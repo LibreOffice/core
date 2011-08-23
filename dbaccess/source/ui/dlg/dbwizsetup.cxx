@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -199,8 +199,8 @@ using namespace ::com::sun::star::document;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-#define START_PAGE      0
-#define CONNECTION_PAGE 1
+#define START_PAGE		0
+#define CONNECTION_PAGE	1
 
 
 
@@ -224,7 +224,7 @@ using namespace ::cppu;
 //#define EVOLUTION_PATH_GROUPWISE 17
 //#define EVOLUTION_PATH_LDAP      18
 //#define KAB_PATH                 19
-//#define MACAB_PATH                 20
+//#define MACAB_PATH            	 20
 //#define THUNDERBIRD_PATH         21
 //#define CREATENEW_PATH           22
 //#define USERDEFINED_PATH         23
@@ -292,7 +292,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pOutSet = new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() );
 
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
-//  eType = m_pImpl->getDatasourceType(*m_pOutSet);
+//	eType = m_pImpl->getDatasourceType(*m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MAP_APPFONT));
     ShowButtonFixedLine(sal_True);
@@ -541,7 +541,7 @@ void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatas
     // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
     // the indirect property values of the first ds are shown in the second ds ...)
     const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
-    for (   ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
+    for	(	ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
             aIndirect != rMap.end();
             ++aIndirect
         )
@@ -601,7 +601,7 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
 
 
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString	ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
 {
     ::rtl::OUString sRet = m_pImpl->getDatasourceType(_rSet);
     if (m_pMySQLIntroPage != NULL && m_pMySQLIntroPage->IsVisible() )
@@ -687,11 +687,11 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             pPage = OConnectionTabPageSetup::CreateAdabasTabPage( this, *m_pOutSet);
             break;
 
-        case PAGE_DBSETUPWIZARD_LDAP    :
+        case PAGE_DBSETUPWIZARD_LDAP	:
             pPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(this,*m_pOutSet);
             break;
 
-        case PAGE_DBSETUPWIZARD_SPREADSHEET:    /// first user defined driver
+        case PAGE_DBSETUPWIZARD_SPREADSHEET:	/// first user defined driver
             pPage = OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage(this,*m_pOutSet);
             break;
 
@@ -1246,6 +1246,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,22 +39,22 @@ class ScDeleteContentsDlg : public ModalDialog
 {
 private:
     FixedLine       aFlFrame;
-    CheckBox        aBtnDelAll;
-    CheckBox        aBtnDelStrings;
-    CheckBox        aBtnDelNumbers;
-    CheckBox        aBtnDelDateTime;
-    CheckBox        aBtnDelFormulas;
-    CheckBox        aBtnDelNotes;
-    CheckBox        aBtnDelAttrs;
-    CheckBox        aBtnDelObjects;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    CheckBox		aBtnDelAll;
+    CheckBox		aBtnDelStrings;
+    CheckBox		aBtnDelNumbers;
+    CheckBox		aBtnDelDateTime;
+    CheckBox		aBtnDelFormulas;
+    CheckBox		aBtnDelNotes;
+    CheckBox		aBtnDelAttrs;
+    CheckBox		aBtnDelObjects;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
-    BOOL            bObjectsDisabled;
+    BOOL			bObjectsDisabled;
 
-    static BOOL     bPreviousAllCheck;
-    static USHORT   nPreviousChecks;
+    static BOOL		bPreviousAllCheck;
+    static USHORT	nPreviousChecks;
 
     void DisableChecks( BOOL bDelAllChecked = TRUE );
     DECL_LINK( DelAllHdl, void * );
@@ -63,9 +63,9 @@ public:
             ScDeleteContentsDlg( Window* pParent,
                                  USHORT  nCheckDefaults = 0 );
             ~ScDeleteContentsDlg();
-    void    DisableObjects();
+    void	DisableObjects();
 
-    USHORT  GetDelContentsCmdBits() const;
+    USHORT	GetDelContentsCmdBits() const;
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ struct urp_BridgeImpl;
 void SAL_CALL urp_releaseRemoteCallback(
     remote_Interface *pRemoteI,rtl_uString *pOid,
     typelib_TypeDescriptionReference *pTypeRef,
-    uno_Environment *pEnvRemote );
+    uno_Environment *pEnvRemote	);
 
 struct UnpackItem
 {

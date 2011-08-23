@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -210,10 +210,10 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
             case SID_FM_FORMATTEDFIELD:
             case SID_FM_SCROLLBAR:
             case SID_FM_SPINBUTTON:
-            {   // set a new image, matching to this slot
+            {	// set a new image, matching to this slot
                 rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlot ));
-                Image aImage = GetImage( m_xFrame,
+                Image aImage = GetImage( m_xFrame, 
                                         aSlotURL,
                                         hasBigImages(),
                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
@@ -291,9 +291,9 @@ SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec()
 //-----------------------------------------------------------------------
 void SvxFmTbxCtlAbsRec::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    USHORT              nId = GetId();
-    ToolBox*            pToolBox = &GetToolBox();
-    SvxFmAbsRecWin*     pWin = (SvxFmAbsRecWin*)( pToolBox->GetItemWindow(nId) );
+    USHORT 				nId = GetId();
+    ToolBox*			pToolBox = &GetToolBox();
+    SvxFmAbsRecWin*		pWin = (SvxFmAbsRecWin*)( pToolBox->GetItemWindow(nId) );
 
     DBG_ASSERT( pWin, "Control not found!" );
 
@@ -343,7 +343,7 @@ SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 }
 
 //-----------------------------------------------------------------------
-Window* SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
+Window*	SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
 {
     XubString aText( SVX_RES(RID_STR_REC_TEXT) );
     FixedText* pFixedText = new FixedText( pParent );
@@ -377,7 +377,7 @@ SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText()
 }
 
 //-----------------------------------------------------------------------
-Window* SvxFmTbxCtlRecFromText::CreateItemWindow( Window* pParent )
+Window*	SvxFmTbxCtlRecFromText::CreateItemWindow( Window* pParent )
 {
     XubString aText( SVX_RES(RID_STR_REC_FROM_TEXT) );
     FixedText* pFixedText = new FixedText( pParent, WB_CENTER );
@@ -411,7 +411,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 }
 
 //-----------------------------------------------------------------------
-Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
+Window*	SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
 {
     pFixedText = new FixedText( pParent );
     String aSample( "123456", sizeof( "123456" ) - 1 );
@@ -455,7 +455,7 @@ SvxFmTbxNextRec::SvxFmTbxNextRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
 {
     rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | TIB_REPEAT);
 
-    AllSettings aSettings = rTbx.GetSettings();
+    AllSettings	aSettings = rTbx.GetSettings();
     MouseSettings aMouseSettings = aSettings.GetMouseSettings();
     aMouseSettings.SetButtonRepeat(aMouseSettings.GetButtonRepeat() / 4);
     aSettings.SetMouseSettings(aMouseSettings);

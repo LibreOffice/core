@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,16 +58,16 @@ namespace framework
             ::com::sun::star::util::URL                                                aTargetURL;
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
          };
-         DECL_STATIC_LINK( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo* );
+         DECL_STATIC_LINK( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo* ); 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
         ::rtl::OUString m_aModuleIdentifier;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels;
-
+        
         public:
             MacrosMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
             virtual ~MacrosMenuController();
-
+            
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
@@ -80,7 +80,7 @@ namespace framework
         private:
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-            String RetrieveLabelFromCommand( const String& aCmdURL );
+            String RetrieveLabelFromCommand( const String& aCmdURL ); 
             void addScriptItems( PopupMenu* pPopupMenu, USHORT startItemId );
     };
 }

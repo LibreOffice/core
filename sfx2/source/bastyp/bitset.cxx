@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 
 #include "bitset.hxx"
 
-#include <string.h>     // memset(), memcpy()
-#include <limits.h>     // USHRT_MAX
+#include <string.h>		// memset(), memcpy()
+#include <limits.h>		// USHRT_MAX
 
 //====================================================================
 // add nOffset to each bit-value in the set

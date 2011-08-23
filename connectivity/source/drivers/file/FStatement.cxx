@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,16 +94,16 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
 
     sal_Int32 nAttrib = 0;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),      PROPERTY_ID_CURSORNAME,         nAttrib,&m_aCursorName,     ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXFIELDSIZE),    PROPERTY_ID_MAXFIELDSIZE,       nAttrib,&m_nMaxFieldSize,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXROWS),         PROPERTY_ID_MAXROWS,            nAttrib,&m_nMaxRows,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_QUERYTIMEOUT),    PROPERTY_ID_QUERYTIMEOUT,       nAttrib,&m_nQueryTimeOut,   ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),       PROPERTY_ID_FETCHSIZE,          nAttrib,&m_nFetchSize,      ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),   PROPERTY_ID_RESULTSETTYPE,      nAttrib,&m_nResultSetType,  ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),  PROPERTY_ID_FETCHDIRECTION,     nAttrib,&m_nFetchDirection, ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING),PROPERTY_ID_ESCAPEPROCESSING,   nAttrib,&m_bEscapeProcessing,::getCppuBooleanType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),		PROPERTY_ID_CURSORNAME,			nAttrib,&m_aCursorName,		::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXFIELDSIZE),	PROPERTY_ID_MAXFIELDSIZE,		nAttrib,&m_nMaxFieldSize,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXROWS),			PROPERTY_ID_MAXROWS,			nAttrib,&m_nMaxRows,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_QUERYTIMEOUT),	PROPERTY_ID_QUERYTIMEOUT,		nAttrib,&m_nQueryTimeOut,	::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),		PROPERTY_ID_FETCHSIZE,			nAttrib,&m_nFetchSize,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),	PROPERTY_ID_RESULTSETTYPE,		nAttrib,&m_nResultSetType,	::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),	PROPERTY_ID_FETCHDIRECTION,		nAttrib,&m_nFetchDirection,	::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING),PROPERTY_ID_ESCAPEPROCESSING,	nAttrib,&m_bEscapeProcessing,::getCppuBooleanType());
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),        PROPERTY_ID_RESULTSETCONCURRENCY,   nAttrib,&m_nResultSetConcurrency,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),		PROPERTY_ID_RESULTSETCONCURRENCY,	nAttrib,&m_nResultSetConcurrency,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
@@ -215,7 +215,7 @@ void OStatement_Base::reset() throw (SQLException)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::reset" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+                
 
     clearWarnings ();
 
@@ -232,7 +232,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::clearMyResultSet " );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+        
     try
     {
         Reference<XCloseable> xCloseable;
@@ -253,7 +253,7 @@ void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::setWarning " );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+        
 
     m_aLastWarning = ex;
 }
@@ -264,7 +264,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getWarnings" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+        
     return makeAny(m_aLastWarning);
 }
 // -------------------------------------------------------------------------
@@ -325,7 +325,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+       
     construct(sql);
     Reference< XResultSet > xRS;
     OResultSet* pResult = createResultSet();
@@ -334,7 +334,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString
     m_xResultSet = Reference<XResultSet>(pResult);
 
     pResult->OpenImpl();
-
+    
     return xRS;
 }
 // -------------------------------------------------------------------------
@@ -347,14 +347,14 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& sql ) throw
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+    
 
     construct(sql);
     OResultSet* pResult = createResultSet();
     Reference< XResultSet > xRS = pResult;
     initializeResultSet(pResult);
     pResult->OpenImpl();
-
+    
     return pResult->getRowCountResult();
 }
 
@@ -420,7 +420,7 @@ void OStatement_Base::anylizeSQL()
     }
 }
 //------------------------------------------------------------------
-void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
+void OStatement_Base::setOrderbyColumn(	OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::setOrderbyColumn" );
@@ -430,19 +430,19 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
     else if (pColumnRef->count() == 3)
     {
         // Nur die Table Range-Variable darf hier vorkommen:
-//      if (!(pColumnRef->getChild(0)->getTokenValue() == aTableRange))
-//      {
-//          aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_INVALID_RANGE_VAR))),
-//                      0, String() );
-            //  return;
-        //  }
+//		if (!(pColumnRef->getChild(0)->getTokenValue() == aTableRange))
+//		{
+//			aStatus.Set(SQL_STAT_ERROR,
+//						String::CreateFromAscii("S1000"),
+//						aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_INVALID_RANGE_VAR))),
+//						0, String() );
+            //	return;
+        //	}
         pColumnRef->getChild(2)->parseNodeToStr( aColumnName, getOwnConnection(), NULL, sal_False, sal_False );
     }
     else
     {
-        //  aStatus.SetStatementTooComplex();
+        //	aStatus.SetStatementTooComplex();
         throw SQLException();
     }
 
@@ -504,7 +504,7 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
             default:
                 break;
         }
-
+        
         // at this moment we support only one table per select statement
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
         if(xTunnel.is())
@@ -517,15 +517,15 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         }
         OSL_ENSURE(m_pTable,"No table!");
         if ( m_pTable )
-            m_xColNames     = m_pTable->getColumns();
+            m_xColNames		= m_pTable->getColumns();
         Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
         // set the binding of the resultrow
-        m_aRow          = new OValueRefVector(xNames->getCount());
+        m_aRow			= new OValueRefVector(xNames->getCount());
         (m_aRow->get())[0]->setBound(sal_True);
         ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetRefBound(sal_False));
 
         // set the binding of the resultrow
-        m_aEvaluateRow  = new OValueRefVector(xNames->getCount());
+        m_aEvaluateRow	= new OValueRefVector(xNames->getCount());
 
         (m_aEvaluateRow->get())[0]->setBound(sal_True);
         ::std::for_each(m_aEvaluateRow->get().begin()+1,m_aEvaluateRow->get().end(),TSetRefBound(sal_False));
@@ -537,7 +537,7 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         // create the column mapping
         createColumnMapping();
 
-        m_pSQLAnalyzer  = createAnalyzer();
+        m_pSQLAnalyzer	= createAnalyzer();
 
         Reference<XIndexesSupplier> xIndexSup(xTunnel,UNO_QUERY);
         if(xIndexSup.is())
@@ -553,7 +553,7 @@ void OStatement_Base::createColumnMapping()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::createColumnMapping" );
     // initialize the column index map (mapping select columns to table columns)
-    ::vos::ORef<connectivity::OSQLColumns>  xColumns = m_aSQLIterator.getSelectColumns();
+    ::vos::ORef<connectivity::OSQLColumns>	xColumns = m_aSQLIterator.getSelectColumns();
     m_aColMapping.resize(xColumns->get().size() + 1);
     for (sal_Int32 i=0; i<(sal_Int32)m_aColMapping.size(); ++i)
         m_aColMapping[i] = i;
@@ -578,7 +578,7 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
     _pResult->setSelectRow(m_aSelectRow);
 
     m_pSQLAnalyzer->bindSelectRow(m_aRow);
-    m_pEvaluationKeySet = m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
+    m_pEvaluationKeySet = m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);	// Werte im Code des Compilers setzen
     _pResult->setEvaluationKeySet(m_pEvaluationKeySet);
 }
 // -----------------------------------------------------------------------------
@@ -719,7 +719,7 @@ void OStatement_Base::GetAssignValues()
             OSL_ENSURE(pComp->getNodeType() == SQL_NODE_EQUAL,"OResultSet: pComp->getNodeType() != SQL_NODE_COMPARISON");
             if (pComp->getTokenValue().toChar() != '=')
             {
-                //  aStatus.SetInvalidStatement();
+                //	aStatus.SetInvalidStatement();
                 throwFunctionSequenceException(*this);
             }
 
@@ -756,7 +756,7 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
         parseParamterElem(aColumnName,pRow_Value_Constructor_Elem);
     else
     {
-        //  aStatus.SetStatementTooComplex();
+        //	aStatus.SetStatementTooComplex();
         throwFunctionSequenceException(*this);
     }
 }
@@ -775,15 +775,15 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
     if (!xCol.is())
     {
         // Diese Column gibt es nicht!
-//      aStatus.Set(SQL_STAT_ERROR,
-//                  String::CreateFromAscii("S0022"),
-//                  aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_COLUMN_NOT_FOUND))),
-//                  0, String() );
+//		aStatus.Set(SQL_STAT_ERROR,
+//					String::CreateFromAscii("S0022"),
+//					aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_COLUMN_NOT_FOUND))),
+//					0, String() );
         throwFunctionSequenceException(*this);
     }
 
     // Value an die Row mit den zuzuweisenden Werten binden:
-    //  const ODbVariantRef& xValue = (*aAssignValues)[pFileColumn->GetId()];
+    //	const ODbVariantRef& xValue = (*aAssignValues)[pFileColumn->GetId()];
 
     // Alles geprueft und wir haben den Namen der Column.
     // Jetzt eine Value allozieren, den Wert setzen und die Value an die Row binden.
@@ -809,7 +809,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
                         *(m_aAssignValues->get())[nId] = sal_False;
                     else
                     {
-                        //  aStatus.Set(SQL_STAT_ERROR);    // nyi: genauer!
+                        //	aStatus.Set(SQL_STAT_ERROR);	// nyi: genauer!
                         throwFunctionSequenceException(*this);
                     }
                 }
@@ -826,16 +826,16 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
             case DataType::TIMESTAMP:
             {
                 *(m_aAssignValues->get())[nId] = ORowSetValue(aValue); // .ToDouble
-//              try
-//              {
-//                  double n = xValue->toDouble();
-//                  xValue->setDouble(n);
-//              }
-//              catch ( ... )
-//              {
-//                  aStatus.SetDriverNotCapableError();
-//              }
-            }   break;
+//				try
+//				{
+//					double n = xValue->toDouble();
+//					xValue->setDouble(n);
+//				}
+//				catch ( ... )
+//				{
+//					aStatus.SetDriverNotCapableError();
+//				}
+            }	break;
             default:
                 throwFunctionSequenceException(*this);
         }

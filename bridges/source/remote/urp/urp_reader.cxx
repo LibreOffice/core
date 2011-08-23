@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace bridges_urp
      ***/
     void SAL_CALL urp_releaseRemoteCallback (
         remote_Interface *, rtl_uString *pOid,
-        typelib_TypeDescriptionReference *pTypeRef, uno_Environment *pEnvRemote )
+        typelib_TypeDescriptionReference *pTypeRef, uno_Environment *pEnvRemote	)
     {
         remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
         urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
@@ -757,7 +757,7 @@ void OReaderThread::run()
                     pLastRemoteI = 0;
                 }
                 ClientJob *pClientJob =
-                    m_pBridgeImpl->m_clientJobContainer.remove( *( ByteSequence * )ppLastTid );
+                    m_pBridgeImpl->m_clientJobContainer.remove(	*( ByteSequence * )ppLastTid );
 
                 // Bridge MUST be already disposed, otherwise we got a wrong threadid
                 // from remote !

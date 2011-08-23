@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ using namespace ::com::sun::star::uno;
 
 DlgExportEPNG::DlgExportEPNG( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPNG, *rPara.pResMgr ) ),
-                FilterConfigItem    ( OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PNG" ) ), &rPara.aFilterData ),
-                rFltCallPara        ( rPara ),
+                FilterConfigItem	( OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PNG" ) ), &rPara.aFilterData ),
+                rFltCallPara		( rPara ),
                 aGrpCompression     ( this, ResId( GRP_COMPRESSION, *rPara.pResMgr ) ),
                 aFiCompression      ( this, ResId( FI_COMPRESSION, *rPara.pResMgr ) ),
                 aNumCompression     ( this, ResId( NUM_COMPRESSION, *rPara.pResMgr ) ),
@@ -52,18 +52,18 @@ DlgExportEPNG::DlgExportEPNG( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
-                pMgr                ( rPara.pResMgr )
+                pMgr				( rPara.pResMgr )
 {
     FreeResource();
 
     // Config-Parameter lesen
-    sal_Int32   nCompression = ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) ), 6 );
+    sal_Int32	nCompression = ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) ), 6 );
     if ( ( nCompression < 0 ) || ( nCompression > 9 ) )
         nCompression = 6;
     aNumCompression.SetValue( nCompression );
 
-    sal_Int32   nInterlaced = ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 );
-    sal_Bool    bInterlaced = nInterlaced != 0;
+    sal_Int32	nInterlaced = ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 );
+    sal_Bool	bInterlaced = nInterlaced != 0;
     aCbxInterlaced.Check( bInterlaced );
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportEPNG, OK ) );

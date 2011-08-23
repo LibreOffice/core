@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,16 +51,16 @@ namespace svxform
     class SVX_DLLPUBLIC ODbtoolsClient
     {
     private:
-        static  ::osl::Mutex    s_aMutex;
-        static  sal_Int32       s_nClients;
-        static oslModule        s_hDbtoolsModule;
+        static	::osl::Mutex	s_aMutex;
+        static	sal_Int32		s_nClients;
+        static oslModule		s_hDbtoolsModule;
         static ::connectivity::simple::createDataAccessToolsFactoryFunction
                                 s_pFactoryCreationFunc;
         //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
         mutable BOOL            m_bCreateAlready;
 
     private:
-        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory > m_xDataAccessFactory;
+        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >	m_xDataAccessFactory;
 
     protected:
         ODbtoolsClient();
@@ -83,7 +83,7 @@ namespace svxform
     class SVX_DLLPUBLIC OStaticDataAccessTools : public ODbtoolsClient
     {
     protected:
-        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    m_xDataAccessTools;
+        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTools >	m_xDataAccessTools;
 
     protected:
         virtual bool ensureLoaded() const;
@@ -102,7 +102,7 @@ namespace svxform
         // ------------------------------------------------
         sal_Int32 getDefaultNumberFormat(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,									 
             const ::com::sun::star::lang::Locale& _rLocale );
 
         // ------------------------------------------------
@@ -162,19 +162,19 @@ namespace svxform
 
         // ------------------------------------------------
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
-            @param      _rxCursorSet    the property set
+            @param		_rxCursorSet	the property set
         */
         sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
-            @param      _rxCursorSet    the property set
+            @param		_rxCursorSet	the property set
         */
         sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
-            @param      _rxCursorSet    the property set
+            @param		_rxCursorSet	the property set
         */
         sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
@@ -186,7 +186,7 @@ namespace svxform
                 const ::rtl::OUString& _rCommand,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-            )   SAL_THROW( ( ) );
+            )	SAL_THROW( ( ) );
 
         // ------------------------------------------------
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
@@ -195,7 +195,7 @@ namespace svxform
                 const sal_Int32 _nCommandType,
                 const ::rtl::OUString& _rCommand,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-            )   SAL_THROW( ( ) );
+            )	SAL_THROW( ( ) );
 
         // ------------------------------------------------
         bool isEmbeddedInDatabase(
@@ -227,7 +227,7 @@ namespace svxform
     };
 
 //........................................................................
-}   // namespace svxform
+}	// namespace svxform
 //........................................................................
 
 #endif // SVX_DBTOOLSCLIENT_HXX

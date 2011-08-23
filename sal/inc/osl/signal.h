@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,11 @@
 extern "C" {
 #endif
 
-#define OSL_SIGNAL_USER_RESERVED    0
+#define OSL_SIGNAL_USER_RESERVED	0
 
-#define OSL_SIGNAL_USER_RESOURCEFAILURE     (OSL_SIGNAL_USER_RESERVED - 1)
-#define OSL_SIGNAL_USER_X11SUBSYSTEMERROR   (OSL_SIGNAL_USER_RESERVED - 2)
-#define OSL_SIGNAL_USER_RVPCONNECTIONERROR  (OSL_SIGNAL_USER_RESERVED - 3)
+#define OSL_SIGNAL_USER_RESOURCEFAILURE		(OSL_SIGNAL_USER_RESERVED - 1)
+#define OSL_SIGNAL_USER_X11SUBSYSTEMERROR 	(OSL_SIGNAL_USER_RESERVED - 2)
+#define OSL_SIGNAL_USER_RVPCONNECTIONERROR 	(OSL_SIGNAL_USER_RESERVED - 3)
 
 typedef void* oslSignalHandler;
 
@@ -65,20 +65,20 @@ typedef enum
 } oslSignalAction;
 
 #ifdef SAL_W32
-#   pragma pack(push, 8)
+#	pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(push, 4)
+#	pragma pack(push, 4)
 #endif
 
 typedef struct
-{
-    oslSignal   Signal;
-    sal_Int32   UserSignal;
-    void*       UserData;
+{	
+    oslSignal	Signal;
+    sal_Int32	UserSignal;
+    void* 		UserData;
 } oslSignalInfo;
 
 #if defined( SAL_W32) ||  defined(SAL_OS2)
-#   pragma pack(pop)
+#	pragma pack(pop)
 #endif
 
 /** the function-ptr. representing the signal handler-function.
@@ -95,10 +95,10 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData);
 
     On default error reporting is enabled after process startup.
 
-    @param  bEnable [in]
-    Enables or disables error reporting.
-
-    @return
+    @param	bEnable [in]
+    Enables or disables error reporting.	
+    
+    @return 
     sal_True if previous state of error reporting was enabled<br>
     sal_False if previous state of error reporting was disbaled<br>
 */
@@ -109,6 +109,6 @@ sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable );
 }
 #endif
 
-#endif  /* _OSL_SIGNAL_H_ */
+#endif	/* _OSL_SIGNAL_H_ */
 
 

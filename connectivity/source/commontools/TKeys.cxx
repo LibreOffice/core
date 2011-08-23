@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::lang;
 
 
 
-OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
+OKeysHelper::OKeysHelper(	OTableHelper* _pTable,
         ::osl::Mutex& _rMutex,
         const TStringVector& _rVector
         ) : OKeys_BASE(*_pTable,sal_True,_rMutex,_rVector,sal_True)
@@ -148,7 +148,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
     }
 
     const ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)));
+    sal_Int32 nKeyType		= getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)));
     sal_Int32 nUpdateRule = 0, nDeleteRule = 0;
     ::rtl::OUString sReferencedName;
 
@@ -169,8 +169,8 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
         // In this case, really append the new index.
         ::rtl::OUStringBuffer aSql;
         aSql.appendAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+        ::rtl::OUString aQuote	= m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aDot	= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
 
         aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::eInTableDefinitions, false, false, true ));
         aSql.appendAscii(" ADD ");
@@ -195,7 +195,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
                 aSql.appendAscii(",");
             ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
             aSql.append( ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))) );
-
+            
         }
         aSql.appendAscii(")");
 
@@ -211,11 +211,11 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
                     aSql.appendAscii(",");
                 xColumns->getByIndex(i) >>= xColProp;
                 aSql.append(::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_RELATEDCOLUMN)))));
-
+                
             }
             aSql.appendAscii(")");
-            aSql.append(getKeyRuleString(sal_True   ,nUpdateRule));
-            aSql.append(getKeyRuleString(sal_False  ,nDeleteRule));
+            aSql.append(getKeyRuleString(sal_True	,nUpdateRule));
+            aSql.append(getKeyRuleString(sal_False	,nDeleteRule));
         }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -226,9 +226,9 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
     try
     {
         ::rtl::OUString aSchema,aTable;
-        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
-        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
-        Reference< XResultSet > xResult;
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))	>>= aSchema;
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))		>>= aTable;
+        Reference< XResultSet > xResult; 
         sal_Int32 nColumn = 12;
         if ( nKeyType == KeyType::FOREIGN )
             xResult = m_pTable->getMetaData()->getImportedKeys( m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
@@ -302,7 +302,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
             else
             {
                 aSql.append(getDropForeignKey());
-                const ::rtl::OUString aQuote    = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
+                const ::rtl::OUString aQuote	= m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
                 aSql.append( ::dbtools::quoteName( aQuote,_sElementName) );
             }
 

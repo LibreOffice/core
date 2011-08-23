@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ public:
         const ::std::vector<
             css::uno::Reference<css::drawing::framework::XResourceId> >& rResources,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
-
+    
     /** Deactivate all the resources that are specified by resource ids in
         rResources.  The resource ids of deactivated resources are removed
         from the given configuration.  Activated resources are notified to all
@@ -126,15 +126,15 @@ private:
     void ActivateResource (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
-
+    
     void DeactivateResource (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
-
+    
     void AddResource (
         const css::uno::Reference<css::drawing::framework::XResource>& rxResource,
         const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory);
-
+    
     ResourceDescriptor RemoveResource (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
 };

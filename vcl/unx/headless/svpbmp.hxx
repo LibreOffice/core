@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,28 +37,28 @@ class SvpSalBitmap : public SalBitmap, public SvpElement
 public:
     SvpSalBitmap() {}
     virtual ~SvpSalBitmap();
-
+    
     const basebmp::BitmapDeviceSharedPtr& getBitmap() const { return m_aBitmap; }
     void setBitmap( const basebmp::BitmapDeviceSharedPtr& rSrc ) { m_aBitmap = rSrc; }
-
+    
     // SvpElement
     virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aBitmap; }
-
+    
     // SalBitmap
-    virtual bool            Create( const Size& rSize,
-                                    USHORT nBitCount,
+    virtual bool			Create( const Size& rSize, 
+                                    USHORT nBitCount, 
                                     const BitmapPalette& rPal );
-    virtual bool            Create( const SalBitmap& rSalBmp );
-    virtual bool            Create( const SalBitmap& rSalBmp,
+    virtual bool			Create( const SalBitmap& rSalBmp );
+    virtual bool			Create( const SalBitmap& rSalBmp, 
                                     SalGraphics* pGraphics );
-    virtual bool            Create( const SalBitmap& rSalBmp,
+    virtual bool			Create( const SalBitmap& rSalBmp,
                                     USHORT nNewBitCount );
-    virtual void            Destroy();
-    virtual Size            GetSize() const;
-    virtual USHORT          GetBitCount() const;
-
-    virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly );
-    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
+    virtual void			Destroy();
+    virtual Size			GetSize() const;
+    virtual USHORT			GetBitCount() const;
+                        
+    virtual BitmapBuffer*	AcquireBuffer( bool bReadOnly );
+    virtual void			ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     virtual bool            GetSystemData( BitmapSystemData& rData );
 
 };

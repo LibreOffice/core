@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ public:
 
     virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException)
     { return mxResourceId; };
-
+    
 private:
     Reference<XResourceId> mxResourceId;
 };
@@ -267,7 +267,7 @@ void SAL_CALL PresenterViewFactory::disposing (void)
 
 
 //----- XViewFactory ----------------------------------------------------------
-
+    
 Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
     throw (RuntimeException)
@@ -275,7 +275,7 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
     ThrowIfDisposed();
 
     Reference<XResource> xView;
-
+    
     if (rxViewId.is())
     {
         Reference<XPane> xAnchorPane (
@@ -291,7 +291,7 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
         if (pDescriptor.get() != NULL)
             pDescriptor->SetActivationState(true);
     }
-
+    
     return xView;
 }
 
@@ -397,7 +397,7 @@ Reference<XResource> PresenterViewFactory::CreateView(
     const Reference<XPane>& rxAnchorPane)
 {
     Reference<XView> xView;
-
+    
     try
     {
         const OUString sResourceURL (rxViewId->getResourceURL());
@@ -426,7 +426,7 @@ Reference<XResource> PresenterViewFactory::CreateView(
         {
             xView = CreateHelpView(rxViewId);
         }
-
+        
         // Activate it.
         CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(xView.get());
         if (pView != NULL)
@@ -447,12 +447,12 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
     const Reference<XResourceId>& rxViewId) const
 {
     Reference<XView> xView;
-
+     
     if ( ! mxConfigurationController.is())
         return xView;
     if ( ! mxComponentContext.is())
         return xView;
-
+    
     try
     {
         rtl::Reference<PresenterSlideShowView> pShowView (
@@ -480,12 +480,12 @@ Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
     const Reference<XPane>& rxAnchorPane) const
 {
     Reference<XView> xView;
-
+    
     if ( ! mxConfigurationController.is())
         return xView;
     if ( ! mxComponentContext.is())
         return xView;
-
+    
     try
     {
         xView = Reference<XView>(
@@ -526,12 +526,12 @@ Reference<XView> PresenterViewFactory::CreateNotesView(
 {
     (void)rxAnchorPane;
     Reference<XView> xView;
-
+    
     if ( ! mxConfigurationController.is())
         return xView;
     if ( ! mxComponentContext.is())
         return xView;
-
+    
     try
     {
         xView = Reference<XView>(static_cast<XWeak*>(
@@ -557,12 +557,12 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
     const Reference<XResourceId>& rxViewId) const
 {
     Reference<XView> xView;
-
+    
     if ( ! mxConfigurationController.is())
         return xView;
     if ( ! mxComponentContext.is())
         return xView;
-
+    
     try
     {
         rtl::Reference<PresenterSlideSorter> pView (

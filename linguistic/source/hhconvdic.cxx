@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c) throw (RuntimeException)
 
   if ( !U_SUCCESS(status) ) throw RuntimeException();
 
-  return scriptCode == USCRIPT_HANGUL ? SCRIPT_HANGUL :
+  return scriptCode == USCRIPT_HANGUL ? SCRIPT_HANGUL : 
             scriptCode == USCRIPT_HAN ? SCRIPT_HANJA : SCRIPT_OTHERS;
 }
 
@@ -113,13 +113,13 @@ HHConvDic::~HHConvDic()
 }
 
 
-void SAL_CALL HHConvDic::addEntry(
-        const OUString& aLeftText,
-        const OUString& aRightText )
+void SAL_CALL HHConvDic::addEntry( 
+        const OUString& aLeftText, 
+        const OUString& aRightText ) 
     throw (IllegalArgumentException, container::ElementExistException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
+    
     if ((aLeftText.getLength() != aRightText.getLength()) ||
         !TextIsAllScriptType( aLeftText,  SCRIPT_HANGUL ) ||
         !TextIsAllScriptType( aRightText, SCRIPT_HANJA ))
@@ -128,7 +128,7 @@ void SAL_CALL HHConvDic::addEntry(
 }
 
 
-OUString SAL_CALL HHConvDic::getImplementationName(  )
+OUString SAL_CALL HHConvDic::getImplementationName(  ) 
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -136,7 +136,7 @@ OUString SAL_CALL HHConvDic::getImplementationName(  )
 }
 
 
-sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName ) 
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -148,7 +148,7 @@ sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  ) 
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -156,7 +156,7 @@ uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
 }
 
 
-uno::Sequence< OUString > HHConvDic::getSupportedServiceNames_Static()
+uno::Sequence< OUString > HHConvDic::getSupportedServiceNames_Static() 
     throw()
 {
     uno::Sequence< OUString > aSNS( 2 );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@ namespace svt
     class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
     {
     protected:
-        RoadmapImpl*    m_pImpl;
+        RoadmapImpl*	m_pImpl;
         // Window overridables
-        void            Paint( const Rectangle& _rRect );
+        void			Paint( const Rectangle& _rRect );
         void            implInit();
 
     public:
@@ -70,8 +70,8 @@ namespace svt
         ORoadmap( Window* _pParent, WinBits _nWinStyle = 0 );
         ~ORoadmap( );
 
-        void            SetRoadmapBitmap( const BitmapEx& maBitmap, sal_Bool _bInvalidate = sal_True );
-        const BitmapEx& GetRoadmapBitmap( ) const;
+        void			SetRoadmapBitmap( const BitmapEx& maBitmap, sal_Bool _bInvalidate = sal_True );
+        const BitmapEx&	GetRoadmapBitmap( ) const;
 
         void            EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex = 0  );
         sal_Bool        IsRoadmapItemEnabled( ItemId _nItemId, ItemIndex _nStartIndex = 0 ) const;
@@ -99,12 +99,12 @@ namespace svt
 
         void            SetItemSelectHdl( const Link& _rHdl );
         Link            GetItemSelectHdl( ) const;
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void	DataChanged( const DataChangedEvent& rDCEvt );
         virtual void    GetFocus();
 
 
     protected:
-        long            PreNotify( NotifyEvent& rNEvt );
+        long       		PreNotify( NotifyEvent& rNEvt );
 
     protected:
         /// called when an item has been selected by any means
@@ -118,19 +118,19 @@ namespace svt
 
         RoadmapItem*         GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  );
         const RoadmapItem*   GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  ) const;
-        RoadmapItem*            GetPreviousHyperLabel( ItemIndex _Index);
+        RoadmapItem*			GetPreviousHyperLabel( ItemIndex _Index);
 
-        void                        DrawHeadline();
-        void                        DeselectOldRoadmapItems();
-        ItemId                      GetNextAvailableItemId( ItemIndex _NewIndex );
-        ItemId                      GetPreviousAvailableItemId( ItemIndex _NewIndex );
+        void						DrawHeadline();
+        void						DeselectOldRoadmapItems();
+        ItemId						GetNextAvailableItemId( ItemIndex _NewIndex );
+        ItemId						GetPreviousAvailableItemId( ItemIndex _NewIndex );
         RoadmapItem*                GetByPointer(Window* pWindow);
         RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const ::rtl::OUString& _aStr, ItemId _RMID, sal_Bool _bEnabled = sal_True  );
-        void                        UpdatefollowingHyperLabels( ItemIndex _Index );
+        void						UpdatefollowingHyperLabels( ItemIndex _Index );
     };
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 #endif

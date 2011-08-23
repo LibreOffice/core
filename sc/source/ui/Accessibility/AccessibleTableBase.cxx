@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@
 #include <comphelper/sequence.hxx>
 
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -331,7 +331,7 @@ sal_Int32 SAL_CALL
     IsObjectValid();
     return static_cast<sal_Int32>(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
             (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-//  return 1;
+//	return 1;
 }
 
 uno::Reference< XAccessible > SAL_CALL
@@ -358,7 +358,7 @@ uno::Reference< XAccessible > SAL_CALL
     throw (uno::RuntimeException)
 {
     String sDesc(ScResId(STR_ACC_TABLE_DESCR));
-/*  String sCoreName;
+/*	String sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
         sDesc.SearchAndReplaceAscii("%1", sCoreName);
     sDesc.SearchAndReplaceAscii("%2", String(ScResId(SCSTR_UNKNOWN)));*/

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,26 +36,26 @@
 #endif
 #include <malloc.h>
 
-extern HMODULE      UWINAPI_BaseAddress;
+extern HMODULE		UWINAPI_BaseAddress;
 
 // This function should be exported by every DLL that wants to provide it's version number.
 // This code automaticly generates the information from the version resource
 
 extern "C" HRESULT CALLBACK DllGetVersion( DLLVERSIONINFO *pdvi )
 {
-    TCHAR   szModulePath[MAX_PATH];
-    BOOL    fSuccess = FALSE;
+    TCHAR	szModulePath[MAX_PATH];
+    BOOL	fSuccess = FALSE;
 
     if ( UWINAPI_BaseAddress && GetModuleFileName( UWINAPI_BaseAddress, szModulePath, MAX_PATH ) )
     {
-        DWORD   dwHandle = 0;
-        DWORD   dwSize = GetFileVersionInfoSize( szModulePath, &dwHandle );
-        LPVOID  lpData = _alloca( dwSize );
+        DWORD	dwHandle = 0;
+        DWORD	dwSize = GetFileVersionInfoSize( szModulePath, &dwHandle );
+        LPVOID	lpData = _alloca( dwSize );
 
         if ( GetFileVersionInfo( szModulePath, dwHandle, dwSize, lpData ) )
         {
-            VS_FIXEDFILEINFO    *lpBuffer = NULL;
-            UINT    uLen = 0;
+            VS_FIXEDFILEINFO	*lpBuffer = NULL;
+            UINT	uLen = 0;
 
             if ( VerQueryValue( lpData, TEXT("\\"), (LPVOID *)&lpBuffer, &uLen ) )
             {

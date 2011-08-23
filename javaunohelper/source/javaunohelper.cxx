@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     const jchar* pJLibName = pJEnv->GetStringChars( jLibName, NULL );
     OUString aLibName( pJLibName );
     pJEnv->ReleaseStringChars( jLibName, pJLibName);
-
+    
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (lib)
     {
@@ -83,7 +83,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
         if (pSym)
         {
             Environment java_env, loader_env;
-
+            
             const sal_Char * pEnvTypeName = 0;
             (*((component_getImplementationEnvironmentFunc)pSym))(
                 &pEnvTypeName, (uno_Environment **)&loader_env );
@@ -92,14 +92,14 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                 OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
                 uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
             }
-
+            
             // create vm access
             ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
             OUString java_env_name = OUSTR(UNO_LB_JAVA);
             uno_getEnvironment(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
-
+            
             OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
             pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
             if (pSym)
@@ -107,16 +107,16 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                 if (loader_env.is() && java_env.is())
                 {
                     Mapping java2dest(java_env.get(), loader_env.get());
-
+                    
                     if ( java2dest.is() )
-                    {
+                    {						
                         void * pSMgr =
                             java2dest.mapInterface(
                                 jSMgr, getCppuType((Reference< lang::XMultiServiceFactory > *) 0) );
                         void * pKey =
                             java2dest.mapInterface(
                                 jRegKey, getCppuType((Reference< registry::XRegistryKey > *) 0) );
-
+                        
                         uno_ExtEnvironment * env = loader_env.get()->pExtEnv;
                         if (pKey)
                         {
@@ -125,7 +125,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                             if (env)
                                 (*env->releaseInterface)( env, pKey );
                         }
-
+                        
                         if (pSMgr && env)
                             (*env->releaseInterface)( env, pSMgr );
                     }
@@ -133,7 +133,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             }
         }
     }
-
+    
     return bRet == sal_False? JNI_FALSE : JNI_TRUE;
 }
 
@@ -152,9 +152,9 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     pJEnv->ReleaseStringChars( jLibName, pJLibName);
 
     aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM(SAL_DLLEXTENSION) );
-
+    
     jobject joSLL_cpp = 0;
-
+    
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (lib)
     {
@@ -165,7 +165,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
         if (pSym)
         {
             Environment java_env, loader_env;
-
+            
             const sal_Char * pEnvTypeName = 0;
             (*((component_getImplementationEnvironmentFunc)pSym))(
                 &pEnvTypeName, (uno_Environment **)&loader_env );
@@ -175,23 +175,23 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                 OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
                 uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
             }
-
+            
             // create vm access
             ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
             OUString java_env_name = OUSTR(UNO_LB_JAVA);
             uno_getEnvironment(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
-
+            
             OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
             pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
             if (pSym)
-            {
+            {				
                 if (loader_env.is() && java_env.is())
                 {
                     Mapping java2dest( java_env.get(), loader_env.get() );
                     Mapping dest2java( loader_env.get(), java_env.get() );
-
+                    
                     if (dest2java.is() && java2dest.is())
                     {
                         void * pSMgr =
@@ -200,21 +200,21 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                         void * pKey =
                             java2dest.mapInterface(
                                 jRegKey, ::getCppuType((Reference< registry::XRegistryKey > *) 0) );
-
+                        
                         const char* pImplName = pJEnv->GetStringUTFChars( jImplName, NULL );
-
+                        
                         void * pSSF = (*((component_getFactoryFunc)pSym))(
                             pImplName, pSMgr, pKey );
-
+                        
                         pJEnv->ReleaseStringUTFChars( jImplName, pImplName );
-
+                        
                         uno_ExtEnvironment * env = loader_env.get()->pExtEnv;
-
+                        
                         if (pKey && env)
                             (*env->releaseInterface)( env, pKey );
                         if (pSMgr && env)
                             (*env->releaseInterface)( env, pSMgr );
-
+                        
                         if (pSSF)
                         {
                             jobject jglobal = (jobject) dest2java.mapInterface(
@@ -229,7 +229,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             }
         }
     }
-
+    
     return joSLL_cpp;
 }
 
@@ -249,15 +249,15 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
     {
         OUString aWriteRegFile;
         OUString aReadRegFile;
-
+    
         sal_Bool bReadOnly = jbReadOnly == JNI_FALSE ? sal_False : sal_True;
-
+    
         if (jReadRegFile) {
             const jchar* pjReadRegFile = pJEnv->GetStringChars(jReadRegFile, NULL);
             aReadRegFile = OUString(pjReadRegFile);
             pJEnv->ReleaseStringChars(jReadRegFile, pjReadRegFile);
         }
-
+        
         if (jWriteRegFile) {
             const jchar * pjWriteRegFile = pJEnv->GetStringChars(jWriteRegFile, NULL);
             aWriteRegFile = OUString(pjWriteRegFile);
@@ -270,7 +270,7 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
             rMSFac = ::cppu::createRegistryServiceFactory( aWriteRegFile, bReadOnly);
         else
             rMSFac = ::cppu::createRegistryServiceFactory(aWriteRegFile, aReadRegFile, bReadOnly);
-
+        
         Reference< beans::XPropertySet > xProps(
             rMSFac, UNO_QUERY_THROW );
         Reference< XComponentContext > xContext(
@@ -282,21 +282,21 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
         // wrap vm singleton entry
         xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
         rMSFac.set( xContext->getServiceManager(), UNO_QUERY_THROW );
-
+        
         // get uno envs
         OUString aCurrentEnv(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
         OUString java_env_name = OUSTR(UNO_LB_JAVA);
-        Environment java_env, curr_env;
+        Environment java_env, curr_env;    
         uno_getEnvironment((uno_Environment **)&curr_env, aCurrentEnv.pData, NULL);
         uno_getEnvironment( (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
-
+        
         Mapping curr_java(curr_env.get(), java_env.get());
         if (! curr_java.is())
         {
             throw RuntimeException(
                 OUSTR("no C++ <-> Java mapping available!"), Reference< XInterface >() );
         }
-
+        
         jobject joGlobalRegServiceFac =
             (jobject)curr_java.mapInterface(
                 rMSFac.get(),
@@ -316,7 +316,7 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
         }
         return 0;
     }
-
+    
     OSL_TRACE("javaunohelper.cxx: object %i", joRegServiceFac);
 
     return joRegServiceFac;

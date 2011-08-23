@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,11 @@ class ODbDataSourceAdministrationHelper;
     //========================================================================
     class OTableSubscriptionDialog : public SfxSingleTabDialog, public IItemSetHelper
     {
-        ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+        ::std::auto_ptr<ODbDataSourceAdministrationHelper>	m_pImpl;
         sal_Bool m_bStopExecution; // set when the dialog should not be executed
 
         DECL_LINK( OKClickHdl, OKButton* );
-        SfxItemSet*             m_pOutSet;
+        SfxItemSet*				m_pOutSet;
     public:
 
         OTableSubscriptionDialog(Window* pParent
@@ -72,21 +72,21 @@ class ODbDataSourceAdministrationHelper;
         virtual ~OTableSubscriptionDialog();
 
         // forwards from ODbDataSourceAdministrationHelper
-        void        successfullyConnected();
-        sal_Bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
-        void        clearPassword();
-        String      getConnectionURL() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
+        void		successfullyConnected();
+        sal_Bool	getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
+        void		clearPassword();
+        String		getConnectionURL() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	getCurrentDataSource();
         inline void endExecution() { m_bStopExecution = sal_True; }
 
         virtual const SfxItemSet* getOutputSet() const;
         virtual SfxItemSet* getWriteOutputSet();
 
-        virtual short   Execute();
+        virtual short	Execute();
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_TABLESSINGLEDLG_HXX_

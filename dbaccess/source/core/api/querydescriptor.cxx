@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace dbaccess
 //==========================================================================
 DBG_NAME(OQueryDescriptor)
 //--------------------------------------------------------------------------
-OQueryDescriptor::OQueryDescriptor()
+OQueryDescriptor::OQueryDescriptor() 
     :OQueryDescriptor_Base(m_aMutex,*this)
     ,ODataSettings(m_aBHelper,sal_True)
 {
@@ -151,7 +151,7 @@ Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) 
 // -----------------------------------------------------------------------------
 DBG_NAME(OQueryDescriptor_Base);
 //--------------------------------------------------------------------------
-OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWeakObject& _rMySelf)
+OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&	_rMutex,::cppu::OWeakObject& _rMySelf)
     :m_bColumnsOutOfDate(sal_True)
     ,m_rMutex(_rMutex)
 {
@@ -245,7 +245,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
             throw;
         }
     }
-
+    
     return m_pColumns;
 }
 
@@ -317,7 +317,7 @@ OColumn* OQueryDescriptor_Base::createColumn( const ::rtl::OUString& /*_rName*/ 
 }
 // -----------------------------------------------------------------------------
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 

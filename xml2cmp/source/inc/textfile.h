@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,37 +35,37 @@
 
 typedef struct TextFile
 {
-    Cstring             sName;
-    FILE *              hFile;
-    intt                nLastAction;
+    Cstring				sName;
+    FILE *				hFile;
+    intt				nLastAction;
 } TextFile;
 
-#define TextFile_THIS       TextFile * pThis
+#define TextFile_THIS		TextFile * pThis
 
 
 
-void                TextFile_CTOR( TextFile_THIS,
-                        char *              i_pName );
-void                TextFile_DTOR( TextFile_THIS );
+void           		TextFile_CTOR( TextFile_THIS,
+                        char *				i_pName );
+void           		TextFile_DTOR( TextFile_THIS );
 
-Bool                TF_Open( TextFile_THIS,
-                        char *              i_sOptions );    /* options for second parameter of fopen */
-Bool                TF_Create( TextFile_THIS );
-void                TF_Close( TextFile_THIS );
+Bool			   	TF_Open( TextFile_THIS,
+                        char * 				i_sOptions );    /* options for second parameter of fopen */
+Bool			   	TF_Create( TextFile_THIS );
+void			   	TF_Close( TextFile_THIS );
 
-void                TF_Goto( TextFile_THIS,
-                        intt                i_nPosition );
-intt                TF_Read( TextFile_THIS,
-                        char *              o_pBuffer,
-                        intt                i_nNrOfBytes );
-intt                TF_Write( TextFile_THIS,
-                        char *              i_pBuffer,
-                        intt                i_nNrOfBytes );
-intt                TF_WriteStr( TextFile_THIS,
-                        char *              i_pString );
+void			   	TF_Goto( TextFile_THIS,
+                        intt	 			i_nPosition );
+intt			   	TF_Read( TextFile_THIS,
+                        char *				o_pBuffer,
+                        intt				i_nNrOfBytes );
+intt			   	TF_Write( TextFile_THIS,
+                        char *				i_pBuffer,
+                        intt				i_nNrOfBytes );
+intt			   	TF_WriteStr( TextFile_THIS,
+                        char *				i_pString );
 
-intt                TF_Position( TextFile_THIS );
-intt                TF_Size( TextFile_THIS );
+intt			   	TF_Position( TextFile_THIS );
+intt			   	TF_Size( TextFile_THIS );
 
 
 

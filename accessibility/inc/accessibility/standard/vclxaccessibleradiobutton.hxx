@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 #endif
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleRadioButton
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleRadioButton
+//	----------------------------------------------------
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper2< 
     ::com::sun::star::accessibility::XAccessibleAction,
     ::com::sun::star::accessibility::XAccessibleValue > VCLXAccessibleRadioButton_BASE;
 

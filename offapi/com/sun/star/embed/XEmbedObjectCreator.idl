@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
 
         @param aObjectArgs
             optional parameters for the object persistence initialization
-            see also
+            see also 
             <type>EmbeddedObjectDescriptor</type>
 
         @throws ::com::sun::star::lang::IllegalArgumentException
@@ -116,7 +116,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         from the entry. In case a persistent representation of a link is
         specified, the result object will be a link.
         </p>
-
+        
         @param xStorage
             a parent storage the entry should be opened in
 
@@ -163,7 +163,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         <p> In case specified entry exists it's contents are ignored and will
         be overwritten on storing.
         </p>
-
+        
         @param xStorage
             a parent storage the entry should be created/opened in
 

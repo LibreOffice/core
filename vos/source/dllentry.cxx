@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ sal_Int32 CALLBACK LibMain(HINSTANCE hinst, WORD wDataSeg, WORD cbHeap, LPSTR lp
     HGLOBAL    hgblClassStruct;
     LPWNDCLASS lpClassStruct;
     static HINSTANCE hinstLib = NULL;
-
+    
     /* Has the library been initialized yet? */
     if (hinstLib == NULL)
     {
-        WORD    wVersionRequested;
-        WSADATA wsaData;
-        sal_Int32       error;
+        WORD	wVersionRequested;
+        WSADATA	wsaData;
+        sal_Int32		error;
 
 
         wVersionRequested = 0x0101;
@@ -57,6 +57,6 @@ sal_Int32 CALLBACK LibMain(HINSTANCE hinst, WORD wDataSeg, WORD cbHeap, LPSTR lp
 
     return (hinstLib ? TRUE : FALSE);  /* return TRUE = success; FALSE = fail */
 }
-
+ 
 #endif
 

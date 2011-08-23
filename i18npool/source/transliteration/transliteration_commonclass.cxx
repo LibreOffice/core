@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ void SAL_CALL transliteration_commonclass::loadModule( TransliterationModules /*
 }
 
 
-void SAL_CALL
+void SAL_CALL 
 transliteration_commonclass::loadModuleNew( const Sequence < TransliterationModulesNew >& /*modName*/, const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
@@ -71,14 +71,14 @@ transliteration_commonclass::loadModuleByImplName( const OUString& /*implName*/,
         throw RuntimeException();
 }
 
-void SAL_CALL
+void SAL_CALL 
 transliteration_commonclass::loadModulesByImplNames(const Sequence< OUString >& /*modNamelist*/, const Locale& /*rLocale*/)
         throw(RuntimeException)
 {
         throw RuntimeException();
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString > SAL_CALL 
 transliteration_commonclass::getAvailableModules( const Locale& /*rLocale*/, sal_Int16 /*sType*/ )
         throw(RuntimeException)
 {

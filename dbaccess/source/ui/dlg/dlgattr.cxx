@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@
 #include <svl/zforlist.hxx>
 #endif
 #include <svx/svxids.hrc> //CHINA001
-#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/flagsdef.hxx>	//CHINA001
 #ifndef _SFXINTITEM_HXX //CHINA001
 #include <svl/intitem.hxx> //CHINA001
 #endif //CHINA001
@@ -97,9 +97,9 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
         DBG_ERROR( "found flag TP_ATTR_CHAR" );
     }
     if( nFlags & TP_ATTR_NUMBER )
-        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)) ); //CHINA001 AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)),SvxNumberFormatTabPage::Create, 0 );
+        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)) ); //CHINA001 AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)),SvxNumberFormatTabPage::Create,	0 );
     if( nFlags & TP_ATTR_ALIGN )
-        AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ModuleRes(TP_ATTR_ALIGN)) );//CHINA001 AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ModuleRes(TP_ATTR_ALIGN)),SvxAlignmentTabPage::Create, 0 );
+        AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ModuleRes(TP_ATTR_ALIGN)) );//CHINA001 AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ModuleRes(TP_ATTR_ALIGN)),SvxAlignmentTabPage::Create,	0 );
     FreeResource();
 }
 
@@ -128,7 +128,7 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
         case RID_SVXPAGE_CHAR_STD:
         {
-            //  ((SvxCharStdPage&)rTabPage).SetFontList(SBA_MOD_EXT()->FontListItem());
+            //	((SvxCharStdPage&)rTabPage).SetFontList(SBA_MOD_EXT()->FontListItem());
         }
         break;
 

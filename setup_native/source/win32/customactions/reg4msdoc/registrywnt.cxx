@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 //---------------------------------------
-//
+// 
 //---------------------------------------
 
 #ifdef _MSC_VER
@@ -49,22 +49,22 @@
 #endif
 
 //---------------------------------------
-//
+// 
 //---------------------------------------
 
 const size_t MAX_TMP_BUFF_SIZE = 1024 * sizeof(wchar_t);
 
 
 //############################################
-// Creation
-// only possible through WindowsRegistry class
+// Creation 
+// only possible through WindowsRegistry class	
 //############################################
 
 
 //-----------------------------------------------------
 /** Create instance and open the specified Registry key
 */
-RegistryKeyImplWinNT::RegistryKeyImplWinNT(HKEY RootKey, const std::wstring& KeyName) :
+RegistryKeyImplWinNT::RegistryKeyImplWinNT(HKEY RootKey, const std::wstring& KeyName) : 
     RegistryKeyImpl(RootKey, KeyName)
 {
 }
@@ -72,7 +72,7 @@ RegistryKeyImplWinNT::RegistryKeyImplWinNT(HKEY RootKey, const std::wstring& Key
 //-----------------------------------------------------
 /** Create instance and open the specified Registry key
 */
-RegistryKeyImplWinNT::RegistryKeyImplWinNT(HKEY RootKey) :
+RegistryKeyImplWinNT::RegistryKeyImplWinNT(HKEY RootKey) : 
     RegistryKeyImpl(RootKey)
 {
 }
@@ -94,10 +94,10 @@ RegistryKeyImplWinNT::RegistryKeyImplWinNT(HKEY RootKey, HKEY SubKey, const std:
 
 //-----------------------------------------------------
 /** The number of sub values of the key at hand
-
+        
     @precond IsOpen = true
 
-    @throws
+    @throws 
 */
 size_t RegistryKeyImplWinNT::GetSubValueCount() const
 {
@@ -146,37 +146,37 @@ size_t RegistryKeyImplWinNT::GetSubKeyCount() const
 /**
 */
 StringListPtr RegistryKeyImplWinNT::GetSubKeyNames() const
-{
+{	
     assert(IsOpen());
 
     wchar_t buff[1024];
-    DWORD  buff_size = sizeof(buff);
+    DWORD  buff_size = sizeof(buff);	
     FILETIME ftime;
-
+    
     StringList* key_names = new StringList();
-
+        
     LONG rc = ERROR_SUCCESS;
 
     for (DWORD i = 0; /* left empty */; i++)
-    {
+    {	
         rc = RegEnumKeyExW(
             m_hSubKey, i, buff, &buff_size,
             0, 0, 0, &ftime);
-
-        if (ERROR_SUCCESS != rc &&
+        
+        if (ERROR_SUCCESS != rc && 
             ERROR_MORE_DATA != rc)
             break;
-
+        
         buff_size = sizeof(buff);
 
-        key_names->push_back(buff);
+        key_names->push_back(buff);		
     }
-
+    
     if (ERROR_INVALID_HANDLE == rc)
         throw RegistryIOException(rc);
     else if (ERROR_NO_MORE_ITEMS != rc && ERROR_SUCCESS != rc)
         throw RegistryException(rc);
-
+        
 #if (_MSC_VER < 1300) && !defined(__MINGW32__)
     return key_names;
 #else
@@ -192,7 +192,7 @@ StringListPtr RegistryKeyImplWinNT::GetSubValueNames() const
     assert(IsOpen());
 
     wchar_t buff[1024];
-    DWORD  buff_size = sizeof(buff);
+    DWORD  buff_size = sizeof(buff);	
 
     StringList* value_names = new StringList();
 
@@ -203,16 +203,16 @@ StringListPtr RegistryKeyImplWinNT::GetSubValueNames() const
         rc = RegEnumValueW(
             m_hSubKey, i, buff, &buff_size,
             0, 0, 0, 0);
-
-        if (ERROR_SUCCESS != rc &&
+    
+        if (ERROR_SUCCESS != rc && 
             ERROR_MORE_DATA != rc)
             break;
 
         buff_size = sizeof(buff);
 
-        value_names->push_back(buff);
+        value_names->push_back(buff);		
     }
-
+    
     if (ERROR_INVALID_HANDLE == rc)
         throw RegistryIOException(rc);
     else if (ERROR_NO_MORE_ITEMS != rc && ERROR_SUCCESS != rc)
@@ -270,7 +270,7 @@ RegistryValue RegistryKeyImplWinNT::GetValue(const std::wstring& Name) const
     {
         assert(false);
     }
-
+    
     return regval;
 }
 
@@ -323,7 +323,7 @@ RegistryValue RegistryKeyImplWinNT::GetValue(const std::wstring& Name, const Reg
 
     return regval;
 }
-
+    
 
 //############################################
 // Commands
@@ -331,7 +331,7 @@ RegistryValue RegistryKeyImplWinNT::GetValue(const std::wstring& Name, const Reg
 
 
 //-----------------------------------------------------
-/** Open the registry key, has no effect if
+/** Open the registry key, has no effect if 
     the key is already open
 
     @precond IsOpen = false
@@ -364,7 +364,7 @@ void RegistryKeyImplWinNT::Open(bool Writeable)
         throw RegistryException(rc);
 
     m_IsWriteable = Writeable;
-
+    
     assert(IsOpen());
 }
 
@@ -404,7 +404,7 @@ RegistryKey RegistryKeyImplWinNT::CreateSubKey(const std::wstring& Name)
     HKEY hRoot = IsRootKey() ? m_hRootKey : m_hSubKey;
 
     HKEY hKey;
-
+    
     LONG rc = RegCreateKeyExW(
         hRoot,
         Name.c_str(),
@@ -441,16 +441,16 @@ void RegistryKeyImplWinNT::DeleteSubKey(const std::wstring& Name)
     assert(IsOpen());
     assert(IsWriteable());
     assert(HasSubKey(Name));
-
+    
     RegistryKey SubKey = OpenSubKey(Name);
 
     size_t nSubKeyCount = SubKey->GetSubKeyCount();
-
+    
     assert(0 == nSubKeyCount);
-
+    
     if (nSubKeyCount)
         throw RegistryInvalidOperationException(ERROR_NOT_SUPPORTED);
-
+    
     LONG rc = RegDeleteKeyW(m_hSubKey, Name.c_str());
 
     if (ERROR_INVALID_HANDLE == rc)
@@ -498,9 +498,9 @@ LONG RegistryKeyImplWinNT::ImplDeleteSubKeyTree(HKEY RootKey, const std::wstring
         0,
         KEY_READ | DELETE,
         &hKey);
-
+    
     if (ERROR_SUCCESS == rc)
-    {
+    {	
         wchar_t* lpSubKey;
         DWORD    nMaxSubKeyLen;
 
@@ -508,7 +508,7 @@ LONG RegistryKeyImplWinNT::ImplDeleteSubKeyTree(HKEY RootKey, const std::wstring
             hKey, 0, 0, 0, 0,
             &nMaxSubKeyLen,
             0, 0, 0, 0, 0, 0);
-
+    
         nMaxSubKeyLen++; // space for trailing '\0'
 
         lpSubKey = reinterpret_cast<wchar_t*>(
@@ -537,7 +537,7 @@ LONG RegistryKeyImplWinNT::ImplDeleteSubKeyTree(HKEY RootKey, const std::wstring
 
         } // while
 
-        RegCloseKey(hKey);
+        RegCloseKey(hKey);        
 
     } // if
 
@@ -560,7 +560,7 @@ LONG RegistryKeyImplWinNT::ImplDeleteSubKeyTree(HKEY RootKey, const std::wstring
                  IsWriteable = true
                  HasValue(Name) = true
 
-        @throws RegistryIOException
+        @throws	RegistryIOException
                 RegistryWriteAccessDeniedException
                 RegistryValueNotFoundException
 */

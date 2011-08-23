@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,12 +79,12 @@ public:
 
 TestService::TestService( OUString implName, OUString serviceName):
             m_implName(implName),m_serviceName(serviceName)
-{   // Library unloading support
+{	// Library unloading support
     globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
 }
 
 TestService::~TestService()
-{   // Library unloading support
+{	// Library unloading support
     globalModuleCount.modCnt.release( &globalModuleCount.modCnt);
 }
 
@@ -151,18 +151,18 @@ extern "C" {
 
                 xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME1)));
 
-                xNewKey=
+                xNewKey= 
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                         OUString::createFromAscii( "/" IMPLNAME2 "/UNO/SERVICES" ) );
 
                 xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME2)));
-                xNewKey=
+                xNewKey= 
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                         OUString::createFromAscii( "/" IMPLNAME3 "/UNO/SERVICES" )   );
 
                 xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME3)));
-
-                xNewKey=
+                
+                xNewKey= 
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                         OUString::createFromAscii( "/" IMPLNAME4 "/UNO/SERVICES" )   );
 
@@ -177,10 +177,10 @@ extern "C" {
         return sal_False;
     }
 
-    void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey) throw()
+    void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey) throw() 
     {
         void * pRet = 0;
-
+    
 
         OUString implname1( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME1) );
         OUString serviceName1( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME1) );
@@ -201,7 +201,7 @@ extern "C" {
                 Sequence<OUString>( &serviceName1, 1),
                 &globalModuleCount.modCnt
                 ));
-
+        
             if (xFactory.is())
             {
                 xFactory->acquire();
@@ -218,7 +218,7 @@ extern "C" {
                 Sequence<OUString>( &serviceName2, 1),
                 &globalModuleCount.modCnt
                 ));
-
+        
             if (xFactory.is())
             {
                 xFactory->acquire();
@@ -235,7 +235,7 @@ extern "C" {
                 Sequence<OUString>( &serviceName3, 1),
                 &globalModuleCount.modCnt
                 ));
-
+        
             if (xFactory.is())
             {
                 xFactory->acquire();
@@ -252,7 +252,7 @@ extern "C" {
                 Sequence<OUString>( &serviceName3, 1),
                 &globalModuleCount.modCnt
                 ));
-
+        
             if (xFactory.is())
             {
                 xFactory->acquire();

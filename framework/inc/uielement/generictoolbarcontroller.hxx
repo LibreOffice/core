@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <svtools/toolboxcontroller.hxx>
@@ -46,7 +46,7 @@ class ToolBar;
 class GenericToolbarController : public svt::ToolboxController
 {
     public:
-        GenericToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        GenericToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   USHORT   nID,
@@ -57,13 +57,13 @@ class GenericToolbarController : public svt::ToolboxController
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException); 
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
-         DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
-
+         DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* ); 
+    
     protected:
         ToolBox*        m_pToolbar;
         sal_uInt16      m_nID;
@@ -79,12 +79,12 @@ class MenuToolbarController : public GenericToolbarController
     com::sun::star::uno::Reference< com::sun::star::lang::XComponent > m_xMenuManager;
     rtl::OUString m_aModuleIdentifier;
     public:
-        MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   USHORT   nID,
-                                  const rtl::OUString& aCommand,
-                                  const rtl::OUString& aModuleIdentifier,
+                                  const rtl::OUString& aCommand, 
+                                  const rtl::OUString& aModuleIdentifier, 
                                   const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xMenuDesc );
 
     ~MenuToolbarController();

@@ -1,6 +1,6 @@
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2009 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -164,14 +164,14 @@ namespace dbaccess
         // not interested in
         (void)i_rEvent;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SubComponentLoader::windowMoved( const WindowEvent& i_rEvent ) throw (RuntimeException)
     {
         // not interested in
         (void)i_rEvent;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SubComponentLoader::windowShown( const EventObject& i_rEvent ) throw (RuntimeException)
     {
@@ -180,7 +180,7 @@ namespace dbaccess
         lcl_onWindowShown_nothrow( *m_pData );
         m_pData->xAppComponentWindow->removeWindowListener( this );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SubComponentLoader::windowHidden( const EventObject& i_rEvent ) throw (RuntimeException)
     {

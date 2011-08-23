@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -465,7 +465,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
     fprintf( fp, "\nMinAutoPaperSize: %li x %li", pEE->GetMinAutoPaperSize().Width(), pEE->GetMinAutoPaperSize().Height() );
     fprintf( fp, "\nUpdate: %i", pEE->GetUpdateMode() );
     fprintf( fp, "\nAnzahl der Views: %i", pEE->GetViewCount() );
-    for ( USHORT nView = 0; nView < pEE->GetViewCount(); nView++ )
+    for	( USHORT nView = 0; nView < pEE->GetViewCount(); nView++ )
     {
         EditView* pV = pEE->GetView( nView );
         DBG_ASSERT( pV, "View nicht gefunden!" );

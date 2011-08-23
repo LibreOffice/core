@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::mozilla;
 
 namespace
 {
-    #if defined(XP_MAC) || defined(XP_MACOSX) || defined(MACOSX)
+    #if defined(XP_MAC) || defined(XP_MACOSX) || defined(MACOSX) 
         #define APP_REGISTRY_NAME "Application Registry"
     #elif defined(XP_WIN) || defined(XP_OS2)
         #define APP_REGISTRY_NAME "registry.dat"

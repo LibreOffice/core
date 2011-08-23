@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
 
             m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,sal_True );
         }
-
+        
         //const ::rtl::OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
         //if ( xNameCont->hasByName(sRowSet) )
         //{
@@ -203,7 +203,7 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const ::rtl::OUString & 
             //        uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
             //        const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
             //        const uno::Reference< chart2::XCoordinateSystem >* pIter = aCooSysSeq.getConstArray();
-            //        const uno::Reference< chart2::XCoordinateSystem >* pEnd     = pIter + aCooSysSeq.getLength();
+            //        const uno::Reference< chart2::XCoordinateSystem >* pEnd	  = pIter + aCooSysSeq.getLength();
             //        for(;pIter != pEnd;++pIter)
             //        {
             //            const uno::Reference< chart2::XChartTypeContainer > xCTCnt( *pIter, uno::UNO_QUERY_THROW );
@@ -265,7 +265,7 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
             ::rtl::OUString sStr;
             _aValue>>= sStr;
             xFormatted->setString(sStr);
-            uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
+            uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1); 
             aArgs[0] = xFormatted;
             xTitle->setText(aArgs);
         }
@@ -396,7 +396,7 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
             ,PROPERTY_PREVIEW_COUNT
             //,PROPERTY_TITLE
         };
-
+        
         for (size_t nPos = 0; nPos < sizeof(s_pProperties)/sizeof(s_pProperties[0]) ;++nPos )
         {
             aValue.Name = s_pProperties[nPos];
@@ -450,7 +450,7 @@ inspection::InteractiveSelectionResult SAL_CALL DataProviderHandler::onInteracti
         default:
             eResult = m_xFormComponentHandler->onInteractivePropertySelection(PropertyName, Primary, out_Data, _rxInspectorUI);
     }
-
+    
     return eResult;
 }
 
@@ -499,7 +499,7 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
         const sal_Int32 nId = m_pInfoService->getPropertyId(ActuatingPropertyName);
         switch(nId)
         {
-
+            
             case PROPERTY_ID_MASTERFIELDS:
                 break;
             case PROPERTY_ID_DETAILFIELDS:
@@ -565,7 +565,7 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 
     _rClearBeforeDialog.clear();
     return ( xDialog->execute() != 0 );
-}
+} 
 //........................................................................
 } // namespace rptui
 //........................................................................

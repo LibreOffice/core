@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ using namespace ::ooo::vba;
 #define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))//liuchen 2009-6-8
 #define GET_TYPE(x) ::getCppuType((uno::Reference< x > *)0);
 
-// Some constants
+// Some constants 
 const static rtl::OUString DELIM = rtl::OUString::createFromAscii( "::" );
 const static sal_Int32 DELIMLEN = DELIM.getLength();
 
@@ -107,12 +107,12 @@ void dumpListeners( const Reference< beans::XIntrospection >& xIntrospection, co
     Reference< beans::XIntrospectionAccess > xIntrospectionAccess;
     if ( xIntrospection.is() )
     {
-        xIntrospectionAccess = xIntrospection->inspect(
+        xIntrospectionAccess = xIntrospection->inspect( 
             makeAny( xIfc ) );
-        Sequence< Type > aControlListeners =
+        Sequence< Type > aControlListeners = 
             xIntrospectionAccess->getSupportedListeners();
         sal_Int32 nLength = aControlListeners.getLength();
-
+             
         for ( sal_Int32 i = 0; i< nLength; ++i )
         {
             Type& listType = aControlListeners[ i ];
@@ -121,51 +121,51 @@ void dumpListeners( const Reference< beans::XIntrospection >& xIntrospection, co
             sal_Int32 lastDotIndex = -1;
             if ( ( lastDotIndex = sFullTypeName.lastIndexOf( '.' ) ) > -1 )
             {
-                sTypeName = sFullTypeName.copy( lastDotIndex + 1 );
-            }
-            Sequence< ::rtl::OUString > sMeths = comphelper::getEventMethodsForType( listType );
+                sTypeName = sFullTypeName.copy( lastDotIndex + 1 );    
+            } 
+            Sequence< ::rtl::OUString > sMeths = comphelper::getEventMethodsForType( listType );    
             sal_Int32 sMethLen = sMeths.getLength();
             for ( sal_Int32 j=0 ; j < sMethLen; ++j )
             {
                 OSL_TRACE("**Listener [%d] Type[%s] Method[%s]",j,
-                    rtl::OUStringToOString( sTypeName,
+                    rtl::OUStringToOString( sTypeName, 
                         RTL_TEXTENCODING_UTF8 ).getStr(),
-                    rtl::OUStringToOString( sMeths[ j ],
+                    rtl::OUStringToOString( sMeths[ j ], 
                         RTL_TEXTENCODING_UTF8 ).getStr() );
             }
         }
-
+       
     }
 }
 
 void dumpEvent( const ScriptEvent& evt )
 {
     OSL_TRACE("dumpEvent: Source %s",
-        rtl::OUStringToOString( comphelper::anyToString( makeAny(evt.Source)),
+        rtl::OUStringToOString( comphelper::anyToString( makeAny(evt.Source)), 
             RTL_TEXTENCODING_UTF8 ).getStr() );
 
     OSL_TRACE("dumpEvent: ScriptType %s",
-        rtl::OUStringToOString( evt.ScriptType,
+        rtl::OUStringToOString( evt.ScriptType, 
             RTL_TEXTENCODING_UTF8 ).getStr() );
-
+    
     OSL_TRACE("dumpEvent: ScriptCode %s",
-        rtl::OUStringToOString( evt.ScriptCode,
+        rtl::OUStringToOString( evt.ScriptCode, 
             RTL_TEXTENCODING_UTF8 ).getStr() );
 
     OSL_TRACE("dumpEvent: ListenerType %s",
-        rtl::OUStringToOString( evt.ListenerType.getTypeName(),
+        rtl::OUStringToOString( evt.ListenerType.getTypeName(), 
             RTL_TEXTENCODING_UTF8 ).getStr() );
-
+    
     OSL_TRACE("dumpEvent: Listener methodname %s",
-        rtl::OUStringToOString( evt.MethodName,
+        rtl::OUStringToOString( evt.MethodName, 
             RTL_TEXTENCODING_UTF8 ).getStr() );
 
     OSL_TRACE("dumpEvent: arguments;");
     sal_Int32 nLen = evt.Arguments.getLength();
     for ( sal_Int32 index=0; index < nLen; ++index )
     {
-        OSL_TRACE("\t [%d] %s", index,
-        rtl::OUStringToOString( comphelper::anyToString( evt.Arguments[ index ] ),
+        OSL_TRACE("\t [%d] %s", index, 
+        rtl::OUStringToOString( comphelper::anyToString( evt.Arguments[ index ] ), 
             RTL_TEXTENCODING_UTF8 ).getStr() );
 
     }
@@ -194,9 +194,9 @@ Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
     Sequence< Any > translatedParams;
     awt::MouseEvent evt;
 
-    if ( !( isMouseEventOk(evt, params)) ||
+    if ( !( isMouseEventOk(evt, params)) || 
         (evt.ClickCount != 2) )
-        return Sequence< Any >();
+        return Sequence< Any >(); 
     // give back orig params, this will signal that the event is good
     return params;
 }
@@ -207,7 +207,7 @@ Sequence< Any > ooMouseEvtToVBAMouseEvt( const Sequence< Any >& params )
     awt::MouseEvent evt;
 
     if ( !isMouseEventOk(evt, params) )
-        return Sequence< Any >();
+        return Sequence< Any >(); 
 
     translatedParams.realloc(4);
 
@@ -228,12 +228,12 @@ Sequence< Any > ooKeyPressedToVBAKeyPressed( const Sequence< Any >& params )
     awt::KeyEvent evt;
 
     if ( !isKeyEventOk( evt, params ) )
-        return Sequence< Any >();
+        return Sequence< Any >(); 
 
     translatedParams.realloc(1);
 
     msforms::ReturnInteger keyCode;
-    keyCode.Value = evt.KeyCode;
+    keyCode.Value = evt.KeyCode; 
     translatedParams[0] <<= keyCode;
     return  translatedParams;
 }
@@ -244,7 +244,7 @@ Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
     awt::KeyEvent evt;
 
     if ( !isKeyEventOk( evt, params ) )
-        return Sequence< Any >();
+        return Sequence< Any >(); 
 
     translatedParams.realloc(2);
 
@@ -252,7 +252,7 @@ Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
     sal_Int8 shift = sal::static_int_cast<sal_Int8>( evt.Modifiers );
 
     // #TODO check whether values from OOO conform to values generated from vba
-    keyCode.Value = evt.KeyCode;
+    keyCode.Value = evt.KeyCode; 
     translatedParams[0] <<= keyCode;
     translatedParams[1] <<= shift;
     return  translatedParams;
@@ -261,18 +261,18 @@ Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
 typedef Sequence< Any > (*Translator)(const Sequence< Any >&);
 
 //liuchen 2009-6-23
-//expand the "TranslateInfo" struct to support more kinds of events
+//expand the "TranslateInfo" struct to support more kinds of events 
 struct TranslateInfo
 {
     rtl::OUString sVBAName; //vba event name
-    Translator toVBA;       //the method to convert OO event parameters to VBA event parameters
-    bool (*ApproveRule)(const ScriptEvent& evt, void* pPara); //this method is used to determine which types of controls should execute the event
-    void *pPara;            //Parameters for the above approve method
+    Translator toVBA;       //the method to convert OO event parameters to VBA event parameters	
+    bool (*ApproveRule)(const ScriptEvent& evt, void* pPara); //this method is used to determine which types of controls should execute the event 
+    void *pPara;			//Parameters for the above approve method
 };
 
 
-typedef std::hash_map< rtl::OUString,
-std::list< TranslateInfo >,
+typedef std::hash_map< rtl::OUString, 
+std::list< TranslateInfo >, 
 ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > EventInfoHash;
 
@@ -280,9 +280,9 @@ std::list< TranslateInfo >,
 struct TranslatePropMap
 {
     rtl::OUString sEventInfo;   //OO event name
-    TranslateInfo aTransInfo;
+    TranslateInfo aTransInfo;   
 };
-
+ 
 bool ApproveAll(const ScriptEvent& evt, void* pPara); //allow all types of controls to execute the event
 bool ApproveType(const ScriptEvent& evt, void* pPara); //certain types of controls should execute the event, those types are given by pPara
 bool DenyType(const ScriptEvent& evt, void* pPara);    //certain types of controls should not execute the event, those types are given by pPara
@@ -306,18 +306,18 @@ TypeList radioButtonList = {&typeXRadioButton, 1};
 TypeList comboBoxList = {&typeXComboBox, 1};
 
 //this array stores the OO event to VBA event translation info
-static TranslatePropMap aTranslatePropMap_Impl[] =
+static TranslatePropMap aTranslatePropMap_Impl[] = 
 {
     // actionPerformed ooo event
-    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Click"), NULL, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Click"), NULL, ApproveAll, NULL } },	
     { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },  //liuchen 2009-7-30, OptionalButton_Change event is not the same as OptionalButton_Click event
 
     // itemStateChanged ooo event
     { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },  //liuchen, add to support VBA ComboBox_Click event
     { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } }, //liuchen 2009-7-30, OptionalButton_Change event should be triggered when the button state is changed
-
+    
     // changed ooo event
-    { MAP_CHAR_LEN("changed"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("changed"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },	
 
     // focusGained ooo event
     { MAP_CHAR_LEN("focusGained"), { MAP_CHAR_LEN("_GotFocus"), NULL, ApproveAll, NULL } },
@@ -344,7 +344,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
     { MAP_CHAR_LEN("mousePressed"), { MAP_CHAR_LEN("_MouseDown"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
     { MAP_CHAR_LEN("mousePressed"), { MAP_CHAR_LEN("_DblClick"), ooMouseEvtToVBADblClick, ApproveAll, NULL } },
 
-    // mouseMoved ooo event
+    // mouseMoved ooo event	
     { MAP_CHAR_LEN("mouseMoved"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
     { MAP_CHAR_LEN("mouseDragged"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } }, //liuchen, add to support VBA MouseMove event when the "Shift" key is pressed
 
@@ -365,17 +365,17 @@ EventInfoHash& getEventTransInfo()
 
         int i = 0;
         while (i < nCount)
-        {
+        {		
             sEventInfo = pTransProp->sEventInfo;
             std::list< TranslateInfo > infoList;
             do
-            {
+            {									
                 infoList.push_back( pTransProp->aTransInfo );
                 pTransProp++;
                 i++;
             }while(i < nCount && sEventInfo == pTransProp->sEventInfo);
-            eventTransInfo[sEventInfo] = infoList;
-        }
+            eventTransInfo[sEventInfo] = infoList;			
+        }	
         initialised = true;
     }
     return eventTransInfo;
@@ -388,7 +388,7 @@ class ScriptEventHelper
 {
 public:
     ScriptEventHelper( const Reference< XInterface >& xControl );
-    Sequence< ScriptEventDescriptor > createEvents( const rtl::OUString& sCodeName );
+    Sequence< ScriptEventDescriptor > createEvents( const rtl::OUString& sCodeName );   
     Sequence< rtl::OUString > getEventListeners();
 private:
     Reference< XComponentContext > m_xCtx;
@@ -411,16 +411,16 @@ eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescrip
     }
     sMethodName = rEventMethod.copy( nDelimPos + DELIMLEN );
     sTypeName = rEventMethod.copy( 0, nDelimPos );
-
+            
     EventInfoHash& infos = getEventTransInfo();
 
     // Only create an ScriptEventDescriptor for an event we can translate
     // or emulate
-    if ( sMethodName.getLength()
+    if ( sMethodName.getLength() 
          && sTypeName.getLength()
          && ( infos.find( sMethodName ) != infos.end() ) )
     {
-        // just fill in CodeName, when the event fires the other
+        // just fill in CodeName, when the event fires the other 
     // info is gathered from the event source to determine what
     // event handler we try to call
         evtDesc.ScriptCode = sCodeName;
@@ -430,7 +430,7 @@ eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescrip
         // set this it VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
         evtDesc.ScriptType = rtl::OUString::createFromAscii(
-            "VBAInterop" );
+            "VBAInterop" );	
         return true;
     }
     return false;
@@ -442,40 +442,40 @@ ScriptEventHelper::ScriptEventHelper( const Reference< XInterface >& xControl ) 
     Reference < beans::XPropertySet > xProps(
         ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
     m_xCtx.set( xProps->getPropertyValue( rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
+        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), 
         uno::UNO_QUERY_THROW );
 }
 
-Sequence< rtl::OUString >
+Sequence< rtl::OUString > 
 ScriptEventHelper::getEventListeners()
 {
-    Reference< lang::XMultiComponentFactory > xMFac(
+    Reference< lang::XMultiComponentFactory > xMFac( 
         m_xCtx->getServiceManager(), UNO_QUERY );
     std::list< rtl::OUString > eventMethods;
 
     if ( xMFac.is() )
     {
-        Reference< beans::XIntrospection > xIntrospection(
-            xMFac->createInstanceWithContext( rtl::OUString(
+        Reference< beans::XIntrospection > xIntrospection( 
+            xMFac->createInstanceWithContext( rtl::OUString( 
                 RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection"  ) ), m_xCtx ), UNO_QUERY );
 #if 0
         dumpListeners( xIntrospection, m_xControl );
         dumpListeners( xIntrospection, m_xControl->getModel() );
-#endif
+#endif 
         Reference< beans::XIntrospectionAccess > xIntrospectionAccess;
     if  ( xIntrospection.is() )
     {
-            xIntrospectionAccess = xIntrospection->inspect(
+            xIntrospectionAccess = xIntrospection->inspect( 
                 makeAny( m_xControl ) );
-            Sequence< Type > aControlListeners =
+            Sequence< Type > aControlListeners = 
                 xIntrospectionAccess->getSupportedListeners();
-            sal_Int32 nLength = aControlListeners.getLength();
+            sal_Int32 nLength = aControlListeners.getLength();             
             for ( sal_Int32 i = 0; i< nLength; ++i )
             {
                 Type& listType = aControlListeners[ i ];
                 rtl::OUString sFullTypeName = listType.getTypeName();
-                Sequence< ::rtl::OUString > sMeths =
-                    comphelper::getEventMethodsForType( listType );
+                Sequence< ::rtl::OUString > sMeths = 
+                    comphelper::getEventMethodsForType( listType );    
                 sal_Int32 sMethLen = sMeths.getLength();
                 for ( sal_Int32 j=0 ; j < sMethLen; ++j )
                 {
@@ -485,7 +485,7 @@ ScriptEventHelper::getEventListeners()
                     eventMethods.push_back( sEventMethod );
                 }
             }
-
+            
         }
     }
 
@@ -494,20 +494,20 @@ ScriptEventHelper::getEventListeners()
     rtl::OUString* pDest = sEventMethodNames.getArray();
 
     for ( ; it != eventMethods.end(); ++it, ++pDest )
-        *pDest = *it;
+        *pDest = *it;         
 
     return sEventMethodNames;
 }
 
-Sequence< ScriptEventDescriptor >
+Sequence< ScriptEventDescriptor > 
 ScriptEventHelper::createEvents( const rtl::OUString& sCodeName )
 {
     Sequence< rtl::OUString > aControlListeners = getEventListeners();
     rtl::OUString* pSrc = aControlListeners.getArray();
-    sal_Int32 nLength = aControlListeners.getLength();
+    sal_Int32 nLength = aControlListeners.getLength();             
 
     Sequence< ScriptEventDescriptor > aDest( nLength );
-    sal_Int32 nEvts = 0;
+    sal_Int32 nEvts = 0; 
     for ( sal_Int32 i = 0; i< nLength; ++i, ++pSrc )
     {
         // from getListeners eventName is of form
@@ -541,7 +541,7 @@ public:
     virtual void SAL_CALL insertByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException)
     {
         throw RuntimeException( rtl::OUString::createFromAscii( "ReadOnly container" ), Reference< XInterface >() );
-
+ 
     }
     virtual void SAL_CALL removeByName( const ::rtl::OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
@@ -552,9 +552,9 @@ public:
     virtual void SAL_CALL replaceByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
         throw RuntimeException( rtl::OUString::createFromAscii( "ReadOnly container" ), Reference< XInterface >() );
-
+ 
     }
-
+                                                                                
     // XNameAccess
     virtual Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException);
     virtual Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
@@ -583,13 +583,13 @@ ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< rtl::O
         ScriptEventDescriptor evtDesc;
         if (  eventMethodToDescriptor( *pSrc, evtDesc, sCodeName ) )
         {
-            aDesc <<= evtDesc;
+            aDesc <<= evtDesc; 
             m_hEvents[ *pSrc ] = aDesc;
         }
     }
 }
 
-Any SAL_CALL
+Any SAL_CALL 
 ReadOnlyEventsNameContainer::getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException){
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
     if ( it == m_hEvents.end() )
@@ -597,7 +597,7 @@ ReadOnlyEventsNameContainer::getByName( const ::rtl::OUString& aName ) throw (co
     return it->second;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL
+Sequence< ::rtl::OUString > SAL_CALL 
 ReadOnlyEventsNameContainer::getElementNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > names(m_hEvents.size());
@@ -609,7 +609,7 @@ ReadOnlyEventsNameContainer::getElementNames(  ) throw (RuntimeException)
     return names;
 }
 
-sal_Bool SAL_CALL
+sal_Bool SAL_CALL 
 ReadOnlyEventsNameContainer::hasByName( const ::rtl::OUString& aName ) throw (RuntimeException)
 {
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
@@ -625,7 +625,7 @@ class ReadOnlyEventsSupplier : public EventsSupplier_BASE
 public:
     ReadOnlyEventsSupplier( const Sequence< ::rtl::OUString >& eventMethods, const rtl::OUString& sCodeName )
     { m_xNameContainer = new ReadOnlyEventsNameContainer( eventMethods, sCodeName ); }
-
+    
     // XScriptEventSupplier
     virtual Reference< container::XNameContainer > SAL_CALL getEvents(  ) throw (RuntimeException){ return m_xNameContainer; }
 private:
@@ -643,7 +643,7 @@ class EventListener : public EventListener_BASE
     ,public ::comphelper::OPropertyArrayUsageHelper< EventListener >
 
 {
-
+    
 public:
     EventListener( const Reference< XComponentContext >& rxContext );
     // XEventListener
@@ -654,7 +654,7 @@ public:
     virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException);
     virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException);
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);    
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
     // XInterface
@@ -683,7 +683,7 @@ private:
     Reference< XComponentContext > m_xContext;
     Reference< frame::XModel > m_xModel;
     SfxObjectShell* mpShell;
-
+    
 };
 
 EventListener::EventListener( const Reference< XComponentContext >& rxContext ) :
@@ -708,7 +708,7 @@ EventListener::setShellFromModel()
             break;
         }
         pShell = SfxObjectShell::GetNext( *pShell );
-    }
+    }    
 }
 
 //XEventListener
@@ -719,13 +719,13 @@ EventListener::disposing(const lang::EventObject&)  throw( RuntimeException )
 
 //XScriptListener
 
-void SAL_CALL
+void SAL_CALL 
 EventListener::firing(const ScriptEvent& evt) throw(RuntimeException)
 {
     firing_Impl( evt );
 }
 
-Any SAL_CALL
+Any SAL_CALL 
 EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException)
 {
     Any ret;
@@ -734,7 +734,7 @@ EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::Invocatio
 }
 
 // XInitialization
-void SAL_CALL
+void SAL_CALL 
 EventListener::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
 {
     if ( aArguments.getLength() == 1 )
@@ -752,7 +752,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( EventListener, EventListener_BASE, OPropertyCo
 
 // OPropertySetHelper
 
-::cppu::IPropertyArrayHelper&
+::cppu::IPropertyArrayHelper& 
 EventListener::getInfoHelper(  )
 {
     return *getArrayHelper();
@@ -760,7 +760,7 @@ EventListener::getInfoHelper(  )
 
 // OPropertyArrayUsageHelper
 
-::cppu::IPropertyArrayHelper*
+::cppu::IPropertyArrayHelper* 
 EventListener::createArrayHelper(  ) const
 {
     Sequence< beans::Property > aProps;
@@ -769,7 +769,7 @@ EventListener::createArrayHelper(  ) const
 }
 
 // XPropertySet
-Reference< beans::XPropertySetInfo >
+Reference< beans::XPropertySetInfo > 
 EventListener::getPropertySetInfo(  ) throw (RuntimeException)
 {
     Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -819,7 +819,7 @@ bool DenyType(const ScriptEvent& evt, void* pPara)
 }
 
 //when mouse is moving, either the mouse button is pressed or some key is pressed can trigger the OO mouseDragged event,
-//the former should be denyed, and the latter allowed, only by doing so can the VBA MouseMove event when the "Shift" key is
+//the former should be denyed, and the latter allowed, only by doing so can the VBA MouseMove event when the "Shift" key is 
 //pressed can be correctly triggered
 bool DenyMouseDrag(const ScriptEvent& evt, void* )
 {
@@ -886,15 +886,15 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
             eventInfo_it->second.begin();
         std::list< TranslateInfo >::const_iterator txInfo_end = eventInfo_it->second.end();
         rtl::OUString sMacroLoc = rtl::OUString::createFromAscii("Standard.").concat( evt.ScriptCode ).concat( rtl::OUString::createFromAscii(".") );
-
+       
         StarBASIC* pBasic = mpShell->GetBasic();
         SbModule* pModule = pBasic->FindModule( evt.ScriptCode );
         for ( ; pModule && txInfo != txInfo_end; ++txInfo )
         {
             // see if we have a match for the handlerextension
-            // where ScriptCode is methodname_handlerextension
-            rtl::OUString sTemp = sName.concat( (*txInfo).sVBAName );
-
+            // where ScriptCode is methodname_handlerextension 
+            rtl::OUString sTemp = sName.concat( (*txInfo).sVBAName ); 
+            
             OSL_TRACE("*** trying to invoke %s ",
                 rtl::OUStringToOString( sTemp, RTL_TEXTENCODING_UTF8 ).getStr() );
             SbMethod* pMeth = static_cast< SbMethod* >( pModule->Find( sTemp, SbxCLASS_METHOD ) );
@@ -906,7 +906,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
                     continue;
                 }
                 //liuchen 2009-6-8
-                // !! translate arguments & emulate events where necessary
+                // !! translate arguments & emulate events where necessary 
                 Sequence< Any > aArguments;
                 if  ( (*txInfo).toVBA )
                     aArguments = (*txInfo).toVBA( evt.Arguments );
@@ -917,13 +917,13 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
                     // call basic event handlers for event
 
                     static rtl::OUString part1 = rtl::OUString::createFromAscii( "vnd.sun.star.script:");
-                    static rtl::OUString part2 = rtl::OUString::createFromAscii("?language=Basic&location=document");
+                    static rtl::OUString part2 = rtl::OUString::createFromAscii("?language=Basic&location=document"); 
 
                     // create script url
                     rtl::OUString url = part1 + sMacroLoc + sTemp + part2;
-
+                 
                     OSL_TRACE("script url = %s",
-                        rtl::OUStringToOString( url,
+                        rtl::OUStringToOString( url, 
                             RTL_TEXTENCODING_UTF8 ).getStr() );
                     Sequence< sal_Int16 > aOutArgsIndex;
                     Sequence< Any > aOutArgs;
@@ -940,7 +940,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
                     {
                         OSL_TRACE("event script raised %s", rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
-               }
+               } 
            }
        }
     }
@@ -959,29 +959,29 @@ public:
     virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const rtl::OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException);
 private:
     Reference< XComponentContext > m_xContext;
-
+  
 };
 
 VBAToOOEventDescGen::VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext ):m_xContext( rxContext ) {}
 
-Sequence< ScriptEventDescriptor > SAL_CALL
+Sequence< ScriptEventDescriptor > SAL_CALL 
 VBAToOOEventDescGen::getEventDescriptions( const Reference< XInterface >& xControl, const rtl::OUString& sCodeName ) throw (RuntimeException)
 {
-    ScriptEventHelper evntHelper( xControl );
-    return evntHelper.createEvents( sCodeName );
+    ScriptEventHelper evntHelper( xControl ); 
+    return evntHelper.createEvents( sCodeName ); 
 }
 
-Reference< XScriptEventsSupplier > SAL_CALL
+Reference< XScriptEventsSupplier > SAL_CALL 
 VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, const rtl::OUString& sCodeName  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ScriptEventHelper evntHelper( xControl );
-    Reference< XScriptEventsSupplier > xSupplier =
-        new ReadOnlyEventsSupplier(
+    ScriptEventHelper evntHelper( xControl ); 
+    Reference< XScriptEventsSupplier > xSupplier = 
+        new ReadOnlyEventsSupplier( 
             evntHelper.getEventListeners(), sCodeName ) ;
     return xSupplier;
 }
 
-// Component related
+// Component related 
 
 namespace evtlstner
 {
@@ -1011,9 +1011,9 @@ namespace evtlstner
     {
         const ::rtl::OUString strName( ::evtlstner::getImplementationName() );
         return Sequence< ::rtl::OUString >( &strName, 1 );
-    }
+    }	
 }
-namespace ooevtdescgen
+namespace ooevtdescgen 
 {
     ::rtl::OUString SAL_CALL getImplementationName()
     {
@@ -1041,5 +1041,5 @@ namespace ooevtdescgen
     {
         const ::rtl::OUString strName( ::ooevtdescgen::getImplementationName() );
         return Sequence< ::rtl::OUString >( &strName, 1 );
-    }
+    }	
 }

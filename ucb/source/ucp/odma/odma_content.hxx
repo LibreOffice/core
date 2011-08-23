@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@
 #include <list>
 #include <ucbhelper/contenthelper.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace beans {
         struct Property;
         struct PropertyValue;
-    }
+    } 
     namespace sdbc {
         class XRow;
     }
@@ -66,9 +66,9 @@ class ContentProvider;
 class ContentProperties;
 class Content : public ::ucbhelper::ContentImplHelper
 {
-    ::rtl::Reference<ContentProperties> m_aProps;
-    ContentProvider*                    m_pProvider;
-    ::ucbhelper::Content*               m_pContent;
+    ::rtl::Reference<ContentProperties>	m_aProps;
+    ContentProvider*				    m_pProvider;
+    ::ucbhelper::Content*				m_pContent;
 
 private:
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
@@ -96,12 +96,12 @@ private:
     ::rtl::OUString openDoc();
 
     /** changePropertyValue sets the property referenced by _sMemberValue to the new value
-        @param  _rValue         the new value to set
-        @param  _rnCurrentPos   the current position inside the Any sequence _rRet
-        @param  _sMemberValue   the place where to set the property
-        @param  _rnChanged      will be incremented when property changed
-        @param  _rRet           collect the exceptions
-        @param  _rChanges       contains the changes done
+        @param	_rValue			the new value to set
+        @param	_rnCurrentPos	the current position inside the Any sequence _rRet
+        @param	_sMemberValue	the place where to set the property
+        @param	_rnChanged		will be incremented when property changed
+        @param	_rRet			collect the exceptions
+        @param	_rChanges		contains the changes done
     */
     void changePropertyValue(const ::com::sun::star::beans::PropertyValue& _rValue,
                              sal_Int32 _rnCurrentPos,
@@ -123,7 +123,7 @@ private:
         throw( ::com::sun::star::uno::Exception );
 
 //  // Command "delete"
-//  void destroy( sal_Bool bDeletePhysical )
+//	void destroy( sal_Bool bDeletePhysical )
 //      throw( ::com::sun::star::uno::Exception );
 
 public:
@@ -185,7 +185,7 @@ public:
                            ::com::sun::star::beans::Property >& rProperties,
                        const ::rtl::Reference<ContentProperties>& rData,
                        const ::rtl::Reference<
-                           ::ucbhelper::ContentProviderImplHelper >&    rProvider,
+                           ::ucbhelper::ContentProviderImplHelper >&	rProvider,
                        const ::rtl::OUString& rContentId );
 
     ContentProvider* getContentProvider() const { return m_pProvider; }

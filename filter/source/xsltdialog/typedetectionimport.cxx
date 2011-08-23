@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ using namespace rtl;
 using namespace std;
 
 TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >& xMSF )
-:   mxMSF(xMSF),
+:	mxMSF(xMSF),
     sRootNode( RTL_CONSTASCII_USTRINGPARAM( "oor:component-data" ) ),
     sNode( RTL_CONSTASCII_USTRINGPARAM( "node" ) ),
     sName( RTL_CONSTASCII_USTRINGPARAM( "oor:name" ) ),
@@ -68,7 +68,7 @@ TypeDetectionImporter::~TypeDetectionImporter (void )
 }
 
 void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, Reference< XInputStream > xIS, XMLFilterVector& rFilters )
-{
+{	
     try
     {
         Reference< XParser > xParser( xMSF->createInstance(OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) ), UNO_QUERY );
@@ -81,7 +81,7 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
             InputSource source;
             source.aInputStream = xIS;
 
-            // start parsing
+            // start parsing 
             xParser->parseStream( source );
 
             pImporter->fillFilterVector( rFilters );
@@ -154,7 +154,7 @@ Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
 
         aIter++;
     }
-
+    
     return NULL;
 }
 
@@ -170,7 +170,7 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     sal_Unicode aComma(',');
 
     pFilter->maType = getSubdata( 1, aComma, aData  );
-    pFilter->maDocumentService = getSubdata( 2, aComma, aData );
+    pFilter->maDocumentService = getSubdata( 2, aComma, aData );    
 
     OUString aFilterService( getSubdata( 3, aComma, aData ) );
     pFilter->maFlags = getSubdata( 4, aComma, aData ).toInt32();
@@ -236,17 +236,17 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     return pFilter;
 }
 
-void SAL_CALL TypeDetectionImporter::startDocument(  )
+void SAL_CALL TypeDetectionImporter::startDocument(  ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-void SAL_CALL TypeDetectionImporter::endDocument(  )
+void SAL_CALL TypeDetectionImporter::endDocument(  ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
+void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
     ImportState eNewState = e_Unknown;
@@ -303,11 +303,11 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
 
     maStack.push( eNewState );
 }
-void SAL_CALL TypeDetectionImporter::endElement( const OUString& /* aName */ )
+void SAL_CALL TypeDetectionImporter::endElement( const OUString& /* aName */ ) 	
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
     if( !maStack.empty()  )
-    {
+    { 
         ImportState eCurrentState = maStack.top();
         switch( eCurrentState )
         {
@@ -339,7 +339,7 @@ void SAL_CALL TypeDetectionImporter::endElement( const OUString& /* aName */ )
         maStack.pop();
     }
 }
-void SAL_CALL TypeDetectionImporter::characters( const OUString& aChars )
+void SAL_CALL TypeDetectionImporter::characters( const OUString& aChars ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
     if( !maStack.empty() && maStack.top() == e_Value )
@@ -347,15 +347,15 @@ void SAL_CALL TypeDetectionImporter::characters( const OUString& aChars )
         maValue += aChars;
     }
 }
-void SAL_CALL TypeDetectionImporter::ignorableWhitespace( const OUString& /* aWhitespaces */ )
+void SAL_CALL TypeDetectionImporter::ignorableWhitespace( const OUString& /* aWhitespaces */ ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
-void SAL_CALL TypeDetectionImporter::processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ )
+void SAL_CALL TypeDetectionImporter::processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
-void SAL_CALL TypeDetectionImporter::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /* xLocator */ )
+void SAL_CALL TypeDetectionImporter::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /* xLocator */ ) 	
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }

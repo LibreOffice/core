@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace container {
         class XNameAccess;
         class XHierarchicalNameAccess;
@@ -53,12 +53,12 @@ namespace com { namespace sun { namespace star {
 }}}
 
 
-#define SAD_DEFAULT                 0x0000
-#define SAD_ADDITIONAL_DESCRIPTION  0x0001
+#define	SAD_DEFAULT					0x0000
+#define SAD_ADDITIONAL_DESCRIPTION	0x0001
 
-#define SAD_TITLE_STORE_AS          0x0000
-#define SAD_TITLE_PASTE_AS          0x0100
-#define SAD_TITLE_RENAME            0x0200
+#define SAD_TITLE_STORE_AS			0x0000
+#define SAD_TITLE_PASTE_AS			0x0100
+#define SAD_TITLE_RENAME			0x0200
 
 class Button;
 class Edit;
@@ -72,14 +72,14 @@ namespace dbaui
         OSaveAsDlgImpl* m_pImpl;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     public:
-        OSaveAsDlg( Window * pParent,const sal_Int32& _rType,
+        OSaveAsDlg(	Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                     const String& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 
-        OSaveAsDlg( Window* _pParent,
+        OSaveAsDlg(	Window* _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                     const String& _rDefault,
                     const String& _sLabel,

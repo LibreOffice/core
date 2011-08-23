@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,7 @@
 #include "vbanames.hxx"  // Amelia Wang
 #include "nameuno.hxx"
 #include "docoptio.hxx"
+#include "unonames.hxx"
 
 // Much of the impl. for the equivalend UNO module is
 // sc/source/ui/unoobj/docuno.cxx, viewuno.cxx
@@ -61,11 +62,11 @@ class ActiveSheet : public ScVbaWorksheet
 {
 protected:
     virtual uno::Reference< frame::XModel > getModel()
-    {
-        return getCurrentExcelDoc( mxContext );
+    { 	
+        return getCurrentExcelDoc( mxContext ); 
     }
     virtual uno::Reference< sheet::XSpreadsheet > getSheet()
-    {
+    { 
         uno::Reference< frame::XModel > xModel = getModel();
         uno::Reference< sheet::XSpreadsheet > xSheet;
         if ( xModel.is() )
@@ -73,13 +74,13 @@ protected:
             uno::Reference< sheet::XSpreadsheetView > xSpreadsheet(
                             xModel->getCurrentController(), uno::UNO_QUERY );
             if ( xSpreadsheet.is() )
-                xSheet = xSpreadsheet->getActiveSheet();
+                xSheet = xSpreadsheet->getActiveSheet(); 
         }
         return xSheet;
     }
 public:
     ActiveSheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : ScVbaWorksheet( xParent, xContext ) {}
-
+        
 };
 
 uno::Sequence< sal_Int32 > ScVbaWorkbook::ColorData;
@@ -94,13 +95,13 @@ void ScVbaWorkbook::initColorData( const uno::Sequence< sal_Int32 >& sColors )
 }
 
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaWorkbook::ResetColors(  ) throw (::script::BasicErrorException, ::uno::RuntimeException)
 {
         uno::Reference< container::XIndexAccess > xIndexAccess( ScVbaPalette::getDefaultPalette(), uno::UNO_QUERY_THROW );
         sal_Int32 nLen = xIndexAccess->getCount();
         ColorData.realloc( nLen );
-
+    
         uno::Sequence< sal_Int32 > dDefaultColors( nLen );
         sal_Int32* pDest = dDefaultColors.getArray();
         for ( sal_Int32 index=0; index < nLen; ++pDest, ++index )
@@ -108,7 +109,7 @@ ScVbaWorkbook::ResetColors(  ) throw (::script::BasicErrorException, ::uno::Runt
         initColorData( dDefaultColors );
 }
 
-::uno::Any SAL_CALL
+::uno::Any SAL_CALL 
 ScVbaWorkbook::Colors( const ::uno::Any& Index ) throw (::script::BasicErrorException, ::uno::RuntimeException)
 {
     uno::Any aRet;
@@ -116,14 +117,14 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index ) throw (::script::BasicErrorExce
     {
         sal_Int32 nIndex = 0;
         Index >>= nIndex;
-        aRet = uno::makeAny( XLRGBToOORGB( ColorData[ --nIndex ] ) );
+        aRet = uno::makeAny( XLRGBToOORGB( ColorData[ --nIndex ] ) );			
     }
     else
         aRet = uno::makeAny( ColorData );
     return aRet;
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32 SAL_CALL 
 ScVbaWorkbook::FileFormat(  ) throw (::script::BasicErrorException, ::uno::RuntimeException)
 {
         sal_Int32 aFileFormat = 0;
@@ -184,13 +185,13 @@ ScVbaWorkbook::FileFormat(  ) throw (::script::BasicErrorException, ::uno::Runti
         return aFileFormat;
 }
 
-void
+void 
 ScVbaWorkbook::init()
 {
     if ( !ColorData.getLength() )
         ResetColors();
 }
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext) :ScVbaWorkbook_BASE( xParent, xContext )
+ScVbaWorkbook::ScVbaWorkbook( 	const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext) :ScVbaWorkbook_BASE( xParent, xContext )
 {
     //#FIXME this persists the color data per office instance and
     // not per workbook instance, need to hook the data into XModel
@@ -201,14 +202,13 @@ ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface 
     init();
 }
 
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel ) : ScVbaWorkbook_BASE( xParent, xContext, xModel )
-{
+ScVbaWorkbook::ScVbaWorkbook( 	const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel ) : ScVbaWorkbook_BASE( xParent, xContext, xModel )
+{ 
     init();
 }
 
 ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
     uno::Reference< uno::XComponentContext> const & xContext ) : ScVbaWorkbook_BASE( args, xContext )
-
 {
     init();
 }
@@ -216,31 +216,34 @@ ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
 uno::Reference< excel::XWorksheet >
 ScVbaWorkbook::getActiveSheet() throw (uno::RuntimeException)
 {
-    uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ) );
-    uno::Reference< sheet::XSpreadsheet > xSheet;
+    uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
     uno::Reference< sheet::XSpreadsheetView > xView( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    if ( xView.is() )
-        xSheet = xView->getActiveSheet();
-    return new ScVbaWorksheet( this, mxContext, xSheet, xModel );
+    uno::Reference< beans::XPropertySet > xSheetProps( xView->getActiveSheet(), uno::UNO_QUERY_THROW );
+    // #162503# return the original document module wrapper object, instead of a new instance
+    ::rtl::OUString aCodeName;
+    xSheetProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_CODENAME ) ) ) >>= aCodeName;
+    ScDocShell* pShell = excel::getDocShell( xModel );
+    if( !pShell )
+        throw uno::RuntimeException();
+    return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
 }
+
 uno::Any SAL_CALL
 ScVbaWorkbook::Sheets( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     return Worksheets( aIndex );
 }
 
-
-
 uno::Any SAL_CALL
 ScVbaWorkbook::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< frame::XModel > xModel( getModel() );
+    uno::Reference< frame::XModel > xModel( getModel() );	
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
     uno::Reference<container::XIndexAccess > xSheets( xSpreadDoc->getSheets(), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xWorkSheets(  new ScVbaWorksheets( this, mxContext, xSheets, xModel ) );
     if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
     {
-        return uno::Any( xWorkSheets );
+        return uno::Any( xWorkSheets );	
     }
     // pass on to collection
     return uno::Any( xWorkSheets->Item( aIndex, uno::Any() ) );
@@ -296,12 +299,12 @@ ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::Runtime
     xStor->storeToURL( aURL, storeProps );
 }
 
-css::uno::Any SAL_CALL
+css::uno::Any SAL_CALL 
 ScVbaWorkbook::Styles( const::uno::Any& Item ) throw (uno::RuntimeException)
 {
     // quick look and Styles object doesn't seem to have a valid parent
-    // or a least the object browser just shows an object that has no
-    // variables ( therefore... leave as NULL for now )
+    // or a least the object browser just shows an object that has no 
+    // variables ( therefore... leave as NULL for now ) 
     uno::Reference< XCollection > dStyles = new ScVbaStyles( uno::Reference< XHelperInterface >(), mxContext, getModel() );
     if ( Item.hasValue() )
         return dStyles->Item( Item, uno::Any() );
@@ -323,14 +326,14 @@ ScVbaWorkbook::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException
     return uno::Any( xNames->Item( aIndex, uno::Any() ) );
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaWorkbook::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWorkbook") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaWorkbook::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ bool lcl_deleteDataSeries(
             ::chart::DataSeriesHelper::deleteSeries( xSeries, xChartType );
 
             ::chart::AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram );
-
+                        
             bResult = true;
             aUndoGuard.commitAction();
         }
@@ -210,7 +210,7 @@ namespace chart
     awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
 
     return ::std::auto_ptr< ReferenceSizeProvider >(
-        new ReferenceSizeProvider( aPageSize,
+        new ReferenceSizeProvider( aPageSize, 
             Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
 }
 
@@ -247,7 +247,7 @@ void ChartController::executeDispatch_NewArrangement()
 
             // 3d rotation
             ThreeDHelper::set3DSettingsToDefault( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ) );
-
+            
             // legend
             Reference< beans::XPropertyState > xLegendState( xDiagram->getLegend(), uno::UNO_QUERY );
             if( xLegendState.is())
@@ -827,16 +827,14 @@ bool ChartController::executeDispatch_Delete()
     else
     {
         //remove additional shape
-        uno::Reference< drawing::XShape > xShape( m_aSelection.getSelectedAdditionalShape() );
-        if( xShape.is() )
+        impl_ClearSelection();
         {
-            impl_ClearSelection();
+            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            if ( m_pDrawViewWrapper )
             {
-                ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-                if( m_pDrawViewWrapper )
-                    m_pDrawViewWrapper->UnmarkAll();
+                m_pDrawViewWrapper->DeleteMarked();
+                bReturn = true;
             }
-            bReturn = DrawModelWrapper::removeShape( xShape );
         }
     }
     return bReturn;

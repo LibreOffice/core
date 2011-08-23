@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,8 +129,8 @@ drawing::HomogenMatrix3 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMat
 ::basegfx::B3DPoint Position3DToB3DPoint( const drawing::Position3D& rPosition )
 {
     return ::basegfx::B3DPoint(
-        rPosition.PositionX ,
-        rPosition.PositionY ,
+        rPosition.PositionX , 
+        rPosition.PositionY , 
         rPosition.PositionZ );
 }
 
@@ -199,7 +199,7 @@ void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position
 drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygon, sal_Int32 nPointIndex, sal_Int32 nPolyIndex )
 {
     drawing::Position3D aRet(0.0,0.0,0.0);
-
+    
     if( nPolyIndex>=0 && nPolyIndex<rPolygon.SequenceX.getLength())
     {
         if(nPointIndex<rPolygon.SequenceX[nPolyIndex].getLength())
@@ -352,7 +352,7 @@ void appendPointSequence( drawing::PointSequenceSequence& rTarget
     if(!nAddCount)
         return;
     sal_Int32 nOldCount = rTarget.getLength();
-
+    
     rTarget.realloc(nOldCount+nAddCount);
     for(sal_Int32 nS=0; nS<nAddCount; nS++ )
         rTarget[nOldCount+nS]=rAdd[nS];

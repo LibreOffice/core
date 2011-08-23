@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
                                    GetValue());
 
             if(HasCurrentFunction(SID_BEZIER_EDIT))
-            {   // ggf. die richtige Editfunktion aktivieren
+            {	// ggf. die richtige Editfunktion aktivieren
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
                                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             }
@@ -160,8 +160,8 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
 // automatisches Auf/Zuklappen des FontWork-Dialog; erstmal deaktiviert
-//      if ( pDlg )
-//          pDlg->SetActive(FALSE);
+//		if ( pDlg )
+//			pDlg->SetActive(FALSE);
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -180,7 +180,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     {
         if ( pDlg )
         {
-//          pDlg->SetActive();
+//			pDlg->SetActive();
             pDlg->SetColorTable(GetDoc()->GetColorTable());
         }
 
@@ -261,7 +261,7 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         UINT32 nInv = pObj->GetObjInventor();
-        UINT16 nId  = pObj->GetObjIdentifier();
+        UINT16 nId	= pObj->GetObjIdentifier();
         // 1 selektiertes Gruppenobjekt
         if( nInv == SdrInventor && nId == OBJ_GRUP )
             nValue = 3;
@@ -373,8 +373,8 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
-                SdrGrafObj* pNewObj = (SdrGrafObj*) pObj->Clone();
-                BOOL        bCont = TRUE;
+                SdrGrafObj*	pNewObj = (SdrGrafObj*) pObj->Clone();
+                BOOL		bCont = TRUE;
 
                 if( pNewObj->IsLinkedGraphic() )
                 {
@@ -392,8 +392,8 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
                 if( bCont )
                 {
-                    const Graphic&  rOldGraphic = pNewObj->GetGraphic();
-                    const Graphic   aNewGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow(
+                    const Graphic&	rOldGraphic = pNewObj->GetGraphic();
+                    const Graphic	aNewGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( 
                                                  SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                                  Mask( rOldGraphic ) );
 
@@ -402,7 +402,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
                         pNewObj->SetEmptyPresObj( FALSE );
-                        pNewObj->SetGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow(
+                        pNewObj->SetGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( 
                                              SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                              Mask( pNewObj->GetGraphic() ) );
 
@@ -431,11 +431,11 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
 void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
-    const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-    const SdrObject*    pObj = NULL;
-    USHORT              nId = SvxBmpMaskChildWindow::GetChildWindowId();
-    SvxBmpMask*         pDlg = NULL;
-    BOOL                bEnable = FALSE;
+    const SdrMarkList&	rMarkList = mpDrawView->GetMarkedObjectList();
+    const SdrObject*	pObj = NULL;
+    USHORT				nId = SvxBmpMaskChildWindow::GetChildWindowId();
+    SvxBmpMask* 		pDlg = NULL;
+    BOOL				bEnable = FALSE;
 
     if ( GetViewFrame()->HasChildWindow( nId ) )
     {
@@ -683,7 +683,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             rReq.Ignore ();
         }
         break;
-
+        
         case SID_LAYER_DIALOG_WIN:
         {
             if ( rReq.GetArgs() )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 #include <tools/solar.h>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase2.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -49,34 +49,34 @@ namespace linguistic
 
 ///////////////////////////////////////////////////////////////////////////
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSpellAlternatives >
+::com::sun::star::uno::Reference< 
+    ::com::sun::star::linguistic2::XSpellAlternatives > 
         MergeProposals(
-                ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::Reference< 
                     ::com::sun::star::linguistic2::XSpellAlternatives > &rxAlt1,
-                ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::Reference< 
                     ::com::sun::star::linguistic2::XSpellAlternatives > &rxAlt2 );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString >
+::com::sun::star::uno::Sequence< ::rtl::OUString > 
         MergeProposalSeqs(
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt1,
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt2,
                 BOOL bAllowDuplicates );
 
-void    SeqRemoveNegEntries(
+void    SeqRemoveNegEntries( 
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XDictionaryList > &rxDicList,
+                ::com::sun::star::uno::Reference< 
+                    ::com::sun::star::linguistic2::XDictionaryList > &rxDicList, 
                 INT16 nLanguage );
 
-BOOL    SeqHasEntry(
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
+BOOL    SeqHasEntry( 
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq, 
                 const ::rtl::OUString &rTxt);
 
 ///////////////////////////////////////////////////////////////////////////
 
-void SearchSimilarText( const rtl::OUString &rText, INT16 nLanguage,
-        ::com::sun::star::uno::Reference<
+void SearchSimilarText( const rtl::OUString &rText, INT16 nLanguage, 
+        ::com::sun::star::uno::Reference< 
             ::com::sun::star::linguistic2::XDictionaryList > &xDicList,
         std::vector< rtl::OUString > & rDicListProps );
 
@@ -90,10 +90,10 @@ class SpellAlternatives :
         ::com::sun::star::linguistic2::XSetSpellAlternatives
     >
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aAlt;   // list of alternatives, may be empty.
-    ::rtl::OUString         aWord;
-    INT16                   nType;          // type of failure
-    INT16                   nLanguage;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >	aAlt;	// list of alternatives, may be empty.
+    ::rtl::OUString			aWord;
+    INT16					nType;			// type of failure
+    INT16					nLanguage;
 
     // disallow copy-constructor and assignment-operator for now
     SpellAlternatives(const SpellAlternatives &);
@@ -119,16 +119,16 @@ public:
     virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) throw (::com::sun::star::uno::RuntimeException);
 
     // non-interface specific functions
-    void    SetWordLanguage(const ::rtl::OUString &rWord, INT16 nLang);
-    void    SetFailureType(INT16 nTypeP);
-    void    SetAlternatives(
+    void	SetWordLanguage(const ::rtl::OUString &rWord, INT16 nLang);
+    void	SetFailureType(INT16 nTypeP);
+    void	SetAlternatives(
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
 };
 
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
 #endif
 

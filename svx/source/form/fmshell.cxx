@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,23 +101,23 @@
 
 #include "svx/sdrobjectfilter.hxx"
 
-#define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
-    try                                                                     \
-    {                                                                       \
-        successflag = sal_False;                                                \
-        action;                                                             \
-        successflag = sal_True;                                                 \
-    }                                                                       \
-    catch(::com::sun::star::sdbc::SQLException& e)                                                  \
-    {                                                                       \
-        ::com::sun::star::sdb::SQLContext eExtendedInfo =                                           \
-        GetImpl()->prependContextInfo(e, Reference< XInterface > (), context, ::rtl::OUString());              \
-        displayException(eExtendedInfo);                                    \
-    }                                                                       \
-    catch(Exception&)                                                           \
-    {                                                                       \
-        DBG_ERROR(message);                                                 \
-    }                                                                       \
+#define HANDLE_SQL_ERRORS( action, successflag, context, message )			\
+    try 																	\
+    {																		\
+        successflag = sal_False;												\
+        action; 															\
+        successflag = sal_True; 												\
+    }																		\
+    catch(::com::sun::star::sdbc::SQLException& e)													\
+    {																		\
+        ::com::sun::star::sdb::SQLContext eExtendedInfo =											\
+        GetImpl()->prependContextInfo(e, Reference< XInterface > (), context, ::rtl::OUString());			   \
+        displayException(eExtendedInfo);									\
+    }																		\
+    catch(Exception&)															\
+    {																		\
+        DBG_ERROR(message); 												\
+    }																		\
 
 
 #define DO_SAFE_WITH_ERROR( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); }
@@ -134,7 +134,7 @@
 
 // wird fuer Invalidate verwendet -> mitpflegen
 // aufsteigend sortieren !!!!!!
-sal_uInt16 ControllerSlotMap[] =    // slots des Controllers
+sal_uInt16 ControllerSlotMap[] =	// slots des Controllers
 {
     SID_FM_CONFIG,
     SID_FM_PUSHBUTTON,
@@ -213,7 +213,7 @@ const sal_uInt32 FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR    = 0x00000040;
 const sal_uInt32 FM_UI_FEATURE_TB_CONTROLS              = 0x00000080;
 const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS          = 0x00000100;
 const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN            = 0x00000200;
-const sal_uInt32 FM_UI_FEATURE_SHOW_DATANAVIGATOR       = 0x00000400;
+const sal_uInt32 FM_UI_FEATURE_SHOW_DATANAVIGATOR 	    = 0x00000400;
 
 SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
 {
@@ -549,7 +549,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_TOGGLECONTROLFOCUS, sal_False );
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
-            {   // see below
+            {	// see below
                 SfxViewShell* pShell = GetViewShell();
                 Window* pShellWnd = pShell ? pShell->GetWindow() : NULL;
                 if ( pShellWnd )
@@ -573,7 +573,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
             if ( rReq.GetModifier() & KEY_MOD1 )
             {
-                //  #99013# if selected with control key, return focus to current view
+                //	#99013# if selected with control key, return focus to current view
                 // do this asynchron, so that the creation can be finished first
                 // reusing the SID_FM_TOGGLECONTROLFOCUS is somewhat hacky ... which it wouldn't if it would have another
                 // name, so I do not really have a big problem with this ....
@@ -583,7 +583,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             rReq.Done();
-        }   break;
+        }	break;
     }
 
     // Individuelle Aktionen
@@ -625,23 +625,23 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_VIEW_AS_GRID:
             GetImpl()->CreateExternalView();
             break;
-        case SID_FM_CONVERTTO_EDIT          :
-        case SID_FM_CONVERTTO_BUTTON            :
-        case SID_FM_CONVERTTO_FIXEDTEXT     :
-        case SID_FM_CONVERTTO_LISTBOX       :
-        case SID_FM_CONVERTTO_CHECKBOX      :
-        case SID_FM_CONVERTTO_RADIOBUTTON   :
-        case SID_FM_CONVERTTO_GROUPBOX      :
-        case SID_FM_CONVERTTO_COMBOBOX      :
-        case SID_FM_CONVERTTO_IMAGEBUTTON   :
-        case SID_FM_CONVERTTO_FILECONTROL   :
-        case SID_FM_CONVERTTO_DATE          :
-        case SID_FM_CONVERTTO_TIME          :
-        case SID_FM_CONVERTTO_NUMERIC       :
-        case SID_FM_CONVERTTO_CURRENCY      :
-        case SID_FM_CONVERTTO_PATTERN       :
-        case SID_FM_CONVERTTO_IMAGECONTROL  :
-        case SID_FM_CONVERTTO_FORMATTED     :
+        case SID_FM_CONVERTTO_EDIT			:
+        case SID_FM_CONVERTTO_BUTTON			:
+        case SID_FM_CONVERTTO_FIXEDTEXT 	:
+        case SID_FM_CONVERTTO_LISTBOX		:
+        case SID_FM_CONVERTTO_CHECKBOX		:
+        case SID_FM_CONVERTTO_RADIOBUTTON	:
+        case SID_FM_CONVERTTO_GROUPBOX		:
+        case SID_FM_CONVERTTO_COMBOBOX		:
+        case SID_FM_CONVERTTO_IMAGEBUTTON	:
+        case SID_FM_CONVERTTO_FILECONTROL	:
+        case SID_FM_CONVERTTO_DATE			:
+        case SID_FM_CONVERTTO_TIME			:
+        case SID_FM_CONVERTTO_NUMERIC		:
+        case SID_FM_CONVERTTO_CURRENCY		:
+        case SID_FM_CONVERTTO_PATTERN		:
+        case SID_FM_CONVERTTO_IMAGECONTROL	:
+        case SID_FM_CONVERTTO_FORMATTED 	:
         case SID_FM_CONVERTTO_SCROLLBAR     :
         case SID_FM_CONVERTTO_SPINBUTTON    :
         case SID_FM_CONVERTTO_NAVIGATIONBAR :
@@ -679,7 +679,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             GetImpl()->ShowSelectionProperties( bShow );
 
             rReq.Done();
-        }   break;
+        }	break;
 
         case SID_FM_CTL_PROPERTIES:
         {
@@ -692,7 +692,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             GetImpl()->ShowSelectionProperties( bShow );
 
             rReq.Done();
-        }   break;
+        }	break;
         case SID_FM_SHOW_PROPERTIES:
         case SID_FM_ADD_FIELD:
         case SID_FM_FILTER_NAVIGATOR:
@@ -700,10 +700,10 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
             rReq.Done();
-        }   break;
+        }	break;
         case SID_FM_SHOW_FMEXPLORER:
         {
-            if (!m_pFormView)   // setzen der ::com::sun::star::sdbcx::View Forcieren
+            if (!m_pFormView)	// setzen der ::com::sun::star::sdbcx::View Forcieren
                 GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_CREATE_SW_DRAWVIEW);
 
             GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
@@ -822,7 +822,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 rController->execute( nSlot, ::rtl::OUString::createFromAscii( "Position" ), makeAny( (sal_Int32)nRecord ) );
 
             rReq.Done();
-        }   break;
+        }	break;
         case SID_FM_FILTER_EXECUTE:
         case SID_FM_FILTER_EXIT:
         {
@@ -842,10 +842,10 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
                 Reference< runtime::XFormController >  xController( GetImpl()->getActiveController() );
 
-                if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
+                if	(	GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
                         // closing the window was denied, for instance because of a invalid criterion
 
-                    ||  (   xController.is()
+                    ||	(	xController.is()
                         &&  !GetImpl()->getActiveControllerFeatures()->commitCurrentControl( )
                         )
                         // committing the controller was denied
@@ -875,7 +875,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
                 &aIdentifierItem, NULL );
-        }   break;
+        }	break;
     }
 }
 
@@ -975,7 +975,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.Put(SfxObjectItem(nWhich, this));
                 else
                     rSet.Put(SfxObjectItem(nWhich));
-            }   break;
+            }	break;
             case SID_FM_FIELDS_CONTROL:
             case SID_FM_PROPERTY_CONTROL:
             {
@@ -984,7 +984,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 else
                     rSet.Put(SfxObjectItem(nWhich, this));
 
-            }   break;
+            }	break;
             case SID_FM_FMEXPLORER_CONTROL:
             case SID_FM_DATANAVIGATOR_CONTROL :
             {
@@ -993,7 +993,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 else
                     rSet.Put(SfxObjectItem(nWhich, this));
 
-            }   break;
+            }	break;
             case SID_FM_ADD_FIELD:
             case SID_FM_SHOW_FMEXPLORER:
             case SID_FM_SHOW_PROPERTIES:
@@ -1004,7 +1004,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.Put( SfxBoolItem( nWhich, GetViewShell()->GetViewFrame()->HasChildWindow(nWhich)) );
                 else
                     rSet.DisableItem(nWhich);
-            }   break;
+            }	break;
 
             case SID_FM_SHOW_PROPERTY_BROWSER:
             {
@@ -1029,7 +1029,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                         // the currently marked controls
                     rSet.Put( SfxBoolItem( nWhich, bChecked ) );
                 }
-            }   break;
+            }	break;
 
             case SID_FM_PROPERTIES:
             {
@@ -1045,7 +1045,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     sal_Bool bChecked = GetImpl()->IsPropBrwOpen() && GetImpl()->isSolelySelected( GetImpl()->getCurrentForm() );
                     rSet.Put(SfxBoolItem(nWhich, bChecked));
                 }
-            }   break;
+            }	break;
             case SID_FM_TAB_DIALOG:
                 // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
                 // auf den neuesten Stand zu bringen
@@ -1100,25 +1100,25 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 }
             } break;
 
-            case SID_FM_CONVERTTO_FILECONTROL   :
-            case SID_FM_CONVERTTO_CURRENCY      :
-            case SID_FM_CONVERTTO_PATTERN       :
-            case SID_FM_CONVERTTO_IMAGECONTROL  :
+            case SID_FM_CONVERTTO_FILECONTROL	:
+            case SID_FM_CONVERTTO_CURRENCY		:
+            case SID_FM_CONVERTTO_PATTERN		:
+            case SID_FM_CONVERTTO_IMAGECONTROL	:
             case SID_FM_CONVERTTO_SCROLLBAR     :
             case SID_FM_CONVERTTO_NAVIGATIONBAR :
-            case SID_FM_CONVERTTO_IMAGEBUTTON   :
-            case SID_FM_CONVERTTO_EDIT          :
+            case SID_FM_CONVERTTO_IMAGEBUTTON	:
+            case SID_FM_CONVERTTO_EDIT			:
             case SID_FM_CONVERTTO_BUTTON        :
-            case SID_FM_CONVERTTO_FIXEDTEXT     :
-            case SID_FM_CONVERTTO_LISTBOX       :
-            case SID_FM_CONVERTTO_CHECKBOX      :
-            case SID_FM_CONVERTTO_RADIOBUTTON   :
-            case SID_FM_CONVERTTO_GROUPBOX      :
-            case SID_FM_CONVERTTO_COMBOBOX      :
-            case SID_FM_CONVERTTO_DATE          :
-            case SID_FM_CONVERTTO_TIME          :
-            case SID_FM_CONVERTTO_NUMERIC       :
-            case SID_FM_CONVERTTO_FORMATTED     :
+            case SID_FM_CONVERTTO_FIXEDTEXT 	:
+            case SID_FM_CONVERTTO_LISTBOX		:
+            case SID_FM_CONVERTTO_CHECKBOX		:
+            case SID_FM_CONVERTTO_RADIOBUTTON	:
+            case SID_FM_CONVERTTO_GROUPBOX		:
+            case SID_FM_CONVERTTO_COMBOBOX		:
+            case SID_FM_CONVERTTO_DATE			:
+            case SID_FM_CONVERTTO_TIME			:
+            case SID_FM_CONVERTTO_NUMERIC		:
+            case SID_FM_CONVERTTO_FORMATTED 	:
             case SID_FM_CONVERTTO_SPINBUTTON    :
             {
                 if ( !m_pFormView || !m_bDesignMode || !GetImpl()->canConvertCurrentSelectionToControl( nWhich ) )
@@ -1138,12 +1138,12 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 //------------------------------------------------------------------------
 void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
 {
-    if  (   !GetImpl()->getNavController().is()
-        ||  !isRowSetAlive(GetImpl()->getNavController()->getModel())
-        ||  !m_pFormView
-        ||  m_bDesignMode
-        ||  !GetImpl()->getActiveForm().is()
-        ||  GetImpl()->isInFilterMode()
+    if	(	!GetImpl()->getNavController().is()
+        ||	!isRowSetAlive(GetImpl()->getNavController()->getModel())
+        ||	!m_pFormView
+        ||	m_bDesignMode
+        ||	!GetImpl()->getActiveForm().is()
+        ||	GetImpl()->isInFilterMode()
         )
         rSet.DisableItem(nWhich);
     else
@@ -1167,10 +1167,10 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
 
             case SID_FM_SEARCH:
             {
-                Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getActiveForm(), UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >	xNavSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 sal_Int32 nCount = ::comphelper::getINT32(xNavSet->getPropertyValue(FM_PROP_ROWCOUNT));
                 bEnable = nCount != 0;
-            }   break;
+            }	break;
             case SID_FM_RECORD_ABSOLUTE:
             case SID_FM_RECORD_TOTAL:
             {
@@ -1436,7 +1436,7 @@ namespace
 ::std::auto_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice ) const
 {
     ::std::auto_ptr< ::svx::ISdrObjectFilter > pFilter;
-
+    
     if ( !i_rView.IsDesignMode() )
         pFilter.reset( new FocusableControlsFilter( i_rView, i_rDevice ) );
 

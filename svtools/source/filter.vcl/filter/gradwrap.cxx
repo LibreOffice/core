@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 GradientWrapper::GradientWrapper(const Link& rDrawPolyRecordHdl,
                                  const Link& rDrawPolyPolyRecordHdl,
                                  const Link& rSetFillInBrushRecordHdl) :
-            aDrawPolyRecordHdl      (rDrawPolyRecordHdl),
-            aDrawPolyPolyRecordHdl  (rDrawPolyPolyRecordHdl),
+            aDrawPolyRecordHdl		(rDrawPolyRecordHdl),
+            aDrawPolyPolyRecordHdl	(rDrawPolyPolyRecordHdl),
             aSetFillInBrushRecordHdl(rSetFillInBrushRecordHdl)
 {
 }
@@ -265,7 +265,7 @@ void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
 void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
                                           const Gradient& rGradient)
 {
-    USHORT      nStepCount = 100;
+    USHORT  	nStepCount = 100;
     Rectangle   aClipRect = rRect;
     Rectangle   aRect   = rRect;
     long        nZWidth = aRect.GetWidth() * (long)rGradient.GetOfsX() / 100;
@@ -411,9 +411,9 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
 void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
                                         const Gradient& rGradient)
 {
-    USHORT      nStepCount = 100;
+    USHORT  	nStepCount = 100;
     Rectangle   aClipRect = rRect;
-    Rectangle   aRect = rRect;
+    Rectangle 	aRect = rRect;
 
     aRect.Left()--;
     aRect.Top()--;

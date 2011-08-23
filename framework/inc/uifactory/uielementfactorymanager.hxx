@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <list>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -45,7 +45,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
@@ -55,7 +55,7 @@
 #include "com/sun/star/frame/XModuleManager.hpp"
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -88,7 +88,7 @@ namespace framework
 
     // lang.XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
-
+ 
     private:
         class FactoryManagerMap : public std::hash_map< rtl::OUString,
                                                      rtl::OUString,
@@ -100,7 +100,7 @@ namespace framework
                 FactoryManagerMap().swap( *this );
             }
         };
-
+    
         sal_Bool impl_getElementProps( const ::com::sun::star::uno::Any& rElement, rtl::OUString& rType, rtl::OUString& rName, rtl::OUString& rModule, rtl::OUString& rServiceSpecifier ) const;
 
         rtl::OUString                     m_aPropType;
@@ -113,11 +113,11 @@ namespace framework
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     m_xConfigAccess;
         sal_Bool                          m_bConfigAccessInitialized;
-        bool                              m_bConfigDirty;
+        bool							  m_bConfigDirty;
 };
 
 
-class UIElementFactoryManager :  private ThreadHelpBase                                             ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class UIElementFactoryManager :  private ThreadHelpBase							                    ,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                                  public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,
                                                                  ::com::sun::star::ui::XUIElementFactory,
                                                                  ::com::sun::star::ui::XUIElementFactoryRegistration>
@@ -137,7 +137,7 @@ class UIElementFactoryManager :  private ThreadHelpBase                         
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElementFactory > SAL_CALL getFactory( const ::rtl::OUString& ResourceURL, const ::rtl::OUString& ModuleIdentifier ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL registerFactory( const ::rtl::OUString& aType, const ::rtl::OUString& aName, const ::rtl::OUString& aModuleIdentifier, const ::rtl::OUString& aFactoryImplementationName ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL deregisterFactory( const ::rtl::OUString& aType, const ::rtl::OUString& aName, const ::rtl::OUString& aModuleIdentifier ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-
+        
     private:
 
         sal_Bool                                                                            m_bConfigRead;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ class FmXGroupModel : public XBoundControl,
                       public XGroup,
                       public FmXControlModel
 {
-    FmFormControlMap        aControlMap;
+    FmFormControlMap		aControlMap;
 
-    friend Reflection*      FmXGroupModel_getReflection();
-    FmXGroupModel_Impl*     pGroupModelData;            // Properties
+    friend Reflection*		FmXGroupModel_getReflection();
+    FmXGroupModel_Impl*		pGroupModelData;			// Properties
 
 public:
     FmXGroupModel();
@@ -59,8 +59,8 @@ public:
 
     // UNO Anbindung
     SMART_UNO_DECLARATION( FmXGroupModel, FmXControlModel );
-    virtual XInterface*     queryInterface(UsrUik);
-    virtual XIdlClassRef    getIdlClass();
+    virtual XInterface*		queryInterface(UsrUik);
+    virtual XIdlClassRef	getIdlClass();
 
     // XGroup
     virtual INT32 getFormControlCount();
@@ -98,7 +98,7 @@ public:
                                    PropertyChangeEventSequence* pSeq,
                                    INT32 nIndex );
     virtual UsrAny getPropertyValue( UINT16 nId, const XubString& aPropertyName ) const;
-    virtual void addPropertyChangeListener( const XubString& aPropertyName, const XPropertyChangeListenerRef& aListener );
+    virtual	void addPropertyChangeListener( const XubString& aPropertyName, const XPropertyChangeListenerRef& aListener );
     virtual void removePropertyChangeListener( const XubString& aPropertyName, const XPropertyChangeListenerRef& aListener );
 };
 

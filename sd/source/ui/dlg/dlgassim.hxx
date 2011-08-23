@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 class SdPageListControl : public SvTreeListBox
 {
 private:
-    SvLBoxButtonData*   m_pCheckButton;
+    SvLBoxButtonData* 	m_pCheckButton;
 
     SvLBoxEntry* InsertPage( const String& rPageName );
     void InsertTitle( SvLBoxEntry* pEntry, const String& rTitle );
@@ -63,8 +63,8 @@ DECLARE_LIST( TemplateCacheInfoList, TemplateCacheInfo * )
 class TemplateCacheDirEntry
 {
 public:
-    String                      m_aPath;
-    TemplateCacheInfoList       m_aFiles;
+    String						m_aPath;
+    TemplateCacheInfoList		m_aFiles;
 };
 
 DECLARE_LIST( TemplateCacheDirEntryList, TemplateCacheDirEntry * )

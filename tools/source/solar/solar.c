@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,20 +55,20 @@
 #include <setjmp.h>
 #endif
 
-#define printTypeSize(Type,Name)    printf( "sizeof(%s)\t= %d\n", Name, sizeof (Type) )
+#define printTypeSize(Type,Name)	printf(	"sizeof(%s)\t= %d\n", Name, sizeof (Type) )
 
-#define isSignedType(Type)  (((Type)-1) < 0)
-#define printTypeSign(Type,Name)    printf( "%s\t= %s %s\n", Name, ( isSignedType(Type) ? "signed" : "unsigned" ), Name )
+#define isSignedType(Type)	(((Type)-1) < 0)
+#define printTypeSign(Type,Name)	printf(	"%s\t= %s %s\n", Name, ( isSignedType(Type) ? "signed" : "unsigned" ), Name )
 
 
 /*************************************************************************
 |*
-|*  IsBigEndian()
+|*	IsBigEndian()
 |*
-|*  Beschreibung        True, wenn CPU BigEndian ist
+|*	Beschreibung		True, wenn CPU BigEndian ist
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int IsBigEndian()
@@ -79,12 +79,12 @@ int IsBigEndian()
 
 /*************************************************************************
 |*
-|*  IsStackGrowingDown()
+|*	IsStackGrowingDown()
 |*
-|*  Beschreibung        True, wenn der Stack nach unten waechst
+|*	Beschreibung		True, wenn der Stack nach unten waechst
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int IsStackGrowingDown_2( int * pI )
@@ -101,13 +101,13 @@ int IsStackGrowingDown()
 
 /*************************************************************************
 |*
-|*  GetStackAlignment()
+|*	GetStackAlignment()
 |*
-|*  Beschreibung        Alignment von char Parametern, die (hoffentlich)
-|*                      ueber den Stack uebergeben werden
+|*	Beschreibung		Alignment von char Parametern, die (hoffentlich)
+|*						ueber den Stack uebergeben werden
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int GetStackAlignment_3( char*p, long l, int i, short s, char b, char c, ... )
@@ -137,7 +137,7 @@ int GetStackAlignment()
 
 /*************************************************************************
 |*
-|*  Typdeclarations for memory access test functions
+|*	Typdeclarations for memory access test functions
 |*
 *************************************************************************/
 typedef enum { t_char, t_short, t_int, t_long, t_double } Type;
@@ -146,12 +146,12 @@ typedef int (*TestFunc)( Type, void* );
 
 /*************************************************************************
 |*
-|*  PrintArgs()
+|*	PrintArgs()
 |*
-|*  Beschreibung        Testfunktion fuer variable Parameter
+|*	Beschreibung		Testfunktion fuer variable Parameter
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 #ifdef I_STDARG
@@ -183,12 +183,12 @@ va_dcl
 #ifndef USE_FORK_TO_CHECK
 /*************************************************************************
 |*
-|*  SignalHdl()
+|*	SignalHdl()
 |*
-|*  Beschreibung        faengt SIGBUS und SIGSEGV in check() ab
+|*	Beschreibung		faengt SIGBUS und SIGSEGV in check() ab
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 static jmp_buf check_env;
@@ -196,22 +196,22 @@ static int bSignal;
 void SignalHdl( int sig )
 {
   bSignal = 1;
-
+  
   fprintf( stderr, "Signal %d caught\n", sig );
-  signal( SIGSEGV,  SIG_DFL );
-  signal( SIGBUS,   SIG_DFL );
+  signal( SIGSEGV,	SIG_DFL );
+  signal( SIGBUS,	SIG_DFL );
   siglongjmp( check_env, sig );
 }
 #endif
 
 /*************************************************************************
 |*
-|*  check()
+|*	check()
 |*
-|*  Beschreibung        Testet MemoryZugriff (read/write)
+|*	Beschreibung		Testet MemoryZugriff (read/write)
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int check( TestFunc func, Type eT, void* p )
@@ -238,11 +238,11 @@ int check( TestFunc func, Type eT, void* p )
 
   if ( !sigsetjmp( check_env, 1 ) )
   {
-    signal( SIGSEGV,    SignalHdl );
-    signal( SIGBUS,     SignalHdl );
+    signal( SIGSEGV,	SignalHdl );
+    signal( SIGBUS,		SignalHdl );
     result = func( eT, p );
-    signal( SIGSEGV,    SIG_DFL );
-    signal( SIGBUS,     SIG_DFL );
+    signal( SIGSEGV,	SIG_DFL );
+    signal( SIGBUS,		SIG_DFL );
   }
 
   if ( bSignal )
@@ -254,46 +254,46 @@ int check( TestFunc func, Type eT, void* p )
 
 /*************************************************************************
 |*
-|*  GetAtAddress()
+|*	GetAtAddress()
 |*
-|*  Beschreibung        memory read access
+|*	Beschreibung		memory read access
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int GetAtAddress( Type eT, void* p )
 {
   switch ( eT )
   {
-  case t_char:      return *((char*)p);
-  case t_short:     return *((short*)p);
-  case t_int:       return *((int*)p);
-  case t_long:      return *((long*)p);
-  case t_double:    return *((double*)p);
+  case t_char:		return *((char*)p);
+  case t_short:		return *((short*)p);
+  case t_int:		return *((int*)p);
+  case t_long:		return *((long*)p);
+  case t_double:	return *((double*)p);
   }
   abort();
 }
 
 /*************************************************************************
 |*
-|*  SetAtAddress()
+|*	SetAtAddress()
 |*
-|*  Beschreibung        memory write access
+|*	Beschreibung		memory write access
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int SetAtAddress( Type eT, void* p )
 {
   switch ( eT )
   {
-  case t_char:      return *((char*)p)  = 0;
-  case t_short:     return *((short*)p) = 0;
-  case t_int:       return *((int*)p)   = 0;
-  case t_long:      return *((long*)p)  = 0;
-  case t_double:    return *((double*)p)= 0;
+  case t_char:		return *((char*)p)	= 0;
+  case t_short:		return *((short*)p)	= 0;
+  case t_int:		return *((int*)p)	= 0;
+  case t_long:		return *((long*)p)	= 0;
+  case t_double:	return *((double*)p)= 0;
   }
   abort();
 }
@@ -302,24 +302,24 @@ char* TypeName( Type eT )
 {
   switch ( eT )
   {
-  case t_char:      return "char";
-  case t_short:     return "short";
-  case t_int:       return "int";
-  case t_long:      return "long";
-  case t_double:    return "double";
+  case t_char:		return "char";
+  case t_short:		return "short";
+  case t_int:		return "int";
+  case t_long:		return "long";
+  case t_double:	return "double";
   }
   abort();
 }
 
 /*************************************************************************
 |*
-|*  Check(Get|Set)Access()
+|*	Check(Get|Set)Access()
 |*
-|*  Beschreibung        Testet MemoryZugriff (read/write)
-|*                      Zugriffsverletzungen werden abgefangen
+|*	Beschreibung		Testet MemoryZugriff (read/write)
+|*						Zugriffsverletzungen werden abgefangen
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int CheckGetAccess( Type eT, void* p )
@@ -348,19 +348,19 @@ int CheckSetAccess( Type eT, void* p )
 
 /*************************************************************************
 |*
-|*  GetAlignment()
+|*	GetAlignment()
 |*
-|*  Beschreibung        Bestimmt das Alignment verschiedener Typen
+|*	Beschreibung		Bestimmt das Alignment verschiedener Typen
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 int GetAlignment( Type eT )
 {
-  char  a[ 16*8 ];
-  long  p = (long)(void*)a;
-  int   i;
+  char	a[ 16*8 ];
+  long	p = (long)(void*)a;
+  int	i;
 
   /* clear a[...] to set legal value for double access */
   for ( i = 0; i < 16*8; i++ )
@@ -375,37 +375,37 @@ int GetAlignment( Type eT )
 
 /*************************************************************************
 |*
-|*  struct Description
+|*	struct Description
 |*
-|*  Beschreibung        Beschreibt die Parameter der Architektur
+|*	Beschreibung		Beschreibt die Parameter der Architektur
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 struct Description
 {
-  int   bBigEndian;
-  int   bStackGrowsDown;
-  int   nStackAlignment;
-  int   nAlignment[3];  /* 2,4,8 */
+  int	bBigEndian;
+  int	bStackGrowsDown;
+  int	nStackAlignment;
+  int	nAlignment[3];	/* 2,4,8 */
 };
 
 /*************************************************************************
 |*
-|*  Description_Ctor()
+|*	Description_Ctor()
 |*
-|*  Beschreibung        Bestimmt die Parameter der Architektur
+|*	Beschreibung		Bestimmt die Parameter der Architektur
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void Description_Ctor( struct Description* pThis )
 {
-  pThis->bBigEndian         = IsBigEndian();
-  pThis->bStackGrowsDown    = IsStackGrowingDown();
-  pThis->nStackAlignment    = GetStackAlignment();
+  pThis->bBigEndian			= IsBigEndian();
+  pThis->bStackGrowsDown	= IsStackGrowingDown();
+  pThis->nStackAlignment	= GetStackAlignment();
 
   if ( sizeof(short) != 2 )
     abort();
@@ -414,7 +414,7 @@ void Description_Ctor( struct Description* pThis )
     abort();
   pThis->nAlignment[1] = GetAlignment( t_int );
 
-  if      ( sizeof(long) == 8 )
+  if	  ( sizeof(long) == 8 )
     pThis->nAlignment[2] = GetAlignment( t_long );
   else if ( sizeof(double) == 8 )
     pThis->nAlignment[2] = GetAlignment( t_double );
@@ -424,12 +424,12 @@ void Description_Ctor( struct Description* pThis )
 
 /*************************************************************************
 |*
-|*  Description_Print()
+|*	Description_Print()
 |*
-|*  Beschreibung        Schreibt die Parameter der Architektur als Header
+|*	Beschreibung		Schreibt die Parameter der Architektur als Header
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void Description_Print( struct Description* pThis, char* name )
@@ -461,12 +461,12 @@ void Description_Print( struct Description* pThis, char* name )
 
 /*************************************************************************
 |*
-|*  InfoMemoryAccess()
+|*	InfoMemoryAccess()
 |*
-|*  Beschreibung        Informeller Bytezugriffstest
+|*	Beschreibung		Informeller Bytezugriffstest
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 26.06.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void InfoMemoryAccess( char* p )
@@ -484,12 +484,12 @@ void InfoMemoryAccess( char* p )
 
 /*************************************************************************
 |*
-|*  InfoMemoryTypeAccess()
+|*	InfoMemoryTypeAccess()
 |*
-|*  Beschreibung        Informeller Zugriffstest verschiedener Typen
+|*	Beschreibung		Informeller Zugriffstest verschiedener Typen
 |*
-|*  Ersterstellung      EG 15.08.96
-|*  Letzte Aenderung
+|*	Ersterstellung		EG 15.08.96
+|*	Letzte Aenderung
 |*
 *************************************************************************/
 void InfoMemoryTypeAccess( Type eT )
@@ -509,7 +509,7 @@ void InfoMemoryTypeAccess( Type eT )
 }
 /************************************************************************
  *
- *  Use C code to determine the characteristics of the building platform.
+ * 	Use C code to determine the characteristics of the building platform.
  *
  ************************************************************************/
 int main( int argc, char* argv[] )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,29 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_view_XViewCursor_idl__
-#define __com_sun_star_view_XViewCursor_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module view {
-
-//=============================================================================
-
+#ifndef __com_sun_star_view_XViewCursor_idl__ 
+#define __com_sun_star_view_XViewCursor_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module view {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to move a cursor up/down/left/right within laid out text.
-
-    @see com::sun::star::table::CellCursor
-    @see com::sun::star::text::TextCursor
+    
+    @see com::sun::star::table::CellCursor 
+    @see com::sun::star::text::TextCursor 
     @see com::sun::star::view::XLineCursor
  */
 published interface XViewCursor: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** moves the cursor the specified number of lines down.
 
         @param nCount
@@ -57,12 +57,12 @@ published interface XViewCursor: com::sun::star::uno::XInterface
             or the cursor will be just at the new position after the move (<FALSE/>).
 
         @returns
-            <TRUE/> if the cursor was moved,
+            <TRUE/> if the cursor was moved, 
             or <FALSE/> if it was already in the bottom row.
      */
-    boolean goDown( [in] short nCount, [in] boolean bExpand );
-
-    //-------------------------------------------------------------------------
+    boolean goDown( [in] short nCount, [in] boolean bExpand ); 
+ 
+    //------------------------------------------------------------------------- 
     /** moves the cursor the specified number of lines up.
 
         @param nCount
@@ -72,12 +72,12 @@ published interface XViewCursor: com::sun::star::uno::XInterface
             determines whether the text range of the cursor is expanded (<TRUE/>)
 
         @returns
-            <TRUE/> if the cursor was moved,
+            <TRUE/> if the cursor was moved, 
             or <FALSE/> if it was already in the top row.
      */
-    boolean goUp( [in] short nCount, [in] boolean bExpand );
-
-    //-------------------------------------------------------------------------
+    boolean goUp( [in] short nCount, [in] boolean bExpand ); 
+ 
+    //------------------------------------------------------------------------- 
     /** moves the cursor the specified number of characters to the left.
 
         @param nCount
@@ -87,12 +87,12 @@ published interface XViewCursor: com::sun::star::uno::XInterface
             determines whether the text range of the cursor is expanded (<TRUE/>)
 
         @returns
-            <TRUE/> if the cursor was moved,
+            <TRUE/> if the cursor was moved, 
             or <FALSE/> if it was already at the leftmost position.
      */
-    boolean goLeft( [in] short nCount, [in] boolean bExpand );
-
-    //-------------------------------------------------------------------------
+    boolean goLeft( [in] short nCount, [in] boolean bExpand ); 
+ 
+    //------------------------------------------------------------------------- 
     /** moves the cursor the specified number of characters to the right.
 
         @param nCount
@@ -102,15 +102,15 @@ published interface XViewCursor: com::sun::star::uno::XInterface
             determines whether the text range of the cursor is expanded (<TRUE/>)
 
         @returns
-            <TRUE/> if the cursor was moved,
+            <TRUE/> if the cursor was moved, 
             or <FALSE/> if it was already at the rightmost position.
      */
-    boolean goRight( [in] short nCount, [in] boolean bExpand );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    boolean goRight( [in] short nCount, [in] boolean bExpand ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

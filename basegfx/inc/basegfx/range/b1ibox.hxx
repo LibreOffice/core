@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,107 +35,107 @@ namespace basegfx
 {
     class B1IBox
     {
-        ::basegfx::BasicBox maRange;
+        ::basegfx::BasicBox	maRange;
 
-    public:
-        B1IBox()
+    public:		
+        B1IBox() 
         {
         }
-
-        explicit B1IBox(sal_Int32 nStartValue)
-        :   maRange(nStartValue)
+        
+        explicit B1IBox(sal_Int32 nStartValue) 
+        :	maRange(nStartValue) 
         {
         }
-
-        B1IBox(sal_Int32 nStartValue1, sal_Int32 nStartValue2)
-        :   maRange(nStartValue1)
+        
+        B1IBox(sal_Int32 nStartValue1, sal_Int32 nStartValue2) 
+        :	maRange(nStartValue1) 
         {
             expand(nStartValue2);
         }
 
         B1IBox(const B1IBox& rBox)
-        :   maRange(rBox.maRange)
+        :	maRange(rBox.maRange) 
         {
         }
 
-        bool isEmpty() const
+        bool isEmpty() const 
         {
             return maRange.isEmpty();
         }
 
-        void reset()
-        {
-            maRange.reset();
+        void reset() 
+        { 
+            maRange.reset(); 
+        }
+        
+        bool operator==( const B1IBox& rBox ) const 
+        { 
+            return (maRange == rBox.maRange); 
         }
 
-        bool operator==( const B1IBox& rBox ) const
-        {
-            return (maRange == rBox.maRange);
+        bool operator!=( const B1IBox& rBox ) const 
+        { 
+            return (maRange != rBox.maRange); 
         }
 
-        bool operator!=( const B1IBox& rBox ) const
-        {
-            return (maRange != rBox.maRange);
+        void operator=(const B1IBox& rBox) 
+        { 
+            maRange = rBox.maRange; 
         }
 
-        void operator=(const B1IBox& rBox)
-        {
-            maRange = rBox.maRange;
+        sal_Int32 getMinimum() const 
+        { 
+            return maRange.getMinimum(); 
         }
 
-        sal_Int32 getMinimum() const
-        {
-            return maRange.getMinimum();
+        sal_Int32 getMaximum() const 
+        { 
+            return maRange.getMaximum(); 
         }
 
-        sal_Int32 getMaximum() const
-        {
-            return maRange.getMaximum();
+        Int32Traits::DifferenceType getRange() const  
+        { 
+            return maRange.getRange(); 
         }
-
-        Int32Traits::DifferenceType getRange() const
-        {
-            return maRange.getRange();
-        }
-
+    
         double getCenter() const
         {
-            return maRange.getCenter();
+            return maRange.getCenter(); 
         }
 
-        bool isInside(sal_Int32 nValue) const
-        {
-            return maRange.isInside(nValue);
+        bool isInside(sal_Int32 nValue) const 
+        { 
+            return maRange.isInside(nValue); 
+        }
+        
+        bool isInside(const B1IBox& rBox) const 
+        { 
+            return maRange.isInside(rBox.maRange); 
         }
 
-        bool isInside(const B1IBox& rBox) const
-        {
-            return maRange.isInside(rBox.maRange);
+        bool overlaps(const B1IBox& rBox) const 
+        { 
+            return maRange.overlaps(rBox.maRange); 
         }
 
-        bool overlaps(const B1IBox& rBox) const
-        {
-            return maRange.overlaps(rBox.maRange);
+        void expand(sal_Int32 nValue) 
+        { 
+            maRange.expand(nValue); 
         }
 
-        void expand(sal_Int32 nValue)
-        {
-            maRange.expand(nValue);
+        void expand(const B1IBox& rBox) 
+        { 
+            maRange.expand(rBox.maRange); 
         }
 
-        void expand(const B1IBox& rBox)
-        {
-            maRange.expand(rBox.maRange);
-        }
-
-        void intersect(const B1IBox& rBox)
-        {
-            maRange.intersect(rBox.maRange);
+        void intersect(const B1IBox& rBox) 
+        { 
+            maRange.intersect(rBox.maRange); 
         }
 
         void grow(sal_Int32 nValue)
         {
-            maRange.grow(nValue);
+            maRange.grow(nValue); 
         }
     };
 } // end of namespace basegfx

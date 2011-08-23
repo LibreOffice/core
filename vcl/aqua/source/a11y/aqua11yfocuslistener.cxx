@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ rtl::Reference< AquaA11yFocusListener > AquaA11yFocusListener::get()
 {
     if ( ! theListener.is() )
         theListener = new AquaA11yFocusListener();
-
+    
     return theListener;
 }
 
@@ -72,20 +72,20 @@ id AquaA11yFocusListener::getFocusedUIElement()
             // intentionally do nothing ..
         }
     }
-
+    
     return m_focusedObject;
 }
 
 //------------------------------------------------------------------------------
 
-void SAL_CALL
+void SAL_CALL 
 AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAccessible)
 {
     if ( nil != m_focusedObject ) {
         [ m_focusedObject release ];
         m_focusedObject = nil;
     }
-
+    
     try {
         if( xAccessible.is() ) {
             Reference< XAccessibleContext > xContext(xAccessible->getAccessibleContext());
@@ -102,17 +102,17 @@ AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAcc
 
 //------------------------------------------------------------------------------
 
-oslInterlockedCount SAL_CALL
+oslInterlockedCount SAL_CALL 
 AquaA11yFocusListener::acquire() SAL_THROW(())
-{
-    return ReferenceObject::acquire();
+{ 
+    return ReferenceObject::acquire(); 
 }
 
 //------------------------------------------------------------------------------
 
-oslInterlockedCount SAL_CALL
+oslInterlockedCount SAL_CALL 
 AquaA11yFocusListener::release() SAL_THROW(())
-{
-    return ReferenceObject::release();
+{ 
+    return ReferenceObject::release(); 
 }
 

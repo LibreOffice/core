@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,14 +72,14 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     com::sun::star::uno::Sequence < rtl::OUString > xEventNames;
     ::sfx2::DocumentMacroMode
                         aMacroMode;
-    SfxProgress*        pProgress;
-    String              aTitle;
+    SfxProgress*		pProgress;
+    String				aTitle;
     String              aTempName;
-    DateTime            nTime;
+    DateTime			nTime;
     sal_uInt16          nVisualDocumentNumber;
     sal_Int16           nDocumentSignatureState;
     sal_Int16           nScriptingSignatureState;
-    sal_Bool            bInList:1,          // ob per First/Next erreichbar
+    sal_Bool            bInList:1,  		// ob per First/Next erreichbar
                         bClosing:1,         // sal_True w"aehrend Close(), um Benachrichtigungs-Rekursionen zu verhindern
                         bIsSaving:1,
                         bPasswd:1,
@@ -112,36 +112,36 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     IndexBitSet         aBitSet;
     sal_uInt32               lErr;
-    sal_uInt16              nEventId;           // falls vor Activate noch ein
+    sal_uInt16				nEventId;			// falls vor Activate noch ein
                                             // Open/Create gesendet werden mu/s
     AutoReloadTimer_Impl *pReloadTimer;
     MarkData_Impl*      pMarkData;
     sal_uInt16              nLoadedFlags;
     sal_uInt16              nFlagsInProgress;
-    sal_Bool                bModalMode;
+    sal_Bool				bModalMode;
     sal_Bool                bRunningMacro;
     sal_Bool                bReloadAvailable;
-    sal_uInt16              nAutoLoadLocks;
+    sal_uInt16				nAutoLoadLocks;
     SfxModule*              pModule;
     SfxObjectShellFlags     eFlags;
-    sal_Bool                bReadOnlyUI;
+    sal_Bool				bReadOnlyUI;
     SvRefBaseRef            xHeaderAttributes;
-    sal_Bool                bHiddenLockedByAPI;
+    sal_Bool				bHiddenLockedByAPI;
     ::rtl::Reference< SfxBaseModel >
                             pBaseModel;
-    sal_uInt16              nStyleFilter;
-    sal_Bool                bDisposing;
+    sal_uInt16				nStyleFilter;
+    sal_Bool				bDisposing;
 
-    sal_Bool                m_bEnableSetModified;
-    sal_Bool                m_bIsModified;
+    sal_Bool				m_bEnableSetModified;
+    sal_Bool				m_bIsModified;
 
-    Rectangle               m_aVisArea;
-    MapUnit                 m_nMapUnit;
+    Rectangle				m_aVisArea;
+    MapUnit					m_nMapUnit;
 
-    sal_Bool                m_bCreateTempStor;
+    sal_Bool				m_bCreateTempStor;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xDocStorage;
 
-    sal_Bool                m_bIsInit;
+    sal_Bool				m_bIsInit;
 
     ::rtl::OUString         m_aSharedFileURL;
 

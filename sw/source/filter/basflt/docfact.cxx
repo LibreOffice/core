@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 
 
 /******************************************************************************
- *  Methode     :   SwDocFac::SwDocFac( SwDoc *pDoc )
- *  Beschreibung:
- *  Erstellt    :   OK 01-24-94 11:32am
- *  Aenderung   :   OK 01-24-94 11:32am
+ *	Methode		:	SwDocFac::SwDocFac( SwDoc *pDoc )
+ *	Beschreibung:
+ *	Erstellt	:	OK 01-24-94 11:32am
+ *	Aenderung	:	OK 01-24-94 11:32am
  ******************************************************************************/
 
 
@@ -53,10 +53,10 @@ SwDocFac::SwDocFac( SwDoc *pDc )
 }
 
 /******************************************************************************
- *  Methode     :   SwDocFac::~SwDocFac()
- *  Beschreibung:
- *  Erstellt    :   OK 01-24-94 11:33am
- *  Aenderung   :   OK 01-24-94 11:33am
+ *	Methode		:   SwDocFac::~SwDocFac()
+ *	Beschreibung:
+ *	Erstellt	:	OK 01-24-94 11:33am
+ *	Aenderung	:	OK 01-24-94 11:33am
  ******************************************************************************/
 
 
@@ -67,10 +67,10 @@ SwDocFac::~SwDocFac()
 }
 
 /******************************************************************************
- *  Methode     :   SwDoc *SwDocFac::GetDoc()
- *  Beschreibung:   Diese Methode legt immer einen Drucker an.
- *  Erstellt    :   OK 01-24-94 11:34am
- *  Aenderung   :   OK 01-24-94 11:34am
+ *	Methode		:	SwDoc *SwDocFac::GetDoc()
+ *	Beschreibung:	Diese Methode legt immer einen Drucker an.
+ *	Erstellt	:	OK 01-24-94 11:34am
+ *	Aenderung	:	OK 01-24-94 11:34am
  ******************************************************************************/
 
 

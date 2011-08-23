@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // defines
 
-#define SUBDIVIDE_FOR_CUT_TEST_COUNT        (50)
+#define	SUBDIVIDE_FOR_CUT_TEST_COUNT		(50)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -55,13 +55,13 @@ namespace basegfx
 
         class temporaryPoint
         {
-            B2DPoint                            maPoint;        // the new point
-            sal_uInt32                          mnIndex;        // index after which to insert
-            double                              mfCut;          // parametric cut description [0.0 .. 1.0]
+            B2DPoint							maPoint;		// the new point
+            sal_uInt32							mnIndex;		// index after which to insert
+            double								mfCut;			// parametric cut description [0.0 .. 1.0]
 
         public:
             temporaryPoint(const B2DPoint& rNewPoint, sal_uInt32 nIndex, double fCut)
-            :   maPoint(rNewPoint),
+            :	maPoint(rNewPoint),
                 mnIndex(nIndex),
                 mfCut(fCut)
             {
@@ -90,9 +90,9 @@ namespace basegfx
 
         class temporaryPolygonData
         {
-            B2DPolygon                              maPolygon;
-            B2DRange                                maRange;
-            temporaryPointVector                    maPoints;
+            B2DPolygon								maPolygon;
+            B2DRange								maRange;
+            temporaryPointVector					maPoints;
 
         public:
             const B2DPolygon& getPolygon() const { return maPolygon; }
@@ -126,12 +126,12 @@ namespace basegfx
 
                     // add start point
                     aRetval.append(rCandidate.getB2DPoint(0));
-
+                    
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
                         // get edge
                         rCandidate.getBezierSegment(a, aEdge);
-
+                        
                         if(aEdge.isBezier())
                         {
                             // control vectors involved for this edge
@@ -171,7 +171,7 @@ namespace basegfx
                                     aRetval.append(aNewPoint);
                                 }
                             }
-
+                            
                             // add edge end point
                             aRetval.append(aEdge.getEndPoint());
                         }
@@ -183,7 +183,7 @@ namespace basegfx
                     // set closed flag and correct last point (which is added double now).
                     tools::closeWithGeometryChange(aRetval);
                 }
-
+                
                 return aRetval;
             }
             else
@@ -238,8 +238,8 @@ namespace basegfx
         ////////////////////////////////////////////////////////////////////////////////
 
         void findEdgeCutsTwoEdges(
-            const B2DPoint& rCurrA, const B2DPoint& rNextA,
-            const B2DPoint& rCurrB, const B2DPoint& rNextB,
+            const B2DPoint& rCurrA, const B2DPoint& rNextA, 
+            const B2DPoint& rCurrB, const B2DPoint& rNextB, 
             sal_uInt32 nIndA, sal_uInt32 nIndB,
             temporaryPointVector& rTempPointsA, temporaryPointVector& rTempPointsB)
         {
@@ -415,7 +415,7 @@ namespace basegfx
 
         void findEdgeCutsBezierAndEdge(
             const B2DCubicBezier& rCubicA,
-            const B2DPoint& rCurrB, const B2DPoint& rNextB,
+            const B2DPoint& rCurrB, const B2DPoint& rNextB, 
             sal_uInt32 nIndA, sal_uInt32 nIndB,
             temporaryPointVector& rTempPointsA, temporaryPointVector& rTempPointsB)
         {
@@ -429,7 +429,7 @@ namespace basegfx
 
             // create subdivided polygons and find cuts between them
             // Keep adaptiveSubdivideByCount due to needed quality
-            aTempPolygonA.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
+            aTempPolygonA.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8); 
             aTempPolygonA.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             aTempPolygonEdge.append(rCurrB);
@@ -470,10 +470,10 @@ namespace basegfx
 
             // create subdivided polygons and find cuts between them
             // Keep adaptiveSubdivideByCount due to needed quality
-            aTempPolygonA.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
+            aTempPolygonA.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8); 
             aTempPolygonA.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT);
-            aTempPolygonB.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
+            aTempPolygonB.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8); 
             aTempPolygonB.append(rCubicB.getStartPoint());
             rCubicB.adaptiveSubdivideByCount(aTempPolygonB, SUBDIVIDE_FOR_CUT_TEST_COUNT);
 
@@ -514,7 +514,7 @@ namespace basegfx
 
             // create subdivided polygon and find cuts on it
             // Keep adaptiveSubdivideByCount due to needed quality
-            aTempPolygon.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
+            aTempPolygon.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8); 
             aTempPolygon.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findCuts(aTempPolygon, aTempPointVector);
@@ -594,7 +594,7 @@ namespace basegfx
                                     else
                                     {
                                         // test for simple edge-edge cuts
-                                        findEdgeCutsTwoEdges(aCubicA.getStartPoint(), aCubicA.getEndPoint(), aCubicB.getStartPoint(), aCubicB.getEndPoint(),
+                                        findEdgeCutsTwoEdges(aCubicA.getStartPoint(), aCubicA.getEndPoint(), aCubicB.getStartPoint(), aCubicB.getEndPoint(), 
                                             a, b, rTempPoints, rTempPoints);
                                     }
                                 }
@@ -615,7 +615,7 @@ namespace basegfx
                             {
                                 const B2DPoint aNextB(rCandidate.getB2DPoint(b + 1L == nPointCount ? 0L : b + 1L));
                                 const B2DRange aRangeB(aCurrB, aNextB);
-
+                                
                                 // consecutive segments touch of course
                                 bool bOverlap = false;
                                 if( b > a+1)
@@ -626,7 +626,7 @@ namespace basegfx
                                 {
                                     findEdgeCutsTwoEdges(aCurrA, aNextA, aCurrB, aNextB, a, b, rTempPoints, rTempPoints);
                                 }
-
+                                
                                 // prepare next step
                                 aCurrB = aNextB;
                             }
@@ -653,13 +653,13 @@ namespace basegfx
         ////////////////////////////////////////////////////////////////////////////////
 
         void findTouchesOnEdge(
-            const B2DPoint& rCurr, const B2DPoint& rNext, const B2DPolygon& rPointPolygon,
+            const B2DPoint& rCurr, const B2DPoint& rNext, const B2DPolygon& rPointPolygon, 
             sal_uInt32 nInd, temporaryPointVector& rTempPoints)
         {
             // find out if points from rPointPolygon are positioned on given edge. If Yes, add
             // points there to represent touches (which may be enter or leave nodes later).
             const sal_uInt32 nPointCount(rPointPolygon.count());
-
+            
             if(nPointCount)
             {
                 const B2DRange aRange(rCurr, rNext);
@@ -667,7 +667,7 @@ namespace basegfx
                 B2DVector aNormalizedEdgeVector(aEdgeVector);
                 aNormalizedEdgeVector.normalize();
                 bool bTestUsingX(fabs(aEdgeVector.getX()) > fabs(aEdgeVector.getY()));
-
+                
                 for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
                     const B2DPoint aTestPoint(rPointPolygon.getB2DPoint(a));
@@ -680,7 +680,7 @@ namespace basegfx
 
                             if(areParallel(aNormalizedEdgeVector, aTestVector))
                             {
-                                const double fCut((bTestUsingX)
+                                const double fCut((bTestUsingX) 
                                     ? aTestVector.getX() / aEdgeVector.getX()
                                     : aTestVector.getY() / aEdgeVector.getY());
                                 const double fZero(0.0);
@@ -700,7 +700,7 @@ namespace basegfx
         ////////////////////////////////////////////////////////////////////////////////
 
         void findTouchesOnCurve(
-            const B2DCubicBezier& rCubicA, const B2DPolygon& rPointPolygon,
+            const B2DCubicBezier& rCubicA, const B2DPolygon& rPointPolygon, 
             sal_uInt32 nInd, temporaryPointVector& rTempPoints)
         {
             // find all points from rPointPolygon which touch the given bezier segment. Add an entry
@@ -711,7 +711,7 @@ namespace basegfx
 
             // create subdivided polygon and find cuts on it
             // Keep adaptiveSubdivideByCount due to needed quality
-            aTempPolygon.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
+            aTempPolygon.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8); 
             aTempPolygon.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findTouches(aTempPolygon, rPointPolygon, aTempPointVector);
@@ -787,7 +787,7 @@ namespace basegfx
 
         void findCuts(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, temporaryPointVector& rTempPointsA, temporaryPointVector& rTempPointsB)
         {
-            // find out if edges from both polygons cut. If so, add entries to rTempPoints which
+            // find out if edges from both polygons cut. If so, add entries to rTempPoints which 
             // should be added to the polygons accordingly
             const sal_uInt32 nPointCountA(rCandidateA.count());
             const sal_uInt32 nPointCountB(rCandidateB.count());
@@ -846,7 +846,7 @@ namespace basegfx
                                     else
                                     {
                                         // test for simple edge-edge cuts
-                                        findEdgeCutsTwoEdges(aCubicA.getStartPoint(), aCubicA.getEndPoint(), aCubicB.getStartPoint(), aCubicB.getEndPoint(),
+                                        findEdgeCutsTwoEdges(aCubicA.getStartPoint(), aCubicA.getEndPoint(), aCubicB.getStartPoint(), aCubicB.getEndPoint(), 
                                             a, b, rTempPointsA, rTempPointsB);
                                     }
                                 }
@@ -910,7 +910,7 @@ namespace basegfx
             if(rCandidate.count())
             {
                 temporaryPointVector aTempPoints;
-
+                
                 findTouches(rCandidate, rCandidate, aTempPoints);
                 findCuts(rCandidate, aTempPoints);
 
@@ -1015,11 +1015,11 @@ namespace basegfx
             {
                 temporaryPointVector aTempPoints;
                 temporaryPointVector aTempPointsUnused;
-
+                
                 for(sal_uInt32 a(0L); a < rMask.count(); a++)
                 {
                     const B2DPolygon aPartMask(rMask.getB2DPolygon(a));
-
+                    
                     findTouches(rCandidate, aPartMask, aTempPoints);
                     findCuts(rCandidate, aPartMask, aTempPoints, aTempPointsUnused);
                 }
@@ -1051,7 +1051,7 @@ namespace basegfx
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd)
         {
             const sal_uInt32 nCount(rCandidate.count());
-
+            
             if(nCount && !rStart.equal(rEnd))
             {
                 const B2DRange aPolygonRange(rCandidate.getB2DRange());
@@ -1113,7 +1113,7 @@ namespace basegfx
         {
             const sal_uInt32 nCountA(rCandidate.count());
             const sal_uInt32 nCountM(rPolyMask.count());
-
+            
             if(nCountA && nCountM)
             {
                 const B2DRange aRangeA(rCandidate.getB2DRange());
@@ -1207,7 +1207,7 @@ namespace basegfx
             if(rCandidate.count())
             {
                 temporaryPointVector aTempPoints;
-
+                
                 findCuts(rCandidate, aTempPoints);
 
                 return mergeTemporaryPointsAndPolygon(rCandidate, aTempPoints);

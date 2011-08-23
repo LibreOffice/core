@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,25 +75,25 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
     // names of transliteration relevant properties
     static const char* aTranslitNames[] =
     {
-        "IsMatchCase",                          //  0
-        "Japanese/IsMatchFullHalfWidthForms",   //  1
-        "Japanese/IsMatchHiraganaKatakana",     //  2
-        "Japanese/IsMatchContractions",         //  3
-        "Japanese/IsMatchMinusDashCho-on",      //  4
-        "Japanese/IsMatchRepeatCharMarks",      //  5
-        "Japanese/IsMatchVariantFormKanji",     //  6
-        "Japanese/IsMatchOldKanaForms",         //  7
-        "Japanese/IsMatch_DiZi_DuZu",           //  8
-        "Japanese/IsMatch_BaVa_HaFa",           //  9
-        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 10
-        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 11
-        "Japanese/IsMatch_SeShe_ZeJe",          // 12
-        "Japanese/IsMatch_IaIya",               // 13
-        "Japanese/IsMatch_KiKu",                // 14
-        "Japanese/IsIgnorePunctuation",         // 15
-        "Japanese/IsIgnoreWhitespace",          // 16
-        "Japanese/IsIgnoreProlongedSoundMark",  // 17
-        "Japanese/IsIgnoreMiddleDot"            // 18
+        "IsMatchCase",							//  0
+        "Japanese/IsMatchFullHalfWidthForms",	//  1
+        "Japanese/IsMatchHiraganaKatakana",		//  2
+        "Japanese/IsMatchContractions",			//  3
+        "Japanese/IsMatchMinusDashCho-on",		//  4
+        "Japanese/IsMatchRepeatCharMarks",		//  5
+        "Japanese/IsMatchVariantFormKanji",		//  6
+        "Japanese/IsMatchOldKanaForms",			//  7
+        "Japanese/IsMatch_DiZi_DuZu",			//  8
+        "Japanese/IsMatch_BaVa_HaFa",			//  9
+        "Japanese/IsMatch_TsiThiChi_DhiZi",		// 10
+        "Japanese/IsMatch_HyuIyu_ByuVyu",		// 11
+        "Japanese/IsMatch_SeShe_ZeJe",			// 12
+        "Japanese/IsMatch_IaIya",				// 13
+        "Japanese/IsMatch_KiKu",				// 14
+        "Japanese/IsIgnorePunctuation",			// 15
+        "Japanese/IsIgnoreWhitespace",			// 16
+        "Japanese/IsIgnoreProlongedSoundMark",	// 17
+        "Japanese/IsIgnoreMiddleDot"			// 18
     };
 
     const int nCount = sizeof( aTranslitNames ) / sizeof( aTranslitNames[0] );
@@ -118,24 +118,24 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                           Locale(),
                           2, 2, 2,
                           TransliterationModules_IGNORE_CASE ),
-    eFamily         ( SFX_STYLE_FAMILY_PARA ),
-    nCommand        ( 0 ),
-    nCellType       ( SVX_SEARCHIN_FORMULA ),
-    nAppFlag        ( SVX_SEARCHAPP_WRITER ),
-    bRowDirection   ( sal_True ),
-    bAllTables      ( sal_False ),
-    bNotes          ( sal_False),
-    bBackward       ( sal_False ),
-    bPattern        ( sal_False ),
-    bContent        ( sal_False ),
-    bAsianOptions   ( FALSE )
+    eFamily			( SFX_STYLE_FAMILY_PARA ),
+    nCommand		( 0 ),
+    nCellType		( SVX_SEARCHIN_FORMULA ),
+    nAppFlag		( SVX_SEARCHAPP_WRITER ),
+    bRowDirection	( sal_True ),
+    bAllTables		( sal_False ),
+    bNotes			( sal_False),
+    bBackward		( sal_False ),
+    bPattern		( sal_False ),
+    bContent		( sal_False ),
+    bAsianOptions	( FALSE )
 {
     EnableNotification( lcl_GetNotifyNames() );
 
     SvtSearchOptions aOpt;
 
-    bBackward       = aOpt.IsBackwards();
-    bAsianOptions   = aOpt.IsUseAsianOptions();
+    bBackward 		= aOpt.IsBackwards();
+    bAsianOptions	= aOpt.IsUseAsianOptions();
     bNotes = aOpt.IsNotes();
 
     if (aOpt.IsUseRegularExpression())
@@ -195,21 +195,21 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
-    SfxPoolItem ( rItem ),
+    SfxPoolItem	( rItem ),
     ConfigItem( ::rtl::OUString::createFromAscii( CFG_ROOT_NODE ) ),
 
-    aSearchOpt      ( rItem.aSearchOpt ),
-    eFamily         ( rItem.eFamily ),
-    nCommand        ( rItem.nCommand ),
-    nCellType       ( rItem.nCellType ),
-    nAppFlag        ( rItem.nAppFlag ),
-    bRowDirection   ( rItem.bRowDirection ),
-    bAllTables      ( rItem.bAllTables ),
-    bNotes          ( rItem.bNotes),
-    bBackward       ( rItem.bBackward ),
-    bPattern        ( rItem.bPattern ),
-    bContent        ( rItem.bContent ),
-    bAsianOptions   ( rItem.bAsianOptions )
+    aSearchOpt		( rItem.aSearchOpt ),
+    eFamily			( rItem.eFamily ),
+    nCommand		( rItem.nCommand ),
+    nCellType		( rItem.nCellType ),
+    nAppFlag		( rItem.nAppFlag ),
+    bRowDirection	( rItem.bRowDirection ),
+    bAllTables		( rItem.bAllTables ),
+    bNotes			( rItem.bNotes),
+    bBackward		( rItem.bBackward ),
+    bPattern		( rItem.bPattern ),
+    bContent		( rItem.bContent ),
+    bAsianOptions	( rItem.bAsianOptions )
 {
     EnableNotification( lcl_GetNotifyNames() );
 }
@@ -231,15 +231,15 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 //! used below
 static BOOL operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
 {
-    return rItem1.algorithmType         == rItem2.algorithmType &&
-           rItem1.searchFlag            == rItem2.searchFlag    &&
-           rItem1.searchString          == rItem2.searchString  &&
-           rItem1.replaceString         == rItem2.replaceString &&
-           //rItem1.Locale              == rItem2.Locale        &&
-           rItem1.changedChars          == rItem2.changedChars  &&
-           rItem1.deletedChars          == rItem2.deletedChars  &&
-           rItem1.insertedChars         == rItem2.insertedChars &&
-           rItem1.transliterateFlags    == rItem2.transliterateFlags;
+    return rItem1.algorithmType 		== rItem2.algorithmType	&&
+           rItem1.searchFlag 			== rItem2.searchFlag	&&
+           rItem1.searchString 			== rItem2.searchString	&&
+           rItem1.replaceString 		== rItem2.replaceString	&&
+           //rItem1.Locale 				== rItem2.Locale		&&
+           rItem1.changedChars 			== rItem2.changedChars	&&
+           rItem1.deletedChars 			== rItem2.deletedChars	&&
+           rItem1.insertedChars 		== rItem2.insertedChars	&&
+           rItem1.transliterateFlags	== rItem2.transliterateFlags;
 }
 
 
@@ -247,18 +247,18 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
     const SvxSearchItem &rSItem = (SvxSearchItem &) rItem;
-    return ( nCommand       == rSItem.nCommand )        &&
-           ( bBackward      == rSItem.bBackward )       &&
-           ( bPattern       == rSItem.bPattern )        &&
-           ( bContent       == rSItem.bContent )        &&
-           ( eFamily        == rSItem.eFamily )         &&
-           ( bRowDirection  == rSItem.bRowDirection )   &&
-           ( bAllTables     == rSItem.bAllTables )      &&
-           ( nCellType      == rSItem.nCellType )       &&
-           ( nAppFlag       == rSItem.nAppFlag )        &&
-           ( bAsianOptions  == rSItem.bAsianOptions )   &&
-           ( aSearchOpt     == rSItem.aSearchOpt )      &&
-           ( bNotes         == rSItem.bNotes );
+    return ( nCommand 		== rSItem.nCommand )		&&
+           ( bBackward 		== rSItem.bBackward )		&&
+           ( bPattern 		== rSItem.bPattern )		&&
+           ( bContent 		== rSItem.bContent )		&&
+           ( eFamily 		== rSItem.eFamily )			&&
+           ( bRowDirection 	== rSItem.bRowDirection )	&&
+           ( bAllTables 	== rSItem.bAllTables )		&&
+           ( nCellType 		== rSItem.nCellType )		&&
+           ( nAppFlag 		== rSItem.nAppFlag )		&&
+           ( bAsianOptions	== rSItem.bAsianOptions )	&&
+           ( aSearchOpt     == rSItem.aSearchOpt )		&&
+           ( bNotes			== rSItem.bNotes );
 }
 
 
@@ -267,11 +267,11 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 SfxItemPresentation SvxSearchItem::GetPresentation
 (
     SfxItemPresentation ,
-    SfxMapUnit          ,
-    SfxMapUnit          ,
-    XubString&          ,
+    SfxMapUnit			,
+    SfxMapUnit			,
+    XubString& 			,
     const IntlWrapper *
-)   const
+)	const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }

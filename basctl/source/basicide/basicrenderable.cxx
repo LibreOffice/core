@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                                   rtl::OUString(),
                                                   aPageRangeOpt
-                                                  );
+                                                  ); 
 }
 
 BasicRenderable::~BasicRenderable()
@@ -129,10 +129,10 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
         else
             throw lang::IllegalArgumentException();
     }
-
+    
     return nCount;
 }
-
+    
 Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
         sal_Int32, const Any&, const Sequence<beans::PropertyValue>& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
@@ -146,7 +146,7 @@ Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
     if( pPrinter )
     {
         Size aPageSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-
+        
         aVals.realloc( 1 );
         aVals[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         awt::Size aSize;
@@ -154,12 +154,12 @@ Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
         aSize.Height = aPageSize.Height();
         aVals[0].Value <<= aSize;
     }
-
+        
     appendPrintUIOptions( aVals );
 
     return aVals;
 }
-
+    
 void SAL_CALL BasicRenderable::render (
         sal_Int32 nRenderer, const Any&,
         const Sequence<beans::PropertyValue>& i_xOptions

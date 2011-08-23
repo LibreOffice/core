@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
-    BOOL    bValidValue : 1;
-    BOOL    bDeleted : 1;
-    double  nValue;
+    BOOL	bValidValue : 1;
+    BOOL	bDeleted : 1;
+    double 	nValue;
     String  aName;
     String  aContent;
     USHORT  nType;
@@ -50,28 +50,28 @@ class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 public:
     SwUserFieldType( SwDoc* pDocPtr, const String& );
 
-    virtual const String&   GetName() const;
-    virtual SwFieldType*    Copy() const;
+    virtual const String&	GetName() const;
+    virtual SwFieldType*	Copy() const;
 
-    String                  Expand(sal_uInt32 nFmt, USHORT nSubType, USHORT nLng);
+    String					Expand(sal_uInt32 nFmt, USHORT nSubType, USHORT nLng);
 
-    String                  GetContent( sal_uInt32 nFmt = 0 );
-           void             SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
+    String					GetContent( sal_uInt32 nFmt = 0 );
+           void				SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
 
-    inline BOOL             IsValid() const;
-    inline void             ChgValid( BOOL bNew );
+    inline BOOL 			IsValid() const;
+    inline void 			ChgValid( BOOL bNew );
 
-    virtual void            Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    virtual void 			Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
-           double           GetValue(SwCalc& rCalc);    // Member nValue neu berrechnen
-    inline double           GetValue() const;
-    inline void             SetValue(const double nVal);
+           double 			GetValue(SwCalc& rCalc);	// Member nValue neu berrechnen
+    inline double			GetValue() const;
+    inline void				SetValue(const double nVal);
 
-    inline USHORT           GetType() const;
-    inline void             SetType(USHORT);
+    inline USHORT			GetType() const;
+    inline void				SetType(USHORT);
 
-    BOOL                    IsDeleted() const       { return bDeleted; }
-    void                    SetDeleted( BOOL b )    { bDeleted = b; }
+    BOOL					IsDeleted() const 		{ return bDeleted; }
+    void					SetDeleted( BOOL b )	{ bDeleted = b; }
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
@@ -109,22 +109,22 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
 public:
     SwUserField(SwUserFieldType*, USHORT nSub = 0, sal_uInt32 nFmt = 0);
 
-    virtual USHORT          GetSubType() const;
-    virtual void            SetSubType(USHORT nSub);
+    virtual USHORT	 		GetSubType() const;
+    virtual void	 		SetSubType(USHORT nSub);
 
-    virtual double          GetValue() const;
-    virtual void            SetValue( const double& rVal );
+    virtual double			GetValue() const;
+    virtual void 			SetValue( const double& rVal );
 
-    virtual String          Expand() const;
-    virtual SwField*        Copy() const;
-    virtual String          GetCntnt(BOOL bName = FALSE) const;
+    virtual String	 		Expand() const;
+    virtual SwField* 		Copy() const;
+    virtual	String	 		GetCntnt(BOOL bName = FALSE) const;
 
     // Name kann nicht geaendert werden
-    virtual const String&   GetPar1() const;
+    virtual const String& 	GetPar1() const;
 
     // Inhalt
-    virtual String          GetPar2() const;
-    virtual void            SetPar2(const String& rStr);
+    virtual String	 		GetPar2() const;
+    virtual void	 		SetPar2(const String& rStr);
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 };

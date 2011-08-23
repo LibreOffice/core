@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -660,7 +660,7 @@ void dumpdef(char *why)
         register DEFBUF         **syp;
         FILE *pRememberOut = NULL;
 
-        if ( bDumpDefs )    /*ER */
+        if ( bDumpDefs )	/*ER */
         {
             pRememberOut = pCppOut;
             pCppOut = pDefOut;
@@ -730,7 +730,7 @@ void dumpadef(char *why, register DEFBUF *dp)
                 EVALTYPE valEval;
 
                 bIsInEval = 1;
-                infile = NULL;          /* start from scrap */
+                infile = NULL;			/* start from scrap */
                 line = 0;
                 wrongline = 0;
                 *token = EOS;
@@ -740,7 +740,7 @@ void dumpadef(char *why, register DEFBUF *dp)
                 strcpy( file->buffer, dp->repl );
                 fprintf( pCppOut, " ===> ");
                 nEvalOff = 0;
-                cppmain();              /* get() frees also *file */
+                cppmain();				/* get() frees also *file */
                 valEval = 0;
                 if ( 0 == evaluate( EvalBuf, &valEval ) )
                 {
@@ -872,8 +872,8 @@ newline:
             }
         }
 #if (HOST == SYS_UNIX)
-/*ER*/  if (c == '\r')
-/*ER*/      return get();                       /* DOS fuck             */
+/*ER*/	if (c == '\r')
+/*ER*/		return get();						/* DOS fuck				*/
 #endif
         if (c == '\n')                          /* Maintain current     */
             ++line;                             /* line counter         */
@@ -983,7 +983,7 @@ newline:
         }
         else if (c == '\f' || c == VT)          /* Form Feed, Vertical  */
             c = ' ';                            /* Tab are whitespace   */
-        else if (c == 0xef)                     /* eat up UTF-8 BOM */
+        else if (c == 0xef)						/* eat up UTF-8 BOM */
         {
             if((c = get()) == 0xbb)
             {

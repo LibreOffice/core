@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#include "swfdialog.hxx"
-#include "impswfdialog.hxx"
+#include "swfdialog.hxx" 
+#include "impswfdialog.hxx" 
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <svl/solar.hrc>
@@ -63,7 +63,7 @@ OUString SWFDialog_getImplementationName ()
 
 // -----------------------------------------------------------------------------
 
-Sequence< sal_Int8 > SAL_CALL SWFDialog_getImplementationId()
+Sequence< sal_Int8 > SAL_CALL SWFDialog_getImplementationId() 
     throw(RuntimeException)
 {
     static ::cppu::OImplementationId aId;
@@ -72,7 +72,7 @@ Sequence< sal_Int8 > SAL_CALL SWFDialog_getImplementationId()
 
 // -----------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames()
+Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames() 
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
@@ -83,7 +83,7 @@ Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames()
 
 // -----------------------------------------------------------------------------
 
-Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr) 
     throw( Exception )
 {
     return (cppu::OWeakObject*) new SWFDialog( rSMgr );
@@ -114,13 +114,13 @@ SWFDialog::~SWFDialog()
 
 // -----------------------------------------------------------------------------
 
-Any SAL_CALL SWFDialog::queryInterface( const Type& rType )
+Any SAL_CALL SWFDialog::queryInterface( const Type& rType ) 
     throw (RuntimeException)
 {
     Any aReturn = OGenericUnoDialog::queryInterface( rType );
 
     if( !aReturn.hasValue() )
-        aReturn = ::cppu::queryInterface( rType,
+        aReturn = ::cppu::queryInterface( rType, 
                                           static_cast< XPropertyAccess* >( this ),
                                           static_cast< XExporter* >( this ) );
 
@@ -129,7 +129,7 @@ Any SAL_CALL SWFDialog::queryInterface( const Type& rType )
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SWFDialog::acquire()
+void SAL_CALL SWFDialog::acquire() 
     throw ()
 {
     OWeakObject::acquire();
@@ -137,7 +137,7 @@ void SAL_CALL SWFDialog::acquire()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SWFDialog::release()
+void SAL_CALL SWFDialog::release() 
     throw ()
 {
     OWeakObject::release();
@@ -145,7 +145,7 @@ void SAL_CALL SWFDialog::release()
 
 // -----------------------------------------------------------------------------
 
-Sequence< sal_Int8 > SAL_CALL SWFDialog::getImplementationId()
+Sequence< sal_Int8 > SAL_CALL SWFDialog::getImplementationId() 
     throw(RuntimeException)
 {
     return SWFDialog_getImplementationId();
@@ -153,7 +153,7 @@ Sequence< sal_Int8 > SAL_CALL SWFDialog::getImplementationId()
 
 // -----------------------------------------------------------------------------
 
-OUString SAL_CALL SWFDialog::getImplementationName()
+OUString SAL_CALL SWFDialog::getImplementationName() 
     throw (RuntimeException)
 {
     return SWFDialog_getImplementationName();
@@ -169,13 +169,13 @@ Sequence< OUString > SAL_CALL SWFDialog::getSupportedServiceNames()
 
 // -----------------------------------------------------------------------------
 
-Dialog* SWFDialog::createDialog( Window* pParent )
+Dialog*	SWFDialog::createDialog( Window* pParent )
 {
     Dialog* pRet = NULL;
 
     if( mpResMgr && mxSrcDoc.is() )
     {
-/*      TODO: From the controler we may get information what page is visible and what shapes
+/*		TODO: From the controler we may get information what page is visible and what shapes
               are selected, if we optionaly want to limit output to that
         Any aSelection;
 
@@ -186,7 +186,7 @@ Dialog* SWFDialog::createDialog( Window* pParent )
             if( xController.is() )
             {
                 Reference< XSelectionSupplier > xView( xController, UNO_QUERY );
-
+                
                 if( xView.is() )
                     xView->getSelection() >>= aSelection;
             }
@@ -194,7 +194,7 @@ Dialog* SWFDialog::createDialog( Window* pParent )
         catch( RuntimeException )
         {
         }
-*/
+*/        
         ImpSWFDialog* pDlg = new ImpSWFDialog( pParent, *mpResMgr, maFilterData );
         pRet = pDlg;
     }
@@ -214,7 +214,7 @@ void SWFDialog::executedDialog( sal_Int16 nExecutionResult )
 
 // -----------------------------------------------------------------------------
 
-Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
+Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo() 
     throw(RuntimeException)
 {
     Reference< XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -244,7 +244,7 @@ Sequence< PropertyValue > SAL_CALL SWFDialog::getPropertyValues()
 
     for( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) ) 
             break;
     }
 
@@ -253,20 +253,20 @@ Sequence< PropertyValue > SAL_CALL SWFDialog::getPropertyValues()
 
     maMediaDescriptor[ i ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
     maMediaDescriptor[ i ].Value <<= maFilterData;
-
+    
     return maMediaDescriptor;
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SWFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
+void SAL_CALL SWFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps ) 
     throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
     maMediaDescriptor = rProps;
 
     for( sal_Int32 i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) ) 
         {
             maMediaDescriptor[ i ].Value >>= maFilterData;
             break;
@@ -276,7 +276,7 @@ void SAL_CALL SWFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SWFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
+void SAL_CALL SWFDialog::setSourceDocument( const Reference< XComponent >& xDoc ) 
     throw(IllegalArgumentException, RuntimeException)
 {
     mxSrcDoc = xDoc;

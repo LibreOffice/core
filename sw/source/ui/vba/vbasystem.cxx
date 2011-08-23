@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ SwVbaSystem::getCursor() throw (uno::RuntimeException)
     }
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
 {
     try
@@ -131,11 +131,11 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
                 break;
             }
             default:
-                throw uno::RuntimeException( rtl::OUString(
+                throw uno::RuntimeException( rtl::OUString( 
                         RTL_CONSTASCII_USTRINGPARAM("Unknown value for Cursor pointer")), uno::Reference< uno::XInterface >() );
                 // TODO: isn't this a flaw in the API? It should be allowed to throw an
                 // IllegalArgumentException, or so
-        }
+        }        
     }
     catch( const uno::Exception& )
     {
@@ -143,7 +143,7 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
     }
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OUString& rSection, const rtl::OUString& rKey ) throw ( uno::RuntimeException )
 {
     if( rFilename.getLength() == 0 )
@@ -167,14 +167,14 @@ SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OU
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( &maPrivateProfileStringListener ) ) );
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaSystem::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaSystem") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaSystem::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ XMLShadowPropHdl::~XMLShadowPropHdl()
 }
 
 sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     sal_Bool bRet = sal_False;
     table::ShadowFormat aShadow;
     aShadow.Location = table::ShadowLocation_BOTTOM_RIGHT;
@@ -123,11 +123,11 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
 
     rValue <<= aShadow;
 
-    return bRet;
+    return bRet; 
 }
 
 sal_Bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
     table::ShadowFormat aShadow;
@@ -135,7 +135,7 @@ sal_Bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     if( rValue >>= aShadow )
     {
         sal_Int32 nX = 1, nY = 1;
-
+        
         switch( aShadow.Location )
         {
             case table::ShadowLocation_TOP_LEFT:

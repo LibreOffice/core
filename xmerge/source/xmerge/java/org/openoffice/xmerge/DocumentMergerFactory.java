@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ package org.openoffice.xmerge;
  *  <code>OfficeDocument</code> with the merger.  The merger is capable
  *  of doing this even if the &quot;Device&quot; format is lossy in
  *  comparison to the <code>OfficeDocument</code> format.</p>
- *
+ * 
  *  @see  PluginFactory
  *  @see  DocumentMerger
  *  @see  ConverterCapabilities

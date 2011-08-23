@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ namespace bridges_remote
         uno_Mapping *pMapping, void **ppOut, void *pInterface,
         typelib_InterfaceTypeDescription *pInterfaceTypeDescr );
     RemoteToUno remoteToUno;
-
+    
     extern "C" typedef void SAL_CALL UnoToRemote(
         uno_Mapping *pMapping, void **ppOut, void *pInterface,
         typelib_InterfaceTypeDescription *pInterfaceTypeDescr );
     UnoToRemote unoToRemote;
-
+        
     extern "C" typedef void SAL_CALL FreeRemoteMapping(uno_Mapping * mapping);
     FreeRemoteMapping freeRemoteMapping;
 
@@ -60,10 +60,10 @@ namespace bridges_remote
                        uno_MapInterfaceFunc func ,
                        const ::rtl::OUString sPurpose);
         ~RemoteMapping();
-
-        oslInterlockedCount m_nRef;
+        
+        oslInterlockedCount	m_nRef;
         ::rtl::OUString m_sPurpose;
     };
-
+    
 }
 #endif

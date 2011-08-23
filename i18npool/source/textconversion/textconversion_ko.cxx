@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ using namespace rtl;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 #define SCRIPT_OTHERS   0
-#define SCRIPT_HANJA    1
+#define SCRIPT_HANJA    1 
 #define SCRIPT_HANGUL   2
 
 TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& xMSF )
 {
     Reference < XInterface > xI;
-
+    
     xI = xMSF->createInstance(
         OUString::createFromAscii("com.sun.star.i18n.ConversionDictionary_ko"));
 
@@ -64,13 +64,13 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
 
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
-
+    
     maxLeftLength = maxRightLength = 1;
 
     // get maximum length of word in dictionary
     if (xCDL.is()) {
-        Locale loc(OUString::createFromAscii("ko"),
-                    OUString::createFromAscii("KR"),
+        Locale loc(OUString::createFromAscii("ko"), 
+                    OUString::createFromAscii("KR"), 
                     OUString());
         maxLeftLength = xCDL->queryMaxCharCount(loc,
                         ConversionDictionaryType::HANGUL_HANJA,
@@ -123,7 +123,7 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
     return (i < scriptListCount && block >= scriptList[i].from) ? scriptList[i].script : SCRIPT_OTHERS;
 }
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString > SAL_CALL 
 TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toHanja)
 {
     sal_Unicode ch;
@@ -167,7 +167,7 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
 
             if (address != 0xFFFF)
                 newStr->buffer[count++] = address;
-            else
+            else 
                 break;
         }
         if (count > 0) {
@@ -252,25 +252,25 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
                     if (len > 1) {
                         try {
                             if (xCDL.is())
-                                result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
+                                result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len, 
                                     aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
                         }
                         catch ( NoSupportException & ) {
-                            // clear reference (when there is no user dictionary) in order
-                            // to not always have to catch this exception again
+                            // clear reference (when there is no user dictionary) in order 
+                            // to not always have to catch this exception again 
                             // in further calls. (save time)
                             xCDL = 0;
                         }
                         catch (...) {
-                            // catch all other exceptions to allow
+                            // catch all other exceptions to allow 
                             // querying the system dictionary in the next line
                         }
-                        if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion.
+                        if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion. 
                             candidates = xCD->getConversions(aText, start + nStartPos, len, eDirection, nConversionOptions);
                             result.Candidates += candidates;
                         }
                     } else if (! toHanja) { // do whole word character 2 character conversion for Hanja to Hangul conversion
-                        result.Candidates = getCharConversions(aText, nStartPos + start, length - start, toHanja);
+                        result.Candidates = getCharConversions(aText, nStartPos + start, length - start, toHanja); 
                         if (result.Candidates.hasElements())
                             len = result.Candidates[0].getLength();
                     }
@@ -333,8 +333,8 @@ TextConversion_ko::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
     return getConversion(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
-sal_Bool SAL_CALL
-TextConversion_ko::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ )
+sal_Bool SAL_CALL 
+TextConversion_ko::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /*nTextConversionType*/, sal_Int32 /*nTextConversionOptions*/ ) 
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
     return sal_True;

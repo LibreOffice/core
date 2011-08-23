@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ class XFormsSubmissionContext : public TokenContext
 
 public:
 
-    XFormsSubmissionContext( SvXMLImport& rImport,
+    XFormsSubmissionContext( SvXMLImport& rImport, 
                              USHORT nPrefix,
                              const rtl::OUString& rLocalName,
                              const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xModel );
@@ -69,10 +69,10 @@ public:
     //
 
 protected:
-    virtual void HandleAttribute( sal_uInt16 nToken,
+    virtual void HandleAttribute( sal_uInt16 nToken, 
                                   const rtl::OUString& rValue );
 
-    virtual SvXMLImportContext* HandleChild(
+    virtual SvXMLImportContext* HandleChild( 
         sal_uInt16 nToken,
         sal_uInt16 nNamespace,
         const rtl::OUString& rLocalName,

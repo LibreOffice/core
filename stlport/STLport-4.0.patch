@@ -3321,6 +3321,23 @@
   inline char* _FILE_I_next(const FILE& __f) { return (char*) __f._ptr; }  
   inline char* _FILE_I_end(const FILE& __f)
 ***************
+*** 92,98 ****
+  typedef  unsigned char* _File_ptr_type;
+  #endif
+
+! inline int   _FILE_fd(const FILE& __f) { return __f._file; }
+  inline char* _FILE_I_begin(const FILE& __f) { return (char*) __f._base; }
+  inline char* _FILE_I_next(const FILE& __f) { return (char*) __f._ptr; }
+  inline char* _FILE_I_end(const FILE& __f)
+--- 92,98 ----
+  typedef  unsigned char* _File_ptr_type;
+  #endif
+
+! inline int   _FILE_fd(const FILE& __f) { return fileno(__CONST_CAST(FILE*,&__f)); }
+  inline char* _FILE_I_begin(const FILE& __f) { return (char*) __f._base; }
+  inline char* _FILE_I_next(const FILE& __f) { return (char*) __f._ptr; }
+  inline char* _FILE_I_end(const FILE& __f)
+***************
 *** 377,382 ****
 --- 380,388 ----
   # endif

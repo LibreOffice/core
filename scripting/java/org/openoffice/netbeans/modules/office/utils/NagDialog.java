@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class NagDialog {
         String message, String prompt, boolean initialState) {
         NagDialog result = new NagDialog(
             message, prompt, initialState, JOptionPane.INFORMATION_MESSAGE);
-
+        
         result.setDescriptor(new NotifyDescriptor.Message(result.getPanel(),
             NotifyDescriptor.PLAIN_MESSAGE));
 
@@ -64,7 +64,7 @@ public class NagDialog {
         String message, String prompt, boolean initialState) {
         NagDialog result = new NagDialog(
             message, prompt, initialState, JOptionPane.QUESTION_MESSAGE);
-
+        
         result.setDescriptor(new NotifyDescriptor.Confirmation(
             result.getPanel(), NotifyDescriptor.OK_CANCEL_OPTION,
             NotifyDescriptor.PLAIN_MESSAGE));
@@ -113,13 +113,13 @@ public class NagDialog {
             }
         });
         optionPane.setWantsInput(false);
-
+        
         JPanel checkPanel = new JPanel();
         checkbox = new JCheckBox(prompt, initialState);
         checkPanel.setLayout(new BorderLayout());
         checkPanel.setBorder(new EmptyBorder(0, 20, 0, 0));
         checkPanel.add(checkbox, BorderLayout.WEST);
-
+        
         this.panel.setLayout(new BorderLayout());
         this.panel.add(optionPane, BorderLayout.CENTER);
         this.panel.add(checkPanel, BorderLayout.SOUTH);

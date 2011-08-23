@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@
 
 struct ImplBtnDlgItem
 {
-    USHORT              mnId;
-    BOOL                mbOwnButton;
-    BOOL                mbDummyAlign;
-    long                mnSepSize;
-    PushButton*         mpPushButton;
+    USHORT				mnId;
+    BOOL				mbOwnButton;
+    BOOL				mbDummyAlign;
+    long				mnSepSize;
+    PushButton* 		mpPushButton;
 };
 
 DECLARE_LIST( ImplBtnDlgItemList, ImplBtnDlgItem* )
@@ -57,11 +57,11 @@ DECLARE_LIST( ImplBtnDlgItemList, ImplBtnDlgItem* )
 
 void ButtonDialog::ImplInitButtonDialogData()
 {
-    mpItemList              = new ImplBtnDlgItemList( 8, 8 );
-    mnButtonSize            = 0;
-    mnCurButtonId           = 0;
-    mnFocusButtonId         = BUTTONDIALOG_BUTTON_NOTFOUND;
-    mbFormat                = TRUE;
+    mpItemList				= new ImplBtnDlgItemList( 8, 8 );
+    mnButtonSize			= 0;
+    mnCurButtonId			= 0;
+    mnFocusButtonId 		= BUTTONDIALOG_BUTTON_NOTFOUND;
+    mbFormat				= TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -87,7 +87,7 @@ ButtonDialog::ButtonDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_BUTTONDIALOG )
 {
     ImplInitButtonDialogData();
-    rResId.SetRT( RSC_DIALOG );     // !!!!!!!!!! RSC_BUTTONDIALOG !!!!!!!!
+    rResId.SetRT( RSC_DIALOG ); 	// !!!!!!!!!! RSC_BUTTONDIALOG !!!!!!!!
     ImplInit( pParent, ImplInitRes( rResId ) );
     ImplLoadRes( rResId );
 }
@@ -113,7 +113,7 @@ ButtonDialog::~ButtonDialog()
 PushButton* ButtonDialog::ImplCreatePushButton( USHORT nBtnFlags )
 {
     PushButton* pBtn;
-    WinBits     nStyle = 0;
+    WinBits 	nStyle = 0;
 
     if ( nBtnFlags & BUTTONDIALOG_DEFBUTTON )
         nStyle |= WB_DEFBUTTON;
@@ -156,9 +156,9 @@ long ButtonDialog::ImplGetButtonSize()
         return mnButtonSize;
 
     // Calculate ButtonSize
-    long    nLastSepSize = 0;
-    long    nSepSize = 0;
-    long    nButtonCount = 0;
+    long	nLastSepSize = 0;
+    long	nSepSize = 0;
+    long	nButtonCount = 0;
     maCtrlSize = Size( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
     ImplBtnDlgItem* pItem = mpItemList->First();
     while ( pItem )
@@ -206,9 +206,9 @@ void ButtonDialog::ImplPosControls()
 
     // determine dialog size
     ImplBtnDlgItem* pItem;
-    Size            aDlgSize = maPageSize;
-    long            nX;
-    long            nY;
+    Size			aDlgSize = maPageSize;
+    long			nX;
+    long			nY;
     if ( GetStyle() & WB_HORZ )
     {
         if ( mnButtonSize+(IMPL_DIALOG_OFFSET*2) > aDlgSize.Width() )
@@ -335,11 +335,11 @@ void ButtonDialog::AddButton( const XubString& rText, USHORT nId,
                               USHORT nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
-    ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
-    pItem->mnId             = nId;
-    pItem->mbOwnButton      = TRUE;
-    pItem->mnSepSize        = nSepPixel;
-    pItem->mpPushButton     = ImplCreatePushButton( nBtnFlags );
+    ImplBtnDlgItem* pItem	= new ImplBtnDlgItem;
+    pItem->mnId 			= nId;
+    pItem->mbOwnButton		= TRUE;
+    pItem->mnSepSize		= nSepPixel;
+    pItem->mpPushButton 	= ImplCreatePushButton( nBtnFlags );
     if ( rText.Len() )
         pItem->mpPushButton->SetText( rText );
 
@@ -358,10 +358,10 @@ void ButtonDialog::AddButton( StandardButtonType eType, USHORT nId,
                               USHORT nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
-    ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
-    pItem->mnId             = nId;
-    pItem->mbOwnButton      = TRUE;
-    pItem->mnSepSize        = nSepPixel;
+    ImplBtnDlgItem* pItem	= new ImplBtnDlgItem;
+    pItem->mnId 			= nId;
+    pItem->mbOwnButton		= TRUE;
+    pItem->mnSepSize		= nSepPixel;
 
     if ( eType == BUTTON_OK )
         nBtnFlags |= BUTTONDIALOG_OKBUTTON;
@@ -372,9 +372,9 @@ void ButtonDialog::AddButton( StandardButtonType eType, USHORT nId,
     pItem->mpPushButton = ImplCreatePushButton( nBtnFlags );
 
     // Standard-Buttons have the right text already
-    if ( !((eType == BUTTON_OK)     && (pItem->mpPushButton->GetType() == WINDOW_OKBUTTON)) ||
+    if ( !((eType == BUTTON_OK) 	&& (pItem->mpPushButton->GetType() == WINDOW_OKBUTTON)) ||
          !((eType == BUTTON_CANCEL) && (pItem->mpPushButton->GetType() == WINDOW_CANCELBUTTON)) ||
-         !((eType == BUTTON_HELP)   && (pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
+         !((eType == BUTTON_HELP)	&& (pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
     {
         pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
         pItem->mpPushButton->SetHelpText( Button::GetStandardHelpText( eType ) );
@@ -395,11 +395,11 @@ void ButtonDialog::AddButton( PushButton* pBtn, USHORT nId,
                               USHORT nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
-    ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
-    pItem->mnId             = nId;
-    pItem->mbOwnButton      = FALSE;
-    pItem->mnSepSize        = nSepPixel;
-    pItem->mpPushButton     = pBtn;
+    ImplBtnDlgItem* pItem	= new ImplBtnDlgItem;
+    pItem->mnId 			= nId;
+    pItem->mbOwnButton		= FALSE;
+    pItem->mnSepSize		= nSepPixel;
+    pItem->mpPushButton 	= pBtn;
 
     if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
         mnFocusButtonId = nId;

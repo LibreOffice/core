@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,8 +94,8 @@ protected: // protected because its only an implementation relevant class
         attribute structure.
     */
     virtual void start_element(
-        const std::wstring& raw_name,
-        const std::wstring& local_name,
+        const std::wstring& raw_name, 
+        const std::wstring& local_name, 
         const XmlTagAttributes_t& attributes);
 
     /** end_element occurs when a tag is closed
@@ -115,7 +115,7 @@ protected: // protected because its only an implementation relevant class
     */
     virtual void characters(const std::wstring& character);
 
-protected:
+protected: 
     /** choose an appropriate tag reader to handle the tag.
 
         @param tag_name
@@ -123,7 +123,7 @@ protected:
         @param XmlAttributes
         attribute structure of the tag to save in.
     */
-    ITag* chooseTagReader(
+    ITag* chooseTagReader( 
         const std::wstring& tag_name, const XmlTagAttributes_t& XmlAttributes );
 
     /** save the received content into structure.
@@ -143,6 +143,6 @@ private:
     CKeywordsTag* m_pKeywords_Builder;
     CDummyTag*   m_pDummy_Builder;
     CSimpleTag* m_pSimple_Builder;
-};
+}; 
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,7 +157,7 @@ sal_Bool ODataColumn::wasNull(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(!m_xRow.is());
-
+    
     return m_xRow->wasNull();
 }
 
@@ -479,7 +479,7 @@ void ODataColumn::updateObject(const Any& x) throw( SQLException, RuntimeExcepti
 {
     MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed(!m_xRowUpdate.is());
-
+    
     m_xRowUpdate->updateObject(m_nPos, x);
 }
 

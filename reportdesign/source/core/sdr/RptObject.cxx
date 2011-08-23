@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,11 +106,11 @@ sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
         }
         if ( xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
             return OBJ_DLG_IMAGECONTROL;
-        if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
+        if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD )) 
             return OBJ_DLG_FORMATTEDFIELD;
         if ( xServiceInfo->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) ) )
             return OBJ_OLE2;
-        if ( xServiceInfo->supportsService( SERVICE_SHAPE ))
+        if ( xServiceInfo->supportsService( SERVICE_SHAPE )) 
             return OBJ_CUSTOMSHAPE;
         if ( xServiceInfo->supportsService( SERVICE_REPORTDEFINITION ) )
             return OBJ_DLG_SUBREPORT;
@@ -127,11 +127,11 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
     {
         case OBJ_DLG_FIXEDTEXT:
             {
-                OUnoObject* pUnoObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"))
+                OUnoObject* pUnoObj = new OUnoObject( _xComponent 
+                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText")) 
                                     ,OBJ_DLG_FIXEDTEXT);
                 pNewObj = pUnoObj;
-
+            
                 uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
                 if ( xControlModel.is() )
                     xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(sal_True));
@@ -139,18 +139,18 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             break;
         case OBJ_DLG_IMAGECONTROL:
             pNewObj = new OUnoObject(_xComponent
-                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"))
+                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl")) 
                                     ,OBJ_DLG_IMAGECONTROL);
             break;
         case OBJ_DLG_FORMATTEDFIELD:
             pNewObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"))
+                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField")) 
                                     ,OBJ_DLG_FORMATTEDFIELD);
             break;
         case OBJ_DLG_HFIXEDLINE:
         case OBJ_DLG_VFIXEDLINE:
             pNewObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel"))
+                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel")) 
                                     ,nType);
             break;
         case OBJ_CUSTOMSHAPE:
@@ -322,7 +322,7 @@ DBG_NAME( rpt_OObjectBase )
 OObjectBase::OObjectBase(const uno::Reference< report::XReportComponent>& _xComponent)
 :m_bIsListening(sal_False)
 {
-    DBG_CTOR( rpt_OObjectBase,NULL);
+    DBG_CTOR( rpt_OObjectBase,NULL);	
     m_xReportComponent = _xComponent;
 }
 //----------------------------------------------------------------------------
@@ -335,7 +335,7 @@ OObjectBase::OObjectBase(const ::rtl::OUString& _sComponentName)
 //----------------------------------------------------------------------------
 OObjectBase::~OObjectBase()
 {
-    DBG_DTOR( rpt_OObjectBase,NULL);
+    DBG_DTOR( rpt_OObjectBase,NULL);	
     m_xMediator.reset();
     if ( isListening() )
         EndListening();
@@ -369,7 +369,7 @@ void OObjectBase::StartListening()
     if ( !isListening() && m_xReportComponent.is() )
     {
         m_bIsListening = sal_True;
-
+        
         if ( !m_xPropertyChangeListener.is() )
         {
             m_xPropertyChangeListener = new OObjectListener( this );
@@ -550,8 +550,8 @@ void OCustomShape::NbcMove( const Size& rSize )
             m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
             m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
         }
-
-        // set geometry properties
+        
+        // set geometry properties	
         SetPropsFromRect(GetSnapRect());
 
         m_bIsListening = sal_True;
@@ -727,7 +727,7 @@ sal_Int32 OUnoObject::GetStep() const
 void OUnoObject::NbcMove( const Size& rSize )
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
-
+    
     if ( m_bIsListening )
     {
         // stop listening
@@ -774,7 +774,7 @@ void OUnoObject::NbcMove( const Size& rSize )
             //    }
             // }
         }
-        // set geometry properties
+        // set geometry properties	
         SetPropsFromRect(GetLogicRect());
 
         // start listening
@@ -793,8 +793,8 @@ void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Frac
 
     // stop listening
     OObjectBase::EndListening(sal_False);
-
-    // set geometry properties
+    
+    // set geometry properties	
     SetPropsFromRect(GetLogicRect());
 
     // start listening
@@ -806,8 +806,8 @@ void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
     SdrUnoObj::NbcSetLogicRect(rRect);
     // stop listening
     OObjectBase::EndListening(sal_False);
-
-    // set geometry properties
+    
+    // set geometry properties	
     SetPropsFromRect(rRect);
 
     // start listening
@@ -822,7 +822,7 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     if ( bResult )
     {
         impl_setReportComponent_nothrow();
-        // set labels
+        // set labels	
         if ( m_xReportComponent.is() )
         {
             try
@@ -839,7 +839,7 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
             impl_initializeModel_nothrow();
         }
-        // set geometry properties
+        // set geometry properties	
         SetPropsFromRect(GetLogicRect());
     }
 
@@ -847,7 +847,7 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 }
 //----------------------------------------------------------------------------
 ::rtl::OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
-{
+{	
     sal_uInt16 nResId = 0;
     ::rtl::OUString aDefaultName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HERE WE HAVE TO INSERT OUR NAME!"));
     if ( _pObj->supportsService( SERVICE_FIXEDTEXT ) )
@@ -868,7 +868,7 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     }
 
     if (nResId)
-        aDefaultName = ::rtl::OUString( String(ModuleRes(nResId)) );
+        aDefaultName = ::rtl::OUString( String(ModuleRes(nResId)) );			
 
     return aDefaultName;
 }
@@ -927,7 +927,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw
                     OObjectBase::StartListening();
                 }
             }
-        }
+        } 
     }
 }
 // -----------------------------------------------------------------------------
@@ -1034,7 +1034,7 @@ sal_Int32 OOle2Obj::GetStep() const
 void OOle2Obj::NbcMove( const Size& rSize )
 {
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-
+    
     if ( m_bIsListening )
     {
         // stop listening
@@ -1047,8 +1047,8 @@ void OOle2Obj::NbcMove( const Size& rSize )
             m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
             m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
         }
-
-        // set geometry properties
+        
+        // set geometry properties	
         SetPropsFromRect(GetLogicRect());
 
         // start listening
@@ -1067,8 +1067,8 @@ void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
 
     // stop listening
     OObjectBase::EndListening(sal_False);
-
-    // set geometry properties
+    
+    // set geometry properties	
     SetPropsFromRect(GetLogicRect());
 
     // start listening
@@ -1080,8 +1080,8 @@ void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
     SdrOle2Obj::NbcSetLogicRect(rRect);
     // stop listening
     OObjectBase::EndListening(sal_False);
-
-    // set geometry properties
+    
+    // set geometry properties	
     SetPropsFromRect(rRect);
 
     // start listening
@@ -1102,7 +1102,7 @@ FASTBOOL OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             if ( !m_xReportComponent.is() )
                 m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
         }
-        // set geometry properties
+        // set geometry properties	
         SetPropsFromRect(GetLogicRect());
     }
 
@@ -1149,7 +1149,7 @@ SdrObject* OOle2Obj::Clone() const
     OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
     svt::EmbeddedObjectRef::TryRunningState( pObj->GetObjRef() );
     pObj->impl_createDataProvider_nothrow(pRptModel->getReportDefinition().get());
-
+    
     uno::Reference< chart2::data::XDatabaseDataProvider > xSource( lcl_getDataProvider(GetObjRef()) );
     uno::Reference< chart2::data::XDatabaseDataProvider > xDest( lcl_getDataProvider(pObj->GetObjRef()) );
     if ( xSource.is() && xDest.is() )
@@ -1189,7 +1189,7 @@ void OOle2Obj::initializeOle()
         uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
         pRptModel->GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
-
+        
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is() )
         {
@@ -1245,11 +1245,11 @@ uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XRepor
 {
     uno::Reference<container::XNameAccess> xStyles = _xReport->getStyleFamilies();
     uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles"))),uno::UNO_QUERY);
-
+    
     uno::Reference< style::XStyle> xReturn;
     uno::Sequence< ::rtl::OUString> aSeq = xPageStyles->getElementNames();
     const ::rtl::OUString* pIter = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
     for(;pIter != pEnd && !xReturn.is() ;++pIter)
     {
         uno::Reference< style::XStyle> xStyle(xPageStyles->getByName(*pIter),uno::UNO_QUERY);

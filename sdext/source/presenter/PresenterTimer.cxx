@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,10 +90,10 @@ public:
         const PresenterTimer::Task& rTask,
         const TimeValue& rDueTime,
         const sal_Int64 nRepeatIntervall);
-
+    
     void ScheduleTask (const SharedTimerTask& rpTask);
     void CancelTask (const sal_Int32 nTaskId);
-
+    
     static bool GetCurrentTime (TimeValue& rCurrentTime);
     static sal_Int64 GetTimeDifference (
         const TimeValue& rTargetTime,
@@ -122,7 +122,7 @@ private:
     virtual ~TimerScheduler (void);
     class Deleter {public: void operator () (TimerScheduler* pScheduler) { delete pScheduler; } };
     friend class Deleter;
-
+    
     virtual void SAL_CALL run (void);
     virtual void SAL_CALL onTerminated (void);
 };
@@ -140,7 +140,7 @@ sal_Int32 PresenterTimer::ScheduleSingleTaskRelative (
     const Task& rTask,
     const sal_Int64 nDelay)
 {
-    return ScheduleRepeatedTask(rTask, nDelay, 0);
+    return ScheduleRepeatedTask(rTask, nDelay, 0); 
 }
 
 
@@ -266,7 +266,7 @@ void TimerScheduler::ScheduleTask (const SharedTimerTask& rpTask)
 
     osl::MutexGuard aGuard (maTaskContainerMutex);
     maScheduledTasks.insert(rpTask);
-
+    
     if ( ! mbIsRunning)
     {
         mbIsRunning = true;
@@ -336,7 +336,7 @@ void SAL_CALL TimerScheduler::run (void)
         sal_Int64 nDifference = 0;
         {
             ::osl::MutexGuard aGuard (maTaskContainerMutex);
-
+            
             // There are no more scheduled task.  Leave this loop, function and
             // live of the TimerScheduler.
             if (maScheduledTasks.empty())
@@ -351,7 +351,7 @@ void SAL_CALL TimerScheduler::run (void)
                 maScheduledTasks.erase(maScheduledTasks.begin());
             }
         }
-
+        
         // Acquire a reference to the current task.
         {
             ::osl::MutexGuard aGuard (maCurrentTaskMutex);
@@ -383,7 +383,7 @@ void SAL_CALL TimerScheduler::run (void)
                     ScheduleTask(mpCurrentTask);
                 }
             }
-
+            
         }
 
         // Release reference to the current task.
@@ -477,7 +477,7 @@ TimerTask::TimerTask (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext)
 {
     ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
-
+    
     ::rtl::Reference<PresenterClockTimer> pTimer;
     if (mpInstance.is())
     {
@@ -655,13 +655,13 @@ void SAL_CALL PresenterClockTimer::notify (const css::uno::Any& rUserData)
         osl::MutexGuard aGuard (maMutex);
 
         mbIsCallbackPending = false;
-
+    
         ::std::copy(
             maListeners.begin(),
             maListeners.end(),
             ::std::back_inserter(aListenerCopy));
     }
-
+    
     if (aListenerCopy.size() > 0)
     {
         ListenerContainer::const_iterator iListener;

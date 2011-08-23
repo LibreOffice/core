@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,13 +74,13 @@ static USHORT nType3 = 0;
 
 static USHORT nLang = LANGUAGE_NONE;
 
-static BOOL   bAsc1  = TRUE;
-static BOOL   bAsc2  = TRUE;
-static BOOL   bAsc3  = TRUE;
-static BOOL   bCol   = FALSE;
-static BOOL   bCsSens= FALSE;
+static BOOL	  bAsc1	 = TRUE;
+static BOOL	  bAsc2	 = TRUE;
+static BOOL	  bAsc3	 = TRUE;
+static BOOL	  bCol	 = FALSE;
+static BOOL	  bCsSens= FALSE;
 
-static sal_Unicode    cDeli  = '\t';
+static sal_Unicode	  cDeli	 = '\t';
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -97,7 +97,7 @@ void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Fuer Tabellenselektion sel. Zeilen und Spalten
+     Beschreibung: 	Fuer Tabellenselektion sel. Zeilen und Spalten
                     feststellen
  --------------------------------------------------------------------*/
 
@@ -133,45 +133,45 @@ BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_SORTING)),
-    aColLbl(this,       SW_RES(FT_COL   )),
-    aTypLbl(this,       SW_RES(FT_KEYTYP)),
-    aDirLbl(this,       SW_RES(FT_DIR   )),
+    aColLbl(this, 		SW_RES(FT_COL   )),
+    aTypLbl(this, 		SW_RES(FT_KEYTYP)),
+    aDirLbl(this, 		SW_RES(FT_DIR	)),
 
     aDirFL(this,       SW_RES(FL_DIR   )),
 
     aKeyCB1(this,       SW_RES(CB_KEY1  )),
-    aColEdt1(this,      SW_RES(ED_KEY1  )),
-    aTypDLB1(this,      SW_RES(DLB_KEY1 )),
-    aSortUpRB(this,     SW_RES(RB_UP    )),
-    aSortDnRB(this,     SW_RES(RB_DN    )),
+    aColEdt1(this, 		SW_RES(ED_KEY1  )),
+    aTypDLB1(this, 		SW_RES(DLB_KEY1 )),
+    aSortUpRB(this, 	SW_RES(RB_UP    )),
+    aSortDnRB(this, 	SW_RES(RB_DN    )),
 
     aKeyCB2(this,       SW_RES(CB_KEY2  )),
-    aColEdt2(this,      SW_RES(ED_KEY2  )),
-    aTypDLB2(this,      SW_RES(DLB_KEY2 )),
-    aSortUp2RB(this,    SW_RES(RB_UP2    )),
-    aSortDn2RB(this,    SW_RES(RB_DN2    )),
+    aColEdt2(this, 		SW_RES(ED_KEY2  )),
+    aTypDLB2(this, 		SW_RES(DLB_KEY2 )),
+    aSortUp2RB(this, 	SW_RES(RB_UP2    )),
+    aSortDn2RB(this, 	SW_RES(RB_DN2    )),
 
     aKeyCB3(this,       SW_RES(CB_KEY3  )),
-    aColEdt3(this,      SW_RES(ED_KEY3  )),
-    aTypDLB3(this,      SW_RES(DLB_KEY3 )),
-    aSortUp3RB(this,    SW_RES(RB_UP3    )),
-    aSortDn3RB(this,    SW_RES(RB_DN3    )),
+    aColEdt3(this, 		SW_RES(ED_KEY3  )),
+    aTypDLB3(this, 		SW_RES(DLB_KEY3 )),
+    aSortUp3RB(this, 	SW_RES(RB_UP3    )),
+    aSortDn3RB(this, 	SW_RES(RB_DN3    )),
 
     aSortFL(this,      SW_RES(FL_SORT_2  )),
-    aColumnRB(this,     SW_RES(RB_COL   )),
-    aRowRB(this,        SW_RES(RB_ROW   )),
+    aColumnRB(this, 	SW_RES(RB_COL   )),
+    aRowRB(this, 		SW_RES(RB_ROW   )),
 
     aDelimFL(this,     SW_RES(FL_DELIM )),
     aDelimTabRB(this,   SW_RES(RB_TAB   )),
-    aDelimFreeRB(this,  SW_RES(RB_TABCH )),
-    aDelimEdt(this,     SW_RES(ED_TABCH )),
-    aDelimPB(this,      SW_RES( PB_DELIM)),
+    aDelimFreeRB(this, 	SW_RES(RB_TABCH )),
+    aDelimEdt(this, 	SW_RES(ED_TABCH )),
+    aDelimPB(this,    	SW_RES( PB_DELIM)),
 
     aLangFL(this,       SW_RES( FL_LANG )),
-    aLangLB(this,       SW_RES( LB_LANG )),
+    aLangLB(this,     	SW_RES( LB_LANG )),
 
     aSortOptFL(this,    SW_RES( FL_SORT )),
-    aCaseCB(this,       SW_RES( CB_CASE )),
+    aCaseCB(this,     	SW_RES( CB_CASE )),
 
     aOkBtn(this,        SW_RES(BT_OK    )),
     aCancelBtn(this,    SW_RES(BT_CANCEL)),
@@ -179,7 +179,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     aColTxt(            SW_RES(STR_COL)),
     aRowTxt(            SW_RES(STR_ROW)),
-    aNumericTxt(        SW_RES(STR_NUMERIC)),
+    aNumericTxt(		SW_RES(STR_NUMERIC)),
     rSh(rShell),
     pColRes( 0 ),
     nX( 99 ),
@@ -272,7 +272,7 @@ SwSortDlg::~SwSortDlg()
     delete pColRes;
 }
 
-sal_Unicode SwSortDlg::GetDelimChar() const
+sal_Unicode	SwSortDlg::GetDelimChar() const
 {
     sal_Unicode cRet = '\t';
     if( !aDelimTabRB.IsChecked() )

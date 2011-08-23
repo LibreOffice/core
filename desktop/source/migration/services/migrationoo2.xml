@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>   migrationoo2.uno    </module-name>
+    <module-name>	migrationoo2.uno	</module-name>
     <component-description>
         <author> Joachim Lingner </author>
-        <name>  com.sun.star.comp.jvmfwk.MigrationOO2</name>
+        <name>	com.sun.star.comp.jvmfwk.MigrationOO2</name>
         <description>
 Specifies a factory object to create proxy objects.
 These proxy object represent a given target object and can be
 be aggregated. The proxy objects act UNO conform and do NOT provide
 original target interfaces on queryInterface() calls.
 </description>
-        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
-        <language>  C++ </language>
+        <loader-name>	com.sun.star.loader.SharedLibrary	</loader-name>
+        <language>	C++	</language>
         <status value="final"/>
-        <supported-service> com.sun.star.reflection.ProxyFactory    </supported-service>
+        <supported-service>	com.sun.star.reflection.ProxyFactory	</supported-service>
         <service-dependency> ... </service-dependency>
-        <type>  com.sun.star.lang.XTypeProvider    </type>
-        <type>  com.sun.star.lang.XServiceInfo     </type>
-        <type>  com.sun.star.lang.XSingleServiceFactory    </type>
-        <type>  com.sun.star.lang.XMultiServiceFactory     </type>
+        <type>	com.sun.star.lang.XTypeProvider    </type>
+        <type>	com.sun.star.lang.XServiceInfo     </type>
+        <type>	com.sun.star.lang.XSingleServiceFactory    </type>
+        <type>	com.sun.star.lang.XMultiServiceFactory     </type>
     <type>  com.sun.star.lang.XInitialization          </type>
     <type>  com.sun.star.lang.WrappedTargetException </type>
-        <type>  com.sun.star.registry.XRegistryKey         </type>
-    <type>  com.sun.star.lang.XSingleComponentFactory </type>
-        <type>  com.sun.star.task.XJob </type>
-        <type>  com.sun.star.beans.NamedValue </type>
-        <type>  com.sun.star.configuration.backend.XLayer </type>
-        <type>  com.sun.star.configuration.backend.XLayerHandler </type>
-        <type>  com.sun.star.configuration.backend.MalformedDataException </type>
+        <type>	com.sun.star.registry.XRegistryKey         </type>
+    <type>	com.sun.star.lang.XSingleComponentFactory </type>
+        <type>	com.sun.star.task.XJob </type>
+        <type>	com.sun.star.beans.NamedValue </type>
+        <type>	com.sun.star.configuration.backend.XLayer </type>
+        <type>	com.sun.star.configuration.backend.XLayerHandler </type>
+        <type>	com.sun.star.configuration.backend.MalformedDataException </type>
     <type>  com.sun.star.configuration.backend.TemplateIdentifier </type>
     </component-description>
     <component-description>
@@ -41,7 +41,7 @@ original target interfaces on queryInterface() calls.
         <supported-service>com.sun.star.migration.Basic</supported-service>
         <service-dependency>...</service-dependency>
         <type>com.sun.star.beans.NamedValue</type>
-        <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>        
         <type>com.sun.star.lang.XInitialization</type>
         <type>com.sun.star.task.XJob</type>
         <type>com.sun.star.lang.XServiceInfo</type>
@@ -58,7 +58,7 @@ original target interfaces on queryInterface() calls.
         <supported-service>com.sun.star.migration.Autocorrection</supported-service>
         <service-dependency>...</service-dependency>
         <type>com.sun.star.beans.NamedValue</type>
-        <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>        
         <type>com.sun.star.lang.XInitialization</type>
         <type>com.sun.star.task.XJob</type>
         <type>com.sun.star.lang.XServiceInfo</type>

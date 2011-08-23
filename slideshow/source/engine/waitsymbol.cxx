@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include <boost/current_function.hpp>
+#include <boost/current_function.hpp> 
 #include <canvas/canvastools.hxx>
 
 #include <comphelper/anytostring.hxx>
@@ -58,11 +58,11 @@ WaitSymbolSharedPtr WaitSymbol::create( const uno::Reference<rendering::XBitmap>
                                         EventMultiplexer&                         rEventMultiplexer,
                                         const UnoViewContainer&                   rViewContainer )
 {
-    WaitSymbolSharedPtr pRet(
-        new WaitSymbol( xBitmap,
-                        rScreenUpdater,
+    WaitSymbolSharedPtr pRet( 
+        new WaitSymbol( xBitmap, 
+                        rScreenUpdater, 
                         rViewContainer ));
-
+    
     rEventMultiplexer.addViewHandler( pRet );
 
     return pRet;
@@ -85,7 +85,7 @@ WaitSymbol::WaitSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
 
 void WaitSymbol::setVisible( const bool bVisible )
 {
-    if( mbVisible != bVisible )
+    if( mbVisible != bVisible ) 
     {
         mbVisible = bVisible;
 
@@ -112,7 +112,7 @@ void WaitSymbol::setVisible( const bool bVisible )
 basegfx::B2DPoint WaitSymbol::calcSpritePos(
     UnoViewSharedPtr const & rView ) const
 {
-    const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
+    const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(), 
                                                       uno::UNO_QUERY_THROW );
     const geometry::IntegerSize2D realSize( xBitmap->getSize() );
     return basegfx::B2DPoint(
@@ -125,12 +125,12 @@ void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
 {
     cppcanvas::CustomSpriteSharedPtr sprite;
 
-    try
+    try 
     {
         const geometry::IntegerSize2D spriteSize( mxBitmap->getSize() );
         sprite = rView->createSprite( basegfx::B2DVector( spriteSize.Width,
                                                           spriteSize.Height ),
-                                      1000.0 ); // sprite should be in front of all
+                                      1000.0 ); // sprite should be in front of all   
                                                 // other sprites
         rendering::ViewState viewState;
         canvas::tools::initViewState( viewState );
@@ -150,7 +150,7 @@ void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
                     rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
-    }
+    }    
 
     maViews.push_back( ViewsVecT::value_type( rView, sprite ) );
 }
@@ -173,12 +173,12 @@ void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
     // find entry corresponding to modified view
     ViewsVecT::iterator aModifiedEntry(
         std::find_if(
-            maViews.begin(),
+            maViews.begin(), 
             maViews.end(),
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
-                // select view:
+                // select view: 
                 boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))));
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );
@@ -186,7 +186,7 @@ void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
         return;
 
     if( aModifiedEntry->second )
-        aModifiedEntry->second->movePixel(
+        aModifiedEntry->second->movePixel( 
             calcSpritePos(aModifiedEntry->first) );
 }
 

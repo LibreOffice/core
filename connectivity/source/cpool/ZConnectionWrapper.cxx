@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ Reference< XStatement > SAL_CALL OConnectionWeakWrapper::createStatement(  ) thr
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->createStatement();
 }
@@ -75,7 +75,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareStatemen
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->prepareStatement(sql);
 }
@@ -84,7 +84,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( co
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->prepareCall(sql);
 }
@@ -93,7 +93,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( co
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->nativeSQL(sql);
 }
@@ -102,7 +102,7 @@ void SAL_CALL OConnectionWeakWrapper::setAutoCommit( sal_Bool autoCommit ) throw
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
     m_xConnection->setAutoCommit(autoCommit);
 }
 // --------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ sal_Bool SAL_CALL OConnectionWeakWrapper::getAutoCommit(  ) throw(SQLException, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->getAutoCommit();
 }
@@ -119,7 +119,7 @@ void SAL_CALL OConnectionWeakWrapper::commit(  ) throw(SQLException, RuntimeExce
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     m_xConnection->commit();
 }
@@ -128,7 +128,7 @@ void SAL_CALL OConnectionWeakWrapper::rollback(  ) throw(SQLException, RuntimeEx
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     m_xConnection->rollback();
 }
@@ -136,7 +136,7 @@ void SAL_CALL OConnectionWeakWrapper::rollback(  ) throw(SQLException, RuntimeEx
 sal_Bool SAL_CALL OConnectionWeakWrapper::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
+    
     return m_xConnection->isClosed();
 }
 // --------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnectionWeakWrapper::getMetaData(  ) 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->getMetaData();
 }
@@ -153,16 +153,16 @@ void SAL_CALL OConnectionWeakWrapper::setReadOnly( sal_Bool readOnly ) throw(SQL
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     m_xConnection->setReadOnly(readOnly);
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnectionWeakWrapper::isReadOnly(  ) throw(SQLException, RuntimeException)
-{
+{	
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->isReadOnly();
 }
@@ -171,7 +171,7 @@ void SAL_CALL OConnectionWeakWrapper::setCatalog( const ::rtl::OUString& catalog
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     m_xConnection->setCatalog(catalog);
 }
@@ -180,7 +180,7 @@ void SAL_CALL OConnectionWeakWrapper::setCatalog( const ::rtl::OUString& catalog
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->getCatalog();
 }
@@ -189,7 +189,7 @@ void SAL_CALL OConnectionWeakWrapper::setTransactionIsolation( sal_Int32 level )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     m_xConnection->setTransactionIsolation(level);
 }
@@ -198,7 +198,7 @@ sal_Int32 SAL_CALL OConnectionWeakWrapper::getTransactionIsolation(  ) throw(SQL
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->getTransactionIsolation();
 }
@@ -207,7 +207,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnectionWeakWr
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     return m_xConnection->getTypeMap();
 }
@@ -216,7 +216,7 @@ void SAL_CALL OConnectionWeakWrapper::setTypeMap( const Reference< ::com::sun::s
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+        
 
     m_xConnection->setTypeMap(typeMap);
 }
@@ -227,7 +227,7 @@ void SAL_CALL OConnectionWeakWrapper::close(  ) throw(SQLException, RuntimeExcep
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
-
+            
     }
     dispose();
 }
@@ -235,7 +235,7 @@ void SAL_CALL OConnectionWeakWrapper::close(  ) throw(SQLException, RuntimeExcep
 void OConnectionWeakWrapper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    
     OConnectionWeakWrapper_BASE::disposing();
     OConnectionWrapper::disposing();
 }

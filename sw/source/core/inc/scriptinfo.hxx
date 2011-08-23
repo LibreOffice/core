@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ typedef std::list< xub_StrLen > PositionList;
 #define SPACING_PRECISION_FACTOR 100
 
 /*************************************************************************
- *                class SwScanner
+ *				  class SwScanner
  * Hilfsklasse, die beim Spellen die Worte im gewuenschten Bereich
  * nacheinander zur Verfuegung stellt.
  *************************************************************************/
@@ -90,7 +90,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwScriptInfo
+ *						class SwScriptInfo
  *
  * encapsultes information about script changes
  *************************************************************************/

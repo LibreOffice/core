@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -165,11 +165,11 @@ typedef ::comphelper::WeakComponentImplHelper17 <   ::com::sun::star::frame::XMo
                                                 >   ODatabaseDocument_OfficeDocument;
 
 typedef ::cppu::ImplHelper3<    ::com::sun::star::frame::XTitle
-                            ,   ::com::sun::star::frame::XTitleChangeBroadcaster
-                            ,   ::com::sun::star::frame::XUntitledNumbers
+                            ,	::com::sun::star::frame::XTitleChangeBroadcaster
+                            ,	::com::sun::star::frame::XUntitledNumbers
                             >   ODatabaseDocument_Title;
 
-class ODatabaseDocument :public ModelDependentComponent             // ModelDependentComponent must be first!
+class ODatabaseDocument	:public ModelDependentComponent             // ModelDependentComponent must be first!
                         ,public ODatabaseDocument_OfficeDocument
                         ,public ODatabaseDocument_Title
 {
@@ -181,11 +181,11 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     };
 
     DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >,TNumberedController);
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>            m_xUIConfigurationManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>			m_xUIConfigurationManager;
 
-    ::cppu::OInterfaceContainerHelper                                                           m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                                                           m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                                                           m_aStorageListeners;
+    ::cppu::OInterfaceContainerHelper					                                        m_aModifyListeners;
+    ::cppu::OInterfaceContainerHelper					                                        m_aCloseListener;
+    ::cppu::OInterfaceContainerHelper					                                        m_aStorageListeners;
 
     DocumentEvents*                                                                             m_pEventContainer;
     ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;
@@ -195,8 +195,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     Controllers                                                                                 m_aControllers;
     ViewMonitor                                                                                 m_aViewMonitor;
 
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >            m_xForms;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >            m_xReports;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >	        m_xForms;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >	        m_xReports;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::script::provider::XScriptProvider > m_xScriptProvider;
 
     /** @short  such module manager is used to classify new opened documents. */
@@ -248,8 +248,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     /// write a single XML stream into the package
     void WriteThroughComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > & xComponent,  /// the component we export
-        const sal_Char* pStreamName,                                                                /// the stream name
-        const sal_Char* pServiceName,                                                               /// service name of the component
+        const sal_Char* pStreamName,		                                                        /// the stream name
+        const sal_Char* pServiceName,		                                                        /// service name of the component
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> & rArguments,            /// the argument (XInitialization)
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> & rMediaDesc,/// output descriptor
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo
@@ -267,11 +267,11 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ) const;
 
     /** writes the content and settings
-        @param  sURL
+        @param	sURL
             The URL
-        @param  lArguments
+        @param	lArguments
             The media descriptor
-        @param  _xStorageToSaveTo
+        @param	_xStorageToSaveTo
             The storage which should be used for saving
     */
     void impl_writeStorage_throw(
@@ -317,7 +317,7 @@ public:
         SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     // XInterface
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw ();
     virtual void SAL_CALL release(  ) throw ();
 
@@ -371,12 +371,12 @@ public:
     // XEventBroadcaster
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
+    
     // XDocumentEventBroadcaster
     virtual void SAL_CALL addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
-
+    
     // XPrintable
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL setPrinter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aPrinter ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) ;
@@ -620,7 +620,7 @@ private:
             denotes additional document parameters
         @param  _rDocGuard
             is the guard which currently protects the document instance
-
+        
     */
     sal_Bool    impl_attachResource(
                     const ::rtl::OUString& i_rLogicalDocumentURL,
@@ -704,6 +704,6 @@ private:
 };
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 #endif // _DBA_COREDATAACCESS_DATABASEDOCUMENT_HXX_

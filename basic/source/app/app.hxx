@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,12 +56,12 @@ class BasicPrinter;
 struct TTLogMsg;
 
 class BasicApp : public Application {
-    short       nWait;              // Wait-Zaehler
+    short		nWait;				// Wait-Zaehler
 public:
-//  Help*       pHelp;              // Hilfesystem
-    BasicFrame* pFrame;             // Frame Window
-//  MenuBar*    pMainMenu;          // Hauptmenue
-    Accelerator*    pMainAccel;     // Acceleratoren
+//	Help*		pHelp;				// Hilfesystem
+    BasicFrame*	pFrame;				// Frame Window
+//	MenuBar*	pMainMenu;			// Hauptmenue
+    Accelerator*	pMainAccel;		// Acceleratoren
 
     void  Main( );
 
@@ -79,11 +79,11 @@ public:
 typedef USHORT FileType;
 
 #define FT_NO_FILE              (FileType)0x00  // An error has occurred ...
-#define FT_BASIC_SOURCE         (FileType)0x01
-#define FT_BASIC_INCLUDE    (FileType)0x02
-#define FT_RESULT_FILE      (FileType)0x04
-#define FT_RESULT_FILE_TXT  (FileType)0x08
-#define FT_BASIC_LIBRARY    (FileType)0x10
+#define FT_BASIC_SOURCE	        (FileType)0x01
+#define FT_BASIC_INCLUDE	(FileType)0x02
+#define FT_RESULT_FILE		(FileType)0x04
+#define FT_RESULT_FILE_TXT	(FileType)0x08
+#define FT_BASIC_LIBRARY	(FileType)0x10
 
 struct WinInfoRec;
 class DisplayHidDlg;
@@ -107,21 +107,21 @@ virtual void GetFocus();
     BOOL bIsAutoRun;
     DisplayHidDlg* pDisplayHidDlg;
 
-//  BreakPoint *pRunToCursorBP;
+//	BreakPoint *pRunToCursorBP;
 
     SbxVariable *pEditVar;
 
 
 
-    Timer aCheckFiles;      // Checks the files for changes
+    Timer aCheckFiles;		// Checks the files for changes
     BOOL bAutoReload;
     BOOL bAutoSave;
     DECL_LINK( CheckAllFiles, Timer* );
 
-    MyBasicRef  pBasic;             // BASIC-Engine
+    MyBasicRef	pBasic;				// BASIC-Engine
 
-    String aAppName;                // Title bar content
-    String aAppFile;                // AppName AppFile [AppMode]
+    String aAppName;				// Title bar content
+    String aAppFile;				// AppName AppFile [AppMode]
     String aAppMode;
     void UpdateTitle();
     DECL_LINK( CloseButtonClick, void* );
@@ -133,14 +133,14 @@ virtual void GetFocus();
 public:
     BOOL IsAutoRun();
     void SetAutoRun( BOOL bAuto );
-    BOOL bInBreak;                  // TRUE if in Break-Handler
-    StatusLine* pStatus;            // Status line
-    EditList*   pList;              // List of edit windows
-    AppWin*     pWork;              // Current edit window
-    BasicPrinter* pPrn;             // Printer
-    BOOL bDisas;                    // TRUE: disassemble
-    USHORT nFlags;                  // Debugging-Flags
-    USHORT nMaximizedWindows;       // Number of maximized windows
+    BOOL bInBreak;					// TRUE if in Break-Handler
+    StatusLine* pStatus;			// Status line
+    EditList*	pList;				// List of edit windows
+    AppWin* 	pWork;				// Current edit window
+    BasicPrinter* pPrn;				// Printer
+    BOOL bDisas;					// TRUE: disassemble
+    USHORT nFlags;					// Debugging-Flags
+    USHORT nMaximizedWindows;		// Number of maximized windows
     void FocusWindow( AppWin *pWin );
     void WinMax_Restore();
     void WinShow_Hide();
@@ -150,7 +150,7 @@ public:
 
     BasicFrame();
    ~BasicFrame();
-    MyBasic& Basic()                { return *pBasic; }
+    MyBasic& Basic()				{ return *pBasic; }
     void AddToLRU(String const& aFile);
     void LoadLRU();
     DECL_LINK( InitMenu, Menu * );
@@ -165,7 +165,7 @@ public:
     BOOL LoadFile( String aFilename );
     long Command( short,BOOL=FALSE );  // Command handler
     virtual void Command( const CommandEvent& rCEvt );      // Command handler
-    BOOL SaveAll();                 // Save all windows
+    BOOL SaveAll();					// Save all windows
     BOOL QueryFileName( String& rName, FileType nFileType, BOOL bSave ); // Query for filename
     DECL_LINK( ModuleWinExists, String* );
     DECL_LINK( WriteString, String* );
@@ -175,7 +175,7 @@ public:
     AppWin* FindWin( const String& );
     AppWin* FindWin( USHORT nWinId );
     AppWin* IsWinValid( AppWin* pMaybeWin );
-    USHORT BreakHandler();          // Break-Handler-Callback
+    USHORT BreakHandler();			// Break-Handler-Callback
 
     void SetEditVar( SbxVariable *pVar ){ pEditVar = pVar;}
     SbxVariable* GetEditVar(){ return pEditVar;}

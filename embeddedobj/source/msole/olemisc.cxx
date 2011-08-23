@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -238,7 +238,7 @@ void OleEmbeddedObject::GetRidOfComponent()
     {
         if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )
             SaveObject_Impl();
-
+            
         m_pOleComponent->removeCloseListener( m_xClosePreventer );
         try
         {
@@ -247,7 +247,7 @@ void OleEmbeddedObject::GetRidOfComponent()
         catch( uno::Exception& )
         {
             // TODO: there should be a special listener to wait for component closing
-            //       and to notify object, may be object itself can be such a listener
+            // 		 and to notify object, may be object itself can be such a listener
             m_pOleComponent->addCloseListener( m_xClosePreventer );
             throw;
         }
@@ -325,7 +325,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
 
     return m_aClassID;
 }
-
+        
 //------------------------------------------------------
 ::rtl::OUString SAL_CALL OleEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
@@ -391,9 +391,9 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     }
 
     // if ( m_bWaitSaveCompleted )
-    //  throw embed::WrongStateException(
-    //              ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    // 	throw embed::WrongStateException(
+    // 				::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+    // 				uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_pOleComponent )
     {
@@ -425,7 +425,7 @@ void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< e
 
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
-
+    
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
                                                         xListener );
 }
@@ -536,7 +536,7 @@ void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::X
 
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
-
+    
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ), xListener );
 }
 
@@ -583,7 +583,7 @@ void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< documen
 
     if ( !m_pInterfaceContainer )
         m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
-
+    
     m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ), xListener );
 }
 

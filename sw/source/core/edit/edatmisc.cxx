@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,9 +67,9 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
 void SwEditShell::GCAttr()
 {
 //JP 04.02.97: wozu eine Action-Klammerung - ein Formatierung sollte nicht
-//              ausgeloest werden, so dass es hier ueberfluessig ist.
-//              Sonst Probleme im MouseBut.DownHdl - Bug 35562
-//  StartAllAction();
+//				ausgeloest werden, so dass es hier ueberfluessig ist.
+//				Sonst Probleme im MouseBut.DownHdl - Bug 35562
+//	StartAllAction();
     FOREACHPAM_START(this)
         SwTxtNode *pTxtNode;
         if ( !PCURCRSR->HasMark() )
@@ -91,7 +91,7 @@ void SwEditShell::GCAttr()
                     aIdx <= rEnd );
         }
     FOREACHPAM_END()
-//  EndAllAction();
+//	EndAllAction();
 }
 
 // Setze das Attribut als neues default Attribut im Dokument.
@@ -130,7 +130,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
     SET_CURR_SHELL( this );
     StartAllAction();
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
+    if( pCrsr->GetNext() != pCrsr ) 	// Ring von Cursorn
     {
         BOOL bIsTblMode = IsTableMode();
         GetDoc()->StartUndo(UNDO_INSATTR, NULL);
@@ -160,7 +160,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
     SET_CURR_SHELL( this );
     StartAllAction();
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
+    if( pCrsr->GetNext() != pCrsr ) 	// Ring von Cursorn
     {
         BOOL bIsTblMode = IsTableMode();
         GetDoc()->StartUndo(UNDO_INSATTR, NULL);

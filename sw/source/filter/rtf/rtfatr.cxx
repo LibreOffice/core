@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,15 +107,15 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <paratr.hxx>
-#include <fldbas.hxx>           // fuer SwField ...
+#include <fldbas.hxx>			// fuer SwField ...
 #include <wrtrtf.hxx>
-#include <rtf.hxx>          // fuer SwPictureType
+#include <rtf.hxx>			// fuer SwPictureType
 #include <ndgrf.hxx>
 #include <grfatr.hxx>
 #include <docufld.hxx>
 #include <flddat.hxx>
-#include <pagedesc.hxx>     // fuer SwPageDesc ...
-#include <swtable.hxx>      // fuer SwPageDesc ...
+#include <pagedesc.hxx>		// fuer SwPageDesc ...
+#include <swtable.hxx>		// fuer SwPageDesc ...
 #include <docsh.hxx>
 #include <swrect.hxx>
 #include <section.hxx>
@@ -395,7 +395,7 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
 // fuer die Formate muesste eine einzige Ausgabe-Funktion genuegen !
 /*
  * Formate wie folgt ausgeben:
- *      - gebe alle Attribute vom Format aus
+ * 		- gebe alle Attribute vom Format aus
  */
 
 bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
@@ -410,17 +410,17 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
         {
             USHORT nId = rWrt.GetId( (const SwTxtFmtColl&)rFmt );
             if (0 == nId )
-                return false;       // Default-TextStyle nicht ausgeben !!
+                return false;		// Default-TextStyle nicht ausgeben !!
 
             rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_S;
             rWrt.OutULong( nId );
             rWrt.bOutFmtAttr = TRUE;
-//          BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();      //#outline level,zhaojianwei
-//          if( MAXLEVEL > nLvl )
-//          {
+//			BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();		//#outline level,zhaojianwei
+//			if( MAXLEVEL > nLvl )
+//			{
             if(((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
             {
-                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();  //<-end,zhaojianwei
+                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();	//<-end,zhaojianwei
                 USHORT nNumId = rWrt.GetNumRuleId(
                                         *rWrt.pDoc->GetOutlineNumRule() );
                 if( USHRT_MAX != nNumId )
@@ -430,7 +430,7 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
                     rWrt.OutULong( nNumId );
                     rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_ILVL; rWrt.OutULong( nWWLvl );
                     rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_OUTLINELEVEL; rWrt.OutULong( nWWLvl );
-                    if( nWWLvl != nLvl )            // RTF-kennt nur 9 Ebenen
+                    if( nWWLvl != nLvl )			// RTF-kennt nur 9 Ebenen
                     {
                         OutComment( rWrt, OOO_STRING_SVTOOLS_RTF_SOUTLVL );
                         rWrt.OutULong( nLvl ) << '}';
@@ -438,15 +438,15 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
                 }
 
                 const SwNumFmt* pNFmt = &rWrt.pDoc->GetOutlineNumRule()->Get( static_cast<USHORT>(nLvl) );
-                if( pNFmt->GetAbsLSpace() )
+                if( pNFmt->GetIndentAt() )
                 {
                     SfxItemSet aSet( *rFmt.GetAttrSet().GetPool(),
                                     rFmt.GetAttrSet().GetRanges() );
                     aSet.SetParent( &rFmt.GetAttrSet() );
                     SvxLRSpaceItem aLR( (SvxLRSpaceItem&)aSet.Get( RES_LR_SPACE ) );
 
-                    aLR.SetTxtLeft( aLR.GetTxtLeft() + pNFmt->GetAbsLSpace() );
-                    aLR.SetTxtFirstLineOfst( pNFmt->GetFirstLineOffset() );
+                    aLR.SetTxtLeft( aLR.GetTxtLeft() + pNFmt->GetIndentAt() );
+                    aLR.SetTxtFirstLineOfst( pNFmt->GetFirstLineIndent() );
 
                     aSet.Put(aLR);
                     rSet.Put(aSet);
@@ -459,7 +459,7 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
         {
             USHORT nId = rWrt.GetId( (const SwCharFmt&)rFmt );
             if (0 == nId)
-                return false;       // Default-CharStyle nicht ausgeben !!
+                return false;		// Default-CharStyle nicht ausgeben !!
 
             rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_CS;
             rWrt.OutULong( nId );
@@ -467,7 +467,7 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
         }
         break;
 
-//  case RES_GRFFMTCOLL:
+//	case RES_GRFFMTCOLL:
 // ?????
     }
 
@@ -523,27 +523,27 @@ void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
             rRTFWrt.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << aTmpStrm << '}';
         }
     }
-//  rRTFWrt.pFlyFmt = 0;        // wieder zuruecksetzen !!
+//	rRTFWrt.pFlyFmt = 0;		// wieder zuruecksetzen !!
 }
 
 /* Ausgabe der Nodes */
 
 /*
- *  Ausgabe der Texte-Attribute:
- *      Die Text-Attribute sind in einem VarArray nach ihren Start-Positionen
- *      sortiert. Fuer den RTF-Writer ist aber auch das Ende von Bedeutung.
- *      Darum die Idee, sobald im SwpHints-Array ein Attribut mit der Start-
- *      Position gefunden wurde, in einem Sortierten-Array die Endposition
- *      zu speichern. Sobald der Writer die Position erreicht hat, wird die
- *      schliessende Klammer ausgegeben und die Position aus dem Sort.Array
- *      geloescht.
- *  15.3.93: Es reicht leider nicht aus nur Start und End zuspeichern, denn
- *      im SwpHints Array stehen sie nicht nach Ende sortiert, so dass
- *      Attribute die falsche schliessende Klammer bekommen. (z.B
- *      Bold von 0..3, dann folgt Underline von 0..4. Dann bekommt Underline
- *      die schliessende Klammer von Bold !!)
- *      Also muessen erst alle Attribute einer Position gesammelt, nach
- *      Ende sortiert und dann erst ausgegeben werden.
+ *	Ausgabe der Texte-Attribute:
+ * 		Die Text-Attribute sind in einem VarArray nach ihren Start-Positionen
+ * 		sortiert. Fuer den RTF-Writer ist aber auch das Ende von Bedeutung.
+ *		Darum die Idee, sobald im SwpHints-Array ein Attribut mit der Start-
+ *		Position gefunden wurde, in einem Sortierten-Array die Endposition
+ * 		zu speichern. Sobald der Writer die Position erreicht hat, wird die
+ *		schliessende Klammer ausgegeben und die Position aus dem Sort.Array
+ *		geloescht.
+ * 	15.3.93: Es reicht leider nicht aus nur Start und End zuspeichern, denn
+ * 		im SwpHints Array stehen sie nicht nach Ende sortiert, so dass
+ * 		Attribute die falsche schliessende Klammer bekommen. (z.B
+ * 		Bold von 0..3, dann folgt Underline von 0..4. Dann bekommt Underline
+ * 		die schliessende Klammer von Bold !!)
+ *		Also muessen erst alle Attribute einer Position gesammelt, nach
+ *		Ende sortiert und dann erst ausgegeben werden.
  */
 
 SV_DECL_PTRARR( SfxPoolItems, SfxPoolItem*, 4, 4 )
@@ -561,10 +561,10 @@ public:
     SttEndPos( const SfxPoolItem& rAttr, xub_StrLen nStt, xub_StrLen nEnd );
     ~SttEndPos();
 
-    xub_StrLen  GetStart() const            { return nStart; }
-    xub_StrLen  GetEnd() const              { return nEnd; }
+    xub_StrLen  GetStart() const 			{ return nStart; }
+    xub_StrLen  GetEnd() const 				{ return nEnd; }
 
-    const SfxPoolItems& GetAttrs() const    { return aArr; }
+    const SfxPoolItems& GetAttrs() const	{ return aArr; }
     void AddAttr( const SfxPoolItem& rAttr );
     BOOL HasScriptChange() const;
 };
@@ -589,7 +589,7 @@ public:
     RTFEndPosLst( SwRTFWriter& rWrt, const SwTxtNode& rNd, xub_StrLen nStart );
     ~RTFEndPosLst();
 
-    USHORT GetCurScript() const         { return nCurScript; }
+    USHORT GetCurScript() const			{ return nCurScript; }
     BOOL MatchScriptToId( USHORT nId ) const;
     int Insert( const SfxPoolItem& rAttr, xub_StrLen nStt, xub_StrLen nEnd );
 
@@ -678,7 +678,7 @@ int RTFEndPosLst::Insert( const SfxPoolItem& rAttr, xub_StrLen nStt,
         if( pTmp->GetStart() == nStt && pTmp->GetEnd() == nEnd )
         {
             pTmp->AddAttr( rAttr );
-            return false;       // schon vorhanden
+            return false;		// schon vorhanden
         }
         if( nEnd < pTmp->GetEnd() )
         {
@@ -841,7 +841,7 @@ void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
             }
         }
 
-        rWrt.Strm() << '}';     // end of all attributes from this position
+        rWrt.Strm() << '}';		// end of all attributes from this position
         if (pSEPos->GetStart() < nClipStart)
             nClipStart = pSEPos->GetStart();
         bClosed=true;
@@ -1058,13 +1058,13 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
 
 
             sURL = aTmp.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS);
-/*          if( INET_PROT_FILE == aTmp.GetProtocol() )
+/*			if( INET_PROT_FILE == aTmp.GetProtocol() )
             {
                 // WW97 wollen keine FILE-URL haben, sondern einen normalen
                 // Dateinamen. Aber ab WW2000 kennen sie FileURLs.
                 sURL = aTmp.GetFull();
             }
-*/          rWrt.Strm() << '\"';
+*/			rWrt.Strm()	<< '\"';
             RTFOutFuncs::Out_String( rWrt.Strm(), sURL, rRTFWrt.eCurrentEncoding,
                                     rRTFWrt.bWriteHelpFmt ) << "\" ";
             sURL = aTmp.GetMark();
@@ -1185,7 +1185,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     if( rRTFWrt.bWriteAll )
     {
-        rRTFWrt.Strm() << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << ' ';       // alle Attribute zuruecksetzen
+        rRTFWrt.Strm() << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << ' ';		// alle Attribute zuruecksetzen
         if( rRTFWrt.bOutTable )
             rRTFWrt.Strm() << OOO_STRING_SVTOOLS_RTF_INTBL;
 
@@ -1210,7 +1210,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     }
 
     // gibt es harte Attributierung ?
-    if( bNewFmts && pNd->HasSwAttrSet())
+    if( pNd->HasSwAttrSet() )
     {
         rRTFWrt.pFlyFmt = 0;
 
@@ -1233,9 +1233,9 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             SfxItemSet aSet( rNdSet );
             SvxLRSpaceItem aLR( (SvxLRSpaceItem&)rNdSet.Get( RES_LR_SPACE ) );
 
-            aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
+            aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetIndentAt() );
             if( MAXLEVEL > pNd->GetActualListLevel() )
-                aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
+                aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineIndent() );
             else
                 aSet.ClearItem( RES_PARATR_NUMRULE );
             aSet.Put( aLR );
@@ -1264,7 +1264,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         // Ok, es gibt vorher Attribute, die ausgegeben werden muessen
         do {
             nAttrPos++;
-            if( RES_TXTATR_FIELD == pHt->Which() )      // Felder nicht
+            if( RES_TXTATR_FIELD == pHt->Which() )		// Felder nicht
                 continue;                               // ausgeben
 
             if( pHt->GetEnd() )
@@ -1412,7 +1412,7 @@ bool StripMetafileHeader(const sal_uInt8 *&rpGraphicAry, unsigned long &rSize)
              (rpGraphicAry[0] == 0xd7) && (rpGraphicAry[1] == 0xcd) &&
              (rpGraphicAry[2] == 0xc6) && (rpGraphicAry[3] == 0x9a)
            )
-        {   // we have to get rid of the metafileheader
+        {	// we have to get rid of the metafileheader
             rpGraphicAry += 22;
             rSize -= 22;
             return true;
@@ -1616,8 +1616,8 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
     rRTFWrt.bOutFmtAttr = false;
     OutRTF_SwFmt( rRTFWrt, *pNd->GetFmtColl() );
 
-    if( rRTFWrt.bOutFmtAttr )       // wurde ueberhaupt ein Attrribut
-        rRTFWrt.Strm() << "}{";     // ausgegeben ??
+    if( rRTFWrt.bOutFmtAttr )		// wurde ueberhaupt ein Attrribut
+        rRTFWrt.Strm() << "}{";		// ausgegeben ??
 
     String aGrfNm;
     const SwMirrorGrf& rMirror = pNd->GetSwAttrSet().GetMirrorGrf();
@@ -1654,7 +1654,7 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "JPG" )),
                                                     nFlags, pMM100Size );
         }
-        if( nErr )              // fehlerhaft, da ist nichts auszugeben
+        if( nErr )     			// fehlerhaft, da ist nichts auszugeben
         {
             rRTFWrt.Strm() << "}}";
             return rWrt;
@@ -1895,11 +1895,11 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         const SwWriteTableCells& rCells = pRow->GetCells();
 
         BOOL bFixRowHeight = false;
-
+        
         USHORT nBoxes = rCells.Count();
         if (nColCnt < nBoxes)
             nBoxes = nColCnt;
-
+        
         for( nColCnt = 0, nBox = 0; nBox < rCells.Count() && nColCnt < nBoxes; ++nColCnt )
         {
             SwWriteTableCell* pCell = rCells[ nBox ];
@@ -1943,7 +1943,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         long nHeight = 0;
         if( bFixRowHeight && rWrt.pDoc->GetRootFrm() )
         {
-            nHeight = -pRow->GetPos();      //neg. => abs. height!
+            nHeight = -pRow->GetPos();		//neg. => abs. height!
             if( nLine )
                 nHeight += rRows[ nLine - 1 ]->GetPos();
         }
@@ -2020,9 +2020,9 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
             }
 
 // RTF kennt Schattierung in unserem Sinne nicht!
-//              if( SFX_ITEM_SET == pBoxFmt->GetAttrSet().GetItemState(
-//                                          RES_SHADOW, TRUE, &pItem ) )
-//                  OutSwTblShadow( rRTFWrt, *pItem );
+//				if( SFX_ITEM_SET == pBoxFmt->GetAttrSet().GetItemState(
+//											RES_SHADOW, TRUE, &pItem ) )
+//					OutSwTblShadow( rRTFWrt, *pItem );
 
             if( SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState(
                                             RES_BACKGROUND, TRUE, &pItem )
@@ -2057,7 +2057,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         for( nBox = 0; nBox < nBoxes; ++nBox )
         {
             SwWriteTableCell * pCell = pBoxArr[nBox];
-
+            
             if( (nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ]) || pCell == NULL)
                 continue;
 
@@ -2125,14 +2125,14 @@ Writer& OutRTF_SwSectionNode( Writer& rWrt, SwSectionNode& rNode )
     }
 
 
-//  if( CONTENT_SECTION == rSect.GetType() )
+//	if( CONTENT_SECTION == rSect.GetType() )
     {
         // als fortlaufenden Abschnittwechsel heraus schreiben
         if( !bPgDscWrite )
             rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_SECT << OOO_STRING_SVTOOLS_RTF_SBKNONE;
         //JP 19.03.99 - es muss fuer den Import auf jedenfall das Cols
-        //              Token geschrieben werden. Sonst kann nicht erkannt
-        //              werden, wann ein PageDesc & eine Section gueltig ist
+        //				Token geschrieben werden. Sonst kann nicht erkannt
+        //				werden, wann ein PageDesc & eine Section gueltig ist
         rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_COLS << '1';
         rRTFWrt.bOutFmtAttr = TRUE;
         const SfxPoolItem* pItem;
@@ -2228,7 +2228,7 @@ static Writer& OutRTF_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm() << pCmd;
         }
         if( bTxtOut )
-            rWrt.Strm() << '0';     // wieder abschalten
+            rWrt.Strm() << '0';		// wieder abschalten
     }
     return rWrt;
 }
@@ -2272,9 +2272,9 @@ static Writer& OutRTF_SwEmphasisMark( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char* pStr;
     switch( ((const SvxEmphasisMarkItem&)rHt).GetEmphasisMark())
     {
-    case EMPHASISMARK_NONE:         pStr = OOO_STRING_SVTOOLS_RTF_ACCNONE;  break;
-    case EMPHASISMARK_SIDE_DOTS:    pStr = OOO_STRING_SVTOOLS_RTF_ACCCOMMA; break;
-    default:                        pStr = OOO_STRING_SVTOOLS_RTF_ACCDOT;       break;
+    case EMPHASISMARK_NONE:			pStr = OOO_STRING_SVTOOLS_RTF_ACCNONE;	break;
+    case EMPHASISMARK_SIDE_DOTS:	pStr = OOO_STRING_SVTOOLS_RTF_ACCCOMMA;	break;
+    default:						pStr = OOO_STRING_SVTOOLS_RTF_ACCDOT;		break;
     }
 
     rRTFWrt.bOutFmtAttr = TRUE;
@@ -2300,7 +2300,7 @@ static Writer& OutRTF_SwTwoInOne( Writer& rWrt, const SfxPoolItem& rHt )
             nType = 3;
         else if( '[' == cStart || ']' == cEnd )
             nType = 2;
-        else                            // all other kind of brackets
+        else	                        // all other kind of brackets
             nType = 1;
 
         rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_TWOINONE;
@@ -2441,7 +2441,7 @@ static Writer& OutRTF_SwCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
         break;
 
     case SVX_CASEMAP_NOT_MAPPED:
-        rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_CAPS << '0' << OOO_STRING_SVTOOLS_RTF_SCAPS << '0';       // beide aus !!
+        rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_CAPS << '0' << OOO_STRING_SVTOOLS_RTF_SCAPS << '0';		// beide aus !!
         break;
 
     default:
@@ -2652,7 +2652,7 @@ static Writer& OutRTF_SwEscapement( Writer& rWrt, const SfxPoolItem& rHt )
     else if( 0 > rEsc.GetEsc() )
     {
         pUpDn = OOO_STRING_SVTOOLS_RTF_DN;
-        nH = -nH;               // den negativen Wert herrausrechnen
+        nH = -nH;				// den negativen Wert herrausrechnen
     }
     else
         return rWrt;
@@ -2678,9 +2678,9 @@ static Writer& OutRTF_SwEscapement( Writer& rWrt, const SfxPoolItem& rHt )
      * berechne aus der akt. FontSize und dem ProzentWert die Verschiebung,
      * wobei im RTF File 1/2 Points stehen muessen, waehrend intern
      * mit Twips gerechnet wird.
-     * Formel :         (FontSize * 1/20 ) pts         x * 2
-     *                  -----------------------  = ------------
-     *                    100%                      Escapement
+     * Formel :			(FontSize * 1/20 ) pts         x * 2
+     *					-----------------------  = ------------
+     *					  100%       				Escapement
      */
 
     rWrt.OutULong( ( (long( nEsc ) * nH) + 500L ) / 1000L );
@@ -2849,13 +2849,13 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                     // default:
                     // case REF_CONTENT:
                 }
-                rWrt.Strm() << " \\\\h ";       // insert hyperlink
+                rWrt.Strm() << " \\\\h ";		// insert hyperlink
             }
         }
         break;
-//  case RES_CHAPTERFLD:
-//          rWrt.Strm() << ' ';
-//          break;
+//	case RES_CHAPTERFLD:
+//			rWrt.Strm() << ' ';
+//			break;
     case RES_PAGENUMBERFLD:
             rWrt.Strm() << aFldStt.GetBuffer() << "\\\\page";
             {
@@ -2870,12 +2870,12 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                 switch( pFld->GetFormat() )
                 {
                 case SVX_NUM_CHARS_UPPER_LETTER:
-                case SVX_NUM_CHARS_UPPER_LETTER_N:  pFmtStr = sNType0; break;
+                case SVX_NUM_CHARS_UPPER_LETTER_N:	pFmtStr = sNType0; break;
                 case SVX_NUM_CHARS_LOWER_LETTER:
-                case SVX_NUM_CHARS_LOWER_LETTER_N:  pFmtStr = sNType1; break;
-                case SVX_NUM_ROMAN_UPPER:           pFmtStr = sNType2; break;
-                case SVX_NUM_ROMAN_LOWER:           pFmtStr = sNType3; break;
-                case SVX_NUM_ARABIC:                pFmtStr = sNType4; break;
+                case SVX_NUM_CHARS_LOWER_LETTER_N:	pFmtStr = sNType1; break;
+                case SVX_NUM_ROMAN_UPPER:			pFmtStr = sNType2; break;
+                case SVX_NUM_ROMAN_LOWER:			pFmtStr = sNType3; break;
+                case SVX_NUM_ARABIC:				pFmtStr = sNType4; break;
                 }
 
                 if( pFmtStr )
@@ -2911,7 +2911,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                 OutRTF_AsByteString( rWrt, pFld->GetPar2(), rRTFWrt.eDefaultEncoding ).Strm()
                             << '}' << SwRTFWriter::sNewLine;
             }
-            return rWrt;        // nicht bis zum Ende, kein RTF-Feld !!
+            return rWrt;		// nicht bis zum Ende, kein RTF-Feld !!
 
     case RES_DATETIMEFLD:
             if (!(pFld->GetSubType() & FIXEDFLD))
@@ -2925,13 +2925,13 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                     switch( nFmt )
                     {
                     case DF_SSYS:       rWrt.Strm() << "tt.MM.yy";              break;
-                    case DF_LSYS:       rWrt.Strm() << "tttt, t. MMMM yyyy";    break;
+                    case DF_LSYS:       rWrt.Strm() << "tttt, t. MMMM yyyy";	break;
                     case DF_SHORT:      rWrt.Strm() << "tt.MM.yy";              break;
                     case DF_SCENT:      rWrt.Strm() << "tt.MM.yyyy";            break;
-                    case DF_LMON:       rWrt.Strm() << "t. MMM yyyy";           break;
-                    case DF_LMONTH:     rWrt.Strm() << "t. MMMM yyyy";          break;
-                    case DF_LDAYMON:    rWrt.Strm() << "ttt, t. MMMM yyyy";     break;
-                    case DF_LDAYMONTH:  rWrt.Strm() << "tttt, t. MMMM yyyy";    break;
+                    case DF_LMON:       rWrt.Strm() << "t. MMM yyyy";			break;
+                    case DF_LMONTH:     rWrt.Strm() << "t. MMMM yyyy";			break;
+                    case DF_LDAYMON:    rWrt.Strm() << "ttt, t. MMMM yyyy";		break;
+                    case DF_LDAYMONTH:  rWrt.Strm() << "tttt, t. MMMM yyyy";	break;
                     }
                 }
                 else
@@ -2939,9 +2939,9 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                     rWrt.Strm() << aFldStt.GetBuffer() << "\\\\date \\\\@\"";
                     switch( nFmt )
                     {
-                    case TF_SSMM_24:    rWrt.Strm() << "HH:mm"; break;
-                    case TF_SSMM_12:    rWrt.Strm() << "hh:mm"; break;  // ???
-                    case TF_SYSTEM:     rWrt.Strm() << "HH:mm"; break;
+                    case TF_SSMM_24:	rWrt.Strm() << "HH:mm";	break;
+                    case TF_SSMM_12:	rWrt.Strm() << "hh:mm";	break;	// ???
+                    case TF_SYSTEM:		rWrt.Strm() << "HH:mm";	break;
                     }
                 }
                 rWrt.Strm() << '\"';
@@ -2957,7 +2957,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             sal_Char cCh;
             rWrt.Strm().SeekRel(-1);
             rWrt.Strm() >> cCh;
-            if( ' ' != cCh )            // vorweg immer einen Trenner
+            if( ' ' != cCh )			// vorweg immer einen Trenner
                 rWrt.Strm() << ' ';
             RTFOutFuncs::Out_String( rWrt.Strm(),
                 pFld->ExpandField(rWrt.pDoc->IsClipBoard()),
@@ -2995,12 +2995,12 @@ static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
     const SwFmtFtn& rFtn = (const SwFmtFtn&)rHt;
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
 
-    do {    // middle-check-loop
+    do {	// middle-check-loop
         if( !rFtn.GetTxtFtn() || !rFtn.GetTxtFtn()->GetStartNode() )
-            break;          // es gibt keine Kopf-/Fusszeile/Fussnote
+            break;			// es gibt keine Kopf-/Fusszeile/Fussnote
 
         // Hole vom Node und vom letzten Node die Position in der Section
-        ULONG   nStart = rFtn.GetTxtFtn()->GetStartNode()->GetIndex()+1,
+        ULONG	nStart = rFtn.GetTxtFtn()->GetStartNode()->GetIndex()+1,
                 nEnd = rWrt.pDoc->GetNodes()[ nStart-1 ]->EndOfSectionIndex();
 
         // kein Bereich also kein gueltiger Node
@@ -3073,11 +3073,11 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
     sal_Char cDirective = 0, cJC = '0';
     switch( rRuby.GetAdjustment() )
     {
-    case 0:     cJC = '3';  cDirective = 'l';   break;
-    case 2:     cJC = '4';  cDirective = 'r';   break;
-    case 3:     cJC = '1';  cDirective = 'd';   break;
-    case 4:     cJC = '2';  cDirective = 'd';   break;
-    case 1:     break;          //defaults to 0
+    case 0:		cJC = '3';	cDirective = 'l';	break;
+    case 2:		cJC = '4';	cDirective = 'r';	break;
+    case 3:		cJC = '1';	cDirective = 'd';	break;
+    case 4:		cJC = '2';	cDirective = 'd';	break;
+    case 1:		break;			//defaults to 0
     default:
         ASSERT( FALSE, "Unhandled Ruby justication code" );
         break;
@@ -3171,7 +3171,7 @@ static Writer& OutRTF_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
     const SwFmtFrmSize& rSz = (const SwFmtFrmSize&)rHt;
-    if( rRTFWrt.pFlyFmt )       // wird das FlyFrmFmt ausgegeben ?
+    if( rRTFWrt.pFlyFmt )		// wird das FlyFrmFmt ausgegeben ?
     {
         if( !rRTFWrt.bRTFFlySyntax )
             return rWrt;
@@ -3322,7 +3322,7 @@ static Writer& OutRTF_SwFmtULSpace( Writer& rWrt, const SfxPoolItem& rHt )
                         if( ATT_VAR_SIZE != rSz.GetHeightSizeType() )
                             nValue = nValue + static_cast< USHORT >(rSz.GetHeight());
                         else
-                            nValue += 274;      // defaulten fuer 12pt Schrift
+                            nValue += 274;		// defaulten fuer 12pt Schrift
                         nValue = nValue + pFtr->GetFooterFmt()->GetULSpace().GetUpper();
                     }
                 }
@@ -3356,9 +3356,9 @@ Writer& OutRTF_SwFmtHeader( Writer& rWrt, const SfxPoolItem& rHt )
     if( rCntnt.GetCntntIdx() )
         pSttNode = rCntnt.GetCntntIdx()->GetNode().GetStartNode();
 
-    do {    // middle-check-loop
+    do {	// middle-check-loop
         if( !pSttNode )
-            break;          // es gibt keine Kopf-/Fusszeile/Fussnote
+            break;			// es gibt keine Kopf-/Fusszeile/Fussnote
 
         SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
 
@@ -3400,7 +3400,7 @@ Writer& OutRTF_SwFmtHeader( Writer& rWrt, const SfxPoolItem& rHt )
             rRTFWrt.pAktPageDesc->GetFollow() != rRTFWrt.pAktPageDesc )
         {
             rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;        //i13107
-            cTyp = 'f';     // dann FirstPage-Header
+            cTyp = 'f';		// dann FirstPage-Header
         }
         else if( !rRTFWrt.pAktPageDesc->IsHeaderShared() )
         {
@@ -3436,9 +3436,9 @@ Writer& OutRTF_SwFmtFooter( Writer& rWrt, const SfxPoolItem& rHt )
     if( rCntnt.GetCntntIdx() )
         pSttNode = rCntnt.GetCntntIdx()->GetNode().GetStartNode();
 
-    do {    // middle-check-loop
+    do {	// middle-check-loop
         if( !pSttNode )
-            break;          // es gibt keine Kopf-/Fusszeile/Fussnote
+            break;			// es gibt keine Kopf-/Fusszeile/Fussnote
 
         SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
 
@@ -3480,7 +3480,7 @@ Writer& OutRTF_SwFmtFooter( Writer& rWrt, const SfxPoolItem& rHt )
             rRTFWrt.pAktPageDesc->GetFollow() != rRTFWrt.pAktPageDesc )
         {
             rWrt.Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;        //i13107
-            cTyp = 'f';     // dann FirstPage-Header
+            cTyp = 'f';		// dann FirstPage-Header
         }
         else if( !rRTFWrt.pAktPageDesc->IsFooterShared() )
         {
@@ -3796,10 +3796,10 @@ RTF kennt keine Rahmen Umrandung!
             OutBorderLine( rRTFWrt, rBox.GetTop(), OOO_STRING_SVTOOLS_RTF_BOX, nDist );
         else
         {
-            OUT_BRDLINE( rBox.GetTop(),     OOO_STRING_SVTOOLS_RTF_BRDRT, nDist );
-            OUT_BRDLINE( rBox.GetBottom(),  OOO_STRING_SVTOOLS_RTF_BRDRB, nDist );
-            OUT_BRDLINE( rBox.GetLeft(),    OOO_STRING_SVTOOLS_RTF_BRDRL, nDist );
-            OUT_BRDLINE( rBox.GetRight(),   OOO_STRING_SVTOOLS_RTF_BRDRR, nDist );
+            OUT_BRDLINE( rBox.GetTop(), 	OOO_STRING_SVTOOLS_RTF_BRDRT, nDist );
+            OUT_BRDLINE( rBox.GetBottom(),	OOO_STRING_SVTOOLS_RTF_BRDRB, nDist );
+            OUT_BRDLINE( rBox.GetLeft(),	OOO_STRING_SVTOOLS_RTF_BRDRL, nDist );
+            OUT_BRDLINE( rBox.GetRight(),	OOO_STRING_SVTOOLS_RTF_BRDRR, nDist );
         }
 */
         return rWrt;
@@ -4012,14 +4012,14 @@ static Writer& OutRTF_SwAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     ByteString aAttr( "\\q" );
     switch( rAdjust.GetAdjust() )
     {
-    case SVX_ADJUST_LEFT:       aAttr += 'l';   break;
-    case SVX_ADJUST_RIGHT:      aAttr += 'r';   break;
+    case SVX_ADJUST_LEFT:		aAttr += 'l';	break;
+    case SVX_ADJUST_RIGHT:		aAttr += 'r';	break;
     case SVX_ADJUST_BLOCKLINE:
-    case SVX_ADJUST_BLOCK:      aAttr += 'j';   break;
-    case SVX_ADJUST_CENTER:     aAttr += 'c';   break;
+    case SVX_ADJUST_BLOCK:		aAttr += 'j';	break;
+    case SVX_ADJUST_CENTER:		aAttr += 'c';	break;
 
     default:
-        return rWrt;        // kein gueltiges Attriut, also returnen
+        return rWrt;		// kein gueltiges Attriut, also returnen
     }
     ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
     rWrt.Strm() << aAttr.GetBuffer();
@@ -4054,10 +4054,10 @@ static Writer& OutRTF_SwTabStop( Writer& rWrt, const SfxPoolItem& rHt )
             case cDfltFillChar:
                 break;
 
-            case '.':   pFill = OOO_STRING_SVTOOLS_RTF_TLDOT;   break;
-            case '_':   pFill = OOO_STRING_SVTOOLS_RTF_TLUL;    break;
-            case '-':   pFill = OOO_STRING_SVTOOLS_RTF_TLTH;    break;
-            case '=':   pFill = OOO_STRING_SVTOOLS_RTF_TLEQ;    break;
+            case '.':	pFill = OOO_STRING_SVTOOLS_RTF_TLDOT;	break;
+            case '_':	pFill = OOO_STRING_SVTOOLS_RTF_TLUL;	break;
+            case '-':	pFill = OOO_STRING_SVTOOLS_RTF_TLTH;	break;
+            case '=':	pFill = OOO_STRING_SVTOOLS_RTF_TLEQ;	break;
             default:
                 if( !rRTFWrt.bWriteHelpFmt )
                 {
@@ -4175,13 +4175,13 @@ static Writer& OutRTF_SwFontAlign( Writer& rWrt, const SfxPoolItem& rHt )
     const char* pStr;
     switch ( rAttr.GetValue() )
     {
-    case SvxParaVertAlignItem::TOP:         pStr = OOO_STRING_SVTOOLS_RTF_FAHANG;       break;
-    case SvxParaVertAlignItem::BOTTOM:      pStr = OOO_STRING_SVTOOLS_RTF_FAVAR;        break;
-    case SvxParaVertAlignItem::CENTER:      pStr = OOO_STRING_SVTOOLS_RTF_FACENTER; break;
-    case SvxParaVertAlignItem::BASELINE:    pStr = OOO_STRING_SVTOOLS_RTF_FAROMAN;  break;
+    case SvxParaVertAlignItem::TOP:			pStr = OOO_STRING_SVTOOLS_RTF_FAHANG;		break;
+    case SvxParaVertAlignItem::BOTTOM:		pStr = OOO_STRING_SVTOOLS_RTF_FAVAR;		break;
+    case SvxParaVertAlignItem::CENTER:		pStr = OOO_STRING_SVTOOLS_RTF_FACENTER;	break;
+    case SvxParaVertAlignItem::BASELINE:	pStr = OOO_STRING_SVTOOLS_RTF_FAROMAN;	break;
 
-//  case SvxParaVertAlignItem::AUTOMATIC:
-    default:                                pStr = OOO_STRING_SVTOOLS_RTF_FAAUTO;       break;
+//	case SvxParaVertAlignItem::AUTOMATIC:
+    default:								pStr = OOO_STRING_SVTOOLS_RTF_FAAUTO;		break;
     }
     rWrt.Strm() << pStr;
     rRTFWrt.bOutFmtAttr = TRUE;
@@ -4196,42 +4196,42 @@ static Writer& OutRTF_SwFontAlign( Writer& rWrt, const SfxPoolItem& rHt )
  */
 
 SwAttrFnTab aRTFAttrFnTab = {
-/* RES_CHRATR_CASEMAP   */          OutRTF_SwCaseMap,
-/* RES_CHRATR_CHARSETCOLOR  */      0,
-/* RES_CHRATR_COLOR */              OutRTF_SwColor,
-/* RES_CHRATR_CONTOUR   */          OutRTF_SwContour,
-/* RES_CHRATR_CROSSEDOUT    */      OutRTF_SwCrossedOut,
-/* RES_CHRATR_ESCAPEMENT    */      OutRTF_SwEscapement,
-/* RES_CHRATR_FONT  */              OutRTF_SwFont,
-/* RES_CHRATR_FONTSIZE  */          OutRTF_SwSize,
-/* RES_CHRATR_KERNING   */          0, // NOT USED!! OutRTF_SwKerning,
-/* RES_CHRATR_LANGUAGE  */          OutRTF_SwLanguage,
-/* RES_CHRATR_POSTURE   */          OutRTF_SwPosture,
+/* RES_CHRATR_CASEMAP	*/          OutRTF_SwCaseMap,
+/* RES_CHRATR_CHARSETCOLOR	*/      0,
+/* RES_CHRATR_COLOR	*/              OutRTF_SwColor,
+/* RES_CHRATR_CONTOUR	*/          OutRTF_SwContour,
+/* RES_CHRATR_CROSSEDOUT	*/      OutRTF_SwCrossedOut,
+/* RES_CHRATR_ESCAPEMENT	*/      OutRTF_SwEscapement,
+/* RES_CHRATR_FONT	*/              OutRTF_SwFont,
+/* RES_CHRATR_FONTSIZE	*/          OutRTF_SwSize,
+/* RES_CHRATR_KERNING	*/          0, // NOT USED!! OutRTF_SwKerning,
+/* RES_CHRATR_LANGUAGE	*/          OutRTF_SwLanguage,
+/* RES_CHRATR_POSTURE	*/          OutRTF_SwPosture,
 /* RES_CHRATR_PROPORTIONALFONTSIZE*/0,
-/* RES_CHRATR_SHADOWED  */          OutRTF_SwShadowed,
-/* RES_CHRATR_UNDERLINE */          OutRTF_SwUnderline,
-/* RES_CHRATR_WEIGHT    */          OutRTF_SwWeight,
-/* RES_CHRATR_WORDLINEMODE  */      0, // Neu: Wortweises Unter-/Durchstreichen
-/* RES_CHRATR_AUTOKERN  */          0, // Neu: Automatisches Pairkerning
-/* RES_CHRATR_BLINK */              0, // Neu: Blinkender Text
-/* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
+/* RES_CHRATR_SHADOWED	*/          OutRTF_SwShadowed,
+/* RES_CHRATR_UNDERLINE	*/          OutRTF_SwUnderline,
+/* RES_CHRATR_WEIGHT	*/          OutRTF_SwWeight,
+/* RES_CHRATR_WORDLINEMODE	*/      0, // Neu: Wortweises Unter-/Durchstreichen
+/* RES_CHRATR_AUTOKERN	*/          0, // Neu: Automatisches Pairkerning
+/* RES_CHRATR_BLINK	*/          	0, // Neu: Blinkender Text
+/* RES_CHRATR_NOHYPHEN	*/          0, // Neu: nicht trennen
 /* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
-/* RES_CHRATR_BACKGROUND */         OutRTF_SwChrBckgrnd, // Neu: Zeichenhintergrund
-/* RES_CHRATR_CJK_FONT */           OutRTF_SwFont,
-/* RES_CHRATR_CJK_FONTSIZE */       OutRTF_SwSize,
-/* RES_CHRATR_CJK_LANGUAGE */       OutRTF_SwLanguage,
-/* RES_CHRATR_CJK_POSTURE */        OutRTF_SwPosture,
-/* RES_CHRATR_CJK_WEIGHT */         OutRTF_SwWeight,
-/* RES_CHRATR_CTL_FONT */           OutRTF_SwFont,
-/* RES_CHRATR_CTL_FONTSIZE */       OutRTF_SwSize,
-/* RES_CHRATR_CTL_LANGUAGE */       OutRTF_SwLanguage,
-/* RES_CHRATR_CTL_POSTURE */        OutRTF_SwPosture,
-/* RES_CHRATR_CTL_WEIGHT */         OutRTF_SwWeight,
-/* RES_CHRATR_ROTATE */             OutRTF_SwCharRotate,
-/* RES_CHRATR_EMPHASIS_MARK */      OutRTF_SwEmphasisMark,
-/* RES_CHRATR_TWO_LINES */          OutRTF_SwTwoInOne,
-/* RES_CHRATR_SCALEW */             OutRTF_SwCharScaleW,
-/* RES_CHRATR_RELIEF */             OutRTF_SwCharRelief,
+/* RES_CHRATR_BACKGROUND */    	    OutRTF_SwChrBckgrnd, // Neu: Zeichenhintergrund
+/* RES_CHRATR_CJK_FONT */			OutRTF_SwFont,
+/* RES_CHRATR_CJK_FONTSIZE */		OutRTF_SwSize,
+/* RES_CHRATR_CJK_LANGUAGE */		OutRTF_SwLanguage,
+/* RES_CHRATR_CJK_POSTURE */		OutRTF_SwPosture,
+/* RES_CHRATR_CJK_WEIGHT */			OutRTF_SwWeight,
+/* RES_CHRATR_CTL_FONT */			OutRTF_SwFont,
+/* RES_CHRATR_CTL_FONTSIZE */		OutRTF_SwSize,
+/* RES_CHRATR_CTL_LANGUAGE */		OutRTF_SwLanguage,
+/* RES_CHRATR_CTL_POSTURE */		OutRTF_SwPosture,
+/* RES_CHRATR_CTL_WEIGHT */			OutRTF_SwWeight,
+/* RES_CHRATR_ROTATE */				OutRTF_SwCharRotate,
+/* RES_CHRATR_EMPHASIS_MARK */		OutRTF_SwEmphasisMark,
+/* RES_CHRATR_TWO_LINES */			OutRTF_SwTwoInOne,
+/* RES_CHRATR_SCALEW */				OutRTF_SwCharScaleW,
+/* RES_CHRATR_RELIEF */				OutRTF_SwCharRelief,
 /* RES_CHRATR_HIDDEN */             OutRTF_SvxCharHiddenItem,
 /* RES_CHRATR_OVERLINE */           OutRTF_SwOverline,
 /* RES_CHRATR_DUMMY1 */             0,
@@ -4248,28 +4248,28 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
 
-/* RES_TXTATR_FIELD */              OutRTF_SwField,
-/* RES_TXTATR_FLYCNT */             OutRTF_SwFlyCntnt,
-/* RES_TXTATR_FTN */                OutRTF_SwFtn,
+/* RES_TXTATR_FIELD	*/          	OutRTF_SwField,
+/* RES_TXTATR_FLYCNT */ 			OutRTF_SwFlyCntnt,
+/* RES_TXTATR_FTN */				OutRTF_SwFtn,
 /* RES_TXTATR_DUMMY4 */             0,
 /* RES_TXTATR_DUMMY3 */             0,
-/* RES_TXTATR_DUMMY1 */             0, // Dummy:
-/* RES_TXTATR_DUMMY2 */             0, // Dummy:
+/* RES_TXTATR_DUMMY1 */        	    0, // Dummy:
+/* RES_TXTATR_DUMMY2 */        	    0, // Dummy:
 
-/* RES_PARATR_LINESPACING   */      OutRTF_SwLineSpacing,
-/* RES_PARATR_ADJUST    */          OutRTF_SwAdjust,
-/* RES_PARATR_SPLIT */              OutRTF_SvxFmtSplit,
-/* RES_PARATR_WIDOWS    */          0, // NOT USED!! OutRTF_SwWidows,
-/* RES_PARATR_ORPHANS   */          0, // NOT USED!! OutRTF_SwOrphans,
-/* RES_PARATR_TABSTOP   */          OutRTF_SwTabStop,
+/* RES_PARATR_LINESPACING	*/      OutRTF_SwLineSpacing,
+/* RES_PARATR_ADJUST	*/          OutRTF_SwAdjust,
+/* RES_PARATR_SPLIT	*/				OutRTF_SvxFmtSplit,
+/* RES_PARATR_WIDOWS	*/          0, // NOT USED!! OutRTF_SwWidows,
+/* RES_PARATR_ORPHANS	*/          0, // NOT USED!! OutRTF_SwOrphans,
+/* RES_PARATR_TABSTOP	*/          OutRTF_SwTabStop,
 /* RES_PARATR_HYPHENZONE*/          OutRTF_SwHypenZone,
-/* RES_PARATR_DROP */               0,
-/* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
-/* RES_PARATR_NUMRULE */            OutRTF_SwNumRule,
-/* RES_PARATR_SCRIPTSPACE */        OutRTF_SwScriptSpace,
-/* RES_PARATR_HANGINGPUNCTUATION */ OutRTF_SwHangPunctuation,
-/* RES_PARATR_FORBIDDEN_RULE*/      OutRTF_SwForbiddenRule,
-/* RES_PARATR_VERTALIGN */          OutRTF_SwFontAlign,
+/* RES_PARATR_DROP */				0,
+/* RES_PARATR_REGISTER */        	0, // neu:  Registerhaltigkeit
+/* RES_PARATR_NUMRULE */			OutRTF_SwNumRule,
+/* RES_PARATR_SCRIPTSPACE */   	    OutRTF_SwScriptSpace,
+/* RES_PARATR_HANGINGPUNCTUATION */	OutRTF_SwHangPunctuation,
+/* RES_PARATR_FORBIDDEN_RULE*/ 	    OutRTF_SwForbiddenRule,
+/* RES_PARATR_VERTALIGN */        	OutRTF_SwFontAlign,
 /* RES_PARATR_SNAPTOGRID*/          0, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
 /* RES_PARATR_OUTLINELEVEL */       0, // new - outlinelevel
@@ -4280,41 +4280,41 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_PARATR_LIST_RESTARTVALUE */  0, // new
 /* RES_PARATR_LIST_ISCOUNTED */     0, // new
 
-/* RES_FILL_ORDER   */              0, // NOT USED!! OutRTF_SwFillOrder,
-/* RES_FRM_SIZE */                  OutRTF_SwFrmSize,
-/* RES_PAPER_BIN    */              0, // NOT USED!! OutRTF_SwFmtPaperBin,
-/* RES_LR_SPACE */                  OutRTF_SwFmtLRSpace,
-/* RES_UL_SPACE */                  OutRTF_SwFmtULSpace,
-/* RES_PAGEDESC */                  0,
-/* RES_BREAK */                     0,
-/* RES_CNTNT */                     0,
-/* RES_HEADER */                    OutRTF_SwFmtHeader,
-/* RES_FOOTER */                    OutRTF_SwFmtFooter,
-/* RES_PRINT */                     OutRTF_SwFmtPrint,
-/* RES_OPAQUE */                    OutRTF_SwFmtOpaque,
-/* RES_PROTECT */                   OutRTF_SwFmtProtect,
-/* RES_SURROUND */                  OutRTF_SwFmtSurround,
-/* RES_VERT_ORIENT */               OutRTF_SwFmtVertOrient,
-/* RES_HORI_ORIENT */               OutRTF_SwFmtHoriOrient,
-/* RES_ANCHOR */                    OutRTF_SwFmtAnchor,
-/* RES_BACKGROUND */                OutRTF_SwFmtBackground,
-/* RES_BOX  */                      OutRTF_SwFmtBox,
-/* RES_SHADOW */                    OutRTF_SwFmtShadow,
-/* RES_FRMMACRO */                  0, // NOT USED!! OutRTF_SwFmtFrmMacro,
-/* RES_COL */                       OutRTF_SwFmtCol,
-/* RES_KEEP */                      OutRTF_SvxFmtKeep,
-/* RES_URL */                       0, // URL
-/* RES_EDIT_IN_READONLY */          0,
-/* RES_LAYOUT_SPLIT */              0,
-/* RES_FRMATR_DUMMY1 */             0, // Dummy:
-/* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_AUTO_STYLE */                0, // Dummy:
-/* RES_FRMATR_DUMMY4 */             0, // Dummy:
-/* RES_FRMATR_DUMMY5 */             0, // Dummy:
-/* RES_FRMATR_DUMMY6 */             0, // Dummy:
-/* RES_FRAMEDIR*/                   OutRTF_SvxFrmDir,
-/* RES_FRMATR_DUMMY8 */             0, // Dummy:
-/* RES_FRMATR_DUMMY9 */             0, // Dummy:
+/* RES_FILL_ORDER	*/				0, // NOT USED!! OutRTF_SwFillOrder,
+/* RES_FRM_SIZE	*/					OutRTF_SwFrmSize,
+/* RES_PAPER_BIN	*/              0, // NOT USED!! OutRTF_SwFmtPaperBin,
+/* RES_LR_SPACE	*/                  OutRTF_SwFmtLRSpace,
+/* RES_UL_SPACE	*/                  OutRTF_SwFmtULSpace,
+/* RES_PAGEDESC */					0,
+/* RES_BREAK */						0,
+/* RES_CNTNT */						0,
+/* RES_HEADER */		   			OutRTF_SwFmtHeader,
+/* RES_FOOTER */		   			OutRTF_SwFmtFooter,
+/* RES_PRINT */						OutRTF_SwFmtPrint,
+/* RES_OPAQUE */					OutRTF_SwFmtOpaque,
+/* RES_PROTECT */					OutRTF_SwFmtProtect,
+/* RES_SURROUND */					OutRTF_SwFmtSurround,
+/* RES_VERT_ORIENT */				OutRTF_SwFmtVertOrient,
+/* RES_HORI_ORIENT */				OutRTF_SwFmtHoriOrient,
+/* RES_ANCHOR */					OutRTF_SwFmtAnchor,
+/* RES_BACKGROUND */				OutRTF_SwFmtBackground,
+/* RES_BOX	*/                      OutRTF_SwFmtBox,
+/* RES_SHADOW */					OutRTF_SwFmtShadow,
+/* RES_FRMMACRO */					0, // NOT USED!! OutRTF_SwFmtFrmMacro,
+/* RES_COL */						OutRTF_SwFmtCol,
+/* RES_KEEP */						OutRTF_SvxFmtKeep,
+/* RES_URL */        	    		0, // URL
+/* RES_EDIT_IN_READONLY */        	0,
+/* RES_LAYOUT_SPLIT */ 	    		0,
+/* RES_FRMATR_DUMMY1 */        	    0, // Dummy:
+/* RES_FRMATR_DUMMY2 */        	    0, // Dummy:
+/* RES_AUTO_STYLE */        	    0, // Dummy:
+/* RES_FRMATR_DUMMY4 */        	    0, // Dummy:
+/* RES_FRMATR_DUMMY5 */        	    0, // Dummy:
+/* RES_FRMATR_DUMMY6 */        	    0, // Dummy:
+/* RES_FRAMEDIR*/        	    	OutRTF_SvxFrmDir,
+/* RES_FRMATR_DUMMY8 */        	    0, // Dummy:
+/* RES_FRMATR_DUMMY9 */        	    0, // Dummy:
 /* RES_FOLLOW_TEXT_FLOW */          0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
@@ -4322,35 +4322,35 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
-/* RES_GRFATR_MIRRORGRF */          OutRTF_SwMirrorGrf,
-/* RES_GRFATR_CROPGRF   */          OutRTF_SwCropGrf,
-/* RES_GRFATR_ROTATION */           0,
-/* RES_GRFATR_LUMINANCE */          0,
-/* RES_GRFATR_CONTRAST */           0,
-/* RES_GRFATR_CHANNELR */           0,
-/* RES_GRFATR_CHANNELG */           0,
-/* RES_GRFATR_CHANNELB */           0,
-/* RES_GRFATR_GAMMA */              0,
-/* RES_GRFATR_INVERT */             0,
-/* RES_GRFATR_TRANSPARENCY */       0,
-/* RES_GRFATR_DRWAMODE */           0,
-/* RES_GRFATR_DUMMY1 */             0,
-/* RES_GRFATR_DUMMY2 */             0,
-/* RES_GRFATR_DUMMY3 */             0,
-/* RES_GRFATR_DUMMY4 */             0,
-/* RES_GRFATR_DUMMY5 */             0,
+/* RES_GRFATR_MIRRORGRF	*/			OutRTF_SwMirrorGrf,
+/* RES_GRFATR_CROPGRF	*/			OutRTF_SwCropGrf,
+/* RES_GRFATR_ROTATION */			0,
+/* RES_GRFATR_LUMINANCE */			0,
+/* RES_GRFATR_CONTRAST */			0,
+/* RES_GRFATR_CHANNELR */			0,
+/* RES_GRFATR_CHANNELG */			0,
+/* RES_GRFATR_CHANNELB */			0,
+/* RES_GRFATR_GAMMA */				0,
+/* RES_GRFATR_INVERT */				0,
+/* RES_GRFATR_TRANSPARENCY */		0,
+/* RES_GRFATR_DRWAMODE */			0,
+/* RES_GRFATR_DUMMY1 */				0,
+/* RES_GRFATR_DUMMY2 */				0,
+/* RES_GRFATR_DUMMY3 */				0,
+/* RES_GRFATR_DUMMY4 */				0,
+/* RES_GRFATR_DUMMY5 */				0,
 
-/* RES_BOXATR_FORMAT */             0,
-/* RES_BOXATR_FORMULA */            0,
-/* RES_BOXATR_VALUE */              0,
+/* RES_BOXATR_FORMAT */				0,
+/* RES_BOXATR_FORMULA */			0,
+/* RES_BOXATR_VALUE */				0,
 
-/* RES_UNKNOWNATR_CONTAINER */      0
+/* RES_UNKNOWNATR_CONTAINER */		0
 };
 
 SwNodeFnTab aRTFNodeFnTab = {
-/* RES_TXTNODE  */                   OutRTF_SwTxtNode,
-/* RES_GRFNODE  */                   OutRTF_SwGrfNode,
-/* RES_OLENODE  */                   OutRTF_SwOLENode
+/* RES_TXTNODE	*/					 OutRTF_SwTxtNode,
+/* RES_GRFNODE	*/					 OutRTF_SwGrfNode,
+/* RES_OLENODE	*/					 OutRTF_SwOLENode
 };
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ public:
     bool hasPosSize() const;
     bool isAutomatic() const;
     ::com::sun::star::awt::Rectangle getRectangle() const;
-
+    
 
 private:
     bool hasSize() const;
@@ -92,7 +92,7 @@ private:
 
     ::com::sun::star::awt::Point m_aPosition;
     ::com::sun::star::awt::Size m_aSize;
-
+    
     bool m_bHasSizeWidth;
     bool m_bHasSizeHeight;
     bool m_bHasPositionX;
@@ -161,7 +161,7 @@ private:
     ::rtl::OUString maChartTypeServiceName;
 
     tSchXMLLSequencesPerIndex & mrLSequencesPerIndex;
-
+    
     bool mbGlobalChartTypeUsedBySeries;
     ::com::sun::star::awt::Size maChartSize;
 };
@@ -177,9 +177,9 @@ private:
     std::vector< SchXMLAxis >& maAxes;
     rtl::OUString msAutoStyleName;
     rtl::OUString& mrCategoriesAddress;
-    bool mbAddMissingXAxisForNetCharts; //to correct errors from older versions
-    bool mbAdaptWrongPercentScaleValues; //to correct errors from older versions
-    bool mbAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
+    bool mbAddMissingXAxisForNetCharts; //to correct errors from older versions 
+    bool mbAdaptWrongPercentScaleValues; //to correct errors from older versions 
+    bool mbAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions 
     bool& m_rbAxisPositionAttributeImported;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTitleShape();
@@ -287,7 +287,7 @@ public:
                             SvXMLImport& rImport,
                             sal_uInt16 nPrefix,
                             const rtl::OUString& rLocalName,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >& xDiagram,
+                            ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >& xDiagram,							
                             ContextType eContextType );
     virtual ~SchXMLWallFloorContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -315,7 +315,7 @@ public:
                         SvXMLImport& rImport,
                         sal_uInt16 nPrefix,
                         const rtl::OUString& rLocalName,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >& xDiagram,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram >& xDiagram,							
                         ContextType eContextType );
     virtual ~SchXMLStockContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -388,4 +388,4 @@ private:
     ::com::sun::star::awt::Size maChartSize;
 };
 
-#endif  // _SCH_XMLPLOTAREACONTEXT_HXX_
+#endif	// _SCH_XMLPLOTAREACONTEXT_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ extern "C"
     }
 
     // -------------------------------------------------------------------------
-
+    
     SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
     {
         if (pRegistryKey)
@@ -69,7 +69,7 @@ extern "C"
                 for ( nPos = rSNL1.getLength(); nPos--; )
                     xNewKey->createKey( pArray1[nPos] );
 
-                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFDialog_getImplementationName() );
+                xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFDialog_getImplementationName() ); 
                 xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
                 const Sequence< OUString > & rSNL2 = PDFDialog_getSupportedServiceNames();
                 const OUString * pArray2 = rSNL2.getConstArray();
@@ -100,18 +100,18 @@ extern "C"
             if( aImplName.equals( PDFFilter_getImplementationName() ) )
             {
                 xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
-                                                OUString::createFromAscii( pImplName ),
+                                                OUString::createFromAscii( pImplName ), 
                                                 PDFFilter_createInstance, PDFFilter_getSupportedServiceNames() );
-
+                
             }
             else if( aImplName.equals( PDFDialog_getImplementationName() ) )
             {
                 xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
-                                                OUString::createFromAscii( pImplName ),
+                                                OUString::createFromAscii( pImplName ), 
                                                 PDFDialog_createInstance, PDFDialog_getSupportedServiceNames() );
-
+                
             }
-
+            
             if( xFactory.is() )
             {
                 xFactory->acquire();

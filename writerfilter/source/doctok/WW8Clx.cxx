@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ sal_uInt32 WW8Clx::getCp(sal_uInt32 nIndex) const
 
 sal_uInt32 WW8Clx::getFc(sal_uInt32 nIndex) const
 {
-    sal_uInt32 nResult = getU32(nOffsetPieceTable + 5 +
-                                (getPieceCount() + 1) * 4 +
+    sal_uInt32 nResult = getU32(nOffsetPieceTable + 5 + 
+                                (getPieceCount() + 1) * 4 + 
                                 nIndex * 8 + 2);
 
     if (nResult & 0x40000000)
@@ -67,8 +67,8 @@ sal_uInt32 WW8Clx::getFc(sal_uInt32 nIndex) const
 sal_Bool WW8Clx::isComplexFc(sal_uInt32 nIndex) const
 {
     sal_Bool bResult = sal_False;
-    sal_uInt32 nTmp = getU32(nOffsetPieceTable + 5 +
-                             (getPieceCount() + 1) * 4 +
+    sal_uInt32 nTmp = getU32(nOffsetPieceTable + 5 + 
+                             (getPieceCount() + 1) * 4 + 
                              nIndex * 8 + 2);
     if (nTmp & 0x40000000)
         bResult = sal_True;

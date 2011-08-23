@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,78 +24,78 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_SimpleFontMetric_idl__
-#define __com_sun_star_awt_SimpleFontMetric_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_SimpleFontMetric_idl__ 
+#define __com_sun_star_awt_SimpleFontMetric_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** describes the general metrics of a certain font.
  */
 published struct SimpleFontMetric
 {
     /** specifies the portion of a lower case character that
-        rises above the height of the character "x" of the font.
-
-        <p>For example, the letters 'b', 'd', 'h', 'k' and 'l'
+        rises above the height of the character "x" of the font. 
+                        
+        <p>For example, the letters 'b', 'd', 'h', 'k' and 'l' 
         have an ascent unequal to 0.</p>
-
+        
         <p>The ascent is measured in pixels, thus the font metric is
         device dependent.</p>
      */
-    short Ascent;
-
-    //-------------------------------------------------------------------------
-
+    short Ascent; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the portion of a letter falling below the baseline.
-
+                        
         <p>For example, the letters 'g', 'p', and 'y'
         have a descent unequal to 0.</p>
-
-        <p>The descent is measured in pixels, thus the font metric is
+        
+        <p>The descent is measured in pixels, thus the font metric is 
         device dependent.</p>
      */
-    short Descent;
-
-    //-------------------------------------------------------------------------
-
+    short Descent; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the vertical space between lines of this font;
-        it is also called internal linespacing.
-
-        <p>The leading is measured in pixels, thus the font metric is
+        it is also called internal linespacing. 
+                        
+        <p>The leading is measured in pixels, thus the font metric is 
         device dependent.</p>
      */
-    short Leading;
-
-    //-------------------------------------------------------------------------
-
+    short Leading; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the slant of the characters (italic).
-
+                        
         <p>The slant is measured in degrees from 0 to 359.</p>
      */
-    short Slant;
-
-    //-------------------------------------------------------------------------
-
+    short Slant; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the code of the first printable character in the font.
      */
-    char FirstChar;
-
-    //-------------------------------------------------------------------------
-
+    char FirstChar; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the code of the last printable character in the font.
      */
-    char LastChar;
+    char LastChar; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
 
-};
-
-//=============================================================================
-
-}; }; }; };
-
-
-#endif
+#endif 

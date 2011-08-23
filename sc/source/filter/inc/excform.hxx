@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,21 +43,21 @@ protected:
     enum ExtensionType { EXTENSION_ARRAY, EXTENSION_NLR, EXTENSION_MEMAREA };
     typedef ::std::vector< ExtensionType >          ExtensionTypeVec;
 
-    BOOL                bExternName;    // wenn External Name gefunden wurde
-    static const UINT16 nRowMask;
-    static const UINT16 nLastInd;       // letzter Index fuer Excel->SC-
+    BOOL				bExternName;	// wenn External Name gefunden wurde
+    static const UINT16	nRowMask;
+    static const UINT16	nLastInd;		// letzter Index fuer Excel->SC-
                                         // Token Umsetzung
     XclFunctionProvider maFuncProv;
     const XclBiff       meBiff;
 
     // ---------------------------------------------------------------
-    void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs, sal_uInt8 mnMinParamCount = 0 );
+    void				DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs, sal_uInt8 mnMinParamCount = 0 );
 
-    void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, ScSingleRefData&, const BOOL bName );
+    void				ExcRelToScRel( UINT16 nRow, UINT8 nCol, ScSingleRefData&, const BOOL bName );
 
 public:
                         ExcelToSc( const XclImpRoot& rRoot );
-    virtual             ~ExcelToSc();
+    virtual				~ExcelToSc();
     virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
@@ -68,21 +68,21 @@ public:
 
     virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
 
-    void                GetDummy( const ScTokenArray*& );
+    void				GetDummy( const ScTokenArray*& );
     const ScTokenArray* GetBoolErr( XclBoolError );
     BOOL                GetShrFmla( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen );
 
 #if 0
                             // return = TRUE -> String-Record folgt!
-    static BOOL         SetCurVal( ScFormulaCell& rCell, double& rCurVal );
+    static BOOL			SetCurVal( ScFormulaCell& rCell, double& rCurVal );
 #endif
-    static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
+    static void			SetError( ScFormulaCell& rCell, const ConvErr eErr );
 
-    static inline BOOL  IsComplColRange( const UINT16 nCol1, const UINT16 nCol2 );
-    static inline BOOL  IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
+    static inline BOOL	IsComplColRange( const UINT16 nCol1, const UINT16 nCol2 );
+    static inline BOOL	IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
 
-    void                SetComplCol( ScComplexRefData& );
-    void                SetComplRow( ScComplexRefData& );
+    void				SetComplCol( ScComplexRefData& );
+    void				SetComplRow( ScComplexRefData& );
 
     void                ReadExtensions( const ExtensionTypeVec& rExtensions,
                                         XclImpStream& aIn );
@@ -133,7 +133,7 @@ private:
 
 public:
                         ExcelToSc8( const XclImpRoot& rRoot );
-    virtual             ~ExcelToSc8();
+    virtual				~ExcelToSc8();
 
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
@@ -142,7 +142,7 @@ public:
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
                                            const String& rUrl, const ::std::vector<String>& rTabNames );
 
-    static inline BOOL  IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
+    static inline BOOL	IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
 
     virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
 };

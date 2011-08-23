@@ -1,13 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: extensionmigration.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,14 +155,14 @@ void OO3ExtensionMigration::scanUserExtensions( const ::rtl::OUString& sSourceDi
 
                 osl::DirectoryItem aExtDirItem;
                 osl::Directory     aExtensionRootDir( sExtensionFolderURL );
-
+                
                 nRetCode = aExtensionRootDir.open();
                 if (( nRetCode == osl::Directory::E_None ) &&
                     ( aExtensionRootDir.getNextItem( aExtDirItem, nHint ) == osl::Directory::E_None ))
                 {
                     bool bFileStatus = aExtDirItem.getFileStatus(fs) == osl::FileBase::E_None;
                     bool bIsDir      = fs.getFileType() == osl::FileStatus::Directory;
-
+                    
                     if ( bFileStatus && bIsDir )
                     {
                         sExtensionFolderURL = fs.getFileURL();
@@ -183,7 +180,7 @@ OO3ExtensionMigration::ScanResult OO3ExtensionMigration::scanExtensionFolder( co
 {
     ScanResult     aResult = SCANRESULT_NOTFOUND;
     osl::Directory aDir(sExtFolder);
-
+    
     // get sub dirs
     if (aDir.open() == osl::FileBase::E_None)
     {
@@ -235,13 +232,13 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")),
                 m_ctx ), uno::UNO_QUERY );
     }
-
+    
     ::rtl::OUString aExtIdentifier;
     if ( m_xDocBuilder.is() && m_xSimpleFileAccess.is() )
     {
         try
         {
-            uno::Reference< io::XInputStream > xIn =
+            uno::Reference< io::XInputStream > xIn = 
                 m_xSimpleFileAccess->openFileRead( sDescriptionXmlURL );
 
             if ( xIn.is() )
@@ -250,7 +247,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 if ( xDoc.is() )
                 {
                     uno::Reference< xml::dom::XElement > xRoot = xDoc->getDocumentElement();
-                    if ( xRoot.is() &&
+                    if ( xRoot.is() && 
                          xRoot->getTagName().equals(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("description"))) )
                     {
                         uno::Reference< xml::xpath::XXPathAPI > xPath(
@@ -258,24 +255,24 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.xpath.XPathAPI")),
                                 m_ctx),
                             uno::UNO_QUERY);
-
+                        
                         xPath->registerNS(
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc")),
                             xRoot->getNamespaceURI());
                         xPath->registerNS(
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xlink")),
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://www.w3.org/1999/xlink")));
-
-                        try
+                        
+                        try 
                         {
                             uno::Reference< xml::dom::XNode > xRootNode( xRoot, uno::UNO_QUERY );
-                            uno::Reference< xml::dom::XNode > xNode(
+                            uno::Reference< xml::dom::XNode > xNode( 
                                 xPath->selectSingleNode(
-                                    xRootNode,
+                                    xRootNode, 
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:identifier/@value")) ));
                             if ( xNode.is() )
                                 aExtIdentifier = xNode->getNodeValue();
-                        }
+                        } 
                         catch ( xml::xpath::XPathException& )
                         {
                         }
@@ -285,7 +282,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                     }
                 }
             }
-
+            
             if ( aExtIdentifier.getLength() > 0 )
             {
                 // scan extension identifier and try to match with our black list entries
@@ -310,9 +307,9 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
 
         if ( aExtIdentifier.getLength() == 0 )
         {
-            // Fallback:
+            // Fallback: 
             // Try to use the folder name to match our black list
-            // as some extensions don't provide an identifier in the
+            // as some extensions don't provide an identifier in the 
             // description.xml!
             for ( sal_uInt32 i = 0; i < m_aBlackList.size(); i++ )
             {
@@ -334,24 +331,24 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
 {
     if ( !m_xExtensionManager.is() )
     {
-        try
+        try 
         {
             m_xExtensionManager = deployment::ExtensionManager::get( m_ctx );
         }
         catch ( ucb::CommandFailedException & ){}
         catch ( uno::RuntimeException & ) {}
     }
-
+    
     if ( m_xExtensionManager.is() )
     {
         try
         {
             TmpRepositoryCommandEnv* pCmdEnv = new TmpRepositoryCommandEnv();
-
-            uno::Reference< ucb::XCommandEnvironment > xCmdEnv(
+            
+            uno::Reference< ucb::XCommandEnvironment > xCmdEnv( 
                 static_cast< cppu::OWeakObject* >( pCmdEnv ), uno::UNO_QUERY );
             uno::Reference< task::XAbortChannel > xAbortChannel;
-            uno::Reference< deployment::XPackage > xPackage =
+            uno::Reference< deployment::XPackage > xPackage = 
                 m_xExtensionManager->addExtension(
                     sSourceDir, uno::Sequence<beans::NamedValue>(),
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), xAbortChannel, xCmdEnv );
@@ -520,7 +517,7 @@ void TmpRepositoryCommandEnv::handle(
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
-
+    
     bool approve = true;
     bool abort   = false;
 
@@ -544,7 +541,7 @@ void TmpRepositoryCommandEnv::handle(
         else if (abort) {
             uno::Reference< task::XInteractionAbort > xInteractionAbort(
                 pConts[ pos ], uno::UNO_QUERY );
-            if (xInteractionAbort.is()) {
+            if (xInteractionAbort.is()) {           
                 xInteractionAbort->select();
                 // don't query again for ongoing continuations:
                 abort = false;
@@ -583,4 +580,4 @@ Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
 
 // -----------------------------------------------------------------------------
 
-}   // namespace migration
+}	// namespace migration

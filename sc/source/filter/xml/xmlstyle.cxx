@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ using ::rtl::OUString;
 
 #define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_LATEST }
-#define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
+#define MAP_END()	{ NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {
@@ -100,7 +100,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "ParaBottomMargin", XML_NAMESPACE_FO, XML_PADDING, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_ALLPADDING ),
     MAP( "ParaBottomMargin", XML_NAMESPACE_FO, XML_PADDING_BOTTOM, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_BOTTOMPADDING ),
     MAP( "ParaIndent", XML_NAMESPACE_FO, XML_MARGIN_LEFT, XML_TYPE_PROP_PARAGRAPH|XML_TYPE_MEASURE16, 0 ),
-//  MAP( "ParaIsHyphenation", XML_NAMESPACE_FO, XML_HYPHENATE, XML_TYPE_PROP_TEXT|XML_TYPE_BOOL, 0 ),
+//	MAP( "ParaIsHyphenation", XML_NAMESPACE_FO, XML_HYPHENATE, XML_TYPE_PROP_TEXT|XML_TYPE_BOOL, 0 ),
     MAP( "ParaLeftMargin", XML_NAMESPACE_FO, XML_PADDING_LEFT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_LEFTPADDING ),
     MAP( "ParaRightMargin", XML_NAMESPACE_FO, XML_PADDING_RIGHT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_RIGHTPADDING ),
     MAP( "ParaTopMargin", XML_NAMESPACE_FO, XML_PADDING_TOP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_TOPPADDING ),
@@ -125,7 +125,7 @@ const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
     MAP( "IsManualPageBreak", XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_TYPE_PROP_TABLE_COLUMN|XML_SC_TYPE_BREAKBEFORE, 0),
     MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE_COLUMN|XML_SC_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_SC_ISVISIBLE ),
     MAP( "Width", XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0 ),
-//  MAP( "OptimalWidth", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_BOOL, 0),
+//	MAP( "OptimalWidth", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_BOOL, 0),
     MAP_END()
 };
 
@@ -245,31 +245,31 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
         {
             switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
             {
-                case CTF_SC_ALLPADDING:         pPadding = propertie; break;
-                case CTF_SC_BOTTOMPADDING:      pPadding_Bottom = propertie; break;
-                case CTF_SC_LEFTPADDING:        pPadding_Left = propertie; break;
-                case CTF_SC_RIGHTPADDING:       pPadding_Right = propertie; break;
-                case CTF_SC_TOPPADDING:         pPadding_Top = propertie; break;
-                case CTF_SC_ALLBORDER:          pBorder = propertie; break;
-                case CTF_SC_LEFTBORDER:         pBorder_Left = propertie; break;
-                case CTF_SC_RIGHTBORDER:        pBorder_Right = propertie; break;
-                case CTF_SC_BOTTOMBORDER:       pBorder_Bottom = propertie; break;
-                case CTF_SC_TOPBORDER:          pBorder_Top = propertie; break;
-                case CTF_SC_ALLBORDERWIDTH:     pAllBorderWidthState = propertie; break;
-                case CTF_SC_LEFTBORDERWIDTH:    pLeftBorderWidthState = propertie; break;
-                case CTF_SC_RIGHTBORDERWIDTH:   pRightBorderWidthState = propertie; break;
-                case CTF_SC_TOPBORDERWIDTH:     pTopBorderWidthState = propertie; break;
-                case CTF_SC_BOTTOMBORDERWIDTH:  pBottomBorderWidthState = propertie; break;
-                case CTF_ALLBORDER:             pSWBorder = propertie; break;
-                case CTF_LEFTBORDER:            pSWBorder_Left = propertie; break;
-                case CTF_RIGHTBORDER:           pSWBorder_Right = propertie; break;
-                case CTF_BOTTOMBORDER:          pSWBorder_Bottom = propertie; break;
-                case CTF_TOPBORDER:             pSWBorder_Top = propertie; break;
-                case CTF_ALLBORDERWIDTH:        pSWAllBorderWidthState = propertie; break;
-                case CTF_LEFTBORDERWIDTH:       pSWLeftBorderWidthState = propertie; break;
-                case CTF_RIGHTBORDERWIDTH:      pSWRightBorderWidthState = propertie; break;
-                case CTF_TOPBORDERWIDTH:        pSWTopBorderWidthState = propertie; break;
-                case CTF_BOTTOMBORDERWIDTH:     pSWBottomBorderWidthState = propertie; break;
+                case CTF_SC_ALLPADDING:			pPadding = propertie; break;
+                case CTF_SC_BOTTOMPADDING:		pPadding_Bottom = propertie; break;
+                case CTF_SC_LEFTPADDING:		pPadding_Left = propertie; break;
+                case CTF_SC_RIGHTPADDING:		pPadding_Right = propertie; break;
+                case CTF_SC_TOPPADDING:			pPadding_Top = propertie; break;
+                case CTF_SC_ALLBORDER:			pBorder = propertie; break;
+                case CTF_SC_LEFTBORDER:			pBorder_Left = propertie; break;
+                case CTF_SC_RIGHTBORDER:		pBorder_Right = propertie; break;
+                case CTF_SC_BOTTOMBORDER:		pBorder_Bottom = propertie; break;
+                case CTF_SC_TOPBORDER:			pBorder_Top = propertie; break;
+                case CTF_SC_ALLBORDERWIDTH:		pAllBorderWidthState = propertie; break;
+                case CTF_SC_LEFTBORDERWIDTH:	pLeftBorderWidthState = propertie; break;
+                case CTF_SC_RIGHTBORDERWIDTH:	pRightBorderWidthState = propertie; break;
+                case CTF_SC_TOPBORDERWIDTH:		pTopBorderWidthState = propertie; break;
+                case CTF_SC_BOTTOMBORDERWIDTH:	pBottomBorderWidthState = propertie; break;
+                case CTF_ALLBORDER:			    pSWBorder = propertie; break;
+                case CTF_LEFTBORDER:			pSWBorder_Left = propertie; break;
+                case CTF_RIGHTBORDER:		    pSWBorder_Right = propertie; break;
+                case CTF_BOTTOMBORDER:		    pSWBorder_Bottom = propertie; break;
+                case CTF_TOPBORDER:			    pSWBorder_Top = propertie; break;
+                case CTF_ALLBORDERWIDTH:		pSWAllBorderWidthState = propertie; break;
+                case CTF_LEFTBORDERWIDTH:	    pSWLeftBorderWidthState = propertie; break;
+                case CTF_RIGHTBORDERWIDTH:	    pSWRightBorderWidthState = propertie; break;
+                case CTF_TOPBORDERWIDTH:		pSWTopBorderWidthState = propertie; break;
+                case CTF_BOTTOMBORDERWIDTH:	    pSWBottomBorderWidthState = propertie; break;
                 case CTF_SC_DIAGONALTLBR:       pDiagonalTLBR = propertie; break;
                 case CTF_SC_DIAGONALTLBRWIDTH:  pDiagonalTLBRWidthState = propertie; break;
                 case CTF_SC_DIAGONALBLTR:       pDiagonalBLTR = propertie; break;
@@ -537,7 +537,7 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
 {
     //#108550#; don't filter the height, so other applications know the calculated height
 
-/*  XMLPropertyState* pHeight = NULL;
+/*	XMLPropertyState* pHeight = NULL;
     XMLPropertyState* pOptimalHeight = NULL;
 
     for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
@@ -546,8 +546,8 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
     {
         switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
         {
-            case CTF_SC_ROWHEIGHT:              pHeight = propertie; break;
-            case CTF_SC_ROWOPTIMALHEIGHT:       pOptimalHeight = propertie; break;
+            case CTF_SC_ROWHEIGHT:				pHeight = propertie; break;
+            case CTF_SC_ROWOPTIMALHEIGHT:		pOptimalHeight = propertie; break;
         }
     }
     if ((pHeight && pOptimalHeight && ::cppu::any2bool( pOptimalHeight->maValue )) ||

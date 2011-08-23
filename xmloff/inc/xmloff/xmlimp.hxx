@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,17 +81,17 @@ namespace xmloff {
     class RDFaImportHelper;
 }
 
-#define IMPORT_META         0x0001
-#define IMPORT_STYLES       0x0002
+#define IMPORT_META			0x0001
+#define IMPORT_STYLES		0x0002
 #define IMPORT_MASTERSTYLES 0x0004
-#define IMPORT_AUTOSTYLES   0x0008
-#define IMPORT_CONTENT      0x0010
-#define IMPORT_SCRIPTS      0x0020
-#define IMPORT_SETTINGS     0x0040
-#define IMPORT_FONTDECLS    0x0080
-#define IMPORT_EMBEDDED     0x0100
-#define IMPORT_OOO_NAMESPACES   0x0100
-#define IMPORT_ALL          0xffff
+#define IMPORT_AUTOSTYLES	0x0008
+#define IMPORT_CONTENT		0x0010
+#define IMPORT_SCRIPTS		0x0020
+#define IMPORT_SETTINGS		0x0040
+#define IMPORT_FONTDECLS	0x0080
+#define IMPORT_EMBEDDED		0x0100
+#define IMPORT_OOO_NAMESPACES	0x0100
+#define IMPORT_ALL			0xffff
 
 
 
@@ -112,10 +112,10 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxImportInfo;
 
-    UniReference< XMLTextImportHelper >             mxTextImport;
-    UniReference< XMLShapeImportHelper >            mxShapeImport;
-    UniReference< SchXMLImportHelper >              mxChartImport;
-    UniReference< ::xmloff::OFormLayerXMLImport >   mxFormImport;
+    UniReference< XMLTextImportHelper >				mxTextImport;
+    UniReference< XMLShapeImportHelper >			mxShapeImport;
+    UniReference< SchXMLImportHelper >				mxChartImport;
+    UniReference< ::xmloff::OFormLayerXMLImport >	mxFormImport;
 
     SvXMLImportContextRef mxFontDecls;
     SvXMLImportContextRef mxStyles;
@@ -131,30 +131,30 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxNumberStyles;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > mxEventListener;
 
-    SvXMLImport_Impl            *mpImpl;            // dummy
+    SvXMLImport_Impl			*mpImpl;			// dummy
 
-    SvXMLNamespaceMap           *mpNamespaceMap;
-    SvXMLUnitConverter          *mpUnitConv;
-    SvXMLImportContexts_Impl    *mpContexts;
-    SvXMLNumFmtHelper           *mpNumImport;
-    ProgressBarHelper           *mpProgressBarHelper;
-    XMLEventImportHelper        *mpEventImportHelper;
-    XMLErrors                   *mpXMLErrors;
-    StyleMap                    *mpStyleMap;
-    ::rtl::OUString             msPackageProtocol;
+    SvXMLNamespaceMap 			*mpNamespaceMap;
+    SvXMLUnitConverter			*mpUnitConv;
+    SvXMLImportContexts_Impl	*mpContexts;
+    SvXMLNumFmtHelper			*mpNumImport;
+    ProgressBarHelper			*mpProgressBarHelper;
+    XMLEventImportHelper   		*mpEventImportHelper;
+    XMLErrors					*mpXMLErrors;
+    StyleMap 					*mpStyleMap;
+    ::rtl::OUString				msPackageProtocol;
 
     SAL_DLLPRIVATE void _InitCtor();
 
-    sal_uInt16  mnImportFlags;
-    sal_uInt16  mnErrorFlags;
+    sal_uInt16	mnImportFlags;
+    sal_uInt16	mnErrorFlags;
 
 protected:
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
 
     ::com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
-    sal_Bool                    mbIsFormsSupported;
-    bool                        mbIsTableShapeSupported;
+    sal_Bool					mbIsFormsSupported;
+    bool						mbIsTableShapeSupported;
     bool                        mbIsGraphicLoadOnDemandSupported;
 
     // This method is called after the namespace map has been updated, but
@@ -197,15 +197,15 @@ public:
 
     // #110680#
     //SvXMLImport( const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::frame::XModel > & ) throw();
+    //		::com::sun::star::frame::XModel > & ) throw();
     SvXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & ) throw();
 
     // #110680#
     //SvXMLImport( const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::frame::XModel > &,
-    //      const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & ) throw();
+    //		::com::sun::star::frame::XModel > &,
+    //		const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & ) throw();
     SvXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
@@ -331,7 +331,7 @@ public:
     ::rtl::OUString GetStyleDisplayName( sal_uInt16 nFamily,
                                       const ::rtl::OUString& rName ) const;
 
-    ProgressBarHelper*  GetProgressBarHelper();
+    ProgressBarHelper*	GetProgressBarHelper();
 
     void AddNumberStyle(sal_Int32 nKey, const rtl::OUString& sName);
 
@@ -349,8 +349,8 @@ public:
     const SvXMLStylesContext *GetAutoStyles() const;
     const SvXMLStylesContext *GetMasterStyles() const;
 
-    sal_uInt16  getImportFlags() const { return mnImportFlags; }
-    sal_Bool    IsFormsSupported() const { return mbIsFormsSupported; }
+    sal_uInt16	getImportFlags() const { return mnImportFlags; }
+    sal_Bool	IsFormsSupported() const { return mbIsFormsSupported; }
     rtl::OUString GetAbsoluteReference(const rtl::OUString& rValue) const;
 
     sal_Unicode ConvStarBatsCharToStarSymbol( sal_Unicode c );
@@ -456,7 +456,7 @@ public:
     static const sal_uInt16 OOo_Current = 30;
 
     /** this checks the build ID and returns
-
+    
         * OOo_1x for files created with OpenOffice.org 1.x or StarOffice 7 (this also includes binary import over binfilter)
         * OOo_2x for files created with OpenOffice.org 2.x or StarOffice 8
         * OOo_Current for files created with OpenOffice.org 3.x and StarOffice9 or newer or for files not created with OpenOffice.org or StarOffice
@@ -533,4 +533,4 @@ inline SvXMLNumFmtHelper* SvXMLImport::GetDataStylesImport()
 }
 
 
-#endif  //  _XMLOFF_XMLIMP_HXX
+#endif	//  _XMLOFF_XMLIMP_HXX

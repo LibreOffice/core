@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ OSectionUndo::OSectionUndo(OReportModel& _rMod
 ,m_nSlot(_nSlot)
 ,m_bInserted(false)
 {
-    DBG_CTOR(rpt_OSectionUndo,NULL);
+    DBG_CTOR(rpt_OSectionUndo,NULL);    
 }
 // -----------------------------------------------------------------------------
 OSectionUndo::~OSectionUndo()
@@ -165,19 +165,19 @@ OSectionUndo::~OSectionUndo()
             }
         }
     }
-    DBG_DTOR(rpt_OSectionUndo,NULL);
+    DBG_DTOR(rpt_OSectionUndo,NULL);    
 }
 // -----------------------------------------------------------------------------
 void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xSection)
 {
     m_aControls.clear();
     try
-    {
+    { 
         // copy all properties for restoring
         uno::Reference< beans::XPropertySetInfo> xInfo = _xSection->getPropertySetInfo();
         uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
         const beans::Property* pIter = aSeq.getConstArray();
-        const beans::Property* pEnd  = pIter + aSeq.getLength();
+        const beans::Property* pEnd	 = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
         {
             if ( 0 == (pIter->Attributes & beans::PropertyAttribute::READONLY) )
@@ -267,7 +267,7 @@ void OReportSectionUndo::implReRemove( )
     if( m_eAction == Removed )
         collectControls(m_pMemberFunction(&m_aReportHelper));
     const uno::Sequence< beans::PropertyValue > aArgs;
-    m_pController->executeChecked(m_nSlot,aArgs);
+    m_pController->executeChecked(m_nSlot,aArgs);    
     m_bInserted = false;
 }
 //----------------------------------------------------------------------------
@@ -299,7 +299,7 @@ String OGroupSectionUndo::GetComment() const
         try
         {
             uno::Reference< report::XSection > xSection = const_cast<OGroupSectionUndo*>(this)->m_pMemberFunction(&const_cast<OGroupSectionUndo*>(this)->m_aGroupHelper);
-
+                        
             if ( xSection.is() )
                 m_sName = xSection->getName();
         }
@@ -336,7 +336,7 @@ void OGroupSectionUndo::implReRemove( )
     aArgs[0].Value <<= sal_False;
     aArgs[1].Name = PROPERTY_GROUP;
     aArgs[1].Value <<= m_aGroupHelper.getGroup();
-
+    
     m_pController->executeChecked(m_nSlot,aArgs);
     m_bInserted = false;
 }
@@ -345,7 +345,7 @@ TYPEINIT1( OGroupUndo,         OCommentUndoAction );
 //----------------------------------------------------------------------------
 OGroupUndo::OGroupUndo(OReportModel& _rMod
                        ,USHORT nCommentID
-                       ,Action  _eAction
+                       ,Action	_eAction
                        ,const uno::Reference< report::XGroup>& _xGroup
                        ,const uno::Reference< report::XReportDefinition >& _xReportDefinition)
 : OCommentUndoAction(_rMod,nCommentID)
@@ -392,7 +392,7 @@ void OGroupUndo::Undo()
         implReInsert();
         break;
     }
-
+    
 }
 //----------------------------------------------------------------------------
 void OGroupUndo::Redo()

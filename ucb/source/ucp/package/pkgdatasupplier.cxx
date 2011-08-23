@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -468,7 +468,7 @@ void DataSupplier::validate()
 ::rtl::OUString DataSupplier::assembleChildURL( const ::rtl::OUString& aName )
 {
     rtl::OUString aURL;
-    rtl::OUString aContURL
+    rtl::OUString aContURL 
         = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
     sal_Int32 nParam = aContURL.indexOf( '?' );
     if ( nParam >= 0 )
@@ -491,7 +491,7 @@ void DataSupplier::validate()
             aURL += rtl::OUString::createFromAscii( "/" );
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
-    }
+    }	
     return aURL;
 }
 

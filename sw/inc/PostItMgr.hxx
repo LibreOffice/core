@@ -65,12 +65,12 @@ class SwSidebarItem;
 class SwFrm;
 class Window;
 
-#define SORT_POS    1
-#define SORT_AUTHOR 2
-#define SORT_DATE   3
+#define SORT_POS	1
+#define SORT_AUTHOR	2
+#define SORT_DATE	3
 
-#define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
-#define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
+#define COL_NOTES_SIDEPANE_ARROW_ENABLED	RGB_COLORDATA(0,0,0)
+#define COL_NOTES_SIDEPANE_ARROW_DISABLED	RGB_COLORDATA(172,168,153)
 
 typedef std::list<SwSidebarItem*> SwSidebarItem_list;
 typedef std::list<SwSidebarItem*>::iterator SwSidebarItem_iterator;
@@ -151,21 +151,21 @@ class SwNoteProps: public utl::ConfigItem
 class SwPostItMgr: public SfxListener
 {
     private:
-        SwView*                         mpView;
-        SwWrtShell*                     mpWrtShell;
-        SwEditWin*                      mpEditWin;
+        SwView*							mpView;
+        SwWrtShell*						mpWrtShell;
+        SwEditWin*						mpEditWin;
         std::list< SwSidebarItem*>      mvPostItFlds;
-        std::vector<SwPostItPageItem*>  mPages;
-        ULONG                           mnEventId;
-        bool                            mbWaitingForCalcRects;
+        std::vector<SwPostItPageItem*>	mPages;
+        ULONG							mnEventId;
+        bool							mbWaitingForCalcRects;
         sw::sidebarwindows::SwSidebarWin* mpActivePostIt;
-        bool                            mbLayout;
-        long                            mbLayoutHeight;
-        long                            mbLayouting;
-        bool                            mbReadOnly;
-        bool                            mbDeleteNote;
-        FieldShadowState                mShadowState;
-        OutlinerParaObject*             mpAnswer;
+        bool							mbLayout;
+        long							mbLayoutHeight;
+        long							mbLayouting;
+        bool							mbReadOnly;
+        bool							mbDeleteNote;
+        FieldShadowState				mShadowState;
+        OutlinerParaObject*				mpAnswer;
         bool                            mbIsShowAnchor;
 
         // data structure to collect the <SwSidebarWin> instances for certain <SwFrm> instances.
@@ -173,26 +173,26 @@ class SwPostItMgr: public SfxListener
 
         typedef std::list<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
 
-        void            AddPostIts(bool bCheckExistance = true,bool bFocus = true);
-        //void          AddRedlineComments(bool bCheckExistance, bool bFocus);
+        void			AddPostIts(bool bCheckExistance = true,bool bFocus = true);
+        //void			AddRedlineComments(bool bCheckExistance, bool bFocus);
         void            RemoveSidebarWin();
-        void            PreparePageContainer();
-        void            Scroll(const long lScroll,const unsigned long aPage );
+        void			PreparePageContainer();
+        void			Scroll(const long lScroll,const unsigned long aPage );
         void            AutoScroll(const sw::sidebarwindows::SwSidebarWin* pPostIt,const unsigned long aPage );
-        bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
+        bool			ScrollbarHit(const unsigned long aPage,const Point &aPoint);
         bool            LayoutByPage( std::list<sw::sidebarwindows::SwSidebarWin*> &aVisiblePostItList,
                                       const Rectangle aBorder,
                                       long lNeededHeight);
-        void            CheckForRemovedPostIts();
-            bool                ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
-            bool                BorderOverPageBorder(unsigned long aPage) const;
-            bool                HasScrollbars() const;
-        void            Focus(SfxBroadcaster& rBC);
+        void			CheckForRemovedPostIts();
+            bool            	ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
+            bool            	BorderOverPageBorder(unsigned long aPage) const;
+            bool 		       	HasScrollbars() const;
+        void			Focus(SfxBroadcaster& rBC);
 
-            sal_Int32           GetInitialAnchorDistance() const;
-            sal_Int32           GetScrollSize() const;
-            sal_Int32           GetSpaceBetween() const;
-        void            SetReadOnlyState();
+            sal_Int32       	GetInitialAnchorDistance() const;
+            sal_Int32       	GetScrollSize() const;
+            sal_Int32       	GetSpaceBetween() const;
+        void			SetReadOnlyState();
                     DECL_LINK( CalcHdl, void*);
 
         sw::sidebarwindows::SwSidebarWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
@@ -207,8 +207,8 @@ class SwPostItMgr: public SfxListener
             ~SwPostItMgr();
 
             typedef std::list< SwSidebarItem* >::const_iterator const_iterator;
-            const_iterator begin()  const { return mvPostItFlds.begin(); }
-            const_iterator end()    const { return mvPostItFlds.end();  }
+            const_iterator begin()	const { return mvPostItFlds.begin(); }
+            const_iterator end()	const { return mvPostItFlds.end();	}
 
             void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -234,7 +234,7 @@ class SwPostItMgr: public SfxListener
             void Delete(String aAuthor);
             void Delete();
 
-#if 0
+#if 0            
             void Hide( SwPostItField* pPostItField );
 #endif
             void Hide( const String& rAuthor );
@@ -272,12 +272,12 @@ class SwPostItMgr: public SfxListener
 
             void SetSpellChecking();
 
-            Color           GetColorDark(sal_uInt16 aAuthorIndex);
-            Color           GetColorLight(sal_uInt16 aAuthorIndex);
+            Color			GetColorDark(sal_uInt16 aAuthorIndex);
+            Color			GetColorLight(sal_uInt16 aAuthorIndex);
             Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
 
 
-            void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
+            void				RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
             OutlinerParaObject* IsAnswer() {return mpAnswer;}
             void CheckMetaText();
             void StartSpelling();

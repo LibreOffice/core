@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,8 +91,8 @@ namespace dbaccess
         Columns             m_aColumns;
 
     public:
-        ::rtl::OUString     m_sSchemaName;
-        ::rtl::OUString     m_sCatalogName;
+        ::rtl::OUString		m_sSchemaName;
+        ::rtl::OUString		m_sCatalogName;
 
     public:
         OComponentDefinition_Impl();
@@ -118,27 +118,27 @@ class OColumnPropertyListener;
 //=========================================================================
 //= OComponentDefinition - a database "document" which describes a query
 //=========================================================================
-class OComponentDefinition  :public OContentHelper
+class OComponentDefinition	:public OContentHelper
                             ,public ODataSettings
                             ,public IColumnFactory
                             ,public OComponentDefinition_BASE
                             ,public ::comphelper::OPropertyArrayUsageHelper< OComponentDefinition >
 {
     OComponentDefinition();
-
+    
 protected:
     ::std::auto_ptr< OColumns >     m_pColumns;
-    ::comphelper::ImplementationReference< OColumnPropertyListener,::com::sun::star::beans::XPropertyChangeListener>
+    ::comphelper::ImplementationReference< OColumnPropertyListener,::com::sun::star::beans::XPropertyChangeListener>   
                                     m_xColumnPropertyListener;
-    sal_Bool                        m_bTable;
+    sal_Bool	                    m_bTable;
 
-    virtual ~OComponentDefinition();
+    virtual ~OComponentDefinition(); 
     virtual void SAL_CALL disposing();
 
 
 protected:
     OComponentDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
+        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&	_xParentContainer
         ,const TContentPtr& _pImpl
         ,sal_Bool _bTable = sal_True);
 
@@ -179,7 +179,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     // IColumnFactory
-    virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
+    virtual OColumn*	createColumn(const ::rtl::OUString& _rName) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
     virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
     virtual void columnDropped(const ::rtl::OUString& _sName);
@@ -201,7 +201,7 @@ private:
 };
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 #endif // DBA_COREDATAACESS_COMPONENTDEFINITION_HXX

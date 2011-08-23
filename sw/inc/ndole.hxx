@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class SW_DLLPUBLIC SwOLEObj
     svt::EmbeddedObjectRef xOLERef;
     String aName;
 
-    SwOLEObj( const SwOLEObj& rObj );   //nicht erlaubt.
+    SwOLEObj( const SwOLEObj& rObj );	//nicht erlaubt.
     SwOLEObj();
 
     void SetNode( SwOLENode* pNode );
@@ -70,7 +70,7 @@ public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     const String& GetCurrentPersistName() const { return aName; }
-    BOOL IsOleRef() const;  //Damit das Objekt nicht unnoetig geladen werden muss.
+    BOOL IsOleRef() const;	//Damit das Objekt nicht unnoetig geladen werden muss.
 #endif
 };
 
@@ -84,20 +84,20 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
     friend class SwNodes;
     mutable SwOLEObj aOLEObj;
     Graphic*    pGraphic;
-    String sChartTblName;       // bei Chart Objecten: Name der ref. Tabelle
-    BOOL   bOLESizeInvalid;     //Soll beim SwDoc::PrtOLENotify beruecksichtig
+    String sChartTblName;		// bei Chart Objecten: Name der ref. Tabelle
+    BOOL   bOLESizeInvalid;		//Soll beim SwDoc::PrtOLENotify beruecksichtig
                                 //werden (zum Beispiel kopiert). Ist nicht
                                 //Persistent.
 
-    SwEmbedObjectLink*  mpObjectLink;
+    SwEmbedObjectLink*	mpObjectLink;
     String maLinkURL;
 
-    SwOLENode(  const SwNodeIndex &rWhere,
+    SwOLENode(	const SwNodeIndex &rWhere,
                 const svt::EmbeddedObjectRef&,
                 SwGrfFmtColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
 
-    SwOLENode(  const SwNodeIndex &rWhere,
+    SwOLENode(	const SwNodeIndex &rWhere,
                 const String &rName,
                 sal_Int64 nAspect,
                 SwGrfFmtColl *pGrfColl,
@@ -110,7 +110,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
 
 public:
     const SwOLEObj& GetOLEObj() const { return aOLEObj; }
-          SwOLEObj& GetOLEObj()       { return aOLEObj; }
+          SwOLEObj& GetOLEObj()		  { return aOLEObj; }
     ~SwOLENode();
 
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
@@ -130,7 +130,7 @@ public:
     BOOL IsInGlobalDocSection() const;
     BOOL IsOLEObjectDeleted() const;
 
-    BOOL IsOLESizeInvalid() const   { return bOLESizeInvalid; }
+    BOOL IsOLESizeInvalid() const	{ return bOLESizeInvalid; }
     void SetOLESizeInvalid( BOOL b ){ bOLESizeInvalid = b; }
 
     sal_Int64 GetAspect() const { return aOLEObj.GetObject().GetViewAspect(); }
@@ -151,8 +151,8 @@ public:
     // <--
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-    const String& GetChartTblName() const       { return sChartTblName; }
-    void SetChartTblName( const String& rNm )   { sChartTblName = rNm; }
+    const String& GetChartTblName() const 		{ return sChartTblName; }
+    void SetChartTblName( const String& rNm ) 	{ sChartTblName = rNm; }
 #endif
 };
 
@@ -167,5 +167,5 @@ inline const SwOLENode *SwNode::GetOLENode() const
      return ND_OLENODE == nNodeType ? (const SwOLENode*)this : 0;
 }
 
-#endif  // _NDOLE_HXX
+#endif	// _NDOLE_HXX
 

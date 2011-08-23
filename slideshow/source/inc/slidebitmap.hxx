@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,22 +70,22 @@ namespace slideshow
         public:
             SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap );
 
-            bool                draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const;
-            ::basegfx::B2ISize  getSize() const;
+            bool 				draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const;
+            ::basegfx::B2ISize 	getSize() const;
             ::basegfx::B2DPoint getOutputPos() const{return maOutputPos;}
-            void                move( const ::basegfx::B2DPoint& rNewPos );
-            void                clip( const ::basegfx::B2DPolyPolygon& rClipPoly );
-
+            void				move( const ::basegfx::B2DPoint& rNewPos );
+            void				clip( const ::basegfx::B2DPolyPolygon& rClipPoly );
+            
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XBitmap >    getXBitmap();
 
         private:
-            ::basegfx::B2DPoint                                     maOutputPos;
-            ::basegfx::B2DPolyPolygon                               maClipPoly;
+            ::basegfx::B2DPoint										maOutputPos;
+            ::basegfx::B2DPolyPolygon								maClipPoly;
 
             // TODO(Q2): Remove UNO bitmap as the transport medium
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap >      mxBitmap;
+                ::com::sun::star::rendering::XBitmap >		mxBitmap;
         };
 
         typedef ::boost::shared_ptr< SlideBitmap > SlideBitmapSharedPtr;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,12 +65,12 @@
 
 #include <functional>
 
-#define SYNC_DELAY                      200
-#define DROP_ACTION_TIMER_INITIAL_TICKS     10
+#define SYNC_DELAY						200
+#define DROP_ACTION_TIMER_INITIAL_TICKS 	10
     // solange dauert es, bis das Scrollen anspringt
-#define DROP_ACTION_TIMER_SCROLL_TICKS      3
+#define DROP_ACTION_TIMER_SCROLL_TICKS		3
     // in diesen Intervallen wird jeweils eine Zeile gescrollt
-#define DROP_ACTION_TIMER_TICK_BASE         10
+#define DROP_ACTION_TIMER_TICK_BASE 		10
     // das ist die Basis, mit der beide Angaben multipliziert werden (in ms)
 
 using namespace ::svxform;
@@ -250,7 +250,7 @@ Image FmFilterItem::GetImage( BmpColorMode _eMode ) const
 //========================================================================
 class FmFilterHint : public SfxHint
 {
-    FmFilterData*   m_pData;
+    FmFilterData*	m_pData;
 
 public:
     TYPEINFO();
@@ -262,7 +262,7 @@ TYPEINIT1( FmFilterHint, SfxHint );
 //========================================================================
 class FmFilterInsertedHint : public FmFilterHint
 {
-    sal_Int32 m_nPos;   // Position relative to the parent of the data
+    sal_Int32 m_nPos;	// Position relative to the parent of the data
 
 public:
     TYPEINFO();
@@ -319,7 +319,7 @@ TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 //========================================================================
 class FmFilterAdapter : public ::cppu::WeakImplHelper1< XFilterControllerListener >
 {
-    FmFilterModel*              m_pModel;
+    FmFilterModel*			    m_pModel;
     Reference< XIndexAccess >   m_xControllers;
 
 public:
@@ -591,8 +591,8 @@ void FmFilterModel::Clear()
     }
 
     m_pCurrentItems  = NULL;
-    m_xController    = NULL;
-    m_xControllers   = NULL;
+    m_xController	 = NULL;
+    m_xControllers	 = NULL;
 
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
          i != m_aChildren.end(); i++)
@@ -1050,7 +1050,7 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 class FmFilterItemsString : public SvLBoxString
 {
 public:
-    FmFilterItemsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,    const XubString& rStr )
+    FmFilterItemsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,	const XubString& rStr )
         :SvLBoxString(pEntry,nFlags,rStr){}
 
     virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
@@ -1326,7 +1326,7 @@ IMPL_LINK( FmFilterNavigator, OnDropActionTimer, void*, EMPTYARG )
         case DA_EXPANDNODE:
         {
             SvLBoxEntry* pToExpand = GetEntry(m_aTimerTriggered);
-            if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
+            if (pToExpand && (GetChildCount(pToExpand) > 0) &&	!IsExpanded(pToExpand))
                 // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
                 // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
                 // aber ich denke, die BK sollte es auch so vertragen
@@ -1371,7 +1371,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
                 bNeedTrigger = sal_True;
             }
             else
-            {   // is it an entry whith children, and not yet expanded?
+            {	// is it an entry whith children, and not yet expanded?
                 SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
                 if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
                 {
@@ -1434,19 +1434,19 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
     return rEvt.mnAction;
 }
 // -----------------------------------------------------------------------------
-namespace
+namespace 
 {
     FmFilterItems* getTargetItems(SvLBoxEntry* _pTarget)
     {
-        FmFilterData*   pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
-        FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems)
-                                        ?
+        FmFilterData*	pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
+        FmFilterItems*	pTargetItems = pData->ISA(FmFilterItems) 
+                                        ? 
                                         PTR_CAST(FmFilterItems,pData)
-                                        :
+                                        : 
                                     PTR_CAST(FmFilterItems,pData->GetParent());
         return pTargetItems;
     }
-}
+}	
 //------------------------------------------------------------------------
 sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -1465,14 +1465,14 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     // search the container where to add the items
-    FmFilterItems*  pTargetItems = getTargetItems(pDropTarget);
+    FmFilterItems*	pTargetItems = getTargetItems(pDropTarget);
     SelectAll(sal_False);
     SvLBoxEntry* pEntry = FindEntry(pTargetItems);
     Select(pEntry, sal_True);
     SetCurEntry(pEntry);
 
     insertFilterItem(m_aControlExchange->getDraggedEntries(),pTargetItems,DND_ACTION_COPY == rEvt.mnAction);
-
+    
     return sal_True;
 }
 
@@ -1498,7 +1498,7 @@ void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 {
-    if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
+    if (bSelect == IsSelected(pEntry))	// das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
         return sal_True;
 
     if (SvTreeListBox::Select(pEntry, bSelect))
@@ -1766,7 +1766,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                 case SID_FM_FILTER_EDIT:
                 {
                     EditEntry( pClicked );
-                }   break;
+                }	break;
                 case SID_FM_FILTER_IS_NULL:
                 case SID_FM_FILTER_IS_NOT_NULL:
                 {
@@ -1780,11 +1780,11 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                     m_pModel->ValidateText((FmFilterItem*)pClicked->GetUserData(),
                                             aText, aErrorMsg);
                     m_pModel->SetTextForItem((FmFilterItem*)pClicked->GetUserData(), aText);
-                }   break;
+                }	break;
                 case SID_FM_DELETE:
                 {
                     DeleteSelection();
-                }   break;
+                }	break;
             }
             bHandled = sal_True;
         } break;
@@ -1963,7 +1963,7 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
     else
     {
         Reference< XFormController >  xController(pFormShell->GetImpl()->getActiveInternalController());
-        Reference< XIndexAccess >   xContainer;
+        Reference< XIndexAccess >	xContainer;
         if (xController.is())
         {
             Reference< XChild >  xChild(xController, UNO_QUERY);
@@ -2081,5 +2081,5 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *_pParent, sal_uInt16 _
 }
 
 //........................................................................
-}   // namespace svxform
+}	// namespace svxform
 //........................................................................

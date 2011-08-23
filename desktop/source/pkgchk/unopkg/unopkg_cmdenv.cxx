@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,8 +90,8 @@ class CommandEnvironmentImpl
 
     void update_( Any const & Status ) throw (RuntimeException);
     void printLicense(const OUString & sName,const OUString& sLicense,
-                      bool & accept, bool & decline);
-
+                      bool & accept, bool & decline); 
+    
 public:
     virtual ~CommandEnvironmentImpl();
     CommandEnvironmentImpl(
@@ -99,7 +99,7 @@ public:
         OUString const & log_file,
         bool option_force_overwrite,
         bool option_verbose);
-
+    
     // XCommandEnvironment
     virtual Reference< task::XInteractionHandler > SAL_CALL
     getInteractionHandler() throw (RuntimeException);
@@ -110,7 +110,7 @@ public:
     virtual void SAL_CALL handle(
         Reference< task::XInteractionRequest > const & xRequest )
         throw (RuntimeException);
-
+    
     // XProgressHandler
     virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException);
     virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException);
@@ -170,21 +170,21 @@ void CommandEnvironmentImpl::printLicense(
     OUString sY = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_Y, *pResMgr));
     OUString sNO = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_NO, *pResMgr));
     OUString sN = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_N, *pResMgr));
-
+    
     OUString sNewLine(RTL_CONSTASCII_USTRINGPARAM("\n"));
-
+    
     dp_misc::writeConsole(sNewLine + sNewLine + s1 + sNewLine + sNewLine);
     dp_misc::writeConsole(sLicense + sNewLine + sNewLine);
     dp_misc::writeConsole(s2 + sNewLine);
     dp_misc::writeConsole(s3);
-
+    
     //the user may enter "yes" or "no", we compare in a case insensitive way
     Reference< css::i18n::XCollator > xCollator(
         m_xComponentContext->getServiceManager()
             ->createInstanceWithContext(
                 OUSTR("com.sun.star.i18n.Collator"),m_xComponentContext),
-            UNO_QUERY_THROW );
-    xCollator->loadDefaultCollator(OfficeLocale::get(),
+            UNO_QUERY_THROW	);
+    xCollator->loadDefaultCollator(OfficeLocale::get(), 
         css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE);
 
     do
@@ -233,13 +233,13 @@ void CommandEnvironmentImpl::handle(
 {
     Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == TypeClass_EXCEPTION );
-    dp_misc::TRACE(OUSTR("[unopkg_cmdenv.cxx] incoming request:\n")
+    dp_misc::TRACE(OUSTR("[unopkg_cmdenv.cxx] incoming request:\n") 
         + ::comphelper::anyToString(request) + OUSTR("\n\n"));
-
+    
     // selections:
     bool approve = false;
     bool abort = false;
-
+    
     lang::WrappedTargetException wtExc;
     deployment::LicenseException licExc;
     deployment::InstallException instExc;
@@ -305,16 +305,16 @@ void CommandEnvironmentImpl::handle(
         else
             return; // unknown request => no selection at all
     }
-
+    
     //In case of a user declining a license abort is true but this is intended,
     //therefore no logging
-    if (abort && m_option_verbose && !bLicenseException)
-    {
+    if (abort && m_option_verbose && !bLicenseException) 
+    { 
         OUString msg = ::comphelper::anyToString(request);
         dp_misc::writeConsoleError(
             OUSTR("\nERROR: ") + msg + OUSTR("\n"));
     }
-
+    
     // select:
     Sequence< Reference<task::XInteractionContinuation> > conts(
         xRequest->getContinuations() );
@@ -334,7 +334,7 @@ void CommandEnvironmentImpl::handle(
         else if (abort) {
             Reference<task::XInteractionAbort> xInteractionAbort(
                 pConts[ pos ], UNO_QUERY );
-            if (xInteractionAbort.is()) {
+            if (xInteractionAbort.is()) {           
                 xInteractionAbort->select();
                 break;
             }

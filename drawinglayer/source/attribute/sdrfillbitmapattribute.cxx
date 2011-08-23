@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,30 +42,30 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // data definitions
-            Bitmap                                  maBitmap;
-            basegfx::B2DVector                      maSize;
-            basegfx::B2DVector                      maOffset;
-            basegfx::B2DVector                      maOffsetPosition;
-            basegfx::B2DVector                      maRectPoint;
+            Bitmap									maBitmap;
+            basegfx::B2DVector						maSize;
+            basegfx::B2DVector						maOffset;
+            basegfx::B2DVector						maOffsetPosition;
+            basegfx::B2DVector						maRectPoint;
 
             // bitfield
-            unsigned                                mbTiling : 1;
-            unsigned                                mbStretch : 1;
-            unsigned                                mbLogSize : 1;
+            unsigned								mbTiling : 1;
+            unsigned								mbStretch : 1;
+            unsigned								mbLogSize : 1;
 
             ImpSdrFillBitmapAttribute(
-                const Bitmap& rBitmap,
-                const basegfx::B2DVector& rSize,
+                const Bitmap& rBitmap, 
+                const basegfx::B2DVector& rSize, 
                 const basegfx::B2DVector& rOffset,
-                const basegfx::B2DVector& rOffsetPosition,
+                const basegfx::B2DVector& rOffsetPosition, 
                 const basegfx::B2DVector& rRectPoint,
-                bool bTiling,
-                bool bStretch,
+                bool bTiling, 
+                bool bStretch, 
                 bool bLogSize)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maBitmap(rBitmap),
                 maSize(rSize),
                 maOffset(rOffset),
@@ -94,11 +94,11 @@ namespace drawinglayer
                     && getOffset() == rCandidate.getOffset()
                     && getOffsetPosition() == rCandidate.getOffsetPosition()
                     && getRectPoint() == rCandidate.getRectPoint()
-                    && getTiling() == rCandidate.getTiling()
-                    && getStretch() == rCandidate.getStretch()
+                    && getTiling() == rCandidate.getTiling() 
+                    && getStretch() == rCandidate.getStretch() 
                     && getLogSize() == rCandidate.getLogSize());
             }
-
+            
             static ImpSdrFillBitmapAttribute* get_global_default()
             {
                 static ImpSdrFillBitmapAttribute* pDefault = 0;
@@ -111,8 +111,8 @@ namespace drawinglayer
                         basegfx::B2DVector(),
                         basegfx::B2DVector(),
                         basegfx::B2DVector(),
-                        false,
-                        false,
+                        false, 
+                        false, 
                         false);
 
                     // never delete; start with RefCount 1, not 0
@@ -124,27 +124,27 @@ namespace drawinglayer
         };
 
         SdrFillBitmapAttribute::SdrFillBitmapAttribute(
-            const Bitmap& rBitmap,
-            const basegfx::B2DVector& rSize,
+            const Bitmap& rBitmap, 
+            const basegfx::B2DVector& rSize, 
             const basegfx::B2DVector& rOffset,
-            const basegfx::B2DVector& rOffsetPosition,
+            const basegfx::B2DVector& rOffsetPosition, 
             const basegfx::B2DVector& rRectPoint,
-            bool bTiling,
-            bool bStretch,
+            bool bTiling, 
+            bool bStretch, 
             bool bLogSize)
-        :   mpSdrFillBitmapAttribute(new ImpSdrFillBitmapAttribute(
+        :	mpSdrFillBitmapAttribute(new ImpSdrFillBitmapAttribute(
                 rBitmap, rSize, rOffset, rOffsetPosition, rRectPoint, bTiling,  bStretch, bLogSize))
         {
         }
 
         SdrFillBitmapAttribute::SdrFillBitmapAttribute()
-        :   mpSdrFillBitmapAttribute(ImpSdrFillBitmapAttribute::get_global_default())
+        :	mpSdrFillBitmapAttribute(ImpSdrFillBitmapAttribute::get_global_default())
         {
             mpSdrFillBitmapAttribute->mnRefCount++;
         }
 
         SdrFillBitmapAttribute::SdrFillBitmapAttribute(const SdrFillBitmapAttribute& rCandidate)
-        :   mpSdrFillBitmapAttribute(rCandidate.mpSdrFillBitmapAttribute)
+        :	mpSdrFillBitmapAttribute(rCandidate.mpSdrFillBitmapAttribute)
         {
             mpSdrFillBitmapAttribute->mnRefCount++;
         }
@@ -178,7 +178,7 @@ namespace drawinglayer
                 {
                     delete mpSdrFillBitmapAttribute;
                 }
-
+                
                 mpSdrFillBitmapAttribute = rCandidate.mpSdrFillBitmapAttribute;
                 mpSdrFillBitmapAttribute->mnRefCount++;
             }
@@ -201,44 +201,44 @@ namespace drawinglayer
             return (*rCandidate.mpSdrFillBitmapAttribute == *mpSdrFillBitmapAttribute);
         }
 
-        const Bitmap& SdrFillBitmapAttribute::getBitmap() const
-        {
-            return mpSdrFillBitmapAttribute->getBitmap();
+        const Bitmap& SdrFillBitmapAttribute::getBitmap() const 
+        { 
+            return mpSdrFillBitmapAttribute->getBitmap(); 
         }
 
-        const basegfx::B2DVector& SdrFillBitmapAttribute::getSize() const
-        {
-            return mpSdrFillBitmapAttribute->getSize();
+        const basegfx::B2DVector& SdrFillBitmapAttribute::getSize() const 
+        { 
+            return mpSdrFillBitmapAttribute->getSize(); 
         }
 
-        const basegfx::B2DVector& SdrFillBitmapAttribute::getOffset() const
-        {
-            return mpSdrFillBitmapAttribute->getOffset();
+        const basegfx::B2DVector& SdrFillBitmapAttribute::getOffset() const 
+        { 
+            return mpSdrFillBitmapAttribute->getOffset(); 
         }
 
-        const basegfx::B2DVector& SdrFillBitmapAttribute::getOffsetPosition() const
-        {
-            return mpSdrFillBitmapAttribute->getOffsetPosition();
+        const basegfx::B2DVector& SdrFillBitmapAttribute::getOffsetPosition() const 
+        { 
+            return mpSdrFillBitmapAttribute->getOffsetPosition(); 
         }
 
-        const basegfx::B2DVector& SdrFillBitmapAttribute::getRectPoint() const
-        {
-            return mpSdrFillBitmapAttribute->getRectPoint();
+        const basegfx::B2DVector& SdrFillBitmapAttribute::getRectPoint() const 
+        { 
+            return mpSdrFillBitmapAttribute->getRectPoint(); 
         }
 
-        bool SdrFillBitmapAttribute::getTiling() const
-        {
-            return mpSdrFillBitmapAttribute->getTiling();
+        bool SdrFillBitmapAttribute::getTiling() const 
+        { 
+            return mpSdrFillBitmapAttribute->getTiling(); 
         }
 
-        bool SdrFillBitmapAttribute::getStretch() const
-        {
-            return mpSdrFillBitmapAttribute->getStretch();
+        bool SdrFillBitmapAttribute::getStretch() const 
+        { 
+            return mpSdrFillBitmapAttribute->getStretch(); 
         }
 
-        bool SdrFillBitmapAttribute::getLogSize() const
-        {
-            return mpSdrFillBitmapAttribute->getLogSize();
+        bool SdrFillBitmapAttribute::getLogSize() const 
+        { 
+            return mpSdrFillBitmapAttribute->getLogSize(); 
         }
 
         FillBitmapAttribute SdrFillBitmapAttribute::getFillBitmapAttribute(const basegfx::B2DRange& rRange) const

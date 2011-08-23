@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,30 +58,30 @@ using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 using namespace ::std;
 
-#define ASCII_STR(s)        OUString( RTL_CONSTASCII_USTRINGPARAM( s ) )
-#define DEFAULT_ENTRY       COMPATIBILITY_DEFAULT_NAME
-#define USER_ENTRY          ASCII_STR( "_user" )
-#define BUTTON_BORDER       2
+#define ASCII_STR(s)		OUString( RTL_CONSTASCII_USTRINGPARAM( s ) )
+#define DEFAULT_ENTRY		COMPATIBILITY_DEFAULT_NAME
+#define USER_ENTRY			ASCII_STR( "_user" )
+#define BUTTON_BORDER		2
 
 // struct CompatibilityItem ----------------------------------------------
 
 struct CompatibilityItem
 {
-    String      m_sName;
-    String      m_sModule;
-    bool        m_bUsePrtMetrics;
-    bool        m_bAddSpacing;
-    bool        m_bAddSpacingAtPages;
-    bool        m_bUseOurTabStops;
-    bool        m_bNoExtLeading;
-    bool        m_bUseLineSpacing;
-    bool        m_bAddTableSpacing;
-    bool        m_bUseObjPos;
-    bool        m_bUseOurTextWrapping;
-    bool        m_bConsiderWrappingStyle;
+    String		m_sName;
+    String		m_sModule;
+    bool		m_bUsePrtMetrics;
+    bool		m_bAddSpacing;
+    bool		m_bAddSpacingAtPages;
+    bool		m_bUseOurTabStops;
+    bool		m_bNoExtLeading;
+    bool		m_bUseLineSpacing;
+    bool		m_bAddTableSpacing;
+    bool		m_bUseObjPos;
+    bool		m_bUseOurTextWrapping;
+    bool		m_bConsiderWrappingStyle;
     bool        m_bExpandWordSpace;
-    bool        m_bIsDefault;
-    bool        m_bIsUser;
+    bool		m_bIsDefault;
+    bool		m_bIsUser;
 
     CompatibilityItem( const String& _rName, const String& _rModule,
                        bool _bUsePrtMetrics, bool _bAddSpacing, bool _bAddSpacingAtPages,
@@ -90,21 +90,21 @@ struct CompatibilityItem
                        bool _bConsiderWrappingStyle, bool _bExpandWordSpace,
                        bool _bIsDefault, bool _bIsUser ) :
 
-        m_sName                 ( _rName ),
-        m_sModule               ( _rModule ),
-        m_bUsePrtMetrics        ( _bUsePrtMetrics ),
-        m_bAddSpacing           ( _bAddSpacing ),
-        m_bAddSpacingAtPages    ( _bAddSpacingAtPages ),
-        m_bUseOurTabStops       ( _bUseOurTabStops ),
-        m_bNoExtLeading         ( _bNoExtLeading ),
-        m_bUseLineSpacing       ( _bUseLineSpacing ),
-        m_bAddTableSpacing      ( _bAddTableSpacing ),
-        m_bUseObjPos            ( _bUseObjPos ),
-        m_bUseOurTextWrapping   ( _bUseOurTextWrapping ),
+        m_sName					( _rName ),
+        m_sModule				( _rModule ),
+        m_bUsePrtMetrics		( _bUsePrtMetrics ),
+        m_bAddSpacing			( _bAddSpacing ),
+        m_bAddSpacingAtPages	( _bAddSpacingAtPages ),
+        m_bUseOurTabStops		( _bUseOurTabStops ),
+        m_bNoExtLeading			( _bNoExtLeading ),
+        m_bUseLineSpacing		( _bUseLineSpacing ),
+        m_bAddTableSpacing		( _bAddTableSpacing ),
+        m_bUseObjPos			( _bUseObjPos ),
+        m_bUseOurTextWrapping	( _bUseOurTextWrapping ),
         m_bConsiderWrappingStyle( _bConsiderWrappingStyle ),
         m_bExpandWordSpace      ( _bExpandWordSpace ),
-        m_bIsDefault            ( _bIsDefault ),
-        m_bIsUser               ( _bIsUser ) {}
+        m_bIsDefault			( _bIsDefault ),
+        m_bIsUser				( _bIsUser ) {}
 };
 
 #include <vector>
@@ -113,7 +113,7 @@ struct SwCompatibilityOptPage_Impl
 {
     typedef vector< CompatibilityItem > SwCompatibilityItemList;
 
-    SwCompatibilityItemList     m_aList;
+    SwCompatibilityItemList		m_aList;
 };
 
 // class SwCompatibilityOptPage ------------------------------------------
@@ -122,18 +122,18 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
 
     SfxTabPage( pParent, SW_RES( TP_OPTCOMPATIBILITY_PAGE ), rSet ),
 
-    m_aMainFL           ( this, SW_RES( FL_MAIN ) ),
-    m_aFormattingFT     ( this, SW_RES( FT_FORMATTING ) ),
-    m_aFormattingLB     ( this, SW_RES( LB_FORMATTING ) ),
-    m_aOptionsFT        ( this, SW_RES( FT_OPTIONS ) ),
-    m_aOptionsLB        ( this, SW_RES( LB_OPTIONS ) ),
-    m_aResetPB          ( this, SW_RES( PB_RESET ) ),
-    m_aDefaultPB        ( this, SW_RES( PB_DEFAULT ) ),
-    m_sUserEntry        (       SW_RES( STR_USERENTRY ) ),
-    m_sUseAsDefaultQuery(       SW_RES( STR_QRYBOX_USEASDEFAULT ) ),
-    m_pWrtShell         ( NULL ),
-    m_pImpl             ( new SwCompatibilityOptPage_Impl ),
-    m_nSavedOptions     ( 0 )
+    m_aMainFL			( this, SW_RES( FL_MAIN ) ),
+    m_aFormattingFT		( this, SW_RES( FT_FORMATTING ) ),
+    m_aFormattingLB		( this, SW_RES( LB_FORMATTING ) ),
+    m_aOptionsFT		( this, SW_RES( FT_OPTIONS ) ),
+    m_aOptionsLB		( this, SW_RES( LB_OPTIONS ) ),
+    m_aResetPB			( this, SW_RES( PB_RESET ) ),
+    m_aDefaultPB		( this, SW_RES( PB_DEFAULT ) ),
+    m_sUserEntry		( 		SW_RES( STR_USERENTRY ) ),
+    m_sUseAsDefaultQuery( 		SW_RES( STR_QRYBOX_USEASDEFAULT ) ),
+    m_pWrtShell			( NULL ),
+    m_pImpl				( new SwCompatibilityOptPage_Impl ),
+    m_nSavedOptions		( 0 )
 
 {
     // init options strings with local resource ids -> so do it before FreeResource()
@@ -437,7 +437,7 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
                     switch ( eOption )
                     {
                         case COPT_USE_PRINTERDEVICE : pItem->m_bUsePrtMetrics = bChecked; break;
-                        case COPT_ADD_SPACING : pItem->m_bAddSpacing = bChecked; break;
+                        case COPT_ADD_SPACING :	pItem->m_bAddSpacing = bChecked; break;
                         case COPT_ADD_SPACING_AT_PAGES : pItem->m_bAddSpacingAtPages = bChecked; break;
                         case COPT_USE_OUR_TABSTOPS : pItem->m_bUseOurTabStops = bChecked; break;
                         case COPT_NO_EXTLEADING : pItem->m_bNoExtLeading = bChecked; break;
@@ -519,7 +519,7 @@ void SwCompatibilityOptPage::WriteOptions()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage*	SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SwCompatibilityOptPage( pParent, rAttrSet );
 }

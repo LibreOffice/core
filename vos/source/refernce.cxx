@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,29 +35,29 @@ using namespace vos;
 
 ORefCount::~ORefCount()
 {
-
+    
 }
 
 
-OReference::OReference()
+OReference::OReference() 
 {
 }
 
-OReference::~OReference()
+OReference::~OReference() 
 {
     VOS_ASSERT(m_RefCount.referenced() == 0);
 }
 
-IReference::RefCount OReference::acquire()
+IReference::RefCount OReference::acquire() 
 {
     return (m_RefCount.acquire());
 }
 
-IReference::RefCount OReference::release()
+IReference::RefCount OReference::release() 
 {
     RefCount Count = m_RefCount.release();
 
-    if (Count == 0)
+    if (Count == 0) 
         delete this;
 
     return (Count);

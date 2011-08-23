@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,19 +46,19 @@ namespace sdr
         }
 
         PageProperties::PageProperties(SdrObject& rObj)
-        :   EmptyProperties(rObj)
+        :	EmptyProperties(rObj)
         {
         }
 
         PageProperties::PageProperties(const PageProperties& rProps, SdrObject& rObj)
-        :   EmptyProperties(rProps, rObj)
+        :	EmptyProperties(rProps, rObj)
         {
         }
 
         PageProperties::~PageProperties()
         {
         }
-
+        
         BaseProperties& PageProperties::Clone(SdrObject& rObj) const
         {
             return *(new PageProperties(*this, rObj));
@@ -82,7 +82,7 @@ namespace sdr
         {
             // #86481# simply ignore item setting on page objects
         }
-
+        
         SfxStyleSheet* PageProperties::GetStyleSheet() const
         {
             // overloaded to legally return a 0L pointer here

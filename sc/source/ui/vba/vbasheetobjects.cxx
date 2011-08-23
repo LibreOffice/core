@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -375,7 +375,7 @@ public:
 
 protected:
     uno::Reference< container::XIndexContainer > createForm() throw (uno::RuntimeException);
-
+    
     virtual bool implPickShape( const uno::Reference< drawing::XShape >& rxShape ) const;
     virtual OUString implGetShapeServiceName() const;
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@
 // - Error codes -
 // ---------------
 
-#define SVX_GRAPHICFILTER_ERRCODE_NONE              0x00000000
-#define SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE   0x00000001
-#define SVX_GRAPHICFILTER_UNSUPPORTED_SLOT          0x00000002
+#define SVX_GRAPHICFILTER_ERRCODE_NONE				0x00000000
+#define SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE	0x00000001
+#define SVX_GRAPHICFILTER_UNSUPPORTED_SLOT			0x00000002
 
 // --------------------
 // - SvxGraphicFilter -
@@ -61,8 +61,8 @@ class SvxGraphicFilter
 {
 public:
 
-    static ULONG    ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject );
-    static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
+    static ULONG	ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject );
+    static void		DisableGraphicFilterSlots( SfxItemSet& rSet );
 };
 */
 // -----------------------
@@ -76,47 +76,47 @@ private:
     class PreviewWindow : public Control
     {
     private:
+        
+        GraphicObject	maGraphic;
 
-        GraphicObject   maGraphic;
-
-        virtual void    Paint( const Rectangle& rRect );
+        virtual void	Paint( const Rectangle& rRect );
 
     public:
 
                         PreviewWindow( Window* pParent, const ResId& rResId );
                         ~PreviewWindow();
 
-        void            SetGraphic( const Graphic& rGraphic );
+        void			SetGraphic( const Graphic& rGraphic );
     };
 
 private:
 
-    Timer           maTimer;
-    Link            maModifyHdl;
-    Graphic         maGraphic;
-    double          mfScaleX;
-    double          mfScaleY;
-    Size            maSizePixel;
-    PreviewWindow   maPreview;
-    FixedLine       maFlParameter;
-    OKButton        maBtnOK;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
+    Timer			maTimer;
+    Link			maModifyHdl;
+    Graphic			maGraphic;
+    double			mfScaleX;
+    double			mfScaleY;
+    Size			maSizePixel;
+    PreviewWindow	maPreview;
+    FixedLine		maFlParameter;
+    OKButton		maBtnOK;
+    CancelButton	maBtnCancel;
+    HelpButton		maBtnHelp;
 
                     DECL_LINK( ImplPreviewTimeoutHdl, Timer* pTimer );
                     DECL_LINK( ImplModifyHdl, void* p );
 
 protected:
 
-    const Link&     GetModifyHdl() const { return maModifyHdl; }
-    const Size&     GetGraphicSizePixel() const { return maSizePixel; }
+    const Link&		GetModifyHdl() const { return maModifyHdl; }
+    const Size&		GetGraphicSizePixel() const { return maSizePixel; }
 
-public:
-
+public:				
+                    
                     GraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic );
                     ~GraphicFilterDialog();
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
+    virtual Graphic	GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
 
 // -----------------------
@@ -127,11 +127,11 @@ class GraphicFilterMosaic : public GraphicFilterDialog
 {
 private:
 
-    FixedText       maFtWidth;
-    MetricField     maMtrWidth;
-    FixedText       maFtHeight;
-    MetricField     maMtrHeight;
-    CheckBox        maCbxEdges;
+    FixedText		maFtWidth;
+    MetricField		maMtrWidth;
+    FixedText		maFtHeight;
+    MetricField		maMtrHeight;
+    CheckBox		maCbxEdges;
 
 public:
 
@@ -139,10 +139,10 @@ public:
                                          USHORT nTileWidth, USHORT nTileHeight, BOOL bEnhanceEdges );
                     ~GraphicFilterMosaic();
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    long            GetTileWidth() const { return static_cast<long>(maMtrWidth.GetValue()); }
-    long            GetTileHeight() const { return static_cast<long>(maMtrHeight.GetValue()); }
-    BOOL            IsEnhanceEdges() const { return maCbxEdges.IsChecked(); }
+    virtual Graphic	GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    long			GetTileWidth() const { return static_cast<long>(maMtrWidth.GetValue()); }
+    long			GetTileHeight() const { return static_cast<long>(maMtrHeight.GetValue()); }
+    BOOL			IsEnhanceEdges() const { return maCbxEdges.IsChecked(); }
 };
 
 // -------------------------
@@ -153,9 +153,9 @@ class GraphicFilterSolarize : public GraphicFilterDialog
 {
 private:
 
-    FixedText       maFtThreshold;
-    MetricField     maMtrThreshold;
-    CheckBox        maCbxInvert;
+    FixedText		maFtThreshold;
+    MetricField		maMtrThreshold;
+    CheckBox		maCbxInvert;
 
 public:
 
@@ -163,9 +163,9 @@ public:
                                            BYTE nGreyThreshold, BOOL bInvert );
                     ~GraphicFilterSolarize();
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    BYTE            GetGreyThreshold() const { return( (BYTE) FRound( maMtrThreshold.GetValue() * 2.55 ) ); }
-    BOOL            IsInvert() const { return maCbxInvert.IsChecked(); }
+    virtual Graphic	GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    BYTE			GetGreyThreshold() const { return( (BYTE) FRound( maMtrThreshold.GetValue() * 2.55 ) ); }
+    BOOL			IsInvert() const { return maCbxInvert.IsChecked(); }
 };
 
 // ----------------------
@@ -176,8 +176,8 @@ class GraphicFilterSepia : public GraphicFilterDialog
 {
 private:
 
-    FixedText       maFtSepia;
-    MetricField     maMtrSepia;
+    FixedText		maFtSepia;
+    MetricField		maMtrSepia;
 
 public:
 
@@ -185,8 +185,8 @@ public:
                                         USHORT nSepiaPercent );
                     ~GraphicFilterSepia();
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    USHORT          GetSepiaPercent() const
+    virtual Graphic	GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    USHORT			GetSepiaPercent() const
     { return sal::static_int_cast< USHORT >(maMtrSepia.GetValue()); }
 };
 
@@ -198,8 +198,8 @@ class GraphicFilterPoster : public GraphicFilterDialog
 {
 private:
 
-    FixedText       maFtPoster;
-    NumericField    maNumPoster;
+    FixedText		maFtPoster;
+    NumericField	maNumPoster;
 
 public:
 
@@ -207,8 +207,8 @@ public:
                                          USHORT nPosterColorCount );
                     ~GraphicFilterPoster();
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    USHORT          GetPosterColorCount() const { return( (USHORT) maNumPoster.GetValue() ); }
+    virtual Graphic	GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    USHORT			GetPosterColorCount() const { return( (USHORT) maNumPoster.GetValue() ); }
 };
 
 // -----------------------
@@ -223,22 +223,22 @@ private:
     {
     private:
 
-        Link            maModifyHdl;
+        Link			maModifyHdl;
 
-        virtual void    MouseButtonDown( const MouseEvent& rEvt );
+        virtual void	MouseButtonDown( const MouseEvent& rEvt );
 
     public:
 
-                        EmbossControl( Window* pParent, const ResId& rResId, RECT_POINT eRectPoint ) :
+                        EmbossControl( Window* pParent, const ResId& rResId, RECT_POINT eRectPoint ) : 
                             SvxRectCtl( pParent, rResId ) { SetActualRP( eRectPoint ); }
-
-        void            SetModifyHdl( const Link& rHdl ) { maModifyHdl = rHdl; }
+    
+        void			SetModifyHdl( const Link& rHdl ) { maModifyHdl = rHdl; }
     };
 
 private:
 
-    FixedText       maFtLight;
-    EmbossControl   maCtlLight;
+    FixedText		maFtLight;
+    EmbossControl	maCtlLight;
 
 public:
 
@@ -246,8 +246,8 @@ public:
                                          RECT_POINT eLightSource );
                     ~GraphicFilterEmboss();
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
-    RECT_POINT      GetLightSource() const { return maCtlLight.GetActualRP(); }
+    virtual Graphic	GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    RECT_POINT		GetLightSource() const { return maCtlLight.GetActualRP(); }
 };
 
 #endif

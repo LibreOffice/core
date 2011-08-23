@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@ use diagnostics;
 sub trim;
 sub readRedirectionValues($);
 
-my $usage =
+my $usage = 
    "Usage is: \n subst_template.pl configTemplate redirections policyConfig
-
+   
    configTemplate: The config file which is used for the policy assembly. It
    contains place holders for the binding redirection.
 
@@ -44,7 +44,7 @@ my $usage =
    policyConfig: Name of the file in which we want to write the config file.
 ";
 
-
+              
 if (scalar @ARGV < 3) {
    print $usage;
    exit -1;
@@ -89,20 +89,20 @@ sub readRedirectionValues($)
         if (length($trimmed = trim($_)) == 0) {
             next;
         }
-
+        
     #Skip comment symbol: #
     if ($trimmed =~ /^#/) {
         next;
     }
 
         my @lineParts = split /=/,$_;
-
+        
         #Check if we have valid name value pairs.
         if (scalar @lineParts != 2) {
             print "Error: Values in $ARGV[1] are not correct (Entries must have the form name=value). Invalid line: \n$_\n";
             exit -1;
         }
-
+        
         #Trim the strings and check if they still contain characters
         my $name = trim($lineParts[0]);
         my $value = trim($lineParts[1]);
@@ -110,7 +110,7 @@ sub readRedirectionValues($)
             print "Error: Values in $ARGV[1] are not correct. Invalid line: \n$_\n";
             exit -1;
         }
-
+        
         #Check if we have duplicate key names
         for (keys %redirectionValues) {
             if ( $name eq $_) {
@@ -118,7 +118,7 @@ sub readRedirectionValues($)
                 exit -1;
             }
         }
-
+        
         $redirectionValues{$name} = $value;
     }
     return %redirectionValues;

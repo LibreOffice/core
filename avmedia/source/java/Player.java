@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ public class Player implements javax.media.ControllerListener,
                                com.sun.star.lang.XServiceInfo,
                                com.sun.star.media.XPlayer,
                                com.sun.star.lang.XComponent
-
+                               
 
 {
     private com.sun.star.lang.XMultiServiceFactory maFactory;
@@ -54,7 +54,7 @@ public class Player implements javax.media.ControllerListener,
 
     // -------------------------------------------------------------------------
 
-    public Player( com.sun.star.lang.XMultiServiceFactory aFactory,
+    public Player( com.sun.star.lang.XMultiServiceFactory aFactory, 
                    javax.media.Player aPlayer, String aURL )
     {
         maFactory = aFactory;
@@ -113,9 +113,9 @@ public class Player implements javax.media.ControllerListener,
     {
         return mbStarted;
     }
-
+    
     // -------------------------------------------------------------------------
-
+    
     public synchronized double getDuration()
     {
         return maPlayer.getDuration().getSeconds();
@@ -137,44 +137,44 @@ public class Player implements javax.media.ControllerListener,
     }
 
     // -------------------------------------------------------------------------
-
+    
     public synchronized void setStopTime( double fTime )
     {
         boolean bOldStarted = mbStarted;
-
+                                                                                                                    
         if( mbStarted )
             stop();
-
+                                                                                                                    
         maPlayer.setStopTime( new javax.media.Time( fTime ) );
-
+                                                                                                                    
         if( bOldStarted )
             start();
     }
 
     // -------------------------------------------------------------------------
-
+    
     public synchronized double getStopTime()
     {
         return maPlayer.getStopTime().getSeconds();
     }
 
     // -------------------------------------------------------------------------
-
+    
     public synchronized void setRate( double fRate )
     {
         boolean bOldStarted = mbStarted;
-
+        
         if( mbStarted )
             stop();
 
         maPlayer.setRate( (float) fRate );
-
-        if( bOldStarted )
+        
+        if( bOldStarted )    
             start();
     }
 
     // -------------------------------------------------------------------------
-
+    
     public synchronized double getRate()
     {
         return (double) maPlayer.getRate();
@@ -208,7 +208,7 @@ public class Player implements javax.media.ControllerListener,
     {
         return( maGainControl != null ? (short) maGainControl.getDB() : 0 );
     }
-
+    
     // -------------------------------------------------------------------------
 
     public synchronized void setMute( boolean bSet )
@@ -248,14 +248,14 @@ public class Player implements javax.media.ControllerListener,
     {
         try
         {
-            com.sun.star.media.XPlayerWindow xPlayerWindow = ( ( ( aArgs.length > 1 ) && ( AnyConverter.toInt( aArgs[ 0 ] ) > 0 ) ) ?
-                                                             new PlayerWindow( maFactory, aArgs, maPlayer ) :
+            com.sun.star.media.XPlayerWindow xPlayerWindow = ( ( ( aArgs.length > 1 ) && ( AnyConverter.toInt( aArgs[ 0 ] ) > 0 ) ) ? 
+                                                             new PlayerWindow( maFactory, aArgs, maPlayer ) : 
                                                              null );
-
+            
             // check if it is a real player window (video window)
             if( xPlayerWindow != null && xPlayerWindow.getZoomLevel() == com.sun.star.media.ZoomLevel.NOT_AVAILABLE )
                 xPlayerWindow = null;
-
+            
             return xPlayerWindow;
         }
         catch( com.sun.star.lang.IllegalArgumentException e )
@@ -270,7 +270,7 @@ public class Player implements javax.media.ControllerListener,
     {
         return( (com.sun.star.media.XFrameGrabber) new FrameGrabber( maFactory, maURL ) );
     }
-
+    
     // --------------
     // - XComponent -
     // --------------
@@ -278,7 +278,7 @@ public class Player implements javax.media.ControllerListener,
     public synchronized void addEventListener( com.sun.star.lang.XEventListener xListener )
     {
     }
-
+    
     // -------------------------------------------------------------------------
 
     public synchronized void removeEventListener( com.sun.star.lang.XEventListener xListener )
@@ -286,7 +286,7 @@ public class Player implements javax.media.ControllerListener,
     }
 
     // -------------------------------------------------------------------------
-
+    
     public synchronized void dispose()
     {
         if( maPlayer != null )
@@ -296,7 +296,7 @@ public class Player implements javax.media.ControllerListener,
             maPlayer = null;
         }
     }
-
+        
     // ----------------
     // - XServiceInfo -
     // ----------------

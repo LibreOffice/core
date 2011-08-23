@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@ ModalDialog RID_CALLDLG {
   MOVEABLE = TRUE;
   CLOSEABLE = TRUE;
 //  WinChilds = {
-//  FixedText {
-//    Text = "Aktuelle Parameter";
-//    PosSize = MAP_SYSFONT (10,10,120,8);
-//  };
+//	FixedText {
+//	  Text = "Aktuelle Parameter";
+//	  PosSize = MAP_SYSFONT (10,10,120,8);
+//	};
 //  };
   FixedText RID_RETTYPE {
     PosSize = MAP_SYSFONT (10,70,120,8);
@@ -92,13 +92,13 @@ ModalDialog IDD_ABOUT_DIALOG {
         };
     };
 */
-//  FixedIcon RID_ICON {
-//          Pos = MAP_APPFONT( 20, 26 );
-//          Size = MAP_APPFONT( 20, 20 );
-//          FIXED = Icon  {
-//              FILE = "basic.ico";
-//          };
-//      };
+//	FixedIcon RID_ICON {
+//			Pos = MAP_APPFONT( 20, 26 );
+//			Size = MAP_APPFONT( 20, 20 );
+//			FIXED = Icon  {
+//				FILE = "basic.ico";
+//			};
+//		};
     OKButton RID_OK {
             Pos = MAP_APPFONT( 55, 80 );
             Size = MAP_APPFONT( 40, 14 );
@@ -142,7 +142,7 @@ ModalDialog IDD_FIND_DIALOG {
     Size = MAP_APPFONT( 185, 70 );
     SVLook = TRUE;
     MOVEABLE = TRUE;
-    // CLOSEABLE = TRUE;    // Hat cancelbutton
+    // CLOSEABLE = TRUE; 	// Hat cancelbutton
 
     FixedText RID_FIXEDTEXT1 {
             Pos = MAP_APPFONT( 5, 10 );
@@ -176,7 +176,7 @@ ModalDialog IDD_REPLACE_DIALOG {
     Size = MAP_APPFONT( 185, 88 );
     SVLook = TRUE;
     MOVEABLE = TRUE;
-    // CLOSEABLE = TRUE;    // Hat cancelbutton
+    // CLOSEABLE = TRUE; 	// Hat cancelbutton
     FixedText RID_FIXEDTEXT1 {
             Pos = MAP_APPFONT( 5, 10 );
             Size = MAP_APPFONT( 55, 10 );
@@ -416,13 +416,13 @@ String IDS_DISASWIN {
     TEXT[ en-US ] = "Disassembly";
 };
 //Icon RID_APPICON {
-//  FILE = "basic.ico";
+//	FILE = "basic.ico";
 //};
 //Icon RID_APPICON2 {
-//  FILE = "testtool.ico";
+//	FILE = "testtool.ico";
 //};
 //Icon RID_WORKICON {
-//  FILE = "work.ico";
+//	FILE = "work.ico";
 //};
 
 Bitmap MBP_PLUS {
@@ -532,12 +532,12 @@ Menu RID_EDIT {
     MenuItem  {
         Identifier = RID_EDITUNDO;
         TEXT[ en-US ] = "~Undo";
-//      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
+//		AccelKey = KeyCode { Function = KEYFUNC_CUT; };
         };
     MenuItem  {
         Identifier = RID_EDITREDO;
         TEXT[ en-US ] = "~Redo";
-//      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
+//		AccelKey = KeyCode { Function = KEYFUNC_CUT; };
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -578,7 +578,7 @@ Menu RID_EDIT {
         Identifier = RID_EDITREPEAT;
         TEXT[ en-US ] = "Repeat S~earch";
         AccelKey = KeyCode { Code = KEY_F3; };
-//      AccelKey = KeyCode { Function = KEYFUNC_REPEAT; };
+//		AccelKey = KeyCode { Function = KEYFUNC_REPEAT; };
         };
     };
 };
@@ -607,11 +607,11 @@ Menu RID_RUN {
         TEXT[ en-US ] = "Si~ngle Step over Procedure";
         AccelKey = KeyCode { Code = KEY_F10; };
         };
-//  MenuItem  {
-//      Identifier = RID_RUNTOCURSOR;
-//      TEXT = "Run to cursor";
-//      AccelKey = KeyCode { Code = KEY_F7; };
-//      };
+//	MenuItem  {
+//		Identifier = RID_RUNTOCURSOR;
+//		TEXT = "Run to cursor";
+//		AccelKey = KeyCode { Code = KEY_F7; };
+//		};
     MenuItem  {
         Identifier = RID_TOGLEBRKPNT;
         TEXT[ en-US ] = "Set / Delete Break Point";
@@ -656,7 +656,7 @@ Menu RID_TT_EXTRAS {
             Identifier = RID_OPTIONS;
             TEXT[ en-US ] = "~Settings";
         };
-/*  comment out till it gets functionality #i26908
+/*	comment out till it gets functionality #i26908
     MenuItem  {
             Identifier = RID_DECLARE_HELPER;
             Text [ en-US ] = "~Record Dialogs";
@@ -665,7 +665,7 @@ Menu RID_TT_EXTRAS {
 };
 Menu RID_WINDOW {
     ITEMLIST = {
-/*  MenuItem  {
+/*	MenuItem  {
             Identifier = RID_WINCASCADE;
             TEXT[ en-US ] = "~Cascade";
         };
@@ -685,7 +685,7 @@ Menu RID_WINDOW {
 };
 Menu RID_HELP {
     ITEMLIST = {
-/*  MenuItem  {
+/*	MenuItem  {
             Identifier = RID_HELPINDEX;
             TEXT = "~Index";
         };
@@ -710,7 +710,7 @@ Menu RID_HELP {
     MenuItem  {
             SEPARATOR = TRUE;
         };
-*/  MenuItem  {
+*/	MenuItem  {
             ABOUT = TRUE;
             Identifier = RID_HELPABOUT;
             TEXT[ en-US ] = "~About...";
@@ -1191,12 +1191,12 @@ FloatingWindow IDD_DISPLAY_HID {
             Border = TRUE;
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 260, 14 );
-/*          ItemList = {
+/*			ItemList = {
             ToolBoxItem  {
                     Text = "erster der Toolbox";
                 };
             };*/
-//          Hide = TRUE;
+//			Hide = TRUE;
         };
     FixedText RID_FT_CONTROLS {
             Pos = MAP_APPFONT( 4, 16 );
@@ -1278,22 +1278,22 @@ Accelerator MAIN_ACCEL {
             Identifier = RID_QUIT;
             Key = KeyCode { Function = KEYFUNC_QUIT; };
         };
-//  AcceleratorItem  {
-//          Identifier = RID_EDITCUT;
-//          Key = KeyCode { Function = KEYFUNC_CUT; };
-//      };
-//  AcceleratorItem  {
-//          Identifier = RID_EDITCOPY;
-//          Key = KeyCode { Function = KEYFUNC_COPY; };
-//      };
-//  AcceleratorItem  {
-//          Identifier = RID_EDITPASTE;
-//          Key = KeyCode { Function = KEYFUNC_PASTE; };
-//      };
-//  AcceleratorItem  {
-//          Identifier = RID_EDITDEL;
-//          Key = KeyCode { Function = KEYFUNC_DELETE; };
-//      };
+//	AcceleratorItem  {
+//			Identifier = RID_EDITCUT;
+//			Key = KeyCode { Function = KEYFUNC_CUT; };
+//		};
+//	AcceleratorItem  {
+//			Identifier = RID_EDITCOPY;
+//			Key = KeyCode { Function = KEYFUNC_COPY; };
+//		};
+//	AcceleratorItem  {
+//			Identifier = RID_EDITPASTE;
+//			Key = KeyCode { Function = KEYFUNC_PASTE; };
+//		};
+//	AcceleratorItem  {
+//			Identifier = RID_EDITDEL;
+//			Key = KeyCode { Function = KEYFUNC_DELETE; };
+//		};
     AcceleratorItem  {
             Identifier = RID_EDITSEARCH;
             Key = KeyCode { Function = KEYFUNC_FIND; };
@@ -1301,7 +1301,7 @@ Accelerator MAIN_ACCEL {
     AcceleratorItem  {
             Identifier = RID_EDITREPEAT;
             Key = KeyCode { Code = KEY_F3; };
-//          Key = KeyCode { Function = KEYFUNC_REPEAT; };
+//			Key = KeyCode { Function = KEYFUNC_REPEAT; };
         };
     AcceleratorItem  {
             Identifier = RID_RUNSTART;

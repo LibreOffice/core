@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,21 +41,21 @@
 
 class XMXLockBytes : public SvLockBytes
 {
-    REF( NMSP_IO::XInputStream )    mxIStm;
-    SEQ( sal_Int8 )                 maSeq;
+    REF( NMSP_IO::XInputStream ) 	mxIStm;
+    SEQ( sal_Int8 )					maSeq;
 
                                     XMXLockBytes();
 
 public:
 
                                     XMXLockBytes( const REF( NMSP_IO::XInputStream )& rxIStm );
-    virtual                         ~XMXLockBytes();
+    virtual							~XMXLockBytes();
 
-    virtual ErrCode                 ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const;
-    virtual ErrCode                 WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten );
-    virtual ErrCode                 Flush() const;
-    virtual ErrCode                 SetSize( sal_Size nSize );
-    virtual ErrCode                 Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
+    virtual ErrCode					ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const;
+    virtual ErrCode					WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten );
+    virtual ErrCode					Flush() const;
+    virtual ErrCode					SetSize( sal_Size nSize );
+    virtual ErrCode					Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
 };
 
 // ------------------------------------------------------------------------
@@ -65,8 +65,8 @@ XMXLockBytes::XMXLockBytes( const REF( NMSP_IO::XInputStream )& rxIStm ) :
 {
     if( mxIStm.is() )
     {
-        const sal_uInt32    nBytesToRead = 65535;
-        sal_uInt32          nRead;
+        const sal_uInt32	nBytesToRead = 65535;
+        sal_uInt32			nRead;
 
         do
         {
@@ -95,8 +95,8 @@ XMXLockBytes::~XMXLockBytes()
 
 ErrCode XMXLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const
 {
-    const sal_Size      nSeqLen = maSeq.getLength();
-    ErrCode             nErr = ERRCODE_NONE;
+    const sal_Size		nSeqLen = maSeq.getLength();
+    ErrCode				nErr = ERRCODE_NONE;
 
     if( nPos < nSeqLen )
     {
@@ -164,11 +164,11 @@ REF( NMSP_IO::XInputStream ) SAL_CALL XMLExtractor::extract( const REF( NMSP_IO:
 
     if( rxIStm.is() )
     {
-        SvStream        aIStm( new XMXLockBytes( rxIStm ) );
-        SvStorageRef    aStorage( new SvStorage( aIStm ) );
-        String          aStmName;
-        const String    aFormat1( String::CreateFromAscii( "XMLFormat" ) );
-        const String    aFormat2( String::CreateFromAscii( "XMLFormat2" ) );
+        SvStream		aIStm( new XMXLockBytes( rxIStm ) );
+        SvStorageRef	aStorage( new SvStorage( aIStm ) );
+        String			aStmName;
+        const String	aFormat1( String::CreateFromAscii( "XMLFormat" ) );
+        const String	aFormat2( String::CreateFromAscii( "XMLFormat2" ) );
 
         if( aStorage->IsContained( aFormat2 ) )
             aStmName = aFormat2;
@@ -181,8 +181,8 @@ REF( NMSP_IO::XInputStream ) SAL_CALL XMLExtractor::extract( const REF( NMSP_IO:
 
             if( xStream.Is() )
             {
-                SvMemoryStream* pMemStm = new SvMemoryStream( 65535, 65535 );
-                ZCodec          aCodec;
+                SvMemoryStream*	pMemStm = new SvMemoryStream( 65535, 65535 );
+                ZCodec			aCodec;
 
                 aCodec.BeginCompression( ZCODEC_BEST_COMPRESSION );
                 aCodec.Decompress( *xStream, *pMemStm );

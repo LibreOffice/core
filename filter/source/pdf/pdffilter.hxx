@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,8 +71,8 @@ class PDFFilter : public cppu::WeakImplHelper4 < XFilter,
 {
 private:
 
-    Reference< XMultiServiceFactory >   mxMSF;
-    Reference< XComponent >             mxSrcDoc;
+    Reference< XMultiServiceFactory >	mxMSF;
+    Reference< XComponent >				mxSrcDoc;
 
     sal_Bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
 
@@ -94,9 +94,9 @@ protected:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
 
 public:
-
+    
                 PDFFilter( const Reference< XMultiServiceFactory >& rxMSF );
-    virtual     ~PDFFilter();
+    virtual		~PDFFilter();
 };
 
 // -----------------------------------------------------------------------------
@@ -106,12 +106,12 @@ OUString PDFFilter_getImplementationName ()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName ) 
     throw ( RuntimeException );
 
 // -----------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  ) 
     throw ( RuntimeException );
 
 // -----------------------------------------------------------------------------

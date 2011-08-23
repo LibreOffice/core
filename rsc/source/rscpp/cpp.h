@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@ extern FILE *pCppOut;                                   /* BP */
 #if OSL_DEBUG_LEVEL > 1
 extern FILE *pDefOut;                                   /* ER */
 #ifdef EVALDEFS
-#define NEVALBUF        2048
+#define NEVALBUF		2048
 #endif
 #endif
 
 /* limit for reading commandfiles */
-#define PARALIMIT       100
+#define	PARALIMIT		100
 
 #ifndef EOS
 /*
@@ -61,20 +61,20 @@ extern FILE *pDefOut;                                   /* ER */
 #define TOK_SEP         0x1E            /* Token concatenation delim.   */
 #define COM_SEP         0x1F            /* Magic comment separator      */
 
-#ifdef  EBCDIC
-#define HT              0x05            /* horizontal tab               */
-#define NL              0x15            /* new line                     */
-#define CR              0x0D            /* carriage return              */
-#define DEL             0x07
+#ifdef 	EBCDIC
+#define HT				0x05			/* horizontal tab				*/
+#define NL				0x15			/* new line						*/
+#define CR				0x0D			/* carriage return				*/
+#define DEL				0x07
 #else
-#define HT              0x09            /* horizontal tab               */
-#define NL              0x0A            /* new line                     */
-#define CR              0x0D            /* carriage return              */
-#define DEL             0x7F
+#define HT				0x09			/* horizontal tab				*/
+#define NL				0x0A			/* new line						*/
+#define CR				0x0D			/* carriage return				*/
+#define DEL				0x7F
 #endif
 
 
-#ifdef  SOLAR
+#ifdef 	SOLAR
 #define MAC_PARM        0x01            /* Macro formals start here     */
 #else
 /*
@@ -84,7 +84,7 @@ extern FILE *pDefOut;                                   /* ER */
  * value is reserved for string substitution.
  */
 
-#define MAC_PARM        DEL             /* Macro formals start here     */
+#define MAC_PARM        DEL				/* Macro formals start here     */
 #if PAR_MAC >= 33
         assertion fails -- PAR_MAC is not less than 33
 #endif
@@ -277,11 +277,11 @@ extern char     *workp;                 /* Free space in work           */
 #if OSL_DEBUG_LEVEL > 1
 extern int      debug;                  /* Debug level                  */
 /* ER dump & evaluate #define's */
-extern int      bDumpDefs;              /* TRUE if #define's dump req.  */
-extern int      bIsInEval;              /* TRUE if #define dumping now  */
+extern int      bDumpDefs;				/* TRUE if #define's dump req.  */
+extern int		bIsInEval;				/* TRUE if #define dumping now  */
 #ifdef EVALDEFS
-extern char     EvalBuf[NEVALBUF + 1];  /* evaluation buffer            */
-extern int      nEvalOff;               /* offset to free buffer pos    */
+extern char		EvalBuf[NEVALBUF + 1];	/* evaluation buffer            */
+extern int		nEvalOff;				/* offset to free buffer pos	*/
 #endif
 #endif
 extern int      keepcomments;           /* Don't remove comments if set */

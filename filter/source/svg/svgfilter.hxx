@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,20 +35,14 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#ifdef SOLAR_JAVA
 #include <com/sun/star/document/XImporter.hpp>
-#endif // SOLAR_JAVA
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase1.hxx>
-#ifdef SOLAR_JAVA
-#include <cppuhelper/implbase5.hxx>
-#else // !SOLAR_JAVA
 #include <cppuhelper/implbase4.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -116,19 +110,19 @@ private:
 
 protected:
 
-    virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( BOOL /* bUsed */ ) {}
-    virtual void            _ExportAutoStyles() {}
-    virtual void            _ExportContent() {}
-    virtual void            _ExportMasterStyles() {}
-    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) { return 0; }
-
-public:
-
-    SVGExport(
+    virtual void			_ExportMeta() {}
+    virtual void			_ExportStyles( BOOL /* bUsed */ ) {}
+    virtual void			_ExportAutoStyles() {}
+    virtual void			_ExportContent() {}
+    virtual void			_ExportMasterStyles() {}
+    virtual sal_uInt32		exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) { return 0; }
+                            
+public:						
+                            
+    SVGExport( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const Reference< XDocumentHandler >& rxHandler );
-    virtual                 ~SVGExport();
+    virtual					~SVGExport();
 };
 
 // ------------------------
@@ -139,23 +133,23 @@ class ObjectRepresentation
 {
 private:
 
-    Reference< XInterface >         mxObject;
-    GDIMetaFile*                    mpMtf;
-
-public:
-
+    Reference< XInterface >			mxObject;
+    GDIMetaFile*					mpMtf;
+                                    
+public:								
+                                    
                                     ObjectRepresentation();
-                                    ObjectRepresentation( const Reference< XInterface >& rxIf,
+                                    ObjectRepresentation( const Reference< XInterface >& rxIf, 
                                                           const GDIMetaFile& rMtf );
                                     ObjectRepresentation( const ObjectRepresentation& rPresentation );
                                     ~ObjectRepresentation();
+                                    
+    ObjectRepresentation&			operator=( const ObjectRepresentation& rPresentation );
+    bool							operator==( const ObjectRepresentation& rPresentation ) const;
 
-    ObjectRepresentation&           operator=( const ObjectRepresentation& rPresentation );
-    bool                            operator==( const ObjectRepresentation& rPresentation ) const;
-
-    const Reference< XInterface >&  GetObject() const { return mxObject; }
-    sal_Bool                        HasRepresentation() const { return mpMtf != NULL; }
-    const GDIMetaFile&              GetRepresentation() const { return *mpMtf; }
+    const Reference< XInterface >&	GetObject() const { return mxObject; }	
+    sal_Bool						HasRepresentation() const { return mpMtf != NULL; }
+    const GDIMetaFile&				GetRepresentation() const { return *mpMtf; }	
 };
 
 // ---------------------------
@@ -175,101 +169,82 @@ class SVGFontExport;
 class SVGActionWriter;
 class EditFieldInfo;
 
-#ifdef SOLAR_JAVA
-class SVGFilter : public cppu::WeakImplHelper5 < XFilter,
+class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
                                                  XImporter,
                                                  XExporter,
-                                                 XInitialization,
-                                                 XServiceInfo >
-#else // !SOLAR_JAVA
-class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
-                                                 XExporter,
-                                                 XInitialization,
-                                                 XServiceInfo >
-#endif
+                                                 XExtendedFilterDetection >
 {
     typedef ::std::hash_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
 
 private:
 
-    Reference< XMultiServiceFactory >   mxMSF;
-    SvXMLElementExport*                 mpSVGDoc;
-    SVGExport*                          mpSVGExport;
-    SVGFontExport*                      mpSVGFontExport;
-    SVGActionWriter*                    mpSVGWriter;
-    SdrPage*                            mpDefaultSdrPage;
-    SdrModel*                           mpSdrModel;
-    sal_Bool                            mbPresentation;
+    Reference< XMultiServiceFactory >	mxMSF;
+    SvXMLElementExport*					mpSVGDoc;
+    SVGExport*							mpSVGExport;
+    SVGFontExport*						mpSVGFontExport;
+    SVGActionWriter*					mpSVGWriter;
+    SdrPage*							mpDefaultSdrPage;
+    SdrModel*							mpSdrModel;
+    sal_Bool							mbPresentation;
 
-    ObjectMap*                          mpObjects;
-    Reference< XComponent >             mxSrcDoc;
-#ifdef SOLAR_JAVA
-    Reference< XComponent >             mxDstDoc;
-#endif
-    Reference< XDrawPage >              mxDefaultPage;
-    Link                                maOldFieldHdl;
+    ObjectMap*							mpObjects;
+    Reference< XComponent >				mxSrcDoc;
+    Reference< XComponent >				mxDstDoc;
+    Reference< XDrawPage > 				mxDefaultPage;
+    Link								maOldFieldHdl;
 
-#ifdef SOLAR_JAVA
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
-#endif
 
     sal_Bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
     Reference< XDocumentHandler >       implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
-    sal_Bool                            implGenerateMetaData( const Reference< XDrawPages >& rxMasterPages,
+    sal_Bool							implGenerateMetaData( const Reference< XDrawPages >& rxMasterPages, 
                                                               const Reference< XDrawPages >& rxDrawPages );
-    sal_Bool                            implGenerateScript( const Reference< XDrawPages >& rxMasterPages,
+    sal_Bool                            implGenerateScript( const Reference< XDrawPages >& rxMasterPages, 
                                                             const Reference< XDrawPages >& rxDrawPages );
 
-    sal_Bool                            implExportDocument( const Reference< XDrawPages >& rxMasterPages,
+    sal_Bool							implExportDocument( const Reference< XDrawPages >& rxMasterPages,
                                                             const Reference< XDrawPages >& rxDrawPages,
                                                             sal_Int32 nPageToExport );
-
-    sal_Bool                            implExportPages( const Reference< XDrawPages >& rxPages,
+    
+    sal_Bool							implExportPages( const Reference< XDrawPages >& rxPages,
                                                          sal_Int32 nFirstPage, sal_Int32 nLastPage,
                                                          sal_Int32 nVisiblePage, sal_Bool bMaster );
-
-    sal_Bool                            implExportShapes( const Reference< XShapes >& rxShapes );
+    
+    sal_Bool							implExportShapes( const Reference< XShapes >& rxShapes );
     sal_Bool                            implExportShape( const Reference< XShape >& rxShape );
 
-    sal_Bool                            implCreateObjects( const Reference< XDrawPages >& rxMasterPages,
+    sal_Bool							implCreateObjects( const Reference< XDrawPages >& rxMasterPages,
                                                            const Reference< XDrawPages >& rxDrawPages,
                                                            sal_Int32 nPageToExport );
-    sal_Bool                            implCreateObjectsFromShapes( const Reference< XShapes >& rxShapes );
+    sal_Bool							implCreateObjectsFromShapes( const Reference< XShapes >& rxShapes );
     sal_Bool                            implCreateObjectsFromShape( const Reference< XShape >& rxShape );
-    sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
-
-    ::rtl::OUString                     implGetDescriptionFromShape( const Reference< XShape >& rxShape );
-    ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
-
+    sal_Bool							implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
+    
+    ::rtl::OUString						implGetDescriptionFromShape( const Reference< XShape >& rxShape );
+    ::rtl::OUString						implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+    
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );
-
+    
 protected:
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException);
     virtual void SAL_CALL cancel( ) throw (RuntimeException);
 
-#ifdef SOLAR_JAVA
     // XImporter
     virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
-#endif
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
 
-    // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
+    // XExtendedFilterDetection
+    virtual rtl::OUString SAL_CALL detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException);
 
 public:
-
-                SVGFilter( const Reference< XMultiServiceFactory > &rxMSF );
-    virtual     ~SVGFilter();
+    
+    explicit SVGFilter( const Reference< XComponentContext >& rxCtx );
+    virtual	~SVGFilter();
 };
 
 // -----------------------------------------------------------------------------
@@ -279,12 +254,12 @@ public:
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL SVGFilter_supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SVGFilter_supportsService( const ::rtl::OUString& ServiceName ) 
     throw ( ::com::sun::star::uno::RuntimeException );
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SVGFilter_getSupportedServiceNames(  )
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SVGFilter_getSupportedServiceNames(  ) 
     throw ( ::com::sun::star::uno::RuntimeException );
 
 // -----------------------------------------------------------------------------
@@ -292,5 +267,12 @@ sal_Bool SAL_CALL SVGFilter_supportsService( const ::rtl::OUString& ServiceName 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL SVGFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
     throw ( ::com::sun::star::uno::Exception );
+
+// -----------------------------------------------------------------------------
+
+class SvStream;
+class Graphic;
+
+bool importSvg(SvStream & rStream, Graphic & rGraphic );
 
 #endif // SVGFILTER_HXX

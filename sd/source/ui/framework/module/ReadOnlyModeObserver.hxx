@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ public:
     ReadOnlyModeObserver (
         const ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
     virtual ~ReadOnlyModeObserver (void);
-
+    
     virtual void SAL_CALL disposing (void);
 
 
@@ -97,7 +97,7 @@ public:
         const com::sun::star::lang::EventObject& rEvent)
         throw (com::sun::star::uno::RuntimeException);
 
-
+    
     // frame::XStatusListener
 
     /** Called by slot state change broadcasters.
@@ -107,9 +107,9 @@ public:
         statusChanged (
             const ::com::sun::star::frame::FeatureStateEvent& rState)
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     // XConfigurationChangeListener
-
+    
     virtual void SAL_CALL notifyConfigurationChange (
         const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,12 +69,12 @@ SfxCompareSlots_Impl( const void* pSmaller, const void* pBigger )
 
 struct SfxObjectUI_Impl
 {
-    USHORT  nPos;
-    ResId   aResId;
-    BOOL    bVisible;
-    BOOL    bContext;
+    USHORT	nPos;
+    ResId	aResId;
+    BOOL	bVisible;
+    BOOL	bContext;
     String* pName;
-    sal_uInt32  nFeature;
+    sal_uInt32	nFeature;
 
     SfxObjectUI_Impl(USHORT n, const ResId& rResId, BOOL bVis, sal_uInt32 nFeat) :
         nPos(n),
@@ -97,11 +97,11 @@ DECL_PTRARRAY(SfxObjectUIArr_Impl, SfxObjectUI_Impl*, 2, 2)
 
 struct SfxInterface_Impl
 {
-    SfxObjectUIArr_Impl*    pObjectBars;    // registered ObjectBars
-    SfxObjectUIArr_Impl*    pChildWindows;  // registered ChildWindows
-    ResId                   aPopupRes;      // registered PopupMenu
-    ResId                   aStatBarRes;    // registered StatusBar
-    SfxModule*              pModule;
+    SfxObjectUIArr_Impl*	pObjectBars;	// registered ObjectBars
+    SfxObjectUIArr_Impl*	pChildWindows;	// registered ChildWindows
+    ResId					aPopupRes;		// registered PopupMenu
+    ResId					aStatBarRes;	// registered StatusBar
+    SfxModule*				pModule;
     BOOL                    bRegistered;
 
     SfxInterface_Impl() :
@@ -350,7 +350,7 @@ const SfxSlot* SfxInterface::GetSlot( const String& rCommand ) const
 
     for ( USHORT n=0; n<nCount; n++ )
     {
-        if ( (pSlots+n)->pUnoName &&
+        if ( (pSlots+n)->pUnoName && 
              aCommand.CompareIgnoreCaseToAscii( (pSlots+n)->GetUnoName() ) == COMPARE_EQUAL )
             return pSlots+n;
     }

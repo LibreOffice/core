@@ -12,7 +12,7 @@
 
 STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] =
+    static const IID* arr[] = 
     {
         &IID_ISODispatchInterceptor,
     };
@@ -70,7 +70,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
         aArgs[0] = CComVariant( nSearchFlags );
         aArgs[1] = CComVariant( aTargetFrameName );
         aArgs[2] = CComVariant( aURL );
-
+        
         hr = ExecuteFunc( m_xSlave, L"queryDispatch", aArgs, 3, &aResult );
         if( !SUCCEEDED( hr ) || aResult.vt != VT_DISPATCH || aResult.pdispVal == NULL )
         {
@@ -90,9 +90,9 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
 
 STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, SAFEARRAY FAR* FAR* retVal)
 {
-    if ( !aDescripts || !retVal || SafeArrayGetDim( aDescripts ) != 1 )
+    if ( !aDescripts || !retVal || SafeArrayGetDim( aDescripts ) != 1 ) 
         return E_FAIL;
-
+    
     long nLB, nUB;
 
     HRESULT hr = SafeArrayGetLBound( aDescripts, 1, &nLB );
@@ -127,7 +127,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
     return S_OK;
 }
 
-
+        
 STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR* aArgs)
 {
     // get url from aURL
@@ -184,19 +184,19 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
 
     return S_OK;
 }
-
+        
 STDMETHODIMP SODispatchInterceptor::addStatusListener( IDispatch FAR* /*xControl*/, IDispatch FAR* /*aURL*/)
 {
     // not implemented
     return S_OK;
 }
-
+       
 STDMETHODIMP SODispatchInterceptor::removeStatusListener( IDispatch FAR* /*xControl*/, IDispatch FAR* /*aURL*/)
 {
     // not implemented
     return S_OK;
 }
-
+       
 STDMETHODIMP SODispatchInterceptor::getInterceptedURLs( SAFEARRAY FAR* FAR* pVal )
 {
     *pVal = SafeArrayCreateVector( VT_BSTR, 0, 3 );

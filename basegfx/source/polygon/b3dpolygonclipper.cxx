@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -245,7 +245,7 @@ namespace basegfx
                             {
                                 impAppendCopy(aNewPolygon, rCandidate, nNextIndex);
                             }
-
+                        
                             // pepare next step
                             aCurrent = aNext;
                         }
@@ -279,7 +279,7 @@ namespace basegfx
                             {
                                 impAppendCopy(aNewPolygon, rCandidate, nNextIndex);
                             }
-
+                        
                             // pepare next step
                             aCurrent = aNext;
                         }
@@ -337,7 +337,7 @@ namespace basegfx
             {
                 const B3DRange aCandidateRange3D(getRange(rCandidate));
                 const B2DRange aCandidateRange(
-                    aCandidateRange3D.getMinX(), aCandidateRange3D.getMinY(),
+                    aCandidateRange3D.getMinX(), aCandidateRange3D.getMinY(), 
                     aCandidateRange3D.getMaxX(), aCandidateRange3D.getMaxY());
 
                 if(rRange.isInside(aCandidateRange))

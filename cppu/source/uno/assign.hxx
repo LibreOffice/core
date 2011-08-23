@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ inline sal_Bool _assignArray(
         {
             ::rtl_uString_assign( (rtl_uString **)pDest + i,
                                   ((rtl_uString **)pSource)[i] );
-        }
+        }		
         bRet = sal_True;
         break;
     case typelib_TypeClass_TYPE:
@@ -164,7 +164,7 @@ inline sal_Bool _assignArray(
         for (i=0; i < nTotalElements; i++)
         {
             _destructAny( (uno_Any *)pDest + i, release );
-            _copyConstructAny( (uno_Any *)pDest + i, (uno_Any *)pSource + i,
+            _copyConstructAny( (uno_Any *)pDest + i, (uno_Any *)pSource + i, 
                                pElementTypeRef, pElementTypeDescr, acquire, 0 );
         }
         bRet = sal_True;
@@ -182,7 +182,7 @@ inline sal_Bool _assignArray(
         {
             bRet = _assignStruct( (sal_Char *)pDest + i * nElementSize,
                                   (sal_Char *)pSource + i * nElementSize,
-                                  (typelib_CompoundTypeDescription *)pElementTypeDescr,
+                                  (typelib_CompoundTypeDescription *)pElementTypeDescr, 
                                   queryInterface, acquire, release );
             if (! bRet)
                 break;
@@ -193,8 +193,8 @@ inline sal_Bool _assignArray(
         for (i=0; i < nTotalElements; i++)
         {
             _destructUnion( (sal_Char*)pDest + i * nElementSize, pElementTypeDescr, release );
-            _copyConstructUnion( (sal_Char*)pDest + i * nElementSize,
-                                 (sal_Char*)pSource + i * nElementSize,
+            _copyConstructUnion( (sal_Char*)pDest + i * nElementSize, 
+                                 (sal_Char*)pSource + i * nElementSize, 
                                  pElementTypeDescr, acquire, 0 );
         }
         bRet = sal_True;
@@ -215,8 +215,8 @@ inline sal_Bool _assignArray(
         for (i=0; i < nTotalElements; i++)
         {
             _assignInterface(
-                (void **)((sal_Char*)pDest + i * nElementSize),
-                *(void **)((sal_Char*)pSource + i * nElementSize),
+                (void **)((sal_Char*)pDest + i * nElementSize), 
+                *(void **)((sal_Char*)pSource + i * nElementSize), 
                 acquire, release );
         }
         bRet = sal_True;
@@ -240,7 +240,7 @@ inline sal_Bool _assignData(
 {
     if (pDest == pSource)
         return _type_equals( pDestType, pSourceType );
-
+    
     if (! pSource)
     {
         _destructData( pDest, pDestType, pDestTypeDescr, release );
@@ -255,7 +255,7 @@ inline sal_Bool _assignData(
         if (pDest == pSource)
             return sal_True;
     }
-
+    
     switch (pDestType->eTypeClass)
     {
     case typelib_TypeClass_VOID:
@@ -613,7 +613,7 @@ inline sal_Bool _assignData(
                     return true;
                 }
             }
-
+            
             // query for interface:
             void * pQueried = _queryInterface( *static_cast<void **>(pSource),
                                                pDestType, queryInterface );

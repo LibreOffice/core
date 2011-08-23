@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ namespace dbaui
     */
     struct FeatureState
     {
-        sal_Bool                    bEnabled;
+        sal_Bool					bEnabled;
 
         optional< bool >            bChecked;
         optional< bool >            bInvisible;
@@ -172,8 +172,8 @@ namespace dbaui
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >
                     xListener;
-        sal_Int32   nId;
-        sal_Bool    bForceBroadcast;
+        sal_Int32	nId;
+        sal_Bool	bForceBroadcast;
     };
 
     // ....................................................................
@@ -213,15 +213,15 @@ namespace dbaui
                                 ,public IController
     {
     private:
-        SupportedFeatures               m_aSupportedFeatures;
+        SupportedFeatures		        m_aSupportedFeatures;
         ::comphelper::NamedValueCollection
                                         m_aInitParameters;
 
         ::std::auto_ptr< OGenericUnoController_Data >
                                         m_pData;
-        ODataView*                      m_pView;                // our (VCL) "main window"
+        ODataView*				        m_pView;				// our (VCL) "main window"
 
-#ifdef DBG_UTIL
+#ifdef DBG_UTIL 
         bool                            m_bDescribingSupportedFeatures;
 #endif
 
@@ -230,8 +230,8 @@ namespace dbaui
         // attributes
         struct DispatchTarget
         {
-            ::com::sun::star::util::URL                 aURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >    xListener;
+            ::com::sun::star::util::URL					aURL;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > 	xListener;
 
             DispatchTarget() { }
             DispatchTarget(const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef) : aURL(rURL), xListener(xRef) { }
@@ -242,32 +242,32 @@ namespace dbaui
 
         FeatureListeners        m_aFeaturesToInvalidate;
 
-        ::osl::Mutex            m_aFeatureMutex;        // locked when features are append to or remove from deque
-        StateCache              m_aStateCache;          // save the current status of feature state
-        Dispatch                m_arrStatusListener;    // all our listeners where we dispatch status changes
-        OAsyncronousLink        m_aAsyncInvalidateAll;
-        OAsyncronousLink        m_aAsyncCloseTask;      // called when a task shoud be closed
+        ::osl::Mutex			m_aFeatureMutex;		// locked when features are append to or remove from deque
+        StateCache				m_aStateCache;			// save the current status of feature state
+        Dispatch				m_arrStatusListener;	// all our listeners where we dispatch status changes
+        OAsyncronousLink		m_aAsyncInvalidateAll;
+        OAsyncronousLink		m_aAsyncCloseTask;		// called when a task shoud be closed
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >         m_xUrlTransformer;      // needed sometimes
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > 		m_xUrlTransformer;		// needed sometimes
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xServiceFactory;
         ControllerFrame                                                                     m_aCurrentFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xMasterDispatcher;    // dito
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xDatabaseContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > 		m_xSlaveDispatcher;		// for intercepting dispatches
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > 		m_xMasterDispatcher;	// dito
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >		m_xDatabaseContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                 m_xTitleHelper;
 
-        sal_Bool                m_bPreview;
-        sal_Bool                m_bReadOnly;
+        sal_Bool				m_bPreview;
+        sal_Bool				m_bReadOnly;
 
-        sal_Bool                m_bCurrentlyModified    : 1;
-        sal_Bool                m_bExternalTitle : 1;
-
+        sal_Bool				m_bCurrentlyModified	: 1;
+        sal_Bool				m_bExternalTitle : 1;
+        
 
 
         // ----------------------------------------------------------------
         // attribute access
-        ::osl::Mutex&               getMutex() const            { return OGenericUnoController_MBASE::getMutex(); }
-        ::cppu::OBroadcastHelper&   getBroadcastHelper()        { return OGenericUnoController_Base::rBHelper; }
+        ::osl::Mutex&				getMutex() const            { return OGenericUnoController_MBASE::getMutex(); }
+        ::cppu::OBroadcastHelper&	getBroadcastHelper()        { return OGenericUnoController_Base::rBHelper; }
 
         // ----------------------------------------------------------------
         // methods
@@ -277,13 +277,13 @@ namespace dbaui
 
 
         /** open the help agent for the given help id.
-            @param  _nHelpId
+            @param	_nHelpId
                 The help id to dispatch.
         */
         void openHelpAgent(sal_Int32 _nHelpId);
 
         /** open the help agent for the given help url.
-            @param  _pHelpStringURL
+            @param	_pHelpStringURL
                 The help url to dispatch.
         */
         void openHelpAgent( const rtl::OUString& _suHelpStringURL );
@@ -299,22 +299,22 @@ namespace dbaui
         void closeTask();
 
         // if getMenu returns a non empty string than this will be dispatched at the frame
-        virtual void            loadMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
+        virtual void			loadMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
 
         /** called when our menu has been loaded into our frame, can be used to load sub toolbars
 
             @param _xLayoutManager
                 The layout manager.
         */
-        virtual void            onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
+        virtual void			onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
 
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures();
+        virtual void			describeSupportedFeatures();
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
+        virtual FeatureState	GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void			Execute(sal_uInt16 nId , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         /** describes a feature supported by the controller
 
@@ -336,7 +336,7 @@ namespace dbaui
                 );
 
         /** returns <TRUE/> if the feature is supported, otherwise <FALSE/>
-            @param  _nId
+            @param	_nId
                 The ID of the feature.
         */
         sal_Bool isFeatureSupported( sal_Int32 _nId );
@@ -434,7 +434,7 @@ namespace dbaui
         virtual sal_Bool Construct(Window* pParent);
 
         /** get the layout manager
-            @param  _xFrame
+            @param	_xFrame
                 The frame to ask for the layout manager.
             @return
                 The layout manager of the frame, can be <NULL/> if the frame isn't initialized.
@@ -482,9 +482,9 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  SAL_CALL getFrame(void) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::frame::XDispatch
-        virtual void        SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw(::com::sun::star::uno::RuntimeException);
-        virtual void        SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw(::com::sun::star::uno::RuntimeException);
-        virtual void        SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw(::com::sun::star::uno::RuntimeException);
+        virtual void 		SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw(::com::sun::star::uno::RuntimeException);
+        virtual void 		SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw(::com::sun::star::uno::RuntimeException);
+        virtual void 		SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::frame::XDispatchProviderInterceptor
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  SAL_CALL getSlaveDispatchProvider(void) throw(::com::sun::star::uno::RuntimeException);
@@ -503,7 +503,7 @@ namespace dbaui
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::frame::XFrameActionListener
-        virtual void        SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void		SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
         // lang::XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 

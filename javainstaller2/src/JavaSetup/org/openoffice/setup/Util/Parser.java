@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,14 @@
 package org.openoffice.setup.Util;
 
 public class Parser {
-
+    
     private Parser() {
     }
 
     static public boolean parseBoolean(String input) {
         boolean value;
         if ( input.equalsIgnoreCase("true")) {
-            value = true;
+            value = true;    
         } else if ( input.equalsIgnoreCase("false")) {
             value = false;
         } else {

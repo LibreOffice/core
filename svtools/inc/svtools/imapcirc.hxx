@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@ class Fraction;
 
 class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 {
-    Point               aCenter;
-    ULONG               nRadius;
+    Point				aCenter;
+    ULONG				nRadius;
 
-    void                ImpConstruct( const Point& rCenter, ULONG nRad, BOOL bPixel );
+    void				ImpConstruct( const Point& rCenter, ULONG nRad, BOOL bPixel );
 
 protected:
 
     // Binaer-Im-/Export
-    virtual void        WriteIMapObject( SvStream& rOStm ) const;
-    virtual void        ReadIMapObject(  SvStream& rIStm );
+    virtual void		WriteIMapObject( SvStream& rOStm ) const;
+    virtual void		ReadIMapObject(  SvStream& rIStm );
 
 public:
 
@@ -63,21 +63,21 @@ public:
                                           const String& rName,
                                           BOOL bActive = TRUE,
                                           BOOL bPixelCoords = TRUE );
-    virtual             ~IMapCircleObject() {};
+    virtual				~IMapCircleObject() {};
 
-    virtual UINT16      GetType() const;
-    virtual BOOL        IsHit( const Point& rPoint ) const;
+    virtual UINT16		GetType() const;
+    virtual BOOL		IsHit( const Point& rPoint ) const;
 
-    Point               GetCenter( BOOL bPixelCoords = TRUE ) const;
-    ULONG               GetRadius( BOOL bPixelCoords = TRUE ) const;
+    Point				GetCenter( BOOL bPixelCoords = TRUE ) const;
+    ULONG				GetRadius( BOOL bPixelCoords = TRUE ) const;
 
     // liefert das BoundRect des Kreis-Objektes in 1/100mm
-    virtual Rectangle   GetBoundRect() const;
+    virtual Rectangle	GetBoundRect() const;
 
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void				Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
-    BOOL                IsEqual( const IMapCircleObject& rEqObj );
+    BOOL				IsEqual( const IMapCircleObject& rEqObj );
 
     // Im-/Export
     void                WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::accessibility;
       beruecksichtigt
 */
 
-#define TREEFLAG_FIXEDHEIGHT        0x0010
+#define TREEFLAG_FIXEDHEIGHT		0x0010
 
 
 DBG_NAME(SvTreeListBox)
@@ -217,7 +217,7 @@ void SvTreeListBox::Resize()
                            SV_LBOXTAB_ADJUST_CENTER |  \
                            SV_LBOXTAB_PUSHABLE)
 
-#define TAB_STARTPOS    2
+#define TAB_STARTPOS	2
 
 // bei Aenderungen GetTextOffset beruecksichtigen
 void SvTreeListBox::SetTabs()
@@ -845,8 +845,8 @@ void SvTreeListBox::ModelHasCleared()
     AdjustEntryHeight( GetDefaultCollapsedEntryBmp() );
 
     SvLBox::ModelHasCleared();
-//  if( IsUpdateMode() )
-//      Invalidate();
+//	if( IsUpdateMode() )
+//		Invalidate();
 }
 
 void SvTreeListBox::ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL /* bShow  */ )
@@ -1034,7 +1034,7 @@ BOOL SvTreeListBox::Collapse( SvLBoxEntry* pParent )
     pHdlEntry = pParent;
     BOOL bCollapsed = FALSE;
 
-    if( ExpandingHdl() )
+    if(	ExpandingHdl() )
     {
         bCollapsed = TRUE;
         pImp->CollapsingEntry( pParent );
@@ -1097,8 +1097,8 @@ void SvTreeListBox::SelectAll( BOOL bSelect, BOOL )
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SelAllDestrAnch(
         bSelect,
-        TRUE,       // Anker loeschen,
-        TRUE );     // auch bei SINGLE_SELECTION den Cursor deselektieren
+        TRUE,		// Anker loeschen,
+        TRUE );		// auch bei SINGLE_SELECTION den Cursor deselektieren
 }
 
 void SvTreeListBox::ModelHasInsertedTree( SvListEntry* pEntry )
@@ -1530,7 +1530,7 @@ void SvTreeListBox::InvalidateEntry( SvLBoxEntry* pEntry )
     if( pEntry )
     {
         GetModel()->InvalidateEntry( pEntry );
-    //  pImp->InvalidateEntry( pEntry );
+    //	pImp->InvalidateEntry( pEntry );
     }
 }
 
@@ -1813,11 +1813,11 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
                 BOOL bNativeOK = FALSE;
                 if ( IsNativeControlSupported( CTRL_LISTNODE, PART_ENTIRE_CONTROL) )
                 {
-                    ImplControlValue    aControlValue;
+                    ImplControlValue	aControlValue;
                     Rectangle           aCtrlRegion( aPos,  pImg->GetSizePixel() );
-                    ControlState        nState = 0;
+                    ControlState		nState = 0;
 
-                    if ( IsEnabled() )  nState |= CTRL_STATE_ENABLED;
+                    if ( IsEnabled() )	nState |= CTRL_STATE_ENABLED;
 
                     if ( IsExpanded(pEntry) )
                         aControlValue.setTristateVal( BUTTONVALUE_ON );//expanded node
@@ -2507,13 +2507,18 @@ void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        nEntryHeight = 0;   // _together_ with TRUE of 1. par (bFont) of InitSettings() a zero-height
-                            //  forces complete recalc of heights!
+        nEntryHeight = 0;	// _together_ with TRUE of 1. par (bFont) of InitSettings() a zero-height
+                            //	forces complete recalc of heights!
         InitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
     else
         Control::DataChanged( rDCEvt );
+}
+
+void SvTreeListBox::StateChanged( StateChangedType i_nStateChange )
+{
+    SvLBox::StateChanged( i_nStateChange );
 }
 
 void SvTreeListBox::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)

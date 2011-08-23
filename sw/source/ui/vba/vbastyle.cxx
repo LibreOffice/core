@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ SwVbaStyle::SwVbaStyle( const uno::Reference< XHelperInterface >& xParent, const
     mxStyle.set( _xPropertySet, uno::UNO_QUERY_THROW );
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaStyle::setName( const ::rtl::OUString& Name ) throw (uno::RuntimeException)
 {
     mxStyle->setName(Name);
 }
 
-::rtl::OUString SAL_CALL
+::rtl::OUString SAL_CALL 
 SwVbaStyle::getName() throw (uno::RuntimeException)
 {
     return mxStyle->getName();
@@ -82,9 +82,9 @@ void SAL_CALL SwVbaStyle::setLanguageID( ::sal_Int32 _languageid ) throw (uno::R
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxStyle, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.ParagraphStyle") ) ) )
         nType = word::WdStyleType::wdStyleTypeParagraph;
-    else if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.CharacterStyle") ) ) )
+    else if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.CharacterStyle") ) ) )    
         nType = word::WdStyleType::wdStyleTypeCharacter;
-    else // if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingStyle") ) ) )
+    else // if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingStyle") ) ) )    
         nType = word::WdStyleType::wdStyleTypeList;
     return nType;
 }

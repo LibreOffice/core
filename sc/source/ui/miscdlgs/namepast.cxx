@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,12 +44,12 @@
 
 ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL bInsList )
     : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
-    aLabelText      ( this, ScResId( FT_LABEL ) ),
-    aNameList       ( this, ScResId( LB_ENTRYLIST ) ),
-    aOKButton       ( this, ScResId( BTN_OK ) ),
-    aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-    aHelpButton     ( this, ScResId( BTN_HELP ) ),
-    aInsListButton  ( this, ScResId( BTN_ADD ) )
+    aLabelText		( this, ScResId( FT_LABEL ) ),
+    aNameList		( this, ScResId( LB_ENTRYLIST ) ),
+    aOKButton		( this, ScResId( BTN_OK ) ),
+    aCancelButton	( this, ScResId( BTN_CANCEL ) ),
+    aHelpButton		( this, ScResId( BTN_HELP ) ),
+    aInsListButton	( this, ScResId( BTN_ADD ) )
 {
     if( ! bInsList )
         aInsListButton.Disable();
@@ -59,8 +59,8 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL
     aNameList.SetSelectHdl( LINK( this,ScNamePasteDlg,ListSelHdl) );
     aNameList.SetDoubleClickHdl( LINK( this,ScNamePasteDlg,ListDblClickHdl) );
 
-    USHORT  nCnt = pList->GetCount();
-    String  aText;
+    USHORT	nCnt = pList->GetCount();
+    String	aText;
 
     for( USHORT i=0 ; i<nCnt ; i++ )
     {

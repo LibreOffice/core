@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,12 +86,12 @@ namespace slideshow
             ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewAppletShape::ViewAppletShape(): Invalid ViewLayer canvas" );
             ENSURE_OR_THROW( mxComponentContext.is(), "ViewAppletShape::ViewAppletShape(): Invalid component context" );
 
-            uno::Reference<lang::XMultiComponentFactory> xFactory(
+            uno::Reference<lang::XMultiComponentFactory> xFactory( 
                 mxComponentContext->getServiceManager(),
                 uno::UNO_QUERY_THROW );
 
             mxViewer.set( xFactory->createInstanceWithContext( rServiceName,
-                                                               mxComponentContext),
+                                                               mxComponentContext), 
                           uno::UNO_QUERY_THROW );
 
             uno::Reference< beans::XPropertySet > xShapePropSet( rxShape,
@@ -105,20 +105,20 @@ namespace slideshow
             {
                 aPropName = ::rtl::OUString::createFromAscii( pPropCopyTable[i] );
                 mxViewerPropSet->setPropertyValue( aPropName,
-                                                   xShapePropSet->getPropertyValue(
+                                                   xShapePropSet->getPropertyValue( 
                                                        aPropName ));
             }
         }
 
         // ---------------------------------------------------------------------
-
+                
         ViewAppletShape::~ViewAppletShape()
-        {
+        {		
             try
             {
                 endApplet();
             }
-            catch (uno::Exception &)
+            catch (uno::Exception &) 
             {
                 OSL_ENSURE( false, rtl::OUStringToOString(
                                 comphelper::anyToString(
@@ -135,7 +135,7 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-
+        
         bool ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
             ENSURE_OR_RETURN_FALSE( mpViewLayer && mpViewLayer->getCanvas() && mpViewLayer->getCanvas()->getUNOCanvas().is(),
@@ -143,25 +143,25 @@ namespace slideshow
             try
             {
                 ::cppcanvas::CanvasSharedPtr pCanvas = mpViewLayer->getCanvas();
-
+                    
                 uno::Reference< beans::XPropertySet > xPropSet( pCanvas->getUNOCanvas()->getDevice(),
                                                                 uno::UNO_QUERY_THROW );
-
-                uno::Reference< awt::XWindow2 > xParentWindow(
-                    xPropSet->getPropertyValue(
+            
+                uno::Reference< awt::XWindow2 > xParentWindow( 
+                    xPropSet->getPropertyValue( 
                         ::rtl::OUString::createFromAscii( "Window" )),
                     uno::UNO_QUERY_THROW );
 
-                uno::Reference<lang::XMultiComponentFactory> xFactory(
+                uno::Reference<lang::XMultiComponentFactory> xFactory( 
                     mxComponentContext->getServiceManager() );
-
+            
                 if( xFactory.is() )
                 {
                     // create an awt window to contain the applet
                     // ==========================================
 
                     uno::Reference< awt::XToolkit > xToolkit(
-                        xFactory->createInstanceWithContext(
+                        xFactory->createInstanceWithContext( 
                             ::rtl::OUString::createFromAscii( "com.sun.star.awt.Toolkit" ),
                             mxComponentContext ),
                         uno::UNO_QUERY_THROW );
@@ -172,12 +172,12 @@ namespace slideshow
                                                                                                 uno::UNO_QUERY_THROW),
                                                              0,
                                                              awt::Rectangle(),
-                                                             awt::WindowAttribute::SHOW
+                                                             awt::WindowAttribute::SHOW 
                                                              | awt::VclWindowPeerAttribute::CLIPCHILDREN );
 
-                    uno::Reference< awt::XWindowPeer > xNewWinPeer(
+                    uno::Reference< awt::XWindowPeer > xNewWinPeer( 
                         xToolkit->createWindow( aOwnWinDescriptor ));
-                    uno::Reference< awt::XWindow > xOwnWindow( xNewWinPeer,
+                    uno::Reference< awt::XWindow > xOwnWindow( xNewWinPeer, 
                                                                uno::UNO_QUERY_THROW );
 
 
@@ -185,16 +185,16 @@ namespace slideshow
                     // ===========================================
 
                     mxFrame.set(
-                        xFactory->createInstanceWithContext(
+                        xFactory->createInstanceWithContext( 
                             ::rtl::OUString::createFromAscii( "com.sun.star.frame.Frame" ),
                             mxComponentContext ),
                         uno::UNO_QUERY_THROW );
 
                     mxFrame->initialize( xOwnWindow );
 
-                    uno::Reference < frame::XSynchronousFrameLoader > xLoader( mxViewer,
+                    uno::Reference < frame::XSynchronousFrameLoader > xLoader( mxViewer, 
                                                                                uno::UNO_QUERY_THROW );
-                    xLoader->load( uno::Sequence < beans::PropertyValue >(),
+                    xLoader->load( uno::Sequence < beans::PropertyValue >(), 
                                    mxFrame );
 
 
@@ -202,29 +202,29 @@ namespace slideshow
                     // ==========================================================
 
                     ::basegfx::B2DRange aTmpRange;
-                    ::canvas::tools::calcTransformedRectBounds( aTmpRange,
-                                                                rBounds,
+                    ::canvas::tools::calcTransformedRectBounds( aTmpRange, 
+                                                                rBounds, 
                                                                 mpViewLayer->getTransformation() );
                     const ::basegfx::B2IRange& rPixelBounds(
                         ::basegfx::unotools::b2ISurroundingRangeFromB2DRange( aTmpRange ));
 
                     uno::Reference< awt::XWindow > xSurroundingWindow( mxFrame->getContainerWindow() );
                     if( xSurroundingWindow.is() )
-                        xSurroundingWindow->setPosSize( static_cast<sal_Int32>(rPixelBounds.getMinX()),
+                        xSurroundingWindow->setPosSize( static_cast<sal_Int32>(rPixelBounds.getMinX()), 
                                                         static_cast<sal_Int32>(rPixelBounds.getMinY()),
-                                                        static_cast<sal_Int32>(rPixelBounds.getWidth()),
+                                                        static_cast<sal_Int32>(rPixelBounds.getWidth()), 
                                                         static_cast<sal_Int32>(rPixelBounds.getHeight()),
                                                         awt::PosSize::POSSIZE );
 
                     uno::Reference< awt::XWindow > xAppletWindow( mxFrame->getComponentWindow() );
                     if( xAppletWindow.is() )
-                        xAppletWindow->setPosSize( 0, 0,
-                                                   static_cast<sal_Int32>(rPixelBounds.getWidth()),
+                        xAppletWindow->setPosSize( 0, 0, 
+                                                   static_cast<sal_Int32>(rPixelBounds.getWidth()), 
                                                    static_cast<sal_Int32>(rPixelBounds.getHeight()),
                                                    awt::PosSize::POSSIZE );
                 }
             }
-            catch (uno::Exception &)
+            catch (uno::Exception &) 
             {
                 return false;
             }
@@ -233,7 +233,7 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-
+        
         void ViewAppletShape::endApplet()
         {
             uno::Reference<util::XCloseable> xCloseable(
@@ -248,11 +248,11 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-
+        
         bool ViewAppletShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
             ::cppcanvas::CanvasSharedPtr pCanvas = mpViewLayer->getCanvas();
-
+            
             if( !pCanvas )
                 return false;
 
@@ -273,24 +273,24 @@ namespace slideshow
                 return false;
 
             ::basegfx::B2DRange aTmpRange;
-            ::canvas::tools::calcTransformedRectBounds( aTmpRange,
-                                                        rBounds,
+            ::canvas::tools::calcTransformedRectBounds( aTmpRange, 
+                                                        rBounds, 
                                                         mpViewLayer->getTransformation() );
             const ::basegfx::B2IRange& rPixelBounds(
                 ::basegfx::unotools::b2ISurroundingRangeFromB2DRange( aTmpRange ));
-
+                
             uno::Reference< awt::XWindow > xFrameWindow( mxFrame->getContainerWindow() );
             if( xFrameWindow.is() )
-                xFrameWindow->setPosSize( static_cast<sal_Int32>(rPixelBounds.getMinX()),
-                                          static_cast<sal_Int32>(rPixelBounds.getMinY()),
-                                          static_cast<sal_Int32>(rPixelBounds.getWidth()),
+                xFrameWindow->setPosSize( static_cast<sal_Int32>(rPixelBounds.getMinX()), 
+                                          static_cast<sal_Int32>(rPixelBounds.getMinY()), 
+                                          static_cast<sal_Int32>(rPixelBounds.getWidth()), 
                                           static_cast<sal_Int32>(rPixelBounds.getHeight()),
                                           awt::PosSize::POSSIZE );
 
             uno::Reference< awt::XWindow > xAppletWindow( mxFrame->getComponentWindow() );
             if( xAppletWindow.is() )
-                xAppletWindow->setPosSize( 0, 0,
-                                           static_cast<sal_Int32>(rPixelBounds.getWidth()),
+                xAppletWindow->setPosSize( 0, 0, 
+                                           static_cast<sal_Int32>(rPixelBounds.getWidth()), 
                                            static_cast<sal_Int32>(rPixelBounds.getHeight()),
                                            awt::PosSize::POSSIZE );
 

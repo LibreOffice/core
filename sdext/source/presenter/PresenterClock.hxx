@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ public:
 
     // lang::XEventListener
 
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
 
@@ -104,7 +104,7 @@ public:
 
 
     // XWindowListener
-
+    
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -125,13 +125,13 @@ public:
 
     virtual void SAL_CALL mouseReleased (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
 
     // XResourceId
 
@@ -157,7 +157,7 @@ private:
     class Timer;
     Timer* mpTimer;
     ::boost::scoped_ptr<Painter> mpClockPainter;
-    /**
+    /** 
         This is used for debugging to show one clock atop another to compare
         the output of the painters.
     */

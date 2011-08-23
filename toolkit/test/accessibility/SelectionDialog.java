@@ -22,7 +22,7 @@ class SelectionDialog extends JDialog
     public SelectionDialog (AccTreeNode aNode)
     {
         super (AccessibilityWorkBench.Instance());
-
+        
         maNode = aNode;
 
         Layout();
@@ -37,7 +37,7 @@ class SelectionDialog extends JDialog
         Container aContent = getContentPane();
 
         // label with explanation
-        aContent.add( new JLabel( "Select/Deselect child elements" ),
+        aContent.add( new JLabel( "Select/Deselect child elements" ), 
                       BorderLayout.NORTH );
 
         // the JListBox
@@ -122,9 +122,9 @@ class SelectionDialog extends JDialog
         }
         catch( IndexOutOfBoundsException e )
         {
-            JOptionPane.showMessageDialog( AccessibilityWorkBench.Instance(),
+            JOptionPane.showMessageDialog( AccessibilityWorkBench.Instance(), 
                                            "Can't select: IndexOutofBounds",
-                                           "Error in selectAccessibleChild",
+                                           "Error in selectAccessibleChild", 
                                            JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -133,14 +133,14 @@ class SelectionDialog extends JDialog
     {
         try
         {
-            mxSelection.deselectAccessibleChild(
+            mxSelection.deselectAccessibleChild( 
                 maChildrenSelector.getSelectedIndex());
         }
         catch( IndexOutOfBoundsException e )
         {
-            JOptionPane.showMessageDialog( AccessibilityWorkBench.Instance(),
+            JOptionPane.showMessageDialog( AccessibilityWorkBench.Instance(), 
                                            "Can't deselect: IndexOutofBounds",
-                                           "Error in deselectAccessibleChild",
+                                           "Error in deselectAccessibleChild", 
                                            JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -155,7 +155,7 @@ class SelectionDialog extends JDialog
         mxSelection.clearAccessibleSelection();
     }
 
-
+        
 
     public void actionPerformed(ActionEvent e)
     {

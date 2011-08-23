@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace dbaccess
                                     ,   ::com::sun::star::container::XContainerApproveListener
                                     >   OContainerListener_BASE;
 
-    /** is helper class to avoid a cycle in refcount
+    /** is helper class to avoid a cycle in refcount 
     */
     class OContainerListener : public OContainerListener_BASE
     {
@@ -91,7 +91,7 @@ namespace dbaccess
         virtual ~OContainerListener();
     };
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 #endif // DBA_CONTAINERLISTENER_HXX
 

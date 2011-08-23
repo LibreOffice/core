@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _SVEDIT_HXX
+#ifndef _SVEDIT_HXX 
 #include <svtools/svmedit.hxx>
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
@@ -41,7 +41,7 @@
 #endif
 #include <memory>
 using namespace dbaui;
-#define STANDARD_MARGIN                 6
+#define STANDARD_MARGIN					6
 //==================================================================
 // class OTableDesignHelpBar
 //==================================================================

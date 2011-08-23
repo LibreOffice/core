@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent);
 
-    virtual ~AccessibleOutlineView  (void);
+    virtual ~AccessibleOutlineView	(void);
 
     /** Complete the initialization begun in the constructor.
     */
@@ -67,7 +67,7 @@ public:
 
     //=====  IAccessibleViewForwarderListener  ================================
 
-    virtual void ViewForwarderChanged (ChangeType aChangeType,
+    virtual void ViewForwarderChanged (ChangeType aChangeType, 
         const IAccessibleViewForwarder* pViewForwarder);
 
     //=====  XAccessibleContext  ==============================================
@@ -82,24 +82,24 @@ public:
 
     //=====  XAccessibleEventBroadcaster  ========================================
 
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         addEventListener (
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
+            const ::com::sun::star::uno::Reference< 
+                ::com::sun::star::accessibility::XAccessibleEventListener >& xListener) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL
-        removeEventListener (
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
+    virtual void SAL_CALL 
+        removeEventListener ( 
+            const ::com::sun::star::uno::Reference< 
+                ::com::sun::star::accessibility::XAccessibleEventListener >& xListener) 
         throw (::com::sun::star::uno::RuntimeException);
 
     using cppu::WeakComponentImplHelperBase::addEventListener;
     using cppu::WeakComponentImplHelperBase::removeEventListener;
 
     //=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
+    
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
@@ -136,13 +136,13 @@ protected:
     // This method is called from the component helper base class while disposing.
     virtual void SAL_CALL disposing (void);
 
-    /// Create an accessible name that contains the current view mode.
+    ///	Create an accessible name that contains the current view mode.
     virtual ::rtl::OUString
         CreateAccessibleName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Create an accessible description that contains the current
-    /// view mode.
+    ///	Create an accessible description that contains the current
+    ///	view mode.
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);

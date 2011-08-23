@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +38,14 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
 
-#define ELEMENT_ACCELERATORLIST     "acceleratorlist"
-#define ELEMENT_ACCELERATORITEM     "item"
+#define	ELEMENT_ACCELERATORLIST		"acceleratorlist"
+#define ELEMENT_ACCELERATORITEM		"item"
 
-#define ATTRIBUTE_KEYCODE           "code"
-#define ATTRIBUTE_MODIFIER          "modifier"
-#define ATTRIBUTE_URL               "url"
+#define ATTRIBUTE_KEYCODE			"code"
+#define ATTRIBUTE_MODIFIER			"modifier"
+#define ATTRIBUTE_URL				"url"
 
-#define ATTRIBUTE_TYPE_CDATA        "CDATA"
+#define ATTRIBUTE_TYPE_CDATA		"CDATA"
 
 // ------------------------------------------------------------------
 
@@ -80,9 +80,9 @@ struct TagAttribute
     TagAttribute(){}
     TagAttribute( const OUString &aName, const OUString &aType , const OUString &aValue )
     {
-        sName   = aName;
-        sType   = aType;
-        sValue  = aValue;
+        sName 	= aName;
+        sType 	= aType;
+        sValue 	= aValue;
     }
 
     OUString sName;
@@ -179,7 +179,7 @@ AttributeListImpl::~AttributeListImpl()
 }
 
 
-void AttributeListImpl::addAttribute(   const OUString &sName ,
+void AttributeListImpl::addAttribute( 	const OUString &sName ,
                                         const OUString &sType ,
                                         const OUString &sValue )
 {
@@ -219,7 +219,7 @@ throw( SAXException, RuntimeException )
 
 void SAL_CALL OReadAccelatorDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     m_xLocator = xLocator;
 }
@@ -314,7 +314,7 @@ throw( SAXException, RuntimeException )
 
 
 void SAL_CALL OReadAccelatorDocumentHandler::characters(const rtl::OUString&)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
 }
 

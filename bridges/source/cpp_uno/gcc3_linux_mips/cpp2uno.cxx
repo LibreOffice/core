@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,9 +86,9 @@ namespace
 #endif
 
     /* C++ has [ret *] or this as the first arguments, so no arguments will
-     * be passed in floating-point registers?
+     * be passed in floating-point registers? 
      */
-    //int int_seen = 0; // have we seen integer arguments?
+    //int int_seen = 0; // have we seen integer arguments? 
 
     void ** pCppStack; //temporary stack pointer
 
@@ -129,7 +129,7 @@ namespace
     }
 
     // pop this
-    gpreg++;
+    gpreg++; 
     nw++;
 
     // stack space
@@ -154,7 +154,7 @@ namespace
       typelib_TypeDescription * pParamTypeDescr = 0;
       TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-      if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
+      if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) 
         // value
       {
 
@@ -170,7 +170,7 @@ namespace
               if (nw & 1) {
                 nw++;
                 gpreg++;
-              }
+              }  
 #ifdef BRDEBUG
     fprintf(stderr,"cpp2uno_call:gpreg=%p,%p\n",gpreg[0],gpreg[1]);
 #endif
@@ -252,7 +252,7 @@ namespace
 #ifdef BRDEBUG
     fprintf(stderr,"cpp2uno_call:ptr|ref\n");
 #endif
-        if (nw < 4) {
+        if (nw < 4) { 
           pCppArgs[nPos] = *(void **)gpreg;
           pCppStack = gpreg;
           nw++;
@@ -327,7 +327,7 @@ namespace
       if (pReturnTypeDescr)
         TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
 
-      CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, pThis->getBridge()->getUno2Cpp() );
+      CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, pThis->getBridge()->getUno2Cpp() ); 
       // has to destruct the any
       // is here for dummy
       return typelib_TypeClass_VOID;
@@ -464,8 +464,8 @@ namespace
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
               ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
+            aParam.bIn		= sal_True;
+            aParam.bOut		= sal_False;
 
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
@@ -506,7 +506,7 @@ namespace
                   XInterface * pInterface = 0;
                   (*pCppI->getBridge()->getCppEnv()->getRegisteredInterface)(
                                                                              pCppI->getBridge()->getCppEnv(),
-                                                                             (void **)&pInterface, pCppI->getOid().pData,
+                                                                             (void **)&pInterface, pCppI->getOid().pData, 
                                                                              (typelib_InterfaceTypeDescription *)pTD );
 
                   if (pInterface)
@@ -578,15 +578,15 @@ namespace
 
     memcpy( gpreg, pCallStack, 16);
 
-#ifdef BRDEBUG
-    fprintf(stderr,"in cpp_vtable_call nFunctionIndex is %d\n",nFunctionIndex);
+#ifdef BRDEBUG 
+    fprintf(stderr,"in cpp_vtable_call nFunctionIndex is %d\n",nFunctionIndex); 
     fprintf(stderr,"in cpp_vtable_call nVtableOffset is %d\n",vTableOffset);
     fprintf(stderr,"gp=%x,%x,%x,%x\n",gpreg[0],gpreg[1],gpreg[2],gpreg[3]);
 #endif
 
     //sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
 
-    typelib_TypeClass aType =
+    typelib_TypeClass aType = 
       cpp_mediate( nFunctionIndex, vTableOffset, (void**)gpreg, (void**)fpreg, ovrflw, (sal_Int64*)nRegReturn );
 
     switch( aType )
@@ -638,7 +638,7 @@ namespace
 
   int const codeSnippetSize = 56;
 
-  unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset,
+  unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset, 
       bool simpleRetType)
   {
 
@@ -682,7 +682,7 @@ namespace
        40:   00000000        nop
 
        be careful, we use the argument space reserved by the caller to
-       write down regs. This can avoid the need to make use of arbitary far away
+       write down regs. This can avoid the need to make use of arbitary far away 
        stack space or to allocate a function frame for this code snippet itself.
        Since only functions with variable arguments will overwrite the space,
        cpp_vtable_call should be safe.

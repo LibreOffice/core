@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,15 +65,15 @@ namespace dxcanvas
         mbShowSpriteBounds( false )
     {
     }
-
-    void SpriteHelper::init( const geometry::RealSize2D&     rSpriteSize,
-                             const SpriteCanvasRef&          rSpriteCanvas,
+    
+    void SpriteHelper::init( const geometry::RealSize2D&	 rSpriteSize,
+                             const SpriteCanvasRef&			 rSpriteCanvas,
                              const IDXRenderModuleSharedPtr& rRenderModule,
-                             const DXSurfaceBitmapSharedPtr  rBitmap,
-                             bool                            bShowSpriteBounds )
+                             const DXSurfaceBitmapSharedPtr	 rBitmap,
+                             bool							 bShowSpriteBounds )
     {
-        ENSURE_OR_THROW( rSpriteCanvas.get() &&
-                          rRenderModule &&
+        ENSURE_OR_THROW( rSpriteCanvas.get() && 
+                          rRenderModule && 
                           rBitmap,
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );
 
@@ -138,7 +138,7 @@ namespace dxcanvas
             // background buffer.
 
             // log output pos in device pixel
-            VERBOSE_TRACE( "SpriteHelper::redraw(): output pos is (%f, %f)",
+            VERBOSE_TRACE( "SpriteHelper::redraw(): output pos is (%f, %f)", 
                            rPos.getX(),
                            rPos.getY() );
 
@@ -150,8 +150,8 @@ namespace dxcanvas
             mbTextureDirty   = false;
             io_bSurfaceDirty = false; // state taken, and processed.
 
-            ::basegfx::B2DPolyPolygon   aClipPath; // empty for no clip
-            bool                        bIsClipRectangular( false ); // false, if no
+            ::basegfx::B2DPolyPolygon	aClipPath; // empty for no clip
+            bool						bIsClipRectangular( false ); // false, if no 
                                                                     // clip, or clip
                                                                     // is complex
 
@@ -190,10 +190,10 @@ namespace dxcanvas
                 // apply a simple rect clip
                 // ========================
 
-                ::basegfx::B2DRectangle aClipBounds(
+                ::basegfx::B2DRectangle aClipBounds( 
                     ::basegfx::tools::getRange( aClipPath ) );
                 aClipBounds.intersect( aSourceRect );
-
+                 
                 mpBitmap->draw(fAlpha,rPos,aClipBounds,rTransform);
             }
             else

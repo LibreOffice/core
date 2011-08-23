@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@ public:
     virtual ~SvtCTLOptions();
 
     void            SetCTLFontEnabled( sal_Bool _bEnabled );
-    sal_Bool        IsCTLFontEnabled() const;
+    sal_Bool		IsCTLFontEnabled() const;
 
-    void            SetCTLSequenceChecking( sal_Bool _bEnabled );
-    sal_Bool        IsCTLSequenceChecking() const;
+    void			SetCTLSequenceChecking( sal_Bool _bEnabled );
+    sal_Bool		IsCTLSequenceChecking() const;
 
-    void            SetCTLSequenceCheckingRestricted( sal_Bool _bEnable );
-    sal_Bool        IsCTLSequenceCheckingRestricted( void ) const;
+    void			SetCTLSequenceCheckingRestricted( sal_Bool _bEnable );
+    sal_Bool		IsCTLSequenceCheckingRestricted( void ) const;
 
     void            SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable );
     sal_Bool        IsCTLSequenceCheckingTypeAndReplace() const;
@@ -65,8 +65,8 @@ public:
         MOVEMENT_LOGICAL = 0,
         MOVEMENT_VISUAL
     };
-    void            SetCTLCursorMovement( CursorMovement _eMovement );
-    CursorMovement  GetCTLCursorMovement() const;
+    void        	SetCTLCursorMovement( CursorMovement _eMovement );
+    CursorMovement	GetCTLCursorMovement() const;
 
     enum TextNumerals
     {
@@ -75,8 +75,8 @@ public:
         NUMERALS_SYSTEM,
         NUMERALS_CONTEXT
     };
-    void            SetCTLTextNumerals( TextNumerals _eNumerals );
-    TextNumerals    GetCTLTextNumerals() const;
+    void        	SetCTLTextNumerals( TextNumerals _eNumerals );
+    TextNumerals	GetCTLTextNumerals() const;
 
     enum EOption
     {

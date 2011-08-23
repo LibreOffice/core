@@ -9,7 +9,7 @@
     This component provides locale data for I18n Framework
 </description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
-        <language>  C++ </language>
+        <language>	C++	</language>
         <status value="final"/>
         <supported-service>com.sun.star.i18n.LocaleData</supported-service>
         <reference-docu xlink:href="file:///docs/sampledoc.html" xlink:type="simple"/>

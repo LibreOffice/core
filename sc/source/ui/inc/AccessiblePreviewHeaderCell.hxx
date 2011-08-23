@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,12 +71,12 @@ public:
 
     ///=====  XInterface  =====================================================
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( 
+        ::com::sun::star::uno::Type const & rType ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw ();
-
+       
     virtual void SAL_CALL release() throw ();
 
     //=====  XAccessibleValue  ================================================
@@ -92,7 +92,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint )
                                 throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   grabFocus() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	grabFocus() throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 
@@ -114,11 +114,11 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
-        getTypes()
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL 
+        getTypes() 
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns a implementation id.
+    /**	Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
@@ -132,20 +132,20 @@ protected:
     virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ScPreviewShell*     mpViewShell;
+    ScPreviewShell*		mpViewShell;
     accessibility::AccessibleTextHelper* mpTextHelper;
-    sal_Int32           mnIndex;
-    ScAddress           maCellPos;
-    sal_Bool            mbColumnHeader;
-    sal_Bool            mbRowHeader;
-    mutable ScPreviewTableInfo* mpTableInfo;
+    sal_Int32			mnIndex;
+    ScAddress			maCellPos;
+    sal_Bool			mbColumnHeader;
+    sal_Bool			mbRowHeader;
+    mutable ScPreviewTableInfo*	mpTableInfo;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
     void CreateTextHelper();
-    void    FillTableInfo() const;
+    void	FillTableInfo() const;
 };
 
 

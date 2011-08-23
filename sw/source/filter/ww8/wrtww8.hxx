@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -254,7 +254,7 @@ private:
     void WriteFtnEndTxt( WW8Export& rWrt, ULONG nCpStt );
 public:
     void OutHeaderFooter(WW8Export& rWrt, bool bHeader,
-            const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags, BYTE nFlag,  BYTE nBreakCode);
+            const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags, BYTE nFlag,  BYTE nBreakCode); 
 };
 
 //--------------------------------------------------------------------------
@@ -569,9 +569,9 @@ public:
 
     /// Return the numeric id of the style.
     USHORT GetId( const SwCharFmt& rFmt ) const;
-
+    
     USHORT GetId( const SwTOXType& rTOXType );
-
+    
     const SfxPoolItem& GetItem( USHORT nWhich ) const;
 
     /// Find the reference.
@@ -652,7 +652,7 @@ public:
     /// The return value indicates, if a follow page desc is written.
     bool OutputFollowPageDesc( const SfxItemSet* pSet,
                                const SwTxtNode* pNd );
-
+    
     /// Write header/footer text.
     void WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader);
 
@@ -675,7 +675,7 @@ public:
 
     /// Write static data of SwNumRule - LSTF
     void NumberingDefinitions();
-
+    
     /// Write all Levels for all SwNumRules - LVLF
     void AbstractNumberingDefinitions();
 
@@ -707,7 +707,7 @@ public:
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
     virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
-
+    
     virtual void DoComboBox(const rtl::OUString &rName,
                     const rtl::OUString &rHelp,
                     const rtl::OUString &ToolTip,
@@ -753,7 +753,7 @@ protected:
     bool FmtHdFtContainsChapterField(const SwFrmFmt &rFmt) const;
 
     virtual void SectionBreaksAndFrames( const SwTxtNode& rNode ) = 0;
-
+    
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFmtPageDesc* pNewPgDescFmt = 0,
@@ -784,7 +784,7 @@ protected:
     ///
     /// One of OutputTextNode(), OutputGrfNode(), or OutputOLENode()
     void OutputContentNode( const SwCntntNode& );
-
+    
 public:
     MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam );
     virtual ~MSWordExportBase();
@@ -988,7 +988,7 @@ public:
 
     void WriteAsStringTable(const ::std::vector<String>&, INT32& rfcSttbf,
         INT32& rlcbSttbf, USHORT nExtraLen = 0);
-
+    
     virtual ULONG ReplaceCr( BYTE nChar );
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() );
@@ -1102,7 +1102,7 @@ protected:
 
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
-
+    
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 
 private:
@@ -1403,11 +1403,11 @@ class WW8SHDLong
     sal_uInt32 m_cvFore;
     sal_uInt32 m_cvBack;
     sal_uInt16 m_ipat;
-
+    
 public:
     WW8SHDLong() : m_cvFore(0), m_cvBack(0), m_ipat(0) {}
     virtual ~WW8SHDLong() {}
-
+    
     void Write(WW8Export & rExport);
     void setCvFore(sal_uInt32 cvFore) { m_cvFore = cvFore; }
     void setCvBack(sal_uInt32 cvBack) { m_cvBack = cvBack; }

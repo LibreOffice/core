@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -13,7 +13,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Arc generator. Produces at most 4 consecutive cubic bezier curves, i.e.,
+// Arc generator. Produces at most 4 consecutive cubic bezier curves, i.e., 
 // 4, 7, 10, or 13 vertices.
 //
 //----------------------------------------------------------------------------
@@ -27,13 +27,13 @@ namespace agg
 {
 
     //-----------------------------------------------------------------------
-    void arc_to_bezier(double cx, double cy, double rx, double ry,
+    void arc_to_bezier(double cx, double cy, double rx, double ry, 
                        double start_angle, double sweep_angle,
                        double* curve);
 
 
     //==============================================================bezier_arc
-    //
+    // 
     // See implemantaion agg_bezier_arc.cpp
     //
     class bezier_arc
@@ -41,18 +41,18 @@ namespace agg
     public:
         //--------------------------------------------------------------------
         bezier_arc() : m_vertex(26) {}
-        bezier_arc(double x,  double y,
-                   double rx, double ry,
-                   double start_angle,
+        bezier_arc(double x,  double y, 
+                   double rx, double ry, 
+                   double start_angle, 
                    double sweep_angle)
         {
             init(x, y, rx, ry, start_angle, sweep_angle);
         }
 
         //--------------------------------------------------------------------
-        void init(double x,  double y,
-                  double rx, double ry,
-                  double start_angle,
+        void init(double x,  double y, 
+                  double rx, double ry, 
+                  double start_angle, 
                   double sweep_angle);
 
         //--------------------------------------------------------------------
@@ -71,13 +71,13 @@ namespace agg
             return (m_vertex == 2) ? path_cmd_move_to : path_cmd_curve4;
         }
 
-        // Supplemantary functions. num_vertices() actually returns doubled
+        // Supplemantary functions. num_vertices() actually returns doubled 
         // number of vertices. That is, for 1 vertex it returns 2.
         //--------------------------------------------------------------------
         unsigned  num_vertices() const { return m_num_vertices; }
         const double* vertices() const { return m_vertices;     }
         double*       vertices()       { return m_vertices;     }
-
+ 
     private:
         unsigned m_vertex;
         unsigned m_num_vertices;
@@ -87,15 +87,15 @@ namespace agg
 
 
     //==========================================================bezier_arc_svg
-    // Compute an SVG-style bezier arc.
+    // Compute an SVG-style bezier arc. 
     //
-    // Computes an elliptical arc from (x1, y1) to (x2, y2). The size and
-    // orientation of the ellipse are defined by two radii (rx, ry)
-    // and an x-axis-rotation, which indicates how the ellipse as a whole
-    // is rotated relative to the current coordinate system. The center
-    // (cx, cy) of the ellipse is calculated automatically to satisfy the
-    // constraints imposed by the other parameters.
-    // large-arc-flag and sweep-flag contribute to the automatic calculations
+    // Computes an elliptical arc from (x1, y1) to (x2, y2). The size and 
+    // orientation of the ellipse are defined by two radii (rx, ry) 
+    // and an x-axis-rotation, which indicates how the ellipse as a whole 
+    // is rotated relative to the current coordinate system. The center 
+    // (cx, cy) of the ellipse is calculated automatically to satisfy the 
+    // constraints imposed by the other parameters. 
+    // large-arc-flag and sweep-flag contribute to the automatic calculations 
     // and help determine how the arc is drawn.
     class bezier_arc_svg
     {
@@ -103,20 +103,20 @@ namespace agg
         //--------------------------------------------------------------------
         bezier_arc_svg() : m_arc(), m_radii_ok(false) {}
 
-        bezier_arc_svg(double x1, double y1,
-                       double rx, double ry,
+        bezier_arc_svg(double x1, double y1, 
+                       double rx, double ry, 
                        double angle,
                        bool large_arc_flag,
                        bool sweep_flag,
-                       double x2, double y2) :
+                       double x2, double y2) : 
             m_arc(), m_radii_ok(false)
         {
             init(x1, y1, rx, ry, angle, large_arc_flag, sweep_flag, x2, y2);
         }
 
         //--------------------------------------------------------------------
-        void init(double x1, double y1,
-                  double rx, double ry,
+        void init(double x1, double y1, 
+                  double rx, double ry, 
                   double angle,
                   bool large_arc_flag,
                   bool sweep_flag,
@@ -137,7 +137,7 @@ namespace agg
             return m_arc.vertex(x, y);
         }
 
-        // Supplemantary functions. num_vertices() actually returns doubled
+        // Supplemantary functions. num_vertices() actually returns doubled 
         // number of vertices. That is, for 1 vertex it returns 2.
         //--------------------------------------------------------------------
         unsigned  num_vertices() const { return m_arc.num_vertices(); }

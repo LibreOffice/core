@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -220,7 +220,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             while( pPrvNd != aEnd.GetNode().StartOfSectionNode() )
                 aEnd++;
 
-            --aEnd;     // im InsertSection ist Ende inclusive
+            --aEnd;		// im InsertSection ist Ende inclusive
             pNewSectNode = GetNodes().InsertTextSection(
                         aStt, *pFmt, rNewData, pTOXBase, & aEnd);
         }
@@ -465,7 +465,7 @@ USHORT SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                         aIdx++;
                     } while( aIdx.GetNode().IsEndNode() &&
                                 0 != aIdx.GetNode().FindSectionNode() );
-//                  if( !aIdx.GetNode().IsEndNode() )
+//					if( !aIdx.GetNode().IsEndNode() )
                     {
                         nRet = 2;
                         if( ppSttNd )
@@ -583,8 +583,8 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
         nPos = pSectionFmtTbl->GetPos( pFmt );
 
         // ACHTUNG: erst aus dem Array entfernen und dann loeschen.
-        //          Der Section-DTOR versucht selbst noch sein Format
-        //          zu loeschen!
+        //			Der Section-DTOR versucht selbst noch sein Format
+        //			zu loeschen!
         pSectionFmtTbl->Remove( nPos );
 //FEATURE::CONDCOLL
         ULONG nCnt = 0, nSttNd = 0;
@@ -831,7 +831,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                                 bool const bInsAtStart, bool const bCreateFrms)
 {
     SwNodeIndex aInsPos( rNdIdx );
-    if( !pEnde )        // kein Bereich also neue Section davor/hinter anlegen
+    if( !pEnde )		// kein Bereich also neue Section davor/hinter anlegen
     {
         // #i26762#
         ASSERT(!pEnde || rNdIdx <= *pEnde,
@@ -905,7 +905,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             if( pCpyTNd->HasSwAttrSet() )
             {
                 // Task 70955 - move PageDesc/Break to the first Node of the
-                //              section
+                //				section
                 const SfxItemSet& rSet = *pCpyTNd->GetpSwAttrSet();
                 if( SFX_ITEM_SET == rSet.GetItemState( RES_BREAK ) ||
                     SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC ))
@@ -956,7 +956,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
         SwNode* pNd = (*this)[n];
 
         //JP 30.04.99: Bug 65644 - alle in der NodeSection liegenden
-        //              Sections unter die neue haengen
+        //				Sections unter die neue haengen
         if( ULONG_MAX == nSkipIdx )
             pNd->pStartOfSection = pSectNd;
         else if( n >= nSkipIdx )
@@ -1277,9 +1277,9 @@ void SwSectionNode::DelFrms()
     m_pSection->m_Data.SetHiddenFlag(true);
 
     // Bug 30582: falls der Bereich in Fly oder TabellenBox ist, dann
-    //              kann er nur "gehiddet" werden, wenn weiterer Content
-    //              vorhanden ist, der "Frames" haelt. Sonst hat der
-    //              Fly/TblBox-Frame keinen Lower !!!
+    //				kann er nur "gehiddet" werden, wenn weiterer Content
+    //				vorhanden ist, der "Frames" haelt. Sonst hat der
+    //				Fly/TblBox-Frame keinen Lower !!!
     {
         SwNodeIndex aIdx( *this );
         if( !rNds.GoPrevSection( &aIdx, TRUE, FALSE ) ||
@@ -1352,7 +1352,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         pNewSect->SetEditInReadonly( TRUE );
     // <--
 
-    SwNodeRange aRg( *this, +1, *EndOfSectionNode() );  // (wo stehe in denn nun ??)
+    SwNodeRange aRg( *this, +1, *EndOfSectionNode() );	// (wo stehe in denn nun ??)
     rNds._Copy( aRg, aInsPos, FALSE );
 
     // loesche alle Frames vom kopierten Bereich, diese werden beim
@@ -1360,7 +1360,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     pSectNd->DelFrms();
 
     // dann kopiere auch noch die Links/Server
-    if( pNewSect->IsLinkType() )        // den Link eintragen
+    if( pNewSect->IsLinkType() )		// den Link eintragen
         pNewSect->CreateLink( pDoc->GetRootFrm() ? CREATE_CONNECT
                                                  : CREATE_NONE );
 

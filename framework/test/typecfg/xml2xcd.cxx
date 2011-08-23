@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #define VCL_NEED_BASETSD
@@ -44,12 +44,12 @@
 #include <filterflags.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <unotools/processfactory.hxx>
@@ -63,17 +63,17 @@
 #include <vcl/msgbox.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::framework ;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  defines
+//	defines
 //_________________________________________________________________________________________________________________
 
 /*
@@ -115,7 +115,7 @@ using namespace ::framework ;
 #define SCPFILE_ADDITIONAL              "scp_additional.txt"
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-***************************************************************************************************************/
@@ -221,7 +221,7 @@ class XCDGenerator : public Application
 };  //  class XCDGenerator
 
 //_________________________________________________________________________________________________________________
-//  global variables
+//	global variables
 //_________________________________________________________________________________________________________________
 
 XCDGenerator gGenerator;
@@ -1422,13 +1422,13 @@ void XCDGenerator::impl_generateIntProperty(        ::rtl::OUStringBuffer& sXCD 
                                             const   ::rtl::OUString&       sName       ,
                                                     sal_Int32              nValue      )
 {
-    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                );
-    sXCD.append     ( sName                                             );
-    sXCD.appendAscii( "\" cfg:type=\"int\" cfg:writable=\""             );
+    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""		   		);
+    sXCD.append		( sName										   		);
+    sXCD.appendAscii( "\" cfg:type=\"int\" cfg:writable=\""		   		);
     sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n" );
-    sXCD.appendAscii( "\t\t\t\t<default:data>"                          );
-    sXCD.append     ( (sal_Int32)(nValue)                               );
-    sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"       );
+    sXCD.appendAscii( "\t\t\t\t<default:data>"							);
+    sXCD.append		( (sal_Int32)(nValue)								);
+    sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"		);
 }
 
 //*****************************************************************************************************************
@@ -1436,13 +1436,13 @@ void XCDGenerator::impl_generateBoolProperty(           ::rtl::OUStringBuffer& s
                                                 const   ::rtl::OUString&       sName       ,
                                                         sal_Bool               bValue      )
 {
-    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                );
-    sXCD.append     ( sName                                             );
+    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""				);
+    sXCD.append		( sName												);
     sXCD.appendAscii( "\" cfg:type=\"boolean\" cfg:writable=\""         );
     sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n" );
-    sXCD.appendAscii( "\t\t\t\t<default:data>"                          );
-    sXCD.appendAscii( bValue==sal_True ? "true" : "false"               );
-    sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"       );
+    sXCD.appendAscii( "\t\t\t\t<default:data>"							);
+    sXCD.appendAscii( bValue==sal_True ? "true" : "false"				);
+    sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"		);
 }
 
 //*****************************************************************************************************************
@@ -1450,9 +1450,9 @@ void XCDGenerator::impl_generateStringProperty(         ::rtl::OUStringBuffer& s
                                                 const   ::rtl::OUString&       sName       ,
                                                 const   ::rtl::OUString&       sValue      )
 {
-    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""            );
-    sXCD.append     ( sName                                         );
-    sXCD.appendAscii( "\" cfg:type=\"string\" cfg:writable=\""      );
+    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""			);
+    sXCD.append		( sName											);
+    sXCD.appendAscii( "\" cfg:type=\"string\" cfg:writable=\""		);
     sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""   );
     if( sValue.getLength() > 0 )
     {
@@ -1491,7 +1491,7 @@ void XCDGenerator::impl_generateStringListProperty(         ::rtl::OUStringBuffe
 
     if( nCount > 0 )
     {
-        sXCD.appendAscii( ">\n\t\t\t\t<default:data>"   );
+        sXCD.appendAscii( ">\n\t\t\t\t<default:data>"	);
         for( ConstStringListIterator pEntry=lValue.begin(); pEntry!=lValue.end(); ++pEntry )
         {
             sXCD.append( *pEntry );
@@ -1516,9 +1516,9 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
                                                 const   ::rtl::OUString&            sName       ,
                                                 const   StringHash&                 lUINames    )
 {
-    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                                );
-    sXCD.append     ( sName                                                             );
-    sXCD.appendAscii( "\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""   );
+    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""								);
+    sXCD.append		( sName																);
+    sXCD.appendAscii( "\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""	);
     sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""               );
 
     if( lUINames.size() > 0 )
@@ -1574,8 +1574,8 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
 {
     ::rtl::OUStringBuffer  sSource     ( sValue );
     ::rtl::OUStringBuffer  sDestination( 10000  );
-    sal_Int32       nCount      = sValue.getLength();
-    sal_Int32       i           = 0;
+    sal_Int32		nCount		= sValue.getLength();
+    sal_Int32		i			= 0;
 
     for( i=0; i<nCount; ++i )
     {

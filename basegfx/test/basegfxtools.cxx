@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,8 +96,8 @@ public:
         CPPUNIT_ASSERT_MESSAGE("0.51", nIndex==1 && fAlpha==1.0);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
+    // Change the following lines only, if you add, remove or rename 
+    // member functions of the current class, 
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(KeyStopLerpTest);

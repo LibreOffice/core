@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ module com { module sun { module star { module text {
 published service DocumentIndexFormat
 {
     //-------------------------------------------------------------------------
-    /**     This property contains the name of the paragraph style that is
+    /** 	This property contains the name of the paragraph style that is
     used for the index title.
 
     */
     [property] string TitleStyle;
 
     //-------------------------------------------------------------------------
-    /**     This property contains the name of the paragraph style that is
+    /** 	This property contains the name of the paragraph style that is
     used for the separator. This entry is ignored for user indexes
     and content indexes.
 
@@ -57,7 +57,7 @@ published service DocumentIndexFormat
     [property] string SeparatorStyle;
 
     //-------------------------------------------------------------------------
-    /** contains the number of levels in the document index.
+    /**	contains the number of levels in the document index.
     */
     [readonly, property] short LevelCount;
 
@@ -68,7 +68,7 @@ published service DocumentIndexFormat
     [property] sequence<string> LevelStyles;
 
     //-------------------------------------------------------------------------
-    /** This method specifies whether the form supports hyperlinks.
+    /**	This method specifies whether the form supports hyperlinks.
     */
     [readonly, property] boolean HasHyperlinks;
 

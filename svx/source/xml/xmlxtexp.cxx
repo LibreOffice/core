@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,8 +160,8 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
-    uno::Reference<document::XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLExport( xServiceFactory, rFileName, rHandler, NULL, MAP_100TH_MM),
+    uno::Reference<document::XGraphicObjectResolver >& xGrfResolver ) 
+:	SvXMLExport( xServiceFactory, rFileName, rHandler, NULL, MAP_100TH_MM), 
     mxTable( xTable )
 {
 
@@ -184,8 +184,8 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
     SfxMedium* pMedium = NULL;
     sal_Bool bRet = sal_False;
 
-    uno::Reference< XGraphicObjectResolver >    xGrfResolver;
-    SvXMLGraphicHelper* pGraphicHelper = 0;
+    uno::Reference< XGraphicObjectResolver >	xGrfResolver;
+    SvXMLGraphicHelper*	pGraphicHelper = 0;
 
     try
     {
@@ -210,7 +210,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
                 return FALSE;
             }
 
-            uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+            uno::Reference<xml::sax::XDocumentHandler>	xHandler( xWriter, uno::UNO_QUERY );
 
             if( bNeedStorage )
             {
@@ -248,7 +248,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
             xMetaSrc->setOutputStream( xOut );
 
             const OUString aName;
-
+            
             // #110680#
             // SvxXMLXTableExportComponent aExporter( aName, xHandler, xTable, xGrfResolver );
             SvxXMLXTableExportComponent aExporter( xServiceFactory, aName, xHandler, xTable, xGrfResolver );

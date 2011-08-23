@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 
 class ScCellRangesBase;
 
-namespace ooo
+namespace ooo 
 {
-    namespace vba
+    namespace vba 
     {
     namespace excel
-        {
+        { 
                 // nTabs empty means apply zoom to all sheets
                 void implSetZoom( const css::uno::Reference< css::frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs );
         void implnCopy( const css::uno::Reference< css::frame::XModel>& xModel );

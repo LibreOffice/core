@@ -50,7 +50,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODOCUMENTEVENTLISTENER)
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 // ISOActionsApproval
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE approveAction(
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE approveAction( 
             /* [in] */ long nActionID,
             /* [retval][out] */ boolean *pbApproval)
         {

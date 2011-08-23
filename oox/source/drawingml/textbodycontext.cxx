@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,14 +83,14 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
     // EG_TextRun
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_r:      // "CT_RegularTextRun" Regular Text Run.
+    case NMSP_DRAWINGML|XML_r:		// "CT_RegularTextRun" Regular Text Run.
     {
         TextRunPtr pRun( new TextRun );
         mrParagraph.addRun( pRun );
         xRet.set( new RegularTextRunContext( *this, pRun ) );
         break;
     }
-    case NMSP_DRAWINGML|XML_br: // "CT_TextLineBreak" Soft return line break (vertical tab).
+    case NMSP_DRAWINGML|XML_br:	// "CT_TextLineBreak" Soft return line break (vertical tab).
     {
         TextRunPtr pRun( new TextRun );
         pRun->setLineBreak();
@@ -98,7 +98,7 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
         xRet.set( new RegularTextRunContext( *this, pRun ) );
         break;
     }
-    case NMSP_DRAWINGML|XML_fld:    // "CT_TextField" Text Field.
+    case NMSP_DRAWINGML|XML_fld:	// "CT_TextField" Text Field.
     {
         TextFieldPtr pField( new TextField );
         mrParagraph.addRun( pField );
@@ -161,10 +161,10 @@ Reference< XFastContextHandler > RegularTextRunContext::createFastChildContext( 
 
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_rPr:    // "CT_TextCharPropertyBag" The text char properties of this text run.
+    case NMSP_DRAWINGML|XML_rPr:	// "CT_TextCharPropertyBag" The text char properties of this text run.
         xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mpRunPtr->getTextCharacterProperties() ) );
         break;
-    case NMSP_DRAWINGML|XML_t:      // "xsd:string" minOccurs="1" The actual text string.
+    case NMSP_DRAWINGML|XML_t:		// "xsd:string" minOccurs="1" The actual text string.
         mbIsInText = true;
         break;
     }
@@ -194,13 +194,13 @@ Reference< XFastContextHandler > TextBodyContext::createFastChildContext( sal_In
 
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_bodyPr:     // CT_TextBodyPropertyBag
+    case NMSP_DRAWINGML|XML_bodyPr:		// CT_TextBodyPropertyBag
         xRet.set( new TextBodyPropertiesContext( *this, xAttribs, mrTextBody.getTextProperties() ) );
         break;
-    case NMSP_DRAWINGML|XML_lstStyle:   // CT_TextListStyle
+    case NMSP_DRAWINGML|XML_lstStyle:	// CT_TextListStyle
         xRet.set( new TextListStyleContext( *this, mrTextBody.getTextListStyle() ) );
         break;
-    case NMSP_DRAWINGML|XML_p:          // CT_TextParagraph
+    case NMSP_DRAWINGML|XML_p:			// CT_TextParagraph
         xRet.set( new TextParagraphContext( *this, mrTextBody.addParagraph() ) );
         break;
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@
 #include <string.h>
 
 #include "testfactreg.hxx"
-#define IMPLEMENTATION_NAME L"test.com.sun.star.comp.extensions.stm.Pipe"
-#define SERVICE_NAME        L"test.com.sun.star.io.Pipe"
+#define IMPLEMENTATION_NAME	L"test.com.sun.star.comp.extensions.stm.Pipe"
+#define SERVICE_NAME		L"test.com.sun.star.io.Pipe"
 
 #ifndef _VOS_NO_NAMESPACE
 using namespace vos;
@@ -104,29 +104,29 @@ public:
     ~OPipeTest();
 
 public: // refcounting
-    BOOL                        queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void                        acquire()                        { OWeakObject::acquire(); }
-    void                        release()                        { OWeakObject::release(); }
-    void*                       getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL						queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void 						acquire() 						 { OWeakObject::acquire(); }
+    void 						release() 						 { OWeakObject::release(); }
+    void* 						getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public: // implementation names
-    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS( () );
-    static UString              getImplementationName_Static() THROWS( () );
+    static Sequence< UString > 	getSupportedServiceNames_Static(void) THROWS( () );
+    static UString 				getImplementationName_Static() THROWS( () );
 
 public:
     virtual void testInvariant(const UString& TestName, const XInterfaceRef& TestObject)
-                                                                THROWS( (   IllegalArgumentException,
+                                                                THROWS( (	IllegalArgumentException,
                                                                             UsrSystemException) );
 
-    virtual INT32 test( const UString& TestName,
+    virtual INT32 test(	const UString& TestName,
                         const XInterfaceRef& TestObject,
-                        INT32 hTestHandle)                      THROWS( (   IllegalArgumentException,
+                        INT32 hTestHandle) 						THROWS( (	IllegalArgumentException,
                                                                             UsrSystemException) );
 
-    virtual BOOL testPassed(void)                               THROWS( (   UsrSystemException) );
-    virtual Sequence< UString > getErrors(void)                 THROWS( (UsrSystemException) );
-    virtual Sequence< UsrAny > getErrorExceptions(void)         THROWS( (UsrSystemException) );
-    virtual Sequence< UString > getWarnings(void)               THROWS( (UsrSystemException) );
+    virtual BOOL testPassed(void) 								THROWS( (	UsrSystemException) );
+    virtual Sequence< UString > getErrors(void) 				THROWS( (UsrSystemException) );
+    virtual Sequence< UsrAny > getErrorExceptions(void) 		THROWS( (UsrSystemException) );
+    virtual Sequence< UString > getWarnings(void) 				THROWS( (UsrSystemException) );
 
 private:
     void testSimple( const XInterfaceRef & );
@@ -166,7 +166,7 @@ BOOL OPipeTest::queryInterface( Uik uik , XInterfaceRef &rOut )
 
 
 void OPipeTest::testInvariant( const UString& TestName, const XInterfaceRef& TestObject )
-                                                                THROWS( (   IllegalArgumentException,
+                                                                THROWS( (	IllegalArgumentException,
                                                                             UsrSystemException) )
 {
     XServiceInfoRef info( TestObject, USR_QUERY );
@@ -180,9 +180,9 @@ void OPipeTest::testInvariant( const UString& TestName, const XInterfaceRef& Tes
 }
 
 
-INT32 OPipeTest::test(  const UString& TestName,
+INT32 OPipeTest::test(	const UString& TestName,
                         const XInterfaceRef& TestObject,
-                        INT32 hTestHandle)                      THROWS( (   IllegalArgumentException,
+                        INT32 hTestHandle) 						THROWS( (	IllegalArgumentException,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.io.Pipe" == TestName )  {
@@ -222,25 +222,25 @@ INT32 OPipeTest::test(  const UString& TestName,
 
 
 
-BOOL OPipeTest::testPassed(void)                                        THROWS( (UsrSystemException) )
+BOOL OPipeTest::testPassed(void) 										THROWS( (UsrSystemException) )
 {
     return m_seqErrors.getLen() == 0;
 }
 
 
-Sequence< UString > OPipeTest::getErrors(void)                          THROWS( (UsrSystemException) )
+Sequence< UString > OPipeTest::getErrors(void) 							THROWS( (UsrSystemException) )
 {
     return m_seqErrors;
 }
 
 
-Sequence< UsrAny > OPipeTest::getErrorExceptions(void)                  THROWS( (UsrSystemException) )
+Sequence< UsrAny > OPipeTest::getErrorExceptions(void) 					THROWS( (UsrSystemException) )
 {
     return m_seqExceptions;
 }
 
 
-Sequence< UString > OPipeTest::getWarnings(void)                        THROWS( (UsrSystemException) )
+Sequence< UString > OPipeTest::getWarnings(void) 						THROWS( (UsrSystemException) )
 {
     return m_seqWarnings;
 }
@@ -283,7 +283,7 @@ void OPipeTest::testSimple( const XInterfaceRef &r )
         ERROR_ASSERT( 5 == input->available() , "wrong available after skip/write " );
 
         input->readBytes( seqRead , 5 );
-        ERROR_ASSERT(   ! strcmp(   (char*) seqRead.getArray() ,
+        ERROR_ASSERT( 	! strcmp( 	(char*) seqRead.getArray() ,
                             (char*) &( seqWrite.getArray()[seqWrite.getLen()-5] ) ),
                         "write/read mismatich" );
 
@@ -303,7 +303,7 @@ void OPipeTest::testSimple( const XInterfaceRef &r )
         ERROR_ASSERT( 0 , "writing on a closed stream does not cause an exception" );
     }
     catch (IOException& e ) {
-        e;      // just to suppress warning during compile
+        e; 		// just to suppress warning during compile
     }
 
     ERROR_ASSERT(! input->readBytes( seqRead , 1 ), "eof not found !" );
@@ -314,7 +314,7 @@ void OPipeTest::testSimple( const XInterfaceRef &r )
         ERROR_ASSERT( 0 , "reading from a closed stream does not cause an exception" );
     }
     catch( IOException& e ) {
-        e;          // just to suppress warning during compile
+        e;  		// just to suppress warning during compile
     }
 
 }
@@ -342,7 +342,7 @@ void OPipeTest::testBufferResizing( const XInterfaceRef &r )
 
     for( i = 0 ; i < iMax ; i ++ ) {
         input->readBytes( seqRead, createIntSeq(i).getLen() );
-        ERROR_ASSERT( ! strcmp(     (char*) seqRead.getArray() ,
+        ERROR_ASSERT( ! strcmp( 	(char*) seqRead.getArray() ,
                                     (char*) createIntSeq(i).getArray() ) ,
                         "written/read mismatch\n" );
     }
@@ -381,7 +381,7 @@ void OPipeTest::testMultithreading( const XInterfaceRef &r )
             break;
         }
 
-        ERROR_ASSERT( ! strcmp(     (char*) seqRead.getArray() ,
+        ERROR_ASSERT( ! strcmp( 	(char*) seqRead.getArray() ,
                                     (char*) createIntSeq(i).getArray() ) ,
                         "written/read mismatch\n" );
     }
@@ -390,7 +390,7 @@ void OPipeTest::testMultithreading( const XInterfaceRef &r )
     input->closeInput();
 }
 
-/*  {
+/*	{
         try {
             XInterfaceRef x = xSMgr->createInstance( strService );
 
@@ -398,7 +398,7 @@ void OPipeTest::testMultithreading( const XInterfaceRef &r )
             XOutputStreamRef output( x , USR_QUERY );
 
             OSL_ASSERT( output.is() );
-            while(  TRUE ) {
+            while(	TRUE ) {
                 // basic read/write
                 Sequence<BYTE> seqWrite( 500 );
                 output->writeBytes( seqWrite );
@@ -442,7 +442,7 @@ UString     OPipeTest_getServiceName() THROWS( () )
     return SERVICE_NAME;
 }
 
-UString     OPipeTest_getImplementationName() THROWS( () )
+UString 	OPipeTest_getImplementationName() THROWS( () )
 {
     return IMPLEMENTATION_NAME;
 }

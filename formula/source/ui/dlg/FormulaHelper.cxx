@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 namespace formula
 {
 
-    namespace
+    namespace 
     {
         //============================================================================
         class OEmptyFunctionDescription : public IFunctionDescription
@@ -58,12 +58,12 @@ namespace formula
         };
     }
 //===================================================================
-//  class FormulaHelper - statische Methoden
+//	class FormulaHelper - statische Methoden
 //===================================================================
 
 #define FUNC_NOTFOUND 0xffff
 
-FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
+FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager) 
     :m_pSysLocale(new SvtSysLocale)
     ,m_pFunctionManager(_pFunctionManager)
     ,open(_pFunctionManager->getSingleToken(IFunctionManager::eOk))
@@ -74,16 +74,16 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
 {
     m_pCharClass = m_pSysLocale->GetCharClassPtr();
 }
-BOOL FormulaHelper::GetNextFunc( const String&  rFormula,
-                                 BOOL           bBack,
-                                 xub_StrLen&    rFStart,   // Ein- und Ausgabe
-                                 xub_StrLen*    pFEnd,     // = NULL
-                                 const IFunctionDescription**   ppFDesc,   // = NULL
-                                 ::std::vector< ::rtl::OUString>*   pArgs )  const // = NULL
+BOOL FormulaHelper::GetNextFunc( const String&	rFormula,
+                                 BOOL			bBack,
+                                 xub_StrLen&	rFStart,   // Ein- und Ausgabe
+                                 xub_StrLen*	pFEnd, 	   // = NULL
+                                 const IFunctionDescription**	ppFDesc,   // = NULL
+                                 ::std::vector< ::rtl::OUString>*	pArgs )  const // = NULL
 {
-    BOOL        bFound = FALSE;
-    xub_StrLen  nOldStart = rFStart;
-    String      aFname;
+    BOOL		bFound = FALSE;
+    xub_StrLen	nOldStart = rFStart;
+    String		aFname;
 
     rFStart = GetFunctionStart( rFormula, rFStart, bBack, ppFDesc ? &aFname : NULL );
     bFound  = ( rFStart != FUNC_NOTFOUND );
@@ -131,15 +131,15 @@ BOOL FormulaHelper::GetNextFunc( const String&  rFormula,
 
 //------------------------------------------------------------------------
 
-void FormulaHelper::FillArgStrings( const String&   rFormula,
-                                    xub_StrLen      nFuncPos,
-                                    USHORT          nArgs,
+void FormulaHelper::FillArgStrings( const String&	rFormula,
+                                    xub_StrLen		nFuncPos,
+                                    USHORT			nArgs,
                                     ::std::vector< ::rtl::OUString >& _rArgs ) const
 {
-    xub_StrLen  nStart  = 0;
-    xub_StrLen  nEnd    = 0;
-    USHORT      i;
-    BOOL        bLast   = FALSE;
+    xub_StrLen	nStart	= 0;
+    xub_StrLen	nEnd	= 0;
+    USHORT		i;
+    BOOL		bLast	= FALSE;
 
     for ( i=0; i<nArgs && !bLast; i++ )
     {
@@ -189,7 +189,7 @@ inline BOOL IsFormulaText( const CharClass* _pCharClass,const String& rStr, xub_
     if( _pCharClass->isLetterNumeric( rStr, nPos ) )
         return TRUE;
     else
-    {   // In internationalized versions function names may contain a dot
+    {	// In internationalized versions function names may contain a dot
         //  and in every version also an underscore... ;-)
         sal_Unicode c = rStr.GetChar(nPos);
         return c == '.' || c == '_';
@@ -197,18 +197,18 @@ inline BOOL IsFormulaText( const CharClass* _pCharClass,const String& rStr, xub_
 
 }
 
-xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
-                                        xub_StrLen      nStart,
-                                        BOOL            bBack,
-                                        String*         pFuncName ) const
+xub_StrLen FormulaHelper::GetFunctionStart( const String&	rFormula,
+                                        xub_StrLen		nStart,
+                                        BOOL			bBack,
+                                        String*			pFuncName ) const
 {
     xub_StrLen nStrLen = rFormula.Len();
 
     if ( nStrLen < nStart )
         return nStart;
 
-    xub_StrLen  nFStart = FUNC_NOTFOUND;
-    xub_StrLen  nParPos = nStart;
+    xub_StrLen	nFStart = FUNC_NOTFOUND;
+    xub_StrLen	nParPos	= nStart;
 
     BOOL bRepeat, bFound;
     do
@@ -262,11 +262,11 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
         {
             if ( IsFormulaText( m_pCharClass,rFormula, nFStart ) )
             {
-                                    //  Funktion gefunden
+                                    //	Funktion gefunden
                 if ( pFuncName )
                     *pFuncName = rFormula.Copy( nFStart, nParPos-nFStart );
             }
-            else                    // Klammern ohne Funktion -> weitersuchen
+            else					// Klammern ohne Funktion -> weitersuchen
             {
                 bRepeat = TRUE;
                 if ( !bBack )
@@ -277,7 +277,7 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
                     bRepeat = FALSE;
             }
         }
-        else                        // keine Klammern gefunden
+        else						// keine Klammern gefunden
         {
             nFStart = FUNC_NOTFOUND;
             if ( pFuncName )
@@ -291,16 +291,16 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
 
 //------------------------------------------------------------------------
 
-xub_StrLen  FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart ) const
+xub_StrLen	FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart ) const
 {
     xub_StrLen nStrLen = rStr.Len();
 
     if ( nStrLen < nStart )
         return nStart;
 
-    short   nParCount = 0;
+    short	nParCount = 0;
     bool    bInArray = false;
-    BOOL    bFound = FALSE;
+    BOOL	bFound = FALSE;
 
     while ( !bFound && (nStart < nStrLen) )
     {
@@ -322,7 +322,7 @@ xub_StrLen  FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart
             else if ( nParCount < 0 )
             {
                 bFound = TRUE;
-                nStart--;   // einen zu weit gelesen
+                nStart--;	// einen zu weit gelesen
             }
         }
         else if ( c == arrayOpen )
@@ -338,7 +338,7 @@ xub_StrLen  FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart
             if ( !bInArray && nParCount == 0 )
             {
                 bFound = TRUE;
-                nStart--;   // einen zu weit gelesen
+                nStart--;	// einen zu weit gelesen
             }
         }
         nStart++; // hinter gefundene Position stellen
@@ -356,9 +356,9 @@ xub_StrLen FormulaHelper::GetArgStart( const String& rStr, xub_StrLen nStart, US
     if ( nStrLen < nStart )
         return nStart;
 
-    short   nParCount   = 0;
+    short	nParCount	= 0;
     bool    bInArray    = false;
-    BOOL    bFound      = FALSE;
+    BOOL	bFound		= FALSE;
 
     while ( !bFound && (nStart < nStrLen) )
     {

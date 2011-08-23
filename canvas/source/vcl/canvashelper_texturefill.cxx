@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,19 +78,19 @@ namespace vclcanvas
 {
     namespace
     {
-        bool textureFill( OutputDevice&         rOutDev,
-                          GraphicObject&        rGraphic,
-                          const ::Point&        rPosPixel,
-                          const ::Size&         rNextTileX,
-                          const ::Size&         rNextTileY,
-                          sal_Int32             nTilesX,
-                          sal_Int32             nTilesY,
-                          const ::Size&         rTileSize,
-                          const GraphicAttr&    rAttr)
+        bool textureFill( OutputDevice&			rOutDev,
+                          GraphicObject&		rGraphic,
+                          const ::Point&		rPosPixel,
+                          const ::Size&			rNextTileX,
+                          const ::Size&			rNextTileY,
+                          sal_Int32				nTilesX,
+                          sal_Int32				nTilesY,
+                          const ::Size&			rTileSize,
+                          const GraphicAttr&	rAttr)
         {
-            BOOL    bRet( false );
-            Point   aCurrPos;
-            int     nX, nY;
+            BOOL	bRet( false );
+            Point 	aCurrPos;
+            int 	nX, nY;
 
             for( nY=0; nY < nTilesY; ++nY )
             {
@@ -101,11 +101,11 @@ namespace vclcanvas
                 {
                     // update return value. This method should return true, if
                     // at least one of the looped Draws succeeded.
-                    bRet |= rGraphic.Draw( &rOutDev,
+                    bRet |= rGraphic.Draw( &rOutDev, 
                                            aCurrPos,
                                            rTileSize,
                                            &rAttr );
-
+                    
                     aCurrPos.X() += rNextTileX.Width();
                     aCurrPos.Y() += rNextTileX.Height();
                 }
@@ -120,10 +120,10 @@ namespace vclcanvas
             Since most of the code for linear and axial gradients are
             the same, we've a unified method here
          */
-        void fillLinearGradient( OutputDevice&                                  rOutDev,
-                                 const ::basegfx::B2DHomMatrix&                 rTextureTransform,
-                                 const ::Rectangle&                             rBounds,
-                                 unsigned int                                   nStepCount,
+        void fillLinearGradient( OutputDevice&					                rOutDev,
+                                 const ::basegfx::B2DHomMatrix&	                rTextureTransform,
+                                 const ::Rectangle&				                rBounds,
+                                 unsigned int								    nStepCount,
                                  const ::canvas::ParametricPolyPolygon::Values& rValues,
                                  const std::vector< ::Color >&                  rColors )
         {
@@ -136,23 +136,23 @@ namespace vclcanvas
             ::basegfx::B2DPoint aRightTop( 1.0, 0.0 );
             ::basegfx::B2DPoint aRightBottom( 1.0, 1.0 );
 
-            aLeftTop    *= rTextureTransform;
+            aLeftTop	*= rTextureTransform;
             aLeftBottom *= rTextureTransform;
-            aRightTop   *= rTextureTransform;
+            aRightTop 	*= rTextureTransform;
             aRightBottom*= rTextureTransform;
 
             // calc length of bound rect diagonal
-            const ::basegfx::B2DVector aBoundRectDiagonal(
+            const ::basegfx::B2DVector aBoundRectDiagonal( 
                 ::vcl::unotools::b2DPointFromPoint( rBounds.TopLeft() ) -
                 ::vcl::unotools::b2DPointFromPoint( rBounds.BottomRight() ) );
             const double nDiagonalLength( aBoundRectDiagonal.getLength() );
 
             // create direction of gradient:
             //     _______
-            //     |  |  |
+            //     |  |  | 
             // ->  |  |  | ...
-            //     |  |  |
-            //     -------
+            //     |  |  | 
+            //     -------            
             ::basegfx::B2DVector aDirection( aRightTop - aLeftTop );
             aDirection.normalize();
 
@@ -164,7 +164,7 @@ namespace vclcanvas
                                                              aRightTop,
                                                              aRightBottom,
                                                              ::vcl::unotools::b2DRectangleFromRectangle( rBounds ) );
-
+            
 
             // render gradient
             // ===============
@@ -183,7 +183,7 @@ namespace vclcanvas
             OSL_ENSURE( nStepCount >= 3,
                         "fillLinearGradient(): stepcount smaller than 3" );
 
-
+        
             // fill initial strip (extending two times the bound rect's
             // diagonal to the 'left'
             // ------------------------------------------------------
@@ -204,7 +204,7 @@ namespace vclcanvas
 
             // iteratively render all other strips
             // -----------------------------------
-
+            
             // ensure that nStepCount matches color stop parity, to
             // have a well-defined middle color e.g. for axial
             // gradients.
@@ -221,7 +221,7 @@ namespace vclcanvas
                 double fAlpha;
                 boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(double(i)/nStepCount);
 
-                rOutDev.SetFillColor(
+                rOutDev.SetFillColor( 
                     Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
                            (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
                            (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
@@ -236,18 +236,18 @@ namespace vclcanvas
                 // increased by one, to account for the fact that we
                 // calculate the right border here (whereas the fill
                 // color is governed by the left edge)
-                const ::basegfx::B2DPoint& rPoint3(
-                    (nStepCount - i-1)/double(nStepCount)*aLeftTop +
+                const ::basegfx::B2DPoint& rPoint3( 
+                    (nStepCount - i-1)/double(nStepCount)*aLeftTop + 
                     (i+1)/double(nStepCount)*aRightTop );
                 aTempPoly[1] = ::Point( ::basegfx::fround( rPoint3.getX() ),
                                         ::basegfx::fround( rPoint3.getY() ) );
 
-                const ::basegfx::B2DPoint& rPoint4(
-                    (nStepCount - i-1)/double(nStepCount)*aLeftBottom +
+                const ::basegfx::B2DPoint& rPoint4( 
+                    (nStepCount - i-1)/double(nStepCount)*aLeftBottom + 
                     (i+1)/double(nStepCount)*aRightBottom );
                 aTempPoly[2] = ::Point( ::basegfx::fround( rPoint4.getX() ),
                                         ::basegfx::fround( rPoint4.getY() ) );
-
+                
                 rOutDev.DrawPolygon( aTempPoly );
             }
 
@@ -293,8 +293,8 @@ namespace vclcanvas
             // here, keep it all the way and only change the vertex values
             // in the loop below (as ::Polygon is a pimpl class, creating
             // one every loop turn would really stress the mem allocator)
-            ::basegfx::B2DPolygon   aOuterPoly( rGradientPoly );
-            ::basegfx::B2DPolygon   aInnerPoly;
+            ::basegfx::B2DPolygon 	aOuterPoly( rGradientPoly );
+            ::basegfx::B2DPolygon 	aInnerPoly;
 
             // subdivide polygon _before_ rendering, would otherwise have
             // to be performed on every loop turn.
@@ -302,7 +302,7 @@ namespace vclcanvas
                 aOuterPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aOuterPoly);
 
             aInnerPoly = aOuterPoly;
-
+        
             // only transform outer polygon _after_ copying it into
             // aInnerPoly, because inner polygon has to be scaled before
             // the actual texture transformation takes place
@@ -312,7 +312,7 @@ namespace vclcanvas
             // have to be prefixed by anisotrophic scaling)
             ::basegfx::B2DHomMatrix aInnerPolygonTransformMatrix;
 
-
+        
             // apply scaling (possibly anisotrophic) to inner polygon
             // ------------------------------------------------------
 
@@ -331,7 +331,7 @@ namespace vclcanvas
             else if( nAspectRatio < 1.0 )
             {
                 // width < height case
-                aInnerPolygonTransformMatrix.scale( 0.0,
+                aInnerPolygonTransformMatrix.scale( 0.0, 
                                                     1.0 - nAspectRatio );
             }
             else
@@ -345,11 +345,11 @@ namespace vclcanvas
 
             // apply final matrix to polygon
             aInnerPoly.transform( aInnerPolygonTransformMatrix );
-
+        
 
             const sal_uInt32 nNumPoints( aOuterPoly.count() );
-            ::Polygon        aTempPoly( static_cast<USHORT>(nNumPoints+1) );
-
+            ::Polygon		 aTempPoly( static_cast<USHORT>(nNumPoints+1) );
+        
             // increase number of steps by one: polygonal gradients have
             // the outermost polygon rendered in rColor2, and the
             // innermost in rColor1. The innermost polygon will never
@@ -359,7 +359,7 @@ namespace vclcanvas
             // |                       |
             // |-------|-------|-------|
             // |                       |
-            // 3       2       1       0
+            // 3       2       1       0 
             //
             // This yields 4 tick marks, where 0 is never attained (since
             // zero-area polygons typically don't display perceivable
@@ -379,27 +379,27 @@ namespace vclcanvas
 
                 for( unsigned int i=1,p; i<nStepCount; ++i )
                 {
-                    const double fT( i/double(nStepCount) );
+                    const double fT( i/double(nStepCount) );            
 
                     std::ptrdiff_t nIndex;
                     double fAlpha;
                     boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
                     // lerp color
-                    rOutDev.SetFillColor(
+                    rOutDev.SetFillColor( 
                         Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
                                (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
                                (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                     // scale and render polygon, by interpolating between
-                    // outer and inner polygon.
+                    // outer and inner polygon. 
 
                     for( p=0; p<nNumPoints; ++p )
                     {
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                        aTempPoly[(USHORT)p] = ::Point(
+                        aTempPoly[(USHORT)p] = ::Point( 
                             basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
                             basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
@@ -423,8 +423,8 @@ namespace vclcanvas
                 // here, keep it all the way and only change the vertex values
                 // in the loop below (as ::Polygon is a pimpl class, creating
                 // one every loop turn would really stress the mem allocator)
-                ::PolyPolygon           aTempPolyPoly;
-                ::Polygon               aTempPoly2( static_cast<USHORT>(nNumPoints+1) );
+                ::PolyPolygon			aTempPolyPoly;
+                ::Polygon				aTempPoly2( static_cast<USHORT>(nNumPoints+1) );
 
                 aTempPoly2[0] = rBounds.TopLeft();
                 aTempPoly2[1] = rBounds.TopRight();
@@ -438,18 +438,18 @@ namespace vclcanvas
                 for( unsigned int i=0,p; i<nStepCount; ++i )
                 {
                     const double fT( (i+1)/double(nStepCount) );
-
+            
                     std::ptrdiff_t nIndex;
                     double fAlpha;
                     boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
                     // lerp color
-                    rOutDev.SetFillColor(
+                    rOutDev.SetFillColor( 
                         Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
                                (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
                                (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0        
                     if( i && !(i % 10) )
                         rOutDev.SetFillColor( COL_RED );
 #endif
@@ -463,7 +463,7 @@ namespace vclcanvas
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                        aTempPoly[(USHORT)p] = ::Point(
+                        aTempPoly[(USHORT)p] = ::Point( 
                             basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
                             basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
@@ -497,7 +497,7 @@ namespace vclcanvas
         }
 
         void doGradientFill( OutputDevice&                                  rOutDev,
-                             const ::canvas::ParametricPolyPolygon::Values& rValues,
+                             const ::canvas::ParametricPolyPolygon::Values&	rValues,
                              const std::vector< ::Color >&                  rColors,
                              const ::basegfx::B2DHomMatrix&                 rTextureTransform,
                              const ::Rectangle&                             rBounds,
@@ -514,7 +514,7 @@ namespace vclcanvas
                                         rValues,
                                         rColors );
                     break;
-
+               
                 case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
                     // FALLTHROUGH intended
                 case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
@@ -535,9 +535,9 @@ namespace vclcanvas
 
         int numColorSteps( const ::Color& rColor1, const ::Color& rColor2 )
         {
-            return ::std::max(
+            return ::std::max( 
                 labs( rColor1.GetRed() - rColor2.GetRed() ),
-                ::std::max(
+                ::std::max(                    
                     labs( rColor1.GetGreen() - rColor2.GetGreen() ),
                     labs( rColor1.GetBlue()  - rColor2.GetBlue() ) ) );
         }
@@ -547,7 +547,7 @@ namespace vclcanvas
                            const ::canvas::ParametricPolyPolygon::Values&  rValues,
                            const std::vector< ::Color >&                   rColors,
                            const PolyPolygon&                              rPoly,
-                           const rendering::ViewState&                     viewState,
+                           const rendering::ViewState&                     viewState, 
                            const rendering::RenderState&                   renderState,
                            const rendering::Texture&                       texture,
                            int                                             nTransparency )
@@ -573,11 +573,11 @@ namespace vclcanvas
                                                        texture,
                                                        nColorSteps);
 
-            rOutDev.SetLineColor();
+            rOutDev.SetLineColor(); 
 
             // determine maximal bound rect of texture-filled
             // polygon
-            const ::Rectangle aPolygonDeviceRectOrig(
+            const ::Rectangle aPolygonDeviceRectOrig( 
                 rPoly.GetBoundRect() );
 
             if( tools::isRectangle( rPoly ) )
@@ -700,19 +700,20 @@ namespace vclcanvas
             }
 #endif // complex-clipping vs. XOR-trick
 
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0        
             {
                 ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
                 ::basegfx::B2DRectangle aTextureDeviceRect;
-                ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect,
-                                                            aRect,
+                ::basegfx::B2DHomMatrix aTextureTransform;
+                ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect, 
+                                                            aRect, 
                                                             aTextureTransform );
-                rOutDev.SetLineColor( COL_RED );
+                rOutDev.SetLineColor( COL_RED ); 
                 rOutDev.SetFillColor();
                 rOutDev.DrawRect( ::vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
-                rOutDev.SetLineColor( COL_BLUE );
-                ::Polygon aPoly1(
+                rOutDev.SetLineColor( COL_BLUE ); 
+                ::Polygon aPoly1( 
                     ::vcl::unotools::rectangleFromB2DRectangle( aRect ));
                 ::basegfx::B2DPolygon aPoly2( aPoly1.getB2DPolygon() );
                 aPoly2.transform( aTextureTransform );
@@ -725,15 +726,15 @@ namespace vclcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas* 							pCanvas, 
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                         const rendering::ViewState&                        viewState,
-                                                                                         const rendering::RenderState&                      renderState,
-                                                                                         const uno::Sequence< rendering::Texture >&         textures )
+                                                                                         const rendering::ViewState& 						viewState,
+                                                                                         const rendering::RenderState& 						renderState,
+                                                                                         const uno::Sequence< rendering::Texture >& 		textures )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
-        ENSURE_ARG_OR_THROW( textures.getLength(),
+        ENSURE_ARG_OR_THROW( textures.getLength(), 
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
         if( mpOutDev )
@@ -741,7 +742,7 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
-            PolyPolygon aPolyPoly( tools::mapPolyPolygon(
+            PolyPolygon aPolyPoly( tools::mapPolyPolygon( 
                                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                        viewState, renderState ) );
 
@@ -750,7 +751,7 @@ namespace vclcanvas
             {
                 // try to cast XParametricPolyPolygon2D reference to
                 // our implementation class.
-                ::canvas::ParametricPolyPolygon* pGradient =
+                ::canvas::ParametricPolyPolygon* pGradient = 
                       dynamic_cast< ::canvas::ParametricPolyPolygon* >( textures[0].Gradient.get() );
 
                 if( pGradient && pGradient->getValues().maColors.getLength() )
@@ -799,14 +800,14 @@ namespace vclcanvas
             else if( textures[0].Bitmap.is() )
             {
                 const geometry::IntegerSize2D aBmpSize( textures[0].Bitmap->getSize() );
-
+                
                 ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
                                  aBmpSize.Height != 0,
                                  "CanvasHelper::fillTexturedPolyPolygon(): zero-sized texture bitmap" );
 
                 // determine maximal bound rect of texture-filled
                 // polygon
-                const ::Rectangle aPolygonDeviceRect(
+                const ::Rectangle aPolygonDeviceRect( 
                     aPolyPoly.GetBoundRect() );
 
 
@@ -821,18 +822,18 @@ namespace vclcanvas
                                                              viewState,
                                                              renderState);
                 ::basegfx::B2DHomMatrix aTextureTransform;
-                ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
+                ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform, 
                                                                 textures[0].AffineTransform );
-
+                
                 aTotalTransform *= aTextureTransform;
 
                 const ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
                 ::basegfx::B2DRectangle aTextureDeviceRect;
-                ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect,
-                                                            aRect,
+                ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect, 
+                                                            aRect, 
                                                             aTotalTransform );
 
-                const ::Rectangle aIntegerTextureDeviceRect(
+                const ::Rectangle aIntegerTextureDeviceRect( 
                     ::vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
                 if( bRectangularPolygon &&
@@ -859,14 +860,14 @@ namespace vclcanvas
                         pColor[2] = 0.0;
                         pColor[3] = textures[0].Alpha;
 
-                        return drawBitmapModulated( pCanvas,
+                        return drawBitmapModulated( pCanvas, 
                                                     textures[0].Bitmap,
                                                     viewState,
                                                     aLocalState );
                     }
                     else
                     {
-                        return drawBitmap( pCanvas,
+                        return drawBitmap( pCanvas, 
                                            textures[0].Bitmap,
                                            viewState,
                                            aLocalState );
@@ -893,7 +894,7 @@ namespace vclcanvas
                     // combine with view and render transform
                     ::basegfx::B2DHomMatrix aMatrix;
                     ::canvas::tools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
-
+                    
                     // combine all three transformations into one
                     // global texture-to-device-space transformation
                     aTotalTransform *= aMatrix;
@@ -903,12 +904,12 @@ namespace vclcanvas
                     // appropriate GraphicObject
                     ::basegfx::B2DVector aScale;
                     ::basegfx::B2DPoint  aOutputPos;
-                    double               nRotate;
-                    double               nShearX;
+                    double				 nRotate;
+                    double				 nShearX;
                     aTotalTransform.decompose( aScale, aOutputPos, nRotate, nShearX );
-
-                    GraphicAttr             aGrfAttr;
-                    GraphicObjectSharedPtr  pGrfObj;
+                
+                    GraphicAttr 			aGrfAttr;
+                    GraphicObjectSharedPtr 	pGrfObj;
 
                     if( ::basegfx::fTools::equalZero( nShearX ) )
                     {
@@ -917,8 +918,8 @@ namespace vclcanvas
                         // and translation)
 
                         // setup GraphicAttr
-                        aGrfAttr.SetMirrorFlags(
-                            ( aScale.getX() < 0.0 ? BMP_MIRROR_HORZ : 0 ) |
+                        aGrfAttr.SetMirrorFlags( 
+                            ( aScale.getX() < 0.0 ? BMP_MIRROR_HORZ : 0 ) | 
                             ( aScale.getY() < 0.0 ? BMP_MIRROR_VERT : 0 ) );
                         aGrfAttr.SetRotation( static_cast< USHORT >(::basegfx::fround( nRotate*10.0 )) );
 
@@ -976,9 +977,9 @@ namespace vclcanvas
                     // device coordinate space, were we determine the
                     // start point from it.
                     ::basegfx::B2DRectangle aTextureSpacePolygonRect;
-                    ::canvas::tools::calcTransformedRectBounds( aTextureSpacePolygonRect,
+                    ::canvas::tools::calcTransformedRectBounds( aTextureSpacePolygonRect, 
                                                                 ::vcl::unotools::b2DRectangleFromRectangle(
-                                                                    aPolygonDeviceRect ),
+                                                                    aPolygonDeviceRect ), 
                                                                 aInverseTextureTransform );
 
                     // calc left, top of extended polygon rect in
@@ -1001,26 +1002,26 @@ namespace vclcanvas
 
                     // and convert back to device space
                     ::basegfx::B2DRectangle aSingleDeviceTextureRect;
-                    ::canvas::tools::calcTransformedRectBounds( aSingleDeviceTextureRect,
-                                                                aSingleTextureRect,
+                    ::canvas::tools::calcTransformedRectBounds( aSingleDeviceTextureRect, 
+                                                                aSingleTextureRect, 
                                                                 aPureTotalTransform );
-
-                    const ::Point aPtRepeat( ::vcl::unotools::pointFromB2DPoint(
+                    
+                    const ::Point aPtRepeat( ::vcl::unotools::pointFromB2DPoint( 
                                                  aSingleDeviceTextureRect.getMinimum() ) );
                     const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width ),
                                        ::basegfx::fround( aScale.getY() * aBmpSize.Height ) );
                     const ::Size  aIntegerNextTileX( ::vcl::unotools::sizeFromB2DSize(aNextTileX) );
                     const ::Size  aIntegerNextTileY( ::vcl::unotools::sizeFromB2DSize(aNextTileY) );
 
-                    const ::Point aPt( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                    const ::Point aPt( textures[0].RepeatModeX == rendering::TexturingMode::NONE ? 
                                        ::basegfx::fround( aOutputPos.getX() ) : aPtRepeat.X(),
-                                       textures[0].RepeatModeY == rendering::TexturingMode::NONE ?
+                                       textures[0].RepeatModeY == rendering::TexturingMode::NONE ? 
                                        ::basegfx::fround( aOutputPos.getY() ) : aPtRepeat.Y() );
-                    const sal_Int32 nTilesX( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                    const sal_Int32 nTilesX( textures[0].RepeatModeX == rendering::TexturingMode::NONE ? 
                                              1 : nX2 - nX1 );
-                    const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
+                    const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ? 
                                              1 : nY2 - nY1 );
-
+                    
                     OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
                     if( bRectangularPolygon )
@@ -1048,8 +1049,8 @@ namespace vclcanvas
                             // transOrig*transModulate (which would be
                             // equivalent to the origAlpha*modulateAlpha
                             // the DX canvas performs)
-                            aGrfAttr.SetTransparency(
-                                static_cast< BYTE >(
+                            aGrfAttr.SetTransparency( 
+                                static_cast< BYTE >( 
                                     ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
                         }
 
@@ -1116,11 +1117,11 @@ namespace vclcanvas
                             // output VDev content alpha-blended to
                             // target position.
                             const ::Point aEmptyPoint;
-                            Bitmap aContentBmp(
-                                aVDev.GetBitmap( aEmptyPoint,
+                            Bitmap aContentBmp( 
+                                aVDev.GetBitmap( aEmptyPoint, 
                                                  aVDev.GetOutputSizePixel() ) );
 
-                            BYTE nCol( static_cast< BYTE >(
+                            BYTE nCol( static_cast< BYTE >( 
                                            ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
                             AlphaMask aAlpha( aVDev.GetOutputSizePixel(),
                                               &nCol );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -208,7 +208,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
 //        ( C2U( "CharEscapement" ),          C2U("CharEscapement") ) //#i98344# @future: add these to properties again, if the user interface offers the possibility to change them; then make sure that older wrong files are corrected on import
 //        ( C2U( "CharEscapementHeight" ),    C2U("CharEscapementHeight") ) //#i98344# @future: add these to properties again, if the user interface offers the possibility to change them; then make sure that older wrong files are corrected on import
 //      ( C2U( "CharFlash" ),               C2U("Flashing") )
-
+        
         ( C2U( "CharFontFamily" ),          C2U("CharFontFamily") )
         ( C2U( "CharFontFamilyAsian" ),     C2U("CharFontFamilyAsian") )
         ( C2U( "CharFontFamilyComplex" ),   C2U("CharFontFamilyComplex") )
@@ -224,7 +224,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
         ( C2U( "CharFontStyleName" ),       C2U("CharFontStyleName") )
         ( C2U( "CharFontStyleNameAsian" ),  C2U("CharFontStyleNameAsian") )
         ( C2U( "CharFontStyleNameComplex" ),C2U("CharFontStyleNameComplex") )
-
+        
         ( C2U( "CharHeight" ),              C2U("CharHeight") )
         ( C2U( "CharHeightAsian" ),         C2U("CharHeightAsian") )
         ( C2U( "CharHeightComplex" ),       C2U("CharHeightComplex") )
@@ -250,7 +250,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
         ( C2U( "CharWordMode" ),            C2U("CharWordMode") )
 
         ( C2U( "WritingMode" ),             C2U("WritingMode") )
-
+        
 //      ( C2U( "RubyText" ),                C2U("RubyText") )
 //      ( C2U( "RubyAdjust" ),              C2U("RubyAdjust") )
 //      ( C2U( "RubyCharStyleName" ),       C2U("RubyStyleName") )
@@ -442,7 +442,7 @@ void PropertyMapper::setMultiProperties(
         {
             aPropName = rNames[nN];
             aValue = rValues[nN];
-
+            
             try
             {
                 xTarget->setPropertyValue( aPropName, aValue );

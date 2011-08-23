@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,10 +101,10 @@ class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 
     // JP 28.03.96
     // fuer Textnodes: Stufungslevel der Autoformatierung. Ist erstmal hier
-    //                  gelandet, weil noch Bits frei sind
+    //					gelandet, weil noch Bits frei sind
     BYTE nAFmtNumLvl : 3;
-    BOOL bSetNumLSpace : 1;         // fuer Numerierung: TRUE Einzug setzen
-    BOOL bIgnoreDontExpand : 1;     // for Text Attributes - ignore the flag
+    BOOL bSetNumLSpace : 1;			// fuer Numerierung: TRUE Einzug setzen
+    BOOL bIgnoreDontExpand : 1;		// for Text Attributes - ignore the flag
 
 protected:
     SwStartNode* pStartOfSection;
@@ -140,7 +140,7 @@ public:
     inline BOOL IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
     inline void SetIgnoreDontExpand( BOOL bNew )  { bIgnoreDontExpand = bNew; }
 
-    BYTE    GetNodeType() const { return nNodeType; }
+    BYTE 	GetNodeType() const { return nNodeType; }
 
     inline       SwStartNode *GetStartNode();
     inline const SwStartNode *GetStartNode() const;
@@ -148,12 +148,12 @@ public:
     inline const SwCntntNode *GetCntntNode() const;
     inline       SwEndNode   *GetEndNode();
     inline const SwEndNode   *GetEndNode() const;
-#ifndef  ICC
+#ifndef	 ICC
   inline
 #endif
     SwTxtNode   *GetTxtNode();
 
-#ifndef  ICC
+#ifndef	 ICC
   inline
 #endif
     const SwTxtNode   *GetTxtNode() const;
@@ -281,7 +281,7 @@ public:
     BOOL IsInProtectSect() const;
     // befindet sich der Node in irgendetwas geschuetzten ?
     // (Bereich/Rahmen/Tabellenzellen/... incl. des Ankers bei
-    //  Rahmen/Fussnoten/..)
+    //	Rahmen/Fussnoten/..)
     BOOL IsProtect() const;
     // suche den PageDesc, mit dem dieser Node formatiert ist. Wenn das
     // Layout vorhanden ist wird ueber das gesucht, ansonsten gibt es nur
@@ -316,7 +316,7 @@ class SwStartNode: public SwNode
 {
     friend class SwNode;
     friend class SwNodes;
-    friend class SwEndNode;     // um theEndOfSection zu setzen !!
+    friend class SwEndNode;		// um theEndOfSection zu setzen !!
 
     SwEndNode* pEndOfSection;
     SwStartNodeType eSttNdTyp;
@@ -331,7 +331,7 @@ protected:
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwStartNode)
 
-    SwStartNodeType GetStartNodeType() const        { return eSttNdTyp; }
+    SwStartNodeType GetStartNodeType() const 		{ return eSttNdTyp; }
 
     // an alle ContentNodes der Section das ChkCondColl rufen
     void CheckSectionCondColl() const;
@@ -349,8 +349,8 @@ private:
 class SwEndNode : public SwNode
 {
     friend class SwNodes;
-    friend class SwTableNode;       // um seinen EndNode anlegen zukoennen
-    friend class SwSectionNode;     // um seinen EndNode anlegen zukoennen
+    friend class SwTableNode;		// um seinen EndNode anlegen zukoennen
+    friend class SwSectionNode;		// um seinen EndNode anlegen zukoennen
 
     // fuer den initialen StartNode
     SwEndNode( SwNodes& rNodes, ULONG nPos, SwStartNode& rSttNd );
@@ -387,7 +387,7 @@ protected:
     virtual ~SwCntntNode();
 
     // Attribut-Set fuer alle AUTO-Attribute eines CntntNodes
-    //  ( z.B: TxtNode oder NoTxtNode
+    //	( z.B: TxtNode oder NoTxtNode
     boost::shared_ptr<const SfxItemSet> mpAttrSet;
 
     // lasse von den entsprechenden Nodes die spz. AttrSets anlegen
@@ -398,7 +398,7 @@ protected:
     USHORT ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();		//Bereits in Basisklasse Client drin.
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
@@ -411,8 +411,8 @@ public:
     int CanJoinNext( SwNodeIndex* pIdx =0 ) const;
     int CanJoinPrev( SwNodeIndex* pIdx =0 ) const;
 
-    void MakeStartIndex( SwIndex * pIdx )   { pIdx->Assign( this, 0 ); }
-    void MakeEndIndex( SwIndex * pIdx )     { pIdx->Assign( this, Len() ); }
+    void MakeStartIndex( SwIndex * pIdx )	{ pIdx->Assign( this, 0 ); }
+    void MakeEndIndex( SwIndex * pIdx )		{ pIdx->Assign( this, Len() ); }
 
     BOOL GoNext(SwIndex *, USHORT nMode ) const;
     BOOL GoPrevious(SwIndex *, USHORT nMode ) const;

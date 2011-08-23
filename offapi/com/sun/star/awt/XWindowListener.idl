@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,65 +24,65 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XWindowListener_idl__
-#define __com_sun_star_awt_XWindowListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_WindowEvent_idl__
-#include <com/sun/star/awt/WindowEvent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_XWindowListener_idl__ 
+#define __com_sun_star_awt_XWindowListener_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_WindowEvent_idl__ 
+#include <com/sun/star/awt/WindowEvent.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to receive window events.
-
-    <p>Component events are provided <strong>only</strong> for
-    notification purposes.  Moves and resizes will be handled
-    internally by the window component, so that GUI layout works properly
+            
+    <p>Component events are provided <strong>only</strong> for 
+    notification purposes.  Moves and resizes will be handled 
+    internally by the window component, so that GUI layout works properly 
     regardless of whether a program registers such a listener or not.</p>
  */
 published interface XWindowListener: com::sun::star::lang::XEventListener
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the window has been resized.
      */
-    [oneway] void windowResized( [in] com::sun::star::awt::WindowEvent e );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void windowResized( [in] com::sun::star::awt::WindowEvent e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the window has been moved.
      */
-    [oneway] void windowMoved( [in] com::sun::star::awt::WindowEvent e );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void windowMoved( [in] com::sun::star::awt::WindowEvent e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the window has been shown.
      */
-    [oneway] void windowShown( [in] com::sun::star::lang::EventObject e );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void windowShown( [in] com::sun::star::lang::EventObject e ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the window has been hidden.
      */
-    [oneway] void windowHidden( [in] com::sun::star::lang::EventObject e );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [oneway] void windowHidden( [in] com::sun::star::lang::EventObject e ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

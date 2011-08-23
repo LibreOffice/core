@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ enum COMPARE { LESS = -1, EQUAL = 0, GREATER = 1 };
 enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
 
 /******************* M A K R O S *****************************************/
-#define ALIGNED_SIZE( nSize )                               \
+#define ALIGNED_SIZE( nSize )								\
             (nSize + sizeof( void * ) -1) / sizeof( void * ) * sizeof( void * )
 /******************* F u n c t i o n   F o r w a r d s *******************/
 ByteString GetTmpFileName();
@@ -73,38 +73,38 @@ public:
 /****************** R s c P t r P t r ************************************/
 class RscPtrPtr
 {
-    sal_uInt32  nCount;
-    void **         pMem;
+    sal_uInt32	nCount;
+    void ** 		pMem;
 public:
                     RscPtrPtr();
                     ~RscPtrPtr();
-    void            Reset();
-    sal_uInt32  Append( void * );
-    sal_uInt32  Append( char * pStr ){
+    void			Reset();
+    sal_uInt32	Append( void * );
+    sal_uInt32	Append( char * pStr ){
                         return( Append( (void *)pStr ) );
                     };
-    sal_uInt32  GetCount(){ return( nCount ); };
-    void *          GetEntry( sal_uInt32 nEle );
-    void **         GetBlock(){ return( pMem ); };
+    sal_uInt32	GetCount(){ return( nCount ); };
+    void *			GetEntry( sal_uInt32 nEle );
+    void ** 		GetBlock(){ return( pMem ); };
 };
 
 /****************** R s c W r i t e R c **********************************/
 class RscWriteRc
 {
-    sal_uInt32              nLen;
-    BOOL                bSwap;
-    RSCBYTEORDER_TYPE   nByteOrder;
-    char *              pMem;
-    char *              GetPointer( sal_uInt32 nSize );
+    sal_uInt32				nLen;
+    BOOL				bSwap;
+    RSCBYTEORDER_TYPE	nByteOrder;
+    char *				pMem;
+    char *				GetPointer( sal_uInt32 nSize );
 public:
                 RscWriteRc( RSCBYTEORDER_TYPE nOrder = RSC_SYSTEMENDIAN );
                 ~RscWriteRc();
-    sal_uInt32      IncSize( sal_uInt32 nSize );// gibt die vorherige Groesse
-    void *      GetBuffer()
+    sal_uInt32		IncSize( sal_uInt32 nSize );// gibt die vorherige Groesse
+    void *		GetBuffer()
                 {
                     return GetPointer( 0 );
                 }
-    sal_uInt16  GetShort( sal_uInt32 nPos )
+    sal_uInt16	GetShort( sal_uInt32 nPos )
                 {
                     sal_uInt16 nVal = 0;
                     char* pFrom = GetPointer(nPos);
@@ -113,7 +113,7 @@ public:
                     *pTo++ = *pFrom++;
                     return bSwap ? SWAPSHORT( nVal ) : nVal;
                 }
-    sal_uInt32  GetLong( sal_uInt32 nPos )
+    sal_uInt32	GetLong( sal_uInt32 nPos )
                 {
                     sal_uInt32 nVal = 0;
                     char* pFrom = GetPointer(nPos);
@@ -124,14 +124,14 @@ public:
                     *pTo++ = *pFrom++;
                     return bSwap ? SWAPLONG( nVal ) : nVal;
                 }
-    char *      GetUTF8( sal_uInt32 nPos )
+    char *		GetUTF8( sal_uInt32 nPos )
                 {
                     return GetPointer( nPos );
                 }
 
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
-    sal_uInt32      Size(){ return( nLen ); };
+    sal_uInt32		Size(){ return( nLen ); };
     void        Put( sal_uInt64 lVal )
                 {
                     union
@@ -151,7 +151,7 @@ public:
                         Put( aVal32[1] );
                     }
                 }
-    void        Put( sal_Int32 lVal )
+    void		Put( sal_Int32 lVal )
                 {
                     union
                     {
@@ -171,14 +171,14 @@ public:
                         Put( aVal16[1] );
                     }
                 }
-    void        Put( sal_uInt32 nValue )
+    void		Put( sal_uInt32 nValue )
                 { Put( (sal_Int32)nValue ); }
-    void        Put( sal_uInt16 nValue );
-    void        Put( sal_Int16 nValue )
+    void		Put( sal_uInt16 nValue );
+    void		Put( sal_Int16 nValue )
                 { Put( (sal_uInt16)nValue ); }
-    void        PutUTF8( char * pData );
+    void		PutUTF8( char * pData );
 
-    void        PutAt( sal_uInt32 nPos, INT32 lVal )
+    void		PutAt( sal_uInt32 nPos, INT32 lVal )
                 {
                     union
                     {
@@ -202,11 +202,11 @@ public:
                 {
                     PutAt( nPos, (INT32)lVal);
                 }
-    void        PutAt( sal_uInt32 nPos, short nVal )
+    void		PutAt( sal_uInt32 nPos, short nVal )
                 {
                     PutAt( nPos, (sal_uInt16)nVal );
                 }
-    void        PutAt( sal_uInt32 nPos, sal_uInt16 nVal )
+    void		PutAt( sal_uInt32 nPos, sal_uInt16 nVal )
                 {
                     if( bSwap )
                         nVal = SWAPSHORT( nVal );

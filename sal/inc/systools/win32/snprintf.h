@@ -8,39 +8,39 @@
 /* Macros for Unicode/ANSI support like in TCHAR.H */
 
 #ifdef _UNICODE
-#define sntprintf   snwprintf
-#define vsntprintf  vsnwprintf
+#define sntprintf	snwprintf
+#define vsntprintf	vsnwprintf
 #else
-#define sntprintf   snprintf
-#define vsntprintf  vsnprintf
+#define sntprintf	snprintf
+#define vsntprintf	vsnprintf
 #endif
 
 /* Define needed types if they are not yet defined */
 
 #if 0
-#   ifndef _INC_STDARG
-#   include <stdarg.h>
-#   endif
+#	ifndef _INC_STDARG
+#	include <stdarg.h>
+#	endif
 #else
-#   ifndef _VA_LIST_DEFINED
+#	ifndef _VA_LIST_DEFINED
     typedef char *  va_list;
-#   define _VA_LIST_DEFINED
-#   endif
+#	define _VA_LIST_DEFINED
+#	endif
 #endif
 
 #if 0
-#   ifndef _INC_WCHAR
-#   include <wchar.h>
-#   endif
+#	ifndef _INC_WCHAR
+#	include <wchar.h>
+#	endif
 #else
-#   ifndef _WCHAR_T_DEFINED
+#	ifndef _WCHAR_T_DEFINED
     typedef unsigned short wchar_t;
-#   define _WCHAR_T_DEFINED
-#   endif
+#	define _WCHAR_T_DEFINED
+#	endif
 #endif
 
 #ifndef _SNPRINTF_DLLIMPORT
-#define _SNPRINTF_DLLIMPORT __declspec( dllimport )
+#define _SNPRINTF_DLLIMPORT	__declspec( dllimport )
 #endif
 
 #ifdef __cplusplus
@@ -48,11 +48,11 @@ extern "C" {
 #endif
 
 
-/*  Implementations of snprintf following the ISO/IEC 9899:1999 (ISO C99)
+/*	Implementations of snprintf following the ISO/IEC 9899:1999 (ISO C99) 
     standard.
-    The difference compared to _snprintf is that the buffer always is zero
-    terminated (unless count is zero) and the return value is the number of
-    characters (not including terminating zero) that would have been written
+    The difference compared to _snprintf is that the buffer always is zero 
+    terminated (unless count is zero) and the return value is the number of 
+    characters (not including terminating zero) that would have been written 
     even if the buffer wasn't large
     enough to hold the string. */
 

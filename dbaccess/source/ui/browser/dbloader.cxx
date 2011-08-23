@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,22 +74,22 @@ using namespace dbaui;
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
 {
 private:
-    ::rtl::OUString                     m_aURL;
-    Sequence< PropertyValue>            m_aArgs;
-    Reference< XLoadEventListener >     m_xListener;
-    Reference< XFrame >                 m_xFrame;
-    Reference< XMultiServiceFactory >   m_xServiceFactory;
+    ::rtl::OUString						m_aURL;
+    Sequence< PropertyValue>			m_aArgs;
+    Reference< XLoadEventListener > 	m_xListener;
+    Reference< XFrame > 				m_xFrame;
+    Reference< XMultiServiceFactory >	m_xServiceFactory;
 public:
     DBContentLoader(const Reference< XMultiServiceFactory >&);
     ~DBContentLoader();
 
     // XServiceInfo
-    ::rtl::OUString                 SAL_CALL getImplementationName() throw(  );
-    sal_Bool                        SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    Sequence< ::rtl::OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
+    ::rtl::OUString					SAL_CALL getImplementationName() throw(  );
+    sal_Bool 						SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
+    Sequence< ::rtl::OUString > 	SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
-    static ::rtl::OUString          getImplementationName_Static() throw(  )
+    static ::rtl::OUString 			getImplementationName_Static() throw(  )
     {
         return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.DBContentLoader");
     }
@@ -98,7 +98,7 @@ public:
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
     // XLoader
-    virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const ::rtl::OUString& _rURL,
+    virtual void SAL_CALL load(	const Reference< XFrame > & _rFrame, const ::rtl::OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL cancel(void) throw();
@@ -141,8 +141,8 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
 sal_Bool SAL_CALL DBContentLoader::supportsService(const ::rtl::OUString& ServiceName) throw(  )
 {
     Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pBegin  = aSNL.getConstArray();
-    const ::rtl::OUString * pEnd    = pBegin + aSNL.getLength();
+    const ::rtl::OUString * pBegin	= aSNL.getConstArray();
+    const ::rtl::OUString * pEnd	= pBegin + aSNL.getLength();
     for( ; pBegin != pEnd; ++pBegin)
         if( *pBegin == ServiceName )
             return sal_True;
@@ -187,10 +187,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
 {
-    m_xFrame    = rFrame;
+    m_xFrame	= rFrame;
     m_xListener = rListener;
-    m_aURL      = rURL;
-    m_aArgs     = rArgs;
+    m_aURL		= rURL;
+    m_aArgs		= rArgs;
 
     ::comphelper::ComponentContext aContext( m_xServiceFactory );
 
@@ -309,9 +309,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             Sequence< Any > aInitArgs(m_aArgs.getLength()+1);
 
             Any* pBegin = aInitArgs.getArray();
-            Any* pEnd   = pBegin + aInitArgs.getLength();
+            Any* pEnd	= pBegin + aInitArgs.getLength();
             *pBegin <<= aFrame;
-            const PropertyValue* pIter      = m_aArgs.getConstArray();
+            const PropertyValue* pIter		= m_aArgs.getConstArray();
             for(++pBegin;pBegin != pEnd;++pBegin,++pIter)
             {
                 *pBegin <<= *pIter;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _CORBAMAKER_CPPUOPTIONS_HXX_
 #define _CORBAMAKER_CPPUOPTIONS_HXX_
 
-#include    <codemaker/options.hxx>
+#include	<codemaker/options.hxx>
 
 class CorbaOptions : public Options
 {
@@ -38,14 +38,14 @@ public:
 
     ~CorbaOptions() {}
 
-    sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
+    sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False) 
             throw( IllegalArgument );
 
-    ::rtl::OString  prepareHelp();
+    ::rtl::OString	prepareHelp();
 
-    ::rtl::OString  prepareVersion();
-
+    ::rtl::OString	prepareVersion();
+    
 protected:
 };
-
+    
 #endif // _CORBAMAKER_CPPUOPTIONS_HXX_

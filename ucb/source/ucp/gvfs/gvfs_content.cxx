@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ Content::Content(
 #ifdef DEBUG
     g_warning ("New Transient content ('%s') (%d)", getURI(), IsFolder);
 #endif
-//  m_info.name = FIXME: set name ?
+//	m_info.name = FIXME: set name ?
     m_info.valid_fields = GNOME_VFS_FILE_INFO_FIELDS_TYPE;
     m_info.type = IsFolder ? GNOME_VFS_FILE_TYPE_DIRECTORY :
                          GNOME_VFS_FILE_TYPE_REGULAR;

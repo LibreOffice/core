@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ struct vba_service_class_ : public serviceimpl_base< detail::OwnServiceImpl<Impl
     vba_service_class_() : baseT() {}
     template <typename PostProcessFuncT>
     /** Ctor to pass a post processing function/functor.
-
+        
         @tpl PostProcessDefaultT let your compiler deduce this
         @param postProcessFunc function/functor that gets the yet unacquired
                                ImplT_ pointer returning a

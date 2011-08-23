@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,21 +36,21 @@
 #include "OutlineView.hxx"
 #include <svx/sdrpaintwindow.hxx>
 
-namespace accessibility
+namespace accessibility 
 {
 
     AccessibleOutlineEditSource::AccessibleOutlineEditSource(
-        SdrOutliner&    rOutliner,
-        SdrView&        rView,
-        OutlinerView& rOutlView,
-        const ::Window& rViewWindow )
+        SdrOutliner& 	rOutliner, 
+        SdrView& 		rView, 
+        OutlinerView& rOutlView, 
+        const ::Window& rViewWindow ) 
         : mrView( rView ),
           mrWindow( rViewWindow ),
           mpOutliner( &rOutliner ),
           mpOutlinerView( &rOutlView ),
           mTextForwarder( rOutliner, NULL ),
           mViewForwarder( rOutlView )
-    {
+    {       
         // register as listener - need to broadcast state change messages
         rOutliner.SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
         StartListening(rOutliner);
@@ -100,7 +100,7 @@ namespace accessibility
 
     void AccessibleOutlineEditSource::UpdateData()
     {
-        // NOOP, since we're always working on the 'real' outliner,
+        // NOOP, since we're always working on the 'real' outliner, 
         // i.e. changes are immediately reflected on the screen
     }
 
@@ -143,20 +143,20 @@ namespace accessibility
             return mrWindow.LogicToPixel( aVisArea, aMapMode );
         }
 
-        return Rectangle();
+        return Rectangle();        
     }
 
     Point AccessibleOutlineEditSource::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
     {
         if( IsValid() && mrView.GetModel() )
         {
-            Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
+            Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode, 
                                                       MapMode(mrView.GetModel()->GetScaleUnit()) ) );
             MapMode aMapMode(mrWindow.GetMapMode());
             aMapMode.SetOrigin(Point());
             return mrWindow.LogicToPixel( aPoint, aMapMode );
         }
-
+    
         return Point();
     }
 
@@ -167,11 +167,11 @@ namespace accessibility
             MapMode aMapMode(mrWindow.GetMapMode());
             aMapMode.SetOrigin(Point());
             Point aPoint( mrWindow.PixelToLogic( rPoint, aMapMode ) );
-            return OutputDevice::LogicToLogic( aPoint,
-                                               MapMode(mrView.GetModel()->GetScaleUnit()),
+            return OutputDevice::LogicToLogic( aPoint, 
+                                               MapMode(mrView.GetModel()->GetScaleUnit()), 
                                                rMapMode );
         }
-
+    
         return Point();
     }
 
@@ -214,11 +214,11 @@ namespace accessibility
         if( aNotify )
         {
             ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
-
+            
             if( aHint.get() )
                 Broadcast( *aHint.get() );
         }
-
+        
         return 0;
     }
 

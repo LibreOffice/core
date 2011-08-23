@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,10 @@
 #include "TransformerContext.hxx"
 
 
-class XMLPersAttrListTContext : public XMLTransformerContext
+class XMLPersAttrListTContext : public XMLTransformerContext 
 {
 
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
     ::rtl::OUString m_aElemQName;
     sal_uInt16 m_nActionMap;
@@ -51,22 +51,22 @@ public:
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
+    XMLPersAttrListTContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName );
 
     // attr list persistence + attribute processing
-    XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
+    XMLPersAttrListTContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nActionMap );
 
     // attr list persistence + renaming
-    XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
+    XMLPersAttrListTContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
 
     // attr list persistence + renaming + attribute processing
-    XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
+    XMLPersAttrListTContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
@@ -105,7 +105,7 @@ public:
 
     const ::rtl::OUString& GetExportQName() const { return m_aElemQName; }
 
-    void AddAttribute( sal_uInt16 nAPrefix,
+    void AddAttribute( sal_uInt16 nAPrefix, 
         ::xmloff::token::XMLTokenEnum eAToken,
            ::xmloff::token::XMLTokenEnum eVToken );
 
@@ -118,5 +118,5 @@ public:
         GetAttrList() const;
 };
 
-#endif  //  _XMLOFF_PERSATTRLISTTCONTEXT_HXX
+#endif	//  _XMLOFF_PERSATTRLISTTCONTEXT_HXX
 

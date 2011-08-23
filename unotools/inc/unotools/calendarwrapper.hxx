@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ namespace com { namespace sun { namespace star {
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedCalendar >   xC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedCalendar >	xC;
 
-            DateTime            aEpochStart;        // 1Jan1970
+            DateTime			aEpochStart;		// 1Jan1970
 
 public:
                                 CalendarWrapper(
@@ -114,11 +114,11 @@ public:
                                     { return aEpochStart; }
 
     /// set a local (!) Gregorian DateTime
-    inline  void                setGregorianDateTime( const DateTime& rDateTime )
+    inline	void				setGregorianDateTime( const DateTime& rDateTime )
                                     { setLocalDateTime( rDateTime - aEpochStart ); }
 
     /// get the DateTime as a local (!) Gregorian DateTime
-    inline  DateTime            getGregorianDateTime() const
+    inline	DateTime			getGregorianDateTime() const
                                     { return aEpochStart + getLocalDateTime(); }
 
 private:

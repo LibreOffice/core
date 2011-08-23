@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,19 @@
 namespace framework
 {
 
-ResMgr* FwkResId::GetResManager()
+ResMgr*	FwkResId::GetResManager()
 {
-    static ResMgr*  pResMgr = NULL;
-
+    static ResMgr*	pResMgr = NULL;
+    
     if ( !pResMgr )
     {
         rtl::OStringBuffer aBuf( 32 );
         aBuf.append( "fwe" );
-
+        
         vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
     }
-
+    
     return pResMgr;
 }
 

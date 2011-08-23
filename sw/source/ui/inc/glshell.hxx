@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 
 class SwGlosDocShell : public SwDocShell
 {
-    String          aLongName;
-    String          aShortName;
-    String          aGroupName;
-    sal_Bool        bShow;
+    String 			aLongName;
+    String 			aShortName;
+    String			aGroupName;
+    sal_Bool 		bShow;
 
     using SotObject::GetInterface;
 
@@ -44,27 +44,27 @@ public:
 
     TYPEINFO();
     SFX_DECL_INTERFACE(SW_GLOSDOCSHELL)
-
+    
     SwGlosDocShell( sal_Bool bNewShow = sal_True);
     virtual ~SwGlosDocShell();
 
-    void            Execute( SfxRequest& );
-    void            GetState( SfxItemSet& );
-    void            SetLongName( const String& rLongName )
+    void			Execute( SfxRequest& );
+    void			GetState( SfxItemSet& );
+    void 			SetLongName( const String& rLongName )
                         { aLongName = rLongName; }
-    void            SetShortName( const String& rShortName )
+    void 			SetShortName( const String& rShortName )
                         { aShortName = rShortName; }
-    void            SetGroupName( const String& rGroupName )
+    void 			SetGroupName( const String& rGroupName )
                         { aGroupName = rGroupName; }
-    const String&   GetShortName(){return aShortName;}
+    const String& 	GetShortName(){return aShortName;}
 };
 
 
 class SwWebGlosDocShell : public SwWebDocShell
 {
-    String          aLongName;
-    String          aShortName;
-    String          aGroupName;
+    String 			aLongName;
+    String 			aShortName;
+    String			aGroupName;
 
     using SotObject::GetInterface;
 
@@ -75,19 +75,19 @@ public:
 
     TYPEINFO();
     SFX_DECL_INTERFACE(SW_WEBGLOSDOCSHELL)
-
+    
     SwWebGlosDocShell();
     virtual ~SwWebGlosDocShell();
 
-    void            Execute( SfxRequest& );
-    void            GetState( SfxItemSet& );
-    void            SetLongName( const String& rLongName )
+    void			Execute( SfxRequest& );
+    void			GetState( SfxItemSet& );
+    void 			SetLongName( const String& rLongName )
                         { aLongName = rLongName; }
-    void            SetShortName( const String& rShortName )
+    void 			SetShortName( const String& rShortName )
                         { aShortName = rShortName; }
-    void            SetGroupName( const String& rGroupName )
+    void 			SetGroupName( const String& rGroupName )
                         { aGroupName = rGroupName; }
-    const String&   GetShortName(){return aShortName;}
+    const String& 	GetShortName(){return aShortName;}
 };
 
 #endif

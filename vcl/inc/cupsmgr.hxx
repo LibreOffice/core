@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,23 +47,23 @@ struct FPtrHash
 
 class CUPSManager : public PrinterInfoManager
 {
-    CUPSWrapper*                                                m_pCUPSWrapper;
-    std::hash_map< FILE*, rtl::OString, FPtrHash >              m_aSpoolFiles;
-    int                                                         m_nDests;
-    void*                                                       m_pDests;
-    bool                                                        m_bNewDests;
-    std::hash_map< rtl::OUString, int, rtl::OUStringHash >      m_aCUPSDestMap;
+    CUPSWrapper*												m_pCUPSWrapper;
+    std::hash_map< FILE*, rtl::OString, FPtrHash >				m_aSpoolFiles;
+    int															m_nDests;
+    void*														m_pDests;
+    bool														m_bNewDests;
+    std::hash_map< rtl::OUString, int, rtl::OUStringHash >		m_aCUPSDestMap;
 
     std::hash_map< rtl::OUString, PPDContext, rtl::OUStringHash > m_aDefaultContexts;
 
-    rtl::OString                                                m_aUser;
+    rtl::OString												m_aUser;
     // this is a security risk, but the CUPS API demands
     // to deliver a pointer to a static buffer containing
     // the password, so this cannot be helped
-    rtl::OString                                                m_aPassword;
+    rtl::OString												m_aPassword;
 
-    osl::Mutex                                                  m_aCUPSMutex;
-    oslThread                                                   m_aDestThread;
+    osl::Mutex													m_aCUPSMutex;
+    oslThread													m_aDestThread;
 
     CUPSManager( CUPSWrapper* );
     virtual ~CUPSManager();
@@ -75,7 +75,7 @@ class CUPSManager : public PrinterInfoManager
 public:
     // public for stub
     static void runDestThread(void* pMgr);
-
+    
     static CUPSManager* tryLoadCUPS();
 
     const PPDParser* createCUPSParser( const rtl::OUString& rPrinter );
@@ -99,7 +99,7 @@ public:
     virtual bool removePrinter( const rtl::OUString& rPrinterName, bool bCheckOnly = false );
     virtual bool writePrinterConfig();
     virtual bool setDefaultPrinter( const rtl::OUString& rPrinterName );
-
+    
     virtual bool addOrRemovePossible() const;
 };
 

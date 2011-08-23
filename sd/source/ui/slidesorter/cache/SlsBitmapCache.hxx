@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ public:
     */
     void SetBitmap (
         const CacheKey& rKey,
-        const ::boost::shared_ptr<BitmapEx>& rpPreview,
+        const ::boost::shared_ptr<BitmapEx>& rpPreview, 
         bool bIsPrecious);
 
     /** Mark the specified preview bitmap as precious, i.e. that it must not
@@ -129,7 +129,7 @@ public:
         bitmaps.
     */
     void ReCalculateTotalCacheSize (void);
-
+    
     /** Use the previews in the given cache to initialize missing previews.
     */
     void Recycle (const BitmapCache& rCache);
@@ -195,7 +195,7 @@ private:
         size to the allowed value.
     */
     bool mbIsFull;
-
+    
     /** Update mnNormalCacheSize or mnPreciousCacheSize according to the
         precious flag of the specified preview bitmap and the specified
         operation.

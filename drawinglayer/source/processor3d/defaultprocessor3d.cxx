@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -226,15 +226,15 @@ namespace drawinglayer
                 if(rFillBitmapAttribute.getTiling())
                 {
                     mpGeoTexSvx.reset(new texture::GeoTexSvxBitmapTiled(
-                        rFillBitmapAttribute.getBitmapEx().GetBitmap(),
-                        rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
+                        rFillBitmapAttribute.getBitmapEx().GetBitmap(), 
+                        rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(), 
                         rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize()));
                 }
                 else
                 {
                     mpGeoTexSvx.reset(new texture::GeoTexSvxBitmap(
-                        rFillBitmapAttribute.getBitmapEx().GetBitmap(),
-                        rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
+                        rFillBitmapAttribute.getBitmapEx().GetBitmap(), 
+                        rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(), 
                         rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize()));
                 }
 
@@ -284,7 +284,7 @@ namespace drawinglayer
                 if(a2DRange.overlaps(maRasterRange))
                 {
                     const attribute::MaterialAttribute3D aMaterial(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
-
+                    
                     rasterconvertB3DPolygon(aMaterial, aHairline);
                 }
             }
@@ -298,7 +298,7 @@ namespace drawinglayer
 
             // #i98295# get ShadeMode. Correct early when only flat is possible due to missing normals
             const ::com::sun::star::drawing::ShadeMode aShadeMode(
-                aFill.areNormalsUsed() ?
+                aFill.areNormalsUsed() ? 
                     getSdrSceneAttribute().getShadeMode() : ::com::sun::star::drawing::ShadeMode_FLAT);
 
             if(bPaintIt)
@@ -378,7 +378,7 @@ namespace drawinglayer
                         for(sal_uInt32 a(0L); a < aFill.count(); a++)
                         {
                             basegfx::B3DPolygon aPartFill(aFill.getB3DPolygon(a));
-
+                            
                             for(sal_uInt32 b(0L); b < aPartFill.count(); b++)
                             {
                                 // solve color model. Transform normal to eye coor
@@ -419,11 +419,11 @@ namespace drawinglayer
 
                 // draw it to ZBuffer
                 const attribute::MaterialAttribute3D aMaterial(
-                    maBColorModifierStack.getModifiedColor(aObjectColor),
-                    rPrimitive.getMaterial().getSpecular(),
-                    rPrimitive.getMaterial().getEmission(),
+                    maBColorModifierStack.getModifiedColor(aObjectColor), 
+                    rPrimitive.getMaterial().getSpecular(), 
+                    rPrimitive.getMaterial().getEmission(), 
                     rPrimitive.getMaterial().getSpecularIntensity());
-
+                
                 rasterconvertB3DPolyPolygon(aMaterial, aFill);
             }
         }
@@ -537,7 +537,7 @@ namespace drawinglayer
             const geometry::ViewInformation3D& rViewInformation,
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute)
-        :   BaseProcessor3D(rViewInformation),
+        :	BaseProcessor3D(rViewInformation),
             mrSdrSceneAttribute(rSdrSceneAttribute),
             mrSdrLightingAttribute(rSdrLightingAttribute),
             maRasterRange(),

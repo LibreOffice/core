@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@
 using namespace com::sun::star;
 using namespace rtl;
 
-sal_Unicode const pszExtColor[]  = {'s','o','c'};
+sal_Unicode const pszExtColor[]	 = {'s','o','c'};
 
-static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};   // < 5.2
-static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};   // = 5.2
-static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
+static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};	// < 5.2
+static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};	// = 5.2
+static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };		// = 6.0
 
 // ------------------
 // class XColorTable

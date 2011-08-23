@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ ScVbaComment::getAnnotationIndex() throw (uno::RuntimeException)
     {
         uno::Reference< sheet::XSheetAnnotation > xAnno( xAnnos->getByIndex( aIndex ), uno::UNO_QUERY_THROW );
         table::CellAddress xAddress = xAnno->getPosition();
-
+    
         if ( xAddress.Column == aAddress.Column && xAddress.Row == aAddress.Row && xAddress.Sheet == aAddress.Sheet )
         {
             OSL_TRACE("** terminating search, index is %d", aIndex );
@@ -219,14 +219,14 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     return sAnnoText;
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaComment::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComment") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaComment::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

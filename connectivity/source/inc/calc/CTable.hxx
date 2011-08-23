@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include "file/FTable.hxx"
 #include <tools/date.hxx>
-
+ 
 namespace com { namespace sun { namespace star { namespace sheet {
     class XSpreadsheet;
     class XSpreadsheetDocument;
@@ -52,11 +52,11 @@ namespace connectivity
                         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>,
                         comphelper::UStringMixLess > OContainer;
 
-        class OCalcTable :  public OCalcTable_BASE
+        class OCalcTable :	public OCalcTable_BASE
         {
-        private:
-            ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
-            ::std::vector<sal_Int32> m_aPrecisions; // same as aboth
+        private:					
+            ::std::vector<sal_Int32> m_aTypes;		// holds all type for columns just to avoid to ask the propertyset
+            ::std::vector<sal_Int32> m_aPrecisions;	// same as aboth
             ::std::vector<sal_Int32> m_aScales;
             ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >           m_xSheet;
             OCalcConnection* m_pConnection;

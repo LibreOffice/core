@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace cairocanvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCanvasFont,
                                                ::com::sun::star::lang::XServiceInfo > CanvasFont_Base;
 
-    class CanvasFont : public ::comphelper::OBaseMutex,
+    class CanvasFont : public ::comphelper::OBaseMutex, 
                        public CanvasFont_Base,
                        private ::boost::noncopyable
     {
@@ -63,10 +63,10 @@ namespace cairocanvas
             CanvasFont,
             ::com::sun::star::rendering::XCanvasFont > Reference;
 
-        CanvasFont( const ::com::sun::star::rendering::FontRequest&                                  fontRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& extraFontProperties,
-                    const ::com::sun::star::geometry::Matrix2D&                                      rFontMatrix,
-                    const SurfaceProviderRef&                                                        rDevice );
+        CanvasFont( const ::com::sun::star::rendering::FontRequest& 								 fontRequest,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& extraFontProperties, 
+                    const ::com::sun::star::geometry::Matrix2D&										 rFontMatrix,
+                    const SurfaceProviderRef&														 rDevice );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -86,9 +86,9 @@ namespace cairocanvas
         ::Font getVCLFont() const;
 
     private:
-        ::canvas::vcltools::VCLObject<Font>      maFont;
+        ::canvas::vcltools::VCLObject<Font>		 maFont;
         ::com::sun::star::rendering::FontRequest maFontRequest;
-        SurfaceProviderRef                       mpRefDevice;
+        SurfaceProviderRef						 mpRefDevice;
     };
 
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,28 +31,28 @@
 #include <vcl/dialog.hxx>
 #include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
-#include "scui_def.hxx" //CHINA001
+#include "scui_def.hxx" //CHINA001 
 
-//CHINA001 #define NAME_TOP     1
-//CHINA001 #define NAME_LEFT        2
-//CHINA001 #define NAME_BOTTOM      4
-//CHINA001 #define NAME_RIGHT       8
+//CHINA001 #define NAME_TOP		1
+//CHINA001 #define NAME_LEFT		2
+//CHINA001 #define NAME_BOTTOM		4
+//CHINA001 #define NAME_RIGHT		8
 
 class ScNameCreateDlg : public ModalDialog
 {
 protected:
     FixedLine       aFixedLine;
-    CheckBox        aTopBox;
-    CheckBox        aLeftBox;
-    CheckBox        aBottomBox;
-    CheckBox        aRightBox;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    HelpButton      aHelpButton;
+    CheckBox		aTopBox;
+    CheckBox		aLeftBox;
+    CheckBox		aBottomBox;
+    CheckBox		aRightBox;
+    OKButton		aOKButton;
+    CancelButton	aCancelButton;
+    HelpButton		aHelpButton;
 public:
     ScNameCreateDlg( Window * pParent, USHORT nFlags );
 
-    USHORT          GetFlags() const;
+    USHORT			GetFlags() const;
 };
 
 

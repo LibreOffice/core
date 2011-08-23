@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -233,7 +233,7 @@ void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
 
         if( bIsUIActive ||
             ( aActiveLayer.Len() != 0 && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
-            !pPV->IsLayerVisible(aActiveLayer) ) ) ||
+            !pPV->IsLayerVisible(aActiveLayer) ) ) || 
             SD_MOD()->GetWaterCan() )
         {
             rSet.DisableItem( SID_INSERT_TABLE );

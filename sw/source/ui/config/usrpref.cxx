@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,6 +63,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     bIsVScrollMetricSet(sal_False),
     nDefTab( MM50 * 4 ),
     bIsSquaredPageMode(sal_False),
+    bApplyCharUnit(sal_False),
     aContentConfig(bWeb, *this),
     aLayoutConfig(bWeb, *this),
     aGridConfig(bWeb, *this),
@@ -95,11 +96,11 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Display/GraphicObject",                    //  0
-        "Display/Table",                            //  1
-        "Display/DrawingControl",                   //  2
-        "Display/FieldCode",                        //  3
-        "Display/Note",                             //  4
+        "Display/GraphicObject",   					// 	0
+        "Display/Table",							//  1
+        "Display/DrawingControl",  					//  2
+        "Display/FieldCode",	   					//  3
+        "Display/Note",								//  4
         "Display/PreventTips",                      //  5
         "NonprintingCharacter/MetaCharacters",     //   6
         "NonprintingCharacter/ParagraphEnd",        //  7
@@ -165,11 +166,11 @@ void SwContentViewConfig::Commit()
         sal_Bool bVal = FALSE;
         switch(nProp)
         {
-            case  0: bVal = rParent.IsGraphic();    break;// "Display/GraphicObject",
-            case  1: bVal = rParent.IsTable();  break;// "Display/Table",
-            case  2: bVal = rParent.IsDraw();       break;// "Display/DrawingControl",
-            case  3: bVal = rParent.IsFldName();    break;// "Display/FieldCode",
-            case  4: bVal = rParent.IsPostIts();    break;// "Display/Note",
+            case  0: bVal = rParent.IsGraphic();	break;// "Display/GraphicObject",
+            case  1: bVal = rParent.IsTable();	break;// "Display/Table",
+            case  2: bVal = rParent.IsDraw();    	break;// "Display/DrawingControl",
+            case  3: bVal = rParent.IsFldName(); 	break;// "Display/FieldCode",
+            case  4: bVal = rParent.IsPostIts(); 	break;// "Display/Note",
             case  5: bVal = rParent.IsPreventTips(); break; // "Display/PreventTips"
             case  6: bVal = rParent.IsViewMetaChars(); break; //"NonprintingCharacter/MetaCharacters"
             case  7: bVal = rParent.IsParagraph(sal_True); break;// "NonprintingCharacter/ParagraphEnd",
@@ -208,11 +209,11 @@ void SwContentViewConfig::Load()
                 sal_Bool bSet = nProp != 16 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
-                    case  0: rParent.SetGraphic(bSet);  break;// "Display/GraphicObject",
-                    case  1: rParent.SetTable(bSet);    break;// "Display/Table",
-                    case  2: rParent.SetDraw(bSet);     break;// "Display/DrawingControl",
-                    case  3: rParent.SetFldName(bSet);  break;// "Display/FieldCode",
-                    case  4: rParent.SetPostIts(bSet);  break;// "Display/Note",
+                    case  0: rParent.SetGraphic(bSet);	break;// "Display/GraphicObject",
+                    case  1: rParent.SetTable(bSet);	break;// "Display/Table",
+                    case  2: rParent.SetDraw(bSet);    	break;// "Display/DrawingControl",
+                    case  3: rParent.SetFldName(bSet); 	break;// "Display/FieldCode",
+                    case  4: rParent.SetPostIts(bSet); 	break;// "Display/Note",
                     case  5: rParent.SetPreventTips(bSet);  break;// "Display/PreventTips",
                     case  6: rParent.SetViewMetaChars(bSet); break; //"NonprintingCharacter/MetaCharacters"
                     case  7: rParent.SetParagraph(bSet); break;// "NonprintingCharacter/ParagraphEnd",
@@ -263,9 +264,10 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Window/IsVerticalRulerRight",      //15
         "ViewLayout/Columns",               //16
         "ViewLayout/BookMode",              //17
-        "Other/IsSquaredPageMode"           //18
+        "Other/IsSquaredPageMode",        //18
+        "Other/ApplyCharUnit"               //19
     };
-    const int nCount = bWeb ? 14 : 19;
+    const int nCount = bWeb ? 14 : 20;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -332,8 +334,9 @@ void SwLayoutViewConfig::Commit()
             case 16: pValues[nProp] <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;// "ViewLayout/Columns",
             case 17: bSet = rParent.IsViewLayoutBookMode(); break;// "ViewLayout/BookMode",
             case 18: bSet = rParent.IsSquaredPageMode(); break;// "Other/IsSquaredPageMode",
+            case 19: bSet = rParent.IsApplyCharUnit(); break;// "Other/ApplyCharUnit",
         }
-        if(nProp < 8 || nProp == 10 || nProp == 15 || nProp == 17 || nProp == 18 )
+        if(nProp < 8 || nProp == 10 || nProp == 15 || nProp == 17 || nProp == 18 || nProp == 19 )
             pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
     }
     PutProperties(aNames, aValues);
@@ -353,7 +356,7 @@ void SwLayoutViewConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Bool bSet = nProp < 8 || nProp == 10 || nProp == 17 || nProp == 18 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                sal_Bool bSet = nProp < 8 || nProp == 10 || nProp == 17 || nProp == 18 || nProp == 19 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
                     case  0: rParent.SetCrossHair(bSet); break;// "Line/Guide",
@@ -419,6 +422,7 @@ void SwLayoutViewConfig::Load()
                     break;// "ViewLayout/Columns",
                     case 17: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
                     case 18: rParent.SetDefaultPageMode(bSet,TRUE); break;// "Other/IsSquaredPageMode",
+                    case 19: rParent.SetApplyCharUnit(bSet); break;// "Other/ApplyUserChar"
                 }
             }
         }
@@ -434,13 +438,13 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Option/SnapToGrid",            // 0
-        "Option/VisibleGrid",           // 1
-        "Option/Synchronize",           // 2
-        "Resolution/XAxis",             // 3
-        "Resolution/YAxis",             // 4
-        "Subdivision/XAxis",            // 5
-        "Subdivision/YAxis"             // 6
+        "Option/SnapToGrid",			// 0
+        "Option/VisibleGrid",			// 1
+        "Option/Synchronize",			// 2
+        "Resolution/XAxis",				// 3
+        "Resolution/YAxis",				// 4
+        "Subdivision/XAxis",			// 5
+        "Subdivision/YAxis"				// 6
     };
     const int nCount = 7;
     Sequence<OUString> aNames(nCount);
@@ -482,7 +486,7 @@ void SwGridConfig::Commit()
         sal_Bool bSet;
         switch(nProp)
         {
-            case  0: bSet = rParent.IsSnap(); break;//      "Option/SnapToGrid",
+            case  0: bSet = rParent.IsSnap(); break;// 		"Option/SnapToGrid",
             case  1: bSet = rParent.IsGridVisible(); break;//"Option/VisibleGrid",
             case  2: bSet = rParent.IsSynchronize(); break;//  "Option/Synchronize",
             case  3: pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(rParent.GetSnapSize().Width()); break;//      "Resolution/XAxis",
@@ -517,7 +521,7 @@ void SwGridConfig::Load()
                     pValues[nProp] >>= nSet;
                 switch(nProp)
                 {
-                    case  0: rParent.SetSnap(bSet); break;//        "Option/SnapToGrid",
+                    case  0: rParent.SetSnap(bSet); break;// 		"Option/SnapToGrid",
                     case  1: rParent.SetGridVisible(bSet); break;//"Option/VisibleGrid",
                     case  2: rParent.SetSynchronize(bSet); break;//  "Option/Synchronize",
                     case  3: aSnap.Width() = MM100_TO_TWIP(nSet); break;//      "Resolution/XAxis",
@@ -540,8 +544,8 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "DirectCursor/UseDirectCursor", // 0
-        "DirectCursor/Insert",          // 1
+        "DirectCursor/UseDirectCursor",	// 0
+        "DirectCursor/Insert",			// 1
         "Option/ProtectedArea"          // 2
     };
     const int nCount = 3;
@@ -581,8 +585,8 @@ void SwCursorConfig::Commit()
         sal_Bool bSet;
         switch(nProp)
         {
-            case  0: bSet = rParent.IsShadowCursor();       break;//  "DirectCursor/UseDirectCursor",
-            case  1: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCrsrFillMode();   break;//  "DirectCursor/Insert",
+            case  0: bSet = rParent.IsShadowCursor(); 		break;//  "DirectCursor/UseDirectCursor",
+            case  1: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCrsrFillMode(); 	break;//  "DirectCursor/Insert",
             case  2: bSet = rParent.IsCursorInProtectedArea(); break;// "Option/ProtectedArea"
         }
         if(nProp != 1 )
@@ -614,7 +618,7 @@ void SwCursorConfig::Load()
                     pValues[nProp] >>= nSet;
                 switch(nProp)
                 {
-                    case  0: rParent.SetShadowCursor(bSet);         break;//  "DirectCursor/UseDirectCursor",
+                    case  0: rParent.SetShadowCursor(bSet); 		break;//  "DirectCursor/UseDirectCursor",
                     case  1: rParent.SetShdwCrsrFillMode((BYTE)nSet); break;//  "DirectCursor/Insert",
                     case  2: rParent.SetCursorInProtectedArea(bSet); break;// "Option/ProtectedArea"
                 }
@@ -654,7 +658,7 @@ void SwWebColorConfig::Commit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= (sal_Int32)rParent.GetRetoucheColor().GetColor();   break;// "Color",
+            case  0: pValues[nProp] <<= (sal_Int32)rParent.GetRetoucheColor().GetColor();	break;// "Color",
         }
     }
     PutProperties(aPropNames, aValues);

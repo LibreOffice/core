@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,30 +51,30 @@ class SvtLanguageTable;
 #define LANG_LIST_SPELL_USED        0x0200
 #define LANG_LIST_HYPH_USED         0x0400
 #define LANG_LIST_THES_USED         0x0800
-#define LANG_LIST_ALSO_PRIMARY_ONLY 0x1000  // Do not exclude primary-only
-                                            // languages that do not form a
-                                            // locale, such as Arabic as
+#define LANG_LIST_ALSO_PRIMARY_ONLY 0x1000  // Do not exclude primary-only 
+                                            // languages that do not form a 
+                                            // locale, such as Arabic as 
                                             // opposed to Arabic-Egypt.
 
 
 // load language strings from resource
-SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg );
+SVX_DLLPUBLIC String 	GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg );
 
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {
 public:
 
 private:
-    Image                   m_aNotCheckedImage;
-    Image                   m_aCheckedImage;
+    Image					m_aNotCheckedImage;
+    Image					m_aCheckedImage;
     Image                   m_aCheckedImageHC;
-    String                  m_aAllString;
+    String					m_aAllString;
     com::sun::star::uno::Sequence< INT16 >  *m_pSpellUsedLang;
     SvtLanguageTable*       m_pLangTable;
-    INT16                   m_nLangList;
+    INT16					m_nLangList;
     BOOL                    m_bHasLangNone;
-    BOOL                    m_bLangNoneIsLangAll;
-    BOOL                    m_bWithCheckmark;
+    BOOL					m_bLangNoneIsLangAll;
+    BOOL					m_bWithCheckmark;
 
     SVX_DLLPRIVATE void                    Init();
     SVX_DLLPRIVATE USHORT                  ImplInsertImgEntry( const String& rEntry, USHORT nPos, bool bChecked );
@@ -85,18 +85,18 @@ public:
     SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bCheck = FALSE);
     ~SvxLanguageBox();
 
-    void            SetLanguageList( INT16 nLangList,
+    void			SetLanguageList( INT16 nLangList,
                             BOOL bHasLangNone, BOOL bLangNoneIsLangAll = FALSE,
                             BOOL bCheckSpellAvail = FALSE );
 
-    USHORT          InsertLanguage( const LanguageType eLangType, USHORT nPos = LISTBOX_APPEND );
-    USHORT          InsertDefaultLanguage( sal_Int16 nType, USHORT nPos = LISTBOX_APPEND );
+    USHORT			InsertLanguage( const LanguageType eLangType, USHORT nPos = LISTBOX_APPEND );
+    USHORT			InsertDefaultLanguage( sal_Int16 nType, USHORT nPos = LISTBOX_APPEND );
     USHORT          InsertLanguage( const LanguageType eLangType,
                             BOOL bCheckEntry, USHORT nPos = LISTBOX_APPEND );
-    void            RemoveLanguage( const LanguageType eLangType );
-    void            SelectLanguage( const LanguageType eLangType, BOOL bSelect = TRUE );
-    LanguageType    GetSelectLanguage() const;
-    BOOL            IsLanguageSelected( const LanguageType eLangType ) const;
+    void			RemoveLanguage( const LanguageType eLangType );
+    void			SelectLanguage( const LanguageType eLangType, BOOL bSelect = TRUE );
+    LanguageType	GetSelectLanguage() const;
+    BOOL			IsLanguageSelected( const LanguageType eLangType ) const;
 };
 
 #if ENABLE_LAYOUT

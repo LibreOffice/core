@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,40 +24,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_DataTransferEvent_idl__
-#define __com_sun_star_io_DataTransferEvent_idl__
-
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module io {
-
-//=============================================================================
-
+#ifndef __com_sun_star_io_DataTransferEvent_idl__ 
+#define __com_sun_star_io_DataTransferEvent_idl__ 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module io {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: struct com::sun::star::io::DataTransferEvent
 /** is broadcast by a filter.
     @see XDataTransferEventListener
  */
 published struct DataTransferEvent: com::sun::star::lang::EventObject
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+        
     // DocMerge from xml: field com::sun::star::io::DataTransferEvent::aException
     /** specifies an occurred exception.
      */
-    any aException;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    any aException; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

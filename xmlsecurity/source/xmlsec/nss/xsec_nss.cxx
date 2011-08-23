@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
     Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
 
     if( xKey.is() ) {
-        //  try {
+        //	try {
         // XMLSignature_NssImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLSignature_NssImpl::impl_getImplementationName() ;
@@ -121,11 +121,11 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
             for( i = seqServices.getLength() ; i -- ;  )
                 xNewKey->createKey( seqServices.getConstArray()[i] ) ;
         }
-
+        
         return sal_True;
         //} catch( InvalidRegistryException & ) {
-        //  //we should not ignore exceptions
-        //  return sal_False ;
+        //	//we should not ignore exceptions
+        //	return sal_False ;
         //}
     }
     return result;

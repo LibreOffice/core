@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,37 +45,37 @@
 
 #include <hash_map>
 
-#define OBJTYPE_BASICMANAGER    1L
-//#define OBJTYPE_LIB               2L
-//#define OBJTYPE_MODULE            3L
-#define OBJTYPE_METHOD          2L
-//#define OBJTYPE_METHODINOBJ       5L
-//#define OBJTYPE_OBJECT            6L
-//#define OBJTYPE_SUBOBJ            7L
-//#define OBJTYPE_PROPERTY      8L
-#define OBJTYPE_SCRIPTCONTAINER     3L
-#define OBJTYPE_SFROOT      4L
+#define OBJTYPE_BASICMANAGER	1L
+//#define OBJTYPE_LIB				2L
+//#define OBJTYPE_MODULE			3L
+#define OBJTYPE_METHOD			2L
+//#define OBJTYPE_METHODINOBJ		5L
+//#define OBJTYPE_OBJECT			6L
+//#define OBJTYPE_SUBOBJ			7L
+//#define OBJTYPE_PROPERTY		8L
+#define OBJTYPE_SCRIPTCONTAINER		3L
+#define OBJTYPE_SFROOT		4L
 
-#define BROWSEMODE_MODULES      0x01
-#define BROWSEMODE_SUBS         0x02
-#define BROWSEMODE_OBJS         0x04
-#define BROWSEMODE_PROPS        0x08
-#define BROWSEMODE_SUBOBJS      0x10
+#define BROWSEMODE_MODULES		0x01
+#define BROWSEMODE_SUBS			0x02
+#define BROWSEMODE_OBJS			0x04
+#define BROWSEMODE_PROPS		0x08
+#define BROWSEMODE_SUBOBJS		0x10
 
-#define INPUTMODE_NEWLIB        1
-#define INPUTMODE_NEWMACRO      2
-#define INPUTMODE_RENAME        3
+#define INPUTMODE_NEWLIB		1
+#define INPUTMODE_NEWMACRO		2
+#define INPUTMODE_RENAME		3
 
-typedef ::std::hash_map < ::rtl::OUString, ::rtl::OUString ,
+typedef ::std::hash_map < ::rtl::OUString, ::rtl::OUString , 
     ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > Selection_hash;
 
 class SFEntry;
 
 class SFTreeListBox : public SvTreeListBox
 {
-   friend class SvxScriptOrgDialog;
+   friend class SvxScriptOrgDialog; 
 private:
-    USHORT          nMode;
+    USHORT			nMode;
     Image m_hdImage;
     Image m_hdImage_hc;
     Image m_libImage;
@@ -94,33 +94,33 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
 
 protected:
-    void                    ExpandTree( SvLBoxEntry* pRootEntry );
-    virtual void            RequestingChilds( SvLBoxEntry* pParent );
-    virtual void            ExpandedHdl();
-    SvLBoxEntry*            FindEntry( SvLBoxEntry* pParent, const String& rText, BYTE nType );
-    virtual long            ExpandingHdl();
-    static BOOL             dialogSort1( com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node1,
+    void 					ExpandTree( SvLBoxEntry* pRootEntry );
+    virtual void			RequestingChilds( SvLBoxEntry* pParent );
+    virtual void 			ExpandedHdl();
+    SvLBoxEntry* 			FindEntry( SvLBoxEntry* pParent, const String& rText, BYTE nType );
+    virtual long			ExpandingHdl();
+    static BOOL             dialogSort1( com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node1, 
             com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node2 );
-    static BOOL             dialogSort2( com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node1,
+    static BOOL             dialogSort2( com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node1, 
             com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node2 );
 
 public:
-    void                    Init( const ::rtl::OUString& language );
-    void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
+    void 					Init( const ::rtl::OUString& language );
+    void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node, 
                               ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
                     SFTreeListBox( Window* pParent, const ResId& rRes );
                     ~SFTreeListBox();
 
-    void            UpdateEntries();
+    void			UpdateEntries();
 
-    void            ExpandAllTrees();
+    void			ExpandAllTrees();
 
 
 
     SvLBoxEntry * insertEntry(String const & rText, USHORT nBitmap,
                               SvLBoxEntry * pParent,
                               bool bChildrenOnDemand,
-                              std::auto_ptr< SFEntry > aUserData,
+                              std::auto_ptr< SFEntry > aUserData, 
                               ::rtl::OUString factoryURL );
     SvLBoxEntry * insertEntry(String const & rText, USHORT nBitmap,
                               SvLBoxEntry * pParent,
@@ -133,54 +133,54 @@ public:
 class InputDialog : public ModalDialog
 {
 private:
-    FixedText       aText;
-    Edit            aEdit;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
+    FixedText		aText;
+    Edit			aEdit;
+    OKButton		aOKButton;
+    CancelButton	aCancelButton;
 
 public:
     InputDialog( Window * pParent, USHORT nMode );
                 ~InputDialog();
 
-    String      GetObjectName() const { return aEdit.GetText(); }
-    void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
+    String		GetObjectName() const { return aEdit.GetText(); }
+    void		SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
 };
 
 class SFEntry
 {
 private:
-    BYTE            nType;
+    BYTE			nType;
     bool            loaded;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > nodes;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > model;
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > nodes;   
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > model;   
     SFEntry(){}
 public:
-                    SFEntry( BYTE nT )              { nType = nT; loaded=false; }
-                    SFEntry( BYTE nT,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& entryNodes ,
+                    SFEntry( BYTE nT )				{ nType = nT; loaded=false; }
+                    SFEntry( BYTE nT, 
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& entryNodes , 
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& entryModel) { nType = nT; nodes = entryNodes; loaded=false; model = entryModel; }
                     SFEntry( const SFEntry& r ) { nType = r.nType; nodes = r.nodes; loaded = r.loaded; }
-    virtual         ~SFEntry() {}
+    virtual 		~SFEntry() {}
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > GetNode() { return nodes ;}
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel() { return model ;};
-    BYTE            GetType() const                     { return nType; }
-    bool            isLoaded() const                    { return loaded; }
-    void            setLoaded()                         { loaded=true; }
+    BYTE			GetType() const 					{ return nType; }
+    bool			isLoaded() const 					{ return loaded; }
+    void			setLoaded()                         { loaded=true; }
 };
 
 class SvxScriptOrgDialog : public SfxModalDialog
 {
 protected:
-    FixedText               aScriptsTxt;
-    SFTreeListBox           aScriptsBox;
+    FixedText 				aScriptsTxt;
+    SFTreeListBox		    aScriptsBox;
 
-    PushButton              aRunButton;
-    CancelButton            aCloseButton;
-    PushButton              aCreateButton;
-    PushButton              aEditButton;
-    PushButton              aRenameButton;
-    PushButton              aDelButton;
-    HelpButton              aHelpButton;
+    PushButton				aRunButton;
+    CancelButton 			aCloseButton;
+    PushButton 				aCreateButton;
+    PushButton				aEditButton;
+    PushButton				aRenameButton;
+    PushButton				aDelButton;
+    HelpButton				aHelpButton;
 
     ::rtl::OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;
@@ -199,22 +199,22 @@ protected:
     DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
-    BOOL                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
-    void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
-
+    BOOL 	            getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
+    void				CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
-
+    
     void        createEntry( SvLBoxEntry* pEntry );
     void        renameEntry( SvLBoxEntry* pEntry );
     void        deleteEntry( SvLBoxEntry* pEntry );
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
-                getBrowseNode( SvLBoxEntry* pEntry );
+                getBrowseNode( SvLBoxEntry* pEntry ); 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvLBoxEntry* pEntry );
-    void        EnableButton( Button& rButton, BOOL bEnable );
+    void	    EnableButton( Button& rButton, BOOL bEnable );
     String      getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
-    //String                GetInfo( SbxVariable* pVar );
+    //String				GetInfo( SbxVariable* pVar );
 
 public:
                     // prob need another arg in the ctor
@@ -222,7 +222,7 @@ public:
                     SvxScriptOrgDialog( Window* pParent, ::rtl::OUString language );
                     ~SvxScriptOrgDialog();
 
-    virtual short   Execute();
+    virtual short	Execute();
 
     //DECL_LINK( ActivatePageHdl, TabControl * );
 };
@@ -242,7 +242,7 @@ public:
 
     ~SvxScriptErrorDialog();
 
-    short           Execute();
+    short			Execute();
 };
 
 #endif // _SCRIPTDLG_HXX

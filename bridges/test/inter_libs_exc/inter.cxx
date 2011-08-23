@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,11 +56,11 @@ extern "C" int main( int argc, char const * argv [] )
     typedef t_throws_exc (SAL_CALL * t_get_thrower)();
     t_get_thrower get_thrower = (t_get_thrower)mod_thrower.getSymbol( OUSTR("get_thrower") );
     t_throws_exc thrower = (*get_thrower)();
-
+    
     typedef void (SAL_CALL * t_starter)( t_throws_exc );
     t_starter start = (t_starter)mod_starter.getSymbol( OUSTR("start") );
-
+    
     (*start)( thrower );
-
+    
     return 0;
 }

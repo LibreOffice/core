@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,11 +69,11 @@ protected:
 
     virtual ~SvRTFParser();
 
-    rtl_TextEncoding GetCodeSet() const             { return eCodeSet; }
+    rtl_TextEncoding GetCodeSet() const 			{ return eCodeSet; }
     void SetEncoding( rtl_TextEncoding eEnc );
 
-    rtl_TextEncoding GetUNICodeSet() const          { return eUNICodeSet; }
-    void SetUNICodeSet( rtl_TextEncoding eSet )     { eUNICodeSet = eSet; }
+    rtl_TextEncoding GetUNICodeSet() const 			{ return eUNICodeSet; }
+    void SetUNICodeSet( rtl_TextEncoding eSet )		{ eUNICodeSet = eSet; }
 
 public:
     SvRTFParser( SvStream& rIn, BYTE nStackSize = 3 );
@@ -83,8 +83,8 @@ public:
     int GetOpenBrakets() const { return nOpenBrakets; }
 
     // fuers asynchrone lesen aus dem SvStream
-//  virtual void SaveState( int nToken );
-//  virtual void RestoreState();
+//	virtual void SaveState( int nToken );
+//	virtual void RestoreState();
     virtual void Continue( int nToken );
 };
 

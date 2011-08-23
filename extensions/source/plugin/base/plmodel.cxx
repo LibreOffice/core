@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,13 +114,13 @@ Reference< ::com::sun::star::beans::XPropertySetInfo >  PluginModel::getProperty
 }
 
 sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
-                                                Any & rOldValue,
+                                                Any & rOldValue, 
                                                 sal_Int32 nHandle,
                                                 const Any& rValue ) throw()
 {
     if( nHandle == 1 || nHandle == 2 )
     {
-        if( rValue.getValueTypeClass() == TypeClass_STRING )
+        if( rValue.getValueTypeClass() == TypeClass_STRING )   
         {
             rConvertedValue = rValue;
             if( nHandle == 2 )
@@ -181,7 +181,7 @@ void PluginModel::dispose(void) throw()
         (*it)->disposing( aEvt );
 
     m_aDisposeListeners.clear();
-
+    
     disposing();
 }
 

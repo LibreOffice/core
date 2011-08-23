@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,24 +92,24 @@ namespace vclcanvas
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > queryBitmapCanvas();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
-            getScaledBitmap( const ::com::sun::star::geometry::RealSize2D&  newSize,
-                             sal_Bool                                       beFast );
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > 
+            getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& 	newSize, 
+                             sal_Bool 										beFast );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,
-                     const ::com::sun::star::geometry::IntegerRectangle2D&  rect );
+        ::com::sun::star::uno::Sequence< sal_Int8 > 
+            getData( ::com::sun::star::rendering::IntegerBitmapLayout& 		bitmapLayout,
+                     const ::com::sun::star::geometry::IntegerRectangle2D&	rect );
 
-        void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&        data,
-                      const ::com::sun::star::rendering::IntegerBitmapLayout&   bitmapLayout,
-                      const ::com::sun::star::geometry::IntegerRectangle2D&     rect );
+        void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >& 		data, 
+                      const ::com::sun::star::rendering::IntegerBitmapLayout& 	bitmapLayout, 
+                      const ::com::sun::star::geometry::IntegerRectangle2D& 	rect );
 
-        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&       color,
-                       const ::com::sun::star::rendering::IntegerBitmapLayout&  bitmapLayout,
-                       const ::com::sun::star::geometry::IntegerPoint2D&        pos );
+        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >& 		color, 
+                       const ::com::sun::star::rendering::IntegerBitmapLayout&	bitmapLayout, 
+                       const ::com::sun::star::geometry::IntegerPoint2D& 		pos );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
+        ::com::sun::star::uno::Sequence< sal_Int8 > 
+            getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout, 
                       const ::com::sun::star::geometry::IntegerPoint2D& pos );
 
         ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
@@ -119,9 +119,9 @@ namespace vclcanvas
 
     private:
 
-        void setBitmap( const BitmapEx& rBitmap );
+        void setBitmap( const BitmapEx&	rBitmap );
 
-        BitmapBackBufferSharedPtr   mpBackBuffer;
+        BitmapBackBufferSharedPtr	mpBackBuffer;
         OutDevProviderSharedPtr     mpOutDevReference;
     };
 }

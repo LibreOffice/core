@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,18 +57,18 @@
 ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
     ModalDialog ( pParent, ScResId( RID_SCDLG_LINKAREA ) ),
     //
-    aFlLocation ( this, ScResId( FL_LOCATION ) ),
-    aCbUrl      ( this, ScResId( CB_URL ) ),
-    aBtnBrowse  ( this, ScResId( BTN_BROWSE ) ),
-    aTxtHint    ( this, ScResId( FT_HINT ) ),
-    aFtRanges   ( this, ScResId( FT_RANGES ) ),
-    aLbRanges   ( this, ScResId( LB_RANGES ) ),
-    aBtnReload  ( this, ScResId( BTN_RELOAD ) ),
-    aNfDelay    ( this, ScResId( NF_DELAY ) ),
-    aFtSeconds  ( this, ScResId( FT_SECONDS ) ),
-    aBtnOk      ( this, ScResId( BTN_OK ) ),
-    aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp    ( this, ScResId( BTN_HELP ) ),
+    aFlLocation	( this, ScResId( FL_LOCATION ) ),
+    aCbUrl		( this, ScResId( CB_URL ) ),
+    aBtnBrowse	( this, ScResId( BTN_BROWSE ) ),
+    aTxtHint	( this, ScResId( FT_HINT ) ),
+    aFtRanges	( this, ScResId( FT_RANGES ) ),
+    aLbRanges	( this, ScResId( LB_RANGES ) ),
+    aBtnReload	( this, ScResId( BTN_RELOAD ) ),
+    aNfDelay	( this, ScResId( NF_DELAY ) ),
+    aFtSeconds	( this, ScResId( FT_SECONDS ) ),
+    aBtnOk		( this, ScResId( BTN_OK ) ),
+    aBtnCancel	( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp	( this, ScResId( BTN_HELP ) ),
     //
     pSourceShell( NULL ),
     pDocInserter( NULL )
@@ -76,7 +76,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
 {
     FreeResource();
 
-    aCbUrl.SetHelpId( HID_SCDLG_LINKAREAURL );  // SvtURLBox ctor always sets SID_OPENURL
+    aCbUrl.SetHelpId( HID_SCDLG_LINKAREAURL );	// SvtURLBox ctor always sets SID_OPENURL
     aCbUrl.SetSelectHdl( LINK( this, ScLinkedAreaDlg, FileHdl ) );
     aBtnBrowse.SetClickHdl( LINK( this, ScLinkedAreaDlg, BrowseHdl ) );
     aLbRanges.SetSelectHdl( LINK( this, ScLinkedAreaDlg, RangeHdl ) );
@@ -93,7 +93,7 @@ short ScLinkedAreaDlg::Execute()
 {
     // set parent for file dialog or filter options
 
-    Window* pOldDefParent = Application::GetDefDialogParent();
+    Window*	pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
     short nRet = ModalDialog::Execute();
@@ -123,14 +123,14 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
         SfxMedium* pMed = pSourceShell->GetMedium();
         if ( pMed->GetName() == aEntered )
         {
-            //  already loaded - nothing to do
+            //	already loaded - nothing to do
             return 0;
         }
     }
 
     String aFilter;
     String aOptions;
-    //  get filter name by looking at the file content (bWithContent = TRUE)
+    //	get filter name by looking at the file content (bWithContent = TRUE)
     // Break operation if any error occured inside.
     if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE, TRUE ))
         return 0;
@@ -150,7 +150,7 @@ void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, 
 {
     if ( pSourceShell )
     {
-        //  unload old document
+        //	unload old document
         pSourceShell->DoClose();
         pSourceShell = NULL;
         aSourceRef.Clear();
@@ -165,16 +165,16 @@ void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, 
 
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
 
-        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, TRUE );    // with interaction
+        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, TRUE );	// with interaction
         pSourceShell = aLoader.GetDocShell();
         if ( pSourceShell )
         {
             ULONG nErr = pSourceShell->GetErrorCode();
             if (nErr)
-                ErrorHandler::HandleError( nErr );      // including warnings
+                ErrorHandler::HandleError( nErr );		// including warnings
 
             aSourceRef = pSourceShell;
-            aLoader.ReleaseDocRef();    // don't call DoClose in DocLoader dtor
+            aLoader.ReleaseDocRef();	// don't call DoClose in DocLoader dtor
         }
     }
 }
@@ -361,6 +361,6 @@ ULONG ScLinkedAreaDlg::GetRefresh()
     if ( aBtnReload.IsChecked() )
         return sal::static_int_cast<ULONG>( aNfDelay.GetValue() );
     else
-        return 0;   // disabled
+        return 0;	// disabled
 }
 

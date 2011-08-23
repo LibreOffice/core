@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ public:
     CellUndo( const SdrObjectWeakRef& xObjRef, const CellRef& xCell );
     virtual ~CellUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual BOOL			Merge( SfxUndoAction *pNextAction );
 
     void dispose();
     virtual void ObjectInDestruction(const SdrObject& rObject);
@@ -68,16 +68,16 @@ private:
 
         ::com::sun::star::table::CellContentType mnCellContentType;
 
-        ::rtl::OUString msFormula;
-        double          mfValue;
-        ::sal_Int32     mnError;
-        ::sal_Bool      mbMerged;
-        ::sal_Int32     mnRowSpan;
-        ::sal_Int32     mnColSpan;
+        ::rtl::OUString	msFormula;
+        double			mfValue;
+        ::sal_Int32		mnError;
+        ::sal_Bool		mbMerged;
+        ::sal_Int32		mnRowSpan;
+        ::sal_Int32		mnColSpan;
 
         Data() : mpProperties(0), mpOutlinerParaObject(0) {};
     };
-
+    
     void setDataToCell( const Data& rData );
     void getDataFromCell( Data& rData );
 
@@ -96,8 +96,8 @@ public:
     InsertRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aNewRows );
     virtual ~InsertRowUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void			Undo();
+    virtual void			Redo();
 
 private:
     TableModelRef mxTable;
@@ -114,8 +114,8 @@ public:
     RemoveRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aRemovedRows );
     virtual ~RemoveRowUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void			Undo();
+    virtual void			Redo();
 
 private:
     TableModelRef mxTable;
@@ -132,8 +132,8 @@ public:
     InsertColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells );
     virtual ~InsertColUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void			Undo();
+    virtual void			Redo();
 
 private:
     TableModelRef mxTable;
@@ -151,8 +151,8 @@ public:
     RemoveColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells );
     virtual ~RemoveColUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void			Undo();
+    virtual void			Redo();
 
 private:
     TableModelRef mxTable;
@@ -170,19 +170,19 @@ public:
     TableColumnUndo( const TableColumnRef& xCol );
     virtual ~TableColumnUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual BOOL			Merge( SfxUndoAction *pNextAction );
 
 private:
     struct Data
     {
-        sal_Int32   mnColumn;
-        sal_Int32   mnWidth;
-        sal_Bool    mbOptimalWidth;
-        sal_Bool    mbIsVisible;
-        sal_Bool    mbIsStartOfNewPage;
-        ::rtl::OUString maName;
+        sal_Int32	mnColumn;
+        sal_Int32	mnWidth;
+        sal_Bool	mbOptimalWidth;
+        sal_Bool	mbIsVisible;
+        sal_Bool	mbIsStartOfNewPage;
+        ::rtl::OUString	maName;
     };
 
     void setData( const Data& rData );
@@ -202,19 +202,19 @@ public:
     TableRowUndo( const TableRowRef& xRow );
     virtual ~TableRowUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual BOOL			Merge( SfxUndoAction *pNextAction );
 
 private:
     struct Data
     {
-        CellVector  maCells;
-        sal_Int32   mnRow;
-        sal_Int32   mnHeight;
-        sal_Bool    mbOptimalHeight;
-        sal_Bool    mbIsVisible;
-        sal_Bool    mbIsStartOfNewPage;
+        CellVector	maCells;
+        sal_Int32	mnRow;
+        sal_Int32	mnHeight;
+        sal_Bool	mbOptimalHeight;
+        sal_Bool	mbIsVisible;
+        sal_Bool	mbIsStartOfNewPage;
         ::rtl::OUString maName;
     };
 
@@ -234,8 +234,8 @@ class TableStyleUndo : public SdrUndoAction
 public:
     TableStyleUndo( const SdrTableObj& rTableObj );
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void			Undo();
+    virtual void			Redo();
 
 private:
     SdrObjectWeakRef mxObjRef;

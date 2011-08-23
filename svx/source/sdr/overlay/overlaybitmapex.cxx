@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,15 +55,15 @@ namespace sdr
                 aReference = drawinglayer::primitive2d::Primitive2DReference(
                                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aNewTransPrimitiveVector, mfAlpha));
             }
-
+            
             return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
         }
 
         OverlayBitmapEx::OverlayBitmapEx(
             const basegfx::B2DPoint& rBasePos,
-            const BitmapEx& rBitmapEx,
+            const BitmapEx& rBitmapEx, 
             sal_uInt16 nCenX, sal_uInt16 nCenY, double fAlpha)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_WHITE)),
+        :	OverlayObjectWithBasePosition(rBasePos, Color(COL_WHITE)),
             maBitmapEx(rBitmapEx),
             mnCenterX(nCenX),
             mnCenterY(nCenY),

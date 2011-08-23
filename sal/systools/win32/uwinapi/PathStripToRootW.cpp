@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SHLWAPI_
 #include <shlwapi.h>
 
-IMPLEMENT_THUNK( shlwapi, WINDOWS, BOOL, WINAPI, PathStripToRootW,
+IMPLEMENT_THUNK( shlwapi, WINDOWS, BOOL, WINAPI, PathStripToRootW, 
 (
     LPWSTR lpPathW
 ))
@@ -38,5 +38,5 @@ IMPLEMENT_THUNK( shlwapi, WINDOWS, BOOL, WINAPI, PathStripToRootW,
     AUTO_WSTR2STR(lpPath);
     BOOL bret = PathStripToRootA(lpPathA);
     STR2WSTR(lpPath, wcslen(lpPathW) + 1);
-    return bret;
+    return bret;        
 }

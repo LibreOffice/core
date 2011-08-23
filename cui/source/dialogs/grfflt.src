@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,14 +56,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
         Size = MAP_APPFONT ( 81, 73 ) ;
     };
-#define MA_Y0   3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_Y0	3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTERMOSAIC_FT_WIDTH
     {
         Pos = MAP_APPFONT ( 12, MA_Y0 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
         Text [ en-US ] = "~Width" ;
     };
-#define MA_Y1   MA_Y0 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
+#define MA_Y1	MA_Y0 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_WIDTH
     {
         Border = TRUE ;
@@ -81,14 +81,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Last = 999 ;
         SpinSize = 1 ;
     };
-#define MA_Y2   MA_Y1 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+#define MA_Y2	MA_Y1 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText DLG_FILTERMOSAIC_FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12, MA_Y2 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
         Text [ en-US ] = "H~eight" ;
     };
-#define MA_Y3   MA_Y2 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
+#define MA_Y3	MA_Y2 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_HEIGHT
     {
         Border = TRUE ;
@@ -106,12 +106,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Last = 999 ;
         SpinSize = 1 ;
     };
-#define MA_Y4   MA_Y3 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_Y
+#define MA_Y4	MA_Y3 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_Y
     CheckBox DLG_FILTERMOSAIC_CBX_EDGES
-    {
-        Pos = MAP_APPFONT ( 12, MA_Y4 ) ;
-        Size = MAP_APPFONT ( 91, 12 ) ;
-        TabStop = TRUE ;
+    {	
+        Pos = MAP_APPFONT ( 12, MA_Y4 ) ; 
+        Size = MAP_APPFONT ( 91, 12 ) ; 
+        TabStop = TRUE ; 
         Text [ en-US ] = "E~nhance edges" ;
     };
     OKButton BTN_OK
@@ -160,35 +160,35 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
         Size = MAP_APPFONT ( 81, 73 ) ;
     };
-#define MA_Y5   3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_Y5	3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTERSOLARIZE_FT_THRESHOLD
     {
         Pos = MAP_APPFONT ( 12, MA_Y5 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text [ en-US ] = "Threshold ~value" ;
     };
-#define MA_Y6   MA_Y5 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
+#define MA_Y6	MA_Y5 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
     {
-        Border = TRUE ;
+        Border = TRUE ; 
         Pos = MAP_APPFONT ( 12 , MA_Y6 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 100 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
+        TabStop = TRUE ; 
+        Repeat = TRUE ; 
+        Spin = TRUE ; 
+        Maximum = 100 ; 
+        StrictFormat = TRUE ; 
+        Unit = FUNIT_CUSTOM ; 
         CustomUnitText = " %" ;
-        Last = 100 ;
-        SpinSize = 1 ;
+        Last = 100 ; 
+        SpinSize = 1 ; 
     };
-#define MA_Y7   MA_Y6 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+#define MA_Y7	MA_Y6 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     CheckBox DLG_FILTERSOLARIZE_CBX_INVERT
-    {
-        Pos = MAP_APPFONT ( 12, 46 ) ;
-        Size = MAP_APPFONT ( 77, 12 ) ;
-        TabStop = TRUE ;
+    {	
+        Pos = MAP_APPFONT ( 12, 46 ) ; 
+        Size = MAP_APPFONT ( 77, 12 ) ; 
+        TabStop = TRUE ; 
         Text [ en-US ] = "~Invert" ;
     };
     OKButton BTN_OK
@@ -237,31 +237,31 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
         Size = MAP_APPFONT ( 81, 73 ) ;
     };
-#define MA_Y8   3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_Y8	3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTERSEPIA_FT_SEPIA
     {
         Pos = MAP_APPFONT ( 12 , MA_Y8 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text [ en-US ] = "Aging degree" ;
     };
-#define MA_Y9   MA_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
+#define MA_Y9	MA_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSEPIA_MTR_SEPIA
     {
-        Border = TRUE ;
+        Border = TRUE ; 
         Pos = MAP_APPFONT ( 12 , MA_Y9 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
-        TabStop = TRUE ;
-        Right = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        Maximum = 100 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
+        TabStop = TRUE ; 
+        Right = TRUE ; 
+        Repeat = TRUE ; 
+        Spin = TRUE ; 
+        Minimum = 1 ; 
+        Maximum = 100 ; 
+        StrictFormat = TRUE ; 
+        Unit = FUNIT_CUSTOM ; 
         CustomUnitText = " %" ;
-        First = 1 ;
-        Last = 100 ;
-        SpinSize = 1 ;
+        First = 1 ; 
+        Last = 100 ; 
+        SpinSize = 1 ; 
     };
     OKButton BTN_OK
     {
@@ -295,7 +295,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     Moveable = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
-
+    
     Text [ en-US ] = "Posterize" ;
 
     FixedLine FL_PARAMETER
@@ -309,28 +309,28 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
         Size = MAP_APPFONT ( 81, 73 ) ;
     };
-#define MA_Y10  3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_Y10	3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTERPOSTER_FT_POSTER
     {
         Pos = MAP_APPFONT ( 12 , MA_Y10 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text [ en-US ] = "Poster colors" ;
     };
-#define MA_Y11  MA_Y10 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
+#define MA_Y11	MA_Y10 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     NumericField DLG_FILTERPOSTER_NUM_POSTER
     {
-        Border = TRUE ;
+        Border = TRUE ; 
         Pos = MAP_APPFONT ( 12 , MA_Y11 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 2 ;
-        Maximum = 64 ;
-        StrictFormat = TRUE ;
-        First = 2 ;
-        Last = 64 ;
-        SpinSize = 1 ;
+        TabStop = TRUE ; 
+        Repeat = TRUE ; 
+        Spin = TRUE ; 
+        Minimum = 2 ; 
+        Maximum = 64 ; 
+        StrictFormat = TRUE ; 
+        First = 2 ; 
+        Last = 64 ; 
+        SpinSize = 1 ; 
     };
     OKButton BTN_OK
     {
@@ -359,8 +359,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
 
 TabPage RID_SVX_GRFFILTER_DLG_EMBOSS_TAB
 {
-    Pos = MAP_APPFONT ( 0, 0 ) ;
-    Size = MAP_APPFONT ( 0, 0 ) ;
+    Pos = MAP_APPFONT ( 0, 0 ) ; 
+    Size = MAP_APPFONT ( 0, 0 ) ; 
 };
 
 ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
@@ -372,7 +372,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Size = MAP_APPFONT ( 250, 100 ) ;
 
     Text [ en-US ] = "Relief" ;
-
+    
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -384,21 +384,21 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
         Size = MAP_APPFONT ( 81, 73 ) ;
     };
-#define MA_Y12  3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
+#define MA_Y12	3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTEREMBOSS_FT_LIGHT
     {
         Pos = MAP_APPFONT ( 12 , MA_Y12 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text [ en-US ] = "Light source" ;
     };
-#define MA_Y13  MA_Y12 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
+#define MA_Y13	MA_Y12 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     Control DLG_FILTEREMBOSS_CTL_LIGHT
     {
         HelpID = HID_GRFFILTER_EMBOSS_LIGHT ;
-        Border = TRUE ;
+        Border = TRUE ; 
         Pos = MAP_APPFONT ( 12 , MA_Y13 ) ;
         Size = MAP_APPFONT ( 77 , 60 ) ;
-        TabStop = TRUE ;
+        TabStop = TRUE ; 
     };
     OKButton BTN_OK
     {

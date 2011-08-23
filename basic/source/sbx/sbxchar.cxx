@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ using namespace rtl;
 xub_Unicode ImpGetChar( const SbxValues* p )
 {
     SbxValues aTmp;
-    xub_Unicode nRes;
+    xub_Unicode nRes = 0;
 start:
     switch( +p->eType )
     {
@@ -126,7 +126,7 @@ start:
         case SbxBYREF | SbxDECIMAL:
             {
             double dVal;
-            if( p->eType == SbxCURRENCY )
+            if( p->eType ==	SbxCURRENCY )
                 dVal = ImpCurrencyToDouble( p->nLong64 );
             else if( p->eType == SbxLONG64 )
                 dVal = ImpINT64ToDouble( p->nLong64 );
@@ -156,13 +156,11 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
-                nRes = 0;
-            else
+            if ( p->pOUString )
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pString, d, t, NULL ) != SbxERR_OK )
+                if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                     nRes = 0;
                 else if( d > SbxMAXCHAR )
                 {
@@ -274,9 +272,10 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
-                p->pString = new XubString;
-            *p->pString = n;
+            if ( !p->pOUString )
+                p->pOUString = new ::rtl::OUString( n );
+            else
+                *p->pOUString = ::rtl::OUString( n );
             break;
         case SbxOBJECT:
         {

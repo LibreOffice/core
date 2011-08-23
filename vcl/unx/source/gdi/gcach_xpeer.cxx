@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ void X11GlyphPeer::InitAntialiasing()
 
 enum { INFO_EMPTY=0, INFO_PIXMAP, INFO_XRENDER, INFO_RAWBMP, INFO_MULTISCREEN };
 static const Glyph NO_GLYPHID = 0;
-static RawBitmap* const NO_RAWBMP = NULL;
+static RawBitmap* const NO_RAWBMP = NULL; 
 static const Pixmap NO_PIXMAP = ~0;
 
 // ---------------------------------------------------------------------------
@@ -516,7 +516,7 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex, int nR
                     *pTemp = lsb2msb[ *pTemp ];
 
                 // often a glyph pixmap is only needed on the default screen
-                // => optimize for this common case
+                // => optimize for this common case 
                 int nMinScreen = 0;
                 int nEndScreen = mnMaxScreens;
                 if( nReqScreen == mnDefaultScreen ) {
@@ -642,7 +642,7 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 // ===========================================================================
 
 X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
-:   GlyphCache( rPeer )
+:	GlyphCache( rPeer )
 {
 }
 

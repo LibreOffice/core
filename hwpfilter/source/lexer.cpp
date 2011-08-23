@@ -15,7 +15,7 @@
 #define YY_NEVER_INTERACTIVE 0
 #endif
 #ifndef YY_MAIN
-#define YY_MAIN 0
+#define YY_MAIN 0        
 #endif
 
 #define FLEX_SCANNER
@@ -49,15 +49,15 @@
 /* The "const" storage-class-modifier is valid. */
 #define YY_USE_CONST
 
-#else   /* ! __cplusplus */
+#else	/* ! __cplusplus */
 
 #if __STDC__
 
 #define YY_USE_PROTOS
 #define YY_USE_CONST
 
-#endif  /* __STDC__ */
-#endif  /* ! __cplusplus */
+#endif	/* __STDC__ */
+#endif	/* ! __cplusplus */
 
 #ifdef __TURBOC__
  #pragma warn -rch
@@ -128,10 +128,10 @@ extern FILE *yyin, *yyout;
  * int a single C statement (which needs a semi-colon terminator).  This
  * avoids problems with code like:
  *
- *  if ( condition_holds )
- *      yyless( 5 );
- *  else
- *      do_something_else();
+ * 	if ( condition_holds )
+ *		yyless( 5 );
+ *	else
+ *		do_something_else();
  *
  * Prior to using the do-while the compiler would get upset at the
  * "else" because it interpreted the "if" statement as being all
@@ -164,8 +164,8 @@ struct yy_buffer_state
     {
     FILE *yy_input_file;
 
-    char *yy_ch_buf;        /* input buffer */
-    char *yy_buf_pos;       /* current position in input buffer */
+    char *yy_ch_buf;		/* input buffer */
+    char *yy_buf_pos;		/* current position in input buffer */
 
     /* Size of input buffer in bytes, not including room for EOB
      * characters.
@@ -229,15 +229,15 @@ static YY_BUFFER_STATE yy_current_buffer = 0;
 /* yy_hold_char holds the character lost when yytext is formed. */
 static char yy_hold_char;
 
-static int yy_n_chars;      /* number of characters read into yy_ch_buf */
+static int yy_n_chars;		/* number of characters read into yy_ch_buf */
 
 
 int yyleng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = (char *) 0;
-static int yy_init = 1;     /* whether we need to initialize */
-static int yy_start = 0;    /* start state number */
+static int yy_init = 1;		/* whether we need to initialize */
+static int yy_start = 0;	/* start state number */
 
 /* Flag which is used to allow yywrap()'s to do buffer switches
  * instead of setting up a fresh yyin.  A bit of a hack ...
@@ -1210,7 +1210,7 @@ YY_DECL
 #endif
 
         if ( ! yy_start )
-            yy_start = 1;   /* first start state */
+            yy_start = 1;	/* first start state */
 
         if ( ! yyin )
             yyin = stdin;
@@ -1225,7 +1225,7 @@ YY_DECL
         yy_load_buffer_state();
         }
 
-    while ( 1 )     /* loops until end-of-file is reached */
+    while ( 1 )		/* loops until end-of-file is reached */
         {
         yy_cp = yy_c_buf_p;
 
@@ -1270,7 +1270,7 @@ yy_find_action:
         YY_DO_BEFORE_ACTION;
 
 
-do_action:  /* This label is used only to access EOF actions. */
+do_action:	/* This label is used only to access EOF actions. */
 
 
         switch ( yy_act )
@@ -1285,62 +1285,62 @@ do_action:  /* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 91 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Begin[%s]\n",yytext+1); return EQBEGIN; }
+{ yylval.str = yytext+1; token_debug("	==>Begin[%s]\n",yytext+1); return EQBEGIN; }
     //YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 92 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>End[%s]\n",yytext+1); return EQEND; }
+{ yylval.str = yytext+1; token_debug("	==>End[%s]\n",yytext+1); return EQEND; }
     //YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 93 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Left[%s]\n",yytext+1); return EQLEFT; }
+{ yylval.str = yytext+1; token_debug("	==>Left[%s]\n",yytext+1); return EQLEFT; }
     //YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 94 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>LeftDelim[%s]\n",yytext+1); return LEFT_DELIM; }
+{ yylval.str = yytext+1; token_debug("	==>LeftDelim[%s]\n",yytext+1); return LEFT_DELIM; }
     //YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 95 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>RightDelim[%s]\n",yytext+1); return RIGHT_DELIM; }
+{ yylval.str = yytext+1; token_debug("	==>RightDelim[%s]\n",yytext+1); return RIGHT_DELIM; }
     //YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 96 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Right[%s]\n",yytext+1); return EQRIGHT; }
+{ yylval.str = yytext+1; token_debug("	==>Right[%s]\n",yytext+1); return EQRIGHT; }
     //YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 97 "lexer.l"
-{ yylval.str = yytext;   token_debug("  ==>NewLine[%s]\n",yytext); return NEWLINE; }
+{ yylval.str = yytext;   token_debug("	==>NewLine[%s]\n",yytext); return NEWLINE; }
     //YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 99 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Accent[%s]\n",yytext+1); return ACCENT; }
+{ yylval.str = yytext+1; token_debug("	==>Accent[%s]\n",yytext+1); return ACCENT; }
     //YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 100 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Small_Greek[%s]\n",yytext+1); return SMALL_GREEK; }
+{ yylval.str = yytext+1; token_debug("	==>Small_Greek[%s]\n",yytext+1); return SMALL_GREEK; }
     //YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 101 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Capital_Greek[%s]\n",yytext+1); return CAPITAL_GREEK; }
+{ yylval.str = yytext+1; token_debug("	==>Capital_Greek[%s]\n",yytext+1); return CAPITAL_GREEK; }
     //YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 102 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Binary_Operator[%s]\n",yytext+1); return BINARY_OPERATOR; }
+{ yylval.str = yytext+1; token_debug("	==>Binary_Operator[%s]\n",yytext+1); return BINARY_OPERATOR; }
     //YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 103 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Relation_Symbol[%s]\n",yytext+1); return RELATION_OPERATOR; }
+{ yylval.str = yytext+1; token_debug("	==>Relation_Symbol[%s]\n",yytext+1); return RELATION_OPERATOR; }
     //YY_BREAK
 case 13:
 YY_RULE_SETUP
@@ -1375,113 +1375,113 @@ YY_RULE_SETUP
 case 19:
 YY_RULE_SETUP
 #line 112 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Arrow[%s]\n",yytext+1); return ARROW; }
+{ yylval.str = yytext+1; token_debug("	==>Arrow[%s]\n",yytext+1); return ARROW; }
     //YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 113 "lexer.l"
-{ yylval.str = strdup("leftrightarrow"); token_debug("  ==>Arrow[leftrightarrow]\n"); return ARROW; }
+{ yylval.str = strdup("leftrightarrow"); token_debug("	==>Arrow[leftrightarrow]\n"); return ARROW; }
     //YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 114 "lexer.l"
-{ yylval.str = strdup("rightarrow"); token_debug("  ==>Arrow[rightarrow]\n"); return ARROW; }
+{ yylval.str = strdup("rightarrow"); token_debug("	==>Arrow[rightarrow]\n"); return ARROW; }
     //YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 115 "lexer.l"
-{ yylval.str = strdup("leftarrow"); token_debug("   ==>Arrow[leftarrow]\n"); return ARROW; }
+{ yylval.str = strdup("leftarrow"); token_debug("	==>Arrow[leftarrow]\n"); return ARROW; }
     //YY_BREAK
 
 case 23:
 YY_RULE_SETUP
 #line 116 "lexer.l"
-{ token_debug(" ==>Ignore[\\rm]\n"); }
+{ token_debug("	==>Ignore[\\rm]\n"); }
     //YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 117 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>General_Iden[%s]\n",yytext+1); return GENERAL_IDEN; }
+{ yylval.str = yytext+1; token_debug("	==>General_Iden[%s]\n",yytext+1); return GENERAL_IDEN; }
     //YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 118 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>General_Oper[%s]\n",yytext+1); return GENERAL_OPER; }
+{ yylval.str = yytext+1; token_debug("	==>General_Oper[%s]\n",yytext+1); return GENERAL_OPER; }
     //YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 119 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Big_Symbol[%s]\n",yytext+1); return BIG_SYMBOL; }
+{ yylval.str = yytext+1; token_debug("	==>Big_Symbol[%s]\n",yytext+1); return BIG_SYMBOL; }
     //YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 120 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Function[%s]\n",yytext+1); return FUNCTION; }
+{ yylval.str = yytext+1; token_debug("	==>Function[%s]\n",yytext+1); return FUNCTION; }
     //YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 121 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Root[%s]\n",yytext+1); return ROOT; }
+{ yylval.str = yytext+1; token_debug("	==>Root[%s]\n",yytext+1); return ROOT; }
     //YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 122 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Fraction[%s]\n",yytext+1); return FRACTION; }
+{ yylval.str = yytext+1; token_debug("	==>Fraction[%s]\n",yytext+1); return FRACTION; }
     //YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 123 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Over[%s]\n",yytext+1); return EQOVER; }
+{ yylval.str = yytext+1; token_debug("	==>Over[%s]\n",yytext+1); return EQOVER; }
     //YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 124 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Delimeter[%s]\n",yytext+1); return DELIMETER; }
+{ yylval.str = yytext+1; token_debug("	==>Delimeter[%s]\n",yytext+1); return DELIMETER; }
     //YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 125 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Large_Delim[%s]\n",yytext+1); return LARGE_DELIM; }
+{ yylval.str = yytext+1; token_debug("	==>Large_Delim[%s]\n",yytext+1); return LARGE_DELIM; }
     //YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 126 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Decoration[%s]\n",yytext+1); return DECORATION; }
+{ yylval.str = yytext+1; token_debug("	==>Decoration[%s]\n",yytext+1); return DECORATION; }
     //YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 127 "lexer.l"
-{ yylval.str = yytext+1; token_debug("  ==>Space_Symbol[%s]\n",yytext+1); /*return SPACE_SYMBOL;*/ }
+{ yylval.str = yytext+1; token_debug("	==>Space_Symbol[%s]\n",yytext+1); /*return SPACE_SYMBOL;*/ }
     //YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 128 "lexer.l"
-{ yylval.str = strdup("quad"); token_debug("    ==>Space_Symbol[quad]\n"); /* return SPACE_SYMBOL;*/ }
+{ yylval.str = strdup("quad"); token_debug("	==>Space_Symbol[quad]\n"); /* return SPACE_SYMBOL;*/ }
     //YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 129 "lexer.l"
-{ yylval.dval = yytext;  token_debug("  ==>Digit[%s]\n",yytext); return DIGIT; }
+{ yylval.dval = yytext;  token_debug("	==>Digit[%s]\n",yytext); return DIGIT; }
     //YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 130 "lexer.l"
-{ yylval.str = yytext;   token_debug("  ==>Operator[%s]\n",yytext); return OPERATOR; }
+{ yylval.str = yytext;   token_debug("	==>Operator[%s]\n",yytext); return OPERATOR; }	
     //YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 131 "lexer.l"
-{ token_debug(" ==>SubSup[%s]\n",yytext); return yytext[0]; }
+{ token_debug("	==>SubSup[%s]\n",yytext); return yytext[0]; }
     //YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 132 "lexer.l"
-{ token_debug(" ==>Paren[%s]\n",yytext); return yytext[0];}
+{ token_debug("	==>Paren[%s]\n",yytext); return yytext[0];}
     //YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 133 "lexer.l"
-{ token_debug(" ==>Abs[%s]\n",yytext); return yytext[0];}
+{ token_debug("	==>Abs[%s]\n",yytext); return yytext[0];}
     //YY_BREAK
 case 41:
 YY_RULE_SETUP
@@ -1496,12 +1496,12 @@ YY_RULE_SETUP
 case 43:
 YY_RULE_SETUP
 #line 136 "lexer.l"
-{ yylval.str = yytext;  token_debug("   ==>String[%s]\n",yytext); return STRING; }
+{ yylval.str = yytext;  token_debug("	==>String[%s]\n",yytext); return STRING; }	
     //YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 137 "lexer.l"
-{ yylval.str = yytext;  token_debug("   ==>Else[%s]\n",yytext); return CHARACTER; }
+{ yylval.str = yytext;  token_debug("	==>Else[%s]\n",yytext); return CHARACTER; }	
     //YY_BREAK
 case 45:
 YY_RULE_SETUP
@@ -1645,9 +1645,9 @@ case YY_STATE_EOF(INITIAL):
 /* yy_get_next_buffer - try to read in a new buffer
  *
  * Returns a code representing an action:
- *  EOB_ACT_LAST_MATCH -
- *  EOB_ACT_CONTINUE_SCAN - continue scanning from current position
- *  EOB_ACT_END_OF_FILE - end of file
+ *	EOB_ACT_LAST_MATCH -
+ *	EOB_ACT_CONTINUE_SCAN - continue scanning from current position
+ *	EOB_ACT_END_OF_FILE - end of file
  */
 
 static int yy_get_next_buffer()
@@ -1813,7 +1813,7 @@ static yy_state_type yy_get_previous_state()
 /* yy_try_NUL_trans - try to make a transition on the NUL character
  *
  * synopsis
- *  next_state = yy_try_NUL_trans( current_state );
+ *	next_state = yy_try_NUL_trans( current_state );
  */
 
 #ifdef YY_USE_PROTOS
@@ -1844,7 +1844,7 @@ yy_state_type yy_current_state;
     return yy_is_jam ? 0 : yy_current_state;
     }
 
-/* yyunput unused
+/* yyunput unused 
 #ifndef YY_NO_UNPUT
 #ifdef YY_USE_PROTOS
 static void yyunput( int c, register char *yy_bp )
@@ -1856,12 +1856,12 @@ register char *yy_bp;
     {
     register char *yy_cp = yy_c_buf_p;
 
-    // undo effects of setting up yytext
+    // undo effects of setting up yytext 
     *yy_cp = yy_hold_char;
 
     if ( yy_cp < yy_current_buffer->yy_ch_buf + 2 )
-        { // need to shift things up to make room
-        // +2 for EOB chars.
+        { // need to shift things up to make room 
+        // +2 for EOB chars. 
         register int number_to_move = yy_n_chars + 2;
         register char *dest = &yy_current_buffer->yy_ch_buf[
                     yy_current_buffer->yy_buf_size + 2];
@@ -1887,7 +1887,7 @@ register char *yy_bp;
     yy_hold_char = *yy_cp;
     yy_c_buf_p = yy_cp;
     }
-#endif  // ifndef YY_NO_UNPUT
+#endif	// ifndef YY_NO_UNPUT 
 */
 
 #ifdef __cplusplus
@@ -1954,8 +1954,8 @@ static int input()
             }
         }
 
-    c = *(unsigned char *) yy_c_buf_p;  /* cast for 8-bit char's */
-    *yy_c_buf_p = '\0'; /* preserve yytext */
+    c = *(unsigned char *) yy_c_buf_p;	/* cast for 8-bit char's */
+    *yy_c_buf_p = '\0';	/* preserve yytext */
     yy_hold_char = *++yy_c_buf_p;
 
 
@@ -2156,7 +2156,7 @@ yy_size_t size;
     if ( ! b )
         YY_FATAL_ERROR( "out of dynamic memory in yy_scan_buffer()" );
 
-    b->yy_buf_size = size - 2;  /* "- 2" to take care of EOB's */
+    b->yy_buf_size = size - 2;	/* "- 2" to take care of EOB's */
     b->yy_buf_pos = b->yy_ch_buf = base;
     b->yy_is_our_buffer = 0;
     b->yy_input_file = 0;

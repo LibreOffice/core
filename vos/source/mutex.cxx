@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,30 +41,30 @@ VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OMutex, vos), VOS_NAMESPACE(OMutex, vos), 
 IMutex& OMutex::getGlobalMutex()
 {
     static OMutex theGlobalMutex;
-
+        
     return theGlobalMutex;
 }
 
-OMutex::OMutex()
+OMutex::OMutex() 
 {
     m_Impl= osl_createMutex();
 }
 
-OMutex::~OMutex()
+OMutex::~OMutex() 
 {
     osl_destroyMutex(m_Impl);
 }
-
+    
 void OMutex::acquire()
 {
     osl_acquireMutex(m_Impl);
 }
 
-sal_Bool OMutex::tryToAcquire()
+sal_Bool OMutex::tryToAcquire() 
 {
     return osl_tryToAcquireMutex(m_Impl);
 }
-
+    
 void OMutex::release()
 {
     osl_releaseMutex(m_Impl);

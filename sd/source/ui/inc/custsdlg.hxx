@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,22 +46,22 @@ class SdCustomShow;
 class SdCustomShowDlg : public ModalDialog
 {
 private:
-    ListBox         aLbCustomShows;
-    CheckBox        aCbxUseCustomShow;
-    PushButton      aBtnNew;
-    PushButton      aBtnEdit;
-    PushButton      aBtnRemove;
-    PushButton      aBtnCopy;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnStartShow;
-    OKButton        aBtnOK;
+    ListBox 		aLbCustomShows;
+    CheckBox		aCbxUseCustomShow;
+    PushButton		aBtnNew;
+    PushButton		aBtnEdit;
+    PushButton		aBtnRemove;
+    PushButton		aBtnCopy;
+    HelpButton		aBtnHelp;
+    PushButton  	aBtnStartShow;
+    OKButton		aBtnOK;
 
-    SdDrawDocument& rDoc;
-    List*           pCustomShowList;
-    SdCustomShow*   pCustomShow;
-    BOOL            bModified;
+    SdDrawDocument&	rDoc;
+    List*			pCustomShowList;
+    SdCustomShow*	pCustomShow;
+    BOOL			bModified;
 
-    void            CheckState();
+    void			CheckState();
 
     DECL_LINK( ClickButtonHdl, void * );
     DECL_LINK( StartShowHdl, Button* );
@@ -70,8 +70,8 @@ public:
                 SdCustomShowDlg( Window* pWindow, SdDrawDocument& rDrawDoc );
                 ~SdCustomShowDlg();
 
-    BOOL        IsModified() const { return( bModified ); }
-    BOOL        IsCustomShow() const;
+    BOOL		IsModified() const { return( bModified ); }
+    BOOL		IsCustomShow() const;
 };
 
 
@@ -80,25 +80,25 @@ public:
 class SdDefineCustomShowDlg : public ModalDialog
 {
 private:
-    FixedText       aFtName;
-    Edit            aEdtName;
-    FixedText       aFtPages;
-    MultiListBox    aLbPages;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    FixedText       aFtCustomPages;
-    SvTreeListBox   aLbCustomPages;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    FixedText		aFtName;
+    Edit			aEdtName;
+    FixedText		aFtPages;
+    MultiListBox	aLbPages;
+    PushButton		aBtnAdd;
+    PushButton		aBtnRemove;
+    FixedText		aFtCustomPages;
+    SvTreeListBox	aLbCustomPages;
+    OKButton		aBtnOK;
+    CancelButton 	aBtnCancel;
+    HelpButton		aBtnHelp;
 
-    SdDrawDocument& rDoc;
-    SdCustomShow*&  rpCustomShow;
-    BOOL            bModified;
-    String          aOldName;
+    SdDrawDocument&	rDoc;
+    SdCustomShow*&	rpCustomShow;
+    BOOL			bModified;
+    String			aOldName;
 
-    void            CheckState();
-    void            CheckCustomShow();
+    void			CheckState();
+    void			CheckCustomShow();
 
     DECL_LINK( ClickButtonHdl, void * );
     DECL_LINK( OKHdl, Button* );
@@ -109,7 +109,7 @@ public:
                             SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS );
                     ~SdDefineCustomShowDlg();
 
-    BOOL            IsModified() const { return( bModified ); }
+    BOOL			IsModified() const { return( bModified ); }
 };
 
 #endif // _SD_CUSTSDLG_HXX

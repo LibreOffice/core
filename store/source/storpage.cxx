@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -977,7 +977,7 @@ storeError OStorePageManager::rebuild (
                 // Determine data page count.
                 inode::ChunkDescriptor aDescr (
                     nDataLen - xDstDir->capacity(), xData->capacity());
-
+                
                 sal_uInt32 i, n = aDescr.m_nPage;
                 if (aDescr.m_nOffset) n += 1;
 

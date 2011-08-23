@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx>	// helper for implementations
 
 #include <boost/shared_ptr.hpp>
 #include <map>
@@ -64,11 +64,11 @@ class HyphenatorDispatcher :
     HyphSvcByLangMap_t      aSvcMap;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >                     xPropSet;
+        ::com::sun::star::beans::XPropertySet >						xPropSet;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList;
+        ::com::sun::star::linguistic2::XSearchableDictionaryList >	xDicList;
 
-    LngSvcMgr      &rMgr;
+    LngSvcMgr	   &rMgr;
 
     // disallow copy-constructor and assignment-operator for now
     HyphenatorDispatcher(const HyphenatorDispatcher &);
@@ -81,11 +81,11 @@ class HyphenatorDispatcher :
         ::com::sun::star::linguistic2::XSearchableDictionaryList >
             GetDicList();
 
-    void    ClearSvcList();
+    void	ClearSvcList();
 
     com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord>
-            buildHyphWord( const rtl::OUString rOrigWord,
+            buildHyphWord( const rtl::OUString rOrigWord, 
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XDictionaryEntry> &xEntry,
                 INT16 nLang, INT16 nMaxLeading );
@@ -151,7 +151,7 @@ inline ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >
         HyphenatorDispatcher::GetPropSet()
 {
-    return xPropSet.is() ?
+    return xPropSet.is() ? 
                 xPropSet : xPropSet = ::linguistic::GetLinguProperties();
 }
 
@@ -160,7 +160,7 @@ inline ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSearchableDictionaryList >
         HyphenatorDispatcher::GetDicList()
 {
-    return xDicList.is() ?
+    return xDicList.is() ? 
                 xDicList : xDicList = ::linguistic::GetSearchableDictionaryList();
 }
 

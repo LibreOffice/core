@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,12 +118,12 @@ public:
                         SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
                         ~SfxCommonPrintOptionsTabPage();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual Window*     GetParentLabeledBy( const Window* pLabel ) const;
-    virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
+    virtual Window*		GetParentLabeledBy( const Window* pLabel ) const;
+    virtual Window*		GetParentLabelFor( const Window* pLabel ) const;
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
 // -------------------------------
@@ -134,12 +134,12 @@ class TransparencyPrintWarningBox : public ModalDialog
 {
 private:
 
-    FixedImage      aWarnFI;
-    FixedText       aWarnFT;
-    OKButton        aYesBtn;
-    PushButton      aNoBtn;
+    FixedImage		aWarnFI;
+    FixedText		aWarnFT;
+    OKButton		aYesBtn;
+    PushButton	    aNoBtn;
     CancelButton    aCancelBtn;
-    CheckBox        aNoWarnCB;
+    CheckBox		aNoWarnCB;
 
                     DECL_LINK( ClickNoBtn, PushButton* );
 
@@ -148,7 +148,7 @@ public:
                     TransparencyPrintWarningBox( Window* pParent );
                     ~TransparencyPrintWarningBox();
 
-    BOOL            IsNoWarningChecked() const { return aNoWarnCB.IsChecked(); }
+    BOOL			IsNoWarningChecked() const { return aNoWarnCB.IsChecked(); }
 };
 
 #endif // #ifndef _SFX_PRINTOPT_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,9 +139,9 @@ public:
         if ( nVCLException )
         {
             bIn = TRUE;
-
+        
             ::vos::OGuard aLock(&Application::GetSolarMutex());
-
+        
             // Timer nicht mehr anhalten, da ansonsten die UAE-Box
             // auch nicht mehr gepaintet wird
             ImplSVData* pSVData = ImplGetSVData();
@@ -183,10 +183,10 @@ BOOL ImplSVMain()
         pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = FALSE;
     }
-
+    
     if( pSVData->mxDisplayConnection.is() )
     {
-        vcl::DisplayConnection* pConnection =
+        vcl::DisplayConnection* pConnection = 
             dynamic_cast<vcl::DisplayConnection*>(pSVData->mxDisplayConnection.get());
 
         if( pConnection )
@@ -195,7 +195,7 @@ BOOL ImplSVMain()
     }
 
     // This is a hack to work around the problem of the asynchronous nature
-    // of bridging accessibility through Java: on shutdown there might still
+    // of bridging accessibility through Java: on shutdown there might still 
     // be some events in the AWT EventQueue, which need the SolarMutex which
     // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
     // here ..
@@ -271,7 +271,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     if( pExceptionHandler != NULL )
         return FALSE;
-
+    
     if( ! ImplGetSVData() )
         ImplInitSVData();
 
@@ -343,7 +343,7 @@ void DeInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mbDeInit = TRUE;
-
+    
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 
     // give ime status a chance to destroy its own windows
@@ -489,7 +489,7 @@ void DeInitVCL()
             pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().RemoveListener( pSVData->maAppData.mpCfgListener );
             delete pSVData->maAppData.mpCfgListener;
         }
-
+        
         delete pSVData->maAppData.mpSettings;
         pSVData->maAppData.mpSettings = NULL;
     }

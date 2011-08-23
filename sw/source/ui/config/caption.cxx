@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include "numrule.hxx"
 #include "caption.hxx"
 
-#define VERSION_01      1
+#define VERSION_01 		1
 #define CAPTION_VERSION VERSION_01
 
 /*--------------------------------------------------------------------
@@ -103,11 +103,11 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
 BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {
     return (eObjType == rOpt.eObjType &&
-            aOleId == rOpt.aOleId); // Damit gleiche Ole-IDs nicht mehrfach eingefuegt
+            aOleId == rOpt.aOleId);	// Damit gleiche Ole-IDs nicht mehrfach eingefuegt
                                     // werden koennen, auf nichts weiteres vergleichen
 
 
-/*           &&
+/*			 &&
             sCategory == rOpt.sCategory &&
             nNumType == rOpt.nNumType &&
             sCaption == rOpt.sCaption &&
@@ -132,15 +132,15 @@ BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
     BYTE   nVersion;
 
     rIStream >> nVersion;
-    rIStream >> cVal;               rCapOpt.UseCaption() = cVal != 0;
-    rIStream >> nVal;               rCapOpt.eObjType = (SwCapObjType)nVal;
+    rIStream >> cVal;				rCapOpt.UseCaption() = cVal != 0;
+    rIStream >> nVal;				rCapOpt.eObjType = (SwCapObjType)nVal;
     rIStream >> rCapOpt.aOleId;
 
     rIStream.ReadByteString( rCapOpt.sCategory, eEncoding );
-    rIStream >> nVal;               rCapOpt.nNumType = nVal;
+    rIStream >> nVal;				rCapOpt.nNumType = nVal;
     rIStream.ReadByteString( rCapOpt.sCaption, eEncoding );
-    rIStream >> nVal;               rCapOpt.nPos = nVal;
-    rIStream >> nVal;               rCapOpt.nLevel = nVal;
+    rIStream >> nVal;				rCapOpt.nPos = nVal;
+    rIStream >> nVal;				rCapOpt.nLevel = nVal;
 
     rIStream >> cVal;
     rCapOpt.sSeparator = UniString(
@@ -160,19 +160,19 @@ BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 /*SvStream& operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt )
 {
     rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    rOStream    << (BYTE)CAPTION_VERSION
+    rOStream	<< (BYTE)CAPTION_VERSION
                 << (BYTE)rCapOpt.UseCaption()
                 << (UINT16)rCapOpt.eObjType
                 << rCapOpt.aOleId;
 
     rOStream.WriteByteString( rCapOpt.sCategory, eEncoding );
 
-    rOStream    << (UINT16)rCapOpt.nNumType;
+    rOStream	<< (UINT16)rCapOpt.nNumType;
 
     rOStream.WriteByteString( rCapOpt.sCaption, eEncoding );
 
     BYTE cSep = ByteString(rCapOpt.sSeparator, eEncoding).GetChar(0);
-    rOStream    << (UINT16)rCapOpt.nPos
+    rOStream 	<< (UINT16)rCapOpt.nPos
                 << (UINT16)rCapOpt.nLevel
                 << cSep;
 

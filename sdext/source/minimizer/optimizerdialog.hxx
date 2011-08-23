@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,16 +56,16 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 
-#define MAX_STEP        4
-#define OD_DIALOG_WIDTH 330
-#define DIALOG_HEIGHT   210
-#define BUTTON_WIDTH    50
-#define BUTTON_HEIGHT   14
-#define BUTTON_POS_Y    DIALOG_HEIGHT - BUTTON_HEIGHT - 6
+#define MAX_STEP		4
+#define OD_DIALOG_WIDTH	330
+#define DIALOG_HEIGHT	210
+#define BUTTON_WIDTH	50
+#define BUTTON_HEIGHT	14
+#define BUTTON_POS_Y	DIALOG_HEIGHT - BUTTON_HEIGHT - 6
 
-#define PAGE_POS_X      91
-#define PAGE_POS_Y      8
-#define PAGE_WIDTH      OD_DIALOG_WIDTH - PAGE_POS_X
+#define PAGE_POS_X		91
+#define PAGE_POS_Y		8
+#define PAGE_WIDTH		OD_DIALOG_WIDTH - PAGE_POS_X
 
 // -------------------
 // - OPTIMIZERDIALOG -
@@ -78,26 +78,26 @@ public :
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > rxStatusDispatcher );
     ~OptimizerDialog();
 
-    sal_Bool                execute();
+    sal_Bool				execute();
 
-    sal_Int16               mnCurrentStep;
-    sal_Int16               mnTabIndex;
-    sal_Bool                mbIsReadonly;
+    sal_Int16				mnCurrentStep;
+    sal_Int16				mnTabIndex;
+    sal_Bool				mbIsReadonly;
 
 private :
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >			mxFrame;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControl;
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControlModel;
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >		mxRoadmapControl;
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >		mxRoadmapControlModel;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener >    mxItemListener;
-    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
-    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListenerListBox0Pg0;
-    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >    mxTextListenerFormattedField0Pg1;
-    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >    mxTextListenerComboBox0Pg1;
-    com::sun::star::uno::Reference< com::sun::star::awt::XSpinListener >    mxSpinListenerFormattedField0Pg1;
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >      mxStatusDispatcher;
+    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener >	mxItemListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >	mxActionListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >	mxActionListenerListBox0Pg0;
+    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >	mxTextListenerFormattedField0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >	mxTextListenerComboBox0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::awt::XSpinListener >	mxSpinListenerFormattedField0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >		mxStatusDispatcher;
 
     std::vector< std::vector< rtl::OUString > > maControlPages;
 
@@ -164,7 +164,7 @@ public:
     virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
 private:
-
+    
     OptimizerDialog& mrOptimizerDialog;
 };
 
@@ -178,7 +178,7 @@ public:
     virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
 private:
-
+    
     OptimizerDialog& mrOptimizerDialog;
 };
 
@@ -192,7 +192,7 @@ public:
     virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
 private:
-
+    
     OptimizerDialog& mrOptimizerDialog;
 };
 
@@ -206,7 +206,7 @@ public:
     virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
 private:
-
+    
     OptimizerDialog& mrOptimizerDialog;
 };
 
@@ -223,7 +223,7 @@ public:
     virtual void SAL_CALL last( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
 private:
-
+    
     OptimizerDialog& mrOptimizerDialog;
 };
 
@@ -241,7 +241,7 @@ public:
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
 
 private:
-
+    
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& mrXFrame;
 };
 

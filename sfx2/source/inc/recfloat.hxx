@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 class SfxRecordingFloatWrapper_Impl : public SfxChildWindow
 {
-    SfxBindings*        pBindings;
+    SfxBindings*		pBindings;
 public:
                         SfxRecordingFloatWrapper_Impl( Window* pParent ,
                                                 USHORT nId ,
@@ -44,12 +44,12 @@ public:
                         ~SfxRecordingFloatWrapper_Impl();
 
                         SFX_DECL_CHILDWINDOW(SfxRecordingFloatWrapper_Impl);
-    virtual sal_Bool    QueryClose();
+    virtual sal_Bool 	QueryClose();
 };
 
 class SfxRecordingFloat_Impl : public SfxFloatingWindow
 {
-    SfxChildWindow*         pWrapper;
+    SfxChildWindow*		    pWrapper;
     ToolBox                 aTbx;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xStopRecTbxCtrl;
 public:
@@ -59,7 +59,7 @@ public:
     virtual             ~SfxRecordingFloat_Impl();
     virtual BOOL        Close();
     virtual void        FillInfo( SfxChildWinInfo& rInfo ) const;
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void		StateChanged( StateChangedType nStateChange );
 
     DECL_LINK( Select, ToolBox * );
 };

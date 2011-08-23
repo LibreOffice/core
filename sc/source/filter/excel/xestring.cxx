@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ XclExpString::XclExpString( const OUString& rString, XclStrFlags nFlags, sal_uIn
 //UNUSED2008-05  {
 //UNUSED2008-05      Assign( rString, rFormats, nFlags, nMaxLen );
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  XclExpString::XclExpString(
 //UNUSED2008-05          const OUString& rString, const XclFormatRunVec& rFormats,
 //UNUSED2008-05          XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -204,7 +204,7 @@ void XclExpString::Append( const String& rString )
 //UNUSED2008-05  {
 //UNUSED2008-05      BuildAppend( rString.getStr(), rString.getLength() );
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  void XclExpString::Append( sal_Unicode cChar )
 //UNUSED2008-05  {
 //UNUSED2008-05      BuildAppend( &cChar, 1 );
@@ -493,7 +493,7 @@ static sal_uInt16 lcl_WriteRun( XclExpXmlStream& rStrm, const ScfUInt16Vec& rBuf
         rStrm.WriteFontData( rFontData, XML_rFont );
         rWorksheet->endElement( XML_rPr );
     }
-    rWorksheet->startElement( XML_t,
+    rWorksheet->startElement( XML_t, 
             FSNS( XML_xml, XML_space ), "preserve",
             FSEND );
     rWorksheet->writeEscaped( XclXmlUtils::ToOUString( rBuffer, nStart, nLength ) );
@@ -521,11 +521,11 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
         const XclExpFont* pFont = NULL;
         for ( ; aIt != aEnd; ++aIt )
         {
-            nStart = lcl_WriteRun( rStrm, GetUnicodeBuffer(),
+            nStart = lcl_WriteRun( rStrm, GetUnicodeBuffer(), 
                     nStart, aIt->mnChar-nStart, pFont );
             pFont = rFonts.GetFont( aIt->mnFontIdx );
         }
-        lcl_WriteRun( rStrm, GetUnicodeBuffer(),
+        lcl_WriteRun( rStrm, GetUnicodeBuffer(), 
                 nStart, GetUnicodeBuffer().size() - nStart, pFont );
     }
 }

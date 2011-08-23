@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ void CellMarginHandler::attribute(Id rName, Value & rVal)
     /* WRITERFILTERSTATUS: table: CellColor_attributedata */
     switch( rName )
     {
-        case NS_ooxml::LN_CT_TblWidth_w:
+        case NS_ooxml::LN_CT_TblWidth_w: 
             m_nValue = ConversionHelper::convertTwipToMM100( nIntValue );
         break;
         case NS_ooxml::LN_CT_TblWidth_type:
@@ -101,7 +101,7 @@ void CellMarginHandler::sprm(Sprm & rSprm)
                 m_bLeftMarginValid = true;
             break;
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            case NS_ooxml::LN_CT_TblCellMar_bottom:
+            case NS_ooxml::LN_CT_TblCellMar_bottom: 
                 m_nBottomMargin = m_nValue;
                 m_bBottomMarginValid = true;
             break;

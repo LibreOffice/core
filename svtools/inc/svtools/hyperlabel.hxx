@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ namespace svt
 //.........................................................................
 
        class HyperLabelImpl;
-
+    
     class HyperLabel : public FixedText
     {
     protected:
-        HyperLabelImpl*     m_pImpl;
+        HyperLabelImpl*		m_pImpl;
         Link                maClickHdl;
 
         virtual void        MouseMove( const MouseEvent& rMEvt );
@@ -63,8 +63,8 @@ namespace svt
         HyperLabel( Window* _pParent, const ResId& _rId );
         HyperLabel( Window* _pParent, WinBits _nWinStyle = 0 );
         ~HyperLabel( );
-
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        
+        virtual void	DataChanged( const DataChangedEvent& rDCEvt );
 
         void                SetID( sal_Int16 _ID );
         sal_Int16           GetID() const;
@@ -73,11 +73,11 @@ namespace svt
         sal_Int32           GetIndex() const;
 
         void                SetLabel( const ::rtl::OUString& _rText );
-        sal_Int32           GetLogicWidth();
+        sal_Int32			GetLogicWidth();
 
         ::rtl::OUString     GetLabel( );
-
-        void                ToggleBackgroundColor( const Color& _rGBColor );
+        
+        void				ToggleBackgroundColor( const Color& _rGBColor );
         void                SetInteractive( sal_Bool _bInteractive );
 
         void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
@@ -86,7 +86,7 @@ namespace svt
         Size                CalcMinimumSize( long nMaxWidth = 0 ) const;
 
     private:
-
+        
         DECL_LINK(ImplClickHdl, HyperLabel*);
 
     private:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,27 +42,27 @@
 //#include <sostor.hxx>
 
 // Defines for ToolBox-Id's
-#define TB_NEW              1
-#define TB_OPENSTORAGE      2
-#define TB_SAVESTORAGE      3
-#define TB_ORG              4
-#define TB_CREATELIB1       10
-#define TB_CREATELIB2       11
-#define TB_CREATELIB3       12
-#define TB_LOADLIB1         20
-#define TB_LOADLIB2         21
-#define TB_LOADLIB3         22
-#define TB_STORELIBX        30
-#define TB_UNLOADX          31
-#define TB_LOADX            32
-#define TB_EXECX            33
-#define TB_REMOVEX          34
-#define TB_REMOVEDELX       35
+#define TB_NEW				1
+#define TB_OPENSTORAGE		2
+#define TB_SAVESTORAGE		3
+#define TB_ORG				4
+#define TB_CREATELIB1		10
+#define TB_CREATELIB2		11
+#define TB_CREATELIB3		12
+#define TB_LOADLIB1			20
+#define TB_LOADLIB2			21
+#define TB_LOADLIB3			22
+#define TB_STORELIBX		30
+#define TB_UNLOADX			31
+#define TB_LOADX			32
+#define TB_EXECX			33
+#define TB_REMOVEX			34
+#define TB_REMOVEDELX		35
 
-#define TB_LIB0             40
-#define TB_LIB1             41
-#define TB_LIB2             42
-#define TB_LIB3             43
+#define TB_LIB0				40
+#define TB_LIB1				41
+#define TB_LIB2				42
+#define TB_LIB3				43
 
 const char* pLib1Str = "Lib1";
 const char* pLib2Str = "Lib2";
@@ -81,11 +81,11 @@ public:
 class TestWindow : public WorkWindow
 {
 private:
-    ToolBox         aToolBox;
-    BasicManager*   pBasMgr;
+    ToolBox 		aToolBox;
+    BasicManager*	pBasMgr;
 
-    void            CheckError();
-    USHORT          nLibX;
+    void			CheckError();
+    USHORT			nLibX;
     DECL_LINK( BasicErrorHdl, StarBASIC * );
 
 
@@ -93,16 +93,16 @@ public:
                     TestWindow();
                     ~TestWindow();
 
-    virtual void    Paint( const Rectangle& );
-    virtual void    Resize();
-    virtual void    KeyInput( const KeyEvent& rKeyEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	Paint( const Rectangle& );
+    virtual void	Resize();
+    virtual void	KeyInput( const KeyEvent& rKeyEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
 
     DECL_LINK( TBSelect, ToolBox * );
-    void            UpdateToolBox();
-    void            ShowInfo();
+    void			UpdateToolBox();
+    void			ShowInfo();
 };
 
 TestWindow::~TestWindow()
@@ -420,13 +420,13 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         }
         break;
 
-        case TB_LIB0:   nLibX = 0;
+        case TB_LIB0:	nLibX = 0;
         break;
-        case TB_LIB1:   nLibX = 1;
+        case TB_LIB1:	nLibX = 1;
         break;
-        case TB_LIB2:   nLibX = 2;
+        case TB_LIB2:	nLibX = 2;
         break;
-        case TB_LIB3:   nLibX = 3;
+        case TB_LIB3:	nLibX = 3;
         break;
     }
 

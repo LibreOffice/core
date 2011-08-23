@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -657,7 +657,7 @@ void ElementDescriptor::readTreeControlModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readSelectionTypeAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectionType") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":selectiontype") ) );
-
+    
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("RootDisplayed") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":rootdisplayed") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowsHandles") ),
@@ -751,27 +751,27 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );   
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );  
     readBoolAttr( OUSTR("HideInactiveSelection"),
                   OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) ); 
     readDateFormatAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DateFormat") ),
                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":date-format") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DateShowCentury") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":show-century") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Date") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) ); 
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DateMin") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) ); 
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DateMax") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) ); 
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
     if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
@@ -806,31 +806,31 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );   
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );  
     readBoolAttr( OUSTR("HideInactiveSelection"),
                   OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) ); 
     readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("DecimalAccuracy") ),
-                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":decimal-accuracy") ) );
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":decimal-accuracy") ) ); 
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowThousandsSeparator") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":thousands-separator") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":thousands-separator") ) );   
     readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Value") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );   
     readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueMin") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );   
     readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueMax") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );   
     readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueStep") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-step") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-step") ) );  
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );  
     if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
         readLongAttr( OUSTR("RepeatDelay"),
                       OUSTR(XMLNS_DIALOGS_PREFIX ":repeat"), true /* force */ );
@@ -859,7 +859,7 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
@@ -910,25 +910,25 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );   
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );  
     readBoolAttr( OUSTR("HideInactiveSelection"),
                   OUSTR(XMLNS_DIALOGS_PREFIX ":hide-inactive-selection") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) ); 
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
     readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("EditMask") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":edit-mask") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":edit-mask") ) );   
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LiteralMask") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":literal-mask") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":literal-mask") ) );    
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -952,7 +952,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
@@ -974,7 +974,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
     if (extract_throw<bool>( _xProps->getPropertyValue( OUSTR("Repeat") ) ))
         readLongAttr( OUSTR("RepeatDelay"),
                       OUSTR(XMLNS_DIALOGS_PREFIX ":repeat"), true /* force */ );
-
+    
     Any a( readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveDefault") ) ) );
     switch (a.getValueTypeClass())
     {
@@ -997,7 +997,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
     readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveValue") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
-
+    
     // format spec
     sal_Int32 nKey = 0;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ) ) >>= nKey)
@@ -1015,7 +1015,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":treat-as-number") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("EnforceFormat") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":enforce-format") ) );
-
+    
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -1035,11 +1035,11 @@ void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults();
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );   
     readOrientationAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
                          OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
     readEvents();
@@ -1061,7 +1061,7 @@ void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults();
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValue") ),
@@ -1087,11 +1087,11 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults();
     readOrientationAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
-                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );  
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("BlockIncrement") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":pageincrement") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineIncrement") ),
@@ -1122,7 +1122,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
     addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_SCRIPT_PREFIX) ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_URI) ) );
-
+    
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
@@ -1138,7 +1138,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
                       all_styles->getStyleId( aStyle ) );
     }
-
+    
     // collect elements
     readDefaults( false, false );
     readBoolAttr(
@@ -1158,10 +1158,10 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     bool bDecoration = sal_False;
     if ( (aDecorationAny >>= bDecoration) && !bDecoration )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":withtitlebar") ),
-                      OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
+                      OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) ); 
 
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) ); 
 
     readEvents();
 }

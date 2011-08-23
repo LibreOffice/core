@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@
 
 /***********************   CSimpleTag  ***********************/
 void CSimpleTag::startTag()
-{
+{   
     m_SimpleContent = L"";
 }
 
 
 void CSimpleTag::endTag()
 {
-
+    
 }
 
 void CSimpleTag::addCharacters(const std::wstring& characters)

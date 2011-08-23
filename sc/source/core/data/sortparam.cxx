@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
 {
     for (USHORT i=0; i<MAXSORT; i++)
     {
-        bDoSort[i]    = r.bDoSort[i];
-        nField[i]     = r.nField[i];
+        bDoSort[i]	  = r.bDoSort[i];
+        nField[i]	  = r.nField[i];
         bAscending[i] = r.bAscending[i];
     }
 }
@@ -72,14 +72,14 @@ void ScSortParam::Clear()
     nDestTab = 0;
     nUserIndex = 0;
     bHasHeader=bCaseSens=bUserDef = FALSE;
-    bByRow=bIncludePattern=bInplace = TRUE;
+    bByRow=bIncludePattern=bInplace	= TRUE;
     aCollatorLocale = ::com::sun::star::lang::Locale();
     aCollatorAlgorithm.Erase();
 
     for (USHORT i=0; i<MAXSORT; i++)
     {
-        bDoSort[i]    = FALSE;
-        nField[i]     = 0;
+        bDoSort[i]	  = FALSE;
+        nField[i]	  = 0;
         bAscending[i] = TRUE;
     }
 }
@@ -88,27 +88,27 @@ void ScSortParam::Clear()
 
 ScSortParam& ScSortParam::operator=( const ScSortParam& r )
 {
-    nCol1           = r.nCol1;
-    nRow1           = r.nRow1;
-    nCol2           = r.nCol2;
-    nRow2           = r.nRow2;
-    bHasHeader      = r.bHasHeader;
-    bCaseSens       = r.bCaseSens;
-    bByRow          = r.bByRow;
-    bUserDef        = r.bUserDef;
-    nUserIndex      = r.nUserIndex;
-    bIncludePattern = r.bIncludePattern;
-    bInplace        = r.bInplace;
-    nDestTab        = r.nDestTab;
-    nDestCol        = r.nDestCol;
-    nDestRow        = r.nDestRow;
-    aCollatorLocale         = r.aCollatorLocale;
-    aCollatorAlgorithm      = r.aCollatorAlgorithm;
+    nCol1			= r.nCol1;
+    nRow1			= r.nRow1;
+    nCol2			= r.nCol2;
+    nRow2			= r.nRow2;
+    bHasHeader		= r.bHasHeader;
+    bCaseSens		= r.bCaseSens;
+    bByRow			= r.bByRow;
+    bUserDef		= r.bUserDef;
+    nUserIndex		= r.nUserIndex;
+    bIncludePattern	= r.bIncludePattern;
+    bInplace		= r.bInplace;
+    nDestTab		= r.nDestTab;
+    nDestCol		= r.nDestCol;
+    nDestRow		= r.nDestRow;
+    aCollatorLocale			= r.aCollatorLocale;
+    aCollatorAlgorithm		= r.aCollatorAlgorithm;
 
     for (USHORT i=0; i<MAXSORT; i++)
     {
-        bDoSort[i]    = r.bDoSort[i];
-        nField[i]     = r.nField[i];
+        bDoSort[i]	  = r.bDoSort[i];
+        nField[i]	  = r.nField[i];
         bAscending[i] = r.bAscending[i];
     }
 
@@ -121,37 +121,37 @@ BOOL ScSortParam::operator==( const ScSortParam& rOther ) const
 {
     BOOL bEqual = FALSE;
     // Anzahl der Sorts gleich?
-    USHORT nLast      = 0;
+    USHORT nLast 	  = 0;
     USHORT nOtherLast = 0;
     while ( bDoSort[nLast++] && nLast < MAXSORT ) ;
     while ( rOther.bDoSort[nOtherLast++] && nOtherLast < MAXSORT ) ;
     nLast--;
     nOtherLast--;
-    if (   (nLast           == nOtherLast)
-        && (nCol1           == rOther.nCol1)
-        && (nRow1           == rOther.nRow1)
-        && (nCol2           == rOther.nCol2)
-        && (nRow2           == rOther.nRow2)
-        && (bHasHeader      == rOther.bHasHeader)
-        && (bByRow          == rOther.bByRow)
-        && (bCaseSens       == rOther.bCaseSens)
-        && (bUserDef        == rOther.bUserDef)
-        && (nUserIndex      == rOther.nUserIndex)
+    if (   (nLast 			== nOtherLast)
+        && (nCol1			== rOther.nCol1)
+        && (nRow1			== rOther.nRow1)
+        && (nCol2			== rOther.nCol2)
+        && (nRow2			== rOther.nRow2)
+        && (bHasHeader		== rOther.bHasHeader)
+        && (bByRow			== rOther.bByRow)
+        && (bCaseSens		== rOther.bCaseSens)
+        && (bUserDef		== rOther.bUserDef)
+        && (nUserIndex		== rOther.nUserIndex)
         && (bIncludePattern == rOther.bIncludePattern)
-        && (bInplace        == rOther.bInplace)
-        && (nDestTab        == rOther.nDestTab)
-        && (nDestCol        == rOther.nDestCol)
-        && (nDestRow        == rOther.nDestRow)
-        && (aCollatorLocale.Language    == rOther.aCollatorLocale.Language)
-        && (aCollatorLocale.Country     == rOther.aCollatorLocale.Country)
-        && (aCollatorLocale.Variant     == rOther.aCollatorLocale.Variant)
-        && (aCollatorAlgorithm          == rOther.aCollatorAlgorithm)
+        && (bInplace		== rOther.bInplace)
+        && (nDestTab		== rOther.nDestTab)
+        && (nDestCol		== rOther.nDestCol)
+        && (nDestRow		== rOther.nDestRow)
+        && (aCollatorLocale.Language	== rOther.aCollatorLocale.Language)
+        && (aCollatorLocale.Country		== rOther.aCollatorLocale.Country)
+        && (aCollatorLocale.Variant		== rOther.aCollatorLocale.Variant)
+        && (aCollatorAlgorithm			== rOther.aCollatorAlgorithm)
         )
     {
         bEqual = TRUE;
         for ( USHORT i=0; i<=nLast && bEqual; i++ )
         {
-            bEqual = (nField[i] == rOther.nField[i]) && (bAscending[i]  == rOther.bAscending[i]);
+            bEqual = (nField[i] == rOther.nField[i]) && (bAscending[i]	== rOther.bAscending[i]);
         }
     }
     return bEqual;
@@ -170,21 +170,21 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
     USHORT nNewCount = 0;
     USHORT i;
 
-    //  zuerst die Gruppen aus den Teilergebnissen
+    //	zuerst die Gruppen aus den Teilergebnissen
     if (rSub.bDoSort)
         for (i=0; i<MAXSUBTOTAL; i++)
             if (rSub.bGroupActive[i])
             {
                 if (nNewCount < MAXSORT)
                 {
-                    bDoSort[nNewCount]    = TRUE;
-                    nField[nNewCount]     = rSub.nField[i];
+                    bDoSort[nNewCount]	  = TRUE;
+                    nField[nNewCount]	  = rSub.nField[i];
                     bAscending[nNewCount] = rSub.bAscending;
                     ++nNewCount;
                 }
             }
 
-    //  dann dahinter die alten Einstellungen
+    //	dann dahinter die alten Einstellungen
     for (i=0; i<MAXSORT; i++)
         if (rOld.bDoSort[i])
         {
@@ -193,22 +193,22 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
             for (USHORT j=0; j<nNewCount; j++)
                 if ( nField[j] == nThisField )
                     bDouble = TRUE;
-            if (!bDouble)               // ein Feld nicht zweimal eintragen
+            if (!bDouble)				// ein Feld nicht zweimal eintragen
             {
                 if (nNewCount < MAXSORT)
                 {
-                    bDoSort[nNewCount]    = TRUE;
-                    nField[nNewCount]     = nThisField;
+                    bDoSort[nNewCount]	  = TRUE;
+                    nField[nNewCount]	  = nThisField;
                     bAscending[nNewCount] = rOld.bAscending[i];
                     ++nNewCount;
                 }
             }
         }
 
-    for (i=nNewCount; i<MAXSORT; i++)       // Rest loeschen
+    for (i=nNewCount; i<MAXSORT; i++)		// Rest loeschen
     {
-        bDoSort[i]    = FALSE;
-        nField[i]     = 0;
+        bDoSort[i]	  = FALSE;
+        nField[i]	  = 0;
         bAscending[i] = TRUE;
     }
 }
@@ -228,8 +228,8 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
     bAscending[0] = TRUE;
     for (USHORT i=1; i<MAXSORT; i++)
     {
-        bDoSort[i]    = FALSE;
-        nField[i]     = 0;
+        bDoSort[i]	  = FALSE;
+        nField[i]	  = 0;
         bAscending[i] = TRUE;
     }
 }

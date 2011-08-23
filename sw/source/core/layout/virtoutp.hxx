@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,27 +29,27 @@
 
 #include <vcl/virdev.hxx>
 
-#include "swtypes.hxx"      // UCHAR
-#include "swrect.hxx"       // SwRect
+#include "swtypes.hxx"		// UCHAR
+#include "swrect.hxx"		// SwRect
 
 class ViewShell;
 #define VIRTUALHEIGHT 64
 
 /*************************************************************************
- *                      class SwTxtVout
+ *						class SwTxtVout
  *************************************************************************/
 
 class SwLayVout
 {
-    friend void _FrmFinit();    //loescht das Vout
+    friend void _FrmFinit();	//loescht das Vout
 private:
-    ViewShell*      pSh;
-    OutputDevice*   pOut;
-    VirtualDevice*  pVirDev;
-    SwRect          aRect;
-    SwRect          aOrgRect;
-    Size            aSize;
-    USHORT          nCount;
+    ViewShell*		pSh;
+    OutputDevice*	pOut;
+    VirtualDevice*	pVirDev;
+    SwRect			aRect;
+    SwRect			aOrgRect;
+    Size			aSize;
+    USHORT			nCount;
 
     BOOL DoesFit( const Size &rOut );
 

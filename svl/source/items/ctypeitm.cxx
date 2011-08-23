@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,14 +56,14 @@ CntContentTypeItem::CntContentTypeItem()
 }
 
 //----------------------------------------------------------------------------
-CntContentTypeItem::CntContentTypeItem( USHORT which, const XubString& rType )
+CntContentTypeItem::CntContentTypeItem(	USHORT which, const XubString& rType )
 : CntUnencodedStringItem( which, rType ),
   _eType( CONTENT_TYPE_NOT_INIT )
 {
 }
 
 //----------------------------------------------------------------------------
-CntContentTypeItem::CntContentTypeItem( USHORT which,
+CntContentTypeItem::CntContentTypeItem(	USHORT which,
                                         const INetContentType eType )
 : CntUnencodedStringItem( which, INetContentTypes::GetContentType( eType ) ),
   _eType( eType )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
  *  </li><li>
  *    Otherwise check whether the row repeated attribute is the same.
  *  </li><li>
- *    If the row repeated attribute is the same, then compare two rows
+ *    If the row repeated attribute is the same, then compare two rows 
  *    and mark it as <i>change</i> if those rows are different.
  *  </li><li>
  *    If the row repeated attribute is different, then split the rows and
@@ -76,7 +76,7 @@ public class IteratorRowCompare implements DiffAlgorithm {
      *
      *  @param  orgSeq  The original sequence.
      *  @param  modSeq  The modified (or changed) sequence to
-     *                 compare against with the origial.
+     * 			       compare against with the origial.
      *
      *  @return  An array of Difference objects.
      */
@@ -127,11 +127,11 @@ public class IteratorRowCompare implements DiffAlgorithm {
                     int modRowNum = 1;
 
                     if (orgRowRepeated.length() > 0) {
-                        orgRowNum =
+                        orgRowNum = 
                             Integer.valueOf(orgRowRepeated).intValue();
                     }
                     if (modRowRepeated.length() > 0) {
-                        modRowNum =
+                        modRowNum = 
                             Integer.valueOf(modRowRepeated).intValue();
                     }
 
@@ -169,7 +169,7 @@ public class IteratorRowCompare implements DiffAlgorithm {
                     }
 
                     if (different) {
-                        Difference diff = new Difference(Difference.CHANGE,
+                        Difference diff = new Difference(Difference.CHANGE, 
                                           i, j);
                         diffVector.add(diff);
                     }

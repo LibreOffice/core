@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 /* If you need to define implementation helper classes that deal with more than
    12 interfaces, then use macros as follows, e.g. for 3 interfaces:
-
+   
 #include <cppuhelper/implbase_ex_pre.hxx>
 #define __IFC_EX_TYPE_INIT3( class_cast ) \
     __IFC_EX_TYPE_INIT( class_cast, 1 ), __IFC_EX_TYPE_INIT( class_cast, 2 ), \
@@ -83,19 +83,19 @@ struct class_data
     /** number of supported types in m_typeEntries
     */
     sal_Int16 m_nTypes;
-
+    
     /** determines whether m_typeEntries is initialized and carries unacquired type refs
     */
     sal_Bool m_storedTypeRefs;
-
+    
     /** determines whether an implementation id was created in m_id
     */
     sal_Bool m_createdId;
-
+    
     /** implementation id
      */
     sal_Int8 m_id[ 16 ];
-
+    
     /** type, object offset
     */
     type_entry m_typeEntries[ 1 ];

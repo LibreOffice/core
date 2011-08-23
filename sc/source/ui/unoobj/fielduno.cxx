@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include "hints.hxx"
 #include "editsrc.hxx"
 #include "cellsuno.hxx"
-#include "servuno.hxx"      // fuer IDs
+#include "servuno.hxx"		// fuer IDs
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "editutil.hxx"
@@ -58,7 +58,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+//	alles ohne Which-ID, Map nur fuer PropertySetInfo
 
 const SfxItemPropertySet* lcl_GetURLPropertySet()
 {
@@ -105,15 +105,15 @@ const SfxItemPropertySet* lcl_GetFileFieldPropertySet()
 
 //------------------------------------------------------------------------
 
-#define SCTEXTFIELD_SERVICE         "com.sun.star.text.TextField"
-#define SCTEXTCONTENT_SERVICE       "com.sun.star.text.TextContent"
+#define SCTEXTFIELD_SERVICE			"com.sun.star.text.TextField"
+#define SCTEXTCONTENT_SERVICE		"com.sun.star.text.TextContent"
 
 SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
 
 //------------------------------------------------------------------------
 
-//  ScUnoEditEngine nur um aus einer EditEngine die Felder herauszubekommen...
+//	ScUnoEditEngine nur um aus einer EditEngine die Felder herauszubekommen...
 
 enum ScUnoCollectMode
 {
@@ -125,28 +125,28 @@ enum ScUnoCollectMode
 
 class ScUnoEditEngine : public ScEditEngineDefaulter
 {
-    ScUnoCollectMode    eMode;
-    USHORT              nFieldCount;
-    TypeId              aFieldType;
-    SvxFieldData*       pFound;         // lokale Kopie
-    USHORT              nFieldPar;
-    xub_StrLen          nFieldPos;
-    USHORT              nFieldIndex;
+    ScUnoCollectMode	eMode;
+    USHORT				nFieldCount;
+    TypeId				aFieldType;
+    SvxFieldData*		pFound;			// lokale Kopie
+    USHORT				nFieldPar;
+    xub_StrLen			nFieldPos;
+    USHORT				nFieldIndex;
 
 public:
                 ScUnoEditEngine(ScEditEngineDefaulter* pSource);
                 ~ScUnoEditEngine();
 
-                    //! nPos should be xub_StrLen
-    virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
+                    //!	nPos should be xub_StrLen
+    virtual String	CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
                                     Color*& rTxtColor, Color*& rFldColor );
 
-    USHORT          CountFields(TypeId aType);
-    SvxFieldData*   FindByIndex(USHORT nIndex, TypeId aType);
-    SvxFieldData*   FindByPos(USHORT nPar, xub_StrLen nPos, TypeId aType);
+    USHORT			CountFields(TypeId aType);
+    SvxFieldData*	FindByIndex(USHORT nIndex, TypeId aType);
+    SvxFieldData*	FindByPos(USHORT nPar, xub_StrLen nPos, TypeId aType);
 
-    USHORT          GetFieldPar() const     { return nFieldPar; }
-    xub_StrLen      GetFieldPos() const     { return nFieldPos; }
+    USHORT			GetFieldPar() const		{ return nFieldPar; }
+    xub_StrLen		GetFieldPos() const		{ return nFieldPos; }
 };
 
 ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource) :
@@ -175,7 +175,7 @@ String ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     String aRet(EditEngine::CalcFieldValue( rField, nPara, nPos, rTxtColor, rFldColor ));
     if (eMode != SC_UNO_COLLECT_NONE)
     {
-        const SvxFieldData* pFieldData = rField.GetField();
+        const SvxFieldData*	pFieldData = rField.GetField();
         if ( pFieldData )
         {
             if ( !aFieldType || pFieldData->Type() == aFieldType )
@@ -278,30 +278,30 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
-        //! Ref-Update
+        //!	Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;		// ungueltig geworden
     }
 
-    //  EditSource hat sich selber als Listener angemeldet
+    //	EditSource hat sich selber als Listener angemeldet
 }
 
 // XIndexAccess (via XTextFields)
 
 ScCellFieldObj* ScCellFieldsObj::GetObjectByIndex_Impl(INT32 Index) const
 {
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //!	Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    if ( aTempEngine.FindByIndex( (USHORT)Index, NULL ) )   // in der Zelle ist der Typ egal
+    if ( aTempEngine.FindByIndex( (USHORT)Index, NULL ) )	// in der Zelle ist der Typ egal
     {
         USHORT nPar = aTempEngine.GetFieldPar();
         xub_StrLen nPos = aTempEngine.GetFieldPos();
-        ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
+        ESelection aSelection( nPar, nPos, nPar, nPos+1 );		// Feld ist 1 Zeichen
         return new ScCellFieldObj( pDocShell, aCellPos, aSelection );
     }
     return NULL;
@@ -311,11 +311,11 @@ sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //!	Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    return aTempEngine.CountFields(NULL);       // Felder zaehlen, in Zelle ist der Typ egal
+    return aTempEngine.CountFields(NULL);		// Felder zaehlen, in Zelle ist der Typ egal
 }
 
 uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
@@ -394,7 +394,7 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
                     }
                     catch(uno::RuntimeException&)
                     {
-//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
+//						DBG_ERROR("a object is gone without to remove from Broadcaster");
                         ++pInterfaces;
                         ++i;
                     }
@@ -429,7 +429,7 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 
 //------------------------------------------------------------------------
 
-//  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
+//	Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 
 
 //UNUSED2008-05  ScCellFieldObj::ScCellFieldObj() :
@@ -448,7 +448,7 @@ ScCellFieldObj::ScCellFieldObj(ScDocShell* pDocSh, const ScAddress& rPos,
     aCellPos( rPos ),
     aSelection( rSel )
 {
-    //  pDocShell ist Null, wenn per ServiceProvider erzeugt
+    //	pDocShell ist Null, wenn per ServiceProvider erzeugt
 
     if (pDocShell)
     {
@@ -463,12 +463,12 @@ uno::Any SAL_CALL ScCellFieldObj::queryAggregation( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
     SC_QUERYINTERFACE( text::XTextField )
-    SC_QUERYINTERFACE( text::XTextContent )         // parent of XTextField
+    SC_QUERYINTERFACE( text::XTextContent )			// parent of XTextField
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
     SC_QUERYINTERFACE( lang::XServiceInfo )
 
-    return OComponentHelper::queryAggregation( rType );     // XComponent
+    return OComponentHelper::queryAggregation( rType );		// XComponent
 }
 
 uno::Sequence<uno::Type> SAL_CALL ScCellFieldObj::getTypes() throw(uno::RuntimeException)
@@ -488,7 +488,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellFieldObj::getTypes() throw(uno::RuntimeE
         pPtr[nParentLen + 3] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
 
         for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
+            pPtr[i] = pParentPtr[i];				// parent types first
     }
     return aTypes;
 }
@@ -545,21 +545,21 @@ ScCellFieldObj::~ScCellFieldObj()
 
 void ScCellFieldObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Updates fuer aSelection (muessen erst noch erzeugt werden) !!!!!!
+    //!	Updates fuer aSelection (muessen erst noch erzeugt werden) !!!!!!
 
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
-        //! Ref-Update
+        //!	Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;		// ungueltig geworden
     }
 
-    //  EditSource hat sich selber als Listener angemeldet
+    //	EditSource hat sich selber als Listener angemeldet
 }
 
 // per getImplementation gerufen:
@@ -581,7 +581,7 @@ void ScCellFieldObj::DeleteField()
     if (pEditSource)
     {
         SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
-//      pEditEngine->QuickDelete( aSelection );
+//		pEditEngine->QuickDelete( aSelection );
         pForwarder->QuickInsertText( String(), aSelection );
         pEditSource->UpdateData();
 
@@ -589,7 +589,7 @@ void ScCellFieldObj::DeleteField()
         aSelection.nEndPos  = aSelection.nStartPos;
 
         //! Broadcast, um Selektion in anderen Objekten anzupassen
-        //! (auch bei anderen Aktionen)
+        //!	(auch bei anderen Aktionen)
     }
 }
 
@@ -603,11 +603,11 @@ rtl::OUString SAL_CALL ScCellFieldObj::getPresentation( sal_Bool bShowCommand )
 
     if (pEditSource)
     {
-        //! Feld-Funktionen muessen an den Forwarder !!!
+        //!	Feld-Funktionen muessen an den Forwarder !!!
         ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        //	Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
         DBG_ASSERT(pField,"getPresentation: Feld nicht gefunden");
         if (pField)
@@ -689,16 +689,16 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
     rtl::OUString aStrVal;
     if (pEditSource)
     {
-        //! Feld-Funktionen muessen an den Forwarder !!!
+        //!	Feld-Funktionen muessen an den Forwarder !!!
         ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        //	Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
         DBG_ASSERT(pField,"setPropertyValue: Feld nicht gefunden");
         if (pField)
         {
-            SvxURLField* pURL = (SvxURLField*)pField;   // ist eine Kopie in der ScUnoEditEngine
+            SvxURLField* pURL = (SvxURLField*)pField;	// ist eine Kopie in der ScUnoEditEngine
 
             BOOL bOk = TRUE;
             if ( aNameString.EqualsAscii( SC_UNONAME_URL ) )
@@ -726,7 +726,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
             }
         }
     }
-    else        // noch nicht eingefuegt
+    else		// noch nicht eingefuegt
     {
         if ( aNameString.EqualsAscii( SC_UNONAME_URL ) )
         {
@@ -768,11 +768,11 @@ uno::Any SAL_CALL ScCellFieldObj::getPropertyValue( const rtl::OUString& aProper
         aRet <<= text::WrapTextMode_NONE;
     else if (pEditSource)
     {
-        //! Feld-Funktionen muessen an den Forwarder !!!
+        //!	Feld-Funktionen muessen an den Forwarder !!!
         ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
         ScUnoEditEngine aTempEngine(pEditEngine);
 
-        //  Typ egal (in Zellen gibts nur URLs)
+        //	Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
         DBG_ASSERT(pField,"getPropertyValue: Feld nicht gefunden");
         if (pField)
@@ -787,7 +787,7 @@ uno::Any SAL_CALL ScCellFieldObj::getPropertyValue( const rtl::OUString& aProper
                 aRet <<= rtl::OUString( pURL->GetTargetFrame() );
         }
     }
-    else        // noch nicht eingefuegt
+    else		// noch nicht eingefuegt
     {
         if ( aNameString.EqualsAscii( SC_UNONAME_URL ) )
             aRet <<= rtl::OUString( aUrl );
@@ -880,7 +880,7 @@ ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, USHORT 
 
     if (pContentObj)
     {
-        pContentObj->acquire();     // darf nicht wegkommen
+        pContentObj->acquire();		// darf nicht wegkommen
         pEditSource = new ScHeaderFooterEditSource( pContentObj, nPart );
     }
     else
@@ -913,20 +913,20 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
 
 ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(INT32 Index) const
 {
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //!	Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     TypeId aTypeId = NULL;
     switch (nType)
     {
-        case SC_SERVICE_PAGEFIELD:  aTypeId = TYPE(SvxPageField);    break;
-        case SC_SERVICE_PAGESFIELD: aTypeId = TYPE(SvxPagesField);   break;
-        case SC_SERVICE_DATEFIELD:  aTypeId = TYPE(SvxDateField);    break;
-        case SC_SERVICE_TIMEFIELD:  aTypeId = TYPE(SvxTimeField);    break;
-        case SC_SERVICE_TITLEFIELD: aTypeId = TYPE(SvxFileField);    break;
-        case SC_SERVICE_FILEFIELD:  aTypeId = TYPE(SvxExtFileField); break;
-        case SC_SERVICE_SHEETFIELD: aTypeId = TYPE(SvxTableField);   break;
+        case SC_SERVICE_PAGEFIELD:	aTypeId = TYPE(SvxPageField);	 break;
+        case SC_SERVICE_PAGESFIELD:	aTypeId = TYPE(SvxPagesField);	 break;
+        case SC_SERVICE_DATEFIELD:	aTypeId = TYPE(SvxDateField);	 break;
+        case SC_SERVICE_TIMEFIELD:	aTypeId = TYPE(SvxTimeField);	 break;
+        case SC_SERVICE_TITLEFIELD:	aTypeId = TYPE(SvxFileField);	 break;
+        case SC_SERVICE_FILEFIELD:	aTypeId = TYPE(SvxExtFileField); break;
+        case SC_SERVICE_SHEETFIELD:	aTypeId = TYPE(SvxTableField);	 break;
         // bei SC_SERVICE_INVALID bleibt TypeId Null
     }
     SvxFieldData* pData = aTempEngine.FindByIndex( (USHORT)Index, aTypeId );
@@ -938,16 +938,16 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(INT32 Index) const
         USHORT nFieldType = nType;
         if ( nFieldType == SC_SERVICE_INVALID )
         {
-            if ( pData->ISA( SvxPageField ) )         nFieldType = SC_SERVICE_PAGEFIELD;
-            else if ( pData->ISA( SvxPagesField ) )   nFieldType = SC_SERVICE_PAGESFIELD;
-            else if ( pData->ISA( SvxDateField ) )    nFieldType = SC_SERVICE_DATEFIELD;
-            else if ( pData->ISA( SvxTimeField ) )    nFieldType = SC_SERVICE_TIMEFIELD;
-            else if ( pData->ISA( SvxFileField ) )    nFieldType = SC_SERVICE_TITLEFIELD;
+            if ( pData->ISA( SvxPageField ) )		  nFieldType = SC_SERVICE_PAGEFIELD;
+            else if ( pData->ISA( SvxPagesField ) )	  nFieldType = SC_SERVICE_PAGESFIELD;
+            else if ( pData->ISA( SvxDateField ) )	  nFieldType = SC_SERVICE_DATEFIELD;
+            else if ( pData->ISA( SvxTimeField ) )	  nFieldType = SC_SERVICE_TIMEFIELD;
+            else if ( pData->ISA( SvxFileField ) )	  nFieldType = SC_SERVICE_TITLEFIELD;
             else if ( pData->ISA( SvxExtFileField ) ) nFieldType = SC_SERVICE_FILEFIELD;
-            else if ( pData->ISA( SvxTableField ) )   nFieldType = SC_SERVICE_SHEETFIELD;
+            else if ( pData->ISA( SvxTableField ) )	  nFieldType = SC_SERVICE_SHEETFIELD;
         }
 
-        ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field is 1 character
+        ESelection aSelection( nPar, nPos, nPar, nPos+1 );		// Field is 1 character
         return new ScHeaderFieldObj( pContentObj, nPart, nFieldType, aSelection );
     }
     return NULL;
@@ -957,22 +957,22 @@ sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 
-    //! Feld-Funktionen muessen an den Forwarder !!!
+    //!	Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
     TypeId aTypeId = NULL;
     switch (nType)
     {
-        case SC_SERVICE_PAGEFIELD:  aTypeId = TYPE(SvxPageField);    break;
-        case SC_SERVICE_PAGESFIELD: aTypeId = TYPE(SvxPagesField);   break;
-        case SC_SERVICE_DATEFIELD:  aTypeId = TYPE(SvxDateField);    break;
-        case SC_SERVICE_TIMEFIELD:  aTypeId = TYPE(SvxTimeField);    break;
-        case SC_SERVICE_TITLEFIELD: aTypeId = TYPE(SvxFileField);    break;
-        case SC_SERVICE_FILEFIELD:  aTypeId = TYPE(SvxExtFileField); break;
-        case SC_SERVICE_SHEETFIELD: aTypeId = TYPE(SvxTableField);   break;
+        case SC_SERVICE_PAGEFIELD:	aTypeId = TYPE(SvxPageField);	 break;
+        case SC_SERVICE_PAGESFIELD:	aTypeId = TYPE(SvxPagesField);	 break;
+        case SC_SERVICE_DATEFIELD:	aTypeId = TYPE(SvxDateField);	 break;
+        case SC_SERVICE_TIMEFIELD:	aTypeId = TYPE(SvxTimeField);	 break;
+        case SC_SERVICE_TITLEFIELD:	aTypeId = TYPE(SvxFileField);	 break;
+        case SC_SERVICE_FILEFIELD:	aTypeId = TYPE(SvxExtFileField); break;
+        case SC_SERVICE_SHEETFIELD:	aTypeId = TYPE(SvxTableField);	 break;
     }
-    return aTempEngine.CountFields(aTypeId);        // Felder zaehlen
+    return aTempEngine.CountFields(aTypeId);		// Felder zaehlen
 }
 
 uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
@@ -1051,7 +1051,7 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
                     }
                     catch(uno::RuntimeException&)
                     {
-//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
+//						DBG_ERROR("a object is gone without to remove from Broadcaster");
                         ++pInterfaces;
                         ++i;
                     }
@@ -1090,10 +1090,10 @@ SvxFileFormat lcl_UnoToSvxFileFormat( sal_Int16 nUnoValue )
 {
     switch( nUnoValue )
     {
-        case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
-        case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
-        case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
-//      case text::FilenameDisplayFormat::NAME_AND_EXT:
+        case text::FilenameDisplayFormat::FULL:	return SVXFILEFORMAT_FULLPATH;
+        case text::FilenameDisplayFormat::PATH:	return SVXFILEFORMAT_PATH;
+        case text::FilenameDisplayFormat::NAME:	return SVXFILEFORMAT_NAME;
+//		case text::FilenameDisplayFormat::NAME_AND_EXT:
         default:
             return SVXFILEFORMAT_NAME_EXT;
     }
@@ -1103,17 +1103,17 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 {
     switch( nSvxValue )
     {
-        case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
-        case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
-        case SVXFILEFORMAT_PATH:        return text::FilenameDisplayFormat::PATH;
-//      case SVXFILEFORMAT_NAME:
+        case SVXFILEFORMAT_NAME_EXT:	return text::FilenameDisplayFormat::NAME_AND_EXT;
+        case SVXFILEFORMAT_FULLPATH:	return text::FilenameDisplayFormat::FULL;
+        case SVXFILEFORMAT_PATH:		return text::FilenameDisplayFormat::PATH;
+//		case SVXFILEFORMAT_NAME:
         default:
             return text::FilenameDisplayFormat::NAME;
     }
 }
 
 
-//  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
+//	Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 //UNUSED2008-05  ScHeaderFieldObj::ScHeaderFieldObj() :
 //UNUSED2008-05      OComponentHelper( getMutex() ),
 //UNUSED2008-05      aPropSet( lcl_GetHeaderFieldPropertyMap() ),
@@ -1135,11 +1135,11 @@ ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, USHORT nP
     aSelection( rSel ),
     nFileFormat( SVXFILEFORMAT_NAME_EXT )
 {
-    //  pContent ist Null, wenn per ServiceProvider erzeugt
+    //	pContent ist Null, wenn per ServiceProvider erzeugt
 
     if (pContentObj)
     {
-        pContentObj->acquire();     // darf nicht wegkommen
+        pContentObj->acquire();		// darf nicht wegkommen
         pEditSource = new ScHeaderFooterEditSource( pContentObj, nPart );
     }
     else
@@ -1150,12 +1150,12 @@ uno::Any SAL_CALL ScHeaderFieldObj::queryAggregation( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
     SC_QUERYINTERFACE( text::XTextField )
-    SC_QUERYINTERFACE( text::XTextContent )         // parent of XTextField
+    SC_QUERYINTERFACE( text::XTextContent )			// parent of XTextField
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
     SC_QUERYINTERFACE( lang::XServiceInfo )
 
-    return OComponentHelper::queryAggregation( rType );     // XComponent
+    return OComponentHelper::queryAggregation( rType );		// XComponent
 }
 
 uno::Sequence<uno::Type> SAL_CALL ScHeaderFieldObj::getTypes() throw(uno::RuntimeException)
@@ -1175,7 +1175,7 @@ uno::Sequence<uno::Type> SAL_CALL ScHeaderFieldObj::getTypes() throw(uno::Runtim
         pPtr[nParentLen + 3] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
 
         for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
+            pPtr[i] = pParentPtr[i];				// parent types first
     }
     return aTypes;
 }
@@ -1219,7 +1219,7 @@ void ScHeaderFieldObj::InitDoc( ScHeaderFooterContentObj* pContent, USHORT nP,
         nPart = nP;
         pContentObj = pContent;
 
-        pContentObj->acquire();     // darf nicht wegkommen
+        pContentObj->acquire();		// darf nicht wegkommen
         pEditSource = new ScHeaderFooterEditSource( pContentObj, nPart );
     }
 }
@@ -1286,7 +1286,7 @@ void ScHeaderFieldObj::DeleteField()
     if (pEditSource)
     {
         SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
-//      pEditEngine->QuickDelete( aSelection );
+//		pEditEngine->QuickDelete( aSelection );
         pForwarder->QuickInsertText( String(), aSelection );
         pEditSource->UpdateData();
 
@@ -1294,7 +1294,7 @@ void ScHeaderFieldObj::DeleteField()
         aSelection.nEndPos  = aSelection.nStartPos;
 
         //! Broadcast, um Selektion in anderen Objekten anzupassen
-        //! (auch bei anderen Aktionen)
+        //!	(auch bei anderen Aktionen)
     }
 }
 
@@ -1379,7 +1379,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScHeaderFieldObj::getPropertySe
     ScUnoGuard aGuard;
     if (nType == SC_SERVICE_FILEFIELD)
     {
-        //  file field has different properties
+        //	file field has different properties
         static uno::Reference<beans::XPropertySetInfo> aFileFieldInfo = pPropSet->getPropertySetInfo();
         return aFileFieldInfo;
     }
@@ -1413,7 +1413,7 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
                 DBG_ASSERT(pField,"setPropertyValue: Field not found");
                 if (pField)
                 {
-                    SvxExtFileField* pExtFile = (SvxExtFileField*)pField;   // local to the ScUnoEditEngine
+                    SvxExtFileField* pExtFile = (SvxExtFileField*)pField;	// local to the ScUnoEditEngine
                     pExtFile->SetFormat( eFormat );
                     pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
                     pEditSource->UpdateData();
@@ -1431,7 +1431,7 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
 {
     ScUnoGuard aGuard;
 
-    //! Properties?
+    //!	Properties?
     uno::Any aRet;
     String aNameString(aPropertyName);
 
@@ -1464,7 +1464,7 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
             }
         }
         else
-            eFormat = (SvxFileFormat) nFileFormat;      // not inserted yet - use stored value
+            eFormat = (SvxFileFormat) nFileFormat;		// not inserted yet - use stored value
 
         sal_Int16 nIntVal = lcl_SvxToUnoFileFormat( eFormat );
         aRet <<= nIntVal;

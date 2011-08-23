@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,9 +87,9 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
         // if the restart already running there is no need to trigger it again
         if ( m_bRestartRequested )
             return;
-#ifndef MACOSX
+
         m_bRestartRequested = sal_True;
-#endif
+
         // the office is still not initialized, no need to terminate, changing the state is enough
         if ( !m_bOfficeInitialized )
             return;
@@ -144,7 +144,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
                 xFactory->createInstanceWithContext(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), m_xContext ),
                 uno::UNO_QUERY_THROW );
-
+            
             // Turn Quickstarter veto off
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );
             ::rtl::OUString aVetoPropName( RTL_CONSTASCII_USTRINGPARAM( "SuspendQuickstartVeto" ) );

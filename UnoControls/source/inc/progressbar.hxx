@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,70 +29,70 @@
 #define _UNOCONTROLS_PROGRESSBAR_CTRL_HXX
 
 //____________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //____________________________________________________________________________________________________________
 
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 //____________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //____________________________________________________________________________________________________________
 #include "basecontrol.hxx"
 
 //____________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //____________________________________________________________________________________________________________
 
 namespace unocontrols{
 
-#define UNO3_REFERENCE                  ::com::sun::star::uno::Reference
-#define UNO3_XMULTISERVICEFACTORY       ::com::sun::star::lang::XMultiServiceFactory
-#define UNO3_RUNTIMEEXCEPTION           ::com::sun::star::uno::RuntimeException
-#define UNO3_XCONTROLMODEL              ::com::sun::star::awt::XControlModel
-#define UNO3_XPROGRESSBAR               ::com::sun::star::awt::XProgressBar
-#define UNO3_ANY                        ::com::sun::star::uno::Any
-#define UNO3_TYPE                       ::com::sun::star::uno::Type
-#define UNO3_SEQUENCE                   ::com::sun::star::uno::Sequence
-#define UNO3_XGRAPHICS                  ::com::sun::star::awt::XGraphics
-#define UNO3_OUSTRING                   ::rtl::OUString
-#define UNO3_SIZE                       ::com::sun::star::awt::Size
+#define	UNO3_REFERENCE					::com::sun::star::uno::Reference
+#define	UNO3_XMULTISERVICEFACTORY		::com::sun::star::lang::XMultiServiceFactory
+#define	UNO3_RUNTIMEEXCEPTION			::com::sun::star::uno::RuntimeException
+#define	UNO3_XCONTROLMODEL				::com::sun::star::awt::XControlModel
+#define	UNO3_XPROGRESSBAR				::com::sun::star::awt::XProgressBar
+#define	UNO3_ANY						::com::sun::star::uno::Any
+#define	UNO3_TYPE						::com::sun::star::uno::Type
+#define	UNO3_SEQUENCE                   ::com::sun::star::uno::Sequence
+#define	UNO3_XGRAPHICS					::com::sun::star::awt::XGraphics
+#define	UNO3_OUSTRING					::rtl::OUString
+#define	UNO3_SIZE						::com::sun::star::awt::Size
 
 //____________________________________________________________________________________________________________
-//  defines
+//	defines
 //____________________________________________________________________________________________________________
 
-#define SERVICENAME_PROGRESSBAR             "com.sun.star.awt.XProgressBar"
-#define IMPLEMENTATIONNAME_PROGRESSBAR      "stardiv.UnoControls.ProgressBar"
+#define	SERVICENAME_PROGRESSBAR				"com.sun.star.awt.XProgressBar"
+#define	IMPLEMENTATIONNAME_PROGRESSBAR		"stardiv.UnoControls.ProgressBar"
 #define FREESPACE                           4
-#define DEFAULT_HORIZONTAL                  sal_True
-#define DEFAULT_BLOCKDIMENSION              Size(1,1)
-#define DEFAULT_BACKGROUNDCOLOR             TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )    // lightgray
-#define DEFAULT_FOREGROUNDCOLOR             TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x80 )    // blue
+#define DEFAULT_HORIZONTAL					sal_True
+#define DEFAULT_BLOCKDIMENSION				Size(1,1)
+#define	DEFAULT_BACKGROUNDCOLOR				TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )	// lightgray
+#define	DEFAULT_FOREGROUNDCOLOR				TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x80 )	// blue
 #define DEFAULT_MINRANGE                    INT_MIN
-#define DEFAULT_MAXRANGE                    INT_MAX
-#define DEFAULT_BLOCKVALUE                  1
-#define DEFAULT_VALUE                       DEFAULT_MINRANGE
-#define LINECOLOR_BRIGHT                    TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )    // white
-#define LINECOLOR_SHADOW                    TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )    // black
+#define DEFAULT_MAXRANGE					INT_MAX
+#define DEFAULT_BLOCKVALUE	 				1
+#define DEFAULT_VALUE						DEFAULT_MINRANGE
+#define	LINECOLOR_BRIGHT					TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )	// white
+#define	LINECOLOR_SHADOW					TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )	// black
 
 //____________________________________________________________________________________________________________
-//  classes
+//	classes
 //____________________________________________________________________________________________________________
 
-class ProgressBar   : public UNO3_XCONTROLMODEL
+class ProgressBar	: public UNO3_XCONTROLMODEL
                     , public UNO3_XPROGRESSBAR
                     , public BaseControl
 {
 
 //____________________________________________________________________________________________________________
-//  public methods
+//	public methods
 //____________________________________________________________________________________________________________
 
 public:
 
     //________________________________________________________________________________________________________
-    //  construct/destruct
+    //	construct/destruct
     //________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -123,10 +123,10 @@ public:
         @onerror
     */
 
-    virtual ~ProgressBar();
+    virtual	~ProgressBar();
 
     //__________________________________________________________________________________________________________
-    //  XInterface
+    //	XInterface
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -145,39 +145,39 @@ public:
     virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
 
     /**_______________________________________________________________________________________________________
-        @short      increment refcount
-        @descr      -
+        @short		increment refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    release()
+        @seealso	XInterface
+        @seealso	release()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short      decrement refcount
-        @descr      -
+        @short		decrement refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    acquire()
+        @seealso	XInterface
+        @seealso	acquire()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //__________________________________________________________________________________________________________
-    //  XTypeProvider
+    //	XTypeProvider
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -196,7 +196,7 @@ public:
     virtual UNO3_SEQUENCE< UNO3_TYPE > SAL_CALL getTypes() throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  XAggregation
+    //	XAggregation
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -215,7 +215,7 @@ public:
     UNO3_ANY SAL_CALL queryAggregation( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
 
     //________________________________________________________________________________________________________
-    //  XProgressBar
+    //	XProgressBar
     //________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -276,8 +276,8 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setRange( sal_Int32   nMin    ,
-                                    sal_Int32   nMax    ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL setRange(	sal_Int32	nMin	,
+                                    sal_Int32	nMax	) throw( UNO3_RUNTIMEEXCEPTION );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -295,7 +295,7 @@ public:
     virtual sal_Int32 SAL_CALL getValue() throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  XWindow
+    //	XWindow
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -311,14 +311,14 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
-                                        sal_Int32   nY      ,
-                                        sal_Int32   nWidth  ,
-                                        sal_Int32   nHeight ,
-                                        sal_Int16   nFlags  ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL setPosSize(	sal_Int32	nX		,
+                                        sal_Int32	nY		,
+                                        sal_Int32	nWidth	,
+                                        sal_Int32	nHeight	,
+                                        sal_Int16	nFlags	) throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  XControl
+    //	XControl
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -352,7 +352,7 @@ public:
     virtual UNO3_REFERENCE< UNO3_XCONTROLMODEL > SAL_CALL getModel() throw( UNO3_RUNTIMEEXCEPTION );
 
     //__________________________________________________________________________________________________________
-    //  BaseControl
+    //	BaseControl
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -386,7 +386,7 @@ public:
     static const UNO3_OUSTRING impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
-//  protected methods
+//	protected methods
 //____________________________________________________________________________________________________________
 
 protected:
@@ -404,9 +404,9 @@ protected:
         @onerror
     */
 
-    virtual void impl_paint(        sal_Int32                           nX          ,
-                                    sal_Int32                           nY          ,
-                            const   UNO3_REFERENCE< UNO3_XGRAPHICS >&   xGraphics   );
+    virtual void impl_paint(		sal_Int32							nX			,
+                                    sal_Int32							nY			,
+                            const	UNO3_REFERENCE< UNO3_XGRAPHICS >&	xGraphics	);
 
     /**_________________________________________________________________________________________________________
         @short
@@ -424,22 +424,22 @@ protected:
     void impl_recalcRange();
 
 //____________________________________________________________________________________________________________
-//  private variables
+//	private variables
 //____________________________________________________________________________________________________________
 
 private:
 
-    sal_Bool    m_bHorizontal       ;   // orientation for steps            [true=horizontal/false=vertikal]
-    UNO3_SIZE   m_aBlockSize        ;   // width and height of a block      [>=0,0]
-    sal_Int32   m_nForegroundColor  ;   //                                  (alpha,r,g,b)
-    sal_Int32   m_nBackgroundColor  ;   //                                  (alpha,r,g,b)
-    sal_Int32   m_nMinRange         ;   // lowest value  =   0%             [long, <_nMaxRange]
-    sal_Int32   m_nMaxRange         ;   // highest value = 100%             [long, >_nMinRange]
+    sal_Bool	m_bHorizontal	 	;	// orientation for steps			[true=horizontal/false=vertikal]
+    UNO3_SIZE	m_aBlockSize	 	;	// width and height of a block		[>=0,0]
+    sal_Int32	m_nForegroundColor	;	//									(alpha,r,g,b)
+    sal_Int32	m_nBackgroundColor	;	//									(alpha,r,g,b)
+    sal_Int32	m_nMinRange			;	// lowest value  =   0%				[long, <_nMaxRange]
+    sal_Int32	m_nMaxRange			;	// highest value = 100%				[long, >_nMinRange]
     double      m_nBlockValue       ;   // value for one block              [long, >0]
-    sal_Int32   m_nValue            ;   // value for progress               [long]
+    sal_Int32	m_nValue			;	// value for progress				[long]
 
-};  // class ProgressBar
+};	// class ProgressBar
 
-}   // namespace unocontrols
+}	// namespace unocontrols
 
-#endif  // #ifndef _UNOCONTROLS_PROGRESSBAR_CTRL_HXX
+#endif	// #ifndef _UNOCONTROLS_PROGRESSBAR_CTRL_HXX

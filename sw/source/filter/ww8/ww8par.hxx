@@ -1581,6 +1581,8 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_OCX(WW8FieldDesc*, String&);
     eF_ResT Read_F_Hyperlink(WW8FieldDesc*, String& rStr);
         eF_ResT Read_F_Shape(WW8FieldDesc* pF, String& rStr);
+    eF_ResT Read_F_HTMLControl( WW8FieldDesc* pF, String& rStr);
+
 
     void DeleteFormImpl();
 
@@ -1619,7 +1621,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
 // --> OD 2010-05-06 #i103711#
 // --> OD 2010-05-11 #i105414#
-void SyncIndentWithList( SvxLRSpaceItem &rLR,
+void SyncIndentWithList( SvxLRSpaceItem &rLR, 
                          const SwNumFmt &rFmt,
                          const bool bFirstLineOfStSet,
                          const bool bLeftIndentSet );

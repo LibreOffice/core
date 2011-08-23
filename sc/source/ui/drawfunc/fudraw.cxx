@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 //------------------------------------------------------------------------
 
-#include <editeng/editeng.hxx>  // EditEngine::IsSimpleCharInput
+#include <editeng/editeng.hxx>	// EditEngine::IsSimpleCharInput
 #include <editeng/outlobj.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
@@ -86,23 +86,23 @@ FuDraw::~FuDraw()
 
 void FuDraw::DoModifiers(const MouseEvent& rMEvt)
 {
-    //  Shift   = Ortho und AngleSnap
-    //  Control = Snap (Toggle)
-    //  Alt     = zentrisch
+    //	Shift	= Ortho und AngleSnap
+    //	Control	= Snap (Toggle)
+    //	Alt		= zentrisch
 
-    BOOL bShift = rMEvt.IsShift();
+    BOOL bShift	= rMEvt.IsShift();
 //    BOOL bCtrl  = rMEvt.IsMod1();
-    BOOL bAlt   = rMEvt.IsMod2();
+    BOOL bAlt	= rMEvt.IsMod2();
 
 //    ScViewData* pViewData = pViewShell->GetViewData();
 //    const ScViewOptions& rOpt = pViewData->GetOptions();
 //    const ScGridOptions& rGrid = rOpt.GetGridOptions();
 //    BOOL bGridOpt = rGrid.GetUseGridSnap();
 
-    BOOL bOrtho     = bShift;
-    BOOL bAngleSnap = bShift;
+    BOOL bOrtho		= bShift;
+    BOOL bAngleSnap	= bShift;
 //    BOOL bGridSnap  = ( bGridOpt != bCtrl );        // andere Snap's nicht unterstuetzt
-    BOOL bCenter    = bAlt;
+    BOOL bCenter	= bAlt;
 
     // #i33136#
     if(doConstructOrthogonal())
@@ -115,7 +115,7 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
     if (pView->IsAngleSnapEnabled() != bAngleSnap)
         pView->SetAngleSnapEnabled(bAngleSnap);
 
-/*  Control fuer Snap beisst sich beim Verschieben mit "kopieren" !!!
+/*	Control fuer Snap beisst sich beim Verschieben mit "kopieren" !!!
 
     if (pView->IsGridSnap() != bGridSnap)
         pView->SetGridSnap(bGridSnap);
@@ -175,8 +175,8 @@ BOOL __EXPORT FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
 BOOL __EXPORT FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
-    //  #106438# evaluate modifiers only if in a drawing layer action
-    //  (don't interfere with keyboard shortcut handling)
+    //	#106438# evaluate modifiers only if in a drawing layer action
+    //	(don't interfere with keyboard shortcut handling)
     if (pView->IsAction())
         DoModifiers( rMEvt );
 
@@ -229,7 +229,7 @@ BOOL lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEven
 
         // get the resulting FuText and set in edit mode
         pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // no RTTI
+        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )	 //	no RTTI
         {
             FuText* pText = (FuText*)pPoor;
             pText->SetInEditMode( pObj, NULL, TRUE, pInitialKey );
@@ -251,20 +251,20 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
 
     /* 18.12.95: TextShell beibehalten nicht mehr gewuenscht...
      *
-     *          if ( pView->IsAction() )
-     *          {
-     *              pView->BrkAction();
-     *              pWindow->ReleaseMouse();
-     *              bReturn = TRUE;
-     *          }
-     *          else if ( pView->IsTextEdit() )
-     *          {
-     *              pView->EndTextEdit();
-     *              pView->SetCreateMode();
-     *              pViewShell->GetScDrawView()->InvalidateDrawTextAttrs();
-     *              bReturn = TRUE;
-     *          }
-     *          else
+     *			if ( pView->IsAction() )
+     *			{
+     *				pView->BrkAction();
+     *				pWindow->ReleaseMouse();
+     *				bReturn = TRUE;
+     *			}
+     *			else if ( pView->IsTextEdit() )
+     *			{
+     *				pView->EndTextEdit();
+     *				pView->SetCreateMode();
+     *				pViewShell->GetScDrawView()->InvalidateDrawTextAttrs();
+     *				bReturn = TRUE;
+     *			}
+     *			else
      */
 
             if ( pViewShell->IsDrawTextShell() || aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
@@ -288,7 +288,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 else
                     pView->UnmarkAll();
 
-                //  Beim Bezier-Editieren ist jetzt wieder das Objekt selektiert
+                //	Beim Bezier-Editieren ist jetzt wieder das Objekt selektiert
                 if (!pView->AreObjectsMarked())
                     pViewShell->SetDrawShell( FALSE );
 
@@ -296,7 +296,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             }
             break;
 
-        case KEY_DELETE:                    //! ueber Accelerator
+        case KEY_DELETE:					//! ueber Accelerator
             pView->DeleteMarked();
             bReturn = TRUE;
         break;
@@ -320,7 +320,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                         // consumed
                         bReturn = TRUE;
                     }
-                    else if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )       // start text edit for suitable object
+                    else if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )		// start text edit for suitable object
                         bReturn = TRUE;
                 }
             }
@@ -337,7 +337,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                    if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )            // start text edit for suitable object
+                    if ( lcl_KeyEditMode( pObj, pViewShell, NULL ) )			// start text edit for suitable object
                         bReturn = TRUE;
                 }
             }
@@ -719,7 +719,7 @@ void FuDraw::SelectionHasChanged()
 
 void FuDraw::ScrollStart()
 {
-//      HideShownXor in Gridwin
+//		HideShownXor in Gridwin
 }
 
 /*************************************************************************
@@ -730,7 +730,7 @@ void FuDraw::ScrollStart()
 
 void FuDraw::ScrollEnd()
 {
-//      ShowShownXor in Gridwin
+//		ShowShownXor in Gridwin
 }
 
 /*************************************************************************
@@ -785,9 +785,9 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     if ( !pView->IsAction() )
     {
         Point aPosPixel = pWindow->GetPointerPosPixel();
-        BOOL bAlt       = pMEvt && pMEvt->IsMod2();
-        Point aPnt      = pWindow->PixelToLogic( aPosPixel );
-        SdrHdl* pHdl    = pView->PickHandle(aPnt);
+        BOOL bAlt		= pMEvt && pMEvt->IsMod2();
+        Point aPnt		= pWindow->PixelToLogic( aPosPixel );
+        SdrHdl* pHdl	= pView->PickHandle(aPnt);
         SdrObject* pObj;
         SdrPageView* pPV;
 
@@ -805,7 +805,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
         if ( pView->IsTextEdit() )
         {
-            pViewShell->SetActivePointer(Pointer(POINTER_TEXT));        // kann nicht sein ?
+            pViewShell->SetActivePointer(Pointer(POINTER_TEXT));		// kann nicht sein ?
         }
         else if ( pHdl )
         {
@@ -819,13 +819,13 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         else if ( !bAlt && ( !pMEvt || !pMEvt->GetButtons() )
                         && lcl_UrlHit( pView, aPosPixel, pWindow ) )
         {
-            //  kann mit ALT unterdrueckt werden
-            pWindow->SetPointer( Pointer( POINTER_REFHAND ) );          // Text-URL / ImageMap
+            //	kann mit ALT unterdrueckt werden
+            pWindow->SetPointer( Pointer( POINTER_REFHAND ) );			// Text-URL / ImageMap
         }
         else if ( !bAlt && pView->PickObj(aPnt, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
         {
-            //  kann mit ALT unterdrueckt werden
-            SdrObjMacroHitRec aHitRec;  //! muss da noch irgendwas gesetzt werden ????
+            //	kann mit ALT unterdrueckt werden
+            SdrObjMacroHitRec aHitRec;	//! muss da noch irgendwas gesetzt werden ????
             pViewShell->SetActivePointer( pObj->GetMacroPointer(aHitRec) );
         }
 #ifdef ISSUE66550_HLINK_FOR_SHAPES
@@ -837,7 +837,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         else if ( IsDetectiveHit( aPnt ) )
             pViewShell->SetActivePointer( Pointer( POINTER_DETECTIVE ) );
         else
-            pViewShell->SetActivePointer( aNewPointer );            //! in Gridwin?
+            pViewShell->SetActivePointer( aNewPointer );			//! in Gridwin?
     }
 }
 

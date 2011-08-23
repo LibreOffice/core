@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ MozabDriver::~MozabDriver()
 void MozabDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    
     // when driver will be destroied so all our connections have to be destroied as well
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
@@ -98,7 +98,7 @@ rtl::OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeExcepti
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
+    // which service is supported 
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
@@ -147,8 +147,8 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
         OConnection* pCon = reinterpret_cast<OConnection*>((*m_pCreationFunc)(this));
-        xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-        pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
+        xCon = pCon;	// important here because otherwise the connection could be deleted inside (refcount goes -> 0)
+        pCon->construct(url,info);				// late constructor call which can throw exception and allows a correct dtor call when so
         m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     }
@@ -159,14 +159,14 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
                 STR_COULD_NOT_LOAD_LIB,
                 "$libname$", ::rtl::OUString::createFromAscii( SVLIBRARY( "mozabdrv" ) )
              ) );
-
+        
         ::dbtools::throwGenericSQLException(sError,*this);
     }
-
+    
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url ) 
         throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
@@ -201,7 +201,7 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rt
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("100"))
                 ,Sequence< ::rtl::OUString >())
                 );
-        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size()); 
     }
     ::connectivity::SharedResources aResources;
     const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);

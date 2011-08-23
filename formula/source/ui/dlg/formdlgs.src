@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@ TabPage RID_FORMULATAB_FUNCTION
     Hide = TRUE ;
     Size = MAP_APPFONT ( 96 , 180 ) ;
     HelpId = HID_FORMULATAB_FUNCTION ;
-     // Titel wird dynamisch gesetzt (s.u.)
-     // 1. Seite
+     //	Titel wird dynamisch gesetzt (s.u.)
+     //	1. Seite
     ListBox LB_CATEGORY
     {
         HelpId = HID_FORMULA_LB_CATEGORY;
@@ -51,17 +51,17 @@ TabPage RID_FORMULATAB_FUNCTION
             < "Last Used" ; Default ; > ;
             < "All" ; Default ; > ;
         };
-        //  < "Database" ; Default ; > ;
-        //  < "Date&Time" ; Default ; > ;
-        //  < "Financial" ; Default ; > ;
-        //  < "Information" ; Default ; > ;
-        //  < "Logical" ; Default ; > ;
-        //  < "Mathematical" ; Default ; > ;
-        //  < "Array" ; Default ; > ;
-        //  < "Statistical" ; Default ; > ;
-        //  < "Spreadsheet" ; Default ; > ;
-        //  < "Text" ; Default ; > ;
-        //  < "Add-in" ; Default ; > ;
+        //	< "Database" ; Default ; > ;
+        //	< "Date&Time" ; Default ; > ;
+        //	< "Financial" ; Default ; > ;
+        //	< "Information" ; Default ; > ;
+        //	< "Logical" ; Default ; > ;
+        //	< "Mathematical" ; Default ; > ;
+        //	< "Array" ; Default ; > ;
+        //	< "Statistical" ; Default ; > ;
+        //	< "Spreadsheet" ; Default ; > ;
+        //	< "Text" ; Default ; > ;
+        //	< "Add-in" ; Default ; > ;
         //};
     };
     ListBox LB_FUNCTION
@@ -90,8 +90,8 @@ TabPage RID_FORMULATAB_STRUCT
     Hide = TRUE ;
     Size = MAP_APPFONT ( 96 , 180 ) ;
     HelpId = HID_FORMULATAB_STRUCT ;
-     // Titel wird dynamisch gesetzt (s.u.)
-     // 1. Seite
+     //	Titel wird dynamisch gesetzt (s.u.)
+     //	1. Seite
     Control TLB_STRUCT
     {
         Border = TRUE ;

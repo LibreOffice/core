@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #define __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/filtercachedata.hxx>
@@ -49,7 +49,7 @@
 #include <queries.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -60,7 +60,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 
@@ -71,29 +71,29 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          cache for all filter and type information
-    @descr          Frameloader- and filterfactory need some informations about our current registered filters and types.
+    @descr			Frameloader- and filterfactory need some informations about our current registered filters and types.
                     For better performance its neccessary to cache all needed values.
 
-    @implements     -
+    @implements		-
     @base           ThreadHelpBase
                     TransactionBase
 
-    @devstatus      ready to use
+    @devstatus		ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
@@ -103,28 +103,28 @@ class FilterCache   :   private ThreadHelpBase
     public:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         FilterCache( sal_Int32 nVersion = DEFAULT_FILTERCACHE_VERSION,
                      sal_Int16 nMode    = DEFAULT_FILTERCACHE_MODE   );
 
         /*-****************************************************************************************************//**
-            @short      standard destructor to delete instance
-            @descr      This will clear the cache if last owner release it.
+            @short		standard destructor to delete instance
+            @descr		This will clear the cache if last owner release it.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual ~FilterCache();
@@ -132,16 +132,16 @@ class FilterCache   :   private ThreadHelpBase
         void flush( DataContainer::ECFGType eType );
 
         /*-****************************************************************************************************//**
-            @short      get the current state of the cache
-            @descr      Call this methods to get information about the state of the current cache.
+            @short		get the current state of the cache
+            @descr		Call this methods to get information about the state of the current cache.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
-            @return     -
+            @param		-
+            @return		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         sal_Bool isValidOrRepairable() const;
@@ -152,8 +152,8 @@ class FilterCache   :   private ThreadHelpBase
         sal_Bool hasContentHandlers () const;
 
         /*-****************************************************************************************************//**
-            @short      search routines to find items which match given parameter
-            @descr      Mostly we search for a type first and get all informations about filter, detector and loader
+            @short		search routines to find items which match given parameter
+            @descr		Mostly we search for a type first and get all informations about filter, detector and loader
                         services from the other configuration tables which are registered for this type.
                         These operations support a FindFirst/Next mechanism.
                         If you call search...( ... nStartEntry=0 ... ) we search for
@@ -162,18 +162,18 @@ class FilterCache   :   private ThreadHelpBase
                         DONT'T CHANGE THE VALUE OF "rStartEntry" between two search calls!
                         You can use returned value as parameter for getBy...Name() functions of this implementation too!
 
-            @attention  returned type name is an internal name
+            @attention	returned type name is an internal name
                         returned filter name is an internal name
                         returned loader name is an implementation name of a service
                         returned detector name is an implementation name of a service
 
-            @seealso    -
+            @seealso	-
 
             @param      "sResult", name of found type, filter, ...
-            @return     true, if search was successful,
+            @return		true, if search was successful,
                         false, otherwise.
 
-            @onerror    We return false.
+            @onerror	We return false.
         *//*-*****************************************************************************************************/
 
         sal_Bool searchType                     (   const   ::rtl::OUString&            sURL                ,
@@ -199,17 +199,17 @@ class FilterCache   :   private ThreadHelpBase
                                                             ::rtl::OUString&            sResult             ) const;
 
         /*-****************************************************************************************************//**
-            @short      get all properties of a cache entry by given name
-            @descr      If you need additional informations about our internal cache values
+            @short		get all properties of a cache entry by given name
+            @descr		If you need additional informations about our internal cache values
                         you can use these methods to get a list of all cached config values
                         and subkeys of specified entry.
 
-            @seealso    -
+            @seealso	-
 
             @param      "sName", name of suspected entry in cache
-            @return     A structure with valid information if item exists! An empty Any otherwise.
+            @return		A structure with valid information if item exists! An empty Any otherwise.
 
-            @onerror    We return an empty Any.
+            @onerror	We return an empty Any.
         *//*-*****************************************************************************************************/
 
         css::uno::Sequence< ::rtl::OUString >               getAllTypeNames                 () const;
@@ -240,68 +240,68 @@ class FilterCache   :   private ThreadHelpBase
         sal_Bool                                            existsContentHandler            (   const   ::rtl::OUString&    sName   ) const;
 
         /*-****************************************************************************************************//**
-            @short      support special query modes
-            @descr      Our owner services need sometimes a special mode to query for subsets of our configuration!
+            @short		support special query modes
+            @descr		Our owner services need sometimes a special mode to query for subsets of our configuration!
                         They give us a special query string - we return right values.
 
-            @seealso    file queries.h
-            @seealso    class FilterFactory
-            @seealso    class FrameLoaderFactory
-            @seealso    class TypeDetection
+            @seealso	file queries.h
+            @seealso	class FilterFactory
+            @seealso	class FrameLoaderFactory
+            @seealso	class TypeDetection
 
             @param      "sName", name of query
-            @return     A structure with valid information!
+            @return		A structure with valid information!
 
-            @onerror    We return an empty result set.
+            @onerror	We return an empty result set.
         *//*-*****************************************************************************************************/
 
         css::uno::Any queryFilters( const ::rtl::OUString& sQuery ) const;
 
         /*-****************************************************************************************************//**
-            @short      support registration of elements in current configuration
-            @descr      Use this methods to add or remove items in our configuration files.
+            @short		support registration of elements in current configuration
+            @descr		Use this methods to add or remove items in our configuration files.
                         We use the globale configuration to do that ... in fat office "share/config/registry/..."!
 
                         *** structure of type properties **********************************************************
 
-                            PropertyValue.Name                  PropertyValue.Value                 Description
+                            PropertyValue.Name					PropertyValue.Value					Description
                             ---------------------------------------------------------------------------------------
                             ...
 
                         *** structure of filter properties ********************************************************
 
-                            PropertyValue.Name                  PropertyValue.Value                 Description
+                            PropertyValue.Name					PropertyValue.Value					Description
                             ---------------------------------------------------------------------------------------
-                            "Name"                              [string]                            internal name
-                            "Type"                              [string]                            registered for these type
-                            "UIName"                            [string]                            localized name for UI (valid for current locale at runtime!)
-                            "UINames"                           [stringlist]                        assignment of all supported localized names to right locales
-                            "DocumentService"                   [string]                            uno servicename of document services
-                            "FilterService"                     [string]                            uno servicename of filter implementation
-                            "Flags"                             [long]                              describe filter
-                            "UserData"                          [stringlist]                        additional user data (format not fixed!)
-                            "FileFormatVersion"                 [long]                              version numbher of supported files
-                            "TemplateName"                      [string]                            name of template
+                            "Name"								[string]							internal name
+                            "Type"								[string]							registered for these type
+                            "UIName"							[string]							localized name for UI (valid for current locale at runtime!)
+                            "UINames"							[stringlist]						assignment of all supported localized names to right locales
+                            "DocumentService"					[string]							uno servicename of document services
+                            "FilterService"						[string]							uno servicename of filter implementation
+                            "Flags"								[long]								describe filter
+                            "UserData"							[stringlist]						additional user data (format not fixed!)
+                            "FileFormatVersion"					[long]								version numbher of supported files
+                            "TemplateName"						[string]							name of template
 
                         *** structure of detector properties ******************************************************
 
-                            PropertyValue.Name                  PropertyValue.Value                 Description
+                            PropertyValue.Name					PropertyValue.Value					Description
                             ---------------------------------------------------------------------------------------
                             ...
 
                         *** structure of loader properties ********************************************************
 
-                            PropertyValue.Name                  PropertyValue.Value                 Description
+                            PropertyValue.Name					PropertyValue.Value					Description
                             ---------------------------------------------------------------------------------------
                             ...
 
-            @seealso    -
+            @seealso	-
 
-            @param      "sName"         , name of type, filter ...
-            @param      "lProperties"   , values of new type, filter
-            @return     state of operation as bool
+            @param      "sName"			, name of type, filter ...
+            @param      "lProperties"	, values of new type, filter
+            @return		state of operation as bool
 
-            @onerror    We return false then.
+            @onerror	We return false then.
         *//*-*****************************************************************************************************/
 
         sal_Bool addFilter    ( const ::rtl::OUString&                                 sName       ,
@@ -348,79 +348,79 @@ class FilterCache   :   private ThreadHelpBase
         sal_Bool validateAndRepairHandler();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
+    //	protected methods
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
+    //	debug methods
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
+            @short		debug-method to check incoming parameter of some other mehods of this class
+            @descr		The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
 
-            @seealso    ASSERT in implementation!
+            @seealso	ASSERT in implementation!
 
-            @param      references to checking variables
-            @return     sal_False ,on invalid parameter
-            @return     sal_True  ,otherwise
+            @param		references to checking variables
+            @return		sal_False ,on invalid parameter
+            @return		sal_True  ,otherwise
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
     #ifdef ENABLE_ASSERTIONS
 
     private:
 
-        static sal_Bool implcp_searchType                           (   const   ::rtl::OUString&                                    sURL                ,
-                                                                        const   ::rtl::OUString*                                    pMediaType          ,
-                                                                        const   ::rtl::OUString*                                    pClipboardFormat    ,
-                                                                        const   CheckedTypeIterator&                                aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_searchFilterForType                  (   const   ::rtl::OUString&                                    sInternalTypeName   ,
-                                                                        const   CheckedStringListIterator&                          aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_searchDetectorForType                (   const   ::rtl::OUString&                                    sInternalTypeName   ,
-                                                                        const   CheckedStringListIterator&                          aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_searchLoaderForType                  (   const   ::rtl::OUString&                                    sInternalTypeName   ,
-                                                                        const   CheckedStringListIterator&                          aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
+        static sal_Bool implcp_searchType							(	const	::rtl::OUString&									sURL				,
+                                                                        const	::rtl::OUString*									pMediaType			,
+                                                                        const	::rtl::OUString*									pClipboardFormat	,
+                                                                        const	CheckedTypeIterator&								aStartEntry			,
+                                                                        const	::rtl::OUString&									sResult				);
+        static sal_Bool implcp_searchFilterForType					(	const	::rtl::OUString&									sInternalTypeName	,
+                                                                        const	CheckedStringListIterator&							aStartEntry			,
+                                                                        const	::rtl::OUString&									sResult				);
+        static sal_Bool implcp_searchDetectorForType				(	const	::rtl::OUString&									sInternalTypeName	,
+                                                                        const	CheckedStringListIterator&							aStartEntry			,
+                                                                        const	::rtl::OUString&									sResult				);
+        static sal_Bool implcp_searchLoaderForType					(	const	::rtl::OUString&									sInternalTypeName	,
+                                                                        const	CheckedStringListIterator&							aStartEntry			,
+                                                                        const	::rtl::OUString&									sResult				);
         static sal_Bool implcp_searchContentHandlerForType          (   const   ::rtl::OUString&                                    sInternalTypeName   ,
-                                                                        const   CheckedStringListIterator&                          aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_getTypeProperties                    (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getFilterProperties                  (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getDetectorProperties                (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getLoaderProperties                  (   const   ::rtl::OUString&                                    sName               );
+                                                                        const	CheckedStringListIterator&							aStartEntry			,
+                                                                        const	::rtl::OUString&									sResult				);
+        static sal_Bool implcp_getTypeProperties					(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_getFilterProperties					(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_getDetectorProperties				(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_getLoaderProperties					(	const	::rtl::OUString&									sName				);
         static sal_Bool implcp_getContentHandlerProperties          (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getType                              (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getFilter                            (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getDetector                          (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getLoader                            (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getType								(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_getFilter							(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_getDetector							(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_getLoader							(	const	::rtl::OUString&									sName				);
         static sal_Bool implcp_getContentHandler                    (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsType                           (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsFilter                         (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsDetector                       (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsLoader                         (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_existsType							(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_existsFilter							(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_existsDetector						(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_existsLoader							(	const	::rtl::OUString&									sName				);
         static sal_Bool implcp_existsContentHandler                 (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_addFilter                            (   const   ::rtl::OUString&                                    sName               ,
-                                                                        const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties         );
-        static sal_Bool implcp_replaceFilter                        (   const   ::rtl::OUString&                                    sName               ,
-                                                                        const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties         );
-        static sal_Bool implcp_removeFilter                         (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_queryFilters                         (   const   ::rtl::OUString&                                    sQuery              );
+        static sal_Bool implcp_addFilter							(	const	::rtl::OUString&									sName				,
+                                                                        const	css::uno::Sequence< css::beans::PropertyValue >&	lProperties			);
+        static sal_Bool implcp_replaceFilter						(	const	::rtl::OUString&									sName				,
+                                                                        const	css::uno::Sequence< css::beans::PropertyValue >&	lProperties			);
+        static sal_Bool implcp_removeFilter							(	const	::rtl::OUString&									sName				);
+        static sal_Bool implcp_queryFilters							(	const	::rtl::OUString&									sQuery				);
 
-    #endif  //  #ifdef ENABLE_ASSERTIONS
+    #endif	//	#ifdef ENABLE_ASSERTIONS
 
     #ifdef ENABLE_COMPONENT_SELF_CHECK
 
@@ -431,7 +431,7 @@ class FilterCache   :   private ThreadHelpBase
     #endif // ENABLE_COMPONENT_SELF_CHECK
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private variables
+    //	private variables
     //-------------------------------------------------------------------------------------------------------------
     private:
 
@@ -440,8 +440,8 @@ class FilterCache   :   private ThreadHelpBase
         static sal_Int32        m_nVersion          ;
         static sal_Int16        m_nMode             ;
 
-};      //  class FilterCache
+};		//	class FilterCache
 
-}       //  namespace framework
+}		//	namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
+#endif	//	#ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_

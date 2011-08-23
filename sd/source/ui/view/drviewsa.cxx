@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ class ScannerEventListener : public ::cppu::WeakImplHelper1< ::com::sun::star::l
 {
 private:
 
-    DrawViewShell*      mpParent;
+    DrawViewShell*		mpParent;
 
 public:
 
@@ -112,9 +112,9 @@ public:
                             ~ScannerEventListener();
 
     // XEventListener
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& rEventObject ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL 	disposing( const ::com::sun::star::lang::EventObject& rEventObject ) throw (::com::sun::star::uno::RuntimeException);
 
-    void                    ParentDestroyed() { mpParent = NULL; }
+    void					ParentDestroyed() { mpParent = NULL; }
 };
 
 // -----------------------------------------------------------------------------
@@ -159,7 +159,7 @@ DrawViewShell::~DrawViewShell()
 {
     mpAnnotationManager.reset();
     mpViewOverlayManager.reset();
-
+   
     OSL_ASSERT (GetViewShell()!=NULL);
 
     if( mxScannerListener.is() )
@@ -204,7 +204,7 @@ DrawViewShell::~DrawViewShell()
     if ( mpClipEvtLstnr )
     {
         mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
-        mpClipEvtLstnr->ClearCallbackLink();        // #103849# prevent callback if another thread is waiting
+        mpClipEvtLstnr->ClearCallbackLink();		// #103849# prevent callback if another thread is waiting
         mpClipEvtLstnr->release();
     }
 
@@ -273,7 +273,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     GetDoc()->CreateFirstPages();
 
     mpDrawView = new DrawView(pDocSh, GetActiveWindow(), this);
-    mpView = mpDrawView;             // Pointer der Basisklasse ViewShell
+    mpView = mpDrawView;			 // Pointer der Basisklasse ViewShell
     mpDrawView->SetSwapAsynchron(TRUE); // Asynchrones Laden von Graphiken
 
     // We do not read the page kind from the frame view anymore so we have
@@ -401,8 +401,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
                                 ::com::sun::star::uno::UNO_QUERY );
         }
     }
-
-    mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );
+    
+    mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );    
     mpViewOverlayManager.reset( new ViewOverlayManager( GetViewShellBase() ) );
 }
 
@@ -473,7 +473,7 @@ bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
 /*
     linienzuege werden ueber makros als folge von
         MoveTo (x, y)
-        LineTo (x, y)   [oder BezierTo (x, y)]
+        LineTo (x, y)	[oder BezierTo (x, y)]
         LineTo (x, y)
             :
     dargestellt. einen endbefehl fuer die linienzuege
@@ -844,7 +844,7 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
 {
     if( mpAnnotationManager.get() )
-        mpAnnotationManager->ExecuteAnnotation( rRequest );
+        mpAnnotationManager->ExecuteAnnotation( rRequest );    
 }
 
 // --------------------------------------------------------------------
@@ -852,7 +852,7 @@ void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
 void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 {
     if( mpAnnotationManager.get() )
-        mpAnnotationManager->GetAnnotationState( rItemSet );
+        mpAnnotationManager->GetAnnotationState( rItemSet );    
 }
 
 

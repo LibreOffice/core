@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@ public:
 class ClassName : private Stack                                     \
 {                                                                   \
 public:                                                             \
-                using Stack::Clear;                                 \
-                using Stack::Count;                                 \
+                using Stack::Clear;									\
+                using Stack::Count;									\
                                                                     \
                 ClassName( USHORT _nInitSize = 16,                  \
                        USHORT _nReSize = 16 ) :                     \

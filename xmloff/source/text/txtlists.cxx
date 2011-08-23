@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ void XMLTextListsHelper::PopListContext()
     OSL_ENSURE(mListStack.size(),
         "internal error: PopListContext: mListStack empty");
 //    fprintf(stderr, "PopListContext\n");
-    if ( !mListStack.empty())
+    if ( !mListStack.empty()) 
         mListStack.pop();
 }
 

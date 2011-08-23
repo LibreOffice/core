@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,23 +50,23 @@ namespace drawinglayer
 
             // create unit outline polygon
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
-                basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
-                getCornerRadiusX(),
+                basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), 
+                getCornerRadiusX(), 
                 getCornerRadiusY()));
 
             // add fill
             if(!getSdrLFSTAttribute().getFill().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        getSdrLFSTAttribute().getFill(),
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getFill(), 
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
             else if(getForceFillForHitTest())
             {
-                // if no fill and it's a text frame, create a fill for HitTest and
+                // if no fill and it's a text frame, create a fill for HitTest and 
                 // BoundRect fallback
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createHiddenGeometryPrimitives2D(
@@ -78,16 +78,16 @@ namespace drawinglayer
             // add line
             if(!getSdrLFSTAttribute().getLine().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolygonLinePrimitive(
-                        aUnitOutline,
-                        getTransform(),
+                        aUnitOutline, 
+                        getTransform(), 
                         getSdrLFSTAttribute().getLine(),
                         attribute::SdrLineStartEndAttribute()));
             }
             else if(!getForceFillForHitTest())
             {
-                // if initially no line is defined and it's not a text frame, create
+                // if initially no line is defined and it's not a text frame, create 
                 // a line for HitTest and BoundRect
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createHiddenGeometryPrimitives2D(
@@ -99,14 +99,14 @@ namespace drawinglayer
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createTextPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        getSdrLFSTAttribute().getText(),
-                        getSdrLFSTAttribute().getLine(),
-                        false,
-                        false,
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getText(), 
+                        getSdrLFSTAttribute().getLine(), 
+                        false, 
+                        false, 
                         false));
             }
 
@@ -114,7 +114,7 @@ namespace drawinglayer
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval,
+                    aRetval, 
                     getSdrLFSTAttribute().getShadow());
             }
 
@@ -122,12 +122,12 @@ namespace drawinglayer
         }
 
         SdrRectanglePrimitive2D::SdrRectanglePrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform, 
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-            double fCornerRadiusX,
+            double fCornerRadiusX, 
             double fCornerRadiusY,
             bool bForceFillForHitTest)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),

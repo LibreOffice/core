@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -629,7 +629,7 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
 
     if(aPt3.X())
     {
-        // #i74358# the axes are not orthogonal, so for getting the correct height,
+        // #i74358# the axes are not orthogonal, so for getting the correct height, 
         // calculate the length of aPt3
 
         // #i74358# this change was wrong, in the field of the old geometry stuff
@@ -1178,9 +1178,9 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
 {
     switch(eUnit)
     {
-        default             :
-        case FUNIT_NONE     :
-        case FUNIT_CUSTOM   :
+        default				:
+        case FUNIT_NONE		:
+        case FUNIT_CUSTOM	:
         {
             rStr = UniString();
             break;

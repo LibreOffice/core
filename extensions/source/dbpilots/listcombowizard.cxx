@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ namespace dbp
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())
-        {   // ... skip it!
+        {	// ... skip it!
             skip(1);
             m_bHadDataSelection = sal_False;
         }
@@ -292,9 +292,9 @@ namespace dbp
     //---------------------------------------------------------------------
     OContentTableSelection::OContentTableSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_TABLE))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aSelectTableLabel    (this, ModuleRes(FT_SELECTTABLE_LABEL))
-        ,m_aSelectTable         (this, ModuleRes(LB_SELECTTABLE))
+        ,m_aFrame				(this, ModuleRes(FL_FRAME))
+        ,m_aSelectTableLabel	(this, ModuleRes(FT_SELECTTABLE_LABEL))
+        ,m_aSelectTable			(this, ModuleRes(LB_SELECTTABLE))
     {
         FreeResource();
 
@@ -379,12 +379,12 @@ namespace dbp
     //---------------------------------------------------------------------
     OContentFieldSelection::OContentFieldSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_FIELD))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aTableFields         (this, ModuleRes(FT_TABLEFIELDS))
-        ,m_aSelectTableField    (this, ModuleRes(LB_SELECTFIELD))
-        ,m_aDisplayedFieldLabel (this, ModuleRes(FT_DISPLAYEDFIELD))
-        ,m_aDisplayedField      (this, ModuleRes(ET_DISPLAYEDFIELD))
-        ,m_aInfo                (this, ModuleRes(FT_CONTENTFIELD_INFO))
+        ,m_aFrame				(this, ModuleRes(FL_FRAME))
+        ,m_aTableFields			(this, ModuleRes(FT_TABLEFIELDS))
+        ,m_aSelectTableField	(this, ModuleRes(LB_SELECTFIELD))
+        ,m_aDisplayedFieldLabel	(this, ModuleRes(FT_DISPLAYEDFIELD))
+        ,m_aDisplayedField		(this, ModuleRes(ET_DISPLAYEDFIELD))
+        ,m_aInfo				(this, ModuleRes(FT_CONTENTFIELD_INFO))
     {
         m_aInfo.SetText(String(ModuleRes( isListBox() ? STR_FIELDINFO_LISTBOX : STR_FIELDINFO_COMBOBOX)));
         FreeResource();
@@ -453,12 +453,12 @@ namespace dbp
     //---------------------------------------------------------------------
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_FIELDLINK))
-        ,m_aDescription         (this, ModuleRes(FT_FIELDLINK_DESC))
-        ,m_aFrame               (this, ModuleRes(FL_FRAME))
-        ,m_aValueListFieldLabel (this, ModuleRes(FT_VALUELISTFIELD))
-        ,m_aValueListField      (this, ModuleRes(CMB_VALUELISTFIELD))
-        ,m_aTableFieldLabel     (this, ModuleRes(FT_TABLEFIELD))
-        ,m_aTableField          (this, ModuleRes(CMB_TABLEFIELD))
+        ,m_aDescription			(this, ModuleRes(FT_FIELDLINK_DESC))
+        ,m_aFrame				(this, ModuleRes(FL_FRAME))
+        ,m_aValueListFieldLabel	(this, ModuleRes(FT_VALUELISTFIELD))
+        ,m_aValueListField		(this, ModuleRes(CMB_VALUELISTFIELD))
+        ,m_aTableFieldLabel		(this, ModuleRes(FT_TABLEFIELD))
+        ,m_aTableField			(this, ModuleRes(CMB_TABLEFIELD))
     {
         FreeResource();
 
@@ -557,6 +557,6 @@ namespace dbp
     }
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/scopeguard.hxx> 
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -43,7 +43,7 @@
 #include "dx_spritecanvashelper.hxx"
 #include "dx_canvascustomsprite.hxx"
 
-#if defined(DX_DEBUG_IMAGES)
+#if defined(DX_DEBUG_IMAGES) 
 # if OSL_DEBUG_LEVEL > 0
 #  include <imdebug.h>
 #  undef min
@@ -57,9 +57,9 @@ namespace dxcanvas
 {
     namespace
     {
-        void repaintBackground( const ::basegfx::B2DRange&      rUpdateArea,
-                                const ::basegfx::B2IRange&      rOutputArea,
-                                const DXSurfaceBitmapSharedPtr& rBackBuffer )
+        void repaintBackground( const ::basegfx::B2DRange&		rUpdateArea,
+                                const ::basegfx::B2IRange&		rOutputArea,
+                                const DXSurfaceBitmapSharedPtr&	rBackBuffer )
         {
             // TODO(E1): Use numeric_cast to catch overflow here
             ::basegfx::B2IRange aActualArea( 0, 0,
@@ -119,11 +119,11 @@ namespace dxcanvas
     }
 
     void SpriteCanvasHelper::init( SpriteCanvas&                                    rParent,
-                                   ::canvas::SpriteRedrawManager&                   rManager,
-                                   const IDXRenderModuleSharedPtr&                  rRenderModule,
-                                   const ::canvas::ISurfaceProxyManagerSharedPtr&   rSurfaceProxy,
-                                   const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
-                                   const ::basegfx::B2ISize&                        rOutputOffset )
+                                   ::canvas::SpriteRedrawManager&					rManager,
+                                   const IDXRenderModuleSharedPtr&					rRenderModule,
+                                   const ::canvas::ISurfaceProxyManagerSharedPtr&	rSurfaceProxy,
+                                   const DXSurfaceBitmapSharedPtr&					rBackBuffer,
+                                   const ::basegfx::B2ISize&						rOutputOffset )
     {
         // init base
         setDevice( rParent );
@@ -135,7 +135,7 @@ namespace dxcanvas
         mpSurfaceProxy  = rSurfaceProxy;
         mpBackBuffer    = rBackBuffer;
     }
-
+    
     void SpriteCanvasHelper::disposing()
     {
         if(mpRenderModule)
@@ -147,17 +147,17 @@ namespace dxcanvas
         mpSpriteSurface = NULL;
 
         // forward to base
-        CanvasHelper::disposing();
+        CanvasHelper::disposing();        
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation(
+    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation( 
         const uno::Reference< rendering::XAnimation >& /*animation*/ )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps(
-        const uno::Sequence< uno::Reference< rendering::XBitmap > >& /*animationBitmaps*/,
+    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps( 
+        const uno::Sequence< uno::Reference< rendering::XBitmap > >& /*animationBitmaps*/, 
         sal_Int8                                                     /*interpolationMode*/ )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
@@ -168,8 +168,8 @@ namespace dxcanvas
         if( !mpRedrawManager )
             return uno::Reference< rendering::XCustomSprite >(); // we're disposed
 
-        return uno::Reference< rendering::XCustomSprite >(
-            new CanvasCustomSprite( spriteSize,
+        return uno::Reference< rendering::XCustomSprite >( 
+            new CanvasCustomSprite( spriteSize, 
                                     mpSpriteSurface,
                                     mpRenderModule,
                                     mpSurfaceProxy,
@@ -185,7 +185,7 @@ namespace dxcanvas
                                                sal_Bool                       bUpdateAll,
                                                bool&                          io_bSurfaceDirty )
     {
-        if( !mpRedrawManager ||
+        if( !mpRedrawManager || 
             !mpRenderModule ||
             !mpBackBuffer )
         {
@@ -196,7 +196,7 @@ namespace dxcanvas
 # if OSL_DEBUG_LEVEL > 0
         mpBackBuffer->imageDebugger();
 # endif
-#endif
+#endif        
 
         // store current output area (need to tunnel that to the
         // background, scroll, opaque and general sprite repaint
@@ -207,8 +207,8 @@ namespace dxcanvas
         maUpdateRect.reset();
 
         // TODO(P1): Might be worthwile to track areas of background
-        // changes, too.
-
+        // changes, too.        
+        
         // TODO(P2): Might be worthwhile to use page-flipping only if
         // a certain percentage of screen area has changed - and
         // compose directly to the front buffer otherwise.
@@ -258,7 +258,7 @@ namespace dxcanvas
         // change record vector must be cleared, for the next turn of
         // rendering and sprite changing
         mpRedrawManager->clearChangeRecords();
-
+        
         io_bSurfaceDirty = false;
 
         return sal_True;
@@ -275,8 +275,8 @@ namespace dxcanvas
                            mpBackBuffer );
     }
 
-    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange&                       /*rMoveStart*/,
-                                           const ::basegfx::B2DRange&                       rMoveEnd,
+    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange& 						/*rMoveStart*/, 
+                                           const ::basegfx::B2DRange& 						rMoveEnd,
                                            const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
     {
         ENSURE_OR_THROW( mpRenderModule &&
@@ -321,11 +321,11 @@ namespace dxcanvas
                                          static_cast<sal_Int32>(maScrapRect.getWidth()),
                                          static_cast<sal_Int32>(maScrapRect.getHeight()) );
         aActualArea.intersect( fround( rUpdateArea.maTotalBounds ) );
-
+        
         // add given update area to the 'blit to foreground' rect
         maUpdateRect.expand( aActualArea );
     }
-
+    
     void SpriteCanvasHelper::opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
@@ -344,12 +344,12 @@ namespace dxcanvas
         ::basegfx::B2IRange aActualArea( 0, 0,
                                          static_cast<sal_Int32>(maScrapRect.getWidth()),
                                          static_cast<sal_Int32>(maScrapRect.getHeight()) );
-        aActualArea.intersect( fround( rTotalArea ) );
-
+        aActualArea.intersect( fround( rTotalArea ) );        
+        
         // add given update area to the 'blit to foreground' rect
         maUpdateRect.expand( aActualArea );
     }
-
+    
     void SpriteCanvasHelper::genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
@@ -375,7 +375,7 @@ namespace dxcanvas
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
                          ::std::ptr_fun( &spriteRedrawStub ) );
-
+        
         // add given update area to the 'blit to foreground' rect
         maUpdateRect.expand( aActualArea );
     }

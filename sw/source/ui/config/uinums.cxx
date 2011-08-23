@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 
 #include <tools/resid.hxx>
 #include <fmtornt.hxx>
-#include <swtypes.hxx>      // Leerstring
+#include <swtypes.hxx>		// Leerstring
 #include <wrtsh.hxx>
 #include <uinums.hxx>
 #include <poolfmt.hxx>
@@ -56,18 +56,18 @@
 using namespace ::com::sun::star;
 
 
-#define VERSION_30B     ((USHORT)250)
-#define VERSION_31B     ((USHORT)326)
-#define VERSION_40A     ((USHORT)364)
+#define VERSION_30B		((USHORT)250)
+#define VERSION_31B		((USHORT)326)
+#define VERSION_40A		((USHORT)364)
 #define VERSION_50A     ((USHORT)373)
 #define VERSION_53A     ((USHORT)596)
-#define ACT_NUM_VERSION VERSION_53A
+#define ACT_NUM_VERSION	VERSION_53A
 
 #define NUMRULE_FILENAME "numrule.cfg"
 #define CHAPTER_FILENAME "chapter.cfg"
 
 /*------------------------------------------------------------------------
- Beschreibung:  Ops. zum Laden / Speichern
+ Beschreibung:	Ops. zum Laden / Speichern
 ------------------------------------------------------------------------*/
 
 
@@ -77,8 +77,8 @@ SV_IMPL_PTRARR( _SwNumFmtsAttrs, SfxPoolItem* )
 // SwNumRulesWithName ----------------------------------------------------
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:  Speichern einer Regel
- Parameter:     rCopy -- die zu speichernde Regel
+ Beschreibung:	Speichern einer Regel
+ Parameter:		rCopy -- die zu speichernde Regel
                 nIdx -- Position, an der die Regel zu speichern ist.
                         Eine alte Regel an dieser Position wird ueberschrieben.
 ------------------------------------------------------------------------*/
@@ -146,7 +146,7 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, USHORT nIdx)
 
 // PROTECTED METHODES ----------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:  Speichern
+ Beschreibung:	Speichern
 ------------------------------------------------------------------------*/
 
 BOOL /**/ SwBaseNumRules::Store(SvStream &rStream)
@@ -170,13 +170,13 @@ BOOL /**/ SwBaseNumRules::Store(SvStream &rStream)
 
 
 /*------------------------------------------------------------------------
- Beschreibung:  Speichern / Laden
+ Beschreibung:	Speichern / Laden
 ------------------------------------------------------------------------*/
 
 
 int SwBaseNumRules::Load(SvStream &rStream)
 {
-    int         rc = 0;
+    int			rc = 0;
 
     rStream >> nVersion;
 
@@ -305,7 +305,7 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, USHORT nVersion )
         // wegen eines kleinen aber schweren Fehlers schreibt die PreFinal die
         // gleiche VERSION_40A wie das SP2 #55402#
         else if(nVersion < VERSION_40A && n > 5)
-//      else if(nVersion < VERSION_50A && n > 5)
+//		else if(nVersion < VERSION_50A && n > 5)
             c = 0;
         else
             rStream >> c;
@@ -420,47 +420,47 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         BOOL bFlag;
         String sStr;
 
-        rStream >> nUS;             aFmt.SetNumberingType((sal_Int16)nUS );
+        rStream >> nUS;				aFmt.SetNumberingType((sal_Int16)nUS );
         if( VERSION_53A > nVersion )
         {
-            rStream >> cChar;       aFmt.SetBulletChar( cChar );
+            rStream >> cChar;		aFmt.SetBulletChar( cChar );
         }
         else
         {
-            rStream >> nUS;         aFmt.SetBulletChar( nUS );
+            rStream >> nUS; 		aFmt.SetBulletChar( nUS );
         }
 
-        rStream >> bFlag;           aFmt.SetIncludeUpperLevels( bFlag );
+        rStream >> bFlag;			aFmt.SetIncludeUpperLevels( bFlag );
 
         if( VERSION_30B == nVersion )
         {
             long nL;
-            rStream >> cChar;       aFmt.SetStart( (USHORT)cChar );
+            rStream >> cChar;		aFmt.SetStart( (USHORT)cChar );
 
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetSuffix( sStr );
-            rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
-            rStream >> nL;          aFmt.SetLSpace( lNumIndent );
-            rStream >> nL;          aFmt.SetFirstLineOffset( (short)nL );
+            rStream >> nUS;			aFmt.SetNumAdjust( SvxAdjust( nUS ) );
+            rStream >> nL;			aFmt.SetLSpace( lNumIndent );
+            rStream >> nL;			aFmt.SetFirstLineOffset( (short)nL );
         }
-        else                // alter StartWert war ein Byte
+        else 				// alter StartWert war ein Byte
         {
-            rStream >> nUS;         aFmt.SetStart( nUS );
+            rStream >> nUS;			aFmt.SetStart( nUS );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetSuffix( sStr );
-            rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
-            rStream >> nUS;         aFmt.SetAbsLSpace( nUS );
-            rStream >> nShort;      aFmt.SetFirstLineOffset( nShort );
-            rStream >> nUS;         aFmt.SetCharTextDistance( nUS );
-            rStream >> nShort;      aFmt.SetLSpace( nShort );
+            rStream >> nUS;			aFmt.SetNumAdjust( SvxAdjust( nUS ) );
+            rStream >> nUS;			aFmt.SetAbsLSpace( nUS );
+            rStream >> nShort;		aFmt.SetFirstLineOffset( nShort );
+            rStream >> nUS;			aFmt.SetCharTextDistance( nUS );
+            rStream >> nShort;		aFmt.SetLSpace( nShort );
             rStream >> bFlag;
         }
 
-        USHORT  nFamily;
+        USHORT	nFamily;
         USHORT  nCharSet;
         short   nWidth;
         short   nHeight;
@@ -660,7 +660,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
             else
                 pFmt = rSh.GetCharFmtFromPool( nCharPoolId );
 
-            if( !pFmt->GetDepends() )       // Attribute setzen
+            if( !pFmt->GetDepends() )		// Attribute setzen
                 for( USHORT n = aItems.Count(); n; )
                     pFmt->SetFmtAttr( *aItems[ --n ] );
         }

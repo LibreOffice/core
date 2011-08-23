@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -590,7 +590,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
                         Reference< frame::XModel > xNextModel( xModels->nextElement(), UNO_QUERY );
                         if ( xNextModel.is() )
                         {
-                            BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
+                            BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );	
                             if ( pMgr )
                                 aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
                             if ( aDlgLibAny.hasValue() )

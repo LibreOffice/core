@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,13 +69,13 @@ OEvoabDriver::~OEvoabDriver()
 void OEvoabDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    
     // when driver will be destroied so all our connections have to be destroied as well
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
         if (xComp.is()) {
-            try {
+            try {	
             xComp->dispose();
             }
             catch (com::sun::star::lang::DisposedException e) {
@@ -101,7 +101,7 @@ rtl::OUString OEvoabDriver::getImplementationName_Static(  ) throw(RuntimeExcept
 //------------------------------------------------------------------
 Sequence< ::rtl::OUString > OEvoabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
+    // which service is supported 
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
@@ -140,15 +140,15 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const ::rtl::OUString& 
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
         throw DisposedException();
-
+    
     if ( ! acceptsURL(url) )
         return NULL;
-
+    
     OEvoabConnection* pCon = new OEvoabConnection( *this );
     pCon->construct(url,info);
         Reference< XConnection > xCon = pCon;
         m_xConnections.push_back(WeakReferenceHelper(*pCon));
-
+    
     return xCon;
 }
 // --------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,17 +38,17 @@ namespace connectivity
 {
     namespace adabas
     {
-        class OAdabasStatement :    public  ::connectivity::odbc::OStatement
+        class OAdabasStatement :	public	::connectivity::odbc::OStatement
         {
-            OAdabasConnection*          m_pOwnConnection;
-            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
+            OAdabasConnection*			m_pOwnConnection;
+            ::vos::ORef<OSQLColumns>	m_aSelectColumns;
         protected:
             virtual odbc::OResultSet* createResulSet();
             virtual void setResultSetConcurrency(sal_Int32 _par0);
-            virtual void setResultSetType(sal_Int32 _par0)      ;
+            virtual void setResultSetType(sal_Int32 _par0)		;
             virtual void setUsingBookmarks(sal_Bool _bUseBookmark);
         public:
-            OAdabasStatement( OAdabasConnection* _pConnection)
+            OAdabasStatement( OAdabasConnection* _pConnection) 
                 : ::connectivity::odbc::OStatement( _pConnection )
                 ,m_pOwnConnection(_pConnection)
             {}

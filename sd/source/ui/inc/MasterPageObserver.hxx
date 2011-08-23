@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public:
         document.
     */
     void UnregisterDocument (SdDrawDocument& rDocument);
-
+    
     /** Add a listener that is informed of master pages that are newly
         assigned to slides or become unassigned.
         @param rEventListener
@@ -117,13 +117,13 @@ public:
     EventType meType;
     SdDrawDocument& mrDocument;
     const String& mrMasterPageName;
-
+    
     MasterPageObserverEvent (
         EventType eType,
         SdDrawDocument& rDocument,
         const String& rMasterPageName)
-        : meType(eType),
-          mrDocument(rDocument),
+        : meType(eType), 
+          mrDocument(rDocument), 
           mrMasterPageName(rMasterPageName)
     {}
 

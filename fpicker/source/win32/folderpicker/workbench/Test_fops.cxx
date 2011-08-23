@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 
 
 //-----------------------------------------------------------
-//  interface includes
+//	interface includes
 //-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <osl/file.hxx>
 
 //--------------------------------------------------------------
-//  other includes
+//	other includes
 //--------------------------------------------------------------
 #include <cppuhelper/servicefactory.hxx>
 
@@ -69,27 +69,27 @@
 #include <windows.h>
 
 //--------------------------------------------------------------
-//  namesapces
+//	namesapces
 //--------------------------------------------------------------
 
-using namespace ::rtl                   ;
-using namespace ::cppu                  ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
+using namespace	::rtl					;
+using namespace	::cppu					;
+using namespace	::com::sun::star::uno	;
+using namespace	::com::sun::star::lang	;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace std                     ;
+using namespace std						;
 
 //--------------------------------------------------------------
-//  defines
+//	defines
 //--------------------------------------------------------------
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb"
 
 //--------------------------------------------------------------
-//  global variables
+//	global variables
 //--------------------------------------------------------------
 
-Reference< XMultiServiceFactory >   g_xFactory;
+Reference< XMultiServiceFactory >	g_xFactory;
 
 /*
 void CreateDeepDirectory( )
@@ -108,16 +108,16 @@ void CreateDeepDirectory( )
         OSL_ASSERT( ::osl::FileBase::E_None == \
             ::osl::FileBase::getNormalizedPathFromFileURL( aPathURL, normalizedPath ) );
     }
-
+    
 }
 */
 
 //--------------------------------------------------------------
-//  main
+//	main
 //--------------------------------------------------------------
 
 
-int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
+int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/	)
 {
     CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
@@ -148,14 +148,14 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
 
     Reference< XFolderPicker > xFolderPicker;
 
-    xFolderPicker = Reference< XFolderPicker >(
+    xFolderPicker = Reference< XFolderPicker >( 
         g_xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM ( FOLDER_PICKER_SERVICE_NAME ) ) ), UNO_QUERY );
-
+    
     if ( xFolderPicker.is() == sal_False )
     {
         OSL_ENSURE( sal_False, "Error creating FolderPicker Service" );
         return(-1);
-    }
+    }	
 
     try
     {

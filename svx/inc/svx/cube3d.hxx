@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@ class SVX_DLLPUBLIC E3dCubeObj : public E3dCompoundObject
 {
 private:
     // Parameter
-    basegfx::B3DPoint                   aCubePos;
-    basegfx::B3DVector                  aCubeSize;
-    UINT16                              nSideFlags;
+    basegfx::B3DPoint					aCubePos;
+    basegfx::B3DVector					aCubeSize;
+    UINT16								nSideFlags;
 
     // BOOLeans
-    unsigned                            bPosIsCenter : 1;
+    unsigned							bPosIsCenter : 1;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -92,4 +92,4 @@ public:
     virtual void TakeObjNamePlural(String& rName) const;
 };
 
-#endif          // _E3D_CUBE3D_HXX
+#endif			// _E3D_CUBE3D_HXX

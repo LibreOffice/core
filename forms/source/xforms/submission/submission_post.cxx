@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,12 +51,12 @@ using namespace std;
 
 
 CSubmissionPost::CSubmissionPost(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
-    : CSubmission(aURL, aFragment)
+    : CSubmission(aURL, aFragment) 
 {
 }
 
 CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
-{
+{    
     // PUT always uses application/xml
     CSS::uno::Reference< XCommandEnvironment > aEnvironment;
     auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
@@ -65,7 +65,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
 
         // use post command
-
+            
         OUString aCommandName = OUString::createFromAscii("post");
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
@@ -87,7 +87,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         // xOut->closeOutput();
 
         try {
-            // m_aResultStream = CSS::uno::Reference< XInputStream >(aSink, UNO_QUERY_THROW);
+            // m_aResultStream = CSS::uno::Reference< XInputStream >(aSink, UNO_QUERY_THROW); 
             m_aResultStream = aSink->getInputStream();
         } catch (Exception&) {
             OSL_ENSURE(sal_False, "Cannot open reply stream from content");
@@ -98,7 +98,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         OSL_ENSURE(sal_False, "Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }
-
+    
 
     return SUCCESS;
 }

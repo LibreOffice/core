@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -222,7 +222,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExceptio
     return nValue;
 }
 // -------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
+sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  ) 
 {
     return 0;
 }
@@ -233,7 +233,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLExcepti
     return nValue;
 }
 // -------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
+sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  ) 
 {
     // We only support a single table
     return 1;
@@ -255,7 +255,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  ) 
 {
     return sal_False;
 }
@@ -302,7 +302,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
     return aVal;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
+::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  ) 
 {
     // normally this is "
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("\""));
@@ -380,7 +380,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  ) 
 {
     return sal_False;
 }
@@ -405,7 +405,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  ) 
 {
     return sal_False;
 }
@@ -975,7 +975,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
-    if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types ) )
+    if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types ) ) 
         getOwnConnection()->throwSQLException( m_pDbMetaDataHelper->getError(), *this );
 
     ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;

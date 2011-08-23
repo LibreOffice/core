@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ extern "C" void SAL_CALL sdbt_initializeModule()
 //---------------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment **
+                const sal_Char	**ppEnvTypeName,
+                uno_Environment	**
             )
 {
     sdbt_initializeModule();
@@ -71,8 +71,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
                 void* pRegistryKey
             )
 {
-    if (pRegistryKey)
-    try
+    if (pRegistryKey) 
+    try 
     {
         return ::sdbtools::SdbtModule::getInstance().writeComponentInfos(
             static_cast<XMultiServiceFactory*>(pServiceManager),

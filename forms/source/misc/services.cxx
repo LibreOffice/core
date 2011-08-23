@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,17 +102,17 @@ DECLARE_SERVICE_INFO(ImageProducer)
 
 //---------------------------------------------------------------------------------------
 
-static Sequence< ::rtl::OUString >                      s_aClassImplementationNames;
-static Sequence<Sequence< ::rtl::OUString > >   s_aClassServiceNames;
-static Sequence<sal_Int64>                              s_aFactories;
+static Sequence< ::rtl::OUString >						s_aClassImplementationNames;
+static Sequence<Sequence< ::rtl::OUString > >	s_aClassServiceNames;
+static Sequence<sal_Int64>								s_aFactories;
     // need to use sal_Int64 instead of ComponentInstantiation, as ComponentInstantiation has no cppuType, so
     // it can't be used with sequences
 
 //---------------------------------------------------------------------------------------
 void registerClassInfo(
-        ::rtl::OUString _rClassImplName,                                // the ImplName of the class
-        const Sequence< ::rtl::OUString >& _rServiceNames,      // the services supported by this class
-        ::cppu::ComponentInstantiation _pCreateFunction                 // the method for instantiating such a class
+        ::rtl::OUString _rClassImplName,								// the ImplName of the class
+        const Sequence< ::rtl::OUString >& _rServiceNames,		// the services supported by this class
+        ::cppu::ComponentInstantiation _pCreateFunction					// the method for instantiating such a class
         )
 {
     sal_Int32 nCurrentLength = s_aClassImplementationNames.getLength();

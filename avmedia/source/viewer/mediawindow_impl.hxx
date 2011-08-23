@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,33 +43,33 @@ namespace avmedia
         // ----------------------
         // - MediaWindowControl -
         // ----------------------
-
+        
         class MediaWindowControl : public MediaControl
         {
         public:
-
+        
                     MediaWindowControl( Window* pParent );
                     ~MediaWindowControl();
-
+        
         protected:
-
-            void    update();
-            void    execute( const MediaItem& rItem );
+        
+            void 	update();
+            void 	execute( const MediaItem& rItem );
         };
 
         // --------------------
         // - MediaChildWindow -
         // --------------------
-
+        
         class MediaChildWindow : public JavaChildWindow
         {
         public:
-
+        
                             MediaChildWindow( Window* pParent );
                             ~MediaChildWindow();
-
+        
         protected:
-
+        
             virtual void    MouseMove( const MouseEvent& rMEvt );
             virtual void    MouseButtonDown( const MouseEvent& rMEvt );
             virtual void    MouseButtonUp( const MouseEvent& rMEvt );
@@ -77,7 +77,7 @@ namespace avmedia
             virtual void    KeyUp( const KeyEvent& rKEvt );
             virtual void    Command( const CommandEvent& rCEvt );
         };
-
+                
         // ------------------.
         // - MediaWindowImpl -
         // -------------------
@@ -88,7 +88,7 @@ namespace avmedia
                                 public MediaWindowBaseImpl,
                                 public DropTargetHelper,
                                 public DragSourceHelper
-
+                                   
         {
         public:
 
@@ -96,19 +96,19 @@ namespace avmedia
             virtual         ~MediaWindowImpl();
 
             virtual void    cleanUp();
-            virtual void    onURLChanged();
-
+            virtual void	onURLChanged();
+        
         public:
+        
+            void			update();
 
-            void            update();
-
-            void            setPosSize( const Rectangle& rRect );
-
-            void            setPointer( const Pointer& rPointer );
-            const Pointer&  getPointer() const;
-
-            bool            hasInternalMediaControl() const;
-
+            void    		setPosSize( const Rectangle& rRect );
+                
+            void			setPointer( const Pointer& rPointer );
+            const Pointer&	getPointer() const;
+            
+            bool			hasInternalMediaControl() const;
+            
         protected:
 
             // Window
@@ -132,12 +132,12 @@ namespace avmedia
 
         private:
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxEventsIf;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >	mxEventsIf;
             MediaEventListenersImpl*                                                mpEvents;
-            MediaChildWindow                                                        maChildWindow;
-            MediaWindowControl*                                                     mpMediaWindowControl;
-            BitmapEx*                                                               mpEmptyBmpEx;
-            BitmapEx*                                                               mpAudioBmpEx;
+            MediaChildWindow														maChildWindow;
+            MediaWindowControl*														mpMediaWindowControl;
+            BitmapEx*																mpEmptyBmpEx;
+            BitmapEx*																mpAudioBmpEx;
         };
     }
 }

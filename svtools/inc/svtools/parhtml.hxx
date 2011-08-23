@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,18 +62,18 @@ enum HTMLTableRules { HTML_TR_NONE, HTML_TR_GROUPS, HTML_TR_ROWS,
 
 enum HTMLInputType
 {
-    HTML_IT_TEXT =      0x01,
-    HTML_IT_PASSWORD =  0x02,
-    HTML_IT_CHECKBOX =  0x03,
-    HTML_IT_RADIO =     0x04,
-    HTML_IT_RANGE =     0x05,
-    HTML_IT_SCRIBBLE =  0x06,
-    HTML_IT_FILE =      0x07,
-    HTML_IT_HIDDEN =    0x08,
-    HTML_IT_SUBMIT =    0x09,
-    HTML_IT_IMAGE =     0x0a,
-    HTML_IT_RESET =     0x0b,
-    HTML_IT_BUTTON =    0x0c
+    HTML_IT_TEXT =		0x01,
+    HTML_IT_PASSWORD =	0x02,
+    HTML_IT_CHECKBOX =	0x03,
+    HTML_IT_RADIO =		0x04,
+    HTML_IT_RANGE =		0x05,
+    HTML_IT_SCRIBBLE =	0x06,
+    HTML_IT_FILE =		0x07,
+    HTML_IT_HIDDEN =	0x08,
+    HTML_IT_SUBMIT =	0x09,
+    HTML_IT_IMAGE =		0x0a,
+    HTML_IT_RESET =		0x0b,
+    HTML_IT_BUTTON = 	0x0c
 };
 
 enum HTMLScriptLanguage
@@ -85,8 +85,8 @@ enum HTMLScriptLanguage
 
 struct HTMLOptionEnum
 {
-    const sal_Char *pName;  // Wert einer HTML-Option
-    sal_uInt16 nValue;      // und der dazugehoerige Wert eines Enums
+    const sal_Char *pName;	// Wert einer HTML-Option
+    sal_uInt16 nValue;		// und der dazugehoerige Wert eines Enums
 };
 
 // Repraesentation einer HTML-Option (=Atrribut in einem Start-Tag)
@@ -96,26 +96,26 @@ struct HTMLOptionEnum
 
 class SVT_DLLPUBLIC HTMLOption
 {
-    String aValue;          // der Wert der Option (immer als String)
-    String aToken;          // der Name der Option als String
-    sal_uInt16 nToken;          // und das entsprechende Token
+    String aValue;			// der Wert der Option (immer als String)
+    String aToken;			// der Name der Option als String
+    sal_uInt16 nToken;			// und das entsprechende Token
 
 public:
 
     HTMLOption( sal_uInt16 nTyp, const String& rToken, const String& rValue );
 
     // der Name der Option ...
-    sal_uInt16 GetToken() const { return nToken; }  // ... als Enum
+    sal_uInt16 GetToken() const { return nToken; }	// ... als Enum
     const String& GetTokenString() const { return aToken; } // ... als String
 
     // der Wert der Option ...
-    const String& GetString() const { return aValue; }  // ... als String
+    const String& GetString() const { return aValue; }	// ... als String
 
-    sal_uInt32 GetNumber() const;                           // ... als Zahl
-    sal_Int32 GetSNumber() const;                           // ... als Zahl
-    void GetNumbers( SvULongs &rLongs,                  // ... als Zahlen
+    sal_uInt32 GetNumber() const;                          	// ... als Zahl
+    sal_Int32 GetSNumber() const;                          	// ... als Zahl
+    void GetNumbers( SvULongs &rLongs, 					// ... als Zahlen
                      sal_Bool bSpaceDelim=sal_False ) const;
-    void GetColor( Color& ) const;                      // ... als Farbe
+    void GetColor( Color& ) const;						// ... als Farbe
 
     // ... als Enum pOptEnums ist ein HTMLOptionEnum-Array
     sal_uInt16 GetEnum( const HTMLOptionEnum *pOptEnums,
@@ -123,10 +123,10 @@ public:
     BOOL GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const;
 
     // ... und als ein par spezielle Enums
-    HTMLInputType GetInputType() const;                 // <INPUT TYPE=...>
-    HTMLTableFrame GetTableFrame() const;               // <TABLE FRAME=...>
-    HTMLTableRules GetTableRules() const;               // <TABLE RULES=...>
-    //SvxAdjust GetAdjust() const;                      // <P,TH,TD ALIGN=>
+    HTMLInputType GetInputType() const;				   	// <INPUT TYPE=...>
+    HTMLTableFrame GetTableFrame() const;				// <TABLE FRAME=...>
+    HTMLTableRules GetTableRules() const;				// <TABLE RULES=...>
+    //SvxAdjust GetAdjust() const;						// <P,TH,TD ALIGN=>
 };
 
 typedef HTMLOption* HTMLOptionPtr;
@@ -134,28 +134,28 @@ SV_DECL_PTRARR(HTMLOptions,HTMLOptionPtr,16,16)
 
 class SVT_DLLPUBLIC HTMLParser : public SvParser
 {
-    BOOL bNewDoc        : 1;        // neues Doc lesen ?
-    BOOL bIsInHeader    : 1;        // scanne Header-Bereich
-    BOOL bIsInBody      : 1;        // scanne Body-Bereich
-    BOOL bReadListing   : 1;        // Lese Listings
-    BOOL bReadXMP       : 1;        // Lese XMP
-    BOOL bReadPRE       : 1;        // Lese preformatted Text
-    BOOL bReadTextArea  : 1;        // Lese TEXTAREA
-    BOOL bReadScript    : 1;        // Lesen von <SCRIPT>
-    BOOL bReadStyle     : 1;        // Lesen von <STYLE>
-    BOOL bEndTokenFound : 1;        // </SCRIPT> oder </STYLE> gefunden
+    BOOL bNewDoc 		: 1;		// neues Doc lesen ?
+    BOOL bIsInHeader 	: 1;		// scanne Header-Bereich
+    BOOL bIsInBody 		: 1;		// scanne Body-Bereich
+    BOOL bReadListing	: 1;		// Lese Listings
+    BOOL bReadXMP		: 1;		// Lese XMP
+    BOOL bReadPRE		: 1;		// Lese preformatted Text
+    BOOL bReadTextArea	: 1;		// Lese TEXTAREA
+    BOOL bReadScript	: 1;		// Lesen von <SCRIPT>
+    BOOL bReadStyle		: 1;		// Lesen von <STYLE>
+    BOOL bEndTokenFound : 1;		// </SCRIPT> oder </STYLE> gefunden
 
-    BOOL bPre_IgnoreNewPara : 1;    // Flags fuers lesen von PRE-Absaetzen
-    BOOL bReadNextChar : 1;         // TRUE: NextChar nochmals lesen (JavaScript!)
-    BOOL bReadComment : 1;          // TRUE: NextChar nochmals lesen (JavaScript!)
+    BOOL bPre_IgnoreNewPara : 1;	// Flags fuers lesen von PRE-Absaetzen
+    BOOL bReadNextChar : 1;			// TRUE: NextChar nochmals lesen (JavaScript!)
+    BOOL bReadComment : 1;			// TRUE: NextChar nochmals lesen (JavaScript!)
 
-    sal_uInt32 nPre_LinePos;            // Pos in der Line im PRE-Tag
+    sal_uInt32 nPre_LinePos;			// Pos in der Line im PRE-Tag
 
-    HTMLOptions *pOptions;          // die Optionen des Start-Tags
+    HTMLOptions *pOptions;			// die Optionen des Start-Tags
     String aEndToken;
 
 protected:
-    String sSaveToken;              // das gelesene Tag als String
+    String sSaveToken;				// das gelesene Tag als String
 
     int ScanText( const sal_Unicode cBreak = 0U );
 
@@ -173,17 +173,17 @@ public:
 
     virtual SvParserState CallParser();   // Aufruf des Parsers
 
-    BOOL IsNewDoc() const       { return bNewDoc; }
-    BOOL IsInHeader() const     { return bIsInHeader; }
-    BOOL IsInBody() const       { return bIsInBody; }
-    BOOL IsValidSyntax() const  { return TRUE; }
-    BOOL IsReadListing() const  { return bReadListing; }
-    BOOL IsReadXMP() const      { return bReadXMP; }
-    BOOL IsReadPRE() const      { return bReadPRE; }
-    BOOL IsReadScript() const   { return bReadScript; }
-    BOOL IsReadStyle() const    { return bReadStyle; }
+    BOOL IsNewDoc() const 		{ return bNewDoc; }
+    BOOL IsInHeader() const 	{ return bIsInHeader; }
+    BOOL IsInBody() const 		{ return bIsInBody; }
+    BOOL IsValidSyntax() const 	{ return TRUE; }
+    BOOL IsReadListing() const 	{ return bReadListing; }
+    BOOL IsReadXMP() const 		{ return bReadXMP; }
+    BOOL IsReadPRE() const 		{ return bReadPRE; }
+    BOOL IsReadScript() const 	{ return bReadScript; }
+    BOOL IsReadStyle() const 	{ return bReadStyle; }
 
-    void SetReadNextChar()      { bReadNextChar = TRUE; }
+    void SetReadNextChar() 		{ bReadNextChar = TRUE; }
 
     // PRE-/LISTING oder XMP-Modus starten/beenden oder Tags entsprechend
     // filtern
@@ -225,8 +225,8 @@ public:
     const HTMLOptions *GetOptions( sal_uInt16 *pNoConvertToken=0 ) const;
 
     // fuers asynchrone lesen aus dem SvStream
-//  virtual void SaveState( int nToken );
-//  virtual void RestoreState();
+//	virtual void SaveState( int nToken );
+//	virtual void RestoreState();
     virtual void Continue( int nToken );
 
 

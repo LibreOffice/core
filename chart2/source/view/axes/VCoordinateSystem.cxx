@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
     for( nN = 0 ;nN<aResolution.getLength(); nN++ )
         aResolution[nN]=1000;
 
-    ::basegfx::B3DTuple aScale( BaseGFXHelper::GetScaleFromMatrix(
+    ::basegfx::B3DTuple aScale( BaseGFXHelper::GetScaleFromMatrix( 
         BaseGFXHelper::HomogenMatrixToB3DHomMatrix(
             m_aMatrixSceneToScreen ) ) );
 
@@ -197,10 +197,10 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
         nXResolution = 10;
     if( nYResolution < 10 )
         nYResolution = 10;
-
+       
     if( this->getPropertySwapXAndYAxis() )
         std::swap(nXResolution,nYResolution);
-
+    
     //2D
     if( 2 == aResolution.getLength() )
     {
@@ -215,7 +215,7 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
         for( nN = 0 ;nN<aResolution.getLength(); nN++ )
             aResolution[nN]=nMaxResolution;
     }
-
+    
     return aResolution;
 }
 
@@ -277,7 +277,7 @@ Sequence< ExplicitScaleData > VCoordinateSystem::getExplicitScales( sal_Int32 nD
 
     impl_adjustDimensionAndIndex( nDimensionIndex, nAxisIndex );
     aRet[nDimensionIndex]=this->getExplicitScale( nDimensionIndex, nAxisIndex );
-
+    
     return aRet;
 }
 
@@ -296,7 +296,7 @@ ExplicitScaleData VCoordinateSystem::getExplicitScale( sal_Int32 nDimensionIndex
     ExplicitScaleData aRet;
 
     impl_adjustDimensionAndIndex( nDimensionIndex, nAxisIndex );
-
+    
     if( nAxisIndex == 0)
     {
         aRet = m_aExplicitScales[nDimensionIndex];
@@ -431,7 +431,7 @@ VAxisBase* VCoordinateSystem::getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAx
     tVAxisMap::const_iterator aIt = m_aAxisMap.find( aFullAxisIndex );
     if( aIt != m_aAxisMap.end() )
         pRet = aIt->second.get();
-
+    
     return pRet;
 }
 
@@ -538,7 +538,7 @@ void VCoordinateSystem::createAxesShapes()
                             m_aExplicitScales[0].Origin );
                 }
             }
-
+            
             pVAxis->createShapes();
         }
     }

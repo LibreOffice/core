@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _EDITATTR_HXX
-#define _EDITATTR_HXX
+#define	_EDITATTR_HXX
 
 #include <editeng/eeitem.hxx>
 
@@ -56,13 +56,13 @@ class SvxCharReliefItem;
 
 class SfxVoidItem;
 
-#define CH_FEATURE_OLD  (BYTE)          0xFF
-#define CH_FEATURE      (sal_Unicode)   0x01
+#define CH_FEATURE_OLD	(BYTE)			0xFF
+#define CH_FEATURE		(sal_Unicode) 	0x01
 
 // DEF_METRIC: Bei meinem Pool sollte immer die DefMetric bei
 // GetMetric( nWhich ) ankommen!
 // => Zum ermitteln der DefMetrik einfach ein GetMetric( 0 )
-#define DEF_METRIC  0
+#define DEF_METRIC	0
 
 // -------------------------------------------------------------------------
 // class EditAttrib
@@ -74,17 +74,17 @@ private:
             EditAttrib( const EditAttrib & ) {;}
 
 protected:
-    const SfxPoolItem*  pItem;
+    const SfxPoolItem*	pItem;
 
                         EditAttrib( const SfxPoolItem& rAttr );
-    virtual             ~EditAttrib();
+    virtual				~EditAttrib();
 
 public:
     // RemoveFromPool muss immer vorm DTOR Aufruf erfolgen!!
-    void                RemoveFromPool( SfxItemPool& rPool );
+    void				RemoveFromPool( SfxItemPool& rPool );
 
-    USHORT              Which() const   { return pItem->Which(); }
-    const SfxPoolItem*  GetItem() const { return pItem; }
+    USHORT				Which() const	{ return pItem->Which(); }
+    const SfxPoolItem*	GetItem() const	{ return pItem; }
 };
 
 // -------------------------------------------------------------------------
@@ -96,42 +96,42 @@ class EditCharAttrib : public EditAttrib
 {
 protected:
 
-    USHORT              nStart;
-    USHORT              nEnd;
-    BOOL                bFeature    :1;
-    BOOL                bEdge       :1;
+    USHORT 				nStart;
+    USHORT 				nEnd;
+    BOOL				bFeature	:1;
+    BOOL				bEdge		:1;
 
 public:
             EditCharAttrib( const SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    USHORT&         GetStart()                  { return nStart; }
-    USHORT&         GetEnd()                    { return nEnd; }
+    USHORT&			GetStart()					{ return nStart; }
+    USHORT&			GetEnd()					{ return nEnd; }
 
-    USHORT          GetStart() const            { return nStart; }
-    USHORT          GetEnd() const              { return nEnd; }
+    USHORT			GetStart() const			{ return nStart; }
+    USHORT			GetEnd() const				{ return nEnd; }
 
-    inline USHORT   GetLen() const;
+    inline USHORT	GetLen() const;
 
-    inline void     MoveForward( USHORT nDiff );
-    inline void     MoveBackward( USHORT nDiff );
+    inline void		MoveForward( USHORT nDiff );
+    inline void		MoveBackward( USHORT nDiff );
 
-    inline void     Expand( USHORT nDiff );
-    inline void     Collaps( USHORT nDiff );
+    inline void		Expand( USHORT nDiff );
+    inline void		Collaps( USHORT nDiff );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 
-    BOOL    IsIn( USHORT nIndex )
+    BOOL	IsIn( USHORT nIndex )
                 { return ( ( nStart <= nIndex ) && ( nEnd >= nIndex ) ); }
-    BOOL    IsInside( USHORT nIndex )
+    BOOL	IsInside( USHORT nIndex )
                 { return ( ( nStart < nIndex ) && ( nEnd > nIndex ) ); }
-    BOOL    IsEmpty()
+    BOOL	IsEmpty()
                 { return nStart == nEnd; }
 
-    BOOL    IsFeature() const   { return bFeature; }
-    void    SetFeature( BOOL b) { bFeature = b; }
+    BOOL	IsFeature() const	{ return bFeature; }
+    void	SetFeature( BOOL b) { bFeature = b; }
 
-    BOOL    IsEdge() const      { return bEdge; }
-    void    SetEdge( BOOL b )   { bEdge = b; }
+    BOOL	IsEdge() const		{ return bEdge; }
+    void	SetEdge( BOOL b )	{ bEdge = b; }
 };
 
 inline USHORT EditCharAttrib::GetLen() const
@@ -154,14 +154,14 @@ inline void EditCharAttrib::MoveBackward( USHORT nDiff )
     nEnd = nEnd - nDiff;
 }
 
-inline void EditCharAttrib::Expand( USHORT nDiff )
+inline void	EditCharAttrib::Expand( USHORT nDiff )
 {
     DBG_ASSERT( ( ((long)nEnd + nDiff) <= (long)0xFFFF ), "EditCharAttrib: Expand?!" );
     DBG_ASSERT( !bFeature, "Bitte keine Features expandieren!" );
     nEnd = nEnd + nDiff;
 }
 
-inline void EditCharAttrib::Collaps( USHORT nDiff )
+inline void	EditCharAttrib::Collaps( USHORT nDiff )
 {
     DBG_ASSERT( (long)nEnd - nDiff >= (long)nStart, "EditCharAttrib: Collaps?!" );
     DBG_ASSERT( !bFeature, "Bitte keine Features schrumpfen!" );
@@ -176,7 +176,7 @@ class EditCharAttribFont: public EditCharAttrib
 public:
     EditCharAttribFont( const SvxFontItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -187,7 +187,7 @@ class EditCharAttribWeight : public EditCharAttrib
 public:
     EditCharAttribWeight( const SvxWeightItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 // -------------------------------------------------------------------------
 // class EditCharAttribItalic
@@ -197,7 +197,7 @@ class EditCharAttribItalic : public EditCharAttrib
 public:
     EditCharAttribItalic( const SvxPostureItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -208,7 +208,7 @@ class EditCharAttribShadow : public EditCharAttrib
 public:
     EditCharAttribShadow( const SvxShadowedItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -219,7 +219,7 @@ class EditCharAttribEscapement : public EditCharAttrib
 public:
     EditCharAttribEscapement( const SvxEscapementItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -230,7 +230,7 @@ class EditCharAttribOutline : public EditCharAttrib
 public:
     EditCharAttribOutline( const SvxContourItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -241,7 +241,7 @@ class EditCharAttribStrikeout : public EditCharAttrib
 public:
     EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -252,7 +252,7 @@ class EditCharAttribUnderline : public EditCharAttrib
 public:
     EditCharAttribUnderline( const SvxUnderlineItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -263,7 +263,7 @@ class EditCharAttribOverline : public EditCharAttrib
 public:
     EditCharAttribOverline( const SvxOverlineItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -274,7 +274,7 @@ class EditCharAttribEmphasisMark : public EditCharAttrib
 public:
     EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -285,7 +285,7 @@ class EditCharAttribRelief : public EditCharAttrib
 public:
     EditCharAttribRelief( const SvxCharReliefItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -296,7 +296,7 @@ class EditCharAttribFontHeight : public EditCharAttrib
 public:
     EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -307,7 +307,7 @@ class EditCharAttribFontWidth : public EditCharAttrib
 public:
     EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -318,7 +318,7 @@ class EditCharAttribColor : public EditCharAttrib
 public:
     EditCharAttribColor( const SvxColorItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -329,7 +329,7 @@ class EditCharAttribLanguage : public EditCharAttrib
 public:
     EditCharAttribLanguage( const SvxLanguageItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -340,7 +340,7 @@ class EditCharAttribTab : public EditCharAttrib
 public:
     EditCharAttribTab( const SfxVoidItem& rAttr, USHORT nPos );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -351,7 +351,7 @@ class EditCharAttribLineBreak : public EditCharAttrib
 public:
     EditCharAttribLineBreak( const SfxVoidItem& rAttr, USHORT nPos );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -359,9 +359,9 @@ public:
 // -------------------------------------------------------------------------
 class EditCharAttribField: public EditCharAttrib
 {
-    XubString       aFieldValue;
-    Color*          pTxtColor;
-    Color*          pFldColor;
+    XubString		aFieldValue;
+    Color*			pTxtColor;
+    Color*			pFldColor;
 
     EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) const;
 
@@ -374,14 +374,14 @@ public:
     BOOL operator != ( const EditCharAttribField& rAttr ) const
                                     { return !(operator == ( rAttr ) ); }
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
-    Color*&         GetTxtColor()           { return pTxtColor; }
-    Color*&         GetFldColor()           { return pFldColor; }
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    Color*&			GetTxtColor() 			{ return pTxtColor; }
+    Color*&			GetFldColor() 			{ return pFldColor; }
 
-    const XubString&    GetFieldValue() const   { return aFieldValue; }
-    XubString&      GetFieldValue()         { return aFieldValue; }
+    const XubString&	GetFieldValue() const 	{ return aFieldValue; }
+    XubString&		GetFieldValue() 		{ return aFieldValue; }
 
-    void            Reset()
+    void			Reset()
                     {
                         aFieldValue.Erase();
                         delete pTxtColor; pTxtColor = 0;
@@ -397,7 +397,7 @@ class EditCharAttribPairKerning : public EditCharAttrib
 public:
     EditCharAttribPairKerning( const SvxAutoKernItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -408,7 +408,7 @@ class EditCharAttribKerning : public EditCharAttrib
 public:
     EditCharAttribKerning( const SvxKerningItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 // -------------------------------------------------------------------------
@@ -419,7 +419,7 @@ class EditCharAttribWordLineMode: public EditCharAttrib
 public:
     EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    virtual void 	SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };
 
 

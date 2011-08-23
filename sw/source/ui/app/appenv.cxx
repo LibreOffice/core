@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,16 +88,16 @@
 #include "envelp.hrc"
 #include "envimg.hxx"
 
-#define ENV_NEWDOC      RET_OK
-#define ENV_INSERT      RET_USER
-#define ENV_CANCEL      SHRT_MAX
+#define ENV_NEWDOC		RET_OK
+#define ENV_INSERT		RET_USER
+#define ENV_CANCEL		SHRT_MAX
 
 
 // --------------------------------------------------------------------------
 
 
 // Funktion wird fuer Etiketten und Briefumschlaege benutzt!
-//  im applab.cxx und appenv.cxx
+//	im applab.cxx und appenv.cxx
 String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
 {
     String sRet;
@@ -119,7 +119,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
             {
                 sTmpText = aLine.Copy( 0, nPos );
                 aLine.Erase( 0, nPos );
-//              sTmpText = aLine.Cut( 0, nPos );
+//				sTmpText = aLine.Cut( 0, nPos );
             }
             else
             {
@@ -128,13 +128,13 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
                 {
                     sTmpText = aLine;
                     aLine.Erase();
-//                  sTmpText = aLine.Cut();
+//					sTmpText = aLine.Cut();
                 }
                 else
                 {
                     sTmpText = aLine.Copy( 0, nPos + 1);
                     aLine.Erase( 0, nPos + 1);
-//                  sTmpText = aLine.Cut( 0, nPos + 1 );
+//					sTmpText = aLine.Cut( 0, nPos + 1 );
 
                     // Datenbankfelder muesen mind. 3 Punkte beinhalten!
                     String sDBName( sTmpText.Copy( 1, sTmpText.Len() - 2));
@@ -154,7 +154,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
         }
         rSh.InsertLineBreak();
     }
-    rSh.DelLeft();  // Letzten Linebreak wieder l???schen
+    rSh.DelLeft();	// Letzten Linebreak wieder l???schen
 
     return sRet;
 }
@@ -178,15 +178,15 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 {
 static USHORT nTitleNo = 0;
 
-    SwDocShell      *pMyDocSh;
-    SfxViewFrame    *pFrame;
+    SwDocShell		*pMyDocSh;
+    SfxViewFrame	*pFrame;
     SwView          *pNewView;
-    SwWrtShell      *pOldSh,
+    SwWrtShell		*pOldSh,
                     *pSh;
 
     //aktuelle Shell besorgen
     pMyDocSh = (SwDocShell*) SfxObjectShell::Current();
-    pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
+    pOldSh	 = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
 
     // Neues Dokument erzeugen (kein Show!)
     SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
@@ -358,7 +358,7 @@ static USHORT nTitleNo = 0;
         }
 
         SET_CURR_SHELL(pSh);
-        pSh->SetNewDoc();       // Performanceprobleme vermeiden
+        pSh->SetNewDoc();		// Performanceprobleme vermeiden
 
         // Flys dieser Seite merken
         SvPtrarr aFlyArr(0, 5);
@@ -528,7 +528,7 @@ static USHORT nTitleNo = 0;
 
         rReq.Done();
     }
-    else    //Abbruch
+    else	//Abbruch
     {
         rReq.Ignore();
 

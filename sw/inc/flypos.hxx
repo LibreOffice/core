@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ class SwNodeIndex;
 // Struktur zum Erfragen der akt. freifliegenden Rahmen am Dokument.
 class SW_DLLPUBLIC SwPosFlyFrm
 {
-    const SwFrmFmt* pFrmFmt;    // das FlyFrmFmt
-//  SwPosition* pPos;           // Position in den ContentNode
-    SwNodeIndex* pNdIdx;        // es reicht ein Index auf den Node
+    const SwFrmFmt* pFrmFmt;	// das FlyFrmFmt
+//	SwPosition* pPos;			// Position in den ContentNode
+    SwNodeIndex* pNdIdx;		// es reicht ein Index auf den Node
     UINT32 nOrdNum;
 public:
     SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, USHORT nArrPos );

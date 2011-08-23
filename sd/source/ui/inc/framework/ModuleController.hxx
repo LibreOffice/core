@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace sd { namespace framework {
 */
 class ModuleController
     : private sd::MutexOwner,
-      public ModuleControllerInterfaceBase
+      public ModuleControllerInterfaceBase      
 {
 public:
     static css::uno::Reference<
@@ -86,15 +86,15 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
-
+    
     // XModuleController
 
     virtual void SAL_CALL requestResource(const ::rtl::OUString& rsResourceURL)
         throw (css::uno::RuntimeException);
 
-
+    
     // XInitialization
-
+    
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
@@ -107,14 +107,14 @@ private:
     ::boost::scoped_ptr<ResourceToFactoryMap> mpResourceToFactoryMap;
     class LoadedFactoryContainer;
     ::boost::scoped_ptr<LoadedFactoryContainer> mpLoadedFactories;
-
+    
     ModuleController (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         throw();
     ModuleController (void); // Not implemented.
     ModuleController (const ModuleController&); // Not implemented.
     virtual ~ModuleController (void) throw();
-
+    
     /** Load a list of URL to service mappings from the
         /org.openoffice.Office.Impress/MultiPaneGUI/Framework/ResourceFactories
         configuration entry.  The mappings are stored in the
@@ -125,7 +125,7 @@ private:
     /** Called for every entry in the ResourceFactories configuration entry.
     */
     void ProcessFactory (const ::std::vector<css::uno::Any>& rValues);
-
+    
     /** Instantiate all startup services that are found in the
         /org.openoffice.Office.Impress/MultiPaneGUI/Framework/StartupServices
         configuration entry.  This method is called once when a new

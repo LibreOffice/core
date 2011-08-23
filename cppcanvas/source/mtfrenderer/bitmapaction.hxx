@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ class BitmapEx;
 
 /* Definition of internal::BitmapActionFactory class */
 
-namespace cppcanvas
-{
+namespace cppcanvas 
+{ 
     namespace internal
     {
         struct OutDevState;
@@ -56,16 +56,16 @@ namespace cppcanvas
         {
         public:
             /// Unscaled bitmap action, only references destination point
-            static ActionSharedPtr createBitmapAction( const ::BitmapEx&,
-                                                       const ::basegfx::B2DPoint& rDstPoint,
-                                                       const CanvasSharedPtr&,
-                                                       const OutDevState& );
-
+            static ActionSharedPtr createBitmapAction( const ::BitmapEx&,  
+                                                       const ::basegfx::B2DPoint& rDstPoint,  
+                                                       const CanvasSharedPtr&, 
+                                                       const OutDevState& ); 
+            
             /// Scaled bitmap action, dest point and dest size
             static ActionSharedPtr createBitmapAction( const ::BitmapEx&,
-                                                       const ::basegfx::B2DPoint&  rDstPoint,
+                                                       const ::basegfx::B2DPoint&  rDstPoint,  
                                                        const ::basegfx::B2DVector& rDstSize,
-                                                       const CanvasSharedPtr&,
+                                                       const CanvasSharedPtr&, 
                                                        const OutDevState& );
 
         private:

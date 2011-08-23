@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ class ODbAdminDialog : public SfxTabDialog , public IItemSetHelper, public IData
 {
 private:
     typedef ::std::stack< sal_Int32 > PageStack;
-    PageStack               m_aCurrentDetailPages;  // ids of all currently enabled (type-dependent) detail pages
+    PageStack				m_aCurrentDetailPages;	// ids of all currently enabled (type-dependent) detail pages
 
-    ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+    ::std::auto_ptr<ODbDataSourceAdministrationHelper>	m_pImpl;
 
-    sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
-    sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
+    sal_Bool				m_bApplied : 1;		/// sal_True if any changes have been applied while the dialog was executing
+    sal_Bool				m_bUIEnabled : 1;	/// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
     USHORT                  m_nMainPageID;
 
 public:
@@ -81,16 +81,16 @@ public:
     virtual ~ODbAdminDialog();
 
     /** create and return an item set for use with the dialog.
-        @param      _pTypeCollection        pointer to an <type>ODatasourceMap</type>. May be NULL, in this case
+        @param		_pTypeCollection		pointer to an <type>ODatasourceMap</type>. May be NULL, in this case
                                             the pool will not contain a typecollection default.
     */
-    static SfxItemSet*  createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection);
+    static SfxItemSet*	createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection);
     /** destroy and item set / item pool / pool defaults previously created by <method>createItemSet</method>
     */
-    static void         destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
+    static void			destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);
 
     /** selects the DataSource
-        @param  _rName
+        @param	_rName
             The name of the data source
     */
     void selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName);
@@ -101,7 +101,7 @@ public:
     // forwards to ODbDataSourceAdministrationHelper
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >	getDriver();
     virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
@@ -116,8 +116,8 @@ protected:
     virtual short Ok();
 
 protected:
-    inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }
-    inline void     disabledUI() { m_bUIEnabled = sal_False; }
+    inline sal_Bool	isUIEnabled() const { return m_bUIEnabled; }
+    inline void		disabledUI() { m_bUIEnabled = sal_False; }
 
 private:
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
@@ -127,17 +127,17 @@ private:
 
     enum ApplyResult
     {
-        AR_LEAVE_MODIFIED,      // somthing was modified and has successfully been committed
-        AR_LEAVE_UNCHANGED,     // no changes were made
-        AR_KEEP                 // don't leave the page (e.g. because an error occured)
+        AR_LEAVE_MODIFIED,		// somthing was modified and has successfully been committed
+        AR_LEAVE_UNCHANGED,		// no changes were made
+        AR_KEEP					// don't leave the page (e.g. because an error occured)
     };
     /** apply all changes made
     */
-    ApplyResult implApplyChanges();
+    ApplyResult	implApplyChanges();
 };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DBADMIN_HXX_

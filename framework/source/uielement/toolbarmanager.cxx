@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include <uielement/toolbarmanager.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 
@@ -55,7 +55,7 @@
 #include <helper/acceleratorinfo.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -79,7 +79,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -102,7 +102,7 @@
 #include <svtools/acceleratorexecute.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
 using rtl::OUString;
@@ -220,7 +220,7 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_6                     (   ToolBarManager                                                                                              ,
                                             OWeakObject                                                                                                 ,
@@ -232,8 +232,8 @@ DEFINE_XINTERFACE_6                     (   ToolBarManager                      
                                             DERIVED_INTERFACE( ::com::sun::star::lang::XEventListener, ::com::sun::star::frame::XFrameActionListener    )
                                         )
 
-DEFINE_XTYPEPROVIDER_6                  (   ToolBarManager                                          ,
-                                            ::com::sun::star::lang::XTypeProvider                   ,
+DEFINE_XTYPEPROVIDER_6                  (   ToolBarManager		                                    ,
+                                            ::com::sun::star::lang::XTypeProvider		            ,
                                             ::com::sun::star::lang::XComponent                      ,
                                             ::com::sun::star::ui::XUIConfigurationListener  ,
                                             ::com::sun::star::frame::XFrameActionListener           ,
@@ -352,7 +352,7 @@ void ToolBarManager::Destroy()
     /* #i99167# removed change for i93173 since there is some weird crash */
         // #i93173# delete toolbar lazily as we can still be in one of its handlers
     m_pToolBar->doLazyDelete();
-
+    
     Link aEmpty;
     m_pToolBar->SetSelectHdl( aEmpty );
     m_pToolBar->SetActivateHdl( aEmpty );
@@ -874,7 +874,7 @@ void ToolBarManager::RemoveControllers()
 uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const ::rtl::OUString& rCmdURL )
 {
     Sequence< PropertyValue > aPropSeq;
-
+    
     // Retrieve properties for command
     try
     {
@@ -882,7 +882,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
         {
             Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
             Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
-
+            
             m_bModuleIdentified = sal_True;
             m_aModuleIdentifier = xModuleManager->identify( xIfac );
 
@@ -893,7 +893,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
                     xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandLabels;
             }
         }
-
+        
         if ( m_xUICommandLabels.is() )
         {
             if ( rCmdURL.getLength() > 0 )
@@ -952,7 +952,7 @@ void ToolBarManager::CreateControllers()
     Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
 
-    css::util::URL      aURL;
+    css::util::URL	    aURL;
     sal_Bool            bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
     SvtCommandOptions   aCmdOptions;
 
@@ -1052,9 +1052,9 @@ void ToolBarManager::CreateControllers()
                     MenuDescriptionMap::iterator it = m_aMenuMap.find( nId );
                     if ( it == m_aMenuMap.end() )
                     {
-                        xController = Reference< XStatusListener >(
+                        xController = Reference< XStatusListener >( 
                             new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL ));
-
+                        
                         // Accessibility support: Set toggle button role for specific commands
                         sal_Int32 nProps = RetrievePropertiesFromCommand( aCommandURL );
                         if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
@@ -1116,7 +1116,7 @@ void ToolBarManager::CreateControllers()
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
                 aPropValue.Value <<= xToolbarWindow;
-                aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropertyVector.push_back( makeAny( aPropValue ));               
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
@@ -1131,17 +1131,17 @@ void ToolBarManager::CreateControllers()
                 Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
                 xInit->initialize( aArgs );
                 //for Support Visiblitly by shizhoubo
-                if (pController)
+                if (pController)  
                 {
-                //  rtl::OUString aCommandURL = pController->m_aCommandURL;
-                    if(aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwitchXFormsDesignMode" )) ||
-                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ViewDataSourceBrowser" )) ||
-                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaLeftToRight" )) ||
-                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaRightToLeft" ))
+                //	rtl::OUString aCommandURL = pController->m_aCommandURL;
+                    if(aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwitchXFormsDesignMode" )) || 
+                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ViewDataSourceBrowser" )) || 
+                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaLeftToRight" )) || 
+                       aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaRightToLeft" )) 
                        )
                         pController->setFastPropertyValue_NoBroadcast(1,makeAny(sal_True));
                 }
-
+                
                 //end
             }
 
@@ -1341,7 +1341,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                     xMenuContainer = m_xUICfgMgr->getSettings( aCommandURL, sal_False );
                                 if ( xMenuContainer.is() && xMenuContainer->getCount() )
                                 {
-                                    Sequence< PropertyValue > aProps;
+                                    Sequence< PropertyValue > aProps; 
                                     // drop down menu info is currently
                                     // the first ( and only ) menu
                                     // in the menusettings container
@@ -1349,7 +1349,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                     for ( sal_Int32 index=0; index<aProps.getLength(); ++index )
                                     {
                                         if ( aProps[ index ].Name.equalsAsciiL( ITEM_DESCRIPTOR_CONTAINER, ITEM_DESCRIPTOR_CONTAINER_LEN ))
-
+ 
                                         {
                                             aProps[ index ].Value >>= aMenuDesc;
                                             break;
@@ -2161,9 +2161,9 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
 
 IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
 {
-    if ((( pDataChangedEvent->GetType() == DATACHANGED_SETTINGS )   ||
-        (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
-        ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
+    if ((( pDataChangedEvent->GetType() == DATACHANGED_SETTINGS	)	||
+        (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY	))	&&
+        ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE		))
     {
         // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
@@ -2241,7 +2241,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
         {
             pExecuteInfo->xLayoutManager->dockAllWindows( UIElementType::TOOLBAR );
         }
-    }
+    }	
     catch ( Exception& )
     {
     }

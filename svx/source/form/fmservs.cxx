@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,15 +33,15 @@
 #include "fmservs.hxx"
 
 // ------------------------------------------------------------------------
-#define DECL_SERVICE(ImplName)                      \
+#define DECL_SERVICE(ImplName)						\
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &) throw( ::com::sun::star::uno::Exception );
 
-#define REGISTER_SERVICE(ImplName, ServiceName)                         \
-    sString = (ServiceName);                                        \
-    xSingleFactory = ::cppu::createSingleFactory(xServiceFactory,               \
-                        ::rtl::OUString(), ImplName##_NewInstance_Impl,             \
-                        ::com::sun::star::uno::Sequence< ::rtl::OUString>(&sString, 1));    \
-    if (xSingleFactory.is())                                            \
+#define REGISTER_SERVICE(ImplName, ServiceName)							\
+    sString = (ServiceName);										\
+    xSingleFactory = ::cppu::createSingleFactory(xServiceFactory,				\
+                        ::rtl::OUString(), ImplName##_NewInstance_Impl, 			\
+                        ::com::sun::star::uno::Sequence< ::rtl::OUString>(&sString, 1));	\
+    if (xSingleFactory.is())											\
         xSet->insert(::com::sun::star::uno::makeAny(xSingleFactory));
 
 
@@ -54,7 +54,7 @@
 namespace svxform
 {
 
-#define DECL_SELFAWARE_SERVICE( ClassName )                     \
+#define DECL_SELFAWARE_SERVICE( ClassName )						\
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ClassName##_Create(      \
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );  \
     ::rtl::OUString SAL_CALL ClassName##_GetImplementationName();                                           \
@@ -98,9 +98,9 @@ namespace svxform
 
         // ------------------------------------------------------------------------
         // DBGridControl
-        REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRID);  // compatibility
+        REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRID);	// compatibility
         REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRIDCONTROL);
         REGISTER_SERVICE(FmXGridControl, FM_SUN_CONTROL_GRIDCONTROL);
     };
 
-}   // namespace svxform
+}	// namespace svxform

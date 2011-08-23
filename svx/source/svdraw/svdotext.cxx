@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include <editeng/adjitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/xftouit.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <vcl/salbtype.hxx>		// FRound
 #include <svx/xflgrit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
@@ -110,7 +110,7 @@ sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
 TYPEINIT1(SdrTextObj,SdrAttrObj);
 
 SdrTextObj::SdrTextObj()
-:   SdrAttrObj(),
+:	SdrAttrObj(),
     mpText(NULL),
     pEdtOutl(NULL),
     pFormTextBoundRect(NULL),
@@ -140,7 +140,7 @@ SdrTextObj::SdrTextObj()
 }
 
 SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
-:   SdrAttrObj(),
+:	SdrAttrObj(),
     aRect(rNewRect),
     mpText(NULL),
     pEdtOutl(NULL),
@@ -171,7 +171,7 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
-:   SdrAttrObj(),
+:	SdrAttrObj(),
     mpText(NULL),
     pEdtOutl(NULL),
     pFormTextBoundRect(NULL),
@@ -201,7 +201,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
-:   SdrAttrObj(),
+:	SdrAttrObj(),
     aRect(rNewRect),
     mpText(NULL),
     pEdtOutl(NULL),
@@ -233,7 +233,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat)
-:   SdrAttrObj(),
+:	SdrAttrObj(),
     aRect(rNewRect),
     mpText(NULL),
     pEdtOutl(NULL),
@@ -336,7 +336,7 @@ void SdrTextObj::SetText(const XubString& rStr)
     BroadcastObjectChange();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     //if (GetBoundRect()!=aBoundRect0) {
-    //  SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    //	SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     //}
 }
 
@@ -650,7 +650,7 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(bool bAuto)
 
 FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
 {
-    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // SJ: #i44922#
+    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )			// SJ: #i44922#
     {
         SetObjectItem(SdrTextMinFrameHeightItem(nHgt));
 
@@ -689,7 +689,7 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(bool bAuto)
 
 FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
 {
-    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // SJ: #i44922#
+    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )			// SJ: #i44922#
     {
         SetObjectItem(SdrTextMinFrameWidthItem(nWdt));
 
@@ -1382,12 +1382,12 @@ boost::shared_ptr< SdrOutliner > SdrTextObj::CreateDrawOutliner()
 }
 
 // #101029#: Extracted from Paint()
-void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
-                                               SdrOutliner&     rOutliner,
-                                               Rectangle&       rTextRect,
-                                               Rectangle&       rAnchorRect,
-                                               Rectangle&       rPaintRect,
-                                               Fraction&        rFitXKorreg ) const
+void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL 		bContourFrame,
+                                               SdrOutliner& 	rOutliner,
+                                               Rectangle& 		rTextRect,
+                                               Rectangle& 		rAnchorRect,
+                                               Rectangle& 		rPaintRect,
+                                               Fraction& 		rFitXKorreg ) const
 {
     if (!bContourFrame)
     {
@@ -1729,7 +1729,7 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
 
     // build matrix
     rMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-        aScale,
+        aScale, 
         basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
         basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
         aTranslate);

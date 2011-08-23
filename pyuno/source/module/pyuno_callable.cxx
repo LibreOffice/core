@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,11 +63,11 @@ typedef struct
 void PyUNO_callable_del (PyObject* self)
 {
     PyUNO_callable* me;
-
+  
     me = (PyUNO_callable*) self;
     delete me->members;
     PyObject_Del (self);
-
+  
     return;
 }
 
@@ -84,14 +84,14 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
     Any ret_value;
     RuntimeCargo *cargo = 0;
     me = (PyUNO_callable*) self;
-
+  
     PyRef ret;
     try
     {
         Runtime runtime;
         cargo = runtime.getImpl()->cargo;
         any_params = runtime.pyObject2Any (args, me->members->mode);
-
+    
         if (any_params.getValueTypeClass () == com::sun::star::uno::TypeClass_SEQUENCE)
         {
             any_params >>= aParams;
@@ -104,8 +104,8 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
 
         {
             PyThreadDetach antiguard; //pyhton free zone
-
-            // do some logging if desired ...
+            
+            // do some logging if desired ... 
             if( isLog( cargo, LogLevel::CALL ) )
             {
                 logCall( cargo, "try     py->uno[0x", me->members->xInvocation.get(),
@@ -123,7 +123,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
                           me->members->methodName, ret_value, aOutParam);
             }
         }
-
+        
 
         PyRef temp = runtime.any2PyObject (ret_value);
         if( aOutParam.getLength() )
@@ -138,7 +138,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
                 Py_INCREF( Py_None );
                 PyTuple_SetItem( return_list.get() , i , Py_None );
             }
-
+            
             for( i = 0 ; i < aOutParam.getLength() ; i ++ )
             {
                 PyRef ref = runtime.any2PyObject( aOutParam[i] );
@@ -153,7 +153,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
     }
     catch( com::sun::star::reflection::InvocationTargetException & e )
     {
-
+        
         if( isLog( cargo, LogLevel::CALL ) )
         {
             logException( cargo, "except  py->uno[0x", me->members->xInvocation.get() ,
@@ -255,7 +255,7 @@ PyRef PyUNO_callable_new (
     enum ConversionMode mode )
 {
     PyUNO_callable* self;
-
+  
     self = PyObject_New (PyUNO_callable, &PyUNO_callable_Type);
     if (self == NULL)
         return NULL; //NULL == Error!

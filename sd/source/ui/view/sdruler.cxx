@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ void RulerCtrlItem::StateChanged( USHORT nSId, SfxItemState, const SfxPoolItem* 
 |*
 \************************************************************************/
 
-Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, USHORT nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle)
+Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, USHORT nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle) 
 : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle)
 , pSdWin(pWin)
 , pDrViewShell(&rViewSh)
@@ -189,8 +189,8 @@ void Ruler::SetNullOffset(const Point& rOffset)
 {
     long nOffset;
 
-    if ( bHorz )    nOffset = rOffset.X();
-    else            nOffset = rOffset.Y();
+    if ( bHorz )	nOffset = rOffset.X();
+    else			nOffset = rOffset.Y();
 
     SetNullOffsetLogic(nOffset);
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import org.openoffice.xmerge.DocumentMergerFactory;
 /**
  *  General implementation of the <code>PluginFactory</code> interface
  *  for SXC <code>Document</code> objects.
- *
+ * 
  *  @see  org.openoffice.xmerge.DocumentDeserializer
  *  @see  org.openoffice.xmerge.DocumentMerger
  *  @see  org.openoffice.xmerge.DocumentSerializer

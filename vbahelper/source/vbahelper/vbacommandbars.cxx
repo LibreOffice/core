@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ public:
         if( hasMoreElements() )
         {
             rtl::OUString sResourceUrl( m_sNames[ m_nCurrentPosition++ ] );
-            if( sResourceUrl.indexOf( rtl::OUString::createFromAscii("private:resource/toolbar/") ) != -1 )
+            if( sResourceUrl.indexOf( rtl::OUString::createFromAscii("private:resource/toolbar/") ) != -1 ) 
             {
                 uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
                 uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, sal_False, sal_False ) );
@@ -92,7 +92,7 @@ ScVbaCommandBars::~ScVbaCommandBars()
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL
+uno::Type SAL_CALL 
 ScVbaCommandBars::getElementType() throw ( uno::RuntimeException )
 {
     return XCommandBar::static_type( 0 );
@@ -113,7 +113,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
     rtl::OUString sBarName;
     sal_Bool bMenu = sal_False;
     uno::Any aRet;
-
+    
     if( aSource >>= sBarName )
     {
         // some built-in command bars
@@ -162,7 +162,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
 }
 
 // XCommandBars
-uno::Reference< XCommandBar > SAL_CALL
+uno::Reference< XCommandBar > SAL_CALL 
 ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Position*/, const css::uno::Any& /*MenuBar*/, const css::uno::Any& Temporary ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     // FIXME: only support to add Toolbar
@@ -182,19 +182,19 @@ ScVbaCommandBars::Add( const css::uno::Any& Name, const css::uno::Any& /*Positio
     else
     {
         sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom1") );
-    }
+    }    
 
     sal_Bool bTemporary = sal_False;
     if( Temporary.hasValue() )
         Temporary >>= bTemporary;
-
+    
     sResourceUrl = VbaCommandBarHelper::generateCustomURL();
     uno::Reference< container::XIndexAccess > xBarSettings( m_pCBarHelper->getSettings( sResourceUrl ), uno::UNO_QUERY_THROW );
     uno::Reference< XCommandBar > xCBar( new ScVbaCommandBar( this, mxContext, m_pCBarHelper, xBarSettings, sResourceUrl, sal_False, bTemporary ) );
     xCBar->setName( sName );
     return xCBar;
 }
-sal_Int32 SAL_CALL
+sal_Int32 SAL_CALL 
 ScVbaCommandBars::getCount() throw(css::uno::RuntimeException)
 {
     // Filter out all toolbars from the window collection
@@ -216,7 +216,7 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
 {
     if( aIndex.getValueTypeClass() == uno::TypeClass_STRING )
     {
-        return createCollectionObject( aIndex );
+        return createCollectionObject( aIndex );    
     }
 
     // hardcode if "aIndex = 1" that would return "main menu".
@@ -229,20 +229,20 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
             aSource <<= rtl::OUString::createFromAscii( "Worksheet Menu Bar" );
         else if( m_pCBarHelper->getModuleId().equalsAscii("com.sun.star.text.TextDocument") )
             aSource <<= rtl::OUString::createFromAscii( "Menu Bar" );
-        if( aSource.hasValue() )
+        if( aSource.hasValue() )    
             return createCollectionObject( aSource );
     }
     return uno::Any();
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString& 
 ScVbaCommandBars::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBars") );
     return sImplName;
 }
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 ScVbaCommandBars::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

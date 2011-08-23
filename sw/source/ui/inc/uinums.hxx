@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public:
 
     const SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
-    const String& GetName() const               { return aName; }
+    const String& GetName() const 				{ return aName; }
     void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;
 
     void Store( SvStream& );
@@ -89,24 +89,24 @@ public:
 class SwBaseNumRules
 {
 public:
-    enum { nMaxRules = MAX_NUM_RULES };         // zur Zeit 9 definierte Forms
+    enum { nMaxRules = MAX_NUM_RULES };			// zur Zeit 9 definierte Forms
 protected:
-    SwNumRulesWithName  *pNumRules[ MAX_NUM_RULES ];
-    String              sFileName;
-    USHORT              nVersion;
-     BOOL               bModified;
+    SwNumRulesWithName 	*pNumRules[ MAX_NUM_RULES ];
+    String 				sFileName;
+    USHORT 				nVersion;
+     BOOL 				bModified;
 
-    virtual int         Load(SvStream&);
-    virtual BOOL        Store(SvStream&);
+    virtual int     	Load(SvStream&);
+    virtual BOOL    	Store(SvStream&);
 
-    void                Init();
+    void 				Init();
 
 public:
     SwBaseNumRules(const String& rFileName);
     virtual ~SwBaseNumRules();
 
-    inline const SwNumRulesWithName*    GetRules(USHORT nIdx) const;
-    virtual void                        ApplyNumRules(
+    inline const SwNumRulesWithName*	GetRules(USHORT nIdx) const;
+    virtual void 						ApplyNumRules(
                                                 const SwNumRulesWithName &rCopy,
                                                 USHORT nIdx);
 
@@ -122,7 +122,7 @@ public:
     SwChapterNumRules();
     virtual ~SwChapterNumRules();
 
-    virtual void        ApplyNumRules(  const SwNumRulesWithName &rCopy,
+    virtual void 		ApplyNumRules(	const SwNumRulesWithName &rCopy,
                                             USHORT nIdx);
 };
 

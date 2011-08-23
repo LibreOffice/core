@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,13 +118,13 @@ namespace svt { namespace table
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)
-            nVerFlag = TEXT_DRAW_BOTTOM;
+            nVerFlag = TEXT_DRAW_BOTTOM;		
         if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 1)
             nHorFlag = TEXT_DRAW_CENTER;
         else if(m_pImpl->rModel.getColumnModel(_nCol)->getHorizontalAlign() == 2)
             nHorFlag = TEXT_DRAW_RIGHT;
         Rectangle aRect(_rArea);
-        aRect.Left()+=4; aRect.Right()-=4;
+        aRect.Left()+=4; aRect.Right()-=4; 
         aRect.Bottom()-=2;
             _rDevice.DrawText( aRect, sHeaderText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
@@ -154,10 +154,10 @@ namespace svt { namespace table
             aRowBackground = fieldColor;
         if(aRowBackground2 == 0xFFFFFF)
             aRowBackground2 = fieldColor;
-        //if row is selected background color becomes blue, and lines should be also blue
+        //if row is selected background color becomes blue, and lines should be also blue 
         //if they aren't user defined
         if(_bSelected)
-        {
+        {	
             Color aSelected(_rStyle.GetHighlightColor());
             aRowBackground = aSelected;
             if(line == 0xFFFFFF)
@@ -174,9 +174,9 @@ namespace svt { namespace table
                 aRowBackground = aRowBackground2;
                 if(line == 0xFFFFFF)
                     _rDevice.SetLineColor(aRowBackground);
-                else
+                else	
                     _rDevice.SetLineColor(line);
-            }
+            }	
             //fill the rows with alternating background colors if second background color is specified
             else if(aRowBackground != fieldColor && line == 0xFFFFFF)
                 _rDevice.SetLineColor(aRowBackground);
@@ -190,7 +190,7 @@ namespace svt { namespace table
         _rDevice.SetFillColor( aRowBackground );
         _rDevice.DrawRect( _rRowArea );
 
-        // TODO: active?
+        // TODO: active? 
 
         _rDevice.Pop();
         (void)_bActive;
@@ -212,13 +212,13 @@ namespace svt { namespace table
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)
-            nVerFlag = TEXT_DRAW_BOTTOM;
+            nVerFlag = TEXT_DRAW_BOTTOM;		
         if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 1)
             nHorFlag = TEXT_DRAW_CENTER;
         else if(m_pImpl->rModel.getColumnModel(0)->getHorizontalAlign() == 2)
             nHorFlag = TEXT_DRAW_RIGHT;
         Rectangle aRect(_rArea);
-        aRect.Left()+=4; aRect.Right()-=4;
+        aRect.Left()+=4; aRect.Right()-=4; 
         aRect.Bottom()-=2;
         _rDevice.DrawText( aRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
         // TODO: active? selected?
@@ -248,7 +248,7 @@ namespace svt { namespace table
         else
         {
             if(background2 != 0xFFFFFF && m_pImpl->nCurrentRow%2)
-            {
+            {	
                 if(line == 0xFFFFFF)
                     _rDevice.SetLineColor(background2);
                 else
@@ -277,14 +277,14 @@ namespace svt { namespace table
             else if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 2)
                 imagePos.X() = aRect.Right() - imageSize.Width();
         }
-        else
+        else 
             imageSize.Width() = aRect.GetWidth();
         if(aRect.GetHeight() > imageSize.Height())
         {
             if(m_pImpl->rModel.getVerticalAlign() == 1)
                 imagePos.Y() = aRect.Top()+((double)(aRect.GetHeight() - imageSize.Height()))/2;
             else if(m_pImpl->rModel.getVerticalAlign() == 2)
-                imagePos.Y() = aRect.Bottom() - imageSize.Height();
+                imagePos.Y() = aRect.Bottom() - imageSize.Height();		
         }
         else
             imageSize.Height() = aRect.GetHeight()-1;
@@ -337,23 +337,23 @@ namespace svt { namespace table
         ++aRect.Left(); --aRect.Right();
         aRect.Top(); aRect.Bottom();
         if(_bSelected)
-            _rDevice.SetTextColor(_rStyle.GetHighlightTextColor());
+            _rDevice.SetTextColor(_rStyle.GetHighlightTextColor());			
         else if(m_pImpl->rModel.getTextColor() != 0x000000)
             _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
         else
-            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
+            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());		
         ULONG nHorFlag = TEXT_DRAW_LEFT;
         ULONG nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)
-            nVerFlag = TEXT_DRAW_BOTTOM;
+            nVerFlag = TEXT_DRAW_BOTTOM;		
         if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 1)
             nHorFlag = TEXT_DRAW_CENTER;
         else if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 2)
             nHorFlag = TEXT_DRAW_RIGHT;
         Rectangle textRect(_rArea);
-        textRect.Left()+=4; textRect.Right()-=4;
+        textRect.Left()+=4; textRect.Right()-=4; 
         textRect.Bottom()-=2;
         _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
 
@@ -373,7 +373,7 @@ namespace svt { namespace table
     {
     (void)_rCursorRect;
         _rView.HideFocus();
-
+        
     }
 
 //........................................................................

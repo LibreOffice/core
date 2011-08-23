@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace connectivity
 {
     namespace macab
     {
-        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper4<	::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable> MacabCommonStatement_BASE;
@@ -54,23 +54,23 @@ namespace connectivity
         // Class MacabCommonStatement
         // is a base class for the normal statement and for the prepared statement
         //**************************************************************
-        class MacabCommonStatement :    public comphelper::OBaseMutex,
-                        public  MacabCommonStatement_BASE,
-                        public  ::cppu::OPropertySetHelper,
-                        public  comphelper::OPropertyArrayUsageHelper<MacabCommonStatement>
+        class MacabCommonStatement :	public comphelper::OBaseMutex,
+                        public	MacabCommonStatement_BASE,
+                        public	::cppu::OPropertySetHelper,
+                        public	comphelper::OPropertyArrayUsageHelper<MacabCommonStatement>
 
         {
-            ::com::sun::star::sdbc::SQLWarning  m_aLastWarning;
+            ::com::sun::star::sdbc::SQLWarning	m_aLastWarning;
 
         protected:
-            ::std::list< ::rtl::OUString>       m_aBatchList;
-            connectivity::OSQLParser            m_aParser;
-            connectivity::OSQLParseTreeIterator m_aSQLIterator;
-            connectivity::OSQLParseNode*        m_pParseTree;
-            MacabConnection*                        m_pConnection;  // The owning Connection object
-            MacabHeader*                            m_pHeader;  // The header of the address book on which to run queries (provided by m_pConnection)
+            ::std::list< ::rtl::OUString>		m_aBatchList;
+            connectivity::OSQLParser			m_aParser;
+            connectivity::OSQLParseTreeIterator	m_aSQLIterator;
+            connectivity::OSQLParseNode*		m_pParseTree;
+            MacabConnection*						m_pConnection;	// The owning Connection object
+            MacabHeader*							m_pHeader;	// The header of the address book on which to run queries (provided by m_pConnection)
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
-
+            
 
         protected:
             class MacabCondition *analyseWhereClause(

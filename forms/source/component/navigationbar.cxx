@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,7 +169,7 @@ namespace frm
     IMPLEMENT_DEFAULT_CLONING( ONavigationBarModel )
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ONavigationBarModel::getImplementationName()  throw(RuntimeException)
+    ::rtl::OUString	SAL_CALL ONavigationBarModel::getImplementationName()  throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
@@ -181,7 +181,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ONavigationBarModel::getImplementationName_Static()
+    ::rtl::OUString	SAL_CALL ONavigationBarModel::getImplementationName_Static()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.form.ONavigationBarModel" ) );
     }

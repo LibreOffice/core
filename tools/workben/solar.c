@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,11 +67,11 @@ int check( TestFunc func, Type eT, void* p );
 #else
 #endif
 
-#define printTypeSize(Type,Name)    printf( "sizeof(%s)\t= %d\n", Name, \
+#define printTypeSize(Type,Name)	printf(	"sizeof(%s)\t= %d\n", Name,	\
                 sizeof (Type) )
 
-#define isSignedType(Type)  (((Type)-1) < 0)
-#define printTypeSign(Type,Name)    printf( "%s\t= %s %s\n", Name,      \
+#define isSignedType(Type)	(((Type)-1) < 0)
+#define printTypeSign(Type,Name)	printf(	"%s\t= %s %s\n", Name,		\
                 ( isSignedType(Type) ? "unsigned" : "signed" ), Name )
 
 
@@ -162,7 +162,7 @@ void __cdecl SignalHandler( int sig )
   bSignal = 1;
   /*
   fprintf( stderr, "Signal %d caught\n", sig );
-  signal( sig,  SignalHandler );
+  signal( sig,	SignalHandler );
   */
   longjmp( check_env, sig );
 }
@@ -192,15 +192,15 @@ int check( TestFunc func, Type eT, void* p )
 
   if ( !setjmp( check_env ) )
   {
-    signal( SIGSEGV,    SignalHandler );
+    signal( SIGSEGV,	SignalHandler );
 #ifdef UNX
-    signal( SIGBUS, SignalHandler );
+    signal( SIGBUS,	SignalHandler );
 #else
 #endif
     result = func( eT, p );
-    signal( SIGSEGV,    SIG_DFL );
+    signal( SIGSEGV,	SIG_DFL );
 #ifdef UNX
-    signal( SIGBUS, SIG_DFL );
+    signal( SIGBUS,	SIG_DFL );
 #else
 #endif
   }
@@ -219,11 +219,11 @@ int GetAtAddress( Type eT, void* p )
 {
   switch ( eT )
   {
-  case t_char:      return *((char*)p);
-  case t_short:     return *((short*)p);
-  case t_int:       return *((int*)p);
-  case t_long:      return *((long*)p);
-  case t_double:    return *((double*)p);
+  case t_char:		return *((char*)p);
+  case t_short:		return *((short*)p);
+  case t_int:		return *((int*)p);
+  case t_long:		return *((long*)p);
+  case t_double:	return *((double*)p);
   }
   abort();
 }
@@ -232,11 +232,11 @@ int SetAtAddress( Type eT, void* p )
 {
   switch ( eT )
   {
-  case t_char:      return *((char*)p)  = 0;
-  case t_short:     return *((short*)p) = 0;
-  case t_int:       return *((int*)p)   = 0;
-  case t_long:      return *((long*)p)  = 0;
-  case t_double:    return *((double*)p)= 0;
+  case t_char:		return *((char*)p)	= 0;
+  case t_short:		return *((short*)p)	= 0;
+  case t_int:		return *((int*)p)	= 0;
+  case t_long:		return *((long*)p)	= 0;
+  case t_double:	return *((double*)p)= 0;
   }
   abort();
 }
@@ -245,11 +245,11 @@ char* TypeName( Type eT )
 {
   switch ( eT )
   {
-  case t_char:      return "char";
-  case t_short:     return "short";
-  case t_int:       return "int";
-  case t_long:      return "long";
-  case t_double:    return "double";
+  case t_char:		return "char";
+  case t_short:		return "short";
+  case t_int:		return "int";
+  case t_long:		return "long";
+  case t_double:	return "double";
   }
   abort();
 }
@@ -279,9 +279,9 @@ int CheckSetAccess( Type eT, void* p )
 
 int GetAlignment( Type eT )
 {
-  char  a[ 16*8 ];
-  int   p = (int)(void*)&a;
-  int   i;
+  char	a[ 16*8 ];
+  int	p = (int)(void*)&a;
+  int	i;
   p = ( p + 0xF ) & ~0xF;
   for ( i = 1; i < 16; i++ )
     if ( CheckGetAccess( eT, (void*)(p+i) ) )
@@ -306,17 +306,17 @@ int CheckCharAccess( char* p )
 
 struct Description
 {
-  int   bBigEndian;
-  int   bStackGrowsDown;
-  int   nStackAlignment;
-  int   nAlignment[3];  /* 2,4,8 */
+  int	bBigEndian;
+  int	bStackGrowsDown;
+  int	nStackAlignment;
+  int	nAlignment[3];	/* 2,4,8 */
 };
 
 void Description_Ctor( struct Description* pThis )
 {
-  pThis->bBigEndian         = IsBigEndian();
-  pThis->bStackGrowsDown    = IsStackGrowingDown();
-  pThis->nStackAlignment    = GetStackAlignment();
+  pThis->bBigEndian			= IsBigEndian();
+  pThis->bStackGrowsDown	= IsStackGrowingDown();
+  pThis->nStackAlignment	= GetStackAlignment();
 
   if ( sizeof(short) != 2 )
     abort();

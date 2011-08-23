@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ import java.io.IOException;
  *  <p>The <code>PluginFactory</code> {@link
  *  org.openoffice.xmerge.DocumentDeserializerFactory#createDocumentDeserializer
  *  createDocumentDeserializer} method creates a <code>DocumentDeserializer</code>,
- *  which may or may not implement <code>DocumentDeserializer2</code>.
+ *  which may or may not implement <code>DocumentDeserializer2</code>.   
  *  When it is constructed, a
- *  <code>ConvertData</code> object is passed in to be used as input.</p>
+ *  <code>ConvertData</code> object is passed in to be used as input.</p> 
  *
  *  @author  Henrik Just
  *  @see     org.openoffice.xmerge.PluginFactory

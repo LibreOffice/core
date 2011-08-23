@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ namespace dbaui
 */
 class OMarkableTreeListBox : public DBTreeListBox
 {
-    SvLBoxButtonData*   m_pCheckButton;
-    Link                m_aCheckButtonHandler;
+    SvLBoxButtonData*	m_pCheckButton;
+    Link				m_aCheckButtonHandler;
 
 public:
     OMarkableTreeListBox( Window* pParent
@@ -61,8 +61,8 @@ public:
     ~OMarkableTreeListBox();
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    CheckButtonHdl();
-    void            CheckButtons();     // make the button states consistent (bottom-up)
+    virtual void	CheckButtonHdl();
+    void			CheckButtons();		// make the button states consistent (bottom-up)
 
     /// the handler given is called whenever the check state of one or more items changed
     void SetCheckHandler(const Link& _rHdl) { m_aCheckButtonHandler = _rHdl; }
@@ -71,7 +71,7 @@ protected:
     virtual void Paint(const Rectangle& _rRect);
     virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
 
-    SvButtonState   implDetermineState(SvLBoxEntry* _pEntry);
+    SvButtonState	implDetermineState(SvLBoxEntry* _pEntry);
         // determines the check state of the given entry, by analyzing the states of all descendants
 
 private:
@@ -79,7 +79,7 @@ private:
 };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_MARKTREE_HXX_

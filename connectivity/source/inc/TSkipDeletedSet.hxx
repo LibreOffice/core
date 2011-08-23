@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ namespace connectivity
     */
     class OOO_DLLPUBLIC_DBTOOLS OSkipDeletedSet
     {
-        ::std::vector<sal_Int32>                m_aBookmarksPositions;// vector of iterators to position map, the order is the logical position
-        IResultSetHelper*                       m_pHelper;            // used for moving in the resultset
+        ::std::vector<sal_Int32>	            m_aBookmarksPositions;// vector of iterators to position map, the order is the logical position
+        IResultSetHelper*						m_pHelper;			  // used for moving in the resultset
         bool                                    m_bDeletedVisible;
 
-        sal_Bool    moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
+        sal_Bool	moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
     public:
         OSkipDeletedSet(IResultSetHelper* _pHelper);
         ~OSkipDeletedSet();
@@ -62,42 +62,42 @@ namespace connectivity
             skipDeleted moves the resultset to the position defined by the parameters
             it garantees that the row isn't deleted
                 @param
-                    IResultSetHelper::Movement  _eCursorPosition        in which direction the resultset should be moved
-                    sal_Int32                   _nOffset                the position relativ to the movement
-                    sal_Bool                    _bRetrieveData          is true when the current row should be filled which data
+                    IResultSetHelper::Movement	_eCursorPosition		in which direction the resultset should be moved
+                    sal_Int32					_nOffset				the position relativ to the movement
+                    sal_Bool					_bRetrieveData			is true when the current row should be filled which data
                 @return
                     true when the movement was successful otherwise false
         */
-        sal_Bool    skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
+        sal_Bool	skipDeleted(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
         /**
             clear the map and the vector used in this class
         */
-        void        clear();
+        void		clear();
         /**
             getMappedPosition returns the mapped position of a logical position
             @param
-                sal_Int32 _nBookmark    the logical position
+                sal_Int32 _nBookmark	the logical position
 
             @return the mapped position
         */
-        sal_Int32   getMappedPosition(sal_Int32 _nBookmark) const;
+        sal_Int32	getMappedPosition(sal_Int32 _nBookmark) const;
         /**
             insertNewPosition adds a new position to the map
             @param
-                sal_Int32 _nPos the logical position
+                sal_Int32 _nPos	the logical position
         */
-        void        insertNewPosition(sal_Int32 _nPos);
+        void		insertNewPosition(sal_Int32 _nPos);
         /**
             deletePosition deletes this position from the map and decrement all following positions
             @param
-                sal_Int32 _nPos the logical position
+                sal_Int32 _nPos	the logical position
         */
-        void        deletePosition(sal_Int32 _nPos);
+        void		deletePosition(sal_Int32 _nPos);
         /**
             getLastPosition returns the last position
             @return the last position
         */
-        inline sal_Int32    getLastPosition() const { return m_aBookmarksPositions.size(); }
+        inline sal_Int32	getLastPosition() const { return m_aBookmarksPositions.size(); }
         inline void SetDeleted(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
     };
 }

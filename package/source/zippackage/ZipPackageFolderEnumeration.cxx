@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ ZipPackageFolderEnumeration::~ZipPackageFolderEnumeration( void )
 {
 }
 
-sal_Bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements(  )
+sal_Bool SAL_CALL ZipPackageFolderEnumeration::hasMoreElements(  ) 
         throw(uno::RuntimeException)
 {
     return (aIterator != rContents.end() );
 }
-uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
+uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  ) 
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/printwarningoptions.hxx>
@@ -44,16 +44,16 @@
 #include <itemholder1.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl					;
+using namespace ::rtl					;
+using namespace ::osl					;
+using namespace ::com::sun::star::uno	;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 #define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print"))
@@ -64,10 +64,10 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_TRANSPARENCY       OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/Transparency"))
 #define PROPERTYNAME_PRINTINGMODIFIESDOCUMENT  OUString(RTL_CONSTASCII_USTRINGPARAM("PrintingModifiesDocument"))
 
-#define PROPERTYHANDLE_PAPERSIZE        0
-#define PROPERTYHANDLE_PAPERORIENTATION 1
-#define PROPERTYHANDLE_NOTFOUND         2
-#define PROPERTYHANDLE_TRANSPARENCY     3
+#define	PROPERTYHANDLE_PAPERSIZE		0
+#define	PROPERTYHANDLE_PAPERORIENTATION	1
+#define	PROPERTYHANDLE_NOTFOUND	        2
+#define	PROPERTYHANDLE_TRANSPARENCY 	3
 #define PROPERTYHDL_PRINTINGMODIFIESDOCUMENT            4
 
 #define PROPERTYCOUNT                   5
@@ -77,37 +77,37 @@ class SvtPrintWarningOptions_Impl : public ConfigItem
 public:
 
 //---------------------------------------------------------------------------------------------------------
-//  constructor / destructor
+//	constructor / destructor
 //---------------------------------------------------------------------------------------------------------
 
      SvtPrintWarningOptions_Impl();
     ~SvtPrintWarningOptions_Impl();
 
 //---------------------------------------------------------------------------------------------------------
-//  overloaded methods of baseclass
+//	overloaded methods of baseclass
 //---------------------------------------------------------------------------------------------------------
 
     virtual void Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
 //---------------------------------------------------------------------------------------------------------
-//  public interface
+//	public interface
 //---------------------------------------------------------------------------------------------------------
 
-    sal_Bool    IsPaperSize() const { return m_bPaperSize; }
-    sal_Bool    IsPaperOrientation() const { return m_bPaperOrientation; }
-    sal_Bool    IsNotFound() const { return m_bNotFound; }
-    sal_Bool    IsTransparency() const { return m_bTransparency; }
+    sal_Bool	IsPaperSize() const { return m_bPaperSize; }
+    sal_Bool	IsPaperOrientation() const { return m_bPaperOrientation; }
+    sal_Bool	IsNotFound() const { return m_bNotFound; }
+    sal_Bool	IsTransparency() const { return m_bTransparency; }
     sal_Bool    IsModifyDocumentOnPrintingAllowed() const { return m_bModifyDocumentOnPrintingAllowed; }
 
-    void        SetPaperSize( sal_Bool bState ) { m_bPaperSize = bState; SetModified(); }
-    void        SetPaperOrientation( sal_Bool bState ) { m_bPaperOrientation = bState; SetModified(); }
-    void        SetNotFound( sal_Bool bState ) { m_bNotFound = bState; SetModified(); }
-    void        SetTransparency( sal_Bool bState ) { m_bTransparency = bState; SetModified(); }
+    void		SetPaperSize( sal_Bool bState ) { m_bPaperSize = bState; SetModified(); }
+    void		SetPaperOrientation( sal_Bool bState ) { m_bPaperOrientation = bState; SetModified(); }
+    void		SetNotFound( sal_Bool bState ) { m_bNotFound = bState; SetModified(); }
+    void		SetTransparency( sal_Bool bState ) { m_bTransparency = bState; SetModified(); }
     void        SetModifyDocumentOnPrintingAllowed( sal_Bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
 
 //-------------------------------------------------------------------------------------------------------------
-//  private methods
+//	private methods
 //-------------------------------------------------------------------------------------------------------------
 
 private:
@@ -115,41 +115,41 @@ private:
     static Sequence< OUString > impl_GetPropertyNames();
 
 //-------------------------------------------------------------------------------------------------------------
-//  private member
+//	private member
 //-------------------------------------------------------------------------------------------------------------
 
 private:
 
-    sal_Bool    m_bPaperSize;
-    sal_Bool    m_bPaperOrientation;
-    sal_Bool    m_bNotFound;
-    sal_Bool    m_bTransparency;
+    sal_Bool	m_bPaperSize;
+    sal_Bool	m_bPaperOrientation;
+    sal_Bool	m_bNotFound;
+    sal_Bool	m_bTransparency;
     sal_Bool    m_bModifyDocumentOnPrintingAllowed;
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
-    ConfigItem( ROOTNODE_START  ),
+    ConfigItem( ROOTNODE_START	),
     m_bPaperSize( sal_False ),
     m_bPaperOrientation( sal_False ),
     m_bNotFound( sal_False ),
     m_bTransparency( sal_True ),
     m_bModifyDocumentOnPrintingAllowed( sal_True )
 {
-    Sequence< OUString >    seqNames( impl_GetPropertyNames() );
-    Sequence< Any >         seqValues( GetProperties( seqNames ) );
+    Sequence< OUString >	seqNames( impl_GetPropertyNames() );
+    Sequence< Any >			seqValues( GetProperties( seqNames ) );
 
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to our internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
-    sal_Int32 nProperty = 0;
+    sal_Int32 nProperty	= 0;
 
     for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -196,7 +196,7 @@ SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtPrintWarningOptions_Impl::~SvtPrintWarningOptions_Impl()
 {
@@ -205,12 +205,12 @@ SvtPrintWarningOptions_Impl::~SvtPrintWarningOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  Commit
+//	Commit
 //*****************************************************************************************************************
 void SvtPrintWarningOptions_Impl::Commit()
 {
-    Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
-    Sequence< Any >         aSeqValues( aSeqNames.getLength() );
+    Sequence< OUString >	aSeqNames( impl_GetPropertyNames() );
+    Sequence< Any >			aSeqValues( aSeqNames.getLength() );
 
     for( sal_Int32 nProperty = 0, nCount = aSeqNames.getLength(); nProperty < nCount; ++nProperty )
     {
@@ -245,7 +245,7 @@ void SvtPrintWarningOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
 {
@@ -266,15 +266,15 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
 SvtPrintWarningOptions_Impl*    SvtPrintWarningOptions::m_pDataContainer = NULL;
-sal_Int32                       SvtPrintWarningOptions::m_nRefCount = 0;
+sal_Int32				        SvtPrintWarningOptions::m_nRefCount = 0;
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtPrintWarningOptions::SvtPrintWarningOptions()
 {
@@ -291,7 +291,7 @@ SvtPrintWarningOptions::SvtPrintWarningOptions()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtPrintWarningOptions::~SvtPrintWarningOptions()
 {
@@ -309,7 +309,7 @@ SvtPrintWarningOptions::~SvtPrintWarningOptions()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtPrintWarningOptions::IsPaperSize() const
 {
@@ -318,7 +318,7 @@ sal_Bool SvtPrintWarningOptions::IsPaperSize() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtPrintWarningOptions::IsPaperOrientation() const
 {
@@ -327,7 +327,7 @@ sal_Bool SvtPrintWarningOptions::IsPaperOrientation() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtPrintWarningOptions::IsNotFound() const
 {
@@ -336,7 +336,7 @@ sal_Bool SvtPrintWarningOptions::IsNotFound() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 sal_Bool SvtPrintWarningOptions::IsTransparency() const
 {
@@ -345,7 +345,7 @@ sal_Bool SvtPrintWarningOptions::IsTransparency() const
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtPrintWarningOptions::SetPaperSize( sal_Bool bState )
 {
@@ -354,7 +354,7 @@ void SvtPrintWarningOptions::SetPaperSize( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtPrintWarningOptions::SetPaperOrientation( sal_Bool bState )
 {
@@ -363,7 +363,7 @@ void SvtPrintWarningOptions::SetPaperOrientation( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtPrintWarningOptions::SetNotFound( sal_Bool bState )
 {
@@ -372,7 +372,7 @@ void SvtPrintWarningOptions::SetNotFound( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtPrintWarningOptions::SetTransparency( sal_Bool bState )
 {
@@ -396,7 +396,7 @@ void SvtPrintWarningOptions::SetModifyDocumentOnPrintingAllowed( sal_Bool bState
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Mutex& SvtPrintWarningOptions::GetOwnStaticMutex()
 {

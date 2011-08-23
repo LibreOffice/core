@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ namespace pcr
 
     //========================================================================
     struct PropertyLessByName
-                :public ::std::binary_function  <   ::com::sun::star::beans::Property,
+                :public ::std::binary_function	<	::com::sun::star::beans::Property,
                                                     ::com::sun::star::beans::Property,
                                                     bool
                                                 >
@@ -51,7 +51,7 @@ namespace pcr
 
     //========================================================================
     struct TypeLessByName
-                :public ::std::binary_function  <   ::com::sun::star::uno::Type,
+                :public ::std::binary_function	<	::com::sun::star::uno::Type,
                                                     ::com::sun::star::uno::Type,
                                                     bool
                                                 >

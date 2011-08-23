@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,7 +154,7 @@ namespace drawinglayer
                             const basegfx::B2DRange aDiscreteRangeCross(
                                 aViewPos.getX() - fHalfCrossSize, aViewPos.getY() - fHalfCrossSize,
                                 aViewPos.getX() + fHalfCrossSize, aViewPos.getY() + fHalfCrossSize);
-
+                            
                             if(rViewInformation.getDiscreteViewport().overlaps(aDiscreteRangeCross))
                             {
                                 const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
@@ -201,7 +201,7 @@ namespace drawinglayer
                 const sal_uInt32 nCountCross(aPositionsCross.size());
                 const sal_uInt32 nRetvalCount((nCountPoint ? 1 : 0) + (nCountCross ? 1 : 0));
                 sal_uInt32 nInsertCounter(0);
-
+                
                 aRetval.realloc(nRetvalCount);
 
                 // add PointArrayPrimitive2D if point markers were added
@@ -230,7 +230,7 @@ namespace drawinglayer
         }
 
         GridPrimitive2D::GridPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform, 
             double fWidth,
             double fHeight,
             double fSmallestViewDistance,
@@ -239,7 +239,7 @@ namespace drawinglayer
             sal_uInt32 nSubdivisionsY,
             const basegfx::BColor& rBColor,
             const BitmapEx& rCrossMarker)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mfWidth(fWidth),
             mfHeight(fHeight),
@@ -259,7 +259,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const GridPrimitive2D& rCompare = (GridPrimitive2D&)rPrimitive;
-
+                
                 return (getTransform() == rCompare.getTransform()
                     && getWidth() == rCompare.getWidth()
                     && getHeight() == rCompare.getHeight()
@@ -287,7 +287,7 @@ namespace drawinglayer
         }
 
         Primitive2DSequence GridPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
-        {
+        { 
             ::osl::MutexGuard aGuard( m_aMutex );
 
             if(getBuffered2DDecomposition().hasElements())

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ GalleryPreview::~GalleryPreview()
 bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
 {
     bool bRet = true;
-    Graphic aGraphic;
+    Graphic	aGraphic;
     if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
     {
         aGraphic = BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) );
@@ -128,9 +128,9 @@ void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 BOOL GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
-    const Size  aWinSize( GetOutputSizePixel() );
-    Size        aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
-    BOOL        bRet = FALSE;
+    const Size	aWinSize( GetOutputSizePixel() );
+    Size		aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
+    BOOL		bRet = FALSE;
 
     if( aNewSize.Width() && aNewSize.Height() )
     {
@@ -168,7 +168,7 @@ void GalleryPreview::Paint( const Rectangle& rRect )
     if( ImplGetGraphicCenterRect( aGraphicObj.GetGraphic(), aPreviewRect ) )
     {
         const Point aPos( aPreviewRect.TopLeft() );
-        const Size  aSize( aPreviewRect.GetSize() );
+        const Size	aSize( aPreviewRect.GetSize() );
 
         if( aGraphicObj.IsAnimated() )
             aGraphicObj.StartAnimation( this, aPos, aSize );
@@ -192,7 +192,7 @@ void GalleryPreview::Command(const CommandEvent& rCEvt )
     Window::Command( rCEvt );
 
     if( mpTheme && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) )
-        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this,
+        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this, 
             ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
 }
 
@@ -209,7 +209,7 @@ void GalleryPreview::KeyInput( const KeyEvent& rKEvt )
             case( KEY_BACKSPACE ):
                 pBrowser->TogglePreview( this );
             break;
-
+                
             case( KEY_HOME ):
                 pBrowser->Travel( GALLERYBROWSERTRAVEL_FIRST );
             break;
@@ -283,13 +283,13 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
     if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
     {
         ::avmedia::MediaFloater* pFloater = AVMEDIA_MEDIAWINDOW();
-
+        
         if( !pFloater )
         {
             SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_AVMEDIA_PLAYER, SFX_CALLMODE_SYNCHRON );
             pFloater = AVMEDIA_MEDIAWINDOW();
         }
-
+        
         if( pFloater )
             pFloater->setURL( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ), true );
     }
@@ -305,7 +305,7 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
         ValueSet( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_VSCROLL | WB_FLATVALUESET ),
         DropTargetHelper( this ),
         DragSourceHelper( this ),
-        mpTheme ( pTheme )
+        mpTheme	( pTheme )
 {
     EnableFullItemMode( FALSE );
 
@@ -354,9 +354,9 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
 
         if( pObj )
         {
-            const Rectangle&    rRect = rUDEvt.GetRect();
-            OutputDevice*       pDev = rUDEvt.GetDevice();
-            Graphic             aGraphic;
+            const Rectangle&	rRect = rUDEvt.GetRect();
+            OutputDevice*		pDev = rUDEvt.GetDevice();
+            Graphic 			aGraphic;
 
             if( pObj->IsThumbBitmap() )
             {
@@ -379,9 +379,9 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
             {
                 if( ( aSize.Width() > rRect.GetWidth() ) || ( aSize.Height() > rRect.GetHeight() ) )
                 {
-                    Point           aNewPos;
-                    const double    fBmpWH  = (double) aSize.Width() / aSize.Height();
-                    const double    fThmpWH = (double) rRect.GetWidth() / rRect.GetHeight();
+                    Point			aNewPos;
+                    const double	fBmpWH	= (double) aSize.Width() / aSize.Height();
+                    const double	fThmpWH = (double) rRect.GetWidth() / rRect.GetHeight();
 
                     // Bitmap an Thumbgroesse anpassen
                     if ( fBmpWH < fThmpWH )
@@ -426,7 +426,7 @@ void GalleryIconView::Command( const CommandEvent& rCEvt )
 
     if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this,
+        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this, 
             ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
     }
 }
@@ -450,15 +450,15 @@ sal_Int8 GalleryIconView::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 GalleryIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    return( static_cast< GalleryBrowser2* >( GetParent() )->ExecuteDrop( *this, rEvt ) );
+    return(	static_cast< GalleryBrowser2* >( GetParent() )->ExecuteDrop( *this, rEvt ) );
 }
 
 // ------------------------------------------------------------------------
 
 void GalleryIconView::StartDrag( sal_Int8, const Point& )
 {
-    const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, TRUE );
-    Region              aRegion;
+    const CommandEvent	aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, TRUE );
+    Region				aRegion;
 
     // call this to initiate dragging for ValueSet
     ValueSet::StartDrag( aEvt, aRegion );
@@ -529,7 +529,7 @@ String GalleryListView::GetCellText(long _nRow, USHORT nColumnId) const
 
         if( pObj )
         {
-            sRet = GalleryBrowser2::GetItemText( *mpTheme, *pObj,
+            sRet = GalleryBrowser2::GetItemText( *mpTheme, *pObj, 
                 ( GALLERY_BRWBOX_TITLE == nColumnId ) ? GALLERY_ITEM_TITLE : GALLERY_ITEM_PATH );
 
             mpTheme->ReleaseObject( pObj );
@@ -549,11 +549,11 @@ Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nC
     {
         SvxFont aFont( GetFont() );
         AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, sal::static_int_cast<USHORT>( GetColumnId( sal::static_int_cast<USHORT>(_nColumnPos) ) ) ) );
-
+        
         // get the bounds inside the string
         aStringWrap.GetCharacterBounds(nIndex, aRect);
 
-        // offset to
+        // offset to 
     }
     return aRect;
 }
@@ -606,9 +606,9 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, US
                 {
                     if( ( aSize.Width() > aOutputRect.GetWidth() ) || ( aSize.Height() > aOutputRect.GetHeight() ) )
                     {
-                        Point           aNewPos;
-                        const double    fBmpWH  = (double) aSize.Width() / aSize.Height();
-                        const double    fThmpWH = (double) aOutputRect.GetWidth() / aOutputRect.GetHeight();
+                        Point			aNewPos;
+                        const double	fBmpWH	= (double) aSize.Width() / aSize.Height();
+                        const double	fThmpWH = (double) aOutputRect.GetWidth() / aOutputRect.GetHeight();
 
                         // Bitmap an Thumbgroesse anpassen
                         if ( fBmpWH < fThmpWH )
@@ -656,7 +656,7 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
 
         if( rCEvt.IsMouseEvent() && ( GetRowAtYPosPixel( rCEvt.GetMousePosPixel().Y() ) != BROWSER_ENDOFSELECTION ) )
             pPos = &rCEvt.GetMousePosPixel();
-
+        
         ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this, pPos );
     }
 }
@@ -711,8 +711,8 @@ sal_Int8 GalleryListView::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     ExecuteDropEvent aEvt( rEvt );
 
     aEvt.maPosPixel.Y() += GetTitleHeight();
-
-    return( ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, aEvt ) );
+    
+    return(	( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, aEvt ) );
 }
 
 // ------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,22 +55,22 @@
 \************************************************************************/
 SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
                             SdDrawDocument& rDrawDoc ) :
-    ModalDialog     ( pWindow, SdResId( DLG_CUSTOMSHOW ) ),
+    ModalDialog		( pWindow, SdResId( DLG_CUSTOMSHOW ) ),
 
-    aLbCustomShows  ( this, SdResId( LB_CUSTOMSHOWS ) ),
+    aLbCustomShows	( this, SdResId( LB_CUSTOMSHOWS ) ),
     aCbxUseCustomShow( this, SdResId( CBX_USE_CUSTOMSHOW ) ),
-    aBtnNew         ( this, SdResId( BTN_NEW ) ),
-    aBtnEdit        ( this, SdResId( BTN_EDIT ) ),
-    aBtnRemove      ( this, SdResId( BTN_REMOVE ) ),
-    aBtnCopy        ( this, SdResId( BTN_COPY ) ),
+    aBtnNew			( this, SdResId( BTN_NEW ) ),
+    aBtnEdit		( this, SdResId( BTN_EDIT ) ),
+    aBtnRemove		( this, SdResId( BTN_REMOVE ) ),
+    aBtnCopy  		( this, SdResId( BTN_COPY ) ),
     aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-    aBtnStartShow   ( this, SdResId( BTN_STARTSHOW ) ),
+    aBtnStartShow	( this, SdResId( BTN_STARTSHOW ) ),
     aBtnOK          ( this, SdResId( BTN_OK ) ),
 
-    rDoc            ( rDrawDoc ),
-    pCustomShowList ( NULL ),
-    pCustomShow     ( NULL ),
-    bModified       ( FALSE )
+    rDoc			( rDrawDoc ),
+    pCustomShowList	( NULL ),
+    pCustomShow		( NULL ),
+    bModified		( FALSE )
 {
     FreeResource();
 
@@ -310,23 +310,23 @@ BOOL SdCustomShowDlg::IsCustomShow() const
 \************************************************************************/
 SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
                         SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS ) :
-    ModalDialog     ( pWindow, SdResId( DLG_DEFINE_CUSTOMSHOW ) ),
+    ModalDialog		( pWindow, SdResId( DLG_DEFINE_CUSTOMSHOW ) ),
 
-    aFtName         ( this, SdResId( FT_NAME ) ),
-    aEdtName        ( this, SdResId( EDT_NAME ) ),
-    aFtPages        ( this, SdResId( FT_PAGES ) ),
-    aLbPages        ( this, SdResId( LB_PAGES ) ),
-    aBtnAdd         ( this, SdResId( BTN_ADD ) ),
-    aBtnRemove      ( this, SdResId( BTN_REMOVE ) ),
-    aFtCustomPages  ( this, SdResId( FT_CUSTOM_PAGES ) ),
-    aLbCustomPages  ( this, SdResId( LB_CUSTOM_PAGES ) ),
+    aFtName			( this, SdResId( FT_NAME ) ),
+    aEdtName		( this, SdResId( EDT_NAME ) ),
+    aFtPages		( this, SdResId( FT_PAGES ) ),
+    aLbPages		( this, SdResId( LB_PAGES ) ),
+    aBtnAdd			( this, SdResId( BTN_ADD ) ),
+    aBtnRemove		( this, SdResId( BTN_REMOVE ) ),
+    aFtCustomPages	( this, SdResId( FT_CUSTOM_PAGES ) ),
+    aLbCustomPages	( this, SdResId( LB_CUSTOM_PAGES ) ),
     aBtnOK          ( this, SdResId( BTN_OK ) ),
-    aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
+    aBtnCancel		( this, SdResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, SdResId( BTN_HELP ) ),
 
-    rDoc            ( rDrawDoc ),
-    rpCustomShow    ( rpCS ),
-    bModified       ( FALSE )
+    rDoc			( rDrawDoc ),
+    rpCustomShow	( rpCS ),
+    bModified		( FALSE )
 {
     FreeResource();
 

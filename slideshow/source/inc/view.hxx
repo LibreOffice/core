@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace slideshow
         {
         public:
             /** Create a new view layer for this view
-
+            
                 @param rLayerBounds
                 Specifies the bound rect of the layer relative to the
                 user view coordinate system.
@@ -79,7 +79,7 @@ namespace slideshow
             virtual void setViewSize( const ::basegfx::B2DVector& ) = 0;
 
             /** Change the view's mouse cursor.
-
+                
                 @param nPointerShape
                 One of the ::com::sun::star::awt::SystemPointer
                 constant group members.
@@ -87,8 +87,8 @@ namespace slideshow
             virtual void setCursorShape( sal_Int16 nPointerShape ) = 0;
         };
 
-        typedef ::boost::shared_ptr< View >     ViewSharedPtr;
-        typedef ::std::vector< ViewSharedPtr >  ViewVector;
+        typedef ::boost::shared_ptr< View > 	ViewSharedPtr;
+        typedef ::std::vector< ViewSharedPtr >	ViewVector;
     }
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ namespace sdr
         {
         protected:
             // the Bitmap itself
-            BitmapEx                                maBitmapEx;
+            BitmapEx								maBitmapEx;
 
             // position of the basePosition inside the Bitmap, in pixels
-            sal_uInt16                              mnCenterX;
-            sal_uInt16                              mnCenterY;
-
+            sal_uInt16								mnCenterX;
+            sal_uInt16								mnCenterY;
+            
             // optional transparency
             double mfAlpha;
 
@@ -55,7 +55,7 @@ namespace sdr
         public:
             OverlayBitmapEx(
                 const basegfx::B2DPoint& rBasePos,
-                const BitmapEx& rBitmapEx,
+                const BitmapEx& rBitmapEx, 
                 sal_uInt16 nCenX = 0, sal_uInt16 nCenY = 0, double fAlpha = 0.0 );
             virtual ~OverlayBitmapEx();
 

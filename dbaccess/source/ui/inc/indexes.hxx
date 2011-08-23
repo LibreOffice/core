@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace dbaui
     //==================================================================
     struct OIndexField
     {
-        String              sFieldName;
-        sal_Bool            bSortAscending;
+        String				sFieldName;
+        sal_Bool			bSortAscending;
 
         OIndexField() : bSortAscending(sal_True) { }
     };
@@ -66,15 +66,15 @@ namespace dbaui
     struct OIndex
     {
     protected:
-        ::rtl::OUString     sOriginalName;
-        sal_Bool            bModified;
+        ::rtl::OUString		sOriginalName;
+        sal_Bool			bModified;
 
     public:
-        ::rtl::OUString     sName;
-        ::rtl::OUString     sDescription;
-        sal_Bool            bPrimaryKey;
-        sal_Bool            bUnique;
-        IndexFields         aFields;
+        ::rtl::OUString		sName;
+        ::rtl::OUString		sDescription;
+        sal_Bool			bPrimaryKey;
+        sal_Bool			bUnique;
+        IndexFields			aFields;
 
     public:
         OIndex(const ::rtl::OUString& _rOriginalName)
@@ -84,23 +84,23 @@ namespace dbaui
 
         const ::rtl::OUString& getOriginalName() const { return sOriginalName; }
 
-        sal_Bool    isModified() const { return bModified; }
-        void        setModified(sal_Bool _bModified) { bModified = _bModified; }
-        void        clearModified() { setModified(sal_False); }
+        sal_Bool	isModified() const { return bModified; }
+        void		setModified(sal_Bool _bModified) { bModified = _bModified; }
+        void		clearModified() { setModified(sal_False); }
 
-        sal_Bool    isNew() const { return 0 == getOriginalName().getLength(); }
-        void        flagAsNew(const GrantIndexAccess&) { sOriginalName = ::rtl::OUString(); }
-        void        flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
-
+        sal_Bool	isNew() const { return 0 == getOriginalName().getLength(); }
+        void		flagAsNew(const GrantIndexAccess&) { sOriginalName = ::rtl::OUString(); }
+        void		flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
+        
 
     private:
-        OIndex();   // not implemented
+        OIndex();	// not implemented
     };
 
     DECLARE_STL_VECTOR( OIndex, Indexes );
 
 //......................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //......................................................................
 
 #endif // _DBAUI_INDEXES_HXX_

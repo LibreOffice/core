@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,8 +160,8 @@ void SbxBase::AddFactory( SbxFactory* pFac )
     const SbxFactory* pTemp = pFac;
 
     // AB, 6.3.96: HandleLast-Flag beruecksichtigen
-    USHORT nPos = p->aFacs.Count();     // Einfuege-Position
-    if( !pFac->IsHandleLast() )         // Nur, wenn nicht selbst HandleLast
+    USHORT nPos = p->aFacs.Count();		// Einfuege-Position
+    if( !pFac->IsHandleLast() )			// Nur, wenn nicht selbst HandleLast
     {
         // Neue Factory vor Factories mit HandleLast einordnen
         while( nPos > 0 &&
@@ -196,16 +196,16 @@ SbxBase* SbxBase::Create( UINT16 nSbxId, UINT32 nCreator )
     if( nCreator == SBXCR_SBX )
       switch( nSbxId )
     {
-        case SBXID_VALUE:       return new SbxValue;
-        case SBXID_VARIABLE:    return new SbxVariable;
-        case SBXID_ARRAY:       return new SbxArray;
-        case SBXID_DIMARRAY:    return new SbxDimArray;
-        case SBXID_OBJECT:      return new SbxObject( aEmptyStr );
-        case SBXID_COLLECTION:  return new SbxCollection( aEmptyStr );
+        case SBXID_VALUE:		return new SbxValue;
+        case SBXID_VARIABLE:	return new SbxVariable;
+        case SBXID_ARRAY:  		return new SbxArray;
+        case SBXID_DIMARRAY:	return new SbxDimArray;
+        case SBXID_OBJECT:		return new SbxObject( aEmptyStr );
+        case SBXID_COLLECTION:	return new SbxCollection( aEmptyStr );
         case SBXID_FIXCOLLECTION:
                                 return new SbxStdCollection( aEmptyStr, aEmptyStr );
-        case SBXID_METHOD:      return new SbxMethod( aEmptyStr, SbxEMPTY );
-        case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
+        case SBXID_METHOD:		return new SbxMethod( aEmptyStr, SbxEMPTY );
+        case SBXID_PROPERTY:	return new SbxProperty( aEmptyStr, SbxEMPTY );
     }
     // Unbekanter Typ: Åber die Factories gehen!
     SbxAppData* p = GetSbxData_Impl();

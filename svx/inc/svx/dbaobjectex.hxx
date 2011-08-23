@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ namespace svx
     class SVX_DLLPUBLIC OComponentTransferable : public TransferableHelper
     {
     protected:
-        ODataAccessDescriptor   m_aDescriptor;
+        ODataAccessDescriptor	m_aDescriptor;
 
     public:
         /** construct the transferable
         */
         OComponentTransferable(
-            const ::rtl::OUString&  _rDatasourceOrLocation
+            const ::rtl::OUString&	_rDatasourceOrLocation
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
         );
 
@@ -67,9 +67,9 @@ namespace svx
         /** extracts a component descriptor from the transferable given
         */
         static sal_Bool extractComponentDescriptor(
-            const TransferableDataHelper&   _rData
+            const TransferableDataHelper&	_rData
             ,sal_Bool _bExtractForm
-            ,::rtl::OUString&               _rDatasourceOrLocation
+            ,::rtl::OUString&				_rDatasourceOrLocation
             ,::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
         );
 
@@ -80,14 +80,14 @@ namespace svx
 
     protected:
         // TransferableHelper overridables
-        virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void		AddSupportedFormats();
+        virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
-        static sal_uInt32   getDescriptorFormatId(sal_Bool _bExtractForm);
+        static sal_uInt32	getDescriptorFormatId(sal_Bool _bExtractForm);
     };
 
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 #endif // SVX_DBAOBJECTEX_HXX

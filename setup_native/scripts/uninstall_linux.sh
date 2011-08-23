@@ -6,7 +6,7 @@
 
 if [ $# -ne 1 ]
 then
-  echo
+  echo 
   echo "Usage:" $0 "<office-installation-dir>"
   echo "    <inst-destination-dir>: directory where the office to be removed is installed"
   echo

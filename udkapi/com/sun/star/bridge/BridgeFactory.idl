@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,33 +24,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_bridge_BridgeFactory_idl__
-#define __com_sun_star_bridge_BridgeFactory_idl__
+#ifndef __com_sun_star_bridge_BridgeFactory_idl__ 
+#define __com_sun_star_bridge_BridgeFactory_idl__ 
 
-#ifndef __com_sun_star_lang_XComponent_idl__
+#ifndef __com_sun_star_lang_XComponent_idl__ 
 #include <com/sun/star/lang/XComponent.idl>
-#endif
+#endif 
 
-#ifndef __com_sun_star_bridge_XBridgeFactory_idl__
+#ifndef __com_sun_star_bridge_XBridgeFactory_idl__ 
 #include <com/sun/star/bridge/XBridgeFactory.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module bridge {
-
-//=============================================================================
-
-/** allows to create new or access existing interprocess bridges.
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module bridge {  
+ 
+//============================================================================= 
+ 
+/**	allows to create new or access existing interprocess bridges.
 
     <p> It enumerates at the servicemanager all services supporting
     the meta service com.sun.star.bridge.Bridge to get all known, possible
     protocols.
 
-    @see com::sun::star::bridge::Bridge
+    @see com::sun::star::bridge::Bridge 
  */
 published service BridgeFactory
-{
+{ 
     /** The main interface of the service
      */
     interface com::sun::star::bridge::XBridgeFactory;
@@ -58,9 +58,9 @@ published service BridgeFactory
     /** This interface allows to break possible cyclic references.
      */
     interface com::sun::star::lang::XComponent;
-};
-
-//=============================================================================
-
-}; }; }; };
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+#endif 

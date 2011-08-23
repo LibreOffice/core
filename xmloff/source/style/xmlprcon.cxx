@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,16 +46,16 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
     vector< XMLPropertyState > &rProps,
     const UniReference < SvXMLImportPropertyMapper >  &rMap,
     sal_Int32 nSIdx, sal_Int32 nEIdx )
-:   SvXMLImportContext( rImp, nPrfx, rLName )
-,   mnStartIdx( nSIdx )
-,   mnEndIdx( nEIdx )
-,   mnFamily( nFam )
-,   mrProperties( rProps )
-,   mxMapper( rMap )
+:	SvXMLImportContext( rImp, nPrfx, rLName )
+,	mnStartIdx( nSIdx )
+,	mnEndIdx( nEIdx )
+,	mnFamily( nFam )
+,	mrProperties( rProps )
+,	mxMapper( rMap )
 {
     mxMapper->importXML( mrProperties, xAttrList,
                         GetImport().GetMM100UnitConverter(),
-                        GetImport().GetNamespaceMap(), mnFamily,
+                        GetImport().GetNamespaceMap(), mnFamily, 
                         mnStartIdx, mnEndIdx );
 }
 

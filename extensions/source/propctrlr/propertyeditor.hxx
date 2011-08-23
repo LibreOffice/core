@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,14 +118,14 @@ namespace pcr
         void                        RemoveEntry( const ::rtl::OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor& );
 
-        void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
-        Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
+        void	setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        Link	getPageActivationHandler() const { return m_aPageActivationHandler; }
 
         // #95343# -------------------------------
         sal_Int32 getMinimumWidth();
         sal_Int32 getMinimumHeight();
 
-        void                        CommitModified();
+        void	                    CommitModified();
 
     protected:
         using Window::SetHelpText;

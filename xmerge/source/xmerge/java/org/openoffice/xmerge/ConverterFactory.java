@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 public class ConverterFactory {
 
    /**
-    *  Confirms whether or not a particular conversion can be done
-    *  based on the Mime types of the files to be converted to and
+    *  Confirms whether or not a particular conversion can be done 
+    *  based on the Mime types of the files to be converted to and 
     *  from.
     *
     *  @param  mimeTypeIn   The mime input type.
@@ -59,15 +59,15 @@ public class ConverterFactory {
         ConverterInfo foundInfo = null;
 
         // findConverterInfo expects the second paramenter to be the
-        // destination MimeType
-        if (foundInfo.isValidOfficeType(mimeTypeOut))
+        // destination MimeType 
+        if (foundInfo.isValidOfficeType(mimeTypeOut))  
             foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeIn, mimeTypeOut);
         else
             foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeOut, mimeTypeIn);
 
         if (foundInfo != null)
             return true;
-        else
+        else 
             return false;
     }
 
@@ -81,32 +81,32 @@ public class ConverterFactory {
     *  @param  mimeTypeIn   The mime input type.
     *  @param  mimeTypeOut  The mime output type.
     *
-    *  @return  The first <code>Convert</code> object that supports
-    *           the specified conversion.
+    *  @return  The first <code>Convert</code> object that supports 
+    *           the specified conversion. 
     */
     public Convert getConverter(String mimeTypeIn, String mimeTypeOut) {
 
         ConverterInfo foundInfo = null;
         boolean toOffice;
-
+        
         toOffice = foundInfo.isValidOfficeType(mimeTypeOut);
-
+        
         // findConverterInfo expects the second paramenter to be the
-        // destination MimeType
+        // destination MimeType 
         if (toOffice)
             foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeIn, mimeTypeOut);
-        else
+        else 
             foundInfo = ConverterInfoMgr.findConverterInfo(mimeTypeOut, mimeTypeIn);
-
+        
         if (foundInfo != null)
-            return getConverter(foundInfo, toOffice);
-        else
+            return getConverter(foundInfo, toOffice);    
+        else 
             return null;
     }
 
-
+    
    /**
-    *  Returns the <code>Convert</code> object that is described
+    *  Returns the <code>Convert</code> object that is described 
     *  by the <code>ConverterInfo</code> parameter.
     *
     *  @param  ci  The <code>ConverterInfo</code> describing the converter.
@@ -116,7 +116,7 @@ public class ConverterFactory {
     *  @return  The <code>Convert</code> object
     */
     public Convert getConverter(ConverterInfo ci, boolean toOffice) {
-
+            
         Convert myConvert = new Convert(ci, toOffice);
         return myConvert;
     }

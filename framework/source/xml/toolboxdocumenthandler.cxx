@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/resetableguard.hxx>
@@ -40,7 +40,7 @@
 #include <xml/toolboxconfigurationdefines.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
@@ -48,7 +48,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <sal/config.h>
@@ -59,7 +59,7 @@
 #include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star::uno;
@@ -68,7 +68,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 
 
-#define TOOLBAR_DOCTYPE             "<!DOCTYPE toolbar:toolbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"toolbar.dtd\">"
+#define TOOLBAR_DOCTYPE				"<!DOCTYPE toolbar:toolbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"toolbar.dtd\">"
 
 namespace framework
 {
@@ -138,28 +138,28 @@ sal_Int32 nStyleItemEntries = sizeof( Styles ) / sizeof( Styles[ 0 ] );
 
 struct ToolBarEntryProperty
 {
-    OReadToolBoxDocumentHandler::ToolBox_XML_Namespace  nNamespace;
-    char                                                aEntryName[20];
+    OReadToolBoxDocumentHandler::ToolBox_XML_Namespace	nNamespace;
+    char												aEntryName[20];
 };
 
 ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_COUNT] =
 {
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBAR             },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBARITEM         },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBARSPACE        },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBARBREAK        },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ELEMENT_TOOLBARSEPARATOR    },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_TEXT              },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_BITMAP            },
-    { OReadToolBoxDocumentHandler::TB_NS_XLINK,     ATTRIBUTE_URL               },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMBITS          },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_VISIBLE           },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_WIDTH             },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_USER              },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_HELPID            },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMSTYLE         },
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ELEMENT_TOOLBAR				},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ELEMENT_TOOLBARITEM			},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ELEMENT_TOOLBARSPACE		},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ELEMENT_TOOLBARBREAK		},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ELEMENT_TOOLBARSEPARATOR	},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_TEXT				},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_BITMAP			},
+    { OReadToolBoxDocumentHandler::TB_NS_XLINK,		ATTRIBUTE_URL				},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_ITEMBITS			},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_VISIBLE			},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_WIDTH				},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_USER				},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_HELPID			},
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_ITEMSTYLE			},
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_UINAME            },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_TOOLTIP           },
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,	ATTRIBUTE_TOOLTIP			},
 };
 
 OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XIndexContainer >& rItemContainer ) :
@@ -197,22 +197,22 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     }
 
     // pre-calculate a hash code for all style strings to speed up xml read process
-    m_nHashCode_Style_Radio         = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
-    m_nHashCode_Style_Auto          = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTO ).hashCode();
-    m_nHashCode_Style_Left          = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
-    m_nHashCode_Style_AutoSize      = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ).hashCode();
-    m_nHashCode_Style_DropDown      = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
-    m_nHashCode_Style_Repeat        = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
+    m_nHashCode_Style_Radio		    = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
+    m_nHashCode_Style_Auto		    = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTO ).hashCode();
+    m_nHashCode_Style_Left		    = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
+    m_nHashCode_Style_AutoSize	    = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ).hashCode();
+    m_nHashCode_Style_DropDown	    = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
+    m_nHashCode_Style_Repeat	    = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
     m_nHashCode_Style_DropDownOnly  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY ).hashCode();
     m_nHashCode_Style_Text  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_TEXT ).hashCode();
     m_nHashCode_Style_Image  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
 
-    m_bToolBarStartFound            = sal_False;
-    m_bToolBarEndFound              = sal_False;
-    m_bToolBarItemStartFound        = sal_False;
-    m_bToolBarSpaceStartFound       = sal_False;
-    m_bToolBarBreakStartFound       = sal_False;
-    m_bToolBarSeparatorStartFound   = sal_False;
+    m_bToolBarStartFound			= sal_False;
+    m_bToolBarEndFound				= sal_False;
+    m_bToolBarItemStartFound		= sal_False;
+    m_bToolBarSpaceStartFound		= sal_False;
+    m_bToolBarBreakStartFound		= sal_False;
+    m_bToolBarSeparatorStartFound	= sal_False;
 }
 
 OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
@@ -221,17 +221,17 @@ OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
 
 // XDocumentHandler
 void SAL_CALL OReadToolBoxDocumentHandler::startDocument(void)
-throw ( SAXException, RuntimeException )
+throw (	SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::endDocument(void)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
     if (( m_bToolBarStartFound && !m_bToolBarEndFound ) ||
-        ( !m_bToolBarStartFound && m_bToolBarEndFound )     )
+        ( !m_bToolBarStartFound && m_bToolBarEndFound )		)
     {
         ::rtl::OUString aErrorMessage = getErrorLineString();
         aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No matching start or end element 'toolbar' found!" ));
@@ -241,7 +241,7 @@ throw(  SAXException, RuntimeException )
 
 void SAL_CALL OReadToolBoxDocumentHandler::startElement(
     const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttribs )
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -319,7 +319,7 @@ throw(  SAXException, RuntimeException )
                 }
 
                 ::rtl::OUString aAttribute;
-                sal_Bool bAttributeURL  = sal_False;
+                sal_Bool bAttributeURL	= sal_False;
 
                 m_bToolBarItemStartFound = sal_True;
                 ::rtl::OUString        aLabel;
@@ -353,8 +353,8 @@ throw(  SAXException, RuntimeException )
 
                             case TB_ATTRIBUTE_URL:
                             {
-                                bAttributeURL   = sal_True;
-                                aCommandURL     = xAttribs->getValueByIndex( n ).intern();
+                                bAttributeURL	= sal_True;
+                                aCommandURL		= xAttribs->getValueByIndex( n ).intern();
                             }
                             break;
 
@@ -411,7 +411,7 @@ throw(  SAXException, RuntimeException )
 
                                 do
                                 {
-                                    ::rtl::OUString aToken  = aTemp.getToken( 0, ' ', nIndex );
+                                    ::rtl::OUString aToken	= aTemp.getToken( 0, ' ', nIndex );
                                     if ( aToken.getLength() > 0 )
                                     {
                                         sal_Int32 nHashCode = aToken.hashCode();
@@ -558,7 +558,7 @@ throw(  SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::endElement(const ::rtl::OUString& aName)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -639,24 +639,24 @@ throw(  SAXException, RuntimeException )
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::characters(const ::rtl::OUString&)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::ignorableWhitespace(const ::rtl::OUString&)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::processingInstruction(
     const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadToolBoxDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException )
+throw(	SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -680,7 +680,7 @@ throw(  SAXException, RuntimeException )
 
 
 //_________________________________________________________________________________________________________________
-//  OWriteToolBoxDocumentHandler
+//	OWriteToolBoxDocumentHandler
 //_________________________________________________________________________________________________________________
 
 OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
@@ -691,10 +691,10 @@ OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     m_rItemAccess( rItemAccess )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType    = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
-    m_aXMLXlinkNS       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
-    m_aXMLToolbarNS     = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_TOOLBAR_PREFIX ));
+    m_xEmptyList		= Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
+    m_aAttributeType	= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aXMLXlinkNS		= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
+    m_aXMLToolbarNS		= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_TOOLBAR_PREFIX ));
 }
 
 OWriteToolBoxDocumentHandler::~OWriteToolBoxDocumentHandler()
@@ -785,7 +785,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
 }
 
 //_________________________________________________________________________________________________________________
-//  protected member functions
+//	protected member functions
 //_________________________________________________________________________________________________________________
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
@@ -851,7 +851,7 @@ throw ( SAXException, RuntimeException )
                     aValue = aValue.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" ") ) );
                 aValue += rtl::OUString::createFromAscii( pStyle->attrName );
             }
-        }
+        } 
         pList->AddAttribute( m_aXMLToolbarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE )),
                              m_aAttributeType,
                              aValue );

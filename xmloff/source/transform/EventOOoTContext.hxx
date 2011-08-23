@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ class XMLEventOOoTransformerContext : public XMLPersElemContentTContext
 public:
     TYPEINFO();
 
-    XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
+    XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName,
-                              sal_Bool bPersistent = sal_False  );
+                              sal_Bool bPersistent = sal_False	);
     virtual ~XMLEventOOoTransformerContext();
 
     static XMLTransformerOOoEventMap_Impl *CreateEventMap();
@@ -60,5 +60,5 @@ public:
     virtual sal_Bool IsPersistent() const;
 };
 
-#endif  //  _XMLOFF_EVENTOOOTCONTEXT_HXX
+#endif	//  _XMLOFF_EVENTOOOTCONTEXT_HXX
 

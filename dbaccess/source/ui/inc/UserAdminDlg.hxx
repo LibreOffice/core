@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,10 +63,10 @@ namespace dbaui
     class OUserAdminDlg : public SfxTabDialog, public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
     {
         OModuleClient m_aModuleClient;
-        ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+        ::std::auto_ptr<ODbDataSourceAdministrationHelper>	m_pImpl;
         SfxItemSet* m_pItemSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-        sal_Bool    m_bOwnConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>			m_xConnection;
+        sal_Bool	m_bOwnConnection;
     protected:
         virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     public:
@@ -75,18 +75,18 @@ namespace dbaui
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
                             ,const ::com::sun::star::uno::Any& _aDataSourceName
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
-
+            
         virtual ~OUserAdminDlg();
 
         virtual const SfxItemSet* getOutputSet() const;
         virtual SfxItemSet* getWriteOutputSet();
 
-        virtual short   Execute();
+        virtual short	Execute();
 
         // forwards to ODbDataSourceAdministrationHelper
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
         virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >	getDriver();
         virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
         virtual void clearPassword();
         virtual sal_Bool saveDatasource();
@@ -94,7 +94,7 @@ namespace dbaui
         virtual void enableConfirmSettings( bool _bEnable );
     };
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_USERADMINDLG_HXX

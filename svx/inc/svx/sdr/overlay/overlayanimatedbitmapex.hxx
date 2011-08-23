@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,21 +41,21 @@ namespace sdr
         {
         protected:
             // the Bitmaps
-            BitmapEx                                maBitmapEx1;
-            BitmapEx                                maBitmapEx2;
+            BitmapEx								maBitmapEx1;
+            BitmapEx								maBitmapEx2;
 
             // position of the basePosition inside the Bitmaps, in pixels
-            sal_uInt16                              mnCenterX1;
-            sal_uInt16                              mnCenterY1;
-            sal_uInt16                              mnCenterX2;
-            sal_uInt16                              mnCenterY2;
+            sal_uInt16								mnCenterX1;
+            sal_uInt16								mnCenterY1;
+            sal_uInt16								mnCenterX2;
+            sal_uInt16								mnCenterY2;
 
             // #i53216# added CursorBlinkTime (in ms)
-            sal_uInt32                              mnBlinkTime;
+            sal_uInt32								mnBlinkTime;
 
             // bitfield
             // Flag to remember which state to draw. Inited with sal_False (0)
-            unsigned                                mbOverlayState : 1;
+            unsigned								mbOverlayState : 1;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
@@ -66,12 +66,12 @@ namespace sdr
         public:
             OverlayAnimatedBitmapEx(
                 const basegfx::B2DPoint& rBasePos,
-                const BitmapEx& rBitmapEx1,
-                const BitmapEx& rBitmapEx2,
+                const BitmapEx& rBitmapEx1, 
+                const BitmapEx& rBitmapEx2, 
                 sal_uInt32 nBlinkTime = 500,
-                sal_uInt16 nCenX1 = 0,
-                sal_uInt16 nCenY1 = 0,
-                sal_uInt16 nCenX2 = 0,
+                sal_uInt16 nCenX1 = 0, 
+                sal_uInt16 nCenY1 = 0, 
+                sal_uInt16 nCenX2 = 0, 
                 sal_uInt16 nCenY2 = 0);
             virtual ~OverlayAnimatedBitmapEx();
 

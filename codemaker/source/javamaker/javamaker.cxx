@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,18 +40,18 @@
 using namespace rtl;
 
 sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
-                         TypeManager const & typeMgr,
+                         TypeManager const & typeMgr, 
                          codemaker::GeneratedTypeSet & generated,
                          JavaOptions* pOptions,
                          sal_Bool bFullScope)
     throw( CannotDumpException )
 {
     OString typeName = typeMgr.getTypeName(rTypeKey);
-
+    
     if (!produceType(rTypeKey, bIsExtraType, typeMgr, generated, pOptions))
     {
-        fprintf(stderr, "%s ERROR: %s\n",
-                pOptions->getProgramName().getStr(),
+        fprintf(stderr, "%s ERROR: %s\n", 
+                pOptions->getProgramName().getStr(), 
                 OString("cannot dump Type '" + typeName + "'").getStr());
         exit(99);
     }
@@ -60,7 +60,7 @@ sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
     RegistryKeyList::const_iterator iter = typeKeys.begin();
     RegistryKey key, subKey;
     RegistryKeyArray subKeys;
-
+    
     while (iter != typeKeys.end())
     {
         key = (*iter).first;
@@ -83,25 +83,25 @@ sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
                         return sal_False;
                 }
             }
-        }
+        }      
 
         ++iter;
     }
-
-    return sal_True;
+    
+    return sal_True;			
 }
 
 sal_Bool produceAllTypes(const OString& typeName,
-                         TypeManager const & typeMgr,
+                         TypeManager const & typeMgr, 
                          codemaker::GeneratedTypeSet & generated,
                          JavaOptions* pOptions,
                          sal_Bool bFullScope)
     throw( CannotDumpException )
 {
-    if (!produceType(typeName, typeMgr, generated, pOptions))
+    if (!produceType(typeName, typeMgr,	generated, pOptions))
     {
-        fprintf(stderr, "%s ERROR: %s\n",
-                pOptions->getProgramName().getStr(),
+        fprintf(stderr, "%s ERROR: %s\n", 
+                pOptions->getProgramName().getStr(), 
                 OString("cannot dump Type '" + typeName + "'").getStr());
         exit(99);
     }
@@ -132,19 +132,19 @@ sal_Bool produceAllTypes(const OString& typeName,
                         return sal_False;
                 }
             }
-        }
-
+        }      
+        
         ++iter;
     }
-
-    return sal_True;
+    
+    return sal_True;			
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     JavaOptions options;
 
-    try
+    try 
     {
         if (!options.initOptions(argc, argv))
         {
@@ -158,7 +158,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
 
     RegistryTypeManager typeMgr;
-
+    
     if (!typeMgr.init(options.getInputFiles(), options.getExtraInputFiles()))
     {
         fprintf(stderr, "%s : init registries failed, check your registry files.\n", options.getProgramName().getStr());
@@ -170,7 +170,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         typeMgr.setBase(options.getOption("-B"));
     }
 
-    try
+    try 
     {
         if (options.isValid("-T"))
         {
@@ -183,7 +183,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             do
             {
                 typeName = tOption.getToken(0, ';', nIndex);
-
+                
                 sal_Int32 nPos = typeName.lastIndexOf( '.' );
                 tmpName = typeName.copy( nPos != -1 ? nPos+1 : 0 );
                 if (tmpName == "*")
@@ -195,7 +195,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     } else
                     {
                         tmpName = typeName.copy(0, typeName.lastIndexOf('.')).replace('.', '/');
-                        if (tmpName.getLength() == 0)
+                        if (tmpName.getLength() == 0) 
                             tmpName = "/";
                         else
                             tmpName.replace('.', '/');
@@ -214,8 +214,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
                 if (!ret)
                 {
-                    fprintf(stderr, "%s ERROR: %s\n",
-                            options.getProgramName().getStr(),
+                    fprintf(stderr, "%s ERROR: %s\n", 
+                            options.getProgramName().getStr(), 
                             OString("cannot dump Type '" + typeName + "'").getStr());
                     exit(99);
                 }
@@ -226,8 +226,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             codemaker::GeneratedTypeSet generated;
             if (!produceAllTypes("/", typeMgr, generated, &options, sal_True))
             {
-                fprintf(stderr, "%s ERROR: %s\n",
-                        options.getProgramName().getStr(),
+                fprintf(stderr, "%s ERROR: %s\n", 
+                        options.getProgramName().getStr(), 
                         "an error occurs while dumping all types.");
                 exit(99);
             }
@@ -235,8 +235,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch( CannotDumpException& e)
     {
-        fprintf(stderr, "%s ERROR: %s\n",
-                options.getProgramName().getStr(),
+        fprintf(stderr, "%s ERROR: %s\n", 
+                options.getProgramName().getStr(), 
                 e.m_message.getStr());
         exit(99);
     }

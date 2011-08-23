@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,23 +73,23 @@ TableStyleTextStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
     switch( aElementToken )
     {
         // EG_ThemeableFontStyles (choice)
-        case NMSP_DRAWINGML|XML_font:       // CT_FontCollection
+        case NMSP_DRAWINGML|XML_font:		// CT_FontCollection
             xRet.set( this );
             break;
-        case NMSP_DRAWINGML|XML_ea:             // CT_TextFont
+        case NMSP_DRAWINGML|XML_ea:				// CT_TextFont
             mrTableStylePart.getAsianFont().setAttributes( aAttribs );
             return 0;
-        case NMSP_DRAWINGML|XML_cs:             // CT_TextFont
+        case NMSP_DRAWINGML|XML_cs:				// CT_TextFont
             mrTableStylePart.getComplexFont().setAttributes( aAttribs );
             return 0;
-        case NMSP_DRAWINGML|XML_sym:            // CT_TextFont
+        case NMSP_DRAWINGML|XML_sym:			// CT_TextFont
             mrTableStylePart.getSymbolFont().setAttributes( aAttribs );
             return 0;
-        case NMSP_DRAWINGML|XML_latin:          // CT_TextFont
+        case NMSP_DRAWINGML|XML_latin:			// CT_TextFont
             mrTableStylePart.getLatinFont().setAttributes( aAttribs );
             return 0;
 
-        case NMSP_DRAWINGML|XML_fontRef:    // CT_FontReference
+        case NMSP_DRAWINGML|XML_fontRef:	// CT_FontReference
             {
                 ShapeStyleRef& rFontStyle = mrTableStylePart.getStyleRefs()[ XML_fontRef ];
                 rFontStyle.mnThemedIdx = aAttribs.getToken( XML_idx, XML_none );
@@ -97,7 +97,7 @@ TableStyleTextStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             }
             break;
 
-        case NMSP_DRAWINGML|XML_extLst:     // CT_OfficeArtExtensionList
+        case NMSP_DRAWINGML|XML_extLst:		// CT_OfficeArtExtensionList
             break;
     }
     if( !xRet.is() )

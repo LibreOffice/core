@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -340,7 +340,7 @@ public:
     // public versions of internal helper methods, with access control
     struct TC_AccessControl { friend class TC_SolarMethodGuard; private: TC_AccessControl() { } };
 
-    inline ::osl::Mutex&    getMutex( const TC_AccessControl& ) { return getOslMutex(); }
+    inline ::osl::Mutex&	getMutex( const TC_AccessControl& ) { return getOslMutex(); }
     inline void             ensureIsAlive( const TC_AccessControl& ) { ensureIsAlive(); }
 
 protected:
@@ -359,15 +359,15 @@ private:
     ::rtl::OUString m_aName;
     /** Localized description text. */
     ::rtl::OUString m_aDescription;
-    ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
+    ::comphelper::AccessibleEventNotifier::TClientId	m_aClientId;
 };
 
 // ============================================================================
 // a version of AccessibleGridControlBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessible
-                            >   GridControlAccessibleElement_Base;
+typedef ::cppu::ImplHelper1	<	::com::sun::star::accessibility::XAccessible
+                            >	GridControlAccessibleElement_Base;
 
 class GridControlAccessibleElement
             :public AccessibleGridControlBase
@@ -406,9 +406,9 @@ protected:
         throw ( ::com::sun::star::uno::RuntimeException );
 
 private:
-    GridControlAccessibleElement();                                             // never implemented
-    GridControlAccessibleElement( const GridControlAccessibleElement& );        // never implemented
-    GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ); // never implemented
+    GridControlAccessibleElement();												// never implemented
+    GridControlAccessibleElement( const GridControlAccessibleElement& );		// never implemented
+    GridControlAccessibleElement& operator=( const GridControlAccessibleElement& );	// never implemented
 };
 
 // ============================================================================

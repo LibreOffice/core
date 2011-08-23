@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -232,7 +232,7 @@ static sal_Unicode table_normalwidth[] = {
     //  0x0000,   // 0x30fc KATAKANA-HIRAGANA PROLONGED SOUND MARK
     //  0x0000,   // 0x30fd KATAKANA ITERATION MARK
     //  0x0000,   // 0x30fe KATAKANA VOICED ITERATION MARK
-    //  0x0000    // 0x30ff
+    //  0x0000    // 0x30ff 
 };
 
 static sal_Unicode table_halfwidth[] = {
@@ -302,13 +302,13 @@ static sal_Unicode table_halfwidth[] = {
 };
 
 
-OUString SAL_CALL
+OUString SAL_CALL 
 ignoreProlongedSoundMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 0 now.
-    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
+    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h  
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
@@ -322,7 +322,7 @@ ignoreProlongedSoundMark_ja_JP::folding( const OUString& inStr, sal_Int32 startP
         position = startPos;
     }
 
-    //
+    // 
     sal_Unicode previousChar = *src ++;
     sal_Unicode currentChar;
 

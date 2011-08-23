@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@
 //==================================================================
 
 ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
-                      Window*           pParent,
+                      Window*			pParent,
                       const SfxItemSet* pCellAttrs )
 
     :   SfxTabDialog( pFrameP,
@@ -75,32 +75,32 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
 
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");//CHINA001
 #if LAYOUT_SFX_TABDIALOG_BROKEN
-    AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 ); //CHINA001 AddTabPage( TP_NUMBER,     SvxNumberFormatTabPage::Create, 0 );
+    AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 ); //CHINA001 AddTabPage( TP_NUMBER,		SvxNumberFormatTabPage::Create,	0 );
 #else
     String number = rtl::OUString::createFromAscii ("Numbers");
     AddTabPage( TP_NUMBER, number, pFact->GetTabPageCreatorFunc (RID_SVXPAGE_NUMBERFORMAT), 0, FALSE, TAB_APPEND);
 #endif
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");//CHINA001
-    AddTabPage( TP_FONT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 ); //CHINA001 AddTabPage( TP_FONT,        SvxCharNamePage::Create,        0 );
+    AddTabPage( TP_FONT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 ); //CHINA001 AddTabPage( TP_FONT,		SvxCharNamePage::Create,		0 );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");//CHINA001
-    AddTabPage( TP_FONTEFF, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 ); //CHINA001 AddTabPage( TP_FONTEFF,       SvxCharEffectsPage::Create,     0 );
+    AddTabPage( TP_FONTEFF, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 ); //CHINA001 AddTabPage( TP_FONTEFF,		SvxCharEffectsPage::Create,		0 );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), "GetTabPageCreatorFunc fail!");//CHINA001
-    AddTabPage( TP_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),    0 ); //CHINA001 AddTabPage( TP_ALIGNMENT,   SvxAlignmentTabPage::Create,    0 );
+    AddTabPage( TP_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),	0 ); //CHINA001 AddTabPage( TP_ALIGNMENT,	SvxAlignmentTabPage::Create,	0 );
 
     if ( aCJKOptions.IsAsianTypographyEnabled() )
     {
-        //CHINA001 AddTabPage( TP_ASIAN,    SvxAsianTabPage::Create,        0 );
+        //CHINA001 AddTabPage( TP_ASIAN,	SvxAsianTabPage::Create,		0 );
 //        ::CreateTabPage pCreateTabpage = pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN);
         DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");//CHINA001
-        AddTabPage( TP_ASIAN,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       0 );
+        AddTabPage( TP_ASIAN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),		0 );
     }
     else
         RemoveTabPage( TP_ASIAN );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");//CHINA001
-    AddTabPage( TP_BORDER,      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     0 ); //CHINA001 AddTabPage( TP_BORDER,      SvxBorderTabPage::Create,       0 );
+    AddTabPage( TP_BORDER,		pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),		0 ); //CHINA001 AddTabPage( TP_BORDER,		SvxBorderTabPage::Create,		0 );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");//CHINA001
-    AddTabPage( TP_BACKGROUND,  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 ); //CHINA001 AddTabPage( TP_BACKGROUND,  SvxBackgroundTabPage::Create,   0 );
-    AddTabPage( TP_PROTECTION,  ScTabPageProtection::Create,    0 );
+    AddTabPage( TP_BACKGROUND,	pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ),	0 ); //CHINA001 AddTabPage( TP_BACKGROUND,	SvxBackgroundTabPage::Create,	0 );
+    AddTabPage( TP_PROTECTION,	ScTabPageProtection::Create,	0 );
     FreeResource();
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,16 +40,16 @@
 class VCL_DLLPUBLIC SpinField : public Edit
 {
 protected:
-    Edit*           mpEdit;
-    AutoTimer       maRepeatTimer;
-    Rectangle       maUpperRect;
-    Rectangle       maLowerRect;
-    Rectangle       maDropDownRect; // noch nicht angebunden...
-    Link            maUpHdlLink;
-    Link            maDownHdlLink;
-    Link            maFirstHdlLink;
-    Link            maLastHdlLink;
-    BOOL            mbRepeat:1,
+    Edit*			mpEdit;
+    AutoTimer		maRepeatTimer;
+    Rectangle		maUpperRect;
+    Rectangle		maLowerRect;
+    Rectangle		maDropDownRect; // noch nicht angebunden...
+    Link			maUpHdlLink;
+    Link			maDownHdlLink;
+    Link			maFirstHdlLink;
+    Link			maLastHdlLink;
+    BOOL			mbRepeat:1,
                     mbSpin:1,
                     mbInitialUp:1,
                     mbInitialDown:1,
@@ -59,20 +59,20 @@ protected:
                     mbInDropDown:1;
 
     using Window::ImplInit;
-    SAL_DLLPRIVATE void   ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void	  ImplInit( Window* pParent, WinBits nStyle );
 
 private:
     DECL_DLLPRIVATE_LINK( ImplTimeout, Timer* );
-    SAL_DLLPRIVATE void   ImplInitSpinFieldData();
-    SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea );
+    SAL_DLLPRIVATE void	  ImplInitSpinFieldData();
+    SAL_DLLPRIVATE void	  ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea );
 
 protected:
                     SpinField( WindowType nTyp );
 
-    virtual long    Notify( NotifyEvent& rNEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual long	Notify( NotifyEvent& rNEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
 
-    void            EndDropDown();
+    void			EndDropDown();
 
     virtual void    FillLayoutData() const;
     Rectangle *     ImplFindPartRect( const Point& rPt );
@@ -81,35 +81,35 @@ public:
                     SpinField( Window* pParent, const ResId& rResId );
                     ~SpinField();
 
-    virtual BOOL    ShowDropDown( BOOL bShow );
+    virtual BOOL	ShowDropDown( BOOL bShow );
 
-    virtual void    Up();
-    virtual void    Down();
-    virtual void    First();
-    virtual void    Last();
+    virtual void	Up();
+    virtual void	Down();
+    virtual void	First();
+    virtual void	Last();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
-    virtual void    Resize();
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	Paint( const Rectangle& rRect );
+    virtual void	Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void	Resize();
+    virtual void	StateChanged( StateChangedType nType );
+    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
-    void            SetUpHdl( const Link& rLink ) { maUpHdlLink = rLink; }
-    const Link&     GetUpHdl() const { return maUpHdlLink; }
-    void            SetDownHdl( const Link& rLink ) { maDownHdlLink = rLink; }
-    const Link&     GetDownHdl() const { return maDownHdlLink; }
-    void            SetFirstHdl( const Link& rLink ) { maFirstHdlLink = rLink; }
-    const Link&     GetFirstHdl() const { return maFirstHdlLink; }
-    void            SetLastHdl( const Link& rLink ) { maLastHdlLink = rLink; }
-    const Link&     GetLastHdl() const { return maLastHdlLink; }
+    void			SetUpHdl( const Link& rLink ) { maUpHdlLink = rLink; }
+    const Link& 	GetUpHdl() const { return maUpHdlLink; }
+    void			SetDownHdl( const Link& rLink ) { maDownHdlLink = rLink; }
+    const Link& 	GetDownHdl() const { return maDownHdlLink; }
+    void			SetFirstHdl( const Link& rLink ) { maFirstHdlLink = rLink; }
+    const Link& 	GetFirstHdl() const { return maFirstHdlLink; }
+    void			SetLastHdl( const Link& rLink ) { maLastHdlLink = rLink; }
+    const Link& 	GetLastHdl() const { return maLastHdlLink; }
 
-    virtual Size    CalcMinimumSize() const;
+    virtual Size	CalcMinimumSize() const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
-    virtual Size    CalcSize( USHORT nChars ) const;
+    virtual Size	CalcSize( USHORT nChars ) const;
 };
 
 #endif // _SV_SPINFLD_HXX

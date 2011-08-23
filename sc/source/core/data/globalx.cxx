@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,8 +70,8 @@ void ScGlobal::InitAddIns()
             String aPath( aMultiPath.GetToken( 0, ';', nIndex ) );
             if ( aPath.Len() > 0 )
             {
-                //  use LocalFileHelper to convert the path to a URL that always points
-                //  to the file on the server
+                //	use LocalFileHelper to convert the path to a URL that always points
+                //	to the file on the server
                 String aUrl;
                 if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( aPath, aUrl ) )
                     aPath = aUrl;

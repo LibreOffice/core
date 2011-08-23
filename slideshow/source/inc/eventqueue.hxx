@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace slideshow
                 even when they schedule new regular events without delay.
             */
             bool addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent);
-
+            
             /** Process the event queue.
 
                 This method executes all events whose timeout has
@@ -96,7 +96,7 @@ namespace slideshow
             bool isEmpty() const;
 
             /** Query timeout for the topmost event in the queue.
-
+            
                 @return Timeout in seconds, until the next event is
                 ready. The time returned here is relative to the pres
                 timer (i.e. the timer specified at the EventQueue
@@ -118,19 +118,19 @@ namespace slideshow
                 @attention do only call from event loop, this calls process_()!
              */
             void forceEmpty();
-
+            
             /** Gets the queue's timer object.
              */
             ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const &
             getTimer() const { return mpTimer; }
-
+            
         private:
             mutable ::osl::Mutex      maMutex;
 
             struct EventEntry : public ::std::unary_function<EventEntry, bool>
             {
-                EventSharedPtr  pEvent;
-                double          nTime;
+                EventSharedPtr	pEvent;
+                double			nTime;
 
                 bool operator<( const EventEntry& ) const; // to leverage priority_queue's default compare
 
@@ -139,12 +139,12 @@ namespace slideshow
             };
 
             typedef ::std::priority_queue< EventEntry > ImplQueueType;
-            ImplQueueType                   maEvents;
+            ImplQueueType					maEvents;
             typedef ::std::vector<EventEntry> EventEntryVector;
             EventEntryVector                maNextEvents;
             ImplQueueType                   maNextNextEvents;
             void process_( bool bFireAllEvents );
-
+            
             // perform timing of events via relative time
             // measurements. The world time starts, when the
             // EventQueue object is created

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,81 +52,81 @@
 // shape export features are bits used for the nFeature
 // parameter of XMLShapeExport::exportShape
 
-#define SEF_EXPORT_X        0x0001
-#define SEF_EXPORT_Y        0x0002
-#define SEF_EXPORT_POSITION 0x0003
+#define SEF_EXPORT_X		0x0001
+#define SEF_EXPORT_Y		0x0002
+#define SEF_EXPORT_POSITION	0x0003
 
-#define SEF_EXPORT_WIDTH    0x0004
-#define SEF_EXPORT_HEIGHT   0x0008
-#define SEF_EXPORT_SIZE     0x000c
+#define SEF_EXPORT_WIDTH	0x0004
+#define SEF_EXPORT_HEIGHT	0x0008
+#define SEF_EXPORT_SIZE		0x000c
 
 // when you set this flag a chart does NOT export its own data as table element
-#define SEF_EXPORT_NO_CHART_DATA    0x0010
+#define SEF_EXPORT_NO_CHART_DATA	0x0010
 
 // When setting the flag below no ignorableWhiteSpace will be called around
 // the drawing object elements
-#define SEF_EXPORT_NO_WS    0x0020
+#define SEF_EXPORT_NO_WS	0x0020
 
 // When setting the flag below a callout shape is exported as office:annotation
 #define SEF_EXPORT_ANNOTATION 0x0040
 
-#define SEF_DEFAULT         SEF_EXPORT_POSITION|SEF_EXPORT_SIZE
+#define SEF_DEFAULT			SEF_EXPORT_POSITION|SEF_EXPORT_SIZE
 
 enum XmlShapeType
 {
-    XmlShapeTypeUnknown,                            // not known
+    XmlShapeTypeUnknown,							// not known
 
-    XmlShapeTypeDrawRectangleShape,                 // "com.sun.star.drawing.RectangleShape"
-    XmlShapeTypeDrawEllipseShape,                   // "com.sun.star.drawing.EllipseShape"
-    XmlShapeTypeDrawControlShape,                   // "com.sun.star.drawing.ControlShape"
-    XmlShapeTypeDrawConnectorShape,                 // "com.sun.star.drawing.ConnectorShape"
-    XmlShapeTypeDrawMeasureShape,                   // "com.sun.star.drawing.MeasureShape"
-    XmlShapeTypeDrawLineShape,                      // "com.sun.star.drawing.LineShape"
-    XmlShapeTypeDrawPolyPolygonShape,               // "com.sun.star.drawing.PolyPolygonShape"
-    XmlShapeTypeDrawPolyLineShape,                  // "com.sun.star.drawing.PolyLineShape"
-    XmlShapeTypeDrawOpenBezierShape,                // "com.sun.star.drawing.OpenBezierShape"
-    XmlShapeTypeDrawClosedBezierShape,              // "com.sun.star.drawing.ClosedBezierShape"
-    XmlShapeTypeDrawGraphicObjectShape,             // "com.sun.star.drawing.GraphicObjectShape"
-    XmlShapeTypeDrawGroupShape,                     // "com.sun.star.drawing.GroupShape"
-    XmlShapeTypeDrawTextShape,                      // "com.sun.star.drawing.TextShape"
-    XmlShapeTypeDrawOLE2Shape,                      // "com.sun.star.drawing.OLE2Shape"
-    XmlShapeTypeDrawChartShape,                     // embedded com.sun.star.chart
-    XmlShapeTypeDrawSheetShape,                     // embedded com.sun.star.sheet
-    XmlShapeTypeDrawPageShape,                      // "com.sun.star.drawing.PageShape"
-    XmlShapeTypeDrawFrameShape,                     // "com.sun.star.drawing.FrameShape"
-    XmlShapeTypeDrawCaptionShape,                   // "com.sun.star.drawing.CaptionShape"
-    XmlShapeTypeDrawAppletShape,                    // "com.sun.star.drawing.AppletShape"
-    XmlShapeTypeDrawPluginShape,                    // "com.sun.star.drawing.PlugginShape"
+    XmlShapeTypeDrawRectangleShape,					// "com.sun.star.drawing.RectangleShape"
+    XmlShapeTypeDrawEllipseShape,					// "com.sun.star.drawing.EllipseShape"
+    XmlShapeTypeDrawControlShape,					// "com.sun.star.drawing.ControlShape"
+    XmlShapeTypeDrawConnectorShape,					// "com.sun.star.drawing.ConnectorShape"
+    XmlShapeTypeDrawMeasureShape,					// "com.sun.star.drawing.MeasureShape"
+    XmlShapeTypeDrawLineShape,						// "com.sun.star.drawing.LineShape"
+    XmlShapeTypeDrawPolyPolygonShape,				// "com.sun.star.drawing.PolyPolygonShape"
+    XmlShapeTypeDrawPolyLineShape,					// "com.sun.star.drawing.PolyLineShape"
+    XmlShapeTypeDrawOpenBezierShape,				// "com.sun.star.drawing.OpenBezierShape"
+    XmlShapeTypeDrawClosedBezierShape,				// "com.sun.star.drawing.ClosedBezierShape"
+    XmlShapeTypeDrawGraphicObjectShape,				// "com.sun.star.drawing.GraphicObjectShape"
+    XmlShapeTypeDrawGroupShape,						// "com.sun.star.drawing.GroupShape"
+    XmlShapeTypeDrawTextShape,						// "com.sun.star.drawing.TextShape"
+    XmlShapeTypeDrawOLE2Shape,						// "com.sun.star.drawing.OLE2Shape"
+    XmlShapeTypeDrawChartShape,						// embedded com.sun.star.chart
+    XmlShapeTypeDrawSheetShape,						// embedded com.sun.star.sheet
+    XmlShapeTypeDrawPageShape,						// "com.sun.star.drawing.PageShape"
+    XmlShapeTypeDrawFrameShape,						// "com.sun.star.drawing.FrameShape"
+    XmlShapeTypeDrawCaptionShape,					// "com.sun.star.drawing.CaptionShape"
+    XmlShapeTypeDrawAppletShape,					// "com.sun.star.drawing.AppletShape"
+    XmlShapeTypeDrawPluginShape,					// "com.sun.star.drawing.PlugginShape"
 
-    XmlShapeTypeDraw3DSceneObject,                  // "com.sun.star.drawing.Shape3DSceneObject"
-    XmlShapeTypeDraw3DCubeObject,                   // "com.sun.star.drawing.Shape3DCubeObject"
-    XmlShapeTypeDraw3DSphereObject,                 // "com.sun.star.drawing.Shape3DSphereObject"
-    XmlShapeTypeDraw3DLatheObject,                  // "com.sun.star.drawing.Shape3DLatheObject"
-    XmlShapeTypeDraw3DExtrudeObject,                // "com.sun.star.drawing.Shape3DExtrudeObject"
+    XmlShapeTypeDraw3DSceneObject,					// "com.sun.star.drawing.Shape3DSceneObject"
+    XmlShapeTypeDraw3DCubeObject,					// "com.sun.star.drawing.Shape3DCubeObject"
+    XmlShapeTypeDraw3DSphereObject,					// "com.sun.star.drawing.Shape3DSphereObject"
+    XmlShapeTypeDraw3DLatheObject,					// "com.sun.star.drawing.Shape3DLatheObject"
+    XmlShapeTypeDraw3DExtrudeObject,				// "com.sun.star.drawing.Shape3DExtrudeObject"
 
-    XmlShapeTypePresTitleTextShape,                 // "com.sun.star.presentation.TitleTextShape"
-    XmlShapeTypePresOutlinerShape,                  // "com.sun.star.presentation.OutlinerShape"
-    XmlShapeTypePresSubtitleShape,                  // "com.sun.star.presentation.SubtitleShape"
-    XmlShapeTypePresGraphicObjectShape,             // "com.sun.star.presentation.GraphicObjectShape"
-    XmlShapeTypePresPageShape,                      // "com.sun.star.presentation.PageShape"
-    XmlShapeTypePresOLE2Shape,                      // "com.sun.star.presentation.OLE2Shape"
-    XmlShapeTypePresChartShape,                     // "com.sun.star.presentation.ChartShape"
-    XmlShapeTypePresSheetShape,                     // "com.sun.star.presentation.CalcShape"
-    XmlShapeTypePresTableShape,                     // "com.sun.star.presentation.TableShape"
-    XmlShapeTypePresOrgChartShape,                  // "com.sun.star.presentation.OrgChartShape"
-    XmlShapeTypePresNotesShape,                     // "com.sun.star.presentation.NotesShape"
-    XmlShapeTypeHandoutShape,                       // "com.sun.star.presentation.HandoutShape"
+    XmlShapeTypePresTitleTextShape,					// "com.sun.star.presentation.TitleTextShape"
+    XmlShapeTypePresOutlinerShape,					// "com.sun.star.presentation.OutlinerShape"
+    XmlShapeTypePresSubtitleShape,					// "com.sun.star.presentation.SubtitleShape"
+    XmlShapeTypePresGraphicObjectShape,				// "com.sun.star.presentation.GraphicObjectShape"
+    XmlShapeTypePresPageShape,						// "com.sun.star.presentation.PageShape"
+    XmlShapeTypePresOLE2Shape,						// "com.sun.star.presentation.OLE2Shape"
+    XmlShapeTypePresChartShape,						// "com.sun.star.presentation.ChartShape"
+    XmlShapeTypePresSheetShape,						// "com.sun.star.presentation.CalcShape"
+    XmlShapeTypePresTableShape,						// "com.sun.star.presentation.TableShape"
+    XmlShapeTypePresOrgChartShape,					// "com.sun.star.presentation.OrgChartShape"
+    XmlShapeTypePresNotesShape,						// "com.sun.star.presentation.NotesShape"
+    XmlShapeTypeHandoutShape,						// "com.sun.star.presentation.HandoutShape"
 
-    XmlShapeTypePresHeaderShape,                    // "com.sun.star.presentation.HeaderShape"
-    XmlShapeTypePresFooterShape,                    // "com.sun.star.presentation.FooterShape"
-    XmlShapeTypePresSlideNumberShape,               // "com.sun.star.presentation.SlideNumberShape"
-    XmlShapeTypePresDateTimeShape,                  // "com.sun.star.presentation.DateTimeShape"
+    XmlShapeTypePresHeaderShape,					// "com.sun.star.presentation.HeaderShape"
+    XmlShapeTypePresFooterShape,					// "com.sun.star.presentation.FooterShape"
+    XmlShapeTypePresSlideNumberShape,				// "com.sun.star.presentation.SlideNumberShape"
+    XmlShapeTypePresDateTimeShape,					// "com.sun.star.presentation.DateTimeShape"
 
-    XmlShapeTypeDrawCustomShape,                    // "com.sun.star.drawing.CustomShape"
-    XmlShapeTypeDrawMediaShape,                     // "com.sun.star.drawing.MediaShape"
-    XmlShapeTypePresMediaShape,                     // "com.sun.star.presentation.MediaShape"
+    XmlShapeTypeDrawCustomShape,					// "com.sun.star.drawing.CustomShape"
+    XmlShapeTypeDrawMediaShape,						// "com.sun.star.drawing.MediaShape"
+    XmlShapeTypePresMediaShape,						// "com.sun.star.presentation.MediaShape"
 
-    XmlShapeTypeDrawTableShape,                     // "com.sun.star.drawing.TableShape"
+    XmlShapeTypeDrawTableShape,						// "com.sun.star.drawing.TableShape"
 
     XmlShapeTypeNotYetSet
 };
@@ -134,10 +134,10 @@ enum XmlShapeType
 /** caches style and type info after a collectShapeAutostyle for later use in exportShape */
 struct ImplXMLShapeExportInfo
 {
-    rtl::OUString   msStyleName;
-    rtl::OUString   msTextStyleName;
-    sal_Int32       mnFamily;
-    XmlShapeType    meShapeType;
+    rtl::OUString	msStyleName;
+    rtl::OUString	msTextStyleName;
+    sal_Int32		mnFamily;
+    XmlShapeType	meShapeType;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xCustomShapeReplacement;
 
@@ -166,59 +166,59 @@ class XMLOFF_DLLPUBLIC XMLShapeExport : public UniRefBase
 {
 private:
 
-    SvXMLExport&                                mrExport;
-    UniReference< XMLPropertyHandlerFactory >   mxSdPropHdlFactory;
-    UniReference< SvXMLExportPropertyMapper >   mxPropertySetMapper;
-    UniReference< XMLAnimationsExporter >       mxAnimationsExporter;
-    sal_Int32                                   mnNextUniqueShapeId;
-    ShapesInfos                                 maShapesInfos;
-    ShapesInfos::iterator                       maCurrentShapesIter;
-    sal_Bool                                    mbExportLayer;
-    ImplXMLShapeExportInfoVector                maShapeInfos;
-    ImplXMLShapeExportInfoVector::iterator      maCurrentInfo;
-    rtl::OUString                               msPresentationStylePrefix;
+    SvXMLExport&								mrExport;
+    UniReference< XMLPropertyHandlerFactory >	mxSdPropHdlFactory;
+    UniReference< SvXMLExportPropertyMapper >	mxPropertySetMapper;
+    UniReference< XMLAnimationsExporter >		mxAnimationsExporter;
+    sal_Int32									mnNextUniqueShapeId;
+    ShapesInfos									maShapesInfos;
+    ShapesInfos::iterator						maCurrentShapesIter;
+    sal_Bool									mbExportLayer;
+    ImplXMLShapeExportInfoVector				maShapeInfos;
+    ImplXMLShapeExportInfoVector::iterator		maCurrentInfo;
+    rtl::OUString								msPresentationStylePrefix;
 
     // #88546# possibility to swich progress bar handling on/off
-    sal_Bool                                    mbHandleProgressBar;
+    sal_Bool									mbHandleProgressBar;
 
-    rtl::Reference< XMLTableExport >            mxShapeTableExport;
+    rtl::Reference< XMLTableExport >			mxShapeTableExport;
 
 protected:
     SvXMLExport& GetExport() { return mrExport; }
     const SvXMLExport& GetExport() const  { return mrExport; }
 private:
 
-    SAL_DLLPRIVATE UniReference< SvXMLExportPropertyMapper > GetPropertySetMapper() const { return mxPropertySetMapper; }
+    SAL_DLLPRIVATE UniReference< SvXMLExportPropertyMapper > GetPropertySetMapper() const { return mxPropertySetMapper;	}
 
-    const rtl::OUString                         msZIndex;
-    const rtl::OUString                         msPrintable;
-    const rtl::OUString                         msVisible;
+    const rtl::OUString							msZIndex;
+    const rtl::OUString							msPrintable;
+    const rtl::OUString							msVisible;
 
-    const rtl::OUString                         msEmptyPres;
-    const rtl::OUString                         msModel;
-    const rtl::OUString                         msStartShape;
-    const rtl::OUString                         msEndShape;
-    const rtl::OUString                         msOnClick;
+    const rtl::OUString							msEmptyPres;
+    const rtl::OUString							msModel;
+    const rtl::OUString							msStartShape;
+    const rtl::OUString							msEndShape;
+    const rtl::OUString							msOnClick;
 #ifdef ISSUE66550_HLINK_FOR_SHAPES
-    const rtl::OUString                         msOnAction;
-    const rtl::OUString                         msAction;
-    const rtl::OUString                         msURL;
+    const rtl::OUString							msOnAction;
+    const rtl::OUString							msAction;
+    const rtl::OUString							msURL;
 #endif
-    const rtl::OUString                         msEventType;
-    const rtl::OUString                         msPresentation;
-    const rtl::OUString                         msMacroName;
-    const rtl::OUString                         msScript;
-    const rtl::OUString                         msLibrary;
-    const rtl::OUString                         msClickAction;
-    const rtl::OUString                         msBookmark;
-    const rtl::OUString                         msEffect;
-    const rtl::OUString                         msPlayFull;
-    const rtl::OUString                         msVerb;
-    const rtl::OUString                         msSoundURL;
-    const rtl::OUString                         msSpeed;
-    const rtl::OUString                         msStarBasic;
+    const rtl::OUString							msEventType;
+    const rtl::OUString							msPresentation;
+    const rtl::OUString							msMacroName;
+    const rtl::OUString							msScript;
+    const rtl::OUString							msLibrary;
+    const rtl::OUString							msClickAction;
+    const rtl::OUString							msBookmark;
+    const rtl::OUString							msEffect;
+    const rtl::OUString							msPlayFull;
+    const rtl::OUString							msVerb;
+    const rtl::OUString							msSoundURL;
+    const rtl::OUString							msSpeed;
+    const rtl::OUString							msStarBasic;
 
-    rtl::OUStringBuffer msBuffer;
+    rtl::OUStringBuffer	msBuffer;
 
     SAL_DLLPRIVATE void ImpCalcShapeType(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType& eShapeType);
 
@@ -242,9 +242,9 @@ private:
     SAL_DLLPRIVATE void ImpExportTextBoxShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportGraphicObjectShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportChartShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL, SvXMLAttributeList* pAttrList = NULL );
-    SAL_DLLPRIVATE void ImpExportControlShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,  com::sun::star::awt::Point* pRefPoint = NULL );
+    SAL_DLLPRIVATE void ImpExportControlShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,	com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportConnectorShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportMeasureShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,  com::sun::star::awt::Point* pRefPoint = NULL );
+    SAL_DLLPRIVATE void ImpExportMeasureShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,	com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportOLE2Shape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL, SvXMLAttributeList* pAttrList = NULL );
     SAL_DLLPRIVATE void ImpExportPageShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportCaptionShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
@@ -254,7 +254,7 @@ private:
     SAL_DLLPRIVATE void ImpExportAppletShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportCustomShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
     SAL_DLLPRIVATE void ImpExportMediaShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT, com::sun::star::awt::Point* pRefPoint = NULL );
-    SAL_DLLPRIVATE void ImpExportTableShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,    com::sun::star::awt::Point* pRefPoint = NULL );
+    SAL_DLLPRIVATE void ImpExportTableShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures = SEF_DEFAULT,	com::sun::star::awt::Point* pRefPoint = NULL );
 public:
     XMLShapeExport(SvXMLExport& rExp, SvXMLExportPropertyMapper *pExtMapper=0 );
     virtual ~XMLShapeExport();
@@ -335,7 +335,7 @@ public:
     /** is called before a shape element for the given XShape is exported */
     virtual void onExport( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape );
 
-    const rtl::Reference< XMLTableExport >&     GetShapeTableExport();
+    const rtl::Reference< XMLTableExport >&		GetShapeTableExport();
 };
 
 

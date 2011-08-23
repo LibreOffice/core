@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -13,7 +13,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Arc generator. Produces at most 4 consecutive cubic bezier curves, i.e.,
+// Arc generator. Produces at most 4 consecutive cubic bezier curves, i.e., 
 // 4, 7, 10, or 13 vertices.
 //
 //----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ namespace agg
 {
 
     //------------------------------------------------------------arc_to_bezier
-    void arc_to_bezier(double cx, double cy, double rx, double ry,
+    void arc_to_bezier(double cx, double cy, double rx, double ry, 
                        double start_angle, double sweep_angle,
                        double* curve)
     {
@@ -60,9 +60,9 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void bezier_arc::init(double x,  double y,
-                          double rx, double ry,
-                          double start_angle,
+    void bezier_arc::init(double x,  double y, 
+                          double rx, double ry, 
+                          double start_angle, 
                           double sweep_angle)
     {
         start_angle = fmod(start_angle, 2.0 * pi);
@@ -96,9 +96,9 @@ namespace agg
                 }
             }
 
-            arc_to_bezier(x, y, rx, ry,
-                          start_angle,
-                          local_sweep,
+            arc_to_bezier(x, y, rx, ry, 
+                          start_angle, 
+                          local_sweep, 
                           m_vertices + m_num_vertices - 2);
 
             m_num_vertices += 6;
@@ -111,8 +111,8 @@ namespace agg
 
 
     //--------------------------------------------------------------------
-    void bezier_arc_svg::init(double x0, double y0,
-                              double rx, double ry,
+    void bezier_arc_svg::init(double x0, double y0, 
+                              double rx, double ry, 
                               double angle,
                               bool large_arc_flag,
                               bool sweep_flag,
@@ -123,7 +123,7 @@ namespace agg
         if(rx < 0.0) rx = -rx;
         if(ry < 0.0) ry = -rx;
 
-        // Calculate the middle point between
+        // Calculate the middle point between 
         // the current and the final points
         //------------------------
         double dx2 = (x0 - x2) / 2.0;
@@ -149,7 +149,7 @@ namespace agg
         // Check that radii are large enough
         //------------------------
         double radii_check = px1/prx + py1/pry;
-        if(radii_check > 1.0)
+        if(radii_check > 1.0) 
         {
             rx = sqrt(radii_check) * rx;
             ry = sqrt(radii_check) * ry;
@@ -201,12 +201,12 @@ namespace agg
         if(v < -1.0) v = -1.0;
         if(v >  1.0) v =  1.0;
         double sweep_angle = sign * acos(v);
-        if(!sweep_flag && sweep_angle > 0)
+        if(!sweep_flag && sweep_angle > 0) 
         {
             sweep_angle -= pi * 2.0;
-        }
-        else
-        if (sweep_flag && sweep_angle < 0)
+        } 
+        else 
+        if (sweep_flag && sweep_angle < 0) 
         {
             sweep_angle += pi * 2.0;
         }
@@ -216,7 +216,7 @@ namespace agg
         m_arc.init(0.0, 0.0, rx, ry, start_angle, sweep_angle);
         trans_affine mtx = trans_affine_rotation(angle);
         mtx *= trans_affine_translation(cx, cy);
-
+        
         for(unsigned i = 2; i < m_arc.num_vertices()-2; i += 2)
         {
             mtx.transform(m_arc.vertices() + i, m_arc.vertices() + i + 1);

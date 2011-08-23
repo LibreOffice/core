@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <svl/lstner.hxx>
 #include <svl/svarray.hxx>
-#include "global.hxx"       // ScImportParam
+#include "global.hxx"		// ScImportParam
 
 
 namespace com { namespace sun { namespace star { namespace frame {
@@ -53,7 +53,7 @@ class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<
                                         com::sun::star::lang::XEventListener>,
                                     public SfxListener
 {
-    ScTabViewShell*     pViewShell;
+    ScTabViewShell*		pViewShell;
 
     // the component which's dispatches we're intercepting
     ::com::sun::star::uno::Reference<
@@ -72,9 +72,9 @@ class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<
 public:
 
                             ScDispatchProviderInterceptor(ScTabViewShell* pViewSh);
-    virtual                 ~ScDispatchProviderInterceptor();
+    virtual					~ScDispatchProviderInterceptor();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
@@ -91,17 +91,17 @@ public:
                             // XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
                             getSlaveDispatchProvider() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setSlaveDispatchProvider( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	setSlaveDispatchProvider( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::frame::XDispatchProvider >& xNewDispatchProvider )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
                             getMasterDispatchProvider() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setMasterDispatchProvider( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	setMasterDispatchProvider( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::frame::XDispatchProvider >& xNewSupplier )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XEventListener
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
+    virtual void SAL_CALL	disposing( const ::com::sun::star::lang::EventObject& Source )
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
@@ -111,28 +111,28 @@ class ScDispatch : public cppu::WeakImplHelper2<
                                     com::sun::star::view::XSelectionChangeListener >,
                                 public SfxListener
 {
-    ScTabViewShell*         pViewShell;
-    XStatusListenerArr_Impl aDataSourceListeners;
-    ScImportParam           aLastImport;
-    sal_Bool                bListeningToView;
+    ScTabViewShell*			pViewShell;
+    XStatusListenerArr_Impl	aDataSourceListeners;
+    ScImportParam			aLastImport;
+    sal_Bool				bListeningToView;
 
 public:
 
                             ScDispatch(ScTabViewShell* pViewSh);
-    virtual                 ~ScDispatch();
+    virtual					~ScDispatch();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XDispatch
-    virtual void SAL_CALL   dispatch( const ::com::sun::star::util::URL& aURL,
+    virtual void SAL_CALL	dispatch( const ::com::sun::star::util::URL& aURL,
                                 const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue >& aArgs )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addStatusListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	addStatusListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::frame::XStatusListener >& xControl,
                                 const ::com::sun::star::util::URL& aURL )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeStatusListener( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeStatusListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::frame::XStatusListener >& xControl,
                                 const ::com::sun::star::util::URL& aURL )
                                 throw(::com::sun::star::uno::RuntimeException);

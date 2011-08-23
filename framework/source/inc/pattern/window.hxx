@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-#include <rtl/ustring.hxx>
+#include <rtl/ustring.hxx> 
 
 //_______________________________________________
 // namespaces
@@ -64,7 +64,7 @@ namespace framework{
 // definitions
 
 class WindowHelper
-{
+{    
     public:
 
 //-----------------------------------------------
@@ -75,7 +75,7 @@ static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWind
 
     // SOLAR SAFE -> ----------------------------
     ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
-
+    
     ByteString sWindowState;
     Window*    pWindow     = VCLUnoHelper::GetWindow(xWindow);
     // check for system window is neccessary to guarantee correct pointer cast!
@@ -104,7 +104,7 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
 
     // SOLAR SAFE -> ----------------------------
     ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
-
+    
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     // check for system window is neccessary to guarantee correct pointer cast!
     if (
@@ -116,10 +116,10 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
             (!((WorkWindow*)pWindow)->IsMinimized() )
         )
        )
-    {
+    {            
         ((SystemWindow*)pWindow)->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
     }
-
+    
     aSolarGuard.clear();
     // <- SOLAR SAFE ----------------------------
 }
@@ -139,7 +139,7 @@ static ::sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xW
         ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if (
-            (pWindow                  ) &&
+            (pWindow				  ) &&
             (pWindow->IsSystemWindow())
            )
             return sal_True;

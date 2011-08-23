@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,16 +38,16 @@
 #include <X11/keysym.h>
 
 #if !defined (SunXK_Undo)
-#define SunXK_Undo      0x0000FF65  // XK_Undo
-#define SunXK_Again     0x0000FF66  // XK_Redo
-#define SunXK_Find      0x0000FF68  // XK_Find
-#define SunXK_Stop      0x0000FF69  // XK_Cancel
-#define SunXK_Props     0x1005FF70
-#define SunXK_Front     0x1005FF71
-#define SunXK_Copy      0x1005FF72
-#define SunXK_Open      0x1005FF73
-#define SunXK_Paste     0x1005FF74
-#define SunXK_Cut       0x1005FF75
+#define SunXK_Undo		0x0000FF65	// XK_Undo
+#define SunXK_Again		0x0000FF66	// XK_Redo
+#define SunXK_Find		0x0000FF68	// XK_Find
+#define SunXK_Stop		0x0000FF69	// XK_Cancel
+#define SunXK_Props		0x1005FF70
+#define SunXK_Front		0x1005FF71
+#define SunXK_Copy		0x1005FF72
+#define SunXK_Open		0x1005FF73
+#define SunXK_Paste		0x1005FF74
+#define SunXK_Cut		0x1005FF75
 #endif
 
 #ifdef SOLARIS
@@ -68,17 +68,17 @@ namespace vcl_sal {
 
     struct KeysymNameReplacement
     {
-        KeySym          aSymbol;
-        const char*     pName;
+        KeySym			aSymbol;
+        const char*		pName;
     };
 
     struct KeyboardReplacements
     {
-        const char*                     pKeyboardName;
-        const KeysymNameReplacement*    pReplacements;
-        int                             nReplacements;
+        const char*						pKeyboardName;
+        const KeysymNameReplacement*	pReplacements;
+        int								nReplacements;
     };
-
+    
     // ====================================================================
     //
     // CAUTION CAUTION CAUTION
@@ -91,7 +91,7 @@ namespace vcl_sal {
     {
         { XK_Control_L, "Ctrl" },
         { XK_Control_R, "Ctrl" },
-        { XK_Escape, "Esc" },
+        { XK_Escape, "Esc" }, 
         { XK_space, "Space" },
         { XK_minus, "-" },
         { XK_plus, "+" }
@@ -105,7 +105,7 @@ namespace vcl_sal {
         { XK_Left, "Sol" },
         { XK_Up, "Yukarı" },
         { XK_Down, "Aşağı" },
-        { XK_space, "Boşluk" }
+        { XK_space, "Boşluk" } 
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Russian[] =
@@ -114,7 +114,7 @@ namespace vcl_sal {
         { XK_Left, "Влево" },
         { XK_Up, "Вверх" },
         { XK_Down, "Вниз" },
-        { XK_space, "Пробел" }
+        { XK_space, "Пробел" } 
     };
 
     static const struct KeysymNameReplacement aImplReplacements_German[] =
@@ -448,7 +448,7 @@ namespace vcl_sal {
 
 #ifdef SOLARIS
 typedef struct {
-    int         n_layout;
+    int 		n_layout;
     const char* p_description;
 } keyboard_layout;
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::OUString& rsLeftPaneURL);
     virtual ~SlideSorterModule (void);
-
-
+    
+    
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (

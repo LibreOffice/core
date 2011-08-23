@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,10 +94,10 @@ PresenterSlidePreview::PresenterSlidePreview (
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY);
         if (xPeer.is())
             xPeer->setBackground(util::Color(0xff000000));
-
+        
         mxWindow->setVisible(sal_True);
     }
-
+    
     if (mpPresenterController.get() != NULL)
         mnSlideAspectRatio = mpPresenterController->GetSlideAspectRatio();
 
@@ -392,7 +392,7 @@ void PresenterSlidePreview::Resize (void)
     {
         const awt::Rectangle aWindowBox (mxWindow->getPosSize());
         const awt::Size aNewPreviewSize (mxPreviewRenderer->calculatePreviewSize(
-            mnSlideAspectRatio,
+            mnSlideAspectRatio, 
                 awt::Size(aWindowBox.Width, aWindowBox.Height)));
         const geometry::IntegerSize2D aPreviewSize (mxPreview->getSize());
         if (aNewPreviewSize.Width==aPreviewSize.Width

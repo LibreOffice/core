@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,17 +58,17 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define VERSION 1
-#define nPixel  30L
-#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
+#define VERSION	1
+#define nPixel	30L
+#define USERITEM_NAME			OUString::createFromAscii( "UserItem" )
 
 struct SfxDock_Impl
 {
-    USHORT              nType;
-    SfxDockingWindow*   pWin;           // SplitWindow hat dieses Fenster
-    BOOL                bNewLine;
-    BOOL                bHide;          // SplitWindow hatte dieses Fenster
-    long                nSize;
+    USHORT 				nType;
+    SfxDockingWindow*	pWin;			// SplitWindow hat dieses Fenster
+    BOOL				bNewLine;
+    BOOL				bHide;			// SplitWindow hatte dieses Fenster
+    long				nSize;
 };
 
 typedef SfxDock_Impl* SfxDockPtr;
@@ -85,14 +85,14 @@ class SfxEmptySplitWin_Impl : public SplitWindow
 */
 friend class SfxSplitWindow;
 
-    SfxSplitWindow*     pOwner;
-    BOOL                bFadeIn;
-    BOOL                bAutoHide;
-    BOOL                bSplit;
-    BOOL                bEndAutoHide;
-    Timer               aTimer;
-    Point               aLastPos;
-    USHORT              nState;
+    SfxSplitWindow* 	pOwner;
+    BOOL				bFadeIn;
+    BOOL				bAutoHide;
+    BOOL				bSplit;
+    BOOL				bEndAutoHide;
+    Timer				aTimer;
+    Point				aLastPos;
+    USHORT				nState;
 
                         SfxEmptySplitWin_Impl( SfxSplitWindow *pParent )
                             : SplitWindow( pParent->GetParent(), WinBits( WB_BORDER | WB_3DLOOK ) )
@@ -118,10 +118,10 @@ friend class SfxSplitWindow;
                             aTimer.Stop();
                         }
 
-    virtual void        MouseMove( const MouseEvent& );
-    virtual void        AutoHide();
-    virtual void        FadeIn();
-    void                Actualize();
+    virtual void		MouseMove( const MouseEvent& );
+    virtual void		AutoHide();
+    virtual void		FadeIn();
+    void				Actualize();
 };
 
 void SfxEmptySplitWin_Impl::Actualize()
@@ -194,7 +194,7 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
     Au\erdem sichert es die Persistenz der Anordnung der SfxDockingWindows.
 */
 
-:   SplitWindow ( pParent, nBits | WB_HIDE ),
+:	SplitWindow ( pParent, nBits | WB_HIDE ),
     eAlign(eAl),
     pWorkWin(pW),
     pDockArr( new SfxDockArr_Impl ),
@@ -444,7 +444,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 
 */
 {
-    short nLine = -1;       // damit erstes Fenster nLine auf 0 hochsetzen kann
+    short nLine = -1;    	// damit erstes Fenster nLine auf 0 hochsetzen kann
     USHORT nL;
     USHORT nPos = 0;
     BOOL bNewLine = TRUE;

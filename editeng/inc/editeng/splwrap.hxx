@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,28 +58,28 @@ private:
     friend class SvxHyphenWordDialog;
     friend class SvxHyphenWordDialog_Impl;
 
-    Window*     pWin;
+    Window*		pWin;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
+        ::com::sun::star::uno::XInterface > 			xLast;	// result of last spelling/hyphenation attempt
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    xHyph;
-    sal_uInt16  nOldLang;       // Sprache merken, nur bei Aenderung SetLanguage rufen
-    sal_Bool    bOtherCntnt : 1; // gesetzt => Sonderbereiche zunaechst pruefen
-    sal_Bool    bDialog     : 1; // Ist pWin der Svx...Dialog?
-    sal_Bool    bHyphen     : 1; // Trennen statt Spellen
-    sal_Bool    bAuto       : 1; // Autokorrektur vorhanden?
-    sal_Bool    bReverse    : 1; // Rueckwaerts Spellen
-    sal_Bool    bStartDone  : 1; // Vorderen Teil bereits korrigiert
-    sal_Bool    bEndDone    : 1; // Hinteren Teil bereits korrigiert
-    sal_Bool    bStartChk   : 1; // Vorderen Teil pruefen
-    sal_Bool    bRevAllowed : 1; // Niemals rueckwaerts spellen
-    sal_Bool    bAllRight   : 1; // falsche Woerter in geignetes Woerterbuch
+        ::com::sun::star::linguistic2::XHyphenator > 	xHyph;
+    sal_uInt16 	nOldLang; 		// Sprache merken, nur bei Aenderung SetLanguage rufen
+    sal_Bool 	bOtherCntnt : 1; // gesetzt => Sonderbereiche zunaechst pruefen
+    sal_Bool 	bDialog		: 1; // Ist pWin der Svx...Dialog?
+    sal_Bool 	bHyphen		: 1; // Trennen statt Spellen
+    sal_Bool	bAuto		: 1; // Autokorrektur vorhanden?
+    sal_Bool	bReverse	: 1; // Rueckwaerts Spellen
+    sal_Bool	bStartDone	: 1; // Vorderen Teil bereits korrigiert
+    sal_Bool	bEndDone	: 1; // Hinteren Teil bereits korrigiert
+    sal_Bool	bStartChk	: 1; // Vorderen Teil pruefen
+    sal_Bool	bRevAllowed : 1; // Niemals rueckwaerts spellen
+    sal_Bool	bAllRight	: 1; // falsche Woerter in geignetes Woerterbuch
                              // aufnehmen und nicht den Dialog starten.
 
-    EDITENG_DLLPRIVATE sal_Bool     SpellNext();        // naechsten Bereich anwaehlen
-    sal_Bool    FindSpellError();   // Suche nach Fehlern ( ueber Bereiche hinweg )
+    EDITENG_DLLPRIVATE sal_Bool 	SpellNext();   		// naechsten Bereich anwaehlen
+    sal_Bool	FindSpellError(); 	// Suche nach Fehlern ( ueber Bereiche hinweg )
 
 public:
     SvxSpellWrapper( Window* pWn,
@@ -94,57 +94,57 @@ public:
 
     virtual ~SvxSpellWrapper();
 
-    static sal_Int16    CheckSpellLang(
+    static sal_Int16	CheckSpellLang(
                             ::com::sun::star::uno::Reference<
                                 ::com::sun::star::linguistic2::XSpellChecker1 >  xSpell,
                             sal_Int16 nLang );
-    static sal_Int16    CheckHyphLang(
+    static sal_Int16	CheckHyphLang(
                             ::com::sun::star::uno::Reference<
                                 ::com::sun::star::linguistic2::XHyphenator >  xHyph,
                             sal_Int16 nLang );
 
-    static void         ShowLanguageErrors();
+    static void			ShowLanguageErrors();
 
-    void            SpellDocument();        // Rechtschreibpruefung durchfuehren
+    void 			SpellDocument();		// Rechtschreibpruefung durchfuehren
     inline sal_Bool IsStartDone(){ return bStartDone; }
     inline sal_Bool IsEndDone(){ return bEndDone; }
     inline sal_Bool IsReverse(){ return bReverse; }
     inline sal_Bool IsDialog(){ return bDialog; } // SvxSpellCheckDialog OnScreen
     inline sal_Bool IsHyphen(){ return bHyphen; } // Trennen statt Spellen
-    inline void     SetHyphen( const sal_Bool bNew = sal_True ){ bHyphen = bNew; }
+    inline void 	SetHyphen( const sal_Bool bNew = sal_True ){ bHyphen = bNew; }
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >
                     GetXSpellChecker() { return xSpell; }
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >
-                    GetXHyphenator()    { return xHyph; }
-    inline sal_Bool             IsAllRight()        { return bAllRight; }
-    inline Window*  GetWin() { return pWin; }
+                    GetXHyphenator() 	{ return xHyph; }
+    inline sal_Bool				IsAllRight()		{ return bAllRight; }
+    inline Window* 	GetWin() { return pWin; }
     // kann evtl entfallen in ONE_LINGU:
-    inline void     SetOldLang( const sal_uInt16 nNew ){ nOldLang = nNew; }
+    inline void 	SetOldLang( const sal_uInt16 nNew ){ nOldLang = nNew; }
     // kann evtl entfallen in ONE_LINGU:
-    inline void     ChangeLanguage( const sal_uInt16 nNew ) // rufe ggf. SetLanguage
+    inline void 	ChangeLanguage( const sal_uInt16 nNew ) // rufe ggf. SetLanguage
         { if ( nNew != nOldLang ) { SetLanguage( nNew ); nOldLang = nNew; } }
-    inline void     EnableAutoCorrect() { bAuto = sal_True; }
+    inline void 	EnableAutoCorrect() { bAuto = sal_True; }
 
 protected:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface >
-                     GetLast()      { return xLast; }
-    void             SetLast(const ::com::sun::star::uno::Reference<
+                     GetLast()		{ return xLast; }
+    void			 SetLast(const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
-    virtual sal_Bool SpellMore();               // weitere Dokumente pruefen?
-    virtual sal_Bool HasOtherCnt();             // gibt es ueberhaupt Sonderbereiche
-    virtual void     SpellStart( SvxSpellArea eSpell ); // Bereich vorbereiten
-    virtual sal_Bool SpellContinue();           // Bereich pruefen
+    virtual	sal_Bool SpellMore(); 				// weitere Dokumente pruefen?
+    virtual	sal_Bool HasOtherCnt(); 			// gibt es ueberhaupt Sonderbereiche
+    virtual	void 	 SpellStart( SvxSpellArea eSpell ); // Bereich vorbereiten
+    virtual	sal_Bool SpellContinue();			// Bereich pruefen
                                             // Ergebnis mit GetLast verfuegbar
-    virtual void ReplaceAll( const String &rNewText, sal_Int16 nLanguage ); // Wort aus Replace-Liste ersetzen
-    virtual void StartThesaurus( const String &rWord, sal_uInt16 nLang );   // Thesaurus starten
+    virtual void ReplaceAll( const String &rNewText, sal_Int16 nLanguage );	// Wort aus Replace-Liste ersetzen
+    virtual void StartThesaurus( const String &rWord, sal_uInt16 nLang );	// Thesaurus starten
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >
                  GetAllRightDic() const;
-    virtual void SpellEnd();                        // Bereich abschliessen
+    virtual	void SpellEnd();                        // Bereich abschliessen
     virtual void ScrollArea();                      // ScrollArea einstellen
     // Wort ersetzen
     virtual void ChangeWord( const String& rNewWord, const sal_uInt16 nLang );

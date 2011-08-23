@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -45,7 +45,7 @@ namespace agg
 
     //------------------------------------------------------------------------
     void vcgen_stroke::miter_limit_theta(double t)
-    {
+    { 
         m_miter_limit = 1.0 / sin(t * 0.5) ;
     }
 
@@ -121,8 +121,8 @@ namespace agg
 
             case cap1:
                 stroke_calc_cap(m_out_vertices,
-                                m_src_vertices[0],
-                                m_src_vertices[1],
+                                m_src_vertices[0], 
+                                m_src_vertices[1], 
                                 m_src_vertices[0].dist,
                                 m_line_cap,
                                 m_width,
@@ -135,8 +135,8 @@ namespace agg
 
             case cap2:
                 stroke_calc_cap(m_out_vertices,
-                                m_src_vertices[m_src_vertices.size() - 1],
-                                m_src_vertices[m_src_vertices.size() - 2],
+                                m_src_vertices[m_src_vertices.size() - 1], 
+                                m_src_vertices[m_src_vertices.size() - 2], 
                                 m_src_vertices[m_src_vertices.size() - 2].dist,
                                 m_line_cap,
                                 m_width,
@@ -164,13 +164,13 @@ namespace agg
                         break;
                     }
                 }
-                stroke_calc_join(m_out_vertices,
-                                 m_src_vertices.prev(m_src_vertex),
-                                 m_src_vertices.curr(m_src_vertex),
-                                 m_src_vertices.next(m_src_vertex),
+                stroke_calc_join(m_out_vertices, 
+                                 m_src_vertices.prev(m_src_vertex), 
+                                 m_src_vertices.curr(m_src_vertex), 
+                                 m_src_vertices.next(m_src_vertex), 
                                  m_src_vertices.prev(m_src_vertex).dist,
                                  m_src_vertices.curr(m_src_vertex).dist,
-                                 m_width,
+                                 m_width, 
                                  m_line_join,
                                  m_inner_line_join,
                                  m_miter_limit,
@@ -196,12 +196,12 @@ namespace agg
 
                 --m_src_vertex;
                 stroke_calc_join(m_out_vertices,
-                                 m_src_vertices.next(m_src_vertex),
-                                 m_src_vertices.curr(m_src_vertex),
-                                 m_src_vertices.prev(m_src_vertex),
-                                 m_src_vertices.curr(m_src_vertex).dist,
+                                 m_src_vertices.next(m_src_vertex), 
+                                 m_src_vertices.curr(m_src_vertex), 
+                                 m_src_vertices.prev(m_src_vertex), 
+                                 m_src_vertices.curr(m_src_vertex).dist, 
                                  m_src_vertices.prev(m_src_vertex).dist,
-                                 m_width,
+                                 m_width, 
                                  m_line_join,
                                  m_inner_line_join,
                                  m_miter_limit,

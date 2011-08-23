@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
     if ( pStylePool != pSPool )
     {
-//      if ( pStylePool )
-//          EndListening( *pStylePool, TRUE );
+//		if ( pStylePool )
+//			EndListening( *pStylePool, TRUE );
 
         pStylePool = pSPool;
 
-//      if ( pStylePool )
-//          StartListening( *pStylePool, TRUE );
+//		if ( pStylePool )
+//			StartListening( *pStylePool, TRUE );
     }
 }
 
@@ -190,10 +190,10 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 // ULONG nStyles = pMyStylePool->GetStyles().Count();
                 // for ( ULONG nStyle = 0; nStyle < nStyles; nStyle++ )
                 // {
-                //  EditStyleSheet* pES = (EditStyleSheet*)pMyStylePool->GetStyles().GetObject( nStyle );
-                //  DBG_ASSERT( pES, "NULL-Pointer im StyleSheetPool!" );
-                //  if ( pES->IsUsed() && pES->HasStyleAsAnyParent( *pStyle ) )
-                //      UpdateParagraphsWithStyleSheet( pES );
+                // 	EditStyleSheet* pES = (EditStyleSheet*)pMyStylePool->GetStyles().GetObject( nStyle );
+                // 	DBG_ASSERT( pES, "NULL-Pointer im StyleSheetPool!" );
+                // 	if ( pES->IsUsed() && pES->HasStyleAsAnyParent( *pStyle ) )
+                // 		UpdateParagraphsWithStyleSheet( pES );
                 // }
             }
         }
@@ -355,7 +355,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
     USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
     // ueber die Absaetze iterieren...
-    for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
+    for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++	)
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         DBG_ASSERT( aEditDoc.SaveGetObject( nNode ), "Node nicht gefunden: GetAttrib" );
@@ -414,7 +414,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
                         // => Lieber nicht invalidieren, UMSTELLEN!
                         // Besser waere, Absatzweise ein ItemSet zu fuellen
                         // und dieses mit dem gesmten vergleichen.
-    //                      aCurSet.InvalidateItem( nWhich );
+    //						aCurSet.InvalidateItem( nWhich );
                         if ( nWhich <= EE_PARA_END )
                             aCurSet.InvalidateItem( nWhich );
                     }
@@ -557,7 +557,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
     }
 
     // ueber die Absaetze iterieren...
-    for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
+    for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++	)
     {
         BOOL bParaAttribFound = FALSE;
         BOOL bCharAttribFound = FALSE;
@@ -577,13 +577,13 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
 
         // ueber die Items iterieren...
 #ifdef EDITDEBUG
-//      FILE* fp = fopen( "d:\\debug.log", "a" );
-//      if ( fp )
-//      {
-//          fprintf( fp, "\n\n=> Zeichen-Attribute: Absatz %i, %i-%i\n", nNode, nStartPos, nEndPos );
-//          DbgOutItemSet( fp, rSet, TRUE, FALSE );
-//          fclose( fp );
-//      }
+//		FILE* fp = fopen( "d:\\debug.log", "a" );
+//		if ( fp )
+//		{
+//			fprintf( fp, "\n\n=> Zeichen-Attribute: Absatz %i, %i-%i\n", nNode, nStartPos, nEndPos );
+//			DbgOutItemSet( fp, rSet, TRUE, FALSE );
+//			fclose( fp );
+//		}
 #endif
 
         for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
@@ -658,7 +658,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, BOOL bRemoveParaAttri
     }
 
     // ueber die Absaetze iterieren...
-    for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
+    for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++	)
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         ParaPortion* pPortion = GetParaPortions().GetObject( nNode );
@@ -677,7 +677,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, BOOL bRemoveParaAttri
         BOOL bChanged = aEditDoc.RemoveAttribs( pNode, nStartPos, nEndPos, nWhich );
         if ( bRemoveParaAttribs )
         {
-            SetParaAttribs( nNode, *_pEmptyItemSet );   // Invalidiert
+            SetParaAttribs( nNode, *_pEmptyItemSet );	// Invalidiert
         }
         else
         {
@@ -743,13 +743,13 @@ void ImpEditEngine::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
         return;
 
 #ifdef EDITDEBUG
-//      FILE* fp = fopen( "d:\\debug.log", "a" );
-//      if ( fp )
-//      {
-//          fprintf( fp, "\n\n=> Absatz-Attribute: Absatz %i\n", nPara );
-//          DbgOutItemSet( fp, rSet, TRUE, FALSE );
-//          fclose( fp );
-//      }
+//		FILE* fp = fopen( "d:\\debug.log", "a" );
+//		if ( fp )
+//		{
+//			fprintf( fp, "\n\n=> Absatz-Attribute: Absatz %i\n", nPara );
+//			DbgOutItemSet( fp, rSet, TRUE, FALSE );
+//			fclose( fp );
+//		}
 #endif
 
     if ( !( pNode->GetContentAttribs().GetItems() == rSet ) )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 */
 public class CaretSpinnerModel
     implements SpinnerModel
-{
+{ 
     public CaretSpinnerModel (XAccessibleText xText)
     {
         mxText = xText;
@@ -86,7 +86,7 @@ public class CaretSpinnerModel
     {
         if (mxText != null)
             return new Integer (mxText.getCaretPosition());
-        else
+        else 
             return null;
     }
 

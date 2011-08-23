@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,26 +49,26 @@
 
 //=========================================================================
 
-SfxDocumentTemplateDlg::SfxDocumentTemplateDlg( Window * pParent, SfxDocumentTemplates* pTempl ) :
+SfxDocumentTemplateDlg::SfxDocumentTemplateDlg(	Window * pParent, SfxDocumentTemplates* pTempl ) :
 
     ModalDialog( pParent, SfxResId( DLG_DOC_TEMPLATE ) ),
 
-    aEditFL     ( this, SfxResId( FL_EDIT ) ),
-    aNameEd     ( this, SfxResId( ED_NAME ) ),
-    aTemplateFL ( this, SfxResId( FL_STYLESHEETS ) ),
-    aRegionFt   ( this, SfxResId( FT_SECTION ) ),
-    aRegionLb   ( this, SfxResId( LB_SECTION ) ),
-    aTemplateFt ( this, SfxResId( FT_STYLESHEETS ) ),
-    aTemplateLb ( this, SfxResId( LB_STYLESHEETS ) ),
+    aEditFL		( this, SfxResId( FL_EDIT ) ),
+    aNameEd		( this, SfxResId( ED_NAME ) ),
+    aTemplateFL	( this, SfxResId( FL_STYLESHEETS ) ),
+    aRegionFt	( this, SfxResId( FT_SECTION ) ),
+    aRegionLb	( this, SfxResId( LB_SECTION ) ),
+    aTemplateFt	( this, SfxResId( FT_STYLESHEETS ) ),
+    aTemplateLb	( this, SfxResId( LB_STYLESHEETS ) ),
 
-    aOkBt       ( this, SfxResId( BT_OK ) ),
-    aCancelBt   ( this, SfxResId( BT_CANCEL ) ),
-    aHelpBt     ( this, SfxResId( BT_HELP ) ),
-    aEditBt     ( this, SfxResId( BT_EDIT ) ),
-    aOrganizeBt ( this, SfxResId( BT_ORGANIZE ) ),
+    aOkBt		( this, SfxResId( BT_OK ) ),
+    aCancelBt	( this, SfxResId( BT_CANCEL ) ),
+    aHelpBt		( this, SfxResId( BT_HELP ) ),
+    aEditBt		( this, SfxResId( BT_EDIT ) ),
+    aOrganizeBt	( this, SfxResId( BT_ORGANIZE ) ),
 
-    pTemplates  ( pTempl ),
-    pHelper     ( NULL )
+    pTemplates	( pTempl ),
+    pHelper		( NULL )
 
 {
     FreeResource();

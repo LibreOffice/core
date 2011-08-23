@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,8 +66,8 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
         if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory]->nId)
         {
             pAppData_Impl->pFactArr->Remove( nFactory );
-//          DBG_ERROR("ChildWindow mehrfach registriert!");
-//          return;
+//			DBG_ERROR("ChildWindow mehrfach registriert!");
+//			return;
         }
     }
 //#endif

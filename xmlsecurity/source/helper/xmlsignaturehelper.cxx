@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@
 /* SEInitializer component */
 #define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
-#define TAG_DOCUMENTSIGNATURES  "document-signatures"
-#define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
+#define TAG_DOCUMENTSIGNATURES	"document-signatures"
+#define NS_DOCUMENTSIGNATURES	"http://openoffice.org/2004/documentsignatures"
 #define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
 
 using namespace ::com::sun::star;
@@ -83,7 +83,7 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
     DBG_ASSERT( !mxSecurityContext.is(), "XMLSignatureHelper::Init - mxSecurityContext already set!" );
 
     ImplCreateSEInitializer();
-
+    
     if ( mxSEInitializer.is() )
         mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
 
@@ -91,7 +91,7 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
 }
 
 void XMLSignatureHelper::ImplCreateSEInitializer()
-{
+{ 
     rtl::OUString sSEInitializer(rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT ));
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     mxSEInitializer = uno::Reference< com::sun::star::xml::crypto::XSEInitializer > (
@@ -108,7 +108,7 @@ com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding > XMLSi
     return mxUriBinding;
 }
 
-void XMLSignatureHelper::SetStorage(
+void XMLSignatureHelper::SetStorage( 
     const Reference < css::embed::XStorage >& rxStorage,
     ::rtl::OUString sODFVersion)
 {
@@ -143,7 +143,7 @@ sal_Int32 XMLSignatureHelper::GetNewSecurityId()
     return mpXSecController->getNewSecurityId();
 }
 
-void XMLSignatureHelper::SetX509Certificate(
+void XMLSignatureHelper::SetX509Certificate( 
         sal_Int32 nSecurityId,
         const rtl::OUString& ouX509IssuerName,
         const rtl::OUString& ouX509SerialNumber,
@@ -156,7 +156,7 @@ void XMLSignatureHelper::SetX509Certificate(
         ouX509Cert);
 }
 
-void XMLSignatureHelper::SetX509Certificate(
+void XMLSignatureHelper::SetX509Certificate( 
         sal_Int32 nSecurityId,
         sal_Int32 nSecurityEnvironmentIndex,
         const rtl::OUString& ouX509IssuerName,
@@ -199,31 +199,31 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
     const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )
 {
     /*
-     * get SAX writer component
+     * get SAX writer component 
      */
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< io::XActiveDataSource > xSaxWriter(
-        xMCF->createInstanceWithContext(rtl::OUString::createFromAscii(
+        xMCF->createInstanceWithContext(rtl::OUString::createFromAscii( 
             "com.sun.star.xml.sax.Writer"), mxCtx ), uno::UNO_QUERY );
-
+        
     DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
-
+    
     /*
-     * connect XML writer to output stream
+     * connect XML writer to output stream 
      */
     xSaxWriter->setOutputStream( xOutputStream );
 
     /*
      * prepare document handler
      */
-    uno::Reference<xml::sax::XDocumentHandler>
+    uno::Reference<xml::sax::XDocumentHandler> 
         xDocHandler( xSaxWriter,uno::UNO_QUERY);
-
+        
     /*
      * write the xml context for signatures
      */
     rtl::OUString tag_AllSignatures(RTL_CONSTASCII_USTRINGPARAM(TAG_DOCUMENTSIGNATURES));
-
+    
     SvXMLAttributeList *pAttributeList = new SvXMLAttributeList();
     rtl::OUString sNamespace;
     if (mbODFPre1_2)
@@ -234,12 +234,12 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
     pAttributeList->AddAttribute(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_XMLNS)),
         sNamespace);
-
+        
     xDocHandler->startDocument();
-    xDocHandler->startElement(
+    xDocHandler->startElement( 
         tag_AllSignatures,
         uno::Reference< com::sun::star::xml::sax::XAttributeList > (pAttributeList));
-
+        
     return xDocHandler;
 }
 
@@ -250,7 +250,7 @@ void XMLSignatureHelper::CloseDocumentHandler( const uno::Reference<xml::sax::XD
     xDocumentHandler->endDocument();
 }
 
-void XMLSignatureHelper::ExportSignature(
+void XMLSignatureHelper::ExportSignature( 
     const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler,
     const SignatureInformation& signatureInfo )
 {
@@ -265,7 +265,7 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
      * create a signature listener
      */
 /*
-    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(
+    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener( 
                                                     LINK( this, XMLSignatureHelper, SignatureCreationResultListener ),
                                                     LINK( this, XMLSignatureHelper, SignatureVerifyResultListener ),
                                                     LINK( this, XMLSignatureHelper, StartVerifySignatureElement ) );
@@ -287,30 +287,30 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
      * clear up the signature creation listener
      */
     //mpXSecController->setSignatureCreationResultListener( NULL );
-
+    
     return !mbError;
 }
 
 bool XMLSignatureHelper::CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )
 {
-    uno::Reference<xml::sax::XDocumentHandler> xDocHandler
+    uno::Reference<xml::sax::XDocumentHandler> xDocHandler 
         = CreateDocumentHandlerWithHeader(xOutputStream);
-
+        
     bool rc = CreateAndWriteSignature( xDocHandler );
-
+    
     CloseDocumentHandler(xDocHandler);
-
+    
     return rc;
 }
 
 bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream )
 {
     mbError = false;
-
+    
     DBG_ASSERT(xInputStream.is(), "input stream missing");
-
+    
     /*
-     * prepare ParserInputSrouce
+     * prepare ParserInputSrouce 
      */
     xml::sax::InputSource aParserInput;
     // aParserInput.sSystemId = ouName;
@@ -330,31 +330,31 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     /*
      * create a signature reader
      */
-    uno::Reference< xml::sax::XDocumentHandler > xHandler
+    uno::Reference< xml::sax::XDocumentHandler > xHandler 
         = mpXSecController->createSignatureReader( );
-
+        
     /*
      * create a signature listener
      */
-    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(
+    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener( 
                                                     LINK( this, XMLSignatureHelper, SignatureCreationResultListener ),
                                                     LINK( this, XMLSignatureHelper, SignatureVerifyResultListener ),
                                                     LINK( this, XMLSignatureHelper, StartVerifySignatureElement ) );
-
+    
     /*
      * configure the signature verify listener
      */
     //mpXSecController->setSignatureVerifyResultListener( pSignatureListener );
-
+    
     /*
      * setup the connection:
      * Parser -> SignatureListener -> SignatureReader
      */
-    pSignatureListener->setNextHandler(xHandler);
+    pSignatureListener->setNextHandler(xHandler);	
     xParser->setDocumentHandler( pSignatureListener );
-
+    
     /*
-     * parser the stream
+     * parser the stream 
      */
     try
     {
@@ -376,11 +376,11 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     {
         mbError = true;
     }
-
+    
     /*
      * clear up the connection
      */
-    pSignatureListener->setNextHandler( NULL );
+    pSignatureListener->setNextHandler( NULL );	
 
     /*
      * clear up the signature verify listener
@@ -391,7 +391,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
      * release the signature reader
      */
     mpXSecController->releaseSignatureReader( );
-
+    
     return !mbError;
 }
 

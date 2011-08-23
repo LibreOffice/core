@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ void GtkHookedYieldMutex::release()
     SalYieldMutex::release();
 }
 
-extern "C"
+extern "C" 
 {
     #define GET_YIELD_MUTEX() static_cast<GtkHookedYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())
     static void GdkThreadsEnter( void )
@@ -160,7 +160,7 @@ extern "C"
             pYieldMutex = new GtkHookedYieldMutex();
         else
             pYieldMutex = new GtkYieldMutex();
-
+                
         gdk_threads_init();
 
         GtkInstance* pInstance = new GtkInstance( pYieldMutex );
@@ -204,7 +204,7 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
     // so we need the X11SalObject in that case
     if( pWindowData )
         return X11SalObject::CreateObject( pParent, pWindowData, bShow );
-
+    
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
 }
 
@@ -223,8 +223,8 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 #else
     static getDefaultFnc sym_gtk_recent_manager_get_default =
         (getDefaultFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_get_default" );
-
-    static addItemFnc sym_gtk_recent_manager_add_item =
+    
+    static addItemFnc sym_gtk_recent_manager_add_item = 
         (addItemFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_add_item");
     if (sym_gtk_recent_manager_get_default && sym_gtk_recent_manager_add_item)
     {
@@ -252,7 +252,7 @@ void GtkYieldMutex::acquire()
         return;
     }
     OMutex::release();
-
+    
     // obtain gdk mutex
     gdk_threads_enter();
 
@@ -306,13 +306,13 @@ sal_Bool GtkYieldMutex::tryToAcquire()
     // how to we do a try_lock without having a gdk_threads_try_enter ?
     if( ! g_mutex_trylock( gdk_threads_mutex ) )
         return sal_False;
-
+    
     // obtained gdk mutex, now lock count is one by definition
     OMutex::acquire();
     mnCount = 1;
     mnThreadId = aCurrentThread;
     OMutex::release();
-
+    
     return sal_True;
 }
 

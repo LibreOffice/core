@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ public:
     static StackMode getStackMode(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
-        bool& rbFound, bool& rbAmbiguous
+        bool& rbFound, bool& rbAmbiguous 
         );
 
     /** @param bOnlyAtFirstChartType
@@ -123,7 +123,7 @@ public:
 
     /** Retrieves the stackmode of the first DataSeries or none. If the series have differing stack
         modes, rbAmbiguous is set to true. If no series is there rbFound is set to false.
-
+    
         @param xCorrespondingCoordinateSystem
             The coordinate system in which the given chart type xChartType is
             located.  (This is needed for determining percent stacking.  If

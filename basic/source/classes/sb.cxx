@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,7 @@
 #include <vos/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "errobject.hxx"
+#include <hash_map>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -81,7 +82,7 @@ const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
-    {
+    {	
         Any aThisDoc;
         if ( GetUNOConstant("ThisComponent", aThisDoc) )
         {
@@ -245,7 +246,7 @@ const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
     { 1005, SbERR_SETPROP_FAILED },
     { 1006, SbERR_GETPROP_FAILED },
     { 1007, SbERR_BASIC_COMPAT },
-    { 0xFFFF, 0xFFFFFFFFL }     // End mark
+    { 0xFFFF, 0xFFFFFFFFL }		// End mark
 };
 
 // The StarBASIC factory is a hack. When a SbModule is created, its pointer
@@ -312,7 +313,7 @@ SbxBase* SbOLEFactory::Create( UINT16, UINT32 )
     return NULL;
 }
 
-SbUnoObject* createOLEObject_Impl( const String& aType );   // sbunoobj.cxx
+SbUnoObject* createOLEObject_Impl( const String& aType );	// sbunoobj.cxx
 
 SbxObject* SbOLEFactory::CreateObject( const String& rClassName )
 {
@@ -390,13 +391,13 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                         pDest->AddDim32( lb, ub );
                     }
                 }
-                else
+                else 
                     pDest->unoAddDim( 0, -1 ); // variant array
 
                 USHORT nSavFlags = pVar->GetFlags();
                 pNewProp->ResetFlag( SBX_FIXED );
-                // need to reset the FIXED flag
-                // when calling PutObject ( because the type will not match Object )
+                // need to reset the FIXED flag 
+                // when calling PutObject ( because the type will not match Object ) 	
                 pNewProp->PutObject( pDest );
                 pNewProp->SetFlags( nSavFlags );
             }
@@ -493,7 +494,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         }
     }
 
-    // Copy SbIfaceMapperMethod in a second step to ensure that
+    // Copy SbIfaceMapperMethod in a second step to ensure that 
     // the corresponding base methods have already been copied
     for( i = 0 ; i < nMethodCount ; i++ )
     {
@@ -518,7 +519,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                 DBG_ERROR( "Found no ImplMethod copy" );
                 continue;
             }
-            SbIfaceMapperMethod* pNewIfaceMethod =
+            SbIfaceMapperMethod* pNewIfaceMethod = 
                 new SbIfaceMapperMethod( pIfaceMethod->GetName(), pImplMethodCopy );
             pMethods->PutDirect( pNewIfaceMethod, i );
         }
@@ -552,6 +553,39 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                 USHORT nFlags_ = pProp->GetFlags();
                 pProp->SetFlag( SBX_NO_BROADCAST );
                 SbxProperty* pNewProp = new SbxProperty( *pProp );
+
+                // Special handling for modules instances and collections, they need
+                // to be instantiated, otherwise all refer to the same base object
+                SbxDataType eVarType = pProp->GetType();
+                if( eVarType == SbxOBJECT )
+                {
+                    SbxBase* pObjBase = pProp->GetObject();
+                    SbxObject* pObj = PTR_CAST(SbxObject,pObjBase);
+                    if( pObj != NULL )
+                    {
+                        String aObjClass = pObj->GetClassName();
+                        (void)aObjClass;
+
+                        SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pObjBase);
+                        if( pClassModuleObj != NULL )
+                        {
+                            SbModule* pLclClassModule = pClassModuleObj->getClassModule();
+                            SbClassModuleObject* pNewObj = new SbClassModuleObject( pLclClassModule );
+                            pNewObj->SetName( pProp->GetName() );
+                            pNewObj->SetParent( pLclClassModule->pParent );
+                            pNewProp->PutObject( pNewObj );
+                        }
+                        else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
+                        {
+                            String aCollectionName( RTL_CONSTASCII_USTRINGPARAM("Collection") );
+                            BasicCollection* pNewCollection = new BasicCollection( aCollectionName );
+                            pNewCollection->SetName( pProp->GetName() );
+                            pNewCollection->SetParent( pClassModule->pParent );
+                            pNewProp->PutObject( pNewCollection );
+                        }
+                    }
+                }
+
                 pNewProp->ResetFlag( SBX_NO_BROADCAST );
                 pNewProp->SetParent( this );
                 pProps->PutDirect( pNewProp, i );
@@ -568,7 +602,7 @@ SbClassModuleObject::~SbClassModuleObject()
     if( StarBASIC::IsRunning() )
         triggerTerminateEvent();
 
-    // Must be deleted by base class dtor because this data
+    // Must be deleted by base class dtor because this data 
     // is not owned by the SbClassModuleObject object
     pImage = NULL;
     pBreaks = NULL;
@@ -605,7 +639,7 @@ void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
                     if( nVarParCount > 1 )
                     {
                         SbxArrayRef xMethParameters = new SbxArray;
-                        xMethParameters->Put( pMeth, 0 );   // Method as parameter 0
+                        xMethParameters->Put( pMeth, 0 );	// Method as parameter 0
                         for( USHORT i = 1 ; i < nVarParCount ; ++i )
                         {
                             SbxVariable* pPar = pArg->Get( i );
@@ -638,7 +672,7 @@ void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
                     aProcName += pProcProperty->GetName();
                     pMeth = Find( aProcName, SbxCLASS_METHOD );
                 }
-                if( !pMeth )    // Let
+                if( !pMeth )	// Let
                 {
                     String aProcName;
                     aProcName.AppendAscii( "Property Let " );
@@ -650,7 +684,7 @@ void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
                 {
                     // Setup parameters
                     SbxArrayRef xArray = new SbxArray;
-                    xArray->Put( pMeth, 0 );    // Method as parameter 0
+                    xArray->Put( pMeth, 0 );	// Method as parameter 0
                     xArray->Put( pVar, 1 );
                     pMeth->SetParameters( xArray );
 
@@ -725,7 +759,8 @@ SbClassData::SbClassData( void )
 
 void SbClassData::clear( void )
 {
-    mxIfaces->Clear();
+    mxIfaces->Clear(); 
+    maRequiredTypes.clear();
 }
 
 SbClassFactory::SbClassFactory( void )
@@ -861,7 +896,7 @@ void* StarBASIC::operator new( size_t n )
 {
     if( n < sizeof( StarBASIC ) )
     {
-//      DBG_ASSERT( FALSE, "Warnung: inkompatibler BASIC-Stand!" );
+//		DBG_ASSERT( FALSE, "Warnung: inkompatibler BASIC-Stand!" );
         n = sizeof( StarBASIC );
     }
     return ::operator new( n );
@@ -891,7 +926,7 @@ SbModule* StarBASIC::MakeModule32( const String& rName, const ::rtl::OUString& r
 }
 SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo, const rtl::OUString& rSrc )
 {
-
+    
     OSL_TRACE("create module %s type mInfo %d", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(), mInfo.ModuleType );
     SbModule* p = NULL;
     switch ( mInfo.ModuleType )
@@ -911,7 +946,7 @@ SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo,
         break;
         default:
             p = new SbModule( rName, isVBAEnabled() );
-
+            
     }
     p->SetSource32( rSrc );
     p->SetParent( this );
@@ -981,6 +1016,72 @@ SbModule* StarBASIC::FindModule( const String& rName )
     return NULL;
 }
 
+
+struct ClassModuleRunInitItem
+{
+    SbModule*		m_pModule;
+    bool			m_bProcessing;
+    bool			m_bRunInitDone;
+    //ModuleVector	m_vModulesDependingOnThisModule;
+
+    ClassModuleRunInitItem( void )
+        : m_pModule( NULL )
+        , m_bProcessing( false )
+        , m_bRunInitDone( false )
+    {}
+    ClassModuleRunInitItem( SbModule* pModule )
+        : m_pModule( pModule )
+        , m_bProcessing( false )
+        , m_bRunInitDone( false )
+    {}
+};
+
+typedef std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
+    ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInitDependencyMap;
+
+static ModuleInitDependencyMap* GpMIDMap = NULL;
+
+void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
+{
+    ModuleInitDependencyMap& rMIDMap = *GpMIDMap;
+
+    rItem.m_bProcessing = true;
+
+    //bool bAnyDependencies = true;
+    SbModule* pModule = rItem.m_pModule;
+    if( pModule->pClassData != NULL )
+    {
+        StringVector& rReqTypes = pModule->pClassData->maRequiredTypes;
+        if( rReqTypes.size() > 0 )
+        {
+            for( StringVector::iterator it = rReqTypes.begin() ; it != rReqTypes.end() ; ++it )
+            {
+                String& rStr = *it;
+
+                // Is required type a class module?
+                ModuleInitDependencyMap::iterator itFind = rMIDMap.find( rStr );
+                if( itFind != rMIDMap.end() )
+                {
+                    ClassModuleRunInitItem& rParentItem = itFind->second;
+                    if( rParentItem.m_bProcessing )
+                    {
+                        // TODO: raise error?
+                        DBG_ERROR( "Cyclic module dependency detected" );
+                        continue;
+                    }
+
+                    if( !rParentItem.m_bRunInitDone )
+                        implProcessModuleRunInit( rParentItem );
+                }
+            }
+        }
+    }
+
+    pModule->RunInit();
+    rItem.m_bRunInitDone = true;
+    rItem.m_bProcessing = false;
+}
+
 // Run Init-Code of all modules (including inserted libraries)
 void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
@@ -988,16 +1089,39 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        if( !pModule->IsCompiled() )
+        if(	!pModule->IsCompiled() )
             pModule->Compile();
     }
-    // compile modules first then RunInit ( otherwise there is
+    // compile modules first then RunInit ( otherwise there is 
     // can be order dependency, e.g. classmodule A has a member
     // of of type classmodule B and classmodule B hasn't been compiled yet )
+
+    // Consider required types to init in right order. Class modules
+    // that are required by other modules have to be initialized first.
+    ModuleInitDependencyMap aMIDMap;
+    GpMIDMap = &aMIDMap;
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        pModule->RunInit();
+        String aModuleName = pModule->GetName();
+        if( pModule->isProxyModule() )
+            aMIDMap[aModuleName] = ClassModuleRunInitItem( pModule );
+    }
+
+    ModuleInitDependencyMap::iterator it;
+    for( it = aMIDMap.begin() ; it != aMIDMap.end(); ++it )
+    {
+        ClassModuleRunInitItem& rItem = it->second;
+        SbModule::implProcessModuleRunInit( rItem );
+    }
+    GpMIDMap = NULL;
+
+    // Call RunInit on standard modules
+    for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
+    {
+        SbModule* pModule = (SbModule*)pModules->Get( nMod );
+        if( !pModule->isProxyModule() )
+            pModule->RunInit();
     }
 
     // Check all objects if they are BASIC,
@@ -1256,14 +1380,14 @@ USHORT __EXPORT StarBASIC::BreakHdl()
 }
 
 // Calls for error handler and break handler
-USHORT StarBASIC::GetLine()     { return GetSbData()->nLine; }
-USHORT StarBASIC::GetCol1()     { return GetSbData()->nCol1; }
-USHORT StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
+USHORT StarBASIC::GetLine()		{ return GetSbData()->nLine; }
+USHORT StarBASIC::GetCol1()		{ return GetSbData()->nCol1; }
+USHORT StarBASIC::GetCol2()		{ return GetSbData()->nCol2; }
 
 // Specific to error handler
-SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
-const String& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
-BOOL StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
+SbError StarBASIC::GetErrorCode()		{ return GetSbData()->nCode; }
+const String& StarBASIC::GetErrorText()	{ return GetSbData()->aErrMsg; }
+BOOL StarBASIC::IsCompilerError()		{ return GetSbData()->bCompiler; }
 void StarBASIC::SetGlobalLanguageMode( SbLanguageMode eLanguageMode )
 {
     GetSbData()->eLanguageMode = eLanguageMode;
@@ -1314,7 +1438,7 @@ USHORT StarBASIC::GetVBErrorCode( SbError nError )
                 nRet = 0;
         }
     }
-
+    
     // Suchschleife
     const SFX_VB_ErrorItem* pErrItem;
     USHORT nIndex = 0;
@@ -1328,11 +1452,11 @@ USHORT StarBASIC::GetVBErrorCode( SbError nError )
         }
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );      // bis End-Marke
+    while( pErrItem->nErrorVB != 0xFFFF );		// bis End-Marke
     return nRet;
 }
 
-SbError StarBASIC::GetSfxFromVBError( USHORT nError )
+SbError	StarBASIC::GetSfxFromVBError( USHORT nError )
 {
     SbError nRet = 0L;
 
@@ -1374,11 +1498,11 @@ SbError StarBASIC::GetSfxFromVBError( USHORT nError )
             break;
         }
         else if( pErrItem->nErrorVB > nError )
-            break;              // kann nicht mehr gefunden werden
+            break;				// kann nicht mehr gefunden werden
 
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );      // bis End-Marke
+    while( pErrItem->nErrorVB != 0xFFFF );		// bis End-Marke
     return nRet;
 }
 
@@ -1501,7 +1625,7 @@ BOOL StarBASIC::CError
         bRet = (BOOL) GetSbData()->aErrHdl.Call( this );
     else
         bRet = ErrorHdl();
-    GetSbData()->bCompiler = FALSE;     // nur TRUE fuer Error-Handler
+    GetSbData()->bCompiler = FALSE;		// nur TRUE fuer Error-Handler
     return bRet;
 }
 
@@ -1525,7 +1649,7 @@ BOOL StarBASIC::RTError( SbError code, const String& rMsg, USHORT l, USHORT c1, 
     {
         // very confusing, even though MakeErrorText sets up the error text
         // seems that this is not used ( if rMsg already has content )
-        // In the case of VBA MakeErrorText also formats the error to be alittle more
+        // In the case of VBA MakeErrorText also formats the error to be alittle more 
         // like vba ( adds an error number etc )
         if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
         {
@@ -1631,7 +1755,7 @@ SbxArrayRef StarBASIC::getUnoListeners( void )
 
 /**************************************************************************
 *
-*   Laden und Speichern
+*	Laden und Speichern
 *
 **************************************************************************/
 
@@ -1730,10 +1854,10 @@ bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::u
 
 TYPEINIT1(BasicCollection,SbxObject)
 
-static const char pCountStr[]   = "Count";
-static const char pAddStr[]     = "Add";
-static const char pItemStr[]    = "Item";
-static const char pRemoveStr[]  = "Remove";
+static const char pCountStr[]	= "Count";
+static const char pAddStr[]		= "Add";
+static const char pItemStr[]	= "Item";
+static const char pRemoveStr[]	= "Remove";
 static USHORT nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
 SbxInfoRef BasicCollection::xAddInfo = NULL;
@@ -1750,7 +1874,7 @@ BasicCollection::BasicCollection( const XubString& rClass )
         nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemoveStr ) );
     }
     Initialize();
-
+    
 }
 
 BasicCollection::~BasicCollection()
@@ -1778,18 +1902,18 @@ void BasicCollection::Initialize()
     p->SetFlag( SBX_DONTSTORE );
     p = Make( String::CreateFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
-    if ( !xAddInfo.Is() )
+    if ( !xAddInfo.Is() ) 
     {
         xAddInfo = new SbxInfo;
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Item") ), SbxVARIANT, SBX_READ );
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Key") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Before") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("After") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Item") ), SbxVARIANT, SBX_READ );	
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Key") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );	
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Before") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );	
+        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("After") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );	
     }
-    if ( !xItemInfo.Is() )
+    if ( !xItemInfo.Is() ) 
     {
         xItemInfo = new SbxInfo;
-        xItemInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Index") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL);
+        xItemInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Index") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL);	
     }
 }
 
@@ -1962,7 +2086,7 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
     if( nIndex >= 0 && nIndex < (INT32)xItemArray->Count32() )
         pRes = xItemArray->Get32( nIndex );
     if( !pRes )
-        SetError( SbxERR_BAD_INDEX );
+        SetError( SbERR_BAD_ARGUMENT );
     else
         *(pPar_->Get(0)) = *pRes;
 }
@@ -1980,6 +2104,6 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
     if( nIndex >= 0 && nIndex < (INT32)xItemArray->Count32() )
         xItemArray->Remove32( nIndex );
     else
-        SetError( SbxERR_BAD_INDEX );
+        SetError( SbERR_BAD_ARGUMENT );
 }
 

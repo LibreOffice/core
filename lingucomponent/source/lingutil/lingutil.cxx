@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,33 +128,33 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     bool bThes  = false;
     if (strcmp( pDicType, "DICT" ) == 0)
     {
-        aFormatName     = A2OU("DICT_SPELL");
-        aDicExtension   = String::CreateFromAscii( ".dic" );
+        aFormatName		= A2OU("DICT_SPELL");
+        aDicExtension	= String::CreateFromAscii( ".dic" );
 #ifdef SYSTEM_DICTS
-        aSystemDir      = A2OU( DICT_SYSTEM_DIR );
-        aSystemSuffix       = aDicExtension;
+        aSystemDir		= A2OU( DICT_SYSTEM_DIR );
+        aSystemSuffix		= aDicExtension;
 #endif
         bSpell = true;
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
-        aFormatName     = A2OU("DICT_HYPH");
-        aDicExtension   = String::CreateFromAscii( ".dic" );
+        aFormatName		= A2OU("DICT_HYPH");
+        aDicExtension	= String::CreateFromAscii( ".dic" );
 #ifdef SYSTEM_DICTS
-        aSystemDir      = A2OU( HYPH_SYSTEM_DIR );
-        aSystemPrefix       = A2OU( "hyph_" );
-        aSystemSuffix       = aDicExtension;
+        aSystemDir		= A2OU( HYPH_SYSTEM_DIR );
+        aSystemPrefix		= A2OU( "hyph_" );
+        aSystemSuffix		= aDicExtension;
 #endif
         bHyph = true;
     }
     else if (strcmp( pDicType, "THES" ) == 0)
     {
-        aFormatName     = A2OU("DICT_THES");
-        aDicExtension   = String::CreateFromAscii( ".dat" );
+        aFormatName		= A2OU("DICT_THES");
+        aDicExtension	= String::CreateFromAscii( ".dat" );
 #ifdef SYSTEM_DICTS
-        aSystemDir      = A2OU( THES_SYSTEM_DIR );
-        aSystemPrefix       = A2OU( "th_" );
-        aSystemSuffix       = A2OU( "_v2.dat" );
+        aSystemDir		= A2OU( THES_SYSTEM_DIR );
+        aSystemPrefix		= A2OU( "th_" );
+        aSystemSuffix		= A2OU( "_v2.dat" );
 #endif
         bThes = true;
     }

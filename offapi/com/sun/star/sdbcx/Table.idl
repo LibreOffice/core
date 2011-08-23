@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_Table_idl__
-#define __com_sun_star_sdbcx_Table_idl__
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbcx {
-
- published interface XDataDescriptorFactory;
- published interface XColumnsSupplier;
- published interface XIndexesSupplier;
- published interface XKeysSupplier;
- published interface XRename;
- published interface XAlterTable;
-
-
+#ifndef __com_sun_star_sdbcx_Table_idl__ 
+#define __com_sun_star_sdbcx_Table_idl__ 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
+ published interface XDataDescriptorFactory; 
+ published interface XColumnsSupplier; 
+ published interface XIndexesSupplier; 
+ published interface XKeysSupplier; 
+ published interface XRename; 
+ published interface XAlterTable; 
+ 
+ 
 /** used to specify a table in a database. A table is described by its
     name and one or more columns.
 
@@ -59,76 +59,76 @@
     the user's privileges.
     </p>
 
-    @see com::sun::star::sdbc::XDatabaseMetaData
+    @see com::sun::star::sdbc::XDatabaseMetaData 
     @see com::sun::star::sdbcx::Privilege
  */
 published service Table
-{
-
+{ 
+     
     /** optional, could be used to copy an table.
      */
-    [optional] interface XDataDescriptorFactory;
-
-
+    [optional] interface XDataDescriptorFactory; 
+ 
+     
     /** access to the contained table columns.
      */
-    interface XColumnsSupplier;
-
-
+    interface XColumnsSupplier; 
+ 
+     
     /** optional, provides the access of the table indexes.
      */
-    [optional] interface XIndexesSupplier;
-
-
+    [optional] interface XIndexesSupplier; 
+ 
+     
     /** optional, provides the access to the table keys.
      */
-    [optional] interface XKeysSupplier;
-
-
+    [optional] interface XKeysSupplier; 
+ 
+     
     /** optional, allows the renaming of tables.
      */
-    [optional] interface XRename;
-
-
+    [optional] interface XRename; 
+ 
+     
     /** optional, allows the altering of columns.
      */
-    [optional] interface XAlterTable;
-
+    [optional] interface XAlterTable; 
+ 
     // gives access to the properties
-    interface com::sun::star::beans::XPropertySet;
-
-
+    interface com::sun::star::beans::XPropertySet; 
+ 
+     
     /** is the name of the table.
      */
-    [readonly, property] string Name;
-
-
+    [readonly, property] string Name; 
+ 
+     
     /** is the name of the table catalog.
      */
-    [readonly, property] string CatalogName;
-
-
+    [readonly, property] string CatalogName; 
+ 
+     
     /** is the name of the table schema.
      */
-    [readonly, property] string SchemaName;
-
-
+    [readonly, property] string SchemaName; 
+ 
+     
     /** supplies a comment on the table. Could be empty, if not supported by
         the driver.
      */
-    [readonly, property] string Description;
-
-
+    [readonly, property] string Description; 
+ 
+     
     /** indicates the type of the table like (TABLE, VIEW, SYSTEM TABLE).
         Could be empty, if not supported by the driver.
      */
-    [optional, readonly, property] string Type;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    [optional, readonly, property] string Type; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

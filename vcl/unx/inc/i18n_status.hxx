@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class X11ImeStatus : public SalI18NImeStatus
 public:
     X11ImeStatus() {}
     virtual ~X11ImeStatus();
-
+    
     virtual bool canToggle();
     virtual void toggle();
 };
@@ -66,13 +66,13 @@ class I18NStatus
 public:
     struct ChoiceData
     {
-        String  aString;
-        void*   pData;
+        String	aString;
+        void*	pData;
     };
 private:
-    SalFrame*                       m_pParent;
-    StatusWindow*                   m_pStatusWindow;
-    String                          m_aCurrentIM;
+    SalFrame*				        m_pParent;
+    StatusWindow*			        m_pStatusWindow;
+    String					        m_aCurrentIM;
     ::std::vector< ChoiceData >     m_aChoices;
 
     I18NStatus();

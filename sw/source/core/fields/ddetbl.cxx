@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <swddetbl.hxx>
-#include <ddefld.hxx>           // fuer den FieldType
+#include <ddefld.hxx>			// fuer den FieldType
 #include <ndindex.hxx>
 #include <fldupde.hxx>
 #include <swtblfmt.hxx>
@@ -54,7 +54,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
                           rTable.GetTabSortBoxes().Count()  ); // move die Inh. Boxen
     rTable.GetTabSortBoxes().Remove( (USHORT)0, rTable.GetTabSortBoxes().Count() );
 
-    aLines.Insert( &rTable.GetTabLines(),0 );                       // move die Lines
+    aLines.Insert( &rTable.GetTabLines(),0 );						// move die Lines
     rTable.GetTabLines().Remove( 0, rTable.GetTabLines().Count() );
 
     if( aLines.Count() )

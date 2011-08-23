@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 #include "precompiled_sfx2.hxx"
 
 //________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //________________________________________________________________________________________________________
 
 #include <sfx2/sfxbasemodel.hxx>
 
 //________________________________________________________________________________________________________
-//  include of other projects
+//	include of other projects
 //________________________________________________________________________________________________________
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -95,9 +95,10 @@
 #include <framework/titlehelper.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/ucbhelper.hxx>
 
 //________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //________________________________________________________________________________________________________
 
 #include <sfx2/sfxbasecontroller.hxx>
@@ -136,7 +137,7 @@
 static const ::rtl::OUString SERVICENAME_DESKTOP = ::rtl::OUString::createFromAscii ("com.sun.star.frame.Desktop");
 
 //________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //________________________________________________________________________________________________________
 
 namespace css = ::com::sun::star;
@@ -192,7 +193,7 @@ void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
 }
 
 //________________________________________________________________________________________________________
-//  impl. declarations
+//	impl. declarations
 //________________________________________________________________________________________________________
 
 
@@ -232,16 +233,16 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
-            :   m_pObjectShell          ( pObjectShell  )
-            ,   m_aInterfaceContainer   ( rMutex        )
-            ,   m_nControllerLockCount  ( 0             )
-            ,   m_bClosed               ( sal_False     )
-            ,   m_bClosing              ( sal_False     )
+            :   m_pObjectShell			( pObjectShell	)
+            ,	m_aInterfaceContainer   ( rMutex        )
+            ,	m_nControllerLockCount	( 0				)
+            ,	m_bClosed			    ( sal_False		)
+            ,	m_bClosing			    ( sal_False		)
             ,   m_bSaving               ( sal_False     )
             ,   m_bSuicide              ( sal_False     )
             ,   m_bInitialized          ( sal_False     )
             ,   m_bModifiedSinceLastSave( sal_False     )
-            ,   m_pStorageModifyListen  ( NULL          )
+            ,	m_pStorageModifyListen	( NULL			)
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
@@ -525,7 +526,7 @@ SfxSaveGuard::~SfxSaveGuard()
 // =======================================================================================================
 
 //________________________________________________________________________________________________________
-//  constructor
+//	constructor
 //________________________________________________________________________________________________________
 DBG_NAME(sfx2_SfxBaseModel)
 SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
@@ -542,7 +543,7 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 }
 
 //________________________________________________________________________________________________________
-//  destructor
+//	destructor
 //________________________________________________________________________________________________________
 
 SfxBaseModel::~SfxBaseModel()
@@ -551,7 +552,7 @@ SfxBaseModel::~SfxBaseModel()
 }
 
 //________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //________________________________________________________________________________________________________
 
 uno::Any SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( uno::RuntimeException )
@@ -565,33 +566,33 @@ uno::Any SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( un
 }
 
 //________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::acquire() throw( )
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     OWeakObject::acquire() ;
 }
 
 //________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::release() throw( )
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     OWeakObject::release() ;
 }
 
 //________________________________________________________________________________________________________
-//  XTypeProvider
+//	XTypeProvider
 //________________________________________________________________________________________________________
 
 namespace
@@ -623,7 +624,7 @@ uno::Sequence< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( uno::RuntimeEx
 }
 
 //________________________________________________________________________________________________________
-//  XTypeProvider
+//	XTypeProvider
 //________________________________________________________________________________________________________
 
 uno::Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( uno::RuntimeException )
@@ -655,7 +656,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( un
 }
 
 //________________________________________________________________________________________________________
-//  XStarBasicAccess
+//	XStarBasicAccess
 //________________________________________________________________________________________________________
 
 uno::Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell* pObjectShell )
@@ -684,7 +685,7 @@ uno::Reference< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() th
 }
 
 /**___________________________________________________________________________________________________
-    @seealso    XStarBasicAccess
+    @seealso	XStarBasicAccess
 */
 void SAL_CALL SfxBaseModel::createLibrary( const ::rtl::OUString& LibName, const ::rtl::OUString& Password,
     const ::rtl::OUString& ExternalSourceURL, const ::rtl::OUString& LinkTargetURL )
@@ -701,7 +702,7 @@ void SAL_CALL SfxBaseModel::createLibrary( const ::rtl::OUString& LibName, const
 }
 
 /**___________________________________________________________________________________________________
-    @seealso    XStarBasicAccess
+    @seealso	XStarBasicAccess
 */
 void SAL_CALL SfxBaseModel::addModule( const ::rtl::OUString& LibraryName, const ::rtl::OUString& ModuleName,
     const ::rtl::OUString& Language, const ::rtl::OUString& Source )
@@ -718,7 +719,7 @@ void SAL_CALL SfxBaseModel::addModule( const ::rtl::OUString& LibraryName, const
 }
 
 /**___________________________________________________________________________________________________
-    @seealso    XStarBasicAccess
+    @seealso	XStarBasicAccess
 */
 void SAL_CALL SfxBaseModel::addDialog( const ::rtl::OUString& LibraryName, const ::rtl::OUString& DialogName,
     const ::com::sun::star::uno::Sequence< sal_Int8 >& Data )
@@ -736,7 +737,7 @@ void SAL_CALL SfxBaseModel::addDialog( const ::rtl::OUString& LibraryName, const
 
 
 //________________________________________________________________________________________________________
-//  XChild
+//	XChild
 //________________________________________________________________________________________________________
 
 uno::Reference< uno::XInterface > SAL_CALL SfxBaseModel::getParent() throw( uno::RuntimeException )
@@ -747,7 +748,7 @@ uno::Reference< uno::XInterface > SAL_CALL SfxBaseModel::getParent() throw( uno:
 }
 
 //________________________________________________________________________________________________________
-//  XChild
+//	XChild
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::setParent(const uno::Reference< uno::XInterface >& Parent) throw(NOSUPPORTEXCEPTION, uno::RuntimeException)
@@ -757,7 +758,7 @@ void SAL_CALL SfxBaseModel::setParent(const uno::Reference< uno::XInterface >& P
 }
 
 //________________________________________________________________________________________________________
-//  XChild
+//	XChild
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -815,7 +816,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
 }
 
 //________________________________________________________________________________________________________
-//  XChild
+//	XChild
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::addEventListener( const uno::Reference< XEVENTLISTENER >& aListener )
@@ -826,7 +827,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const uno::Reference< XEVENTLISTEN
 }
 
 //________________________________________________________________________________________________________
-//  XChild
+//	XChild
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XEVENTLISTENER >& aListener )
@@ -906,7 +907,7 @@ SfxBaseModel::getDocumentProperties()
 
 
 //________________________________________________________________________________________________________
-//  XEVENTLISTENER
+//	XEVENTLISTENER
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::disposing( const lang::EventObject& aObject )
@@ -1265,7 +1266,7 @@ uno::Reference< uno::XInterface > SAL_CALL SfxBaseModel::getCurrentSelection() t
 }
 
 //________________________________________________________________________________________________________
-//  XModifiable2
+//	XModifiable2
 //________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL SfxBaseModel::disableSetModified() throw (::com::sun::star::uno::RuntimeException)
@@ -1305,7 +1306,7 @@ sal_Bool SAL_CALL SfxBaseModel::isSetModifiedEnabled() throw (::com::sun::star::
 }
 
 //________________________________________________________________________________________________________
-//  XModifiable
+//	XModifiable
 //________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL SfxBaseModel::isModified() throw(::com::sun::star::uno::RuntimeException)
@@ -1316,7 +1317,7 @@ sal_Bool SAL_CALL SfxBaseModel::isModified() throw(::com::sun::star::uno::Runtim
 }
 
 //________________________________________________________________________________________________________
-//  XModifiable
+//	XModifiable
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::setModified( sal_Bool bModified )
@@ -1329,7 +1330,7 @@ void SAL_CALL SfxBaseModel::setModified( sal_Bool bModified )
 }
 
 //________________________________________________________________________________________________________
-//  XModifiable
+//	XModifiable
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::addModifyListener(const uno::Reference< XMODIFYLISTENER >& xListener) throw( uno::RuntimeException )
@@ -1340,7 +1341,7 @@ void SAL_CALL SfxBaseModel::addModifyListener(const uno::Reference< XMODIFYLISTE
 }
 
 //________________________________________________________________________________________________________
-//  XModifiable
+//	XModifiable
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::removeModifyListener(const uno::Reference< XMODIFYLISTENER >& xListener) throw( uno::RuntimeException )
@@ -1438,7 +1439,7 @@ void SAL_CALL SfxBaseModel::removeCloseListener( const uno::Reference< XCLOSELIS
 }
 
 //________________________________________________________________________________________________________
-//  XPrintable
+//	XPrintable
 //________________________________________________________________________________________________________
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getPrinter() throw(::com::sun::star::uno::RuntimeException)
@@ -1470,7 +1471,7 @@ void SAL_CALL SfxBaseModel::print(const uno::Sequence< beans::PropertyValue >& r
 }
 
 //________________________________________________________________________________________________________
-//  XStorable
+//	XStorable
 //________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(::com::sun::star::uno::RuntimeException)
@@ -1481,7 +1482,7 @@ sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(::com::sun::star::uno::Runti
 }
 
 //________________________________________________________________________________________________________
-//  XStorable
+//	XStorable
 //________________________________________________________________________________________________________
 
 ::rtl::OUString SAL_CALL SfxBaseModel::getLocation() throw(::com::sun::star::uno::RuntimeException)
@@ -1501,7 +1502,7 @@ sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(::com::sun::star::uno::Runti
 }
 
 //________________________________________________________________________________________________________
-//  XStorable
+//	XStorable
 //________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL SfxBaseModel::isReadonly() throw(::com::sun::star::uno::RuntimeException)
@@ -1512,7 +1513,7 @@ sal_Bool SAL_CALL SfxBaseModel::isReadonly() throw(::com::sun::star::uno::Runtim
 }
 
 //________________________________________________________________________________________________________
-//  XStorable2
+//	XStorable2
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyValue >&  aSeqArgs )
@@ -1602,7 +1603,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
 }
 
 //________________________________________________________________________________________________________
-//  XStorable
+//	XStorable
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -1611,7 +1612,7 @@ void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::
 }
 
 //________________________________________________________________________________________________________
-//  XStorable
+//	XStorable
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                   rURL    ,
@@ -1636,7 +1637,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
 }
 
 //________________________________________________________________________________________________________
-//  XStorable
+//	XStorable
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::storeToURL( const   ::rtl::OUString&                   rURL    ,
@@ -1768,8 +1769,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
         //if( pFrameItem && pFrameItem->GetFrame() )
         //{
-        //  SfxFrame* pFrame = pFrameItem->GetFrame();
-        //  pMedium->SetLoadTargetFrame( pFrame );
+        //	SfxFrame* pFrame = pFrameItem->GetFrame();
+        //	pMedium->SetLoadTargetFrame( pFrame );
         //}
 
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
@@ -2266,7 +2267,7 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
 
 
 //--------------------------------------------------------------------------------------------------------
-//  XEventsSupplier
+//	XEventsSupplier
 //--------------------------------------------------------------------------------------------------------
 
 uno::Reference< container::XNameReplace > SAL_CALL SfxBaseModel::getEvents() throw( uno::RuntimeException )
@@ -2282,7 +2283,7 @@ uno::Reference< container::XNameReplace > SAL_CALL SfxBaseModel::getEvents() thr
 }
 
 //--------------------------------------------------------------------------------------------------------
-//  XEmbeddedScripts
+//	XEmbeddedScripts
 //--------------------------------------------------------------------------------------------------------
 
 uno::Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getBasicLibraries() throw (RuntimeException)
@@ -2315,7 +2316,7 @@ uno::Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::g
 }
 
 //--------------------------------------------------------------------------------------------------------
-//  XScriptInvocationContext
+//	XScriptInvocationContext
 //--------------------------------------------------------------------------------------------------------
 
 Reference< document::XEmbeddedScripts > SAL_CALL SfxBaseModel::getScriptContainer() throw (RuntimeException)
@@ -2351,7 +2352,7 @@ Reference< document::XEmbeddedScripts > SAL_CALL SfxBaseModel::getScriptContaine
 }
 
 //--------------------------------------------------------------------------------------------------------
-//  XEventBroadcaster
+//	XEventBroadcaster
 //--------------------------------------------------------------------------------------------------------
 
 void SAL_CALL SfxBaseModel::addEventListener( const uno::Reference< XDOCEVENTLISTENER >& aListener ) throw( uno::RuntimeException )
@@ -2362,7 +2363,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const uno::Reference< XDOCEVENTLIS
 }
 
 //--------------------------------------------------------------------------------------------------------
-//  XEventBroadcaster
+//	XEventBroadcaster
 //--------------------------------------------------------------------------------------------------------
 
 void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XDOCEVENTLISTENER >& aListener ) throw( uno::RuntimeException )
@@ -2373,7 +2374,7 @@ void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XDOCEVENT
 }
 
 //________________________________________________________________________________________________________
-//  SfxListener
+//	SfxListener
 //________________________________________________________________________________________________________
 
 void addTitle_Impl( Sequence < ::com::sun::star::beans::PropertyValue >& rSeq, const ::rtl::OUString& rTitle )
@@ -2429,8 +2430,8 @@ void SfxBaseModel::NotifyStorageListeners_Impl()
     }
 }
 
-void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
-                             const  SfxHint&        rHint   )
+void SfxBaseModel::Notify(			SfxBroadcaster&	rBC		,
+                             const	SfxHint&		rHint	)
 {
     if ( !m_pData )
         return;
@@ -2543,7 +2544,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 }
 
 //________________________________________________________________________________________________________
-//  public impl.
+//	public impl.
 //________________________________________________________________________________________________________
 
 void SfxBaseModel::NotifyModifyListeners_Impl() const
@@ -2581,7 +2582,7 @@ void SfxBaseModel::impl_change()
 }
 
 //________________________________________________________________________________________________________
-//  public impl.
+//	public impl.
 //________________________________________________________________________________________________________
 
 SfxObjectShell* SfxBaseModel::GetObjectShell() const
@@ -2595,7 +2596,7 @@ SfxObjectShell* SfxBaseModel::impl_getObjectShell() const
 }
 
 //________________________________________________________________________________________________________
-//  public impl.
+//	public impl.
 //________________________________________________________________________________________________________
 
 sal_Bool SfxBaseModel::IsDisposed() const
@@ -2620,7 +2621,7 @@ sal_Bool SfxBaseModel::impl_isDisposed() const
 }
 
 //________________________________________________________________________________________________________
-//  private impl.
+//	private impl.
 //________________________________________________________________________________________________________
 
 ::rtl::OUString SfxBaseModel::GetMediumFilterName_Impl()
@@ -2638,7 +2639,7 @@ sal_Bool SfxBaseModel::impl_isDisposed() const
 
 void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL            ,
                                 const   uno::Sequence< beans::PropertyValue >&  seqArguments    ,
-                                        sal_Bool                    bSaveTo         )
+                                        sal_Bool					bSaveTo			)
 {
     if( !sURL.getLength() )
         throw frame::IllegalArgumentIOException();
@@ -2648,7 +2649,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
     sal_Bool bSaved = sal_False;
     if ( !bSaveTo && m_pData->m_pObjectShell && sURL.getLength()
       && sURL.compareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
-      && SfxMedium::EqualURLs( getLocation(), sURL ) )
+      && ::utl::UCBContentHelper::EqualURLs( getLocation(), sURL ) )
     {
         // this is the same file URL as the current document location, try to use storeOwn if possible
 
@@ -2755,7 +2756,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
         m_pData->m_pObjectShell->SetModifyPasswordHash( nModifyPasswordHash );
         uno::Sequence< beans::PropertyValue > aOldModifyPasswordInfo = m_pData->m_pObjectShell->GetModifyPasswordInfo();
         m_pData->m_pObjectShell->SetModifyPasswordInfo( aModifyPasswordInfo );
-
+       
         // since saving a document modifies its DocumentInfo, the current
         // DocumentInfo must be saved on "SaveTo", so it can be restored
         // after saving
@@ -2999,8 +3000,8 @@ void SAL_CALL SfxBaseModel::addPrintJobListener( const uno::Reference< view::XPr
         if ( xPJB.is() )
             xPJB->addPrintJobListener( xListener );
     }
-//  else
-//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
+//	else
+//		m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::XPrintJobListener >& xListener ) throw (uno::RuntimeException)
@@ -3013,8 +3014,8 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
         if ( xPJB.is() )
             xPJB->removePrintJobListener( xListener );
     }
-//  else
-//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
+//	else
+//		m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 // simple declaration of class SvObject is enough
@@ -3037,7 +3038,7 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequ
 }
 
 //____________________________________________________________________________________________________
-//  XDocumentSubStorageSupplier
+//	XDocumentSubStorageSupplier
 //____________________________________________________________________________________________________
 
 void SfxBaseModel::ListenForStorage_Impl( const uno::Reference< embed::XStorage >& xStorage )
@@ -3115,7 +3116,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
 }
 
 //____________________________________________________________________________________________________
-//  XScriptProviderSupplier
+//	XScriptProviderSupplier
 //____________________________________________________________________________________________________
 
 
@@ -3152,7 +3153,7 @@ uno::Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getSc
 }
 
 //____________________________________________________________________________________________________
-//  XUIConfigurationManagerSupplier
+//	XUIConfigurationManagerSupplier
 //____________________________________________________________________________________________________
 
 rtl::OUString SfxBaseModel::getRuntimeUID() const
@@ -3335,7 +3336,7 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
 }
 
 //____________________________________________________________________________________________________
-//  XVisualObject
+//	XVisualObject
 //____________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
@@ -3434,7 +3435,7 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
 }
 
 //____________________________________________________________________________________________________
-//  XStorageBasedDocument
+//	XStorageBasedDocument
 //____________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& xStorage,

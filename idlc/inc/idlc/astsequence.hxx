@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ public:
         , m_pMemberType(pMemberType)
         , m_pRelativName(NULL)
     {}
-    virtual ~AstSequence()
+    virtual ~AstSequence() 
     {
         if ( m_pRelativName )
             delete m_pRelativName;
@@ -49,9 +49,9 @@ public:
     virtual bool isUnsigned() const
     { return m_pMemberType != 0 && m_pMemberType->isUnsigned(); }
 
-    virtual const sal_Char* getRelativName() const;
+    virtual const sal_Char*	getRelativName() const;
 private:
-    AstType*        m_pMemberType;
+    AstType* 		m_pMemberType;
     mutable ::rtl::OString* m_pRelativName;
 };
 

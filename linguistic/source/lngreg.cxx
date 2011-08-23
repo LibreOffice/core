@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_linguistic.hxx"
 
 
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <rtl/string.hxx>
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -144,10 +144,10 @@ sal_Bool SAL_CALL component_writeInfo
         bRet = ConvDicList_writeInfo( pServiceManager, pRegistryKey );
     if(bRet)
         bRet = GrammarCheckingIterator_writeInfo( pServiceManager, pRegistryKey );
-/*
+/*    
     if(bRet)
         bRet = GrammarChecker_writeInfo( pServiceManager, pRegistryKey );
-*/
+*/ 
     return bRet;
 }
 
@@ -159,7 +159,7 @@ void * SAL_CALL component_getFactory(
             pImplName,
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
-
+    
     if(!pRet)
         pRet = LinguProps_getFactory(
             pImplName,
@@ -167,7 +167,7 @@ void * SAL_CALL component_getFactory(
             pRegistryKey );
 
     if(!pRet)
-        pRet =  DicList_getFactory(
+        pRet = 	DicList_getFactory(
             pImplName,
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );

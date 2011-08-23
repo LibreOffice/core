@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,14 +93,14 @@ namespace connectivity
             private:
                 ::std::vector< ::rtl::OUString> m_aAlias;
                 ::std::vector< ::rtl::OUString> m_aHeadLineNames;
-                ::std::map< ::rtl::OUString, ::rtl::OUString> m_aAliasMap;
+                ::std::map< ::rtl::OUString, ::rtl::OUString> m_aAliasMap; 
             protected:
                 ::osl::Mutex  m_aMutex;
             public:
                 void initialise(void);
                 const ::std::vector< ::rtl::OUString> & getAlias(void) const;
                 const ::std::map< ::rtl::OUString, ::rtl::OUString> & getAliasMap(void) const;
-                void setAlias(const ::com::sun::star::uno::Reference<
+                void setAlias(const ::com::sun::star::uno::Reference< 
                                                     ::com::sun::star::lang::XMultiServiceFactory > &);
             private:
                 void setAliasMap(void);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ class SfxStatusListenerInterface
 };
 
 class SFX2_DLLPUBLIC SfxStatusListener :
-                          public ::com::sun::star::frame::XStatusListener   ,
+                          public ::com::sun::star::frame::XStatusListener	,
                           public ::com::sun::star::lang::XTypeProvider      ,
                           public ::com::sun::star::lang::XComponent         ,
-                          public ::cppu::OWeakObject
+                          public ::cppu::OWeakObject 
 {
     public:
         SFX_DECL_XINTERFACE_XTYPEPROVIDER

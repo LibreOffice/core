@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace com { namespace sun { namespace star { namespace rendering
 
 /* Definition of internal::PolyPolyActionFactory class */
 
-namespace cppcanvas
-{
+namespace cppcanvas 
+{ 
     namespace internal
     {
         struct OutDevState;
@@ -58,35 +58,35 @@ namespace cppcanvas
             text layout) is Canvas-dependent.
          */
         class PolyPolyActionFactory
-        {
-        public:
+        { 
+        public: 
             /// Create polygon, fill/stroke according to state
-            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                         const CanvasSharedPtr&,
-                                                         const OutDevState&     );
+            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,  
+                                                         const CanvasSharedPtr&, 
+                                                         const OutDevState& 	); 
 
             /// Create texture-filled polygon
-            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                         const CanvasSharedPtr&,
+            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,  
+                                                         const CanvasSharedPtr&, 
                                                          const OutDevState&,
-                                                         const ::com::sun::star::rendering::Texture& );
+                                                         const ::com::sun::star::rendering::Texture& ); 
 
             /// Create line polygon (always stroked, not filled)
-            static ActionSharedPtr createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                             const CanvasSharedPtr&,
-                                                             const OutDevState& );
+            static ActionSharedPtr createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon&,  
+                                                             const CanvasSharedPtr&, 
+                                                             const OutDevState& ); 
 
             /// Create stroked polygon
-            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                         const CanvasSharedPtr&,
+            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,  
+                                                         const CanvasSharedPtr&, 
                                                          const OutDevState&,
-                                                         const ::com::sun::star::rendering::StrokeAttributes& );
+                                                         const ::com::sun::star::rendering::StrokeAttributes& ); 
 
             /// For transparent painting of the given polygon (normally, we take the colors always opaque)
-            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
-                                                         const CanvasSharedPtr&,
+            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,  
+                                                         const CanvasSharedPtr&, 
                                                          const OutDevState&,
-                                                         int nTransparency );
+                                                         int nTransparency ); 
 
         private:
             // static factory, disable big four
@@ -95,7 +95,7 @@ namespace cppcanvas
             PolyPolyActionFactory(const PolyPolyActionFactory&);
             PolyPolyActionFactory& operator=( const PolyPolyActionFactory& );
         };
-    }
+    } 
 }
 
 #endif /* _CPPCANVAS_POLYPOLYACTION_HXX */

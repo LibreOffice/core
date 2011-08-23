@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,26 +78,26 @@ namespace drawinglayer
         private:
             // The Pixel renderer resets the original MapMode from the OutputDevice.
             // For some situations it is necessary to get it again, so it is rescued here
-            MapMode                                                 maOriginalMapMode;
-
+            MapMode								                    maOriginalMapMode;
+            
             // the (current) destination OutDev and canvas
-            OutputDevice*                                           mpOutputDevice;
-            com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas >    mxCanvas;
+            OutputDevice*											mpOutputDevice;
+            com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas >	mxCanvas;
             com::sun::star::rendering::ViewState                    maViewState;
             com::sun::star::rendering::RenderState                  maRenderState;
 
             // the modifiedColorPrimitive stack
-            basegfx::BColorModifierStack                            maBColorModifierStack;
+            basegfx::BColorModifierStack							maBColorModifierStack;
 
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
-            const SvtOptionsDrawinglayer                            maDrawinglayerOpt;
+            const SvtOptionsDrawinglayer							maDrawinglayerOpt;
 
             // the current clipping PolyPolygon from MaskPrimitive2D, always in
             // object coordinates
             basegfx::B2DPolyPolygon                                 maClipPolyPolygon;
 
             // determined LanguageType
-            LanguageType                                            meLang;
+            LanguageType											meLang;
 
             // as tooling, the process() implementation takes over API handling and calls this
             // virtual render method when the primitive implementation is BasePrimitive2D-based.
@@ -112,10 +112,10 @@ namespace drawinglayer
             void impRenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive);
             void impRenderFillBitmapPrimitive2D(const primitive2d::FillBitmapPrimitive2D& rFillBitmapPrimitive2D);
             void impRenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate);
-
+        
         public:
             canvasProcessor2D(
-                const geometry::ViewInformation2D& rViewInformation,
+                const geometry::ViewInformation2D& rViewInformation, 
                 OutputDevice& rOutDev);
             virtual ~canvasProcessor2D();
 

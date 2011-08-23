@@ -14,7 +14,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:helpid="helpid:5712"  />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="helpid:5701"  />
- <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="helpid:5700"  />
+ <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="helpid:5700"  /> 
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectCatalog" toolbar:helpid="helpid:30774"  />
  <toolbar:toolbaritem xlink:href=".uno:ChooseMacro" toolbar:helpid="helpid:30770"  />

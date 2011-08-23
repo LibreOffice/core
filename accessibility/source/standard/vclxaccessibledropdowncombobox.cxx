@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 
-VCLXAccessibleDropDownComboBox::VCLXAccessibleDropDownComboBox (VCLXWindow* pVCLWindow)
+VCLXAccessibleDropDownComboBox::VCLXAccessibleDropDownComboBox (VCLXWindow* pVCLWindow) 
     : VCLXAccessibleBox (pVCLWindow, VCLXAccessibleBox::COMBOBOX, true)
 {
 }
@@ -73,7 +73,7 @@ VCLXAccessibleDropDownComboBox::~VCLXAccessibleDropDownComboBox (void)
 bool VCLXAccessibleDropDownComboBox::IsValid (void) const
 {
     return static_cast<ComboBox*>(GetWindow()) != NULL;
-
+ 
 }
 
 
@@ -86,7 +86,7 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
         case VCLEVENT_DROPDOWN_OPEN:
         case VCLEVENT_DROPDOWN_CLOSE:
         {
-            /*          // child count changed
+            /*			// child count changed
             Any aOldValue, aNewValue;
             // get the listbox child
             Reference< XAccessible > xChild;
@@ -121,7 +121,7 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString VCLXAccessibleDropDownComboBox::getImplementationName()
+::rtl::OUString VCLXAccessibleDropDownComboBox::getImplementationName() 
     throw (RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.comp.toolkit.AccessibleDropDownComboBox");
@@ -130,7 +130,7 @@ void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& r
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceNames (void)
+Sequence< ::rtl::OUString > VCLXAccessibleDropDownComboBox::getSupportedServiceNames (void) 
     throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();

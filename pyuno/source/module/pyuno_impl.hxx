@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ PyRef ustring2PyUnicode( const rtl::OUString &source );
 PyRef ustring2PyString( const ::rtl::OUString & source );
 rtl::OUString pyString2ustring( PyObject *str );
 
-
+    
 PyRef AnyToPyObject (const com::sun::star::uno::Any & a, const Runtime &r )
     throw ( com::sun::star::uno::RuntimeException );
 
@@ -243,7 +243,7 @@ public:
     PyRef getWrappedObject() { return mWrappedObject; }
     com::sun::star::uno::Sequence< com::sun::star::uno::Type > getWrappedTypes() { return mTypes; }
     virtual ~Adapter();
-
+    
     // XInvocation
     virtual com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >
            SAL_CALL getIntrospection(  ) throw (::com::sun::star::uno::RuntimeException);

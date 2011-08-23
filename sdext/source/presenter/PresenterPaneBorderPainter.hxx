@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@ public:
     class Renderer;
 
     // XPaneBorderPainter
-
+    
     virtual css::awt::Rectangle SAL_CALL addBorder (
         const rtl::OUString& rsPaneBorderStyleName,
         const css::awt::Rectangle& rRectangle,
@@ -125,7 +125,7 @@ public:
         const css::awt::Rectangle& rRepaintArea,
         const rtl::OUString& rsTitle)
         throw(css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL paintBorderWithCallout (
         const rtl::OUString& rsPaneBorderStyleName,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,

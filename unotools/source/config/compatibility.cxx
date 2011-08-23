@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,13 @@
 #include "precompiled_unotools.hxx"
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/compatibility.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -48,7 +49,7 @@
 #include <algorithm>
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
 using namespace ::std;
@@ -59,12 +60,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_OPTIONS        OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Compatibility/" ) )
-#define PATHDELIMITER           OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) )
-#define SETNODE_ALLFILEFORMATS  OUString( RTL_CONSTASCII_USTRINGPARAM( "AllFileFormats" ) )
+#define ROOTNODE_OPTIONS		OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Compatibility/" ) )
+#define PATHDELIMITER			OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) )
+#define SETNODE_ALLFILEFORMATS	OUString( RTL_CONSTASCII_USTRINGPARAM( "AllFileFormats" ) )
 
 #define PROPERTYNAME_NAME               COMPATIBILITY_PROPERTYNAME_NAME
 #define PROPERTYNAME_MODULE             COMPATIBILITY_PROPERTYNAME_MODULE
@@ -97,7 +98,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_EXPANDWORDSPACE          12
 
 //_________________________________________________________________________________________________________________
-//  private declarations!
+//	private declarations!
 //_________________________________________________________________________________________________________________
 
 /*-****************************************************************************************************************
@@ -123,30 +124,30 @@ struct SvtCompatibilityEntry
                 bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
                 bExpandWordSpace( true ) {}
 
-        inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
-        inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
-        inline void     SetAddSpacingAtPages( bool _bSet ) { bAddSpacingAtPages = _bSet; }
-        inline void     SetUseOurTabStops( bool _bSet ) { bUseOurTabStops = _bSet; }
-        inline void     SetNoExtLeading( bool _bSet ) { bNoExtLeading = _bSet; }
-        inline void     SetUseLineSpacing( bool _bSet ) { bUseLineSpacing = _bSet; }
-        inline void     SetAddTableSpacing( bool _bSet ) { bAddTableSpacing = _bSet; }
-        inline void     SetUseObjPos( bool _bSet ) { bUseObjPos = _bSet; }
-        inline void     SetUseOurTextWrapping( bool _bSet ) { bUseOurTextWrapping = _bSet; }
+        inline void		SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
+        inline void		SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
+        inline void		SetAddSpacingAtPages( bool _bSet ) { bAddSpacingAtPages = _bSet; }
+        inline void		SetUseOurTabStops( bool _bSet ) { bUseOurTabStops = _bSet; }
+        inline void		SetNoExtLeading( bool _bSet ) { bNoExtLeading = _bSet; }
+        inline void		SetUseLineSpacing( bool _bSet ) { bUseLineSpacing = _bSet; }
+        inline void		SetAddTableSpacing( bool _bSet ) { bAddTableSpacing = _bSet; }
+        inline void		SetUseObjPos( bool _bSet ) { bUseObjPos = _bSet; }
+        inline void		SetUseOurTextWrapping( bool _bSet ) { bUseOurTextWrapping = _bSet; }
         inline void     SetConsiderWrappingStyle( bool _bSet ) { bConsiderWrappingStyle = _bSet; }
         inline void     SetExpandWordSpace( bool _bSet ) { bExpandWordSpace = _bSet; }
 
     public:
         OUString    sName;
         OUString    sModule;
-        bool        bUsePrtMetrics;
-        bool        bAddSpacing;
-        bool        bAddSpacingAtPages;
-        bool        bUseOurTabStops;
-        bool        bNoExtLeading;
-        bool        bUseLineSpacing;
-        bool        bAddTableSpacing;
-        bool        bUseObjPos;
-        bool        bUseOurTextWrapping;
+        bool		bUsePrtMetrics;
+        bool		bAddSpacing;
+        bool		bAddSpacingAtPages;
+        bool		bUseOurTabStops;
+        bool		bNoExtLeading;
+        bool		bUseLineSpacing;
+        bool		bAddTableSpacing;
+        bool		bUseObjPos;
+        bool		bUseOurTextWrapping;
         bool        bConsiderWrappingStyle;
         bool        bExpandWordSpace;
 };
@@ -181,7 +182,7 @@ class SvtCompatibility
             Sequence< Sequence< PropertyValue > > lResult( nCount );
             const vector< SvtCompatibilityEntry >* pList = &lEntries;
 
-            lProperties[ OFFSET_NAME ].Name = PROPERTYNAME_NAME;
+            lProperties[ OFFSET_NAME ].Name	= PROPERTYNAME_NAME;
             lProperties[ OFFSET_MODULE ].Name = PROPERTYNAME_MODULE;
             lProperties[ OFFSET_USEPRTMETRICS ].Name = PROPERTYNAME_USEPRTMETRICS;
             lProperties[ OFFSET_ADDSPACING ].Name = PROPERTYNAME_ADDSPACING;
@@ -218,7 +219,7 @@ class SvtCompatibility
             return lResult;
         }
 
-        int size() const
+        int	size() const
         {
             return lEntries.size();
         }
@@ -235,55 +236,57 @@ class SvtCompatibility
 class SvtCompatibilityOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtCompatibilityOptions_Impl();
         ~SvtCompatibilityOptions_Impl();
 
+        void SetDefault( OUString sName, bool bValue );
+
         //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
+        //	overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
+            @short		called for notify of configmanager
+            @descr		These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
             @param      "lPropertyNames" is the list of properties which should be updated.
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
+            @short		write changes to configuration
+            @descr		These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso    baseclass ConfigItem
+            @seealso	baseclass ConfigItem
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //  public interface
+        //	public interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
@@ -291,17 +294,17 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
             @descr      These class is used as static member of "SvtCompatibilityOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         void                                    Clear();
         Sequence< Sequence< PropertyValue > >   GetList() const;
-        void                                    AppendItem( const ::rtl::OUString& _sName,
+        void 									AppendItem( const ::rtl::OUString& _sName,
                                                             const ::rtl::OUString& _sModule,
                                                             bool _bUsePrtMetrics,
                                                             bool _bAddSpacing,
@@ -328,22 +331,22 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
             @short      return list of key names of our configuration management which represent one module tree
-            @descr      These methods return the current list of key names! We need it to get needed values from our
+            @descr		These methods return the current list of key names! We need it to get needed values from our
                         configuration management and support dynamical menu item lists!
 
-            @seealso    -
+            @seealso	-
 
             @param      -
-            @return     A list of configuration key names is returned.
+            @return		A list of configuration key names is returned.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         Sequence< OUString > impl_GetPropertyNames( Sequence< OUString >& rItems );
@@ -357,30 +360,30 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
             @param      "lSource"      ,   original list
             @param      "lDestination" ,   destination of operation
-            @return     A list of configuration key names is returned.
+            @return		A list of configuration key names is returned.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         void impl_ExpandPropertyNames( const Sequence< OUString >& lSource,
                                              Sequence< OUString >& lDestination );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        SvtCompatibility        m_aOptions;
-        SvtCompatibilityEntry   m_aDefOptions;
+        SvtCompatibility		m_aOptions;
+        SvtCompatibilityEntry	m_aDefOptions;
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
     // Init baseclasses first
@@ -425,6 +428,12 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
 
         if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
         {
+            SvtSysLocale aSysLocale;
+            com::sun::star::lang::Locale aLocale = aSysLocale.GetLocale();
+            if ( aLocale.Language.equalsAscii( "zh" ) || aLocale.Language.equalsAscii( "ja" ) ||
+                    aLocale.Language.equalsAscii( "ko" ) )
+                aItem.bExpandWordSpace = false;
+
             m_aDefOptions = aItem;
             bDefaultFound = true;
         }
@@ -432,7 +441,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
 {
@@ -443,8 +452,34 @@ SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
     }
 }
 
+void SvtCompatibilityOptions_Impl::SetDefault( OUString sName, bool bValue )
+{
+    if ( COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS.equals( sName ) )
+        m_aDefOptions.SetUsePrtMetrics( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_ADDSPACING.equals( sName ) )
+        m_aDefOptions.SetAddSpacing( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES.equals( sName ) )
+        m_aDefOptions.SetAddSpacingAtPages( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS.equals( sName ) )
+        m_aDefOptions.SetUseOurTabStops( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_NOEXTLEADING.equals( sName ) )
+        m_aDefOptions.SetNoExtLeading( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_USELINESPACING.equals( sName ) )
+        m_aDefOptions.SetUseLineSpacing( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING.equals( sName ) )
+        m_aDefOptions.SetAddTableSpacing( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING.equals( sName ) )
+        m_aDefOptions.SetUseObjPos( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING.equals( sName ) )
+        m_aDefOptions.SetUseOurTextWrapping( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE.equals( sName ) )
+        m_aDefOptions.SetConsiderWrappingStyle( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE.equals( sName ) )
+        m_aDefOptions.SetExpandWordSpace( bValue );
+}
+
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 {
@@ -452,7 +487,7 @@ void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCompatibilityOptions_Impl::Commit()
 {
@@ -470,29 +505,29 @@ void SvtCompatibilityOptions_Impl::Commit()
         aItem = m_aOptions[ nItem ];
         sNode = SETNODE_ALLFILEFORMATS + PATHDELIMITER + aItem.sName + PATHDELIMITER;
 
-        lPropertyValues[ OFFSET_MODULE - 1                  ].Name = sNode + PROPERTYNAME_MODULE;
-        lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Name = sNode + PROPERTYNAME_USEPRTMETRICS;
-        lPropertyValues[ OFFSET_ADDSPACING - 1              ].Name = sNode + PROPERTYNAME_ADDSPACING;
-        lPropertyValues[ OFFSET_ADDSPACINGATPAGES - 1       ].Name = sNode + PROPERTYNAME_ADDSPACINGATPAGES;
-        lPropertyValues[ OFFSET_USEOURTABSTOPS - 1          ].Name = sNode + PROPERTYNAME_USEOURTABSTOPS;
-        lPropertyValues[ OFFSET_NOEXTLEADING - 1            ].Name = sNode + PROPERTYNAME_NOEXTLEADING;
-        lPropertyValues[ OFFSET_USELINESPACING - 1          ].Name = sNode + PROPERTYNAME_USELINESPACING;
-        lPropertyValues[ OFFSET_ADDTABLESPACING - 1         ].Name = sNode + PROPERTYNAME_ADDTABLESPACING;
-        lPropertyValues[ OFFSET_USEOBJPOS - 1               ].Name = sNode + PROPERTYNAME_USEOBJPOS;
-        lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Name = sNode + PROPERTYNAME_USEOURTEXTWRAP;
+        lPropertyValues[ OFFSET_MODULE - 1					].Name = sNode + PROPERTYNAME_MODULE;
+        lPropertyValues[ OFFSET_USEPRTMETRICS - 1			].Name = sNode + PROPERTYNAME_USEPRTMETRICS;
+        lPropertyValues[ OFFSET_ADDSPACING - 1				].Name = sNode + PROPERTYNAME_ADDSPACING;
+        lPropertyValues[ OFFSET_ADDSPACINGATPAGES - 1		].Name = sNode + PROPERTYNAME_ADDSPACINGATPAGES;
+        lPropertyValues[ OFFSET_USEOURTABSTOPS - 1			].Name = sNode + PROPERTYNAME_USEOURTABSTOPS;
+        lPropertyValues[ OFFSET_NOEXTLEADING - 1			].Name = sNode + PROPERTYNAME_NOEXTLEADING;
+        lPropertyValues[ OFFSET_USELINESPACING - 1			].Name = sNode + PROPERTYNAME_USELINESPACING;
+        lPropertyValues[ OFFSET_ADDTABLESPACING - 1			].Name = sNode + PROPERTYNAME_ADDTABLESPACING;
+        lPropertyValues[ OFFSET_USEOBJPOS - 1				].Name = sNode + PROPERTYNAME_USEOBJPOS;
+        lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1		].Name = sNode + PROPERTYNAME_USEOURTEXTWRAP;
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Name = sNode + PROPERTYNAME_CONSIDERWRAPSTYLE;
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Name = sNode + PROPERTYNAME_EXPANDWORDSPACE;
 
-        lPropertyValues[ OFFSET_MODULE - 1                  ].Value <<= aItem.sModule;
-        lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Value <<= aItem.bUsePrtMetrics;
-        lPropertyValues[ OFFSET_ADDSPACING - 1              ].Value <<= aItem.bAddSpacing;
-        lPropertyValues[ OFFSET_ADDSPACINGATPAGES - 1       ].Value <<= aItem.bAddSpacingAtPages;
-        lPropertyValues[ OFFSET_USEOURTABSTOPS - 1          ].Value <<= aItem.bUseOurTabStops;
-        lPropertyValues[ OFFSET_NOEXTLEADING - 1            ].Value <<= aItem.bNoExtLeading;
-        lPropertyValues[ OFFSET_USELINESPACING - 1          ].Value <<= aItem.bUseLineSpacing;
-        lPropertyValues[ OFFSET_ADDTABLESPACING - 1         ].Value <<= aItem.bAddTableSpacing;
-        lPropertyValues[ OFFSET_USEOBJPOS - 1               ].Value <<= aItem.bUseObjPos;
-        lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Value <<= aItem.bUseOurTextWrapping;
+        lPropertyValues[ OFFSET_MODULE - 1					].Value <<= aItem.sModule;
+        lPropertyValues[ OFFSET_USEPRTMETRICS - 1			].Value <<= aItem.bUsePrtMetrics;
+        lPropertyValues[ OFFSET_ADDSPACING - 1				].Value <<= aItem.bAddSpacing;
+        lPropertyValues[ OFFSET_ADDSPACINGATPAGES - 1		].Value <<= aItem.bAddSpacingAtPages;
+        lPropertyValues[ OFFSET_USEOURTABSTOPS - 1			].Value <<= aItem.bUseOurTabStops;
+        lPropertyValues[ OFFSET_NOEXTLEADING - 1			].Value <<= aItem.bNoExtLeading;
+        lPropertyValues[ OFFSET_USELINESPACING - 1			].Value <<= aItem.bUseLineSpacing;
+        lPropertyValues[ OFFSET_ADDTABLESPACING - 1			].Value <<= aItem.bAddTableSpacing;
+        lPropertyValues[ OFFSET_USEOBJPOS - 1				].Value <<= aItem.bUseObjPos;
+        lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1  	].Value <<= aItem.bUseOurTextWrapping;
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Value <<= aItem.bConsiderWrappingStyle;
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Value <<= aItem.bExpandWordSpace;
 
@@ -501,7 +536,7 @@ void SvtCompatibilityOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCompatibilityOptions_Impl::Clear()
 {
@@ -510,7 +545,7 @@ void SvtCompatibilityOptions_Impl::Clear()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() const
 {
@@ -520,10 +555,10 @@ Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() co
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 
-void SvtCompatibilityOptions_Impl::AppendItem(  const ::rtl::OUString& _sName,
+void SvtCompatibilityOptions_Impl::AppendItem(	const ::rtl::OUString& _sName,
                                                 const ::rtl::OUString& _sModule,
                                                 bool _bUsePrtMetrics,
                                                 bool _bAddSpacing,
@@ -559,7 +594,7 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const ::rtl::OUString& _sName,
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequence< OUString >& rItems )
 {
@@ -573,7 +608,7 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
     const Sequence< OUString >& lSource, Sequence< OUString >& lDestination )
@@ -629,15 +664,15 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
-SvtCompatibilityOptions_Impl*   SvtCompatibilityOptions::m_pDataContainer = NULL;
-sal_Int32                       SvtCompatibilityOptions::m_nRefCount = 0;
+SvtCompatibilityOptions_Impl*	SvtCompatibilityOptions::m_pDataContainer = NULL;
+sal_Int32						SvtCompatibilityOptions::m_nRefCount = 0;
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 SvtCompatibilityOptions::SvtCompatibilityOptions()
 {
@@ -654,7 +689,7 @@ SvtCompatibilityOptions::SvtCompatibilityOptions()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 SvtCompatibilityOptions::~SvtCompatibilityOptions()
 {
@@ -672,7 +707,7 @@ SvtCompatibilityOptions::~SvtCompatibilityOptions()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCompatibilityOptions::Clear()
 {
@@ -680,8 +715,13 @@ void SvtCompatibilityOptions::Clear()
     m_pDataContainer->Clear();
 }
 
+void SvtCompatibilityOptions::SetDefault( ::rtl::OUString sName, bool bValue )
+{
+    m_pDataContainer->SetDefault( sName, bValue );
+}
+
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void SvtCompatibilityOptions::AppendItem( const ::rtl::OUString& sName,
                                           const ::rtl::OUString& sModule,
@@ -778,7 +818,7 @@ Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 Mutex& SvtCompatibilityOptions::GetOwnStaticMutex()
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,19 +45,19 @@
 
 
 SvXPropertyControl::SvXPropertyControl( Window* pParent, WinBits nWinStyle)
-            :   Control(pParent,nWinStyle)
+            :	Control(pParent,nWinStyle)
 {
 }
 
 SvXPropertyControl::SvXPropertyControl( Window* pParent, const ResId& rResId )
-            :   Control(pParent,rResId )
+            :	Control(pParent,rResId )
 {
 }
 
 //------------------------------------------------------------------
 
 SvXPropertyEdit::SvXPropertyEdit( Window* pParent, WinBits nWinStyle)
-        :       SvXPropertyControl(pParent,nWinStyle),
+        :		SvXPropertyControl(pParent,nWinStyle),
                 aEdit(this,WB_BORDER | WB_TABSTOP)
 {
     pListener=NULL;
@@ -72,7 +72,7 @@ SvXPropertyEdit::SvXPropertyEdit( Window* pParent, WinBits nWinStyle)
 }
 
 SvXPropertyEdit::SvXPropertyEdit( Window* pParent, const ResId& rResId)
-        :       SvXPropertyControl(pParent,rResId),
+        :		SvXPropertyControl(pParent,rResId),
                 aEdit(this,WB_BORDER | WB_TABSTOP)
 {
     pListener=NULL;
@@ -186,7 +186,7 @@ IMPL_LINK( SvXPropertyEdit, LoseFocusHdl, Edit*, EMPTYARG )
 //------------------------------------------------------------------
 
 SvXPropertyListBox::SvXPropertyListBox( Window* pParent, WinBits nWinStyle)
-        :       SvXPropertyControl(pParent,nWinStyle),
+        :		SvXPropertyControl(pParent,nWinStyle),
                 aListBox(this,WB_BORDER | WB_DROPDOWN | WB_TABSTOP)
 {
     pListener=NULL;
@@ -200,7 +200,7 @@ SvXPropertyListBox::SvXPropertyListBox( Window* pParent, WinBits nWinStyle)
 }
 
 SvXPropertyListBox::SvXPropertyListBox( Window* pParent, const ResId& rResId)
-        :       SvXPropertyControl(pParent,rResId),
+        :		SvXPropertyControl(pParent,rResId),
                 aListBox(this,WB_BORDER | WB_DROPDOWN | WB_TABSTOP)
 {
     pListener=NULL;
@@ -315,7 +315,7 @@ IMPL_LINK( SvXPropertyListBox, LoseFocusHdl, ListBox*, EMPTYARG )
 
 
 SvXPropertyComboBox::SvXPropertyComboBox( Window* pParent, WinBits nWinStyle)
-        :       SvXPropertyControl(pParent,nWinStyle),
+        :		SvXPropertyControl(pParent,nWinStyle),
                 aComboBox(this,WB_BORDER | WB_DROPDOWN | WB_TABSTOP)
 {
     pListener=NULL;
@@ -329,7 +329,7 @@ SvXPropertyComboBox::SvXPropertyComboBox( Window* pParent, WinBits nWinStyle)
 }
 
 SvXPropertyComboBox::SvXPropertyComboBox( Window* pParent, const ResId& rResId)
-        :       SvXPropertyControl(pParent,rResId),
+        :		SvXPropertyControl(pParent,rResId),
                 aComboBox(this,WB_BORDER | WB_DROPDOWN | WB_TABSTOP)
 {
     pListener=NULL;
@@ -379,7 +379,7 @@ void SvXPropertyComboBox::SetProperty(const String &rString)
     aComboBox.SetText(rString);
 }
 
-String SvXPropertyComboBox::GetProperty()   const
+String SvXPropertyComboBox::GetProperty()	const
 {
     return aComboBox.GetText();
 }
@@ -442,7 +442,7 @@ IMPL_LINK( SvXPropertyComboBox, LoseFocusHdl, ComboBox*, EMPTYARG )
 //------------------------------------------------------------------
 
 SvPropertyLine::SvPropertyLine( Window* pParent,WinBits nWinStyle)
-        :   Control(pParent,nWinStyle),
+        :	Control(pParent,nWinStyle),
             aName(this,WB_BORDER),
             pSvXPropertyControl(NULL),
             aXButton(this,WB_BORDER),
@@ -461,10 +461,10 @@ SvPropertyLine::SvPropertyLine( Window* pParent,WinBits nWinStyle)
 }
 
 SvPropertyLine::SvPropertyLine( Window* pParent,const ResId& rResId )
-        :   Control(pParent,rResId),
-            aName       (this,WB_BORDER),
+        :	Control(pParent,rResId),
+            aName		(this,WB_BORDER),
             pSvXPropertyControl(NULL),
-            aXButton    (this,WB_BORDER),
+            aXButton	(this,WB_BORDER),
             bIsLocked(FALSE),
             bIsHyperlink(FALSE)
 {
@@ -525,8 +525,8 @@ void SvPropertyLine::Resize()
         aPos.X()=GetOutputSizePixel().Width()
                     -nXButtonWidth;
         aSize.Width()=nXButtonWidth;
-        aXButton    .SetSizePixel(aSize);
-        aXButton    .SetPosPixel(aPos);
+        aXButton	.SetSizePixel(aSize);
+        aXButton	.SetPosPixel(aPos);
     }
 }
 
@@ -659,7 +659,7 @@ void SvXPropEvListener::KeyInput (SvXPropertyControl *pSvXPCtr,const KeyCode& th
     aKeyInputLink.Call(this);
 }
 
-SvXPropertyControl *    SvXPropEvListener::GetPropertyControl()
+SvXPropertyControl *	SvXPropEvListener::GetPropertyControl()
 {
     return pTheActiveControl;
 }
@@ -672,13 +672,13 @@ KeyCode SvXPropEvListener::GetKeyCode() const
 //------------------------------------------------------------------
 
 SvListBoxForProperties::SvListBoxForProperties( Window* pParent, WinBits nWinStyle)
-        :   Control(pParent,nWinStyle),
+        :	Control(pParent,nWinStyle),
             aPlayGround(this,WB_DIALOGCONTROL),
             aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG),
             pPropDataControl(NULL)
 {
 
-    aListener.SetModifyHdl   (LINK( this, SvListBoxForProperties,   ModifyHdl));
+    aListener.SetModifyHdl	 (LINK( this, SvListBoxForProperties,	ModifyHdl));
     aListener.SetGetFocusHdl (LINK( this, SvListBoxForProperties, GetFocusHdl));
     aListener.SetLoseFocusHdl(LINK( this, SvListBoxForProperties,LoseFocusHdl));
     aListener.SetKeyInputHdl (LINK( this, SvListBoxForProperties, KeyInputHdl));
@@ -700,7 +700,7 @@ SvListBoxForProperties::SvListBoxForProperties( Window* pParent, WinBits nWinSty
 
 
 SvListBoxForProperties::SvListBoxForProperties( Window* pParent, const ResId& rResId )
-            :       Control(pParent,rResId),
+            :		Control(pParent,rResId),
                     aPlayGround(this,0),
                     aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG),
                     pPropDataControl(NULL)
@@ -733,9 +733,9 @@ void SvListBoxForProperties::Clear()
 
         switch(pPropLine->GetKindOfControl())
         {
-            case    KOC_LISTBOX:
-            case    KOC_COMBOBOX:
-            case    KOC_EDIT:       delete pPropLine->GetSvXPropertyControl();
+            case	KOC_LISTBOX:
+            case	KOC_COMBOBOX:
+            case	KOC_EDIT:		delete pPropLine->GetSvXPropertyControl();
                                     break;
             default:
                                     break;
@@ -946,9 +946,9 @@ void SvListBoxForProperties::ChangeEntry( const SvPropertyData& aPropData, USHOR
 
         switch(pPropLine->GetKindOfControl())
         {
-            case    KOC_LISTBOX:
-            case    KOC_COMBOBOX:
-            case    KOC_EDIT:       delete pPropLine->GetSvXPropertyControl();
+            case	KOC_LISTBOX:
+            case	KOC_COMBOBOX:
+            case	KOC_EDIT:		delete pPropLine->GetSvXPropertyControl();
                                     break;
             default:
                                     break;
@@ -956,22 +956,22 @@ void SvListBoxForProperties::ChangeEntry( const SvPropertyData& aPropData, USHOR
 
         switch(aPropData.eKind)
         {
-            case    KOC_LISTBOX:
+            case	KOC_LISTBOX:
                                     pPropLine->SetSvXPropertyControl(
                                             new SvXPropertyComboBox(pPropLine,WB_TABSTOP));
                                     pPropLine->SetKindOfControl(aPropData.eKind);
                                     break;
-            case    KOC_COMBOBOX:
+            case	KOC_COMBOBOX:
                                     pPropLine->SetSvXPropertyControl(
                                             new SvXPropertyComboBox(pPropLine,WB_TABSTOP));
                                     pPropLine->SetKindOfControl(aPropData.eKind);
                                     break;
-            case    KOC_EDIT:
+            case	KOC_EDIT:
                                     pPropLine->SetSvXPropertyControl(
                                             new SvXPropertyEdit(pPropLine,WB_TABSTOP));
                                     pPropLine->SetKindOfControl(aPropData.eKind);
                                     break;
-            case    KOC_USERDEFINED:
+            case	KOC_USERDEFINED:
                                     pPropLine->SetSvXPropertyControl(aPropData.pControl);
                                     aPropData.pControl->SetParent(pPropLine);
                                     pPropLine->SetKindOfControl(aPropData.eKind);
@@ -1141,7 +1141,7 @@ IMPL_LINK( SvListBoxForProperties, KeyInputHdl,SvXPropEvListener*, pSvXPEvL)
 
 
 SvTabPageForProperties::SvTabPageForProperties(Window* pParent,WinBits nWinStyle)
-            :   TabPage(pParent,nWinStyle),
+            :	TabPage(pParent,nWinStyle),
                 aLbProp(this)
 {
     aLbProp.Show();
@@ -1351,9 +1351,9 @@ void SvBasicPropertyDataControl::Modified(const String& aName,
     aModifyLink.Call(this);
 }
 
-void SvBasicPropertyDataControl::Clicked(   const String& aName,
+void SvBasicPropertyDataControl::Clicked(	const String& aName,
                                     const String& aVal,
-                                    void* pData)        //Xtension-Button pressed
+                                    void* pData)		//Xtension-Button pressed
 {
     aEntryName=aName;
     aEntryProperty=aVal;
@@ -1361,9 +1361,9 @@ void SvBasicPropertyDataControl::Clicked(   const String& aName,
     aClickedLink.Call(this);
 }
 
-void SvBasicPropertyDataControl::Commit(        const String& aName,
+void SvBasicPropertyDataControl::Commit(		const String& aName,
                                     const String& aVal,
-                                    void* pData)        //User accept changes
+                                    void* pData)		//User accept changes
 {
     aEntryName=aName;
     aEntryProperty=aVal;
@@ -1371,8 +1371,8 @@ void SvBasicPropertyDataControl::Commit(        const String& aName,
     aCommitLink.Call(this);
 }
 
-void SvBasicPropertyDataControl::Select(        const String& aName,
-                                    void* pData)        //User select new Row
+void SvBasicPropertyDataControl::Select(		const String& aName,
+                                    void* pData)		//User select new Row
 {
     aEntryName=aName;
     pTheData=pData;
@@ -1384,17 +1384,17 @@ void SvBasicPropertyDataControl::LinkClicked(const String&, void*)
 }
 
 
-String  SvBasicPropertyDataControl::GetName() const //Tell's the name of the Property
+String	SvBasicPropertyDataControl::GetName() const //Tell's the name of the Property
 {
     return aEntryName;
 }
 
-String  SvBasicPropertyDataControl::GetProperty() const //Tell's the content of the Property
+String	SvBasicPropertyDataControl::GetProperty() const //Tell's the content of the Property
 {
     return aEntryProperty;
 }
 
-void*   SvBasicPropertyDataControl::GetData() //Tell's the storage
+void*	SvBasicPropertyDataControl::GetData() //Tell's the storage
 {
     return pTheData;
 }
@@ -1424,13 +1424,13 @@ void SvBasicPropertyDataControl::SetIsCorrect(BOOL nFlag)
 //========================================================================
 /*
 ScPropertyDlg::ScPropertyDlg( Window* pParent) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_PROPERTIES) ),
-    aPropListBox    ( this, ResId( CTR_PROPLINE) ),
-    aKindOfListBox  (this,ResId( LB_KIND_OF_PROP)),
-    aModAnswer      (this,ResId(FT_ANSMOD   )),
-    aClickAnswer    (this,ResId(FT_ANSCLICK )),
-    aCommitAnswer   (this,ResId(FT_ANSCOMMIT)),
-    aSelectAnswer   (this,ResId(FT_ANSSELECT)),
+    ModalDialog 	( pParent, ScResId( RID_SCDLG_PROPERTIES) ),
+    aPropListBox	( this, ResId( CTR_PROPLINE) ),
+    aKindOfListBox	(this,ResId( LB_KIND_OF_PROP)),
+    aModAnswer		(this,ResId(FT_ANSMOD	)),
+    aClickAnswer	(this,ResId(FT_ANSCLICK )),
+    aCommitAnswer	(this,ResId(FT_ANSCOMMIT)),
+    aSelectAnswer	(this,ResId(FT_ANSSELECT)),
     anOk(this,ResId( BTN_OK)),
     aCancel(this,ResId( BTN_CANCEL))
 {
@@ -1445,9 +1445,9 @@ ScPropertyDlg::ScPropertyDlg( Window* pParent) :
     String aString("Don't know ");
 
     aBaProDatCtr.SetModifyHdl (LINK( this, ScPropertyDlg, RowModifiedHdl ));
-    aBaProDatCtr.SetClickedHdl(LINK( this, ScPropertyDlg, ClickHdl       ));
-    aBaProDatCtr.SetCommitHdl (LINK( this, ScPropertyDlg, SelectHdl      ));
-    aBaProDatCtr.SetSelectHdl (LINK( this, ScPropertyDlg, CommitHdl      ));
+    aBaProDatCtr.SetClickedHdl(LINK( this, ScPropertyDlg, ClickHdl		 ));
+    aBaProDatCtr.SetCommitHdl (LINK( this, ScPropertyDlg, SelectHdl 	 ));
+    aBaProDatCtr.SetSelectHdl (LINK( this, ScPropertyDlg, CommitHdl 	 ));
 
     aPropListBox.SetController(&aBaProDatCtr);
 

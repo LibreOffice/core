@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public:
     static void RunOnUpdateEnd (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
         const Action& rAction);
-
+    
     virtual void SAL_CALL disposing (void);
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
@@ -107,7 +107,7 @@ private:
     virtual ~PresenterFrameworkObserver (void);
 
     void Shutdown (void);
-
+    
     /** Predicate that returns true when the specified resource is active
         with respect to the given configuration controller.
     */

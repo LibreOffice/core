@@ -326,7 +326,7 @@ UDK_3.1 {
         __1cEcppubL__RTTI__1CpnEcppuSBootstrapException__;
         __1cEcppubM__RTTI__1CpknEcppuSBootstrapException__;
 } UDK_3_0_0;
-
+                    
 UDK_3.2 {
     global:
     __1cEcppubL__RTTI__1nEcppuUPropertySetMixinImpl__;

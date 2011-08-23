@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -260,9 +260,9 @@ Graphic::Graphic( const GDIMetaFile& rMtf )
 
 Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic )
 {
-    uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
-    uno::Reference< lang::XTypeProvider >   xProv( rxGraphic, uno::UNO_QUERY );
-    const ::Graphic*                        pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
+    uno::Reference< lang::XUnoTunnel >		xTunnel( rxGraphic, uno::UNO_QUERY );
+    uno::Reference< lang::XTypeProvider	>	xProv( rxGraphic, uno::UNO_QUERY );
+    const ::Graphic* 						pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
                                                          reinterpret_cast< ::Graphic* >( xTunnel->getSomething( xProv->getImplementationId() ) ) :
                                                           NULL );
 
@@ -471,8 +471,8 @@ uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
 
             if( xProv.is() )
             {
-                uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
-                ::rtl::OUString                         aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
+                uno::Sequence< beans::PropertyValue > 	aLoadProps( 1 );
+                ::rtl::OUString							aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
 
                 aLoadProps[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
                 aLoadProps[ 0 ].Value <<= ( aURL += ::rtl::OUString::valueOf( reinterpret_cast< sal_Int64 >( this ) ) );

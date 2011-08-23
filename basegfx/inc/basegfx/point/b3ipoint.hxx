@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,81 +45,81 @@ namespace basegfx
     */
     class B3IPoint : public ::basegfx::B3ITuple
     {
-    public:
-        /** Create a 3D Point
+    public:					
+        /**	Create a 3D Point
 
             The point is initialized to (0, 0, 0)
         */
-        B3IPoint()
-        :   B3ITuple()
+        B3IPoint() 
+        :	B3ITuple()
         {}
 
-        /** Create a 3D Point
+        /**	Create a 3D Point
 
             @param nX
             This parameter is used to initialize the X-coordinate
             of the 3D Point.
-
+            
             @param nY
             This parameter is used to initialize the Y-coordinate
             of the 3D Point.
-
+            
             @param nZ
             This parameter is used to initialize the Z-coordinate
             of the 3D Point.
         */
-        B3IPoint(sal_Int32 nX, sal_Int32 nY, sal_Int32 nZ)
-        :   B3ITuple(nX, nY, nZ)
+        B3IPoint(sal_Int32 nX, sal_Int32 nY, sal_Int32 nZ) 
+        :	B3ITuple(nX, nY, nZ)
         {}
 
-        /** Create a copy of a 3D Point
+        /**	Create a copy of a 3D Point
 
             @param rVec
             The 3D Point which will be copied.
         */
-        B3IPoint(const B3IPoint& rVec)
-        :   B3ITuple(rVec)
+        B3IPoint(const B3IPoint& rVec) 
+        :	B3ITuple(rVec)
         {}
 
         /** constructor with tuple to allow copy-constructing
             from B3ITuple-based classes
         */
-        B3IPoint(const ::basegfx::B3ITuple& rTuple)
-        :   B3ITuple(rTuple)
+        B3IPoint(const ::basegfx::B3ITuple& rTuple) 
+        :	B3ITuple(rTuple)
         {}
 
-        ~B3IPoint()
+        ~B3IPoint() 
         {}
 
         /** *=operator to allow usage from B3IPoint, too
         */
-        B3IPoint& operator*=( const B3IPoint& rPnt )
-        {
+        B3IPoint& operator*=( const B3IPoint& rPnt ) 
+        { 
             mnX *= rPnt.mnX;
-            mnY *= rPnt.mnY;
-            mnZ *= rPnt.mnZ;
-            return *this;
+            mnY *= rPnt.mnY; 
+            mnZ *= rPnt.mnZ; 
+            return *this; 
         }
 
         /** *=operator to allow usage from B3IPoint, too
         */
-        B3IPoint& operator*=(sal_Int32 t)
-        {
-            mnX *= t;
-            mnY *= t;
-            mnZ *= t;
-            return *this;
+        B3IPoint& operator*=(sal_Int32 t) 
+        { 
+            mnX *= t; 
+            mnY *= t; 
+            mnZ *= t; 
+            return *this; 
         }
 
         /** assignment operator to allow assigning the results
             of B3ITuple calculations
         */
-        B3IPoint& operator=( const ::basegfx::B3ITuple& rVec )
-        {
+        B3IPoint& operator=( const ::basegfx::B3ITuple& rVec ) 
+        { 
             mnX = rVec.getX();
-            mnY = rVec.getY();
-            mnZ = rVec.getZ();
-            return *this;
+            mnY = rVec.getY(); 
+            mnZ = rVec.getZ(); 
+            return *this; 
         }
 
         /** Transform point by given transformation matrix.

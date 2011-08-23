@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,9 +129,9 @@ inline static typelib_TypeDescription * createCTD(
         sal_Int32 nMembers = aDiscriminants.getLength();
         OSL_ASSERT( nMembers == aMemberNames.getLength() && nMembers == aMemberTypes.getLength() );
 
-        const Any * pDiscriminants                          = aDiscriminants.getConstArray();
-        const Reference< XTypeDescription > * pMemberTypes  = aMemberTypes.getConstArray();
-        const OUString * pMemberNames                       = aMemberNames.getConstArray();
+        const Any * pDiscriminants							= aDiscriminants.getConstArray();
+        const Reference< XTypeDescription > * pMemberTypes	= aMemberTypes.getConstArray();
+        const OUString * pMemberNames						= aMemberNames.getConstArray();
 
         typelib_Union_Init * pMembers = (typelib_Union_Init *)alloca( nMembers * sizeof(typelib_Union_Init) );
 
@@ -181,10 +181,10 @@ inline static typelib_TypeDescription * createCTD(
 
         // construct member init array
         const Sequence<Reference< XTypeDescription > > & rMemberTypes = xType->getMemberTypes();
-        const Sequence< OUString > & rMemberNames                     = xType->getMemberNames();
+        const Sequence< OUString > & rMemberNames					  = xType->getMemberNames();
 
         const Reference< XTypeDescription > * pMemberTypes = rMemberTypes.getConstArray();
-        const OUString * pMemberNames                      = rMemberNames.getConstArray();
+        const OUString * pMemberNames					   = rMemberNames.getConstArray();
 
         sal_Int32 nMembers = rMemberTypes.getLength();
         OSL_ENSURE( nMembers == rMemberNames.getLength(), "### lens differ!" );
@@ -239,10 +239,10 @@ inline static typelib_TypeDescription * createCTD(
 
         // construct member init array
         const Sequence<Reference< XTypeDescription > > & rMemberTypes = xType->getMemberTypes();
-        const Sequence< OUString > & rMemberNames                     = xType->getMemberNames();
+        const Sequence< OUString > & rMemberNames					  = xType->getMemberNames();
 
         const Reference< XTypeDescription > * pMemberTypes = rMemberTypes.getConstArray();
-        const OUString * pMemberNames                      = rMemberNames.getConstArray();
+        const OUString * pMemberNames					   = rMemberNames.getConstArray();
 
         sal_Int32 nMembers = rMemberTypes.getLength();
         OSL_ENSURE( nMembers == rMemberNames.getLength(), "### lens differ!" );
@@ -332,7 +332,7 @@ static typelib_TypeDescription * createCTD(
 
         // init all params
         const Sequence<Reference< XMethodParameter > > & rParams = xMethod->getParameters();
-        const Reference< XMethodParameter > * pParams            = rParams.getConstArray();
+        const Reference< XMethodParameter > * pParams			 = rParams.getConstArray();
         sal_Int32 nParams = rParams.getLength();
 
         typelib_Parameter_Init * pParamInit = (typelib_Parameter_Init *)alloca(
@@ -342,7 +342,7 @@ static typelib_TypeDescription * createCTD(
         for ( nPos = nParams; nPos--; )
         {
             const Reference< XMethodParameter > & xParam = pParams[nPos];
-            const Reference< XTypeDescription > & xType  = xParam->getType();
+            const Reference< XTypeDescription > & xType	 = xParam->getType();
             typelib_Parameter_Init & rInit = pParamInit[xParam->getPosition()];
 
             rInit.eTypeClass = (typelib_TypeClass)xType->getTypeClass();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace comphelper
     class OComposedPropertySetInfo : public ::cppu::WeakImplHelper1< XPropertySetInfo >
     {
     private:
-        Sequence< Property>     m_aProperties;
+        Sequence< Property>		m_aProperties;
 
     public:
         OComposedPropertySetInfo(const Sequence< Property>& _rProperties);
@@ -99,7 +99,7 @@ namespace comphelper
             if (xMasterSet.is())
                 aMasterProps = xMasterSet->getPropertySetInfo()->getProperties();
             sal_Int32 nMasterPropsCount = aMasterProps.getLength();
-            const Property* pMasterProps = aMasterProps.getConstArray();
+            const Property*	pMasterProps = aMasterProps.getConstArray();
 
             // check which of the master properties should be included
             Sequence<sal_Bool> aInclusionFlags(nMasterPropsCount);
@@ -128,7 +128,7 @@ namespace comphelper
                         xSecondarySet = m_aSingleSets[i];
                         aSecondaryProperties = xSecondarySet->getPropertySetInfo()->getProperties();
                         nSecondaryPropertyCount = aSecondaryProperties.getLength();
-                        const Property* pSecondaryProperties = aSecondaryProperties.getConstArray();
+                        const Property*	pSecondaryProperties = aSecondaryProperties.getConstArray();
 
                         // search the current primary property in the secondary property sequence
                         sal_Int32 k=0;
@@ -146,7 +146,7 @@ namespace comphelper
             sal_Int32 nOverallProperties = 0;
             for (sal_Int32 nCounter=0; nCounter<nMasterPropsCount; ++nCounter)
             {
-                if (pInclusionFlags[nCounter])
+                if (pInclusionFlags[nCounter]) 
                     ++nOverallProperties;
             }
 
@@ -200,19 +200,19 @@ namespace comphelper
             PropertyState eSecondaryState;
             for (sal_Int32 i=1; i<nSingleSets; ++i)
             {
-                Reference< XPropertySet >   xSecondary(m_aSingleSets[i]);
-                Reference< XPropertyState > xSecondaryState(xSecondary, UNO_QUERY);
+                Reference< XPropertySet >	xSecondary(m_aSingleSets[i]);
+                Reference< XPropertyState >	xSecondaryState(xSecondary, UNO_QUERY);
 
                 // the secondary state
                 eSecondaryState = PropertyState_DIRECT_VALUE;
-                if(xSecondaryState.is())
+                if(xSecondaryState.is()) 
                     eSecondaryState = xSecondaryState->getPropertyState(_rPropertyName);
 
                 // the secondary value
                 Any aSecondaryValue(xSecondary->getPropertyValue(_rPropertyName));
 
-                if  (   (PropertyState_AMBIGUOUS_VALUE == eSecondaryState)      // secondary is ambiguous
-                    ||  !::comphelper::compare(aPrimaryValue, aSecondaryValue)  // unequal values
+                if	(	(PropertyState_AMBIGUOUS_VALUE == eSecondaryState)		// secondary is ambiguous
+                    ||	!::comphelper::compare(aPrimaryValue, aSecondaryValue)	// unequal values
                     )
                 {
                     eState = PropertyState_AMBIGUOUS_VALUE;
@@ -246,7 +246,7 @@ namespace comphelper
         sal_Int32 nSingleSets = m_aSingleSets.size();
         for (sal_Int32 i=0; i<nSingleSets; ++i)
         {
-            Reference< XPropertyState > xState(m_aSingleSets[i], UNO_QUERY);
+            Reference< XPropertyState >	xState(m_aSingleSets[i], UNO_QUERY);
             if(xState.is())
                 xState->setPropertyToDefault(_rPropertyName);
         }
@@ -324,7 +324,7 @@ namespace comphelper
     Property SAL_CALL OComposedPropertySetInfo::getPropertyByName( const ::rtl::OUString& _rName ) throw(UnknownPropertyException, RuntimeException)
     {
         sal_Int32 nLength = m_aProperties.getLength();
-        const Property* pProps = m_aProperties.getConstArray();
+        const Property*	pProps = m_aProperties.getConstArray();
         // TODO TODO TODO: this O(n) search really sucks ...
         for (sal_Int32 i=0; i<nLength; ++i, ++pProps)
         {
@@ -339,11 +339,11 @@ namespace comphelper
     sal_Bool SAL_CALL OComposedPropertySetInfo::hasPropertyByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
     {
         sal_Int32 nLength = m_aProperties.getLength();
-        const Property* pProps = m_aProperties.getConstArray();
+        const Property*	pProps = m_aProperties.getConstArray();
         // TODO TODO TODO: this O(n) search really sucks ...
         for( sal_Int32 i=0; i<nLength; ++i,++pProps )
         {
-            if(pProps->Name == _rName)
+            if(pProps->Name == _rName) 
                 return sal_True;
         }
 
@@ -351,7 +351,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 

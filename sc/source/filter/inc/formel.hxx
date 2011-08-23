@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ struct ScComplexRefData;
 enum ConvErr
 {
     ConvOK = 0,
-    ConvErrNi,      // nicht implemntierter/unbekannter Opcode aufgetreten
-    ConvErrNoMem,   // Fehler beim Speicheranfordern
+    ConvErrNi,		// nicht implemntierter/unbekannter Opcode aufgetreten
+    ConvErrNoMem,	// Fehler beim Speicheranfordern
     ConvErrExternal,// Add-Ins aus Excel werden nicht umgesetzt
-    ConvErrCount    // Nicht alle Bytes der Formel 'erwischt'
+    ConvErrCount	// Nicht alle Bytes der Formel 'erwischt'
 };
 
 
@@ -77,17 +77,17 @@ class _ScRangeList : protected List
 private:
 protected:
 public:
-    virtual                 ~_ScRangeList();
-    inline void             Append( const ScRange& rRange );
-    inline void             Append( ScRange* pRange );
-    inline void             Append( const ScSingleRefData& rSRD );
-    inline void             Append( const ScComplexRefData& rCRD );
+    virtual					~_ScRangeList();
+    inline void				Append( const ScRange& rRange );
+    inline void				Append( ScRange* pRange );
+    inline void				Append( const ScSingleRefData& rSRD );
+    inline void				Append( const ScComplexRefData& rCRD );
 
     using                   List::Count;
-    inline BOOL             HasRanges( void ) const;
+    inline BOOL				HasRanges( void ) const;
 
-    inline const ScRange*   First( void );
-    inline const ScRange*   Next( void );
+    inline const ScRange*	First( void );
+    inline const ScRange*	Next( void );
 };
 
 
@@ -129,7 +129,7 @@ inline void _ScRangeList::Append( const ScSingleRefData& r )
 
 inline void _ScRangeList::Append( const ScComplexRefData& r )
 {
-    List::Insert(   new ScRange(    r.Ref1.nCol, r.Ref1.nRow, r.Ref1.nTab,
+    List::Insert(	new ScRange(	r.Ref1.nCol, r.Ref1.nRow, r.Ref1.nTab,
                                     r.Ref2.nCol, r.Ref2.nRow, r.Ref2.nTab ),
                     LIST_APPEND );
 }
@@ -143,23 +143,23 @@ class _ScRangeListTabs
 {
 private:
 protected:
-    BOOL                        bHasRanges;
-    _ScRangeList**              ppTabLists;
-    _ScRangeList*               pAct;
-    UINT16                      nAct;
+    BOOL						bHasRanges;
+    _ScRangeList**				ppTabLists;
+    _ScRangeList*				pAct;
+    UINT16						nAct;
 public:
                                 _ScRangeListTabs( void );
-    virtual                     ~_ScRangeListTabs();
+    virtual						~_ScRangeListTabs();
 
-    void                        Append( ScSingleRefData aSRD, const BOOL bLimit = TRUE );
-    void                        Append( ScComplexRefData aCRD, const BOOL bLimit = TRUE );
+    void						Append( ScSingleRefData aSRD, const BOOL bLimit = TRUE );
+    void						Append( ScComplexRefData aCRD, const BOOL bLimit = TRUE );
 
-    inline BOOL                 HasRanges( void ) const;
+    inline BOOL					HasRanges( void ) const;
 
-    const ScRange*              First( const UINT16 nTab = 0 );
-    const ScRange*              Next( void );
-//      const ScRange*              NextContinue( void );
-    inline const _ScRangeList*  GetActList( void ) const;
+    const ScRange*				First( const UINT16 nTab = 0 );
+    const ScRange*				Next( void );
+//		const ScRange*				NextContinue( void );
+    inline const _ScRangeList*	GetActList( void ) const;
 };
 
 
@@ -180,23 +180,23 @@ inline const _ScRangeList* _ScRangeListTabs::GetActList( void ) const
 class ConverterBase
 {
 protected:
-    TokenPool           aPool;          // User Token + Predefined Token
-    TokenStack          aStack;
+    TokenPool			aPool;			// User Token + Predefined Token
+    TokenStack			aStack;
     ScAddress           aEingPos;
     ConvErr             eStatus;
-    sal_Char*           pBuffer;        // Universal-Puffer
-    UINT16              nBufferSize;    // ...und seine Groesse
+    sal_Char*			pBuffer;		// Universal-Puffer
+    UINT16				nBufferSize;	// ...und seine Groesse
 
                         ConverterBase( UINT16 nNewBuffer );
-    virtual             ~ConverterBase();
+    virtual				~ConverterBase();
 
-    void                Reset();
+    void				Reset();
 
 public:
-    inline SCCOL        GetEingabeCol( void ) const { return aEingPos.Col(); }
-    inline SCROW        GetEingabeRow( void ) const { return aEingPos.Row(); }
-    inline SCTAB        GetEingabeTab( void ) const { return aEingPos.Tab(); }
-    inline ScAddress    GetEingPos( void ) const    { return aEingPos; }
+    inline SCCOL		GetEingabeCol( void ) const	{ return aEingPos.Col(); }
+    inline SCROW		GetEingabeRow( void ) const	{ return aEingPos.Row(); }
+    inline SCTAB		GetEingabeTab( void ) const	{ return aEingPos.Tab(); }
+    inline ScAddress	GetEingPos( void ) const	{ return aEingPos; }
 };
 
 
@@ -205,10 +205,10 @@ class ExcelConverterBase : public ConverterBase
 {
 protected:
                         ExcelConverterBase( UINT16 nNewBuffer );
-    virtual             ~ExcelConverterBase();
+    virtual				~ExcelConverterBase();
 
 public:
-    void                Reset();
+    void	 			Reset();
     void                Reset( const ScAddress& rEingPos );
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
@@ -222,26 +222,26 @@ public:
 class LotusConverterBase : public ConverterBase
 {
 protected:
-    SvStream&           aIn;
-    INT32               nBytesLeft;
+    SvStream&			aIn;
+    INT32				nBytesLeft;
 
-    inline void         Ignore( const long nSeekRel );
-    inline void         Read( sal_Char& nByte );
-    inline void         Read( BYTE& nByte );
-    inline void         Read( UINT16& nUINT16 );
-    inline void         Read( INT16& nINT16 );
-    inline void         Read( double& fDouble );
+    inline void			Ignore( const long nSeekRel );
+    inline void			Read( sal_Char& nByte );
+    inline void			Read( BYTE& nByte );
+    inline void			Read( UINT16& nUINT16 );
+    inline void			Read( INT16& nINT16 );
+    inline void			Read( double& fDouble );
         inline void                     Read( UINT32& nUINT32 );
 
                         LotusConverterBase( SvStream& rStr, UINT16 nNewBuffer );
-    virtual             ~LotusConverterBase();
+    virtual				~LotusConverterBase();
 
 public:
 //UNUSED2008-05  void                Reset( INT32 nLen );
 //UNUSED2008-05  void                Reset( INT32 nLen, const ScAddress& rEingPos );
     void                Reset( const ScAddress& rEingPos );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
+    virtual ConvErr		Convert( const ScTokenArray*& rpErg, INT32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 
 protected:

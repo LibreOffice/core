@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace anim
 
     /** Apply given functor to every animation node child.
 
-        @param xNode
+        @param xNode 
         Parent node
 
         @param rFunctor
@@ -57,23 +57,23 @@ namespace anim
         @return true, if the functor was successfully applied to
         all children, false otherwise.
     */
-    template< typename Functor > inline bool for_each_childNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&    xNode,
-                                                          Functor&                                                                                  rFunctor )
+    template< typename Functor > inline bool for_each_childNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&	xNode,
+                                                          Functor&																					rFunctor )
     {
         try
         {
             // get an XEnumerationAccess to the children
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >
-                  xEnumerationAccess( xNode,
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess > 
+                  xEnumerationAccess( xNode, 
                                       ::com::sun::star::uno::UNO_QUERY_THROW );
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
-                  xEnumeration( xEnumerationAccess->createEnumeration(),
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > 
+                  xEnumeration( xEnumerationAccess->createEnumeration(), 
                                 ::com::sun::star::uno::UNO_QUERY_THROW );
-
+                
             while( xEnumeration->hasMoreElements() )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
-                      xChildNode( xEnumeration->nextElement(),
+                ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > 
+                      xChildNode( xEnumeration->nextElement(), 
                                   ::com::sun::star::uno::UNO_QUERY_THROW );
 
                 rFunctor( xChildNode );
@@ -98,22 +98,22 @@ namespace anim
         try
         {
             // get an XEnumerationAccess to the children
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >
-                  xEnumerationAccess( xNode,
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess > 
+                  xEnumerationAccess( xNode, 
                                       ::com::sun::star::uno::UNO_QUERY );
 
             if( xEnumerationAccess.is() )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
-                      xEnumeration( xEnumerationAccess->createEnumeration(),
+                ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > 
+                      xEnumeration( xEnumerationAccess->createEnumeration(), 
                                     ::com::sun::star::uno::UNO_QUERY );
-
+                
                 if( xEnumeration.is() )
                 {
                     while( xEnumeration->hasMoreElements() )
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
-                            xChildNode( xEnumeration->nextElement(),
+                        ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > 
+                            xChildNode( xEnumeration->nextElement(), 
                                         ::com::sun::star::uno::UNO_QUERY_THROW );
 
                         create_deep_vector( xChildNode, rVector );

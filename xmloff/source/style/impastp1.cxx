@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
         sal_Bool bAsFam )
     : pCache( 0 ), mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
       mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), bAsFamily( bAsFam )
-
+      
 {
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
     mpNameList   = new SvXMLAutoStylePoolNamesP_Impl( 5, 5 );

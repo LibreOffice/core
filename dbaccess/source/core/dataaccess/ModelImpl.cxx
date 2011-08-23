@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1167,7 +1167,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "Reports",                    makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "KeyAlterationServiceName",   makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "IndexAlterationServiceName", makeAny( ::rtl::OUString() ) ),
-
+        
         AsciiPropertyValue()
     };
     return aKnownSettings;
@@ -1497,6 +1497,6 @@ ModelDependentComponent::~ModelDependentComponent()
 }
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 

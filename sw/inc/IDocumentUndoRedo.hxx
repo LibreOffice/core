@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,7 +176,7 @@ public:
         bis zum Ende des Undo-Arrays
     */
     virtual void ClearRedo() = 0;
-
+    
     /** Manipulates the position of the undo stack which reset the modified flag
     */
     virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition ) = 0;
@@ -184,10 +184,10 @@ public:
     /** Gets the position of the undo stack which reset the modified flag
     */
     virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const = 0;
-
+    
 protected:
      virtual ~IDocumentUndoRedo() {};
 };
-
+ 
 #endif
 

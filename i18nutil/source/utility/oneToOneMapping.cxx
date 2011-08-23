@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ oneToOneMapping::~oneToOneMapping()
 {
 }
 
-sal_Unicode oneToOneMapping::find(const sal_Unicode nKey) const
+sal_Unicode oneToOneMapping::find(const sal_Unicode nKey) const 
 {
     if( mpTable )
     {
@@ -110,7 +110,7 @@ void oneToOneMappingWithFlag::makeIndex()
     }
 }
 
-sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
+sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const 
 {
     if( mpTableWF )
     {

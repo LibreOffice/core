@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,7 +198,7 @@ sal_Int32 VCLXAccessibleCheckBox::getAccessibleActionCount( ) throw (RuntimeExce
 {
     OExternalLockGuard aGuard( this );
 
-    return 1;
+    return 1;	
 }
 
 // -----------------------------------------------------------------------------
@@ -253,7 +253,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleCheckBox::getAccessibleActionKe
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
-
+    
     OAccessibleKeyBindingHelper* pKeyBindingHelper = new OAccessibleKeyBindingHelper();
     Reference< XAccessibleKeyBinding > xKeyBinding = pKeyBindingHelper;
 
@@ -297,7 +297,7 @@ Any VCLXAccessibleCheckBox::getCurrentValue(  ) throw (RuntimeException)
     VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
     if ( pVCLXCheckBox )
         aValue <<= (sal_Int32) pVCLXCheckBox->getState();
-
+    
     return aValue;
 }
 
@@ -311,7 +311,7 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber ) throw (Ru
 
     VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
     if ( pVCLXCheckBox )
-    {
+    {	
         sal_Int32 nValue = 0, nValueMin = 0, nValueMax = 0;
         OSL_VERIFY( aNumber >>= nValue );
         OSL_VERIFY( getMinimumValue() >>= nValueMin );
@@ -325,7 +325,7 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber ) throw (Ru
         pVCLXCheckBox->setState( (sal_Int16) nValue );
         bReturn = sal_True;
     }
-
+    
     return bReturn;
 }
 
@@ -342,7 +342,7 @@ Any VCLXAccessibleCheckBox::getMaximumValue(  ) throw (RuntimeException)
         aValue <<= (sal_Int32) 2;
     else
         aValue <<= (sal_Int32) 1;
-
+                
     return aValue;
 }
 
@@ -354,7 +354,7 @@ Any VCLXAccessibleCheckBox::getMinimumValue(  ) throw (RuntimeException)
 
     Any aValue;
     aValue <<= (sal_Int32) 0;
-
+    
     return aValue;
 }
 

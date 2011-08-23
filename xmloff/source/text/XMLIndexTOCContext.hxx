@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
 } } }
-namespace rtl { class OUString; }
+namespace rtl {	class OUString; }
 
 
-enum IndexTypeEnum
+enum IndexTypeEnum 
 {
     TEXT_INDEX_TOC,
     TEXT_INDEX_ALPHABETICAL,
@@ -48,7 +48,7 @@ enum IndexTypeEnum
     TEXT_INDEX_BIBLIOGRAPHY,
     TEXT_INDEX_USER,
     TEXT_INDEX_ILLUSTRATION,
-
+    
     TEXT_INDEX_UNKNOWN
 };
 
@@ -59,14 +59,14 @@ enum IndexTypeEnum
  * Originally, this class would import only the TOC (table of
  * content), but now it's role has been expanded to handle all
  * indices, and hence is named inappropriately. Depending on the
- * element name it decides which index source element context to create.
+ * element name it decides which index source element context to create. 
  */
 class XMLIndexTOCContext : public SvXMLImportContext
 {
     const ::rtl::OUString sTitle;
     const ::rtl::OUString sIsProtected;
     const ::rtl::OUString sName;
-
+    
     /** XPropertySet of the index */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> xTOCPropertySet;
@@ -82,7 +82,7 @@ public:
     TYPEINFO();
 
     XMLIndexTOCContext(
-        SvXMLImport& rImport,
+        SvXMLImport& rImport, 
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
@@ -91,15 +91,15 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext *CreateChildContext( 
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 

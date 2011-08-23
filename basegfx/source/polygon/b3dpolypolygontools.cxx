@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,16 +69,16 @@ namespace basegfx
             if(rCandidate.count() && fFullDashDotLen > 0.0)
             {
                 B3DPolyPolygon aLineTarget, aGapTarget;
-
+    
                 for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
                 {
                     const B3DPolygon aCandidate(rCandidate.getB3DPolygon(a));
-
+                    
                     applyLineDashing(
-                        aCandidate,
-                        rDotDashArray,
-                        pLineTarget ? &aLineTarget : 0,
-                        pGapTarget ? &aGapTarget : 0,
+                        aCandidate, 
+                        rDotDashArray, 
+                        pLineTarget ? &aLineTarget : 0, 
+                        pGapTarget ? &aGapTarget : 0, 
                         fFullDashDotLen);
 
                     if(pLineTarget)
@@ -341,8 +341,8 @@ namespace basegfx
 
             return aRetval;
         }
-
-        B3DPolyPolygon createSpherePolyPolygonFromB3DRange( const B3DRange& rRange,
+        
+        B3DPolyPolygon createSpherePolyPolygonFromB3DRange( const B3DRange& rRange, 
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             double fVerStart, double fVerStop,
             double fHorStart, double fHorStop)
@@ -423,8 +423,8 @@ namespace basegfx
 
             return aRetval;
         }
-
-        B3DPolyPolygon createSphereFillPolyPolygonFromB3DRange( const B3DRange& rRange,
+        
+        B3DPolyPolygon createSphereFillPolyPolygonFromB3DRange( const B3DRange& rRange, 
             sal_uInt32 nHorSeg, sal_uInt32 nVerSeg,
             bool bNormals,
             double fVerStart, double fVerStop,

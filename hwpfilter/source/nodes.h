@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,10 +71,10 @@ enum IDLIST {
 class Node{
 public:
      Node(int _id) : id(_id)
-     {
-          value = 0L;
-          child = 0L;
-          next = 0L;
+     { 
+          value = 0L; 
+          child = 0L; 
+          next = 0L; 
 #ifdef NODE_DEBUG
           count++;
           printf("Node count : [%d]\n",count);
@@ -99,7 +99,7 @@ public:
      int id;
      char *value;
      Node *child;
-     Node *next;
+     Node *next; 
 };
 
 //static LinkedList<Node> nodelist;

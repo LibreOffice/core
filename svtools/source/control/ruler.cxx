@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,9 @@
 #define RULER_UNIT_MILE     6
 #define RULER_UNIT_POINT    7
 #define RULER_UNIT_PICA     8
-#define RULER_UNIT_COUNT    9
+#define RULER_UNIT_CHAR	    9
+#define RULER_UNIT_LINE    10
+#define RULER_UNIT_COUNT    11
 
 // -----------------
 // - ImplRulerData -
@@ -145,7 +147,9 @@ static ImplRulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 { MAP_100TH_INCH,     1200,   120,    600,   1200,   30480, 3, "'"      }, // FOOT
 { MAP_10TH_INCH,    633600, 63360, 316800, 633600, 1609344, 4, " miles" }, // MILE
 { MAP_POINT,             1,    12,     12,     36,     353, 2, " pt"    }, // POINT
-{ MAP_100TH_MM,        423,   423,    423,    846,     423, 3, " pi"    }  // PICA
+{ MAP_100TH_MM,        423,   423,    423,    846,     423, 3, " pi"    }, // PICA
+{ MAP_100TH_MM,	       371,   371,    371,    743,     371, 3, " ch"    }, // CHAR
+{ MAP_100TH_MM,        551,   551,    551,   1102,     551, 3, " li"    }  // LINE
 };
 
 // =======================================================================
@@ -264,6 +268,8 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnExtraStyle    = 0;                    // Style des Extra-Feldes
     mnExtraClicks   = 0;                    // Click-Anzahl fuer Extra-Feld
     mnExtraModifier = 0;                    // Modifier-Tasten beim Click im Extrafeld
+    mnCharWidth     = 371;
+    mnLineHeight    = 551;
     mbCalc          = TRUE;                 // Muessen Pagebreiten neu berechnet werden
     mbFormat        = TRUE;                 // Muss neu ausgegeben werden
     mbDrag          = FALSE;                // Sind wir im Drag-Modus
@@ -467,6 +473,29 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long    nY;
     BOOL    bNoTicks = FALSE;
 
+    //Amelia
+    long    nTickUnit ;
+    long    nTick2 ;
+    if ( mnUnitIndex == RULER_UNIT_CHAR )
+    {
+        if ( mnCharWidth == 0 )
+            mnCharWidth = 371;
+        nTick3 = mnCharWidth*2;
+        nTickCount = mnCharWidth;
+        nTickUnit = mnCharWidth;
+        nTick2 = mnCharWidth;
+    }
+    else if ( mnUnitIndex == RULER_UNIT_LINE )
+    {
+        if ( mnLineHeight == 0 )
+            mnLineHeight = 551;
+        nTick3 = mnLineHeight*2;
+        nTickCount = mnLineHeight;
+        nTickUnit = mnLineHeight;
+        nTick2 = mnLineHeight;
+    }
+    aPixSize = maVirDev.LogicToPixel( Size( nTick3, nTick3 ), maMapMode );
+
     // Groessenvorberechnung
     BOOL bVertRight = FALSE;
     if ( mnWinStyle & WB_HORZ )
@@ -487,7 +516,11 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     long nMaxWidth = maVirDev.PixelToLogic( Size( mpData->nPageWidth, 0 ), maMapMode ).Width();
     if ( nMaxWidth < 0 )
         nMaxWidth *= -1;
-    nMaxWidth /= aImplRulerUnitTab[mnUnitIndex].nTickUnit;
+// Amelia
+    if (( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ))
+        nMaxWidth /= nTickUnit;
+    else
+        nMaxWidth /= aImplRulerUnitTab[mnUnitIndex].nTickUnit;
     UniString aNumStr( UniString::CreateFromInt32( nMaxWidth ) );
     long nTxtWidth = GetTextWidth( aNumStr );
     if ( (nTxtWidth*2) > nTickWidth )
@@ -567,7 +600,11 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 // Tick3 - Ausgabe (Text)
                 if ( !(nTick % nTick3) )
                 {
-                    aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
+                    //aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
+                    if ( ( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ) )
+                        aNumStr = UniString::CreateFromInt32( nTick / nTickUnit );
+                    else
+                        aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
                     nTxtWidth2 = GetTextWidth( aNumStr )/2;
 
                     nX = nStart+n;
@@ -594,7 +631,10 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 // Tick/Tick2 - Ausgabe (Striche)
                 else
                 {
-                    if ( !(nTick % aImplRulerUnitTab[mnUnitIndex].nTick2) )
+        /// Amelia
+                    if ( ( mnUnitIndex != RULER_UNIT_CHAR ) && ( mnUnitIndex != RULER_UNIT_LINE ) )
+                        nTick2 = aImplRulerUnitTab[mnUnitIndex].nTick2;
+                    if ( !(nTick % nTick2 ) )
                         nTickWidth = RULER_TICK2_WIDTH;
                     else
                         nTickWidth = RULER_TICK1_WIDTH;
@@ -1470,16 +1510,16 @@ void Ruler::ImplDraw()
             if(mpData->bTextRTL)
                 aVirDevSize.Width() -= maExtraRect.GetWidth();
 
-//  else
-//      aVirDevSize.Width() -= mnVirOff;
+//	else
+//		aVirDevSize.Width() -= mnVirOff;
             aOffPos.Y() = RULER_OFF;
         }
         else
         {
             aOffPos.X() = RULER_OFF;
             aOffPos.Y() = mnVirOff;
-//  else
-//      aVirDevSize.Height() -= mnVirOff;
+//	else
+//		aVirDevSize.Height() -= mnVirOff;
         }
         DrawOutDev( aOffPos, aVirDevSize, Point(), aVirDevSize, maVirDev );
 
@@ -2804,6 +2844,12 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
             case FUNIT_PICA:
                 mnUnitIndex = RULER_UNIT_PICA;
                 break;
+            case FUNIT_CHAR:
+                mnUnitIndex = RULER_UNIT_CHAR;
+                break;
+            case FUNIT_LINE:
+                mnUnitIndex = RULER_UNIT_LINE;
+                break;
             default:
 #ifdef DBG_UTIL
                 DBG_ERRORFILE( "Ruler::SetUnit() - Wrong Unit" );
@@ -3179,3 +3225,11 @@ const RulerBorder*  Ruler::GetBorders() const { return mpData->pBorders; }
 USHORT              Ruler::GetIndentCount() const { return mpData->nIndents; }
 const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
 
+/* ---------------------------------------------------
+ *
+ * ---------------------------------------------------*/
+void Ruler::DrawTicks()
+{
+    mbFormat = TRUE;
+    ImplDraw();
+}

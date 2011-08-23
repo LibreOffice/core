@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,27 +59,27 @@ typedef boost::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
 struct CustomShapeGuide
 {
-    rtl::OUString   maName;
-    rtl::OUString   maFormula;
+    rtl::OUString	maName;
+    rtl::OUString	maFormula;
 };
 
 struct AdjustHandle
 {
-    sal_Bool                                polar;
+    sal_Bool								polar;
     com::sun::star::drawing::EnhancedCustomShapeParameterPair
                                             pos;
 
     // depending to the type (polar or not):
-    OptValue< rtl::OUString >               gdRef1; // gdRefX   or gdRefR
+    OptValue< rtl::OUString >				gdRef1;	// gdRefX	or gdRefR
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
-                                            min1;   // minX     or minR
+                                            min1;	// minX		or minR
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
-                                            max1;   // maxX     or maxR
-    OptValue< rtl::OUString >               gdRef2; // gdRefY   or gdRefAng
+                                            max1;	// maxX		or maxR
+    OptValue< rtl::OUString >				gdRef2;	// gdRefY	or gdRefAng
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
-                                            min2;   // minX     or minAng
+                                            min2;	// minX		or minAng
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
-                                            max2;   // maxY     or maxAng
+                                            max2;	// maxY		or maxAng
 
     AdjustHandle( sal_Bool bPolar ) : polar( bPolar ) {};
 };
@@ -94,19 +94,19 @@ struct ConnectionSite
 
 struct GeomRect
 {
-    com::sun::star::drawing::EnhancedCustomShapeParameter   l;
-    com::sun::star::drawing::EnhancedCustomShapeParameter   t;
-    com::sun::star::drawing::EnhancedCustomShapeParameter   r;
-    com::sun::star::drawing::EnhancedCustomShapeParameter   b;
+    com::sun::star::drawing::EnhancedCustomShapeParameter	l;
+    com::sun::star::drawing::EnhancedCustomShapeParameter	t;
+    com::sun::star::drawing::EnhancedCustomShapeParameter	r;
+    com::sun::star::drawing::EnhancedCustomShapeParameter	b;
 };
 
 struct Path2D
 {
-    sal_Int64   w;
-    sal_Int64   h;
-    sal_Int32   fill;
-    sal_Bool    stroke;
-    sal_Bool    extrusionOk;
+    sal_Int64	w;
+    sal_Int64	h;
+    sal_Int32	fill;
+    sal_Bool	stroke;
+    sal_Bool	extrusionOk;
     std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > parameter;
 
     Path2D() : w( 0 ), h( 0 ), fill( XML_norm ), stroke( sal_True ), extrusionOk( sal_True ) {};
@@ -126,15 +126,15 @@ public:
 
     void setShapePresetType( const rtl::OUString& rShapePresetType ){ maShapePresetType = rShapePresetType; };
 
-    std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };
-    std::vector< CustomShapeGuide >&    getGuideList(){ return maGuideList; };
-    std::vector< AdjustHandle >&        getAdjustHandleList(){ return maAdjustHandleList; };
-    std::vector< ConnectionSite >&      getConnectionSiteList(){ return maConnectionSiteList; };
-    OptValue< GeomRect >&               getTextRect(){ return maTextRect; };
-    std::vector< Path2D >&              getPath2DList(){ return maPath2DList; };
+    std::vector< CustomShapeGuide >&	getAdjustmentGuideList(){ return maAdjustmentGuideList; };
+    std::vector< CustomShapeGuide >&	getGuideList(){ return maGuideList; };
+    std::vector< AdjustHandle >&		getAdjustHandleList(){ return maAdjustHandleList; };
+    std::vector< ConnectionSite >&		getConnectionSiteList(){ return maConnectionSiteList; };
+    OptValue< GeomRect >&				getTextRect(){ return maTextRect; };
+    std::vector< Path2D >&				getPath2DList(){ return maPath2DList; };
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
-    void                                setMirroredX( sal_Bool bMirroredX ) { mbMirroredX = bMirroredX; };
-    void                                setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
+    void								setMirroredX( sal_Bool bMirroredX ) { mbMirroredX = bMirroredX; };
+    void								setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
 
     double getValue( const std::vector< CustomShapeGuide >&, sal_uInt32 nIndex ) const;
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
@@ -142,18 +142,18 @@ public:
 
 private:
 
-    rtl::OUString                   maShapePresetType;
-    std::vector< CustomShapeGuide > maAdjustmentGuideList;
-    std::vector< CustomShapeGuide > maGuideList;
-    std::vector< AdjustHandle >     maAdjustHandleList;
-    std::vector< ConnectionSite >   maConnectionSiteList;
-    OptValue< GeomRect >            maTextRect;
-    std::vector< Path2D >           maPath2DList;
+    rtl::OUString					maShapePresetType;
+    std::vector< CustomShapeGuide >	maAdjustmentGuideList;
+    std::vector< CustomShapeGuide >	maGuideList;
+    std::vector< AdjustHandle >		maAdjustHandleList;
+    std::vector< ConnectionSite >	maConnectionSiteList;
+    OptValue< GeomRect >			maTextRect;
+    std::vector< Path2D >			maPath2DList;
 
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >
                                     maSegments;
-    sal_Bool                        mbMirroredX;
-    sal_Bool                        mbMirroredY;
+    sal_Bool						mbMirroredX;
+    sal_Bool						mbMirroredY;
 };
 
 } }

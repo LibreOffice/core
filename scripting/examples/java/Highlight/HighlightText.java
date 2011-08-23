@@ -113,9 +113,9 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
             // highlight the text in red
             Color cRed = new Color(255, 0, 0);
             int red = cRed.getRGB();
-
+            
             XReplaceable replaceable = (XReplaceable)
-                UnoRuntime.queryInterface(XReplaceable.class, theDocument);
+                UnoRuntime.queryInterface(XReplaceable.class, theDocument); 
 
             XReplaceDescriptor descriptor =
                 (XReplaceDescriptor) replaceable.createReplaceDescriptor();
@@ -136,7 +136,7 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
                     com.sun.star.beans.PropertyState.DIRECT_VALUE);
 
             // Apply the properties
-            PropertyValue[] props = new PropertyValue[] { cv, wv };
+            PropertyValue[] props = new PropertyValue[] { cv, wv }; 
 
             try {
                 xPropertyReplace.setReplaceAttributes(props);
@@ -164,9 +164,9 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
             }
 
             // Replaces all instances of searchKey with new Text properties
-            // and gets the number of instances of the searchKey
-            descriptor.setSearchString(searchKey);
-            descriptor.setReplaceString(searchKey);
+            // and gets the number of instances of the searchKey 
+            descriptor.setSearchString(searchKey); 
+            descriptor.setReplaceString(searchKey); 
             replaceable.replaceAll(descriptor);
         }
     }
@@ -193,10 +193,10 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
 
             Object serviceObj = context.getComponentContext().getValueByName(
                 "/singletons/com.sun.star.util.theMacroExpander");
-
+                                                                                
             XMacroExpander xme = (XMacroExpander) AnyConverter.toObject(
                 new Type(XMacroExpander.class), serviceObj);
-
+                                                                                
             String bootstrapName = "bootstraprc";
             if (System.getProperty("os.name").startsWith("Windows")) {
                 bootstrapName = "bootstrap.ini";

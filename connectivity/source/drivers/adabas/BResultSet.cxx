@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ sal_Bool SAL_CALL OAdabasResultSet::next(  ) throw(SQLException, RuntimeExceptio
 
 
     m_nLastColumnPos = 0;
-    //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
+    //	m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
     m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
 
     if(m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO)
@@ -191,7 +191,7 @@ void SAL_CALL OAdabasResultSet::refreshRow(  ) throw(SQLException, RuntimeExcept
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    //  SQLRETURN nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_REFRESH,SQL_LOCK_NO_CHANGE);
+    //	SQLRETURN nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_REFRESH,SQL_LOCK_NO_CHANGE);
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_RETRIEVE_DATA,(SQLPOINTER)SQL_RD_OFF,SQL_IS_UINTEGER);
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,0);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;

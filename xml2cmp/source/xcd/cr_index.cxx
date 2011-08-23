@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,27 +36,27 @@
 #include "cr_html.hxx"
 
 
-extern unsigned C_nSupportedServicesIndex;
+extern unsigned	C_nSupportedServicesIndex;
 
 char C_sLineEnd[] = "\n";
 
-char C_sFileBegin[]     = "<HTML><HEAD></HEAD><BODY bgcolor=\"#ffffff\">\n";
-char C_sFileEnd[]       = "</BODY></HTML>\n";
-char C_sTableBegin[]    = "<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=0><TBODY>\n";
-char C_sTableEnd[]      = "</TBODY></TABLE>\n";
-char C_sService[]       = "SupportedService";
-char C_sModule[]        = "ModuleName";
-char C_sComponentname[] = "ComponentName";
+char C_sFileBegin[] 	= "<HTML><HEAD></HEAD><BODY bgcolor=\"#ffffff\">\n";
+char C_sFileEnd[]   	= "</BODY></HTML>\n";
+char C_sTableBegin[] 	= "<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=0><TBODY>\n";
+char C_sTableEnd[]  	= "</TBODY></TABLE>\n";
+char C_sService[]	    = "SupportedService";
+char C_sModule[]	    = "ModuleName";
+char C_sComponentname[]	= "ComponentName";
 
 
 
 Simstr sIdlRootPath;
 
 
-Index::Index( const char *          i_sOutputDirectory,
-              const char *          i_sIdlRootPath,
-              const List<Simstr> &   )
-    :   aService2Module(20),
+Index::Index( const char *			i_sOutputDirectory,
+              const char *			i_sIdlRootPath,
+              const List<Simstr> &	 )
+    :	aService2Module(20),
         aModule2Service(20),
         sOutputDirectory(i_sOutputDirectory),
         sIdlRootPath(i_sIdlRootPath)
@@ -105,7 +105,7 @@ Index::WriteOutput( const char * i_sOuputFile )
 }
 
 void
-Index::InsertSupportedService( const Simstr &       i_sService )
+Index::InsertSupportedService( const Simstr &		i_sService )
 {
     aService2Module.InsertValue( i_sService, sCurModule );
     aModule2Service.InsertValue( sCurModule, i_sService );
@@ -114,10 +114,10 @@ Index::InsertSupportedService( const Simstr &       i_sService )
 void
 Index::ReadFile(  const char * i_sFilename )
 {
-    static char             sOutputHtml[1020];
+    static char				sOutputHtml[1020];
 
-    ModuleDescription   aModule;
-    X2CParser           aParser(aModule);
+    ModuleDescription	aModule;
+    X2CParser			aParser(aModule);
 
     // Parse
     bool bResult = aParser.Parse(i_sFilename);
@@ -132,7 +132,7 @@ Index::ReadFile(  const char * i_sFilename )
 
     // Create Html:
     CreateHtmlFileName( sOutputHtml, aModule );
-    HtmlCreator     aHtmlCreator( sOutputHtml, aModule, sIdlRootPath );
+    HtmlCreator 	aHtmlCreator( sOutputHtml, aModule, sIdlRootPath );
     aHtmlCreator.Run();
 
     // GetResults:
@@ -148,8 +148,8 @@ Index::ReadFile(  const char * i_sFilename )
 }
 
 void
-Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
-                            const ModuleDescription &   i_rModule )
+Index::CreateHtmlFileName(	char *						o_sOutputHtml,
+                            const ModuleDescription	&   i_rModule )
 {
     if ( strlen(sOutputDirectory.str()) + strlen(i_rModule.ModuleName()) > 1000 )
     {
@@ -163,7 +163,7 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
 #elif defined(UNX)
     strcat(o_sOutputHtml, "/");                             // STRCAT SAFE HERE
 #else
-#error  WNT or UNX have to be defined.
+#error	WNT or UNX have to be defined.
 #endif
     strcat( o_sOutputHtml, i_rModule.ModuleName() );        // STRCAT SAFE HERE
     strcat( o_sOutputHtml, ".html" );                       // STRCAT SAFE HERE
@@ -171,11 +171,11 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
 
 
 void
-Index::WriteTableFromHeap( std::ostream &   o_rOut,
-                           Heap &       i_rHeap,
-                           const char * i_sIndexValue,
-                           const char * i_sIndexReference,
-                           E_LinkType       i_eLinkType )
+Index::WriteTableFromHeap( std::ostream &  	o_rOut,
+                           Heap & 	    i_rHeap,
+                           const char *	i_sIndexValue,
+                           const char *	i_sIndexReference,
+                           E_LinkType		i_eLinkType )
 {
     WriteStr(o_rOut, "<H3><BR>");
     WriteStr(o_rOut, i_sIndexValue );
@@ -190,9 +190,9 @@ Index::WriteTableFromHeap( std::ostream &   o_rOut,
 
 
 void
-Index::WriteHeap( std::ostream &    o_rOut,
-                  Heap &        i_rHeap,
-                  E_LinkType    i_eLinkType )
+Index::WriteHeap( std::ostream &  	o_rOut,
+                  Heap &	    i_rHeap,
+                  E_LinkType 	i_eLinkType )
 {
     static Simstr S_sKey;
     static char C_sSpaceInName[] = "&nbsp;&nbsp;&nbsp;";
@@ -240,7 +240,7 @@ Index::WriteHeap( std::ostream &    o_rOut,
 
 
 
-/** Übersicht der Struktur
+/**	Übersicht der Struktur
 
 MODULEDESCRIPTION
 {

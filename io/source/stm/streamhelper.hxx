@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <assert.h>
 
 #define Max( a, b )     (((a)>(b)) ? (a) : (b) )
-#define Min( a, b )     (((a)<(b)) ? (a) : (b) )
+#define Min( a, b )		(((a)<(b)) ? (a) : (b) )
 
 namespace io_stm {
 
@@ -54,15 +54,15 @@ class IFIFO
 public:
 
 
-    virtual void    write( const Sequence<sal_Int8> &) throw( IFIFO_OutOfMemoryException,
+    virtual void 	write( const Sequence<sal_Int8> &) throw( IFIFO_OutOfMemoryException,
                                                               IFIFO_OutOfBoundsException )=0;
 
-    virtual void    read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
+    virtual void 	read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
                                                     throw( IFIFO_OutOfBoundsException )=0;
-    virtual void    skip( sal_Int32 nBytesToSkip )
+    virtual void 	skip( sal_Int32 nBytesToSkip )
                                         throw( IFIFO_OutOfBoundsException )=0;
-    virtual sal_Int32   getSize() const throw(  )  =0;
-    virtual void    shrink() throw() = 0;
+    virtual sal_Int32 	getSize() const throw(  )  =0;
+    virtual void 	shrink() throw() = 0;
 
     virtual ~IFIFO() {};
 };
@@ -85,15 +85,15 @@ public:
     *
     ***/
 
-    virtual void    writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &)
+    virtual void 	writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &)
         throw( IRingBuffer_OutOfMemoryException,
                IRingBuffer_OutOfBoundsException )=0;
-    virtual void    readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const
+    virtual void 	readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const
         throw( IRingBuffer_OutOfBoundsException )=0;
-    virtual sal_Int32   getSize() const throw(  )  =0;
-    virtual void    forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException)=0;
-    virtual void    forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException)=0;
-    virtual void    shrink() throw() = 0;
+    virtual sal_Int32 	getSize() const throw(  )  =0;
+    virtual void 	forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException)=0;
+    virtual void	forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException)=0;
+    virtual void 	shrink() throw() = 0;
     virtual ~IRingBuffer() {};
 };
 
@@ -105,14 +105,14 @@ public:
     MemRingBuffer();
     virtual ~MemRingBuffer();
 
-    virtual void    writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &)
-                                                    throw(  IRingBuffer_OutOfMemoryException,
+    virtual void 	writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &)
+                                                    throw(	IRingBuffer_OutOfMemoryException,
                                                                 IRingBuffer_OutOfBoundsException );
-    virtual void    readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const
+    virtual void 	readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const
                                                     throw( IRingBuffer_OutOfBoundsException );
-    virtual sal_Int32   getSize() const throw(  );
-    virtual void    forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException);
-    virtual void    forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException);
+    virtual sal_Int32 	getSize() const throw(  );
+    virtual void 	forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException);
+    virtual void	forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException);
 
     virtual void shrink() throw();
 
@@ -128,10 +128,10 @@ private:
         assert( 0 == m_nStart || m_nStart < m_nBufferLen );
     }
 
-    sal_Int8    *m_p;
-    sal_Int32   m_nBufferLen;
-    sal_Int32   m_nStart;
-    sal_Int32   m_nOccupiedBuffer;
+    sal_Int8 	*m_p;
+    sal_Int32 	m_nBufferLen;
+    sal_Int32 	m_nStart;
+    sal_Int32 	m_nOccupiedBuffer;
 };
 
 
@@ -140,14 +140,14 @@ class MemFIFO :
         private MemRingBuffer
 {
 public:
-    virtual void    write( const Sequence<sal_Int8> &) throw( IFIFO_OutOfMemoryException,
+    virtual void 	write( const Sequence<sal_Int8> &) throw( IFIFO_OutOfMemoryException,
                                                               IFIFO_OutOfBoundsException );
-    virtual void    read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
+    virtual void 	read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
                                                     throw( IFIFO_OutOfBoundsException );
-    virtual void    skip( sal_Int32 nBytesToSkip ) throw( IFIFO_OutOfBoundsException );
-    virtual sal_Int32   getSize()  const throw(  )
+    virtual void 	skip( sal_Int32 nBytesToSkip ) throw( IFIFO_OutOfBoundsException );
+    virtual sal_Int32 	getSize()  const throw(  )
                         { return MemRingBuffer::getSize(); }
-    virtual void    shrink() throw()
+    virtual void 	shrink() throw()
                         { MemRingBuffer::shrink(); }
 
 };

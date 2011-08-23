@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,88 +24,88 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_WindowEvent_idl__
-#define __com_sun_star_awt_WindowEvent_idl__
-
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_WindowEvent_idl__ 
+#define __com_sun_star_awt_WindowEvent_idl__ 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** specifies a window event.
  */
 published struct WindowEvent: com::sun::star::lang::EventObject
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the outer x position of the window.
      */
-    long X;
-
-    //-------------------------------------------------------------------------
-
+    long X; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the outer y position of the window.
      */
-    long Y;
-
-    //-------------------------------------------------------------------------
-
+    long Y; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the outer (total) width of the window.
      */
-    long Width;
-
-    //-------------------------------------------------------------------------
-
+    long Width; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the outer (total) height of the window.
      */
-    long Height;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the inset from the left.
-
+    long Height; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies the inset from the left. 
+                        
         <p>The inset is the distance between the outer and the inner window,
         that means the left inset is the width of the left border.</p>
      */
-    long LeftInset;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the inset from the top.
-
+    long LeftInset; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies the inset from the top. 
+                        
         <p>The inset is the distance between the outer and the inner window,
         that means the top inset is the heigt of the top border.</p>
      */
-    long TopInset;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the inset from the right.
-
+    long TopInset; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies the inset from the right. 
+                        
         <p>The inset is the distance between the outer and the inner window,
         that means the right inset is the width of the right border.</p>
      */
-    long RightInset;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the inset from the bottom.
-
+    long RightInset; 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** specifies the inset from the bottom. 
+                        
         <p>The inset is the distance between the outer and the inner window,
         that means the bottom inset is the heigt of the bottom border.</p>
      */
-    long BottomInset;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    long BottomInset; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

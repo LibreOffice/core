@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,40 +83,40 @@ namespace sax_expatwrap {
 ****/
 //  inline sal_Int32 CalcXMLLen( const Sequence<sal_Int8> & seq , sal_Bool bConvertAll ) throw()
 //  {
-//      sal_Int32 nLen = 0;
-//      const sal_Int8 *pArray = seq.getConstArray();
+//  	sal_Int32 nLen = 0;
+//  	const sal_Int8 *pArray = seq.getConstArray();
 
-//      for( int i = 0 ; i < seq.getLength() ; i ++ ) {
+//  	for( int i = 0 ; i < seq.getLength() ; i ++ ) {
 
-//          sal_Int8 c = pArray[i];
-//          switch( c )
-//          {
-//          case '&':       // resemble to &amp;
-//              nLen +=5;
-//              break;
-//          case '<':       // &lt;
-//          case '>':       // &gt;
-//              nLen +=4;
-//              break;
-//          case 39:        // 39 == ''', &apos;
-//          case '"':       // &quot;
-//          case 13:        // &#x0d;
-//              nLen += 6;
-//              break;
+//  		sal_Int8 c = pArray[i];
+//  		switch( c )
+//  		{
+//  		case '&':       // resemble to &amp;
+//  			nLen +=5;
+//  			break;
+//  		case '<':       // &lt;
+//  		case '>':       // &gt;
+//  			nLen +=4;
+//  			break;
+//  		case 39:        // 39 == ''', &apos;
+//  		case '"':       // &quot;
+//  		case 13:        // &#x0d;
+//  			nLen += 6;
+//  			break;
 
-//          case 10:        // &#x0a;
-//          case 9:         // &#x09;
-//              if( bConvertAll )
-//              {
-//                  nLen += 6;        //
-//              }
-//              break;
-//          default:
-//              nLen ++;
-//          }
-//      }
+//  		case 10:        // &#x0a;
+//  		case 9:         // &#x09;
+//  			if( bConvertAll )
+//  			{
+//  				nLen += 6;		  //
+//  			}
+//  			break;
+//  		default:
+//  			nLen ++;
+//  		}
+//  	}
 
-//      return nLen;
+//  	return nLen;
 //  }
 
 enum SaxInvalidCharacterError
@@ -128,13 +128,13 @@ enum SaxInvalidCharacterError
 
 class SaxWriterHelper
 {
-    Reference< XOutputStream >  m_out;
-    Sequence < sal_Int8 >       m_Sequence;
-    sal_Int8*                   mp_Sequence;
+    Reference< XOutputStream >	m_out;
+    Sequence < sal_Int8 >		m_Sequence;
+    sal_Int8*					mp_Sequence;
 
-    sal_Int32                   nLastLineFeedPos; // is negative after writing a sequence
-    sal_uInt32                  nCurrentPos;
-    sal_Bool                    m_bStartElementFinished;
+    sal_Int32					nLastLineFeedPos; // is negative after writing a sequence
+    sal_uInt32					nCurrentPos;
+    sal_Bool					m_bStartElementFinished;
 
 
     inline sal_uInt32 writeSequence() throw( SAXException );
@@ -351,7 +351,7 @@ inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                         else
                         {
                             memcpy( &(pTarget[rPos]) , "&quot;" , 6 );
-                            rPos += 6;        // &quot;
+                            rPos += 6;		  // &quot;
                         }
                     }
                     break;
@@ -635,7 +635,7 @@ inline SaxInvalidCharacterError SaxWriterHelper::startElement(const rtl::OUStrin
             nCurrentPos = writeSequence();
     }
 
-    m_bStartElementFinished = sal_False;    // because the '>' character is not added,
+    m_bStartElementFinished = sal_False;	// because the '>' character is not added,
                                             // because it is possible, that the "/>"
                                             // characters have to add
     return eRet;
@@ -838,7 +838,7 @@ inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
                 case 9:         // &#x09;
                     if( bNormalizeWhitespace )
                     {
-                        nOutputLength += 6;       //
+                        nOutputLength += 6;		  //
                     }
                     else
                     {
@@ -1003,9 +1003,9 @@ private:
     void writeSequence( const Sequence<sal_Int8> & seq );
     sal_Int32 getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence ) throw();
 
-    Reference< XOutputStream >  m_out;
-    Sequence < sal_Int8 >       m_seqStartElement;
-    SaxWriterHelper*            mp_SaxWriterHelper;
+    Reference< XOutputStream > 	m_out;
+    Sequence < sal_Int8 > 		m_seqStartElement;
+    SaxWriterHelper*			mp_SaxWriterHelper;
 
     // Status information
     sal_Bool m_bDocStarted : 1;
@@ -1037,7 +1037,7 @@ OUString SaxWriter_getImplementationName() throw()
     return OUString::createFromAscii( "com.sun.star.extensions.xml.sax.Writer" );
 }
 
-Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw()
+Sequence< OUString > 	SaxWriter_getSupportedServiceNames(void) throw()
 {
     Sequence<OUString> aRet(1);
     aRet.getArray()[0] = SaxWriter_getServiceName();
@@ -1095,7 +1095,7 @@ Sequence< OUString > SAXWriter::getSupportedServiceNames(void) throw ()
 
 
 
-void SAXWriter::startDocument()                     throw(SAXException, RuntimeException )
+void SAXWriter::startDocument()						throw(SAXException, RuntimeException )
 {
     if( m_bDocStarted || ! m_out.is() || !mp_SaxWriterHelper ) {
         throw SAXException();
@@ -1105,7 +1105,7 @@ void SAXWriter::startDocument()                     throw(SAXException, RuntimeE
 }
 
 
-void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeException)
+void SAXWriter::endDocument(void) 					throw(SAXException, RuntimeException)
 {
     if( ! m_bDocStarted )
     {
@@ -1204,7 +1204,7 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
     }
 }
 
-void SAXWriter::endElement(const OUString& aName)   throw (SAXException, RuntimeException)
+void SAXWriter::endElement(const OUString& aName) 	throw (SAXException, RuntimeException)
 {
     if( ! m_bDocStarted ) {
         throw SAXException ();
@@ -1240,7 +1240,7 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
     }
 }
 
-void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeException)
+void SAXWriter::characters(const OUString& aChars) 	throw(SAXException, RuntimeException)
 {
     if( ! m_bDocStarted )
     {
@@ -1410,7 +1410,7 @@ void SAXWriter::comment(const OUString& sComment) throw(SAXException, RuntimeExc
 }
 
 
-void SAXWriter::allowLineBreak( )   throw ( SAXException , RuntimeException)
+void SAXWriter::allowLineBreak( ) 	throw ( SAXException , RuntimeException)
 {
     if( ! m_bDocStarted || m_bAllowLineBreak ) {
         throw SAXException();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,29 +55,29 @@
 #endif
 
 //--------------------------------------------------------- EXTERNE VARIABLEN -
-extern WKTYP                eTyp;           // -> filter.cxx, aktueller Dateityp
-extern sal_Char*            pDummy2;        // -> memory.cxx
-extern ScDocument*          pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
-extern CharSet              eCharNach;      // -> filter.cxx, Zeichenkonvertierung von->nach
+extern WKTYP				eTyp;			// -> filter.cxx, aktueller Dateityp
+extern sal_Char*			pDummy2;		// -> memory.cxx
+extern ScDocument*			pDoc;			// -> filter.cxx, Aufhaenger zum Dokumentzugriff
+extern CharSet				eCharNach;		// -> filter.cxx, Zeichenkonvertierung von->nach
 
-extern BOOL                 bFormInit;      // -> memory.cxx, fuer GetFormHandle()
+extern BOOL					bFormInit;		// -> memory.cxx, fuer GetFormHandle()
 
 //--------------------------------------------------------- GLOBALE VARIABLEN -
-BYTE                        nDefaultFormat; // -> op.cpp, Standard-Zellenformat
+BYTE						nDefaultFormat;	// -> op.cpp, Standard-Zellenformat
 
-extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
-extern ScProtectionAttr*    pAttrUnprot;
-extern SfxUInt32Item**      pAttrValForms;
+extern SvxHorJustifyItem	*pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
+extern ScProtectionAttr*	pAttrUnprot;
+extern SfxUInt32Item**		pAttrValForms;
 
-SvxHorJustifyItem           *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
+SvxHorJustifyItem			*pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
                                                     // -> in memory.cxx initialisiert
-ScProtectionAttr*           pAttrUnprot;            // ->  " memory.cxx    "
+ScProtectionAttr*			pAttrUnprot;			// ->  " memory.cxx    "
 
-extern FormCache*           pValueFormCache;        // -> in memory.cxx initialisiert
-FormCache*                  pValueFormCache;
+extern FormCache*			pValueFormCache;		// -> in memory.cxx initialisiert
+FormCache*					pValueFormCache;
 
-SCCOL                       LotusRangeList::nEingCol;
-SCROW                       LotusRangeList::nEingRow;
+SCCOL						LotusRangeList::nEingCol;
+SCROW						LotusRangeList::nEingRow;
 
 
 
@@ -87,8 +87,8 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     // Label-Format-Auswertung
     DBG_ASSERT( pString != NULL, "PutFormString(): pString == NULL" );
 
-    sal_Char            cForm;
-    SvxHorJustifyItem*  pJustify = NULL;
+    sal_Char			cForm;
+    SvxHorJustifyItem*	pJustify = NULL;
 
     cForm = *pString;
 
@@ -120,7 +120,7 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     if( pString )
     {
         pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
-        ScStringCell*   pZelle = new ScStringCell( String( pString, pLotusRoot->eCharsetQ ) );
+        ScStringCell*	pZelle = new ScStringCell( String( pString, pLotusRoot->eCharsetQ ) );
         pDoc->PutCell( nCol, nRow, nTab, pZelle, ( BOOL ) TRUE );
     }
 }
@@ -141,7 +141,7 @@ void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, BYTE nFormat, BYTE nSt )
 }
 
 void InitPage( void )
-{   // Seitenformat initialisieren, d.h. Default-Werte von SC holen
+{	// Seitenformat initialisieren, d.h. Default-Werte von SC holen
     //scGetPageFormat( 0, &aPage );
 }
 
@@ -158,7 +158,7 @@ double SnumToDouble( INT16 nVal )
         0.0625,
         0.015625 };
 
-    double      fVal;
+    double		fVal;
 
     if( nVal & 0x0001 )
     {
@@ -192,7 +192,7 @@ double Snum32ToDouble( UINT32 nValue )
 
 
 FormCache::FormCache( ScDocument* pDoc1, BYTE nNewDefaultFormat )
-{   // Default-Format ist 'Default'
+{	// Default-Format ist 'Default'
     nDefaultFormat = nNewDefaultFormat;
     pFormTable = pDoc1->GetFormatTable();
     for( UINT16 nC = 0 ; nC < __nSize ; nC++ )
@@ -211,14 +211,14 @@ FormCache::~FormCache()
 SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
 {
     // neues Format erzeugen
-    BYTE        nL, nH; // Low-/High-Nibble
-    BYTE        nForm = nFormat;
-    String      aFormString;
+    BYTE		nL, nH; // Low-/High-Nibble
+    BYTE		nForm = nFormat;
+    String		aFormString;
     const sal_Char* pFormString = 0;
-    INT16       eType = NUMBERFORMAT_ALL;
+    INT16		eType = NUMBERFORMAT_ALL;
     UINT32      nIndex1;
-    UINT32      nHandle;
-    BOOL        bDefault = FALSE;
+    UINT32		nHandle;
+    BOOL		bDefault = FALSE;
     //void GenerateFormat( aFormString, eType, COUNTRY_SYSTEM, LANGUAGE_SYSTEM,
     //  BOOL bThousand, BOOL IsRed, UINT16 nPrecision, UINT16 nAnzLeading );
 
@@ -382,7 +382,7 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
         if( pFormString )
             aFormString.AssignAscii( pFormString );
 
-        xub_StrLen  nDummy;
+        xub_StrLen	nDummy;
         pFormTable->PutEntry( aFormString, nDummy, eType, nHandle, eLanguage );
     }
 
@@ -440,7 +440,7 @@ LotusRangeList::LotusRangeList( void )
 {
     aComplRef.InitFlags();
 
-    ScSingleRefData*    pSingRef;
+    ScSingleRefData*	pSingRef;
     nIdCnt = 1;
 
     pSingRef = &aComplRef.Ref1;
@@ -473,7 +473,7 @@ LotusRangeList::~LotusRangeList( void )
 
 LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
 {
-    LotusRange*     pComp = ( LotusRange* ) List::First();
+    LotusRange*		pComp = ( LotusRange* ) List::First();
 
     while( pComp )
     {
@@ -491,9 +491,9 @@ void LotusRangeList::Append( LotusRange* pLR, const String& rName )
     DBG_ASSERT( pLR, "*LotusRangeList::Append(): das wird nichts!" );
     List::Insert( pLR, CONTAINER_APPEND );
 
-    ScTokenArray    aTokArray;
+    ScTokenArray	aTokArray;
 
-    ScSingleRefData*    pSingRef = &aComplRef.Ref1;
+    ScSingleRefData*	pSingRef = &aComplRef.Ref1;
 
     pSingRef->nCol = pLR->nColStart;
     pSingRef->nRow = pLR->nRowStart;
@@ -508,7 +508,7 @@ void LotusRangeList::Append( LotusRange* pLR, const String& rName )
         aTokArray.AddDoubleReference( aComplRef );
     }
 
-    ScRangeData*    pData = new ScRangeData(
+    ScRangeData*	pData = new ScRangeData(
         pLotusRoot->pDoc, rName, aTokArray );
 
     pLotusRoot->pScRangeName->Insert( pData );
@@ -530,7 +530,7 @@ RangeNameBufferWK3::RangeNameBufferWK3( void )
 
 RangeNameBufferWK3::~RangeNameBufferWK3()
 {
-    ENTRY*      pDel = ( ENTRY* ) List::First();
+    ENTRY*		pDel = ( ENTRY* ) List::First();
 
     while( pDel )
     {
@@ -544,17 +544,17 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 
 void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rCRD )
 {
-    String              aScName( rOrgName );
+    String				aScName( rOrgName );
     ScfTools::ConvertToScDefinedName( aScName );
 
-    register ENTRY*     pInsert = new ENTRY( rOrgName, aScName, rCRD );
+    register ENTRY*		pInsert = new ENTRY( rOrgName, aScName, rCRD );
 
     List::Insert( pInsert, CONTAINER_APPEND );
 
     pScTokenArray->Clear();
 
-    register const ScSingleRefData& rRef1 = rCRD.Ref1;
-    register const ScSingleRefData& rRef2 = rCRD.Ref2;
+    register const ScSingleRefData&	rRef1 = rCRD.Ref1;
+    register const ScSingleRefData&	rRef2 = rCRD.Ref2;
 
     if( rRef1.nCol == rRef2.nCol && rRef1.nRow == rRef2.nRow && rRef1.nTab == rRef2.nTab )
     {
@@ -567,7 +567,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
         pInsert->bSingleRef = FALSE;
     }
 
-    ScRangeData*        pData = new ScRangeData( pLotusRoot->pDoc, aScName, *pScTokenArray );
+    ScRangeData*		pData = new ScRangeData( pLotusRoot->pDoc, aScName, *pScTokenArray );
 
     pInsert->nRelInd = nIntCount;
     pData->SetIndex( nIntCount );
@@ -579,9 +579,9 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
 
 BOOL RangeNameBufferWK3::FindRel( const String& rRef, UINT16& rIndex )
 {
-    StringHashEntry     aRef( rRef );
+    StringHashEntry		aRef( rRef );
 
-    ENTRY*              pFind = ( ENTRY* ) List::First();
+    ENTRY*				pFind = ( ENTRY* ) List::First();
 
     while( pFind )
     {
@@ -599,10 +599,10 @@ BOOL RangeNameBufferWK3::FindRel( const String& rRef, UINT16& rIndex )
 
 BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
 {
-    String              aTmp( rRef );
-    StringHashEntry     aRef( aTmp.Erase( 0, 1 ) ); // ohne '$' suchen!
+    String				aTmp( rRef );
+    StringHashEntry		aRef( aTmp.Erase( 0, 1 ) );	// ohne '$' suchen!
 
-    ENTRY*              pFind = ( ENTRY* ) List::First();
+    ENTRY*				pFind = ( ENTRY* ) List::First();
 
     while( pFind )
     {
@@ -613,7 +613,7 @@ BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
                 rIndex = pFind->nAbsInd;
             else
             {
-                ScSingleRefData*        pRef = &pFind->aScComplexRefDataRel.Ref1;
+                ScSingleRefData*		pRef = &pFind->aScComplexRefDataRel.Ref1;
                 pScTokenArray->Clear();
 
                 pRef->SetColRel( FALSE );
@@ -631,7 +631,7 @@ BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
                     pScTokenArray->AddDoubleReference( pFind->aScComplexRefDataRel );
                 }
 
-                ScRangeData*    pData = new ScRangeData( pLotusRoot->pDoc, pFind->aScAbsName, *pScTokenArray );
+                ScRangeData*	pData = new ScRangeData( pLotusRoot->pDoc, pFind->aScAbsName, *pScTokenArray );
 
                 rIndex = pFind->nAbsInd = nIntCount;
                 pData->SetIndex( rIndex );

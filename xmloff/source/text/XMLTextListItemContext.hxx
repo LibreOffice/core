@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ class XMLTextListItemContext : public SvXMLImportContext
 {
     XMLTextImportHelper& rTxtImport;
 
-    sal_Int16                   nStartValue;
+    sal_Int16					nStartValue;
 
     // --> OD 2008-05-07 #refactorlists#
     // quantity of <text:list> child elements

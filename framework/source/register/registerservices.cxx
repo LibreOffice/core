@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //_________________________________________________________________________________________________________________
 #include <macros/registration.hxx>
 
@@ -47,11 +47,11 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
+        COMPONENTWRITEINFO	(	COMPONENTINFO( Service1 )
                                  COMPONENTINFO( Service2 )
                             )
 
-        COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
+        COMPONENTGETFACTORY	(	IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
                              )
@@ -118,7 +118,7 @@
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
-                        COMPONENTINFO( ::framework::Desktop                                 )
+                        COMPONENTINFO( ::framework::Desktop						            )
                         COMPONENTINFO( ::framework::Frame                                   )
                         //COMPONENTINFO( ::framework::Oxt_Handler                             )
                         COMPONENTINFO( ::framework::JobExecutor                             )
@@ -173,12 +173,12 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         //COMPONENTINFO( ::framework::LanguageSelectionMenuController         )
                         //COMPONENTINFO( ::framework::TabWindowService                        )
                         COMPONENTINFO( ::framework::WindowContentFactoryManager             )
-                        COMPONENTINFO( ::framework::SubstitutePathVariables     )
-                        COMPONENTINFO( ::framework::PathSettings                )
+                        COMPONENTINFO( ::framework::SubstitutePathVariables		)
+                        COMPONENTINFO( ::framework::PathSettings				)
                     )
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
-                        IFFACTORY( ::framework::Desktop                                 )   else
+COMPONENTGETFACTORY	(	IFFACTORY( ::framework::URLTransformer					        )	else
+                        IFFACTORY( ::framework::Desktop							        )	else
                         IFFACTORY( ::framework::Frame                                   )   else
                         //IFFACTORY( ::framework::Oxt_Handler                             )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else
@@ -187,7 +187,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         //IFFACTORY( ::framework::MailToDispatcher                        )   else
                         //IFFACTORY( ::framework::ServiceHandler                          )   else
                         IFFACTORY( ::framework::JobDispatch                             )   else
-                        IFFACTORY( ::framework::BackingComp                             )   else
+                        IFFACTORY( ::framework::BackingComp                             )	else
                         //IFFACTORY( ::framework::DispatchHelper                          )   else
                         IFFACTORY( ::framework::LayoutManager                           )   else
                         //IFFACTORY( ::framework::License                                 )   else
@@ -213,18 +213,18 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::AddonsToolBoxFactory                    )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
-                        //IFFACTORY( ::framework::ToolbarsMenuController                  ) else
+                        //IFFACTORY( ::framework::ToolbarsMenuController                  )	else
                         IFFACTORY( ::framework::AutoRecovery                            )   else
-                        IFFACTORY( ::framework::StatusIndicatorFactory                  )   else
+                        IFFACTORY( ::framework::StatusIndicatorFactory                  )	else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
-                        IFFACTORY( ::framework::UICategoryDescription                   )   else
-                        IFFACTORY( ::framework::SessionListener                         )   else
+                        IFFACTORY( ::framework::UICategoryDescription                   )	else
+                        IFFACTORY( ::framework::SessionListener                         )	else
                         IFFACTORY( ::framework::StatusbarControllerFactory              )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         //IFFACTORY( ::framework::LogoImageStatusbarController            )   else
-                        //IFFACTORY( ::framework::LogoTextStatusbarController             ) else
-                        IFFACTORY( ::framework::TaskCreatorService                      )   else
+                        //IFFACTORY( ::framework::LogoTextStatusbarController             )	else
+                        IFFACTORY( ::framework::TaskCreatorService	                    )   else
                         //IFFACTORY( ::framework::NewMenuController                       )   else
                         //IFFACTORY( ::framework::SimpleTextStatusbarController           )   else
                         //IFFACTORY( ::framework::UriAbbreviation                         )   else
@@ -234,7 +234,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         //IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
                         IFFACTORY( ::framework::WindowContentFactoryManager             )   else
                         //IFFACTORY( ::framework::TabWindowService                        )   else
-                        IFFACTORY( ::framework::SubstitutePathVariables                 )   else
-                        IFFACTORY( ::framework::PathSettings                            )
+                        IFFACTORY( ::framework::SubstitutePathVariables			        )	else
+                        IFFACTORY( ::framework::PathSettings					        )
             )
 

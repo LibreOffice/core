@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ namespace sd { namespace framework {
 */
 class Configuration
     : private sd::MutexOwner,
-      public ConfigurationInterfaceBase
+      public ConfigurationInterfaceBase      
 {
 public:
     /** Create a new configuration with a broadcaster that is used to send
@@ -91,12 +91,12 @@ public:
         ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
         bool bBroadcastRequestEvents);
     virtual ~Configuration (void);
-
+    
     virtual void SAL_CALL disposing (void);
 
 
     // XConfiguration
-
+    
     virtual void SAL_CALL addResource (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId)
@@ -106,7 +106,7 @@ public:
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId)
         throw (::com::sun::star::uno::RuntimeException);
-
+        
     virtual ::com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
         com::sun::star::drawing::framework::XResourceId> > SAL_CALL getResources (
         const ::com::sun::star::uno::Reference<
@@ -120,14 +120,14 @@ public:
             rxResourceId)
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
     // XCloneable
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
         SAL_CALL createClone (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
     // XNamed
 
     /** Return a human readable string representation.  This is used for
@@ -168,7 +168,7 @@ private:
         ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
         bool bBroadcastRequestEvents,
         const ResourceContainer& rResourceContainer);
-
+    
     /** Send an event to all interested listeners that a resource has been
         added or removed.  The event is sent to the listeners via the
         ConfigurationController.

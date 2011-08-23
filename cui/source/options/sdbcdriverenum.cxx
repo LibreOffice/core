@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace offapp
     class ODriverEnumerationImpl
     {
     protected:
-        ::std::vector< ::rtl::OUString >    m_aImplNames;
+        ::std::vector< ::rtl::OUString >	m_aImplNames;
 
     public:
         ODriverEnumerationImpl();
@@ -123,7 +123,7 @@ namespace offapp
     }
 
 //........................................................................
-}   // namespace offapp
+}	// namespace offapp
 //........................................................................
 
 

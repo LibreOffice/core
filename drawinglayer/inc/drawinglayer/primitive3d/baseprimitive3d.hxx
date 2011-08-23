@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,21 +69,21 @@ namespace drawinglayer
     namespace primitive3d
     {
         /** BasePrimitive3D class
-
+        
             Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
 
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information.
 
             Current Basic 3D Primitives are:
-
+            
             - PolygonHairlinePrimitive3D (for 3D hairlines)
             - PolyPolygonMaterialPrimitive3D (for 3D filled plane polygons)
 
             That's all for 3D!
          */
         class BasePrimitive3D
-        :   private boost::noncopyable,
+        :	private boost::noncopyable,
             protected comphelper::OBaseMutex,
             public BasePrimitive3DImplBase
         {
@@ -141,18 +141,18 @@ namespace drawinglayer
     namespace primitive3d
     {
         /** BufferedDecompositionPrimitive3D class
-
+        
             Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
 
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information
          */
         class BufferedDecompositionPrimitive3D
-        :   public BasePrimitive3D
+        :	public BasePrimitive3D
         {
         private:
             /// a sequence used for buffering the last create3DDecomposition() result
-            Primitive3DSequence                             maBuffered3DDecomposition;
+            Primitive3DSequence								maBuffered3DDecomposition;
 
         protected:
             /** access methods to maBuffered3DDecomposition. The usage of this methods may allow
@@ -171,10 +171,10 @@ namespace drawinglayer
             // constructor
             BufferedDecompositionPrimitive3D();
 
-            /** The getDecomposition default implementation will on demand use create3DDecomposition() if
-                maBuffered3DDecomposition is empty. It will set maBuffered3DDecomposition to this obtained decomposition
-                to buffer it. If the decomposition is also ViewInformation-dependent, this method needs to be
-                overloaded and the ViewInformation for the last decomposition needs to be remembered, too, and
+            /** The getDecomposition default implementation will on demand use create3DDecomposition() if 
+                maBuffered3DDecomposition is empty. It will set maBuffered3DDecomposition to this obtained decomposition 
+                to buffer it. If the decomposition is also ViewInformation-dependent, this method needs to be 
+                overloaded and the ViewInformation for the last decomposition needs to be remembered, too, and 
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;

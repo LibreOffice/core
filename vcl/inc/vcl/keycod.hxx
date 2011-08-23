@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ enum KeyFuncType { KEYFUNC_DONTKNOW, KEYFUNC_NEW, KEYFUNC_OPEN,
 class VCL_DLLPUBLIC KeyCode
 {
 private:
-    USHORT      nCode;
+    USHORT		nCode;
     KeyFuncType eFunc;
 
 public:
@@ -73,40 +73,40 @@ public:
                 KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2, BOOL bMod3 );
                 KeyCode( KeyFuncType eFunction );
 
-    USHORT      GetFullCode() const { return nCode; }
-    USHORT      GetFullKeyCode() const { return (nCode) ; }
+    USHORT		GetFullCode() const { return nCode; }
+    USHORT		GetFullKeyCode() const { return (nCode) ; }
     KeyFuncType GetFullFunction() const { return eFunc; }
-    BOOL        IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
+    BOOL		IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
 
-    USHORT      GetCode() const
+    USHORT		GetCode() const
                     { return (nCode & KEY_CODE); }
 
-    USHORT      GetModifier() const
+    USHORT		GetModifier() const
                     { return (nCode & KEY_MODTYPE); }
-    USHORT      GetAllModifier() const
+    USHORT		GetAllModifier() const
                     { return (nCode & KEY_ALLMODTYPE); }
-    BOOL        IsShift() const
+    BOOL		IsShift() const
                     { return ((nCode & KEY_SHIFT) != 0); }
-    BOOL        IsMod1() const
+    BOOL		IsMod1() const
                     { return ((nCode & KEY_MOD1) != 0); }
-    BOOL        IsMod2() const
+    BOOL		IsMod2() const
                     { return ((nCode & KEY_MOD2) != 0); }
-    BOOL        IsMod3() const
-                    { return ((nCode & KEY_MOD3) != 0); }
-    USHORT      GetGroup() const
+    BOOL		IsMod3() const
+                    { return ((nCode & KEY_MOD3) != 0); }	
+    USHORT		GetGroup() const
                     { return (nCode & KEYGROUP_TYPE); }
 
-    XubString   GetName( Window* pWindow = NULL ) const;
-    XubString   GetSymbolName( const XubString& rFontName, Window* pWindow = NULL ) const;
+    XubString	GetName( Window* pWindow = NULL ) const;
+    XubString	GetSymbolName( const XubString& rFontName, Window* pWindow = NULL ) const;
 
-    BOOL        IsFunction() const
+    BOOL		IsFunction() const
                     { return ((eFunc != KEYFUNC_DONTKNOW) ? TRUE : FALSE); }
 
     KeyFuncType GetFunction() const;
 
     KeyCode&    operator = ( const KeyCode& rKeyCode );
-    BOOL        operator ==( const KeyCode& rKeyCode ) const;
-    BOOL        operator !=( const KeyCode& rKeyCode ) const;
+    BOOL		operator ==( const KeyCode& rKeyCode ) const;
+    BOOL		operator !=( const KeyCode& rKeyCode ) const;
 };
 
 inline KeyCode::KeyCode( USHORT nKey, BOOL bShift, BOOL bMod1, BOOL bMod2, BOOL bMod3 )

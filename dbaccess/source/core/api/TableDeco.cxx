@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -165,9 +165,9 @@ void SAL_CALL ODBTableDecorator::disposing()
     OTableDescriptor_BASE::disposing();
 
     MutexGuard aGuard(m_aMutex);
-    m_xTable        = NULL;
-    m_xMetaData     = NULL;
-    m_pTables       = NULL;
+    m_xTable		= NULL;
+    m_xMetaData		= NULL;
+    m_pTables		= NULL;
     m_xColumnDefinitions = NULL;
     m_xNumberFormats = NULL;
     if ( m_pColumns )
@@ -196,25 +196,25 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
         case PROPERTY_ID_TEXTRELIEF:
-        case PROPERTY_ID_FONTCHARWIDTH:
-        case PROPERTY_ID_FONTCHARSET:
-        case PROPERTY_ID_FONTFAMILY:
-        case PROPERTY_ID_FONTHEIGHT:
-        case PROPERTY_ID_FONTKERNING:
-        case PROPERTY_ID_FONTNAME:
-        case PROPERTY_ID_FONTORIENTATION:
-        case PROPERTY_ID_FONTPITCH:
-        case PROPERTY_ID_FONTSLANT:
-        case PROPERTY_ID_FONTSTRIKEOUT:
-        case PROPERTY_ID_FONTSTYLENAME:
-        case PROPERTY_ID_FONTUNDERLINE:
-        case PROPERTY_ID_FONTWEIGHT:
-        case PROPERTY_ID_FONTWIDTH:
+        case PROPERTY_ID_FONTCHARWIDTH:	
+        case PROPERTY_ID_FONTCHARSET:		
+        case PROPERTY_ID_FONTFAMILY:		
+        case PROPERTY_ID_FONTHEIGHT:		
+        case PROPERTY_ID_FONTKERNING:		
+        case PROPERTY_ID_FONTNAME:		
+        case PROPERTY_ID_FONTORIENTATION:	
+        case PROPERTY_ID_FONTPITCH:		
+        case PROPERTY_ID_FONTSLANT:		
+        case PROPERTY_ID_FONTSTRIKEOUT:	
+        case PROPERTY_ID_FONTSTYLENAME:	
+        case PROPERTY_ID_FONTUNDERLINE:	
+        case PROPERTY_ID_FONTWEIGHT:		
+        case PROPERTY_ID_FONTWIDTH:		
         case PROPERTY_ID_FONTWORDLINEMODE:
-        case PROPERTY_ID_FONTTYPE:
+        case PROPERTY_ID_FONTTYPE:		
             bRet = ODataSettings::convertFastPropertyValue(rConvertedValue, rOldValue,nHandle,rValue);
             break;
-
+        
         default:
             {
                 Any aValue;
@@ -232,7 +232,7 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
     switch(_nHandle)
     {
         case PROPERTY_ID_PRIVILEGES:
-            OSL_ENSURE(0,"Property is readonly!");
+            OSL_ENSURE(0,"Property is readonly!");			
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
         case PROPERTY_ID_APPLYFILTER:
@@ -242,22 +242,22 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
         case PROPERTY_ID_TEXTRELIEF:
-        case PROPERTY_ID_FONTCHARWIDTH:
-        case PROPERTY_ID_FONTCHARSET:
-        case PROPERTY_ID_FONTFAMILY:
-        case PROPERTY_ID_FONTHEIGHT:
-        case PROPERTY_ID_FONTKERNING:
-        case PROPERTY_ID_FONTNAME:
-        case PROPERTY_ID_FONTORIENTATION:
-        case PROPERTY_ID_FONTPITCH:
-        case PROPERTY_ID_FONTSLANT:
-        case PROPERTY_ID_FONTSTRIKEOUT:
-        case PROPERTY_ID_FONTSTYLENAME:
-        case PROPERTY_ID_FONTUNDERLINE:
-        case PROPERTY_ID_FONTWEIGHT:
-        case PROPERTY_ID_FONTWIDTH:
+        case PROPERTY_ID_FONTCHARWIDTH:	
+        case PROPERTY_ID_FONTCHARSET:		
+        case PROPERTY_ID_FONTFAMILY:		
+        case PROPERTY_ID_FONTHEIGHT:		
+        case PROPERTY_ID_FONTKERNING:		
+        case PROPERTY_ID_FONTNAME:		
+        case PROPERTY_ID_FONTORIENTATION:	
+        case PROPERTY_ID_FONTPITCH:		
+        case PROPERTY_ID_FONTSLANT:		
+        case PROPERTY_ID_FONTSTRIKEOUT:	
+        case PROPERTY_ID_FONTSTYLENAME:	
+        case PROPERTY_ID_FONTUNDERLINE:	
+        case PROPERTY_ID_FONTWEIGHT:		
+        case PROPERTY_ID_FONTWIDTH:		
         case PROPERTY_ID_FONTWORDLINEMODE:
-        case PROPERTY_ID_FONTTYPE:
+        case PROPERTY_ID_FONTTYPE:		
 
             ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
             break;
@@ -312,7 +312,7 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
                 }
             }
             // run through
-
+            
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
         case PROPERTY_ID_APPLYFILTER:
@@ -322,22 +322,22 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
         case PROPERTY_ID_TEXTRELIEF:
-        case PROPERTY_ID_FONTCHARWIDTH:
-        case PROPERTY_ID_FONTCHARSET:
-        case PROPERTY_ID_FONTFAMILY:
-        case PROPERTY_ID_FONTHEIGHT:
-        case PROPERTY_ID_FONTKERNING:
-        case PROPERTY_ID_FONTNAME:
-        case PROPERTY_ID_FONTORIENTATION:
-        case PROPERTY_ID_FONTPITCH:
-        case PROPERTY_ID_FONTSLANT:
-        case PROPERTY_ID_FONTSTRIKEOUT:
-        case PROPERTY_ID_FONTSTYLENAME:
-        case PROPERTY_ID_FONTUNDERLINE:
-        case PROPERTY_ID_FONTWEIGHT:
-        case PROPERTY_ID_FONTWIDTH:
+        case PROPERTY_ID_FONTCHARWIDTH:	
+        case PROPERTY_ID_FONTCHARSET:		
+        case PROPERTY_ID_FONTFAMILY:		
+        case PROPERTY_ID_FONTHEIGHT:		
+        case PROPERTY_ID_FONTKERNING:		
+        case PROPERTY_ID_FONTNAME:		
+        case PROPERTY_ID_FONTORIENTATION:	
+        case PROPERTY_ID_FONTPITCH:		
+        case PROPERTY_ID_FONTSLANT:		
+        case PROPERTY_ID_FONTSTRIKEOUT:	
+        case PROPERTY_ID_FONTSTYLENAME:	
+        case PROPERTY_ID_FONTUNDERLINE:	
+        case PROPERTY_ID_FONTWEIGHT:		
+        case PROPERTY_ID_FONTWIDTH:		
         case PROPERTY_ID_FONTWORDLINEMODE:
-        case PROPERTY_ID_FONTTYPE:
+        case PROPERTY_ID_FONTTYPE:		
             ODataSettings::getFastPropertyValue(_rValue, _nHandle);
             break;
         case PROPERTY_ID_CATALOGNAME:
@@ -395,7 +395,7 @@ void ODBTableDecorator::construct()
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::createArrayHelper" );
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
     Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
-
+    
     Sequence< Property > aTableProps = xInfo->getProperties();
     Property* pIter = aTableProps.getArray();
     Property* pEnd = pIter + aTableProps.getLength();
@@ -416,11 +416,11 @@ void ODBTableDecorator::construct()
     }
 
     describeProperties(aTableProps);
-
-    return new ::cppu::OPropertyArrayHelper(aTableProps);
+    
+    return new ::cppu::OPropertyArrayHelper(aTableProps);			
 }
-// -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & SAL_CALL ODBTableDecorator::getInfoHelper()
+// -----------------------------------------------------------------------------																
+::cppu::IPropertyArrayHelper & SAL_CALL ODBTableDecorator::getInfoHelper() 
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::getInfoHelper" );
     Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
@@ -449,11 +449,11 @@ Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType ) throw(Runti
     if(m_xTable.is())
     {
         aRet = m_xTable->queryInterface(rType);
-        if(aRet.hasValue())
-        {   // now we know that our table supports this type so we return ourself
+        if(aRet.hasValue()) 
+        {	// now we know that our table supports this type so we return ourself
             aRet = OTableDescriptor_BASE::queryInterface(rType);
             if(!aRet.hasValue())
-                aRet = ODataSettings::queryInterface(rType);
+                aRet = ODataSettings::queryInterface(rType);			
         }
     }
 
@@ -479,9 +479,9 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
     if(xRename.is())
     {
-//      ::rtl::OUString sOldName;
-//      Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
-//      xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
+//		::rtl::OUString sOldName;
+//		Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
+//		xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
         xRename->rename(_rNewName);
     }
     else // not supported
@@ -607,9 +607,9 @@ void ODBTableDecorator::fillPrivileges() const
             if ( m_nPrivileges == 0 ) // second chance
             {
                 ::rtl::OUString sCatalog,sSchema,sName;
-                xProp->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
-                xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
-                xProp->getPropertyValue(PROPERTY_NAME)          >>= sName;
+                xProp->getPropertyValue(PROPERTY_CATALOGNAME)	>>= sCatalog;
+                xProp->getPropertyValue(PROPERTY_SCHEMANAME)	>>= sSchema;
+                xProp->getPropertyValue(PROPERTY_NAME)			>>= sName;
                 m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),sCatalog,sSchema, sName);
             }
         }
@@ -654,7 +654,7 @@ void ODBTableDecorator::refreshColumns()
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
     ::std::vector< ::rtl::OUString> aVector;
-
+        
     Reference<XNameAccess> xNames;
     if(m_xTable.is())
     {
@@ -662,8 +662,8 @@ void ODBTableDecorator::refreshColumns()
         if(xNames.is())
         {
             Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
-            const ::rtl::OUString* pIter    = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
+            const ::rtl::OUString* pIter	= aNames.getConstArray();
+            const ::rtl::OUString* pEnd		= pIter + aNames.getLength();
             for(;pIter != pEnd;++pIter)
                 aVector.push_back(*pIter);
         }
@@ -679,7 +679,7 @@ void ODBTableDecorator::refreshColumns()
         OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
         m_xColumnMediator = pMediator;
         pCol->setMediator( pMediator );
-        m_pColumns  = pCol;
+        m_pColumns	= pCol;	
     }
     else
         m_pColumns->reFill(aVector);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@
 
 // defines ---------------------------------------------------------------
 
-#define SCROLL_OFFSET   1
-#define SPACE_OFFSET    5
-#define SCROLL_TIMER    30
+#define SCROLL_OFFSET	1
+#define SPACE_OFFSET	5
+#define SCROLL_TIMER	30
 
 #define WELCOME_URL     DEFINE_CONST_UNICODE( "http://www.openoffice.org/welcome/credits.html" )
 
@@ -153,15 +153,15 @@ Image SfxApplication::GetApplicationLogo()
 
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerStr ) :
 
-    SfxModalDialog  ( pParent,  rId ),
+    SfxModalDialog	( pParent, 	rId ),
 
-    aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
-    aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
-    aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
+    aOKButton      	( this,		ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
+    aVersionText 	( this, 	ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
+    aCopyrightText	( this, 	ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
     aBuildData      ( this ),
-    aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
-    aDevVersionStr  ( rVerStr ),
-    aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
+    aDeveloperAry	( 			ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
+    aDevVersionStr	( rVerStr ),
+    aAccelStr		( 			ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
     aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
     aTimer          (),
     nOff            ( 0 ),
@@ -190,7 +190,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     // Initialisierung fuer Aufruf Entwickler
     if ( aAccelStr.Len() && ByteString(U2S(aAccelStr)).IsAlphaAscii() )
     {
-        Accelerator *pAccel = 0, *pPrevAccel = 0, *pFirstAccel = 0;
+        Accelerator	*pAccel = 0, *pPrevAccel = 0, *pFirstAccel = 0;
         aAccelStr.ToUpperAscii();
 
         for ( USHORT i = 0; i < aAccelStr.Len(); ++i )
@@ -255,14 +255,14 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     long nTextWidth  = aOutSiz.Width() - nDlgMargin;
 
     aCopyrightText.SetText( aCopyrightTextStr );
-
+    
     layoutText( aVersionText, nY, nTextWidth, a6Size );
     nY += nCtrlMargin;
-
+    
     // OK-Button-Position (at the bottom and centered)
     Size aOKSiz = aOKButton.GetSizePixel();
     Point aOKPnt = aOKButton.GetPosPixel();
-
+    
     // Multiline edit with Copyright-Text
     Point aCopyPnt = aCopyrightText.GetPosPixel();
     Size aCopySize = aCopyrightText.GetSizePixel();

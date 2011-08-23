@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,11 +71,11 @@ void SetJpegPreviewSizeHint( int nWidth, int nHeight )
 
 void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 {
-    struct jpeg_decompress_struct   cinfo;
-    struct my_error_mgr             jerr;
+    struct jpeg_decompress_struct	cinfo;
+    struct my_error_mgr				jerr;
     struct JPEGCreateBitmapParam    aCreateBitmapParam;
-    HPBYTE                          pDIB;
-    HPBYTE                          pTmp;
+    HPBYTE							pDIB;
+    HPBYTE							pTmp;
     long                            nWidth;
     long                            nHeight;
     long                            nAlignedWidth;
@@ -84,7 +84,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     long nScanLineBufferComponents = 0;
     // declare bDecompCreated volatile because of gcc
     // warning: variable 'bDecompCreated' might be clobbered by `longjmp' or `vfork'
-    volatile long                   bDecompCreated = 0;
+    volatile long					bDecompCreated = 0;
 
     /* Falls der Stream nicht ausreicht (IO_PENDING)
      wird ueber ein longjmp in der Schleife nach Exit
@@ -197,7 +197,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
             /* PENDING ??? */
             if ( cinfo.err->msg_code == 113 )
             break;
-
+            
             pTmp += nAlignedWidth;
         }
     }
@@ -218,14 +218,14 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
                 long nWidth, long nHeight, long bGreys,
                 long nQualityPercent, void* pCallbackData )
 {
-    struct jpeg_compress_struct cinfo;
-    struct my_error_mgr         jerr;
-    void*                       pScanline;
-    long                        nY;
+    struct jpeg_compress_struct	cinfo;
+    struct my_error_mgr			jerr;
+    void*						pScanline;
+    long						nY;
     // declare bCompCreated, bRet volatile because of gcc
     // warning: variable 'bCompCreated' might be clobbered by `longjmp' or `vfork'
-    volatile long               bCompCreated = 0;
-    volatile long               bRet = 0;
+    volatile long				bCompCreated = 0;
+    volatile long				bRet = 0;
 
     if ( setjmp( jerr.setjmp_buffer ) )
         goto Exit;

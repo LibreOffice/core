@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,16 +34,16 @@
 #ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_ 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_ 
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONNECTION_XCONNECTION_HPP_
+#ifndef _COM_SUN_STAR_CONNECTION_XCONNECTION_HPP_ 
 #include <com/sun/star/connection/XConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_ 
 #include <com/sun/star/container/XNamed.hpp>
 #endif
 #ifndef _DBACCESS_UI_DIRECTSQL_HXX_
@@ -93,7 +93,7 @@ DBG_NAME(ODirectSQLDialog)
     //---------------------------------------------------------------------
     ODirectSQLDialog::~ODirectSQLDialog()
     {
-
+    
         DBG_DTOR(ODirectSQLDialog,NULL);
     }
 
@@ -107,12 +107,12 @@ DBG_NAME(ODirectSQLDialog)
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
 
     //---------------------------------------------------------------------
-    Dialog* ODirectSQLDialog::createDialog(Window* _pParent)
+    Dialog*	ODirectSQLDialog::createDialog(Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection = m_xActiveConnection;
         if ( !xConnection.is() )
-        {
+        {			
             try
             {
                 // the connection the row set is working with
@@ -151,6 +151,6 @@ DBG_NAME(ODirectSQLDialog)
         ODirectSQLDialog_BASE::implInitialize(_rValue);
     }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 

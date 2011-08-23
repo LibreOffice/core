@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,10 @@
 class SfxItemSet;
 
 SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet& );
+SVX_DLLPUBLIC BOOL GetApplyCharUnit( const SfxItemSet& );
 
-#define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
-#define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
+#define OUTPUT_DRAWMODE_COLOR		(DRAWMODE_DEFAULT)
+#define OUTPUT_DRAWMODE_CONTRAST	(DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
 #endif
 

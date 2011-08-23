@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ class SdrModel;
 class SdrPage;
 class SdrView;
 
-/** @descr
+/**	@descr
         This base class provides an implementation of the
         <code>AccessibleContext</code> service.
 */
@@ -98,25 +98,25 @@ public:
     //=====  internal  ========================================================
     SvxGraphCtrlAccessibleContext(
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent,
-        GraphCtrl&              rRepresentation,
-        const ::rtl::OUString*  pName = NULL,
-        const ::rtl::OUString*  pDescription = NULL );
+        GraphCtrl&				rRepresentation,
+        const ::rtl::OUString*	pName = NULL,
+        const ::rtl::OUString*	pDescription = NULL );
 
-    void Notify( SfxBroadcaster& aBC, const SfxHint& aHint );
+    void Notify( SfxBroadcaster& aBC, const	SfxHint& aHint );
 
 protected:
     virtual ~SvxGraphCtrlAccessibleContext();
 public:
     //=====  XAccessible  =====================================================
 
-    /// Return the XAccessibleContext.
+    ///	Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void) throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ============================================
 
     virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& rPoint ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )	throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Point SAL_CALL getLocation() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen() throw (::com::sun::star::uno::RuntimeException);
@@ -138,14 +138,14 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleChildCount (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL getAccessibleChild (sal_Int32 nIndex) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL getAccessibleParent (void) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent (void) throw (::com::sun::star::uno::RuntimeException);
+    virtual	sal_Int32 SAL_CALL getAccessibleIndexInParent (void) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getAccessibleDescription (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL getAccessibleStateSet (void) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale (void) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::accessibility::IllegalAccessibleComponentStateException);
-//  virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
+    virtual ::com::sun::star::lang::Locale SAL_CALL	getLocale (void) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::accessibility::IllegalAccessibleComponentStateException);
+//	virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
 //  virtual void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
 
     //=====  XComponent  ========================================================
@@ -156,7 +156,7 @@ public:
     //=====  XAccessibleEventBroadcaster  =====================================
 
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener>& xListener) throw (com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener(  const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener>& xListener) throw (com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(	const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener>& xListener) throw (com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
 
@@ -214,7 +214,7 @@ private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:
 
-    /** Return the object's current bounding box relative to the desktop,
+    /**	Return the object's current bounding box relative to the desktop,
         i.e in absolute pixel coordinates.
         @return
             The returned rectangle is a bounding box of the object given in
@@ -225,7 +225,7 @@ protected:
     */
      virtual Rectangle GetBoundingBoxOnScreen(void) throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current bounding box relative to the parent object.
+    ///	Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox(void) throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL disposing();
@@ -241,20 +241,20 @@ private:
 
     accessibility::AccessibleShapeTreeInfo maTreeInfo;
 
-    /// Reference to the parent object.
+    ///	Reference to the parent object.
     ::com::sun::star::uno::Reference<
          ::com::sun::star::accessibility::XAccessible> mxParent;
 
-    /** Description of this object.  This is not a constant because it can
+    /**	Description of this object.  This is not a constant because it can
         be set from the outside.
     */
     ::rtl::OUString msDescription;
 
-    /** Name of this object.
+    /**	Name of this object.
     */
     ::rtl::OUString msName;
 
-    /// map of accessible shapes
+    ///	map of accessible shapes
     struct SdrObjectCompareLess
     {
         bool operator()(const SdrObject* p1, const SdrObject* p2) const
@@ -265,7 +265,7 @@ private:
     typedef ::std::map< const SdrObject*, ::accessibility::AccessibleShape*, SdrObjectCompareLess > ShapesMapType;
     ShapesMapType mxShapes;
 
-    GraphCtrl*  mpControl;
+    GraphCtrl*	mpControl;
 
     SdrModel* mpModel;
     SdrPage* mpPage;

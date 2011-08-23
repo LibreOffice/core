@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,33 +41,33 @@ class ParsingThread
      * the Node which will be handled with in the next step
      */
     private Node m_node;
-
+    
     /*
      * the event to be handled in the next step.
      * true means endElement event, false otherwise.
      */
     private boolean m_bIsEndEvent;
-
+    
     /*
      * the document handler which receives generated SAX events
      */
     private XDocumentHandler m_xDocumentHandler;
-
+    
     /*
      * the TestTool which receives UI feedbacks
      */
     private TestTool m_testTool;
-
-
-        ParsingThread(Node node, XDocumentHandler xDocumentHandler, TestTool testTool)
+    
+         
+        ParsingThread(Node node, XDocumentHandler xDocumentHandler, TestTool testTool) 
         {
             m_node = node;
             m_xDocumentHandler = xDocumentHandler;
             m_testTool = testTool;
-
+            
             m_bIsEndEvent = false;
         }
-
+        
         /*
          * changes the document handler.
          */
@@ -75,7 +75,7 @@ class ParsingThread
         {
             this.m_xDocumentHandler = xDocumentHandler;
         }
-
+ 
         /*
          * sends the next SAX event.
          * when there is no further step, then false is returned,
@@ -84,7 +84,7 @@ class ParsingThread
         protected boolean nextStep()
         {
             boolean rc = true;
-
+            
             try
             {
                 String message;
@@ -103,11 +103,11 @@ class ParsingThread
                     break;
                 case Node.ELEMENT_NODE: /* startElement */
                     String nodeName = m_node.getNodeName();
-                    message = "startElement:"+nodeName;
+                    message = "startElement:"+nodeName;			
                     NamedNodeMap attrs = m_node.getAttributes();
-
+                    
                     AttributeListHelper attributeListHelper = new AttributeListHelper();
-
+                    
                     int length = attrs.getLength();
                     for (int i=0; i<length; ++i)
                     {
@@ -115,10 +115,10 @@ class ParsingThread
                         attributeListHelper.setAttribute(attr.getName(), "CDATA", attr.getValue());
                         message += " "+attr.getName()+"='"+attr.getValue()+"'";
                     }
-
+                    
                     m_testTool.updatesCurrentSAXEventInformation(message);
                     m_xDocumentHandler.startElement(m_node.getNodeName(), attributeListHelper);
-
+                    
                     m_testTool.updatesUIs();
                     break;
                 case Node.TEXT_NODE: /* characters */
@@ -138,16 +138,16 @@ class ParsingThread
                     m_testTool.updatesUIs();
                     break;
                 }
-
+                
                 /*
                  * figures out the event for the next step.
                  */
-                switch (type)
+                switch (type) 
                 {
-                    case Node.DOCUMENT_NODE:
+                    case Node.DOCUMENT_NODE: 
                     case Node.ELEMENT_NODE:
-                        if (m_node.hasChildNodes())
-                        /*
+                        if (m_node.hasChildNodes()) 
+                        /* 
                          * for a Document node or an Element node,
                          * if the node has children, then the next event will be for its
                          * first child node.
@@ -155,27 +155,27 @@ class ParsingThread
                         {
                             m_node = m_node.getFirstChild();
                         }
-                        else
+                        else 
                         /*
                          * otherwise, the next event will be endElement.
                          */
                         {
-                            m_bIsEndEvent = true;
+                            m_bIsEndEvent = true; 
                         }
-                        break;
+                        break; 
                     case Node.TEXT_NODE:
                     case Node.PROCESSING_INSTRUCTION_NODE:
-                    case Node.COMMENT_NODE:
+                    case Node.COMMENT_NODE: 
                         Node nextNode = m_node.getNextSibling();
-                        if (nextNode != null)
+                        if (nextNode != null) 
                         /*
                          * for other kinds of node,
                          * if it has a next sibling, then the next event will be for that
                          * sibling.
                          */
                         {
-                            m_node = nextNode;
-                        }
+                            m_node = nextNode; 
+                        } 
                         else
                         /*
                          * otherwise, the next event will be the endElement for the node's
@@ -183,9 +183,9 @@ class ParsingThread
                          */
                         {
                             m_node = m_node.getParentNode();
-                            m_bIsEndEvent = true;
+                            m_bIsEndEvent = true; 
                         }
-                        break;
+                        break; 
                 }
             }
             else
@@ -196,20 +196,20 @@ class ParsingThread
                 switch (type)
                 {
                     case Node.DOCUMENT_NODE: /* endDocument */
-                        m_testTool.updatesCurrentSAXEventInformation("endDocument");
-                        m_xDocumentHandler.endDocument();
+                        m_testTool.updatesCurrentSAXEventInformation("endDocument"); 
+                        m_xDocumentHandler.endDocument(); 
                         m_testTool.updatesUIs();
-
+                        
                         /*
                          * no further steps.
                          */
                         rc = false;
                         break;
                     case Node.ELEMENT_NODE: /* endElement */
-                        m_testTool.updatesCurrentSAXEventInformation("endElement:"+m_node.getNodeName());
-                        m_xDocumentHandler.endElement(m_node.getNodeName());
+                        m_testTool.updatesCurrentSAXEventInformation("endElement:"+m_node.getNodeName()); 
+                        m_xDocumentHandler.endElement(m_node.getNodeName()); 
                         m_testTool.updatesUIs();
-
+                            
                         Node nextNode = m_node.getNextSibling();
                         if (nextNode != null)
                         /*
@@ -235,13 +235,13 @@ class ParsingThread
         catch(  com.sun.star.xml.sax.SAXException e)
         {
             e.printStackTrace();
-
+            
             /*
              * forces to end.
              */
             rc = false;
         }
-
+        
         return rc;
     }
 }

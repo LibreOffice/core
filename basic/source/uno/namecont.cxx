@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -326,7 +326,7 @@ DBG_NAME( SfxLibraryContainer )
 // Ctor
 SfxLibraryContainer::SfxLibraryContainer( void )
     : LibraryContainerHelper( maMutex )
-    , mbVBACompat( sal_False )
+    , mbVBACompat( sal_False ) 
     , maModifiable( *this, maMutex )
     , maNameContainer( getCppuType( (Reference< XNameAccess >*) NULL ) )
     , mbOldInfoFormat( sal_False )
@@ -770,7 +770,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         {
             InputSource source;
             source.aInputStream = xInput;
-            source.sSystemId    = aFileName;
+            source.sSystemId 	= aFileName;
 
             // start parsing
             ::xmlscript::LibDescriptorArray* pLibArray = new ::xmlscript::LibDescriptorArray();
@@ -1403,7 +1403,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                     // #87671 Allow encryption
-//REMOVE                            aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
+//REMOVE	                        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
                     aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
                     xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
 
@@ -1551,7 +1551,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                 // #87671 Allow encryption
-//REMOVE                    aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
+//REMOVE	                aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
                 aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
                 xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
 
@@ -1691,7 +1691,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
 
     InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId    = aLibInfoPath;
+    source.sSystemId 	= aLibInfoPath;
 
     // start parsing
     try {
@@ -1701,8 +1701,8 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     catch( Exception& )
     {
         // throw WrappedTargetException( OUString::createFromAscii( "parsing error!\n" ),
-        //                              Reference< XInterface >(),
-        //                              makeAny( e ) );
+        //								Reference< XInterface >(),
+        //								makeAny( e ) );
         OSL_ENSURE( 0, "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
         ULONG nErrorCode = ERRCODE_IO_GENERAL;
@@ -2387,7 +2387,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             }
 
             Reference< XNameContainer > xLib( pImplLib );
-            Any aAny = importLibraryElement( xLib, aElementName,
+            Any aAny = importLibraryElement( xLib, aElementName, 
                                                 aFile, xInStream );
             if( pImplLib->hasByName( aElementName ) )
             {
@@ -2474,7 +2474,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
     aLibAny >>= xNameAccess;
     SfxLibrary* pImplLib = static_cast< SfxLibrary* >( xNameAccess.get() );
     if( pImplLib->mbPasswordProtected && !pImplLib->mbPasswordVerified )
-        return;     // Lib with unverified password cannot be renamed
+        return;		// Lib with unverified password cannot be renamed
     loadLibrary( Name );
 
     // Remove from container
@@ -2728,9 +2728,9 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
 
     ::xmlscript::LibDescriptor aLibDesc;
     aLibDesc.aName = Name;
-    aLibDesc.bLink = false;             // Link status gets lost?
+    aLibDesc.bLink = false;				// Link status gets lost?
     aLibDesc.bReadOnly = pImplLib->mbReadOnly;
-    aLibDesc.bPreload = false;          // Preload status gets lost?
+    aLibDesc.bPreload = false;			// Preload status gets lost?
     aLibDesc.bPasswordProtected = pImplLib->mbPasswordProtected;
     aLibDesc.aElementNames = pImplLib->getElementNames();
 
@@ -2805,7 +2805,7 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
     OUString aRetStr = pImplLib->maOrignialStorageURL;
     return aRetStr;
 }
-
+    
 
 // XVBACompatibility
 ::sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode() throw (RuntimeException)
@@ -3174,7 +3174,7 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
             }
             case BUNDLED_EXTENSIONS:
             {
-                Reference< deployment::XPackage > xScriptPackage =
+                Reference< deployment::XPackage > xScriptPackage = 
                     implGetNextBundledScriptPackage( rbPureDialogLib );
                 if( !xScriptPackage.is() )
                     break;
@@ -3250,7 +3250,7 @@ Reference< deployment::XPackage > ScriptSubPackageIterator::getNextScriptSubPack
     else
     {
         xScriptPackage = implDetectScriptPackage( m_xMainPackage, rbPureDialogLib );
-        m_bIsValid = false;     // No more script packages
+        m_bIsValid = false;		// No more script packages
     }
 
     return xScriptPackage;
@@ -3370,7 +3370,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
 
     if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
     {
-        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
+        m_eState = SHARED_EXTENSIONS;		// Later: SHARED_MODULE
     }
     else
     {
@@ -3407,7 +3407,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
         try
         {
             Reference< XExtensionManager > xSharedManager =
-                ExtensionManager::get( m_xContext );
+                ExtensionManager::get( m_xContext ); 
             m_aSharedPackagesSeq = xSharedManager->getDeployedExtensions
                 (rtl::OUString::createFromAscii("shared"),
                  Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
@@ -3460,7 +3460,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
         try
         {
             Reference< XExtensionManager > xManager =
-                ExtensionManager::get( m_xContext );
+                ExtensionManager::get( m_xContext ); 
             m_aBundledPackagesSeq = xManager->getDeployedExtensions
                 (rtl::OUString::createFromAscii("bundled"),
                  Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );

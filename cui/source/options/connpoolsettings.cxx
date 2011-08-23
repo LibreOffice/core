@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,9 +56,9 @@ namespace offapp
     //--------------------------------------------------------------------
     sal_Bool DriverPooling::operator == (const DriverPooling& _rR) const
     {
-        return  (sName == _rR.sName)
-            &&  (bEnabled == _rR.bEnabled)
-            &&  (nTimeoutSeconds == _rR.nTimeoutSeconds);
+        return	(sName == _rR.sName)
+            &&	(bEnabled == _rR.bEnabled)
+            &&	(nTimeoutSeconds == _rR.nTimeoutSeconds);
     }
 
     //====================================================================
@@ -114,7 +114,7 @@ namespace offapp
     //--------------------------------------------------------------------
 
 //........................................................................
-}   // namespace offapp
+}	// namespace offapp
 //........................................................................
 
 

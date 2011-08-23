@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,26 +57,26 @@ class SdrAShapeObjGeoData : public SdrTextObjGeoData
 {
     public:
 
-    sal_Bool    bMirroredX;
-    sal_Bool    bMirroredY;
-    double      fObjectRotation;
+    sal_Bool	bMirroredX;
+    sal_Bool	bMirroredY;
+    double		fObjectRotation;
 
     com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >
                 aAdjustmentSeq;
 };
 
-#define CUSTOMSHAPE_HANDLE_RESIZE_FIXED         1
-#define CUSTOMSHAPE_HANDLE_CREATE_FIXED         2
-#define CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X    4
-#define CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y    8
-#define CUSTOMSHAPE_HANDLE_MOVE_SHAPE           16
-#define CUSTOMSHAPE_HANDLE_ORTHO4               32
+#define CUSTOMSHAPE_HANDLE_RESIZE_FIXED			1
+#define CUSTOMSHAPE_HANDLE_CREATE_FIXED			2
+#define CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X	4
+#define CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y	8
+#define CUSTOMSHAPE_HANDLE_MOVE_SHAPE			16
+#define CUSTOMSHAPE_HANDLE_ORTHO4				32
 
 struct SdrCustomShapeInteraction
 {
-    com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle >   xInteraction;
-    com::sun::star::awt::Point                                                      aPosition;
-    sal_Int32                                                                       nMode;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle >	xInteraction;
+    com::sun::star::awt::Point														aPosition;
+    sal_Int32																		nMode;
 };
 
 //************************************************************
@@ -101,14 +101,14 @@ public:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mXRenderedCustomShape;
 
     // #i37011# render geometry shadow
-    SdrObject*                                          mpLastShadowGeometry;
+    SdrObject*											mpLastShadowGeometry;
 
     static com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape );
 
-//  SVX_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > >
-//      SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;
+//	SVX_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > >
+//		SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;
 // #i47293#
-//  SVX_DLLPRIVATE std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > > GetFixedInteractionHandle() const;
+//	SVX_DLLPRIVATE std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > > GetFixedInteractionHandle() const;
 
     SVX_DLLPRIVATE std::vector< SdrCustomShapeInteraction > GetInteractionHandles( const SdrObjCustomShape* pCustomShape ) const;
 
@@ -136,7 +136,7 @@ public:
 
 protected:
 
-    String      aName;
+    String		aName;
 
 public:
 
@@ -154,7 +154,7 @@ public:
     SdrObjCustomShape();
     virtual ~SdrObjCustomShape();
 
-    /* is merging default attributes from type-shype into the SdrCustomShapeGeometryItem. If pType
+    /* is merging default attributes from type-shype into the SdrCustomShapeGeometryItem. If pType 
     is NULL then the type is being taken from the "Type" property of the SdrCustomShapeGeometryItem.
     MergeDefaultAttributes is called when creating CustomShapes via UI and after importing */
     void MergeDefaultAttributes( const rtl::OUString* pType = NULL );
@@ -209,7 +209,7 @@ public:
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
 
     virtual FASTBOOL BegCreate( SdrDragStat& rStat );
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // #i37448#
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat);	// #i37448#
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE) const;

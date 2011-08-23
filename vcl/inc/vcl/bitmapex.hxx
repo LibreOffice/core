@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 enum TransparentType
 {
-    TRANSPARENT_NONE,
+    TRANSPARENT_NONE, 
     TRANSPARENT_COLOR,
     TRANSPARENT_BITMAP
 };
@@ -54,12 +54,12 @@ class VCL_DLLPUBLIC BitmapEx
 
 private:
 
-    Bitmap              aBitmap;
-    Bitmap              aMask;
-    Size                aBitmapSize;
-    Color               aTransparentColor;
-    TransparentType     eTransparent;
-    BOOL                bAlpha;
+    Bitmap				aBitmap;
+    Bitmap				aMask;
+    Size				aBitmapSize;
+    Color				aTransparentColor;
+    TransparentType		eTransparent;
+    BOOL				bAlpha;
 
 public:
 
@@ -82,51 +82,51 @@ public:
                         BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor );
                         ~BitmapEx();
 
-    BitmapEx&           operator=( const BitmapEx& rBitmapEx );
-    BOOL                operator==( const BitmapEx& rBitmapEx ) const;
-    BOOL                operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
-    BOOL                operator!() const { return !aBitmap; }
+    BitmapEx&			operator=( const BitmapEx& rBitmapEx );
+    BOOL				operator==( const BitmapEx& rBitmapEx ) const;
+    BOOL				operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
+    BOOL				operator!() const { return !aBitmap; }
 
-    BOOL                IsEqual( const BitmapEx& rBmpEx ) const;
+    BOOL				IsEqual( const BitmapEx& rBmpEx ) const;
 
-    BOOL                IsEmpty() const;
-    void                SetEmpty();
-    void                Clear();
+    BOOL				IsEmpty() const;
+    void				SetEmpty();
+    void				Clear();
 
-    void                Draw( OutputDevice* pOutDev,
+    void				Draw( OutputDevice* pOutDev, 
                               const Point& rDestPt ) const;
-    void                Draw( OutputDevice* pOutDev,
+    void				Draw( OutputDevice* pOutDev, 
                               const Point& rDestPt, const Size& rDestSize ) const;
-    void                Draw( OutputDevice* pOutDev,
+    void				Draw( OutputDevice* pOutDev, 
                               const Point& rDestPt, const Size& rDestSize,
                               const Point& rSrcPtPixel, const Size& rSrcSizePixel ) const;
 
-    BOOL                IsTransparent() const;
-    TransparentType     GetTransparentType() const { return eTransparent; }
+    BOOL				IsTransparent() const;
+    TransparentType		GetTransparentType() const { return eTransparent; }
 
-    Bitmap              GetBitmap( const Color* pTransReplaceColor = NULL ) const;
-    Bitmap              GetMask() const;
+    Bitmap				GetBitmap( const Color* pTransReplaceColor = NULL ) const;
+    Bitmap				GetMask() const;
 
     BitmapEx            GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const;
 
-    BOOL                IsAlpha() const;
-    AlphaMask           GetAlpha() const;
+    BOOL				IsAlpha() const;
+    AlphaMask			GetAlpha() const;
 
     const Size&         GetSizePixel() const { return aBitmapSize; }
-    void                SetSizePixel( const Size& rNewSize );
+    void				SetSizePixel( const Size& rNewSize );
 
-    const Size&         GetPrefSize() const { return aBitmap.GetPrefSize(); }
-    void                SetPrefSize( const Size& rPrefSize ) { aBitmap.SetPrefSize( rPrefSize ); }
+    const Size&			GetPrefSize() const { return aBitmap.GetPrefSize(); }
+    void				SetPrefSize( const Size& rPrefSize ) { aBitmap.SetPrefSize( rPrefSize ); }
 
-    const MapMode&      GetPrefMapMode() const { return aBitmap.GetPrefMapMode(); }
-    void                SetPrefMapMode( const MapMode& rPrefMapMode ) { aBitmap.SetPrefMapMode( rPrefMapMode ); }
+    const MapMode&		GetPrefMapMode() const { return aBitmap.GetPrefMapMode(); }
+    void				SetPrefMapMode( const MapMode& rPrefMapMode ) { aBitmap.SetPrefMapMode( rPrefMapMode ); }
 
-    const Color&        GetTransparentColor() const { return aTransparentColor; }
-    void                SetTransparentColor( const Color& rColor ) { aTransparentColor = rColor; }
+    const Color&		GetTransparentColor() const { return aTransparentColor; }
+    void				SetTransparentColor( const Color& rColor ) { aTransparentColor = rColor; }
 
-    USHORT              GetBitCount() const { return aBitmap.GetBitCount(); }
-    ULONG               GetSizeBytes() const;
-    ULONG               GetChecksum() const;
+    USHORT				GetBitCount() const { return aBitmap.GetBitCount(); }
+    ULONG				GetSizeBytes() const;
+    ULONG				GetChecksum() const;
 
 public:
 
@@ -137,7 +137,7 @@ public:
 
         @return TRUE, if the conversion was completed successfully.
      */
-    BOOL                Convert( BmpConversion eConversion );
+    BOOL				Convert( BmpConversion eConversion );
 
     /** Reduce number of colors for the bitmap
 
@@ -149,7 +149,7 @@ public:
 
         @return TRUE, if the color reduction operation was completed successfully.
      */
-    BOOL                ReduceColors( USHORT nNewColorCount,
+    BOOL				ReduceColors( USHORT nNewColorCount, 
                                       BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Apply a dither algorithm to the bitmap
@@ -161,7 +161,7 @@ public:
         @param nDitherFlags
         The algorithm to be used for dithering
      */
-    BOOL                Dither( ULONG nDitherFlags = BMP_DITHER_MATRIX );
+    BOOL				Dither( ULONG nDitherFlags = BMP_DITHER_MATRIX );
 
     /** Crop the bitmap
 
@@ -177,11 +177,11 @@ public:
         nothing had to be cropped, because e.g. the crop rectangle
         included the bitmap, FALSE is returned, too!
      */
-    BOOL                Crop( const Rectangle& rRectPixel );
+    BOOL				Crop( const Rectangle& rRectPixel );
 
     /** Expand the bitmap by pixel padding
 
-        @param nDX
+        @param nDX 
         Number of pixel to pad at the right border of the bitmap
 
         @param nDY
@@ -194,8 +194,8 @@ public:
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    BOOL                Expand( ULONG nDX, ULONG nDY,
-                                const Color* pInitColor = NULL,
+    BOOL				Expand( ULONG nDX, ULONG nDY, 
+                                const Color* pInitColor = NULL, 
                                 BOOL bExpandTransparent = FALSE );
 
     /** Copy a rectangular area from another bitmap
@@ -220,7 +220,7 @@ public:
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    BOOL                CopyPixel( const Rectangle& rRectDst,
+    BOOL				CopyPixel( const Rectangle& rRectDst,
                                    const Rectangle& rRectSrc,
                                    const BitmapEx* pBmpExSrc = NULL );
 
@@ -232,22 +232,22 @@ public:
 
         @return TRUE, if the operation was completed successfully.
      */
-    BOOL                Erase( const Color& rFillColor );
+    BOOL				Erase( const Color& rFillColor );
 
     /** Perform the Invert operation on every pixel
 
         @return TRUE, if the operation was completed successfully.
      */
-    BOOL                Invert();
+    BOOL				Invert();
 
     /** Mirror the bitmap
 
         @param nMirrorFlags
         About which axis (horizontal, vertical, or both) to mirror
 
-        @return TRUE, if the operation was completed successfully.
+        @return TRUE, if the operation was completed successfully.        
      */
-    BOOL                Mirror( ULONG nMirrorFlags );
+    BOOL				Mirror( ULONG nMirrorFlags );
 
     /** Scale the bitmap
 
@@ -257,9 +257,9 @@ public:
         @param nScaleFlag
         The algorithm to be used for scaling
 
-        @return TRUE, if the operation was completed successfully.
+        @return TRUE, if the operation was completed successfully.        
      */
-    BOOL                Scale( const Size& rNewSize, ULONG nScaleFlag = BMP_SCALE_FAST );
+    BOOL				Scale( const Size& rNewSize, ULONG nScaleFlag = BMP_SCALE_FAST );
 
     /** Scale the bitmap
 
@@ -269,9 +269,9 @@ public:
         @param rScaleY
         The scale factor in y direction.
 
-        @return TRUE, if the operation was completed successfully.
+        @return TRUE, if the operation was completed successfully.        
      */
-    BOOL                Scale( const double& rScaleX, const double& rScaleY, ULONG nScaleFlag = BMP_SCALE_FAST );
+    BOOL				Scale( const double& rScaleX, const double& rScaleY, ULONG nScaleFlag = BMP_SCALE_FAST );
 
     /** Rotate bitmap by the specified angle
 
@@ -284,15 +284,15 @@ public:
         in. The empty spaces around that rotated original bitmap are
         then filled with this color.
 
-        @return TRUE, if the operation was completed successfully.
+        @return TRUE, if the operation was completed successfully.        
      */
-    BOOL                Rotate( long nAngle10, const Color& rFillColor );
+    BOOL				Rotate( long nAngle10, const Color& rFillColor );
 
     /** Replace all pixel having the search color with the specified color
 
         @param rSearchColor
         Color specifying which pixel should be replaced
-
+        
         @param rReplaceColor
         Color to be placed in all changed pixel
 
@@ -301,15 +301,15 @@ public:
         rSearchColor and the individual pixel values, such that the
         corresponding pixel is still regarded a match.
 
-        @return TRUE, if the operation was completed successfully.
+        @return TRUE, if the operation was completed successfully.        
      */
-    BOOL                Replace( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
+    BOOL				Replace( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
         @param pSearchColor
         Array of colors specifying which pixel should be replaced
-
+        
         @param pReplaceColor
         Array of colors to be placed in all changed pixel
 
@@ -321,9 +321,9 @@ public:
         pSearchColor colors and the individual pixel values, such that
         the corresponding pixel is still regarded a match.
 
-        @return TRUE, if the operation was completed successfully.
+        @return TRUE, if the operation was completed successfully.        
      */
-    BOOL                Replace( const Color* pSearchColors, const Color* pReplaceColors,
+    BOOL				Replace( const Color* pSearchColors, const Color* pReplaceColors, 
                                  ULONG nColorCount, const ULONG* pTols = NULL );
 
     /** Change various global color characteristics
@@ -351,12 +351,12 @@ public:
         @param bInvert
         If TRUE, invert the channel values with the logical 'not' operator
 
-        @return TRUE, if the operation was completed successfully.
+        @return TRUE, if the operation was completed successfully.        
      */
-    BOOL                Adjust( short nLuminancePercent = 0,
+    BOOL				Adjust( short nLuminancePercent = 0,
                                 short nContrastPercent = 0,
-                                short nChannelRPercent = 0,
-                                short nChannelGPercent = 0,
+                                short nChannelRPercent = 0, 
+                                short nChannelGPercent = 0, 
                                 short nChannelBPercent = 0,
                                 double fGamma = 1.0,
                                 BOOL bInvert = FALSE );
@@ -371,10 +371,10 @@ public:
 
         @param pProgress
         A callback for showing the progress of the vectorization
-
-        @return TRUE, if the operation was completed successfully.
+        
+        @return TRUE, if the operation was completed successfully.        
      */
-    BOOL                Filter( BmpFilter eFilter,
+    BOOL				Filter( BmpFilter eFilter, 
                                 const BmpFilterParam* pFilterParam = NULL,
                                 const Link* pProgress = NULL );
 
@@ -393,8 +393,8 @@ public:
 
 public:
 
-    friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
-    friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
+    friend VCL_DLLPUBLIC SvStream&	operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
+    friend VCL_DLLPUBLIC SvStream&	operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
 };
 
 #endif // _SV_BITMAPEX_HXX

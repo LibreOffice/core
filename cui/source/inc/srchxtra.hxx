@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ public:
     ~SvxSearchFormatDialog();
 
 protected:
-    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void 	PageCreated( USHORT nId, SfxTabPage &rPage );
 
 private:
-    FontList*       pFontList;
+    FontList*		pFontList;
 };
 
 // class SvxSearchFormatDialog -------------------------------------------
@@ -61,13 +61,13 @@ public:
 
 private:
     FixedText           aAttrFL;
-    SvxCheckListBox     aAttrLB;
+    SvxCheckListBox		aAttrLB;
 
-    OKButton            aOKBtn;
-    CancelButton        aEscBtn;
-    HelpButton          aHelpBtn;
+    OKButton			aOKBtn;
+    CancelButton		aEscBtn;
+    HelpButton			aHelpBtn;
 
-    SearchAttrItemList& rList;
+    SearchAttrItemList&	rList;
 
     DECL_LINK( OKHdl, Button * );
 };
@@ -78,29 +78,29 @@ class SvxSearchSimilarityDialog : public ModalDialog
 {
 private:
     FixedLine           aFixedLine;
-    FixedText           aOtherTxt;
-    NumericField        aOtherFld;
-    FixedText           aLongerTxt;
-    NumericField        aLongerFld;
-    FixedText           aShorterTxt;
-    NumericField        aShorterFld;
-    CheckBox            aRelaxBox;
+    FixedText			aOtherTxt;
+    NumericField		aOtherFld;
+    FixedText			aLongerTxt;
+    NumericField		aLongerFld;
+    FixedText			aShorterTxt;
+    NumericField		aShorterFld;
+    CheckBox			aRelaxBox;
 
-    OKButton            aOKBtn;
-    CancelButton        aEscBtn;
-    HelpButton          aHelpBtn;
+    OKButton			aOKBtn;
+    CancelButton		aEscBtn;
+    HelpButton			aHelpBtn;
 
 public:
-    SvxSearchSimilarityDialog(  Window* pParent,
+    SvxSearchSimilarityDialog( 	Window* pParent,
                                 BOOL bRelax,
                                 USHORT nOther,
                                 USHORT nShorter,
                                 USHORT nLonger );
 
-    USHORT  GetOther()      { return (USHORT)aOtherFld.GetValue(); }
-    USHORT  GetShorter()    { return (USHORT)aShorterFld.GetValue(); }
-    USHORT  GetLonger()     { return (USHORT)aLongerFld.GetValue(); }
-    BOOL    IsRelaxed()     { return aRelaxBox.IsChecked(); }
+    USHORT	GetOther() 		{ return (USHORT)aOtherFld.GetValue(); }
+    USHORT	GetShorter() 	{ return (USHORT)aShorterFld.GetValue(); }
+    USHORT	GetLonger()		{ return (USHORT)aLongerFld.GetValue(); }
+    BOOL 	IsRelaxed()		{ return aRelaxBox.IsChecked(); }
 };
 
 

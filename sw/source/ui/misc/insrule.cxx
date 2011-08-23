@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     Rectangle aRect = rUDEvt.GetRect();
     OutputDevice*  pDev = rUDEvt.GetDevice();
-    USHORT  nItemId = rUDEvt.GetItemId();
+    USHORT	nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
     // Itemzaehlung beginnt bei 1, und die 1. ist die einfache Linie

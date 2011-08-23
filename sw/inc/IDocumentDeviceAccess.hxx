@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
  */
  class IDocumentDeviceAccess
  {
- public:
+ public:    
 
     /** Return the printer set at the document.
 
@@ -137,7 +137,7 @@
        [in] the new PrintData.
      */
     virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData) = 0;
-
+    
  protected:
     virtual ~IDocumentDeviceAccess() {};
  };

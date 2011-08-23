@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace connectivity
     {
 
         class OBoundParam;
-        typedef ::cppu::ImplInheritanceHelper4< MacabCommonStatement,
+        typedef ::cppu::ImplInheritanceHelper4<	MacabCommonStatement,
                                                 ::com::sun::star::sdbc::XPreparedStatement,
                                                 ::com::sun::star::sdbc::XParameters,
                                                 ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
@@ -50,12 +50,12 @@ namespace connectivity
         class MacabPreparedStatement : public  MacabPreparedStatement_BASE
         {
         protected:
-            ::rtl::OUString                 m_sSqlStatement;
+            ::rtl::OUString					m_sSqlStatement;
             ::rtl::Reference< MacabResultSetMetaData >
                                             m_xMetaData;
-            sal_Bool                        m_bPrepared;
-            mutable sal_Int32                   m_nParameterIndex;
-            OValueRow                       m_aParameterRow;
+            sal_Bool						m_bPrepared;
+            mutable sal_Int32					m_nParameterIndex;
+            OValueRow						m_aParameterRow;
 
             void checkAndResizeParameters(sal_Int32 nParams) throw(::com::sun::star::sdbc::SQLException);
             void setMacabFields() const throw(::com::sun::star::sdbc::SQLException);

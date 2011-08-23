@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,16 +56,16 @@ namespace com
     }
 }
 
-#define REFERENCE               ::com::sun::star::uno::Reference
-#define SEQUENCE                ::com::sun::star::uno::Sequence
-#define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
-#define REFERENCE               ::com::sun::star::uno::Reference
-#define SEQUENCE                ::com::sun::star::uno::Sequence
-#define XDISPATCH               ::com::sun::star::frame::XDispatch
+#define REFERENCE 				::com::sun::star::uno::Reference
+#define SEQUENCE 				::com::sun::star::uno::Sequence
+#define RUNTIMEEXCEPTION 		::com::sun::star::uno::RuntimeException
+#define	REFERENCE				::com::sun::star::uno::Reference
+#define	SEQUENCE				::com::sun::star::uno::Sequence
+#define	XDISPATCH				::com::sun::star::frame::XDispatch
 #define XNOTIFYINGDISPATCH      ::com::sun::star::frame::XNotifyingDispatch
-#define OUSTRING                ::rtl::OUString
-#define UNOURL                  ::com::sun::star::util::URL
-#define DISPATCHDESCRIPTOR      ::com::sun::star::frame::DispatchDescriptor
+#define	OUSTRING				::rtl::OUString
+#define	UNOURL					::com::sun::star::util::URL
+#define	DISPATCHDESCRIPTOR		::com::sun::star::frame::DispatchDescriptor
 
 class SwUnoModule : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::lang::XServiceInfo >
 {
@@ -86,9 +86,9 @@ public:
 
     // XDispatchProvider
     virtual SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION ) ;
-    virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(  const   UNOURL &            aURL            ,
-                                                            const   OUSTRING &          sTargetFrameName,
-                                                                    sal_Int32   eSearchFlags    ) throw( RUNTIMEEXCEPTION ) ;
+    virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(	const	UNOURL &			aURL			,
+                                                            const	OUSTRING &			sTargetFrameName,
+                                                                    sal_Int32	eSearchFlags	) throw( RUNTIMEEXCEPTION ) ;
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);

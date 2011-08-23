@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,16 +89,16 @@ namespace connectivity
 
             virtual sal_Int32 getDBType() const {return m_eDBType;}
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
-            inline sal_Bool isValid() const;
+            inline sal_Bool	isValid() const;
 
             TYPEINFO();
         };
 
         class OOO_DLLPUBLIC_FILE OOperandRow : public OOperand
         {
-            sal_uInt16  m_nRowPos;
+            sal_uInt16	m_nRowPos;
         protected:
-            OValueRefRow    m_pRow;
+            OValueRefRow	m_pRow;
 
             OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType);
         public:
@@ -351,7 +351,7 @@ namespace connectivity
             virtual double operate(const double& fLeft,const double& fRight) const;
         };
 
-        inline sal_Bool OOperand::isValid() const
+        inline sal_Bool	OOperand::isValid() const
         {
             return getValue().getDouble() != double(0.0);
         }

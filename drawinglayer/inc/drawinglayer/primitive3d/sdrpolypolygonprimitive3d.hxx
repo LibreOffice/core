@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,17 +40,17 @@ namespace drawinglayer
 
             This 3D primitive defines a PolyPolgon in space which may have
             Line- and FillStyles and extra 3D surface attributes. It is assumed
-            that the given 3D PolyPolgon (which may contain texture and normal
+            that the given 3D PolyPolgon (which may contain texture and normal 
             information) is planar in 3D.
 
-            The decomposition will include all needed 3D data for visualisation,
+            The decomposition will include all needed 3D data for visualisation, 
             including FatLines and fill styles.
          */
         class SdrPolyPolygonPrimitive3D : public SdrPrimitive3D
         {
         private:
             /// the planar polyPolygon evtl with normals and texture coordinates
-            basegfx::B3DPolyPolygon                 maPolyPolygon3D;
+            basegfx::B3DPolyPolygon					maPolyPolygon3D;
 
         protected:
             /// local decomposition.
@@ -60,9 +60,9 @@ namespace drawinglayer
             /// constructor
             SdrPolyPolygonPrimitive3D(
                 const basegfx::B3DPolyPolygon& rPolyPolygon3D,
-                const basegfx::B3DHomMatrix& rTransform,
+                const basegfx::B3DHomMatrix& rTransform, 
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
+                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute, 
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
             /// data access

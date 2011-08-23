@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,15 +72,15 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL          aImageRotation;
     SvBOOL          aImageReflection;
     SvIdentifier    aPseudoPrefix;
-    SvString        aDisableFlags;
-    SvMetaSlot*     pLinkedSlot;
-    SvMetaSlot*     pNextSlot;
-    ULONG           nListPos;
+    SvString		aDisableFlags;
+    SvMetaSlot*		pLinkedSlot;
+    SvMetaSlot*		pNextSlot;
+    ULONG			nListPos;
     SvMetaEnumValue* pEnumValue;
     SvString    aUnoName;
 
 #ifdef IDL_COMPILER
-    void            WriteSlot( const ByteString & rShellName,
+    void			WriteSlot( const ByteString & rShellName,
                             USHORT nCount, const ByteString & rSlotId,
                             SvSlotElementList &rList,
                             const ByteString & rPrefix,
@@ -89,7 +89,7 @@ class SvMetaSlot : public SvMetaAttribute
                             SvStream & rOutStm, USHORT nTab,
                              WriteType, WriteAttribute = 0 );
 
-    void            SetEnumValue(SvMetaEnumValue *p)
+    void			SetEnumValue(SvMetaEnumValue *p)
                     { pEnumValue = p; }
 #endif
 protected:
@@ -189,17 +189,17 @@ public:
 
     virtual BOOL    IsVariable() const;
     virtual BOOL    IsMethod() const;
-    virtual ByteString  GetMangleName( BOOL bVariable ) const;
+    virtual ByteString	GetMangleName( BOOL bVariable ) const;
 
-    SvMetaAttribute *   GetMethod() const;
-    SvMetaType *        GetSlotType() const;
+    SvMetaAttribute *	GetMethod() const;
+    SvMetaType *		GetSlotType() const;
     BOOL                GetHasCoreId() const;
     const ByteString &      GetGroupId() const;
     const ByteString &      GetConfigId() const;
     const ByteString &      GetExecMethod() const;
     const ByteString &      GetStateMethod() const;
     const ByteString &      GetDefault() const;
-    const ByteString &      GetDisableFlags() const;
+    const ByteString &		GetDisableFlags() const;
     BOOL                GetPseudoSlots() const;
     /*
     BOOL                GetGet() const;
@@ -230,22 +230,22 @@ public:
     BOOL                GetContainer() const;
     BOOL                GetImageRotation() const;
     BOOL                GetImageReflection() const;
-    SvMetaSlot*         GetLinkedSlot() const
+    SvMetaSlot*			GetLinkedSlot() const
                         { return pLinkedSlot; }
-    SvMetaSlot*         GetNextSlot() const
+    SvMetaSlot*			GetNextSlot() const
                         { return pNextSlot; }
-    ULONG               GetListPos() const
+    ULONG				GetListPos() const
                         { return nListPos; }
-    void                SetListPos(ULONG n)
+    void 				SetListPos(ULONG n)
                         { nListPos = n; }
-    void                ResetSlotPointer()
+    void				ResetSlotPointer()
                         { pNextSlot = pLinkedSlot = 0; }
 
 //    void                FillSbxObject( SvIdlDataBase & rBase, SbxObject *, BOOL bProp );
 #ifdef IDL_COMPILER
-    SvMetaEnumValue*    GetEnumValue() const
+    SvMetaEnumValue*	GetEnumValue() const
                         { return pEnumValue; }
-    virtual BOOL        Test( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual BOOL 		Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );
     virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase,
@@ -253,24 +253,24 @@ public:
     virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
                                     SvStream & rOutStm, USHORT nTab );
-    virtual void        Insert( SvSlotElementList&, const ByteString & rPrefix,
+    virtual	void		Insert( SvSlotElementList&, const ByteString & rPrefix,
                                 SvIdlDataBase& );
-    void                WriteSlotStubs( const ByteString & rShellName,
+    void				WriteSlotStubs( const ByteString & rShellName,
                                     ByteStringList & rList,
                                     SvStream & rOutStm );
-    USHORT              WriteSlotMap( const ByteString & rShellName,
+    USHORT      		WriteSlotMap( const ByteString & rShellName,
                                     USHORT nCount,
                                     SvSlotElementList&,
                                     const ByteString &,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
-    USHORT              WriteSlotParamArray( SvIdlDataBase & rBase,
+    USHORT  			WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvStream & rOutStm );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   Table * pIdTable );
     virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   Table * pIdTable );
-    virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
+    virtual void		WriteCSV( SvIdlDataBase&, SvStream& );
 #endif
 };
 SV_DECL_IMPL_REF(SvMetaSlot)

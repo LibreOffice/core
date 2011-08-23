@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,34 +64,34 @@ namespace dbaui
             :public OGenericAdministrationPage
     {
     private:
-        FixedLine               m_aTables;
-        OTableTreeListBox       m_aTablesList;
-        FixedText               m_aExplanation;
+        FixedLine				m_aTables;
+        OTableTreeListBox		m_aTablesList;
+        FixedText				m_aExplanation;
 
-        ::rtl::OUString         m_sCatalogSeparator;
-        sal_Bool                m_bCheckedAll : 1;
-        sal_Bool                m_bCatalogAtStart : 1;
+        ::rtl::OUString			m_sCatalogSeparator;
+        sal_Bool				m_bCheckedAll : 1;
+        sal_Bool				m_bCatalogAtStart : 1;
 
-        ::osl::Mutex            m_aNotifierMutex;
+        ::osl::Mutex			m_aNotifierMutex;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                                m_xCurrentConnection;   /// valid as long as the page is active
+                                m_xCurrentConnection;	/// valid as long as the page is active
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
                                 m_xCollator;
         OTableSubscriptionDialog* m_pTablesDlg;
 
     public:
-        virtual BOOL            FillItemSet(SfxItemSet& _rCoreAttrs);
-        virtual int             DeactivatePage(SfxItemSet* _pSet);
+        virtual	BOOL			FillItemSet(SfxItemSet& _rCoreAttrs);
+        virtual int				DeactivatePage(SfxItemSet* _pSet);
         using OGenericAdministrationPage::DeactivatePage;
 
-        virtual void            StateChanged( StateChangedType nStateChange );
-        virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void 			StateChanged( StateChangedType nStateChange );
+        virtual void 			DataChanged( const DataChangedEvent& rDCEvt );
 
 
         /** will be called when the controls need to be resized.
         */
-        virtual void            resizeControls(const Size& _rDiff);
+        virtual void			resizeControls(const Size& _rDiff);
 
         OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage();
@@ -104,9 +104,9 @@ namespace dbaui
         DECL_LINK( OnTreeEntryChecked, Control* );
 
     private:
+        
 
-
-        /** check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
+        /**	check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
         */
         void implCheckTables(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables);
 
@@ -128,7 +128,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_TABLESPAGE_HXX_

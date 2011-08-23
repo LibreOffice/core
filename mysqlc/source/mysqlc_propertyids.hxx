@@ -17,7 +17,7 @@ namespace mysqlc
 {
     class OPropertyMap
     {
-        ::std::map<sal_Int32 , rtl_uString*> m_aPropertyMap;
+        ::std::map<sal_Int32 , rtl_uString*> m_aPropertyMap; 
 
         ::rtl::OUString fillValue(sal_Int32 _nIndex);
     public:
@@ -39,10 +39,10 @@ namespace mysqlc
 
     struct UStringDescription
     {
-        const sal_Char* pZeroTerminatedName;
+        const sal_Char*	pZeroTerminatedName;
         sal_Int32 nLength;
 
-        UStringDescription(PVFN _fCharFkt);
+        UStringDescription(PVFN _fCharFkt); 
         operator ::rtl::OUString() const { return ::rtl::OUString(pZeroTerminatedName,nLength,RTL_TEXTENCODING_ASCII_US); }
         ~UStringDescription();
     private:
@@ -120,13 +120,13 @@ enum
 #define DECL_PROP1IMPL(varname, type) \
 pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_##varname), PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< type*>(NULL)),
 //------------------------------------------------------------------------------
-#define DECL_PROP0(varname, type)   \
+#define DECL_PROP0(varname, type)	\
     DECL_PROP1IMPL(varname, type) 0)
 //------------------------------------------------------------------------------
 #define DECL_BOOL_PROP1IMPL(varname) \
         pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_##varname), PROPERTY_ID_##varname, ::getBooleanCppuType(),
 //------------------------------------------------------------------------------
-#define DECL_BOOL_PROP0(varname)    \
+#define DECL_BOOL_PROP0(varname)	\
     DECL_BOOL_PROP1IMPL(varname) 0)
 
 

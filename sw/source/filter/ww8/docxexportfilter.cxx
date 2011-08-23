@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
         try
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
-                    static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
+                    static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(                                
                         OUString::createFromAscii( IMPL_NAME "/UNO/SERVICES/" ) ) );
             xNewKey1->createKey( DocxExport_getSupportedServiceNames().getConstArray()[0] );
 

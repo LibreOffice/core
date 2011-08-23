@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,6 +99,7 @@ class SC_DLLPUBLIC ScMatrix
     mutable ULONG   nRefCnt;    // reference count
     SCSIZE          nColCount;
     SCSIZE          nRowCount;
+    bool            mbCloneIfConst;     // Whether the matrix is cloned with a CloneIfConst() call.
 
     void ResetIsString();
     void DeleteIsString();
@@ -171,14 +172,22 @@ public:
     /** If nC*nR results in more than GetElementsMax() entries, a 1x1 matrix is
         created instead and a double error value (errStackOverflow) is set.
         Compare nC and nR with a GetDimensions() call to check. */
-    ScMatrix( SCSIZE nC, SCSIZE nR) : nRefCnt(0) { CreateMatrix( nC, nR); }
+    ScMatrix( SCSIZE nC, SCSIZE nR) : nRefCnt(0), mbCloneIfConst(true) { CreateMatrix( nC, nR); }
 
     /** Clone the matrix. */
     ScMatrix* Clone() const;
 
-    /**
+    /** Clone the matrix if mbCloneIfConst (immutable) is set, otherwise 
+        return _this_ matrix, to be assigned to a ScMatrixRef. */
+    ScMatrix* CloneIfConst();
+
+    /** Set the matrix to (im)mutable for CloneIfConst(), only the interpreter 
+        should do this and know the consequences. */
+    inline void SetImmutable( bool bVal ) { mbCloneIfConst = bVal; }
+
+    /** 
      * Resize the matrix to specified new dimension.  Note that this operation
-     * clears all stored values.
+     * clears all stored values. 
      */
     void Resize( SCSIZE nC, SCSIZE nR);
 
@@ -335,7 +344,7 @@ public:
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
     BOOL IsString( SCSIZE nC, SCSIZE nR ) const
-    {
+    { 
         ValidColRowReplicated( nC, nR );
         return mnValType && IsNonValueType( mnValType[ nC * nRowCount + nR ]);
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <doc.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <ndtxt.hxx>
 #include <undobj.hxx>
 #include <rolbck.hxx>
@@ -114,7 +114,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     nSttNode = rRg.aStart.GetIndex();
     nEndNode = rRg.aEnd.GetIndex();
 
-//  DelFtn( rRange );
+//	DelFtn( rRange );
 
     // wird aus dem CntntBereich in den Sonderbereich verschoben ?
     ULONG nCntntStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
@@ -149,13 +149,13 @@ void SwUndoMove::SetDestRange( const SwPaM& rRange,
                         ? rRange.GetMark()
                         : rRange.GetPoint();
 
-    nDestSttNode    = pStt->nNode.GetIndex();
-    nDestSttCntnt   = pStt->nContent.GetIndex();
-    nDestEndNode    = pEnd->nNode.GetIndex();
-    nDestEndCntnt   = pEnd->nContent.GetIndex();
+    nDestSttNode	= pStt->nNode.GetIndex();
+    nDestSttCntnt	= pStt->nContent.GetIndex();
+    nDestEndNode	= pEnd->nNode.GetIndex();
+    nDestEndCntnt	= pEnd->nContent.GetIndex();
 
     nInsPosNode     = rInsPos.nNode.GetIndex();
-    nInsPosCntnt    = rInsPos.nContent.GetIndex();
+    nInsPosCntnt	= rInsPos.nContent.GetIndex();
 
     if( bCorrPam )
     {
@@ -238,7 +238,7 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
 
             aPam.Exchange();
             aPam.DeleteMark();
-//          pDoc->ResetAttr( aPam, FALSE );
+//			pDoc->ResetAttr( aPam, FALSE );
             if( aPam.GetNode()->IsCntntNode() )
                 aPam.GetNode()->GetCntntNode()->ResetAllAttr();
             // der Pam wird jetzt aufgegeben.

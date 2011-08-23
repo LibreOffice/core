@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ namespace dxcanvas
     class DXSurfaceBitmap : public IBitmap
     {
     public:
-        DXSurfaceBitmap( const ::basegfx::B2IVector&                    rSize,
-                         const canvas::ISurfaceProxyManagerSharedPtr&   rMgr,
-                         const IDXRenderModuleSharedPtr&                rRenderModule,
-                         bool                                           bWithAlpha );
+        DXSurfaceBitmap( const ::basegfx::B2IVector&					rSize,
+                         const canvas::ISurfaceProxyManagerSharedPtr&	rMgr,
+                         const IDXRenderModuleSharedPtr&				rRenderModule,
+                         bool											bWithAlpha );
 
         bool resize( const ::basegfx::B2IVector& rSize );
         void clear();
@@ -54,41 +54,41 @@ namespace dxcanvas
         virtual ::basegfx::B2IVector      getSize() const;
         virtual bool                      hasAlpha() const;
 
-        COMReference<surface_type>              getSurface() const { return mpSurface; }
+        COMReference<surface_type>				getSurface() const { return mpSurface; }
 
-        bool draw( double                           fAlpha,
-                   const ::basegfx::B2DPoint&       rPos,
-                   const ::basegfx::B2DHomMatrix&   rTransform );
+        bool draw( double							fAlpha,
+                   const ::basegfx::B2DPoint&		rPos,
+                   const ::basegfx::B2DHomMatrix&	rTransform );
 
-        bool draw( const ::basegfx::B2IRange&       rArea );
+        bool draw( const ::basegfx::B2IRange&		rArea );
 
-        bool draw( double                           fAlpha,
-                   const ::basegfx::B2DPoint&       rPos,
-                   const ::basegfx::B2DRange&       rArea,
-                   const ::basegfx::B2DHomMatrix&   rTransform );
+        bool draw( double							fAlpha,
+                   const ::basegfx::B2DPoint&		rPos,
+                   const ::basegfx::B2DRange&		rArea,
+                   const ::basegfx::B2DHomMatrix&	rTransform );
 
-        bool draw( double                           fAlpha,
+        bool draw( double							fAlpha,
                    const ::basegfx::B2DPoint&       rPos,
                    const ::basegfx::B2DPolyPolygon& rClipPoly,
                    const ::basegfx::B2DHomMatrix&   rTransform );
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > getData(
-            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
+            ::com::sun::star::rendering::IntegerBitmapLayout&		bitmapLayout,
+            const ::com::sun::star::geometry::IntegerRectangle2D&	rect );
 
         virtual void setData(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&      data,
+            const ::com::sun::star::uno::Sequence< sal_Int8 >&		data,
             const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
+            const ::com::sun::star::geometry::IntegerRectangle2D&	rect );
 
         virtual void setPixel(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
+            const ::com::sun::star::uno::Sequence< sal_Int8 >&		color,
             const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
+            const ::com::sun::star::geometry::IntegerPoint2D&		pos );
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > getPixel(
-            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
+            ::com::sun::star::rendering::IntegerBitmapLayout&		bitmapLayout,
+            const ::com::sun::star::geometry::IntegerPoint2D&		pos );
 
 #ifdef DX_DEBUG_IMAGES
         void imageDebugger();

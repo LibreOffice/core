@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ class SchLegendDlg : public ModalDialog
 private:
     ::std::auto_ptr< LegendPositionResources >    m_apLegendPositionResources;
 
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton		aBtnOK;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
 public:
     SchLegendDlg( Window* pParent, const ::com::sun::star::uno::Reference<

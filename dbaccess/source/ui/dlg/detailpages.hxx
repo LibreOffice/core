@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #ifndef CHARSETLISTBOX_HXX
 #include "charsetlistbox.hxx"
 #endif
-#ifndef _SV_FIELD_HXX
+#ifndef _SV_FIELD_HXX 
 #include <vcl/field.hxx>
 #endif
 #ifndef _SV_FIXED_HXX
@@ -67,9 +67,9 @@ namespace dbaui
     //=========================================================================
     //= OCommonBehaviourTabPage
     //=========================================================================
-    #define     CBTP_NONE                           0x00000000
-    #define     CBTP_USE_CHARSET                    0x00000002
-    #define     CBTP_USE_OPTIONS                    0x00000004
+    #define		CBTP_NONE							0x00000000
+    #define		CBTP_USE_CHARSET					0x00000002
+    #define		CBTP_USE_OPTIONS					0x00000004
 
     /** eases the implementation of tab pages handling user/password and/or character
         set and/or generic options input
@@ -81,33 +81,33 @@ namespace dbaui
     {
     protected:
 
-        FixedText*          m_pOptionsLabel;
-        Edit*               m_pOptions;
+        FixedText*			m_pOptionsLabel;
+        Edit*				m_pOptions;
 
-        FixedLine*          m_pDataConvertFixedLine;
-        FixedText*          m_pCharsetLabel;
+        FixedLine*			m_pDataConvertFixedLine;
+        FixedText*			m_pCharsetLabel;
         CharSetListBox*     m_pCharset;
 
-        FixedLine*          m_pAutoFixedLine;
-        CheckBox*           m_pAutoRetrievingEnabled;
-        FixedText*          m_pAutoIncrementLabel;
-        Edit*               m_pAutoIncrement;
-        FixedText*          m_pAutoRetrievingLabel;
-        Edit*               m_pAutoRetrieving;
+        FixedLine*			m_pAutoFixedLine;
+        CheckBox*			m_pAutoRetrievingEnabled;
+        FixedText*			m_pAutoIncrementLabel;
+        Edit*				m_pAutoIncrement;
+        FixedText*			m_pAutoRetrievingLabel;
+        Edit*				m_pAutoRetrieving;
 
-        sal_uInt32          m_nControlFlags;
+        sal_uInt32			m_nControlFlags;
 
     public:
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual	BOOL		FillItemSet	(SfxItemSet& _rCoreAttrs);
 
         OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags,bool _bFreeResource = true);
     protected:
-
+        
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OCommonBehaviourTabPage();
 
         // must be overloaded by subclasses, but it isn't pure virtual
-        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void		implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
         // <method>OGenericAdministrationPage::fillControls</method>
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -122,20 +122,20 @@ namespace dbaui
     class ODbaseDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
 
         ODbaseDetailsPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
     private:
         // please add new controls also to <method>fillControls</method> or <method>fillWindows</method>
-        CheckBox            m_aShowDeleted;
-        FixedLine           m_aFL_1;
-        FixedText           m_aFT_Message;
-        PushButton          m_aIndexes;
+        CheckBox			m_aShowDeleted;
+        FixedLine			m_aFL_1;
+        FixedText			m_aFT_Message;
+        PushButton			m_aIndexes;
 
-        String              m_sDsn;
+        String				m_sDsn;
 
     protected:
-
+        
         virtual ~ODbaseDetailsPage();
 
     protected:
@@ -165,7 +165,7 @@ namespace dbaui
     class OOdbcDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
 
         OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -173,8 +173,8 @@ namespace dbaui
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
     private:
-        FixedLine           m_aFL_1;
-        CheckBox            m_aUseCatalog;
+        FixedLine			m_aFL_1;
+        CheckBox			m_aUseCatalog;
     };
 
 
@@ -184,7 +184,7 @@ namespace dbaui
     class OUserDriverDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
 
         OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -192,11 +192,11 @@ namespace dbaui
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
     private:
-        FixedText           m_aFTHostname;
-        Edit                m_aEDHostname;
-        FixedText           m_aPortNumber;
-        NumericField        m_aNFPortNumber;
-        CheckBox            m_aUseCatalog;
+        FixedText			m_aFTHostname;
+        Edit				m_aEDHostname;
+        FixedText			m_aPortNumber;
+        NumericField		m_aNFPortNumber;
+        CheckBox			m_aUseCatalog;
     };
 
     //========================================================================
@@ -216,35 +216,35 @@ namespace dbaui
     public:
         OGeneralSpecialJDBCDetailsPage(   Window* pParent
                                         , USHORT _nResId
-                                        , const SfxItemSet& _rCoreAttrs
+                                        , const SfxItemSet& _rCoreAttrs 
                                         , USHORT _nPortId
                                         );
 
     protected:
+        
 
-
-        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
+    
+        FixedLine			m_aFL_1;
+        FixedText			m_aFTHostname;
+        Edit				m_aEDHostname;
+        FixedText			m_aPortNumber;
+        NumericField		m_aNFPortNumber;
+        FixedText			m_aFTSocket;
+        Edit				m_aEDSocket;
 
-        FixedLine           m_aFL_1;
-        FixedText           m_aFTHostname;
-        Edit                m_aEDHostname;
-        FixedText           m_aPortNumber;
-        NumericField        m_aNFPortNumber;
-        FixedText           m_aFTSocket;
-        Edit                m_aEDSocket;
+        FixedText			m_aFTDriverClass;
+        Edit				m_aEDDriverClass;
+        PushButton			m_aTestJavaDriver;
 
-        FixedText           m_aFTDriverClass;
-        Edit                m_aEDDriverClass;
-        PushButton          m_aTestJavaDriver;
-
-        String              m_sDefaultJdbcDriverName;
-        USHORT              m_nPortId;
+        String				m_sDefaultJdbcDriverName;
+        USHORT				m_nPortId;
         bool                m_bUseClass;
     };
 
@@ -258,16 +258,16 @@ namespace dbaui
                             const SfxItemSet& _rCoreAttrs );
 
     private:
-        FixedLine           m_aSeparator1;
+        FixedLine			m_aSeparator1;
         MySQLNativeSettings m_aMySQLSettings;
 
-        FixedLine           m_aSeparator2;
-        FixedText           m_aUserNameLabel;
-        Edit                m_aUserName;
-        CheckBox            m_aPasswordRequired;
+        FixedLine			m_aSeparator2;
+        FixedText			m_aUserNameLabel;
+        Edit				m_aUserName;
+        CheckBox			m_aPasswordRequired;
 
     protected:
-        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -279,7 +279,7 @@ namespace dbaui
     class OAdabasDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual	BOOL		FillItemSet	(SfxItemSet& _rCoreAttrs);
 
         OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -288,30 +288,30 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
 
     private:
-        FixedText           m_aFTHostname;
-        Edit                m_aEDHostname;
-        FixedLine           m_aFL_1;
-        FixedText           m_FT_CACHE_SIZE;
-        NumericField        m_NF_CACHE_SIZE;
+        FixedText			m_aFTHostname;
+        Edit				m_aEDHostname;
+        FixedLine			m_aFL_1;
+        FixedText			m_FT_CACHE_SIZE;
+        NumericField		m_NF_CACHE_SIZE;
 
-        FixedText           m_FT_DATA_INCREMENT;
-        NumericField        m_NF_DATA_INCREMENT;
+        FixedText			m_FT_DATA_INCREMENT;
+        NumericField		m_NF_DATA_INCREMENT;
 
-        FixedLine           m_aFL_2;
-        FixedText           m_FT_CTRLUSERNAME;
-        Edit                m_ET_CTRLUSERNAME;
-        FixedText           m_FT_CTRLPASSWORD;
-        Edit                m_ET_CTRLPASSWORD;
+        FixedLine			m_aFL_2;
+        FixedText			m_FT_CTRLUSERNAME;
+        Edit				m_ET_CTRLUSERNAME;
+        FixedText			m_FT_CTRLPASSWORD;
+        Edit				m_ET_CTRLPASSWORD;
 
-        CheckBox            m_CB_SHUTDB;
-        PushButton          m_PB_STAT;
-        String              m_sUser;
-        BOOL                bAttrsChanged;
+        CheckBox			m_CB_SHUTDB;
+        PushButton			m_PB_STAT;
+        String				m_sUser;
+        BOOL				bAttrsChanged;
 
-        DECL_LINK( AttributesChangedHdl,    void * );
-        DECL_LINK( UserSettingsHdl,         void * );
-        DECL_LINK( LoseFocusHdl,            Edit * );
-        DECL_LINK( PBClickHdl,              Button *);
+        DECL_LINK( AttributesChangedHdl,	void * );
+        DECL_LINK( UserSettingsHdl,			void * );
+        DECL_LINK( LoseFocusHdl,			Edit * );
+        DECL_LINK( PBClickHdl,				Button *);
     };
 
     //========================================================================
@@ -320,7 +320,7 @@ namespace dbaui
     class OLDAPDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
 
         OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -328,17 +328,17 @@ namespace dbaui
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
     private:
-        FixedLine           m_aFL_1;
-        FixedText           m_aBaseDN;
-        Edit                m_aETBaseDN;
-        CheckBox            m_aCBUseSSL;
-        FixedText           m_aPortNumber;
-        NumericField        m_aNFPortNumber;
-        FixedText           m_aFTRowCount;
-        NumericField        m_aNFRowCount;
+        FixedLine			m_aFL_1;
+        FixedText			m_aBaseDN;
+        Edit				m_aETBaseDN;
+        CheckBox			m_aCBUseSSL;
+        FixedText			m_aPortNumber;
+        NumericField		m_aNFPortNumber;
+        FixedText			m_aFTRowCount;
+        NumericField		m_aNFRowCount;
 
-        sal_Int32           m_iSSLPort;
-        sal_Int32           m_iNormalPort;
+        sal_Int32			m_iSSLPort;
+        sal_Int32			m_iNormalPort;
         DECL_LINK( OnCheckBoxClick, CheckBox * );
     };
 
@@ -360,16 +360,16 @@ namespace dbaui
     class OTextDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual	BOOL		FillItemSet	( SfxItemSet& _rCoreAttrs );
 
         OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;
 
     private:
 
-        String      m_aFieldSeparatorList;
-        String      m_aTextSeparatorList;
-        String      m_aTextNone;
+        String		m_aFieldSeparatorList;
+        String		m_aTextSeparatorList;
+        String		m_aTextNone;
     protected:
         virtual ~OTextDetailsPage();
         virtual sal_Bool prepareLeave();
@@ -382,7 +382,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DETAILPAGES_HXX_

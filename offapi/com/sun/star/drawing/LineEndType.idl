@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,16 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_LineEndType_idl__
-#define __com_sun_star_drawing_LineEndType_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_LineEndType_idl__ 
+#define __com_sun_star_drawing_LineEndType_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: enum com::sun::star::drawing::LineEndType
 /** The <type>LineEndType</type> specifies the appearance of the bullet at the
     end of a line.
@@ -41,52 +41,52 @@
     @deprecated
  */
 published enum LineEndType
-{
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR LineEndType::  NONE,
-
+{ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION OMITTED FOR LineEndType::	NONE, 
+    
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::NONE
     /** the line has no special end.
      */
-    NONE,
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR LineEndType::  ARROW,
-
+    NONE, 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION OMITTED FOR LineEndType::	ARROW, 
+    
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::ARROW
     /** the line uses an arrow for the line end.
      */
-    ARROW,
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR LineEndType::  CIRCLE,
-
+    ARROW, 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION OMITTED FOR LineEndType::	CIRCLE, 
+    
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::CIRCLE
     /** the line uses a circle for the line end.
      */
-    CIRCLE,
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR LineEndType::  SQUARE,
-
+    CIRCLE, 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION OMITTED FOR LineEndType::	SQUARE, 
+    
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::SQUARE
     /** the line uses a square for the line end.
      */
-    SQUARE,
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR LineEndType::  SPECIAL
-
+    SQUARE, 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION OMITTED FOR LineEndType::	SPECIAL 
+    
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::SPECIAL
     /** deprecated
      */
-    SPECIAL
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    SPECIAL 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

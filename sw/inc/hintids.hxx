@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,14 +27,14 @@
 #ifndef _HINTIDS_HXX
 #define _HINTIDS_HXX
 
-#include <tools/solar.h>        // fuer __FAR_DATA
-#include <sal/types.h>          // for sal_Unicode
+#include <tools/solar.h>		// fuer __FAR_DATA
+#include <sal/types.h>			// for sal_Unicode
 #include "swdllapi.h"
 
 // fuer SwTxtHints ohne Endindex wird folgendes Zeichen eingefuegt:
 //JP 24.05.00: for the new UniCode Version:
-#define CH_TXTATR_BREAKWORD     ((sal_Unicode)0x01)
-#define CH_TXTATR_INWORD        ((sal_Unicode)0x02)
+#define CH_TXTATR_BREAKWORD		((sal_Unicode)0x01)
+#define CH_TXTATR_INWORD		((sal_Unicode)0x02)
 #define CH_TXTATR_TAB           ((sal_Unicode)'\t')
 #define CH_TXTATR_NEWLINE       ((sal_Unicode)'\n')
 #define CH_TXT_ATR_FIELDSTART ((sal_Unicode)0x04)
@@ -47,56 +47,56 @@
  * Hier kommen erst mal die enums fuer die Hints
  */
 
-#define HINT_BEGIN  1
+#define HINT_BEGIN	1
 
-#define POOLATTR_BEGIN      HINT_BEGIN
-#define POOLATTR_END        RES_UNKNOWNATR_END
+#define POOLATTR_BEGIN		HINT_BEGIN
+#define POOLATTR_END		RES_UNKNOWNATR_END
 
 // Bereiche fuer die Id's der einzelnen Format-Attribute
 // die Which-Werte fuer die Charakter-Format Attribute
 enum RES_CHRATR
 {
 RES_CHRATR_BEGIN = HINT_BEGIN,
-    RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN,  //  1
-    RES_CHRATR_CHARSETCOLOR,                //  2
-    RES_CHRATR_COLOR,                       //  3
-    RES_CHRATR_CONTOUR,                     //  4
-    RES_CHRATR_CROSSEDOUT,                  //  5
-    RES_CHRATR_ESCAPEMENT,                  //  6
-    RES_CHRATR_FONT,                        //  7
-    RES_CHRATR_FONTSIZE,                    //  8
-    RES_CHRATR_KERNING,                     //  9
-    RES_CHRATR_LANGUAGE,                    // 10
-    RES_CHRATR_POSTURE,                     // 11
-    RES_CHRATR_PROPORTIONALFONTSIZE,        // 12
-    RES_CHRATR_SHADOWED,                    // 13
-    RES_CHRATR_UNDERLINE,                   // 14
-    RES_CHRATR_WEIGHT,                      // 15
-    RES_CHRATR_WORDLINEMODE,                // 16
-    RES_CHRATR_AUTOKERN,                    // 17
-    RES_CHRATR_BLINK,                       // 18
-    RES_CHRATR_NOHYPHEN,                    // 19
-    RES_CHRATR_NOLINEBREAK,                 // 20
-    RES_CHRATR_BACKGROUND,                  // 21
-    RES_CHRATR_CJK_FONT,                    // 22
-    RES_CHRATR_CJK_FONTSIZE,                // 23
-    RES_CHRATR_CJK_LANGUAGE,                // 24
-    RES_CHRATR_CJK_POSTURE,                 // 25
-    RES_CHRATR_CJK_WEIGHT,                  // 26
-    RES_CHRATR_CTL_FONT,                    // 27
-    RES_CHRATR_CTL_FONTSIZE,                // 28
-    RES_CHRATR_CTL_LANGUAGE,                // 29
-    RES_CHRATR_CTL_POSTURE,                 // 30
-    RES_CHRATR_CTL_WEIGHT,                  // 31
-    RES_CHRATR_ROTATE,                      // 32
-    RES_CHRATR_EMPHASIS_MARK,               // 33
-    RES_CHRATR_TWO_LINES,                   // 34
-    RES_CHRATR_SCALEW,                      // 35
-    RES_CHRATR_RELIEF,                      // 36
+    RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN,	//	1
+    RES_CHRATR_CHARSETCOLOR,				//	2
+    RES_CHRATR_COLOR,						//	3
+    RES_CHRATR_CONTOUR,						//	4
+    RES_CHRATR_CROSSEDOUT,					//	5
+    RES_CHRATR_ESCAPEMENT,					//	6
+    RES_CHRATR_FONT,						//	7
+    RES_CHRATR_FONTSIZE,					//	8
+    RES_CHRATR_KERNING, 					//	9
+    RES_CHRATR_LANGUAGE,					// 10
+    RES_CHRATR_POSTURE, 					// 11
+    RES_CHRATR_PROPORTIONALFONTSIZE,		// 12
+    RES_CHRATR_SHADOWED,					// 13
+    RES_CHRATR_UNDERLINE,					// 14
+    RES_CHRATR_WEIGHT,						// 15
+    RES_CHRATR_WORDLINEMODE,				// 16
+    RES_CHRATR_AUTOKERN,					// 17
+    RES_CHRATR_BLINK,						// 18
+    RES_CHRATR_NOHYPHEN,					// 19
+    RES_CHRATR_NOLINEBREAK, 				// 20
+    RES_CHRATR_BACKGROUND,					// 21
+    RES_CHRATR_CJK_FONT,					// 22
+    RES_CHRATR_CJK_FONTSIZE,				// 23
+    RES_CHRATR_CJK_LANGUAGE,				// 24
+    RES_CHRATR_CJK_POSTURE, 				// 25
+    RES_CHRATR_CJK_WEIGHT,					// 26
+    RES_CHRATR_CTL_FONT,					// 27
+    RES_CHRATR_CTL_FONTSIZE,				// 28
+    RES_CHRATR_CTL_LANGUAGE,				// 29
+    RES_CHRATR_CTL_POSTURE, 				// 30
+    RES_CHRATR_CTL_WEIGHT,					// 31
+    RES_CHRATR_ROTATE,						// 32
+    RES_CHRATR_EMPHASIS_MARK,				// 33
+    RES_CHRATR_TWO_LINES, 					// 34
+    RES_CHRATR_SCALEW,						// 35
+    RES_CHRATR_RELIEF,						// 36
     RES_CHRATR_HIDDEN,                      // 37
-    RES_CHRATR_OVERLINE,                    // 38
-    RES_CHRATR_DUMMY1,                      // 39
-    RES_CHRATR_DUMMY2,                      // 40
+    RES_CHRATR_OVERLINE,					// 38
+    RES_CHRATR_DUMMY1,						// 39
+    RES_CHRATR_DUMMY2,						// 40
 RES_CHRATR_END
 };
 
@@ -136,13 +136,13 @@ RES_TXTATR_WITHEND_END,
 
 // alle TextAttribute ohne ein Ende
 RES_TXTATR_NOEND_BEGIN = RES_TXTATR_WITHEND_END,
-    RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 51
-    RES_TXTATR_FLYCNT,                              // 52
-    RES_TXTATR_FTN,                                 // 53
+    RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,		// 51
+    RES_TXTATR_FLYCNT,								// 52
+    RES_TXTATR_FTN, 								// 53
     RES_TXTATR_DUMMY4,                              // 54
     RES_TXTATR_DUMMY3,                              // 55
-    RES_TXTATR_DUMMY1,                              // 56
-    RES_TXTATR_DUMMY2,                              // 57
+    RES_TXTATR_DUMMY1,								// 56
+    RES_TXTATR_DUMMY2,								// 57
 RES_TXTATR_NOEND_END,
 RES_TXTATR_END = RES_TXTATR_NOEND_END
 };
@@ -151,19 +151,19 @@ enum RES_PARATR
 {
 RES_PARATR_BEGIN = RES_TXTATR_END,
     RES_PARATR_LINESPACING = RES_PARATR_BEGIN,      // 58
-    RES_PARATR_ADJUST,                              // 59
-    RES_PARATR_SPLIT,                               // 60
-    RES_PARATR_ORPHANS,                             // 61
-    RES_PARATR_WIDOWS,                              // 62
-    RES_PARATR_TABSTOP,                             // 63
-    RES_PARATR_HYPHENZONE,                          // 64
-    RES_PARATR_DROP,                                // 65
-    RES_PARATR_REGISTER,                            // 66
-    RES_PARATR_NUMRULE,                             // 67
-    RES_PARATR_SCRIPTSPACE,                         // 68
-    RES_PARATR_HANGINGPUNCTUATION,                  // 69
-    RES_PARATR_FORBIDDEN_RULES,                     // 70
-    RES_PARATR_VERTALIGN,                           // 71
+    RES_PARATR_ADJUST,								// 59
+    RES_PARATR_SPLIT,								// 60
+    RES_PARATR_ORPHANS, 							// 61
+    RES_PARATR_WIDOWS,								// 62
+    RES_PARATR_TABSTOP, 							// 63
+    RES_PARATR_HYPHENZONE,							// 64
+    RES_PARATR_DROP,								// 65
+    RES_PARATR_REGISTER,							// 66
+    RES_PARATR_NUMRULE, 							// 67
+    RES_PARATR_SCRIPTSPACE,							// 68
+    RES_PARATR_HANGINGPUNCTUATION,					// 69
+    RES_PARATR_FORBIDDEN_RULES,						// 70
+    RES_PARATR_VERTALIGN,							// 71
     RES_PARATR_SNAPTOGRID,                          // 72
     RES_PARATR_CONNECT_BORDER,                      // 73
     RES_PARATR_OUTLINELEVEL,                        // 74
@@ -440,7 +440,7 @@ struct SfxItemInfo;
 typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
 
 extern SwDfltAttrTab __FAR_DATA aAttrTab;
-extern SfxItemInfo   __FAR_DATA aSlotTab[];
+extern SfxItemInfo	 __FAR_DATA aSlotTab[];
 
 SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( USHORT nWhich );
 
@@ -448,8 +448,8 @@ SW_DLLPUBLIC USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript );
 
 // return for the given TextAttribut without an end the correct character.
 // This function returns
-//      CH_TXTATR_BREAKWORD for Textattribut which breaks a word (default)
-//      CH_TXTATR_INWORD    for Textattribut which dont breaks a word
+//		CH_TXTATR_BREAKWORD for Textattribut which breaks a word (default)
+//		CH_TXTATR_INWORD	for Textattribut which dont breaks a word
 class SwTxtAttr;
 sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr );
 

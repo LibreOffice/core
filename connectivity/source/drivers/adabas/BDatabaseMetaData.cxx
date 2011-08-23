@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::lang;
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OAdabasDatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_True; 
 }
 // -----------------------------------------------------------------------------
 Reference< XResultSet > OAdabasDatabaseMetaData::impl_getTypeInfo_throw(  )
@@ -62,64 +62,64 @@ Reference< XResultSet > OAdabasDatabaseMetaData::impl_getTypeInfo_throw(  )
     {
         aRows.reserve(19);
         Reference< XResultSet > xRes = OAdabasDatabaseMetaData_BASE::impl_getTypeInfo_throw();
-
+        
         if(xRes.is())
         {
             ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(19);
-
+            
             Reference< XRow> xRow(xRes,UNO_QUERY);
             while(xRes->next())
             {
                 sal_Int32 nPos = 1;
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString    (1));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString	(1));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt       (2));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt		(2));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt       (3));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt		(3));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString    (4));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString	(4));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString    (5));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString	(5));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString    (6));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString	(6));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt       (7));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt		(7));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getBoolean   (8));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getBoolean	(8));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getShort     (9));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getShort		(9));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getBoolean   (10));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getBoolean	(10));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt       (11));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt		(11));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getBoolean   (12));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getBoolean	(12));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString    (13));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getString	(13));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getShort     (14));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getShort		(14));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getShort     (15));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getShort		(15));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt       (16));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt		(16));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
-                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt       (17));
+                aRow[nPos++] = new ::connectivity::ORowSetValueDecorator(xRow->getInt		(17));
                 if(xRow->wasNull())
                     aRow[nPos-1]->setNull();
                 aRow[nPos++] = new ::connectivity::ORowSetValueDecorator((sal_Int16)xRow->getInt(18));
@@ -132,11 +132,11 @@ Reference< XResultSet > OAdabasDatabaseMetaData::impl_getTypeInfo_throw(  )
                     switch((sal_Int32)aRow[2]->getValue())
                     {
                         case DataType::FLOAT:
-//                          aRow[3] = sal_Int32(15);
-//                          break;
+//							aRow[3] = sal_Int32(15);
+//							break;
                         case DataType::REAL:
-//                          aRow[3] = sal_Int32(16);
-//                          break;
+//							aRow[3] = sal_Int32(16);
+//							break;
                         case DataType::DOUBLE:
                             aRow[2]->setValue(DataType::DOUBLE);
                             aRow[3]->setValue(sal_Int32(18));

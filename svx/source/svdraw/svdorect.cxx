@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,20 +77,20 @@ sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
 TYPEINIT1(SdrRectObj,SdrTextObj);
 
 SdrRectObj::SdrRectObj()
-:   mpXPoly(0L)
+:	mpXPoly(0L)
 {
     bClosedObj=TRUE;
 }
 
 SdrRectObj::SdrRectObj(const Rectangle& rRect)
-:   SdrTextObj(rRect),
+:	SdrTextObj(rRect),
     mpXPoly(NULL)
 {
     bClosedObj=TRUE;
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
-:   SdrTextObj(eNewTextKind),
+:	SdrTextObj(eNewTextKind),
     mpXPoly(NULL)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
@@ -100,7 +100,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
-:   SdrTextObj(eNewTextKind,rRect),
+:	SdrTextObj(eNewTextKind,rRect),
     mpXPoly(NULL)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
@@ -121,7 +121,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
 
 SdrRectObj::~SdrRectObj()
 {
-    if(mpXPoly)
+    if(mpXPoly) 
     {
         delete mpXPoly;
     }
@@ -129,7 +129,7 @@ SdrRectObj::~SdrRectObj()
 
 void SdrRectObj::SetXPolyDirty()
 {
-    if(mpXPoly)
+    if(mpXPoly) 
     {
         delete mpXPoly;
         mpXPoly = 0L;
@@ -173,7 +173,7 @@ void SdrRectObj::RecalcXPoly()
 
 const XPolygon& SdrRectObj::GetXPoly() const
 {
-    if(!mpXPoly)
+    if(!mpXPoly) 
     {
         ((SdrRectObj*)this)->RecalcXPoly();
     }
@@ -330,7 +330,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
         nHdlNum++;
     }
 
-    switch(nHdlNum)
+    switch(nHdlNum) 
     {
         case 0:
         {
@@ -339,7 +339,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
             pH->SetDrehWink(aGeo.nDrehWink);
             break;
         }
-        case 1:
+        case 1: 
         {
             long a = GetEckenradius();
             long b = Max(aRect.GetWidth(),aRect.GetHeight())/2; // Wird aufgerundet, da GetWidth() eins draufaddiert
@@ -362,12 +362,12 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
 
     if(!pH)
     {
-        if(aGeo.nShearWink)
+        if(aGeo.nShearWink) 
         {
             ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
         }
 
-        if(aGeo.nDrehWink)
+        if(aGeo.nDrehWink) 
         {
             RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         }
@@ -391,12 +391,12 @@ bool SdrRectObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
     const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
-    if(bRad)
+    if(bRad) 
     {
         rDrag.SetEndDragChangesAttributes(true);
 
         return true;
-    }
+    } 
 
     return SdrTextObj::beginSpecialDrag(rDrag);
 }
@@ -405,26 +405,26 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
-    if (bRad)
+    if (bRad) 
     {
-        Rectangle aBoundRect0;
+        Rectangle aBoundRect0; 
         Point aPt(rDrag.GetNow());
 
-        if(aGeo.nDrehWink)
+        if(aGeo.nDrehWink) 
             RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
 
         sal_Int32 nRad(aPt.X() - aRect.Left());
 
-        if (nRad < 0)
+        if (nRad < 0) 
             nRad = 0;
 
-        if(nRad != GetEckenradius())
+        if(nRad != GetEckenradius()) 
         {
             NbcSetEckenradius(nRad);
         }
-
+        
         return true;
-    }
+    } 
     else
     {
         return SdrTextObj::applySpecialDrag(rDrag);
@@ -534,7 +534,7 @@ XubString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 {
     INT32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
-
+    
     // #i25616#
     if(!LineIsOutsideGeometry())
     {
@@ -560,7 +560,7 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 SdrGluePoint SdrRectObj::GetCornerGluePoint(USHORT nPosNum) const
 {
     INT32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
-
+    
     // #i25616#
     if(!LineIsOutsideGeometry())
     {
@@ -594,8 +594,8 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(BOOL bBezier) const
     basegfx::B2DPolyPolygon aPolyPolygon(aXP.getB2DPolygon());
     aPolyPolygon.removeDoublePoints();
     SdrObject* pRet = 0L;
-
-    if(!IsTextFrame() || HasFill() || HasLine())
+    
+    if(!IsTextFrame() || HasFill() || HasLine()) 
     {
         pRet = ImpConvertMakeObj(aPolyPolygon, sal_True, bBezier);
     }

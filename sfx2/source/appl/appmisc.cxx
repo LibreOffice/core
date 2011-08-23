@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@
 #include "openflag.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objface.hxx>
-#include "helper.hxx"   // SfxContentHelper::Kill()
+#include "helper.hxx"	// SfxContentHelper::Kill()
 
 using namespace ::vos;
 using namespace ::com::sun::star::uno;
@@ -142,7 +142,7 @@ IMPL_LINK( SfxSpecialConfigError_Impl, TimerHdl, Timer*, pTimer )
 
 //====================================================================
 
-#define SFX_ITEMTYPE_STATBAR             4
+#define SFX_ITEMTYPE_STATBAR			 4
 
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 {
@@ -187,7 +187,7 @@ void SfxApplication::InitializeDisplayName_Impl()
         aGuard.clear();
 
 #ifdef DBG_UTIL
-        ::rtl::OUString aDefault;
+        ::rtl::OUString	aDefault;
         aTitle += DEFINE_CONST_UNICODE(" [");
 
         String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));

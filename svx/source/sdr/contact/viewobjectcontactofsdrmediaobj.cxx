@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,20 +43,20 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace sdr { namespace contact {
+namespace sdr {	namespace contact {
 
 // ----------------------------------
 // - ViewObjectContactOfSdrMediaObj -
 // ----------------------------------
-
-ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
+        
+ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact, 
                                                                 ViewContact& rViewContact,
                                                                 const ::avmedia::MediaItem& rMediaItem ) :
     ViewObjectContactOfSdrObj( rObjectContact, rViewContact ),
     mpMediaWindow( NULL )
 {
     Window* pWindow = getWindow();
-
+    
     if( pWindow )
     {
         mpMediaWindow = new SdrMediaWindow( pWindow, *this );
@@ -75,7 +75,7 @@ ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
 
 // ------------------------------------------------------------------------------
 
-Window* ViewObjectContactOfSdrMediaObj::getWindow() const
+Window*	ViewObjectContactOfSdrMediaObj::getWindow() const
 {
     Window* pRetval = 0;
 
@@ -95,7 +95,7 @@ Window* ViewObjectContactOfSdrMediaObj::getWindow() const
         }
 
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-
+        
         if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
         {
             pRetval = static_cast< Window* >(&rOutDev);
@@ -117,15 +117,15 @@ bool ViewObjectContactOfSdrMediaObj::hasPreferredSize() const
 Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 {
     Size aRet;
-
+    
     if( mpMediaWindow )
         aRet = mpMediaWindow->getPreferredSize();
-
+    
     return aRet;
 }
 
 // ------------------------------------------------------------------------------
-
+        
 void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
     if( mpMediaWindow )
@@ -153,15 +153,15 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
 }
 
 // ------------------------------------------------------------------------------
-
+            
 void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
     if( mpMediaWindow )
     {
         ::avmedia::MediaItem aUpdatedItem;
-
+    
         mpMediaWindow->executeMediaItem( rItem );
-
+        
         // query new properties after trying to set the new properties
         updateMediaItem( aUpdatedItem );
         static_cast< ViewContactOfSdrMediaObj& >( GetViewContact() ).mediaPropertiesChanged( aUpdatedItem );

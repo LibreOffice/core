@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ protected:
 public:
     explicit OOXMLStringValue(const rtl::OUString & rStr);
     virtual ~OOXMLStringValue();
-
+    
     virtual uno::Any getAny() const;
     virtual rtl::OUString getString() const;
     virtual string toString() const;
@@ -149,12 +149,12 @@ public:
 
 struct OOXMLPropertySetImplCompare
 {
-    bool operator()(const OOXMLProperty::Pointer_t x,
+    bool operator()(const OOXMLProperty::Pointer_t x, 
                     const OOXMLProperty::Pointer_t y) const;
 };
 
 class OOXMLPropertySetImpl : public OOXMLPropertySet
-{
+{    
 public:
     typedef vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
 private:

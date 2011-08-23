@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -215,7 +215,7 @@ public:
     // all default implementations just call the same methods at the original. To do something
     // different, overload the method and at least do what the method does.
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
-        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::ViewObjectContact& rOriginal, 
         const sdr::contact::DisplayInfo& rDisplayInfo);
 };
 
@@ -228,7 +228,7 @@ ViewRedirector::~ViewRedirector()
 }
 
 drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedPrimitive2DSequence(
-    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::ViewObjectContact& rOriginal, 
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
@@ -312,7 +312,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                         // create line and stroke attribute
                         ::std::vector< double > aDotDashArray;
-
+                        
                         aDotDashArray.push_back(160.0);
                         aDotDashArray.push_back(80.0);
 
@@ -322,8 +322,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                         // create primitive and add
                         const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-                            aPolygon,
-                            aLine,
+                            aPolygon, 
+                            aLine, 
                             aStroke));
                         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
                     }
@@ -343,7 +343,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                     static String aTitleAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_TITLE ) );
                                     aObjectString = aTitleAreaStr;
                                 }
-
+                                
                                 break;
                             }
                             case PRESOBJ_OUTLINE:
@@ -403,16 +403,16 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             basegfx::B2DTuple aTranslate;
                             double fRotate, fShearX;
                             aObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-
+                            
                             // create font
                             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObject );
                             const SdrTextVertAdjust eTVA(pTextObj ? pTextObj->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_CENTER);
                             Font aScaledVclFont;
-
-                            // use a text size factor to get more reliable text sizes from the text layouter
+                            
+                            // use a text size factor to get more reliable text sizes from the text layouter 
                             // (and from vcl), tipp from HDU
                             static sal_uInt32 nTextSizeFactor(100);
-
+                            
                             // use a factor to get more linear text size calculations
                             aScaledVclFont.SetHeight( 500 * nTextSizeFactor );
 
@@ -420,7 +420,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
                             aTextLayouter.setFont(aScaledVclFont);
                             const xub_StrLen nTextLength(aObjectString.Len());
-
+                            
                             // do not forget to use the factor again to get the width for the 500
                             const double fTextWidth(aTextLayouter.getTextWidth(aObjectString, 0, nTextLength) * (1.0 / nTextSizeFactor));
                             const double fTextHeight(aTextLayouter.getTextHeight() * (1.0 / nTextSizeFactor));
@@ -443,7 +443,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                             const drawinglayer::attribute::FontAttribute aFontAttribute(
                                 drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                                    aTextSizeAttribute,
+                                    aTextSizeAttribute, 
                                     aVclFont,
                                     false,
                                     false));
@@ -451,8 +451,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // fill text matrix
                             const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                                 aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
-                                fShearX,
-                                fRotate,
+                                fShearX, 
+                                fRotate, 
                                 fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
@@ -464,13 +464,13 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // create primitive and add
                             const drawinglayer::primitive2d::Primitive2DReference xRef(
                                 new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                    aTextMatrix,
-                                    aObjectString,
-                                    0,
-                                    nTextLength,
-                                    aDXArray,
-                                    aFontAttribute,
-                                    aLocale,
+                                    aTextMatrix, 
+                                    aObjectString, 
+                                    0, 
+                                    nTextLength, 
+                                    aDXArray, 
+                                    aFontAttribute, 
+                                    aLocale, 
                                     aFontColor));
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
                         }
@@ -482,9 +482,9 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
         if(bDoCreateGeometry)
         {
             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
-                xRetval,
+                xRetval, 
                 sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-                    rOriginal,
+                    rOriginal, 
                     rDisplayInfo));
         }
     }
@@ -532,7 +532,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
                     bScreenDisplay = false;
                 }
 
-                // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
+                // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and 
                 // hint value if screen display. Only then the AutoColor mechanisms shall be applied
                 rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pPgView, bScreenDisplay) );
             }
@@ -548,7 +548,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
             mpLockedRedraws = new List;
 
         SdViewRedrawRec* pRec = new SdViewRedrawRec;
-        pRec->mpOut = pOutDev;
+        pRec->mpOut	= pOutDev;
         pRec->aRect = rReg.GetBoundRect();
         mpLockedRedraws->Insert(pRec, LIST_APPEND);
     }
@@ -998,7 +998,7 @@ void View::DoConnect(SdrOle2Obj* pObj)
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
                     Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-                    aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+                    aScaleWidth.ReduceInaccurate(10);		// kompatibel zum SdrOle2Obj
                     aScaleHeight.ReduceInaccurate(10);
                     pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
@@ -1020,15 +1020,15 @@ void View::DoConnect(SdrOle2Obj* pObj)
 
 BOOL View::IsMorphingAllowed() const
 {
-    const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    BOOL                bRet = FALSE;
+    const SdrMarkList&	rMarkList = GetMarkedObjectList();
+    BOOL				bRet = FALSE;
 
     if ( rMarkList.GetMarkCount() == 2 )
     {
-        const SdrObject*    pObj1 = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        const SdrObject*    pObj2 = rMarkList.GetMark( 1 )->GetMarkedSdrObj();
-        const UINT16        nKind1 = pObj1->GetObjIdentifier();
-        const UINT16        nKind2 = pObj2->GetObjIdentifier();
+        const SdrObject*	pObj1 = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        const SdrObject*	pObj2 = rMarkList.GetMark( 1 )->GetMarkedSdrObj();
+        const UINT16		nKind1 = pObj1->GetObjIdentifier();
+        const UINT16		nKind2 = pObj2->GetObjIdentifier();
 
         if ( ( nKind1 != OBJ_TEXT && nKind2 != OBJ_TEXT ) &&
              ( nKind1 != OBJ_TITLETEXT && nKind2 != OBJ_TITLETEXT ) &&
@@ -1046,14 +1046,14 @@ BOOL View::IsMorphingAllowed() const
              ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
              !pObj1->ISA( E3dObject) && !pObj2->ISA( E3dObject) )
         {
-            SfxItemSet      aSet1( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
-            SfxItemSet      aSet2( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet		aSet1( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet		aSet2( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
 
             aSet1.Put(pObj1->GetMergedItemSet());
             aSet2.Put(pObj2->GetMergedItemSet());
 
-            const XFillStyle    eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
-            const XFillStyle    eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
+            const XFillStyle	eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
+            const XFillStyle	eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
 
             if( ( eFillStyle1 == XFILL_NONE || eFillStyle1 == XFILL_SOLID ) &&
                 ( eFillStyle2 == XFILL_NONE || eFillStyle2 == XFILL_SOLID ) )
@@ -1072,8 +1072,8 @@ BOOL View::IsMorphingAllowed() const
 
 BOOL View::IsVectorizeAllowed() const
 {
-    const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    BOOL                bRet = FALSE;
+    const SdrMarkList&	rMarkList = GetMarkedObjectList();
+    BOOL				bRet = FALSE;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -1295,7 +1295,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
                     pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() ) );
                     DBG_ASSERT( pStyle, "sd::View::OnEndPasteOrDrop(), Style not found!" );
                 }
-
+                
                 if( !pStyle )
                     pStyle = pStyleSheet;
 

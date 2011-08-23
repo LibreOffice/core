@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 /*
  * a simple exception
- * just to seperate
+ * just to seperate 
  * it from other
  * exceptions
  */
@@ -34,14 +34,14 @@ package com.sun.star.tooling.converter;
 
 /**
  * @author Christian Schmidt
- *
+ *  
  * Thrown if an error occurs during converting from one file format to another
  * that does not belong to an other exception
  */
 public class ConverterException extends Exception {
 
     /**
-     *
+     *  
      */
     public ConverterException() {
         super();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,9 +75,9 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     xUICommandDescription = xTmpNameAccess;
     if ( !xUICommandDescription.is() )
     {
-        xUICommandDescription = uno::Reference< container::XNameAccess >(
-                                    xServiceManager->createInstance(
-                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+        xUICommandDescription = uno::Reference< container::XNameAccess >( 
+                                    xServiceManager->createInstance( 
+                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
                                             "com.sun.star.frame.UICommandDescription" ))),
                                     uno::UNO_QUERY );
         xTmpNameAccess = xUICommandDescription;
@@ -86,14 +86,14 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     xModuleManager = xTmpModuleMgr;
     if ( !xModuleManager.is() )
     {
-        xModuleManager = uno::Reference< ::com::sun::star::frame::XModuleManager >(
-            xServiceManager->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+        xModuleManager = uno::Reference< ::com::sun::star::frame::XModuleManager >( 
+            xServiceManager->createInstance( 
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
                     "com.sun.star.frame.ModuleManager" ))),
             uno::UNO_QUERY_THROW );
         xTmpModuleMgr = xModuleManager;
     }
-
+    
     // Retrieve label from UI command description service
     try
     {
@@ -183,7 +183,7 @@ sal_Bool SfxRecordingFloatWrapper_Impl::QueryClose()
     return bRet;
 }
 
-SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
+SfxRecordingFloat_Impl::SfxRecordingFloat_Impl( 
     SfxBindings* pBind ,
     SfxChildWindow* pChildWin ,
     Window* pParent )
@@ -203,16 +203,16 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
     Size aTbxSize = aTbx.CalcWindowSizePixel();
     aTbx.SetPosSizePixel( Point(), aTbxSize );
     SetOutputSizePixel( aTbxSize );
-
+    
     // create a generic toolbox controller for our internal toolbox
-    svt::GenericToolboxController* pController = new svt::GenericToolboxController(
+    svt::GenericToolboxController* pController = new svt::GenericToolboxController( 
                                                     ::comphelper::getProcessServiceFactory(),
-                                                    xFrame,
+                                                    xFrame, 
                                                     &aTbx,
                                                     SID_STOP_RECORDING,
                                                     aCommandStr );
-    xStopRecTbxCtrl = uno::Reference< frame::XToolbarController >(
-                            static_cast< cppu::OWeakObject* >( pController ),
+    xStopRecTbxCtrl = uno::Reference< frame::XToolbarController >( 
+                            static_cast< cppu::OWeakObject* >( pController ), 
                         uno::UNO_QUERY );
     uno::Reference< util::XUpdatable > xUpdate( xStopRecTbxCtrl, uno::UNO_QUERY );
     if ( xUpdate.is() )

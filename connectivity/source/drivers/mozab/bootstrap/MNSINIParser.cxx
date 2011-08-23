@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
 {
     OUString iniUrl;
     if (osl_File_E_None != osl_getFileURLFromSystemPath(rIniName.pData, &iniUrl.pData))
-        return;
+        return;	
+        
 
-
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0    
     OString sFile = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
     OSL_TRACE(__FILE__" -- parser() - %s\n", sFile.getStr());
 #endif
@@ -49,17 +49,17 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
     }
     catch(::com::sun::star::io::IOException e)
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0    
         OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
 #endif
     }
-
+    
     if (osl_File_E_None == fileError)
     {
         rtl::ByteSequence seq;
         sal_uInt64 nSize = 0;
-
+        
         osl_getFileSize(handle, &nSize);
         OUString sectionName = OUString::createFromAscii("no name section");
         while (true)
@@ -83,7 +83,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
                 aSection->lList.push_back(nameValue);
 
             }
-            else
+            else 
             {
                 sal_Int32 nIndexStart = line.indexOf('[');
                 sal_Int32 nIndexEnd = line.indexOf(']');

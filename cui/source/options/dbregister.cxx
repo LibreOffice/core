@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,9 +57,9 @@
 #include "dbregisterednamesconfig.hxx"
 #include <svx/dialogs.hrc>
 
-#define TAB_WIDTH1      80
+#define TAB_WIDTH1		80
 #define TAB_WIDTH_MIN   10
-#define TAB_WIDTH2      1000
+#define TAB_WIDTH2		1000
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
 //........................................................................
@@ -118,18 +118,18 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 
     SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_DBREGISTER), rSet ),
 
-    aStdBox         ( this, CUI_RES( GB_STD ) ),
-    aTypeText       ( this, CUI_RES( FT_TYPE ) ),
-    aPathText       ( this, CUI_RES( FT_PATH ) ),
-    aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
-    m_aNew          ( this, CUI_RES( BTN_NEW ) ),
-    m_aEdit         ( this, CUI_RES( BTN_EDIT ) ),
-    m_aDelete       ( this, CUI_RES( BTN_DELETE ) ),
-    pHeaderBar      ( NULL ),
-    pPathBox        ( NULL ),
-    m_pCurEntry     ( NULL ),
-    m_nOldCount     ( 0 ),
-    m_bModified     ( FALSE )
+    aStdBox			( this, CUI_RES( GB_STD ) ),
+    aTypeText		( this, CUI_RES( FT_TYPE ) ),
+    aPathText		( this, CUI_RES( FT_PATH ) ),
+    aPathCtrl		( this, CUI_RES( LB_PATH ) ),
+    m_aNew			( this, CUI_RES( BTN_NEW ) ),
+    m_aEdit			( this, CUI_RES( BTN_EDIT ) ),
+    m_aDelete		( this, CUI_RES( BTN_DELETE ) ),
+    pHeaderBar		( NULL ),
+    pPathBox		( NULL ),
+    m_pCurEntry		( NULL ),
+    m_nOldCount		( 0 ),
+    m_bModified		( FALSE )
 {
     m_aNew.SetClickHdl( LINK( this, DbRegistrationOptionsPage, NewHdl ) );
     m_aEdit.SetClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
@@ -194,7 +194,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
+SfxTabPage*	DbRegistrationOptionsPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
 {
     return ( new DbRegistrationOptionsPage( pParent, rAttrSet ) );
@@ -257,7 +257,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
         HeaderEndDrag_Impl( NULL );
         // Sortierrichtung restaurieren
         BOOL bUp = (BOOL)(USHORT)aUserData.GetToken(1).ToInt32();
-        HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
+        HeaderBarItemBits nBits	= pHeaderBar->GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
         {
@@ -280,7 +280,7 @@ void DbRegistrationOptionsPage::FillUserData()
 {
     String aUserData = String::CreateFromInt32( pHeaderBar->GetItemSize( ITEMID_TYPE ) );
     aUserData += ';';
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
+    HeaderBarItemBits nBits	= pHeaderBar->GetItemBits( ITEMID_TYPE );
     BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += bUp ? '1' : '0';
     SetUserData( aUserData );
@@ -333,7 +333,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
     if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
         return 0;
 
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
+    HeaderBarItemBits nBits	= pHeaderBar->GetItemBits(ITEMID_TYPE);
     BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
@@ -518,7 +518,7 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, String*, _pName )
     return 1L;
 }
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 

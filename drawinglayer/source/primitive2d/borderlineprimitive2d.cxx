@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace drawinglayer
                                 aLeft.append(aTmpEnd);
 
                                 xRetval[nInsert++] = Primitive2DReference(new PolygonHairlinePrimitive2D(
-                                    aLeft,
+                                    aLeft, 
                                     getRGBColor()));
                             }
                             else
@@ -86,7 +86,7 @@ namespace drawinglayer
                                 // is available and fat line special case reductions between 0.5 < x < 2.5 line widths
                                 // are executed due to the FilledPolygon-do-not-paint-their-bottom-and-right-lines.
                                 const basegfx::B2DVector aLineWidthOffset((getCorrectedLeftWidth() * 0.5) * aPerpendicular);
-
+                                
                                 aLeft.append(aTmpStart + aLineWidthOffset);
                                 aLeft.append(aTmpEnd + aLineWidthOffset);
                                 aLeft.append(aTmpEnd - aLineWidthOffset);
@@ -111,9 +111,9 @@ namespace drawinglayer
                                 // create hairline primitive
                                 aRight.append(aTmpStart);
                                 aRight.append(aTmpEnd);
-
+                                
                                 xRetval[nInsert++] = Primitive2DReference(new PolygonHairlinePrimitive2D(
-                                    aRight,
+                                    aRight, 
                                     getRGBColor()));
                             }
                             else
@@ -149,14 +149,14 @@ namespace drawinglayer
                             aPolygon.append(aTmpEnd);
 
                             xRetval[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(
-                                aPolygon,
+                                aPolygon, 
                                 getRGBColor()));
                         }
                         else
                         {
                             // create filled polygon primitive
                             const basegfx::B2DVector aLineWidthOffset((getCorrectedLeftWidth() * 0.5) * aPerpendicular);
-
+                            
                             aPolygon.append(aTmpStart + aLineWidthOffset);
                             aPolygon.append(aTmpEnd + aLineWidthOffset);
                             aPolygon.append(aTmpEnd - aLineWidthOffset);
@@ -186,7 +186,7 @@ namespace drawinglayer
             bool bCreateInside,
             bool bCreateOutside,
             const basegfx::BColor& rRGBColor)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             maStart(rStart),
             maEnd(rEnd),
             mfLeftWidth(fLeftWidth),

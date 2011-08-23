@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@
 #include <vcl/svapp.hxx>
 
 
-namespace sd { namespace toolpanel {
+namespace sd { namespace toolpanel { 
 
 
 TitledControl::TitledControl (
     TreeNode* pParent,
-    ::std::auto_ptr<TreeNode> pControl,
+    ::std::auto_ptr<TreeNode> pControl, 
     const String& rTitle,
     const ClickHandler& rClickHandler,
     TitleBar::TitleBarType eType)
@@ -137,7 +137,7 @@ sal_Int32 TitledControl::GetPreferredHeight (sal_Int32 nWidth)
 
 bool TitledControl::IsResizable (void)
 {
-    return IsExpanded()
+    return IsExpanded() 
         && GetControl()->IsResizable();
 }
 
@@ -156,7 +156,7 @@ void TitledControl::Resize (void)
 {
     Size aWindowSize (GetOutputSizePixel());
 
-    int nTitleBarHeight
+    int nTitleBarHeight 
         = GetTitleBar()->GetPreferredHeight(aWindowSize.Width());
     GetTitleBar()->GetWindow()->SetPosSizePixel (
         Point (0,0),
@@ -164,7 +164,7 @@ void TitledControl::Resize (void)
 
 
     TreeNode* pControl = GetControl();
-    if (pControl != NULL
+    if (pControl != NULL 
         && pControl->GetWindow() != NULL
         && pControl->GetWindow()->IsVisible())
     {
@@ -257,7 +257,7 @@ bool TitledControl::Expand (bool bExpanded)
         if (bExpansionStateChanged)
             UpdateStates();
     }
-
+    
     return bExpansionStateChanged;
 }
 
@@ -287,7 +287,7 @@ bool TitledControl::IsExpanded (void) const
         return false;
 }
 
-void TitledControl::SetEnabledState(bool bFlag)
+void TitledControl::SetEnabledState(bool bFlag) 
 {
     if (!bFlag)
     {
@@ -296,13 +296,13 @@ void TitledControl::SetEnabledState(bool bFlag)
             ControlContainer::ES_COLLAPSE);
         Disable();
     }
-    else
+    else 
     {
-/*
+/*    
         GetParentNode()->GetControlContainer().SetExpansionState (
             this,
             ControlContainer::ES_EXPAND);
-*/
+*/		   
         Enable();
     }
 
@@ -351,7 +351,7 @@ void TitledControl::UpdateStates (void)
 
 
 
-IMPL_LINK(TitledControl, WindowEventListener,
+IMPL_LINK(TitledControl, WindowEventListener, 
     VclSimpleEvent*, pEvent)
 {
     if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))

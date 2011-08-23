@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -219,9 +219,9 @@ bool addArgument(
 
 }
 
-OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
+OfficeIPCThread*	OfficeIPCThread::pGlobalOfficeIPCThread = 0;
 namespace { struct Security : public rtl::Static<OSecurity, Security> {}; }
-::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
+::osl::Mutex*		OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
 
 String CreateMD5FromString( const OUString& aMsg )
@@ -233,9 +233,9 @@ String CreateMD5FromString( const OUString& aMsg )
     if ( handle > 0 )
     {
         const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
-        sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
-        sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
-        sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
+        sal_uInt32		 nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
+        sal_uInt32		 nMD5KeyLen = rtl_digest_queryLength( handle );
+        sal_uInt8*		 pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
 
         rtl_digest_init( handle, pData, nSize );
         rtl_digest_update( handle, pData, nSize );
@@ -357,7 +357,7 @@ throw( RuntimeException )
 
 // ----------------------------------------------------------------------------
 
-::osl::Mutex&   OfficeIPCThread::GetMutex()
+::osl::Mutex&	OfficeIPCThread::GetMutex()
 {
     // Get or create our mutex for thread-saftey
     if ( !pOfficeIPCThreadMutex )
@@ -375,7 +375,7 @@ void OfficeIPCThread::SetDowning()
     // We have the order to block all incoming requests. Framework
     // wants to shutdown and we have to make sure that no loading/printing
     // requests are executed anymore.
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
 
     if ( pGlobalOfficeIPCThread )
         pGlobalOfficeIPCThread->mbDowning = true;
@@ -386,7 +386,7 @@ static bool s_bInEnableRequests = false;
 void OfficeIPCThread::EnableRequests( bool i_bEnable )
 {
     // switch between just queueing the requests and executing them
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
 
     if ( pGlobalOfficeIPCThread )
     {
@@ -406,7 +406,7 @@ void OfficeIPCThread::EnableRequests( bool i_bEnable )
 sal_Bool OfficeIPCThread::AreRequestsPending()
 {
     // Give info about pending requests
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
     if ( pGlobalOfficeIPCThread )
         return ( pGlobalOfficeIPCThread->mnPendingRequests > 0 );
     else
@@ -416,7 +416,7 @@ sal_Bool OfficeIPCThread::AreRequestsPending()
 void OfficeIPCThread::RequestsCompleted( int nCount )
 {
     // Remove nCount pending requests from our internal counter
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
     if ( pGlobalOfficeIPCThread )
     {
         if ( pGlobalOfficeIPCThread->mnPendingRequests > 0 )
@@ -426,7 +426,7 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
 
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
-    ::osl::MutexGuard   aGuard( GetMutex() );
+    ::osl::MutexGuard	aGuard( GetMutex() );
 
     if( pGlobalOfficeIPCThread )
         return IPC_STATUS_OK;
@@ -457,7 +457,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     // and connectPipe!!
 
     OUString            aIniName;
-
+    
     aInfo.getExecutableFile( aIniName );
     sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
     if ( lastIndex > 0 )
@@ -470,12 +470,12 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
 #endif
     }
-
+   
     ::rtl::Bootstrap aPerfTuneIniFile( aIniName );
-
+    
     OUString aDefault( RTL_CONSTASCII_USTRINGPARAM( "0" ));
     OUString aPreloadData;
-
+    
     aPerfTuneIniFile.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "FastPipeCommunication" )), aPreloadData, aDefault );
 
 
@@ -483,13 +483,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     if ( aPreloadData.equalsAscii( "1" ))
     {
-        sal_Char    szBuffer[32];
+        sal_Char	szBuffer[32];
         sprintf( szBuffer, "%d", SUPD );
         aUserInstallPathHashCode = OUString( szBuffer, strlen(szBuffer), osl_getThreadTextEncoding() );
     }
     else
         aUserInstallPathHashCode = CreateMD5FromString( aDummy );
-
+    
 
     // Check result to create a hash code from the user install path
     if ( aUserInstallPathHashCode.getLength() == 0 )
@@ -628,7 +628,7 @@ OfficeIPCThread::OfficeIPCThread() :
 
 OfficeIPCThread::~OfficeIPCThread()
 {
-    ::osl::ClearableMutexGuard  aGuard( GetMutex() );
+    ::osl::ClearableMutexGuard	aGuard( GetMutex() );
 
     if ( mpDispatchWatcher )
         mpDispatchWatcher->release();
@@ -715,7 +715,7 @@ void SAL_CALL OfficeIPCThread::run()
 #endif
                 continue;
             }
-            CommandLineArgs *pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
+            CommandLineArgs	*pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 
             if ( aCmdLineArgs->IsQuickstart() )
             {
@@ -766,7 +766,7 @@ void SAL_CALL OfficeIPCThread::run()
             // loaded with the "hidden" flag! So they are always checked.
             bDocRequestSent |= aCmdLineArgs->GetPrintList( pRequest->aPrintList );
             bDocRequestSent |= ( aCmdLineArgs->GetPrintToList( pRequest->aPrintToList ) &&
-                                    aCmdLineArgs->GetPrinterName( pRequest->aPrinterName )      );
+                                    aCmdLineArgs->GetPrinterName( pRequest->aPrinterName )		);
 
             if ( !pCurrentCmdLineArgs->IsInvisible() )
             {
@@ -1007,7 +1007,7 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
     // protect the dispatch list
     osl::ClearableMutexGuard aGuard( GetMutex() );
 
-    static DispatchWatcher::DispatchList    aDispatchList;
+    static DispatchWatcher::DispatchList	aDispatchList;
 
     rtl::OUString aEmpty;
     // Create dispatch list for dispatch watcher
@@ -1026,7 +1026,7 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
     {
         if( ! pGlobalOfficeIPCThread->AreRequestsEnabled() )
             return bShutdown;
-
+        
         pGlobalOfficeIPCThread->mnPendingRequests += aDispatchList.size();
         if ( !pGlobalOfficeIPCThread->mpDispatchWatcher )
         {
@@ -1037,7 +1037,7 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
         // copy for execute
         DispatchWatcher::DispatchList aTempList( aDispatchList );
         aDispatchList.clear();
-
+        
         aGuard.clear();
 
         // Execute dispatch requests

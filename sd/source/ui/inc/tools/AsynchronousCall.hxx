@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ namespace sd { namespace tools {
     objects can be used.
     b) When more than one function objects are posted to be executed later
     then the pending ones are erased and only the last one will actually be
-    executed.
-
+    executed.  
+    
     Use this class like this:
     aInstanceOfAsynchronousCall.Post(
         ::boost::bind(
@@ -58,7 +58,7 @@ public:
         one (semantical) type of call.
     */
     AsynchronousCall (void);
-
+    
     ~AsynchronousCall (void);
 
     /** Post a function object that is to be executed asynchronously.  When

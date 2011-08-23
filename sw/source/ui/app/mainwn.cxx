@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ void EndProgress( SwDocShell *pDocShell )
             pProgressContainer->Remove( i );
             delete pProgress->pProgress;
             delete pProgress;
-            //#112337# it may happen that the container has been removed
+            //#112337# it may happen that the container has been removed 
             //while rescheduling
             if ( pProgressContainer && !pProgressContainer->Count() )
                 delete pProgressContainer, pProgressContainer = 0;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@ namespace { // anonymous namespace
 class ConverterCache
 {
 public:
-    explicit    ConverterCache( void );
+    explicit	ConverterCache( void );
                 ~ConverterCache( void );
-    sal_uInt16  convertOne( int nSelect, sal_Unicode );
-    void        convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount );
+    sal_uInt16	convertOne( int nSelect, sal_Unicode );
+    void		convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount );
 protected:
-    void        ensureConverter( int nSelect );
+    void		ensureConverter( int nSelect );
 private:
     rtl_UnicodeToTextConverter maConverterCache[ MAX_CVT_SELECT+1 ];
     rtl_UnicodeToTextContext maContexts[ MAX_CVT_SELECT+1 ];
@@ -191,22 +191,22 @@ sal_uInt16 TranslateChar16(sal_uInt16 src)
 {
     return aCC.convertOne( 6, src);
 }
-
+    
 void TranslateString12(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
     aCC.convertStr( 2, src, dst, n);
 }
-
+            
 void TranslateString13(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
     aCC.convertStr( 3, src, dst, n);
 }
-
+        
 void TranslateString14(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
     aCC.convertStr( 4, src, dst, n);
 }
-
+        
 void TranslateString15(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
     aCC.convertStr( 5, src, dst, n);
@@ -216,6 +216,6 @@ void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
     aCC.convertStr( 6, src, dst, n);
 }
-
+        
 } // namespace vcl
 

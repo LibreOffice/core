@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _COM_SUN_STAR_CONNECTION_XCONNECTOR_IDL_
-#define _COM_SUN_STAR_CONNECTION_XCONNECTOR_IDL_
-
-#include <com/sun/star/connection/ConnectionSetupException.idl>
-#include <com/sun/star/connection/NoConnectException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/connection/XConnection.idl>
-
-
-module com {  module sun {  module star {  module connection {
-
+#ifndef _COM_SUN_STAR_CONNECTION_XCONNECTOR_IDL_ 
+#define _COM_SUN_STAR_CONNECTION_XCONNECTOR_IDL_ 
+ 
+#include <com/sun/star/connection/ConnectionSetupException.idl> 
+#include <com/sun/star/connection/NoConnectException.idl> 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#include <com/sun/star/connection/XConnection.idl> 
+ 
+ 
+module com {  module sun {  module star {  module connection { 
+ 
 /**
    allows to actively establish an interprocess connection.
  */
 published interface XConnector: com::sun::star::uno::XInterface
-{
-
+{ 
+              
     // DocMerge from xml: method com::sun::star::connection::XConnector::connect
     /** creates a new connection interprocess connection.
         <p>
@@ -48,25 +48,25 @@ published interface XConnector: com::sun::star::uno::XInterface
         if a call to connect is made when another call to connect either has not
         yet returned or has returned successfully without raising an exception.
 
-        @param sConnectionDescription
+        @param sConnectionDescription 
                 contains the kind of the connection plus a
                 comma seperated list of attributes,
                e.g., <em>socket,host=locahost,port=2345</em> for a tcpip connection.
 
-        @throws ConnectionSetupException
+        @throws ConnectionSetupException  
                 Problems during setting up the connector
-              on client side, (e.g., Security-reasons, socket already busy .. ),
+              on client side, (e.g., Security-reasons, socket already busy .. ), 
                 or the string could not be interpreted correctly.
-
-        @throws NoConnectException
-                Couldn't reach a server (e.g. network failure),
+     
+        @throws NoConnectException     
+                Couldn't reach a server (e.g. network failure), 
                 no server is listening
      */
-    XConnection connect( [in] string sConnectionDescription )
-        raises( NoConnectException,ConnectionSetupException );
-};
-
-
-};};};};
-
-#endif
+    XConnection connect( [in] string sConnectionDescription ) 
+        raises( NoConnectException,ConnectionSetupException ); 
+}; 
+ 
+ 
+};};};}; 
+ 
+#endif 

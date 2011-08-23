@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class BaseCommandEnv
                                       css::task::XInteractionHandler,
                                       css::ucb::XProgressHandler >
 {
-protected:
+protected:    
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
 
@@ -86,12 +86,12 @@ class TmpRepositoryCommandEnv : public BaseCommandEnv
 public:
     TmpRepositoryCommandEnv();
     TmpRepositoryCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
-
+    
 // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
         throw (css::uno::RuntimeException);
-
+    
 };
 
 /** this class is for use in XPackageManager::synchronize.
@@ -109,12 +109,12 @@ public:
         css::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
         ::rtl::OUString const & repository);
-
+    
 // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
         throw (css::uno::RuntimeException);
-
+    
 };
 
 /** this class is for use in XPackageManager::checkPrerequisites
@@ -127,12 +127,12 @@ class NoLicenseCommandEnv : public BaseCommandEnv
 public:
     NoLicenseCommandEnv(){};
     NoLicenseCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
-
+    
 // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
         throw (css::uno::RuntimeException);
-
+    
 };
 
 // class NoExceptionCommandEnv : public BaseCommandEnv
@@ -143,12 +143,12 @@ public:
 //     NoExceptionCommandEnv::NoExceptionCommandEnv(
 //         css::uno::Reference< css::task::XInteractionHandler> const & handler,
 //         css::uno::Type const & type);
-
+    
 // // XInteractionHandler
 //     virtual void SAL_CALL handle(
 //         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
 //         throw (css::uno::RuntimeException);
-
+    
 // };
 
 }

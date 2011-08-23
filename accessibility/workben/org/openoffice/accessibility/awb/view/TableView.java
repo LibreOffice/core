@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ import com.sun.star.uno.UnoRuntime;
 
 
 /** The <type>ContextView</type> class displays information accessible over
-    the <type>XAccessibleContext</type> interface.  This includes name,
+    the <type>XAccessibleContext</type> interface.  This includes name, 
     description, and role.
 */
 public class TableView
@@ -72,7 +72,7 @@ public class TableView
         maSelectedColumnsLabel = aLayout.AddLabeledEntry ("Selected Columns: ");
     }
 
-
+     
     public void SetObject (XAccessibleContext xContext)
     {
         mxTable = (XAccessibleTable)UnoRuntime.queryInterface(

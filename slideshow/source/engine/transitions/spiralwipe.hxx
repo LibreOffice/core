@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public:
     virtual ::basegfx::B2DPolyPolygon operator () ( double t );
 protected:
     ::basegfx::B2DPolyPolygon calcNegSpiral( double t ) const;
-
+    
     const sal_Int32 m_elements;
     const sal_Int32 m_sqrtElements;
     const bool m_flipOnYAxis;

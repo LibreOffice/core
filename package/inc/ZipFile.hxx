@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace ucb  { class XProgressHandler; }
 } } }
-namespace vos
+namespace vos 
 {
     template < class T > class ORef;
 }
-/*
+/*  
  * We impose arbitrary but reasonable limit on ZIP files.
- */
+ */ 
 
 #define ZIP_MAXNAMELEN 512
 #define ZIP_MAXEXTRA 256
@@ -64,9 +64,9 @@ class ZipFile
 protected:
     ::osl::Mutex    m_aMutex;
 
-    ::rtl::OUString sComment;       /* zip file comment */
-    EntryHash       aEntries;
-    ByteGrabber     aGrabber;
+    ::rtl::OUString	sComment; 	  	/* zip file comment */
+    EntryHash		aEntries;
+    ByteGrabber 	aGrabber;
     Inflater        aInflater;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
@@ -75,15 +75,15 @@ protected:
 
     sal_Bool bRecoveryMode;
 
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createMemoryStream(
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createMemoryStream( 
             ZipEntry & rEntry,
-            const vos::ORef < EncryptionData > &rData,
+            const vos::ORef < EncryptionData > &rData, 
             sal_Bool bRawStream,
             sal_Bool bDecrypt );
 
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createFileStream(
             ZipEntry & rEntry,
-            const vos::ORef < EncryptionData > &rData,
+            const vos::ORef < EncryptionData > &rData, 
             sal_Bool bRawStream,
             sal_Bool bDecrypt );
 
@@ -91,7 +91,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createUnbufferedStream(
             SotMutexHolderRef aMutexHolder,
             ZipEntry & rEntry,
-            const vos::ORef < EncryptionData > &rData,
+            const vos::ORef < EncryptionData > &rData, 
             sal_Int8 nStreamMode,
             sal_Bool bDecrypt,
             ::rtl::OUString aMediaType = ::rtl::OUString() );
@@ -106,14 +106,14 @@ protected:
 
 public:
 
-    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
-             const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
+    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, 
+             const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory, 
              sal_Bool bInitialise
              )
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
 
-    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
-             const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
+    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, 
+             const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory, 
              sal_Bool bInitialise,
              sal_Bool bForceRecover,
              ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgress
@@ -125,13 +125,13 @@ public:
     EntryHash& GetEntryHash() { return aEntries; }
 
     void setInputStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream );
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData(
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData( 
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
             sal_Bool bDecrypt,
             SotMutexHolderRef aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
-
+    
     static sal_Bool StaticGetCipher ( const vos::ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher, sal_Bool bDecode );
 
     static void StaticFillHeader ( const vos::ORef < EncryptionData > & rData,
@@ -150,19 +150,19 @@ public:
         throw ( ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::packages::zip::ZipIOException,
                 ::com::sun::star::uno::RuntimeException );
-
+                
     static sal_Bool StaticHasValidPassword ( const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,
                                              const vos::ORef < EncryptionData > &rData );
+    
 
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream( 
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
             sal_Bool bDecrypt,
             SotMutexHolderRef aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream(
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream( 
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
             sal_Bool bDecrypt,
@@ -172,7 +172,7 @@ public:
                 ::com::sun::star::packages::zip::ZipException,
                 ::com::sun::star::uno::RuntimeException );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getWrappedRawStream(
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getWrappedRawStream( 
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
             const ::rtl::OUString& aMediaType,
@@ -184,13 +184,13 @@ public:
 
     ZipEnumeration * SAL_CALL entries(  );
 protected:
-    sal_Bool        readLOC ( ZipEntry &rEntry)
+    sal_Bool		readLOC ( ZipEntry &rEntry)
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
-    sal_Int32       readCEN()
+    sal_Int32		readCEN()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
-    sal_Int32       findEND()
+    sal_Int32		findEND()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
-    sal_Int32       recover()
+    sal_Int32 		recover()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
 
 };

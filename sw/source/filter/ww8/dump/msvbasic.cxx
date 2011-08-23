@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #include "precompiled_sw.hxx"
 
 
-#include <string.h>     // memset(), ...
+#include <string.h> 	// memset(), ...
 #ifndef UNX
-#include <io.h>         // access()
+#include <io.h> 		// access()
 #endif
 #include <msvbasic.hxx>
 
@@ -285,7 +285,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         xVBAProject->Read(&junksize,2); // usually 18 02, sometimes 1e 02
         //but sometimes its a run of numbers until 0xffff, gagh!!!
         //*pOut << "position is " << xVBAProject->Tell() << "len is "
-        //  << junksize << endl;
+        //	<< junksize << endl;
     }
 
     UINT16 ftest;
@@ -394,7 +394,7 @@ const String &VBA_Impl::Decompress( UINT16 nIndex, int *pOverflow)
         xVBAStream->GetError() )
     {
         DBG_WARNING("Not able to open vb module ");
-//      DBG_WARNING((pOffsets[nIndex].sName).GetStr());
+//		DBG_WARNING((pOffsets[nIndex].sName).GetStr());
     }
     else
     {
@@ -402,7 +402,7 @@ const String &VBA_Impl::Decompress( UINT16 nIndex, int *pOverflow)
         DecompressVBA(nIndex,xVBAStream);
         /*
          * if len was too big for a single string set that variable ?
-         *  if ((len > XX) && (pOverflow))
+         *	if ((len > XX) && (pOverflow))
                 *pOverflow=1;
          */
         if (bCommented)

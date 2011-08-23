@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #ifndef _DOCFLD_HXX
 #define _DOCFLD_HXX
 
-#include <calc.hxx>         // fuer SwHash
+#include <calc.hxx>			// fuer SwHash
 
 class SwTxtFld;
 class SwIndex;
@@ -85,7 +85,7 @@ public:
     _SetGetExpFld( const SwFlyFrmFmt& rFlyFmt, const SwPosition* pPos = 0 );
 
     BOOL operator==( const _SetGetExpFld& rFld ) const
-    {   return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
+    {	return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
                 ( !CNTNT.pTxtFld || !rFld.CNTNT.pTxtFld ||
                     CNTNT.pTxtFld == rFld.CNTNT.pTxtFld ); }
     BOOL operator<( const _SetGetExpFld& rFld ) const;
@@ -144,24 +144,24 @@ void LookString( SwHash** ppTbl, USHORT nSize, const String& rName,
 
 // --------
 
-const int GETFLD_ALL        = 3;        // veroderte Flags !!
-const int GETFLD_CALC       = 1;
-const int GETFLD_EXPAND     = 2;
+const int GETFLD_ALL		= 3;		// veroderte Flags !!
+const int GETFLD_CALC		= 1;
+const int GETFLD_EXPAND		= 2;
 
 class SwDocUpdtFld
 {
-    _SetGetExpFlds* pFldSortLst;    // akt. Field-Liste zum Calculieren
+    _SetGetExpFlds* pFldSortLst;	// akt. Field-Liste zum Calculieren
     SwCalcFldType*  aFldTypeTable[ TBLSZ ];
 
 // noch eine weitere Optimierung - wird z.Z. nicht angesprochen!
-    long nFldUpdtPos;               // ab dieser Position mit Update starten
-    SwCntntNode* pCNode;            // der TxtNode zur UpdatePos.
+    long nFldUpdtPos;				// ab dieser Position mit Update starten
+    SwCntntNode* pCNode;			// der TxtNode zur UpdatePos.
 
-    ULONG nNodes;                   // sollte die NodesAnzahl unterschiedlich sein
+    ULONG nNodes;					// sollte die NodesAnzahl unterschiedlich sein
     BYTE nFldLstGetMode;
 
-    BOOL bInUpdateFlds : 1;         // zur Zeit laeuft ein UpdateFlds,
-    BOOL bFldsDirty : 1;            // irgendwelche Felder sind ungueltig
+    BOOL bInUpdateFlds : 1;			// zur Zeit laeuft ein UpdateFlds,
+    BOOL bFldsDirty : 1;			// irgendwelche Felder sind ungueltig
 
     void _MakeFldList( SwDoc& pDoc, int eGetMode );
     void GetBodyNode( const SwTxtFld& , USHORT nFldWhich );
@@ -179,15 +179,15 @@ public:
     void InsertFldType( const SwFieldType& rType );
     void RemoveFldType( const SwFieldType& rType );
 
-    BOOL IsInUpdateFlds() const         { return bInUpdateFlds; }
-    void SetInUpdateFlds( BOOL b )      { bInUpdateFlds = b; }
+    BOOL IsInUpdateFlds() const			{ return bInUpdateFlds; }
+    void SetInUpdateFlds( BOOL b ) 		{ bInUpdateFlds = b; }
 
-    BOOL IsFieldsDirty() const          { return bFldsDirty; }
-    void SetFieldsDirty( BOOL b )       { bFldsDirty = b; }
+    BOOL IsFieldsDirty() const			{ return bFldsDirty; }
+    void SetFieldsDirty( BOOL b ) 		{ bFldsDirty = b; }
 
-    SwHash**    GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
+    SwHash**	GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
 };
 
 
-#endif  // _DOCFLD_HXX
+#endif	// _DOCFLD_HXX
 

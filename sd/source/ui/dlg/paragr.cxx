@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,16 +55,16 @@ public:
     SdParagraphNumTabPage(Window* pParent, const SfxItemSet& rSet );
     ~SdParagraphNumTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static SfxTabPage*	Create(	Window* pParent, const SfxItemSet& rSet );
+    static USHORT*		GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual BOOL		FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& rSet );
 
 private:
-    TriStateBox     maNewStartCB;
+    TriStateBox		maNewStartCB;
     TriStateBox     maNewStartNumberCB;
-    NumericField    maNewStartNF;
+    NumericField	maNewStartNF;
     bool            mbModified;
 
     DECL_LINK( ImplNewStartHdl, CheckBox* );

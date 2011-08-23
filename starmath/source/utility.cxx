@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.
-//!! Since this method is based on the current focus it is somewhat
+//!! Since this method is based on the current focus it is somewhat 
 //!! unreliable and may return unexpected 0 pointers!
 SmViewShell * SmGetActiveView()
 {
@@ -76,7 +76,7 @@ SmPickList::~SmPickList()
 
 SmPickList& SmPickList::operator=(const SmPickList& rList)
 {
-    USHORT  nPos;
+    USHORT	nPos;
 
     Clear();
     nSize = rList.nSize;
@@ -102,7 +102,7 @@ void SmPickList::Insert(const void *pItem)
 
 void SmPickList::Update(const void *pItem, const void *pNewItem)
 {
-    USHORT  nPos;
+    USHORT	nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         if (CompareItem(GetPtr(nPos), pItem))
@@ -115,7 +115,7 @@ void SmPickList::Update(const void *pItem, const void *pNewItem)
 
 void SmPickList::Remove(const void *pItem)
 {
-    USHORT  nPos;
+    USHORT	nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         if (CompareItem(GetPtr(nPos), pItem))
@@ -128,7 +128,7 @@ void SmPickList::Remove(const void *pItem)
 
 void SmPickList::Clear()
 {
-    USHORT  nPos;
+    USHORT	nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         DestroyItem(GetPtr(nPos));
@@ -157,15 +157,15 @@ void SmFontPickList::DestroyItem(void *pItem)
 
 BOOL SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem) const
 {
-    Font    *pFirstFont, *pSecondFont;
+    Font	*pFirstFont, *pSecondFont;
 
-    pFirstFont  = (Font *)pFirstItem;
+    pFirstFont	= (Font *)pFirstItem;
     pSecondFont = (Font *)pSecondItem;
 
     if (pFirstFont->GetName() == pSecondFont->GetName())
-        if ((pFirstFont->GetFamily()  == pSecondFont->GetFamily())  &&
+        if ((pFirstFont->GetFamily()  == pSecondFont->GetFamily())	&&
             (pFirstFont->GetCharSet() == pSecondFont->GetCharSet()) &&
-            (pFirstFont->GetWeight()  == pSecondFont->GetWeight())  &&
+            (pFirstFont->GetWeight()  == pSecondFont->GetWeight())	&&
             (pFirstFont->GetItalic()  == pSecondFont->GetItalic()))
             return (TRUE);
 
@@ -175,7 +175,7 @@ BOOL SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem
 String SmFontPickList::GetStringItem(void *pItem)
 {
     Font   *pFont;
-    String  aString;
+    String	aString;
     const sal_Char *pDelim = ", ";
 
     pFont = (Font *)pItem;
@@ -230,8 +230,8 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
-    USHORT  nPos;
-    String  aString;
+    USHORT	nPos;
+    String	aString;
 
     nPos = GetSelectEntryPos();
 
@@ -336,7 +336,7 @@ void SmFace::SetSize(const Size& rSize)
     Size  aSize (rSize);
 
     // check the requested size against minimum value
-    static int __READONLY_DATA  nMinVal = SmPtsTo100th_mm(2);
+    static int __READONLY_DATA	nMinVal = SmPtsTo100th_mm(2);
 
     if (aSize.Height() < nMinVal)
         aSize.Height() = nMinVal;
@@ -370,9 +370,9 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
     // scales the width and height of 'rFace' by 'rFrac' and returns a
     // reference to 'rFace'.
     // It's main use is to make scaling fonts look easier.
-{   const Size &rFaceSize = rFace.GetSize();
+{	const Size &rFaceSize = rFace.GetSize();
 
-    rFace.SetSize(Size(Fraction(rFaceSize.Width())  *= rFrac,
+    rFace.SetSize(Size(Fraction(rFaceSize.Width())	*= rFrac,
                        Fraction(rFaceSize.Height()) *= rFrac));
     return rFace;
 }

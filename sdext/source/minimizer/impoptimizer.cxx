@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -239,13 +239,13 @@ void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const
             Sequence< PropertyValue > aFilterData( 8 );
             aFilterData[ 0 ].Name = TKGet( TK_ImageResolution );
             aFilterData[ 0 ].Value <<= nImageResolution;
-            aFilterData[ 1 ].Name = TKGet( TK_ColorMode );      // todo: jpeg color mode (0->true color, 1->greyscale)
+            aFilterData[ 1 ].Name = TKGet( TK_ColorMode );		// todo: jpeg color mode (0->true color, 1->greyscale)
             aFilterData[ 1 ].Value <<= (sal_Int32)0;
-            aFilterData[ 2 ].Name = TKGet( TK_Quality );        // quality that is used if we export to jpeg
+            aFilterData[ 2 ].Name = TKGet( TK_Quality );		// quality that is used if we export to jpeg
             aFilterData[ 2 ].Value <<= nJPEGQuality;
-            aFilterData[ 3 ].Name = TKGet( TK_Compression );    // compression that is used if we export to png
+            aFilterData[ 3 ].Name = TKGet( TK_Compression );	// compression that is used if we export to png
             aFilterData[ 3 ].Value <<= (sal_Int32)6;
-            aFilterData[ 4 ].Name = TKGet( TK_Interlaced );     // interlaced is turned off if we export to png
+            aFilterData[ 4 ].Name = TKGet( TK_Interlaced );		// interlaced is turned off if we export to png
             aFilterData[ 4 ].Value <<= (sal_Int32)0;
             aFilterData[ 5 ].Name = TKGet( TK_LogicalSize );
             aFilterData[ 5 ].Value <<= rLogicalSize;
@@ -253,9 +253,9 @@ void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const
             aFilterData[ 6 ].Value <<= bRemoveCropping;
             aFilterData[ 7 ].Name = TKGet( TK_GraphicCropLogic );
             aFilterData[ 7 ].Value <<= rGraphicCropLogic;
-
+            
             Sequence< PropertyValue > aArgs( 3 );
-            aArgs[ 0 ].Name = TKGet( TK_MimeType );             // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
+            aArgs[ 0 ].Name = TKGet( TK_MimeType );				// the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
             aArgs[ 0 ].Value <<= rDestMimeType;
             aArgs[ 1 ].Name = TKGet( TK_OutputStream );
             aArgs[ 1 ].Value <<= rxOutputStream;
@@ -285,8 +285,8 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             if ( nGraphicType == com::sun::star::graphic::GraphicType::PIXEL )
             {
                 sal_Bool bTransparent = sal_False;
-                sal_Bool bAlpha       = sal_False;
-                sal_Bool bAnimated    = sal_False;
+                sal_Bool bAlpha		  = sal_False;
+                sal_Bool bAnimated	  = sal_False;
 
                 awt::Size aSourceSizePixel( 0, 0 );
                 text::GraphicCrop aGraphicCropPixel( 0, 0, 0, 0 );
@@ -298,7 +298,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                 {
                     awt::Size aDestSizePixel( aSourceSizePixel );
                     if ( !bAnimated )
-                    {
+                    {					
                         sal_Bool bNeedsOptimizing = sal_False;
                         sal_Bool bRemoveCropArea( rGraphicSettings.mbRemoveCropArea );
 
@@ -332,7 +332,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             if ( rGraphicSettings.mbJPEGCompression && !bTransparent && !bAlpha && !bAnimated )
                             {
                                 aDestMimeType = OUString( RTL_CONSTASCII_USTRINGPARAM( "image/jpeg" ) );
-//                                      if( aSourceMimeType != aDestMimeType )
+//										if( aSourceMimeType != aDestMimeType )
                                 bNeedsOptimizing = sal_True;
                             }
                             if ( bRemoveCropArea )
@@ -430,7 +430,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 
                         if ( aGraphicUserIter->maGraphicCropLogic.Left || aGraphicUserIter->maGraphicCropLogic.Top
                         || aGraphicUserIter->maGraphicCropLogic.Right || aGraphicUserIter->maGraphicCropLogic.Bottom )
-                        {   // removing crop area was not possible or should't been applied
+                        {	// removing crop area was not possible or should't been applied
                             text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
                             if ( !aGraphicSettings.mbRemoveCropArea )
                             {
@@ -484,19 +484,19 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 // ----------------
 
 ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxMSF, const Reference< XModel >& rxModel ) :
-    mxMSF                       ( rxMSF ),
-    mxModel                     ( rxModel ),
-    mbJPEGCompression           ( sal_False ),
-    mnJPEGQuality               ( 90 ),
-    mbRemoveCropArea            ( sal_False ),
-    mnImageResolution           ( 0 ),
-    mbEmbedLinkedGraphics       ( sal_True ),
-    mbOLEOptimization           ( sal_False ),
-    mnOLEOptimizationType       ( 0 ),
-    mbDeleteUnusedMasterPages   ( sal_False ),
-    mbDeleteHiddenSlides        ( sal_False ),
-    mbDeleteNotesPages          ( sal_False ),
-    mbOpenNewDocument           ( sal_True )
+    mxMSF						( rxMSF ),
+    mxModel						( rxModel ),
+    mbJPEGCompression			( sal_False ),
+    mnJPEGQuality				( 90 ),
+    mbRemoveCropArea			( sal_False ),
+    mnImageResolution			( 0 ),
+    mbEmbedLinkedGraphics		( sal_True ),
+    mbOLEOptimization			( sal_False ),
+    mnOLEOptimizationType		( 0 ),
+    mbDeleteUnusedMasterPages	( sal_False ),
+    mbDeleteHiddenSlides		( sal_False ),
+    mbDeleteNotesPages			( sal_False ),
+    mbOpenNewDocument			( sal_True )
 {
 }
 
@@ -622,21 +622,21 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                     {
                         switch( TKGet( aSettings[ j ].Name ) )
                         {
-                            case TK_JPEGCompression         : aSettings[ j ].Value >>= mbJPEGCompression; break;
-                            case TK_JPEGQuality             : aSettings[ j ].Value >>= mnJPEGQuality; break;
-                            case TK_RemoveCropArea          : aSettings[ j ].Value >>= mbRemoveCropArea; break;
-                            case TK_ImageResolution         : aSettings[ j ].Value >>= mnImageResolution; break;
-                            case TK_EmbedLinkedGraphics     : aSettings[ j ].Value >>= mbEmbedLinkedGraphics; break;
-                            case TK_OLEOptimization         : aSettings[ j ].Value >>= mbOLEOptimization; break;
-                            case TK_OLEOptimizationType     : aSettings[ j ].Value >>= mnOLEOptimizationType; break;
-                            case TK_CustomShowName          : aSettings[ j ].Value >>= maCustomShowName; break;
+                            case TK_JPEGCompression			: aSettings[ j ].Value >>= mbJPEGCompression; break;
+                            case TK_JPEGQuality				: aSettings[ j ].Value >>= mnJPEGQuality; break;
+                            case TK_RemoveCropArea			: aSettings[ j ].Value >>= mbRemoveCropArea; break;
+                            case TK_ImageResolution			: aSettings[ j ].Value >>= mnImageResolution; break;
+                            case TK_EmbedLinkedGraphics		: aSettings[ j ].Value >>= mbEmbedLinkedGraphics; break;
+                            case TK_OLEOptimization			: aSettings[ j ].Value >>= mbOLEOptimization; break;
+                            case TK_OLEOptimizationType		: aSettings[ j ].Value >>= mnOLEOptimizationType; break;
+                            case TK_CustomShowName			: aSettings[ j ].Value >>= maCustomShowName; break;
                             case TK_DeleteUnusedMasterPages : aSettings[ j ].Value >>= mbDeleteUnusedMasterPages; break;
-                            case TK_DeleteHiddenSlides      : aSettings[ j ].Value >>= mbDeleteHiddenSlides; break;
-                            case TK_DeleteNotesPages        : aSettings[ j ].Value >>= mbDeleteNotesPages; break;
-                            case TK_SaveAsURL               : aSettings[ j ].Value >>= maSaveAsURL; break;
-                            case TK_FilterName              : aSettings[ j ].Value >>= maFilterName; break;
-                            case TK_OpenNewDocument         : aSettings[ j ].Value >>= mbOpenNewDocument; break;
-                            case TK_EstimatedFileSize       : aSettings[ j ].Value >>= nEstimatedFileSize; break;
+                            case TK_DeleteHiddenSlides		: aSettings[ j ].Value >>= mbDeleteHiddenSlides; break;
+                            case TK_DeleteNotesPages		: aSettings[ j ].Value >>= mbDeleteNotesPages; break;
+                            case TK_SaveAsURL				: aSettings[ j ].Value >>= maSaveAsURL; break;
+                            case TK_FilterName				: aSettings[ j ].Value >>= maFilterName; break;
+                            case TK_OpenNewDocument			: aSettings[ j ].Value >>= mbOpenNewDocument; break;
+                            case TK_EstimatedFileSize		: aSettings[ j ].Value >>= nEstimatedFileSize; break;
                             default: break;
                         }
                     }
@@ -652,7 +652,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         Reference< XFrame > xSelf;
         if ( maSaveAsURL.getLength() )
         {
-
+    
             SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 10 ) ) );
             SetStatusValue( TK_Status, Any( TKGet( STR_DUPLICATING_PRESENTATION ) ) );
             DispatchStatus();
@@ -700,7 +700,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             mxModel->lockControllers();
             bRet = Optimize();
             mxModel->unlockControllers();
-
+    
             // clearing undo stack:
             Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
             if ( xFrame.is() )
@@ -726,7 +726,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             SetStatusValue( TK_OpenNewDocument, Any( mbOpenNewDocument ) );
             DispatchStatus();
         }
-
+    
         if ( maSaveAsURL.getLength() )
         {
             if ( mbOpenNewDocument && xSelf.is() )

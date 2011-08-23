@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <WW8ResourceModelImpl.hxx>
 
 namespace writerfilter {
-namespace doctok
+namespace doctok 
 {
 using std::vector;
 
@@ -70,11 +70,11 @@ public:
     virtual void resolveLocal(Properties & rHandler);
     virtual void resolveChildren(Properties & rHandler);
 
-    Records_t findRecords(sal_uInt32 nType, bool bRecursive = true,
+    Records_t findRecords(sal_uInt32 nType, bool bRecursive = true, 
                           bool bAny = false);
 
     void findRecords
-    (sal_uInt32 nType, Records_t & rRecords,
+    (sal_uInt32 nType, Records_t & rRecords, 
      bool bRecursive = true, bool bAny = false);
 
     Records_t::iterator begin();
@@ -105,7 +105,7 @@ public:
 
 typedef vector<DffRecord::Pointer_t> Records_t;
 
-class DffBlock : public WW8StructBase,
+class DffBlock : public WW8StructBase, 
                  public writerfilter::Reference<Properties>
 {
     bool bInitialized;
@@ -115,7 +115,7 @@ class DffBlock : public WW8StructBase,
 
 protected:
     void initChildren();
-
+    
 public:
     typedef boost::shared_ptr<DffBlock> Pointer_t;
 
@@ -124,10 +124,10 @@ public:
     DffBlock(const DffBlock & rSrc);
     virtual ~DffBlock() {}
 
-    Records_t findRecords(sal_uInt32 nType, bool bRecursive = true,
+    Records_t findRecords(sal_uInt32 nType, bool bRecursive = true, 
                           bool bAny = false);
 
-    void findRecords(sal_uInt32 nType, Records_t & rRecords,
+    void findRecords(sal_uInt32 nType, Records_t & rRecords, 
                      bool bRecursive = true, bool bAny = false);
 
     DffRecord::Pointer_t getShape(sal_uInt32 nSpid);
@@ -142,10 +142,10 @@ public:
 };
 
 DffRecord *
-createDffRecord(WW8StructBase * pParent, sal_uInt32 nOffset,
+createDffRecord(WW8StructBase * pParent, sal_uInt32 nOffset, 
                 sal_uInt32 * nSize = NULL);
 DffRecord *
-createDffRecord(WW8Stream & rStream, sal_uInt32 nOffset,
+createDffRecord(WW8Stream & rStream, sal_uInt32 nOffset, 
                 sal_uInt32 * nSize = NULL);
 
 }}

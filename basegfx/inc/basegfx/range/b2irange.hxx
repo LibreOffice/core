@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,73 +40,73 @@ namespace basegfx
 {
     class B2IRange
     {
-    public:
-        typedef sal_Int32       ValueType;
-        typedef Int32Traits     TraitsType;
+    public:		
+        typedef sal_Int32 		ValueType;
+        typedef Int32Traits 	TraitsType;
 
-        B2IRange()
+        B2IRange() 
         {
         }
-
+        
         explicit B2IRange(const B2ITuple& rTuple)
-        :   maRangeX(rTuple.getX()),
+        :	maRangeX(rTuple.getX()),
             maRangeY(rTuple.getY())
         {
         }
-
+        
         B2IRange(sal_Int32 x1,
                  sal_Int32 y1,
                  sal_Int32 x2,
                  sal_Int32 y2)
-        :   maRangeX(x1),
+        :	maRangeX(x1),
             maRangeY(y1)
         {
             maRangeX.expand(x2);
             maRangeY.expand(y2);
         }
-
+        
         B2IRange(const B2ITuple& rTuple1,
                  const B2ITuple& rTuple2)
-        :   maRangeX(rTuple1.getX()),
+        :	maRangeX(rTuple1.getX()),
             maRangeY(rTuple1.getY())
         {
             expand( rTuple2 );
         }
-
+        
         B2IRange(const B2IRange& rRange)
-        :   maRangeX(rRange.maRangeX),
+        :	maRangeX(rRange.maRangeX),
             maRangeY(rRange.maRangeY)
         {
         }
 
-        bool isEmpty() const
+        bool isEmpty() const 
         {
             return maRangeX.isEmpty() || maRangeY.isEmpty();
         }
 
-        void reset()
-        {
-            maRangeX.reset();
-            maRangeY.reset();
+        void reset() 
+        { 
+            maRangeX.reset(); 
+            maRangeY.reset(); 
         }
 
-        bool operator==( const B2IRange& rRange ) const
-        {
-            return (maRangeX == rRange.maRangeX
-                && maRangeY == rRange.maRangeY);
+        bool operator==( const B2IRange& rRange ) const 
+        { 
+            return (maRangeX == rRange.maRangeX 
+                && maRangeY == rRange.maRangeY); 
         }
 
-        bool operator!=( const B2IRange& rRange ) const
-        {
-            return (maRangeX != rRange.maRangeX
-                || maRangeY != rRange.maRangeY);
+        bool operator!=( const B2IRange& rRange ) const 
+        { 
+            return (maRangeX != rRange.maRangeX 
+                || maRangeY != rRange.maRangeY); 
         }
 
-        B2IRange& operator=(const B2IRange& rRange)
-        {
-            maRangeX = rRange.maRangeX;
-            maRangeY = rRange.maRangeY;
-            return *this;
+        B2IRange& operator=(const B2IRange& rRange) 
+        { 
+            maRangeX = rRange.maRangeX; 
+            maRangeY = rRange.maRangeY; 
+            return *this; 
         }
 
         sal_Int32 getMinX() const
@@ -146,7 +146,7 @@ namespace basegfx
                 maRangeY.getMinimum()
                 );
         }
-
+        
         B2IPoint getMaximum() const
         {
             return B2IPoint(
@@ -162,7 +162,7 @@ namespace basegfx
                 maRangeY.getRange()
                 );
         }
-
+    
         B2DPoint getCenter() const
         {
             return B2DPoint(
@@ -170,11 +170,11 @@ namespace basegfx
                 maRangeY.getCenter()
                 );
         }
-
+    
         bool isInside(const B2ITuple& rTuple) const
         {
             return (
-                maRangeX.isInside(rTuple.getX())
+                maRangeX.isInside(rTuple.getX()) 
                 && maRangeY.isInside(rTuple.getY())
                 );
         }
@@ -182,7 +182,7 @@ namespace basegfx
         bool isInside(const B2IRange& rRange) const
         {
             return (
-                maRangeX.isInside(rRange.maRangeX)
+                maRangeX.isInside(rRange.maRangeX) 
                 && maRangeY.isInside(rRange.maRangeY)
                 );
         }
@@ -190,7 +190,7 @@ namespace basegfx
         bool overlaps(const B2IRange& rRange) const
         {
             return (
-                maRangeX.overlaps(rRange.maRangeX)
+                maRangeX.overlaps(rRange.maRangeX) 
                 && maRangeY.overlaps(rRange.maRangeY)
                 );
         }
@@ -203,27 +203,27 @@ namespace basegfx
 
         void expand(const B2IRange& rRange)
         {
-            maRangeX.expand(rRange.maRangeX);
-            maRangeY.expand(rRange.maRangeY);
+            maRangeX.expand(rRange.maRangeX); 
+            maRangeY.expand(rRange.maRangeY); 
         }
 
         void intersect(const B2IRange& rRange)
         {
-            maRangeX.intersect(rRange.maRangeX);
-            maRangeY.intersect(rRange.maRangeY);
+            maRangeX.intersect(rRange.maRangeX); 
+            maRangeY.intersect(rRange.maRangeY); 
         }
 
         void grow(sal_Int32 nValue)
         {
-            maRangeX.grow(nValue);
-            maRangeY.grow(nValue);
+            maRangeX.grow(nValue); 
+            maRangeY.grow(nValue); 
         }
 
     private:
-        typedef ::basegfx::BasicRange< ValueType, TraitsType >  MyBasicRange;
+        typedef ::basegfx::BasicRange< ValueType, TraitsType >	MyBasicRange;
 
-        MyBasicRange        maRangeX;
-        MyBasicRange        maRangeY;
+        MyBasicRange		maRangeX;
+        MyBasicRange		maRangeY;
     };
 
     /** Compute the set difference of the two given ranges
@@ -245,9 +245,9 @@ namespace basegfx
 
         @return the input vector
      */
-    ::std::vector< B2IRange >& computeSetDifference( ::std::vector< B2IRange >& o_rResult,
-                                                     const B2IRange&            rFirst,
-                                                     const B2IRange&            rSecond );
+    ::std::vector< B2IRange >& computeSetDifference( ::std::vector< B2IRange >&	o_rResult,
+                                                     const B2IRange&			rFirst,
+                                                     const B2IRange&			rSecond );
 
 } // end of namespace basegfx
 

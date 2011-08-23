@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     }
     else {
         __asm__ __volatile__ (
-            "lock\n\t"
+            "lock\n\t" 
             "xaddl %0, %1\n\t"
         :   "+r" (nCount), "+m" (*pCount)
         :   /* nothing */

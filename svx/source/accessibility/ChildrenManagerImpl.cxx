@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
 
@@ -740,7 +740,7 @@ void ChildrenManagerImpl::impl_dispose (void)
     }
     catch( uno::RuntimeException&)
     {}
-
+ 
     try
     {
         if (xController.is())
@@ -749,7 +749,7 @@ void ChildrenManagerImpl::impl_dispose (void)
     }
     catch( uno::RuntimeException&)
     {}
-
+    
     maShapeTreeInfo.SetController (NULL);
 
     try
@@ -762,7 +762,7 @@ void ChildrenManagerImpl::impl_dispose (void)
     }
     catch( uno::RuntimeException& )
     {}
-
+ 
     ClearAccessibleShapeList ();
     SetShapeList (NULL);
 }
@@ -835,7 +835,7 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
         aShapeInfo,
         _rShapeTreeInfo
     );
-    Reference< XAccessible > xNewChild( pNewChild );    // keep this alive (do this before calling Init!)
+    Reference< XAccessible > xNewChild( pNewChild );	// keep this alive (do this before calling Init!)
     if ( pNewChild )
         pNewChild->Init();
 

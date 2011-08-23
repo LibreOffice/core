@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ namespace accessibility
 {
 //.........................................................................
 
-    //  ----------------------------------------------------
-    //  class AccessibleTabBarPageList
-    //  ----------------------------------------------------
+    //	----------------------------------------------------
+    //	class AccessibleTabBarPageList
+    //	----------------------------------------------------
 
     typedef ::cppu::ImplHelper3<
         ::com::sun::star::accessibility::XAccessible,
@@ -58,29 +58,29 @@ namespace accessibility
                                         public AccessibleTabBarPageList_BASE
     {
     private:
-        typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
+        typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >	> AccessibleChildren;
 
-        AccessibleChildren      m_aAccessibleChildren;
-        sal_Int32               m_nIndexInParent;
+        AccessibleChildren		m_aAccessibleChildren;
+        sal_Int32				m_nIndexInParent;
 
     protected:
-        void                    UpdateEnabled( sal_Int32 i, sal_Bool bEnabled );
-        void                    UpdateShowing( sal_Bool bShowing );
-        void                    UpdateSelected( sal_Int32 i, sal_Bool bSelected );
-        void                    UpdatePageText( sal_Int32 i );
+        void					UpdateEnabled( sal_Int32 i, sal_Bool bEnabled );
+        void					UpdateShowing( sal_Bool bShowing );
+        void					UpdateSelected( sal_Int32 i, sal_Bool bSelected );
+        void					UpdatePageText( sal_Int32 i );
 
-        void                    InsertChild( sal_Int32 i );
-        void                    RemoveChild( sal_Int32 i );
-        void                    MoveChild( sal_Int32 i, sal_Int32 j );
+        void					InsertChild( sal_Int32 i );
+        void					RemoveChild( sal_Int32 i );
+        void					MoveChild( sal_Int32 i, sal_Int32 j );
 
-        virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-        virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+        virtual void			ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+        virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-        // OCommonAccessibleComponent
-        virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+        // OCommonAccessibleComponent 
+        virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
-        virtual void SAL_CALL   disposing();
+        virtual void SAL_CALL	disposing();
 
     public:
         AccessibleTabBarPageList( TabBar* pTabBar, sal_Int32 nIndexInParent );
@@ -119,7 +119,7 @@ namespace accessibility
         virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleExtendedComponent
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -134,7 +134,7 @@ namespace accessibility
     };
 
 //.........................................................................
-}   // namespace accessibility
+}	// namespace accessibility
 //.........................................................................
 
 #endif // ACCESSIBILITY_EXT_ACCESSIBLETABBARPAGELIST_HXX_

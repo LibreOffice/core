@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ class JNI_info;
 struct BridgeRuntimeError
 {
     ::rtl::OUString m_message;
-
+    
     inline BridgeRuntimeError( ::rtl::OUString const & message )
         : m_message( message )
         {}
@@ -74,10 +74,10 @@ class JNI_context
     JNI_info const * m_jni_info;
     JNIEnv *         m_env;
     jobject          m_class_loader;
-
+    
     JNI_context( JNI_context & ); // not impl
     void operator = ( JNI_context ); // not impl
-
+    
     void java_exc_occured() const;
 public:
     inline explicit JNI_context(
@@ -86,10 +86,10 @@ public:
           m_env( env ),
           m_class_loader( class_loader )
         {}
-
+    
     inline JNI_info const * get_info() const
         { return m_jni_info; }
-
+    
     inline JNIEnv * operator -> () const
         { return m_env; }
     inline JNIEnv * get_jni_env() const
@@ -104,10 +104,10 @@ public:
     jclass findClass(
         char const * name, jclass classClass, jmethodID methodForName,
         bool inException) const;
-
+    
     inline void ensure_no_exception() const; // throws BridgeRuntimeError
     inline bool assert_no_exception() const; // asserts and clears exception
-
+    
     ::rtl::OUString get_stack_trace( jobject jo_exc = 0 ) const;
 };
 
@@ -140,7 +140,7 @@ class JNI_guarded_context
 {
     JNI_guarded_context( JNI_guarded_context & ); // not impl
     void operator = ( JNI_guarded_context ); // not impl
-
+    
 public:
     inline explicit JNI_guarded_context(
         JNI_info const * jni_info, ::jvmaccess::UnoVirtualMachine * vm_access )
@@ -157,7 +157,7 @@ class JLocalAutoRef
 {
     JNI_context const & m_jni;
     jobject m_jo;
-
+    
 public:
     inline JLocalAutoRef( JNI_context const & jni )
         : m_jni( jni ),
@@ -169,7 +169,7 @@ public:
         {}
     inline JLocalAutoRef( JLocalAutoRef & auto_ref );
     inline ~JLocalAutoRef() SAL_THROW( () );
-
+    
     inline jobject get() const
         { return m_jo; }
     inline bool is() const
@@ -243,7 +243,7 @@ struct rtl_mem
         { return mem; }
     inline static void operator delete ( void *, void * )
         {}
-
+    
     static inline ::std::auto_ptr< rtl_mem > allocate( ::std::size_t bytes );
 };
 
@@ -261,15 +261,15 @@ inline ::std::auto_ptr< rtl_mem > rtl_mem::allocate( ::std::size_t bytes )
 class TypeDescr
 {
     typelib_TypeDescription * m_td;
-
+    
     TypeDescr( TypeDescr & ); // not impl
     void operator = ( TypeDescr ); // not impl
-
+    
 public:
     inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );
     inline ~TypeDescr() SAL_THROW( () )
         { TYPELIB_DANGER_RELEASE( m_td ); }
-
+    
     inline typelib_TypeDescription * get() const
         { return m_td; }
 };

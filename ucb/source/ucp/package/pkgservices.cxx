@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ using namespace com::sun::star;
 namespace {
 
 //=========================================================================
-sal_Bool writeInfo(
+sal_Bool writeInfo( 
     void * pRegistryKey,
     const rtl::OUString & rImplementationName,
     uno::Sequence< rtl::OUString > const & rServiceNames )

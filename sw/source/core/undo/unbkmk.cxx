@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "doc.hxx"
 #include "docary.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"			// fuer die UndoIds
 #include "pam.hxx"
 
 #include "undobj.hxx"
@@ -86,7 +86,7 @@ SwRewriter SwUndoBookmark::GetRewriter() const
     return aResult;
 }
 
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------- 
 
 
 SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )

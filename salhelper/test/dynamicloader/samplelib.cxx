@@ -1,6 +1,6 @@
 #include "samplelib.hxx"
 #include <sal/types.h>
-/*
+/* 
 
 
 */
@@ -22,7 +22,7 @@ SampleLib_Api* SAL_CALL initSampleLibApi(void)
 
 }
 
-
+    
 sal_Int32 SAL_CALL funcA( sal_Int32 a)
 {
     return a;

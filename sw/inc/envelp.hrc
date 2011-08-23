@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,8 +81,8 @@
 #define STR_BTN_NEWDOC           (RC_ENVLOP_BEGIN + 65)
 #define STR_SENDER_TOKENS        (RC_ENVLOP_BEGIN + 66)
 
-#define RC_ENVPRT_HC_BEGIN       (RC_ENVLOP_BEGIN + 70)
-#define RC_ENVPRT_HC_END         (RC_ENVLOP_BEGIN + 82)
+#define RC_ENVPRT_HC_BEGIN		 (RC_ENVLOP_BEGIN + 70)
+#define RC_ENVPRT_HC_END		 (RC_ENVLOP_BEGIN + 82)
 
 // Ueberlaufpruefung ----------------------------------------------------------
 

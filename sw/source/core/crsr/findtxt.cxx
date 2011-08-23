@@ -134,13 +134,13 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                 case RES_TXTATR_METAFIELD:
                     {
                         // JP 06.05.98: mit Bug 50100 werden sie als Trenner erwuenscht und nicht
-                        //              mehr zum Wort dazu gehoerend.
+                        //				mehr zum Wort dazu gehoerend.
                         // MA 23.06.98: mit Bug 51215 sollen sie konsequenterweise auch am
-                        //              Satzanfang und -ende ignoriert werden wenn sie Leer sind.
-                        //              Dazu werden sie schlicht entfernt. Fuer den Anfang entfernen
-                        //              wir sie einfach.
-                        //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
-                        //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
+                        //				Satzanfang und -ende ignoriert werden wenn sie Leer sind.
+                        //				Dazu werden sie schlicht entfernt. Fuer den Anfang entfernen
+                        //				wir sie einfach.
+                        //				Fuer das Ende merken wir uns die Ersetzungen und entferenen
+                        //				hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
                            BOOL bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
                             !(static_cast<SwTxtFld const*>(pHt)
                                 ->GetFld().GetFld()->ExpandField(
@@ -584,12 +584,12 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
     BOOL bFnd = (BOOL)pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
 
-    /*   #i80135# if we found something in a note, Mark and Point is the same
+    /*	 #i80135# if we found something in a note, Mark and Point is the same
     if( bFnd && *pCrsr->GetMark() == *pCrsr->GetPoint() )
         return FIND_NOT_FOUND;
     */
 
-    if( bFnd && bReplace )          // String ersetzen ??
+    if( bFnd && bReplace )			// String ersetzen ??
     {
         // Replace-Methode vom SwDoc benutzen
         const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);

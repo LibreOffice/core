@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,8 +125,8 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
         (pDoc != pFmt->GetDoc()))   // different documents?
     {
         // JP 03.06.96: dann sorge dafuer, das der koperierte Anker auf
-        //              gueltigen Content zeigt! Die Umsetzung auf die
-        //              richtige Position erfolgt spaeter.
+        //				gueltigen Content zeigt! Die Umsetzung auf die
+        //				richtige Position erfolgt spaeter.
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), +2 );
         SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
         if( !pCNd )
@@ -185,7 +185,7 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
 
     // beim Ankerwechsel werden immer alle FlyFrms vom Attribut geloescht
     // JP 25.04.95: wird innerhalb des SplitNodes die Frames verschoben
-    //              koennen die Frames erhalten bleiben.
+    //				koennen die Frames erhalten bleiben.
     if( ( !pNode->GetpSwpHints() || !pNode->GetpSwpHints()->IsInSplitNode() )
         && RES_DRAWFRMFMT != pFmt->Which() )
         pFmt->DelFrms();

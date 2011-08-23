@@ -23,15 +23,15 @@
  * default to the 3.51 definitions. should define ODBCVER before here if you want an older set of defines
  ***************************/
 #ifndef ODBCVER
-#define ODBCVER 0x0351
+#define ODBCVER	0x0351
 #endif
 
 /*
  * if thi sis set, then use a 4 byte unicode definition, insteead of the 2 bye that MS use
  */
 
-#ifdef SQL_WCHART_CONVERT
-/*
+#ifdef SQL_WCHART_CONVERT  
+/* 
  * Use this if you want to use the C/C++ portable definition of  a wide char, wchar_t
  *  Microsoft hardcoded a definition of  unsigned short which may not be compatible with
  *  your platform specific wide char definition.
@@ -80,16 +80,16 @@ extern "C" {
 #else
 #define SQL_API
 #endif
-#define BOOL                int
-typedef void*               HWND;
-typedef char                CHAR;
+#define	BOOL				int
+typedef void*				HWND;
+typedef char				CHAR;
 #ifdef UNICODE
 
-/*
- * NOTE: The Microsoft unicode define is only for apps that want to use TCHARs and
+/* 
+ * NOTE: The Microsoft unicode define is only for apps that want to use TCHARs and 
  *  be able to compile for both unicode and non-unicode with the same source.
  *  This is not recommanded for linux applications and is not supported
- *  by the standard linux string header files.
+ * 	by the standard linux string header files.
  */
 #ifdef SQL_WCHART_CONVERT
 typedef wchar_t             TCHAR;
@@ -98,33 +98,33 @@ typedef signed short        TCHAR;
 #endif
 
 #else
-typedef char                TCHAR;
+typedef char				TCHAR;
 #endif
 
 #ifndef DONT_TD_VOID
-typedef void                VOID;
+typedef void				VOID;
 #endif
 
-typedef unsigned short      WORD;
+typedef unsigned short		WORD;
 #if (SIZEOF_LONG_INT == 4)
-typedef unsigned long       DWORD;
+typedef unsigned long		DWORD;
 #else
-typedef unsigned int        DWORD;
+typedef unsigned int		DWORD;
 #endif
-typedef unsigned char       BYTE;
+typedef unsigned char		BYTE;
 
 #ifdef SQL_WCHART_CONVERT
 typedef wchar_t             WCHAR;
 #else
-typedef unsigned short      WCHAR;
+typedef unsigned short 		WCHAR;
 #endif
 
-typedef WCHAR*              LPWSTR;
+typedef WCHAR* 	            LPWSTR;
 typedef const char*         LPCSTR;
 typedef const WCHAR*        LPCWSTR;
 typedef TCHAR*              LPTSTR;
 typedef char*               LPSTR;
-typedef DWORD*              LPDWORD;
+typedef DWORD*           	LPDWORD;
 
 typedef void*               HINSTANCE;
 
@@ -150,7 +150,7 @@ typedef double          SQLFLOAT;
 /*
  * Hopefully by now it should be safe to assume most drivers know about SQLLEN now
  * and the defaukt is now sizeof( SQLLEN ) = 8 on 64 bit platforms
- *
+ * 
  */
 
 #if (SIZEOF_LONG_INT == 8)
@@ -160,7 +160,7 @@ typedef unsigned int    SQLUINTEGER;
 #define SQLLEN          SQLINTEGER
 #define SQLULEN         SQLUINTEGER
 #define SQLSETPOSIROW   SQLUSMALLINT
-/*
+/* 
  * These are not supprted on 64bit ODBC according to MS, removed, so use at your peril
  *
  typedef SQLULEN         SQLROWCOUNT;
@@ -174,13 +174,13 @@ typedef unsigned int    SQLUINTEGER;
 typedef long            SQLLEN;
 typedef unsigned long   SQLULEN;
 typedef unsigned long   SQLSETPOSIROW;
-/*
+/* 
  * These are not supprted on 64bit ODBC according to MS, removed, so use at your peril
  *
- typedef SQLULEN        SQLTRANSID;
- typedef SQLULEN        SQLROWCOUNT;
- typedef SQLUINTEGER    SQLROWSETSIZE;
- typedef SQLLEN         SQLROWOFFSET;
+ typedef SQLULEN 		SQLTRANSID;
+ typedef SQLULEN 		SQLROWCOUNT;
+ typedef SQLUINTEGER 	SQLROWSETSIZE;
+ typedef SQLLEN 		SQLROWOFFSET;
  */
 typedef SQLULEN         SQLROWCOUNT;
 typedef SQLULEN         SQLROWSETSIZE;
@@ -221,7 +221,7 @@ typedef unsigned char   SQLVARCHAR;
 typedef SQLSMALLINT     SQLRETURN;
 
 #if (ODBCVER >= 0x0300)
-typedef void *                  SQLHANDLE;
+typedef void * 			        SQLHANDLE; 
 typedef SQLHANDLE               SQLHENV;
 typedef SQLHANDLE               SQLHDBC;
 typedef SQLHANDLE               SQLHSTMT;
@@ -233,7 +233,7 @@ typedef void *                  SQLHSTMT;
 /*
  * some things like PHP won't build without this
  */
-typedef void *                  SQLHANDLE;
+typedef void * 			        SQLHANDLE; 
 #endif
 
 /****************************
@@ -244,13 +244,13 @@ typedef void *                  SQLHANDLE;
  ***************************/
 
 #if (ODBCVER >= 0x0300)
-typedef SQLHANDLE               HENV;
-typedef SQLHANDLE               HDBC;
-typedef SQLHANDLE               HSTMT;
+typedef SQLHANDLE          		HENV;
+typedef SQLHANDLE          		HDBC;
+typedef SQLHANDLE          		HSTMT;
 #else
-typedef void *                  HENV;
-typedef void *                  HDBC;
-typedef void *                  HSTMT;
+typedef void *          	    HENV;
+typedef void *          	    HDBC;
+typedef void *          	    HSTMT;
 #endif
 
 
@@ -277,9 +277,9 @@ typedef signed short            SSHORT;
 typedef unsigned long           ULONG;
 typedef unsigned short          USHORT;
 typedef double                  SDOUBLE;
-typedef double                  LDOUBLE;
+typedef double            		LDOUBLE;
 typedef float                   SFLOAT;
-typedef void*                   PTR;
+typedef void*              		PTR;
 typedef signed short            RETCODE;
 typedef void*                   SQLHWND;
 
@@ -288,8 +288,8 @@ typedef void*                   SQLHWND;
 /****************************
  * standard structs for working with date/times
  ***************************/
-#ifndef __SQLDATE
-#define __SQLDATE
+#ifndef	__SQLDATE
+#define	__SQLDATE
 typedef struct tagDATE_STRUCT
 {
         SQLSMALLINT    year;
@@ -298,7 +298,7 @@ typedef struct tagDATE_STRUCT
 } DATE_STRUCT;
 
 #if (ODBCVER >= 0x0300)
-typedef DATE_STRUCT SQL_DATE_STRUCT;
+typedef DATE_STRUCT	SQL_DATE_STRUCT;
 #endif
 
 typedef struct tagTIME_STRUCT
@@ -309,7 +309,7 @@ typedef struct tagTIME_STRUCT
 } TIME_STRUCT;
 
 #if (ODBCVER >= 0x0300)
-typedef TIME_STRUCT SQL_TIME_STRUCT;
+typedef TIME_STRUCT	SQL_TIME_STRUCT;
 #endif
 
 typedef struct tagTIMESTAMP_STRUCT
@@ -324,26 +324,26 @@ typedef struct tagTIMESTAMP_STRUCT
 } TIMESTAMP_STRUCT;
 
 #if (ODBCVER >= 0x0300)
-typedef TIMESTAMP_STRUCT    SQL_TIMESTAMP_STRUCT;
+typedef TIMESTAMP_STRUCT	SQL_TIMESTAMP_STRUCT;
 #endif
 
 
 #if (ODBCVER >= 0x0300)
 typedef enum
 {
-    SQL_IS_YEAR                     = 1,
-    SQL_IS_MONTH                    = 2,
-    SQL_IS_DAY                      = 3,
-    SQL_IS_HOUR                     = 4,
-    SQL_IS_MINUTE                   = 5,
-    SQL_IS_SECOND                   = 6,
-    SQL_IS_YEAR_TO_MONTH            = 7,
-    SQL_IS_DAY_TO_HOUR              = 8,
-    SQL_IS_DAY_TO_MINUTE            = 9,
-    SQL_IS_DAY_TO_SECOND            = 10,
-    SQL_IS_HOUR_TO_MINUTE           = 11,
-    SQL_IS_HOUR_TO_SECOND           = 12,
-    SQL_IS_MINUTE_TO_SECOND         = 13
+    SQL_IS_YEAR						= 1,
+    SQL_IS_MONTH					= 2,
+    SQL_IS_DAY						= 3,
+    SQL_IS_HOUR						= 4,
+    SQL_IS_MINUTE					= 5,
+    SQL_IS_SECOND					= 6,
+    SQL_IS_YEAR_TO_MONTH			= 7,
+    SQL_IS_DAY_TO_HOUR				= 8,
+    SQL_IS_DAY_TO_MINUTE			= 9,
+    SQL_IS_DAY_TO_SECOND			= 10,
+    SQL_IS_HOUR_TO_MINUTE			= 11,
+    SQL_IS_HOUR_TO_SECOND			= 12,
+    SQL_IS_MINUTE_TO_SECOND			= 13
 } SQLINTERVAL;
 
 #endif
@@ -351,26 +351,26 @@ typedef enum
 #if (ODBCVER >= 0x0300)
 typedef struct tagSQL_YEAR_MONTH
 {
-        SQLUINTEGER     year;
-        SQLUINTEGER     month;
+        SQLUINTEGER		year;
+        SQLUINTEGER		month;
 } SQL_YEAR_MONTH_STRUCT;
 
 typedef struct tagSQL_DAY_SECOND
 {
-        SQLUINTEGER     day;
-        SQLUINTEGER     hour;
-        SQLUINTEGER     minute;
-        SQLUINTEGER     second;
-        SQLUINTEGER     fraction;
+        SQLUINTEGER		day;
+        SQLUINTEGER		hour;
+        SQLUINTEGER		minute;
+        SQLUINTEGER		second;
+        SQLUINTEGER		fraction;
 } SQL_DAY_SECOND_STRUCT;
 
 typedef struct tagSQL_INTERVAL_STRUCT
 {
-    SQLINTERVAL     interval_type;
-    SQLSMALLINT     interval_sign;
+    SQLINTERVAL		interval_type;
+    SQLSMALLINT		interval_sign;
     union {
-        SQL_YEAR_MONTH_STRUCT       year_month;
-        SQL_DAY_SECOND_STRUCT       day_second;
+        SQL_YEAR_MONTH_STRUCT		year_month;
+        SQL_DAY_SECOND_STRUCT		day_second;
     } intval;
 
 } SQL_INTERVAL_STRUCT;
@@ -385,12 +385,12 @@ typedef struct tagSQL_INTERVAL_STRUCT
 #ifndef ODBCINT64
 # if (ODBCVER >= 0x0300)
 # if (SIZEOF_LONG_INT == 8)
-#   define ODBCINT64        long
-#   define UODBCINT64   unsigned long
+#   define ODBCINT64	    long
+#   define UODBCINT64	unsigned long
 # else
 #  ifdef HAVE_LONG_LONG
-#   define ODBCINT64        long long
-#   define UODBCINT64   unsigned long long
+#   define ODBCINT64	    long long
+#   define UODBCINT64	unsigned long long
 #  else
 /*
  * may fail in some cases, but what else can we do ?
@@ -405,18 +405,18 @@ struct __bigint_struct_u
     unsigned int    hiword;
     unsigned int    loword;
 };
-#   define ODBCINT64        struct __bigint_struct
-#   define UODBCINT64   struct __bigint_struct_u
+#   define ODBCINT64	    struct __bigint_struct
+#   define UODBCINT64	struct __bigint_struct_u
 #  endif
 # endif
 #endif
 #endif
 
 #ifdef ODBCINT64
-typedef ODBCINT64   SQLBIGINT;
+typedef ODBCINT64	SQLBIGINT;
 #endif
 #ifdef UODBCINT64
-typedef UODBCINT64  SQLUBIGINT;
+typedef UODBCINT64	SQLUBIGINT;
 #endif
 
 
@@ -424,20 +424,20 @@ typedef UODBCINT64  SQLUBIGINT;
  * cursor and bookmark
  ***************************/
 #if (ODBCVER >= 0x0300)
-#define SQL_MAX_NUMERIC_LEN     16
+#define SQL_MAX_NUMERIC_LEN		16
 typedef struct tagSQL_NUMERIC_STRUCT
 {
-    SQLCHAR     precision;
-    SQLSCHAR    scale;
-    SQLCHAR     sign;   /* 1=pos 0=neg */
-    SQLCHAR     val[SQL_MAX_NUMERIC_LEN];
+    SQLCHAR		precision;
+    SQLSCHAR	scale;
+    SQLCHAR		sign;	/* 1=pos 0=neg */
+    SQLCHAR		val[SQL_MAX_NUMERIC_LEN];
 } SQL_NUMERIC_STRUCT;
 #endif
 
 #if (ODBCVER >= 0x0350)
 #ifdef GUID_DEFINED
 #ifndef ALLREADY_HAVE_WINDOWS_TYPE
-typedef GUID    SQLGUID;
+typedef GUID	SQLGUID;
 #else
 typedef struct  tagSQLGUID
 {

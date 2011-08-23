@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,10 +65,10 @@ SwSmartTagMgr::~SwSmartTagMgr()
 void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-
+    
     // Installed recognizers have changed. We remove all existing smart tags:
     SW_MOD()->CheckSpellChanges( sal_False, sal_True, sal_True, sal_True );
-
+    
     SmartTagMgr::modified( rEO );
 }
 
@@ -88,7 +88,7 @@ SmartTagMgr& SwSmartTagMgr::Get()
 {
     if ( !pSmartTagMgr )
         pSmartTagMgr = new SmartTagMgr( SwDocShell::Factory().GetModuleName() );
-
+                                         
      return *pSmartTagMgr;
 }
 */

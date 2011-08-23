@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@ namespace reportdesign
     using namespace comphelper;
 uno::Sequence< ::rtl::OUString > lcl_getShapeOptionals()
 {
-    ::rtl::OUString pProps[] = {
-        PROPERTY_DATAFIELD
+    ::rtl::OUString pProps[] = { 
+        PROPERTY_DATAFIELD 
         ,PROPERTY_CONTROLBACKGROUND
         ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
     };
@@ -63,7 +63,7 @@ uno::Sequence< ::rtl::OUString > lcl_getShapeOptionals()
 DBG_NAME( rpt_OShape )
 // -----------------------------------------------------------------------------
 OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
-:ShapeBase(m_aMutex)
+:ShapeBase(m_aMutex) 
 ,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
@@ -77,7 +77,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
                ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                ,uno::Reference< drawing::XShape >& _xShape
                ,const ::rtl::OUString& _sServiceName)
-:ShapeBase(m_aMutex)
+:ShapeBase(m_aMutex) 
 ,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
@@ -121,10 +121,10 @@ uno::Any SAL_CALL OShape::queryInterface( const uno::Type& _rType ) throw (uno::
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::dispose() throw(uno::RuntimeException)
+void SAL_CALL OShape::dispose() throw(uno::RuntimeException) 
 {
     ShapePropertySet::dispose();
-    cppu::WeakComponentImplHelperBase::dispose();
+    cppu::WeakComponentImplHelperBase::dispose(); 
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OShape::getImplementationName_Static(  ) throw(uno::RuntimeException)
@@ -142,7 +142,7 @@ uno::Sequence< ::rtl::OUString > OShape::getSupportedServiceNames_Static(  ) thr
 {
     uno::Sequence< ::rtl::OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_SHAPE;
-
+    
     return aServices;
 }
 //------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OShape::getSupportedServiceNames(  ) t
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OShape::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
 {
-
+    
     return m_sServiceName == ServiceName || ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
 // -----------------------------------------------------------------------------
@@ -191,7 +191,7 @@ void SAL_CALL OShape::setControlBackgroundTransparent( ::sal_Bool /*_controlback
 // -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OShape::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
-
+    
     //return ShapePropertySet::getPropertySetInfo();
     return cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
@@ -479,7 +479,7 @@ void SAL_CALL OShape::setTransformation( const drawing::HomogenMatrix3& _transfo
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aProps.aComponent.m_xProperty->getPropertyValue(PROPERTY_CUSTOMSHAPEENGINE) >>= m_CustomShapeEngine;
-
+    
     return m_CustomShapeEngine;
 }
 // -----------------------------------------------------------------------------

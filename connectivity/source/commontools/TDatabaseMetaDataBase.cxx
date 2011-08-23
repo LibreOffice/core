@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
         ::comphelper::SequenceAsHashMap aMap(m_aConnectionInfo);
         Sequence< Any > aTypeInfoSettings;
         aTypeInfoSettings = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings")),aTypeInfoSettings);
-
+        
         if ( xRow.is() )
         {
             static sal_Int32 pTypes[] = {
@@ -128,7 +128,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
             if ( aTypeInfoSettings.getLength() > 1 && ((aTypeInfoSettings.getLength() % 2) == 0) )
             {
                 const Any* pIter = aTypeInfoSettings.getConstArray();
-                const Any* pEnd  = pIter + aTypeInfoSettings.getLength();
+                const Any* pEnd	 = pIter + aTypeInfoSettings.getLength();
                 try
                 {
                     for(;pIter != pEnd;++pIter)
@@ -154,7 +154,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                     aValue.fill(i,*pType,xRow);
                     aRow.push_back(new ORowSetValueDecorator(aValue));
                 }
-
+                
                 ::std::vector<ExpressionNodeSharedPtr>::iterator aIter = aConditions.begin();
                 ::std::vector<ExpressionNodeSharedPtr>::iterator aEnd = aConditions.end();
                 for (; aIter != aEnd; ++aIter)

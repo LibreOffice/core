@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,18 +44,18 @@ class HtmlCreator
 {
   public:
                         HtmlCreator(
-                            const char *        i_pOutputFileName,
-                            const XmlElement &  i_rDocument,
-                            const Simstr &      i_sIDL_BaseDirectory );
+                            const char *		i_pOutputFileName,
+                            const XmlElement &	i_rDocument,
+                            const Simstr &		i_sIDL_BaseDirectory );
                         ~HtmlCreator();
 
-    void                Run();
+    void				Run();
 
-    void                StartTable();
-    void                FinishTable();
-    void                StartBigCell(
-                            const char *        i_sTitle );
-    void                FinishBigCell();
+    void				StartTable();
+    void				FinishTable();
+    void				StartBigCell(
+                            const char *		i_sTitle );
+    void				FinishBigCell();
 
     void                Write_SglTextElement(
                             const SglTextElement &
@@ -66,12 +66,12 @@ class HtmlCreator
                                                 i_rElement );
     void                Write_SglText(
                             const Simstr &      i_sName,
-                            const Simstr &      i_sValue );
+                            const Simstr &		i_sValue );
     void                Write_ReferenceDocu(
                             const Simstr &      i_sName,
-                            const Simstr &      i_sRef,
-                            const Simstr &      i_sRole,
-                            const Simstr &      i_sTitle );
+                            const Simstr &		i_sRef,
+                            const Simstr &		i_sRole,
+                            const Simstr &		i_sTitle );
   private:
     void                StartRow();
     void                FinishRow();
@@ -80,15 +80,15 @@ class HtmlCreator
     void                FinishCell();
 
     void                WriteElementName(
-                            const Simstr &      i_sName,
+                            const Simstr & 		i_sName,
                             bool                i_bStrong );
-    void                WriteStr(
-                            const char *        i_sStr )
+    void				WriteStr(
+                            const char * 		i_sStr )
                                                 { aFile.write( i_sStr, (int) strlen(i_sStr) ); }
     // DATA
-    std::ofstream       aFile;
-    const XmlElement &  rDocument;
-    Simstr              sIdl_BaseDirectory;
+    std::ofstream		aFile;
+    const XmlElement &	rDocument;
+    Simstr				sIdl_BaseDirectory;
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,14 +76,14 @@ static USHORT pPageTableRanges[] =
     0
 };
 
-BOOL lcl_PutVObjModeItem( USHORT            nWhich,
-                          SfxItemSet&       rCoreSet,
-                          const SfxItemSet& rOldSet,
-                          const CheckBox&   rBtn );
+BOOL lcl_PutVObjModeItem( USHORT			nWhich,
+                          SfxItemSet&		rCoreSet,
+                          const SfxItemSet&	rOldSet,
+                          const CheckBox&	rBtn );
 
-BOOL lcl_PutScaleItem( USHORT               nWhich,
-                       SfxItemSet&          rCoreSet,
-                       const SfxItemSet&    rOldSet,
+BOOL lcl_PutScaleItem( USHORT				nWhich,
+                       SfxItemSet&			rCoreSet,
+                       const SfxItemSet&	rOldSet,
                        const ListBox&       rListBox,
                        USHORT               nLBEntry,
                        const SpinField&     rEd,
@@ -97,22 +97,22 @@ BOOL lcl_PutScaleItem2( USHORT               nWhich,
                        const NumericField&  rEd1,
                        const NumericField&  rEd2 );
 
-BOOL lcl_PutBoolItem( USHORT            nWhich,
-                      SfxItemSet&       rCoreSet,
-                      const SfxItemSet& rOldSet,
-                      BOOL              bIsChecked,
-                      BOOL              bSavedValue );
+BOOL lcl_PutBoolItem( USHORT			nWhich,
+                      SfxItemSet&		rCoreSet,
+                      const SfxItemSet&	rOldSet,
+                      BOOL				bIsChecked,
+                      BOOL				bSavedValue );
 
 //------------------------------------------------------------------------
 
-#define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
-#define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
-#define SCALE_HDL           LINK(this,ScTablePage,ScaleHdl)
+#define PAGENO_HDL 			LINK(this,ScTablePage,PageNoHdl)
+#define PAGEDIR_HDL 		LINK(this,ScTablePage,PageDirHdl)
+#define SCALE_HDL			LINK(this,ScTablePage,ScaleHdl)
 
 #define WAS_DEFAULT(w,s)    (SFX_ITEM_DEFAULT==(s).GetItemState((w),TRUE))
-#define GET_BOOL(sid,set)   ((const SfxBoolItem&)((set).Get(GetWhich((sid))))).GetValue()
-#define GET_USHORT(sid,set) (USHORT)((const SfxUInt16Item&)((set).Get(GetWhich((sid))))).GetValue()
-#define GET_SHOW(sid,set)   ( ScVObjMode( ((const ScViewObjectModeItem&)((set).Get(GetWhich((sid))))).GetValue() ) \
+#define GET_BOOL(sid,set)	((const SfxBoolItem&)((set).Get(GetWhich((sid))))).GetValue()
+#define GET_USHORT(sid,set)	(USHORT)((const SfxUInt16Item&)((set).Get(GetWhich((sid))))).GetValue()
+#define GET_SHOW(sid,set) 	( ScVObjMode( ((const ScViewObjectModeItem&)((set).Get(GetWhich((sid))))).GetValue() ) \
                               == VOBJ_MODE_SHOW )
 
 //========================================================================
@@ -122,29 +122,29 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
         SfxTabPage( pParent, ScResId( RID_SCPAGE_TABLE ), rCoreAttrs ),
 
         aFlPageDir          ( this, ScResId( FL_PAGEDIR ) ),
-        aBtnTopDown         ( this, ScResId( BTN_TOPDOWN ) ),
-        aBtnLeftRight       ( this, ScResId( BTN_LEFTRIGHT ) ),
-        aBmpPageDir         ( this, ScResId( BMP_PAGEDIR ) ),
-        aImgLeftRight       ( ScResId( IMG_LEFTRIGHT ) ),
-        aImgTopDown         ( ScResId( IMG_TOPDOWN ) ),
+        aBtnTopDown 		( this, ScResId( BTN_TOPDOWN ) ),
+        aBtnLeftRight		( this, ScResId( BTN_LEFTRIGHT ) ),
+        aBmpPageDir 		( this, ScResId( BMP_PAGEDIR ) ),
+        aImgLeftRight		( ScResId( IMG_LEFTRIGHT ) ),
+        aImgTopDown 		( ScResId( IMG_TOPDOWN ) ),
         aImgLeftRightHC     ( ScResId( IMG_LEFTRIGHT_H ) ),
         aImgTopDownHC       ( ScResId( IMG_TOPDOWN_H ) ),
-        aBtnPageNo          ( this, ScResId( BTN_PAGENO ) ),
-        aEdPageNo           ( this, ScResId( ED_PAGENO ) ),
+        aBtnPageNo			( this, ScResId( BTN_PAGENO ) ),
+        aEdPageNo			( this, ScResId( ED_PAGENO ) ),
         aFlPrint            ( this, ScResId( FL_PRINT ) ),
-        aBtnHeaders         ( this, ScResId( BTN_HEADER ) ),
-        aBtnGrid            ( this, ScResId( BTN_GRID ) ),
-        aBtnNotes           ( this, ScResId( BTN_NOTES ) ),
-        aBtnObjects         ( this, ScResId( BTN_OBJECTS ) ),
-        aBtnCharts          ( this, ScResId( BTN_CHARTS ) ),
-        aBtnDrawings        ( this, ScResId( BTN_DRAWINGS ) ),
-        aBtnFormulas        ( this, ScResId( BTN_FORMULAS ) ),
-        aBtnNullVals        ( this, ScResId( BTN_NULLVALS ) ),
+        aBtnHeaders 		( this, ScResId( BTN_HEADER ) ),
+        aBtnGrid			( this, ScResId( BTN_GRID ) ),
+        aBtnNotes			( this, ScResId( BTN_NOTES ) ),
+        aBtnObjects 		( this, ScResId( BTN_OBJECTS ) ),
+        aBtnCharts			( this, ScResId( BTN_CHARTS ) ),
+        aBtnDrawings		( this, ScResId( BTN_DRAWINGS ) ),
+        aBtnFormulas		( this, ScResId( BTN_FORMULAS ) ),
+        aBtnNullVals		( this, ScResId( BTN_NULLVALS ) ),
         aFlScale            ( this, ScResId( FL_SCALE ) ),
         aFtScaleMode        ( this, ScResId( FT_SCALEMODE ) ),
         aLbScaleMode        ( this, ScResId( LB_SCALEMODE ) ),
         aFtScaleAll         ( this, ScResId( FT_SCALEFACTOR ) ),
-        aEdScaleAll         ( this, ScResId( ED_SCALEALL ) ),
+        aEdScaleAll 		( this, ScResId( ED_SCALEALL ) ),
         aFtScalePageWidth   ( this, ScResId( FT_SCALEPAGEWIDTH ) ),
         aEdScalePageWidth   ( this, ScResId( ED_SCALEPAGEWIDTH ) ),
         aFtScalePageHeight  ( this, ScResId( FT_SCALEPAGEHEIGHT ) ),
@@ -199,19 +199,19 @@ SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 
 void ScTablePage::Reset( const SfxItemSet& rCoreSet )
 {
-    BOOL    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
-    USHORT  nWhich   = 0;
+    BOOL	bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
+    USHORT	nWhich   = 0;
 
     //-----------
     // BOOL-Flags
     //-----------
-    aBtnNotes       .Check( GET_BOOL(SID_SCATTR_PAGE_NOTES,rCoreSet) );
-    aBtnGrid        .Check( GET_BOOL(SID_SCATTR_PAGE_GRID,rCoreSet) );
-    aBtnHeaders     .Check( GET_BOOL(SID_SCATTR_PAGE_HEADERS,rCoreSet) );
-    aBtnFormulas    .Check( GET_BOOL(SID_SCATTR_PAGE_FORMULAS,rCoreSet) );
-    aBtnNullVals    .Check( GET_BOOL(SID_SCATTR_PAGE_NULLVALS,rCoreSet) );
-    aBtnTopDown     .Check( bTopDown );
-    aBtnLeftRight   .Check( !bTopDown );
+    aBtnNotes		.Check( GET_BOOL(SID_SCATTR_PAGE_NOTES,rCoreSet) );
+    aBtnGrid		.Check( GET_BOOL(SID_SCATTR_PAGE_GRID,rCoreSet) );
+    aBtnHeaders 	.Check( GET_BOOL(SID_SCATTR_PAGE_HEADERS,rCoreSet) );
+    aBtnFormulas	.Check( GET_BOOL(SID_SCATTR_PAGE_FORMULAS,rCoreSet) );
+    aBtnNullVals	.Check( GET_BOOL(SID_SCATTR_PAGE_NULLVALS,rCoreSet) );
+    aBtnTopDown 	.Check( bTopDown );
+    aBtnLeftRight	.Check( !bTopDown );
 
     //------------------
     // Erste Druckseite:
@@ -224,9 +224,9 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     //-------------------
     // Objektdarstellung:
     //-------------------
-    aBtnCharts      .Check( GET_SHOW( SID_SCATTR_PAGE_CHARTS, rCoreSet ) );
-    aBtnObjects     .Check( GET_SHOW( SID_SCATTR_PAGE_OBJECTS, rCoreSet ) );
-    aBtnDrawings    .Check( GET_SHOW( SID_SCATTR_PAGE_DRAWINGS, rCoreSet ) );
+    aBtnCharts		.Check( GET_SHOW( SID_SCATTR_PAGE_CHARTS, rCoreSet ) );
+    aBtnObjects 	.Check( GET_SHOW( SID_SCATTR_PAGE_OBJECTS, rCoreSet ) );
+    aBtnDrawings	.Check( GET_SHOW( SID_SCATTR_PAGE_DRAWINGS, rCoreSet ) );
 
     //------------
     // Skalierung:
@@ -278,32 +278,32 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     ScaleHdl( NULL );
 
     // merken fuer FillItemSet
-    aBtnFormulas    .SaveValue();
-    aBtnNullVals    .SaveValue();
-    aBtnNotes       .SaveValue();
-    aBtnGrid        .SaveValue();
-    aBtnHeaders     .SaveValue();
-    aBtnTopDown     .SaveValue();
-    aBtnLeftRight   .SaveValue();
+    aBtnFormulas	.SaveValue();
+    aBtnNullVals	.SaveValue();
+    aBtnNotes		.SaveValue();
+    aBtnGrid		.SaveValue();
+    aBtnHeaders 	.SaveValue();
+    aBtnTopDown 	.SaveValue();
+    aBtnLeftRight	.SaveValue();
     aLbScaleMode    .SaveValue();
-    aBtnCharts      .SaveValue();
-    aBtnObjects     .SaveValue();
-    aBtnDrawings    .SaveValue();
-    aBtnPageNo      .SaveValue();
-    aEdPageNo       .SaveValue();
-    aEdScaleAll     .SaveValue();
+    aBtnCharts		.SaveValue();
+    aBtnObjects 	.SaveValue();
+    aBtnDrawings	.SaveValue();
+    aBtnPageNo		.SaveValue();
+    aEdPageNo		.SaveValue();
+    aEdScaleAll		.SaveValue();
     aEdScalePageWidth.SaveValue();
     aEdScalePageHeight.SaveValue();
-    aEdScalePageNum .SaveValue();
+    aEdScalePageNum	.SaveValue();
 }
 
 // -----------------------------------------------------------------------
 
 BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
-    const SfxItemSet&   rOldSet      = GetItemSet();
-    USHORT              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
-    BOOL                bDataChanged = FALSE;
+    const SfxItemSet&	rOldSet		 = GetItemSet();
+    USHORT				nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
+    BOOL				bDataChanged = FALSE;
 
     //-----------
     // BOOL-Flags
@@ -345,7 +345,7 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     BOOL bUseValue = aBtnPageNo.IsChecked();
 
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
-        && (    (!bUseValue && bUseValue == aBtnPageNo.GetSavedValue())
+        && (	(!bUseValue && bUseValue == aBtnPageNo.GetSavedValue())
             || (   bUseValue && bUseValue == aBtnPageNo.GetSavedValue()
                 && aEdPageNo.GetText() == aEdPageNo.GetSavedValue() ) ) )
     {
@@ -475,11 +475,11 @@ IMPL_LINK( ScTablePage, ScaleHdl, ListBox*, EMPTYARG )
 // Hilfsfunktionen fuer FillItemSet:
 //========================================================================
 
-BOOL lcl_PutBoolItem( USHORT            nWhich,
-                     SfxItemSet&        rCoreSet,
-                     const SfxItemSet&  rOldSet,
-                     BOOL               bIsChecked,
-                     BOOL               bSavedValue )
+BOOL lcl_PutBoolItem( USHORT			nWhich,
+                     SfxItemSet&		rCoreSet,
+                     const SfxItemSet&	rOldSet,
+                     BOOL				bIsChecked,
+                     BOOL				bSavedValue )
 {
     BOOL bDataChanged = (   bSavedValue == bIsChecked
                          && WAS_DEFAULT(nWhich,rOldSet) );
@@ -494,10 +494,10 @@ BOOL lcl_PutBoolItem( USHORT            nWhich,
 
 //------------------------------------------------------------------------
 
-BOOL lcl_PutVObjModeItem( USHORT            nWhich,
-                         SfxItemSet&        rCoreSet,
-                         const SfxItemSet&  rOldSet,
-                         const CheckBox&    rBtn )
+BOOL lcl_PutVObjModeItem( USHORT			nWhich,
+                         SfxItemSet&		rCoreSet,
+                         const SfxItemSet&	rOldSet,
+                         const CheckBox&	rBtn )
 {
     BOOL bIsChecked   = rBtn.IsChecked();
     BOOL bDataChanged = (   rBtn.GetSavedValue() == bIsChecked
@@ -515,9 +515,9 @@ BOOL lcl_PutVObjModeItem( USHORT            nWhich,
 
 //------------------------------------------------------------------------
 
-BOOL lcl_PutScaleItem( USHORT               nWhich,
-                      SfxItemSet&           rCoreSet,
-                      const SfxItemSet&     rOldSet,
+BOOL lcl_PutScaleItem( USHORT				nWhich,
+                      SfxItemSet&			rCoreSet,
+                      const SfxItemSet&		rOldSet,
                       const ListBox&        rListBox,
                       USHORT                nLBEntry,
                       const SpinField&      rEd,

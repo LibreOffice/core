@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_UICONFIGURATION_UICATEGORYDESCRPTION_HXX_
@@ -41,7 +41,7 @@
 #include "properties.h"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -50,7 +50,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -64,7 +64,7 @@
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
 //
 
@@ -75,7 +75,7 @@ using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
-//  Namespace
+//	Namespace
 //_________________________________________________________________________________________________________________
 //
 
@@ -95,7 +95,7 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  Configuration access class for PopupMenuControllerFactory implementation
+//	Configuration access class for PopupMenuControllerFactory implementation
 //*****************************************************************************************************************
 
 class ConfigurationAccess_UICategory : // Order is neccessary for right initialization!
@@ -157,7 +157,7 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
 };
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 
 ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XMultiServiceFactory >& rServiceManager ) :
@@ -436,11 +436,11 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UICategoryDescription                   ,
-                                            ::cppu::OWeakObject                     ,
-                                            SERVICENAME_UICATEGORYDESCRIPTION       ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UICategoryDescription				    ,
+                                            ::cppu::OWeakObject						,
+                                            SERVICENAME_UICATEGORYDESCRIPTION	    ,
                                             IMPLEMENTATIONNAME_UICATEGORYDESCRIPTION
                                         )
 

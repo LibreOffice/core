@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace dbaui
     {
         OTextConnectionHelper();
 
-        Link        m_aModifiedHandler;     /// to be called if something on the page has been modified
+        Link		m_aModifiedHandler;		/// to be called if something on the page has been modified
 
     public:
         OTextConnectionHelper( Window* pParent, const short _nAvailableSections );
@@ -88,24 +88,24 @@ namespace dbaui
         RadioButton m_aRBAccessOtherFiles;
         Edit        m_aETOwnExtension;
         FixedText   m_aFTExtensionExample;
-        FixedLine   m_aLineFormat;
-        FixedText   m_aFieldSeparatorLabel;
-        ComboBox    m_aFieldSeparator;
-        FixedText   m_aTextSeparatorLabel;
-        ComboBox    m_aTextSeparator;
-        FixedText   m_aDecimalSeparatorLabel;
-        ComboBox    m_aDecimalSeparator;
-        FixedText   m_aThousandsSeparatorLabel;
-        ComboBox    m_aThousandsSeparator;
-          CheckBox  m_aRowHeader;
+        FixedLine	m_aLineFormat;
+        FixedText	m_aFieldSeparatorLabel;
+        ComboBox	m_aFieldSeparator;
+        FixedText	m_aTextSeparatorLabel;
+        ComboBox	m_aTextSeparator;
+        FixedText	m_aDecimalSeparatorLabel;
+        ComboBox	m_aDecimalSeparator;
+        FixedText	m_aThousandsSeparatorLabel;
+        ComboBox	m_aThousandsSeparator;
+          CheckBox	m_aRowHeader;
         FixedLine   m_aCharSetHeader;
         FixedText   m_aCharSetLabel;
         CharSetListBox  m_aCharSet;
-        String      m_aFieldSeparatorList;
-        String      m_aTextSeparatorList;
-        String      m_aTextNone;
+        String		m_aFieldSeparatorList;
+        String		m_aTextSeparatorList;
+        String		m_aTextNone;
         String      m_aOldExtension;
-        Link        m_aGetExtensionHandler; /// to be called if a new type is selected
+        Link		m_aGetExtensionHandler;	/// to be called if a new type is selected
 
         short       m_nAvailableSections;
 
@@ -117,11 +117,11 @@ namespace dbaui
         DECL_LINK(OnEditModified,Edit*);
 
     private:
-        String      GetSeparator( const ComboBox& rBox, const String& rList );
-        void        SetSeparator( ComboBox& rBox, const String& rList, const String& rVal );
+        String		GetSeparator( const ComboBox& rBox, const String& rList );
+        void		SetSeparator( ComboBox& rBox, const String& rList, const String& rVal );
         void        SetExtension(const String& _rVal);
 
-
+        
     public:
         void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bValid);
         void        fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -133,7 +133,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_DBWIZ2_HXX

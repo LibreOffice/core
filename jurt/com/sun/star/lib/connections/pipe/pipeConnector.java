@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,10 +128,10 @@ public final class pipeConnector implements XConnector {
         if (bConnected) {
             throw new ConnectionSetupException("alread connected");
         }
-
-    try
-    {
-        XConnection xConn = new PipeConnection( connectionDescription );
+    
+    try 
+    { 
+        XConnection xConn = new PipeConnection( connectionDescription ); 
         bConnected = true;
         return xConn;
     }

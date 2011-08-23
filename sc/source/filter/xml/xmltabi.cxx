@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,17 +64,17 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-/**
- * Determine whether this table is an external reference cache from its
+/** 
+ * Determine whether this table is an external reference cache from its 
  * name.  There is currently no way of determining whether a table is a
- * regular table or an external reference cache other than examining the
- * name itself.  We should probably introduce a new boolean value for
- * table:table element and use it instead of doing this, to make it more
- * reliable and future-proof.
+ * regular table or an external reference cache other than examining the 
+ * name itself.  We should probably introduce a new boolean value for 
+ * table:table element and use it instead of doing this, to make it more 
+ * reliable and future-proof. 
  *
- * @param rName
- *
- * @return
+ * @param rName 
+ * 
+ * @return 
  */
 static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rUrl, rtl::OUString& rExtTabName)
 {
@@ -241,7 +241,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLName);
     if (pExternalRefInfo.get())
     {
-        // We only care about the table-row and table-source elements for
+        // We only care about the table-row and table-source elements for 
         // external cache data.
         switch (nToken)
         {

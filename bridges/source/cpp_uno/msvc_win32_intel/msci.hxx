@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ const long MSVC_magic_number = 0x19930520L;
 
 //==============================================================================
 type_info * msci_getRTTI( ::rtl::OUString const & rUNOname );
-
+ 
 //==============================================================================
 int msci_filterCppException(
     EXCEPTION_POINTERS * pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno );

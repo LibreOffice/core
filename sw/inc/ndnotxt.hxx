@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,19 +42,19 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
 
 //    String aAlternateText;      // alternativer Text  (HTML)
 
-    PolyPolygon *pContour;      // Polygon fuer Konturumlauf
+    PolyPolygon *pContour;		// Polygon fuer Konturumlauf
     BOOL bAutomaticContour : 1; // automatic contour polygon, not manipulated
     BOOL bContourMapModeValid : 1; // contour map mode is not the graphics's
                                    // prefered map mode, but either
                                       // MM100 or or pixel
-    BOOL bPixelContour : 1;     // contour map mode is invalid and pixel.
+    BOOL bPixelContour : 1;		// contour map mode is invalid and pixel.
 
     // erzeugt fuer alle Ableitungen einen AttrSet mit Bereichen
     // fuer Frame- und Grafik-Attributen (wird nur vom SwCntntNode gerufen)
     virtual void NewAttrSet( SwAttrPool& );
 
-    SwNoTxtNode( const SwNoTxtNode& );              //nicht erlaubt
-    SwNoTxtNode &operator=( const SwNoTxtNode& );   //nicht erlaubt
+    SwNoTxtNode( const SwNoTxtNode& );				//nicht erlaubt
+    SwNoTxtNode &operator=( const SwNoTxtNode& );	//nicht erlaubt
 
 protected:
     SwNoTxtNode( const SwNodeIndex &rWhere, const BYTE nNdType,
@@ -86,20 +86,20 @@ public:
     void               SetContour( const PolyPolygon *pPoly,
                                    BOOL bAutomatic = FALSE );
     const PolyPolygon *HasContour() const;
-    BOOL               _HasContour() const { return pContour!=0; };
-    void               GetContour( PolyPolygon &rPoly ) const;
-    void               CreateContour();
+    BOOL		       _HasContour() const { return pContour!=0; };
+    void  			   GetContour( PolyPolygon &rPoly ) const;
+    void 			   CreateContour();
 
-    void               SetAutomaticContour( BOOL bSet ) { bAutomaticContour = bSet; }
+    void			   SetAutomaticContour( BOOL bSet ) { bAutomaticContour = bSet; }
     BOOL               HasAutomaticContour() const { return bAutomaticContour; }
 
     // set either a MM100 or pixel contour
     void               SetContourAPI( const PolyPolygon *pPoly );
 
     // get either a MM100 or pixel contour, return FALSE if no contour is set.
-    BOOL               GetContourAPI( PolyPolygon &rPoly ) const;
+    BOOL  			   GetContourAPI( PolyPolygon &rPoly ) const;
 
-    void               SetPixelContour( BOOL bSet ) { bPixelContour = bSet; }
+    void			   SetPixelContour( BOOL bSet ) { bPixelContour = bSet; }
     BOOL               IsPixelContour() const;
 
     BOOL               IsContourMapModeValid() const { return bContourMapModeValid; }
@@ -118,4 +118,4 @@ inline const SwNoTxtNode *SwNode::GetNoTxtNode() const
     return ND_NOTXTNODE & nNodeType ? (const SwNoTxtNode*)this : 0;
 }
 
-#endif  // _NDNOTXT_HXX
+#endif	// _NDNOTXT_HXX

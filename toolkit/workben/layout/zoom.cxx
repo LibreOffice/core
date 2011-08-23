@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,7 +127,7 @@ static USHORT pRanges[] =
     0
 };
 
-#define SPECIAL_FACTOR  ((USHORT)0xFFFF)
+#define SPECIAL_FACTOR	((USHORT)0xFFFF)
 
 // class SvxZoomDialog ---------------------------------------------------
 
@@ -279,13 +279,13 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aBottomFl       ( this, SVX_RES( FL_BOTTOM ) ),
     aOKBtn          ( this, SVX_RES( BTN_ZOOM_OK ) ),
     aCancelBtn      ( this, SVX_RES( BTN_ZOOM_CANCEL ) ),
-    aHelpBtn        ( this, SVX_RES( BTN_ZOOM_HELP ) ),
+    aHelpBtn	    ( this, SVX_RES( BTN_ZOOM_HELP ) ),
 
 #if !TEST_LAYOUT
-    rSet        ( rCoreSet ),
+    rSet		( rCoreSet ),
 #endif /* !TEST_LAYOUT */
     pOutSet     ( NULL ),
-    bModified   ( FALSE )
+    bModified	( FALSE )
 
 {
 #if ENABLE_LAYOUT

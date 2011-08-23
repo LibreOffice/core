@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,25 +37,25 @@
 
 class SVX_DLLPUBLIC SvxSwFrameExample : public Window
 {
-    Color       m_aTransColor;      // transparency
-    Color       m_aBgCol;           // background
-    Color       m_aFrameColor;      // graphic frame
-    Color       m_aAlignColor;      // align anchor
-    Color       m_aBorderCol;       // frame of doc
-    Color       m_aPrintAreaCol;    // frame of printable area of doc
-    Color       m_aTxtCol;          // symbolised text
-    Color       m_aBlankCol;        // area of symbol for blank
-    Color       m_aBlankFrameCol;   // frame of symbol for blank
+    Color		m_aTransColor;		// transparency
+    Color		m_aBgCol;			// background
+    Color		m_aFrameColor;		// graphic frame
+    Color     	m_aAlignColor;		// align anchor
+    Color		m_aBorderCol;		// frame of doc
+    Color		m_aPrintAreaCol;	// frame of printable area of doc
+    Color		m_aTxtCol;			// symbolised text
+    Color		m_aBlankCol;		// area of symbol for blank
+    Color		m_aBlankFrameCol;	// frame of symbol for blank
 
-    Rectangle   aPage;
-    Rectangle   aPagePrtArea;
-    Rectangle   aTextLine;
-    Rectangle   aPara;
-    Rectangle   aParaPrtArea;
-    Rectangle   aFrameAtFrame;
-    Rectangle   aDrawObj;
-    Rectangle   aAutoCharFrame;
-    Size        aFrmSize;
+    Rectangle 	aPage;
+    Rectangle 	aPagePrtArea;
+    Rectangle 	aTextLine;
+    Rectangle 	aPara;
+    Rectangle 	aParaPrtArea;
+    Rectangle 	aFrameAtFrame;
+    Rectangle 	aDrawObj;
+    Rectangle 	aAutoCharFrame;
+    Size      	aFrmSize;
 
     short       nHAlign;
     short       nHRel;
@@ -65,9 +65,9 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public Window
 
     short       nWrap;
     short       nAnchor;
-    BOOL        bTrans;
+    BOOL 		bTrans;
 
-    Point       aRelPos;
+    Point		aRelPos;
 
     void InitColors_Impl( void );
     void InitAllRects_Impl();
@@ -83,7 +83,7 @@ public:
     SvxSwFrameExample(Window* pParent, const ResId& rResID);
     ~SvxSwFrameExample();
 
-    inline void SetWrap(USHORT nW)          { nWrap     = nW; }
+    inline void SetWrap(USHORT nW) 			{ nWrap 	= nW; }
 
     inline void SetHAlign(short nH)      { nHAlign   = nH; }
     inline void SetHoriRel(short nR)         { nHRel     = nR; }
@@ -91,7 +91,7 @@ public:
     inline void SetVAlign(short nV)      { nVAlign   = nV; }
     inline void SetVertRel(short nR)         { nVRel     = nR; }
 
-    inline void SetTransparent(BOOL bT)     { bTrans    = bT; }
+    inline void SetTransparent(BOOL bT)		{ bTrans 	= bT; }
     inline void SetAnchor(short nA)          { nAnchor   = nA; }
 
     void SetRelPos(const Point& rP);

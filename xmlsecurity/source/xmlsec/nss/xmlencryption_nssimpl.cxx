@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_NssImpl :: encrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLEncryptionException,
+) throw( com::sun::star::xml::crypto::XMLEncryptionException, 
          com::sun::star::uno::SecurityException )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
@@ -115,7 +115,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
             sal::static_int_cast<sal_uIntPtr>(xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
     if( pSecEnv == NULL )
         throw RuntimeException() ;
-
+        
     //Get the encryption template
     Reference< XXMLElementWrapper > xTemplate = aTemplate->getTemplate() ;
     if( !xTemplate.is() ) {
@@ -160,7 +160,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     if( pContent == NULL ) {
         throw XMLEncryptionException() ;
     }
-
+    
     /* MM : remove the following 2 lines
     xmlUnlinkNode(pContent);
     xmlAddNextSibling(pEncryptedData, pContent);
@@ -200,7 +200,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
 
     pEncryptedData = pTemplate->getNativeElement() ;
 
-    //Find the element to be encrypted.
+    //Find the element to be encrypted. 
     /* MM : remove the old method to get the target element
     //This element is wrapped in the CipherValue sub-element.
     xmlNodePtr pCipherData = pEncryptedData->children;
@@ -229,11 +229,11 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     */
 
     //Encrypt the template
-    if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 )
+    if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) 
     {
         xmlSecEncCtxDestroy( pEncCtx ) ;
         pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
+        
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -260,7 +260,7 @@ Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_NssImpl :: decrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::xml::crypto::XMLEncryptionException ,
+) throw( com::sun::star::xml::crypto::XMLEncryptionException , 
          com::sun::star::uno::SecurityException) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
@@ -309,32 +309,32 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
     }
 
      setErrorRecorder( );
-
+        
     sal_Int32 nSecurityEnvironment = aSecurityCtx->getSecurityEnvironmentNumber();
     sal_Int32 i;
-
+    
     for (i=0; i<nSecurityEnvironment; ++i)
     {
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
-
+        
         //Get Keys Manager
         Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
         if( !aEnvironment.is() ) {
              throw RuntimeException() ;
         }
-
+    
         SecurityEnvironment_NssImpl* pSecEnv =
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
                     xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
         if( pSecEnv == NULL )
             throw RuntimeException() ;
-
+            
         pMngr = pSecEnv->createKeysManager() ; //i39448
         if( !pMngr ) {
             throw RuntimeException() ;
         }
-
+            
         //Create Encryption context
         pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
         if( pEncCtx == NULL )
@@ -353,11 +353,11 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
             //Destroy the encryption context
             xmlSecEncCtxDestroy( pEncCtx ) ;
             pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
+        
             //get the decrypted element
             XMLElementWrapper_XmlSecImpl * ret = new XMLElementWrapper_XmlSecImpl(isParentRef?
                 (referenceNode->children):(referenceNode->next));
-
+        
             //return ret;
             aTemplate->setTemplate(ret);
             break;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -193,7 +193,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
 
     // no section break in this paragraph yet; can be set in SectionBreak()
     m_pSectionInfo = NULL;
-
+    
     m_bParagraphOpened = true;
 }
 
@@ -223,7 +223,7 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
         if ( pInner->isEndOfCell() )
         {
             if ( bForceEmptyParagraph )
-                m_pSerializer->singleElementNS( XML_w, XML_p, FSEND );
+                m_pSerializer->singleElementNS( XML_w, XML_p, FSEND ); 
 
             EndTableCell();
         }
@@ -300,7 +300,7 @@ void DocxAttributeOutput::EndParagraphProperties()
     WriteCollectedParagraphProperties();
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );
-
+            
     if ( m_nColBreakStatus == COLBRK_WRITE )
     {
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
@@ -382,7 +382,7 @@ void DocxAttributeOutput::EndRun()
             }
         }
     }
-
+   
     DoWriteBookmarks( );
 
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
@@ -423,12 +423,12 @@ void DocxAttributeOutput::DoWriteBookmarks()
         m_rOpenedMarksIds[rName] = nId;
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
             FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( nId ) ).getStr(  ),
-            FSNS( XML_w, XML_name ), rName.getStr(),
+            FSNS( XML_w, XML_name ), rName.getStr(), 
             FSEND );
     }
     m_rMarksStart.clear();
 
-    // export the end bookmarks
+    // export the end bookmarks 
     for ( std::vector< OString >::const_iterator it = m_rMarksEnd.begin(), end = m_rMarksEnd.end();
           it < end; ++it )
     {
@@ -440,7 +440,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
         {
             USHORT nId = ( *pPos ).second;
             m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
-                FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( nId ) ).getStr(  ),
+                FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( nId ) ).getStr(  ), 
                 FSEND );
             m_rOpenedMarksIds.erase( rName );
         }
@@ -475,7 +475,7 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRu
                            rFld2.GetSelectedItem(), aItems);
 
                 m_pSerializer->endElementNS( XML_w, XML_fldChar );
-
+        
                 if ( bWriteRun )
                     m_pSerializer->endElementNS( XML_w, XML_r );
 
@@ -490,7 +490,7 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRu
             if ( bWriteRun )
                 m_pSerializer->endElementNS( XML_w, XML_r );
 
-            // The hyperlinks fields can't be expanded: the value is
+            // The hyperlinks fields can't be expanded: the value is 
             // normally in the text run
             if ( !rInfos.pField )
                 CmdField_Impl( rInfos );
@@ -522,7 +522,7 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
         if ( i < ( nNbToken - 1 ) )
             RunText( String::CreateFromAscii( "\t" ) );
     }
-
+    
     m_pSerializer->endElementNS( XML_w, XML_r );
 
 
@@ -587,7 +587,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
         USHORT nSubType = rInfos.pField->GetSubType( );
         bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == RES_SETEXPFLD;
         bool bShowRef = ( !bIsSetField || ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) ) ? false : true;
-
+    
         if ( ( m_sFieldBkm.Len( ) > 0 ) && bShowRef )
         {
             // Write the field beginning
@@ -596,15 +596,15 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
                 FSNS( XML_w, XML_fldCharType ), "begin",
                 FSEND );
             m_pSerializer->endElementNS( XML_w, XML_r );
-
+    
             rInfos.sCmd = FieldString( ww::eREF );
             rInfos.sCmd.APPEND_CONST_ASC( "\"" );
             rInfos.sCmd += m_sFieldBkm;
             rInfos.sCmd.APPEND_CONST_ASC( "\" " );
-
+    
             // Clean the field bookmark data to avoid infinite loop
             m_sFieldBkm = String( );
-
+    
             // Write the end of the field
             EndField_Impl( rInfos );
         }
@@ -764,7 +764,7 @@ bool DocxAttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget,
 
     bool bOutputField = sMark.Len();
 
-    if ( bOutputField )
+    if ( bOutputField ) 
     {
         if ( bBookMarkOnly )
             sURL = FieldString( ww::eHYPERLINK );
@@ -775,10 +775,10 @@ bool DocxAttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget,
             sURL.Insert( sFld, 0 );
             sURL += '\"';
         }
-
+    
         if ( sMark.Len() )
             ( ( sURL.APPEND_CONST_ASC( " \\l \"" ) ) += sMark ) += '\"';
-
+    
         if ( rTarget.Len() )
             ( sURL.APPEND_CONST_ASC( " \\n " ) ) += rTarget;
     }
@@ -796,16 +796,16 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
 
     bool bBookmarkOnly = AnalyzeURL( rUrl, rTarget, &sUrl, &sMark );
 
-    if ( sMark.Len() && !bBookmarkOnly )
+    if ( sMark.Len() && !bBookmarkOnly ) 
     {
         m_rExport.OutputField( NULL, ww::eHYPERLINK, sUrl );
     }
     else
     {
         // Output a hyperlink XML element
-
+    
         m_pHyperlinkAttrList = m_pSerializer->createAttrList();
-        if ( !bBookmarkOnly )
+        if ( !bBookmarkOnly ) 
         {
             OUString osUrl( sUrl );
 
@@ -815,9 +815,9 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
             m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId.getStr());
         }
         else
-            m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ),
+            m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ), 
                     OUStringToOString( OUString( sMark ), RTL_TEXTENCODING_UTF8 ).getStr( ) );
-
+    
         OUString sTarget( rTarget );
         if ( sTarget.getLength( ) > 0 )
         {
@@ -1071,7 +1071,7 @@ static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox )
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
 
-    static const USHORT aXmlElements[] =
+    static const USHORT aXmlElements[] = 
     {
         XML_top, XML_left, XML_bottom, XML_right
     };
@@ -1100,13 +1100,13 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     long vSpan = pTblBox->getRowSpan( );
     if ( vSpan > 1 )
     {
-        m_pSerializer->singleElementNS( XML_w, XML_vMerge,
+        m_pSerializer->singleElementNS( XML_w, XML_vMerge, 
                 FSNS( XML_w, XML_val ), "restart",
                 FSEND );
     }
     else if ( vSpan < 0 )
     {
-        m_pSerializer->singleElementNS( XML_w, XML_vMerge,
+        m_pSerializer->singleElementNS( XML_w, XML_vMerge, 
                 FSNS( XML_w, XML_val ), "continue",
                 FSEND );
     }
@@ -1126,7 +1126,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     // Cell prefered width
     SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )[ pTableTextNodeInfoInner->getCell() ];
-    m_pSerializer->singleElementNS( XML_w, XML_tcW,
+    m_pSerializer->singleElementNS( XML_w, XML_tcW, 
            FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nWidth ) ).getStr( ),
            FSNS( XML_w, XML_type ), "dxa",
            FSEND );
@@ -1139,7 +1139,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
 
-    static const USHORT aXmlElements[] =
+    static const USHORT aXmlElements[] = 
     {
         XML_top, XML_left, XML_bottom, XML_right
     };
@@ -1167,16 +1167,16 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
 
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
     GetTablePageSize( pTableTextNodeInfoInner, nPageSize, bRelBoxSize );
-
+    
     const SwTable* pTable = pTableTextNodeInfoInner->getTable( );
     const SwFrmFmt *pFmt = pTable->GetFrmFmt( );
     SwTwips nTblSz = pFmt->GetFrmSize( ).GetWidth( );
-
+    
     const SwHTMLTableLayout *pLayout = pTable->GetHTMLTableLayout();
     if( pLayout && pLayout->IsExportable() )
         m_pTableWrt = new SwWriteTable( pLayout );
     else
-        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), (USHORT)nPageSize,
+        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), (USHORT)nPageSize, 
                 (USHORT)nTblSz, false);
 }
 
@@ -1209,11 +1209,11 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t p
 
     // Output the row properties
     m_pSerializer->startElementNS( XML_w, XML_trPr, FSEND );
-
+    
     // Header row: tblHeader
     const SwTable *pTable = pTableTextNodeInfoInner->getTable( );
     if ( pTable->GetRowsToRepeat( ) > pTableTextNodeInfoInner->getRow( ) )
-        m_pSerializer->singleElementNS( XML_w, XML_tblHeader,
+        m_pSerializer->singleElementNS( XML_w, XML_tblHeader, 
                FSNS( XML_w, XML_val ), "true",
                FSEND );
 
@@ -1264,13 +1264,13 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     sal_uInt32 nPageSize = 0;
     bool bRelBoxSize = false;
-
+    
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
     GetTablePageSize( pTableTextNodeInfoInner, nPageSize, bRelBoxSize );
-
+    
     // Output the table prefered width
     if ( nPageSize != 0 )
-        m_pSerializer->singleElementNS( XML_w, XML_tblW,
+        m_pSerializer->singleElementNS( XML_w, XML_tblW, 
                 FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nPageSize ) ).getStr( ),
                 FSNS( XML_w, XML_type ), "dxa",
                 FSEND );
@@ -1313,11 +1313,11 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 FSEND );
 
     m_pSerializer->endElementNS( XML_w, XML_tblPr );
-
+    
 
     // Write the table grid infos
     m_pSerializer->startElementNS( XML_w, XML_tblGrid, FSEND );
-
+    
     std::vector<SwTwips> gridCols = GetGridCols( pTableTextNodeInfoInner );
     for ( std::vector<SwTwips>::const_iterator it = gridCols.begin(); it != gridCols.end(); ++it )
         m_pSerializer->singleElementNS( XML_w, XML_gridCol,
@@ -1346,7 +1346,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
 
     Color aColor;
     if ( SFX_ITEM_ON == pFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
-        aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
+        aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor(); 
     else
         aColor = COL_AUTO;
 
@@ -1359,7 +1359,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
 void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
-    const SwTableLine * pTabLine = pTabBox->GetUpper();
+    const SwTableLine * pTabLine = pTabBox->GetUpper();    
     const SwFrmFmt * pLineFmt = pTabLine->GetFrmFmt();
 
     const SwFmtFrmSize& rLSz = pLineFmt->GetFrmSize();
@@ -1386,7 +1386,7 @@ void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTa
 void DocxAttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
-    const SwTableLine * pTabLine = pTabBox->GetUpper();
+    const SwTableLine * pTabLine = pTabBox->GetUpper();    
     const SwFrmFmt * pLineFmt = pTabLine->GetFrmFmt();
 
     const SwFmtRowSplit& rSplittable = pLineFmt->GetRowSplit( );
@@ -1401,7 +1401,7 @@ void DocxAttributeOutput::TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTabl
 {
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
     const SwFrmFmt * pFrmFmt = pTable->GetFrmFmt();
-
+    
     if ( m_rExport.TrueFrameDirection( *pFrmFmt ) == FRMDIR_HORI_RIGHT_TOP )
     {
         m_pSerializer->singleElementNS( XML_w, XML_bidiVisual,
@@ -2612,7 +2612,7 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType
     {
         USHORT nType = pFld->GetTyp( )->Which( );
         USHORT nSubType = pFld->GetSubType();
-
+    
         // TODO Any other field types here ?
         if ( ( nType == RES_SETEXPFLD ) && ( nSubType & nsSwGetSetExpType::GSE_STRING ) )
         {
@@ -2627,7 +2627,7 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType
     }
 }
 
-void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
+void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts, 
         std::vector< OUString >& rEnds )
 {
     for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it < end; ++it )
@@ -2636,7 +2636,7 @@ void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
         m_rMarksStart.push_back( rName );
     }
     rStarts.clear();
-
+    
     for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it < end; ++it )
     {
         OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
@@ -2863,13 +2863,13 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 {
     const SfxPoolItem* pLR = m_rExport.HasItem( RES_LR_SPACE );
     long nCurrentLeft = pLR ? ((const SvxLRSpaceItem*)pLR)->GetTxtLeft() : 0;
-
+    
     m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
 
     sal_uInt16 nCount = rTabStop.Count();
     for (sal_uInt16 i = 0; i < nCount; i++ )
         impl_WriteTabElement( m_pSerializer, rTabStop[i], nCurrentLeft );
-
+    
     m_pSerializer->endElementNS( XML_w, XML_tabs );
 }
 
@@ -2958,7 +2958,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
     OSL_TRACE( "TODO DocxAttributeOutput::FormatFrameSize() - Fly frames\n" );
  #endif
     }
-    else if ( m_rExport.bOutPageDescs )
+    else if ( m_rExport.bOutPageDescs ) 
     {
         FastAttributeList *attrList = m_pSerializer->createAttrList( );
         if ( m_rExport.pAktPageDesc->GetLandscape( ) )
@@ -2990,7 +2990,7 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         OSL_TRACE( "DocxAttributeOutput::FormatLRSpace() - Fly frames\n" );
 #endif
     }
-    else if ( m_rExport.bOutPageDescs )
+    else if ( m_rExport.bOutPageDescs ) 
     {
         if ( !m_pSpacingAttrList )
             m_pSpacingAttrList = m_pSerializer->createAttrList();
@@ -3034,7 +3034,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
     if ( m_rExport.bOutFlyFrmAttrs )
     {
-    }
+    } 
     else if (m_rExport.bOutPageDescs )
     {
         ASSERT( m_rExport.GetCurItemSet(), "Impossible" );
@@ -3046,31 +3046,31 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         if ( aDistances.HasHeader() )
         {
             // Header top
-            m_pSpacingAttrList->add( FSNS( XML_w, XML_header ),
+            m_pSpacingAttrList->add( FSNS( XML_w, XML_header ), 
                     OString::valueOf( sal_Int32( aDistances.dyaHdrTop ) ) );
         }
 
         // Page top
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_top ),
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_top ), 
                 OString::valueOf( sal_Int32( aDistances.dyaTop ) ) );
 
         if ( aDistances.HasFooter() )
         {
             // Footer bottom
-            m_pSpacingAttrList->add( FSNS( XML_w, XML_footer ),
+            m_pSpacingAttrList->add( FSNS( XML_w, XML_footer ), 
                     OString::valueOf( sal_Int32( aDistances.dyaHdrBottom ) ) );
         }
 
         // Page Bottom
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_bottom ),
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_bottom ), 
                 OString::valueOf( sal_Int32( aDistances.dyaBottom ) ) );
-
+        
     }
     else
     {
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_before ),
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_before ), 
                 OString::valueOf( (sal_Int32)rULSpace.GetUpper() ) );
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_after ),
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_after ), 
                 OString::valueOf( (sal_Int32)rULSpace.GetLower() ) );
     }
 }
@@ -3147,7 +3147,7 @@ void DocxAttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol& rCol
     // Get the columns attributes
     FastAttributeList *pColsAttrList = m_pSerializer->createAttrList();
 
-    pColsAttrList->add( FSNS( XML_w, XML_num ),
+    pColsAttrList->add( FSNS( XML_w, XML_num ), 
             OString::valueOf( sal_Int32( nCols ) ). getStr( ) );
 
     const char* pEquals = "false";
@@ -3240,12 +3240,12 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
                FSNS( XML_w, XML_val ), sTextFlow.getStr( ),
                FSEND );
         if ( bBiDi )
-            m_pSerializer->singleElementNS( XML_w, XML_bidi, FSEND );
+            m_pSerializer->singleElementNS( XML_w, XML_bidi, FSEND ); 
     }
     else if ( !m_rExport.bOutFlyFrmAttrs )
     {
         if ( bBiDi )
-            m_pSerializer->singleElementNS( XML_w, XML_bidi, FSEND );
+            m_pSerializer->singleElementNS( XML_w, XML_bidi, FSEND ); 
     }
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,31 +37,31 @@
 #include "ReportHelperDefines.hxx"
 namespace reportdesign
 {
-    typedef ::cppu::PropertySetMixin<        com::sun::star::report::XFormattedField    > FormattedFieldPropertySet;
+    typedef ::cppu::PropertySetMixin<		 com::sun::star::report::XFormattedField	> FormattedFieldPropertySet;
     typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XFormattedField
-                                                ,com::sun::star::lang::XServiceInfo > FormattedFieldBase;
+                                                ,com::sun::star::lang::XServiceInfo	> FormattedFieldBase;
 
     /** \class OFormattedField Defines the implementation of a \interface com:::sun::star::report::XFormattedField
      * \ingroup reportdesign_api
      *
      */
-    class OFormattedField : public comphelper::OBaseMutex,
+    class OFormattedField :	public comphelper::OBaseMutex,
                             public FormattedFieldBase,
                             public FormattedFieldPropertySet
     {
         friend class OShapeHelper;
 
-        OReportControlModel                             m_aProps;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
+        OReportControlModel								m_aProps;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >	
                                                         m_xFormatsSupplier;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction> m_xFunction;
         ::sal_Int32                                     m_nFormatKey;
-
+        
     private:
         OFormattedField(const OFormattedField&);
         OFormattedField& operator=(const OFormattedField&);
 
-        template <typename T> void set(  const ::rtl::OUString& _sProperty
+        template <typename T> void set(	 const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
         {
@@ -134,7 +134,7 @@ namespace reportdesign
 
         // XReportControlModel
         REPORTCONTROLMODEL_HEADER()
-
+        
         // XReportControlFormat
         REPORTCONTROLFORMAT_HEADER()
 
@@ -149,12 +149,12 @@ namespace reportdesign
 
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
+        { 
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        { 
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,42 +40,42 @@
 #include <list>
 
 namespace ppt
-{
+{ 
 
 class ExSoundEntry
 {
-        sal_uInt32              nFileSize;
-        String                  aSoundURL;
+        sal_uInt32				nFileSize;
+        String					aSoundURL;
 
-        String                  ImplGetName() const;
-        String                  ImplGetExtension() const;
+        String					ImplGetName() const;
+        String					ImplGetExtension() const;
 
     public :
-
-        sal_Bool                IsSameURL( const String& rURL ) const;
-        sal_uInt32              GetFileSize( ) const { return nFileSize; };
+        
+        sal_Bool				IsSameURL( const String& rURL ) const;
+        sal_uInt32				GetFileSize( ) const { return nFileSize; };
 
                                 ExSoundEntry( const String& rSoundURL );
 
         // returns the size of a complete SoundContainer
-        sal_uInt32              GetSize( sal_uInt32 nId ) const;
-        void                    Write( SvStream& rSt, sal_uInt32 nId );
+        sal_uInt32				GetSize( sal_uInt32 nId ) const;
+        void					Write( SvStream& rSt, sal_uInt32 nId );
 };
 
 class ExSoundCollection : private List
 {
-        const ExSoundEntry*     ImplGetByIndex( sal_uInt32 nId ) const;
+        const ExSoundEntry*		ImplGetByIndex( sal_uInt32 nId ) const;
 
     public:
 
                                 ExSoundCollection() {}
                                 ~ExSoundCollection();
 
-        sal_uInt32              GetId( const String& );
+        sal_uInt32				GetId( const String& );
 
         // returns the size of a complete SoundCollectionContainer
-        sal_uInt32              GetSize() const;
-        void                    Write( SvStream& rSt );
+        sal_uInt32				GetSize() const;
+        void					Write( SvStream& rSt );
 };
 
 } // namespace ppt

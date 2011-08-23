@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ class ScRangeList;
 class SfxShell;
 #include "scmod.hxx"
 
-typedef    formula::RefButton   ScRefButton;
-typedef        formula::RefEdit ScRefEdit;
+typedef    formula::RefButton	ScRefButton;
+typedef        formula::RefEdit	ScRefEdit;
 //-->Added by PengYunQuan for Validity Cell Range Picker
 class ScFormulaReferenceHelper
 {
@@ -70,7 +70,7 @@ class ScFormulaReferenceHelper
     formula::RefButton*  pRefBtn;                // Button dazu
     Window*             m_pWindow;
     SfxBindings*        m_pBindings;
-    ::std::auto_ptr<Accelerator>
+    ::std::auto_ptr<Accelerator>        
                         pAccel;                 // fuer Enter/Escape
     BOOL*               pHiddenMarks;           // Merkfeld fuer versteckte Controls
     SCTAB               nRefTab;                // used for ShowReference
@@ -84,9 +84,9 @@ class ScFormulaReferenceHelper
     BOOL                bEnableColorRef;
     BOOL                bHighLightRef;
     BOOL                bAccInserted;
-
+    
     DECL_LINK( AccelSelectHdl, Accelerator* );
-
+    
 public:
     ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings);
     ~ScFormulaReferenceHelper();
@@ -112,10 +112,10 @@ public:
     static              void enableInput(BOOL _bInput);
 //<!--Added by PengYunQuan for Validity Cell Range Picker
 protected:
-    Window      *       GetWindow(){ return m_pWindow; }
+    Window		*		GetWindow(){ return m_pWindow; }
 public:
-    bool                CanInputStart( const ScRefEdit *pEdit ){ return !!pEdit; }
-    bool                CanInputDone( BOOL bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
+    bool				CanInputStart( const ScRefEdit *pEdit ){ return !!pEdit; }
+    bool				CanInputDone( BOOL bForced ){	return pRefEdit && (bForced || !pRefBtn);	}
 //<!--Added by PengYunQuan for Validity Cell Range Picker
 };
 //============================================================================
@@ -125,27 +125,27 @@ class SC_DLLPUBLIC ScRefHandler : //public SfxModelessDialog,
                     public IAnyRefDialog
 {
 //<!--Added by PengYunQuan for Validity Cell Range Picker
-    Window &    m_rWindow;
-    bool        m_bInRefMode;
+    Window &	m_rWindow;
+    bool		m_bInRefMode;
 public:
-    operator Window *(){ return &m_rWindow; }
-    Window  * operator ->() { return static_cast<Window *>(*this); }
+    operator Window	*(){ return &m_rWindow; }
+    Window	* operator ->() { return static_cast<Window	*>(*this); }
     template<class,bool> friend class ScRefHdlrImplBase;
 //-->Added by PengYunQuan for Validity Cell Range Picker
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
 
 private:
-    ScFormulaReferenceHelper
+    ScFormulaReferenceHelper 
                         m_aHelper;
     SfxBindings*        pMyBindings;
-
+    
     Window*             pActiveWin;
     Timer               aTimer;
     String              aDocName;               // document on which the dialog was opened
 
     DECL_LINK( UpdateFocusHdl, Timer* );
-
+    
 
 protected:
     virtual BOOL        DoClose( USHORT nId );
@@ -193,8 +193,8 @@ public:
 public:
     bool                EnterRefMode();
     bool                LeaveRefMode();
-    inline  bool        CanInputStart( const ScRefEdit *pEdit );
-    inline  bool        CanInputDone( BOOL bForced );
+    inline	bool		CanInputStart( const ScRefEdit *pEdit );
+    inline	bool		CanInputDone( BOOL bForced );
 //-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
@@ -265,7 +265,7 @@ inline bool ScRefHandler::CanInputStart( const ScRefEdit *pEdit )
     return m_aHelper.CanInputStart( pEdit );
 }
 
-inline  bool ScRefHandler::CanInputDone( BOOL bForced )
+inline	bool ScRefHandler::CanInputDone( BOOL bForced )
 {
     return m_aHelper.CanInputDone( bForced );
 }

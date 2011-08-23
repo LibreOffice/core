@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,58 +54,58 @@ class ScTabOpDlg : public ScAnyRefDlg
 {
 public:
                     ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                ScDocument*     pDocument,
-                                const ScRefAddress& rCursorPos );
+                                ScDocument*		pDocument,
+                                const ScRefAddress&	rCursorPos );
                     ~ScTabOpDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL    IsRefInputMode() const { return TRUE; }
-    virtual void    SetActive();
+    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual BOOL	IsRefInputMode() const { return TRUE; }
+    virtual void	SetActive();
 
-    virtual BOOL    Close();
+    virtual BOOL	Close();
 
 private:
     FixedLine       aFlVariables;
-    FixedText       aFtFormulaRange;
-    formula::RefEdit        aEdFormulaRange;
-    formula::RefButton      aRBFormulaRange;
+    FixedText		aFtFormulaRange;
+    formula::RefEdit		aEdFormulaRange;
+    formula::RefButton		aRBFormulaRange;
 
-    FixedText       aFtRowCell;
-    formula::RefEdit        aEdRowCell;
-    formula::RefButton      aRBRowCell;
+    FixedText		aFtRowCell;
+    formula::RefEdit		aEdRowCell;
+    formula::RefButton		aRBRowCell;
 
-    FixedText       aFtColCell;
-    formula::RefEdit        aEdColCell;
-    formula::RefButton      aRBColCell;
+    FixedText		aFtColCell;
+    formula::RefEdit		aEdColCell;
+    formula::RefButton		aRBColCell;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
-    ScRefAddress    theFormulaCell;
-    ScRefAddress    theFormulaEnd;
-    ScRefAddress    theRowCell;
-    ScRefAddress    theColCell;
+    ScRefAddress	theFormulaCell;
+    ScRefAddress	theFormulaEnd;
+    ScRefAddress	theRowCell;
+    ScRefAddress	theColCell;
 
-    ScDocument*     pDoc;
-    const SCTAB     nCurTab;
-    formula::RefEdit*       pEdActive;
-    BOOL            bDlgLostFocus;
-    const String    errMsgNoFormula;
-    const String    errMsgNoColRow;
-    const String    errMsgWrongFormula;
-    const String    errMsgWrongRowCol;
-    const String    errMsgNoColFormula;
-    const String    errMsgNoRowFormula;
+    ScDocument*		pDoc;
+    const SCTAB	    nCurTab;
+    formula::RefEdit*		pEdActive;
+    BOOL			bDlgLostFocus;
+    const String	errMsgNoFormula;
+    const String	errMsgNoColRow;
+    const String	errMsgWrongFormula;
+    const String	errMsgWrongRowCol;
+    const String	errMsgNoColFormula;
+    const String	errMsgNoRowFormula;
 
 #ifdef _TABOPDLG_CXX
-    void    Init();
-    void    RaiseError( ScTabOpErr eError );
+    void	Init();
+    void	RaiseError( ScTabOpErr eError );
 
     DECL_LINK( BtnHdl, PushButton* );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, Control* );
-#endif  // _TABOPDLG_CXX
+#endif	// _TABOPDLG_CXX
 };
 
 #endif // SC_TABOPDLG_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <stdarg.h>
 #include "cpp.h"
 
-#define OUTS    16384
+#define	OUTS	16384
 char outbuf[OUTS];
 char *outptr = outbuf;
 Source *cursource;
@@ -50,9 +50,9 @@ char* realargv[512];
 
 void checkCommandFile(char* cmdfile)
 {
-    FILE    *commandfile;
-    char    option[256];
-
+    FILE	*commandfile;
+    char 	option[256];
+    
     commandfile = fopen(cmdfile+1, "r");
     if( commandfile == NULL )
     {
@@ -75,8 +75,8 @@ void checkCommandFile(char* cmdfile)
                 if (c!=13 && c!=10) {
                     if (found || c!=' ') {
                         option[i++]=c;
-                        continue;
-                    }
+                        continue;                
+                    } 
                 }
                 if (i==0)
                     continue;
@@ -100,8 +100,8 @@ void checkCommandFile(char* cmdfile)
             realargc++;
         }
         fclose(commandfile);
-    }
-}
+    }	
+}	
 
 void checkCommandArgs(int argc, char **argv)
 {
@@ -118,7 +118,7 @@ void checkCommandArgs(int argc, char **argv)
             realargc++;
         }
     }
-}
+}	
 
 void cleanCommandArgs()
 {
@@ -128,7 +128,7 @@ void cleanCommandArgs()
     {
         free(realargv[i]);
     }
-}
+}	
 
 #ifdef WNT
 int __cdecl main(int argc, char **argv)

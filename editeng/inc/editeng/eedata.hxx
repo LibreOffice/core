@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #define _EEDATA_HXX
 
 //////////////////////////////////////////////////////////////////////////////
-// extended data definitions for EditEngine portion stripping (StripPortions()
+// extended data definitions for EditEngine portion stripping (StripPortions() 
 // support). These may be mapped to some primitive definitions from Drawinglayer
 // later.
 #include <vector>
@@ -36,11 +36,11 @@
 namespace EEngineData
 {
     // spell checking wrong vector containing the redlining data
-    class WrongSpellClass
-    {
+    class WrongSpellClass 
+    { 
     public:
-        sal_uInt32 nStart;
-        sal_uInt32 nEnd;
+        sal_uInt32 nStart; 
+        sal_uInt32 nEnd; 
 
         WrongSpellClass(sal_uInt32 nS, sal_uInt32 nE) : nStart(nS), nEnd(nE) {}
     };
@@ -48,7 +48,7 @@ namespace EEngineData
     typedef std::vector< WrongSpellClass > WrongSpellVector;
 
     // text marking vector containing the EOC, EOW and EOS TEXT definitions
-    enum TextMarkingType
+    enum TextMarkingType 
     {
         EndOfCaracter = 0,
         EndOfWord = 1,

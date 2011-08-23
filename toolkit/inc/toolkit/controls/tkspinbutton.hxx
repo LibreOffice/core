@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,16 +46,16 @@ namespace toolkit
     //====================================================================
     class UnoSpinButtonModel : public UnoControlModel
     {
-    protected:
-        ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-        ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
+    protected:	
+        ::com::sun::star::uno::Any		ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+        ::cppu::IPropertyArrayHelper&	SAL_CALL getInfoHelper();
 
     public:
                             UnoSpinButtonModel();
                             UnoSpinButtonModel( const UnoSpinButtonModel& rModel ) : UnoControlModel( rModel ) {;}
-
-        UnoControlModel*    Clone() const { return new UnoSpinButtonModel( *this ); }
-
+                            
+        UnoControlModel*	Clone() const { return new UnoSpinButtonModel( *this ); }
+                            
         // XMultiPropertySet
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -83,10 +83,10 @@ namespace toolkit
 
     public:
                                     UnoSpinButtonControl();
-        ::rtl::OUString             GetComponentServiceName();
+        ::rtl::OUString				GetComponentServiceName();
 
         DECLARE_UNO3_AGG_DEFAULTS( UnoSpinButtonControl, UnoControlBase );
-        ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Any	SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
         void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
         void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlBase::disposing( Source ); }

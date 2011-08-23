@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,10 +144,10 @@ int main( int argc, char *argv[] )
             UNO_QUERY );
 
         // just ensure that it is registered
-//      createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
-//                       OUString( RTL_CONSTASCII_USTRINGPARAM("iiopbrdg" SAL_DLLEXTENSION)),
-//                       rSMgr );
-
+// 		createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
+// 						 OUString( RTL_CONSTASCII_USTRINGPARAM("iiopbrdg" SAL_DLLEXTENSION)),
+// 						 rSMgr );
+        
         Reference < XBridgeFactory > rFactory(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory")),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION)),

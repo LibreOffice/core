@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ typedef InheritedHelperInterfaceImpl1< ov::msforms::XTextFrame > VbaTextFrame_BA
 
 class VBAHELPER_DLLPUBLIC VbaTextFrame : public VbaTextFrame_BASE
 {
-protected:
+protected:    
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:

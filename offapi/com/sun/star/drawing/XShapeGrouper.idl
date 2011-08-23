@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,38 +24,38 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XShapeGrouper_idl__
-#define __com_sun_star_drawing_XShapeGrouper_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShapeGroup_idl__
-#include <com/sun/star/drawing/XShapeGroup.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShapes_idl__
-#include <com/sun/star/drawing/XShapes.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_XShapeGrouper_idl__ 
+#define __com_sun_star_drawing_XShapeGrouper_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XShapeGroup_idl__ 
+#include <com/sun/star/drawing/XShapeGroup.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_XShapes_idl__ 
+#include <com/sun/star/drawing/XShapes.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** specifies the group/ungroup functionality.
  */
 published interface XShapeGrouper: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** groups the <type>Shape</type>s inside a collection.
 
         <p>Grouping of objects in text documents works only if none
-        of the objects has an anchor of type
+        of the objects has an anchor of type 
         <member scope="com::sun::star::text::TextContentAnchorType">AS_CHARACTER</member>
         </p>.
 
@@ -69,25 +69,25 @@ published interface XShapeGrouper: com::sun::star::uno::XInterface
             <type>GenericDrawPage</type> of the <type>Shape</type>s
             in xShapes.
      */
-    com::sun::star::drawing::XShapeGroup group( [in] com::sun::star::drawing::XShapes xShapes );
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::drawing::XShapeGroup group( [in] com::sun::star::drawing::XShapes xShapes ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** ungroups a given <type>GroupShape</type>.
 
         @param aGroup
             moves all <type>Shape</type>s from this <type>GroupShape</type>
             to the parent <type>XShapes</type> of the <type>GroupShape</type>.
-            The <type>GroupShape</type> is than removed from the
+            The <type>GroupShape</type> is than removed from the 
             <type>GenericDrawPage</type> and disposed.
      */
-    void ungroup( [in] com::sun::star::drawing::XShapeGroup aGroup );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void ungroup( [in] com::sun::star::drawing::XShapeGroup aGroup ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

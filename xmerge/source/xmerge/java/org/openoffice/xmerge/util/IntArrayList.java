@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ public class IntArrayList {
      *  @param  minCapacity  The minimum capacity of the list.
      *  @param  fillValue    This method adds in a integer for each
      *                       slot that was added to ensure that the
-     *                       list meets the minimum capacity.
+     *                       list meets the minimum capacity. 
      *                       <code>fillValue</code> is the value
      *                       used as the initial value of these
      *                       added elements.

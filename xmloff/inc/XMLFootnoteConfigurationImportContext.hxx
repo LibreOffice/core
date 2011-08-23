@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@
 #include <xmloff/xmlstyle.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace uno { template<class X> class Reference; }
+    namespace uno {	template<class X> class Reference; }
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
 } } }
-namespace rtl { class OUString; }
+namespace rtl {	class OUString; }
 class SvXMLImport;
 
 /// import footnote and endnote configuration elements

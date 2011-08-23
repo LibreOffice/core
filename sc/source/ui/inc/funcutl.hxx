@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <vcl/fixed.hxx>
 #endif
 #include <svtools/svmedit.hxx>
-#include "anyrefdg.hxx"     // formula::RefButton
+#include "anyrefdg.hxx"		// formula::RefButton
 
 
 //============================================================================
@@ -46,14 +46,14 @@ class ValWnd : public Window
 public:
             ValWnd( Window* pParent, const ResId& rId );
 
-    void    SetValue( const String& rStrVal );
+    void	SetValue( const String& rStrVal );
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void	Paint( const Rectangle& rRect );
 
 private:
-    String      aStrValue;
-    Rectangle   aRectOut;
+    String		aStrValue;
+    Rectangle	aRectOut;
 };
 
 
@@ -64,18 +64,18 @@ class ScEditBox : public Control
 {
 private:
 
-    MultiLineEdit*  pMEdit;
-    Link            aSelChangedLink;
-    Selection       aOldSel;
-    BOOL            bMouseFlag;
+    MultiLineEdit*	pMEdit;
+    Link			aSelChangedLink;
+    Selection		aOldSel;
+    BOOL			bMouseFlag;
                     DECL_LINK( ChangedHdl, ScEditBox* );
 
 protected:
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual void    SelectionChanged();
-    virtual void    Resize();
-    virtual void    GetFocus();
+    virtual long	PreNotify( NotifyEvent& rNEvt );
+    virtual void	SelectionChanged();
+    virtual void	Resize();
+    virtual void	GetFocus();
 
 
 public:
@@ -83,12 +83,12 @@ public:
 
                     ~ScEditBox();
 
-    MultiLineEdit*  GetEdit() {return pMEdit;}
+    MultiLineEdit*	GetEdit() {return pMEdit;}
 
     void            SetSelChangedHdl( const Link& rLink ) { aSelChangedLink = rLink; }
     const Link&     GetSelChangedHdl() const { return aSelChangedLink; }
 
-    void            UpdateOldSel();
+    void			UpdateOldSel();
 };
 
 
@@ -101,17 +101,17 @@ class ArgEdit : public formula::RefEdit
 public:
             ArgEdit( Window* pParent, const ResId& rResId );
 
-    void    Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
+    void	Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
                   ScrollBar& rArgSlider, USHORT nArgCount );
 
 protected:
-    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void	KeyInput( const KeyEvent& rKEvt );
 
 private:
-    ArgEdit*    pEdPrev;
-    ArgEdit*    pEdNext;
-    ScrollBar*  pSlider;
-    USHORT      nArgs;
+    ArgEdit*	pEdPrev;
+    ArgEdit*	pEdNext;
+    ScrollBar*	pSlider;
+    USHORT		nArgs;
 };
 
 
@@ -122,53 +122,53 @@ class ArgInput
 {
 private:
 
-    Link            aFxClickLink;
-    Link            aRefClickLink;
-    Link            aFxFocusLink;
-    Link            aRefFocusLink;
-    Link            aEdFocusLink;
-    Link            aEdModifyLink;
+    Link			aFxClickLink;
+    Link			aRefClickLink;
+    Link			aFxFocusLink;
+    Link			aRefFocusLink;
+    Link			aEdFocusLink;
+    Link			aEdModifyLink;
 
-    FixedText*      pFtArg;
-    ImageButton*    pBtnFx;
-    ArgEdit*        pEdArg;
-    formula::RefButton* pRefBtn;
+    FixedText*		pFtArg;
+    ImageButton*	pBtnFx;
+    ArgEdit*		pEdArg;
+    formula::RefButton*	pRefBtn;
 
-    DECL_LINK(  FxBtnClickHdl, ImageButton* );
-    DECL_LINK(  RefBtnClickHdl,formula::RefButton* );
-    DECL_LINK(  FxBtnFocusHdl, ImageButton* );
-    DECL_LINK(  RefBtnFocusHdl,formula::RefButton* );
-    DECL_LINK(  EdFocusHdl, ArgEdit* );
-    DECL_LINK(  EdModifyHdl,ArgEdit* );
+    DECL_LINK(	FxBtnClickHdl, ImageButton* );
+    DECL_LINK(	RefBtnClickHdl,formula::RefButton* );
+    DECL_LINK(	FxBtnFocusHdl, ImageButton* );
+    DECL_LINK(	RefBtnFocusHdl,formula::RefButton* );
+    DECL_LINK(	EdFocusHdl, ArgEdit* );
+    DECL_LINK(	EdModifyHdl,ArgEdit* );
 
 protected:
 
-    virtual void    FxClick();
-    virtual void    RefClick();
-    virtual void    FxFocus();
-    virtual void    RefFocus();
-    virtual void    EdFocus();
-    virtual void    EdModify();
+    virtual void	FxClick();
+    virtual void	RefClick();
+    virtual void	FxFocus();
+    virtual void	RefFocus();
+    virtual void	EdFocus();
+    virtual void	EdModify();
 
 public:
 
     ArgInput();
 
-    void        InitArgInput (  FixedText*      pftArg,
-                                ImageButton*    pbtnFx,
-                                ArgEdit*        pedArg,
-                                formula::RefButton* prefBtn);
+    void		InitArgInput (	FixedText*		pftArg,
+                                ImageButton*	pbtnFx,
+                                ArgEdit*		pedArg,
+                                formula::RefButton*	prefBtn);
 
-    void        SetArgName(const String &aArg);
-    String      GetArgName();
-    void        SetArgNameFont(const Font&);
+    void		SetArgName(const String &aArg);
+    String		GetArgName();
+    void		SetArgNameFont(const Font&);
 
-    void        SetArgVal(const String &aVal);
-    String      GetArgVal();
+    void		SetArgVal(const String &aVal);
+    String		GetArgVal();
 
-    void        SetArgSelection (const Selection& rSel );
+    void		SetArgSelection	(const Selection& rSel );
 
-    ArgEdit*    GetArgEdPtr() {return pEdArg;}
+    ArgEdit*	GetArgEdPtr() {return pEdArg;}
 
 
     void            SetFxClickHdl( const Link& rLink ) { aFxClickLink = rLink; }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 /*
- * This adapter converts the current Document (a DOM) into
- * a JTree model.
+ * This adapter converts the current Document (a DOM) into 
+ * a JTree model. 
  */
-class DomToTreeModelAdapter
-    implements javax.swing.tree.TreeModel
+class DomToTreeModelAdapter 
+    implements javax.swing.tree.TreeModel 
 {
     private Document m_document;
     private Vector m_listenerList = new Vector();
@@ -50,50 +50,50 @@ class DomToTreeModelAdapter
     }
 
     /*
-     * Basic TreeModel operations
+     * Basic TreeModel operations 
      */
-    public Object  getRoot()
+    public Object  getRoot() 
     {
         return new AdapterNode(m_document);
     }
 
-    public boolean isLeaf(Object aNode)
+    public boolean isLeaf(Object aNode) 
     {
         boolean rc = true;
-
+        
         /*
          * Determines whether the icon shows up to the left.
          * Return true for any node with no children.
          */
         AdapterNode node = (AdapterNode) aNode;
-
+        
         if (node.childCount() > 0)
         {
             rc = false;
         }
-
+        
         return rc;
     }
-
-    public int getChildCount(Object parent)
+    
+    public int getChildCount(Object parent) 
     {
         AdapterNode node = (AdapterNode) parent;
         return node.childCount();
     }
-
-    public Object getChild(Object parent, int index)
+    
+    public Object getChild(Object parent, int index) 
     {
         AdapterNode node = (AdapterNode) parent;
         return node.child(index);
     }
-
-    public int getIndexOfChild(Object parent, Object child)
+    
+    public int getIndexOfChild(Object parent, Object child) 
     {
         AdapterNode node = (AdapterNode) parent;
         return node.index((AdapterNode) child);
     }
-
-    public void valueForPathChanged(TreePath path, Object newValue)
+    
+    public void valueForPathChanged(TreePath path, Object newValue) 
     {
         /*
          * Null. We won't be making changes in the GUI
@@ -102,60 +102,60 @@ class DomToTreeModelAdapter
          */
     }
 
-    public void addTreeModelListener(TreeModelListener listener)
+    public void addTreeModelListener(TreeModelListener listener) 
     {
-        if ( listener != null
-            && ! m_listenerList.contains( listener ) )
+        if ( listener != null 
+            && ! m_listenerList.contains( listener ) ) 
         {
             m_listenerList.addElement( listener );
         }
     }
-
-    public void removeTreeModelListener(TreeModelListener listener)
+    
+    public void removeTreeModelListener(TreeModelListener listener) 
     {
-        if ( listener != null )
+        if ( listener != null ) 
         {
             m_listenerList.removeElement( listener );
         }
     }
-
-    public void fireTreeNodesChanged( TreeModelEvent e )
+    
+    public void fireTreeNodesChanged( TreeModelEvent e ) 
     {
         Enumeration listeners = m_listenerList.elements();
-        while ( listeners.hasMoreElements() )
+        while ( listeners.hasMoreElements() ) 
         {
-            TreeModelListener listener =
+            TreeModelListener listener = 
             (TreeModelListener) listeners.nextElement();
             listener.treeNodesChanged( e );
         }
-    }
+    } 
 
-    public void fireTreeNodesInserted( TreeModelEvent e )
+    public void fireTreeNodesInserted( TreeModelEvent e ) 
     {
         Enumeration listeners = m_listenerList.elements();
-        while ( listeners.hasMoreElements() )
+        while ( listeners.hasMoreElements() ) 
         {
             TreeModelListener listener =
             (TreeModelListener) listeners.nextElement();
             listener.treeNodesInserted( e );
         }
-    }
+    }   
 
-    public void fireTreeNodesRemoved( TreeModelEvent e )
+    public void fireTreeNodesRemoved( TreeModelEvent e ) 
     {
         Enumeration listeners = m_listenerList.elements();
-        while ( listeners.hasMoreElements() )
+        while ( listeners.hasMoreElements() ) 
         {
-            TreeModelListener listener =
+            TreeModelListener listener = 
             (TreeModelListener) listeners.nextElement();
             listener.treeNodesRemoved( e );
         }
-    }
+    }   
 
-    public void fireTreeStructureChanged( TreeModelEvent e )
+    public void fireTreeStructureChanged( TreeModelEvent e ) 
     {
         Enumeration listeners = m_listenerList.elements();
-        while ( listeners.hasMoreElements() )
+        while ( listeners.hasMoreElements() ) 
         {
             TreeModelListener listener =
             (TreeModelListener) listeners.nextElement();

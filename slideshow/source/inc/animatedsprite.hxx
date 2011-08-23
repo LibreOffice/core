@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,8 +73,8 @@ namespace slideshow
                 Priority of the sprite. Must remain static over the
                 lifetime of this object
              */
-            AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
-                            const ::basegfx::B2DSize&   rSpriteSizePixel,
+            AnimatedSprite( const ViewLayerSharedPtr&	rViewLayer,
+                            const ::basegfx::B2DSize&	rSpriteSizePixel,
                             double                      nSpritePrio );
 
             /** Resize the sprite.
@@ -93,10 +93,10 @@ namespace slideshow
                 canvas by the specified amount of device pixel (for
                 subsequent render operations).
              */
-            void                setPixelOffset( const ::basegfx::B2DSize& rPixelOffset );
+            void 				setPixelOffset( const ::basegfx::B2DSize& rPixelOffset );
 
             /// Retrieve current pixel offset for content output.
-            ::basegfx::B2DSize  getPixelOffset() const;
+            ::basegfx::B2DSize	getPixelOffset() const;
 
             /// Show the sprite
             void show();
@@ -159,23 +159,23 @@ namespace slideshow
 
                 @param rPrio
                 The new sprite prio. Must be in the range [0,1]
-             */
+             */ 
             void setPriority( double rPrio );
 
         private:
-            ViewLayerSharedPtr                                          mpViewLayer;
+            ViewLayerSharedPtr											mpViewLayer;
 
-            ::cppcanvas::CustomSpriteSharedPtr                          mpSprite;
-            ::basegfx::B2DSize                                          maEffectiveSpriteSizePixel;
-            ::basegfx::B2DSize                                          maContentPixelOffset;
+            ::cppcanvas::CustomSpriteSharedPtr							mpSprite;
+            ::basegfx::B2DSize											maEffectiveSpriteSizePixel;
+            ::basegfx::B2DSize											maContentPixelOffset;
 
             double                                                      mnSpritePrio;
-            double                                                      mnAlpha;
+            double														mnAlpha;
             ::boost::optional< ::basegfx::B2DPoint >                    maPosPixel;
             ::boost::optional< ::basegfx::B2DPolyPolygon >              maClip;
             ::boost::optional< ::basegfx::B2DHomMatrix >                maTransform;
 
-            bool                                                        mbSpriteVisible;
+            bool														mbSpriteVisible;
         };
 
         typedef ::boost::shared_ptr< AnimatedSprite > AnimatedSpriteSharedPtr;

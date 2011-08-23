@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,14 @@
 #define _TRANSFERABLE_HXX_
 
 //_________________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________________
 
 
 //#include "..\ImplHelper.hxx"
 
 //_________________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________________
 
 #include <cppuhelper/servicefactory.hxx>
@@ -79,28 +79,28 @@
 #define EVT_NONAME           ""
 
 //------------------------------------------------------------
-//  namesapces
+//	namesapces
 //------------------------------------------------------------
 
-using namespace ::rtl;
+using namespace	::rtl;
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
+using namespace	::com::sun::star::lang;
 
 //------------------------------------------------------------
-//
+//	
 //------------------------------------------------------------
 
 class CTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
 {
-public:
+public:	
     CTransferable( ){};
     CTransferable( wchar_t* dataString);
-
+        
     //-------------------------------------------------
     // XTransferable
     //-------------------------------------------------
@@ -108,13 +108,13 @@ public:
     virtual Any SAL_CALL getTransferData( const DataFlavor& aFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException);
     virtual Sequence< DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& aFlavor ) throw(RuntimeException);
-
+    
     //-------------------------------------------------
     // XClipboardOwner
     //-------------------------------------------------
 
     virtual void SAL_CALL lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw(RuntimeException);
-
+    
 private:
     Sequence< DataFlavor > m_seqDFlv;
     OUString               m_Data;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 static const char ITEM_DESCRIPTOR_ISVISIBLE[]   = "IsVisible";
 static const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
-static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
+static const char ITEM_DESCRIPTOR_UINAME[]		= "UIName";
 
 static const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
 static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
@@ -129,7 +129,7 @@ static const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
 
 static const char __FAR_DATA pSeparatorStr[] =
     "----------------------------------";
-static const char __FAR_DATA pMenuSeparatorStr[]    = " | ";
+static const char __FAR_DATA pMenuSeparatorStr[]	= " | ";
 
 #ifdef _MSC_VER
 #pragma warning (disable:4355)
@@ -1177,15 +1177,19 @@ bool MenuSaveInData::LoadSubMenus(
     const OUString& rBaseTitle,
     SvxConfigEntry* pParentData )
 {
-    SvxEntries*     pEntries            = pParentData->GetEntries();
+    SvxEntries* pEntries = pParentData->GetEntries();
 
+    // Don't access non existing menu configuration!
+    if ( !xMenuSettings.is() )
+        return true;
+    
     for ( sal_Int32 nIndex = 0; nIndex < xMenuSettings->getCount(); nIndex++ )
     {
-        uno::Reference< container::XIndexAccess >   xSubMenu;
-        OUString                aCommandURL;
-        OUString                aHelpURL;
-        OUString                aLabel;
-        bool                    bIsUserDefined = TRUE;
+        uno::Reference< container::XIndexAccess >	xSubMenu;
+        OUString				aCommandURL;
+        OUString				aHelpURL;
+        OUString				aLabel;
+        bool					bIsUserDefined = TRUE;
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
@@ -1497,8 +1501,8 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(
     SetHighlightRange();
     SetSelectionMode(SINGLE_SELECTION);
 
-    SetDragDropMode( SV_DRAGDROP_CTRL_MOVE  |
-                     SV_DRAGDROP_APP_COPY   |
+    SetDragDropMode( SV_DRAGDROP_CTRL_MOVE	|
+                     SV_DRAGDROP_APP_COPY	|
                      SV_DRAGDROP_ENABLE_TOP |
                      SV_DRAGDROP_APP_DROP);
 }
@@ -2407,12 +2411,12 @@ SvxMenuConfigPage::SvxMenuConfigPage(
         LINK( this, SvxMenuConfigPage, SelectMenuEntry ) );
 
     aMoveUpButton.SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
-    aMoveDownButton.SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
+    aMoveDownButton.SetClickHdl	( LINK( this, SvxConfigPage, MoveHdl) );
 
-    aNewTopLevelButton.SetClickHdl  (
+    aNewTopLevelButton.SetClickHdl	(
         LINK( this, SvxMenuConfigPage, NewMenuHdl ) );
 
-    aAddCommandsButton.SetClickHdl  (
+    aAddCommandsButton.SetClickHdl	(
         LINK( this, SvxMenuConfigPage, AddCommandsHdl ) );
 
     PopupMenu* pMenu = new PopupMenu( CUI_RES( MODIFY_MENU ) );
@@ -2594,17 +2598,20 @@ IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
     PopupMenu* pPopup = aModifyTopLevelButton.GetPopupMenu();
-    pPopup->EnableItem( ID_DELETE, pMenuData->IsDeletable() );
-    pPopup->EnableItem( ID_RENAME, pMenuData->IsRenamable() );
-    pPopup->EnableItem( ID_MOVE, pMenuData->IsMovable() );
-
-    SvxEntries* pEntries = pMenuData->GetEntries();
-    SvxEntries::const_iterator iter = pEntries->begin();
-
-    for ( ; iter != pEntries->end(); iter++ )
+    if ( pMenuData )
     {
-        SvxConfigEntry* pEntry = *iter;
-        InsertEntryIntoUI( pEntry );
+        pPopup->EnableItem( ID_DELETE, pMenuData->IsDeletable() );
+        pPopup->EnableItem( ID_RENAME, pMenuData->IsRenamable() );
+        pPopup->EnableItem( ID_MOVE, pMenuData->IsMovable() );
+
+        SvxEntries* pEntries = pMenuData->GetEntries();
+        SvxEntries::const_iterator iter = pEntries->begin();
+
+        for ( ; iter != pEntries->end(); iter++ )
+        {
+            SvxConfigEntry* pEntry = *iter;
+            InsertEntryIntoUI( pEntry );
+        }
     }
 
     UpdateButtonStates();
@@ -2944,7 +2951,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
 
     aMoveUpButton.SetClickHdl (
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
-    aMoveDownButton.SetClickHdl (
+    aMoveDownButton.SetClickHdl	(
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
 }
 
@@ -3370,14 +3377,14 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     aContentsListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbarEntry ) );
 
-    aNewTopLevelButton.SetClickHdl  (
+    aNewTopLevelButton.SetClickHdl	(
         LINK( this, SvxToolbarConfigPage, NewToolbarHdl ) );
 
-    aAddCommandsButton.SetClickHdl  (
+    aAddCommandsButton.SetClickHdl	(
         LINK( this, SvxToolbarConfigPage, AddCommandsHdl ) );
 
     aMoveUpButton.SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
-    aMoveDownButton.SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
+    aMoveDownButton.SetClickHdl	( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     // Always enable Up and Down buttons
     // added for issue i53677 by shizhoubo
     aMoveDownButton.Enable( TRUE );
@@ -4193,7 +4200,7 @@ bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
     return a->GetName().compareTo( b->GetName() ) < 0;
 }
 
-SvxEntries* ToolbarSaveInData::GetEntries()
+SvxEntries*	ToolbarSaveInData::GetEntries()
 {
     typedef ::std::hash_map< ::rtl::OUString,
                              bool,
@@ -4744,17 +4751,17 @@ bool ToolbarSaveInData::LoadToolbar(
     const uno::Reference< container::XIndexAccess >& xToolbarSettings,
     SvxConfigEntry* pParentData )
 {
-    SvxEntries*         pEntries            = pParentData->GetEntries();
+    SvxEntries*			pEntries			= pParentData->GetEntries();
 
     for ( sal_Int32 nIndex = 0; nIndex < xToolbarSettings->getCount(); nIndex++ )
     {
-        uno::Reference< container::XIndexAccess >   xSubMenu;
-        OUString                aCommandURL;
-        OUString                aHelpURL;
-        OUString                aLabel;
-        bool                    bIsUserDefined = TRUE;
-        sal_Bool                bIsVisible;
-        sal_Int32               nStyle;
+        uno::Reference< container::XIndexAccess >	xSubMenu;
+        OUString				aCommandURL;
+        OUString				aHelpURL;
+        OUString				aLabel;
+        bool					bIsUserDefined = TRUE;
+        sal_Bool				bIsVisible;
+        sal_Int32				nStyle;
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
@@ -5130,8 +5137,8 @@ void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pDat
     // in all color modes, like high contrast.
     const AllSettings& rSettings = Application::GetSettings();
 
-    VirtualDevice   aDev;
-    Size            aSize( 26, 20 );
+    VirtualDevice	aDev;
+    Size			aSize( 26, 20 );
 
     aDev.SetOutputSizePixel( aSize );
 
@@ -5139,12 +5146,12 @@ void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pDat
         CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT ));
 
     // Fill button data struct with new images
-    pData->aBmps[SV_BMP_UNCHECKED]      = aImage;
-    pData->aBmps[SV_BMP_CHECKED]        = GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED ));
-    pData->aBmps[SV_BMP_HICHECKED]      = GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED ));
-    pData->aBmps[SV_BMP_HIUNCHECKED]    = GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED));
-    pData->aBmps[SV_BMP_TRISTATE]       = GetSizedImage( aDev, aSize, Image() ); // Use tristate bitmaps to have no checkbox for separator entries
-    pData->aBmps[SV_BMP_HITRISTATE]     = GetSizedImage( aDev, aSize, Image() );
+    pData->aBmps[SV_BMP_UNCHECKED]		= aImage;
+    pData->aBmps[SV_BMP_CHECKED]		= GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED ));
+    pData->aBmps[SV_BMP_HICHECKED]		= GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED ));
+    pData->aBmps[SV_BMP_HIUNCHECKED]	= GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED));
+    pData->aBmps[SV_BMP_TRISTATE]		= GetSizedImage( aDev, aSize, Image() ); // Use tristate bitmaps to have no checkbox for separator entries
+    pData->aBmps[SV_BMP_HITRISTATE]		= GetSizedImage( aDev, aSize, Image() );
 
     // Get image size
     m_aCheckBoxImageSizePixel = aImage.GetSizePixel();
@@ -5158,13 +5165,13 @@ Image SvxToolbarEntriesListBox::GetSizedImage(
 
     // Standard transparent color is light magenta as is won't be
     // used for other things
-    Color   aFillColor( COL_LIGHTMAGENTA );
+    Color	aFillColor( COL_LIGHTMAGENTA );
 
     // Position image at the center of (width-2),(height) rectangle.
     // We need 2 pixels to have a bigger border to the next button image
-    USHORT  nPosX = std::max( (USHORT) (((( aNewSize.Width() - 2 ) - aImage.GetSizePixel().Width() ) / 2 ) - 1), (USHORT) 0 );
-    USHORT  nPosY = std::max( (USHORT) (((( aNewSize.Height() - 2 ) - aImage.GetSizePixel().Height() ) / 2 ) + 1), (USHORT) 0 );
-    Point   aPos( nPosX > 0 ? nPosX : 0, nPosY > 0 ? nPosY : 0 );
+    USHORT	nPosX = std::max( (USHORT) (((( aNewSize.Width() - 2 ) - aImage.GetSizePixel().Width() ) / 2 ) - 1), (USHORT) 0 );
+    USHORT	nPosY = std::max( (USHORT) (((( aNewSize.Height() - 2 ) - aImage.GetSizePixel().Height() ) / 2 ) + 1), (USHORT) 0 );
+    Point	aPos( nPosX > 0 ? nPosX : 0, nPosY > 0 ? nPosY : 0 );
     aDev.SetFillColor( aFillColor );
     aDev.SetLineColor( aFillColor );
     aDev.DrawRect( Rectangle( Point(), aNewSize ));
@@ -5297,14 +5304,14 @@ BOOL SvxToolbarEntriesListBox::NotifyCopying(
 SvxNewToolbarDialog::SvxNewToolbarDialog(
     Window* pWindow, const String& rName )
     :
-    ModalDialog     ( pWindow, CUI_RES( MD_NEW_TOOLBAR ) ),
-    aFtDescription  ( this, CUI_RES( FT_NAME ) ),
-    aEdtName        ( this, CUI_RES( EDT_STRING ) ),
-    aSaveInText     ( this, CUI_RES( TXT_SAVEIN ) ),
-    aBtnOK          ( this, CUI_RES( BTN_OK ) ),
-    aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    aBtnHelp        ( this, CUI_RES( BTN_HELP ) ),
-    aSaveInListBox  ( this, CUI_RES( LB_SAVEIN ) )
+    ModalDialog		( pWindow, CUI_RES( MD_NEW_TOOLBAR ) ),
+    aFtDescription	( this, CUI_RES( FT_NAME ) ),
+    aEdtName		( this, CUI_RES( EDT_STRING ) ),
+    aSaveInText		( this, CUI_RES( TXT_SAVEIN ) ),
+    aBtnOK			( this, CUI_RES( BTN_OK ) ),
+    aBtnCancel		( this, CUI_RES( BTN_CANCEL ) ),
+    aBtnHelp		( this, CUI_RES( BTN_HELP ) ),
+    aSaveInListBox	( this, CUI_RES( LB_SAVEIN ) )
 {
     FreeResource();
 
@@ -5333,18 +5340,18 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     const uno::Reference< css::ui::XImageManager >& rXImageManager,
     const uno::Reference< css::ui::XImageManager >& rXParentImageManager )
     :
-    ModalDialog          ( pWindow, CUI_RES( MD_ICONSELECTOR ) ),
-    aFtDescription       ( this, CUI_RES( FT_SYMBOLS ) ),
-    aTbSymbol            ( this, CUI_RES( TB_SYMBOLS ) ),
-    aFtNote              ( this, CUI_RES( FT_NOTE ) ),
-    aBtnOK               ( this, CUI_RES( BTN_OK ) ),
-    aBtnCancel           ( this, CUI_RES( BTN_CANCEL ) ),
-    aBtnHelp             ( this, CUI_RES( BTN_HELP ) ),
-    aBtnImport           ( this, CUI_RES( BTN_IMPORT ) ),
-    aBtnDelete           ( this, CUI_RES( BTN_DELETE ) ),
-    aFlSeparator         ( this, CUI_RES( FL_SEPARATOR ) ),
+    ModalDialog		     ( pWindow, CUI_RES( MD_ICONSELECTOR ) ),
+    aFtDescription	     ( this, CUI_RES( FT_SYMBOLS ) ),
+    aTbSymbol		     ( this, CUI_RES( TB_SYMBOLS ) ),
+    aFtNote			     ( this, CUI_RES( FT_NOTE ) ),
+    aBtnOK			     ( this, CUI_RES( BTN_OK ) ),
+    aBtnCancel		     ( this, CUI_RES( BTN_CANCEL ) ),
+    aBtnHelp		     ( this, CUI_RES( BTN_HELP ) ),
+    aBtnImport		     ( this, CUI_RES( BTN_IMPORT ) ),
+    aBtnDelete			 ( this, CUI_RES( BTN_DELETE ) ),
+    aFlSeparator		 ( this, CUI_RES( FL_SEPARATOR ) ),
     m_nNextId            ( 0 ),
-    m_xImageManager      ( rXImageManager ),
+    m_xImageManager	     ( rXImageManager ),
     m_xParentImageManager( rXParentImageManager )
 {
     FreeResource();
@@ -5982,7 +5989,7 @@ USHORT SvxIconReplacementDialog :: ShowDialog()
 SvxIconChangeDialog::SvxIconChangeDialog(
     Window *pWindow, const rtl::OUString& aMessage)
     :
-    ModalDialog            ( pWindow, CUI_RES( MD_ICONCHANGE ) ),
+    ModalDialog	           ( pWindow, CUI_RES( MD_ICONCHANGE ) ),
     aFImageInfo            (this, CUI_RES( FI_INFO ) ),
     aBtnOK                 (this, CUI_RES(MD_BTN_OK)),
     aDescriptionLabel      (this, CUI_RES(FTCHGE_DESCRIPTION)),

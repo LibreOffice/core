@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 struct IdentityMapping : public uno_Mapping
 {
-    sal_Int32        m_nRef;
+    sal_Int32	     m_nRef;
     uno::Environment m_env;
 
     IdentityMapping(uno::Environment const & rEnv);
@@ -58,7 +58,7 @@ static void SAL_CALL s_acquire(uno_Mapping * pMapping) SAL_THROW(())
     if (1 == ::osl_incrementInterlockedCount(&static_cast<IdentityMapping *>(pMapping)->m_nRef))
     {
         uno_registerMapping(
-            &pMapping,
+            &pMapping, 
             s_free,
             static_cast<IdentityMapping *>(pMapping)->m_env.get(),
             static_cast<IdentityMapping *>(pMapping)->m_env.get(),
@@ -73,30 +73,30 @@ static void SAL_CALL s_release(uno_Mapping * pMapping) SAL_THROW(())
 }
 
 static void SAL_CALL s_mapInterface(uno_Mapping                       * pMapping,
-                                    void                             ** ppOut,
+                                    void                             ** ppOut, 
                                     void                              * pInterface,
                                     struct _typelib_InterfaceTypeDescription * /*pInterfaceTypeDescr*/)
     SAL_THROW(())
 {
     *ppOut = pInterface;
 
-    if (pInterface)
+    if (pInterface) 
     {
         IdentityMapping * that = static_cast<IdentityMapping *>(pMapping);
-
+        
         (that->m_env.get()->pExtEnv->acquireInterface)(that->m_env.get()->pExtEnv, pInterface);
     }
 }
 }
 
 
-IdentityMapping::IdentityMapping(uno::Environment const & rEnv)
+IdentityMapping::IdentityMapping(uno::Environment const & rEnv) 
     : m_nRef(0),
       m_env(rEnv)
 {
-    uno_Mapping::acquire        = s_acquire;
-    uno_Mapping::release        = s_release;
-    uno_Mapping::mapInterface   = s_mapInterface;
+    uno_Mapping::acquire		= s_acquire;
+    uno_Mapping::release		= s_release;
+    uno_Mapping::mapInterface	= s_mapInterface;
 }
 
 

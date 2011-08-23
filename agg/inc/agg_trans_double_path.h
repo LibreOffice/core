@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -21,7 +21,7 @@
 
 namespace agg
 {
-
+    
     // See also: agg_trans_double_path.cpp
     //
     //-------------------------------------------------------trans_double_path
@@ -60,8 +60,8 @@ namespace agg
         void finalize_paths();
 
         //--------------------------------------------------------------------
-        template<class VertexSource1, class VertexSource2>
-        void add_paths(VertexSource1& vs1, VertexSource2& vs2,
+        template<class VertexSource1, class VertexSource2> 
+        void add_paths(VertexSource1& vs1, VertexSource2& vs2, 
                        unsigned path1_id=0, unsigned path2_id=0)
         {
             double x;
@@ -72,11 +72,11 @@ namespace agg
             vs1.rewind(path1_id);
             while(!is_stop(cmd = vs1.vertex(&x, &y)))
             {
-                if(is_move_to(cmd))
+                if(is_move_to(cmd)) 
                 {
                     move_to1(x, y);
                 }
-                else
+                else 
                 {
                     if(is_vertex(cmd))
                     {
@@ -88,11 +88,11 @@ namespace agg
             vs2.rewind(path2_id);
             while(!is_stop(cmd = vs2.vertex(&x, &y)))
             {
-                if(is_move_to(cmd))
+                if(is_move_to(cmd)) 
                 {
                     move_to2(x, y);
                 }
-                else
+                else 
                 {
                     if(is_vertex(cmd))
                     {
@@ -110,7 +110,7 @@ namespace agg
 
     private:
         double finalize_path(vertex_storage& vertices);
-        void transform1(const vertex_storage& vertices,
+        void transform1(const vertex_storage& vertices, 
                         double kindex, double kx,
                         double *x, double* y) const;
 

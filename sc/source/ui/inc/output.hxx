@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,16 +56,16 @@ class SdrPaintWindow;
 
 // ---------------------------------------------------------------------------
 
-#define SC_SCENARIO_HSPACE      60
-#define SC_SCENARIO_VSPACE      50
+#define SC_SCENARIO_HSPACE		60
+#define SC_SCENARIO_VSPACE		50
 
 // ---------------------------------------------------------------------------
 
-#define SC_OBJECTS_NONE         0
-#define SC_OBJECTS_DRAWING      1
-#define SC_OBJECTS_OLE          2
-#define SC_OBJECTS_CHARTS       4
-#define SC_OBJECTS_ALL          ( SC_OBJECTS_DRAWING | SC_OBJECTS_OLE | SC_OBJECTS_CHARTS )
+#define SC_OBJECTS_NONE			0
+#define SC_OBJECTS_DRAWING		1
+#define SC_OBJECTS_OLE			2
+#define SC_OBJECTS_CHARTS		4
+#define SC_OBJECTS_ALL			( SC_OBJECTS_DRAWING | SC_OBJECTS_OLE | SC_OBJECTS_CHARTS )
 
 enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
@@ -82,87 +82,87 @@ private:
         bool        mbRightClip;
     };
 
-    OutputDevice* pDev;         // Device
-    OutputDevice* pRefDevice;   // printer if used for preview
-    OutputDevice* pFmtDevice;   // reference for text formatting
+    OutputDevice* pDev;			// Device
+    OutputDevice* pRefDevice;	// printer if used for preview
+    OutputDevice* pFmtDevice;	// reference for text formatting
     ScTableInfo& mrTabInfo;
-    RowInfo* pRowInfo;          // Info-Block
-    SCSIZE nArrCount;           // belegte Zeilen im Info-Block
-    ScDocument* pDoc;           // Dokument
-    SCTAB nTab;                 // Tabelle
-    long nScrX;                 // Ausgabe Startpos. (Pixel)
+    RowInfo* pRowInfo;			// Info-Block
+    SCSIZE nArrCount;			// belegte Zeilen im Info-Block
+    ScDocument* pDoc;			// Dokument
+    SCTAB nTab;				    // Tabelle
+    long nScrX; 				// Ausgabe Startpos. (Pixel)
     long nScrY;
-    long nScrW;                 // Ausgabe Groesse (Pixel)
+    long nScrW; 				// Ausgabe Groesse (Pixel)
     long nScrH;
-    long nMirrorW;              // Visible output width for mirroring (default: nScrW)
-    SCCOL nX1;                  // Start-/Endkoordinaten
-    SCROW nY1;                  //  ( incl. versteckte )
+    long nMirrorW;				// Visible output width for mirroring (default: nScrW)
+    SCCOL nX1;					// Start-/Endkoordinaten
+    SCROW nY1;					//	( incl. versteckte )
     SCCOL nX2;
     SCROW nY2;
-    SCCOL nVisX1;               // Start-/Endkoordinaten
-    SCROW nVisY1;               //  ( sichtbarer Bereich )
+    SCCOL nVisX1; 				// Start-/Endkoordinaten
+    SCROW nVisY1;				//	( sichtbarer Bereich )
     SCCOL nVisX2;
     SCROW nVisY2;
-    ScOutputType eType;         // Bildschirm/Drucker ...
-    double nPPTX;               // Pixel per Twips
+    ScOutputType eType;			// Bildschirm/Drucker ...
+    double nPPTX;				// Pixel per Twips
     double nPPTY;
-//  USHORT nZoom;               // Zoom-Faktor (Prozent) - fuer GetFont
+//	USHORT nZoom;				// Zoom-Faktor (Prozent) - fuer GetFont
     Fraction aZoomX;
     Fraction aZoomY;
 
-    SdrObject* pEditObj;        // beim Painten auslassen
+    SdrObject* pEditObj;		// beim Painten auslassen
 
-    ScTabViewShell* pViewShell; // zum Connecten von sichtbaren Plug-Ins
+    ScTabViewShell* pViewShell;	// zum Connecten von sichtbaren Plug-Ins
 
     // #114135#
-    FmFormView* pDrawView;      // SdrView to paint to
+    FmFormView* pDrawView;		// SdrView to paint to
 
-    BOOL bEditMode;             // InPlace editierte Zelle - nicht ausgeben
+    BOOL bEditMode;				// InPlace editierte Zelle - nicht ausgeben
     SCCOL nEditCol;
     SCROW nEditRow;
 
-    BOOL bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
-    BOOL bSingleGrid;           // beim Gitter bChanged auswerten
+    BOOL bMetaFile;				// Ausgabe auf Metafile (nicht in Pixeln!)
+    BOOL bSingleGrid;			// beim Gitter bChanged auswerten
 
-    BOOL bPagebreakMode;        // Seitenumbruch-Vorschau
-    BOOL bSolidBackground;      // weiss statt transparent
+    BOOL bPagebreakMode;		// Seitenumbruch-Vorschau
+    BOOL bSolidBackground;		// weiss statt transparent
 
     BOOL bUseStyleColor;
     BOOL bForceAutoColor;
 
-    BOOL bSyntaxMode;           // Syntax-Highlighting
+    BOOL bSyntaxMode;			// Syntax-Highlighting
     Color* pValueColor;
     Color* pTextColor;
     Color* pFormulaColor;
 
-    Color   aGridColor;
+    Color	aGridColor;
 
-    BOOL    bShowNullValues;
-    BOOL    bShowFormulas;
-    BOOL    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
-    BOOL    bMarkClipped;
+    BOOL	bShowNullValues;
+    BOOL	bShowFormulas;
+    BOOL	bShowSpellErrors;	// Spell-Errors in EditObjekten anzeigen
+    BOOL	bMarkClipped;
 
-    BOOL    bSnapPixel;
+    BOOL	bSnapPixel;
 
-    BOOL    bAnyRotated;        // intern
-    BOOL    bAnyClipped;        // intern
-    BOOL    bTabProtected;
-    BYTE    nTabTextDirection;  // EEHorizontalTextDirection values
-    BOOL    bLayoutRTL;
+    BOOL	bAnyRotated;		// intern
+    BOOL	bAnyClipped;		// intern
+    BOOL	bTabProtected;
+    BYTE	nTabTextDirection;	// EEHorizontalTextDirection values
+    BOOL	bLayoutRTL;
 
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
-    SdrPaintWindow*     mpTargetPaintWindow;
+    SdrPaintWindow*		mpTargetPaintWindow;
 
                             // private methods
 
-    BOOL            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
+    BOOL			GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
                                     SCCOL& rOverX, SCROW& rOverY, BOOL bVisRowChanged );
-    BOOL            IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
-    void            GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell );
+    BOOL			IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
+    void			GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell );
 
-    BOOL            IsAvailable( SCCOL nX, SCROW nY );
+    BOOL			IsAvailable( SCCOL nX, SCROW nY );
 
-    void            GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
+    void			GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
                                    SCCOL nCellX, SCROW nCellY, long nNeeded,
                                    const ScPatternAttr& rPattern,
                                    USHORT nHorJustify, bool bCellIsValue,
@@ -175,12 +175,12 @@ private:
                                     long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
                                     bool& rLeftClip, bool& rRightClip );
 
-    void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
-    void            SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );
+    void			SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
+    void			SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );
 
-    double          GetStretch();
+    double			GetStretch();
 
-    void            DrawRotatedFrame( const Color* pForceColor );       // pixel
+    void			DrawRotatedFrame( const Color* pForceColor );		// pixel
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
@@ -195,46 +195,46 @@ public:
 
     void    SetContentDevice( OutputDevice* pContentDev );
 
-    void    SetRefDevice( OutputDevice* pRDev ) { pRefDevice = pFmtDevice = pRDev; }
-    void    SetFmtDevice( OutputDevice* pRDev ) { pFmtDevice = pRDev; }
-    void    SetEditObject( SdrObject* pObj )    { pEditObj = pObj; }
-    void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
+    void	SetRefDevice( OutputDevice* pRDev ) { pRefDevice = pFmtDevice = pRDev; }
+    void	SetFmtDevice( OutputDevice* pRDev ) { pFmtDevice = pRDev; }
+    void	SetEditObject( SdrObject* pObj )	{ pEditObj = pObj; }
+    void	SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
 
     // #114135#
-    void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }
+    void	SetDrawView( FmFormView* pNew )		{ pDrawView = pNew; }
 
-    void    SetSolidBackground( BOOL bSet )     { bSolidBackground = bSet; }
-    void    SetUseStyleColor( BOOL bSet )       { bUseStyleColor = bSet; }
+    void	SetSolidBackground( BOOL bSet )		{ bSolidBackground = bSet; }
+    void	SetUseStyleColor( BOOL bSet )		{ bUseStyleColor = bSet; }
 
-    void    SetEditCell( SCCOL nCol, SCROW nRow );
-    void    SetSyntaxMode( BOOL bNewMode );
-    void    SetMetaFileMode( BOOL bNewMode );
-    void    SetSingleGrid( BOOL bNewMode );
-    void    SetGridColor( const Color& rColor );
-    void    SetMarkClipped( BOOL bSet );
-    void    SetShowNullValues ( BOOL bSet = TRUE );
-    void    SetShowFormulas   ( BOOL bSet = TRUE );
-    void    SetShowSpellErrors( BOOL bSet = TRUE );
-    void    SetMirrorWidth( long nNew );
-    long    GetScrW() const     { return nScrW; }
-    long    GetScrH() const     { return nScrH; }
+    void	SetEditCell( SCCOL nCol, SCROW nRow );
+    void	SetSyntaxMode( BOOL bNewMode );
+    void	SetMetaFileMode( BOOL bNewMode );
+    void	SetSingleGrid( BOOL bNewMode );
+    void	SetGridColor( const Color& rColor );
+    void	SetMarkClipped( BOOL bSet );
+    void	SetShowNullValues ( BOOL bSet = TRUE );
+    void	SetShowFormulas   ( BOOL bSet = TRUE );
+    void	SetShowSpellErrors( BOOL bSet = TRUE );
+    void	SetMirrorWidth( long nNew );
+    long	GetScrW() const		{ return nScrW; }
+    long	GetScrH() const		{ return nScrH; }
 
-    void    SetSnapPixel( BOOL bSet = TRUE );
+    void	SetSnapPixel( BOOL bSet = TRUE );
 
-    void    DrawGrid( BOOL bGrid, BOOL bPage );
-    void    DrawStrings( BOOL bPixelToLogic = FALSE );
-    void    DrawBackground();
-    void    DrawShadow();
-    void    DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBottom);
-    void    DrawFrame();
+    void	DrawGrid( BOOL bGrid, BOOL bPage );
+    void	DrawStrings( BOOL bPixelToLogic = FALSE );
+    void	DrawBackground();
+    void	DrawShadow();
+    void	DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBottom);
+    void	DrawFrame();
 
                     // with logic MapMode set!
-    void    DrawEdit(BOOL bPixelToLogic);
+    void	DrawEdit(BOOL bPixelToLogic);
 
-    void    FindRotated();
-    void    DrawRotated(BOOL bPixelToLogic);        // logisch
+    void	FindRotated();
+    void	DrawRotated(BOOL bPixelToLogic);		// logisch
 
-    void    DrawClear();
+    void	DrawClear();
 
     // #i72502# printer only command set
     Point PrePrintDrawingLayer(long nLogStX, long nLogStY );
@@ -242,27 +242,27 @@ public:
     void PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset);
 
     // nur Bildschirm:
-    void    DrawingSingle(const sal_uInt16 nLayer);
-    void    DrawSelectiveObjects(const sal_uInt16 nLayer);
+    void	DrawingSingle(const sal_uInt16 nLayer);
+    void	DrawSelectiveObjects(const sal_uInt16 nLayer);
 
-    BOOL    SetChangedClip();       // FALSE = nix
+    BOOL	SetChangedClip();		// FALSE = nix
     PolyPolygon GetChangedArea();
 
-    void    FindChanged();
-    void    SetPagebreakMode( ScPageBreakData* pPageData );
+    void	FindChanged();
+    void	SetPagebreakMode( ScPageBreakData* pPageData );
 #ifdef OLD_SELECTION_PAINT
     void    DrawMark( Window* pWin );
-#endif
-    void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
+#endif    
+    void	DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                          SCCOL nRefEndX, SCROW nRefEndY,
                          const Color& rColor, BOOL bHandle );
-    void    DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
+    void	DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
                             SCCOL nRefEndX, SCROW nRefEndY,
                             const Color& rColor, USHORT nType );
-    void    DrawChangeTrack();
-    void    DrawClipMarks();
+    void	DrawChangeTrack();
+    void	DrawClipMarks();
 
-    void    DrawNoteMarks();
+    void	DrawNoteMarks();
     void    AddPDFNotes();
 };
 

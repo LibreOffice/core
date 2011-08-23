@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace drawinglayer
     namespace primitive3d
     {
         BasePrimitive3D::BasePrimitive3D()
-        :   BasePrimitive3DImplBase(m_aMutex)
+        :	BasePrimitive3DImplBase(m_aMutex)
         {
         }
 
@@ -92,7 +92,7 @@ namespace drawinglayer
         }
 
         BufferedDecompositionPrimitive3D::BufferedDecompositionPrimitive3D()
-        :   BasePrimitive3D(),
+        :	BasePrimitive3D(),
             maBuffered3DDecomposition()
         {
         }

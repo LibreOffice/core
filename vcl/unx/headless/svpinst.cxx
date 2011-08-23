@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,9 +72,9 @@ SvpSalInstance* SvpSalInstance::s_pDefaultInstance = NULL;
 
 SvpSalInstance::SvpSalInstance()
 {
-    m_aTimeout.tv_sec       = 0;
-    m_aTimeout.tv_usec      = 0;
-    m_nTimeoutMS            = 0;
+    m_aTimeout.tv_sec 		= 0;
+    m_aTimeout.tv_usec		= 0;
+    m_nTimeoutMS 			= 0;
 
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
     if (pipe (m_pTimeoutFDS) != -1)
@@ -115,7 +115,7 @@ SvpSalInstance::~SvpSalInstance()
 {
     if( s_pDefaultInstance == this )
         s_pDefaultInstance = NULL;
-
+    
     // close 'wakeup' pipe.
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
@@ -158,7 +158,7 @@ void SvpSalInstance::CancelEvent( const SalFrame* pFrame, void* pData, USHORT nE
 void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 {
     m_aFrames.remove( pFrame );
-
+    
     if( osl_acquireMutex( m_aEventGuard ) )
     {
         // cancel outstanding events for this frame
@@ -389,7 +389,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         }
         else
             nTimeoutMS = -1; // wait until something happens
-
+        
         // release yield mutex
         nAcquireCount = ReleaseYieldMutex();
         // poll
@@ -398,10 +398,10 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         aPoll.events = POLLIN;
         aPoll.revents = 0;
         poll( &aPoll, 1, nTimeoutMS );
-
+        
         // acquire yield mutex again
         AcquireYieldMutex( nAcquireCount );
-
+        
         // clean up pipe
         if( (aPoll.revents & POLLIN) != 0 )
         {
@@ -457,8 +457,8 @@ void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 
 SvpSalYieldMutex::SvpSalYieldMutex()
 {
-    mnCount     = 0;
-    mnThreadId  = 0;
+    mnCount 	= 0;
+    mnThreadId	= 0;
 }
 
 void SvpSalYieldMutex::acquire()
@@ -497,9 +497,9 @@ sal_Bool SvpSalYieldMutex::tryToAcquire()
 
 void SvpSalInstance::StopTimer()
 {
-    m_aTimeout.tv_sec   = 0;
-    m_aTimeout.tv_usec  = 0;
-    m_nTimeoutMS        = 0;
+    m_aTimeout.tv_sec	= 0;
+    m_aTimeout.tv_usec	= 0;
+    m_nTimeoutMS		= 0;
 }
 
 void SvpSalInstance::StartTimer( ULONG nMS )

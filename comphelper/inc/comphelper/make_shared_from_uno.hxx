@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ template <typename T> struct ReleaseFunc : ::std::unary_function<T *, void> {
 /** Makes a boost::shared_ptr from a ref-counted UNO object pointer.
     This makes sense if the object is used via UNO (implementing some X
     interface) and also internally using its implementation class, e.g.
-
+    
     <pre>
         boost::shared_ptr<MyUnoImpl> const ptr(
             comphelper::make_shared_from_UNO( new MyUnoImpl ) );
@@ -53,12 +53,12 @@ template <typename T> struct ReleaseFunc : ::std::unary_function<T *, void> {
         takeSharedPtr( ptr );
         ...
     </pre>
-
+    
     @attention The shared_ptr operates on a separate reference counter, so
                weak pointers (boost::weak_ptr) are invalidated when the last
                shared_ptr is destroyed, although the UNO object may still be
                alive.
-
+               
     @param p object pointer
     @return shared_ptr to object
 */

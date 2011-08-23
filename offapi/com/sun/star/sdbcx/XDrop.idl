@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,58 +24,58 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_XDrop_idl__
-#define __com_sun_star_sdbcx_XDrop_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbcx {
-
+#ifndef __com_sun_star_sdbcx_XDrop_idl__ 
+#define __com_sun_star_sdbcx_XDrop_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
+#include <com/sun/star/container/NoSuchElementException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__ 
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
 /** provides methods to remove an element of its container and to drop it from
     the related database.
  */
 published interface XDrop: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** drops an object of the related container identified by its name.
         @param elementName
             the name of the element to be dropped
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    void dropByName([in]string elementName) raises
-    (com::sun::star::sdbc::SQLException,
-        com::sun::star::container::NoSuchElementException);
-    //-------------------------------------------------------------------------
-
+    void dropByName([in]string elementName) raises 
+    (com::sun::star::sdbc::SQLException, 
+        com::sun::star::container::NoSuchElementException); 
+    //------------------------------------------------------------------------- 
+     
     /** drops an object of the related container identified by its position.
         @param index
             the position of the element to be dropped
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    void dropByIndex([in]long index) raises (com::sun::star::sdbc::SQLException,
-        com::sun::star::lang::IndexOutOfBoundsException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    void dropByIndex([in]long index) raises (com::sun::star::sdbc::SQLException, 
+        com::sun::star::lang::IndexOutOfBoundsException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class RubyPreview : public Window
 {
 protected:
     virtual void Paint( const Rectangle& rRect );
-    SvxRubyDialog&  rParentDlg;
+    SvxRubyDialog&	rParentDlg;
 
 public:
     RubyPreview(SvxRubyDialog& rParent, const ResId& rResId);
@@ -71,7 +71,7 @@ class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
 
 };
 class SvxRubyData_Impl;
-class RubyEdit  : public Edit
+class RubyEdit	: public Edit
 {
     Link    aScrollHdl;
     Link    aJumpHdl;
@@ -96,39 +96,39 @@ class SvxRubyDialog : public SfxModelessDialog
     RubyEdit                aLeft1ED;
     FixedText               aRightFT;
     RubyEdit                aRight1ED;
-    RubyEdit                aLeft2ED;
-    RubyEdit                aRight2ED;
-    RubyEdit                aLeft3ED;
-    RubyEdit                aRight3ED;
-    RubyEdit                aLeft4ED;
-    RubyEdit                aRight4ED;
+    RubyEdit				aLeft2ED;
+    RubyEdit				aRight2ED;
+    RubyEdit				aLeft3ED;
+    RubyEdit				aRight3ED;
+    RubyEdit				aLeft4ED;
+    RubyEdit				aRight4ED;
 
     RubyEdit*               aEditArr[8];
-    ScrollBar           aScrollSB;
+    ScrollBar			aScrollSB;
 
-    CheckBox            aAutoDetectionCB;
+    CheckBox			aAutoDetectionCB;
 
-    FixedText           aAdjustFT;
-    ListBox             aAdjustLB;
+    FixedText			aAdjustFT;
+    ListBox				aAdjustLB;
 
     FixedText           aPositionFT;
     ListBox             aPositionLB;
 
     FixedText           aCharStyleFT;
-    ListBox             aCharStyleLB;
-    PushButton          aStylistPB;
+    ListBox				aCharStyleLB;
+    PushButton			aStylistPB;
 
-    FixedText           aPreviewFT;
-    RubyPreview         aPreviewWin;
+    FixedText			aPreviewFT;
+    RubyPreview			aPreviewWin;
 
-    OKButton            aApplyPB;
-    PushButton          aClosePB;
-    HelpButton          aHelpPB;
+    OKButton 			aApplyPB;
+    PushButton 			aClosePB;
+    HelpButton 			aHelpPB;
 
-    long                nLastPos;
-    long                nCurrentEdit;
+    long 				nLastPos;
+    long 				nCurrentEdit;
 
-    BOOL                bModified;
+    BOOL				bModified;
 
     com::sun::star::uno::Reference<com::sun::star::view::XSelectionChangeListener> xImpl;
     SfxBindings*    pBindings;
@@ -146,19 +146,19 @@ class SvxRubyDialog : public SfxModelessDialog
     DECL_LINK(EditScrollHdl_Impl, sal_Int32*);
     DECL_LINK(EditJumpHdl_Impl, sal_Int32*);
 
-    void                SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
-    void                GetText();
-    void                ClearCharStyleList();
+    void 				SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
+    void 				GetText();
+    void 				ClearCharStyleList();
     void                AssertOneEntry();
 
-    void                Update();
-    virtual BOOL        Close();
+    void				Update();
+    virtual BOOL 		Close();
 
-    long                GetLastPos() const {return nLastPos;}
-    void                SetLastPos(long nSet) {nLastPos = nSet;}
+    long 				GetLastPos() const {return nLastPos;}
+    void				SetLastPos(long nSet) {nLastPos = nSet;}
 
-    BOOL                IsModified() const {return bModified;}
-    void                SetModified(BOOL bSet) {bModified = bSet;}
+    BOOL 				IsModified() const {return bModified;}
+    void				SetModified(BOOL bSet) {bModified = bSet;}
 
     void EnableControls(sal_Bool bEnable)
         {
@@ -184,19 +184,19 @@ class SvxRubyDialog : public SfxModelessDialog
             aApplyPB.Enable(bEnable);
         }
 
-    void                GetCurrentText(String& rBase, String& rRuby);
+    void				GetCurrentText(String& rBase, String& rRuby);
 
-    void                UpdateColors( void );
+    void				UpdateColors( void );
 protected:
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
 public:
 
                         SvxRubyDialog( SfxBindings *pBindings, SfxChildWindow *pCW,
                                     Window* pParent, const ResId& rResId );
-    virtual             ~SvxRubyDialog();
+    virtual				~SvxRubyDialog();
 
-    virtual void        Activate();
-    virtual void        Deactivate();
+    virtual void		Activate();
+    virtual void		Deactivate();
 };
 
 #endif // _SVX_RUBYDLG_HXX_

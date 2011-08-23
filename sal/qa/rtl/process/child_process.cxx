@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
             sal::static_int_cast< long >(nCount));
         return 0;
     }
-
+    
     OUString suArg[4];
     for( sal_Int32 i = 0 ; i < nCount ; i ++ )
     {
@@ -60,7 +60,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
             aString.getStr());
     }
 
-    if ( suArg[0].compareTo( suParam0) != 0 ||
+    if ( suArg[0].compareTo( suParam0) != 0 || 
          suArg[1].compareTo( suParam1) != 0 ||
          suArg[2].compareTo( suParam2) != 0 ||
          suArg[3].compareTo( suParam3) != 0 )

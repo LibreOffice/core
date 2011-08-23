@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,12 +84,12 @@ struct TitleKey : public ::std::pair< ObjectType, ::std::pair< sal_Int32, sal_In
 struct TitleLayoutInfo
 {
     typedef Reference< XShape > (*GetShapeFunc)( const Reference< cssc::XChartDocument >& );
-
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
                         mxTitle;        /// The API title object.
     ModelRef< LayoutModel > mxLayout;   /// The layout model, if existing.
     GetShapeFunc        mpGetShape;     /// Helper function to receive the title shape.
-
+    
     inline explicit     TitleLayoutInfo() : mpGetShape( 0 ) {}
 
     void                convertTitlePos(
@@ -162,7 +162,7 @@ OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 struct ConverterData
 {
     typedef ::std::map< TitleKey, TitleLayoutInfo > TitleMap;
-
+    
     ObjectFormatter     maFormatter;
     TitleMap            maTitles;
     XmlFilterBase&      mrFilter;

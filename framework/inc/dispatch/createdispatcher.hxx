@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,31 +29,31 @@
 #define __FRAMEWORK_DISPATCH_CREATEDISPATCHER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <dispatch/basedispatcher.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -69,7 +69,7 @@ namespace framework{
     @attention      Use this class as member only! Never use it as baseclass.
                     XInterface will be ambigous and we hold a weakreference to ouer OWNER - not to ouer SUPERCLASS!
 
-    @implements     XInterface
+    @implements		XInterface
                     XDispatch
                     XStatusListener
                     XLoadEventListener
@@ -77,7 +77,7 @@ namespace framework{
 
     @base           BaseDispatcher
 
-    @devstatus      ready to use
+    @devstatus		ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 class CreateDispatcher  :   // -interfaces  ... are supported by our BaseDispatcher!
@@ -85,14 +85,14 @@ class CreateDispatcher  :   // -interfaces  ... are supported by our BaseDispatc
                             public BaseDispatcher
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
         //  ctor
                               CreateDispatcher    ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory    ,
                                                     const css::uno::Reference< css::frame::XFrame >&              xParent     ,
                                                     const rtl::OUString&                                          sName       );
-        //  XDispatch
+        //	XDispatch
         virtual void SAL_CALL dispatch            ( const css::util::URL&                                         aURL        ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&        lArguments  ) throw( css::uno::RuntimeException );
 
@@ -113,8 +113,8 @@ class CreateDispatcher  :   // -interfaces  ... are supported by our BaseDispatc
         { LOG_WARNING( "CreateDispatcher::reactForHandlingState()", "Who call this function! It's a non used pure virtual function overload ..." ) }
 
     //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
+    //	variables
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
     private:
         css::uno::WeakReference< css::frame::XFrame >   m_xTarget       ;   /// new created frame (Don't hold hard reference ... target frame couldn't die then!)
@@ -122,6 +122,6 @@ class CreateDispatcher  :   // -interfaces  ... are supported by our BaseDispatc
 
 };      //  class CreateDispatcher
 
-}       //  namespace framework
+}		//	namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_CREATEDISPATCHER_HXX_

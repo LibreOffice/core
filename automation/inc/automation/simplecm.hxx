@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,32 +37,32 @@
 #include <automation/commdefines.hxx>
 
 // CM steht für CommunicationManager
-#define CM_UNLIMITED_CONNECTIONS    0xffff
+#define CM_UNLIMITED_CONNECTIONS	0xffff
 
 typedef USHORT CM_NameType;
-#define CM_DOTTED   ( (CM_NameType) 01 )
-#define CM_FQDN     ( (CM_NameType) 02 )
+#define CM_DOTTED	( (CM_NameType) 01 )
+#define CM_FQDN		( (CM_NameType) 02 )
 
 typedef USHORT CM_InfoType;
 // nur eines dieser 3 defines darf verwendet werden
-#define CM_NO_TEXT      ( (CM_InfoType) 01 )
-#define CM_SHORT_TEXT   ( (CM_InfoType) 02 )
-#define CM_VERBOSE_TEXT ( (CM_InfoType) 03 )
+#define CM_NO_TEXT		( (CM_InfoType) 01 )
+#define CM_SHORT_TEXT	( (CM_InfoType) 02 )
+#define CM_VERBOSE_TEXT	( (CM_InfoType) 03 )
 
-#define CM_OPEN         ( (CM_InfoType) 0x0004 )
-#define CM_CLOSE        ( (CM_InfoType) 0x0008 )
-#define CM_RECEIVE      ( (CM_InfoType) 0x0010 )
-#define CM_SEND         ( (CM_InfoType) 0x0020 )
-#define CM_ERROR        ( (CM_InfoType) 0x0040 )
-#define CM_MISC         ( (CM_InfoType) 0x0080 )
+#define CM_OPEN			( (CM_InfoType) 0x0004 )
+#define CM_CLOSE		( (CM_InfoType) 0x0008 )
+#define CM_RECEIVE		( (CM_InfoType) 0x0010 )
+#define CM_SEND			( (CM_InfoType) 0x0020 )
+#define CM_ERROR		( (CM_InfoType) 0x0040 )
+#define CM_MISC			( (CM_InfoType) 0x0080 )
 
-#define CM_USER_1       ( (CM_InfoType) 0x0100 )
-#define CM_USER_2       ( (CM_InfoType) 0x0200 )
-#define CM_USER_3       ( (CM_InfoType) 0x0400 )
-#define CM_USER_4       ( (CM_InfoType) 0x0800 )
+#define CM_USER_1		( (CM_InfoType) 0x0100 )
+#define CM_USER_2		( (CM_InfoType) 0x0200 )
+#define CM_USER_3		( (CM_InfoType) 0x0400 )
+#define CM_USER_4		( (CM_InfoType) 0x0800 )
 
-#define CM_ALL          ( CM_OPEN | CM_CLOSE | CM_RECEIVE | CM_SEND | CM_ERROR | CM_MISC )
-#define CM_NONE         ( 0 )
+#define CM_ALL			( CM_OPEN | CM_CLOSE | CM_RECEIVE | CM_SEND | CM_ERROR | CM_MISC )
+#define CM_NONE			( 0 )
 
 #define CByteString( constAsciiStr ) ByteString( RTL_CONSTASCII_STRINGPARAM ( constAsciiStr ) )
 
@@ -99,12 +99,12 @@ typedef USHORT CM_InfoType;
 class CommunicationLink;
 
 /*#undef  PRV_SV_DECL_REF_LOCK
-#define PRV_SV_DECL_REF_LOCK(ClassName, Ref)    \
-protected:                                      \
-    ClassName * pObj;                           \
-public:                                         \
-PRV_SV_DECL_REF_SIGNATURE(ClassName, Ref)       \
-    inline               ClassName##Ref( void * pObjP ){ClassName##Ref ((ClassName *) pObjP);}          \
+#define PRV_SV_DECL_REF_LOCK(ClassName, Ref)	\
+protected:										\
+    ClassName * pObj;							\
+public:											\
+PRV_SV_DECL_REF_SIGNATURE(ClassName, Ref)		\
+    inline               ClassName##Ref( void * pObjP ){ClassName##Ref ((ClassName *) pObjP);}			\
 */
 
 SV_DECL_REF( CommunicationLink )
@@ -134,7 +134,7 @@ protected:
     friend class CommunicationManagerServerAcceptThread;
     // Darf nicht abgeräumt werden zwischen Empfang des Streams und ende des Callbacks
 
-protected:  // so daß nur über Ref gelöscht werden kann
+protected:	// so daß nur über Ref gelöscht werden kann
     virtual ~CommunicationLink();
     void InvalidateManager() { pMyManager = NULL; }
 
@@ -147,13 +147,13 @@ public:
     virtual BOOL IsCommunicationError()=0;
     CommunicationManager* GetCommunicationManager(){ return pMyManager; }
 
-//  Der Name oder die IP-Adresse oder sonstwas um den Communikationspartner zu identifizieren
+//	Der Name oder die IP-Adresse oder sonstwas um den Communikationspartner zu identifizieren
     virtual ByteString GetCommunicationPartner( CM_NameType eType )=0;
 
-//  Der Name oder die IP-Adresse oder sonstwas um den Communikationspartner zu identifizieren
+//	Der Name oder die IP-Adresse oder sonstwas um den Communikationspartner zu identifizieren
     virtual ByteString GetMyName( CM_NameType eType )=0;
 
-//  Liefert einen neuen Stream zum Versenden von Daten.
+//	Liefert einen neuen Stream zum Versenden von Daten.
     virtual SvStream* GetBestCommunicationStream()=0;
 
     /** will call virtual function DoTransferDataStream to do actual work
@@ -204,7 +204,7 @@ protected:
 
     virtual BOOL SendHandshake( HandshakeType aHandshakeType, SvStream* pData = NULL)=0;
 
-    virtual BOOL ShutdownCommunication() = 0;   /// Really stop the Communication
+    virtual BOOL ShutdownCommunication() = 0;	/// Really stop the Communication
 
     /// Statistics
     DateTime aStart;
@@ -237,14 +237,14 @@ public:
     virtual BOOL StartCommunication()=0;
     virtual BOOL StartCommunication( String aApp, String aParams );
     virtual BOOL StartCommunication( ByteString aHost, ULONG nPort );
-    virtual BOOL StopCommunication()=0;     // Hält alle CommunicationLinks an
+    virtual BOOL StopCommunication()=0;		// Hält alle CommunicationLinks an
     virtual BOOL IsCommunicationRunning() { return bIsCommunicationRunning; }
-//  virtual BOOL IsCommunicationError();
+//	virtual BOOL IsCommunicationError();
 
-//  Der Name oder die IP-Adresse oder sonstwas um den Communikationspartner zu identifizieren
+//	Der Name oder die IP-Adresse oder sonstwas um den Communikationspartner zu identifizieren
     virtual ByteString GetMyName( CM_NameType eType );
 
-    virtual BOOL IsLinkValid( CommunicationLink* pCL )=0;   // Notwendig für call im Destruktor
+    virtual BOOL IsLinkValid( CommunicationLink* pCL )=0;	// Notwendig für call im Destruktor
 
     virtual USHORT GetCommunicationLinkCount()=0;
     virtual CommunicationLinkRef GetCommunicationLink( USHORT nNr )=0;
@@ -274,7 +274,7 @@ protected:
 
     CM_InfoType nInfoType;
 
-    //  Diese Routinen rufen den Link oder sind überladen
+    // 	Diese Routinen rufen den Link oder sind überladen
     virtual void ConnectionOpened( CommunicationLink* pCL ){ mlConnectionOpened.Call( pCL ); }
     virtual void ConnectionClosed( CommunicationLink* pCL ){ mlConnectionClosed.Call( pCL ); }
     virtual void DataReceived( CommunicationLink* pCL ){ mlDataReceived.Call( pCL ); }
@@ -282,7 +282,7 @@ protected:
 
     BOOL bIsCommunicationRunning;
 
-    virtual void DestroyingLink( CommunicationLink *pCL )=0;    // Link trägt sich im Destruktor aus
+    virtual void DestroyingLink( CommunicationLink *pCL )=0;	// Link trägt sich im Destruktor aus
 
 private:
     ByteString maApplication;
@@ -300,7 +300,7 @@ class SingleCommunicationManager : public CommunicationManager
 public:
     SingleCommunicationManager( BOOL bUseMultiChannel = FALSE );
     virtual ~SingleCommunicationManager();
-    virtual BOOL StopCommunication();       // Hält alle CommunicationLinks an
+    virtual BOOL StopCommunication();		// Hält alle CommunicationLinks an
     virtual BOOL IsLinkValid( CommunicationLink* pCL );
     virtual USHORT GetCommunicationLinkCount();
     virtual CommunicationLinkRef GetCommunicationLink( USHORT nNr );
@@ -310,14 +310,14 @@ protected:
     virtual void CallConnectionClosed( CommunicationLink* pCL );
     CommunicationLinkRef xActiveLink;
     CommunicationLink *pInactiveLink;
-    virtual void DestroyingLink( CommunicationLink *pCL );  // Link trägt sich im Destruktor aus
+    virtual void DestroyingLink( CommunicationLink *pCL );	// Link trägt sich im Destruktor aus
 };
 
 class ICommunicationManagerClient
 {
     friend class CommonSocketFunctions;
 protected:
-    virtual BOOL RetryConnect() { return FALSE; }   // Kann dann eventuell die Applikation starten
+    virtual BOOL RetryConnect() { return FALSE; }	// Kann dann eventuell die Applikation starten
 };
 
 class TCPIO;
@@ -347,7 +347,7 @@ protected:
     void SetStreamSocket( NAMESPACE_VOS(OStreamSocket)* pSocket );
 
     SvStream *pReceiveStream;
-    BOOL DoReceiveDataStream();             /// Recieve DataPacket from Socket
+    BOOL DoReceiveDataStream();				/// Recieve DataPacket from Socket
     virtual BOOL SendHandshake( HandshakeType aHandshakeType, SvStream* pData = NULL);
     void SetFinalRecieveTimeout();
     BOOL bIsRequestShutdownPending;
@@ -362,7 +362,7 @@ public:
     ~SimpleCommunicationLinkViaSocketWithReceiveCallbacks();
     virtual BOOL ReceiveDataStream();
 protected:
-    virtual BOOL ShutdownCommunication();   /// Really stop the Communication
+    virtual BOOL ShutdownCommunication();	/// Really stop the Communication
     virtual void WaitForShutdown();
 };
 

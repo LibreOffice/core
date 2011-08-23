@@ -50,20 +50,20 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // 3D light attribute definitions
-            basegfx::BColor                         maColor;
-            basegfx::B3DVector                      maDirection;
+            basegfx::BColor							maColor;
+            basegfx::B3DVector						maDirection;
 
             // bitfield
-            unsigned                                mbSpecular : 1;
+            unsigned								mbSpecular : 1;
 
             ImpSdr3DLightAttribute(
-                const basegfx::BColor& rColor,
-                const basegfx::B3DVector& rDirection,
+                const basegfx::BColor& rColor, 
+                const basegfx::B3DVector& rDirection, 
                 bool bSpecular)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maColor(rColor),
                 maDirection(rDirection),
                 mbSpecular(bSpecular)
@@ -81,7 +81,7 @@ namespace drawinglayer
                     && getDirection() == rCandidate.getDirection()
                     && getSpecular() == rCandidate.getSpecular());
             }
-
+            
             static ImpSdr3DLightAttribute* get_global_default()
             {
                 static ImpSdr3DLightAttribute* pDefault = 0;
@@ -102,22 +102,22 @@ namespace drawinglayer
         };
 
         Sdr3DLightAttribute::Sdr3DLightAttribute(
-            const basegfx::BColor& rColor,
-            const basegfx::B3DVector& rDirection,
+            const basegfx::BColor& rColor, 
+            const basegfx::B3DVector& rDirection, 
             bool bSpecular)
-        :   mpSdr3DLightAttribute(new ImpSdr3DLightAttribute(
+        :	mpSdr3DLightAttribute(new ImpSdr3DLightAttribute(
                 rColor, rDirection, bSpecular))
         {
         }
 
         Sdr3DLightAttribute::Sdr3DLightAttribute()
-        :   mpSdr3DLightAttribute(ImpSdr3DLightAttribute::get_global_default())
+        :	mpSdr3DLightAttribute(ImpSdr3DLightAttribute::get_global_default())
         {
             mpSdr3DLightAttribute->mnRefCount++;
         }
 
         Sdr3DLightAttribute::Sdr3DLightAttribute(const Sdr3DLightAttribute& rCandidate)
-        :   mpSdr3DLightAttribute(rCandidate.mpSdr3DLightAttribute)
+        :	mpSdr3DLightAttribute(rCandidate.mpSdr3DLightAttribute)
         {
             mpSdr3DLightAttribute->mnRefCount++;
         }
@@ -151,7 +151,7 @@ namespace drawinglayer
                 {
                     delete mpSdr3DLightAttribute;
                 }
-
+                
                 mpSdr3DLightAttribute = rCandidate.mpSdr3DLightAttribute;
                 mpSdr3DLightAttribute->mnRefCount++;
             }
@@ -174,19 +174,19 @@ namespace drawinglayer
             return (*rCandidate.mpSdr3DLightAttribute == *mpSdr3DLightAttribute);
         }
 
-        const basegfx::BColor& Sdr3DLightAttribute::getColor() const
-        {
-            return mpSdr3DLightAttribute->getColor();
+        const basegfx::BColor& Sdr3DLightAttribute::getColor() const 
+        { 
+            return mpSdr3DLightAttribute->getColor(); 
         }
 
-        const basegfx::B3DVector& Sdr3DLightAttribute::getDirection() const
-        {
-            return mpSdr3DLightAttribute->getDirection();
+        const basegfx::B3DVector& Sdr3DLightAttribute::getDirection() const 
+        { 
+            return mpSdr3DLightAttribute->getDirection(); 
         }
 
-        bool Sdr3DLightAttribute::getSpecular() const
-        {
-            return mpSdr3DLightAttribute->getSpecular();
+        bool Sdr3DLightAttribute::getSpecular() const 
+        { 
+            return mpSdr3DLightAttribute->getSpecular(); 
         }
 
     } // end of namespace attribute

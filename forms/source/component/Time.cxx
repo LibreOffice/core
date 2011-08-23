@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
 //==================================================================
-//=
+//= 
 //==================================================================
 
 //==================================================================
@@ -168,7 +168,7 @@ IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OTimeModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_TIMEFIELD; // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_TIMEFIELD;	// old (non-sun) name for compatibility !
 }
 
 // XPropertySet
@@ -176,10 +176,10 @@ IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
-        DECL_PROP3(DEFAULT_TIME,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
-        DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
-        DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
+        DECL_PROP3(DEFAULT_TIME,			sal_Int32,				BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP1(TABINDEX,				sal_Int16,				BOUND);
+        DECL_PROP1(FORMATKEY,				sal_Int32,				TRANSIENT);
+        DECL_IFACE_PROP2(FORMATSSUPPLIER,	XNumberFormatsSupplier,	READONLY, TRANSIENT);
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -360,6 +360,6 @@ Sequence< Type > OTimeModel::getSupportedBindingTypes()
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 

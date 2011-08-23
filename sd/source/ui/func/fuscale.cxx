@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,10 +68,10 @@ TYPEINIT1( FuScale, FuPoor );
 \************************************************************************/
 
 FuScale::FuScale (
-    ViewShell* pViewSh,
-    ::sd::Window* pWin,
+    ViewShell* pViewSh, 
+    ::sd::Window* pWin, 
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument* pDoc, 
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -200,7 +200,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
                     break;
             }
         }
-
+    
         delete pZoomItem;
     }
     else if(mpViewShell && (pArgs->Count () == 1))

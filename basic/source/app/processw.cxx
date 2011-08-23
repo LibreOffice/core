@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@
 
 #define _READ       0x0100  // can be read
 #define _BWRITE     0x0200  // can be used as Lvaluen
-#define _LVALUE     _BWRITE
+#define _LVALUE     _BWRITE 
 #define _READWRITE  0x0300  // can read and written
-#define _OPT        0x0400  // TRUE: optional parameter
+#define	_OPT		0x0400	// TRUE: optional parameter
 #define _METHOD     0x1000  // Mask-Bit for a method
 #define _PROPERTY   0x2000  // Mask-Bit for a property
 #define _COLL       0x4000  // Mask-Bit for a collection
@@ -116,7 +116,7 @@ ProcessWrapper::~ProcessWrapper()
 // Search for an element:
 // Linear search through the method table until an appropriate one
 // can be found.
-// If the the method/property cannot be found, NULL is return
+// If the the method/property cannot be found, NULL is return 
 // without an error code, so that we can ask the whole
 // chain of objects for the method/property.
 SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
@@ -231,8 +231,8 @@ SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 
 void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // Imagefile of the executable
-    (void) pVar; /* avoid warning about unused parameter */
-    (void) bWriteIt; /* avoid warning about unused parameter */
+    (void) pVar; /* avoid warning about unused parameter */ 
+    (void) bWriteIt; /* avoid warning about unused parameter */ 
     if ( pMethodePar->Count() >= 2 )
         pProcess->SetImage(pMethodePar->Get( 1 )->GetString(), pMethodePar->Get( 2 )->GetString() );
     else
@@ -241,29 +241,29 @@ void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pMethodePar, BOOL b
 
 void ProcessWrapper::PStart( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // Program is started
-    (void) pMethodePar; /* avoid warning about unused parameter */
-    (void) bWriteIt; /* avoid warning about unused parameter */
+    (void) pMethodePar; /* avoid warning about unused parameter */ 
+    (void) bWriteIt; /* avoid warning about unused parameter */ 
     pVar->PutBool( pProcess->Start() );
 }
 
 void ProcessWrapper::PGetExitCode( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // ExitCode of the program after it was finished
-    (void) pMethodePar; /* avoid warning about unused parameter */
-    (void) bWriteIt; /* avoid warning about unused parameter */
+    (void) pMethodePar; /* avoid warning about unused parameter */ 
+    (void) bWriteIt; /* avoid warning about unused parameter */ 
     pVar->PutULong( pProcess->GetExitCode() );
 }
 
 void ProcessWrapper::PIsRunning( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // Program is still running
-    (void) pMethodePar; /* avoid warning about unused parameter */
-    (void) bWriteIt; /* avoid warning about unused parameter */
+    (void) pMethodePar; /* avoid warning about unused parameter */ 
+    (void) bWriteIt; /* avoid warning about unused parameter */ 
     pVar->PutBool( pProcess->IsRunning() );
 }
 
 void ProcessWrapper::PWasGPF( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
 { // Program faulted with GPF etc.
-    (void) pMethodePar; /* avoid warning about unused parameter */
-    (void) bWriteIt; /* avoid warning about unused parameter */
+    (void) pMethodePar; /* avoid warning about unused parameter */ 
+    (void) bWriteIt; /* avoid warning about unused parameter */ 
     pVar->PutBool( pProcess->WasGPF() );
 }
 

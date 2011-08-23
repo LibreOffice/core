@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,18 +38,18 @@
 
 /*************************************************************************
 |*
-|*    RscTypCont::FillNameIdList()
+|*	  RscTypCont::FillNameIdList()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.05.91
-|*    Letzte Aenderung  MM 30.05.91
+|*	  Beschreibung
+|*	  Ersterstellung	MM 07.05.91
+|*	  Letzte Aenderung	MM 30.05.91
 |*
 *************************************************************************/
 REResourceList * InsertList( Atom nClassName, const RscId& rId,
                              REResourceList * pList ){
-    REResourceList  *   pSubList;
-    const char *                pStrClass;
-    ByteString          aStrClass;
+    REResourceList	*	pSubList;
+    const char *				pStrClass;
+    ByteString			aStrClass;
 
     pStrClass = pHS->getString( nClassName ).getStr();
     if( pStrClass )
@@ -65,10 +65,10 @@ REResourceList * InsertList( Atom nClassName, const RscId& rId,
 
 void FillSubList( RSCINST & rInst, REResourceList * pList )
 {
-    sal_uInt32      nCount, i;
-    SUBINFO_STRUCT  aInfo;
+    sal_uInt32		nCount, i;
+    SUBINFO_STRUCT	aInfo;
     REResourceList* pSubList;
-    RSCINST         aTmpI;
+    RSCINST 		aTmpI;
 
     nCount = rInst.pClass->GetCount( rInst );
     for( i = 0; i < nCount; i++ ){
@@ -85,7 +85,7 @@ void FillListObj( ObjNode * pObjNode, RscTop * pRscTop,
 {
     if( pObjNode ){
         if( pObjNode->GetFileKey() == lFileKey ){
-            RSCINST         aTmpI;
+            RSCINST 		aTmpI;
             REResourceList* pSubList;
 
             FillListObj( (ObjNode*)pObjNode->Left(), pRscTop,

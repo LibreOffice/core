@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1176,7 +1176,7 @@ SwStyleProperties_Impl::SwStyleProperties_Impl(const SfxItemPropertyMap* pMap) :
 {
     nArrLen = aPropertyEntries.size();
     //const SfxItemPropertyMap* pTmp = _pMap;
-
+    
     pAnyArr = new uno::Any* [nArrLen];
     for ( sal_uInt32 i =0 ; i < nArrLen; i++ )
         pAnyArr[i] = 0;
@@ -1257,7 +1257,7 @@ sal_Bool SwStyleProperties_Impl::GetProperty(const ::rtl::OUString& rName, uno::
         ++nPos;
         ++aIt;
     }
-
+    
     return bRet;
 }
 
@@ -1949,7 +1949,7 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 throw lang::IllegalArgumentException();
         }
         break;
-        // case FN_UNO_DEFAULT_OUTLINE_LEVEL:       //#outline level,removed by zahojianwei
+        // case FN_UNO_DEFAULT_OUTLINE_LEVEL:		//#outline level,removed by zahojianwei
         //{
         //    sal_Int8 nLevel = 0;
         //    if( rValue >>= nLevel )
@@ -1958,14 +1958,14 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         //        rBase.mxNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );
         //}
         //break;
-        case RES_PARATR_OUTLINELEVEL:               //add by zahojianwei
+        case RES_PARATR_OUTLINELEVEL:				//add by zahojianwei
         {
             sal_Int16 nLevel = 0;
-               rValue >>= nLevel;
+               rValue >>= nLevel;		
             if( 0 <= nLevel && nLevel <= MAXLEVEL)
                 rBase.mxNewBase->GetCollection()->SetAttrOutlineLevel( nLevel );
-        }
-        break;                                      //<-end,zhaojianwei
+        }											
+        break;										//<-end,zhaojianwei
         case FN_UNO_FOLLOW_STYLE:
         {
             OUString sTmp;
@@ -2207,9 +2207,9 @@ put_itemset:
             if ( SFX_STYLE_FAMILY_PARA == eFamily &&
                  rEntry.nWID == RES_PARATR_NUMRULE &&
                  rBase.mxNewBase.is() && rBase.mxNewBase->GetCollection() &&
-                 //rBase.mxNewBase->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */)    //#outline level,removed by zhaojianwei
-                 rBase.mxNewBase->GetCollection()->IsAssignedToListLevelOfOutlineStyle() )      ////<-end,add by zhaojianwei
-
+                 //rBase.mxNewBase->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */)	//#outline level,removed by zhaojianwei
+                 rBase.mxNewBase->GetCollection()->IsAssignedToListLevelOfOutlineStyle() )		////<-end,add by zhaojianwei
+                 
             {
                 OUString sNewNumberingRuleName;
                 rValue >>= sNewNumberingRuleName;
@@ -2218,8 +2218,8 @@ put_itemset:
                      sTmp != pDoc->GetOutlineNumRule()->GetName() )
                 {
                     // delete assignment to list level of outline style.
-                    //rBase.mxNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );            //#outline level,removed by zhaojianwei
-                    rBase.mxNewBase->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end,adde by zhaojianwei
+                    //rBase.mxNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );			//#outline level,removed by zhaojianwei
+                    rBase.mxNewBase->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();	//<-end,adde by zhaojianwei
                 }
             }
         }
@@ -2373,7 +2373,7 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 aRet.setValue(&xRules, ::getCppuType((uno::Reference<container::XIndexReplace>*)0));
             }
             break;
-            //case FN_UNO_DEFAULT_OUTLINE_LEVEL:        //#outline level,removed by zahojianwei
+            //case FN_UNO_DEFAULT_OUTLINE_LEVEL:		//#outline level,removed by zahojianwei
             //{
             //    DBG_ASSERT( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
             //    BYTE nLevel = rBase.mxNewBase->GetCollection()->GetOutlineLevel();
@@ -2381,13 +2381,13 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             //        aRet <<= static_cast<sal_Int8>( nLevel );
             //}
             //break;
-            case RES_PARATR_OUTLINELEVEL:               //add by zahojianwei
+            case RES_PARATR_OUTLINELEVEL:				//add by zahojianwei
             {
                 DBG_ASSERT( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
                 int nLevel = rBase.mxNewBase->GetCollection()->GetAttrOutlineLevel();
                     aRet <<= static_cast<sal_Int16>( nLevel );
             }
-            break;                                      //<-end,zhaojianwei
+            break;										//<-end,zhaojianwei
             case FN_UNO_FOLLOW_STYLE:
             {
                 String aString;
@@ -2789,7 +2789,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
         //                  == NO_NUMBERING )
         //                ? beans::PropertyState_DEFAULT_VALUE
         //                : beans::PropertyState_DIRECT_VALUE;
-        //        }                                                     //<-end,zhaojianwei
+        //        }														//<-end,zhaojianwei
                 else if(SFX_STYLE_FAMILY_PAGE == eFamily &&
                         (rPropName.EqualsAscii("Header", 0, 6)
                             || rPropName.EqualsAscii("Footer", 0, 6)))
@@ -2914,7 +2914,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
                 throw uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertiesToDefault: property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
             //if( pEntry->nWID == FN_UNO_DEFAULT_OUTLINE_LEVEL )     //#outline level, removed by zhaojianwei
-            //  static_cast<SwTxtFmtColl*>(pTargetFmt)->SetOutlineLevel( NO_NUMBERING );
+            //	static_cast<SwTxtFmtColl*>(pTargetFmt)->SetOutlineLevel( NO_NUMBERING );
             //else
             //  pTargetFmt->ResetFmtAttr( pEntry->nWID );
             if( pEntry->nWID == RES_PARATR_OUTLINELEVEL )                //add by zhaojianwei
@@ -2957,8 +2957,8 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     // --> OD 2007-07-25 #132402# - make code robust
                     if ( xStyle->GetCollection() )
                     {
-                    //  xStyle->GetCollection()->SetOutlineLevel( NO_NUMBERING );               //#outline level,removed by zhaojianwei
-                        xStyle->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();   //<-end,add by zhaojianwei
+                    //	xStyle->GetCollection()->SetOutlineLevel( NO_NUMBERING );				//#outline level,removed by zhaojianwei
+                        xStyle->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();	//<-end,add by zhaojianwei
                     }
                     // <--
                 }
@@ -4491,8 +4491,8 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::
 //            aPropertyValue.Name = aIt->sName;
 //            pItem->QueryValue( aPropertyValue.Value, aIt->nMemberId );
 //            aPropertyVector.push_back( aPropertyValue );
-//        }
-        // TODO: Optimize - and fix! the old iteration filled each WhichId
+//        }    
+        // TODO: Optimize - and fix! the old iteration filled each WhichId 
         // only once but there are more properties than WhichIds
         PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
         while( aIt != aPropVector.end() )

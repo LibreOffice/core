@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ struct UHashMapEntry
 
 DECLARE_LIST( UHashMapEntryList, UHashMapEntry* )
 
-#define HASHARRAYSIZE   0x10
+#define HASHARRAYSIZE	0x10
 #define UHASHMAP_NOTFOUND sal::static_int_cast< UINT32 >(~0)
 
 class UHashMap
@@ -69,41 +69,41 @@ public:
 * Soriterer                                                            *
 ***********************************************************************/
 
-#define SVXMAP_SHAPE                0
-#define SVXMAP_CONNECTOR            1
-#define SVXMAP_DIMENSIONING         2
-#define SVXMAP_CIRCLE               3
-#define SVXMAP_POLYPOLYGON          4
-#define SVXMAP_POLYPOLYGONBEZIER    5
-#define SVXMAP_GRAPHICOBJECT        6
-#define SVXMAP_3DSCENEOBJECT        7
-#define SVXMAP_3DCUBEOBJEKT         8
-#define SVXMAP_3DSPHEREOBJECT       9
-#define SVXMAP_3DLATHEOBJECT        10
-#define SVXMAP_3DEXTRUDEOBJECT      11
-#define SVXMAP_3DPOLYGONOBJECT      12
-#define SVXMAP_ALL                  13
-#define SVXMAP_GROUP                14
-#define SVXMAP_CAPTION              15
-#define SVXMAP_OLE2                 16
-#define SVXMAP_PLUGIN               17
-#define SVXMAP_FRAME                18
-#define SVXMAP_APPLET               19
-#define SVXMAP_CONTROL              20
-#define SVXMAP_TEXT                 21
-#define SVXMAP_CUSTOMSHAPE          22
-#define SVXMAP_MEDIA                23
-#define SVXMAP_TABLE                24
+#define	SVXMAP_SHAPE				0
+#define	SVXMAP_CONNECTOR			1
+#define	SVXMAP_DIMENSIONING			2
+#define	SVXMAP_CIRCLE				3
+#define	SVXMAP_POLYPOLYGON			4
+#define	SVXMAP_POLYPOLYGONBEZIER	5
+#define	SVXMAP_GRAPHICOBJECT		6
+#define	SVXMAP_3DSCENEOBJECT		7
+#define	SVXMAP_3DCUBEOBJEKT			8
+#define	SVXMAP_3DSPHEREOBJECT		9
+#define	SVXMAP_3DLATHEOBJECT		10
+#define	SVXMAP_3DEXTRUDEOBJECT		11
+#define	SVXMAP_3DPOLYGONOBJECT		12
+#define	SVXMAP_ALL					13
+#define SVXMAP_GROUP				14
+#define SVXMAP_CAPTION				15
+#define SVXMAP_OLE2					16
+#define SVXMAP_PLUGIN				17
+#define SVXMAP_FRAME				18
+#define SVXMAP_APPLET				19
+#define SVXMAP_CONTROL				20
+#define SVXMAP_TEXT					21
+#define SVXMAP_CUSTOMSHAPE			22
+#define SVXMAP_MEDIA				23
+#define SVXMAP_TABLE				24
 #define SVXMAP_PAGE                 25
-#define SVXMAP_END                  26  // last+1 !
+#define	SVXMAP_END					26	// last+1 !
 /***********************************************************************
-* SvxUnoPropertyMapProvider                                            *
+* SvxUnoPropertyMapProvider											   *
 ***********************************************************************/
 class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
     SvxItemPropertySet* aSetArr[SVXMAP_END];
-//  void Sort(USHORT nId);
+//	void Sort(USHORT nId);
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
@@ -115,14 +115,14 @@ public:
 * Globals                                                              *
 ***********************************************************************/
 
-const sal_Int16 OBJ_OLE2_APPLET = 100;
+const sal_Int16 OBJ_OLE2_APPLET	= 100;
 const sal_Int16 OBJ_OLE2_PLUGIN = 101;
 
 extern SvxUnoPropertyMapProvider aSvxMapProvider;
 extern UHashMapEntry pSdrShapeIdentifierMap[];
 extern UHashMap aSdrShapeIdentifierMap;
 
-#define E3D_INVENTOR_FLAG           (0x80000000)
+#define E3D_INVENTOR_FLAG			(0x80000000)
 
 #include <editeng/unoipset.hxx>
 

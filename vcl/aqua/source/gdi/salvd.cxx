@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 {
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
-
+    
     return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
 }
 
@@ -57,10 +57,10 @@ void AquaSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 // =======================================================================
 
 AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
-:   mbGraphicsUsed( false )
-,   mxBitmapContext( NULL )
-,   mnBitmapDepth( 0 )
-,   mxLayer( NULL )
+:	mbGraphicsUsed( false )
+,	mxBitmapContext( NULL )
+,	mnBitmapDepth( 0 )
+,	mxLayer( NULL )
 {
     if( pGraphic && pData && pData->rCGContext )
     {
@@ -90,7 +90,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
 
         if( nDX && nDY )
             SetSize( nDX, nDY );
-
+        
         // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
     }
 }
@@ -202,9 +202,9 @@ BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
         }
     }
-
+    
     DBG_ASSERT( xCGContext, "no context" );
-
+    
     const CGSize aNewSize = { nDX, nDY };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
 

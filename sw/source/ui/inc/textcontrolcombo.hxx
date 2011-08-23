@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ class SW_DLLPUBLIC TextControlCombo : public Window
 {
 protected:
 
-    Control&    mrCtrl;
-    FixedText&  mrFTbefore;
-    FixedText&  mrFTafter;
+    Control&	mrCtrl;
+    FixedText&	mrFTbefore;
+    FixedText&	mrFTafter;
 
 public:
 
@@ -50,16 +50,16 @@ public:
 
                 TextControlCombo( Window* _pParent, const ResId& _rResId,
                             Control& _rCtrl, FixedText& _rFTbefore, FixedText& _rFTafter );
-    virtual     ~TextControlCombo();
+    virtual		~TextControlCombo();
 
-    void        Arrange( FixedText& _rOrg, BOOL bShow = true );
+    void		Arrange( FixedText& _rOrg, BOOL bShow = true );
 
     // identical to window functionality
-    void        Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );
-    void        Hide( USHORT nFlags = 0 ) { Show( FALSE, nFlags ); }
-
-    void        Enable( BOOL bEnable = TRUE, BOOL bChild = TRUE );
-    void        Disable( BOOL bChild = TRUE ) { Enable( FALSE, bChild ); }
+    void		Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );
+    void		Hide( USHORT nFlags = 0 ) { Show( FALSE, nFlags ); }
+    
+    void		Enable( BOOL bEnable = TRUE, BOOL bChild = TRUE );
+    void		Disable( BOOL bChild = TRUE ) { Enable( FALSE, bChild ); }
 };
 
 

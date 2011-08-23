@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ namespace nullcanvas
     public:
         DeviceHelper();
 
-        void init( SpriteCanvas&                rSpriteCanvas,
-                   const ::basegfx::B2ISize&    rSize,
+        void init( SpriteCanvas&				rSpriteCanvas,
+                   const ::basegfx::B2ISize&	rSize,
                    bool                         bFullscreen );
 
         /// Dispose all internal references
@@ -57,36 +57,36 @@ namespace nullcanvas
         // XWindowGraphicDevice
         ::com::sun::star::geometry::RealSize2D getPhysicalResolution();
         ::com::sun::star::geometry::RealSize2D getPhysicalSize();
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&                               rDevice,
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon( 
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 								 rDevice,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > >& points );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBezierPolyPolygon2D > createCompatibleBezierPolyPolygon(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&                                       rDevice,
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBezierPolyPolygon2D > createCompatibleBezierPolyPolygon( 
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 								 		 rDevice,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealBezierSegment2D > >& points );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleBitmap( 
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
+            const ::com::sun::star::geometry::IntegerSize2D& 										size );
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileBitmap( 
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
+            const ::com::sun::star::geometry::IntegerSize2D& 										size );
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleAlphaBitmap( 
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
+            const ::com::sun::star::geometry::IntegerSize2D& 										size );
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap( 
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& 	rDevice,
+            const ::com::sun::star::geometry::IntegerSize2D& 										size );
         sal_Bool hasFullScreenMode(  );
         sal_Bool enterFullScreenMode( sal_Bool bEnter );
 
         ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
+        void 		destroyBuffers(  );
         ::sal_Bool  showBuffer( bool bIsVisible, ::sal_Bool bUpdateAll );
         ::sal_Bool  switchBuffer( bool bIsVisible, ::sal_Bool bUpdateAll );
 
         ::com::sun::star::uno::Any isAccelerated() const;
         ::com::sun::star::uno::Any getDeviceHandle() const;
         ::com::sun::star::uno::Any getSurfaceHandle() const;
-        ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::Reference< 
             ::com::sun::star::rendering::XColorSpace> getColorSpace() const;
 
         void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
@@ -98,7 +98,7 @@ namespace nullcanvas
 
     private:
         /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
-        SpriteCanvas*           mpSpriteCanvas;
+        SpriteCanvas*			mpSpriteCanvas;
         ::basegfx::B2ISize      maSize;
         bool                    mbFullScreen;
     };

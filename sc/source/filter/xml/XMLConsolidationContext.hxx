@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,16 +40,16 @@ class ScXMLImport;
 class ScXMLConsolidationContext : public SvXMLImportContext
 {
 private:
-    ::rtl::OUString             sSourceList;
-    ::rtl::OUString             sUseLabel;
-    ScAddress                   aTargetAddr;
-    ScSubTotalFunc              eFunction;
-    sal_Bool                    bLinkToSource;
-    sal_Bool                    bTargetAddr;
+    ::rtl::OUString				sSourceList;
+    ::rtl::OUString				sUseLabel;
+    ScAddress					aTargetAddr;
+    ScSubTotalFunc				eFunction;
+    sal_Bool					bLinkToSource;
+    sal_Bool					bTargetAddr;
 
 protected:
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&			GetScImport() const	{ return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&				GetScImport()		{ return (ScXMLImport&)GetImport(); }
 
 public:
                                 ScXMLConsolidationContext(
@@ -58,14 +58,14 @@ public:
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual                     ~ScXMLConsolidationContext();
+    virtual						~ScXMLConsolidationContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContext*	CreateChildContext(
                                     USHORT nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual void                EndElement();
+    virtual void				EndElement();
 };
 
 

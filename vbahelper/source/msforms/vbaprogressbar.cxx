@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,26 +38,26 @@ ScVbaProgressBar::ScVbaProgressBar( const uno::Reference< ov::XHelperInterface >
 }
 
 // Attributes
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaProgressBar::getValue() throw (css::uno::RuntimeException)
 {
     return m_xProps->getPropertyValue( SVALUE );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaProgressBar::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( SVALUE,  _value );
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaProgressBar::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaProgressBar") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaProgressBar::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

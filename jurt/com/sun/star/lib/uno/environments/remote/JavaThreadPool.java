@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@ package com.sun.star.lib.uno.environments.remote;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.13 $ $ $Date: 2008-04-11 11:20:22 $
- * @author      Kay Ramme
+ * @version 	$Revision: 1.13 $ $ $Date: 2008-04-11 11:20:22 $
+ * @author 	    Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.IThreadPool
@@ -66,7 +66,7 @@ public class JavaThreadPool implements IThreadPool {
         jobQueue.acquire();
         return jobQueue;
     }
-
+    
     public void attach() {
         attach( getThreadId() );
     }
@@ -75,13 +75,13 @@ public class JavaThreadPool implements IThreadPool {
     {
         ((JobQueue)handle).release();
     }
-
+    
     public void detach() {
         ThreadId threadId =  getThreadId();
         detach(_javaThreadPoolFactory.getJobQueue(threadId), threadId );
     }
 
-
+    
     public Object enter( ) throws Throwable {
         ThreadId threadId = getThreadId();
         return enter( _javaThreadPoolFactory.getJobQueue( threadId ), threadId  );
@@ -96,7 +96,7 @@ public class JavaThreadPool implements IThreadPool {
             JobQueue jobQueue = _javaThreadPoolFactory.getJobQueue(job.getThreadId());
 
             // this has not be synchronized, cause
-            // sync jobs can only come over one bridge
+            // sync jobs can only come over one bridge 
             // (cause the thread blocks on other side)
             if(jobQueue == null)
                 jobQueue = new JobQueue(_javaThreadPoolFactory, job.getThreadId(), true);

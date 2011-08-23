@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ namespace drawinglayer
     namespace primitive2d
     {
         ShadowPrimitive2D::ShadowPrimitive2D(
-            const basegfx::B2DHomMatrix& rShadowTransform,
-            const basegfx::BColor& rShadowColor,
+            const basegfx::B2DHomMatrix& rShadowTransform, 
+            const basegfx::BColor& rShadowColor, 
             const Primitive2DSequence& rChildren)
-        :   GroupPrimitive2D(rChildren),
+        :	GroupPrimitive2D(rChildren),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor)
         {
@@ -62,8 +62,8 @@ namespace drawinglayer
             if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const ShadowPrimitive2D& rCompare = static_cast< const ShadowPrimitive2D& >(rPrimitive);
-
-                return (getShadowTransform() == rCompare.getShadowTransform()
+                
+                return (getShadowTransform() == rCompare.getShadowTransform() 
                     && getShadowColor() == rCompare.getShadowColor());
             }
 

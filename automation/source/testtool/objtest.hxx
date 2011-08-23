@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,39 +40,39 @@
 
 #include <map>
 
-//  #define ID_BeginBlock   1
-//  #define ID_EndBlock     2
-#define ID_Kontext      3
-#define ID_GetError     4
-#define ID_ErrorDummy   5            // Intern zum Behandlen von Fehlenden Controls und Methoden
-#define ID_RecordError  6
-#define ID_Start        7
-//#define ID_Kill           8
-//#define ID_Reset      9
-//  #define ID_AppAbort     10
-#define ID_Dispatch     11
-#define ID_UNODispatch  12
-#define ID_Control      13
-#define ID_StartUse     14
-#define ID_Use          15
-#define ID_FinishUse    16
-#define ID_CaseLog      17
-#define ID_ExceptLog    18
-#define ID_PrintLog     19
-#define ID_WarnLog      20
-#define ID_ErrorLog     21
+//	#define ID_BeginBlock	1
+//	#define ID_EndBlock		2
+#define ID_Kontext		3
+#define ID_GetError		4
+#define ID_ErrorDummy	5            // Intern zum Behandlen von Fehlenden Controls	und Methoden
+#define ID_RecordError	6
+#define ID_Start		7
+//#define ID_Kill			8
+//#define ID_Reset		9
+//	#define ID_AppAbort		10
+#define ID_Dispatch		11
+#define ID_UNODispatch	12
+#define ID_Control		13
+#define ID_StartUse		14
+#define ID_Use			15
+#define ID_FinishUse	16
+#define ID_CaseLog		17
+#define ID_ExceptLog	18
+#define ID_PrintLog		19
+#define ID_WarnLog		20
+#define ID_ErrorLog		21
 #define ID_EnableQaErrors 22
-#define ID_QAErrorLog   23
-#define ID_MaybeAddErr  24
-#define ID_ClearError   25
-#define ID_GetNextCloseWindow   26
+#define ID_QAErrorLog	23
+#define ID_MaybeAddErr	24
+#define ID_ClearError	25
+#define ID_GetNextCloseWindow	26
 #define ID_RemoteCommand 27
-#define ID_SaveIDs      28
-#define ID_AutoExecute  29
-#define ID_Execute      30
+#define ID_SaveIDs		28
+#define ID_AutoExecute	29
+#define ID_Execute		30
 #define ID_DialogHandler 31
-#define ID_GetUnoApp    32
-#define ID_GetIServer   33
+#define ID_GetUnoApp	32
+#define ID_GetIServer	33
 #define ID_RemoteCommandDelay 34
 #define ID_GetApplicationPath 35
 #define ID_GetCommonApplicationPath 36
@@ -120,7 +120,7 @@ public:
 
     ControlItem( const char *Name, SmartId aUIdP );
     ControlItem( const String &Name, SmartId aUIdP );
-//  ControlItem( const String &Name, const String &URL, const URLType aType );
+//	ControlItem( const String &Name, const String &URL, const URLType aType );
 //    ControlItem( const String &Name, const String &URL, const ULONG nUId );
 //    ControlItem( const char *Name, const String &URL, const ULONG nUId );
     ControlItem( ControlData *pDataP );
@@ -130,7 +130,7 @@ DBG_DTOR(ControlItem,0);
     }
     virtual BOOL operator < (const ControlItem &rPar)=0;
     virtual BOOL operator == (const ControlItem &rPar)=0;
-//  void Write( SvStream &aStream );
+//	void Write( SvStream &aStream );
 };
 
 SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
@@ -143,12 +143,12 @@ SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
 class ControlSon
 {
 protected:
-    CNames *pSons;      // um sicherzustelle, daß nur Söhne des richtien Type reinkommen
+    CNames *pSons;		// um sicherzustelle, daß nur Söhne des richtien Type reinkommen
 
 public:
     ControlSon() : pSons( NULL ) {};
     ~ControlSon();
-//  void Write( SvStream &aStream );
+//	void Write( SvStream &aStream );
 
     USHORT Son_Count() { return pSons->Count(); }
     void Sons( CNames *pNewSons ) { pSons = pNewSons; }
@@ -161,10 +161,10 @@ public:
     ControlItemSon(const char *Name, SmartId aUIdP )
         : ControlItem( Name, aUIdP ) {}
     ControlItemSon(const String &Name, SmartId aUIdP );
-//  ControlItemSon(const String &Name, const String &URL, const URLType aType );
+//	ControlItemSon(const String &Name, const String &URL, const URLType aType );
 //    ControlItemSon(const String &Name, const String &URL, const ULONG nUId );
 //    ControlItemSon(const char *Name, const String &URL, const ULONG nUId );
-//  void Write( SvStream &aStream );
+//	void Write( SvStream &aStream );
 };
 
 class ControlDef : public ControlItemSon
@@ -173,7 +173,7 @@ public:
     ControlDef(const char *Name, SmartId aUIdP )
         : ControlItemSon( Name, aUIdP ) {DBG_CTOR(ControlDef,0);}
     ControlDef(const String &Name, SmartId aUIdP );
-//  ControlDef(const String &Name, const String &URL, const URLType aType );
+//	ControlDef(const String &Name, const String &URL, const URLType aType );
     ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, BOOL bWithSons = FALSE );
     ~ControlDef() {DBG_DTOR(ControlDef,0);}
     virtual BOOL operator < (const ControlItem &rPar);
@@ -233,7 +233,7 @@ public:
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
     virtual SbxVariable* Find( const String&, SbxClassType );
-    SbxTransportMethodRef pMethodVar;     // zum Transport von Find nach Notify
+    SbxTransportMethodRef pMethodVar;	  // zum Transport von Find nach Notify
     static CNames  *pClasses;
     static ControlDefLoad __READONLY_DATA arClasses [];
 };
@@ -244,18 +244,18 @@ typedef std::map< String, String > Environment;
 class ImplTestToolObj
 {
 public:
-//  ImplTestToolObj()
-//  ~ImplTestToolObj()
+//	ImplTestToolObj()
+//	~ImplTestToolObj()
 
-    String ProgParam;           // Parameter der zu Testenden APP; Gesetzt über Start
+    String ProgParam;			// Parameter der zu Testenden APP; Gesetzt über Start
 
-    DirEntry aFileBase;         // Grundpfad für die *.sid und *.win Dateien (Aus Configdatei)
-    DirEntry aLogFileBase;      // Grundpfad für die *.res Dateien (Aus Configdatei)
-    DirEntry aHIDDir;           // Verzeichnis, in dem die hid.lst gesucht wird
+    DirEntry aFileBase;			// Grundpfad für die *.sid und *.win Dateien (Aus Configdatei)
+    DirEntry aLogFileBase;		// Grundpfad für die *.res Dateien (Aus Configdatei)
+    DirEntry aHIDDir;			// Verzeichnis, in dem die hid.lst gesucht wird
 
-    SbxTransportMethodRef pNextReturn;  // Verweis auf die Var, die den Returnwert aufnimmt.
+    SbxTransportMethodRef pNextReturn;	// Verweis auf die Var, die den Returnwert aufnimmt.
 
-    ControlsRef pControlsObj;           // Jeweiliges Objekt, an dem Methoden aufgerufen weden.
+    ControlsRef pControlsObj;			// Jeweiliges Objekt, an dem Methoden aufgerufen weden.
 
 #define VAR_POOL_SIZE 8
     SbxTransportMethodRef pMyVars[VAR_POOL_SIZE];  // Falls in Ausdrücken mehrere verwendet werden
@@ -275,7 +275,7 @@ public:
     ULONG nMaxRemoteCommandDelay;
     BOOL bDoRemoteCommandDelay;
 
-    BOOL bLnaguageExtensionLoaded;      // Wurde über 'use' was geladen? Für syntax highlighting
+    BOOL bLnaguageExtensionLoaded;		// Wurde über 'use' was geladen? Für syntax highlighting
     SfxBroadcaster *pTTSfxBroadcaster;
 
     ULONG nErrorCount;
@@ -315,89 +315,89 @@ public:
 
 
 #define ADD_TO_LOG( aLogTypep, aMsgp, aFilenamep, nLinep, nCol1p, nCol2p, aRevisionp, pLogList )\
-{                                                                       \
-    TTLogMsg *pLogMsg = new TTLogMsg();                                 \
-    pLogMsg->aDebugData.aMsg = aMsgp;                                   \
-    pLogMsg->aLogFileName = (pImpl->aLogFileBase + DirEntry(aLogFileName)).GetFull();   \
-    pLogMsg->aDebugData.aFilename = aFilenamep;                         \
-    pLogMsg->aDebugData.nLine = nLinep;                                 \
-    pLogMsg->aDebugData.nCol1 = nCol1p;                                 \
-    pLogMsg->aDebugData.nCol2 = nCol2p;                                 \
-    pLogMsg->aDebugData.aLogType = aLogTypep;                           \
-    aLogHdl.Call( pLogMsg );                                            \
+{																		\
+    TTLogMsg *pLogMsg = new TTLogMsg();									\
+    pLogMsg->aDebugData.aMsg = aMsgp;									\
+    pLogMsg->aLogFileName = (pImpl->aLogFileBase + DirEntry(aLogFileName)).GetFull();	\
+    pLogMsg->aDebugData.aFilename = aFilenamep;							\
+    pLogMsg->aDebugData.nLine = nLinep;									\
+    pLogMsg->aDebugData.nCol1 = nCol1p;									\
+    pLogMsg->aDebugData.nCol2 = nCol2p;									\
+    pLogMsg->aDebugData.aLogType = aLogTypep;							\
+    aLogHdl.Call( pLogMsg );											\
     void* pDummyForWarningAboutNULL = pLogList;                         \
-    if( pDummyForWarningAboutNULL )                                                     \
-    {                                                                   \
-        SbxDimArray* pLogArray = (SbxDimArray*)pLogList;                \
-        SbxVariable* pLogLine = new SbxVariable( SbxSTRING );               \
-        String aCollect;                                                \
-        aCollect.Append( pLogMsg->aDebugData.aFilename );               \
-        aCollect.AppendAscii( ";" );                                    \
-        aCollect.Append( String::CreateFromInt32( nLinep ) );           \
-        aCollect.AppendAscii( ";" );                                    \
-        aCollect.Append( aRevisionp );              \
-        aCollect.AppendAscii( ";" );                                    \
-        aCollect.Append( pLogMsg->aDebugData.aMsg );                                        \
-        pLogLine->PutString( aCollect );                                    \
-        pLogArray->Insert( pLogLine, pLogArray->Count() );  \
-    }                                                                   \
-    delete pLogMsg;                                                     \
-}                                                                       \
+    if( pDummyForWarningAboutNULL )														\
+    {																	\
+        SbxDimArray* pLogArray = (SbxDimArray*)pLogList;				\
+        SbxVariable* pLogLine = new SbxVariable( SbxSTRING );				\
+        String aCollect;												\
+        aCollect.Append( pLogMsg->aDebugData.aFilename );				\
+        aCollect.AppendAscii( ";" );									\
+        aCollect.Append( String::CreateFromInt32( nLinep ) );			\
+        aCollect.AppendAscii( ";" );									\
+        aCollect.Append( aRevisionp );				\
+        aCollect.AppendAscii( ";" );									\
+        aCollect.Append( pLogMsg->aDebugData.aMsg );										\
+        pLogLine->PutString( aCollect );									\
+        pLogArray->Insert( pLogLine, pLogArray->Count() );	\
+    }																	\
+    delete pLogMsg;														\
+}																		\
 
 
-#define ADD_RUN_LOG()                                                   \
-    ADD_TO_LOG(LOG_RUN, String(), String(), 0, 0, 0, String(), NULL)                    \
+#define ADD_RUN_LOG()													\
+    ADD_TO_LOG(LOG_RUN, String(), String(), 0, 0, 0, String(), NULL)					\
 
-#define ADD_ERROR_LOG(aMsg, aFilename, nLine, nCol1, nCol2, aRevision)              \
-{                                                                       \
+#define ADD_ERROR_LOG(aMsg, aFilename, nLine, nCol1, nCol2, aRevision)				\
+{																		\
     ADD_TO_LOG(LOG_ERROR, aMsg, aFilename, nLine, nCol1, nCol2, aRevision, &pImpl->xErrorList) \
-    pImpl->nErrorCount++;                                               \
+    pImpl->nErrorCount++;												\
 }
 
-#define ADD_CALL_STACK_LOG(aMsg, aFilename, nLine, nCol1, nCol2)        \
-    ADD_TO_LOG(LOG_CALL_STACK, aMsg, aFilename, nLine, nCol1, nCol2, String(), NULL)    \
+#define ADD_CALL_STACK_LOG(aMsg, aFilename, nLine, nCol1, nCol2)		\
+    ADD_TO_LOG(LOG_CALL_STACK, aMsg, aFilename, nLine, nCol1, nCol2, String(), NULL)	\
 
 
-#define ADD_AUTO_LOG(aLogType, aMsg, pLogList)                          \
-{                                                                       \
-    if ( BasicRuntimeAccess::HasRuntime() )                             \
-    {                                                                   \
-        BasicRuntime aRun = BasicRuntimeAccess::GetRuntime();           \
-        ADD_TO_LOG(aLogType, aMsg, aRun.GetModuleName(SbxNAME_SHORT_TYPES), \
-            aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2(), aRun.GetSourceRevision(), pLogList) \
-    }                                                                   \
-    else                                                                \
-    {                                                                   \
-        ADD_TO_LOG(aLogType, aMsg, UniString(), 0, 0, STRING_LEN, String(), pLogList)   \
-    }                                                                   \
-}                                                                       \
+#define ADD_AUTO_LOG(aLogType, aMsg, pLogList)							\
+{																		\
+    if ( BasicRuntimeAccess::HasRuntime() )								\
+    {																	\
+        BasicRuntime aRun = BasicRuntimeAccess::GetRuntime();			\
+        ADD_TO_LOG(aLogType, aMsg, aRun.GetModuleName(SbxNAME_SHORT_TYPES),	\
+            aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2(), aRun.GetSourceRevision(), pLogList)	\
+    }																	\
+    else																\
+    {																	\
+        ADD_TO_LOG(aLogType, aMsg, UniString(), 0, 0, STRING_LEN, String(), pLogList)	\
+    }																	\
+}																		\
 
-#define ADD_CASE_LOG(aMsg)                                              \
-    ADD_AUTO_LOG(LOG_TEST_CASE, aMsg, NULL)                             \
+#define ADD_CASE_LOG(aMsg)												\
+    ADD_AUTO_LOG(LOG_TEST_CASE, aMsg, NULL)								\
 
-#define ADD_MESSAGE_LOG(aMsg)                                           \
-    ADD_AUTO_LOG(LOG_MESSAGE, aMsg, NULL)                               \
+#define ADD_MESSAGE_LOG(aMsg)											\
+    ADD_AUTO_LOG(LOG_MESSAGE, aMsg, NULL)								\
 
-#define ADD_WARNING_LOG(aMsg)                                           \
-{                                                                       \
-    ADD_AUTO_LOG(LOG_WARNING, aMsg, &pImpl->xWarningList)               \
-    pImpl->nWarningCount++;                                             \
+#define ADD_WARNING_LOG(aMsg)											\
+{																		\
+    ADD_AUTO_LOG(LOG_WARNING, aMsg, &pImpl->xWarningList)				\
+    pImpl->nWarningCount++;												\
 }
 
-#define ADD_WARNING_LOG2(aMsg, aFilename, nLine )                       \
-{                                                                       \
+#define ADD_WARNING_LOG2(aMsg, aFilename, nLine )						\
+{																		\
     ADD_TO_LOG(LOG_WARNING, aMsg, aFilename, nLine, 0, STRING_LEN, String(), &pImpl->xWarningList) \
-    pImpl->nWarningCount++;                                             \
+    pImpl->nWarningCount++;												\
 }
 
-#define ADD_ASSERTION_LOG(aMsg)                                         \
-    ADD_AUTO_LOG(LOG_ASSERTION, aMsg, NULL)                             \
+#define ADD_ASSERTION_LOG(aMsg)											\
+    ADD_AUTO_LOG(LOG_ASSERTION, aMsg, NULL)								\
 
-#define ADD_QA_ERROR_LOG(aMsg)                                          \
+#define ADD_QA_ERROR_LOG(aMsg)											\
     if ( pImpl->bEnableQaErrors )                                       \
     {                                                                   \
-        ADD_AUTO_LOG(LOG_QA_ERROR, aMsg, &pImpl->xQAErrorList)          \
-        pImpl->nQAErrorCount++;                                         \
+        ADD_AUTO_LOG(LOG_QA_ERROR, aMsg, &pImpl->xQAErrorList)			\
+        pImpl->nQAErrorCount++;											\
     }
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,14 +68,14 @@ class SvtAcceleratorConfig_Impl
 public:
 
     SvtAcceleratorItemList aList;
-    bool            bModified;
+    bool			bModified;
 
                     SvtAcceleratorConfig_Impl()
                         : bModified( FALSE )
                     {}
 
                     SvtAcceleratorConfig_Impl( Reference< XInputStream >& xInputStream );
-    bool            Commit( Reference< XOutputStream >& xOutputStream );
+    bool			Commit( Reference< XOutputStream >& xOutputStream );
 };
 
 // -----------------------------------------------------------------------

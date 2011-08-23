@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 #include <vector>
 #include <utility>
 
-#define POSTITS_NONE    0
-#define POSTITS_ONLY    1
-#define POSTITS_ENDDOC  2
+#define POSTITS_NONE	0
+#define POSTITS_ONLY	1
+#define POSTITS_ENDDOC	2
 #define POSTITS_ENDPAGE 3
 
 
@@ -76,12 +76,12 @@ public:
         bJobStartet(FALSE)
     {}
 
-    const String& MakeNextJobName();        // steht in vprint.cxx
-    const String& GetJobName() const    { return sJobName; }
+    const String& MakeNextJobName();		// steht in vprint.cxx
+    const String& GetJobName() const 	{ return sJobName; }
 
 #if defined(TCPP)
     // seit neuestem (SV 223) kann der keinen mehr generieren
-    inline  SwPrtOptions(const SwPrtOptions& rNew) {*this = rNew;}
+    inline	SwPrtOptions(const SwPrtOptions& rNew) {*this = rNew;}
 #endif
 
 

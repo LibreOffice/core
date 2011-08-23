@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ static OUString gsBasePath;
             }
         }
     }
-
+    
     return gsBasePath;
 }
 
@@ -97,13 +97,13 @@ static struct ImplementationEntry gServiceEntries[] =
         PresenterProtocolHandler::Create,
         PresenterProtocolHandler::getImplementationName_static,
         PresenterProtocolHandler::getSupportedServiceNames_static,
-        createSingleComponentFactory, &g_moduleCount.modCnt, 0
+        createSingleComponentFactory, &g_moduleCount.modCnt, 0 
     },
     {
         PresenterScreenJob::Create,
         PresenterScreenJob::getImplementationName_static,
         PresenterScreenJob::getSupportedServiceNames_static,
-        createSingleComponentFactory, 0, 0
+        createSingleComponentFactory, 0, 0 
     },
     { 0, 0, 0, 0, 0, 0 }
 };

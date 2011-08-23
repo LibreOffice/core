@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
 
     /** The current cell - only one cell can be active at a time. */
     private CellDescriptor cell = null;
-
+    
     /** Format object describing the current cell. */
     private Format fmt = null;
 
@@ -93,11 +93,11 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
      *  @throws  IOException  If any I/O error occurs.
      */
     MinicalcDecoder(String name, String[] worksheetNames, String password) throws IOException {
-
+        
         super(name, password);
-
+        
         fmt = new Format();
-
+        
         this.password = password;
         this.worksheetNames = worksheetNames;
 
@@ -111,9 +111,9 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             Debug.log(Debug.ERROR, "MinicalcDecoder.constructor:" + e.getMessage());
 
             throw new IOException(e.getMessage());
-            //      e.printStackTrace();
+            //	    e.printStackTrace();
 
-        }
+        }	
     }
 
 
@@ -135,17 +135,17 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
 
         Enumeration e = cd.getDocumentEnumeration();
         while(e.hasMoreElements()) {
-
+            
             palmDoc = (PalmDocument) e.nextElement();
                 // Convert PDB to WorkBook/WorkSheet format
             PalmDB pdb = palmDoc.getPdb();
 
                 // This will be done at least once
                 String sheetName = worksheetNames[j];
-
+            
                 // Get number of records in the pdb
                 int numRecords = pdb.getRecordCount();
-
+            
                 // sheetName does not contain the WorkBook name, but we need the
                 // full name.
                 String fullSheetName = new String(wb.getWorkbookName() + "-" + sheetName);
@@ -173,7 +173,7 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
                     // Add each record to the WorkSheet
                     ws.readNextRecord(bis, bisSize);
                 }
-
+                   
 
                 // Add the WorkSheet to the WorkBook
                 wb.addWorksheet(ws);
@@ -185,7 +185,7 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             Debug.log(Debug.ERROR, "MinicalcDecoder.addPDB:" + e.getMessage());
 
             throw new IOException(e.getMessage());
-        }
+        }	
     }
 
 
@@ -237,9 +237,9 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             Debug.log(Debug.ERROR, "MinicalcDecoder.setWorksheet:" + e.getMessage());
 
             throw new IOException(e.getMessage());
-            //      e.printStackTrace();
+            //	    e.printStackTrace();
 
-        }
+        }	
     }
 
 
@@ -277,7 +277,7 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             if (cell != null) {
                 gotCell = true;
             }
-
+            
             // As we read each cell, get its formatting info
             readCellFormat();
         }
@@ -286,9 +286,9 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             Debug.log(Debug.ERROR, "MinicalcDecoder.goToNextCell:" + e.getMessage());
 
             throw new IOException(e.getMessage());
-            //      e.printStackTrace();
+            //	    e.printStackTrace();
 
-        }
+        }	
 
         return gotCell;
     }
@@ -330,7 +330,7 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
     public int getNumberOfColumns() {
         return maxCols;
     }
-
+     
 
     /**
      *  This method returns the col number of the current cell.
@@ -363,11 +363,11 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
 
         if (cell != null) {
             contents = cell.getCellContents();
-
+            
             // Active cell, but no content
             if (contents == null)
                 return new String("");
-
+           
               // Does the cell contain a formula?
             if (contents.startsWith("=")) {
                 contents = parseFormula(contents);
@@ -394,12 +394,12 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
      *  This method is meant to return the value of the formula cell. However
      *  in minicalc this value is not used so hence the stubbed function
      *
-     *  @return the value fo the formula cell
+     *  @return the value fo the formula cell 
      */
     public String getCellValue() {
         return null;
     }
-
+    
     /**
      *  <p>This method takes a formula and parses it into
      *  StarOffice XML formula format.</p>
@@ -407,7 +407,7 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
      *  <p>Many spreadsheets use ',' as a separator.
      *  StarOffice XML format uses ';' as a separator instead.</p>
      *
-     *  <p>Many spreadsheets use '!' as a separator when refencing
+     *  <p>Many spreadsheets use '!' as a separator when refencing 
      *  a cell in a different sheet.</p>
      *
      *  <blockquote>
@@ -652,7 +652,7 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
      *  @param  contents  The input <code>String</code> from which to
      *                    remove the dollar sign.
      *
-     *  @return  The input <code>String</code> minus the dollar sign.
+     *  @return  The input <code>String</code> minus the dollar sign. 
      *           If the input <code>String</code> did not begin or end
      *           with a dollar sign, contents is returned.
      */
@@ -728,17 +728,17 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
         return new Format(fmt);
     }
 
-
+    
     /**
      *  Create the format data for the new cell.
      */
     private void readCellFormat() {
         // Make sure there are no remnants from the last time
         fmt.clearFormatting();
-
+        
         fmt.setCategory(getCellFormatType());
-
+        
         // TODO - Get any more formatting data here
-    }
+    }   
 }
 

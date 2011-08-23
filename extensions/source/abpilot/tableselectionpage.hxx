@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,20 +42,20 @@ namespace abp
     class TableSelectionPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aLabel;
-        ListBox         m_aTableList;
+        FixedText		m_aLabel;
+        ListBox			m_aTableList;
 
     public:
         TableSelectionPage( OAddessBookSourcePilot* _pParent );
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void		initializePage();
+        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         // TabDialog overridables
-        virtual void        ActivatePage();
-        virtual void        DeactivatePage();
+        virtual void		ActivatePage();
+        virtual void		DeactivatePage();
 
         // OImportPage overridables
         virtual bool        canAdvance() const;
@@ -66,7 +66,7 @@ namespace abp
     };
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_TABLESELECTIONPAGE_HXX

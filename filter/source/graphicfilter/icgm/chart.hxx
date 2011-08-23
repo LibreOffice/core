@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,114 +70,114 @@
 
 typedef struct TextAttribute
 {
-    sal_uInt16          nTextAttribCount;
-    sal_Int8            nTextColorIndex;
-    sal_Int8            nTextColorRed;
-    sal_Int8            nTextColorGreen;
-    sal_Int8            nTextColorBlue;
-    sal_Int8            nShadowColorIndex;
-    sal_Int8            nShadowColorRed;
-    sal_Int8            nShadowColorGreen;
-    sal_Int8            nShadowColorBlue;
-    float           nTextAttribSize;
-    sal_uInt16          nTextAttribBits;
-    sal_Int8            nTextFontType;      // font identifiers
-    sal_Int8            nTextCharPage;
-    sal_uInt16          nTextFontFamily;
-    sal_Int8            nTextFontMemberID;
-    sal_Int8            nTextFontVendorID;
-    TextAttribute*  pNextAttribute;     // zero or pointer to next TextAttribute
+    sal_uInt16			nTextAttribCount;
+    sal_Int8			nTextColorIndex;
+    sal_Int8			nTextColorRed;
+    sal_Int8			nTextColorGreen;
+    sal_Int8			nTextColorBlue;
+    sal_Int8			nShadowColorIndex;
+    sal_Int8			nShadowColorRed;
+    sal_Int8			nShadowColorGreen;
+    sal_Int8			nShadowColorBlue;
+    float			nTextAttribSize;
+    sal_uInt16			nTextAttribBits;
+    sal_Int8			nTextFontType;		// font identifiers
+    sal_Int8			nTextCharPage;
+    sal_uInt16			nTextFontFamily;
+    sal_Int8			nTextFontMemberID;
+    sal_Int8			nTextFontVendorID;
+    TextAttribute*	pNextAttribute;		// zero or pointer to next TextAttribute
 } TextAttribute;
 
 typedef struct TextEntry
 {
-    sal_uInt16          nTypeOfText;
-    sal_uInt16          nRowOrLineNum;
-    sal_uInt16          nColumnNum;
-    sal_uInt16          nZoneSize;          // textzone attributes
-    sal_uInt16          nLineType;
-    sal_uInt16          nAttributes;
-    char*           pText;              // null terminated text
-    TextAttribute*  pAttribute;
+    sal_uInt16			nTypeOfText;
+    sal_uInt16			nRowOrLineNum;
+    sal_uInt16			nColumnNum;
+    sal_uInt16			nZoneSize;			// textzone attributes
+    sal_uInt16			nLineType;
+    sal_uInt16			nAttributes;
+    char*			pText;				// null terminated text
+    TextAttribute*	pAttribute;
 } TextEntry;
 
 typedef struct ZoneOption
 {
-    char            nOverTitle;
-    char            nOverBody;
-    char            nOverFoot;
-    char            nFStyle_Title;
-    char            nFStyle_Body;
-    char            nFStyle_Foot;
-    char            nFOutc_Title;
-    char            nFOutc_Body;
-    char            nFOutc_Foot;
-    char            nFFillc_Title;
-    char            nFFillc_Body;
-    char            nFFillc_Foot;
+    char			nOverTitle;
+    char			nOverBody;
+    char			nOverFoot;
+    char			nFStyle_Title;
+    char			nFStyle_Body;
+    char			nFStyle_Foot;
+    char			nFOutc_Title;
+    char			nFOutc_Body;
+    char			nFOutc_Foot;
+    char			nFFillc_Title;
+    char			nFFillc_Body;
+    char			nFFillc_Foot;
 } ZoneOption;
 
 typedef struct BulletOption
 {
-    char            nBType;
-    char            nBSize;
-    char            nBColor;
-    sal_Int16           nBStart;
-    double          nTMargin;
-    double          nBSpace;
-    char            nCPlace;
+    char			nBType;
+    char 			nBSize;
+    char 			nBColor;
+    sal_Int16 			nBStart;
+    double 			nTMargin;
+    double			nBSpace;
+    char 			nCPlace;
 } BulletOption;
 
 typedef struct BulDef
 {
-    char            btype;
-    char            bsize;
-    char            bcolor;
-    char            bnumber;
+    char 			btype;
+    char 			bsize;
+    char 			bcolor;
+    char 			bnumber;
 } BulDef;
 
 typedef struct BulletLines
 {
-    BulDef          nBulDef[ 48 ];
+    BulDef			nBulDef[ 48 ];
 } BulletLines;
 
 typedef struct IntSettings
 {
-    sal_uInt16          nCountry;
-    sal_uInt16          nDateFormat;
-    sal_uInt16          nDateSep;
-    sal_uInt16          nTimeFormat;
-    sal_uInt16          nTimeSep;
-    sal_uInt16          nNumSeps;
-    sal_uInt16          nCurrencyFormat;
-    char            nCurrencySymbol[ 5 ];
+    sal_uInt16 			nCountry;
+    sal_uInt16 			nDateFormat;
+    sal_uInt16 			nDateSep;
+    sal_uInt16 			nTimeFormat;
+    sal_uInt16 			nTimeSep;
+    sal_uInt16 			nNumSeps;
+    sal_uInt16 			nCurrencyFormat;
+    char			nCurrencySymbol[ 5 ];
 } IntSettings;
 
 typedef struct PageOrientDim
 {
-    char            nOrientation;
-    char            nDimension;
-    float           nPageX;
-    float           nPageY;
+    char			nOrientation;
+    char			nDimension;
+    float			nPageX;
+    float			nPageY;
 } PageOrientDim;
 
 typedef struct DataNode
 {
-    sal_Int16           nBoxX1;
-    sal_Int16           nBoxY1;
-    sal_Int16           nBoxX2;
-    sal_Int16           nBoxY2;
-    sal_Int8            nZoneEnum;
+    sal_Int16			nBoxX1;
+    sal_Int16			nBoxY1;
+    sal_Int16			nBoxX2;
+    sal_Int16			nBoxY2;
+    sal_Int8			nZoneEnum;
 } DataNode;
 
 typedef struct ChartZone
 {
-    sal_Int16           nMinX;
-    sal_Int16           nMinY;
-    sal_Int16           nMaxX;
-    sal_Int16           nMaxY;
-    char            nUserDef;
-    char            nPad1;
+    sal_Int16			nMinX;
+    sal_Int16			nMinY;
+    sal_Int16			nMaxX;
+    sal_Int16			nMaxY;
+    char			nUserDef;
+    char			nPad1;
 } ChartZone;
 
 class CGM;
@@ -188,26 +188,26 @@ class CGMChart
     friend class CGMImpressOutAct;
 
     protected:
-        CGM*                    mpCGM;
-        sal_Int8                    mnCurrentFileType;
-        List                    maTextEntryList;
-        DataNode                mDataNode[ 7 ];
-        ChartZone               mChartZone;
-        PageOrientDim           mPageOrientDim;
-        BulletOption            mBulletOption;
-        BulletLines             mBulletLines;
-        ZoneOption              mZoneOption;
-        IntSettings             mIntSettings;
+        CGM*					mpCGM;
+        sal_Int8					mnCurrentFileType;
+        List					maTextEntryList;
+        DataNode				mDataNode[ 7 ];
+        ChartZone				mChartZone;
+        PageOrientDim			mPageOrientDim;
+        BulletOption			mBulletOption;
+        BulletLines				mBulletLines;
+        ZoneOption				mZoneOption;
+        IntSettings				mIntSettings;
 
     public:
                                 CGMChart( CGM& rCGM );
                                 ~CGMChart();
 
-        void                    DeleteTextEntry( TextEntry* );
-        void                    InsertTextEntry( TextEntry* );
+        void					DeleteTextEntry( TextEntry* );
+        void					InsertTextEntry( TextEntry* );
 
-        void                    ResetAnnotation();
-        sal_Bool                    IsAnnotation();
+        void					ResetAnnotation();
+        sal_Bool					IsAnnotation();
 };
 
 #endif

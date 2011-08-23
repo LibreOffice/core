@@ -14,7 +14,7 @@
  *
  * The Original Code is mozilla.org code.
  *
- * The Initial Developer of the Original Code is
+ * The Initial Developer of the Original Code is 
  * Netscape Communications Corporation.
  * Portions created by the Initial Developer are Copyright (C) 1998
  * the Initial Developer. All Rights Reserved.
@@ -22,7 +22,7 @@
  * Contributor(s):
  *
  * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * either the GNU General Public License Version 2 or later (the "GPL"), or 
  * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
  * in which case the provisions of the GPL or the LGPL are applicable instead
  * of those above. If you wish to allow use of your version of this file only
@@ -38,7 +38,7 @@
 /*******************************************************************************
  * Java Runtime Interface - Machine Dependent Types
  ******************************************************************************/
-
+ 
 #ifndef JRI_MD_H
 #define JRI_MD_H
 
@@ -50,19 +50,19 @@ extern "C" {
 
 /*******************************************************************************
  * WHAT'S UP WITH THIS FILE?
- *
+ * 
  * This is where we define the mystical JRI_PUBLIC_API macro that works on all
- * platforms. If you're running with Visual C++, Symantec C, or Borland's
+ * platforms. If you're running with Visual C++, Symantec C, or Borland's 
  * development environment on the PC, you're all set. Or if you're on the Mac
  * with Metrowerks, Symantec or MPW with SC you're ok too. For UNIX it shouldn't
  * matter.
  *
  * On UNIX though you probably care about a couple of other symbols though:
- *  IS_LITTLE_ENDIAN must be defined for little-endian systems
- *  HAVE_LONG_LONG must be defined on systems that have 'long long' integers
- *  HAVE_ALIGNED_LONGLONGS must be defined if long-longs must be 8 byte aligned
- *  HAVE_ALIGNED_DOUBLES must be defined if doubles must be 8 byte aligned
- *  IS_64 must be defined on 64-bit machines (like Dec Alpha)
+ *	IS_LITTLE_ENDIAN must be defined for little-endian systems
+ *	HAVE_LONG_LONG must be defined on systems that have 'long long' integers
+ *	HAVE_ALIGNED_LONGLONGS must be defined if long-longs must be 8 byte aligned
+ *	HAVE_ALIGNED_DOUBLES must be defined if doubles must be 8 byte aligned
+ *	IS_64 must be defined on 64-bit machines (like Dec Alpha)
  ******************************************************************************/
 
 /* DLL Entry modifiers... */
@@ -70,100 +70,100 @@ extern "C" {
 /* PC */
 #if defined(XP_OS2)
 #  ifdef XP_OS2_VACPP
-#     define JRI_PUBLIC_API(ResultType)     ResultType _Optlink
-#     define JRI_PUBLIC_VAR(VarType)        VarType
+#	  define JRI_PUBLIC_API(ResultType)	    ResultType _Optlink
+#	  define JRI_PUBLIC_VAR(VarType)        VarType
 #     define JRI_CALLBACK
 #  else
-#     define JRI_PUBLIC_API(ResultType)     ResultType
-#     define JRI_PUBLIC_VAR(VarType)        VarType
+#	  define JRI_PUBLIC_API(ResultType)	    ResultType
+#	  define JRI_PUBLIC_VAR(VarType)        VarType
 #     define JRI_CALLBACK
 #  endif
 #elif defined(XP_PC) || defined(_WINDOWS) || defined(WIN32) || defined(_WIN32)
-#   include <windows.h>
-#   if defined(_MSC_VER) || defined(__MINGW32__)
-#       if defined(WIN32) || defined(_WIN32)
-#           define JRI_PUBLIC_API(ResultType)   _declspec(dllexport) ResultType
-#           define JRI_PUBLIC_VAR(VarType)      VarType
-#           define JRI_PUBLIC_VAR_EXP(VarType)  _declspec(dllexport) VarType
-#           define JRI_PUBLIC_VAR_IMP(VarType)  _declspec(dllimport) VarType
-#           define JRI_NATIVE_STUB(ResultType)  _declspec(dllexport) ResultType
-#           define JRI_CALLBACK
-#       else /* !_WIN32 */
-#           if defined(_WINDLL)
-#           define JRI_PUBLIC_API(ResultType)   ResultType __cdecl __export __loadds
-#           define JRI_PUBLIC_VAR(VarType)      VarType
-#           define JRI_PUBLIC_VAR_EXP(VarType)  JRI_PUBLIC_VAR(VarType)
-#           define JRI_PUBLIC_VAR_IMP(VarType)  JRI_PUBLIC_VAR(VarType)
-#           define JRI_NATIVE_STUB(ResultType)  ResultType __cdecl __loadds
-#           define JRI_CALLBACK         __loadds
-#       else /* !WINDLL */
-#           define JRI_PUBLIC_API(ResultType)   ResultType __cdecl __export
-#           define JRI_PUBLIC_VAR(VarType)      VarType
-#           define JRI_PUBLIC_VAR_EXP(VarType)  JRI_PUBLIC_VAR(VarType)
-#           define JRI_PUBLIC_VAR_IMP(VarType)  JRI_PUBLIC_VAR(VarType)
-#           define JRI_NATIVE_STUB(ResultType)  ResultType __cdecl __export
-#           define JRI_CALLBACK         __export
+#	include <windows.h>
+#	if defined(_MSC_VER) || defined(__MINGW32__)
+#		if defined(WIN32) || defined(_WIN32)
+#			define JRI_PUBLIC_API(ResultType)	_declspec(dllexport) ResultType
+#			define JRI_PUBLIC_VAR(VarType)		VarType
+#			define JRI_PUBLIC_VAR_EXP(VarType)	_declspec(dllexport) VarType
+#			define JRI_PUBLIC_VAR_IMP(VarType)	_declspec(dllimport) VarType
+#			define JRI_NATIVE_STUB(ResultType)	_declspec(dllexport) ResultType
+#			define JRI_CALLBACK
+#		else /* !_WIN32 */
+#		    if defined(_WINDLL)
+#			define JRI_PUBLIC_API(ResultType)	ResultType __cdecl __export __loadds 
+#			define JRI_PUBLIC_VAR(VarType)		VarType
+#			define JRI_PUBLIC_VAR_EXP(VarType)	JRI_PUBLIC_VAR(VarType)
+#			define JRI_PUBLIC_VAR_IMP(VarType)	JRI_PUBLIC_VAR(VarType)
+#			define JRI_NATIVE_STUB(ResultType)	ResultType __cdecl __loadds
+#			define JRI_CALLBACK			__loadds
+#		else /* !WINDLL */
+#			define JRI_PUBLIC_API(ResultType)	ResultType __cdecl __export
+#			define JRI_PUBLIC_VAR(VarType)		VarType
+#			define JRI_PUBLIC_VAR_EXP(VarType)	JRI_PUBLIC_VAR(VarType)
+#			define JRI_PUBLIC_VAR_IMP(VarType)	JRI_PUBLIC_VAR(VarType)
+#			define JRI_NATIVE_STUB(ResultType)	ResultType __cdecl __export
+#			define JRI_CALLBACK			__export
 #                   endif /* !WINDLL */
-#       endif /* !_WIN32 */
-#   elif defined(__BORLANDC__)
-#       if defined(WIN32) || defined(_WIN32)
-#           define JRI_PUBLIC_API(ResultType)   __export ResultType
-#           define JRI_PUBLIC_VAR(VarType)      VarType
-#           define JRI_PUBLIC_VAR_EXP(VarType)  __export VarType
-#           define JRI_PUBLIC_VAR_IMP(VarType)  __import VarType
-#           define JRI_NATIVE_STUB(ResultType)   __export ResultType
-#           define JRI_CALLBACK
-#       else /* !_WIN32 */
-#           define JRI_PUBLIC_API(ResultType)   ResultType _cdecl _export _loadds
-#           define JRI_PUBLIC_VAR(VarType)      VarType
-#           define JRI_PUBLIC_VAR_EXP(VarType)  __cdecl __export VarType
-#           define JRI_PUBLIC_VAR_IMP(VarType)  __cdecl __import VarType
-#           define JRI_NATIVE_STUB(ResultType)  ResultType _cdecl _loadds
-#           define JRI_CALLBACK         _loadds
-#       endif
-#   else
-#       error Unsupported PC development environment.
-#   endif
-#   ifndef IS_LITTLE_ENDIAN
-#       define IS_LITTLE_ENDIAN
-#   endif
+#		endif /* !_WIN32 */
+#	elif defined(__BORLANDC__)
+#		if defined(WIN32) || defined(_WIN32)
+#			define JRI_PUBLIC_API(ResultType)	__export ResultType
+#			define JRI_PUBLIC_VAR(VarType)		VarType
+#			define JRI_PUBLIC_VAR_EXP(VarType)	__export VarType
+#			define JRI_PUBLIC_VAR_IMP(VarType)	__import VarType
+#			define JRI_NATIVE_STUB(ResultType)	 __export ResultType
+#			define JRI_CALLBACK
+#		else /* !_WIN32 */
+#			define JRI_PUBLIC_API(ResultType)	ResultType _cdecl _export _loadds 
+#			define JRI_PUBLIC_VAR(VarType)		VarType
+#			define JRI_PUBLIC_VAR_EXP(VarType)	__cdecl __export VarType
+#			define JRI_PUBLIC_VAR_IMP(VarType)	__cdecl __import VarType
+#			define JRI_NATIVE_STUB(ResultType)	ResultType _cdecl _loadds
+#			define JRI_CALLBACK			_loadds
+#		endif
+#	else
+#		error Unsupported PC development environment.	
+#	endif
+#	ifndef IS_LITTLE_ENDIAN
+#		define IS_LITTLE_ENDIAN
+#	endif
 
 /* Mac */
 #elif defined (macintosh) || Macintosh || THINK_C
-#   if defined(__MWERKS__)              /* Metrowerks */
-#       if !__option(enumsalwaysint)
-#           error You need to define 'Enums Always Int' for your project.
-#       endif
-#       if defined(TARGET_CPU_68K) && !TARGET_RT_MAC_CFM
-#           if !__option(fourbyteints)
-#               error You need to define 'Struct Alignment: 68k' for your project.
-#           endif
-#       endif /* !GENERATINGCFM */
-#       define JRI_PUBLIC_API(ResultType)   __declspec(export) ResultType
-#       define JRI_PUBLIC_VAR(VarType)      JRI_PUBLIC_API(VarType)
-#       define JRI_PUBLIC_VAR_EXP(VarType)  JRI_PUBLIC_API(VarType)
-#       define JRI_PUBLIC_VAR_IMP(VarType)  JRI_PUBLIC_API(VarType)
-#       define JRI_NATIVE_STUB(ResultType)  JRI_PUBLIC_API(ResultType)
-#   elif defined(__SC__)                /* Symantec */
-#       error What are the Symantec defines? (warren@netscape.com)
-#   elif macintosh && applec            /* MPW */
-#       error Please upgrade to the latest MPW compiler (SC).
-#   else
-#       error Unsupported Mac development environment.
-#   endif
-#   define JRI_CALLBACK
+#	if defined(__MWERKS__)				/* Metrowerks */
+#		if !__option(enumsalwaysint)
+#			error You need to define 'Enums Always Int' for your project.
+#		endif
+#		if defined(TARGET_CPU_68K) && !TARGET_RT_MAC_CFM 
+#			if !__option(fourbyteints) 
+#				error You need to define 'Struct Alignment: 68k' for your project.
+#			endif
+#		endif /* !GENERATINGCFM */
+#		define JRI_PUBLIC_API(ResultType)	__declspec(export) ResultType
+#		define JRI_PUBLIC_VAR(VarType)		JRI_PUBLIC_API(VarType)
+#		define JRI_PUBLIC_VAR_EXP(VarType)	JRI_PUBLIC_API(VarType)
+#		define JRI_PUBLIC_VAR_IMP(VarType)	JRI_PUBLIC_API(VarType)
+#		define JRI_NATIVE_STUB(ResultType)	JRI_PUBLIC_API(ResultType)
+#	elif defined(__SC__)				/* Symantec */
+#		error What are the Symantec defines? (warren@netscape.com)
+#	elif macintosh && applec			/* MPW */
+#		error Please upgrade to the latest MPW compiler (SC).
+#	else
+#		error Unsupported Mac development environment.
+#	endif
+#	define JRI_CALLBACK
 
 /* Unix or else */
 #else
-#   define JRI_PUBLIC_API(ResultType)       ResultType
+#	define JRI_PUBLIC_API(ResultType)		ResultType
 #   define JRI_PUBLIC_VAR(VarType)          VarType
-#   define JRI_PUBLIC_VAR_EXP(VarType)      JRI_PUBLIC_VAR(VarType)
-#   define JRI_PUBLIC_VAR_IMP(VarType)      JRI_PUBLIC_VAR(VarType)
-#   define JRI_NATIVE_STUB(ResultType)      ResultType
-#   define JRI_CALLBACK
+#   define JRI_PUBLIC_VAR_EXP(VarType)		JRI_PUBLIC_VAR(VarType)
+#   define JRI_PUBLIC_VAR_IMP(VarType)		JRI_PUBLIC_VAR(VarType)
+#   define JRI_NATIVE_STUB(ResultType)		ResultType
+#	define JRI_CALLBACK
 #endif
 
-#ifndef FAR     /* for non-Win16 */
+#ifndef FAR		/* for non-Win16 */
 #define FAR
 #endif
 
@@ -171,12 +171,12 @@ extern "C" {
 
 /* Java Scalar Types */
 
-#if 0   /* now in jni.h */
-typedef short           jchar;
-typedef short           jshort;
-typedef float           jfloat;
-typedef double          jdouble;
-typedef juint           jsize;
+#if 0	/* now in jni.h */
+typedef short			jchar;
+typedef short			jshort;
+typedef float			jfloat;
+typedef double			jdouble;
+typedef juint			jsize;
 #endif
 
 /* moved from jni.h -- Sun's new jni.h doesn't have this anymore */
@@ -186,22 +186,22 @@ typedef class _jobject *jref;
 typedef struct _jobject *jref;
 #endif
 
-typedef unsigned char   jbool;
-typedef char            jbyte;
-typedef short           jchar;
-typedef short           jshort;
+typedef unsigned char	jbool;
+typedef char			jbyte;
+typedef short			jchar;
+typedef short			jshort;
 #ifdef IS_64 /* XXX ok for alpha, but not right on all 64-bit architectures */
-typedef unsigned int    juint;
-typedef int             jint;
+typedef unsigned int	juint;
+typedef int				jint;
 #else
-typedef unsigned long   juint;
-typedef long            jint;
+typedef unsigned long	juint;
+typedef long			jint;
 #endif
 
-typedef float           jfloat;
-typedef double          jdouble;
+typedef float			jfloat;
+typedef double			jdouble;
 
-typedef juint           jsize;
+typedef juint			jsize;
 
 
 /*******************************************************************************
@@ -211,8 +211,8 @@ typedef juint           jsize;
 /*
 ** Bit masking macros.  (n must be <= 31 to be portable)
 */
-#define JRI_BIT(n)          ((juint)1 << (n))
-#define JRI_BITMASK(n)      (JRI_BIT(n) - 1)
+#define JRI_BIT(n)			((juint)1 << (n))
+#define JRI_BITMASK(n)		(JRI_BIT(n) - 1)
 
 #ifdef HAVE_LONG_LONG
 
@@ -243,40 +243,40 @@ typedef unsigned long long    julong;
 
 #endif
 
-#define jlong_IS_ZERO(a)    ((a) == 0)
-#define jlong_EQ(a, b)      ((a) == (b))
-#define jlong_NE(a, b)      ((a) != (b))
-#define jlong_GE_ZERO(a)    ((a) >= 0)
-#define jlong_CMP(a, op, b) ((a) op (b))
+#define jlong_IS_ZERO(a)	((a) == 0)
+#define jlong_EQ(a, b)		((a) == (b))
+#define jlong_NE(a, b)		((a) != (b))
+#define jlong_GE_ZERO(a)	((a) >= 0)
+#define jlong_CMP(a, op, b)	((a) op (b))
 
-#define jlong_AND(r, a, b)  ((r) = (a) & (b))
-#define jlong_OR(r, a, b)   ((r) = (a) | (b))
-#define jlong_XOR(r, a, b)  ((r) = (a) ^ (b))
-#define jlong_OR2(r, a)     ((r) = (r) | (a))
-#define jlong_NOT(r, a)     ((r) = ~(a))
+#define jlong_AND(r, a, b)	((r) = (a) & (b))
+#define jlong_OR(r, a, b)	((r) = (a) | (b))
+#define jlong_XOR(r, a, b)	((r) = (a) ^ (b))
+#define jlong_OR2(r, a)		((r) = (r) | (a))
+#define jlong_NOT(r, a)		((r) = ~(a))
 
-#define jlong_NEG(r, a)     ((r) = -(a))
-#define jlong_ADD(r, a, b)  ((r) = (a) + (b))
-#define jlong_SUB(r, a, b)  ((r) = (a) - (b))
+#define jlong_NEG(r, a)		((r) = -(a))
+#define jlong_ADD(r, a, b)	((r) = (a) + (b))
+#define jlong_SUB(r, a, b)	((r) = (a) - (b))
 
-#define jlong_MUL(r, a, b)  ((r) = (a) * (b))
-#define jlong_DIV(r, a, b)  ((r) = (a) / (b))
-#define jlong_MOD(r, a, b)  ((r) = (a) % (b))
+#define jlong_MUL(r, a, b)	((r) = (a) * (b))
+#define jlong_DIV(r, a, b)	((r) = (a) / (b))
+#define jlong_MOD(r, a, b)	((r) = (a) % (b))
 
-#define jlong_SHL(r, a, b)  ((r) = (a) << (b))
-#define jlong_SHR(r, a, b)  ((r) = (a) >> (b))
-#define jlong_USHR(r, a, b) ((r) = (julong)(a) >> (b))
-#define jlong_ISHL(r, a, b) ((r) = ((jlong)(a)) << (b))
+#define jlong_SHL(r, a, b)	((r) = (a) << (b))
+#define jlong_SHR(r, a, b)	((r) = (a) >> (b))
+#define jlong_USHR(r, a, b)	((r) = (julong)(a) >> (b))
+#define jlong_ISHL(r, a, b)	((r) = ((jlong)(a)) << (b))
 
-#define jlong_L2I(i, l)     ((i) = (int)(l))
-#define jlong_L2UI(ui, l)   ((ui) =(unsigned int)(l))
-#define jlong_L2F(f, l)     ((f) = (l))
-#define jlong_L2D(d, l)     ((d) = (l))
+#define jlong_L2I(i, l)		((i) = (int)(l))
+#define jlong_L2UI(ui, l)	((ui) =(unsigned int)(l))
+#define jlong_L2F(f, l)		((f) = (l))
+#define jlong_L2D(d, l)		((d) = (l))
 
-#define jlong_I2L(l, i)     ((l) = (i))
-#define jlong_UI2L(l, ui)   ((l) = (ui))
-#define jlong_F2L(l, f)     ((l) = (f))
-#define jlong_D2L(l, d)     ((l) = (d))
+#define jlong_I2L(l, i)		((l) = (i))
+#define jlong_UI2L(l, ui)	((l) = (ui))
+#define jlong_F2L(l, f)		((l) = (f))
+#define jlong_D2L(l, d)		((l) = (d))
 
 #define jlong_UDIVMOD(qp, rp, a, b)  \
     (*(qp) = ((julong)(a) / (b)), \
@@ -291,35 +291,35 @@ typedef struct {
     juint hi, lo;
 #endif
 } jlong;
-typedef jlong               julong;
+typedef jlong				julong;
 
 extern jlong jlong_MAXINT, jlong_MININT, jlong_ZERO;
 
-#define jlong_IS_ZERO(a)    (((a).hi == 0) && ((a).lo == 0))
-#define jlong_EQ(a, b)      (((a).hi == (b).hi) && ((a).lo == (b).lo))
-#define jlong_NE(a, b)      (((a).hi != (b).hi) || ((a).lo != (b).lo))
-#define jlong_GE_ZERO(a)    (((a).hi >> 31) == 0)
+#define jlong_IS_ZERO(a)	(((a).hi == 0) && ((a).lo == 0))
+#define jlong_EQ(a, b)		(((a).hi == (b).hi) && ((a).lo == (b).lo))
+#define jlong_NE(a, b)		(((a).hi != (b).hi) || ((a).lo != (b).lo))
+#define jlong_GE_ZERO(a)	(((a).hi >> 31) == 0)
 
 /*
  * NB: jlong_CMP and jlong_UCMP work only for strict relationals (<, >).
  */
-#define jlong_CMP(a, op, b) (((int32)(a).hi op (int32)(b).hi) ||          \
+#define jlong_CMP(a, op, b)	(((int32)(a).hi op (int32)(b).hi) ||          \
                  (((a).hi == (b).hi) && ((a).lo op (b).lo)))
-#define jlong_UCMP(a, op, b)    (((a).hi op (b).hi) ||                    \
+#define jlong_UCMP(a, op, b)	(((a).hi op (b).hi) ||                    \
                  (((a).hi == (b).hi) && ((a).lo op (b).lo)))
 
-#define jlong_AND(r, a, b)  ((r).lo = (a).lo & (b).lo,                    \
+#define jlong_AND(r, a, b)	((r).lo = (a).lo & (b).lo,                    \
                  (r).hi = (a).hi & (b).hi)
-#define jlong_OR(r, a, b)   ((r).lo = (a).lo | (b).lo,                    \
+#define jlong_OR(r, a, b)	((r).lo = (a).lo | (b).lo,                    \
                  (r).hi = (a).hi | (b).hi)
-#define jlong_XOR(r, a, b)  ((r).lo = (a).lo ^ (b).lo,                    \
+#define jlong_XOR(r, a, b)	((r).lo = (a).lo ^ (b).lo,                    \
                  (r).hi = (a).hi ^ (b).hi)
-#define jlong_OR2(r, a)     ((r).lo = (r).lo | (a).lo,                    \
+#define jlong_OR2(r, a)		((r).lo = (r).lo | (a).lo,                    \
                  (r).hi = (r).hi | (a).hi)
-#define jlong_NOT(r, a)     ((r).lo = ~(a).lo,                            \
+#define jlong_NOT(r, a)		((r).lo = ~(a).lo,	                          \
                  (r).hi = ~(a).hi)
 
-#define jlong_NEG(r, a)     ((r).lo = -(int32)(a).lo,                     \
+#define jlong_NEG(r, a)		((r).lo = -(int32)(a).lo,                     \
                  (r).hi = -(int32)(a).hi - ((r).lo != 0))
 #define jlong_ADD(r, a, b) {                                              \
     jlong _a, _b;                                                         \
@@ -348,8 +348,8 @@ extern jlong jlong_MAXINT, jlong_MININT, jlong_ZERO;
 }
 
 /* XXX _jlong_lo16(a) = ((a) << 16 >> 16) is better on some archs (not on mips) */
-#define _jlong_lo16(a)      ((a) & JRI_BITMASK(16))
-#define _jlong_hi16(a)      ((a) >> 16)
+#define _jlong_lo16(a)		((a) & JRI_BITMASK(16))
+#define _jlong_hi16(a)		((a) >> 16)
 
 /*
  * Multiply 32-bit operands a and b to get 64-bit result r.
@@ -375,7 +375,7 @@ extern jlong jlong_MAXINT, jlong_MININT, jlong_ZERO;
  * to the 64-bit unsigned quotient, and *rp to the 64-bit unsigned remainder.
  * Minimize effort if one of qp and rp is null.
  */
-#define jlong_UDIVMOD(qp, rp, a, b) jlong_udivmod(qp, rp, a, b)
+#define jlong_UDIVMOD(qp, rp, a, b)	jlong_udivmod(qp, rp, a, b)
 
 extern JRI_PUBLIC_API(void)
 jlong_udivmod(julong *qp, julong *rp, julong a, julong b);
@@ -487,9 +487,9 @@ jlong_udivmod(julong *qp, julong *rp, julong a, julong b);
     }                                                                     \
 }
 
-#define jlong_L2I(i, l)     ((i) = (l).lo)
-#define jlong_L2UI(ui, l)   ((ui) = (l).lo)
-#define jlong_L2F(f, l)     { double _d; jlong_L2D(_d, l); (f) = (float) _d; }
+#define jlong_L2I(i, l)		((i) = (l).lo)
+#define jlong_L2UI(ui, l)	((ui) = (l).lo)
+#define jlong_L2F(f, l)		{ double _d; jlong_L2D(_d, l); (f) = (float) _d; }
 
 #define jlong_L2D(d, l) {                                                 \
     int32 _negative;                                                      \
@@ -506,9 +506,9 @@ jlong_udivmod(julong *qp, julong *rp, julong a, julong b);
     (d) = -(d);                                                           \
 }
 
-#define jlong_I2L(l, i)     ((l).hi = (i) >> 31, (l).lo = (i))
-#define jlong_UI2L(l, ui)   ((l).hi = 0, (l).lo = (ui))
-#define jlong_F2L(l, f)     { double _d = (double) f; jlong_D2L(l, _d); }
+#define jlong_I2L(l, i)		((l).hi = (i) >> 31, (l).lo = (i))
+#define jlong_UI2L(l, ui)	((l).hi = 0, (l).lo = (ui))
+#define jlong_F2L(l, f)		{ double _d = (double) f; jlong_D2L(l, _d); }
 
 #define jlong_D2L(l, d) {                                                 \
     int _negative;                                                        \

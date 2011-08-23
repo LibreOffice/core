@@ -395,7 +395,14 @@
 					<author>AS</author>
 					<desc>Contains all of the document factories that were installed during setup.</desc>
 				</info>
-			</set>
+            </set>
+            <prop oor:name="OfficeRestartInProgress" oor:type="xs:boolean">
+                <info>
+                    <author>MAV</author>
+                    <desc>The entry specifies that we are in restart process</desc>
+                </info>
+                <value>false</value>
+            </prop>
 		</group>
 		<group oor:name="L10N">
 			<info>

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,20 +39,20 @@
 // ----------------
 
 SvColorControl::SvColorControl( Window* pParent, WinBits nStyle ) :
-    Control         ( pParent, nStyle ),
-    mpBitmap        ( NULL ),
-    mpReadAccess    ( NULL ),
-    mnLuminance     ( 50 )
+    Control			( pParent, nStyle ),
+    mpBitmap		( NULL ),
+    mpReadAccess	( NULL ),
+    mnLuminance		( 50 )
 {
     Initialize();
 }
 
 // -----------------------------------------------------------------------
 SvColorControl::SvColorControl( Window* pParent, const ResId& rResId ) :
-    Control         ( pParent, rResId ),
-    mpBitmap        ( NULL ),
-    mpReadAccess    ( NULL ),
-    mnLuminance     ( 50 )
+    Control			( pParent, rResId ),
+    mpBitmap		( NULL ),
+    mpReadAccess	( NULL ),
+    mnLuminance		( 50 )
 {
     Initialize();
 }
@@ -74,7 +74,7 @@ void SvColorControl::Initialize()
 void SvColorControl::CreateBitmap()
 {
     const Size aSize( GetOutputSizePixel() );
-
+    
     if( mpBitmap && mpBitmap->GetSizePixel() != aSize )
         delete mpBitmap, mpBitmap = NULL;
 
@@ -101,7 +101,7 @@ void SvColorControl::CreateBitmap()
 
                 aColHSB.SetHue( nHue );
                 aColHSB.SetSat( nSat );
-
+         
                 // mpBitmap always has a bit count of 24 => use of SetPixel(...) is safe
                 pWriteAccess->SetPixel( i, j, BitmapColor( aColHSB.GetRGB() ) );
             }
@@ -229,7 +229,7 @@ void SvColorControl::SetColor( const ColorHSB& rCol, BOOL bSetColor )
         USHORT  nX = (USHORT) mpBitmap->GetSizePixel().Width();
         USHORT  nY = (USHORT) mpBitmap->GetSizePixel().Height();
         INT16   nZ = rCol.GetBri();
-
+        
         SetLuminance( nZ );
         nX = rCol.GetHue() * nX / 360; // Farbe
         nY = nY - rCol.GetSat() * nY / 100; // Saettigung
@@ -286,7 +286,7 @@ void SvColorControl::SetLuminance( short nLum )
 
 // -----------------------------------------------------------------------
 ColorPreviewControl::ColorPreviewControl( Window* pParent, WinBits nStyle ) :
-    Control     ( pParent, nStyle )
+    Control		( pParent, nStyle )
 {
     SetFillColor( maColor );
     SetLineColor( maColor );
@@ -294,7 +294,7 @@ ColorPreviewControl::ColorPreviewControl( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 ColorPreviewControl::ColorPreviewControl( Window* pParent, const ResId& rResId ) :
-    Control     ( pParent, rResId )
+    Control		( pParent, rResId )
 {
     SetFillColor( maColor );
     SetLineColor( maColor );
@@ -333,9 +333,9 @@ void ColorPreviewControl::SetColor( const Color& rCol )
 // -----------------------------------------------------------------------
 ColorMixingControl::ColorMixingControl( Window* pParent, WinBits nStyle,
                                         USHORT nRows, USHORT nColumns ) :
-    ValueSet    ( pParent, nStyle ),
-    mnRows      ( nRows ),
-    mnColumns   ( nColumns )
+    ValueSet	( pParent, nStyle ),
+    mnRows		( nRows ),
+    mnColumns	( nColumns )
 {
     Initialize();
 }
@@ -343,9 +343,9 @@ ColorMixingControl::ColorMixingControl( Window* pParent, WinBits nStyle,
 // -----------------------------------------------------------------------
 ColorMixingControl::ColorMixingControl( Window* pParent, const ResId& rResId,
                                         USHORT nRows, USHORT nColumns ) :
-    ValueSet    ( pParent, rResId ),
-    mnRows      ( nRows ),
-    mnColumns   ( nColumns )
+    ValueSet	( pParent, rResId ),
+    mnRows		( nRows ),
+    mnColumns	( nColumns )
 {
     Initialize();
 }
@@ -497,7 +497,7 @@ void ColorMixingControl::SetColor( CMCPosition ePos, const Color& rCol )
 // -----------------------------------------------------------------------
 String ColorMixingControl::GetRGBString( const Color& rColor )
 {
-    String  aStr( String::CreateFromInt32(rColor.GetRed()) );
+    String 	aStr( String::CreateFromInt32(rColor.GetRed()) );
             aStr += ' ';
             aStr += String::CreateFromInt32(rColor.GetGreen());
             aStr += ' ';
@@ -506,7 +506,7 @@ String ColorMixingControl::GetRGBString( const Color& rColor )
     return aStr;
 }
 // -----------------------------------------------------------------------
-CMCPosition ColorMixingControl::GetCMCPosition() const
+CMCPosition	ColorMixingControl::GetCMCPosition() const
 {
     CMCPosition ePos = CMC_OTHER;
     USHORT nPos = GetSelectItemId();
@@ -642,13 +642,13 @@ Color ColorHSB::GetRGB() const
 
         switch( n )
         {
-            case 0: cR = nB;    cG = c;     cB = a;     break;
-            case 1: cR = b;     cG = nB;    cB = a;     break;
-            case 2: cR = a;     cG = nB;    cB = c;     break;
-            case 3: cR = a;     cG = b;     cB = nB;    break;
-            case 4: cR = c;     cG = a;     cB = nB;    break;
-            case 5: cR = nB;    cG = a;     cB = b;     break;
-            default: cR = 0;    cG = 0;     cB = 0;     break;  // -Wall ????
+            case 0: cR = nB;	cG = c;		cB = a; 	break;
+            case 1: cR = b;		cG = nB;	cB = a; 	break;
+            case 2: cR = a;		cG = nB;	cB = c;		break;
+            case 3: cR = a;		cG = b; 	cB = nB;	break;
+            case 4: cR = c;		cG = a; 	cB = nB;	break;
+            case 5: cR = nB; 	cG = a;		cB = b;		break;
+            default: cR = 0; 	cG = 0;		cB = 0;		break;  // -Wall ????
         }
     }
 

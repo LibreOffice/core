@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,10 +90,10 @@ private:
     SAL_DLLPRIVATE void         ImplSetFirstPagePos( USHORT nPagePos );
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout = false, bool bFirstInGroup = false, bool bLastInGroup = false, bool bIsCurrentItem = false );
-    SAL_DLLPRIVATE void         ImplPaint( const Rectangle& rRect, bool bLayout = false );
-    SAL_DLLPRIVATE void         ImplFreeLayoutData();
-    SAL_DLLPRIVATE long         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
-
+    SAL_DLLPRIVATE void			ImplPaint( const Rectangle& rRect, bool bLayout = false );
+    SAL_DLLPRIVATE void			ImplFreeLayoutData();
+    SAL_DLLPRIVATE long			ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
+   
     DECL_DLLPRIVATE_LINK(       ImplScrollBtnHdl, PushButton* pBtn );
     DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
     DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
@@ -104,7 +104,7 @@ protected:
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
 
-    virtual void                FillLayoutData() const;
+    virtual void		        FillLayoutData() const;
     virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
@@ -179,7 +179,7 @@ public:
 
     void                SetHelpId( USHORT nPageId, ULONG nHelpId );
     ULONG               GetHelpId( USHORT nPageId ) const;
-
+    
     void                SetPageImage( USHORT nPageId, const Image& rImage );
     const Image*        GetPageImage( USHORT nPageId ) const;
 

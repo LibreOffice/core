@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@
 
 
 
-#define AssertionOf(x)  \
+#define AssertionOf(x)	\
     {if (!(x)) {std::cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
 
 
 
 X2CParser::X2CParser( XmlElement & o_rDocumentData )
-    :   // sFileName,
+    :	// sFileName,
         nFileLine(0),
         pDocumentData(&o_rDocumentData),
         // sWord,
@@ -128,7 +128,7 @@ X2CParser::Parse_Doctype()
 
 void
 X2CParser::Parse_Sequence( DynamicList<XmlElement> & o_rElements,
-                           const Simstr &            i_sElementName  )
+                           const Simstr &			 i_sElementName  )
 {
     CheckAndPassBeginTag(i_sElementName.str());
 
@@ -144,7 +144,7 @@ X2CParser::Parse_Sequence( DynamicList<XmlElement> & o_rElements,
 void
 X2CParser::Parse_FreeChoice( DynamicList<XmlElement> & o_rElements )
 {
-    unsigned        nSize = o_rElements.size();
+    unsigned     	nSize = o_rElements.size();
 
     for ( bool bBreak = false;  !bBreak; )
     {
@@ -158,8 +158,8 @@ X2CParser::Parse_FreeChoice( DynamicList<XmlElement> & o_rElements )
                 bBreak = false;
                 break;
             }
-        }   // end for i
-    }   // end for !bBreak
+        }  	// end for i
+    } 	// end for !bBreak
 }
 
 void
@@ -174,9 +174,9 @@ X2CParser::Parse_List( ListElement &  o_rListElem )
 }
 
 void
-X2CParser::Parse_Text( Simstr &         o_sText,
-                       const Simstr &   i_sElementName,
-                       bool             i_bReverseName )
+X2CParser::Parse_Text( Simstr &			o_sText,
+                       const Simstr &	i_sElementName,
+                       bool				i_bReverseName )
 {
 
     if ( ! CheckAndPassBeginTag(i_sElementName.str()) )
@@ -190,9 +190,9 @@ X2CParser::Parse_Text( Simstr &         o_sText,
 }
 
 void
-X2CParser::Parse_MultipleText( List<Simstr> &   o_rTexts,
-                               const Simstr &   i_sElementName,
-                               bool             i_bReverseName )
+X2CParser::Parse_MultipleText( List<Simstr> &	o_rTexts,
+                               const Simstr &	i_sElementName,
+                               bool				i_bReverseName )
 {
     for ( Goto('<'); IsBeginTag(i_sElementName.str()); Goto('<') )
     {
@@ -204,9 +204,9 @@ X2CParser::Parse_MultipleText( List<Simstr> &   o_rTexts,
 }
 
 void
-X2CParser::Parse_SglAttr( Simstr &          o_sAttrValue,
-                          const Simstr &    i_sElementName,
-                          const Simstr &    i_sAttrName )
+X2CParser::Parse_SglAttr( Simstr &			o_sAttrValue,
+                          const Simstr &	i_sElementName,
+                          const Simstr &	i_sAttrName )
 {
     Goto('<');
     if ( !IsBeginTag(i_sElementName.str()) )
@@ -227,9 +227,9 @@ X2CParser::Parse_SglAttr( Simstr &          o_sAttrValue,
 }
 
 void
-X2CParser::Parse_MultipleAttr( List<Simstr> &       o_rAttrValues,
-                               const Simstr &       i_sElementName,
-                               const List<Simstr> & i_rAttrNames )
+X2CParser::Parse_MultipleAttr( List<Simstr> &		o_rAttrValues,
+                               const Simstr &		i_sElementName,
+                               const List<Simstr> &	i_rAttrNames )
 {
     Goto('<');
     if ( !IsBeginTag(i_sElementName.str()) )
@@ -278,13 +278,13 @@ X2CParser::Get_Attribute( Simstr & o_rAttrValue,
 }
 
 bool
-X2CParser::IsText( const char * i_sComparedText )
+X2CParser::IsText( const char *	i_sComparedText )
 {
     return strnicmp( text, i_sComparedText, strlen(i_sComparedText) ) == 0;
 }
 
 bool
-X2CParser::IsBeginTag( const char * i_sTagName )
+X2CParser::IsBeginTag( const char *	i_sTagName )
 {
     return strnicmp( text+1, i_sTagName, strlen(i_sTagName) ) == 0
            && *text == '<';
@@ -396,7 +396,7 @@ X2CParser::CheckAndPassBeginTag( const char * i_sElementName )
 }
 
 void
-X2CParser::CheckAndPassEndTag( const char * i_sElementName )
+X2CParser::CheckAndPassEndTag( const char *	i_sElementName )
 {
     Pass_White();
     if ( !IsEndTag(i_sElementName) )
@@ -441,9 +441,9 @@ X2CParser::SyntaxError( const char * i_sText )
 void
 X2CParser::TestCurChar()
 {
-//  if (*text == '\0')
-//      SyntaxError("unexpected end of file");
-//  else
+//	if (*text == '\0')
+//		SyntaxError("unexpected end of file");
+//	else
 
     if (*text == '\n')
         nFileLine++;

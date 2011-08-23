@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,5 +40,5 @@ enum FadeSpeed
 // muss angepasst werden!
 #define FADE_SPEED_COUNT 3
 
-#endif  // _SD_FADEDEF_H
+#endif	// _SD_FADEDEF_H
 

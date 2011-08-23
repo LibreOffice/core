@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace slideshow
         class DelayFacade : public Event
         {
         public:
-            DelayFacade( const EventSharedPtr&  rEvent,
-                         double                 nTimeout    ) :
+            DelayFacade( const EventSharedPtr& 	rEvent,
+                         double					nTimeout	) :
 #if OSL_DEBUG_LEVEL > 1
                 Event(::rtl::OUString::createFromAscii("DelayFacade")),
 #endif
@@ -88,8 +88,8 @@ namespace slideshow
             }
 
         private:
-            EventSharedPtr  mpEvent;
-            double          mnTimeout;
+            EventSharedPtr	mpEvent;
+            double			mnTimeout;	
         };
 
         /// Return value for makeInterruptableDelay()
@@ -99,14 +99,14 @@ namespace slideshow
                 event. When enqueued, this event will fire the
                 requested action only after the specified timeout.
              */
-            EventSharedPtr  mpTimeoutEvent;
+            EventSharedPtr	mpTimeoutEvent;
 
             /** This member contains a pointer to the interruption
                 event. When enqueued, this event will fire
                 immediately, interrupting a potentially waiting
                 timeout event.
              */
-            EventSharedPtr  mpImmediateEvent;
+            EventSharedPtr	mpImmediateEvent;
         };
 
         /** Generate an interruptable delay event.
@@ -133,8 +133,8 @@ namespace slideshow
             specified amount of time, and the other fires the given
             functor immediately.
          */
-        template< typename Functor > InterruptableEventPair makeInterruptableDelay( const Functor&  rFunctor,
-                                                                                    double          nTimeout    )
+        template< typename Functor > InterruptableEventPair makeInterruptableDelay( const Functor& 	rFunctor,
+                                                                                    double			nTimeout	)
         {
             InterruptableEventPair aRes;
 

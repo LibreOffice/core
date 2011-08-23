@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ class IntlWrapper;
 //Pagedescriptor
 //Client vom SwPageDesc der durch das Attribut "beschrieben" wird.
 
-#define IVER_FMTPAGEDESC_NOAUTO ((USHORT)0x0001)
-#define IVER_FMTPAGEDESC_LONGPAGE   ((USHORT)0x0002)
+#define	IVER_FMTPAGEDESC_NOAUTO	((USHORT)0x0001)
+#define IVER_FMTPAGEDESC_LONGPAGE	((USHORT)0x0002)
 
 class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
 {
@@ -51,9 +51,9 @@ class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
     // Auto-Flag setzen zu koennen !!
     friend BOOL InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, USHORT,
                         SwHistory* );
-    USHORT nNumOffset;          // Seitennummer Offset
-    USHORT nDescNameIdx;        // SW3-Reader: Stringpool-Index des Vorlagennamens
-    SwModify* pDefinedIn;       // Verweis auf das Objekt, in dem das
+    USHORT nNumOffset;			// Seitennummer Offset
+    USHORT nDescNameIdx;		// SW3-Reader: Stringpool-Index des Vorlagennamens
+    SwModify* pDefinedIn;		// Verweis auf das Objekt, in dem das
                                 // Attribut gesetzt wurde (CntntNode/Format)
 
 public:
@@ -66,22 +66,22 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	BOOL        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	BOOL			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
           SwPageDesc *GetPageDesc() { return (SwPageDesc*)GetRegisteredIn(); }
     const SwPageDesc *GetPageDesc() const { return (SwPageDesc*)GetRegisteredIn(); }
 
-    USHORT  GetNumOffset() const        { return nNumOffset; }
-    void    SetNumOffset( USHORT nNum ) { nNumOffset = nNum; }
+    USHORT	GetNumOffset() const		{ return nNumOffset; }
+    void	SetNumOffset( USHORT nNum ) { nNumOffset = nNum; }
 
     // erfrage/setze, wo drin das Attribut verankert ist
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }

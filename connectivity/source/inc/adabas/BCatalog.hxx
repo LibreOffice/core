@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,31 +40,31 @@ namespace connectivity
         class OAdabasConnection;
         class OAdabasCatalog : public connectivity::sdbcx::OCatalog
         {
-            OAdabasConnection*  m_pConnection;      // used to get the metadata
-            SQLHANDLE           m_aConnectionHdl;   // used for odbc specific stuff
+            OAdabasConnection*	m_pConnection;		// used to get the metadata
+            SQLHANDLE			m_aConnectionHdl;	// used for odbc specific stuff
 
             void fillVector(const ::rtl::OUString& _sQuery,TStringVector& _rVector);
 
         protected:
             /** builds the name which should be used to access the object later on in the collection.
                 Will only be called in fillNames.
-                @param  _xRow
+                @param	_xRow
                     The cuurent row from a call of XDatabaseMetaData::getTables.
             */
-            virtual ::rtl::OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
+            virtual ::rtl::OUString buildName(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
         public:
             // implementation of the pure virtual methods
             virtual void refreshTables();
-            virtual void refreshViews() ;
+            virtual void refreshViews()	;
             virtual void refreshGroups();
-            virtual void refreshUsers() ;
+            virtual void refreshUsers()	;
 
         public:
             OAdabasCatalog(SQLHANDLE _aConnectionHdl,OAdabasConnection* _pCon);
 
-            OAdabasConnection*      getConnection()     const { return m_pConnection; }
-            sdbcx::OCollection*     getPrivateTables()  const { return m_pTables;}
-            sdbcx::OCollection*     getPrivateViews()   const { return m_pViews; }
+            OAdabasConnection*		getConnection()		const { return m_pConnection; }
+            sdbcx::OCollection*		getPrivateTables()	const { return m_pTables;}
+            sdbcx::OCollection*		getPrivateViews()	const { return m_pViews; }
 
             static const ::rtl::OUString& getDot();
             // correct the the column properties of float/real/double values

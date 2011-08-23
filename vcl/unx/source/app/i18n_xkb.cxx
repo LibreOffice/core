@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ pDisplay
 
     // allow user to set the default keyboard group idx or to disable the usage
     // of x keyboard extension at all:
-    //      setenv SAL_XKEYBOARDGROUP       disables keyboard extension
-    //      setenv SAL_XKEYBOARDGROUP 2     sets the keyboard group index to 2
+    // 		setenv SAL_XKEYBOARDGROUP		disables keyboard extension
+    // 		setenv SAL_XKEYBOARDGROUP 2		sets the keyboard group index to 2
     // keyboard group index must be in [1,4], may be specified in hex or decimal
     static char *pUseKeyboardExtension = getenv( "SAL_XKEYBOARDGROUP" );
     if ( pUseKeyboardExtension != NULL )
@@ -149,7 +149,7 @@ SalI18N_KeyboardExtension::LookupKeysymInGroup( sal_uInt32,sal_uInt32,sal_uInt32
 
     nShiftState &= ShiftMask;
 
-    KeySym      nKeySymbol;
+    KeySym		nKeySymbol;
     nKeySymbol = XkbKeycodeToKeysym( mpDisplay, nKeyCode, nGroup, nShiftState );
     return nKeySymbol;
 

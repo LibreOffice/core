@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,14 +99,14 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-#define START_PAGE                      0
-#define CONNECTION_PAGE                 1
-#define ADDITIONAL_PAGE_DBASE           2
+#define START_PAGE			            0
+#define CONNECTION_PAGE		            1
+#define ADDITIONAL_PAGE_DBASE     		2
 #define ADDITIONAL_PAGE_FLAT            3
 #define ADDITIONAL_PAGE_LDAP            4
 #define ADDITIONAL_PAGE_ADABAS          5
 #define ADDITIONAL_PAGE_MYSQL_JDBC      6
-#define ADDITIONAL_PAGE_MYSQL_ODBC      7
+#define ADDITIONAL_PAGE_MYSQL_ODBC	    7
 #define ADDITIONAL_PAGE_ORACLE_JDBC     8
 #define ADDITIONAL_PAGE_ADO             9
 #define ADDITIONAL_PAGE_ODBC           10
@@ -130,7 +130,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     ,m_bApplied(sal_False)
     ,m_bUIEnabled( sal_True )
 {
-    DBG_CTOR(ODbTypeWizDialog,NULL);
+    DBG_CTOR(ODbTypeWizDialog,NULL);	
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -162,8 +162,8 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
 //-------------------------------------------------------------------------
 ODbTypeWizDialog::~ODbTypeWizDialog()
 {
-    DBG_DTOR(ODbTypeWizDialog,NULL);
-    delete m_pOutSet;
+    DBG_DTOR(ODbTypeWizDialog,NULL);	
+    delete m_pOutSet;	
 }
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
@@ -282,7 +282,7 @@ Reference< XDriver > ODbTypeWizDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString	ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -353,7 +353,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
 
     // register ourself as modified listener
     if ( pPage )
-    {
+    {		
         static_cast<OGenericAdministrationPage*>(pPage)->SetServiceFactory(m_pImpl->getORB());
         static_cast<OGenericAdministrationPage*>(pPage)->SetAdminDialog(this,this);
         // open our own resource block, as the page titles are strings local to this block
@@ -417,5 +417,5 @@ sal_Bool ODbTypeWizDialog::onFinish()
     return m_pImpl->saveChanges(*m_pOutSet) ? OWizardMachine::onFinish() : sal_False;
 }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................

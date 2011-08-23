@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace func_provider
 class ScriptingFrameworkURIHelper :
     public ::cppu::WeakImplHelper3<
         css::script::provider::XScriptURIHelper,
-        css::lang::XServiceInfo,
+        css::lang::XServiceInfo, 
         css::lang::XInitialization >
 {
 private:

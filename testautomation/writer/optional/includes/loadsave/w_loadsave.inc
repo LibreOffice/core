@@ -52,6 +52,7 @@ testcase tExportAllReadableFormatsIntoODF
     Dim SavedCorrectly as Boolean
 	Dim sExportFilter as string
 	Dim sExportFile as string
+    Dim sExceptionFile as string
     Dim i as Integer
 
     WorkDirectory = ( ConvertPath ( gOfficePath + "user\work\" + gPlatgroup + "\export\"))
@@ -77,8 +78,12 @@ testcase tExportAllReadableFormatsIntoODF
 	For i = 1 to listCount(ImportFileList())
 		printlog "- " & i & ". load: " & ImportFileList(i)
 		sExportFile = ImportFileList(i)
+        sExceptionFile  = DateiExtract ( sExportFile )
+        printlog sExceptionFile
 		if GetExtention ( sExportFile ) = "psw" then
-			QAErrorlog "#i102221#Pocket Word filter puts General I/O Error"
+            QAErrorlog "#i102221#Pocket Word filter puts General I/O Error"
+        elseif LCase( sExceptionFile ) = "swdos.txt" then
+            QAErrorlog "#i114062#General I/O error loading StarWriter DOS file"
 		else
 			Call hFileOpen ( ImportFileList(i) )
 			printlog "-  done"

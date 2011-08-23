@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,22 +52,22 @@ using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener ,
-                            public ::com::sun::star::lang::XTypeProvider    ,
-                            public ::cppu::OWeakObject
+class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener	,
+                            public ::com::sun::star::lang::XTypeProvider	,
+                            public ::cppu::OWeakObject 
 {
     public:
         SFX_DECL_XINTERFACE_XTYPEPROVIDER
-
+        
         SfxQueryStatus_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const rtl::OUString& aCommand );
         virtual ~SfxQueryStatus_Impl();
-
+        
         // Query method
         SfxItemState QueryState( SfxPoolItem*& pPoolItem );
-
+        
         // XEventListener
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
-
+        
         // XStatusListener
         virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -96,7 +96,7 @@ SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& 
     m_nSlotID( nSlotId )
 {
     m_aCommand.Complete = rCommand;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( 
                                             rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
     xTrans->parseStrict( m_aCommand );
     if ( rDispatchProvider.is() )
@@ -108,7 +108,7 @@ SfxQueryStatus_Impl::~SfxQueryStatus_Impl()
 {
 }
 
-void SAL_CALL SfxQueryStatus_Impl::disposing( const EventObject& )
+void SAL_CALL SfxQueryStatus_Impl::disposing( const EventObject& ) 
 throw( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -119,14 +119,14 @@ void SAL_CALL SfxQueryStatus_Impl::statusChanged( const FeatureStateEvent& rEven
 throw( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
+    
     m_pItem  = NULL;
     m_eState = SFX_ITEM_DISABLED;
-
+    
     if ( rEvent.IsEnabled )
     {
         m_eState = SFX_ITEM_AVAILABLE;
-        ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
+        ::com::sun::star::uno::Type pType =	rEvent.State.getValueType();
 
         if ( pType == ::getBooleanCppuType() )
         {
@@ -174,11 +174,11 @@ throw( RuntimeException )
 
     if ( m_pItem )
         DeleteItemOnIdle( m_pItem );
-
+    
     try
     {
         m_aCondition.set();
-        m_xDispatch->removeStatusListener( Reference< XStatusListener >( static_cast< cppu::OWeakObject* >( this ), UNO_QUERY ),
+        m_xDispatch->removeStatusListener( Reference< XStatusListener >( static_cast< cppu::OWeakObject* >( this ), UNO_QUERY ), 
                                            m_aCommand );
     }
     catch ( Exception& )
@@ -194,14 +194,14 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
     {
         m_pItem  = NULL;
         m_eState = SFX_ITEM_DISABLED;
-
+        
         if ( m_xDispatch.is() )
         {
             try
             {
                 m_aCondition.reset();
                 m_bQueryInProgress = sal_True;
-                m_xDispatch->addStatusListener( Reference< XStatusListener >( static_cast< cppu::OWeakObject* >( this ), UNO_QUERY ),
+                m_xDispatch->addStatusListener( Reference< XStatusListener >( static_cast< cppu::OWeakObject* >( this ), UNO_QUERY ), 
                                                 m_aCommand );
             }
             catch ( Exception& )
@@ -212,10 +212,10 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
         else
             m_aCondition.set();
     }
-
+    
     m_aCondition.wait();
 
-    m_bQueryInProgress = sal_False;
+    m_bQueryInProgress = sal_False;    
     rpPoolItem = m_pItem;
     return m_eState;
 }
@@ -225,8 +225,8 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
 SfxQueryStatus::SfxQueryStatus( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand )
 {
     m_pSfxQueryStatusImpl = new SfxQueryStatus_Impl( rDispatchProvider, nSlotId, rCommand );
-    m_xStatusListener     = Reference< XStatusListener >(
-                                static_cast< cppu::OWeakObject* >( m_pSfxQueryStatusImpl ),
+    m_xStatusListener     = Reference< XStatusListener >( 
+                                static_cast< cppu::OWeakObject* >( m_pSfxQueryStatusImpl ), 
                                 UNO_QUERY );
 }
 

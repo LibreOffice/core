@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@
 // local includes
 #include "utf8conv.hxx"
 
-#define GSI_FILE_UNKNOWN        0x0000
-#define GSI_FILE_OLDSTYLE       0x0001
-#define GSI_FILE_L10NFRAMEWORK  0x0002
+#define GSI_FILE_UNKNOWN		0x0000
+#define GSI_FILE_OLDSTYLE		0x0001
+#define GSI_FILE_L10NFRAMEWORK	0x0002
 
 /*****************************************************************************/
 USHORT GetGSIFileType( SvStream &rStream )
@@ -109,7 +109,7 @@ ByteString GetGSILineLangId( const ByteString &rLine, USHORT nFileType )
 
 /*****************************************************************************/
 void ConvertGSILine( BOOL bToUTF8, ByteString &rLine,
-        rtl_TextEncoding nEncoding, USHORT nFileType )
+        rtl_TextEncoding nEncoding,	USHORT nFileType )
 /*****************************************************************************/
 {
     switch ( nFileType ) {
@@ -314,19 +314,19 @@ int _cdecl main( int argc, char *argv[] )
             ByteString sCharset( argv[ 3 ] );
             sCharset.ToUpperAscii();
 
-            if      ( sCharset == "MS_932" )    nEncoding = RTL_TEXTENCODING_MS_932;
-            else if ( sCharset == "MS_936" )    nEncoding = RTL_TEXTENCODING_MS_936;
-            else if ( sCharset == "MS_949" )    nEncoding = RTL_TEXTENCODING_MS_949;
-            else if ( sCharset == "MS_950" )    nEncoding = RTL_TEXTENCODING_MS_950;
-            else if ( sCharset == "MS_1250" )   nEncoding = RTL_TEXTENCODING_MS_1250;
-            else if ( sCharset == "MS_1251" )   nEncoding = RTL_TEXTENCODING_MS_1251;
-            else if ( sCharset == "MS_1252" )   nEncoding = RTL_TEXTENCODING_MS_1252;
-            else if ( sCharset == "MS_1253" )   nEncoding = RTL_TEXTENCODING_MS_1253;
-            else if ( sCharset == "MS_1254" )   nEncoding = RTL_TEXTENCODING_MS_1254;
-            else if ( sCharset == "MS_1255" )   nEncoding = RTL_TEXTENCODING_MS_1255;
-            else if ( sCharset == "MS_1256" )   nEncoding = RTL_TEXTENCODING_MS_1256;
-            else if ( sCharset == "MS_1257" )   nEncoding = RTL_TEXTENCODING_MS_1257;
-            else if ( sCharset == "UTF8" )      nEncoding = RTL_TEXTENCODING_UTF8;
+            if 		( sCharset == "MS_932" ) 	nEncoding = RTL_TEXTENCODING_MS_932;
+            else if ( sCharset == "MS_936" ) 	nEncoding = RTL_TEXTENCODING_MS_936;
+            else if ( sCharset == "MS_949" ) 	nEncoding = RTL_TEXTENCODING_MS_949;
+            else if ( sCharset == "MS_950" ) 	nEncoding = RTL_TEXTENCODING_MS_950;
+            else if ( sCharset == "MS_1250" ) 	nEncoding = RTL_TEXTENCODING_MS_1250;
+            else if ( sCharset == "MS_1251" ) 	nEncoding = RTL_TEXTENCODING_MS_1251;
+            else if ( sCharset == "MS_1252" ) 	nEncoding = RTL_TEXTENCODING_MS_1252;
+            else if ( sCharset == "MS_1253" ) 	nEncoding = RTL_TEXTENCODING_MS_1253;
+            else if ( sCharset == "MS_1254" ) 	nEncoding = RTL_TEXTENCODING_MS_1254;
+            else if ( sCharset == "MS_1255" ) 	nEncoding = RTL_TEXTENCODING_MS_1255;
+            else if ( sCharset == "MS_1256" ) 	nEncoding = RTL_TEXTENCODING_MS_1256;
+            else if ( sCharset == "MS_1257" ) 	nEncoding = RTL_TEXTENCODING_MS_1257;
+            else if ( sCharset == "UTF8" )		nEncoding = RTL_TEXTENCODING_UTF8;
 
             else {
                 Help();

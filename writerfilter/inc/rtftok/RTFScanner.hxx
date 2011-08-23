@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,20 +38,20 @@ namespace writerfilter { namespace rtftok {
 class WRITERFILTER_DLLPUBLIC RTFScanner {
 public:
         RTFScanner(RTFScannerHandler &eventHandler_) : eventHandler(eventHandler_) {};
-        virtual ~RTFScanner()   { }
+        virtual ~RTFScanner()	{ }
 
-    const char* YYText()    { return yytext; }
-    int YYLeng()        { return yyleng; }
+    const char* YYText()	{ return yytext; }
+    int YYLeng()		{ return yyleng; }
 
     virtual int yylex() = 0;
 
-    int lineno() const      { return yylineno; }
+    int lineno() const		{ return yylineno; }
 
 protected:
     char* yytext;
     int yyleng;
-    int yylineno;       // only maintained if you use %option yylineno
-     int yy_flex_debug; // only has effect with -d or "%option debug"
+    int yylineno;		// only maintained if you use %option yylineno
+     int yy_flex_debug;	// only has effect with -d or "%option debug"
         RTFScannerHandler &eventHandler;
 
 

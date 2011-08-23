@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include <systools/win32/uwinapi.h>
 
 #ifndef _INC_MALLOC
-#   include <malloc.h>
+#	include <malloc.h>
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
@@ -37,10 +37,10 @@
 #endif
 
 #ifndef _INC_TCHAR
-#   ifdef UNICODE
-#       define _UNICODE
-#   endif
-#   include <TCHAR.H>
+#	ifdef UNICODE
+#		define _UNICODE
+#	endif
+#	include <TCHAR.H>
 #endif
 
 // Globally disable "warning C4100: unreferenced formal parameter" caused by
@@ -60,21 +60,21 @@
 #define MAKE_VER_WIN32_WINDOWS( major, minor, build ) \
     MAKE_VER_WIN32( major, minor, build, TRUE )
 
-#define VER_WIN32_WINDOWS_95    MAKE_VER_WIN32_WINDOWS( 4, 0, 0 )
-#define VER_WIN32_WINDOWS_98    MAKE_VER_WIN32_WINDOWS( 4, 10, 0 )
-#define VER_WIN32_WINDOWS_ME    MAKE_VER_WIN32_WINDOWS( 4, 90, 0 )
-#define VER_WIN32_NT_NT4        MAKE_VER_WIN32_NT( 4, 0, 0 )
-#define VER_WIN32_NT_2000       MAKE_VER_WIN32_NT( 5, 0, 0 )
-#define VER_WIN32_NT_XP         MAKE_VER_WIN32_NT( 5, 1, 0 )
+#define VER_WIN32_WINDOWS_95	MAKE_VER_WIN32_WINDOWS( 4, 0, 0 )
+#define VER_WIN32_WINDOWS_98	MAKE_VER_WIN32_WINDOWS( 4, 10, 0 )
+#define VER_WIN32_WINDOWS_ME	MAKE_VER_WIN32_WINDOWS( 4, 90, 0 )
+#define VER_WIN32_NT_NT4		MAKE_VER_WIN32_NT( 4, 0, 0 )
+#define VER_WIN32_NT_2000		MAKE_VER_WIN32_NT( 5, 0, 0 )
+#define VER_WIN32_NT_XP			MAKE_VER_WIN32_NT( 5, 1, 0 )
 
 
 #ifdef __cplusplus
 
 #define _AUTO_WSTR2STR( lpStrA, lpStrW ) \
-LPSTR   lpStrA; \
+LPSTR	lpStrA; \
 if ( lpStrW ) \
 { \
-    int cNeeded = WideCharToMultiByte( CP_ACP, 0, lpStrW, -1, NULL, 0, NULL, NULL ); \
+    int	cNeeded = WideCharToMultiByte( CP_ACP, 0, lpStrW, -1, NULL, 0, NULL, NULL ); \
     lpStrA = (LPSTR)_alloca( cNeeded * sizeof(CHAR) ); \
     WideCharToMultiByte( CP_ACP, 0, lpStrW, -1, lpStrA, cNeeded, NULL, NULL ); \
 } \
@@ -86,9 +86,9 @@ else \
     _AUTO_WSTR2STR( lpStr##A, lpStr##W )
 
 #define AUTO_STR( lpStr, cchBuffer ) \
-LPSTR   lpStr##A = lpStr##W ? (LPSTR)_alloca( (cchBuffer) * sizeof(CHAR) ) : NULL;
+LPSTR	lpStr##A = lpStr##W ? (LPSTR)_alloca( (cchBuffer) * sizeof(CHAR) ) : NULL;
 
-#endif  /* __cplusplus */
+#endif	/* __cplusplus */
 
 
 #define STRBUF2WSTR( lpStr, cchSrcBuffer, cchDestBuffer ) \
@@ -113,17 +113,17 @@ static void func##_Thunk(); \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
 EXTERN_C rettype calltype func params \
 { \
-    asm("   popl    %ebp"); \
-    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+    asm("	popl	%ebp"); \
+    asm("	jmp	*(%0)"::"m"(module##_##func##_Ptr)); \
 } \
 EXTERN_C rettype calltype func##_##resolve params; \
 static rettype calltype func##_##Failure params; \
 static void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, (FARPROC)func##_##resolve, (FARPROC)func##_##Failure ); \
-    asm("   movl    %ebp, %esp"); \
-    asm("   popl    %ebp"); \
-    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+    asm("	movl	%ebp, %esp"); \
+    asm("	popl	%ebp"); \
+    asm("	jmp	*(%0)"::"m"(module##_##func##_Ptr)); \
 } \
 static rettype calltype func##_##Failure params \
 { \
@@ -139,11 +139,11 @@ static rettype calltype func##_##Failure params; \
 static _declspec ( naked ) void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, (FARPROC)func##_##resolve, (FARPROC)func##_##Failure ); \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( naked ) rettype calltype func params \
 { \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
 static rettype calltype func##_##Failure params \
@@ -163,14 +163,14 @@ EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_
 static void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func ); \
-    asm("   movl    %ebp, %esp"); \
-    asm("   popl    %ebp"); \
-    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+    asm("	movl	%ebp, %esp"); \
+    asm("	popl	%ebp"); \
+    asm("	jmp	*(%0)"::"m"(module##_##func##_Ptr)); \
 } \
 EXTERN_C rettype calltype func params \
 { \
-    asm("   popl    %ebp"); \
-    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+    asm("	popl	%ebp"); \
+    asm("	jmp	*(%0)"::"m"(module##_##func##_Ptr)); \
 }
 #else
 #define DEFINE_CUSTOM_THUNK( module, resolve, rettype, calltype, func, params ) \
@@ -178,11 +178,11 @@ EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
 static _declspec ( naked ) void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func ); \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( naked ) rettype calltype func params \
 { \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk;
 #endif
@@ -196,14 +196,14 @@ static rettype calltype func##_##Failure params; \
 static _declspec ( naked ) void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, NULL, (FARPROC)func##_##Failure ); \
-    asm("   movl    %ebp, %esp"); \
-    asm("   popl    %ebp"); \
-    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+    asm("	movl	%ebp, %esp"); \
+    asm("	popl	%ebp"); \
+    asm("	jmp	*(%0)"::"m"(module##_##func##_Ptr)); \
 } \
 EXTERN_C _declspec( naked ) rettype calltype func params \
 { \
-    asm("   popl    %ebp"); \
-    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+    asm("	popl	%ebp"); \
+    asm("	jmp	*(%0)"::"m"(module##_##func##_Ptr)); \
 } \
 static rettype calltype func##_##Failure params \
 { \
@@ -217,11 +217,11 @@ static rettype calltype func##_##Failure params; \
 static _declspec ( naked ) void func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, NULL, (FARPROC)func##_##Failure ); \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( naked ) rettype calltype func params \
 { \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
 static rettype calltype func##_##Failure params \

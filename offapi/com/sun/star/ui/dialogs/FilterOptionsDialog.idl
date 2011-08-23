@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
 
-/** This service enables a filter developer to register a dialog to query
+/**	This service enables a filter developer to register a dialog to query
     for user options before the filter operation is performed.
 
     <p>The user options are stored inside the <type scope="com::sun::star::document">MediaDescriptor</type>
@@ -56,7 +56,7 @@ module com { module sun { module star { module ui { module dialogs {
     the application will retrieve the changed <type scope="com::sun::star::document">MediaDescriptor</type>
     back using the interface <type scope="com::sun::star::beans">XPropertyAccess</type>. The filter
     operation is than continued, using the new <type scope="com::sun::star::document">MediaDescriptor</type>.</p>
-
+    
     <p>Otherwise, the filter operation is canceled.</p>
 
     @since OOo 1.1.2
@@ -64,7 +64,7 @@ module com { module sun { module star { module ui { module dialogs {
 published service FilterOptionsDialog
 {
     //-------------------------------------------------------------------------
-    /** this interface is used to set the property values of the
+    /**	this interface is used to set the property values of the
         <type scope="com::sun::star::document">MediaDescriptor</type> before executing
         the dialog and to retrieve the changed <type scope="com::sun::star::document">MediaDescriptor</type>
 
@@ -73,7 +73,7 @@ published service FilterOptionsDialog
     interface com::sun::star::beans::XPropertyAccess;
 
     //-------------------------------------------------------------------------
-    /** this interface executes a dialog that displays the options
+    /**	this interface executes a dialog that displays the options
         for a filter.
         If <method>XExecutableDialog::execute<method>
         returns <code>ExecutableDialogResults::OK</code>,

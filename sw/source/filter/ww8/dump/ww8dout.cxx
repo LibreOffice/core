@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <stdio.h>          // getchar
+#include <stdio.h>			// getchar
 
 //#include "defs.hxx"
-#include <tools/solar.h>            // BYTE
-//#include "wwscan.hxx" // aWwStor
+#include <tools/solar.h>			// BYTE
+//#include "wwscan.hxx"	// aWwStor
 #include "ww8dout.hxx"
 #include <tools/stream.hxx>
 
@@ -40,7 +40,7 @@
 
 extern SvStorageStreamRef xStrm;
 extern SvStorageStreamRef xTableStream;
-extern SvStorageStreamRef xDataStream;  // ist bei Ver6-7 mit xStrm identisch,
+extern SvStorageStreamRef xDataStream; 	// ist bei Ver6-7 mit xStrm identisch,
 void DumpSprms( BYTE nVersion, SvStream& rSt, short nLen );
 
 ostream* pOut = 0;
@@ -48,7 +48,7 @@ ostream* pOut = 0;
 #define DumpVer8
 
 //-----------------------------------------
-//          Streams
+// 			Streams
 //-----------------------------------------
 
 
@@ -153,7 +153,7 @@ ostream&  __cdecl end1( ostream& s ) { level--; return s << indent1 << "END "; }
 ostream&  __cdecl end2( ostream& s ) { level--; return s << indent2 << "END "; }
 
 //-----------------------------------------
-//          Ausgabe-Funktionen
+//			Ausgabe-Funktionen
 //-----------------------------------------
 
 void OutBool( SvStream& rSt, short )
@@ -286,7 +286,7 @@ void OutTab( SvStream& rSt, short )
 
     rSt.Read( &nDel, sizeof( nDel ) );
     *pOut << "Del " << (USHORT)nDel;
-    if ( nDel ) *pOut << ": ";
+    if ( nDel )	*pOut << ": ";
     else        *pOut << ", ";
 
     for( i=1; i<=nDel; i++){
@@ -297,7 +297,7 @@ void OutTab( SvStream& rSt, short )
     }
     rSt.Read( &nIns, sizeof( nIns ) );
     *pOut << "Ins " << (USHORT)nIns;
-    if ( nIns ) *pOut << ": ";
+    if ( nIns )	*pOut << ": ";
 
     for( i=1; i<=nIns; i++){
         rSt.Read( &nPos, sizeof( nPos ) );
@@ -305,7 +305,7 @@ void OutTab( SvStream& rSt, short )
         if( i<nIns ) *pOut << ',';
         else *pOut << ' ';
     }
-    if ( nIns ) *pOut << "Typ: ";
+    if ( nIns )	*pOut << "Typ: ";
 
     for( i=1; i<=nIns; i++){
         rSt.Read( &nType, sizeof( nType ) );
@@ -314,9 +314,9 @@ void OutTab( SvStream& rSt, short )
         else *pOut << ' ';
     }
 
-//  nSiz = 1 + 2 * nDel + 1 + nIns * 3; // genaue Laenge,
+//	nSiz = 1 + 2 * nDel + 1 + nIns * 3;	// genaue Laenge,
 //      stimmt auch bei Laenge > 256
-//  bei diesem Tab-Befehl anscheinend nicht noetig
+//	bei diesem Tab-Befehl anscheinend nicht noetig
 }
 
 void OutTab190( SvStream& rSt, short nLen )
@@ -365,7 +365,7 @@ void OutHugeHex( SvStream& rSt, short nLen )
 
     xDataStream->Read( &nLen, sizeof( nLen ) );
 
-//  *pOut << ", Len max: " << nLen << ", ID:" << nIStd << endl1;
+//	*pOut << ", Len max: " << nLen << ", ID:" << nIStd << endl1;
     *pOut << endl1;
     DumpSprms( 8, *xDataStream, nLen );
 
@@ -376,7 +376,7 @@ void OutTabD608( SvStream& rSt, short nLen )
 {
     BYTE nHi, nCols;
     rSt.Read( &nHi, sizeof( nHi ) );
-//  nLen += ((short)nHi) << 8;
+//	nLen += ((short)nHi) << 8;
 
     rSt.Read( &nCols, sizeof( nCols ) );
     *pOut << " Cols: " << (short)nCols << ' ' << endl1 << indent2;

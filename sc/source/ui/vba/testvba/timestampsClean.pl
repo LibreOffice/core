@@ -65,7 +65,7 @@ while (<>) {
 output_lines(\@lines);
 
 # $detectedSomeGuff contains the skipped hunks that contain acceptable diff
-# e.g. a timestamp or an OK assertion that contains different content
+# e.g. a timestamp or an OK assertion that contains different content 
 # like perhaps a path
 #print "frag_count = $frag_count fragstocount = $fragstocount detectedSomeGuff = $detectedSomeGuff \n";
 if ($frag_count > $detectedSomeGuff) {

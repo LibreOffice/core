@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,111 +51,111 @@ typedef std::vector<ValType> ValVector;
 // ====================================================================
 
 static const char* pStringIds[] = {
-/*0*/   ".notdef",      "space",            "exclam",           "quotedbl",
-    "numbersign",       "dollar",           "percent",          "ampersand",
-    "quoteright",       "parenleft",        "parenright",       "asterisk",
-    "plus",             "comma",            "hyphen",           "period",
-/*16*/  "slash",        "zero",             "one",              "two",
-    "three",            "four",             "five",             "six",
-    "seven",            "eight",            "nine",             "colon",
-    "semicolon",        "less",             "equal",            "greater",
-/*32*/  "question",     "at",               "A",                "B",
-    "C",                "D",                "E",                "F",
-    "G",                "H",                "I",                "J",
-    "K",                "L",                "M",                "N",
-/*48*/  "O",            "P",                "Q",                "R",
-    "S",                "T",                "U",                "V",
-    "W",                "X",                "Y",                "Z",
-    "bracketleft",      "backslash",        "bracketright",     "asciicircum",
-/*64*/  "underscore",   "quoteleft",        "a",                "b",
-    "c",                "d",                "e",                "f",
-    "g",                "h",                "i",                "j",
-    "k",                "l",                "m",                "n",
-/*80*/  "o",            "p",                "q",                "r",
-    "s",                "t",                "u",                "v",
-    "w",                "x",                "y",                "z",
-    "braceleft",        "bar",              "braceright",       "asciitilde",
-/*96*/  "exclamdown",   "cent",             "sterlin",          "fraction",
-    "yen",              "florin",           "section",          "currency",
-    "quotesingle",      "quotedblleft",     "guillemotleft",    "guilsinglleft",
-    "guilsinglright",   "fi",               "fl",               "endash",
-/*112*/ "dagger",       "daggerdbl",        "periodcentered",   "paragraph",
-    "bullet",           "quotesinglbase",   "quotedblbase",     "quotedblright",
-    "guillemotright",   "ellipsis",         "perthousand",      "questiondown",
-    "grave",            "acute",            "circumflex",       "tilde",
-/*128*/ "macron",       "breve",            "dotaccent",        "dieresis",
-    "ring",             "cedilla",          "hungarumlaut",     "ogonek",
-    "caron",            "endash",           "AE",               "ordfeminine",
-    "Lslash",           "Oslash",           "OE",               "ordmasculine",
-/*144*/ "ae",           "dotlessi",         "lslash",           "oslash",
-    "oe",               "germandbls",       "onesuperior",      "logicalnot",
-    "mu",               "trademark",        "Eth",              "onehalf",
-    "plusminus",        "Thorn",            "onequarter",       "divide",
-/*160*/ "brokenbar",    "degree",           "thorn",            "threequarters",
-    "twosuperior",      "registered",       "minus",            "eth",
-    "multiply",         "threesuperior",    "copyright",        "Aacute",
-    "Acircumflex",      "Adieresis",        "Agrave",           "Aring",
-/*176*/ "Atilde",       "Ccedilla",         "Eacute",           "Ecircumflex",
-    "Edieresis",        "Egrave",           "Iacute",           "Icircumflex",
-    "Idieresis",        "Igrave",           "Ntilde",           "Oacute",
-    "Ocircumflex",      "Odieresis",        "Ograve",           "Otilde",
-/*192*/ "Scaron",       "Uacute",           "Ucircumflex",      "Udieresis",
-    "Ugrave",           "Yacute",           "Ydieresis",        "Zcaron",
-    "aacute",           "acircumflex",      "adieresis",        "agrave",
-    "aring",            "atilde",           "ccedilla",         "eacute",
-/*208*/ "ecircumflex",  "edieresis",        "egrave",           "iacute",
-    "icircumflex",      "idieresis",        "igrave",           "ntilde",
-    "oacute",           "ocircumflex",      "odieresis",        "ograve",
-    "otilde",           "scaron",           "uacute",           "ucircumflex",
-/*224*/ "udieresis",    "ugrave",           "yacute",           "ydieresis",
-    "zcaron",           "exclamsmall",      "Hungarumlautsmall","dollaroldstyle",
-    "dollarsuperior",   "ampersandsmall",   "Acutesmall",       "parenleftsuperior",
-    "parenrightsuperior","twodotenleader",  "onedotenleader",   "zerooldstyle",
-/*240*/ "oneoldstyle",  "twooldstyle",      "threeoldstyle",    "fouroldstyle",
-    "fiveoldstyle",     "sixoldstyle",      "sevenoldstyle",    "eightoldstyle",
-    "nineoldstile",     "commasuperior",    "threequartersemdash","periodsuperior",
-    "questionsmall",    "asuperior",        "bsuperior",        "centsuperior",
-/*256*/ "dsuperior",    "esuperior",        "isuperior",        "lsuperior",
-    "msuperior",        "nsuperior",        "osuperior",        "rsuperior",
-    "ssuperior",        "tsuperior",        "ff",               "ffi",
-    "ffl",              "parenleftinferior","parenrightinferior","Circumflexsmall",
-/*272*/ "hyphensuperior","Gravesmall",      "Asmall",           "Bsmall",
-    "Csmall",           "Dsmall",           "Esmall",           "Fsmall",
-    "Gsmall",           "Hsmall",           "Ismall",           "Jsmall",
-    "Ksmall",           "Lsmall",           "Msmall",           "Nsmall",
-/*288*/ "Osmall",       "Psmall",           "Qsmall",           "Rsmall",
-    "Ssmall",           "Tsmall",           "Usmall",           "Vsmall",
-    "Wsmall",           "Xsmall",           "Ysmall",           "Zsmall",
-    "colonmonetary",    "onefitted",        "rupia",            "Tildesmall",
-/*304*/ "exclamdownsmall","centoldstyle",   "Lslashsmall",      "Scaronsmall",
-    "Zcaronsmall",      "Dieresissmall",    "Brevesmall",       "Caronsmall",
-    "Dotaccentsmall",   "Macronsmall",      "figuredash",       "hypheninferior",
-    "Ogoneksmall",      "Ringsmall",        "Cedillasmall",     "questiondownsmall",
-/*320*/ "oneeight",     "threeeights",      "fiveeights",       "seveneights",
-    "onethird",         "twothirds",        "zerosuperior",     "foursuperior",
-    "fivesuperior",     "sixsuperior",      "sevensuperior",    "eightsuperior",
-    "ninesuperior",     "zeroinferior",     "oneinferior",      "twoinferior",
-/*336*/ "threeinferior","fourinferior",     "fiveinferior",     "sixinferior",
-    "seveninferior",    "eightinferior",    "nineinferior",     "centinferior",
-    "dollarinferior",   "periodinferior",   "commainferior",    "Agravesmall",
-    "Aacutesmall",      "Acircumflexsmall", "Atildesmall",      "Adieresissmall",
-/*352*/ "Aringsmall",   "AEsmall",          "Ccedillasmall",    "Egravesmall",
-    "Eacutesmall",      "Ecircumflexsmall", "Edieresissmall",   "Igravesmall",
-    "Iacutesmall",      "Icircumflexsmall", "Idieresissmall",   "Ethsmall",
-    "Ntildesmall",      "Ogravesmall",      "Oacutesmall",      "Ocircumflexsmall",
-/*368*/ "Otildesmall",  "Odieressissmall",  "OEsmall",          "Oslashsmall",
-    "Ugravesmall",      "Uacutesmall",      "Ucircumflexsmall", "Udieresissmall",
-    "Yacutesmall",      "Thornsmall",       "Ydieresissmall",   "001.000",
-    "001.001",          "001.002",          "001.003",          "Black",
-/*384*/ "Bold",         "Book",             "Light",            "Medium",
-    "Regular",          "Roman",            "Semibold"
+/*0*/	".notdef",		"space",			"exclam",			"quotedbl",
+    "numbersign",		"dollar",			"percent",			"ampersand",
+    "quoteright",		"parenleft",		"parenright",		"asterisk",
+    "plus",				"comma",			"hyphen",			"period",
+/*16*/	"slash",		"zero",				"one",				"two",
+    "three",			"four",				"five",				"six",
+    "seven",			"eight",			"nine",				"colon",
+    "semicolon",		"less",				"equal",			"greater",
+/*32*/	"question",		"at",				"A",				"B",
+    "C",				"D",				"E",				"F",
+    "G",				"H",				"I",				"J",
+    "K",				"L",				"M",				"N",
+/*48*/	"O",			"P",				"Q",				"R",
+    "S",				"T",				"U",				"V",
+    "W",				"X",				"Y",				"Z",
+    "bracketleft",		"backslash",		"bracketright",		"asciicircum",
+/*64*/	"underscore",	"quoteleft",		"a",				"b",
+    "c",				"d",				"e",				"f",
+    "g",				"h",				"i",				"j",
+    "k",				"l",				"m",				"n",
+/*80*/	"o",			"p",				"q",				"r",
+    "s",				"t",				"u",				"v",
+    "w",				"x",				"y",				"z",
+    "braceleft",		"bar",				"braceright",		"asciitilde",
+/*96*/	"exclamdown",	"cent",				"sterlin",			"fraction",
+    "yen",				"florin",			"section",			"currency",
+    "quotesingle",		"quotedblleft",		"guillemotleft",	"guilsinglleft",
+    "guilsinglright",	"fi",				"fl",				"endash",
+/*112*/	"dagger",		"daggerdbl",		"periodcentered",	"paragraph",
+    "bullet",			"quotesinglbase",	"quotedblbase",		"quotedblright",
+    "guillemotright",	"ellipsis",			"perthousand",		"questiondown",
+    "grave",			"acute",			"circumflex",		"tilde",
+/*128*/	"macron",		"breve",			"dotaccent",		"dieresis",
+    "ring",				"cedilla",			"hungarumlaut",		"ogonek",
+    "caron",			"endash",			"AE",				"ordfeminine",
+    "Lslash",			"Oslash",			"OE",				"ordmasculine",
+/*144*/	"ae",			"dotlessi",			"lslash",			"oslash",
+    "oe",				"germandbls",		"onesuperior",		"logicalnot",
+    "mu",				"trademark",		"Eth",				"onehalf",
+    "plusminus",		"Thorn",			"onequarter",		"divide",
+/*160*/	"brokenbar",	"degree",			"thorn",			"threequarters",
+    "twosuperior",		"registered",		"minus",			"eth",
+    "multiply",			"threesuperior",	"copyright",		"Aacute",
+    "Acircumflex",		"Adieresis",		"Agrave",			"Aring",
+/*176*/	"Atilde",		"Ccedilla",			"Eacute",			"Ecircumflex",
+    "Edieresis",		"Egrave",			"Iacute",			"Icircumflex",
+    "Idieresis",		"Igrave",			"Ntilde",			"Oacute",
+    "Ocircumflex",		"Odieresis",		"Ograve",			"Otilde",
+/*192*/	"Scaron",		"Uacute",			"Ucircumflex",		"Udieresis",
+    "Ugrave",			"Yacute",			"Ydieresis",		"Zcaron",
+    "aacute",			"acircumflex",		"adieresis",		"agrave",
+    "aring",			"atilde",			"ccedilla",			"eacute",
+/*208*/	"ecircumflex",	"edieresis",		"egrave",			"iacute",
+    "icircumflex",		"idieresis",		"igrave",			"ntilde",
+    "oacute",			"ocircumflex",		"odieresis",		"ograve",
+    "otilde",			"scaron",			"uacute",			"ucircumflex",
+/*224*/	"udieresis",	"ugrave",			"yacute",			"ydieresis",
+    "zcaron",			"exclamsmall",		"Hungarumlautsmall","dollaroldstyle",
+    "dollarsuperior",	"ampersandsmall",	"Acutesmall",		"parenleftsuperior",
+    "parenrightsuperior","twodotenleader",	"onedotenleader",	"zerooldstyle",
+/*240*/	"oneoldstyle",	"twooldstyle",		"threeoldstyle",	"fouroldstyle",
+    "fiveoldstyle",		"sixoldstyle",		"sevenoldstyle",	"eightoldstyle",
+    "nineoldstile",		"commasuperior",	"threequartersemdash","periodsuperior",
+    "questionsmall",	"asuperior",		"bsuperior",		"centsuperior",
+/*256*/	"dsuperior",	"esuperior",		"isuperior",		"lsuperior",
+    "msuperior",		"nsuperior",		"osuperior",		"rsuperior",
+    "ssuperior",		"tsuperior",		"ff",				"ffi",
+    "ffl",				"parenleftinferior","parenrightinferior","Circumflexsmall",
+/*272*/	"hyphensuperior","Gravesmall",		"Asmall",			"Bsmall",
+    "Csmall",			"Dsmall",			"Esmall",			"Fsmall",
+    "Gsmall",			"Hsmall",			"Ismall",			"Jsmall",
+    "Ksmall",			"Lsmall",			"Msmall",			"Nsmall",
+/*288*/	"Osmall",		"Psmall",			"Qsmall",			"Rsmall",
+    "Ssmall",			"Tsmall",			"Usmall",			"Vsmall",
+    "Wsmall",			"Xsmall",			"Ysmall",			"Zsmall",
+    "colonmonetary",	"onefitted",		"rupia",			"Tildesmall",
+/*304*/	"exclamdownsmall","centoldstyle",	"Lslashsmall",		"Scaronsmall",
+    "Zcaronsmall",		"Dieresissmall",	"Brevesmall",		"Caronsmall",
+    "Dotaccentsmall",	"Macronsmall",		"figuredash",		"hypheninferior",
+    "Ogoneksmall",		"Ringsmall",		"Cedillasmall",		"questiondownsmall",
+/*320*/	"oneeight",		"threeeights",		"fiveeights",		"seveneights",
+    "onethird",			"twothirds",		"zerosuperior",		"foursuperior",
+    "fivesuperior",		"sixsuperior",		"sevensuperior",	"eightsuperior",
+    "ninesuperior",		"zeroinferior",		"oneinferior",		"twoinferior",
+/*336*/	"threeinferior","fourinferior",		"fiveinferior",		"sixinferior",
+    "seveninferior",	"eightinferior",	"nineinferior",		"centinferior",
+    "dollarinferior",	"periodinferior",	"commainferior",	"Agravesmall",
+    "Aacutesmall",		"Acircumflexsmall",	"Atildesmall",		"Adieresissmall",
+/*352*/	"Aringsmall",	"AEsmall",			"Ccedillasmall",	"Egravesmall",
+    "Eacutesmall",		"Ecircumflexsmall",	"Edieresissmall",	"Igravesmall",
+    "Iacutesmall",		"Icircumflexsmall",	"Idieresissmall",	"Ethsmall",
+    "Ntildesmall",		"Ogravesmall",		"Oacutesmall",		"Ocircumflexsmall",
+/*368*/	"Otildesmall",	"Odieressissmall",	"OEsmall",			"Oslashsmall",
+    "Ugravesmall",		"Uacutesmall",		"Ucircumflexsmall",	"Udieresissmall",
+    "Yacutesmall",		"Thornsmall",		"Ydieresissmall",	"001.000",
+    "001.001",			"001.002",			"001.003",			"Black",
+/*384*/	"Bold",			"Book",				"Light",			"Medium",
+    "Regular",			"Roman",			"Semibold"
 };
 
 // --------------------------------------------------------------------
 
 #if 0 // TODO: use them
 static const char* pStdEncNames[] = {
-    "ISOAdobe", "Expert",   "ExpertSubSet"
+    "ISOAdobe",	"Expert",	"ExpertSubSet"
 };
 #endif
 
@@ -163,57 +163,57 @@ static const char* pStdEncNames[] = {
 
 // TOP DICT keywords (also covers PRIV DICT keywords)
 static const char* pDictOps[] = {
-    "sVersion",         "sNotice",              "sFullName",        "sFamilyName",
-    "sWeight",          "aFontBBox",            "dBlueValues",      "dOtherBlues",
-    "dFamilyBlues",     "dFamilyOtherBlues",    "nStdHW",           "nStdVW",
-    "xESC",             "nUniqueID",            "aXUID",            "nCharset",
-    "nEncoding",        "nCharStrings",         "PPrivate",         "nSubrs",
-    "nDefaultWidthX",   "nNominalWidthX",       NULL,               NULL,
-    NULL,               NULL,                   NULL,               NULL,
-    "shortint",         "longint",              "BCD",              NULL
+    "sVersion",			"sNotice",				"sFullName",		"sFamilyName",
+    "sWeight",			"aFontBBox",			"dBlueValues",		"dOtherBlues",
+    "dFamilyBlues",		"dFamilyOtherBlues",	"nStdHW",			"nStdVW",
+    "xESC",				"nUniqueID",			"aXUID",			"nCharset",
+    "nEncoding",		"nCharStrings",			"PPrivate",			"nSubrs",
+    "nDefaultWidthX",	"nNominalWidthX",		NULL,				NULL,
+    NULL,				NULL,					NULL,				NULL,
+    "shortint",			"longint",				"BCD",				NULL
 };
 
 // --------------------------------------------------------------------
 
 // TOP DICT escapes (also covers PRIV DICT escapes)
 static const char* pDictEscs[] = {
-    "sCopyright",           "bIsFixedPitch",    "nItalicAngle",     "nUnderlinePosition",
-    "nUnderlineThickness",  "nPaintType",       "tCharstringType",  "aFontMatrix",
-    "nStrokeWidth",         "nBlueScale",       "nBlueShift",       "nBlueFuzz",
-    "dStemSnapH",           "dStemSnapV",       "bForceBold",       NULL,
-    NULL,                   "nLanguageGroup",   "nExpansionFactor", "nInitialRandomSeed",
-    "nSyntheticBase",       "sPostScript",      "sBaseFontName",    "dBaseFontBlend",
-    NULL,                   NULL,               NULL,               NULL,
-    NULL,                   NULL,               "rROS",             "nCIDFontVersion",
-    "nCIDFontRevision",     "nCIDFontType",     "nCIDCount",        "nUIDBase",
-    "nFDArray",             "nFDSelect",        "sFontName"
+    "sCopyright",			"bIsFixedPitch",	"nItalicAngle",		"nUnderlinePosition",
+    "nUnderlineThickness",	"nPaintType",		"tCharstringType",	"aFontMatrix",
+    "nStrokeWidth",			"nBlueScale",		"nBlueShift",		"nBlueFuzz",
+    "dStemSnapH",			"dStemSnapV",		"bForceBold",		NULL,
+    NULL,					"nLanguageGroup",	"nExpansionFactor",	"nInitialRandomSeed",
+    "nSyntheticBase",		"sPostScript",		"sBaseFontName",	"dBaseFontBlend",
+    NULL,					NULL,				NULL,				NULL,
+    NULL,					NULL,				"rROS",				"nCIDFontVersion",
+    "nCIDFontRevision",		"nCIDFontType",		"nCIDCount",		"nUIDBase",
+    "nFDArray",				"nFDSelect",		"sFontName"
 };
 
 // --------------------------------------------------------------------
 
 static const char* pType1Ops[] = {
-    NULL,               "2hstem",           NULL,               "2vstem",
-    "1vmoveto",         "Arlineto",         "1hlineto",         "1vlineto",
-    "Crrcurveto",       "0closepath",       "Lcallsubr",        "0return",
-    "xT1ESC",           "2hsbw",            "0endchar",         NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               "2rmoveto",         "1hmoveto",         NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               NULL,               "4vhcurveto",       "4hvcurveto"
+    NULL,				"2hstem",			NULL,				"2vstem",
+    "1vmoveto",			"Arlineto",			"1hlineto",			"1vlineto",
+    "Crrcurveto",		"0closepath",		"Lcallsubr",		"0return",
+    "xT1ESC",			"2hsbw",			"0endchar",			NULL,
+    NULL,				NULL,				NULL,				NULL,
+    NULL,				"2rmoveto",			"1hmoveto",			NULL,
+    NULL,				NULL,				NULL,				NULL,
+    NULL,				NULL,				"4vhcurveto",		"4hvcurveto"
 };
 
 // --------------------------------------------------------------------
 
 static const char* pT1EscOps[] = {
-    "0dotsection",      "6vstem3",          "6hstem3",          NULL,
-    NULL,               NULL,               "5seac",            "4sbw",
-    NULL,               "1abs",             "2add",             "2sub",
-    "2div",             NULL,               NULL,               NULL,
-    "Gcallothersubr",   "1pop",             NULL,               NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               NULL,               NULL,               NULL,
-    NULL,               "2setcurrentpoint"
+    "0dotsection",		"6vstem3",			"6hstem3",			NULL,
+    NULL,				NULL,				"5seac",			"4sbw",
+    NULL,				"1abs",				"2add",				"2sub",
+    "2div",				NULL,				NULL,				NULL,
+    "Gcallothersubr",	"1pop",				NULL,				NULL,
+    NULL,				NULL,				NULL,				NULL,
+    NULL,				NULL,				NULL,				NULL,
+    NULL,				NULL,				NULL,				NULL,
+    NULL,				"2setcurrentpoint"
 };
 
 // --------------------------------------------------------------------
@@ -222,47 +222,47 @@ struct TYPE1OP
 {
     enum OPS
     {
-        HSTEM=1,        VSTEM=3,        VMOVETO=4,      RLINETO=5,
-        HLINETO=6,      VLINETO=7,      RCURVETO=8,     CLOSEPATH=9,
-        CALLSUBR=10,    RETURN=11,      T1ESC=12,       HSBW=13,
-        ENDCHAR=14,     RMOVETO=21,     HMOVETO=22,     VHCURVETO=30,
+        HSTEM=1,		VSTEM=3,		VMOVETO=4,		RLINETO=5,
+        HLINETO=6,		VLINETO=7,		RCURVETO=8,		CLOSEPATH=9,
+        CALLSUBR=10,	RETURN=11,		T1ESC=12,		HSBW=13,
+        ENDCHAR=14,		RMOVETO=21,		HMOVETO=22,		VHCURVETO=30,
         HVCURVETO=31
     };
 
     enum ESCS
     {
-        DOTSECTION=0,   VSTEM3=1,           HSTEM3=2,   SEAC=6,
-        SBW=7,          ABS=9,              ADD=10,     SUB=11,
-        DIV=12,         CALLOTHERSUBR=16,   POP=17,     SETCURRENTPOINT=33
+        DOTSECTION=0,	VSTEM3=1,			HSTEM3=2,	SEAC=6,
+        SBW=7,			ABS=9,				ADD=10,		SUB=11,
+        DIV=12,			CALLOTHERSUBR=16,	POP=17,		SETCURRENTPOINT=33
     };
 };
 
 // --------------------------------------------------------------------
 
 static const char* pType2Ops[] = {
-    NULL,           "hhstem",       NULL,           "vvstem",
-    "mvmoveto",     "Arlineto",     "Ehlineto",     "Evlineto",
-    "Crrcurveto",   NULL,           "Lcallsubr",    "Xreturn",
-    "xT2ESC",       NULL,           "eendchar",     NULL,
-    NULL,           NULL,           "Hhstemhm",     "Khintmask",
-    "Kcntrmask",    "Mrmoveto",     "mhmoveto",     "Vvstemhm",
-    ".rcurveline",  ".rlinecurve",  ".vvcurveto",   ".hhcurveto",
-    ".shortint",    "Gcallgsubr",   ".vhcurveto",   ".hvcurveto"
+    NULL,			"hhstem",		NULL,			"vvstem",
+    "mvmoveto",		"Arlineto",		"Ehlineto",		"Evlineto",
+    "Crrcurveto",	NULL,			"Lcallsubr",	"Xreturn",
+    "xT2ESC",		NULL,			"eendchar",		NULL,
+    NULL,			NULL,			"Hhstemhm",		"Khintmask",
+    "Kcntrmask",	"Mrmoveto",		"mhmoveto",		"Vvstemhm",
+    ".rcurveline",	".rlinecurve",	".vvcurveto",	".hhcurveto",
+    ".shortint",	"Gcallgsubr",	".vhcurveto",	".hvcurveto"
 };
 
 // --------------------------------------------------------------------
 
 static const char* pT2EscOps[] = {
-    NULL,       NULL,       NULL,       "2and",
-    "2or",      "1not",     NULL,       NULL,
-    NULL,       "1abs",     "2add",     "2sub",
-    "2div",     NULL,       "1neg",     "2eq",
-    NULL,       NULL,       "1drop",    NULL,
-    "1put",     "1get",     "4ifelse",  "0random",
-    "2mul",     NULL,       "1sqrt",    "1dup",
-    "2exch",    "Iindex",   "Rroll",    NULL,
-    NULL,       NULL,       "7hflex",   "Fflex",
-    "9hflex1",  "fflex1"
+    NULL,		NULL,		NULL,		"2and",
+    "2or",		"1not",		NULL,		NULL,
+    NULL,		"1abs",		"2add",		"2sub",
+    "2div",		NULL,		"1neg",		"2eq",
+    NULL,		NULL,		"1drop",	NULL,
+    "1put",		"1get",		"4ifelse",	"0random",
+    "2mul",		NULL,		"1sqrt",	"1dup",
+    "2exch",	"Iindex",	"Rroll",	NULL,
+    NULL,		NULL,		"7hflex",	"Fflex",
+    "9hflex1",	"fflex1"
 };
 
 // --------------------------------------------------------------------
@@ -271,23 +271,23 @@ struct TYPE2OP
 {
     enum OPS
     {
-        HSTEM=1,        VSTEM=3,        VMOVETO=4,      RLINETO=5,
-        HLINETO=6,      VLINETO=7,      RCURVETO=8,     CALLSUBR=10,
-        RETURN=11,      T2ESC=12,       ENDCHAR=14,     HSTEMHM=18,
-        HINTMASK=19,    CNTRMASK=20,    RMOVETO=21,     HMOVETO=22,
-        VSTEMHM=23,     RCURVELINE=24,  RLINECURVE=25,  VVCURVETO=26,
-        HHCURVETO=27,   SHORTINT=28,    CALLGSUBR=29,   VHCURVETO=30,
+        HSTEM=1,		VSTEM=3,		VMOVETO=4,		RLINETO=5,
+        HLINETO=6,		VLINETO=7,		RCURVETO=8,		CALLSUBR=10,
+        RETURN=11,		T2ESC=12,		ENDCHAR=14,		HSTEMHM=18,
+        HINTMASK=19,	CNTRMASK=20,	RMOVETO=21,		HMOVETO=22,
+        VSTEMHM=23,		RCURVELINE=24,	RLINECURVE=25,	VVCURVETO=26,
+        HHCURVETO=27,	SHORTINT=28,	CALLGSUBR=29,	VHCURVETO=30,
         HVCURVETO=31
     };
 
     enum ESCS
     {
-        AND=3,      OR=4,       NOT=5,      ABS=9,
-        ADD=10,     SUB=11,     DIV=12,     NEG=14,
-        EQ=15,      DROP=18,    PUT=20,     GET=21,
-        IFELSE=22,  RANDOM=23,  MUL=24,     SQRT=26,
-        DUP=27,     EXCH=28,    INDEX=29,   ROLL=30,
-        HFLEX=34,   FLEX=35,    HFLEX1=36,  FLEX1=37
+        AND=3,		OR=4,		NOT=5,		ABS=9,
+        ADD=10,		SUB=11,		DIV=12,		NEG=14,
+        EQ=15,		DROP=18,	PUT=20,		GET=21,
+        IFELSE=22,	RANDOM=23,	MUL=24,		SQRT=26,
+        DUP=27,		EXCH=28,	INDEX=29,	ROLL=30,
+        HFLEX=34,	FLEX=35,	HFLEX1=36,	FLEX1=37
     };
 };
 
@@ -297,28 +297,28 @@ struct CffGlobal
 {
     explicit CffGlobal();
 
-    int     mnNameIdxBase;
-    int     mnNameIdxCount;
-    int     mnStringIdxBase;
-    int     mnStringIdxCount;
-    bool    mbCIDFont;
-    int     mnCharStrBase;
-    int     mnCharStrCount;
-    int     mnEncodingBase;
-    int     mnCharsetBase;
-    int     mnGlobalSubrBase;
-    int     mnGlobalSubrCount;
-    int     mnGlobalSubrBias;
-    int     mnFDSelectBase;
-    int     mnFontDictBase;
-    int     mnFDAryCount;
+    int		mnNameIdxBase;
+    int		mnNameIdxCount;
+    int		mnStringIdxBase;
+    int		mnStringIdxCount;
+    bool 	mbCIDFont;
+    int		mnCharStrBase;
+    int		mnCharStrCount;
+    int		mnEncodingBase;
+    int		mnCharsetBase;
+    int		mnGlobalSubrBase;
+    int		mnGlobalSubrCount;
+    int		mnGlobalSubrBias;
+    int		mnFDSelectBase;
+    int		mnFontDictBase;
+    int		mnFDAryCount;
 
-    ValVector   maFontBBox;
-    ValVector   maFontMatrix;
+    ValVector	maFontBBox;
+    ValVector	maFontMatrix;
 
-    int     mnFontNameSID;
-    int     mnFullNameSID;
-    int     mnFamilyNameSID;
+    int		mnFontNameSID;
+    int		mnFullNameSID;
+    int		mnFamilyNameSID;
 };
 
 // ====================================================================
@@ -327,31 +327,31 @@ struct CffLocal
 {
     explicit CffLocal();
 
-    int     mnPrivDictBase;
-    int     mnPrivDictSize;
-    int     mnLocalSubrOffs;
-    int     mnLocalSubrBase;
-    int     mnLocalSubrCount;
-    int     mnLocalSubrBias;
+    int		mnPrivDictBase;
+    int		mnPrivDictSize;
+    int		mnLocalSubrOffs;
+    int		mnLocalSubrBase;
+    int		mnLocalSubrCount;
+    int		mnLocalSubrBias;
 
-    ValType maNominalWidth;
+    ValType	maNominalWidth;
     ValType maDefaultWidth;
 
     // ATM hinting related values
-    ValType     maStemStdHW;
-    ValType     maStemStdVW;
-    ValVector   maStemSnapH;
-    ValVector   maStemSnapV;
-    ValVector   maBlueValues;
-    ValVector   maOtherBlues;
-    ValVector   maFamilyBlues;
-    ValVector   maFamilyOtherBlues;
-    RealType    mfBlueScale;
-    RealType    mfBlueShift;
-    RealType    mfBlueFuzz;
-    RealType    mfExpFactor;
-    int         mnLangGroup;
-    bool        mbForceBold;
+    ValType		maStemStdHW;
+    ValType		maStemStdVW;
+    ValVector	maStemSnapH;
+    ValVector	maStemSnapV;
+    ValVector	maBlueValues;
+    ValVector	maOtherBlues;
+    ValVector	maFamilyBlues;
+    ValVector	maFamilyOtherBlues;
+    RealType	mfBlueScale;
+    RealType	mfBlueShift;
+    RealType	mfBlueFuzz;
+    RealType	mfExpFactor;
+    int			mnLangGroup;
+    bool		mbForceBold;
 };
 
 // ====================================================================
@@ -373,32 +373,32 @@ SubsetterContext::~SubsetterContext( void)
 // ====================================================================
 
 class CffSubsetterContext
-:   public SubsetterContext
-,   private CffGlobal
+:	public SubsetterContext
+,	private CffGlobal
 {
 public:
-    static const int NMAXSTACK = 48;    // see CFF.appendixB
-    static const int NMAXHINTS = 2*96;  // see CFF.appendixB
-    static const int NMAXTRANS = 32;    // see CFF.appendixB
+    static const int NMAXSTACK = 48;	// see CFF.appendixB
+    static const int NMAXHINTS = 2*96;	// see CFF.appendixB
+    static const int NMAXTRANS = 32;	// see CFF.appendixB
 public:
     explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
-    virtual ~CffSubsetterContext( void);
+    virtual	~CffSubsetterContext( void);
 
-    void    initialCffRead( void);
-    bool    emitAsType1( class Type1Emitter&,
+    void	initialCffRead( void);
+    bool	emitAsType1( class Type1Emitter&,
                 const long* pGlyphIDs, const U8* pEncoding,
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
 
     // used by charstring converter
-    void    setCharStringType( int);
-    void    fakeLocalSubrCount( int nLocalSubrs ) { maCffLocal[0].mnLocalSubrCount=nLocalSubrs;}
+    void	setCharStringType( int);
+    void	fakeLocalSubrCount( int nLocalSubrs ) { maCffLocal[0].mnLocalSubrCount=nLocalSubrs;}
 protected:
-    int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
+    int		convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
 private:
-    void    convertOneTypeOp( void);
-    void    convertOneTypeEsc( void);
-    void    callType2Subr( bool bGlobal, int nSubrNumber);
-    long    getReadOfs( void) const { return (long)(mpReadPtr - mpBasePtr);}
+    void	convertOneTypeOp( void);
+    void	convertOneTypeEsc( void);
+    void	callType2Subr( bool bGlobal, int nSubrNumber);
+    long	getReadOfs( void) const { return (long)(mpReadPtr - mpBasePtr);}
 
     const U8* mpBasePtr;
     const U8* mpBaseEnd;
@@ -406,90 +406,90 @@ private:
     const U8* mpReadPtr;
     const U8* mpReadEnd;
 
-    U8*     mpWritePtr;
-    bool    mbSawError;
-    bool    mbNeedClose;
-    bool    mbIgnoreHints;
-    long    mnCntrMask;
+    U8*		mpWritePtr;
+    bool	mbSawError;
+    bool	mbNeedClose;
+    bool	mbIgnoreHints;
+    long	mnCntrMask;
 
 private:
-    int     seekIndexData( int nIndexBase, int nDataIndex);
-    void    seekIndexEnd( int nIndexBase);
+    int		seekIndexData( int nIndexBase, int nDataIndex);
+    void	seekIndexEnd( int nIndexBase);
 
 private:
-    const char**    mpCharStringOps;
-    const char**    mpCharStringEscs;
+    const char**	mpCharStringOps;
+    const char**	mpCharStringEscs;
 
-    CffLocal    maCffLocal[16];
-    CffLocal*   mpCffLocal;
+    CffLocal	maCffLocal[16];
+    CffLocal*	mpCffLocal;
 
-    void        readDictOp( void);
-    RealType    readRealVal( void);
-    const char* getString( int nStringID);
-    int         getFDSelect( int nGlyphIndex) const;
-    int         getGlyphSID( int nGlyphIndex) const;
+    void		readDictOp( void);
+    RealType	readRealVal( void);
+    const char*	getString( int nStringID);
+    int			getFDSelect( int nGlyphIndex) const;
+    int			getGlyphSID( int nGlyphIndex) const;
     const char* getGlyphName( int nGlyphIndex);
 
-    void    read2push( void);
-    void    pop2write( void);
-    void    writeType1Val( ValType);
-    void    writeTypeOp( int nTypeOp);
-    void    writeTypeEsc( int nTypeOp);
-    void    writeCurveTo( int nStackPos, int nIX1, int nIY1, int nIX2, int nIY2, int nIX3, int nIY3);
-    void    pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTypeXor=0);
-    void    popAll2Write( int nTypeOp);
+    void	read2push( void);
+    void	pop2write( void);
+    void	writeType1Val( ValType);
+    void	writeTypeOp( int nTypeOp);
+    void	writeTypeEsc( int nTypeOp);
+    void	writeCurveTo( int nStackPos, int nIX1, int nIY1, int nIX2, int nIY2, int nIX3, int nIY3);
+    void	pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTypeXor=0);
+    void	popAll2Write( int nTypeOp);
 
 public: // TODO: is public really needed?
     // accessing the value stack
     // TODO: add more checks
-    void    push( ValType nVal) { mnValStack[ mnStackIdx++] = nVal;}
-    ValType popVal( void) { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
+    void	push( ValType nVal) { mnValStack[ mnStackIdx++] = nVal;}
+    ValType	popVal( void) { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
     ValType peekVal( void) const { return ((mnStackIdx>0) ? mnValStack[ mnStackIdx-1] : 0);}
     ValType getVal( int nIndex) const { return mnValStack[ nIndex];}
-    int     popInt( void);
-    int     peekInt( void) const;
-    int     getInt( int nIndex) const;
-    int     size( void) const { return mnStackIdx;}
-    bool    empty( void) const { return !mnStackIdx;}
-    void    clear( void) { mnStackIdx = 0;}
+    int		popInt( void);
+    int		peekInt( void) const;
+    int		getInt( int nIndex) const;
+    int		size( void) const { return mnStackIdx;}
+    bool	empty( void) const { return !mnStackIdx;}
+    void	clear( void) { mnStackIdx = 0;}
 
     // accessing the charstring hints
-    void    addHints( bool bVerticalHints);
-    int     getHorzHintCount( void) const { return (mnHorzHintSize/2);}
-    int     getVertHintCount( void) const { return (mnHintSize-mnHorzHintSize)/2;}
-    void    getHintPair( int nIndex, ValType* nMin, ValType* nEnd) const;
+    void	addHints( bool bVerticalHints);
+    int		getHorzHintCount( void) const { return (mnHorzHintSize/2);}
+    int		getVertHintCount( void) const { return (mnHintSize-mnHorzHintSize)/2;}
+    void	getHintPair( int nIndex, ValType* nMin, ValType* nEnd) const;
 
     // accessing other charstring specifics
-    bool    hasCharWidth( void) const { return (maCharWidth > 0);}
-    ValType getCharWidth( void) const { return maCharWidth;}
-    void    setNominalWidth( ValType aWidth) { mpCffLocal->maNominalWidth = aWidth;}
-    void    setDefaultWidth( ValType aWidth) { mpCffLocal->maDefaultWidth = aWidth;}
-    void    updateWidth( bool bUseFirstVal);
+    bool	hasCharWidth( void) const { return (maCharWidth > 0);}
+    ValType	getCharWidth( void) const { return maCharWidth;}
+    void	setNominalWidth( ValType aWidth) { mpCffLocal->maNominalWidth = aWidth;}
+    void	setDefaultWidth( ValType aWidth) { mpCffLocal->maDefaultWidth = aWidth;}
+    void	updateWidth( bool bUseFirstVal);
 
 private:
     // typeop exceution context
-    int mnStackIdx;
-    ValType mnValStack[ NMAXSTACK+4];
-    ValType mnTransVals[ NMAXTRANS];
+    int	mnStackIdx;
+    ValType	mnValStack[ NMAXSTACK+4];
+    ValType	mnTransVals[ NMAXTRANS];
 
-    int mnHintSize;
-    int mnHorzHintSize;
-    ValType mnHintStack[ NMAXHINTS];
+    int	mnHintSize;
+    int	mnHorzHintSize;
+    ValType	mnHintStack[ NMAXHINTS];
 
-    ValType maCharWidth;
+    ValType	maCharWidth;
 };
 
 // --------------------------------------------------------------------
 
 CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
-:   mpBasePtr( pBasePtr)
-,   mpBaseEnd( pBasePtr+nBaseLen)
-,   mnStackIdx(0)
-,   mnHintSize(0)
-,   mnHorzHintSize(0)
-,   maCharWidth(-1)
+:	mpBasePtr( pBasePtr)
+,	mpBaseEnd( pBasePtr+nBaseLen)
+,	mnStackIdx(0)
+,	mnHintSize(0)
+,	mnHorzHintSize(0)
+,	maCharWidth(-1)
 {
-//  setCharStringType( 1);
+//	setCharStringType( 1);
     // TODO: new CffLocal[ mnFDAryCount];
     mpCffLocal = &maCffLocal[0];
 }
@@ -628,36 +628,36 @@ void CffSubsetterContext::readDictOp( void)
         //TODO: if( nStackIdx > 0)
         switch( *pCmdName) {
         default: fprintf( stderr, "unsupported DictOp.type=\'%c\'\n", *pCmdName); break;
-        case 'b':   // bool
+        case 'b':	// bool
             nInt = popInt();
             switch( nOpId) {
             case 915: mpCffLocal->mbForceBold = nInt; break;    // "ForceBold"
             default: break; // TODO: handle more boolean dictops?
             }
             break;
-        case 'n':   // dict-op number
+        case 'n':	// dict-op number
             nVal = popVal();
             nInt = static_cast<int>(nVal);
             switch( nOpId) {
-            case  10: mpCffLocal->maStemStdHW = nVal; break;    // "StdHW"
-            case  11: mpCffLocal->maStemStdVW = nVal; break;    // "StdVW"
-            case  15: mnCharsetBase = nInt; break;              // "charset"
-            case  16: mnEncodingBase = nInt; break;             // "nEncoding"
-            case  17: mnCharStrBase = nInt; break;              // "nCharStrings"
+            case  10: mpCffLocal->maStemStdHW = nVal; break; 	// "StdHW"
+            case  11: mpCffLocal->maStemStdVW = nVal; break; 	// "StdVW"
+            case  15: mnCharsetBase = nInt; break;				// "charset"
+            case  16: mnEncodingBase = nInt; break;				// "nEncoding"
+            case  17: mnCharStrBase = nInt; break;				// "nCharStrings"
             case  19: mpCffLocal->mnLocalSubrOffs = nInt; break;// "nSubrs"
-            case  20: setDefaultWidth( nVal ); break;           // "defaultWidthX"
-            case  21: setNominalWidth( nVal ); break;           // "nominalWidthX"
-            case 909: mpCffLocal->mfBlueScale = nVal; break;    // "BlueScale"
-            case 910: mpCffLocal->mfBlueShift = nVal; break;    // "BlueShift"
-            case 911: mpCffLocal->mfBlueFuzz = nVal; break;     // "BlueFuzz"
-            case 912: mpCffLocal->mfExpFactor = nVal; break;    // "ExpansionFactor"
-            case 917: mpCffLocal->mnLangGroup = nInt; break;    // "LanguageGroup"
-            case 936: mnFontDictBase = nInt; break;             // "nFDArray"
-            case 937: mnFDSelectBase = nInt; break;             // "nFDSelect"
+            case  20: setDefaultWidth( nVal ); break;			// "defaultWidthX"
+            case  21: setNominalWidth( nVal ); break;			// "nominalWidthX"
+            case 909: mpCffLocal->mfBlueScale = nVal; break; 	// "BlueScale"
+            case 910: mpCffLocal->mfBlueShift = nVal; break; 	// "BlueShift"
+            case 911: mpCffLocal->mfBlueFuzz = nVal; break; 	// "BlueFuzz"
+            case 912: mpCffLocal->mfExpFactor = nVal; break;	// "ExpansionFactor"
+            case 917: mpCffLocal->mnLangGroup = nInt; break;	// "LanguageGroup"
+            case 936: mnFontDictBase = nInt; break;				// "nFDArray"
+            case 937: mnFDSelectBase = nInt; break;				// "nFDSelect"
             default: break; // TODO: handle more numeric dictops?
             }
             break;
-        case 'a': { // array
+        case 'a': {	// array
             switch( nOpId) {
             case   5: maFontBBox.clear(); break;     // "FontBBox"
             case 907: maFontMatrix.clear(); break; // "FontMatrix"
@@ -673,36 +673,36 @@ void CffSubsetterContext::readDictOp( void)
             }
             clear();
             } break;
-        case 'd': { // delta array
+        case 'd': {	// delta array
             nVal = 0;
             for( int i = 0; i < size(); ++i ) {
                 nVal += getVal(i);
                 switch( nOpId) {
-                case   6: mpCffLocal->maBlueValues.push_back( nVal); break;     // "BlueValues"
-                case   7: mpCffLocal->maOtherBlues.push_back( nVal); break;     // "OtherBlues"
-                case   8: mpCffLocal->maFamilyBlues.push_back( nVal); break;    // "FamilyBlues"
+                case   6: mpCffLocal->maBlueValues.push_back( nVal); break;		// "BlueValues"
+                case   7: mpCffLocal->maOtherBlues.push_back( nVal); break;		// "OtherBlues"
+                case   8: mpCffLocal->maFamilyBlues.push_back( nVal); break;	// "FamilyBlues"
                 case   9: mpCffLocal->maFamilyOtherBlues.push_back( nVal); break;// "FamilyOtherBlues"
-                case 912: mpCffLocal->maStemSnapH.push_back( nVal); break;      // "StemSnapH"
-                case 913: mpCffLocal->maStemSnapV.push_back( nVal); break;      // "StemSnapV"
+                case 912: mpCffLocal->maStemSnapH.push_back( nVal); break;		// "StemSnapH"
+                case 913: mpCffLocal->maStemSnapV.push_back( nVal); break;		// "StemSnapV"
                 default: break; // TODO: handle more delta-array dictops?
                 }
             }
             clear();
             } break;
-        case 's':   // stringid (SID)
+        case 's':	// stringid (SID)
             nInt = popInt();
             switch( nOpId ) {
-            case   2: mnFullNameSID = nInt; break;      // "FullName"
-            case   3: mnFamilyNameSID = nInt; break;    // "FamilyName"
-            case 938: mnFontNameSID = nInt; break;      // "FontName"
+            case   2: mnFullNameSID = nInt; break;		// "FullName"
+            case   3: mnFamilyNameSID = nInt; break;	// "FamilyName"
+            case 938: mnFontNameSID = nInt; break;		// "FontName"
             default: break; // TODO: handle more string dictops?
             }
             break;
-        case 'P':   // private dict
+        case 'P': 	// private dict
             mpCffLocal->mnPrivDictBase = popInt();
             mpCffLocal->mnPrivDictSize = popInt();
             break;
-        case 'r': { // ROS operands
+        case 'r': {	// ROS operands
             int nSid1 = popInt();
             int nSid2 = popInt();
             (void)nSid1; // TODO: use
@@ -710,30 +710,30 @@ void CffSubsetterContext::readDictOp( void)
             nVal = popVal();
             mbCIDFont = true;
             } break;
-        case 't':   // CharstringType
+        case 't':	// CharstringType
             nInt = popInt();
             setCharStringType( nInt );
             break;
         }
 
-        return;
+        return; 
     }
 
     if( (c >= 32) || (c == 28) ) {
-//      --mpReadPtr;
+//		--mpReadPtr;
         read2push();
-    } else if( c == 29 ) {      // longint
-        ++mpReadPtr;            // skip 29
+    } else if( c == 29 ) {		// longint
+        ++mpReadPtr;			// skip 29
         int nS32 = mpReadPtr[0] << 24;
         nS32 += mpReadPtr[1] << 16;
         nS32 += mpReadPtr[2] << 8;
         nS32 += mpReadPtr[3] << 0;
         if( (sizeof(nS32) != 4) && (nS32 & (1<<31)))
-            nS32 |= (~0U) << 31;    // assuming 2s complement
+            nS32 |= (~0U) << 31;	// assuming 2s complement
         mpReadPtr += 4;
         nVal = static_cast<ValType>(nS32);
         push( nVal );
-    } else if( c == 30) {       // real number
+    } else if( c == 30) {		// real number
         ++mpReadPtr; // skip 30
         const RealType fReal = readRealVal();
         // push value onto stack
@@ -753,22 +753,22 @@ void CffSubsetterContext::read2push()
     if( c == 28 ) {
         short nS16 = (p[1] << 8) + p[2];
         if( (sizeof(nS16) != 2) && (nS16 & (1<<15)))
-            nS16 |= (~0U) << 15;    // assuming 2s complement
+            nS16 |= (~0U) << 15;	// assuming 2s complement
         aVal = nS16;
         p += 3;
-    } else if( c <= 246 ) {     // -107..+107
+    } else if( c <= 246 ) {		// -107..+107
         aVal = static_cast<ValType>(p[0] - 139);
         p += 1;
-    } else if( c <= 250 ) {     // +108..+1131
+    } else if( c <= 250 ) {		// +108..+1131
         aVal = static_cast<ValType>(((p[0] << 8) + p[1]) - 63124);
         p += 2;
-    } else if( c <= 254 ) {     // -108..-1131
+    } else if( c <= 254 ) {		// -108..-1131
         aVal = static_cast<ValType>(64148 - ((p[0] << 8) + p[1]));
         p += 2;
-    } else /*if( c == 255)*/ {  // Fixed16.16
+    } else /*if( c == 255)*/ {	// Fixed16.16
         int nS32 = (p[1] << 24) + (p[2] << 16) + (p[3] << 8) + p[4];
         if( (sizeof(nS32) != 2) && (nS32 & (1<<31)))
-            nS32 |= (~0U) << 31;    // assuming 2s complement
+            nS32 |= (~0U) << 31;	// assuming 2s complement
         aVal = static_cast<ValType>(nS32 * (1.0 / 0x10000));
         p += 5;
     }
@@ -786,19 +786,19 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
     static const int nOutCharstrType = 1;
     if( (nInt != aVal) && (nOutCharstrType == 2)) {
         // numtype==255 means int32 for Type1, but 16.16 for Type2 charstrings!!!
-        *(pOut++) = 255;                            // Fixed 16.16
+        *(pOut++) = 255;                			// Fixed 16.16
         *(pOut++) = static_cast<U8>(nInt >> 8);
         *(pOut++) = static_cast<U8>(nInt);
         nInt = static_cast<int>(aVal * 0x10000) & 0xFFFF;
         *(pOut++) = static_cast<U8>(nInt >> 8);
         *(pOut++) = static_cast<U8>(nInt);
     } else if( (nInt >= -107) && (nInt <= +107)) {
-        *(pOut++) = static_cast<U8>(nInt + 139);    // -107..+107
+        *(pOut++) = static_cast<U8>(nInt + 139);	// -107..+107
     } else if( (nInt >= -1131) && (nInt <= +1131)) {
         if( nInt >= 0)
-            nInt += 63124;                          // +108..+1131
+            nInt += 63124;							// +108..+1131
         else
-            nInt = 64148 - nInt;                    // -108..-1131
+            nInt = 64148 - nInt;					// -108..-1131
         *(pOut++) = static_cast<U8>(nInt >> 8);
         *(pOut++) = static_cast<U8>(nInt);
     } else if( nOutCharstrType == 1) {
@@ -847,7 +847,7 @@ void CffSubsetterContext::pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTy
         }
         i += nArgsPerTypo;
         writeTypeOp( nTypeOp);
-        nTypeOp ^= nTypeXor;    // for toggling vlineto/hlineto
+        nTypeOp ^= nTypeXor;	// for toggling vlineto/hlineto
     }
     clear();
 }
@@ -1342,7 +1342,7 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
 
     // prepare the charstring conversion
     mpWritePtr = pT1Ops;
-#if 1   // TODO: update caller
+#if 1 	// TODO: update caller
     U8 aType1Ops[ MAX_T1OPS_SIZE];
     if( !pT1Ops)
         mpWritePtr = aType1Ops;
@@ -1372,10 +1372,10 @@ mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
 mnCntrMask = 0;
     while( mpReadPtr < mpReadEnd)
         convertOneTypeOp();
-//  if( bActivePath)
-//      writeTypeOp( TYPE1OP::CLOSEPATH);
-//  if( bSubRoutine)
-//      writeTypeOp( TYPE1OP::RETURN);
+//	if( bActivePath)
+//		writeTypeOp( TYPE1OP::CLOSEPATH);
+//	if( bSubRoutine)
+//		writeTypeOp( TYPE1OP::RETURN);
 if( mbSawError) {
     mpWritePtr = pT1Ops+4;
      // create an "idiotproof" charstring
@@ -1408,7 +1408,7 @@ if( mbSawError) {
     // encrypt the Type1 charstring
     int nRDCryptR = 4330; // TODO: mnRDCryptSeed;
     for( U8* p = pT1Ops; p < mpWritePtr; ++p) {
-        *p ^= (nRDCryptR >> 8);
+        *p ^= (nRDCryptR >> 8); 
         nRDCryptR = (*(U8*)p + nRDCryptR) * 52845 + 22719;
     }
 
@@ -1432,44 +1432,44 @@ RealType CffSubsetterContext::readRealVal()
         if( nH <= 9) {
             nNumber = nNumber * 10 + nH;
             --nExpVal;
-        } else if( nH == 10) {  // comma
+        } else if( nH == 10) {	// comma
             nExpVal = 0;
             bComma = true;
-        } else if( nH == 11) {  // +exp
+        } else if( nH == 11) {	// +exp
             fReal *= nNumber;
             nExpSign = +1;
             nNumber = 0;
-        } else if( nH == 12) {  // -exp
+        } else if( nH == 12) {	// -exp
             fReal *= nNumber;
             nExpSign = -1;
             nNumber = 0;
-        } else if( nH == 13) {  // reserved
+        } else if( nH == 13) {	// reserved
             // TODO: ignore or error?
-        } else if( nH == 14)    // minus
+        } else if( nH == 14)	// minus
             fReal = -fReal;
-        else if( nH == 15)  // end
+        else if( nH == 15)	// end
             break;
         // parse low nibble
         const U8 nL = c & 0x0F;
         if( nL <= 9) {
             nNumber = nNumber * 10 + nL;
             --nExpVal;
-        } else if( nL == 10) {  // comma
+        } else if( nL == 10) {	// comma
             nExpVal = 0;
             bComma = true;
-        } else if( nL == 11) {  // +exp
+        } else if( nL == 11) {	// +exp
             fReal *= nNumber;
             nNumber = 0;
             nExpSign = +1;
-        } else if( nL == 12) {  // -exp
+        } else if( nL == 12) {	// -exp
             fReal *= nNumber;
             nNumber = 0;
             nExpSign = -1;
-        } else if( nL == 13) {  // reserved
+        } else if( nL == 13) {	// reserved
             // TODO: ignore or error?
-        } else if( nL == 14)    // minus
+        } else if( nL == 14)	// minus
             fReal = -fReal;
-        else if( nL == 15)  // end
+        else if( nL == 15)	// end
             break;
     }
 
@@ -1504,19 +1504,19 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
     int nOfs1 = 0;
     switch( nDataOfsSz) {
         default: fprintf( stderr, "\tINVALID nDataOfsSz=%d\n\n", nDataOfsSz); return -1;
-        case 1: nOfs1 = mpReadPtr[0]; break;
-        case 2: nOfs1 = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
-        case 3: nOfs1 = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2]; break;
-        case 4: nOfs1 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
+        case 1:	nOfs1 = mpReadPtr[0]; break;
+        case 2:	nOfs1 = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
+        case 3:	nOfs1 = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2]; break;
+        case 4:	nOfs1 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
     }
     mpReadPtr += nDataOfsSz;
 
     int nOfs2 = 0;
     switch( nDataOfsSz) {
-        case 1: nOfs2 = mpReadPtr[0]; break;
-        case 2: nOfs2 = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
-        case 3: nOfs2 = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2]; break;
-        case 4: nOfs2 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
+        case 1:	nOfs2 = mpReadPtr[0]; break;
+        case 2:	nOfs2 = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
+        case 3:	nOfs2 = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2]; break;
+        case 4:	nOfs2 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
     }
 
     mpReadPtr = mpBasePtr + (nIndexBase + 2) + nDataOfsSz * (nDataCount + 1) + nOfs1;
@@ -1542,10 +1542,10 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
     int nEndOfs = 0;
     switch( nDataOfsSz) {
         default: fprintf( stderr, "\tINVALID nDataOfsSz=%d\n\n", nDataOfsSz); return;
-        case 1: nEndOfs = mpReadPtr[0]; break;
-        case 2: nEndOfs = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
-        case 3: nEndOfs = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2];break;
-        case 4: nEndOfs = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
+        case 1:	nEndOfs = mpReadPtr[0]; break;
+        case 2:	nEndOfs = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
+        case 3:	nEndOfs = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2];break;
+        case 4:	nEndOfs = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
     }
     mpReadPtr += nDataOfsSz;
     mpReadPtr += nEndOfs - 1;
@@ -1558,22 +1558,22 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
 
 // initialize FONTDICT specific values
 CffLocal::CffLocal( void)
-:   mnPrivDictBase( 0)
-,   mnPrivDictSize( 0)
-,   mnLocalSubrOffs( 0)
-,   mnLocalSubrBase( 0)
-,   mnLocalSubrCount( 0)
-,   mnLocalSubrBias( 0)
-,   maNominalWidth( 0)
-,   maDefaultWidth( 0)
-,   maStemStdHW( 0)
-,   maStemStdVW( 0)
-,   mfBlueScale( 0.0)
-,   mfBlueShift( 0.0)
-,   mfBlueFuzz( 0.0)
-,   mfExpFactor( 0.0)
-,   mnLangGroup( 0)
-,   mbForceBold( false)
+:	mnPrivDictBase( 0)
+,	mnPrivDictSize( 0)
+,	mnLocalSubrOffs( 0)
+,	mnLocalSubrBase( 0)
+,	mnLocalSubrCount( 0)
+,	mnLocalSubrBias( 0)
+,	maNominalWidth( 0)
+,	maDefaultWidth( 0)
+,	maStemStdHW( 0)
+,	maStemStdVW( 0)
+,	mfBlueScale( 0.0)
+,	mfBlueShift( 0.0)
+,	mfBlueFuzz( 0.0)
+,	mfExpFactor( 0.0)
+,	mnLangGroup( 0)
+,	mbForceBold( false)
 {
     maStemSnapH.clear();
     maStemSnapV.clear();
@@ -1586,24 +1586,24 @@ CffLocal::CffLocal( void)
 // --------------------------------------------------------------------
 
 CffGlobal::CffGlobal( void)
-:   mnNameIdxBase( 0)
-,   mnNameIdxCount( 0)
-,   mnStringIdxBase( 0)
-,   mnStringIdxCount( 0)
-,   mbCIDFont( false)
-,   mnCharStrBase( 0)
-,   mnCharStrCount( 0)
-,   mnEncodingBase( 0)
-,   mnCharsetBase( 0)
-,   mnGlobalSubrBase( 0)
-,   mnGlobalSubrCount( 0)
-,   mnGlobalSubrBias( 0)
-,   mnFDSelectBase( 0)
-,   mnFontDictBase( 0)
-,   mnFDAryCount( 1)
-,   mnFontNameSID( 0)
-,   mnFullNameSID( 0)
-,   mnFamilyNameSID( 0)
+:	mnNameIdxBase( 0)
+,	mnNameIdxCount( 0)
+,	mnStringIdxBase( 0)
+,	mnStringIdxCount( 0)
+,	mbCIDFont( false)
+,	mnCharStrBase( 0)
+,	mnCharStrCount( 0)
+,	mnEncodingBase( 0)
+,	mnCharsetBase( 0)
+,	mnGlobalSubrBase( 0)
+,	mnGlobalSubrCount( 0)
+,	mnGlobalSubrBias( 0)
+,	mnFDSelectBase( 0)
+,	mnFontDictBase( 0)
+,	mnFDAryCount( 1)
+,	mnFontNameSID( 0)
+,	mnFullNameSID( 0)
+,	mnFamilyNameSID( 0)
 {
     maFontBBox.clear();
     // TODO; maFontMatrix.clear();
@@ -1651,22 +1651,22 @@ void CffSubsetterContext::initialCffRead( void)
     mnGlobalSubrCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
     mnGlobalSubrBias = (mnGlobalSubrCount<1240)?107:(mnGlobalSubrCount<33900)?1131:32768;
     // skip past the last GlobalSubr entry
-//  seekIndexEnd( mnGlobalSubrBase);
+//	seekIndexEnd( mnGlobalSubrBase);
 
     // get/skip the Encodings (we got mnEncodingBase from TOPDICT)
-//  seekEncodingsEnd( mnEncodingBase);
+//	seekEncodingsEnd( mnEncodingBase);
     // get/skip the Charsets (we got mnCharsetBase from TOPDICT)
-//  seekCharsetsEnd( mnCharStrBase);
+//	seekCharsetsEnd( mnCharStrBase);
     // get/skip FDSelect (CID only) data
 
     // prepare access to the CharStrings index (we got the base from TOPDICT)
     mpReadPtr = mpBasePtr + mnCharStrBase;
     mnCharStrCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
-//  seekIndexEnd( mnCharStrBase);
+//	seekIndexEnd( mnCharStrBase);
 
     // read the FDArray index (CID only)
     if( mbCIDFont) {
-//      assert( mnFontDictBase == tellRel());
+//		assert( mnFontDictBase == tellRel());
         mpReadPtr = mpBasePtr + mnFontDictBase;
         mnFDAryCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
         assert( mnFDAryCount < (int)(sizeof(maCffLocal)/sizeof(*maCffLocal)));
@@ -1705,7 +1705,7 @@ void CffSubsetterContext::initialCffRead( void)
             const int nSubrCount = (mpReadPtr[0] << 8) + mpReadPtr[1];
             mpCffLocal->mnLocalSubrCount = nSubrCount;
             mpCffLocal->mnLocalSubrBias = (nSubrCount<1240)?107:(nSubrCount<33900)?1131:32768;
-//          seekIndexEnd( mpCffLocal->mnLocalSubrBase);
+//			seekIndexEnd( mpCffLocal->mnLocalSubrBase);
         }
     }
 
@@ -1782,7 +1782,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                     nPrev = nNext;
                 }
             } break;
-        default:    // invalid FDselect format
+        default:	// invalid FDselect format
             fprintf( stderr, "invalid CFF.FdselType=%d\n", nFDSelFormat);
             break;
     }
@@ -1883,40 +1883,40 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
 class Type1Emitter
 {
 public:
-    explicit    Type1Emitter( const char* pOutFileName, bool bPfbSubset = true);
-    explicit    Type1Emitter( FILE* pOutFile, bool bPfbSubset = true);
-    /*virtual*/ ~Type1Emitter( void);
-    void        setSubsetName( const char* );
+    explicit	Type1Emitter( const char* pOutFileName, bool bPfbSubset = true);
+    explicit	Type1Emitter( FILE* pOutFile, bool bPfbSubset = true);
+    /*virtual*/	~Type1Emitter( void);
+    void		setSubsetName( const char* );
 
-    void        emitRawData( const char* pData, int nLength) const;
-    void        emitAllRaw( void);
-    void        emitAllHex( void);
-    void        emitAllCrypted( void);
-    int         tellPos( void) const;
-    void        updateLen( int nTellPos, int nLength);
-    void        emitValVector( const char* pLineHead, const char* pLineTail, const ValVector&);
+    void		emitRawData( const char* pData, int nLength) const;
+    void		emitAllRaw( void);
+    void		emitAllHex( void);
+    void		emitAllCrypted( void);
+    int			tellPos( void) const;
+    void		updateLen( int nTellPos, int nLength);
+    void		emitValVector( const char* pLineHead, const char* pLineTail, const ValVector&);
 private:
-    FILE*       mpFileOut;
-    bool        mbCloseOutfile;
-    char        maBuffer[MAX_T1OPS_SIZE];   // TODO: dynamic allocation
-    int         mnEECryptR;
+    FILE*		mpFileOut;
+    bool		mbCloseOutfile;
+    char		maBuffer[MAX_T1OPS_SIZE];	// TODO: dynamic allocation
+    int			mnEECryptR;
 public:
-    char*       mpPtr;
+    char*		mpPtr;
 
-    char        maSubsetName[256];
-    bool        mbPfbSubset;
-    int         mnHexLineCol;
+    char		maSubsetName[256];
+    bool		mbPfbSubset;
+    int			mnHexLineCol;
 };
 
 // --------------------------------------------------------------------
 
 Type1Emitter::Type1Emitter( const char* pPfbFileName, bool bPfbSubset)
-:   mpFileOut( NULL)
-,   mbCloseOutfile( true)
-,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
-,   mpPtr( maBuffer)
-,   mbPfbSubset( bPfbSubset)
-,   mnHexLineCol( 0)
+:	mpFileOut( NULL)
+,	mbCloseOutfile( true)
+,	mnEECryptR( 55665)	// default eexec seed, TODO: mnEECryptSeed
+,	mpPtr( maBuffer)
+,	mbPfbSubset( bPfbSubset)
+,	mnHexLineCol( 0)
 {
     mpFileOut = fopen( pPfbFileName, "wb");
     maSubsetName[0] = '\0';
@@ -1925,12 +1925,12 @@ Type1Emitter::Type1Emitter( const char* pPfbFileName, bool bPfbSubset)
 // --------------------------------------------------------------------
 
 Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
-:   mpFileOut( pOutFile)
-,   mbCloseOutfile( false)
-,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
-,   mpPtr( maBuffer)
-,   mbPfbSubset( bPfbSubset)
-,   mnHexLineCol( 0)
+:	mpFileOut( pOutFile)
+,	mbCloseOutfile( false)
+,	mnEECryptR( 55665)	// default eexec seed, TODO: mnEECryptSeed
+,	mpPtr( maBuffer)
+,	mbPfbSubset( bPfbSubset)
+,	mnHexLineCol( 0)
 {
     maSubsetName[0] = '\0';
 }
@@ -2135,7 +2135,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
             pFamilyName, pFamilyName, nUniqueId);
 #endif
     pOut += sprintf( pOut,
-        "11 dict begin\n"   // TODO: dynamic entry count for TOPDICT
+        "11 dict begin\n"	// TODO: dynamic entry count for TOPDICT
         "/FontType 1 def\n"
         "/PaintType 0 def\n");
     pOut += sprintf( pOut, "/FontName /%s def\n", rEmitter.maSubsetName);
@@ -2152,12 +2152,12 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += sprintf( pOut, "/FontBBox {0 0 999 999}readonly def\n");
     // emit FONTINFO into TOPDICT
     pOut += sprintf( pOut,
-        "/FontInfo 2 dict dup begin\n"  // TODO: check fontinfo entry count
+        "/FontInfo 2 dict dup begin\n"	// TODO: check fontinfo entry count
         " /FullName (%s) readonly def\n"
         " /FamilyName (%s) readonly def\n"
         "end readonly def\n",
             pFullName, pFamilyName);
-#if 0   // TODO: use an standard Type1 encoding if possible
+#if 0	// TODO: use an standard Type1 encoding if possible
     pOut += sprintf( pOut,
         "/Encoding StandardEncoding def\n");
 #else
@@ -2181,9 +2181,9 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         // update PFB header segment
         const int nPfbHeaderLen = rEmitter.tellPos() - 6;
         rEmitter.updateLen( 2, nPfbHeaderLen);
-
+    
         // prepare start of eexec segment
-        rEmitter.emitRawData( "\x80\x02\x00\x00\x00\x00", 6);   // segment start
+        rEmitter.emitRawData( "\x80\x02\x00\x00\x00\x00", 6);	// segment start
     }
     const int nEExecSegTell = rEmitter.tellPos();
 
@@ -2217,11 +2217,11 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "/ND{noaccess def}executeonly def\n"
         "/NP{noaccess put}executeonly def\n"
         "/MinFeature{16 16}ND\n"
-        "/password 5839 def\n",     // TODO: mnRDCryptSeed?
+        "/password 5839 def\n",		// TODO: mnRDCryptSeed?
             nPrivEntryCount);
 
 #if defined(IGNORE_HINTS)
-    pOut += sprintf( pOut, "/BlueValues []ND\n");   // BlueValues are mandatory
+    pOut += sprintf( pOut, "/BlueValues []ND\n");	// BlueValues are mandatory
 #else
     // emit blue hint related privdict entries
     if( !mpCffLocal->maBlueValues.empty())
@@ -2237,12 +2237,12 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += dbl2str( pOut, mpCffLocal->mfBlueScale, 6);
         pOut += sprintf( pOut, " def\n");
     }
-    if( mpCffLocal->mfBlueShift) {  // default BlueShift==7
+    if( mpCffLocal->mfBlueShift) {	// default BlueShift==7
         pOut += sprintf( pOut, "/BlueShift ");
         pOut += dbl2str( pOut, mpCffLocal->mfBlueShift);
         pOut += sprintf( pOut, " def\n");
     }
-    if( mpCffLocal->mfBlueFuzz) {       // default BlueFuzz==1
+    if( mpCffLocal->mfBlueFuzz) {		// default BlueFuzz==1
         pOut += sprintf( pOut, "/BlueFuzz ");
         pOut += dbl2str( pOut, mpCffLocal->mfBlueFuzz);
         pOut += sprintf( pOut, " def\n");
@@ -2352,7 +2352,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         const int nEExecLen = rEmitter.tellPos() - nEExecSegTell;
         rEmitter.updateLen( nEExecSegTell-4, nEExecLen);
      }
-
+ 
     // create PFB footer
     static const char aPfxFooter[] = "\x80\x01\x14\x02\x00\x00\n" // TODO: check segment len
         "0000000000000000000000000000000000000000000000000000000000000000\n"
@@ -2385,12 +2385,12 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
                                         static_cast<long>(maFontBBox[3] * fYFactor) ) );
     // PDF-Spec says the values below mean the ink bounds!
     // TODO: use better approximations for these ink bounds
-    rFSInfo.m_nAscent  = +rFSInfo.m_aFontBBox.Bottom(); // for capital letters
-    rFSInfo.m_nDescent = -rFSInfo.m_aFontBBox.Top();    // for all letters
-    rFSInfo.m_nCapHeight = rFSInfo.m_nAscent;           // for top-flat capital letters
+    rFSInfo.m_nAscent  = +rFSInfo.m_aFontBBox.Bottom();	// for capital letters
+    rFSInfo.m_nDescent = -rFSInfo.m_aFontBBox.Top();	// for all letters
+    rFSInfo.m_nCapHeight = rFSInfo.m_nAscent;			// for top-flat capital letters
 
     rFSInfo.m_nFontType = rEmitter.mbPfbSubset ? FontSubsetInfo::TYPE1_PFB : FontSubsetInfo::TYPE1_PFA;
-    rFSInfo.m_aPSName   = String( rEmitter.maSubsetName, RTL_TEXTENCODING_UTF8 );
+    rFSInfo.m_aPSName	= String( rEmitter.maSubsetName, RTL_TEXTENCODING_UTF8 );
 
     return true;
 }

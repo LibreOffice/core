@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ namespace dbaui
     class OTableConnection;
     class OQueryTableConnectionData;
     class OQueryContainerWindow;
-
+    
     class OQueryDesignView : public OQueryView
     {
         enum ChildFocusState
@@ -92,15 +92,15 @@ namespace dbaui
             NONE
         };
 
-        Splitter                            m_aSplitter;
+        Splitter							m_aSplitter;
+        
+        ::com::sun::star::lang::Locale		m_aLocale;
+        ::rtl::OUString						m_sDecimalSep;
 
-        ::com::sun::star::lang::Locale      m_aLocale;
-        ::rtl::OUString                     m_sDecimalSep;
-
-        OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
-        ChildFocusState                     m_eChildFocus;
-        sal_Bool                            m_bInKeyEvent;
-        sal_Bool                            m_bInSplitHandler;
+        OSelectionBrowseBox*				m_pSelectionBox;	// presents the lower window
+        ChildFocusState						m_eChildFocus;
+        sal_Bool							m_bInKeyEvent;
+        sal_Bool							m_bInSplitHandler;
 
     public:
         OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
@@ -128,13 +128,13 @@ namespace dbaui
         // window overloads
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
-
+        
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
         void setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
         void setNoneVisbleRow(sal_Int32 _nRows);
 
-        ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
-        ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
+        ::com::sun::star::lang::Locale		getLocale() const			{ return m_aLocale;}
+        ::rtl::OUString						getDecimalSeparator() const { return m_sDecimalSep;}
 
         SqlParseError   InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
         bool            HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const;
@@ -168,7 +168,7 @@ namespace dbaui
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rFieldDescriptions
                 );
 
-        ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
+        ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(	OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,
                                                                     ::rtl::OUString& _rsErrorMessage,
                                                                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn) const;

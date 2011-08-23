@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ struct SVT_DLLPUBLIC HTMLOutContext
 struct HTMLOutFuncs
 {
 #if defined(MAC) || defined(UNX)
-    static const sal_Char sNewLine;     // nur \012 oder \015
+    static const sal_Char sNewLine;		// nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char __FAR_DATA sNewLine[];	// \015\012
 #endif
 
     SVT_DLLPUBLIC static void ConvertStringToHTML( const String& sSrc, ByteString& rDest,
@@ -74,7 +74,7 @@ struct HTMLOutFuncs
                                    BOOL bOn = TRUE,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
-                        HTMLOutContext& rContext,
+                        HTMLOutContext& rContext, 
                         String *pNonConvertableChars = 0 );
     SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const String&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
@@ -112,7 +112,7 @@ struct HTMLOutFuncs
                         String *pNonConvertableChars = 0 );
 
     // <TD SDVAL="..." SDNUM="...">
-    SVT_DLLPUBLIC static ByteString&    CreateTableDataOptionsValNum( ByteString& aStrTD,
+    SVT_DLLPUBLIC static ByteString&	CreateTableDataOptionsValNum( ByteString& aStrTD,
                 BOOL bValue, double fVal, ULONG nFormat,
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,

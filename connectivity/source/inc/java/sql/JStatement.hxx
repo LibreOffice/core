@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,17 +61,17 @@ namespace connectivity
     //************ Class: java.sql.Statement
     //**************************************************************
     class java_sql_Statement_Base : public comphelper::OBaseMutex,
-                                    public  java_sql_Statement_BASE,
-                                    public  java_lang_Object,
-                                    public  ::cppu::OPropertySetHelper,
-                                    public  ::comphelper::OPropertyArrayUsageHelper<java_sql_Statement_Base>
+                                    public	java_sql_Statement_BASE,
+                                    public	java_lang_Object,
+                                    public	::cppu::OPropertySetHelper,
+                                    public	::comphelper::OPropertyArrayUsageHelper<java_sql_Statement_Base>
 
     {
 
         sal_Int32 getQueryTimeOut()             throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         sal_Int32 getMaxFieldSize()             throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         sal_Int32 getMaxRows()                  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getResultSetConcurrency()     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        sal_Int32 getResultSetConcurrency()		throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         sal_Int32 getResultSetType()            throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         sal_Int32 getFetchDirection()           throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         sal_Int32 getFetchSize()                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -88,13 +88,13 @@ namespace connectivity
         void setEscapeProcessing(sal_Bool _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       m_xGeneratedStatement;
-        java_sql_Connection*        m_pConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>		m_xGeneratedStatement;
+        java_sql_Connection*	    m_pConnection;
         java::sql::ConnectionLog    m_aLogger;
-        ::rtl::OUString             m_sSqlStatement;
+        ::rtl::OUString			    m_sSqlStatement;
         // Properties
-        sal_Int32                   m_nResultSetConcurrency;
-        sal_Int32                   m_nResultSetType;
+        sal_Int32				    m_nResultSetConcurrency;
+        sal_Int32				    m_nResultSetType;
         sal_Bool                    m_bEscapeProcessing;
         ::cppu::OBroadcastHelper&   rBHelper;
 
@@ -173,7 +173,7 @@ namespace connectivity
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 
-    class OStatement_BASE2  :public java_sql_Statement_Base
+    class OStatement_BASE2	:public java_sql_Statement_Base
                             ,public OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>
 
     {
@@ -188,7 +188,7 @@ namespace connectivity
         virtual void SAL_CALL release() throw();
     };
 
-    class java_sql_Statement :  public OStatement_BASE2,
+    class java_sql_Statement :	public OStatement_BASE2,
                                 public ::com::sun::star::sdbc::XBatchExecution,
                                 public ::com::sun::star::lang::XServiceInfo
     {

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -13,12 +13,12 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by
+// Adaptation for high precision colors has been sponsored by 
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-//
+// 
 //----------------------------------------------------------------------------
 
 
@@ -33,10 +33,10 @@ namespace agg
 {
     //=======================================================span_pattern_rgb
     template<class ColorT,
-             class Order,
+             class Order, 
              class WrapModeX,
              class WrapModeY,
-             class Allocator = span_allocator<ColorT> >
+             class Allocator = span_allocator<ColorT> > 
     class span_pattern_rgb : public span_pattern_base<ColorT, Allocator>
     {
     public:
@@ -53,16 +53,16 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        span_pattern_rgb(alloc_type& alloc) :
-            base_type(alloc),
+        span_pattern_rgb(alloc_type& alloc) : 
+            base_type(alloc), 
             m_wrap_mode_x(1),
             m_wrap_mode_y(1)
         {}
 
         //----------------------------------------------------------------
         span_pattern_rgb(alloc_type& alloc,
-                         const rendering_buffer& src,
-                         unsigned offset_x,
+                         const rendering_buffer& src, 
+                         unsigned offset_x, 
                          unsigned offset_y,
                          value_type alpha = base_mask) :
             base_type(alloc, src, offset_x, offset_y, alpha),
@@ -71,8 +71,8 @@ namespace agg
         {}
 
         //-------------------------------------------------------------------
-        void source_image(const rendering_buffer& src)
-        {
+        void source_image(const rendering_buffer& src) 
+        { 
             base_type::source_image(src);
             m_wrap_mode_x = WrapModeX(src.width());
             m_wrap_mode_y = WrapModeY(src.height());
@@ -80,10 +80,10 @@ namespace agg
 
         //--------------------------------------------------------------------
         color_type* generate(int x, int y, unsigned len)
-        {
+        {   
             color_type* span = base_type::allocator().span();
             unsigned sx = m_wrap_mode_x(base_type::offset_x() + x);
-            const value_type* row_ptr =
+            const value_type* row_ptr = 
                 (const value_type*)base_type::source_image().row(
                     m_wrap_mode_y(
                         base_type::offset_y() + y));
@@ -123,8 +123,8 @@ namespace agg
 
         //----------------------------------------------------------------
         span_pattern_rgb24(alloc_type& alloc,
-                           const rendering_buffer& src,
-                           unsigned offset_x, unsigned offset_y,
+                           const rendering_buffer& src, 
+                           unsigned offset_x, unsigned offset_y, 
                            int8u alpha = 255) :
             base_type(alloc, src, offset_x, offset_y, alpha)
         {}
@@ -132,7 +132,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         color_type* generate(int x, int y, unsigned len)
-        {
+        {   
             color_type* span = base_type::allocator().span();
             unsigned sx = (base_type::offset_x() + x) % base_type::source_image().width();
             unsigned wp = base_type::source_image().width() * 3;

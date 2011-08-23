@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -421,12 +421,12 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_SET_DEFAULT:
         {
             // 1. Selektion merken (kriegt die eselige EditEngine nicht selbst
-            //    auf die Reihe!)
+            //	  auf die Reihe!)
             // 2. Update auf False (sonst flackert's noch staerker
             // an allen selektierten Absaetzen:
-            //  a. deren Vorlage nochmal setzen, um absatzweite harte Attribute
-            //     zu entfernen
-            //  b. harte Zeichenattribute loeschen
+            //	a. deren Vorlage nochmal setzen, um absatzweite harte Attribute
+            //	   zu entfernen
+            //	b. harte Zeichenattribute loeschen
             // 3. Update auf True und Selektion wieder setzen
             /*
             ESelection aEsel= pOutlinerView->GetSelection();
@@ -531,7 +531,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
                     //else
-                    //  aName = GetDocSh()->GetName();
+                    //	aName = GetDocSh()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,12 +63,12 @@ class SwFtnBossFrm: public SwLayoutFrm
     SwTwips nMaxFtnHeight;
 
     SwFtnContFrm *MakeFtnCont();
-    SwFtnFrm     *FindFirstFtn();
+    SwFtnFrm	 *FindFirstFtn();
     BYTE _NeighbourhoodAdjustment( const SwFrm* pFrm ) const;
 protected:
 
-    void          InsertFtn( SwFtnFrm * );
-    static void   ResetFtn( const SwFtnFrm *pAssumed );
+    void		  InsertFtn( SwFtnFrm * );
+    static void	  ResetFtn( const SwFtnFrm *pAssumed );
 public:
     inline SwFtnBossFrm( SwFrmFmt* pFmt) : SwLayoutFrm( pFmt ) {}
 
@@ -79,10 +79,10 @@ public:
     //Fussnotenschnittstelle
     void AppendFtn( SwCntntFrm *, SwTxtFtn * );
     void RemoveFtn( const SwCntntFrm *, const SwTxtFtn *, BOOL bPrep = TRUE );
-    static       SwFtnFrm     *FindFtn( const SwCntntFrm *, const SwTxtFtn * );
+    static		 SwFtnFrm 	  *FindFtn( const SwCntntFrm *, const SwTxtFtn * );
                  SwFtnContFrm *FindFtnCont();
     inline const SwFtnContFrm *FindFtnCont() const;
-           const SwFtnFrm     *FindFirstFtn( SwCntntFrm* ) const;
+           const SwFtnFrm	  *FindFirstFtn( SwCntntFrm* ) const;
                  SwFtnContFrm *FindNearestFtnCont( BOOL bDontLeave = FALSE );
 
     void ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *,
@@ -92,7 +92,7 @@ public:
 
     //SS damit der Textformatierer Temporaer die Fussnotenhoehe begrenzen
     //kann. DeadLine in Dokumentkoordinaten.
-    void    SetFtnDeadLine( const SwTwips nDeadLine );
+    void	SetFtnDeadLine( const SwTwips nDeadLine );
     SwTwips GetMaxFtnHeight() const { return nMaxFtnHeight; }
 
     //Liefert den Wert, der noch uebrig ist, bis der Body seine minimale
@@ -117,8 +117,8 @@ public:
                          SwFtnBossFrm*     _pOld,
                          SvPtrarr&         _rFtnArr,
                          const sal_Bool    _bCollectOnlyPreviousFtns = sal_False );
-    void    _MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc = FALSE );
-    void    MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
+    void	_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc = FALSE );
+    void	MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
                       SwTxtFtn *pAttr );
     // Sollte AdjustNeighbourhood gerufen werden (oder Grow/Shrink)?
     BYTE NeighbourhoodAdjustment( const SwFrm* pFrm ) const
@@ -134,4 +134,4 @@ inline const SwFtnContFrm *SwFtnBossFrm::FindFtnCont() const
     return ((SwFtnBossFrm*)this)->FindFtnCont();
 }
 
-#endif  //_FTNBOSS_HXX
+#endif	//_FTNBOSS_HXX

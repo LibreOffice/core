@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,26 +45,26 @@
 
 // alle Werte auf default; wird nach einlesen der Bitmap aufgerufen !
 void SvxRTFPictureType::ResetValues()
-{   // setze alle Werte RTF-Defaults
+{	// setze alle Werte RTF-Defaults
     eStyle = RTF_BITMAP;
     nMode = HEX_MODE;
     nType = nGoalWidth = nGoalHeight = 0;
     nWidth = nHeight = nWidthBytes = 0;
     uPicLen = 0;
     nBitsPerPixel = nPlanes = 1;
-    nScalX = nScalY = 100;      // Skalierung in Prozent
+    nScalX = nScalY = 100;		// Skalierung in Prozent
     nCropT = nCropB = nCropL = nCropR = 0;
 }
 
 ImportInfo::ImportInfo( ImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
     : aSelection( rSel )
 {
-    pParser     = pPrsrs,
-    eState      = eSt;
+    pParser 	= pPrsrs,
+    eState		= eSt;
 
-    nToken      = 0;
-    nTokenValue = 0;
-    pAttrs      = NULL;
+    nToken 		= 0;
+    nTokenValue	= 0;
+    pAttrs 		= NULL;
 }
 
 ImportInfo::~ImportInfo()
@@ -75,20 +75,20 @@ EditRTFParser::EditRTFParser( SvStream& rIn, EditSelection aSel, SfxItemPool& rA
     : SvxRTFParser( rAttrPool, rIn, 0 ), aRTFMapMode( MAP_TWIP )
 {
 
-    pImpEditEngine  = pImpEE;
-    aCurSel         = aSel;
-    eDestCharSet    = RTL_TEXTENCODING_DONTKNOW;
-    nDefFont        = 0;
-    nDefTab         = 0;
-    nLastAction     = 0;
-    nDefFontHeight  = 0;
+    pImpEditEngine	= pImpEE;
+    aCurSel 		= aSel;
+    eDestCharSet	= RTL_TEXTENCODING_DONTKNOW;
+    nDefFont		= 0;
+    nDefTab			= 0;
+    nLastAction		= 0;
+    nDefFontHeight	= 0;
 
     SetInsPos( EditPosition( pImpEditEngine, &aCurSel ) );
 
     // Umwandeln der Twips-Werte...
     SetCalcValue( TRUE );
     SetChkStyleAttr( pImpEE->GetStatus().DoImportRTFStyleSheets() );
-    SetNewDoc( FALSE );     // damit die Pool-Defaults nicht
+    SetNewDoc( FALSE );		// damit die Pool-Defaults nicht
                             // ueberschrieben werden...
     aEditMapMode = MapMode( pImpEE->GetRefDevice()->GetMapMode().GetMapUnit() );
 }
@@ -321,8 +321,8 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     const SfxPoolItem* pItem;
 
     // #i66167# adapt font heights to destination MapUnit if necessary
-    const MapUnit eDestUnit = ( MapUnit )( pImpEditEngine->GetEditDoc().GetItemPool().GetMetric(0) );
-    const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
+    const MapUnit eDestUnit	= ( MapUnit )( pImpEditEngine->GetEditDoc().GetItemPool().GetMetric(0) );
+    const MapUnit eSrcUnit	= aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
     {
         USHORT aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
@@ -330,7 +330,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         {
             if (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], FALSE, &pItem ))
             {
-                UINT32 nHeight  = ((SvxFontHeightItem*)pItem)->GetHeight();
+                UINT32 nHeight	= ((SvxFontHeightItem*)pItem)->GetHeight();
                 long nNewHeight;
                 nNewHeight = pImpEditEngine->GetRefDevice()->LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
 
@@ -347,7 +347,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
         if( ( DFLT_ESC_AUTO_SUPER != nEsc ) && ( DFLT_ESC_AUTO_SUB != nEsc ) )
         {
-            nEsc *= 10; //HalPoints => Twips wurde in RTFITEM.CXX unterschlagen!
+            nEsc *= 10;	//HalPoints => Twips wurde in RTFITEM.CXX unterschlagen!
             SvxFont aFont;
             pImpEditEngine->SeekCursor( aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont );
             nEsc = nEsc * 100 / aFont.GetSize().Height();
@@ -425,7 +425,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     // OutlLevel...
     if ( nOutlLevel != 0xff )
     {
-        for ( USHORT n = nStartNode; n <= nEndNode; n++ )
+        for ( USHORT n = nStartNode; n <= nEndNode; n++ ) 
         {
             ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( n );
             pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
@@ -449,7 +449,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
     SfxStyleSheet* pStyle = (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( pRTFStyle->sName, SFX_STYLE_FAMILY_ALL );
     if ( pStyle )
         return pStyle;
-
+    
     String aName( pRTFStyle->sName );
     String aParent;
     if ( pRTFStyle->nBasedOn )
@@ -485,7 +485,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
 void EditRTFParser::CreateStyleSheets()
 {
     // der SvxRTFParser hat jetzt die Vorlagen erzeugt...
-    if ( pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
+    if ( pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() ) 
     {
         SvxRTFStyleType* pRTFStyle = GetStyleTbl().First();
         while ( pRTFStyle )
@@ -508,7 +508,7 @@ void __EXPORT EditRTFParser::CalcValue()
 void EditRTFParser::ReadField()
 {
     // Aus SwRTFParser::ReadField()
-    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt
+    int _nOpenBrakets = 1;		// die erste wurde schon vorher erkannt
     BOOL bFldInst = FALSE;
     BOOL bFldRslt = FALSE;
     String aFldInst;
@@ -529,16 +529,16 @@ void EditRTFParser::ReadField()
             }
             break;
 
-            case '{':           _nOpenBrakets++;
+            case '{':			_nOpenBrakets++;
                                 break;
 
-            case RTF_FIELD:     SkipGroup();
+            case RTF_FIELD:		SkipGroup();
                                 break;
 
-            case RTF_FLDINST:   bFldInst = TRUE;
+            case RTF_FLDINST:	bFldInst = TRUE;
                                 break;
 
-            case RTF_FLDRSLT:   bFldRslt = TRUE;
+            case RTF_FLDRSLT:	bFldRslt = TRUE;
                                 break;
 
             case RTF_TEXTTOKEN:
@@ -559,8 +559,8 @@ void EditRTFParser::ReadField()
             aFldInst.Erase( 0, aHyperLinkMarker.Len() );
             aFldInst.EraseLeadingChars();
             aFldInst.EraseTrailingChars();
-            aFldInst.Erase( 0, 1 ); // "
-            aFldInst.Erase( aFldInst.Len()-1, 1 );  // "
+            aFldInst.Erase( 0, 1 );	// "
+            aFldInst.Erase( aFldInst.Len()-1, 1 );	// "
 
             if ( !aFldRslt.Len() )
                 aFldRslt = aFldInst;
@@ -572,12 +572,12 @@ void EditRTFParser::ReadField()
         }
     }
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
 }
 
 void EditRTFParser::SkipGroup()
 {
-    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt
+    int _nOpenBrakets = 1;		// die erste wurde schon vorher erkannt
 
     while( _nOpenBrakets && IsParserWorking() )
     {
@@ -589,7 +589,7 @@ void EditRTFParser::SkipGroup()
             }
             break;
 
-            case '{':
+            case '{':			
             {
                 _nOpenBrakets++;
             }
@@ -597,7 +597,7 @@ void EditRTFParser::SkipGroup()
         }
     }
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
 }
 
 ULONG __EXPORT EditNodeIdx::GetIdx() const

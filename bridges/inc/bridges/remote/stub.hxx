@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public:
     ::rtl::OUString m_sOid;
     typelib_InterfaceTypeDescription *m_pType;
     uno_Interface *m_pUnoI;
-    oslInterlockedCount m_nRef;
+    oslInterlockedCount	m_nRef;
 
     uno_Environment *m_pEnvUno;
     uno_Environment *m_pEnvRemote;

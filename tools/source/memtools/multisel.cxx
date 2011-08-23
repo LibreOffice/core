@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,12 +147,12 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
     // an die verschiedenen Systeme (UNIX etc.)
     // und die gewuenschte Eingabe-Syntax angepasst werden.
 
-    UniString           aStr( rString );
-    sal_Unicode*        pStr   = aStr.GetBufferAccess();
-    sal_Unicode*        pOld = pStr;
-    BOOL                bReady = FALSE;
-    BOOL                bUntil = FALSE;
-    xub_StrLen          nCut   = 0;
+    UniString			aStr( rString );
+    sal_Unicode*		pStr   = aStr.GetBufferAccess();
+    sal_Unicode*		pOld = pStr;
+    BOOL				bReady = FALSE;
+    BOOL				bUntil = FALSE;
+    xub_StrLen			nCut   = 0;
 
     // Hier normieren wir den String, sodass nur Ziffern,
     // Semikola als Trenn- und Minus als VonBis-Zeichen
@@ -228,11 +228,11 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
     aStr.ReleaseBufferAccess( nCut );
 
     // Jetzt wird der normierte String ausgewertet ..
-    UniString           aNumStr;
-    Range               aRg( 1, RANGE_MAX );
-    const sal_Unicode*  pCStr = aStr.GetBuffer();
-    long                nPage = 1;
-    long                nNum  = 1;
+    UniString			aNumStr;
+    Range				aRg( 1, RANGE_MAX );
+    const sal_Unicode*	pCStr = aStr.GetBuffer();
+    long				nPage = 1;
+    long				nNum  = 1;
     bUntil = FALSE;
     while ( *pCStr )
     {
@@ -880,7 +880,7 @@ StringRangeEnumerator::StringRangeEnumerator( const rtl::OUString& i_rInput,
     : mnCount( 0 )
     , mnMin( i_nMinNumber )
     , mnMax( i_nMaxNumber )
-    , mnOffset( i_nLogicalOffset )
+    , mnOffset( i_nLogicalOffset )                   
 {
     setRange( i_rInput );
 }
@@ -951,7 +951,7 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
                 bSuccess = false;
         }
     }
-
+    
     return bSuccess;
 }
 
@@ -969,7 +969,7 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_b
         }
         return true;
     }
-
+    
     const sal_Unicode* pInput = i_rNewRange.getStr();
     rtl::OUStringBuffer aNumberBuf( 16 );
     sal_Int32 nLastNumber = -1, nNumber = -1;
@@ -1018,11 +1018,11 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_b
             bInsertRange = true;
         else if( *pInput )
         {
-
+            
             bSuccess = false;
             break; // parse error
         }
-
+        
         if( bInsertRange )
         {
             if( ! insertRange( nLastNumber, nNumber, bSequence, ! i_bStrict ) && i_bStrict )
@@ -1038,7 +1038,7 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_b
     }
     // insert last entries
     insertRange( nLastNumber, nNumber, bSequence, ! i_bStrict );
-
+    
     return bSuccess;
 }
 

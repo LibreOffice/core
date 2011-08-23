@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ using namespace os2;
 // =======================================================================
 
 Os2Transferable::Os2Transferable(
-    const Reference< XInterface >& xCreator ) :
+    const Reference< XInterface >& xCreator	) :
         m_xCreator( xCreator )
 {
     debug_printf("Os2Transferable::Os2Transferable %08x\n", this);
     hAB = WinQueryAnchorBlock( HWND_DESKTOP );
-
+    
     // query clipboard data to get mimetype
     if( UWinOpenClipbrd( hAB ) )
     {
@@ -70,7 +70,7 @@ Os2Transferable::Os2Transferable(
             //debug_printf("Os2Transferable::Os2Transferable pszText %s\n", pszText);
         }
         UWinCloseClipbrd( hAB);
-    }
+    } 
     else
     {
         debug_printf("Os2Transferable::Os2Transferable failed to open clipboard\n");
@@ -94,7 +94,7 @@ Any SAL_CALL Os2Transferable::getTransferData( const DataFlavor& rFlavor )
     debug_printf("Os2Transferable::getTransferData mimetype: %s\n", CHAR_POINTER(rFlavor.MimeType));
     Any aRet;
     Sequence< sal_Int8 > aData;
-
+    
     // retrieve unicode text
     if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) )
     {
@@ -112,7 +112,7 @@ Any SAL_CALL Os2Transferable::getTransferData( const DataFlavor& rFlavor )
                 return aRet;
         }
     }
-
+    
     // retrieve bitmap
     if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) ) )
     {
@@ -157,7 +157,7 @@ sal_Bool SAL_CALL Os2Transferable::isDataFlavorSupported( const DataFlavor& aFla
 {
     debug_printf("Os2Transferable::isDataFlavorSupported %08x\n", this);
     debug_printf("Os2Transferable::isDataFlavorSupported %s\n", CHAR_POINTER(aFlavor.MimeType));
-
+    
     if( aFlavor.DataType != getCppuType( (Sequence< sal_Int8 >*)0 ) )
     {
         if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) &&

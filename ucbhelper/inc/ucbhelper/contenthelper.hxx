@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,16 +76,16 @@ class ContentProviderImplHelper;
   *
   * Features of the base class implementation:
   * - standard interfaces ( XInterface, XTypeProvider, XServiceInfo )
-  * - all required interfaces for service com::sun::star::ucb::Content
+  *	- all required interfaces for service com::sun::star::ucb::Content
   * - all required listener containers
   *   ( XComponent, XPropertiesChangeNotifier, XPropertySetInfoChangeNotifier,
   *     XCommandInfoChangeNotifier )
-  * - XPropertyContainer implementation ( persistence is implemented using
+  *	- XPropertyContainer implementation ( persistence is implemented using
   *   service com.sun.star.ucb.Store )
   * - complete XPropertySetInfo implementation ( including Additioanl Core
   *   Properties supplied via XPropertyContainer interface )
   *   -> protected method: getPropertySetInfo
-  * - complete XCommandInfo implementation
+  *	- complete XCommandInfo implementation
   *    -> protected method: getCommandInfo
   */
 class UCBHELPER_DLLPUBLIC ContentImplHelper :
@@ -107,14 +107,14 @@ class UCBHELPER_DLLPUBLIC ContentImplHelper :
     ucbhelper_impl::ContentImplHelper_Impl* m_pImpl;
 
 protected:
-    osl::Mutex                       m_aMutex;
+    osl::Mutex						 m_aMutex;
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                                      m_xSMgr;
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >
                                      m_xIdentifier;
     rtl::Reference< ContentProviderImplHelper >
                                      m_xProvider;
-    sal_uInt32                       m_nCommandId;
+    sal_uInt32						 m_nCommandId;
 
 private:
     /**
@@ -129,7 +129,7 @@ private:
       * @param xEnv is an environment to use for example, for interactions.
       * @return a sequence containing the property meta data.
       */
-    UCBHELPER_DLLPRIVATE
+    UCBHELPER_DLLPRIVATE 
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
     getProperties( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) = 0;
@@ -141,7 +141,7 @@ private:
       * @param xEnv is an environment to use for example, for interactions.
       * @return a sequence containing the command meta data.
       */
-    UCBHELPER_DLLPRIVATE
+    UCBHELPER_DLLPRIVATE 
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
     getCommands( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) = 0;
@@ -160,7 +160,7 @@ private:
 
 protected:
     /**
-      * This method returns complete meta data for the properties ( including
+      *	This method returns complete meta data for the properties ( including
       * Additional Core Properties supplied via XPropertyContainer interface )
       * supported by the content. To implement the required command
       * "getPropertySetInfo" simply return the return value of this method.
@@ -177,7 +177,7 @@ protected:
                         sal_Bool bCache = sal_True );
 
     /**
-      * This method returns complete meta data for the commands supported by
+      *	This method returns complete meta data for the commands supported by
       * the content. To implement the required command "getCommandInfo" simply
       * return the return value of this method.
       *
@@ -237,15 +237,15 @@ protected:
             const com::sun::star::ucb::ContentEvent& evt ) const;
 
     /**
-      * Use this method to announce the insertion of this content at
-      * the end of your implementation of the command "insert". The
+      *	Use this method to announce the insertion of this content at
+      *	the end of your implementation of the command "insert". The
       * implementation of is method propagates a ContentEvent( INSERTED ).
       */
     void inserted();
 
     /**
-      * Use this method to announce the destruction of this content at
-      * the end of your implementation of the command "delete". The
+      *	Use this method to announce the destruction of this content at
+      *	the end of your implementation of the command "delete". The
       * implementation of is method propagates a ContentEvent( DELETED )
       * and a ContentEvent( REMOVED ) at the parent of the deleted content,
       * if a parent exists.
@@ -253,7 +253,7 @@ protected:
     void deleted();
 
     /**
-      * Use this method to change the identity of a content. The implementation
+      *	Use this method to change the identity of a content. The implementation
       * of this method will replace the content identifier of the content and
       * propagate the appropriate ContentEvent( EXCHANGED ).
       *
@@ -264,8 +264,8 @@ protected:
                         com::sun::star::ucb::XContentIdentifier >& rNewId );
 
     /**
-      * Use this method to get access to the Additional Core Properties of
-      * the content ( added using content's XPropertyContainer interface ).
+      *	Use this method to get access to the Additional Core Properties of
+      *	the content ( added using content's XPropertyContainer interface ).
       * If you supply your own XPropertyContainer implementation, this method
       * will always return an empty propertyset.
       *
@@ -274,12 +274,12 @@ protected:
       * @return the implementation of the service
       *         com.sun.star.ucb.PersistentPropertySet.
       */
-    com::sun::star::uno::Reference<
+    com::sun::star::uno::Reference<	
         com::sun::star::ucb::XPersistentPropertySet >
     getAdditionalPropertySet( sal_Bool bCreate );
 
     /**
-      * This method renames the propertyset containing the Additional Core
+      *	This method renames the propertyset containing the Additional Core
       * Properties of the content.
       *
       * @param  rOldKey is the old key of the propertyset.
@@ -293,7 +293,7 @@ protected:
                                           sal_Bool bRecursive );
 
     /**
-      * This method copies the propertyset containing the Additional Core
+      *	This method copies the propertyset containing the Additional Core
       * Properties of the content.
       *
       * @param  rSourceKey is the key of the source propertyset.
@@ -307,7 +307,7 @@ protected:
                                         sal_Bool bRecursive );
 
     /**
-      * This method removes the propertyset containing the Additional Core
+      *	This method removes the propertyset containing the Additional Core
       * Properties of the content.
       *
       * @param  bRecursive is a flag indicating whether propertysets for

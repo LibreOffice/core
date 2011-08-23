@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,5 +67,5 @@ void TCPIO::SetStreamSocket( NAMESPACE_VOS(OStreamSocket) *pSocket )
 {
     vos::OGuard aRGuard( aMSocketReadAccess );
     vos::OGuard aWGuard( aMSocketWriteAccess );
-    pStreamSocket = pSocket;
+    pStreamSocket = pSocket;    
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,10 @@
 
 #include "starmath.hrc"
 
-#define ITEMID_FONT         1
-#define ITEMID_FONTHEIGHT   2
-#define ITEMID_LRSPACE      3
-#define ITEMID_WEIGHT       4
+#define ITEMID_FONT 		1
+#define ITEMID_FONTHEIGHT	2
+#define ITEMID_LRSPACE		3
+#define ITEMID_WEIGHT		4
 
 //--------- ab hier die "generierten"
 #include <tools/string.hxx>

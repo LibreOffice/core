@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@
 
 class SVX_DLLPUBLIC SdrPolyEditView: public SdrEditView, public IPolyPolygonEditorController
 {
-    friend class                SdrEditView;
+    friend class				SdrEditView;
 
 protected:
-    BOOL                        bSetMarkedPointsSmoothPossible : 1;
-    BOOL                        bSetMarkedSegmentsKindPossible : 1;
+    BOOL						bSetMarkedPointsSmoothPossible : 1;
+    BOOL						bSetMarkedSegmentsKindPossible : 1;
 
-    SdrPathSmoothKind           eMarkedPointsSmooth;
-    SdrPathSegmentKind          eMarkedSegmentsKind;
+    SdrPathSmoothKind			eMarkedPointsSmooth;
+    SdrPathSegmentKind			eMarkedSegmentsKind;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();

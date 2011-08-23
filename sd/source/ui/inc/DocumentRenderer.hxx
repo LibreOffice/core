@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,13 +59,13 @@ public:
         const css::uno::Any& aSelection,
         const css::uno::Sequence<css::beans::PropertyValue >& xOptions)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-
+    
     virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getRenderer (
         sal_Int32 nRenderer,
         const css::uno::Any& rSelection,
         const css::uno::Sequence<css::beans::PropertyValue>& rxOptions)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL render (
         sal_Int32 nRenderer,
         const css::uno::Any& rSelection,

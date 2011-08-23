@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ struct ScMyToResizeShape
 {
     com::sun::star::uno::Reference <com::sun::star::drawing::XShape> xShape;
     rtl::OUString* pRangeList;
-    com::sun::star::table::CellAddress  aEndCell;
-    com::sun::star::table::CellAddress  aStartCell;
+    com::sun::star::table::CellAddress	aEndCell;
+    com::sun::star::table::CellAddress	aStartCell;
     sal_Int32 nEndX;
     sal_Int32 nEndY;
 
@@ -54,9 +54,9 @@ typedef std::list<ScMyToResizeShape> ScMyToResizeShapes;
 
 class ScMyShapeResizer
 {
-    ScXMLImport&                rImport;
-    ScMyToResizeShapes          aShapes;
-    ScChartListenerCollection*  pCollection;
+    ScXMLImport&				rImport;
+    ScMyToResizeShapes			aShapes;
+    ScChartListenerCollection*	pCollection;
 
     sal_Bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const;
     void CreateChartListener(ScDocument* pDoc,
@@ -70,12 +70,12 @@ public:
     ScMyShapeResizer(ScXMLImport& rImport);
     ~ScMyShapeResizer();
 
-    void    AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
+    void	AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
                     rtl::OUString* pRangeList,
                     com::sun::star::table::CellAddress& rStartAddress,
                     com::sun::star::table::CellAddress& rEndAddress,
                     sal_Int32 nEndX, sal_Int32 nEndY);
-    void    ResizeShapes();
+    void	ResizeShapes();
 };
 
 #endif

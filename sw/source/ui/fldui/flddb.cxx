@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@
 #include <dbmgr.hxx>
 #endif
 
-#define USER_DATA_VERSION_1     "1"
+#define USER_DATA_VERSION_1 	"1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -68,20 +68,20 @@
 
 SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage( pParent, SW_RES( TP_FLD_DB ), rCoreSet ),
-    aTypeFT     (this, SW_RES(FT_DBTYPE)),
-    aTypeLB     (this, SW_RES(LB_DBTYPE)),
+    aTypeFT		(this, SW_RES(FT_DBTYPE)),
+    aTypeLB		(this, SW_RES(LB_DBTYPE)),
     aSelectionFT(this, SW_RES(FT_DBSELECTION)),
     aDatabaseTLB(this, SW_RES(TLB_DBLIST), 0, aEmptyStr, FALSE),
     aAddDBFT(this,      SW_RES(FT_ADDDB)),
     aAddDBPB(this,      SW_RES(PB_ADDDB)),
     aConditionFT(this, SW_RES(FT_DBCONDITION)),
     aConditionED(this, SW_RES(ED_DBCONDITION)),
-    aValueFT    (this, SW_RES(FT_DBSETNUMBER)),
-    aValueED    (this, SW_RES(ED_DBSETNUMBER)),
-    aDBFormatRB (this, SW_RES(RB_DBOWNFORMAT)),
+    aValueFT	(this, SW_RES(FT_DBSETNUMBER)),
+    aValueED	(this, SW_RES(ED_DBSETNUMBER)),
+    aDBFormatRB	(this, SW_RES(RB_DBOWNFORMAT)),
     aNewFormatRB(this, SW_RES(RB_DBFORMAT)),
     aNumFormatLB(this, SW_RES(LB_DBNUMFORMAT)),
-    aFormatLB   (this, SW_RES(LB_DBFORMAT)),
+    aFormatLB	(this, SW_RES(LB_DBFORMAT)),
     aFormatFL   (this, SW_RES(FL_DBFORMAT)),
     aFormatVertFL   (this, SW_RES(FL_DBFORMAT_VERT))
 {
@@ -111,7 +111,7 @@ __EXPORT SwFldDBPage::~SwFldDBPage()
 
 void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
 {
-    Init(); // Allgemeine initialisierung
+    Init();	// Allgemeine initialisierung
 
     aTypeLB.SetUpdateMode(FALSE);
     USHORT nOldPos = aTypeLB.GetSelectEntryPos();
@@ -231,7 +231,7 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
     if (!aData.sDataSource.getLength())
         aData = pSh->GetDBData();
 
-    if(aData.sDataSource.getLength())       // Ohne Datenbank kein neuer Feldbefehl
+    if(aData.sDataSource.getLength())		// Ohne Datenbank kein neuer Feldbefehl
     {
         USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
         String aVal(aValueED.GetText());
@@ -289,7 +289,7 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxTabPage* __EXPORT SwFldDBPage::Create(   Window* pParent,
+SfxTabPage* __EXPORT SwFldDBPage::Create( 	Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDBPage( pParent, rAttrSet ) );
@@ -356,7 +356,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 aNumFormatLB.Show();
                 aFormatLB.Hide();
 
-                if (pBox)   // Typ wurde vom User geaendert
+                if (pBox)	// Typ wurde vom User geaendert
                     aDBFormatRB.Check();
 
                 if (IsFldEdit())
@@ -549,7 +549,7 @@ IMPL_LINK( SwFldDBPage, ModifyHdl, Edit *, EMPTYARG )
 /* -----------------12.01.99 11:21-------------------
  *
  * --------------------------------------------------*/
-void    SwFldDBPage::FillUserData()
+void	SwFldDBPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));

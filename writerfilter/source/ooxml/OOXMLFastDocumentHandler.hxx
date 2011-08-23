@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,48 +53,48 @@ public:
     virtual ~OOXMLFastDocumentHandler() {}
 
     // ::com::sun::star::xml::sax::XFastDocumentHandler:
-    virtual void SAL_CALL startDocument()
+    virtual void SAL_CALL startDocument() 
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void SAL_CALL endDocument()
+    virtual void SAL_CALL endDocument() 
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void SAL_CALL setDocumentLocator
-    (const uno::Reference< xml::sax::XLocator > & xLocator)
+    (const uno::Reference< xml::sax::XLocator > & xLocator) 
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     // ::com::sun::star::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement
-    (::sal_Int32 Element,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+    (::sal_Int32 Element, 
+     const uno::Reference< xml::sax::XFastAttributeList > & Attribs) 
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void SAL_CALL startUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+    (const ::rtl::OUString & Namespace, 
+     const ::rtl::OUString & Name, 
+     const uno::Reference< xml::sax::XFastAttributeList > & Attribs) 
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void SAL_CALL endFastElement(::sal_Int32 Element)
+    virtual void SAL_CALL endFastElement(::sal_Int32 Element) 
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void SAL_CALL endUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name)
+    (const ::rtl::OUString & Namespace, 
+     const ::rtl::OUString & Name) 
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL 
     createFastChildContext
-    (::sal_Int32 Element,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+    (::sal_Int32 Element, 
+     const uno::Reference< xml::sax::XFastAttributeList > & Attribs) 
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL 
     createUnknownChildContext
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
-     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+    (const ::rtl::OUString & Namespace, 
+     const ::rtl::OUString & Name, 
+     const uno::Reference< xml::sax::XFastAttributeList > & Attribs) 
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void SAL_CALL characters(const ::rtl::OUString & aChars)
+    virtual void SAL_CALL characters(const ::rtl::OUString & aChars) 
         throw (uno::RuntimeException, xml::sax::SAXException);
-
+    
     void setStream(Stream * pStream);
     void setDocument(OOXMLDocument * pDocument);
     void setXNoteId(const ::rtl::OUString & rXNoteId);
-
+    
     void setIsSubstream( bool bSubstream );
 
 private:

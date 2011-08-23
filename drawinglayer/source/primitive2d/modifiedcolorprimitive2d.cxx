@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ namespace drawinglayer
     namespace primitive2d
     {
         ModifiedColorPrimitive2D::ModifiedColorPrimitive2D(
-            const Primitive2DSequence& rChildren,
+            const Primitive2DSequence& rChildren, 
             const basegfx::BColorModifier& rColorModifier)
-        :   GroupPrimitive2D(rChildren),
+        :	GroupPrimitive2D(rChildren),
             maColorModifier(rColorModifier)
         {
         }

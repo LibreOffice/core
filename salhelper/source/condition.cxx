@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ ConditionModifier::~ConditionModifier()
 {
     if(m_aCond.applies())
         osl_setCondition(m_aCond.m_aCondition);
-
+    
     m_aCond.m_aMutex.release();
 }
 
@@ -96,7 +96,7 @@ ConditionWaiter::ConditionWaiter(Condition& aCond)
     while(true) {
         osl_waitCondition(m_aCond.m_aCondition,0);
         m_aCond.m_aMutex.acquire();
-
+        
         if(m_aCond.applies())
             break;
         else {
@@ -116,14 +116,14 @@ ConditionWaiter::ConditionWaiter(Condition& aCond,sal_uInt32 milliSec)
     TimeValue aTime;
     aTime.Seconds = milliSec / 1000;
     aTime.Nanosec = 1000000 * ( milliSec % 1000 );
-
+    
     while(true) {
         if( osl_waitCondition(m_aCond.m_aCondition,&aTime) ==
             osl_cond_result_timeout )
             throw timedout();
-
+        
         m_aCond.m_aMutex.acquire();
-
+        
         if(m_aCond.applies())
             break;
         else {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,8 +161,8 @@ class ODatabaseSource   :public ModelDependentComponent // must be first
 
 private:
     using ODatabaseSource_Base::rBHelper;
-    OBookmarkContainer                      m_aBookmarks;
-    ::cppu::OInterfaceContainerHelper       m_aFlushListeners;
+    OBookmarkContainer				        m_aBookmarks;
+    ::cppu::OInterfaceContainerHelper		m_aFlushListeners;
 
 private:
     virtual ~ODatabaseSource();
@@ -297,7 +297,7 @@ protected:
 };
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_

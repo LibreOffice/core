@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 #ifndef _VOS_REFERNCE_HXX_
 #define _VOS_REFERNCE_HXX_
 
-#   include <vos/types.hxx>
-#   include <osl/interlck.h>
-#   include <vos/object.hxx>
+#	include <vos/types.hxx>
+#	include <osl/interlck.h>
+#	include <vos/object.hxx>
 
 namespace vos
 {
@@ -43,7 +43,7 @@ public:
 
     IReference() { }
     virtual ~IReference() { }
-
+    
     typedef oslInterlockedCount RefCount;
 
     virtual RefCount SAL_CALL acquire()=0;
@@ -60,14 +60,14 @@ public:
     ORefCount() { m_RefCount = 0; }
     ORefCount(RefCount n) { m_RefCount = n; }
     virtual ~ORefCount();
-
+    
     RefCount SAL_CALL acquire() { return (osl_incrementInterlockedCount(&m_RefCount)); };
     RefCount SAL_CALL release() { return (osl_decrementInterlockedCount(&m_RefCount)); };
 
-    RefCount SAL_CALL operator++()   { return acquire(); }
+    RefCount SAL_CALL operator++() 	 { return acquire(); }
     // don't implement the postfix operator, it won't function this way!
 
-    RefCount SAL_CALL operator--()   { return release(); }
+    RefCount SAL_CALL operator--() 	 { return release(); }
     // don't implement the postfix operator, it won't function this way!
 
     RefCount SAL_CALL referenced() const
@@ -105,5 +105,5 @@ private:
 
 }
 
-#endif  // _VOS_REFERNCE_HXX_
+#endif	// _VOS_REFERNCE_HXX_
 

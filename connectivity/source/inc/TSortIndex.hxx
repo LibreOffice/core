@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,19 +34,19 @@ namespace connectivity
 {
     typedef enum
     {
-        SQL_ORDERBYKEY_NONE,        // do not sort
-        SQL_ORDERBYKEY_DOUBLE,      // numeric key
-        SQL_ORDERBYKEY_STRING       // String Key
+        SQL_ORDERBYKEY_NONE,		// do not sort
+        SQL_ORDERBYKEY_DOUBLE,		// numeric key
+        SQL_ORDERBYKEY_STRING		// String Key
     } OKeyType;
 
     typedef enum
     {
-        SQL_ASC     = 1,            // ascending
-        SQL_DESC    = -1            // otherwise
+        SQL_ASC		= 1,			// ascending
+        SQL_DESC	= -1			// otherwise
     } TAscendingOrder;
 
     class OKeySet;
-    class OKeyValue;                // simple class which holds a sal_Int32 and a ::std::vector<ORowSetValueDecoratorRef>
+    class OKeyValue;				// simple class which holds a sal_Int32 and a ::std::vector<ORowSetValueDecoratorRef>
 
     /**
         The class OSortIndex can be used to implement a sorted index.
@@ -55,18 +55,18 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OSortIndex
     {
     public:
-        typedef ::std::vector< ::std::pair<sal_Int32,OKeyValue*> >  TIntValuePairVector;
-        typedef ::std::vector<OKeyType>                             TKeyTypeVector;
+        typedef ::std::vector< ::std::pair<sal_Int32,OKeyValue*> >	TIntValuePairVector;
+        typedef ::std::vector<OKeyType>								TKeyTypeVector;
 
     private:
-        TIntValuePairVector             m_aKeyValues;
-        TKeyTypeVector                  m_aKeyType;
+        TIntValuePairVector			    m_aKeyValues;
+        TKeyTypeVector				    m_aKeyType;
         ::std::vector<TAscendingOrder>  m_aAscending;
-        sal_Bool                        m_bFrozen;
+        sal_Bool					    m_bFrozen;
 
     public:
 
-        OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
+        OSortIndex(	const ::std::vector<OKeyType>& _aKeyType,
                     const ::std::vector<TAscendingOrder>& _aAscending);
 
         ~OSortIndex();
@@ -84,7 +84,7 @@ namespace connectivity
         /**
             AddKeyValue appends a new value.
             @param
-                pKeyValue   the keyvalue to be appended
+                pKeyValue	the keyvalue to be appended
             ATTENTION: when the sortindex is already frozen the parameter will be deleted
         */
         void AddKeyValue(OKeyValue * pKeyValue);
@@ -105,7 +105,7 @@ namespace connectivity
         // look at the name
         sal_Bool IsFrozen() const { return m_bFrozen; }
         // returns the current size of the keyvalues
-        sal_Int32 Count()   const { return m_aKeyValues.size(); }
+        sal_Int32 Count()	const { return m_aKeyValues.size(); }
         /** GetValue returns the value at position nPos (1..n) [sorted access].
             It only allowed to call this method after the sortindex has been frozen.
         */
@@ -132,8 +132,8 @@ namespace connectivity
             : ORefVector<sal_Int32>(_nSize)
             , m_bFrozen(sal_False){}
 
-        sal_Bool    isFrozen() const                        { return m_bFrozen; }
-        void        setFrozen(sal_Bool _bFrozen=sal_True)   { m_bFrozen = _bFrozen; }
+        sal_Bool	isFrozen() const						{ return m_bFrozen; }
+        void		setFrozen(sal_Bool _bFrozen=sal_True)	{ m_bFrozen = _bFrozen; }
     };
 }
 #endif // CONNECTIVITY_TSORTINDEX_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ SwVbaOptions::~SwVbaOptions()
 {
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaOptions::DefaultFilePath( sal_Int32 _path ) throw ( uno::RuntimeException )
 {
     switch( _path )
@@ -90,7 +90,7 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path ) throw ( uno::RuntimeException )
         }
         default:
         {
-            DebugHelper::exception( SbERR_NOT_IMPLEMENTED, rtl::OUString() );
+            DebugHelper::exception( SbERR_NOT_IMPLEMENTED, rtl::OUString() ); 
             break;
         }
     }
@@ -264,14 +264,14 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( ::sal_Bool /*_autof
 }
 
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaOptions::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaOptions") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaOptions::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

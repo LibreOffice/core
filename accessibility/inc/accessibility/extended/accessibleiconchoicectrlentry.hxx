@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,14 +66,14 @@ namespace accessibility
                                                 , ::com::sun::star::lang::XEventListener > AccessibleIconChoiceCtrlEntry_BASE;
 
     /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
-    class AccessibleIconChoiceCtrlEntry :   public ::comphelper::OBaseMutex,
+    class AccessibleIconChoiceCtrlEntry :	public ::comphelper::OBaseMutex,
                                        public AccessibleIconChoiceCtrlEntry_BASE,
                                     public ::comphelper::OCommonAccessibleText
     {
     private:
         /** The treelistbox control */
-        SvtIconChoiceCtrl*                  m_pIconCtrl;
-        sal_Int32                           m_nIndex;
+        SvtIconChoiceCtrl*					m_pIconCtrl;
+        sal_Int32							m_nIndex;
 
     protected:
         /// client id in the AccessibleEventNotifier queue
@@ -86,45 +86,45 @@ namespace accessibility
     // (the following method is unused currently. If you need it, simply remove the #ifdef thing here and
     // in the cxx)
         /** notifies all listeners that this object has changed
-            @param  _nEventId
+            @param	_nEventId
                 is the event id
-            @param  _aOldValue
+            @param	_aOldValue
                 is the old value
-            @param  _aNewValue
+            @param	_aNewValue
                 is the new value
         */
-        void    NotifyAccessibleEvent( sal_Int16 _nEventId,
+        void	NotifyAccessibleEvent( sal_Int16 _nEventId,
                                        const ::com::sun::star::uno::Any& _aOldValue,
                                        const ::com::sun::star::uno::Any& _aNewValue );
     #endif
 
-        Rectangle               GetBoundingBox_Impl() const;
-        Rectangle               GetBoundingBoxOnScreen_Impl() const;
-        sal_Bool                IsAlive_Impl() const;
-        sal_Bool                IsShowing_Impl() const;
+        Rectangle				GetBoundingBox_Impl() const;
+        Rectangle				GetBoundingBoxOnScreen_Impl() const;
+        sal_Bool				IsAlive_Impl() const;
+        sal_Bool				IsShowing_Impl() const;
 
-        Rectangle               GetBoundingBox() throw ( ::com::sun::star::lang::DisposedException );
-        Rectangle               GetBoundingBoxOnScreen() throw ( ::com::sun::star::lang::DisposedException );
-        void                    EnsureIsAlive() const throw ( ::com::sun::star::lang::DisposedException );
+        Rectangle				GetBoundingBox() throw ( ::com::sun::star::lang::DisposedException );
+        Rectangle				GetBoundingBoxOnScreen() throw ( ::com::sun::star::lang::DisposedException );
+        void 					EnsureIsAlive() const throw ( ::com::sun::star::lang::DisposedException );
 
     protected:
         virtual ~AccessibleIconChoiceCtrlEntry();
         /** this function is called upon disposing the component
         */
-        virtual void SAL_CALL                   disposing();
+        virtual void SAL_CALL					disposing();
 
         // OCommonAccessibleText
-        virtual ::rtl::OUString                 implGetText();
-        virtual ::com::sun::star::lang::Locale  implGetLocale();
-        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+        virtual ::rtl::OUString					implGetText();
+        virtual ::com::sun::star::lang::Locale	implGetLocale();
+        virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
     public:
         /** Ctor()
-            @param  _rListBox
+            @param	_rListBox
                 the view control
-            @param  _pEntry
+            @param	_pEntry
                 the entry
-            @param  _xParent
+            @param	_xParent
                 is our parent accessible object
         */
         AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ class _SfxMacroTabPage_Impl;
 
 class SFX2_DLLPUBLIC _SfxMacroTabPage : public SfxTabPage
 {
-    SvxMacroTableDtor           aTbl;
+    SvxMacroTableDtor			aTbl;
 //#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox * );
@@ -68,40 +68,40 @@ class SFX2_DLLPUBLIC _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer* );
 //#endif
 protected:
-    _SfxMacroTabPage_Impl*      mpImpl;
+    _SfxMacroTabPage_Impl*		mpImpl;
 
                                 _SfxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 
-    void                        InitAndSetHandler();
-    void                        FillEvents();
-    void                        FillMacroList();
-    void                        EnableButtons( const String& rLanguage );
+    void						InitAndSetHandler();
+    void						FillEvents();
+    void						FillMacroList();
+    void						EnableButtons( const String& rLanguage );
 
 public:
 
-    virtual                     ~_SfxMacroTabPage();
+    virtual						~_SfxMacroTabPage();
 
-    void                        AddEvent( const String & rEventName, USHORT nEventId );
+    void						AddEvent( const String & rEventName, USHORT nEventId );
 
-    const SvxMacroTableDtor&    GetMacroTbl() const;
-    void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
-    void                        ClearMacroTbl();
+    const SvxMacroTableDtor&	GetMacroTbl() const;
+    void						SetMacroTbl( const SvxMacroTableDtor& rTbl );
+    void						ClearMacroTbl();
 
-    virtual void                ScriptChanged( const String& rLanguage );
+    virtual void				ScriptChanged( const String& rLanguage );
 
     // zum setzen / abfragen der Links
-    void                        SetGetRangeLink( FNGetRangeHdl pFn );
-    FNGetRangeHdl               GetGetRangeLink() const;
-    void                        SetGetMacrosOfRangeLink( FNGetMacrosOfRangeHdl pFn );
-    FNGetMacrosOfRangeHdl       GetGetMacrosOfRangeLink() const;
+    void						SetGetRangeLink( FNGetRangeHdl pFn );
+    FNGetRangeHdl				GetGetRangeLink() const;
+    void						SetGetMacrosOfRangeLink( FNGetMacrosOfRangeHdl pFn );
+    FNGetMacrosOfRangeHdl		GetGetMacrosOfRangeLink() const;
 
     // --------- Erben aus der Basis -------------
-    virtual BOOL                FillItemSet( SfxItemSet& rSet );
-    virtual void                Reset( const SfxItemSet& rSet );
+    virtual	BOOL				FillItemSet( SfxItemSet& rSet );
+    virtual	void				Reset( const SfxItemSet& rSet );
 
-    void                        SetReadOnly( BOOL bSet );
-    BOOL                        IsReadOnly() const;
-    void                        SelectEvent( const String& rEventName, USHORT nEventId );
+    void						SetReadOnly( BOOL bSet );
+    BOOL						IsReadOnly() const;
+    void						SelectEvent( const String& rEventName, USHORT nEventId );
 };
 
 inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const
@@ -144,7 +144,7 @@ public:
         Window* pParent,
         const SfxObjectShell* _pShell,
         SfxItemSet& rSet );
-    virtual ~SfxMacroAssignDlg();
+    virtual	~SfxMacroAssignDlg();
 };
 
 #endif

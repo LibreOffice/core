@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class Point;
 
 class VCL_DLLPUBLIC Pointer
 {
-    PointerStyle    meStyle;
+    PointerStyle	meStyle;
 
 public:
                     Pointer()
@@ -48,11 +48,11 @@ public:
                     Pointer( PointerStyle eStyle )
                         { meStyle = eStyle; }
 
-    PointerStyle    GetStyle() const { return meStyle; }
+    PointerStyle	GetStyle() const { return meStyle; }
 
-    BOOL            operator==( const Pointer& rPointer ) const
+    BOOL			operator==( const Pointer& rPointer ) const
                         { return (meStyle == rPointer.meStyle); }
-    BOOL            operator!=( const Pointer& rPointer ) const
+    BOOL			operator!=( const Pointer& rPointer ) const
                         { return !(Pointer::operator==( rPointer )); }
 };
 

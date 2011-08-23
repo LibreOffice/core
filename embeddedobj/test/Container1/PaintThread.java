@@ -50,7 +50,7 @@ class PaintThread extends java.lang.Thread
         m_oRequestsLock = new Object();
         m_xWindow = xWindow;
     }
-
+    
     public void setPaintRequest( XBitmap xBitmap, com.sun.star.awt.Rectangle aRect, com.sun.star.awt.Rectangle aClip )
     {
         synchronized( m_oRequestsLock )
@@ -118,7 +118,7 @@ class PaintThread extends java.lang.Thread
                     {
                         // System.out.println( "Step2" );
                         XDisplayBitmap xDisplayBitmap = xDevice.createDisplayBitmap( xBitmap );
-
+            
                         com.sun.star.awt.Size aSize = xBitmap.getSize();
                         xGraphics.draw( xDisplayBitmap, 0, 0, aSize.Width, aSize.Height,
                                                     aRect.X, aRect.Y, aRect.Width, aRect.Height );

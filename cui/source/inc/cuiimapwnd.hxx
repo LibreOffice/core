@@ -22,20 +22,20 @@
 
 class URLDlg : public ModalDialog
 {
-    FixedText           maFtURL;
-    Edit                maEdtURL;
-    FixedText           maFtTarget;
-    ComboBox            maCbbTargets;
-    FixedText           maFtName;
-    Edit                maEdtName;
-    FixedText           maFtAlternativeText;
-    Edit                maEdtAlternativeText;
-    FixedText           maFtDescription;
-    MultiLineEdit       maEdtDescription;
+    FixedText			maFtURL;
+    Edit				maEdtURL;
+    FixedText			maFtTarget;
+    ComboBox			maCbbTargets;
+    FixedText			maFtName;
+    Edit				maEdtName;
+    FixedText			maFtAlternativeText;
+    Edit				maEdtAlternativeText;
+    FixedText			maFtDescription;
+    MultiLineEdit		maEdtDescription;
     FixedLine           maFlURL;
-    HelpButton          maBtnHelp;
-    OKButton            maBtnOk;
-    CancelButton        maBtnCancel;
+    HelpButton			maBtnHelp;
+    OKButton			maBtnOk;
+    CancelButton		maBtnCancel;
 
 public:
 
@@ -44,11 +44,11 @@ public:
                                 const String& rTarget, const String& rName,
                                 TargetList& rTargetList );
 
-    String              GetURL() const { return maEdtURL.GetText(); }
-    String              GetAltText() const { return maEdtAlternativeText.GetText(); }
-    String              GetDesc() const { return maEdtDescription.GetText(); }
-    String              GetTarget() const { return maCbbTargets.GetText(); }
-    String              GetName() const { return maEdtName.GetText(); }
+    String				GetURL() const { return maEdtURL.GetText(); }
+    String				GetAltText() const { return maEdtAlternativeText.GetText(); }
+    String				GetDesc() const { return maEdtDescription.GetText(); }
+    String				GetTarget() const { return maCbbTargets.GetText(); }
+    String				GetName() const { return maEdtName.GetText(); }
 };
 
-#endif
+#endif 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,15 +73,15 @@ namespace slideshow
             ~UserPaintOverlay();
             PolyPolygonVector getPolygons();
             void drawPolygons();
-
+            
         private:
             UserPaintOverlay( const RGBColor&          rStrokeColor,
                               double                   nStrokeWidth,
                               const SlideShowContext&  rContext,
                               const PolyPolygonVector& rPolygons );
 
-            ::boost::shared_ptr<PaintOverlayHandler>    mpHandler;
-            EventMultiplexer&                           mrMultiplexer;
+            ::boost::shared_ptr<PaintOverlayHandler>	mpHandler;
+            EventMultiplexer&							mrMultiplexer;
         };
     }
 }

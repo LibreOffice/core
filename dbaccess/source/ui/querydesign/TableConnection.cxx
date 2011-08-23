@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ namespace dbaui
 
     //------------------------------------------------------------------------
     BOOL OTableConnection::CheckHit( const Point& rMousePos ) const
-    {
+    {								 
         //////////////////////////////////////////////////////////////////////
         // check if the point hit our line
         ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(m_vConnLine.begin(),

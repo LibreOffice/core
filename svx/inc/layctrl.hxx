@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@
 class SVX_DLLPUBLIC SvxTableToolBoxControl : public SfxToolBoxControl
 {
 private:
-    FASTBOOL    bEnabled;
+    FASTBOOL	bEnabled;
 
 public:
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual SfxPopupWindow*     CreatePopupWindowCascading();
-    virtual void                StateChanged( USHORT nSID,
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow* 	CreatePopupWindow();
+    virtual SfxPopupWindow* 	CreatePopupWindowCascading();
+    virtual void				StateChanged( USHORT nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 
@@ -58,18 +58,18 @@ public:
 
 class SVX_DLLPUBLIC SvxColumnsToolBoxControl : public SfxToolBoxControl
 {
-    FASTBOOL    bEnabled;
+    FASTBOOL	bEnabled;
 public:
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual SfxPopupWindow*     CreatePopupWindowCascading();
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow* 	CreatePopupWindow();
+    virtual SfxPopupWindow* 	CreatePopupWindowCascading();
 
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxColumnsToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxColumnsToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID,
+    virtual void				StateChanged( USHORT nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ namespace bridges_urp
         }
         return bReturn;
     }
-
+    
     //--------------------------------------------------------------------------------------
     static void prepareRuntimeExceptionClientSide( uno_Any **ppException , const OUString &s)
     {
@@ -113,7 +113,7 @@ namespace bridges_urp
         uno_type_any_construct( *ppException , &exception , type.getTypeLibType() , 0 );
     }
 
-
+    
     Job::Job( uno_Environment *pEnvRemote,
               remote_Context *pContext,
               sal_Sequence *pTid,
@@ -145,19 +145,19 @@ namespace bridges_urp
 
 
 
-
+    
     //--------------------------------------------------------------------------------------
     sal_Bool ClientJob::extract(  )
     {
         sal_Bool bReturn = sal_True;
         //-------------------------------
-        // Handle the reply, unpack data
+        // Handle the reply, unpack data 
         //-------------------------------
         if( m_bExceptionOccured )
         {
             bReturn = m_pUnmarshal->unpackAny( *m_ppException );
         }
-         else
+         else 
         {
             //---------------------------------
             // alles ist gut
@@ -214,7 +214,7 @@ namespace bridges_urp
         uno_threadpool_putJob( m_pBridgeImpl->m_hThreadPool, m_pTid , this, 0, sal_False);
     }
 
-    //--------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------	
     sal_Bool ClientJob::pack()
     {
         sal_Bool bSuccess = sal_True;
@@ -294,7 +294,7 @@ namespace bridges_urp
             // the flag byte is needed + request
             nFlags = nFlags | HDRFLAG_LONGHEADER | HDRFLAG_REQUEST; //
 
-            // as long as we do not have customized calls, no MOREFLAGS must be set
+            // as long as we do not have customized calls, no MOREFLAGS must be set			
             if( m_nMethodIndex >= 0x100 )
             {
                 nFlags = nFlags | HDRFLAG_LONGMETHODID;
@@ -346,7 +346,7 @@ namespace bridges_urp
         if( bOid )
         {
             m_pBridgeImpl->m_lastOutOid = *(OUString *)&m_pOid;
-            m_pBridgeImpl->m_blockMarshaler.packOid( m_pBridgeImpl->m_lastOutOid );
+            m_pBridgeImpl->m_blockMarshaler.packOid( m_pBridgeImpl->m_lastOutOid );			
         }
         if( bTid )
         {
@@ -358,7 +358,7 @@ namespace bridges_urp
              && m_nMethodIndex != REMOTE_RELEASE_METHOD_INDEX
              && m_pContext != 0 )
         {
-            void * pCc = 0;
+            void * pCc = 0; 
             rtl::OUString aEnvName( RTL_CONSTASCII_USTRINGPARAM( "urp" ) );
             bSuccess = bSuccess && uno_getCurrentContext(
                 &pCc, aEnvName.pData, m_pContext );
@@ -374,7 +374,7 @@ namespace bridges_urp
                 p->release( p );
             }
         }
-
+        
         // marshal arguments !
 #ifdef BRIDGES_URP_PROT
         sal_Int32 nLogHeader = m_pBridgeImpl->m_blockMarshaler.getPos();
@@ -438,7 +438,7 @@ namespace bridges_urp
                      m_pMethodType ? m_pMethodType->aBase.pMemberName :
                                                m_pAttributeType->aBase.pMemberName );
 #endif
-
+        
         if( bSuccess )
         {
             if( ! m_bOneway )
@@ -452,7 +452,7 @@ namespace bridges_urp
             // Inform the writer thread, that there is some work to do
             //---------------------------
             m_pBridgeImpl->m_pWriter->touch( ! m_bOneway );
-
+            
             if( m_bOneway )
             {
                 *m_ppException = 0;
@@ -488,9 +488,9 @@ namespace bridges_urp
         // Wait for the reply
         //---------------------------
         void * pDisposeReason = 0;
-
+        
         uno_threadpool_enter(m_pBridgeImpl->m_hThreadPool, &pDisposeReason );
-
+        
         if( ! pDisposeReason )
         {
             // thread has been disposed !
@@ -500,14 +500,14 @@ namespace bridges_urp
             // it won't be in the container anymore, but it is eiterway safe to call
             // the method
             ClientJob *pJob =
-                m_pBridgeImpl->m_clientJobContainer.remove( *(ByteSequence*) &m_pTid );
+                m_pBridgeImpl->m_clientJobContainer.remove(	*(ByteSequence*) &m_pTid );
             if( pJob != this )
             {
                 // this is not our job, it is probably one of the callstack below, so
                 // push it back
                 m_pBridgeImpl->m_clientJobContainer.add( *(ByteSequence*) &m_pTid , pJob );
             }
-
+            
             OUStringBuffer sMessage( 256 );
             sMessage.appendAscii( RTL_CONSTASCII_STRINGPARAM( "URP_Bridge : disposed\n" ) );
             sMessage.append( m_pBridgeImpl->getErrorsAsString() );
@@ -542,7 +542,7 @@ namespace bridges_urp
         , m_nCurrentMemPosition( 0 )
     {
         m_pEnvRemote->acquire( m_pEnvRemote );
-        m_nCurrentMemSize = MULTIJOB_STANDARD_MEMORY_SIZE + m_nMaxMessages * (
+        m_nCurrentMemSize = MULTIJOB_STANDARD_MEMORY_SIZE +	m_nMaxMessages * (
             MULTIJOB_PER_CALL_MEMORY_SIZE + sizeof(ServerJobEntry) + sizeof(MemberTypeInfo) );
         m_pCurrentMem = ( sal_Int8 * ) rtl_allocateMemory( m_nCurrentMemSize );
         m_aEntries = ( ServerJobEntry * ) getHeap( m_nMaxMessages * sizeof( ServerJobEntry ) );
@@ -556,7 +556,7 @@ namespace bridges_urp
         {
             struct MemberTypeInfo *const pMTI = &( m_aTypeInfo[i] );
             struct ServerJobEntry *const pSJE = &( m_aEntries[i] );
-
+            
               if( pSJE->m_pRemoteI )
                   pSJE->m_pRemoteI->release( pSJE->m_pRemoteI );
 
@@ -565,10 +565,10 @@ namespace bridges_urp
 
             if( pSJE->m_pInterfaceTypeRef )
                 typelib_typedescriptionreference_release( pSJE->m_pInterfaceTypeRef );
-
+            
             if( pMTI->m_pInterfaceType )
                 TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pMTI->m_pInterfaceType );
-
+            
             for( sal_Int32 iArgs = 0 ; iArgs < pMTI->m_nArgCount ; iArgs ++ )
             {
                 if( pMTI->m_ppArgType[iArgs] )
@@ -634,10 +634,10 @@ namespace bridges_urp
                 //             is not a release call.
                 remote_Context *pRemoteC = ((remote_Context*)m_pEnvRemote->pContext);
 
-                if( ! pMTI->m_bIsReleaseCall && pRemoteC->m_pInstanceProvider )
+                if( ! pMTI->m_bIsReleaseCall &&	pRemoteC->m_pInstanceProvider )
                 {
                     pSJE->m_pException = &(pSJE->m_exception);
-
+                    
                     pRemoteC->m_pInstanceProvider->getInstance(
                         pRemoteC->m_pInstanceProvider,
                         m_pEnvRemote,
@@ -666,7 +666,7 @@ namespace bridges_urp
             else
             {
                 pSJE->m_pException = &(pSJE->m_exception );
-
+                
                 if( pMTI->m_bIsReleaseCall )
                 {
                     pSJE->m_pRemoteI->release( pSJE->m_pRemoteI );
@@ -707,18 +707,18 @@ namespace bridges_urp
                         uno_destructData( pSJE->m_ppArgs[j] , pMTI->m_ppArgType[j] , 0 );
                     }
                 }
-
+                
                 if( pSJE->m_pException )
                 {
                     uno_any_destruct( pSJE->m_pException, ::bridges_remote::remote_release );
                 }
-
+                
             }
             else
             {
                 // synchron, get the mutex to marshal reply and send immeadiatly
                 MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
-
+            
                 sal_Bool bTid = sal_False;
                 sal_uInt8 nFlags = HDRFLAG_LONGHEADER;
                 ByteSequence tid = m_pTid;
@@ -728,7 +728,7 @@ namespace bridges_urp
                     nFlags = nFlags | HDRFLAG_NEWTID;
                     bTid = sal_True;
                 }
-
+            
                 if( pSJE->m_pException )
                 {
                     nFlags = nFlags | HDRFLAG_EXCEPTION;
@@ -737,7 +737,7 @@ namespace bridges_urp
                 sal_Int32 nLogStart = m_pBridgeImpl->m_blockMarshaler.getPos();
 #endif
                 m_pBridgeImpl->m_blockMarshaler.packInt8( &nFlags );
-
+                
                 if( bTid )
                 {
                     if( ! pSJE->m_bIgnoreCache )
@@ -758,7 +758,7 @@ namespace bridges_urp
                     //--------------------
                     m_pBridgeImpl->m_blockMarshaler.packAny( &(pSJE->m_exception) );
                     uno_any_destruct( &(pSJE->m_exception) , ::bridges_remote::remote_release );
-
+                    
                     // destroy in parameters
                     for( sal_Int32 j = 0 ; j < pMTI->m_nArgCount ; j ++ )
                     {
@@ -798,21 +798,21 @@ namespace bridges_urp
                         }
                     }
                 }
-
+                
 #ifdef BRIDGES_URP_PROT
                  {
                      typelib_InterfaceMemberTypeDescription *pMemberType =
                          pMTI->m_pMethodType ?
                          (typelib_InterfaceMemberTypeDescription*)pMTI->m_pMethodType :
                          (typelib_InterfaceMemberTypeDescription*)pMTI->m_pAttributeType;
-
+                    
                      urp_logReplying( m_pBridgeImpl ,
                                       m_pBridgeImpl->m_blockMarshaler.getPos() - nLogStart,
                                       m_pBridgeImpl->m_blockMarshaler.getPos() - nLogHeader,
                                       pMemberType->pMemberName );
-                 }
+                 }		 
 #endif
-
+            
                 m_pBridgeImpl->m_nMarshaledMessages ++;
                 // put it on the wire
                 m_pBridgeImpl->m_pWriter->touch( sal_True );
@@ -831,7 +831,7 @@ namespace bridges_urp
             }
         }
     }
-
+    
     //-------------------------------------------------------------------------------------
     void ServerMultiJob::prepareRuntimeException( const OUString & sMessage , sal_Int32 nCall )
     {
@@ -875,7 +875,7 @@ namespace bridges_urp
         pSJE->m_ppArgs = 0;
         pSJE->m_pReturn = 0;
         pMTI->m_pReturnType = 0;
-
+    
         if( pMTI->m_nArgCount )
         {
             pMTI->m_ppArgType =
@@ -887,11 +887,11 @@ namespace bridges_urp
         if( pMTI->m_pMethodType &&
             pMTI->m_pMethodType->pReturnTypeRef->eTypeClass != typelib_TypeClass_VOID )
         {
-            TYPELIB_DANGER_GET( &(pMTI->m_pReturnType), pMTI->m_pMethodType->pReturnTypeRef );
+            TYPELIB_DANGER_GET(	&(pMTI->m_pReturnType), pMTI->m_pMethodType->pReturnTypeRef );
         }
         else if( pMTI->m_pAttributeType && ! pMTI->m_nArgCount )
         {
-            TYPELIB_DANGER_GET( &(pMTI->m_pReturnType) , pMTI->m_pAttributeType->pAttributeTypeRef );
+            TYPELIB_DANGER_GET(	&(pMTI->m_pReturnType) , pMTI->m_pAttributeType->pAttributeTypeRef );
         }
 
         // normal method
@@ -900,10 +900,10 @@ namespace bridges_urp
             for( sal_Int32 i = 0 ; i < pMTI->m_nArgCount ; i ++ )
             {
                 pMTI->m_ppArgType[i] = 0;
-                TYPELIB_DANGER_GET( & ( pMTI->m_ppArgType[i] ) , pMTI->m_pMethodType->pParams[i].pTypeRef);
+                TYPELIB_DANGER_GET(	& ( pMTI->m_ppArgType[i] ) , pMTI->m_pMethodType->pParams[i].pTypeRef);
                 pMTI->m_pbIsIn[i]  = pMTI->m_pMethodType->pParams[i].bIn;
                 pMTI->m_pbIsOut[i] = pMTI->m_pMethodType->pParams[i].bOut;
-
+                
                 pSJE->m_ppArgs[i] = getHeap( pMTI->m_ppArgType[i]->nSize );
                 if( pMTI->m_pbIsIn[i] )
                 {

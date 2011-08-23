@@ -15,9 +15,9 @@ DECLARE_WAPI_FUNC( DdeInitializeW );
 
 
 #ifndef _SVTOOLS_SVDDE_DDEWRAP_CXX_
-#define DdeCreateStringHandleW  lpfnDdeCreateStringHandleW
-#define DdeQueryStringW         lpfnDdeQueryStringW
-#define DdeInitializeW          lpfnDdeInitializeW
+#define DdeCreateStringHandleW	lpfnDdeCreateStringHandleW
+#define DdeQueryStringW			lpfnDdeQueryStringW
+#define DdeInitializeW			lpfnDdeInitializeW
 #endif
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
             maPasswordED.SetSelection( Selection( 0, nLen ) );
             maPasswordED.ReplaceSelected( aFilter.makeStringAndClear() );
         }
-
+        
     }
     maOKBtn.Enable( maPasswordED.GetText().Len() >= mnMinLen );
     return 0;
@@ -97,20 +97,20 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 
     ModalDialog( pParent, SfxResId ( DLG_PASSWD ) ),
 
-    maUserFT        ( this, SfxResId( FT_PASSWD_USER ) ),
-    maUserED        ( this, SfxResId( ED_PASSWD_USER ) ),
-    maPasswordFT    ( this, SfxResId( FT_PASSWD_PASSWORD ) ),
-    maPasswordED    ( this, SfxResId( ED_PASSWD_PASSWORD ) ),
-    maConfirmFT     ( this, SfxResId( FT_PASSWD_CONFIRM ) ),
-    maConfirmED     ( this, SfxResId( ED_PASSWD_CONFIRM ) ),
-    maPasswordBox   ( this, SfxResId( GB_PASSWD_PASSWORD ) ),
-    maOKBtn         ( this, SfxResId( BTN_PASSWD_OK ) ),
-    maCancelBtn     ( this, SfxResId( BTN_PASSWD_CANCEL ) ),
-    maHelpBtn       ( this, SfxResId( BTN_PASSWD_HELP ) ),
-    maConfirmStr    (       SfxResId( STR_PASSWD_CONFIRM ) ),
+    maUserFT		( this, SfxResId( FT_PASSWD_USER ) ),
+    maUserED		( this, SfxResId( ED_PASSWD_USER ) ),
+    maPasswordFT	( this, SfxResId( FT_PASSWD_PASSWORD ) ),
+    maPasswordED	( this, SfxResId( ED_PASSWD_PASSWORD ) ),
+    maConfirmFT		( this, SfxResId( FT_PASSWD_CONFIRM ) ),
+    maConfirmED		( this, SfxResId( ED_PASSWD_CONFIRM ) ),
+    maPasswordBox	( this, SfxResId( GB_PASSWD_PASSWORD ) ),
+    maOKBtn			( this, SfxResId( BTN_PASSWD_OK ) ),
+    maCancelBtn		( this, SfxResId( BTN_PASSWD_CANCEL ) ),
+    maHelpBtn		( this, SfxResId( BTN_PASSWD_HELP ) ),
+    maConfirmStr	( 		SfxResId( STR_PASSWD_CONFIRM ) ),
 
-    mnMinLen        ( 5 ),
-    mnExtras        ( 0 ),
+    mnMinLen		( 5 ),
+    mnExtras		( 0 ),
     mbAsciiOnly     ( false )
 
 {

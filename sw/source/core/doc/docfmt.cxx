@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,14 +56,14 @@
 #include <doc.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
-#include <hints.hxx>            // fuer SwHyphenBug (in SetDefault)
+#include <hints.hxx>			// fuer SwHyphenBug (in SetDefault)
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <undobj.hxx>
 #include <ndgrf.hxx>
-#include <pagedesc.hxx>         // Fuer Sonderbehandlung in InsFrmFmt
-#include <rolbck.hxx>           // Undo-Attr
-#include <mvsave.hxx>           // servieren: Veraenderungen erkennen
+#include <pagedesc.hxx>			// Fuer Sonderbehandlung in InsFrmFmt
+#include <rolbck.hxx>			// Undo-Attr
+#include <mvsave.hxx>			// servieren: Veraenderungen erkennen
 #include <txatbase.hxx>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
@@ -124,7 +124,7 @@ struct ParaRstFmt
     bool bResetAll;
     bool bInclRefToxMark;
 
-    bool bKeepOutlineLevelAttr; //#outline level,add by zhaojianwei
+    bool bKeepOutlineLevelAttr;	//#outline level,add by zhaojianwei
 
     ParaRstFmt( const SwPosition* pStt, const SwPosition* pEnd,
                 SwHistory* pHst, USHORT nWhch = 0, const SfxItemSet* pSet = 0 )
@@ -140,7 +140,7 @@ struct ParaRstFmt
           // <--
           bResetAll( true ),
           bInclRefToxMark( false ),
-          bKeepOutlineLevelAttr( false )    //#outline level,add by zhaojianwei
+          bKeepOutlineLevelAttr( false )	//#outline level,add by zhaojianwei
     {}
 
     ParaRstFmt( SwHistory* pHst )
@@ -156,7 +156,7 @@ struct ParaRstFmt
           // <--
           bResetAll( true ),
           bInclRefToxMark( false ),
-            bKeepOutlineLevelAttr( false )  //#outline level,add by zhaojianwei
+            bKeepOutlineLevelAttr( false )	//#outline level,add by zhaojianwei
     {}
 };
 
@@ -245,13 +245,13 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         // <--
 
         const SfxPoolItem* pItem;
-  //      USHORT __READONLY_DATA aSavIds[ 3 ] = { RES_PAGEDESC, RES_BREAK,  //#outline level,removed by zhaojianwei
+  //      USHORT __READONLY_DATA aSavIds[ 3 ] = { RES_PAGEDESC, RES_BREAK,	//#outline level,removed by zhaojianwei
   //                                              RES_PARATR_NUMRULE };
         //for( USHORT n = 0; n < 3; ++n )
-        USHORT __READONLY_DATA aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,    //->add by zhaojianwei
+        USHORT __READONLY_DATA aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,	//->add by zhaojianwei
                                                 RES_PARATR_NUMRULE,
                                                 RES_PARATR_OUTLINELEVEL };
-        for( USHORT n = 0; n < 4; ++n )                                     //<-end,zhaojianwei
+        for( USHORT n = 0; n < 4; ++n )										//<-end,zhaojianwei
         {
             if( SFX_ITEM_SET == pSet->GetItemState( aSavIds[ n ], FALSE, &pItem ))
             {
@@ -269,11 +269,11 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                         bSave = 0 != ((SwNumRuleItem*)pItem)->GetValue().Len();
                     }
                     break;
-                    case RES_PARATR_OUTLINELEVEL:               //#outline level,add by zhaojianwei
+                    case RES_PARATR_OUTLINELEVEL:				//#outline level,add by zhaojianwei
                     {
                         bSave = pPara && pPara->bKeepOutlineLevelAttr;
                     }
-                    break;                                      //<-end,zhaojianwei
+                    break;										//<-end,zhaojianwei
                 }
                 if( bSave )
                 {
@@ -396,7 +396,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         USHORT nMkPos, nPtPos = rSt.GetIndex();
 
         // JP 22.08.96: Sonderfall: steht der Crsr in einem URL-Attribut
-        //              dann wird dessen Bereich genommen
+        //				dann wird dessen Bereich genommen
         SwTxtAttr const*const pURLAttr(
             pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
         if (pURLAttr && pURLAttr->GetINetFmt().GetValue().Len())
@@ -487,7 +487,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     BOOL bAdd = TRUE;
     SwNodeIndex aTmpStt( pStt->nNode );
     SwNodeIndex aTmpEnd( pEnd->nNode );
-    if( pStt->nContent.GetIndex() )     // nur ein Teil
+    if( pStt->nContent.GetIndex() )		// nur ein Teil
     {
         // dann spaeter aufsetzen und alle CharFmtAttr -> TxtFmtAttr
         SwTxtNode* pTNd = aTmpStt.GetNode().GetTxtNode();
@@ -884,7 +884,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
     }
 
-    if( !rRg.HasMark() )        // kein Bereich
+    if( !rRg.HasMark() )		// kein Bereich
     {
         if( !pNode )
         {
@@ -900,7 +900,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             const String& rStr = pTxtNd->GetTxt();
 
             // JP 22.08.96: Sonderfall: steht der Crsr in einem URL-Attribut
-            //              dann wird dessen Bereich genommen
+            //				dann wird dessen Bereich genommen
             SwTxtAttr const*const pURLAttr(
                 pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
             if (pURLAttr && pURLAttr->GetINetFmt().GetValue().Len())
@@ -1223,9 +1223,9 @@ int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
 {
     // dann aender bei allen TabStop die default's auf den neuen Wert
     // !!! Achtung: hier wird immer auf dem PoolAttribut gearbeitet,
-    //              damit nicht in allen Sets die gleiche Berechnung
-    //              auf dem gleichen TabStop (gepoolt!) vorgenommen
-    //              wird. Als Modify wird ein FmtChg verschickt.
+    // 				damit nicht in allen Sets die gleiche Berechnung
+    //				auf dem gleichen TabStop (gepoolt!) vorgenommen
+    //				wird. Als Modify wird ein FmtChg verschickt.
 
     USHORT nOldCnt = rChgTabStop.Count();
     if( !nOldCnt || nOldWidth == nNewWidth )
@@ -1240,7 +1240,7 @@ int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
         if( SVX_TAB_ADJUST_DEFAULT != pTabs->GetAdjustment() )
             break;
     ++n;
-    if( n < nOldCnt )   // die DefTabStops loeschen
+    if( n < nOldCnt )	// die DefTabStops loeschen
         rChgTabStop.Remove( n, nOldCnt - n );
     return TRUE;
 }
@@ -1340,9 +1340,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             // TabStop-Aenderungen behandeln wir erstmal anders:
             // dann aender bei allen TabStop die dafault's auf den neuen Wert
             // !!! Achtung: hier wird immer auf dem PoolAttribut gearbeitet,
-            //              damit nicht in allen Sets die gleiche Berechnung
-            //              auf dem gleichen TabStop (gepoolt!) vorgenommen
-            //              wird. Als Modify wird ein FmtChg verschickt.
+            // 				damit nicht in allen Sets die gleiche Berechnung
+            //				auf dem gleichen TabStop (gepoolt!) vorgenommen
+            //				wird. Als Modify wird ein FmtChg verschickt.
             SwTwips nNewWidth = (*(SvxTabStopItem*)pTmpItem)[ 0 ].GetTabPos(),
                     nOldWidth = ((SvxTabStopItem&)aOld.Get(RES_PARATR_TABSTOP))[ 0 ].GetTabPos();
 
@@ -1368,7 +1368,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         SwAttrSetChg aChgOld( aOld, aOld );
         SwAttrSetChg aChgNew( aNew, aNew );
-        aCallMod.Modify( &aChgOld, &aChgNew );      // alle veraenderten werden verschickt
+        aCallMod.Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
     }
 
     // und die default-Formate wieder beim Object austragen
@@ -1687,7 +1687,7 @@ void SwDoc::DelTxtFmtColl(USHORT nFmtColl, BOOL bBroadcast)
     // Wer hat die zu loeschende als Next
     SwTxtFmtColl *pDel = (*pTxtFmtCollTbl)[nFmtColl];
     if( pDfltTxtFmtColl == pDel )
-        return;     // default nie loeschen !!
+        return;		// default nie loeschen !!
 
     if (bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PARA,
@@ -1864,7 +1864,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
     SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent, FALSE, TRUE );
     // <--
     pNewFmt->SetAuto( rFmt.IsAuto() );
-    pNewFmt->CopyAttrs( rFmt, TRUE );           // kopiere Attribute
+    pNewFmt->CopyAttrs( rFmt, TRUE );			// kopiere Attribute
 
     pNewFmt->SetPoolFmtId( rFmt.GetPoolFmtId() );
     pNewFmt->SetPoolHelpId( rFmt.GetPoolHelpId() );
@@ -1928,8 +1928,8 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     pNewColl->CopyAttrs( rColl, TRUE );
 
     // setze noch den Outline-Level
-    //if( NO_NUMBERING != rColl.GetOutlineLevel() ) //#outline level,zhaojianwei
-    //  pNewColl->SetOutlineLevel( rColl.GetOutlineLevel() );
+    //if( NO_NUMBERING != rColl.GetOutlineLevel() )	//#outline level,zhaojianwei
+    //	pNewColl->SetOutlineLevel( rColl.GetOutlineLevel() );
     if(rColl.IsAssignedToListLevelOfOutlineStyle())
         pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
     //<-end
@@ -2040,8 +2040,8 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
 
         pDest = FindFmtByName( rDestArr, pSrc->GetName() );
         pDest->SetAuto( FALSE );
-//      pDest->ResetAllAttr();
-//      pDest->CopyAttrs( *pSrc, TRUE );            // kopiere Attribute
+//		pDest->ResetAllAttr();
+//		pDest->CopyAttrs( *pSrc, TRUE );			// kopiere Attribute
 //JP 19.02.96: ist so wohl optimaler - loest ggfs. kein Modify aus!
         pDest->DelDiffs( *pSrc );
         // --> OD 2009-03-23 #i94285#
@@ -2092,8 +2092,8 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
                     rDestArr, pSrcColl->GetNextTxtFmtColl().GetName() ) );
 
             // setze noch den Outline-Level
-            //if( NO_NUMBERING != pSrcColl->GetOutlineLevel() ) //#outline level,zhaojianwei
-            //  pDstColl->SetOutlineLevel( pSrcColl->GetOutlineLevel() );
+            //if( NO_NUMBERING != pSrcColl->GetOutlineLevel() )	//#outline level,zhaojianwei
+            //	pDstColl->SetOutlineLevel( pSrcColl->GetOutlineLevel() );
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
                 pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
             //<-end
@@ -2442,7 +2442,7 @@ void SwDoc::_CreateNumberFormatter()
 
 
     LanguageType eLang = LANGUAGE_SYSTEM; //System::GetLanguage();
-/*              ((const SvxLanguageItem&)GetAttrPool().
+/*				((const SvxLanguageItem&)GetAttrPool().
                     GetDefaultItem( RES_CHRATR_LANGUAGE )).GetLanguage();
 */
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
@@ -2654,7 +2654,7 @@ namespace docfunc
 
                 if ( pTxtFmtColl->IsDefault() ||
                    //  pTxtFmtColl->GetOutlineLevel() == NO_NUMBERING ) //#outline level,zhaojianwei
-                    ! pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )  //<-end,zhaojianwei
+                    ! pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )	//<-end,zhaojianwei
                 {
                     continue;
                 }

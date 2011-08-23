@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,22 +32,22 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module frame {
 
-//=============================================================================
+//============================================================================= 
 
 /** is used to query, register and unregister user interface controller.
 
     <p>
-    A user interface controller can be registered for a command URL. A certain user
-    interface controller will be created when a user interface element contains a
+    A user interface controller can be registered for a command URL. A certain user 
+    interface controller will be created when a user interface element contains a 
     registered command URL.
-
+    
     @see PopupMenuControllerFactory
     </p>
-
+    
     @since OOo 2.0
  */
 
@@ -69,9 +69,9 @@ published interface XUIControllerRegistration : com::sun::star::uno::XInterface
     */
     boolean hasController( [in] string aCommandURL, [in] string aModelName );
 
-    /** function to create an association between a user interface controller implementation
+    /** function to create an association between a user interface controller implementation 
         and a command URL and optional module.
-
+        
         @param aCommandURL
             a command URL which specifies an action which shoudl be associated with a user
             interface controller.
@@ -85,10 +85,10 @@ published interface XUIControllerRegistration : com::sun::star::uno::XInterface
             with the OpenOffice service manager.
     */
     void registerController( [in] string aCommandURL, [in] string aModelName, [in] string aControllerImplementationName );
-
-    /** function to remove a previously defined association between a user interface controller
+    
+    /** function to remove a previously defined association between a user interface controller 
         implementation and a command URL and optional module.
-
+        
         @param aCommandURL
             a command URL which specifies an action which shoudl be associated with a user
             interface controller.
@@ -102,6 +102,6 @@ published interface XUIControllerRegistration : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-//=============================================================================
+//============================================================================= 
 
 #endif

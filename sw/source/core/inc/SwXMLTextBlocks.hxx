@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,17 +36,17 @@ class SwDoc;
 class SvxMacroTableDtor;
 class SwImpBlocks;
 
-#define SWXML_CONVBLOCK     0x0001
-#define SWXML_NOROOTCOMMIT  0x0002
+#define SWXML_CONVBLOCK 	0x0001
+#define SWXML_NOROOTCOMMIT 	0x0002
 
 class SwXMLTextBlocks : public SwImpBlocks
 {
 protected:
-    BOOL         bAutocorrBlock;
-    BOOL         bBlock;
+    BOOL 		 bAutocorrBlock;
+    BOOL 		 bBlock;
     SfxObjectShellRef xDocShellRef;
-    USHORT       nFlags;
-    String       aPackageName;
+    USHORT		 nFlags;
+    String		 aPackageName;
     SfxMediumRef xMedium;
 
     void ReadInfo();
@@ -57,7 +57,7 @@ protected:
 public:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xBlkRoot;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xRoot;
-    short               nCurBlk;
+    short				nCurBlk;
     SwXMLTextBlocks( const String& rFile );
     SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFile );
     void   AddName( const String&, const String&, const String&, BOOL bOnlyTxt = FALSE );

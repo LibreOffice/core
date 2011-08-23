@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,20 +72,20 @@ namespace cppcanvas
             The created polygon initially has the same size in user
             coordinate space as the source polygon
          */
-        PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::basegfx::B2DPolygon& rPoly ) const;
-        PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::basegfx::B2DPolyPolygon& rPoly ) const;
+        PolyPolygonSharedPtr 	createPolyPolygon( const CanvasSharedPtr&, const ::basegfx::B2DPolygon& rPoly ) const;
+        PolyPolygonSharedPtr 	createPolyPolygon( const CanvasSharedPtr&, const ::basegfx::B2DPolyPolygon& rPoly ) const;
 
         /** Create an uninitialized bitmap with the given size
          */
-        BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const;
+        BitmapSharedPtr 		createBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const; 
 
         /** Create an uninitialized alpha bitmap with the given size
          */
-        BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const;
+        BitmapSharedPtr 		createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const; 
 
-        /** Create a text portion with the given content string
+        /** Create a text portion with the given content string 
          */
-        TextSharedPtr           createText( const CanvasSharedPtr&, const ::rtl::OUString& ) const;
+        TextSharedPtr 			createText( const CanvasSharedPtr&, const ::rtl::OUString& ) const;
 
     private:
         friend struct InitInstance2;

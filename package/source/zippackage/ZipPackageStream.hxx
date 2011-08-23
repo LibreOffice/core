@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 #endif
 #include <mutexholder.hxx>
 
-#define PACKAGE_STREAM_NOTSET           0
-#define PACKAGE_STREAM_PACKAGEMEMBER    1
-#define PACKAGE_STREAM_DETECT           2
-#define PACKAGE_STREAM_DATA             3
-#define PACKAGE_STREAM_RAW              4
+#define PACKAGE_STREAM_NOTSET			0
+#define PACKAGE_STREAM_PACKAGEMEMBER	1
+#define PACKAGE_STREAM_DETECT			2
+#define PACKAGE_STREAM_DATA				3
+#define PACKAGE_STREAM_RAW				4
 
 class ZipPackage;
 struct ZipEntry;
@@ -59,13 +59,13 @@ class ZipPackageStream : public cppu::ImplInheritanceHelper2
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-    ZipPackage          &rZipPackage;
-    sal_Bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
+    ZipPackage 			&rZipPackage;
+    sal_Bool			bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
     vos::ORef < EncryptionData > xEncryptionData;
 
-    sal_uInt8   m_nStreamMode;
-    sal_uInt32  m_nMagicalHackPos;
-    sal_uInt32  m_nMagicalHackSize;
+    sal_uInt8	m_nStreamMode;
+    sal_uInt32	m_nMagicalHackPos;
+    sal_uInt32	m_nMagicalHackSize;
 
     sal_Bool m_bHasSeekable;
 
@@ -76,10 +76,10 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& GetOwnSeekStream();
 
 public:
-    sal_Bool HasOwnKey () const  { return bHaveOwnKey;}
+    sal_Bool HasOwnKey () const	 { return bHaveOwnKey;}
     sal_Bool IsToBeCompressed () const { return bToBeCompressed;}
     sal_Bool IsToBeEncrypted () const { return bToBeEncrypted;}
-    sal_Bool IsEncrypted () const    { return bIsEncrypted;}
+    sal_Bool IsEncrypted () const  	 { return bIsEncrypted;}
     sal_Bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
 
     sal_Bool IsFromManifest() const { return m_bFromManifest; }
@@ -106,8 +106,8 @@ public:
 
     void SetToBeCompressed (sal_Bool bNewValue) { bToBeCompressed = bNewValue;}
     void SetIsEncrypted (sal_Bool bNewValue) { bIsEncrypted = bNewValue;}
-    void SetToBeEncrypted (sal_Bool bNewValue)
-    {
+    void SetToBeEncrypted (sal_Bool bNewValue)  
+    { 
         bToBeEncrypted  = bNewValue;
         if ( bToBeEncrypted && xEncryptionData.isEmpty())
             xEncryptionData = new EncryptionData;
@@ -145,16 +145,16 @@ public:
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
         throw(::com::sun::star::uno::RuntimeException);
-
+    
     static ::com::sun::star::uno::Sequence < sal_Int8 >& static_getImplementationId()
     {
         return aImplementationId;
     }
 
     // XActiveDataSink
-    virtual void SAL_CALL setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
+    virtual void SAL_CALL setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream ) 
         throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  ) 
         throw(::com::sun::star::uno::RuntimeException);
 
     // XDataSinkEncrSupport
@@ -181,21 +181,21 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) 
         throw(::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) 
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) 
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) 
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 };
 #endif

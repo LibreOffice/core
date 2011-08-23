@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
     memset( pCache, 0, nCacheSize * sizeof( SvLongsPtr ) );
     sal_uInt32 nCount(rPolyPolygon.count());
     mpPolyPolygon = new PolyPolygon( (sal_uInt16)nCount );
-
+    
     for(sal_uInt32 i(0L); i < nCount; i++)
     {
         const basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(i).getDefaultAdaptiveSubdivision());
@@ -180,7 +180,7 @@ class SvxBoundArgs
     void _NoteFarPoint( long nPx, long nPyDiff, long nDiff );
     void NoteFarPoint( long nPx, long nPyDiff, long nDiff )
         { if( nDiff ) _NoteFarPoint( nPx, nPyDiff, nDiff ); }
-    long CalcMax( const Point& rPt1, const Point& rPt2, long nRange, long nFar );
+    long CalcMax( const Point& rPt1, const Point& rPt2,	long nRange, long nFar );
     void CheckCut( const Point& rLst, const Point& rNxt );
     inline long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
     inline long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
@@ -305,7 +305,7 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
     BOOL bOdd = nIdx % 2 ? TRUE : FALSE;
     // Kein Ueberlappung mit vorhandenen Intervallen?
     if( nIdx == nCount || ( !bOdd && nMax < (*pLongArr)[ nIdx ] ) )
-    {   // Dann wird ein neues eingefuegt ...
+    {	// Dann wird ein neues eingefuegt ...
         pLongArr->Insert( nMin, nIdx );
         pLongArr->Insert( nMax, nIdx + 1 );
         aBoolArr.Insert( bToggle, nIdx / 2 );
@@ -392,8 +392,8 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
                     else
                         NotePoint( A(rNull) );
                 }
-                nFirst = 0; // In welcher Richtung wird die Zeile verlassen?
-                nAct = 3;   // Wir sind z.Z. innerhalb der Zeile.
+                nFirst = 0;	// In welcher Richtung wird die Zeile verlassen?
+                nAct = 3;	// Wir sind z.Z. innerhalb der Zeile.
             }
             if( nCount > 1 )
             {
@@ -568,7 +568,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
         while( nLeftPos < nOldCount && nLeft > (*pOld)[ nLeftPos ] )
             nLeftPos += 2;
         if( nLeftPos >= nOldCount )
-        {   // Das aktuelle Intervall gehoert ans Ende des alten Arrays...
+        {	// Das aktuelle Intervall gehoert ans Ende des alten Arrays...
             if( !bSubtract )
                 pOld->Insert( pLongArr, nOldCount, i - 2, USHRT_MAX );
             break;

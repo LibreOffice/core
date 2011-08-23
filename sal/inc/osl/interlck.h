@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@ extern "C" {
 
 typedef sal_Int32 oslInterlockedCount;
 
-/** Increments the count variable addressed by pCount.
+/** Increments the count variable addressed by pCount. 
     @param Address of counter variable
     @return The result of the operation is zero, the value of the count variable.
 */
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount);
 
-/** Decrement the count variable addressed by pCount.
+/** Decrement the count variable addressed by pCount. 
     @param Address of counter variable
     @return The result of the operation is the new value is of the count variable.
 */
@@ -52,6 +52,6 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 }
 #endif
 
-#endif  /* _OSL_INTERLOCK_H_ */
+#endif	/* _OSL_INTERLOCK_H_ */
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,6 +74,6 @@ public:
 //allow somewhat more dubious transformations that are nevertheless
 //recognizably similiar. Even in this mode there will be characters that fail.
 //The users of this might want to make a distinction between failed characters
-//which were inside and those outside the unicode private area.
+//which were inside and those outside the unicode private area. 
 UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly=false);
 #endif // _UNOTOOLS_FONTCVT_HXX

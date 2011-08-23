@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -342,7 +342,7 @@ BOOL StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, BOOL bDel )
             delete pDel;
         // Rebalance the tree the hard way
         // OS 22.09.95: Auf MD's Wunsch auskommentiert wg. Absturz
-/*      StgAvlNode* pNew = NULL;
+/*		StgAvlNode* pNew = NULL;
         while( *pRoot )
         {
             StgAvlNode* p = Rem( pRoot, *pRoot, FALSE );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@
 void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 {
     rStrm.SetSliceSize( 7 );
-    rStrm   << (sal_uInt16) rDateTime.GetYear()
-            << (sal_uInt8)  rDateTime.GetMonth()
-            << (sal_uInt8)  rDateTime.GetDay()
-            << (sal_uInt8)  rDateTime.GetHour()
-            << (sal_uInt8)  rDateTime.GetMin()
-            << (sal_uInt8)  rDateTime.GetSec();
+    rStrm	<< (sal_uInt16)	rDateTime.GetYear()
+            << (sal_uInt8)	rDateTime.GetMonth()
+            << (sal_uInt8)	rDateTime.GetDay()
+            << (sal_uInt8)	rDateTime.GetHour()
+            << (sal_uInt8)	rDateTime.GetMin()
+            << (sal_uInt8)	rDateTime.GetSec();
     rStrm.SetSliceSize( 0 );
 }
 
@@ -88,17 +88,17 @@ XclExpUserBView::XclExpUserBView( const String& rUsername, const sal_uInt8* pGUI
 
 void XclExpUserBView::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (sal_uInt32) 0xFF078014
-            << (sal_uInt32) 0x00000001;
+    rStrm	<< (sal_uInt32)	0xFF078014
+            << (sal_uInt32)	0x00000001;
     lcl_WriteGUID( rStrm, aGUID );
     rStrm.WriteZeroBytes( 8 );
     rStrm   << (sal_uInt32) 1200
-            << (sal_uInt32) 1000
-            << (sal_uInt16) 1000
-            << (sal_uInt16) 0x0CF7
-            << (sal_uInt16) 0x0000
-            << (sal_uInt16) 0x0001
-            << (sal_uInt16) 0x0000;
+            << (sal_uInt32)	1000
+            << (sal_uInt16)	1000
+            << (sal_uInt16)	0x0CF7
+            << (sal_uInt16)	0x0000
+            << (sal_uInt16)	0x0001
+            << (sal_uInt16)	0x0000;
     if( sUsername.Len() > 0 )
         rStrm << sUsername;
 }
@@ -152,19 +152,19 @@ XclExpUsersViewBegin::XclExpUsersViewBegin( const sal_uInt8* pGUID, sal_uInt32 n
 void XclExpUsersViewBegin::SaveCont( XclExpStream& rStrm )
 {
     lcl_WriteGUID( rStrm, aGUID );
-    rStrm   << nCurrTab
-            << (sal_uInt32) 100
-            << (sal_uInt32) 64
-            << (sal_uInt32) 3
-            << (sal_uInt32) 0x0000003C
-            << (sal_uInt16) 0
-            << (sal_uInt16) 3
-            << (sal_uInt16) 0
-            << (sal_uInt16) 3
-            << (double)     0
-            << (double)     0
-            << (sal_Int16)  -1
-            << (sal_Int16)  -1;
+    rStrm	<< nCurrTab
+            << (sal_uInt32)	100
+            << (sal_uInt32)	64
+            << (sal_uInt32)	3
+            << (sal_uInt32)	0x0000003C
+            << (sal_uInt16)	0
+            << (sal_uInt16)	3
+            << (sal_uInt16)	0
+            << (sal_uInt16)	3
+            << (double)		0
+            << (double)		0
+            << (sal_Int16)	-1
+            << (sal_Int16)	-1;
 }
 
 UINT16 XclExpUsersViewBegin::GetNum() const
@@ -215,7 +215,7 @@ sal_Size XclExpChTr0x0191::GetLen() const
 
 void XclExpChTr0x0198::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (sal_uInt16) 0x0006
+    rStrm	<< (sal_uInt16) 0x0006
             << (sal_uInt16) 0x0000;
 }
 
@@ -333,12 +333,12 @@ XclExpChTrHeader::~XclExpChTrHeader()
 
 void XclExpChTrHeader::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (sal_uInt16) 0x0006
+    rStrm	<< (sal_uInt16) 0x0006
             << (sal_uInt16) 0x0000
             << (sal_uInt16) 0x000D;
     lcl_WriteGUID( rStrm, aGUID );
     lcl_WriteGUID( rStrm, aGUID );
-    rStrm   << nCount
+    rStrm	<< nCount
             << (sal_uInt16) 0x0001
             << (sal_uInt32) 0x00000000
             << (sal_uInt16) 0x001E;
@@ -362,16 +362,16 @@ XclExpChTrInfo::~XclExpChTrInfo()
 
 void XclExpChTrInfo::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (sal_uInt32) 0xFFFFFFFF
-            << (sal_uInt32) 0x00000000
-            << (sal_uInt32) 0x00000020
-            << (sal_uInt16) 0xFFFF;
+    rStrm	<< (sal_uInt32)	0xFFFFFFFF
+            << (sal_uInt32)	0x00000000
+            << (sal_uInt32)	0x00000020
+            << (sal_uInt16)	0xFFFF;
     lcl_WriteGUID( rStrm, aGUID );
-    rStrm   << (sal_uInt16) 0x04B0;
+    rStrm	<< (sal_uInt16)	0x04B0;
     lcl_WriteFixedString( rStrm, sUsername, 113 );
     lcl_WriteDateTime( rStrm, aDateTime );
-    rStrm   << (sal_uInt8)  0x0000
-            << (sal_uInt16) 0x0002;
+    rStrm	<< (sal_uInt8)	0x0000
+            << (sal_uInt16)	0x0002;
 }
 
 UINT16 XclExpChTrInfo::GetNum() const
@@ -580,7 +580,7 @@ void XclExpChTrAction::SetIndex( sal_uInt32& rIndex )
 void XclExpChTrAction::SaveCont( XclExpStream& rStrm )
 {
     DBG_ASSERT( nOpCode != EXC_CHTR_OP_UNKNOWN, "XclExpChTrAction::SaveCont - unknown action" );
-    rStrm   << nLength
+    rStrm	<< nLength
             << nIndex
             << nOpCode
             << (sal_uInt16)(bAccepted ? EXC_CHTR_ACCEPT : EXC_CHTR_NOTHING);
@@ -802,10 +802,10 @@ void XclExpChTrCellContent::GetCellData(
 void XclExpChTrCellContent::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aPosition.Tab() );
-    rStrm   << (sal_uInt16)((pOldData ? (pOldData->nType << 3) : 0x0000) | (pNewData ? pNewData->nType : 0x0000))
+    rStrm	<< (sal_uInt16)((pOldData ? (pOldData->nType << 3) : 0x0000) | (pNewData ? pNewData->nType : 0x0000))
             << (sal_uInt16) 0x0000;
     Write2DAddress( rStrm, aPosition );
-    rStrm   << nOldLength
+    rStrm	<< nOldLength
             << (sal_uInt32) 0x00000000;
     if( pOldData )
         pOldData->Write( rStrm, rIdBuffer );
@@ -841,10 +841,10 @@ XclExpChTrInsert::XclExpChTrInsert(
     nLength = 0x00000030;
     switch( rAction.GetType() )
     {
-        case SC_CAT_INSERT_COLS:    nOpCode = EXC_CHTR_OP_INSCOL;   break;
-        case SC_CAT_INSERT_ROWS:    nOpCode = EXC_CHTR_OP_INSROW;   break;
-        case SC_CAT_DELETE_COLS:    nOpCode = EXC_CHTR_OP_DELCOL;   break;
-        case SC_CAT_DELETE_ROWS:    nOpCode = EXC_CHTR_OP_DELROW;   break;
+        case SC_CAT_INSERT_COLS:	nOpCode = EXC_CHTR_OP_INSCOL;	break;
+        case SC_CAT_INSERT_ROWS:	nOpCode = EXC_CHTR_OP_INSROW;	break;
+        case SC_CAT_DELETE_COLS:	nOpCode = EXC_CHTR_OP_DELCOL;	break;
+        case SC_CAT_DELETE_ROWS:	nOpCode = EXC_CHTR_OP_DELROW;	break;
         default:
             DBG_ERROR( "XclExpChTrInsert::XclExpChTrInsert - unknown action" );
     }
@@ -874,9 +874,9 @@ XclExpChTrInsert::~XclExpChTrInsert()
 void XclExpChTrInsert::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aRange.aStart.Tab() );
-    rStrm   << (sal_uInt16) 0x0000;
+    rStrm	<< (sal_uInt16)	0x0000;
     Write2DRange( rStrm, aRange );
-    rStrm   << (sal_uInt32) 0x00000000;
+    rStrm	<< (sal_uInt32) 0x00000000;
 }
 
 void XclExpChTrInsert::PrepareSaveAction( XclExpStream& rStrm ) const
@@ -1010,7 +1010,7 @@ XclExpChTr0x014A::~XclExpChTr0x014A()
 void XclExpChTr0x014A::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aRange.aStart.Tab() );
-    rStrm   << (sal_uInt16) 0x0003
+    rStrm	<< (sal_uInt16)	0x0003
             << (sal_uInt16) 0x0001;
     Write2DRange( rStrm, aRange );
 }
@@ -1119,7 +1119,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     sal_uInt32 nIndex = 1;
     while( XclExpChTrAction* pAction = aActionStack.Pop() )
     {
-        if( (nIndex == 1) || pAction->ForceInfoRecord() ||
+        if(	(nIndex == 1) || pAction->ForceInfoRecord() ||
             (pAction->GetUsername() != sLastUsername) ||
             (pAction->GetDateTime() != aLastDateTime) )
         {

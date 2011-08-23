@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@
 
 namespace accessibility {
 
-/** @descr
+/**	@descr
         This class makes OLE objects accessible.  With respect to its
         base class <type>AccessibleShape</type> it supports the additional
         <type>XAccessibleAction</type> interface.
 */
 class SVX_DLLPUBLIC AccessibleOLEShape
-    :   public AccessibleShape,
-        public ::com::sun::star::accessibility::XAccessibleAction
+    :	public AccessibleShape,
+        public ::com::sun::star::accessibility::XAccessibleAction 
 {
 public:
     //=====  internal  ========================================================
@@ -60,18 +60,18 @@ public:
     sal_Int32 SAL_CALL getAccessibleActionCount (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+    sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) 
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, 
             ::com::sun::star::uno::RuntimeException);
 
     ::rtl::OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, 
             ::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::accessibility::XAccessibleKeyBinding> SAL_CALL getAccessibleActionKeyBinding (
             sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, 
             ::com::sun::star::uno::RuntimeException);
 
     //=====  XInterface  ======================================================
@@ -81,7 +81,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        acquire (void)
+        acquire (void) 
         throw ();
 
     virtual void SAL_CALL
@@ -105,18 +105,18 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    /// Create a name string that contains the accessible name.
+    ///	Create a name string that contains the accessible name.
     virtual ::rtl::OUString
         CreateAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Create a description string that contains the accessible description.
+    ///	Create a description string that contains the accessible description.
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    /** Don't use the default constructor.  Use the public constructor that
+    /** Don't use the default constructor.  Use the public constructor that 
         takes the original shape and the parent as arguments instead.
     */
     SVX_DLLPRIVATE AccessibleOLEShape (void);

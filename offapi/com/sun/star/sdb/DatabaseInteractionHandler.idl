@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,16 +27,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_InteractionHandler_idl__
-#define __com_sun_star_sdb_InteractionHandler_idl__
-
+#ifndef __com_sun_star_sdb_InteractionHandler_idl__ 
+#define __com_sun_star_sdb_InteractionHandler_idl__ 
+ 
 module com { module sun { module star { module task {
     interface XInteractionHandler2;
 }; }; }; };
+ 
+module com {  module sun {  module star {  module sdb { 
 
-module com {  module sun {  module star {  module sdb {
-
-/** describes a service which is able to handle database-related interactions.
+/**	describes a service which is able to handle database-related interactions.
 
     <p>Usually, you will not instantiate this service directly. Instead, you'll instantiate a generic
     <type scope="com::sun::star::task">InteractionHandler</type> service, and pass it your request. Based on
@@ -64,8 +64,8 @@ module com {  module sun {  module star {  module sdb {
 */
 service DatabaseInteractionHandler: com::sun::star::task::XInteractionHandler2;
 
-//=============================================================================
-
-}; }; }; };
-
-#endif
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 

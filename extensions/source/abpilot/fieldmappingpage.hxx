@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,20 +41,20 @@ namespace abp
     class FieldMappingPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aExplanation;
-        PushButton      m_aInvokeDialog;
-        FixedText       m_aHint;
+        FixedText		m_aExplanation;
+        PushButton		m_aInvokeDialog;
+        FixedText		m_aHint;
 
     public:
         FieldMappingPage( OAddessBookSourcePilot* _pParent );
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
+        virtual void		initializePage();
 
         // TabDialog overridables
-        virtual void        ActivatePage();
-        virtual void        DeactivatePage();
+        virtual void		ActivatePage();
+        virtual void		DeactivatePage();
 
     private:
         DECL_LINK( OnInvokeDialog, void* );
@@ -63,7 +63,7 @@ namespace abp
     };
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_FIELDMAPPINGPAGE_HXX

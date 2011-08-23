@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ start:
         case SbxBYREF | SbxDECIMAL:
             {
             double dVal;
-            if( p->eType == SbxCURRENCY )
+            if( p->eType ==	SbxCURRENCY )
                 dVal = ImpCurrencyToDouble( p->nLong64 );
             else if( p->eType == SbxLONG64 )
                 dVal = ImpINT64ToDouble( p->nLong64 );
@@ -154,13 +154,13 @@ start:
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
-            if( !p->pString )
+            if( !p->pOUString )
                 nRes = 0;
             else
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pString, d, t, NULL ) != SbxERR_OK )
+                if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                     nRes = 0;
                 else if( d > SbxMAXINT )
                 {
@@ -275,9 +275,9 @@ start:
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
-            if( !p->pString )
-                p->pString = new XubString;
-            ImpCvtNum( (double) n, 0, *p->pString );
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
+            ImpCvtNum( (double) n, 0, *p->pOUString );
             break;
         case SbxOBJECT:
         {
@@ -330,7 +330,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); *p->puInt64 = 0;
             }
             else
-                *p->puInt64 = n;
+                *p->puInt64 = n; 
             break;
         case SbxBYREF | SbxSINGLE:
             *p->pSingle = (float) n; break;
@@ -430,7 +430,7 @@ start:
         case SbxCURRENCY:
             {
             double dVal;
-            if( p->eType == SbxCURRENCY )
+            if( p->eType ==	SbxCURRENCY )
                 dVal = ImpCurrencyToDouble( p->nLong64 );
             else if( p->eType == SbxLONG64 )
                 dVal = ImpINT64ToDouble( p->nLong64 );
@@ -456,20 +456,19 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
+            if( !p->pOUString )
                 nRes = 0;
             else
             {
-                ::rtl::OUString aOUStr( *p->pString );
                    ::rtl::OString aOStr = ::rtl::OUStringToOString
-                    ( aOUStr, RTL_TEXTENCODING_ASCII_US );
+                    ( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
                 nRes = aOStr.toInt64();
                 if( nRes == 0 )
                 {
                     // Check if really 0 or invalid conversion
                     double d;
                     SbxDataType t;
-                    if( ImpScan( *p->pString, d, t, NULL ) != SbxERR_OK )
+                    if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                         nRes = 0;
                     else
                         nRes = ImpDoubleToSalInt64( d );
@@ -575,13 +574,12 @@ start:
         case SbxSTRING:
         case SbxLPSTR:
         {
-            if( !p->pString )
-                p->pString = new XubString;
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
 
             ::rtl::OString  aOStr  = ::rtl::OString::valueOf( n );
-               ::rtl::OUString aOUStr = ::rtl::OStringToOUString
+               (*p->pOUString) = ::rtl::OStringToOUString
                 ( aOStr, RTL_TEXTENCODING_ASCII_US );
-            (*p->pString) = aOUStr;
             break;
         }
         case SbxOBJECT:
@@ -720,7 +718,7 @@ start:
         case SbxCURRENCY:
             {
             double dVal;
-            if( p->eType == SbxCURRENCY )
+            if( p->eType ==	SbxCURRENCY )
                 dVal = ImpCurrencyToDouble( p->nLong64 );
             else if( p->eType == SbxLONG64 )
                 dVal = ImpINT64ToDouble( p->nLong64 );
@@ -745,20 +743,19 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
+            if( !p->pOUString )
                 nRes = 0;
             else
             {
-                ::rtl::OUString aOUStr( *p->pString );
                    ::rtl::OString aOStr = ::rtl::OUStringToOString
-                    ( aOUStr, RTL_TEXTENCODING_ASCII_US );
+                    ( *p->pOUString, RTL_TEXTENCODING_ASCII_US );
                 sal_Int64 n64 = aOStr.toInt64();
                 if( n64 == 0 )
                 {
                     // Check if really 0 or invalid conversion
                     double d;
                     SbxDataType t;
-                    if( ImpScan( *p->pString, d, t, NULL ) != SbxERR_OK )
+                    if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                         nRes = 0;
                     else if( d > SbxMAXSALUINT64 )
                     {
@@ -879,16 +876,15 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
-                p->pString = new XubString;
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
             if( n > SbxMAXSALINT64 )
                 SbxBase::SetError( SbxERR_CONVERSION );
             else
             {
                 ::rtl::OString  aOStr  = ::rtl::OString::valueOf( (sal_Int64)n );
-                   ::rtl::OUString aOUStr = ::rtl::OStringToOUString
+                   (*p->pOUString) = ::rtl::OStringToOUString
                     ( aOStr, RTL_TEXTENCODING_ASCII_US );
-                (*p->pString) = aOUStr;
             }
             break;
         case SbxOBJECT:

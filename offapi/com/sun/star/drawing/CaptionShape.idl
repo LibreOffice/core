@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,67 +24,67 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_CaptionShape_idl__
-#define __com_sun_star_drawing_CaptionShape_idl__
+#ifndef __com_sun_star_drawing_CaptionShape_idl__ 
+#define __com_sun_star_drawing_CaptionShape_idl__ 
+ 
+#ifndef __com_sun_star_drawing_Shape_idl__ 
+#include <com/sun/star/drawing/Shape.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_Text_idl__ 
+#include <com/sun/star/drawing/Text.idl> 
+#endif 
 
-#ifndef __com_sun_star_drawing_Shape_idl__
-#include <com/sun/star/drawing/Shape.idl>
-#endif
+#ifndef __com_sun_star_drawing_FillProperties_idl__ 
+#include <com/sun/star/drawing/FillProperties.idl> 
+#endif 
 
-#ifndef __com_sun_star_drawing_Text_idl__
-#include <com/sun/star/drawing/Text.idl>
-#endif
+#ifndef __com_sun_star_drawing_LineProperties_idl__ 
+#include <com/sun/star/drawing/LineProperties.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_ShadowProperties_idl__ 
+#include <com/sun/star/drawing/ShadowProperties.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_drawing_RotationDescriptor_idl__ 
+#include <com/sun/star/drawing/RotationDescriptor.idl> 
+#endif 
 
-#ifndef __com_sun_star_drawing_FillProperties_idl__
-#include <com/sun/star/drawing/FillProperties.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_LineProperties_idl__
-#include <com/sun/star/drawing/LineProperties.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_ShadowProperties_idl__
-#include <com/sun/star/drawing/ShadowProperties.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_RotationDescriptor_idl__
-#include <com/sun/star/drawing/RotationDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
-#include <com/sun/star/awt/Point.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_Point_idl__ 
+#include <com/sun/star/awt/Point.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** The <type>CaptionShape</type> represents a rectangular drawing shape
     with an additional set of lines. It can be used as a description for
     a fixed point inside a drawing.
  */
 published service CaptionShape
-{
+{ 
     /** the position and size is only used for the
         caption area
     */
-    service com::sun::star::drawing::Shape;
+    service com::sun::star::drawing::Shape; 
 
     service com::sun::star::drawing::FillProperties;
 
     service com::sun::star::drawing::LineProperties;
 
-    service com::sun::star::drawing::ShadowProperties;
-
-    service com::sun::star::drawing::Text;
-
-    service com::sun::star::drawing::RotationDescriptor;
+    service com::sun::star::drawing::ShadowProperties; 
+    
+    service com::sun::star::drawing::Text; 
+    
+    service com::sun::star::drawing::RotationDescriptor;  
 
     /** This is the radius of the caption area corners.
      */
-    [property] long CornerRadius;
+    [property] long CornerRadius; 
 
     /** The caption point property specify the position of
         the point that is captioned. A set of lines are
@@ -148,11 +148,11 @@ published service CaptionShape
         the best possible length for the caption line.
     */
     [property] boolean CaptionIsFitLineLength;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <string.h>
 
-class MemoryByteGrabber
+class MemoryByteGrabber 
 {
 protected:
     const com::sun::star::uno::Sequence < sal_Int8 > maBuffer;
@@ -41,8 +41,8 @@ public:
     MemoryByteGrabber ( const com::sun::star::uno::Sequence < sal_Int8 > & rBuffer )
     : maBuffer ( rBuffer )
     , mpBuffer ( rBuffer.getConstArray() )
-    , mnCurrent ( 0 )
-    , mnEnd ( rBuffer.getLength() )
+    , mnCurrent ( 0 ) 
+    , mnEnd ( rBuffer.getLength() ) 
     {
     }
     MemoryByteGrabber()
@@ -51,8 +51,8 @@ public:
     const sal_Int8 * getCurrentPos () { return mpBuffer + mnCurrent; }
 
     // XInputStream chained
-    sal_Int32 SAL_CALL readBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData,
-                                            sal_Int32 nBytesToRead )
+    sal_Int32 SAL_CALL readBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData, 
+                                            sal_Int32 nBytesToRead ) 
         throw(com::sun::star::io::NotConnectedException, com::sun::star::io::BufferSizeExceededException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
     {
         if ( nBytesToRead < 0)
@@ -67,29 +67,29 @@ public:
         return nBytesToRead;
     }
 
-    sal_Int32 SAL_CALL readSomeBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData,
-                                                    sal_Int32 nMaxBytesToRead )
+    sal_Int32 SAL_CALL readSomeBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData, 
+                                                    sal_Int32 nMaxBytesToRead ) 
         throw(com::sun::star::io::NotConnectedException, com::sun::star::io::BufferSizeExceededException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
     {
-        return readBytes( aData, nMaxBytesToRead );
+        return readBytes( aData, nMaxBytesToRead );	
     }
-    void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+    void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) 
         throw(com::sun::star::io::NotConnectedException, com::sun::star::io::BufferSizeExceededException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
     {
         mnCurrent += nBytesToSkip;
     }
-    sal_Int32 SAL_CALL available(  )
+    sal_Int32 SAL_CALL available(  ) 
         throw(com::sun::star::io::NotConnectedException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
     {
         return mnEnd - mnCurrent;
     }
-    void SAL_CALL closeInput(  )
+    void SAL_CALL closeInput(  ) 
         throw(com::sun::star::io::NotConnectedException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
     {
     }
 
     // XSeekable chained...
-    sal_Int64 SAL_CALL seek( sal_Int64 location )
+    sal_Int64 SAL_CALL seek( sal_Int64 location ) 
         throw(com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
     {
         if ( location < 0 || location > mnEnd )
@@ -97,7 +97,7 @@ public:
         mnCurrent = static_cast < sal_Int32 > ( location );
         return mnCurrent;
     }
-    sal_Int64 SAL_CALL getPosition(  )
+    sal_Int64 SAL_CALL getPosition(  ) 
             throw(com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
     {
         return mnCurrent;

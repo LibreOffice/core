@@ -65,24 +65,24 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::style;
 
-#define EES_MAP_FRACTION 1440   // 1440 dpi
+#define EES_MAP_FRACTION 1440	// 1440 dpi
 
 // ===================================================================
 
 ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
         :
-        mpEscherEx              ( &rEx ),
-        maMapModeSrc            ( MAP_100TH_MM ),
+        mpEscherEx				( &rEx ),
+        maMapModeSrc			( MAP_100TH_MM ),
         // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
         maMapModeDest( MAP_INCH, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) ),
-//      mXStatusIndicator       ( rXStatInd ),
-        mpPicStrm               ( NULL ),
-        mpHostAppData           ( NULL ),
-        mnPagesWritten          ( 0 ),
-        mnShapeMasterTitle      ( 0 ),
-        mnShapeMasterBody       ( 0 ),
-        mbStatusIndicator       ( FALSE ),
-        mbStatus                ( FALSE )
+//		mXStatusIndicator		( rXStatInd ),
+        mpPicStrm				( NULL ),
+        mpHostAppData			( NULL ),
+        mnPagesWritten			( 0 ),
+        mnShapeMasterTitle		( 0 ),
+        mnShapeMasterBody		( 0 ),
+        mbStatusIndicator		( FALSE ),
+        mbStatus				( FALSE )
 {
 }
 
@@ -121,11 +121,11 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
         nAngle = ( 36000 - ( nAngle % 36000 ) );
 
     double fVal = (double)nAngle * F_PI18000;
-    double  fCos = cos( fVal );
-    double  fSin = sin( fVal );
+    double	fCos = cos( fVal );
+    double	fSin = sin( fVal );
 
-    double  nWidthHalf = (double) aRect.GetWidth() / 2;
-    double  nHeightHalf = (double) aRect.GetHeight() / 2;
+    double	nWidthHalf = (double) aRect.GetWidth() / 2;
+    double	nHeightHalf = (double) aRect.GetHeight() / 2;
 
     double nXDiff = fCos * nWidthHalf + fSin * (-nHeightHalf);
     double nYDiff = - ( fSin * nWidthHalf - fCos * ( -nHeightHalf ) );
@@ -134,34 +134,34 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
 
     nAngle *= 655;
     nAngle += 0x8000;
-    nAngle &=~0xffff;                                   // nAngle auf volle Gradzahl runden
+    nAngle &=~0xffff;									// nAngle auf volle Gradzahl runden
     rPropOpt.AddOpt( ESCHER_Prop_Rotation, nAngle );
 
     rObj.SetAngle( nAngle );
     rObj.SetRect( aRect );
 }
 
-//  -----------------------------------------------------------------------
+//	-----------------------------------------------------------------------
 
-#define ADD_SHAPE( nType, nFlags )                              \
-{                                                               \
-    nShapeType = nType;                                         \
+#define ADD_SHAPE( nType, nFlags )								\
+{																\
+    nShapeType = nType;											\
     nShapeID = mpEscherEx->GenerateShapeId();                   \
-    rObj.SetShapeId( nShapeID );                                \
-    mpEscherEx->AddShape( (UINT32)nType, (UINT32)nFlags, nShapeID );    \
-    rSolverContainer.AddShape( rObj.GetShapeRef(), nShapeID );  \
+    rObj.SetShapeId( nShapeID );								\
+    mpEscherEx->AddShape( (UINT32)nType, (UINT32)nFlags, nShapeID );	\
+    rSolverContainer.AddShape( rObj.GetShapeRef(), nShapeID );	\
 }
 
-#define SHAPE_TEXT( bFill )                                         \
-{                                                                   \
-    mpEscherEx->OpenContainer( ESCHER_SpContainer );                \
-    ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );                     \
-    if ( bFill )                                                    \
-        aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );  \
-    if( rObj.ImplGetText() )                                        \
-        aPropOpt.CreateTextProperties( rObj.mXPropSet,              \
-            mpEscherEx->QueryTextID( rObj.GetShapeRef(),            \
-                rObj.GetShapeId() ) );                              \
+#define SHAPE_TEXT( bFill )											\
+{																	\
+    mpEscherEx->OpenContainer( ESCHER_SpContainer );				\
+    ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );						\
+    if ( bFill )													\
+        aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );	\
+    if( rObj.ImplGetText() )										\
+        aPropOpt.CreateTextProperties( rObj.mXPropSet,				\
+            mpEscherEx->QueryTextID( rObj.GetShapeRef(),			\
+                rObj.GetShapeId() ) );								\
 }
 
 //Map from twips to export units, generally twips as well, only excel and word
@@ -177,7 +177,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 {
     UINT32 nShapeID = 0;
     UINT16 nShapeType = 0;
-    BOOL bDontWriteText = FALSE;        // if a metafile is written as shape replacement, then the text is already part of the metafile
+    BOOL bDontWriteText = FALSE;		// if a metafile is written as shape replacement, then the text is already part of the metafile
     BOOL bAdditionalText = FALSE;
     UINT32 nGrpShapeID = 0;
 
@@ -234,9 +234,9 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                 RTL_TEXTENCODING_MS_1252 ));
         }
 
-        const ::com::sun::star::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
-        const ::com::sun::star::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
-        Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
+        const ::com::sun::star::awt::Size	aSize100thmm( rObj.GetShapeRef()->getSize() );
+        const ::com::sun::star::awt::Point	aPoint100thmm( rObj.GetShapeRef()->getPosition() );
+        Rectangle	aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
@@ -258,8 +258,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
                 {
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
-                    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );        // no fill
-                    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );        // no linestyle
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );		// no fill
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );		// no linestyle
                         SdrObject* pObj = GetSdrObjectFromXShape( rObj.GetShapeRef() );
                     if ( pObj )
                     {
@@ -283,7 +283,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 {
                     if ( !aPropOpt.IsFontWork() )
                         aPropOpt.CreateTextProperties( rObj.mXPropSet, mpEscherEx->QueryTextID(
-                            rObj.GetShapeRef(), rObj.GetShapeId() ), sal_True, sal_False );
+                            rObj.GetShapeRef(),	rObj.GetShapeId() ), sal_True, sal_False );
                 }
             }
         }
@@ -295,20 +295,20 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if( nRadius )
             {
                 nRadius = ImplMapSize( Size( nRadius, 0 )).Width();
-                ADD_SHAPE( ESCHER_ShpInst_RoundRectangle, 0xa00 );  // Flags: Connector | HasSpt
+                ADD_SHAPE( ESCHER_ShpInst_RoundRectangle, 0xa00 );	// Flags: Connector | HasSpt
                 INT32 nLenght = rObj.GetRect().GetWidth();
                 if ( nLenght > rObj.GetRect().GetHeight() )
                     nLenght = rObj.GetRect().GetHeight();
                 nLenght >>= 1;
                 if ( nRadius >= nLenght )
-                    nRadius = 0x2a30;                           // 0x2a30 ist PPTs maximum radius
+                    nRadius = 0x2a30;							// 0x2a30 ist PPTs maximum radius
                 else
                     nRadius = ( 0x2a30 * nRadius ) / nLenght;
                 aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nRadius );
             }
             else
             {
-                ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
+                ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );			// Flags: Connector | HasSpt
             }
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
             if( rObj.ImplGetText() )
@@ -318,8 +318,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Ellipse" ))
         {
-            CircleKind  eCircleKind = CircleKind_FULL;
-            PolyStyle   ePolyKind = PolyStyle();
+            CircleKind	eCircleKind = CircleKind_FULL;
+            PolyStyle	ePolyKind = PolyStyle();
             if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("CircleKind") ) )
             {
                 eCircleKind = *( (CircleKind*)rObj.GetUsrAny().getValue() );
@@ -349,7 +349,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if ( eCircleKind == CircleKind_FULL )
             {
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
-                ADD_SHAPE( ESCHER_ShpInst_Ellipse, 0xa00 );         // Flags: Connector | HasSpt
+                ADD_SHAPE( ESCHER_ShpInst_Ellipse, 0xa00 );			// Flags: Connector | HasSpt
                 aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );;
             }
             else
@@ -385,7 +385,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     rObj.SetAngle( 0 );
                 }
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
-                ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
+                ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );		// Flags: Connector | HasSpt
                 ::com::sun::star::awt::Rectangle aNewRect;
                 switch ( ePolyKind )
                 {
@@ -438,11 +438,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 mpEscherEx->EnterGroup( &maRect );
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplWriteAny( ANY_FLAGS_LINE, FALSE );
-                UINT32 nFlags = 0xa00;                                          // Flags: Connector | HasSpt
+                UINT32 nFlags = 0xa00;											// Flags: Connector | HasSpt
                 if ( maRect.Top() > maRect.Bottom() )
-                    nFlags |= 0x80;                                             // Flags: VertMirror
+                    nFlags |= 0x80;												// Flags: VertMirror
                 if ( maRect.Left() > maRect.Right() )
-                    nFlags |= 0x40;                                             // Flags: HorzMirror
+                    nFlags |= 0x40;												// Flags: HorzMirror
 
                 ADD_SHAPE( ESCHER_ShpInst_Line, nFlags );
                 aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
@@ -450,7 +450,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 mpEscherEx->EndCount( ESCHER_OPT, 3 );
                 maRect.Justify();
                 mpEscherEx->AddClientAnchor( maRect );
-                mpEscherEx->CloseContainer();           // ESCHER_SpContainer
+                mpEscherEx->CloseContainer();			// ESCHER_SpContainer
 
                 if ( ImplGetPropertyValue( L"MeasureTextHorizontalPosition" ) )
                 {
@@ -522,11 +522,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             //i27942: Poly/Lines/Bezier do not support text.
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            UINT32 nFlags = 0xa00;          // Flags: Connector | HasSpt
+            UINT32 nFlags = 0xa00;			// Flags: Connector | HasSpt
             if( aNewRect.Height < 0 )
-                nFlags |= 0x80;             // Flags: VertMirror
+                nFlags |= 0x80;	  			// Flags: VertMirror
             if( aNewRect.Width < 0 )
-                nFlags |= 0x40;             // Flags: HorzMirror
+                nFlags |= 0x40;				// Flags: HorzMirror
 
             ADD_SHAPE( ESCHER_ShpInst_Line, nFlags );
             aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
@@ -537,11 +537,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             if( rObj.ImplHasText() )
             {
-                nGrpShapeID = ImplEnterAdditionalTextGroup( rObj.GetShapeRef(), &rObj.GetRect() );
+                nGrpShapeID = ImplEnterAdditionalTextGroup(	rObj.GetShapeRef(), &rObj.GetRect() );
                 bAdditionalText = TRUE;
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
+            ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );		// Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_False, aNewRect, NULL );
             MapRect(rObj);
@@ -553,7 +553,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             //i27942: Poly/Lines/Bezier do not support text.
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
+            ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );		// Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, NULL );
             MapRect(rObj);
@@ -565,7 +565,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             //i27942: Poly/Lines/Bezier do not support text.
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
+            ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );		// Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_True, aNewRect, NULL );
             MapRect(rObj);
@@ -576,11 +576,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             if ( rObj.ImplHasText() )
             {
-                nGrpShapeID = ImplEnterAdditionalTextGroup( rObj.GetShapeRef(), &rObj.GetRect() );
+                nGrpShapeID = ImplEnterAdditionalTextGroup(	rObj.GetShapeRef(), &rObj.GetRect() );
                 bAdditionalText = TRUE;
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
+            ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );		// Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_True, aNewRect, NULL );
             MapRect(rObj);
@@ -594,7 +594,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             // ein GraphicObject kann auch ein ClickMe Element sein
             if( rObj.IsEmptyPresObj() && ( ePageType == NORMAL ) )
             {
-                ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );               // Flags: HaveAnchor | HaveMaster
+                ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );				// Flags: HaveAnchor | HaveMaster
                 UINT32 nTxtBxId = mpEscherEx->QueryTextID( rObj.GetShapeRef(),
                                                         rObj.GetShapeId() );
                 aPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
@@ -609,7 +609,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     /* SJ #i34951#: because M. documents are not allowing GraphicObjects containing text, we
                        have to create a simpe Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                     */
-                    ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
+                    ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );			// Flags: Connector | HasSpt
                     if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_True,  sal_True, sal_False ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
@@ -654,7 +654,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             if( rObj.IsEmptyPresObj() && ( ePageType == NORMAL ) )
             {
-                ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );               // Flags: HaveAnchor | HaveMaster
+                ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );				// Flags: HaveAnchor | HaveMaster
                 UINT32 nTxtBxId = mpEscherEx->QueryTextID( rObj.GetShapeRef(),
                                                         rObj.GetShapeId() );
                 aPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
@@ -671,23 +671,23 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 if ( aPropOpt.CreateOLEGraphicProperties( rObj.GetShapeRef() ) )
                 {
                     if ( bAppOLE )
-                    {   // snooped from Xcl hex dump, nobody knows the trouble I have seen
-                        aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape,    0x00080008 );
-                        aPropOpt.AddOpt( ESCHER_Prop_pictureId,     0x00000001 );
-                        aPropOpt.AddOpt( ESCHER_Prop_fillColor,     0x08000041 );
-                        aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000041 );
-                        aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest,    0x00110010 );
-                        aPropOpt.AddOpt( ESCHER_Prop_lineColor,     0x08000040 );
+                    {	// snooped from Xcl hex dump, nobody knows the trouble I have seen
+                        aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape,	0x00080008 );
+                        aPropOpt.AddOpt( ESCHER_Prop_pictureId,		0x00000001 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fillColor,		0x08000041 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fillBackColor,	0x08000041 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest,	0x00110010 );
+                        aPropOpt.AddOpt( ESCHER_Prop_lineColor,		0x08000040 );
                         aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash,0x00080008 );
-//                      aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured,0x00020000 );
-                        aPropOpt.AddOpt( ESCHER_Prop_fPrint,            0x00080000 );
+//						aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured,0x00020000 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fPrint,			0x00080000 );
                     }
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
             }
         }
         else if( '3' == rObj.GetType().GetChar(8 ) &&
-                 'D' == rObj.GetType().GetChar( 9 ) )   // drawing.3D
+                 'D' == rObj.GetType().GetChar( 9 ) )	// drawing.3D
         {
             // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
             if ( !rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("Bitmap") ) )
@@ -735,13 +735,13 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->AddChildAnchor( rObj.GetRect() );
 
         if ( mpHostAppData )
-        {   //! with AdditionalText the App has to control whether these are written or not
+        {	//! with AdditionalText the App has to control whether these are written or not
             mpHostAppData->WriteClientAnchor( *mpEscherEx, rObj.GetRect() );
             mpHostAppData->WriteClientData( *mpEscherEx );
             if ( !bDontWriteText )
                 mpHostAppData->WriteClientTextbox( *mpEscherEx );
         }
-        mpEscherEx->CloseContainer();       // ESCHER_SpContainer
+        mpEscherEx->CloseContainer();		// ESCHER_SpContainer
 
         if( bAdditionalText )
         {
@@ -769,9 +769,9 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
-        const ::com::sun::star::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
-        const ::com::sun::star::awt::Point  aPoint100thmm( rObj.GetShapeRef()->getPosition() );
-        Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
+        const ::com::sun::star::awt::Size	aSize100thmm( rObj.GetShapeRef()->getSize() );
+        const ::com::sun::star::awt::Point	aPoint100thmm( rObj.GetShapeRef()->getPosition() );
+        Rectangle	aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPictureStream();
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
@@ -794,7 +794,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
-            aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );     // Size Shape To Fit Text
+            aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );		// Size Shape To Fit Text
             if ( nAngle < 0 )
                 nAngle = ( 36000 + nAngle ) % 36000;
             if ( nAngle )
@@ -819,7 +819,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 
             nAngle *= 655;
             nAngle += 0x8000;
-            nAngle &=~0xffff;   // nAngle auf volle Gradzahl runden
+            nAngle &=~0xffff;	// nAngle auf volle Gradzahl runden
             aPropOpt.AddOpt( ESCHER_Prop_Rotation, nAngle );
             mpEscherEx->SetGroupSnapRect( mpEscherEx->GetGroupLevel(),
                                             rObj.GetRect() );
@@ -839,18 +839,18 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         // ClientTextbox
         mpEscherEx->OpenContainer( ESCHER_ClientTextbox );
         mpEscherEx->AddAtom( 4, EPP_TextHeaderAtom );
-        *mpStrm << (UINT32)EPP_TEXTTYPE_Other;                              // Text in a Shape
+        *mpStrm << (UINT32)EPP_TEXTTYPE_Other;								// Text in a Shape
         ImplWriteTextStyleAtom();
-        mpEscherEx->CloseContainer();   // ESCHER_ClientTextBox
+        mpEscherEx->CloseContainer();	// ESCHER_ClientTextBox
 #else // !EES_WRITE_EPP
         if ( mpHostAppData )
-        {   //! the App has to control whether these are written or not
+        {	//! the App has to control whether these are written or not
             mpHostAppData->WriteClientAnchor( *mpEscherEx, rObj.GetRect() );
             mpHostAppData->WriteClientData( *mpEscherEx );
             mpHostAppData->WriteClientTextbox( *mpEscherEx );
         }
 #endif // EES_WRITE_EPP
-        mpEscherEx->CloseContainer();   // ESCHER_SpContainer
+        mpEscherEx->CloseContainer();	// ESCHER_SpContainer
     } while ( 0 );
     mpEscherEx->LeaveGroup();
     mpEscherEx->EndShape( nShapeType, nShapeID );
@@ -874,9 +874,9 @@ UINT32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShape >&
 BOOL ImplEESdrWriter::ImplInitPageValues()
 {
     mnIndices = 0;
-    mnOutlinerCount = 0;                // die gliederungsobjekte muessen dem layout entsprechen,
+    mnOutlinerCount = 0;				// die gliederungsobjekte muessen dem layout entsprechen,
     mnEffectCount = 0;
-    mbIsTitlePossible = TRUE;           // bei mehr als einem title geht powerpoint in die knie
+    mbIsTitlePossible = TRUE;			// bei mehr als einem title geht powerpoint in die knie
 
     return TRUE;
 }
@@ -948,12 +948,12 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
 
             mpSdrPage = NULL;
             // why not declare a const parameter if the object will not be modified?
-//          mXDrawPage = pSvxDrawPage = new SvxDrawPage( (SdrPage*) &rPage );
+//			mXDrawPage = pSvxDrawPage = new SvxDrawPage( (SdrPage*) &rPage );
             mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( (SdrPage*) &rPage );
             mXShapes = Reference< XShapes >::query( mXDrawPage );
             if ( !mXShapes.is() )
                 break;
-            if ( !ImplInitPageValues() )    // ImplEESdrWriter
+            if ( !ImplInitPageValues() )	// ImplEESdrWriter
                 break;
             mpSdrPage = &rPage;
 
@@ -998,7 +998,7 @@ void ImplEscherExSdr::ImplExitPage()
         mpEscherEx->LeaveGroup();
 
     ImplFlushSolverContainer();
-    mpSdrPage = NULL;   // reset page for next init
+    mpSdrPage = NULL;	// reset page for next init
 }
 
 
@@ -1095,7 +1095,7 @@ UINT32 EscherEx::AddDummyShape()
     OpenContainer( ESCHER_SpContainer );
     UINT32 nShapeID = GenerateShapeId();
     AddShape( ESCHER_ShpInst_Rectangle, 0xa00, nShapeID );
-//??    aSolverContainer.AddShape( mXShape, nShapeID );
+//??	aSolverContainer.AddShape( mXShape, nShapeID );
     CloseContainer();
 
     return nShapeID;
@@ -1168,7 +1168,7 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
         SetRect( rEx.ImplMapPoint( Point( mXShape->getPosition().X, mXShape->getPosition().Y ) ),
                  rEx.ImplMapSize( Size( mXShape->getSize().Width, mXShape->getSize().Height ) ) );
         mType = String( mXShape->getShapeType() );
-        mType.Erase( 0, nPrefix );  // strip "com.sun.star."
+        mType.Erase( 0, nPrefix );	// strip "com.sun.star."
         xub_StrLen nPos = mType.SearchAscii( "Shape" );
         mType.Erase( nPos, 5 );
 

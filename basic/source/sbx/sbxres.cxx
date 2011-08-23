@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ static const char* pSbxRes[] = {
     "Item",
     "Remove",
 
-    "Error ",   // mit Blank!
+    "Error ",	// mit Blank!
     "False",
     "True"
 };
@@ -86,6 +86,6 @@ const char* GetSbxRes( USHORT nId )
 }
 
 SbxRes::SbxRes( USHORT nId )
-    : XubString( String::CreateFromAscii( GetSbxRes( nId ) ) )
+    : ::rtl::OUString( ::rtl::OUString::createFromAscii( GetSbxRes( nId ) ) )
 {}
 

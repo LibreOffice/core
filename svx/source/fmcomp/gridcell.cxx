@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1705,7 +1705,7 @@ CellControllerRef DbCheckBox::CreateController() const
     return new CheckBoxCellController((CheckBoxControl*)m_pWindow);
 }
 //------------------------------------------------------------------------------
-static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
+static void lcl_setCheckBoxState(	const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                         CheckBoxControl* _pCheckBoxControl )
 {
     TriState eState = STATE_DONTKNOW;
@@ -3092,7 +3092,7 @@ void DbFilterField::Update()
         Reference< ::com::sun::star::container::XNameAccess >    xFieldNames = xSupCol->getColumns();
         if (!xFieldNames->hasByName(aName))
             return;
-
+        
         Reference< ::com::sun::star::container::XNameAccess >    xTablesNames = xSupTab->getTables();
         Reference< ::com::sun::star::beans::XPropertySet >       xComposerFieldAsSet(xFieldNames->getByName(aName),UNO_QUERY);
 
@@ -3505,13 +3505,13 @@ void FmXGridCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, 
     case VCLEVENT_CONTROL_LOSEFOCUS:
     case VCLEVENT_WINDOW_LOSEFOCUS:
     {
-        if  (   (   _rWindow.IsCompoundControl()
-                &&  (   _nEventId == VCLEVENT_CONTROL_GETFOCUS
+        if	(	(	_rWindow.IsCompoundControl()
+                &&	(   _nEventId == VCLEVENT_CONTROL_GETFOCUS
                     ||  _nEventId == VCLEVENT_CONTROL_LOSEFOCUS
                     )
                 )
-            ||  (   !_rWindow.IsCompoundControl()
-                &&  (   _nEventId == VCLEVENT_WINDOW_GETFOCUS
+            ||	(	!_rWindow.IsCompoundControl()
+                &&	(   _nEventId == VCLEVENT_WINDOW_GETFOCUS
                     ||  _nEventId == VCLEVENT_WINDOW_LOSEFOCUS
                     )
                 )

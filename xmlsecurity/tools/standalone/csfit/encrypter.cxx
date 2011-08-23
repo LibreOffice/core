@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,13 +78,13 @@ using namespace ::com::sun::star::xml::crypto ;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    CERTCertDBHandle*   certHandle ;
-    PK11SlotInfo*       slot = NULL ;
-    PK11SymKey*         symKey = NULL ;
-    xmlDocPtr           doc = NULL ;
-    xmlNodePtr          tplNode ;
-    xmlNodePtr          tarNode ;
-    FILE*               dstFile = NULL ;
+    CERTCertDBHandle*	certHandle ;
+    PK11SlotInfo*		slot = NULL ;
+    PK11SymKey*			symKey = NULL ;
+    xmlDocPtr			doc = NULL ;
+    xmlNodePtr			tplNode ;
+    xmlNodePtr			tarNode ;
+    FILE*				dstFile = NULL ;
 
     if( argc != 7 ) {
         fprintf( stderr, "Usage: %s < CertDir > <file_url of template> <file_url of result> <target element name> <target element namespace> <rdb file>\n\n" , argv[0] ) ;
@@ -98,7 +98,7 @@ int SAL_CALL main( int argc, char **argv )
     xmlSubstituteEntitiesDefault(1);
 
     #ifndef XMLSEC_NO_XSLT
-    xmlIndentTreeOutput = 1;
+    xmlIndentTreeOutput = 1; 
     #endif // XMLSEC_NO_XSLT
 
     //Initialize NSPR and NSS
@@ -300,7 +300,7 @@ done:
 
     /* Shutdown libxslt/libxml */
     #ifndef XMLSEC_NO_XSLT
-    xsltCleanupGlobals();
+    xsltCleanupGlobals();            
     #endif /* XMLSEC_NO_XSLT */
     xmlCleanupParser();
 

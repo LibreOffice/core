@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,69 +24,69 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_ConnectionType_idl__
-#define __com_sun_star_drawing_ConnectionType_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_ConnectionType_idl__ 
+#define __com_sun_star_drawing_ConnectionType_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: enum com::sun::star::drawing::ConnectionType
 /** the direction where the
     connection line leaves the connection point.
  */
 published enum ConnectionType
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ConnectionType::AUTO
     /** the connection point is chosen automatically,
      */
-    AUTO,
-
-    //-------------------------------------------------------------------------
-
+    AUTO, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ConnectionType::LEFT
     /** the connection line leaves the connected object to the left,
      */
-    LEFT,
-
-    //-------------------------------------------------------------------------
-
+    LEFT, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ConnectionType::TOP
     /** the connection line leaves the connected object from the top,
      */
-    TOP,
-
-    //-------------------------------------------------------------------------
-
+    TOP, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ConnectionType::RIGHT
     /** the connection line leaves the connected object to the right,
      */
-    RIGHT,
-
-    //-------------------------------------------------------------------------
-
+    RIGHT, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ConnectionType::BOTTOM
     /** the connection line leaves the connected object from the bottom,
      */
-    BOTTOM,
-
-    //-------------------------------------------------------------------------
-
+    BOTTOM, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::ConnectionType::SPECIAL
     /** not implemented, yet.
      */
-    SPECIAL
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    SPECIAL 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

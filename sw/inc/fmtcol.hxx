@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <format.hxx>
-#include <swtypes.hxx>      // fuer MAXLEVEL
+#include <swtypes.hxx>		// fuer MAXLEVEL
 
-class SwDoc;        // fuer friend
+class SwDoc;		// fuer friend
 
 class SwFmtColl : public SwFmt
 {
@@ -68,9 +68,9 @@ class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
     // <--
 
 protected:
-    //BYTE nOutlineLevel;        //<-#outline level, removed by zhaojianwei
-    bool mbAssignedToOutlineStyle;//<-#outline level added by zhaojianwei
-
+    //BYTE nOutlineLevel;		 //<-#outline level, removed by zhaojianwei
+    bool mbAssignedToOutlineStyle;//<-#outline level added by zhaojianwei	     
+    
     SwTxtFmtColl *pNextTxtFmtColl;
 
     SwTxtFmtColl( SwAttrPool& rPool, const sal_Char* pFmtCollName,
@@ -81,8 +81,8 @@ protected:
           // --> OD 2007-01-24 #i73790#
           mbStayAssignedToListLevelOfOutlineStyle( false ),
           // <--
-          //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
-          mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
+          //nOutlineLevel( NO_NUMBERING )	//<-#outline level,removed by zhaojianwei
+          mbAssignedToOutlineStyle(false)	//<-#outline level,added by zhaojianwei
     { pNextTxtFmtColl = this; }
 
     SwTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
@@ -93,15 +93,15 @@ protected:
           // --> OD 2007-01-24 #i73790#
           mbStayAssignedToListLevelOfOutlineStyle( false ),
           // <--
-          //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
-          mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
+          //nOutlineLevel( NO_NUMBERING )	//<-#outline level,removed by zhaojianwei
+          mbAssignedToOutlineStyle(false)	//<-#outline level,added by zhaojianwei
     { pNextTxtFmtColl = this; }
 public:
 
     // zum "abfischen" von UL-/LR-/FontHeight Aenderungen
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();		//Bereits in Basisklasse Client drin.
 
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
@@ -190,7 +190,7 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();		//Bereits in Basisklasse Client drin.
 };
 
 typedef SwGrfFmtColl* SwGrfFmtCollPtr;
@@ -203,18 +203,18 @@ SV_DECL_PTRARR(SwGrfFmtColls,SwGrfFmtCollPtr,2,4)
 
 enum Master_CollConditions
 {
-    PARA_IN_LIST        = 0x0001,
-    PARA_IN_OUTLINE     = 0x0002,
-    PARA_IN_FRAME       = 0x0004,
-    PARA_IN_TABLEHEAD   = 0x0008,
-    PARA_IN_TABLEBODY   = 0x0010,
-    PARA_IN_SECTION     = 0x0020,
-    PARA_IN_FOOTENOTE   = 0x0040,
-    PARA_IN_FOOTER      = 0x0080,
-    PARA_IN_HEADER      = 0x0100,
-    PARA_IN_ENDNOTE     = 0x0200,
+    PARA_IN_LIST		= 0x0001,
+    PARA_IN_OUTLINE		= 0x0002,
+    PARA_IN_FRAME		= 0x0004,
+    PARA_IN_TABLEHEAD	= 0x0008,
+    PARA_IN_TABLEBODY	= 0x0010,
+    PARA_IN_SECTION		= 0x0020,
+    PARA_IN_FOOTENOTE 	= 0x0040,
+    PARA_IN_FOOTER 		= 0x0080,
+    PARA_IN_HEADER 		= 0x0100,
+    PARA_IN_ENDNOTE 	= 0x0200,
     // ...
-    USRFLD_EXPRESSION   = (int)0x8000
+    USRFLD_EXPRESSION	= (int)0x8000
 };
 
 
@@ -228,7 +228,7 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
     } aSubCondition;
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();		//Bereits in Basisklasse Client drin.
 
 
     SwCollCondition( SwTxtFmtColl* pColl, ULONG nMasterCond,
@@ -248,13 +248,13 @@ public:
     int operator!=( const SwCollCondition& rCmp ) const
                             { return ! (*this == rCmp); }
 
-    ULONG GetCondition() const      { return nCondition; }
-    ULONG GetSubCondition() const   { return aSubCondition.nSubCondition; }
+    ULONG GetCondition() const 		{ return nCondition; }
+    ULONG GetSubCondition() const	{ return aSubCondition.nSubCondition; }
     const String* GetFldExpression() const
                                     { return aSubCondition.pFldExpression; }
 
     void SetCondition( ULONG nCond, ULONG nSubCond );
-    SwTxtFmtColl* GetTxtFmtColl() const     { return (SwTxtFmtColl*)GetRegisteredIn(); }
+    SwTxtFmtColl* GetTxtFmtColl() const 	{ return (SwTxtFmtColl*)GetRegisteredIn(); }
 };
 
 
@@ -277,15 +277,15 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();		//Bereits in Basisklasse Client drin.
 
     virtual ~SwConditionTxtFmtColl();
 
     // zum "abfischen" von Aenderungen
-//  virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+//	virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;
-    const SwFmtCollConditions& GetCondColls() const     { return aCondColls; }
+    const SwFmtCollConditions& GetCondColls() const		{ return aCondColls; }
     void InsertCondition( const SwCollCondition& rCond );
     BOOL RemoveCondition( const SwCollCondition& rCond );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ extern "C" void SAL_CALL dbp_initializeModule()
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment ** /*ppEnv*/
+                const sal_Char	**ppEnvTypeName,
+                uno_Environment	** /*ppEnv*/
             )
 {
     dbp_initializeModule();
@@ -75,8 +75,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
                 void* pRegistryKey
             )
 {
-    if (pRegistryKey)
-    try
+    if (pRegistryKey) 
+    try 
     {
         return ::dbp::OModule::writeComponentInfos(
             static_cast<XMultiServiceFactory*>(pServiceManager),

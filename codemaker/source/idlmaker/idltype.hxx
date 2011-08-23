@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_IDLMAKER_IDLTYPE_HXX
 #define INCLUDED_CODEMAKER_SOURCE_IDLMAKER_IDLTYPE_HXX
 
-#include    <codemaker/typemanager.hxx>
-#include    <codemaker/dependency.hxx>
+#include	<codemaker/typemanager.hxx>
+#include	<codemaker/dependency.hxx>
 
 enum BASETYPE
 {
@@ -38,7 +38,7 @@ enum BASETYPE
     BT_ANY,
     BT_TYPE,
     BT_BOOLEAN,
-    BT_CHAR,
+    BT_CHAR,		
     BT_STRING,
     BT_FLOAT,
     BT_DOUBLE,
@@ -58,7 +58,7 @@ enum IdlTypeDecl
     CPPUTYPEDECL_ALLTYPES,
     CPPUTYPEDECL_NOINTERFACES,
     CPPUTYPEDECL_ONLYINTERFACES
-};
+};	
 
 class IdlOptions;
 class FileStream;
@@ -68,7 +68,7 @@ class IdlType
 public:
     IdlType(TypeReader& typeReader,
              const ::rtl::OString& typeName,
-             const TypeManager& typeMgr,
+             const TypeManager& typeMgr, 
              const TypeDependency& typeDependencies);
 
     virtual ~IdlType();
@@ -87,34 +87,34 @@ public:
 
     virtual void dumpType(FileStream& o, const ::rtl::OString& type)
                     throw( CannotDumpException );
-    ::rtl::OString  getBaseType(const ::rtl::OString& type);
-    void    dumpIdlGetType(FileStream& o, const ::rtl::OString& type, sal_Bool bDecl=sal_False, IdlTypeDecl eDeclFlag=CPPUTYPEDECL_ALLTYPES);
+    ::rtl::OString	getBaseType(const ::rtl::OString& type);
+    void	dumpIdlGetType(FileStream& o, const ::rtl::OString& type, sal_Bool bDecl=sal_False, IdlTypeDecl eDeclFlag=CPPUTYPEDECL_ALLTYPES);
     BASETYPE isBaseType(const ::rtl::OString& type);
 
-    void    dumpConstantValue(FileStream& o, sal_uInt16 index);
+    void 	dumpConstantValue(FileStream& o, sal_uInt16 index);
 
     virtual sal_uInt32  getMemberCount();
-    virtual sal_uInt32  getInheritedMemberCount();
+    virtual sal_uInt32	getInheritedMemberCount();
 
-    void            inc(sal_uInt32 num=4);
-    void            dec(sal_uInt32 num=4);
-    ::rtl::OString  indent();
-    ::rtl::OString  indent(sal_uInt32 num);
+    void 			inc(sal_uInt32 num=4);
+    void 			dec(sal_uInt32 num=4);
+    ::rtl::OString 	indent();
+    ::rtl::OString	indent(sal_uInt32 num);
 protected:
-    virtual sal_uInt32  checkInheritedMemberCount(const TypeReader* pReader);
+    virtual sal_uInt32	checkInheritedMemberCount(const TypeReader* pReader);
 
-    ::rtl::OString  checkSpecialIdlType(const ::rtl::OString& type);
-    ::rtl::OString  checkRealBaseType(const ::rtl::OString& type, sal_Bool bResolveTypeOnly = sal_False);
-
+    ::rtl::OString	checkSpecialIdlType(const ::rtl::OString& type);
+    ::rtl::OString	checkRealBaseType(const ::rtl::OString& type, sal_Bool bResolveTypeOnly = sal_False);
+    
 protected:
-    sal_uInt32          m_inheritedMemberCount;
+    sal_uInt32 			m_inheritedMemberCount;
 
-    sal_uInt32          m_indentLength;
-    ::rtl::OString      m_typeName;
-    ::rtl::OString      m_name;
-    TypeReader          m_reader;
-    TypeManager&        m_typeMgr;
-    TypeDependency      m_dependencies;
+    sal_uInt32			m_indentLength;
+    ::rtl::OString		m_typeName;
+    ::rtl::OString		m_name;
+    TypeReader			m_reader;
+    TypeManager&		m_typeMgr;	
+    TypeDependency  	m_dependencies;	
 };
 
 class InterfaceType : public IdlType
@@ -122,26 +122,26 @@ class InterfaceType : public IdlType
 public:
     InterfaceType(TypeReader& typeReader,
                  const ::rtl::OString& typeName,
-                 const TypeManager& typeMgr,
+                 const TypeManager& typeMgr, 
                  const TypeDependency& typeDependencies);
 
     virtual ~InterfaceType();
 
-    sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
+    sal_Bool	dumpHFile(FileStream& o) throw( CannotDumpException );
 
-    void        dumpAttributes(FileStream& o);
-    void        dumpMethods(FileStream& o);
+    void		dumpAttributes(FileStream& o);
+    void		dumpMethods(FileStream& o);
 
-    sal_uInt32  getMemberCount();
-    sal_uInt32  getInheritedMemberCount();
-
-protected:
-    sal_uInt32  checkInheritedMemberCount(const TypeReader* pReader);
+    sal_uInt32	getMemberCount();
+    sal_uInt32	getInheritedMemberCount();
 
 protected:
-    sal_uInt32  m_inheritedMemberCount;
-    sal_Bool    m_hasAttributes;
-    sal_Bool    m_hasMethods;
+    sal_uInt32	checkInheritedMemberCount(const TypeReader* pReader);
+
+protected:
+    sal_uInt32 	m_inheritedMemberCount;
+    sal_Bool 	m_hasAttributes;
+    sal_Bool 	m_hasMethods;
 };
 
 class ModuleType : public IdlType
@@ -149,14 +149,14 @@ class ModuleType : public IdlType
 public:
     ModuleType(TypeReader& typeReader,
                   const ::rtl::OString& typeName,
-               const TypeManager& typeMgr,
+               const TypeManager& typeMgr, 
                const TypeDependency& typeDependencies);
 
     virtual ~ModuleType();
 
-    virtual sal_Bool    dump(IdlOptions* pOptions) throw( CannotDumpException );
-    sal_Bool            dumpHFile(FileStream& o) throw( CannotDumpException );
-    sal_Bool            hasConstants();
+    virtual sal_Bool 	dump(IdlOptions* pOptions) throw( CannotDumpException );
+    sal_Bool			dumpHFile(FileStream& o) throw( CannotDumpException );
+    sal_Bool			hasConstants();
 };
 
 class ConstantsType : public ModuleType
@@ -164,12 +164,12 @@ class ConstantsType : public ModuleType
 public:
     ConstantsType(TypeReader& typeReader,
                   const ::rtl::OString& typeName,
-               const TypeManager& typeMgr,
+               const TypeManager& typeMgr, 
                const TypeDependency& typeDependencies);
 
     virtual ~ConstantsType();
 
-    virtual sal_Bool    dump(IdlOptions* pOptions) throw( CannotDumpException );
+    virtual sal_Bool 	dump(IdlOptions* pOptions) throw( CannotDumpException );
 };
 
 class StructureType : public IdlType
@@ -177,14 +177,14 @@ class StructureType : public IdlType
 public:
     StructureType(TypeReader& typeReader,
                   const ::rtl::OString& typeName,
-                  const TypeManager& typeMgr,
+                  const TypeManager& typeMgr, 
                   const TypeDependency& typeDependencies);
 
     virtual ~StructureType();
 
-    sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
+    sal_Bool	dumpHFile(FileStream& o) throw( CannotDumpException );
 
-    void        dumpSuperMember(FileStream& o, const ::rtl::OString& super);
+    void		dumpSuperMember(FileStream& o, const ::rtl::OString& super);
 };
 
 class ExceptionType : public IdlType
@@ -192,14 +192,14 @@ class ExceptionType : public IdlType
 public:
     ExceptionType(TypeReader& typeReader,
                   const ::rtl::OString& typeName,
-                  const TypeManager& typeMgr,
+                  const TypeManager& typeMgr, 
                   const TypeDependency& typeDependencies);
 
     virtual ~ExceptionType();
 
-    sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
+    sal_Bool	dumpHFile(FileStream& o) throw( CannotDumpException );
 
-    void        dumpSuperMember(FileStream& o, const ::rtl::OString& super);
+    void		dumpSuperMember(FileStream& o, const ::rtl::OString& super);
 };
 
 class EnumType : public IdlType
@@ -207,12 +207,12 @@ class EnumType : public IdlType
 public:
     EnumType(TypeReader& typeReader,
               const ::rtl::OString& typeName,
-              const TypeManager& typeMgr,
+              const TypeManager& typeMgr, 
               const TypeDependency& typeDependencies);
 
     virtual ~EnumType();
 
-    sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
+    sal_Bool	dumpHFile(FileStream& o) throw( CannotDumpException );
 };
 
 class TypeDefType : public IdlType
@@ -225,18 +225,18 @@ public:
 
     virtual ~TypeDefType();
 
-    sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
+    sal_Bool	dumpHFile(FileStream& o) throw( CannotDumpException );
 };
 
 
 sal_Bool produceType(const ::rtl::OString& typeName,
-                     TypeManager& typeMgr,
+                     TypeManager& typeMgr, 
                      TypeDependency& typeDependencies,
                      IdlOptions* pOptions)
                  throw( CannotDumpException );
 
 /**
- * This function returns a C++ scoped name, represents the namespace
+ * This function returns a C++ scoped name, represents the namespace 
  * scoping of this type, e.g. com:.sun::star::uno::XInterface. If the scope of
  * the type is equal scope, the relativ name will be used.
  */

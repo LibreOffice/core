@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,7 +177,7 @@ bool VAxisBase::prepareShapeCreation()
         //-----------------------------------------
         //create all scaled tickmark values
         removeTextShapesFromTicks();
-
+        
         createAllTickInfos(m_aAllTickInfos);
         m_bReCreateAllTickInfos = false;
     }

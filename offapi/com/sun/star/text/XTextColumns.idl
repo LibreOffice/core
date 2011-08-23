@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,92 +24,92 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XTextColumns_idl__
-#define __com_sun_star_text_XTextColumns_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextColumn_idl__
-#include <com/sun/star/text/TextColumn.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+#ifndef __com_sun_star_text_XTextColumns_idl__ 
+#define __com_sun_star_text_XTextColumns_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_text_TextColumn_idl__ 
+#include <com/sun/star/text/TextColumn.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text { 
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: interface com::sun::star::text::XTextColumns
 /** manages columns within the object.
-
-
-
+    
+    
+    
     <p>The values used are relative. So it is not necessary to know the
     width of the object. The sum of the relative width values depends on
     the object and is defined in "ReferenceValue."
-
+    
     </p>
  */
 published interface XTextColumns: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from idl: method com::sun::star::text::XTextColumns::getReferenceValue
-    /** @returns
-                the sum of all values.
-
+    /** @returns 
+                the sum of all values. 
+         
                 <p>As described above, the width values are relative.
      */
-    long getReferenceValue();
-
-    //-------------------------------------------------------------------------
-
+    long getReferenceValue(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from idl: method com::sun::star::text::XTextColumns::getColumnCount
-    /** @returns
+    /** @returns 
                 the number of columns.
      */
-    short getColumnCount();
-
-    //-------------------------------------------------------------------------
-
+    short getColumnCount(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::text::XTextColumns::setColumnCount
     /** sets the number of columns.
-
-
-
+        
+        
+        
         <p>The minimum is 1 column.</p>
      */
-    void setColumnCount( [in] short nColumns );
-
-    //-------------------------------------------------------------------------
-
+    void setColumnCount( [in] short nColumns ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from idl: method com::sun::star::text::XTextColumns::getColumns
-    /** returns the column description of the object.
+    /** returns the column description of the object. 
                 @see TextColumn
      */
-    sequence<com::sun::star::text::TextColumn> getColumns();
-
-    //-------------------------------------------------------------------------
-
+    sequence<com::sun::star::text::TextColumn> getColumns(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::text::XTextColumns::setColumns
     /** sets the descriptors of all columns.
-
-
-
+        
+        
+        
         <p>The number of members in the sequence must be the same as the
         number of columns of the object.
-
+        
         </p>@see TextColumn
      */
-    void setColumns( [in] sequence<com::sun::star::text::TextColumn> Columns );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void setColumns( [in] sequence<com::sun::star::text::TextColumn> Columns ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 

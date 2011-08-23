@@ -14,10 +14,10 @@
 class FmInputRecordNoDialog : public ModalDialog
 {
 public:
-    FixedText       m_aLabel;
-    NumericField    m_aRecordNo;
-    OKButton        m_aOk;
-    CancelButton    m_aCancel;
+    FixedText		m_aLabel;
+    NumericField	m_aRecordNo;
+    OKButton		m_aOk;
+    CancelButton	m_aCancel;
 
 public:
     FmInputRecordNoDialog(Window * pParent);

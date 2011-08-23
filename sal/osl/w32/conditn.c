@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,22 +32,22 @@
 #include <osl/time.h>
 
 /*
-    under WIN32, we use the void* oslCondition
+    under WIN32, we use the void* oslCondition 
     as a WIN32 HANDLE (which is also a 32-bit value)
 */
 
 /*****************************************************************************/
 /* osl_createCondition */
 /*****************************************************************************/
-oslCondition SAL_CALL osl_createCondition(void)
+oslCondition SAL_CALL osl_createCondition(void) 
 {
     oslCondition Condition;
 
-    Condition= (oslCondition)CreateEvent(0,         /* no security */
-                                         sal_True,      /* manual reset */
-                                         sal_False,     /* initial state not signaled */
-                                         0);        /* automatic name */
-
+    Condition= (oslCondition)CreateEvent(0,			/* no security */
+                                         sal_True,		/* manual reset */
+                                         sal_False,		/* initial state not signaled */
+                                         0);		/* automatic name */
+    
     return Condition;
 
 }
@@ -55,9 +55,9 @@ oslCondition SAL_CALL osl_createCondition(void)
 /*****************************************************************************/
 /* osl_destroyCondition */
 /*****************************************************************************/
-void SAL_CALL osl_destroyCondition(oslCondition Condition)
+void SAL_CALL osl_destroyCondition(oslCondition Condition) 
 {
-    if(Condition)
+    if(Condition) 
     {
         OSL_VERIFY(CloseHandle(Condition));
     }
@@ -66,7 +66,7 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
 /*****************************************************************************/
 /* osl_setCondition */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
+sal_Bool SAL_CALL osl_setCondition(oslCondition Condition) 
 {
     OSL_ASSERT(Condition);
 
@@ -76,7 +76,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 /*****************************************************************************/
 /* osl_resetCondition */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
+sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition) 
 {
     OSL_ASSERT(Condition);
 
@@ -86,8 +86,8 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 /*****************************************************************************/
 /* osl_waitCondition */
 /*****************************************************************************/
-oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
-                                     const TimeValue* pTimeout)
+oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, 
+                                     const TimeValue* pTimeout) 
 {
     DWORD timeout;
 
@@ -108,7 +108,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
         {
             case WAIT_OBJECT_0 + 1:
                 {
-                MSG msg;
+                MSG	msg;
 
                 /* We Must not dispatch the message. PM_NOREMOVE leaves the message queue untouched
                  but dispatches SendMessage calls automatically */
@@ -121,10 +121,10 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
                 return (osl_cond_result_ok);
 
             case WAIT_TIMEOUT:
-                return (osl_cond_result_timeout);
+                return (osl_cond_result_timeout);				
 
             default:
-                return (osl_cond_result_error);
+                return (osl_cond_result_error);			
         }
     }
 }
@@ -132,7 +132,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
 /*****************************************************************************/
 /* osl_checkCondition */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
+sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition) 
 {
     OSL_ASSERT(Condition);
 

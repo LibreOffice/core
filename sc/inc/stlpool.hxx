@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,50 +37,50 @@ class ScDocument;
 class ScStyleSheetPool : public SfxStyleSheetPool
 {
 public:
-                        ScStyleSheetPool( SfxItemPool&  rPool,
-                                          ScDocument*   pDocument );
+                        ScStyleSheetPool( SfxItemPool&	rPool,
+                                          ScDocument*	pDocument );
 
-    void                SetDocument( ScDocument* pDocument );
-    ScDocument*         GetDocument() const { return pDoc; }
+    void				SetDocument( ScDocument* pDocument );
+    ScDocument*			GetDocument() const { return pDoc; }
 
-    virtual void        Remove( SfxStyleSheetBase* pStyle );
+    virtual void		Remove( SfxStyleSheetBase* pStyle );
 
-    void                SetActualStyleSheet ( SfxStyleSheetBase* pActStyleSheet )
+    void				SetActualStyleSheet ( SfxStyleSheetBase* pActStyleSheet )
                                 { pActualStyleSheet = pActStyleSheet; }
 
-    SfxStyleSheetBase*  GetActualStyleSheet ()
+    SfxStyleSheetBase*	GetActualStyleSheet ()
                                 { return pActualStyleSheet; }
 
-    void                CreateStandardStyles();
-    void                CopyStdStylesFrom( ScStyleSheetPool* pSrcPool );
-//UNUSED2008-05  void               UpdateStdNames();
+    void				CreateStandardStyles();
+    void				CopyStdStylesFrom( ScStyleSheetPool* pSrcPool );
+//UNUSED2008-05  void				UpdateStdNames();
 
-    void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
+    void				CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                         const String& rName, SfxStyleFamily eFamily );
 
-    ScStyleSheet*       FindCaseIns( const String& rName, SfxStyleFamily eFam );
+    ScStyleSheet*		FindCaseIns( const String& rName, SfxStyleFamily eFam );
 
-//UNUSED2009-05 void                SetForceStdName( const String* pSet );
-    const String*       GetForceStdName() const { return pForceStdName; }
+//UNUSED2009-05 void				SetForceStdName( const String* pSet );
+    const String*		GetForceStdName() const	{ return pForceStdName; }
 
     virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,
                                      USHORT nMask = 0xffff, USHORT nPos = 0xffff );
 
 protected:
-    virtual             ~ScStyleSheetPool();
+    virtual 			~ScStyleSheetPool();
 
     using SfxStyleSheetPool::Create;    // calcwarnings: Create(const SfxStyleSheet&) - ever used?
 
-    virtual SfxStyleSheetBase* Create( const String&    rName,
-                                       SfxStyleFamily   eFamily,
-                                       USHORT           nMask);
+    virtual SfxStyleSheetBase* Create( const String&	rName,
+                                       SfxStyleFamily	eFamily,
+                                       USHORT			nMask);
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle );
 
 private:
-    SfxStyleSheetBase*  pActualStyleSheet;
-    ScDocument*         pDoc;
-    const String*       pForceStdName;
+    SfxStyleSheetBase*	pActualStyleSheet;
+    ScDocument*			pDoc;
+    const String*		pForceStdName;
 };
 
-#endif     // SC_STLPOOL_HXX
+#endif	   // SC_STLPOOL_HXX
 

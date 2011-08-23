@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace bridges_remote {
     {
         RTC_HOLDENVWEAK = 0x1
     };
-
+    
     class RemoteThreadCounter
     {
     public:
@@ -62,13 +62,13 @@ namespace bridges_remote {
               remote_Context *pContext = ((remote_Context *) m_pEnvRemote->pContext );
             osl_incrementInterlockedCount( &( pContext->m_pBridgeImpl->m_nRemoteThreads ) );
         }
-
+        
         RemoteThreadCounter( uno_Environment *pEnvRemote )
             : m_bReleaseEnvironment( sal_True )
             , m_pEnvRemote( pEnvRemote )
         {
             m_pEnvRemote->acquire( m_pEnvRemote );
-
+            
               remote_Context *pContext = ((remote_Context *) m_pEnvRemote->pContext );
             osl_incrementInterlockedCount( &( pContext->m_pBridgeImpl->m_nRemoteThreads ) );
         }
@@ -85,7 +85,7 @@ namespace bridges_remote {
             if( m_bReleaseEnvironment )
                 m_pEnvRemote->release( m_pEnvRemote );
         }
-
+        
         sal_Bool m_bReleaseEnvironment;
         uno_Environment *m_pEnvRemote;
     };

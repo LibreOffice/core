@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@ public:
 
 protected:
     TextParagraphProperties& mrTextParagraphProperties;
-    TextSpacing     maLineSpacing;
+    TextSpacing		maLineSpacing;
     TextSpacing&    mrSpaceBefore;
     TextSpacing&    mrSpaceAfter;
-    BulletList&     mrBulletList;
+    BulletList&		mrBulletList;
     ::std::list< ::com::sun::star::style::TabStop >  maTabList;
     ::boost::shared_ptr< BlipFillProperties > mxBlipProps;
 };

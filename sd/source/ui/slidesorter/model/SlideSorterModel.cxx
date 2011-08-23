@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,7 +185,7 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
 sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSlide) const
 {
     ::osl::MutexGuard aGuard (maMutex);
-
+  
     // First try to guess the right index.
     Reference<beans::XPropertySet> xSet (rxSlide, UNO_QUERY);
     if (xSet.is())
@@ -215,7 +215,7 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
     for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
     {
         SharedPageDescriptor pDescriptor (maPageDescriptors[nIndex]);
-
+        
         // Make sure that the descriptor exists.  Without it the given slide
         // can not be found.
         if (pDescriptor.get() == NULL)
@@ -223,7 +223,7 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
             // Call GetPageDescriptor() to create the missing descriptor.
             pDescriptor = GetPageDescriptor(nIndex,true);
         }
-
+        
         if (pDescriptor->GetXDrawPage() == rxSlide)
             return nIndex;
     }
@@ -306,7 +306,7 @@ void SlideSorterModel::SetPageObjectFactory(
 
 
 
-const controller::PageObjectFactory&
+const controller::PageObjectFactory& 
     SlideSorterModel::GetPageObjectFactory (void) const
 {
     ::osl::MutexGuard aGuard (maMutex);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ namespace rptui
         void operator =(const OColorListener&);
     protected:
         OModuleClient                       m_aModuleClient;
-        Link                                m_aCollapsedLink;
-        svtools::ColorConfig                m_aColorConfig;
-        svtools::ExtendedColorConfig        m_aExtendedColorConfig;
-        ::rtl::OUString                     m_sColorEntry;
-        sal_Int32                           m_nColor;
-        sal_Int32                           m_nTextBoundaries;
-        sal_Bool                            m_bCollapsed;
-        sal_Bool                            m_bMarked;
+        Link						        m_aCollapsedLink;
+        svtools::ColorConfig				m_aColorConfig;
+        svtools::ExtendedColorConfig		m_aExtendedColorConfig;
+        ::rtl::OUString						m_sColorEntry;
+        sal_Int32							m_nColor;
+        sal_Int32							m_nTextBoundaries;
+        sal_Bool					        m_bCollapsed;
+        sal_Bool							m_bMarked;
 
         virtual void ImplInitSettings() = 0;
     protected:
@@ -62,22 +62,22 @@ namespace rptui
         virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
 
         /** set the marker as marked or not marked
-            @param  _bMark  set the new state of the marker
+            @param	_bMark	set the new state of the marker
         */
-        void    setMarked(sal_Bool _bMark);
+        void	setMarked(sal_Bool _bMark);
 
         /** returns if the section is marked
         */
-        inline sal_Bool isMarked() const { return m_bMarked; }
+        inline sal_Bool	isMarked() const { return m_bMarked; }
 
-        inline void     setCollapsedHdl(const Link& _aLink ){ m_aCollapsedLink = _aLink; }
-        inline sal_Bool isCollapsed() const { return m_bCollapsed; }
+        inline void		setCollapsedHdl(const Link& _aLink ){ m_aCollapsedLink = _aLink; }
+        inline sal_Bool	isCollapsed() const { return m_bCollapsed; }
 
         /** collapse or expand
          *
          * \param _bCollapsed
          */
-        virtual void    setCollapsed(sal_Bool _bCollapsed);
+        virtual void	setCollapsed(sal_Bool _bCollapsed);
     };
 }
 #endif // RPTUI_COLORLISTENER_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ public:
     static FigureWipe * createStarWipe( sal_Int32 nPoints );
     static FigureWipe * createPentagonWipe();
     static FigureWipe * createHexagonWipe();
-
+    
     virtual ::basegfx::B2DPolyPolygon operator () ( double t );
 private:
     FigureWipe( ::basegfx::B2DPolygon const & figure ) : m_figure(figure) {}

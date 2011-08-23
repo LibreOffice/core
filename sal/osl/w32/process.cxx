@@ -67,11 +67,11 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 /***************************************************************************/
 
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
-{
+{	
     oslProcessImpl* pProcImpl;
     HANDLE hProcess = OpenProcess(
         STANDARD_RIGHTS_REQUIRED | PROCESS_QUERY_INFORMATION | SYNCHRONIZE, FALSE, (DWORD)Ident);
-
+        
     if (hProcess)
     {
         pProcImpl = reinterpret_cast< oslProcessImpl*>( rtl_allocateMemory(sizeof(oslProcessImpl)) );
@@ -192,7 +192,7 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     DWORD           timeout   = INFINITE;
     oslProcessError osl_error = osl_Process_E_None;
     DWORD           ret;
-
+    
     if (NULL == Process)
         return osl_Process_E_Unknown;
 
@@ -396,20 +396,20 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
    #109941# because of a bug in the M$ unicows library we have to
    allocate a buffer large enough to hold the requested environment
    variable instead of testing for the required size. This wastes
-   some stack space, maybe we should revoke this work around if
+   some stack space, maybe we should revoke this work around if 
    unicows library is fixed.
 */
 #define ENV_BUFFER_SIZE (32*1024-1)
 
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
-{
-    WCHAR buff[ENV_BUFFER_SIZE];
-
+{        
+    WCHAR buff[ENV_BUFFER_SIZE];         
+                            
     if (GetEnvironmentVariableW(reinterpret_cast<LPCWSTR>(ustrVar->buffer), buff, ENV_BUFFER_SIZE) > 0)
-    {
-        rtl_uString_newFromStr(ustrValue, reinterpret_cast<const sal_Unicode*>(buff));
+    {        
+        rtl_uString_newFromStr(ustrValue, reinterpret_cast<const sal_Unicode*>(buff));        
         return osl_Process_E_None;
-    }
+    }        
     return osl_Process_E_Unknown;
 }
 
@@ -417,12 +417,12 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
  * Current Working Directory.
  ***************************************************************************/
 
-extern "C" oslMutex g_CurrentDirectoryMutex;
+extern "C" oslMutex	g_CurrentDirectoryMutex;
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-    DWORD   dwLen = 0;
+    DWORD	dwLen = 0;
 
 
     osl_acquireMutex( g_CurrentDirectoryMutex );
@@ -431,8 +431,8 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )
     {
-        oslFileError    eError;
-        rtl_uString     *ustrTemp = NULL;;
+        oslFileError	eError;
+        rtl_uString		*ustrTemp = NULL;;
 
         rtl_uString_newFromStr_WithLength( &ustrTemp, aBuffer, dwLen );
         eError = osl_getFileURLFromSystemPath( ustrTemp, pustrWorkingDir );
@@ -521,28 +521,28 @@ sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket pSocket)
     sal_Bool bRet = sal_False;
     sal_Int32 bytes = 0;
 
-    /*  duplicate handle on this other side ->
-        receive remote process
+    /* 	duplicate handle on this other side -> 
+        receive remote process 
         duplicate handle and send it */
     DWORD remoteProcessID = 0;
     HANDLE fd = (HANDLE)pSocket->m_Socket;
     oslDescriptorType code = osl_Process_TypeSocket;
-
+    
     OSL_TRACE("osl_sendResourcePipe: enter...");
-
+    
     if (ReadPipe(hPipe, &remoteProcessID, sizeof(remoteProcessID), &bytes))
     {
-        HANDLE hRemoteProc = OpenProcess(PROCESS_DUP_HANDLE,
-                                         FALSE,
+        HANDLE hRemoteProc = OpenProcess(PROCESS_DUP_HANDLE, 
+                                         FALSE, 
                                          remoteProcessID);
-
+        
         if (hRemoteProc != (HANDLE)NULL)
         {
             HANDLE newFd;
-
+            
             if (DuplicateHandle(GetCurrentProcess(),
-                                fd,
-                                hRemoteProc,
+                                fd, 
+                                hRemoteProc, 
                                 &newFd,
                                 0, FALSE, DUPLICATE_SAME_ACCESS))
             {
@@ -552,11 +552,11 @@ sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket pSocket)
                     )
                     bRet = sal_True;
             }
-
+            
             CloseHandle(hRemoteProc);
         }
     }
-
+    
     if (bRet)
     {
         sal_Int32 commitCode;
@@ -568,12 +568,12 @@ sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket pSocket)
             )
             bRet = sal_False;
     }
-
+    
     OSL_TRACE("osl_sendResourcePipe: exit... %d\n", bRet);
     return(bRet);
 }
 
-
+    
 oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
 {
     sal_Bool bRet = sal_False;
@@ -581,14 +581,14 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
     sal_Int32 commitCode;
     oslSocket pSocket = NULL;
 
-    /* duplicate handle on the other side ->
+    /* duplicate handle on the other side -> 
        send my process id receive duplicated handle */
     HANDLE fd = INVALID_HANDLE_VALUE;
     DWORD myProcessID = GetCurrentProcessId();
     oslDescriptorType code = osl_Process_TypeNone;
 
     OSL_TRACE("osl_receiveResourcePipe: enter...\n");
-
+    
     if (
         WritePipe(hPipe, &myProcessID, sizeof(myProcessID), &bytes) &&
         ReadPipe(hPipe, &code, sizeof(code), &bytes) &&
@@ -606,15 +606,15 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
             bRet = sal_False;
         }
         }
-
+    
     if (bRet)
         commitCode = 1;
     else
         commitCode = 0;
-
+    
     WritePipe(hPipe, &commitCode, sizeof(commitCode), &bytes);
 
     OSL_TRACE("osl_receiveResourcePipe: exit... %d, %p\n", bRet, pSocket);
-
+    
     return pSocket;
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,32 +65,32 @@ namespace dbaui
 class OUserAdmin : public OGenericAdministrationPage
 {
 protected:
-    FixedLine           m_FL_USER;
-    FixedText           m_FT_USER;
-    ListBox             m_LB_USER;
-    PushButton          m_PB_NEWUSER;
-    PushButton          m_PB_CHANGEPWD;
-    PushButton          m_PB_DELETEUSER;
-    FixedLine           m_FL_TABLE_GRANTS;
-    OTableGrantControl  m_TableCtrl; // show the grant rights of one user
+    FixedLine			m_FL_USER;
+    FixedText			m_FT_USER;
+    ListBox				m_LB_USER;
+    PushButton			m_PB_NEWUSER;
+    PushButton			m_PB_CHANGEPWD;
+    PushButton			m_PB_DELETEUSER;
+    FixedLine			m_FL_TABLE_GRANTS;
+    OTableGrantControl	m_TableCtrl; // show the grant rights of one user
+                        
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>			m_xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xUsers;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString>								m_aUserNames;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aUserNames;
-
-    String              m_UserName;
-
+    String				m_UserName;
+        
     // methods
     DECL_LINK( ListDblClickHdl, ListBox * );
-    DECL_LINK( CloseHdl,        PushButton * );
-    DECL_LINK( UserHdl,         PushButton * );
+    DECL_LINK( CloseHdl,		PushButton * );
+    DECL_LINK( UserHdl,			PushButton * );
 
-    void        FillUserNames();
+    void		FillUserNames();
 
     OUserAdmin( Window* pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
-
+    static	SfxTabPage*	Create( Window* pParent, const SfxItemSet& _rAttrSet );
+    
     ~OUserAdmin();
     String GetUser();
 

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -474,7 +474,7 @@ namespace agg
             ((int8u*)&val)[1] = *m_ptr++;
             return val;
         }
-
+       
     public:
         // Iterate scanlines interface
         //--------------------------------------------------------------------
@@ -483,7 +483,7 @@ namespace agg
             m_ptr = m_data;
             if(m_ptr < m_end)
             {
-                m_min_x = read_int16() + m_dx;
+                m_min_x = read_int16() + m_dx; 
                 m_min_y = read_int16() + m_dy;
                 m_max_x = read_int16() + m_dx;
                 m_max_y = read_int16() + m_dy;

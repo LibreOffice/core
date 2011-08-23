@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/itemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 using namespace cppu;
@@ -50,10 +50,10 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 
-ItemContainer::ItemContainer( const ShareableMutex& rMutex ) :
+ItemContainer::ItemContainer( const ShareableMutex& rMutex ) : 
     m_aShareMutex( rMutex )
 {
 }
@@ -64,7 +64,7 @@ ItemContainer::ItemContainer( const ConstItemContainer& rConstItemContainer, con
     copyItemContainer( rConstItemContainer.m_aItemVector, rMutex );
 }
 
-ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer, const ShareableMutex& rMutex ) :
+ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer, const ShareableMutex& rMutex ) : 
     m_aShareMutex( rMutex )
 {
     if ( rSourceContainer.is() )

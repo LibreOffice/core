@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,27 +137,27 @@ class XMLTextFieldImportContext : public SvXMLImportContext
     const ::rtl::OUString sIsFixed;
 
     // data members
-    ::rtl::OUStringBuffer sContentBuffer;   /// collect character data
-    ::rtl::OUString sContent;               /// character data after collection
-    ::rtl::OUString sServiceName;           /// service name for text field
-    XMLTextImportHelper& rTextImportHelper; /// the import helper
+    ::rtl::OUStringBuffer sContentBuffer;	/// collect character data
+    ::rtl::OUString sContent;				/// character data after collection
+    ::rtl::OUString sServiceName;			/// service name for text field
+    XMLTextImportHelper& rTextImportHelper;	/// the import helper
 
 protected:
     ::rtl::OUString sServicePrefix;
 
     // data members for use in subclasses
-    sal_Bool bValid;                        /// ist dieses Feld gültig?
+    sal_Bool bValid;						/// ist dieses Feld gültig?
 
 public:
 
     TYPEINFO();
 
     XMLTextFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        const sal_Char* pService,               /// name of SO API service
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        const sal_Char* pService,				/// name of SO API service
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& rLocalName);		/// element name w/o prefix
 
     virtual ~XMLTextFieldImportContext();
 
@@ -218,9 +218,9 @@ protected:
 class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 {
 
-    sal_Int16 nSubType;         /// API subtype for ExtUser field
+    sal_Int16 nSubType;			/// API subtype for ExtUser field
 
-    const ::rtl::OUString sEmpty;       /// empty string
+    const ::rtl::OUString sEmpty;		/// empty string
     const ::rtl::OUString sPropertyFixed;
     const ::rtl::OUString sPropertyFieldSubType;
     const ::rtl::OUString sPropertyContent;
@@ -229,18 +229,18 @@ protected:
 
     // variables for access in subclass
     sal_Bool bFixed;
-    sal_uInt16 nElementToken;   /// token for this elment field
+    sal_uInt16 nElementToken;	/// token for this elment field
 
 public:
 
     TYPEINFO();
 
     XMLSenderFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName,      /// element name w/o prefix
-        sal_uInt16 nToken);                     /// element token
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName,		/// element name w/o prefix
+        sal_uInt16 nToken);						/// element token
 
 protected:
 
@@ -275,11 +275,11 @@ public:
     TYPEINFO();
 
     XMLAuthorFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName,      /// element name w/o prefix
-        sal_uInt16 nToken);                     /// element token
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName,		/// element name w/o prefix
+        sal_uInt16 nToken);						/// element token
 
 protected:
 
@@ -299,7 +299,7 @@ protected:
 class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
 {
 
-    const ::rtl::OUString sEmpty;       /// empty string
+    const ::rtl::OUString sEmpty;		/// empty string
     const ::rtl::OUString sServiceJumpEdit;
     const ::rtl::OUString sPropertyPlaceholderType;
     const ::rtl::OUString sPropertyPlaceholder;
@@ -314,10 +314,10 @@ public:
     TYPEINFO();
 
     XMLPlaceholderFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName);		/// element name w/o prefix
 
 protected:
 
@@ -350,7 +350,7 @@ protected:
     sal_Bool bTimeOK;
     sal_Bool bFormatOK;
     sal_Bool bFixed;
-    sal_Bool bIsDate;           // is this a date?
+    sal_Bool bIsDate;			// is this a date?
                                 // (for XMLDateFieldImportContext, really)
     sal_Bool bIsDefaultLanguage;
 
@@ -359,10 +359,10 @@ public:
     TYPEINFO();
 
     XMLTimeFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName);		/// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -385,10 +385,10 @@ public:
     TYPEINFO();
 
     XMLDateFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName);		/// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -403,20 +403,20 @@ class XMLPageContinuationImportContext : public XMLTextFieldImportContext
     const ::rtl::OUString sPropertyUserText;
     const ::rtl::OUString sPropertyNumberingType;
 
-    ::rtl::OUString sString;            /// continuation string
-    com::sun::star::text::PageNumberType eSelectPage;   /// previous, current
+    ::rtl::OUString sString;			/// continuation string
+    com::sun::star::text::PageNumberType eSelectPage;	/// previous, current
                                                         /// or next page
-    sal_Bool sStringOK;                 /// continuation string encountered?
+    sal_Bool sStringOK;					/// continuation string encountered?
 
 public:
 
     TYPEINFO();
 
     XMLPageContinuationImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName);		/// element name w/o prefix
 
 
     /// process attribute values
@@ -440,7 +440,7 @@ class XMLPageNumberImportContext : public XMLTextFieldImportContext
     ::rtl::OUString sNumberFormat;
     ::rtl::OUString sNumberSync;
     sal_Int16 nPageAdjust;
-    com::sun::star::text::PageNumberType eSelectPage;   /// previous, current
+    com::sun::star::text::PageNumberType eSelectPage;	/// previous, current
                                                         /// or next page
     sal_Bool sNumberFormatOK;
 
@@ -449,10 +449,10 @@ public:
     TYPEINFO();
 
     XMLPageNumberImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName);		/// element name w/o prefix
 
 
     /// process attribute values
@@ -1502,10 +1502,10 @@ public:
     TYPEINFO();
 
     XMLHeaderFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName);		/// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -1524,10 +1524,10 @@ public:
     TYPEINFO();
 
     XMLFooterFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName);		/// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -1546,10 +1546,10 @@ public:
     TYPEINFO();
 
     XMLDateTimeFieldImportContext(
-        SvXMLImport& rImport,                   /// XML Import
-        XMLTextImportHelper& rHlp,              /// Text import helper
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        SvXMLImport& rImport,					/// XML Import
+        XMLTextImportHelper& rHlp,				/// Text import helper
+        sal_uInt16 nPrfx,						/// namespace prefix
+        const ::rtl::OUString& sLocalName);		/// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,

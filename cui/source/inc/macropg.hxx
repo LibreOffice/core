@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ class _SvxMacroTabPage : public SfxTabPage
 
 #endif
 protected:
-    _SvxMacroTabPage_Impl*      mpImpl;
+    _SvxMacroTabPage_Impl*		mpImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xAppEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xDocEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > m_xModifiable;
@@ -90,24 +90,24 @@ protected:
 
                                 _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 
-    void                        EnableButtons( const String& rLanguage );
-    ::com::sun::star::uno::Any  GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash );
+    void						EnableButtons( const String& rLanguage );
+    ::com::sun::star::uno::Any 	GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash );
     ::std::pair< ::rtl::OUString, ::rtl::OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
 
 public:
 
-    virtual                     ~_SvxMacroTabPage();
+    virtual						~_SvxMacroTabPage();
     void                        InitResources();
 
-    void                        InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
-    virtual BOOL                FillItemSet( SfxItemSet& rSet );
-
+    void						InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
+    virtual	BOOL				FillItemSet( SfxItemSet& rSet );
+    
     using SfxTabPage::Reset;
-    virtual void                Reset();
+    virtual	void				Reset();
 
-    void                        DisplayAppEvents( bool appEvents);
-    void                        SetReadOnly( BOOL bSet );
-    BOOL                        IsReadOnly() const;
+    void						DisplayAppEvents( bool appEvents);
+    void						SetReadOnly( BOOL bSet );
+    BOOL						IsReadOnly() const;
 };
 
 class SvxMacroTabPage : public _SvxMacroTabPage
@@ -125,7 +125,7 @@ public:
 
 // class SvxMacroAssignDlg --------------------------------------------------
 
-typedef USHORT* (*GetTabPageRanges)(); // liefert internationale Which-Werte
+typedef USHORT*	(*GetTabPageRanges)(); // liefert internationale Which-Werte
 
 class SvxMacroAssignSingleTabDialog : public SfxModalDialog
 {
@@ -134,24 +134,24 @@ public:
 
     virtual             ~SvxMacroAssignSingleTabDialog();
 
-    void                SetTabPage( SfxTabPage* pTabPage );
-    // SfxTabPage*          GetTabPage() const { return pPage; }
+    void				SetTabPage( SfxTabPage* pTabPage );
+    // SfxTabPage*			GetTabPage() const { return pPage; }
 
-    // OKButton*            GetOKButton() const { return pOKBtn; }
-    // CancelButton*        GetCancelButton() const { return pCancelBtn; }
+    // OKButton*			GetOKButton() const { return pOKBtn; }
+    // CancelButton*		GetCancelButton() const { return pCancelBtn; }
 
 private:
     SfxViewFrame*       pFrame;
 
-    FixedLine*          pFixedLine;
+    FixedLine*			pFixedLine;
 
-    OKButton*           pOKBtn;
-    CancelButton*       pCancelBtn;
-    HelpButton*         pHelpBtn;
+    OKButton*			pOKBtn;
+    CancelButton*		pCancelBtn;
+    HelpButton*			pHelpBtn;
 
-    SfxTabPage*         pPage;
-    const SfxItemSet*   pOptions;
-    SfxItemSet*         pOutSet;
+    SfxTabPage*			pPage;
+    const SfxItemSet*	pOptions;
+    SfxItemSet*			pOutSet;
 
 #if _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
@@ -169,7 +169,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& xNameReplace,
         sal_uInt16 nSelectedIndex
     );
-    virtual ~SvxMacroAssignDlg();
+    virtual	~SvxMacroAssignDlg();
 };
 
 #endif

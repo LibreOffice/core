@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex is provided!\n" );
     if ( !m_pImpl->m_rMutexRef.Is() )
         throw uno::RuntimeException(); // just a disaster
-
+    
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
 }
 
@@ -98,12 +98,12 @@ uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
 
     // common interfaces
     aReturn <<= ::cppu::queryInterface
-                (   rType
-                    ,   static_cast<io::XInputStream*> ( this )
-                    ,   static_cast<io::XStream*> ( this )
-                    ,   static_cast<lang::XComponent*> ( this )
-                    ,   static_cast<beans::XPropertySet*> ( this )
-                    ,   static_cast<embed::XExtendedStorageStream*> ( this ) );
+                (	rType
+                    ,	static_cast<io::XInputStream*> ( this )
+                    ,	static_cast<io::XStream*> ( this )
+                    ,	static_cast<lang::XComponent*> ( this )
+                    ,	static_cast<beans::XPropertySet*> ( this )
+                    ,	static_cast<embed::XExtendedStorageStream*> ( this ) );
 
     if ( aReturn.hasValue() == sal_True )
         return aReturn ;
@@ -111,9 +111,9 @@ uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         aReturn <<= ::cppu::queryInterface
-                    (   rType
-                        ,   static_cast<embed::XRelationshipAccess*> ( this ) );
-
+                    (	rType
+                        ,	static_cast<embed::XRelationshipAccess*> ( this ) );
+    
         if ( aReturn.hasValue() == sal_True )
             return aReturn ;
     }
@@ -122,7 +122,7 @@ uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -145,7 +145,7 @@ sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -169,7 +169,7 @@ sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& a
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputCompStream::skipBytes( sal_Int32 nBytesToSkip )
+void SAL_CALL OInputCompStream::skipBytes( sal_Int32 nBytesToSkip ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -193,7 +193,7 @@ void SAL_CALL OInputCompStream::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OInputCompStream::available(  )
+sal_Int32 SAL_CALL OInputCompStream::available(  ) 
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -216,7 +216,7 @@ sal_Int32 SAL_CALL OInputCompStream::available(  )
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputCompStream::closeInput(  )
+void SAL_CALL OInputCompStream::closeInput(  ) 
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -448,7 +448,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
                     return aSeq[nInd1];
                 break;
             }
-
+    
     throw container::NoSuchElementException();
 }
 
@@ -678,7 +678,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
 
 
 //-----------------------------------------------
-void SAL_CALL OInputCompStream::addPropertyChangeListener(
+void SAL_CALL OInputCompStream::addPropertyChangeListener( 
     const ::rtl::OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw ( beans::UnknownPropertyException,

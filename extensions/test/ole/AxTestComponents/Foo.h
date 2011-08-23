@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 //#include "AxTestComponents.h"
 /////////////////////////////////////////////////////////////////////////////
 // CBasic
-class ATL_NO_VTABLE CFoo :
+class ATL_NO_VTABLE CFoo : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CFoo, &CLSID_Foo>,
     public IFoo
 
-//  public IDispatchImpl<IFoo, &__uuidof(IFoo), &LIBID_AXTESTCOMPONENTSLib, /* wMajor = */ 1, /* wMinor = */ 0>
+//	public IDispatchImpl<IFoo, &__uuidof(IFoo), &LIBID_AXTESTCOMPONENTSLib, /* wMajor = */ 1, /* wMinor = */ 0>
 {
 public:
     CFoo();

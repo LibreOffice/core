@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,10 +62,10 @@
 namespace dbaccess
 {
 //........................................................................
-
+    
     class OPropertyForward;
 
-    class OContainerMediator :   public ::comphelper::OBaseMutex
+    class OContainerMediator :	 public ::comphelper::OBaseMutex
                                 ,public ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener >
     {
     public:
@@ -78,9 +78,9 @@ namespace dbaccess
     private:
         typedef ::rtl::Reference< OPropertyForward >                TPropertyForward;
         typedef ::std::map< ::rtl::OUString, TPropertyForward >     PropertyForwardList;
-        PropertyForwardList                                                             m_aForwardList;
+        PropertyForwardList																m_aForwardList;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xSettings;    // can not be weak
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >     m_xContainer;   // can not be weak
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >	    m_xContainer;   // can not be weak
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_aConnection;
         ContainerType                                                                   m_eType;
 
@@ -117,7 +117,7 @@ namespace dbaccess
                 );
     };
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 #endif // DBA_CONTAINERMEDIATOR_HXX

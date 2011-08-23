@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ public:
     GenericPageCache (
         const Size& rPreviewSize,
         const SharedCacheContext& rpCacheContext);
-
+    
     ~GenericPageCache (void);
 
     /** Change the size of the preview bitmaps.  This may be caused by a
@@ -107,7 +107,7 @@ public:
 
     /** Call this method when all preview bitmaps have to be generated anew.
         This is the case when the size of the page objects on the screen has
-        changed or when the model has changed.
+        changed or when the model has changed. 
     */
     void InvalidateCache (bool bUpdateCache);
 
@@ -129,7 +129,7 @@ private:
     ::boost::scoped_ptr<QueueProcessor> mpQueueProcessor;
 
     SharedCacheContext mpCacheContext;
-
+    
     /** The current size of preview bitmaps.
     */
     Size maPreviewSize;

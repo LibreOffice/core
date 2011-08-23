@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -314,11 +314,11 @@ Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans:
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bHasTitle = sal_False;
-
+    
     Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() ) );
     if( xTitle.is() && (TitleHelper::getCompleteString( xTitle ).getLength() != 0) )
         bHasTitle = sal_True;
-
+    
     Any aRet;
     aRet <<= bHasTitle;
     return aRet;
@@ -343,7 +343,7 @@ public:
     WrappedAxisLabelExistenceProperty( bool bMain, sal_Int32 nDimensionIndex
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAxisLabelExistenceProperty();
-
+ 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 

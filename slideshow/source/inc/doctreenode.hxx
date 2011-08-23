@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace slideshow
             represented in a tree structure, with DocTreeNodes as the
             nodes. Instances of this class can be queried from the
             DocTreeNodeSupplier interface.
-
+            
             This class has nothing to do with the Draw document tree.
          */
         class DocTreeNode
@@ -82,7 +82,7 @@ namespace slideshow
 
             /** Create empty tree node
              */
-            DocTreeNode() :
+            DocTreeNode() : 
                 mnStartIndex(-1),
                 mnEndIndex(-1),
                 meType(NODETYPE_INVALID)
@@ -91,7 +91,7 @@ namespace slideshow
 
             /** Create tree node from start and end index.
 
-                Create a tree node for the given range and type.
+                Create a tree node for the given range and type. 
 
                 @param nStartIndex
                 Start index
@@ -102,23 +102,23 @@ namespace slideshow
                 @param eType
                 Node type
              */
-            DocTreeNode( sal_Int32 nStartIndex,
-                         sal_Int32 nEndIndex,
-                         NodeType  eType ) :
+            DocTreeNode( sal_Int32 nStartIndex, 
+                         sal_Int32 nEndIndex, 
+                         NodeType  eType ) : 
                 mnStartIndex(nStartIndex),
                 mnEndIndex(nEndIndex),
                 meType(eType)
             {
             }
 
-            bool                isEmpty() const { return mnStartIndex == mnEndIndex; }
+            bool 				isEmpty() const { return mnStartIndex == mnEndIndex; }
 
-            sal_Int32           getStartIndex() const { return mnStartIndex; }
-            sal_Int32           getEndIndex() const { return mnEndIndex; }
-            void                setStartIndex( sal_Int32 nIndex ) { mnStartIndex = nIndex; }
-            void                setEndIndex( sal_Int32 nIndex ) { mnEndIndex = nIndex; }
+            sal_Int32 			getStartIndex() const { return mnStartIndex; }
+            sal_Int32 			getEndIndex() const { return mnEndIndex; }
+            void 				setStartIndex( sal_Int32 nIndex ) { mnStartIndex = nIndex; }
+            void 				setEndIndex( sal_Int32 nIndex ) { mnEndIndex = nIndex; }
 
-            NodeType            getType() const { return meType; }
+            NodeType			getType() const { return meType; }
 
             void                reset()
             {
@@ -128,9 +128,9 @@ namespace slideshow
             }
 
         private:
-            sal_Int32   mnStartIndex;
-            sal_Int32   mnEndIndex;
-            NodeType    meType;
+            sal_Int32	mnStartIndex;
+            sal_Int32	mnEndIndex;
+            NodeType 	meType;
 
         };
 

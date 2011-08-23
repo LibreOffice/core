@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,16 +52,16 @@ class PageObjectViewContact
 {
 public:
     PageObjectViewContact (
-        SdrPageObj& rPageObj,
+        SdrPageObj& rPageObj, 
         const model::SharedPageDescriptor& rpDescriptor);
     ~PageObjectViewContact (void);
 
     /** Create a ViewObjectContact object that buffers its output in a
-        bitmap.
+        bitmap.  
         @return
             Ownership of the new object passes to the caller.
     */
-    virtual ::sdr::contact::ViewObjectContact&
+    virtual ::sdr::contact::ViewObjectContact& 
         CreateObjectSpecificViewObjectContact(
             ::sdr::contact::ObjectContact& rObjectContact);
 

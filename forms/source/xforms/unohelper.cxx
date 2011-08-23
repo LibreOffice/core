@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,14 +67,14 @@ Reference<XInterface> xforms::createInstance( const OUString& sServiceName )
     return xInstance;
 }
 
-void xforms::copy( const Reference<XPropertySet>& xFrom,
+void xforms::copy( const Reference<XPropertySet>& xFrom, 
                    Reference<XPropertySet>& xTo )
 {
     OSL_ENSURE( xFrom.is(), "no source" );
     OSL_ENSURE( xTo.is(), "no target" );
 
     // get property names & infos, and iterate over target properties
-    Sequence<Property> aProperties =
+    Sequence<Property> aProperties = 
         xTo->getPropertySetInfo()->getProperties();
     sal_Int32 nProperties = aProperties.getLength();
     const Property* pProperties = aProperties.getConstArray();

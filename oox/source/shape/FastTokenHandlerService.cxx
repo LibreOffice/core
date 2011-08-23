@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,16 +97,16 @@ uno::Reference< uno::XInterface > SAL_CALL FastTokenHandlerService_create(
     return static_cast< ::cppu::OWeakObject * >(new FastTokenHandlerService(context));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL
+uno::Reference< uno::XInterface > SAL_CALL 
 FastTokenHandlerService_createInstance
-( const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+( const uno::Reference< lang::XMultiServiceFactory > & rSMgr) 
 throw( uno::Exception )
 {
-    uno::Reference<beans::XPropertySet>
+    uno::Reference<beans::XPropertySet> 
         xPropertySet(rSMgr, uno::UNO_QUERY_THROW);
     uno::Any aDefaultContext = xPropertySet->getPropertyValue
         (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
-
+    
     uno::Reference<uno::XComponentContext> xContext;
     aDefaultContext >>= xContext;
 

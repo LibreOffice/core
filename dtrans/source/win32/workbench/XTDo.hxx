@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,12 +56,12 @@ class EnumFormatEtc;
       a clipboard client ask for the available formats on the clipboard
       and decides if there is a format he can use
       if there is one, he requests the data in this format
-
-    - This class inherits from IDataObject an so can be placed on the
-      OleClipboard. The class wrapps a transferable object which is the
+      
+    - This class inherits from IDataObject an so can be placed on the 
+      OleClipboard. The class wrapps a transferable object which is the 
       original DataSource
     - DataFlavors offerd by this transferable will be translated into
-      appropriate clipboard formats
+      appropriate clipboard formats 
     - if the transferable contains text data always text and unicodetext
       will be offered or vice versa
     - text data will be automaticaly converted between text und unicode text
@@ -74,7 +74,7 @@ class CXTDataObject : public IDataObject
 {
 public:
     CXTDataObject( );
-
+    
     //-----------------------------------------------------------------
     // ole interface implementation
     //-----------------------------------------------------------------
@@ -100,33 +100,33 @@ public:
 private:
 
 private:
-    LONG m_nRefCnt;
+    LONG m_nRefCnt;	
 };
 
 //------------------------------------------------------------------------
-//
+// 
 //------------------------------------------------------------------------
 
 class CEnumFormatEtc : public IEnumFORMATETC
 {
 public:
     CEnumFormatEtc( LPUNKNOWN pUnkDataObj );
-
-    // IUnknown
+    
+    // IUnknown 
     STDMETHODIMP           QueryInterface( REFIID iid, LPVOID* ppvObject );
     STDMETHODIMP_( ULONG ) AddRef( );
     STDMETHODIMP_( ULONG ) Release( );
 
-    //IEnumFORMATETC
+    //IEnumFORMATETC 
     STDMETHODIMP Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFetched );
     STDMETHODIMP Skip( ULONG celt );
     STDMETHODIMP Reset( );
     STDMETHODIMP Clone( IEnumFORMATETC** ppenum );
 
 private:
-    LONG                                m_nRefCnt;
-    LPUNKNOWN                           m_pUnkDataObj;
-    ULONG                               m_nCurrPos;
+    LONG								m_nRefCnt;
+    LPUNKNOWN							m_pUnkDataObj;
+    ULONG								m_nCurrPos;	
 };
 
 typedef CEnumFormatEtc *PCEnumFormatEtc;

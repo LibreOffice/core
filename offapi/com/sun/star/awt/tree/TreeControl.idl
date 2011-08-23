@@ -1,7 +1,7 @@
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,19 +24,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_tree_TreeControl_idl__
-#define __com_sun_star_awt_tree_TreeControl_idl__
-
+#ifndef __com_sun_star_awt_tree_TreeControl_idl__ 
+#define __com_sun_star_awt_tree_TreeControl_idl__ 
+ 
 #ifndef __com_sun_star_awt_tree_XTreeControl_idl__
 #include <com/sun/star/awt/tree/XTreeControl.idl>
 #endif
 
-//=============================================================================
-
+//============================================================================= 
+ 
 module com {  module sun {  module star {  module awt { module tree {
 
-//=============================================================================
-
+//============================================================================= 
+ 
 /** A control that displays a set of hierarchical data as an outline.
 
     <p>
@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module awt { module tree {
     You can implement it yourself or use the <type>MutableTreeDataModel</type>
     which uses <type>XMutableTreeNode</type> and <type>XMutableTreeDataModel</type>
     for a simple and mutable data model.
-
+    
     <p>The data model must be set at the <member>TreeControlModel::TreeDataModel</member> property.</p>
 
     <h4>Selection</h4>
@@ -87,11 +87,11 @@ module com {  module sun {  module star {  module awt { module tree {
     </p>
  */
 service TreeControl: XTreeControl
-{
-};
-
-//=============================================================================
+{ 
+}; 
+ 
+//============================================================================= 
 
 }; }; }; }; };
-
-#endif
+ 
+#endif 

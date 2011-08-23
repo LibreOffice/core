@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ class RehearseTimingsActivity : public Activity,
 public:
     /** Creates the activity.
      */
-    static boost::shared_ptr<RehearseTimingsActivity> create(
+    static boost::shared_ptr<RehearseTimingsActivity> create( 
         const SlideShowContext& rContext );
 
     virtual ~RehearseTimingsActivity();
@@ -69,7 +69,7 @@ public:
     /** Starts and shows the timer; adds to activity queue.
      */
     void start();
-
+    
     /** Stops and hides the timer.
         @return elapsed time
      */
@@ -84,7 +84,7 @@ public:
     virtual void viewRemoved( const UnoViewSharedPtr& rView );
     virtual void viewChanged( const UnoViewSharedPtr& rView );
     virtual void viewsChanged();
-
+    
     // Disposable:
     virtual void dispose();
     // Activity:
@@ -93,18 +93,18 @@ public:
     virtual bool isActive() const;
     virtual void dequeued();
     virtual void end();
-
+    
 private:
     class WakeupEvent;
 
     explicit RehearseTimingsActivity( const SlideShowContext& rContext );
-
+    
     void paint( ::cppcanvas::CanvasSharedPtr const & canvas ) const;
     void paintAllSprites() const;
-
+    
     class MouseHandler;
     friend class MouseHandler;
-
+    
     typedef ::std::vector<
         ::std::pair<UnoViewSharedPtr,
                     boost::shared_ptr<cppcanvas::CustomSprite> > > ViewsVecT;
@@ -120,7 +120,7 @@ private:
 
     ::basegfx::B2DRange calcSpriteRectangle(
         UnoViewSharedPtr const & rView ) const;
-
+    
     EventQueue&                     mrEventQueue;
     ScreenUpdater&                  mrScreenUpdater;
     EventMultiplexer&               mrEventMultiplexer;
@@ -128,10 +128,10 @@ private:
     canvas::tools::ElapsedTime      maElapsedTime;
 
     ViewsVecT                       maViews;
-
+    
     /// screen rect of sprite (in view coordinates!)
     ::basegfx::B2DRange             maSpriteRectangle;
-
+    
     Font                            maFont;
     boost::shared_ptr<WakeupEvent>  mpWakeUpEvent;
     boost::shared_ptr<MouseHandler> mpMouseHandler;

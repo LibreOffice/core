@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,21 +48,21 @@ module com { module sun { module star { module awt {
     @see com::sun::star::accessibility::XAccessibleComponent
     @see com::sun::star::accessibility::XAccessibleExtendedComponent
     @since OOo 1.1.2
-*/
+*/    
 published service AccessibleComboBox
 {
     /** This interface gives access to the structural information of a combo box:
 
        <ul>
-       <li>Role: The role of a combo box is <const
+       <li>Role: The role of a combo box is <const 
            scope="com::sun::star::accessibility"
            >AccessibleRole::COMBO_BOX</const>.</li>
        <li>Name: The name of a combo box is its localized label.</li>
        <li>Description: The description of a combo box is its localized
            help text.</li>
-       <li>Children: There exists two children.
-            The first is a <type scope="com::sun::star::awt">AccessibleTextField</type>
-            and the 2nd is a <type scope="com::sun::star::awt">AccessibleList</type>. </li>
+       <li>Children: There exists two children. 
+            The first is a <type scope="com::sun::star::awt">AccessibleTextField</type> 
+            and the 2nd is a <type scope="com::sun::star::awt">AccessibleList</type>. </li>            
        <li>Parent: The parent is the window that contains the combo box.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
@@ -70,7 +70,7 @@ published service AccessibleComboBox
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
-               and subsequent calls to this object result in
+               and subsequent calls to this object result in				
                <type scope="com::sun::star::lang">DisposedException</type>
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
@@ -102,7 +102,7 @@ published service AccessibleComboBox
     interface com::sun::star::accessibility::XAccessibleComponent;
     interface com::sun::star::accessibility::XAccessibleExtendedComponent;
 };
-
+          
 }; }; }; };
 
 #endif

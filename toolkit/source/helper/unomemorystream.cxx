@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 #include <toolkit/helper/unomemorystream.hxx>
 #include <algorithm>
 
-//  ----------------------------------------------------
-//  class UnoMemoryStream
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoMemoryStream
+//	----------------------------------------------------
 UnoMemoryStream::UnoMemoryStream( sal_uInt32 nInitSize, sal_uInt32 nInitResize )
     : SvMemoryStream( nInitSize, nInitResize )
 {
@@ -48,7 +48,7 @@ UnoMemoryStream::UnoMemoryStream( sal_uInt32 nInitSize, sal_uInt32 nInitResize )
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-
+    
 // ::com::sun::star::io::XInputStream
 sal_Int32 UnoMemoryStream::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
@@ -57,10 +57,10 @@ sal_Int32 UnoMemoryStream::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 
     sal_Int32 nRead = available();
     if ( nRead > nBytesToRead )
         nRead = nBytesToRead;
-
+    
     rData = ::com::sun::star::uno::Sequence< sal_Int8 >( nRead );
     Read( rData.getArray(), nRead );
-
+    
     return nRead;
 }
 
@@ -69,14 +69,14 @@ sal_Int32 UnoMemoryStream::readSomeBytes( ::com::sun::star::uno::Sequence< sal_I
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_Int32 nAvailable = available();
-    if( nAvailable )
+    if( nAvailable ) 
     {
         return readBytes( rData, std::min( nMaxBytesToRead , nAvailable ) );
     }
-    else
+    else 
     {
         // Not the most effective method, but it sticks to the specification
-        return readBytes( rData, 1 );
+        return readBytes( rData, 1 );	
     }
 }
 
@@ -99,7 +99,7 @@ sal_Int32 UnoMemoryStream::available() throw(::com::sun::star::io::NotConnectedE
 
 void UnoMemoryStream::closeInput() throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
-    // nothing to do
+    // nothing to do	
 }
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,18 +60,18 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
-    virtual String          GetValueTextByPos( USHORT nPos ) const;
-    virtual USHORT          GetValueCount() const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
+    virtual String			GetValueTextByPos( USHORT nPos ) const;
+    virtual USHORT			GetValueCount() const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	sal_Bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	sal_Bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    virtual int             HasBoolValue() const;
-    virtual BOOL            GetBoolValue() const;
-    virtual void            SetBoolValue( BOOL bVal );
+    virtual int 			HasBoolValue() const;
+    virtual BOOL			GetBoolValue() const;
+    virtual void			SetBoolValue( BOOL bVal );
 
     inline SvxWeightItem& operator=(const SvxWeightItem& rWeight) {
             SetValue( rWeight.GetValue() );
@@ -79,9 +79,9 @@ public:
         }
 
     // enum cast
-    FontWeight              GetWeight() const
+    FontWeight				GetWeight() const
                                 { return (FontWeight)GetValue(); }
-    void                    SetWeight( FontWeight eNew )
+    void					SetWeight( FontWeight eNew )
                                 { SetValue( (USHORT)eNew ); }
 };
 

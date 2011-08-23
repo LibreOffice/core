@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #include <uifactory/menubarfactory.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <uielement/menubarwrapper.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -50,7 +50,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #ifndef _VCL_MENU_HXX_
@@ -62,9 +62,9 @@
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
-//
+// 
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -77,11 +77,11 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MenuBarFactory                                  ,
-                                            ::cppu::OWeakObject                             ,
-                                            SERVICENAME_MENUBARFACTORY                      ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MenuBarFactory				                    ,
+                                            ::cppu::OWeakObject							    ,
+                                            SERVICENAME_MENUBARFACTORY	                    ,
                                             IMPLEMENTATIONNAME_MENUBARFACTORY
                                         )
 
@@ -105,8 +105,8 @@ MenuBarFactory::~MenuBarFactory()
 }
 
 // XUIElementFactory
-Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
-    const ::rtl::OUString& ResourceURL,
+Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement( 
+    const ::rtl::OUString& ResourceURL, 
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
@@ -127,7 +127,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
                                      ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >& _xModuleManager
                                      ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager)
 {
-    Reference< XUIConfigurationManager > xCfgMgr;
+    Reference< XUIConfigurationManager > xCfgMgr;    
     Reference< XUIConfigurationManager > xConfigSource;
     Reference< XFrame >                  xFrame;
     rtl::OUString                        aResourceURL( ResourceURL );
@@ -182,7 +182,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
             }
         }
     }
-
+    
     PropertyValue aPropValue;
     Sequence< Any > aPropSeq( _pExtraMode ? 5 : 4);
     aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
@@ -203,8 +203,8 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
         aPropValue.Value <<= bExtraMode;
         aPropSeq[4] <<= aPropValue;
     }
-
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    
+    vos::OGuard	aGuard( Application::GetSolarMutex() );
     Reference< XInitialization > xInit( _xMenuBar, UNO_QUERY );
     xInit->initialize( aPropSeq );
 }

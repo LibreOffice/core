@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,18 +107,18 @@ enum FileStatus
     FILE_DOES_NOT_EXIST,
     FILE_INVALID
 };
-
+    
 /** checks if the URL is a file.
 
     If it is a link to a file than
     it is resolved. Assuming that the argument
     represents a relative URL then FILE_INVALID
     is returned.
-
+    
 
     @return
     one of the values of FileStatus.
-
+    
     @exception
     Errors occured during determining if the file exists
  */
@@ -133,6 +133,6 @@ bool isAccessibilitySupportDesired();
 
 rtl::OUString buildClassPathFromDirectory(const rtl::OUString & relPath);
 
-rtl::OUString retrieveClassPath( ::rtl::OUString const & macro );
+rtl::OUString retrieveClassPath( ::rtl::OUString const & macro );    
 }
 #endif

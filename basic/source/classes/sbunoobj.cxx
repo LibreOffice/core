@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,6 +71,7 @@
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
+#include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 
 
 using com::sun::star::uno::Reference;
@@ -300,7 +301,12 @@ SbUnoObject* createOLEObject_Impl( const String& aType )
     SbUnoObject* pUnoObj = NULL;
     if( xOLEFactory.is() )
     {
-        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aType );
+        // some type names available in VBA can not be directly used in COM
+        ::rtl::OUString aOLEType = aType;
+        if ( aOLEType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SAXXMLReader30" ) ) ) )
+            aOLEType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Msxml2.SAXXMLReader.3.0" ) );
+
+        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aOLEType );
         if( xOLEObject.is() )
         {
             Any aAny;
@@ -516,43 +522,43 @@ SbxDataType unoToSbxType( TypeClass eType )
         case TypeClass_INTERFACE:
         case TypeClass_TYPE:
         case TypeClass_STRUCT:
-        case TypeClass_EXCEPTION:       eRetType = SbxOBJECT;   break;
+        case TypeClass_EXCEPTION:		eRetType = SbxOBJECT;	break;
 
         /* folgende Typen lassen wir erstmal weg
-        case TypeClass_SERVICE:         break;
-        case TypeClass_CLASS:           break;
-        case TypeClass_TYPEDEF:         break;
-        case TypeClass_UNION:           break;
-        case TypeClass_ARRAY:           break;
+        case TypeClass_SERVICE:			break;
+        case TypeClass_CLASS:			break;
+        case TypeClass_TYPEDEF:			break;
+        case TypeClass_UNION:			break;
+        case TypeClass_ARRAY:			break;
         */
-        case TypeClass_ENUM:            eRetType = SbxLONG;     break;
+        case TypeClass_ENUM:			eRetType = SbxLONG;		break;
         case TypeClass_SEQUENCE:
             eRetType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
             break;
 
         /*
-        case TypeClass_VOID:            break;
-        case TypeClass_UNKNOWN:         break;
+        case TypeClass_VOID:			break;
+        case TypeClass_UNKNOWN:			break;
         */
 
-        case TypeClass_ANY:             eRetType = SbxVARIANT;  break;
-        case TypeClass_BOOLEAN:         eRetType = SbxBOOL;     break;
-        case TypeClass_CHAR:            eRetType = SbxCHAR;     break;
-        case TypeClass_STRING:          eRetType = SbxSTRING;   break;
-        case TypeClass_FLOAT:           eRetType = SbxSINGLE;   break;
-        case TypeClass_DOUBLE:          eRetType = SbxDOUBLE;   break;
-        //case TypeClass_OCTET:                                 break;
-        case TypeClass_BYTE:            eRetType = SbxINTEGER;  break;
-        //case TypeClass_INT:               eRetType = SbxINT;  break;
-        case TypeClass_SHORT:           eRetType = SbxINTEGER;  break;
-        case TypeClass_LONG:            eRetType = SbxLONG;     break;
-        case TypeClass_HYPER:           eRetType = SbxSALINT64; break;
-        //case TypeClass_UNSIGNED_OCTET:                        break;
-        case TypeClass_UNSIGNED_SHORT:  eRetType = SbxUSHORT;   break;
-        case TypeClass_UNSIGNED_LONG:   eRetType = SbxULONG;    break;
+        case TypeClass_ANY:				eRetType = SbxVARIANT;	break;
+        case TypeClass_BOOLEAN:			eRetType = SbxBOOL;		break;
+        case TypeClass_CHAR:			eRetType = SbxCHAR;		break;
+        case TypeClass_STRING:			eRetType = SbxSTRING;	break;
+        case TypeClass_FLOAT:			eRetType = SbxSINGLE;	break;
+        case TypeClass_DOUBLE:			eRetType = SbxDOUBLE;	break;
+        //case TypeClass_OCTET:									break;
+        case TypeClass_BYTE:			eRetType = SbxINTEGER;  break;
+        //case TypeClass_INT:				eRetType = SbxINT;	break;
+        case TypeClass_SHORT:			eRetType = SbxINTEGER;	break;
+        case TypeClass_LONG:			eRetType = SbxLONG;		break;
+        case TypeClass_HYPER:			eRetType = SbxSALINT64;	break;
+        //case TypeClass_UNSIGNED_OCTET:						break;
+        case TypeClass_UNSIGNED_SHORT:	eRetType = SbxUSHORT;	break;
+        case TypeClass_UNSIGNED_LONG:	eRetType = SbxULONG;	break;
         case TypeClass_UNSIGNED_HYPER:  eRetType = SbxSALUINT64;break;
-        //case TypeClass_UNSIGNED_INT:  eRetType = SbxUINT;     break;
-        //case TypeClass_UNSIGNED_BYTE: eRetType = SbxUSHORT;   break;
+        //case TypeClass_UNSIGNED_INT:	eRetType = SbxUINT;		break;
+        //case TypeClass_UNSIGNED_BYTE:	eRetType = SbxUSHORT;	break;
         default: break;
     }
     return eRetType;
@@ -647,7 +653,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
             unoToSbxValue( (SbxVariable*)xVar, aValue );
 
             sal_Int32* pIndices = indices.getArray();
-            pArray->Put32(  (SbxVariable*)xVar, pIndices );
+            pArray->Put32( 	(SbxVariable*)xVar, pIndices );
 
         }
     }
@@ -752,7 +758,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             // SbUnoObject instanzieren
             String aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aValue );
-            //If this is called externally e.g. from the scripting
+            //If this is called externally e.g. from the scripting 
             //framework then there is no 'active' runtime the default property will not be set up
             //only a vba object will have XDefaultProp set anyway so... this
             //test seems a bit of overkill
@@ -778,12 +784,12 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         break;
 
         /* folgende Typen lassen wir erstmal weg
-        case TypeClass_SERVICE:         break;
-        case TypeClass_CLASS:           break;
-        case TypeClass_TYPEDEF:         break;
-        case TypeClass_UNION:           break;
-        case TypeClass_ENUM:            break;
-        case TypeClass_ARRAY:           break;
+        case TypeClass_SERVICE:			break;
+        case TypeClass_CLASS:			break;
+        case TypeClass_TYPEDEF:			break;
+        case TypeClass_UNION:			break;
+        case TypeClass_ENUM:			break;
+        case TypeClass_ARRAY:			break;
         */
 
         case TypeClass_ENUM:
@@ -843,8 +849,8 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         break;
 
         /*
-        case TypeClass_VOID:            break;
-        case TypeClass_UNKNOWN:         break;
+        case TypeClass_VOID:			break;
+        case TypeClass_UNKNOWN:			break;
 
         case TypeClass_ANY:
         {
@@ -856,28 +862,28 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         break;
         */
 
-        case TypeClass_BOOLEAN:         pVar->PutBool( *(sal_Bool*)aValue.getValue() ); break;
+        case TypeClass_BOOLEAN:			pVar->PutBool( *(sal_Bool*)aValue.getValue() );	break;
         case TypeClass_CHAR:
         {
             pVar->PutChar( *(sal_Unicode*)aValue.getValue() );
             break;
         }
-        case TypeClass_STRING:          { ::rtl::OUString val; aValue >>= val; pVar->PutString( String( val ) ); }  break;
-        case TypeClass_FLOAT:           { float val = 0; aValue >>= val; pVar->PutSingle( val ); } break;
-        case TypeClass_DOUBLE:          { double val = 0; aValue >>= val; pVar->PutDouble( val ); } break;
-        //case TypeClass_OCTET:         break;
-        case TypeClass_BYTE:            { sal_Int8 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
-        //case TypeClass_INT:           break;
-        case TypeClass_SHORT:           { sal_Int16 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
-        case TypeClass_LONG:            { sal_Int32 val = 0; aValue >>= val; pVar->PutLong( val ); } break;
-        case TypeClass_HYPER:           { sal_Int64 val = 0; aValue >>= val; pVar->PutInt64( val ); } break;
+        case TypeClass_STRING:			{ ::rtl::OUString val; aValue >>= val; pVar->PutString( String( val ) ); }	break;
+        case TypeClass_FLOAT:			{ float val = 0; aValue >>= val; pVar->PutSingle( val ); } break;
+        case TypeClass_DOUBLE:			{ double val = 0; aValue >>= val; pVar->PutDouble( val ); } break;
+        //case TypeClass_OCTET:			break;
+        case TypeClass_BYTE:			{ sal_Int8 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
+        //case TypeClass_INT:			break;
+        case TypeClass_SHORT:			{ sal_Int16 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
+        case TypeClass_LONG:			{ sal_Int32 val = 0; aValue >>= val; pVar->PutLong( val ); } break;
+        case TypeClass_HYPER:			{ sal_Int64 val = 0; aValue >>= val; pVar->PutInt64( val ); } break;
         //case TypeClass_UNSIGNED_OCTET:break;
-        case TypeClass_UNSIGNED_SHORT:  { sal_uInt16 val = 0; aValue >>= val; pVar->PutUShort( val ); } break;
-        case TypeClass_UNSIGNED_LONG:   { sal_uInt32 val = 0; aValue >>= val; pVar->PutULong( val ); } break;
-        case TypeClass_UNSIGNED_HYPER:  { sal_uInt64 val = 0; aValue >>= val; pVar->PutUInt64( val ); } break;
-        //case TypeClass_UNSIGNED_INT:  break;
-        //case TypeClass_UNSIGNED_BYTE: break;
-        default:                        pVar->PutEmpty();                       break;
+        case TypeClass_UNSIGNED_SHORT:	{ sal_uInt16 val = 0; aValue >>= val; pVar->PutUShort( val ); } break;
+        case TypeClass_UNSIGNED_LONG:	{ sal_uInt32 val = 0; aValue >>= val; pVar->PutULong( val ); } break;
+        case TypeClass_UNSIGNED_HYPER:	{ sal_uInt64 val = 0; aValue >>= val; pVar->PutUInt64( val ); } break;
+        //case TypeClass_UNSIGNED_INT:	break;
+        //case TypeClass_UNSIGNED_BYTE:	break;
+        default:						pVar->PutEmpty();						break;
     }
 }
 
@@ -887,15 +893,15 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
     Type aRetType = getCppuVoidType();
     switch( eType )
     {
-        //case SbxEMPTY:        eRet = TypeClass_VOID; break;
-        case SbxNULL:       aRetType = ::getCppuType( (const Reference< XInterface > *)0 ); break;
-        case SbxINTEGER:    aRetType = ::getCppuType( (sal_Int16*)0 ); break;
-        case SbxLONG:       aRetType = ::getCppuType( (sal_Int32*)0 ); break;
-        case SbxSINGLE:     aRetType = ::getCppuType( (float*)0 ); break;
-        case SbxDOUBLE:     aRetType = ::getCppuType( (double*)0 ); break;
-        case SbxCURRENCY:   aRetType = ::getCppuType( (oleautomation::Currency*)0 ); break;
-        case SbxDECIMAL:    aRetType = ::getCppuType( (oleautomation::Decimal*)0 ); break;
-        case SbxDATE:       {
+        //case SbxEMPTY:		eRet = TypeClass_VOID; break;
+        case SbxNULL:		aRetType = ::getCppuType( (const Reference< XInterface > *)0 ); break;
+        case SbxINTEGER:	aRetType = ::getCppuType( (sal_Int16*)0 ); break;
+        case SbxLONG:		aRetType = ::getCppuType( (sal_Int32*)0 ); break;
+        case SbxSINGLE:		aRetType = ::getCppuType( (float*)0 ); break;
+        case SbxDOUBLE:		aRetType = ::getCppuType( (double*)0 ); break;
+        case SbxCURRENCY:	aRetType = ::getCppuType( (oleautomation::Currency*)0 ); break;
+        case SbxDECIMAL:	aRetType = ::getCppuType( (oleautomation::Decimal*)0 ); break;
+        case SbxDATE:		{
                             SbiInstance* pInst = pINST;
                             if( pInst && pInst->IsCompatibility() )
                                 aRetType = ::getCppuType( (double*)0 );
@@ -903,30 +909,30 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
                                 aRetType = ::getCppuType( (oleautomation::Date*)0 );
                             }
                             break;
-        // case SbxDATE:        aRetType = ::getCppuType( (double*)0 ); break;
-        case SbxSTRING:     aRetType = ::getCppuType( (::rtl::OUString*)0 ); break;
-        //case SbxOBJECT:   break;
-        //case SbxERROR:    break;
-        case SbxBOOL:       aRetType = ::getCppuType( (sal_Bool*)0 ); break;
-        case SbxVARIANT:    aRetType = ::getCppuType( (Any*)0 ); break;
+        // case SbxDATE:		aRetType = ::getCppuType( (double*)0 ); break;
+        case SbxSTRING:		aRetType = ::getCppuType( (::rtl::OUString*)0 ); break;
+        //case SbxOBJECT:	break;
+        //case SbxERROR:	break;
+        case SbxBOOL:		aRetType = ::getCppuType( (sal_Bool*)0 ); break;
+        case SbxVARIANT:	aRetType = ::getCppuType( (Any*)0 ); break;
         //case SbxDATAOBJECT: break;
-        case SbxCHAR:       aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
-        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int8*)0 ); break;
-        case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
-        case SbxULONG:      aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
-        //case SbxLONG64:   break;
-        //case SbxULONG64:  break;
+        case SbxCHAR:		aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
+        case SbxBYTE:		aRetType = ::getCppuType( (sal_Int8*)0 ); break;
+        case SbxUSHORT:		aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
+        case SbxULONG:		aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
+        //case SbxLONG64:	break;
+        //case SbxULONG64:	break;
         // Maschinenabhaengige zur Sicherheit auf Hyper abbilden
-        case SbxINT:        aRetType = ::getCppuType( (sal_Int32*)0 ); break;
-        case SbxUINT:       aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
-        //case SbxVOID:     break;
-        //case SbxHRESULT:  break;
-        //case SbxPOINTER:  break;
-        //case SbxDIMARRAY: break;
-        //case SbxCARRAY:   break;
-        //case SbxUSERDEF:  break;
-        //case SbxLPSTR:    break;
-        //case SbxLPWSTR:   break;
+        case SbxINT:		aRetType = ::getCppuType( (sal_Int32*)0 ); break;
+        case SbxUINT:		aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
+        //case SbxVOID:		break;
+        //case SbxHRESULT:	break;
+        //case SbxPOINTER:	break;
+        //case SbxDIMARRAY:	break;
+        //case SbxCARRAY:	break;
+        //case SbxUSERDEF:	break;
+        //case SbxLPSTR:	break;
+        //case SbxLPWSTR:	break;
         //case SbxCoreSTRING: break;
         default: break;
     }
@@ -1313,12 +1319,12 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         break;
 
         /* folgende Typen lassen wir erstmal weg
-        case TypeClass_SERVICE:         break;
-        case TypeClass_CLASS:           break;
-        case TypeClass_TYPEDEF:         break;
-        case TypeClass_UNION:           break;
-        case TypeClass_ENUM:            break;
-        case TypeClass_ARRAY:           break;
+        case TypeClass_SERVICE:			break;
+        case TypeClass_CLASS:			break;
+        case TypeClass_TYPEDEF:			break;
+        case TypeClass_UNION:			break;
+        case TypeClass_ENUM:			break;
+        case TypeClass_ARRAY:			break;
         */
 
         // Array -> Sequence
@@ -1437,8 +1443,8 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         break;
 
         /*
-        case TypeClass_VOID:            break;
-        case TypeClass_UNKNOWN:         break;
+        case TypeClass_VOID:			break;
+        case TypeClass_UNKNOWN:			break;
         */
 
         // Bei Any die Klassen-unabhaengige Konvertierungs-Routine nutzen
@@ -1460,10 +1466,10 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
             aRetVal.setValue( &c , getCharCppuType() );
             break;
         }
-        case TypeClass_STRING:          aRetVal <<= ::rtl::OUString( pVar->GetString() ); break;
-        case TypeClass_FLOAT:           aRetVal <<= pVar->GetSingle(); break;
-        case TypeClass_DOUBLE:          aRetVal <<= pVar->GetDouble(); break;
-        //case TypeClass_OCTET:         break;
+        case TypeClass_STRING:			aRetVal <<= pVar->GetOUString(); break;
+        case TypeClass_FLOAT:			aRetVal <<= pVar->GetSingle(); break;
+        case TypeClass_DOUBLE:			aRetVal <<= pVar->GetDouble(); break;
+        //case TypeClass_OCTET:			break;
 
         case TypeClass_BYTE:
         {
@@ -1486,16 +1492,16 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
             aRetVal <<= nByteVal;
             break;
         }
-        //case TypeClass_INT:           break;
-        case TypeClass_SHORT:           aRetVal <<= (sal_Int16)( pVar->GetInteger() );  break;
-        case TypeClass_LONG:            aRetVal <<= (sal_Int32)( pVar->GetLong() );     break;
-        case TypeClass_HYPER:           aRetVal <<= (sal_Int64)( pVar->GetInt64() );    break;
+        //case TypeClass_INT:			break;
+        case TypeClass_SHORT:			aRetVal <<= (sal_Int16)( pVar->GetInteger() );	break;
+        case TypeClass_LONG:			aRetVal <<= (sal_Int32)( pVar->GetLong() );     break;
+        case TypeClass_HYPER:			aRetVal <<= (sal_Int64)( pVar->GetInt64() );    break;
         //case TypeClass_UNSIGNED_OCTET:break;
-        case TypeClass_UNSIGNED_SHORT:  aRetVal <<= (sal_uInt16)( pVar->GetUShort() );  break;
-        case TypeClass_UNSIGNED_LONG:   aRetVal <<= (sal_uInt32)( pVar->GetULong() );   break;
+        case TypeClass_UNSIGNED_SHORT:	aRetVal <<= (sal_uInt16)( pVar->GetUShort() );	break;
+        case TypeClass_UNSIGNED_LONG:	aRetVal <<= (sal_uInt32)( pVar->GetULong() );	break;
         case TypeClass_UNSIGNED_HYPER:  aRetVal <<= (sal_uInt64)( pVar->GetUInt64() );  break;
-        //case TypeClass_UNSIGNED_INT:  break;
-        //case TypeClass_UNSIGNED_BYTE: break;
+        //case TypeClass_UNSIGNED_INT:	break;
+        //case TypeClass_UNSIGNED_BYTE:	break;
         default: break;
     }
 
@@ -1633,7 +1639,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
                     xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sTypeName;
                     if ( sTypeName.getLength() == 0 || sTypeName.equals(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IDispatch") ) ) )
                         // can't check type, leave it pass
-                        result = true;
+                        result = true;	
                     else
                         result = sTypeName.equals( aClass );
                 }
@@ -1728,39 +1734,39 @@ String Dbg_SbxDataType2String( SbxDataType eType )
     String aRet( RTL_CONSTASCII_USTRINGPARAM("Unknown Sbx-Type!") );
     switch( +eType )
     {
-        case SbxEMPTY:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxEMPTY") ); break;
-        case SbxNULL:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxNULL") ); break;
-        case SbxINTEGER:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINTEGER") ); break;
-        case SbxLONG:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLONG") ); break;
-        case SbxSINGLE:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxSINGLE") ); break;
-        case SbxDOUBLE:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDOUBLE") ); break;
-        case SbxCURRENCY:   aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCURRENCY") ); break;
-        case SbxDECIMAL:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDECIMAL") ); break;
-        case SbxDATE:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDATE") ); break;
-        case SbxSTRING:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxSTRING") ); break;
-        case SbxOBJECT:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxOBJECT") ); break;
-        case SbxERROR:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxERROR") ); break;
-        case SbxBOOL:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxBOOL") ); break;
-        case SbxVARIANT:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxVARIANT") ); break;
+        case SbxEMPTY:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxEMPTY") ); break;
+        case SbxNULL:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxNULL") ); break;
+        case SbxINTEGER:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINTEGER") ); break;
+        case SbxLONG:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLONG") ); break;
+        case SbxSINGLE:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxSINGLE") ); break;
+        case SbxDOUBLE:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDOUBLE") ); break;
+        case SbxCURRENCY:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCURRENCY") ); break;
+        case SbxDECIMAL:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDECIMAL") ); break;
+        case SbxDATE:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDATE") ); break;
+        case SbxSTRING:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxSTRING") ); break;
+        case SbxOBJECT:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxOBJECT") ); break;
+        case SbxERROR:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxERROR") ); break;
+        case SbxBOOL:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxBOOL") ); break;
+        case SbxVARIANT:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxVARIANT") ); break;
         case SbxDATAOBJECT: aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDATAOBJECT") ); break;
-        case SbxCHAR:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCHAR") ); break;
-        case SbxBYTE:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxBYTE") ); break;
-        case SbxUSHORT:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUSHORT") ); break;
-        case SbxULONG:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxULONG") ); break;
-        case SbxLONG64:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLONG64") ); break;
-        case SbxULONG64:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxULONG64") ); break;
-        case SbxSALINT64:   aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINT64") ); break;
-        case SbxSALUINT64:  aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUINT64") ); break;
-        case SbxINT:        aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINT") ); break;
-        case SbxUINT:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUINT") ); break;
-        case SbxVOID:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxVOID") ); break;
-        case SbxHRESULT:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxHRESULT") ); break;
-        case SbxPOINTER:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxPOINTER") ); break;
-        case SbxDIMARRAY:   aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDIMARRAY") ); break;
-        case SbxCARRAY:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCARRAY") ); break;
-        case SbxUSERDEF:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUSERDEF") ); break;
-        case SbxLPSTR:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLPSTR") ); break;
-        case SbxLPWSTR:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLPWSTR") ); break;
+        case SbxCHAR:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCHAR") ); break;
+        case SbxBYTE:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxBYTE") ); break;
+        case SbxUSHORT:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUSHORT") ); break;
+        case SbxULONG:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxULONG") ); break;
+        case SbxLONG64:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLONG64") ); break;
+        case SbxULONG64:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxULONG64") ); break;
+        case SbxSALINT64:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINT64") ); break;
+        case SbxSALUINT64:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUINT64") ); break;
+        case SbxINT:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINT") ); break;
+        case SbxUINT:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUINT") ); break;
+        case SbxVOID:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxVOID") ); break;
+        case SbxHRESULT:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxHRESULT") ); break;
+        case SbxPOINTER:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxPOINTER") ); break;
+        case SbxDIMARRAY:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDIMARRAY") ); break;
+        case SbxCARRAY:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCARRAY") ); break;
+        case SbxUSERDEF:	aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUSERDEF") ); break;
+        case SbxLPSTR:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLPSTR") ); break;
+        case SbxLPWSTR:		aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLPWSTR") ); break;
         case SbxCoreSTRING: aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCoreSTRING" ) ); break;
         case SbxOBJECT | SbxARRAY: aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxARRAY") ); break;
         default: break;
@@ -1961,13 +1967,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 if( nId < 0 )
                 {
                     // Id == -1: Implementierte Interfaces gemaess ClassProvider anzeigen
-                    if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
+                    if( nId == -1 )		// Property ID_DBG_SUPPORTEDINTERFACES"
                     {
                         String aRetStr = Impl_GetSupportedInterfaces( this );
                         pVar->PutString( aRetStr );
                     }
                     // Id == -2: Properties ausgeben
-                    else if( nId == -2 )        // Property ID_DBG_PROPERTIES
+                    else if( nId == -2 )		// Property ID_DBG_PROPERTIES
                     {
                         // Jetzt muessen alle Properties angelegt werden
                         implCreateAll();
@@ -1975,7 +1981,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         pVar->PutString( aRetStr );
                     }
                     // Id == -3: Methoden ausgeben
-                    else if( nId == -3 )        // Property ID_DBG_METHODS
+                    else if( nId == -3 )		// Property ID_DBG_METHODS
                     {
                         // Jetzt muessen alle Properties angelegt werden
                         implCreateAll();
@@ -2265,6 +2271,7 @@ Reference< XInvocation > createDynamicInvocationFor( const Any& aAny );
 SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
     , bNeedIntrospection( TRUE )
+    , bIgnoreNativeCOMObjectMembers( FALSE )
 {
     static Reference< XIntrospection > xIntrospection;
 
@@ -2310,6 +2317,12 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
             bNeedIntrospection = FALSE;
             return;
         }
+
+        // Ignore introspection based members for COM objects to avoid
+        // hiding of equally named COM symbols, e.g. XInvocation::getValue
+        Reference< oleautomation::XAutomationObject > xAutomationObject( aUnoObj_, UNO_QUERY );
+        if( xAutomationObject.is() )
+            bIgnoreNativeCOMObjectMembers = TRUE;
     }
 
     maTmpUnoObj = aUnoObj_;
@@ -2553,7 +2566,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
     if( !pRes )
     {
         ::rtl::OUString aUName( rName );
-        if( mxUnoAccess.is() )
+        if( mxUnoAccess.is() && !bIgnoreNativeCOMObjectMembers )
         {
             if( mxExactName.is() )
             {
@@ -2713,10 +2726,12 @@ void SbUnoObject::implCreateAll( void )
 
     // Instrospection besorgen
     Reference< XIntrospectionAccess > xAccess = mxUnoAccess;
-    if( !xAccess.is() )
+    if( !xAccess.is() || bIgnoreNativeCOMObjectMembers )
     {
         if( mxInvocation.is() )
             xAccess = mxInvocation->getIntrospection();
+        else if( bIgnoreNativeCOMObjectMembers )
+            return;
     }
     if( !xAccess.is() )
         return;
@@ -2925,7 +2940,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
 {
     (void)pBasic;
     (void)bWrite;
-
+    
     // Wir brauchen mindestens 2 Parameter
     if ( rPar.Count() < 3 )
     {
@@ -3412,7 +3427,7 @@ SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
             for( int i = 0 ; i < nCtorCount ; ++i )
             {
                 Reference< XServiceConstructorDescription > xCtor = pCtorSeq[i];
-
+                
                 String aName( xCtor->getName() );
                 if( !aName.Len() )
                 {
@@ -3557,7 +3572,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     Reference < XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
                     xContext.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ), UNO_QUERY_THROW );
                 }
-                Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
+                Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() ); 
 
                 Any aRetAny;
                 if( xServiceMgr.is() )
@@ -3714,7 +3729,7 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
 }
 
-
+ 
 //========================================================================
 //========================================================================
 //========================================================================
@@ -3726,8 +3741,8 @@ class BasicAllListener_Impl : public BasicAllListenerHelper
     virtual void firing_impl(const AllEventObject& Event, Any* pRet);
 
 public:
-    SbxObjectRef    xSbxObj;
-    ::rtl::OUString     aPrefixName;
+    SbxObjectRef	xSbxObj;
+    ::rtl::OUString		aPrefixName;
 
     BasicAllListener_Impl( const ::rtl::OUString& aPrefixName );
     ~BasicAllListener_Impl();
@@ -3747,7 +3762,7 @@ public:
 //========================================================================
 BasicAllListener_Impl::BasicAllListener_Impl
 (
-    const ::rtl::OUString   & aPrefixName_
+    const ::rtl::OUString	& aPrefixName_
 )
     : aPrefixName( aPrefixName_ )
 {
@@ -3856,9 +3871,9 @@ public:
 
 private:
     Reference< XIdlReflection >  m_xCoreReflection;
-    Reference< XAllListener >    m_xAllListener;
-    Reference< XIdlClass >       m_xListenerType;
-    Any                          m_Helper;
+    Reference< XAllListener >	 m_xAllListener;
+    Reference< XIdlClass >  	 m_xListenerType;
+    Any 						 m_Helper;
 };
 
 
@@ -3874,7 +3889,7 @@ Reference< XInterface > createAllListenerAdapter
     Reference< XInterface > xAdapter;
     if( xInvocationAdapterFactory.is() && xListenerType.is() && xListener.is() )
     {
-       Reference< XInvocation > xInvocationToAllListenerMapper =
+       Reference< XInvocation >	xInvocationToAllListenerMapper =
             (XInvocation*)new InvocationToAllListenerMapper( xListenerType, xListener, Helper );
         Type aListenerType( xListenerType->getTypeClass(), xListenerType->getName() );
         xAdapter = xInvocationAdapterFactory->createAdapter( xInvocationToAllListenerMapper, aListenerType );
@@ -4159,9 +4174,9 @@ typedef WeakImplHelper1< XInvocation > ModuleInvocationProxyHelper;
 
 class ModuleInvocationProxy : public ModuleInvocationProxyHelper
 {
-    ::rtl::OUString     m_aPrefix;
-    SbxObjectRef        m_xScopeObj;
-    bool                m_bProxyIsClassModuleObject;
+    ::rtl::OUString		m_aPrefix;
+    SbxObjectRef		m_xScopeObj;
+    bool				m_bProxyIsClassModuleObject;
 
 public:
     ModuleInvocationProxy( const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
@@ -4176,7 +4191,7 @@ public:
         throw( UnknownPropertyException );
     virtual sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& rName ) throw();
     virtual sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& rProp ) throw();
-
+    
     virtual Any SAL_CALL invoke( const ::rtl::OUString& rFunction,
                                  const Sequence< Any >& rParams,
                                  Sequence< sal_Int16 >& rOutParamIndex,
@@ -4332,7 +4347,7 @@ Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::
     Reference< XInterface > xRet;
 
     Reference< XComponentContext > xContext = getComponentContext_Impl();
-    Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
+    Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() ); 
 
     Reference< XInvocation > xProxy = new ModuleInvocationProxy( aPrefix, xScopeObj );
 
@@ -4362,7 +4377,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
     // TODO: Check if support for multiple interfaces is needed
 
     Reference< XComponentContext > xContext = getComponentContext_Impl();
-    Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
+    Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() ); 
     Reference< XSingleServiceFactory > xComImplementsFactory
     (
         xServiceMgr->createInstanceWithContext(

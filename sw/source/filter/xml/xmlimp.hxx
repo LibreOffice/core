@@ -1,7 +1,7 @@
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,48 +54,48 @@ namespace SwImport {
 
 class SwXMLImport: public SvXMLImport
 {
-    SwNodeIndex             *pSttNdIdx;
+    SwNodeIndex				*pSttNdIdx;
 
-    SvXMLUnitConverter      *pTwipUnitConv;
-    SvXMLImportItemMapper   *pTableItemMapper;// paragraph item import
-    SvXMLTokenMap           *pDocElemTokenMap;
-    SvXMLTokenMap           *pTableElemTokenMap;
-    SvXMLTokenMap           *pTableCellAttrTokenMap;
-    SvXMLGraphicHelper      *pGraphicResolver;
-    SvXMLEmbeddedObjectHelper   *pEmbeddedResolver;
+    SvXMLUnitConverter		*pTwipUnitConv;
+    SvXMLImportItemMapper	*pTableItemMapper;// paragraph item import
+    SvXMLTokenMap			*pDocElemTokenMap;
+    SvXMLTokenMap			*pTableElemTokenMap;
+    SvXMLTokenMap			*pTableCellAttrTokenMap;
+    SvXMLGraphicHelper 		*pGraphicResolver;
+    SvXMLEmbeddedObjectHelper	*pEmbeddedResolver;
 
-    SvXMLItemMapEntriesRef  xTableItemMap;
-    SvXMLItemMapEntriesRef  xTableColItemMap;
-    SvXMLItemMapEntriesRef  xTableRowItemMap;
-    SvXMLItemMapEntriesRef  xTableCellItemMap;
-    SvStorageRef            xPackage;
+    SvXMLItemMapEntriesRef 	xTableItemMap;
+    SvXMLItemMapEntriesRef 	xTableColItemMap;
+    SvXMLItemMapEntriesRef 	xTableRowItemMap;
+    SvXMLItemMapEntriesRef 	xTableCellItemMap;
+    SvStorageRef			xPackage;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                             xLateInitSettings;
 
-    sal_uInt16              nStyleFamilyMask;// Mask of styles to load
-    sal_Bool                bLoadDoc : 1;   // Load doc or styles only
-    sal_Bool                bInsert : 1;    // Insert mode. If styles are
+    sal_uInt16				nStyleFamilyMask;// Mask of styles to load
+    sal_Bool				bLoadDoc : 1;	// Load doc or styles only
+    sal_Bool				bInsert : 1;	// Insert mode. If styles are
                                             // loaded only sal_False means that
                                             // existing styles will be
                                             // overwritten.
-    sal_Bool                bBlock : 1;     // Load text block
-    sal_Bool                bAutoStylesValid : 1;
-    sal_Bool                bShowProgress : 1;
-    sal_Bool                bOrganizerMode : 1;
+    sal_Bool				bBlock : 1;		// Load text block
+    sal_Bool				bAutoStylesValid : 1;
+    sal_Bool				bShowProgress : 1;
+    sal_Bool				bOrganizerMode : 1;
     sal_Bool                bInititedXForms : 1;
-    sal_Bool                bPreserveRedlineMode;
+    sal_Bool				bPreserveRedlineMode;
 
-    void                    _InitItemImport();
-    void                    _FinitItemImport();
-    void                    UpdateTxtCollConditions( SwDoc *pDoc );
+    void					_InitItemImport();
+    void					_FinitItemImport();
+    void 					UpdateTxtCollConditions( SwDoc *pDoc );
 
-    void         setTextInsertMode(
+    void		 setTextInsertMode(
                      const ::com::sun::star::uno::Reference<
                         ::com::sun::star::text::XTextRange > & rInsertPos );
-    void         setStyleInsertMode( sal_uInt16 nFamilies,
+    void		 setStyleInsertMode( sal_uInt16 nFamilies,
                                      sal_Bool bOverwrite );
-    void         setBlockMode();
-    void         setOrganizerMode();
+    void		 setBlockMode();
+    void		 setOrganizerMode();
 
 
 protected:
@@ -120,12 +120,12 @@ public:
 
 #ifdef XML_CORE_API
     // #110680#
-    SwXMLImport(
+    SwXMLImport( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        SwDoc& rDoc,
-        const SwPaM& rPaM,
+        SwDoc& rDoc, 
+        const SwPaM& rPaM, 
         sal_Bool bLoadDoc,
-        sal_Bool bInsertMode,
+        sal_Bool bInsertMode, 
         sal_uInt16 nStyleFamMask,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
         const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > &,
@@ -151,8 +151,8 @@ public:
     ::rtl::OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
 
-    void                    InsertStyles( sal_Bool bAuto );
-    void                    FinishStyles();
+    void					InsertStyles( sal_Bool bAuto );
+    void					FinishStyles();
 
     // namespace office
 
@@ -224,8 +224,8 @@ inline const SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper() const
 
 inline void SwXMLImport::SetProgressValue( sal_Int32 nValue )
 {
-    if ( bShowProgress )
-        GetProgressBarHelper()->SetValue(nValue);
+    if ( bShowProgress ) 
+        GetProgressBarHelper()->SetValue(nValue); 
 }
 
-#endif  //  _XMLIMP_HXX
+#endif	//  _XMLIMP_HXX

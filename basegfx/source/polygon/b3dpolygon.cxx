@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,38 +42,38 @@
 
 class CoordinateData3D
 {
-    basegfx::B3DPoint                               maPoint;
+    basegfx::B3DPoint								maPoint;
 
 public:
-    CoordinateData3D()
-    :   maPoint()
+    CoordinateData3D() 
+    :	maPoint() 
     {
     }
 
     explicit CoordinateData3D(const basegfx::B3DPoint& rData)
-    :   maPoint(rData)
+    :	maPoint(rData) 
     {
     }
 
-    const basegfx::B3DPoint& getCoordinate() const
-    {
-        return maPoint;
+    const basegfx::B3DPoint& getCoordinate() const 
+    { 
+        return maPoint; 
     }
 
-    void setCoordinate(const basegfx::B3DPoint& rValue)
-    {
-        if(rValue != maPoint)
-            maPoint = rValue;
+    void setCoordinate(const basegfx::B3DPoint& rValue) 
+    { 
+        if(rValue != maPoint) 
+            maPoint = rValue; 
     }
 
-    bool operator==(const CoordinateData3D& rData) const
-    {
-        return (maPoint == rData.getCoordinate());
+    bool operator==(const CoordinateData3D& rData) const 
+    {	
+        return (maPoint == rData.getCoordinate()); 
     }
 
-    void transform(const basegfx::B3DHomMatrix& rMatrix)
-    {
-        maPoint *= rMatrix;
+    void transform(const basegfx::B3DHomMatrix& rMatrix) 
+    { 
+        maPoint *= rMatrix; 
     }
 };
 
@@ -83,21 +83,21 @@ class CoordinateDataArray3D
 {
     typedef ::std::vector< CoordinateData3D > CoordinateData3DVector;
 
-    CoordinateData3DVector                          maVector;
+    CoordinateData3DVector							maVector;
 
 public:
     explicit CoordinateDataArray3D(sal_uInt32 nCount)
-    :   maVector(nCount)
+    :	maVector(nCount)
     {
     }
 
     explicit CoordinateDataArray3D(const CoordinateDataArray3D& rOriginal)
-    :   maVector(rOriginal.maVector)
+    :	maVector(rOriginal.maVector)
     {
     }
 
     CoordinateDataArray3D(const CoordinateDataArray3D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maVector(rOriginal.maVector.begin() + nIndex, rOriginal.maVector.begin() + (nIndex + nCount))
+    :	maVector(rOriginal.maVector.begin() + nIndex, rOriginal.maVector.begin() + (nIndex + nCount))
     {
     }
 
@@ -123,7 +123,7 @@ public:
             for(a = 1; a < nPointCount; a++)
             {
                 const basegfx::B3DPoint& rCandidate = maVector[a].getCoordinate();
-
+                
                 if((rCandidate.getX() < pSmallest->getX())
                     || (rCandidate.getX() == pSmallest->getX() && rCandidate.getY() < pSmallest->getY())
                     || (rCandidate.getX() == pSmallest->getX() && rCandidate.getY() == pSmallest->getY() && rCandidate.getZ() < pSmallest->getZ()))
@@ -237,7 +237,7 @@ public:
             const sal_uInt32 nHalfSize(maVector.size() >> 1L);
             CoordinateData3DVector::iterator aStart(maVector.begin());
             CoordinateData3DVector::iterator aEnd(maVector.end() - 1L);
-
+            
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
@@ -265,24 +265,24 @@ class BColorArray
 {
     typedef ::std::vector< ::basegfx::BColor > BColorDataVector;
 
-    BColorDataVector                                    maVector;
-    sal_uInt32                                          mnUsedEntries;
+    BColorDataVector									maVector;
+    sal_uInt32											mnUsedEntries;
 
 public:
     explicit BColorArray(sal_uInt32 nCount)
-    :   maVector(nCount),
+    :	maVector(nCount),
         mnUsedEntries(0L)
     {
     }
 
     explicit BColorArray(const BColorArray& rOriginal)
-    :   maVector(rOriginal.maVector),
+    :	maVector(rOriginal.maVector),
         mnUsedEntries(rOriginal.mnUsedEntries)
     {
     }
 
     BColorArray(const BColorArray& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maVector(),
+    :	maVector(),
         mnUsedEntries(0L)
     {
         BColorDataVector::const_iterator aStart(rOriginal.maVector.begin());
@@ -314,8 +314,8 @@ public:
         return (maVector == rCandidate.maVector);
     }
 
-    bool isUsed() const
-    {
+    bool isUsed() const 
+    { 
         return (0L != mnUsedEntries);
     }
 
@@ -412,7 +412,7 @@ public:
             const sal_uInt32 nHalfSize(maVector.size() >> 1L);
             BColorDataVector::iterator aStart(maVector.begin());
             BColorDataVector::iterator aEnd(maVector.end() - 1L);
-
+            
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
@@ -429,24 +429,24 @@ class NormalsArray3D
 {
     typedef ::std::vector< ::basegfx::B3DVector > NormalsData3DVector;
 
-    NormalsData3DVector                                 maVector;
-    sal_uInt32                                          mnUsedEntries;
+    NormalsData3DVector									maVector;
+    sal_uInt32											mnUsedEntries;
 
 public:
     explicit NormalsArray3D(sal_uInt32 nCount)
-    :   maVector(nCount),
+    :	maVector(nCount),
         mnUsedEntries(0L)
     {
     }
 
     explicit NormalsArray3D(const NormalsArray3D& rOriginal)
-    :   maVector(rOriginal.maVector),
+    :	maVector(rOriginal.maVector),
         mnUsedEntries(rOriginal.mnUsedEntries)
     {
     }
 
     NormalsArray3D(const NormalsArray3D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maVector(),
+    :	maVector(),
         mnUsedEntries(0L)
     {
         NormalsData3DVector::const_iterator aStart(rOriginal.maVector.begin());
@@ -478,8 +478,8 @@ public:
         return (maVector == rCandidate.maVector);
     }
 
-    bool isUsed() const
-    {
+    bool isUsed() const 
+    { 
         return (0L != mnUsedEntries);
     }
 
@@ -576,7 +576,7 @@ public:
             const sal_uInt32 nHalfSize(maVector.size() >> 1L);
             NormalsData3DVector::iterator aStart(maVector.begin());
             NormalsData3DVector::iterator aEnd(maVector.end() - 1L);
-
+            
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
@@ -604,24 +604,24 @@ class TextureCoordinate2D
 {
     typedef ::std::vector< ::basegfx::B2DPoint > TextureData2DVector;
 
-    TextureData2DVector                                 maVector;
-    sal_uInt32                                          mnUsedEntries;
+    TextureData2DVector									maVector;
+    sal_uInt32											mnUsedEntries;
 
 public:
     explicit TextureCoordinate2D(sal_uInt32 nCount)
-    :   maVector(nCount),
+    :	maVector(nCount),
         mnUsedEntries(0L)
     {
     }
 
     explicit TextureCoordinate2D(const TextureCoordinate2D& rOriginal)
-    :   maVector(rOriginal.maVector),
+    :	maVector(rOriginal.maVector),
         mnUsedEntries(rOriginal.mnUsedEntries)
     {
     }
 
     TextureCoordinate2D(const TextureCoordinate2D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maVector(),
+    :	maVector(),
         mnUsedEntries(0L)
     {
         TextureData2DVector::const_iterator aStart(rOriginal.maVector.begin());
@@ -653,8 +653,8 @@ public:
         return (maVector == rCandidate.maVector);
     }
 
-    bool isUsed() const
-    {
+    bool isUsed() const 
+    { 
         return (0L != mnUsedEntries);
     }
 
@@ -751,7 +751,7 @@ public:
             const sal_uInt32 nHalfSize(maVector.size() >> 1L);
             TextureData2DVector::iterator aStart(maVector.begin());
             TextureData2DVector::iterator aEnd(maVector.end() - 1L);
-
+            
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
@@ -779,29 +779,29 @@ class ImplB3DPolygon
 {
     // The point vector. This vector exists always and defines the
     // count of members.
-    CoordinateDataArray3D                           maPoints;
+    CoordinateDataArray3D							maPoints;
 
     // The BColor vector. This vectors are created on demand
     // and may be zero.
-    BColorArray*                                    mpBColors;
+    BColorArray*									mpBColors;
 
     // The Normals vector. This vectors are created on demand
     // and may be zero.
-    NormalsArray3D*                                 mpNormals;
+    NormalsArray3D*									mpNormals;
 
     // The TextureCoordinates vector. This vectors are created on demand
     // and may be zero.
-    TextureCoordinate2D*                            mpTextureCoordiantes;
+    TextureCoordinate2D*							mpTextureCoordiantes;
 
     // The calculated plane normal. mbPlaneNormalValid says if it's valid.
-    ::basegfx::B3DVector                            maPlaneNormal;
+    ::basegfx::B3DVector							maPlaneNormal;
 
     // bitfield
     // flag which decides if this polygon is opened or closed
-    unsigned                                        mbIsClosed : 1;
+    unsigned										mbIsClosed : 1;
 
     // flag which says if maPlaneNormal is up-to-date
-    unsigned                                        mbPlaneNormalValid : 1;
+    unsigned										mbPlaneNormalValid : 1;
 
 protected:
     void invalidatePlaneNormal()
@@ -816,7 +816,7 @@ public:
     // This constructor is only used from the static identity polygon, thus
     // the RefCount is set to 1 to never 'delete' this static incarnation.
     ImplB3DPolygon()
-    :   maPoints(0L),
+    :	maPoints(0L),
         mpBColors(0L),
         mpNormals(0L),
         mpTextureCoordiantes(0L),
@@ -828,7 +828,7 @@ public:
     }
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied)
-    :   maPoints(rToBeCopied.maPoints),
+    :	maPoints(rToBeCopied.maPoints),
         mpBColors(0L),
         mpNormals(0L),
         mpTextureCoordiantes(0L),
@@ -854,7 +854,7 @@ public:
     }
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maPoints(rToBeCopied.maPoints, nIndex, nCount),
+    :	maPoints(rToBeCopied.maPoints, nIndex, nCount),
         mpBColors(0L),
         mpNormals(0L),
         mpTextureCoordiantes(0L),
@@ -1535,7 +1535,7 @@ public:
 
 namespace basegfx
 {
-    namespace { struct DefaultPolygon : public rtl::Static< B3DPolygon::ImplType,
+    namespace { struct DefaultPolygon : public rtl::Static< B3DPolygon::ImplType, 
                                                             DefaultPolygon > {}; }
 
     B3DPolygon::B3DPolygon() :
@@ -1592,7 +1592,7 @@ namespace basegfx
     basegfx::B3DPoint B3DPolygon::getB3DPoint(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
-
+        
         return mpPolygon->getPoint(nIndex);
     }
 
@@ -1607,7 +1607,7 @@ namespace basegfx
     BColor B3DPolygon::getBColor(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
-
+        
         return mpPolygon->getBColor(nIndex);
     }
 
@@ -1638,7 +1638,7 @@ namespace basegfx
     B3DVector B3DPolygon::getNormal(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
-
+        
         return mpPolygon->getNormal(nIndex);
     }
 
@@ -1670,7 +1670,7 @@ namespace basegfx
     B2DPoint B3DPolygon::getTextureCoordinate(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
-
+        
         return mpPolygon->getTextureCoordinate(nIndex);
     }
 
@@ -1702,7 +1702,7 @@ namespace basegfx
     void B3DPolygon::insert(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
     {
         OSL_ENSURE(nIndex <= mpPolygon->count(), "B3DPolygon Insert outside range (!)");
-
+        
         if(nCount)
             mpPolygon->insert(nIndex, rPoint, nCount);
     }
@@ -1762,11 +1762,11 @@ namespace basegfx
     void B3DPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
         OSL_ENSURE(nIndex + nCount <= mpPolygon->count(), "B3DPolygon Remove outside range (!)");
-
+        
         if(nCount)
             mpPolygon->remove(nIndex, nCount);
     }
-
+    
     void B3DPolygon::clear()
     {
         mpPolygon = DefaultPolygon::get();

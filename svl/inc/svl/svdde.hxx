@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ class SVL_DLLPUBLIC DdeData
 //#if 0 // _SOLAR__PRIVATE
     SVL_DLLPRIVATE void            Lock();
 //#endif
-    void            SetFormat( ULONG nFmt );
+    void			SetFormat( ULONG nFmt );
 
 public:
                     DdeData();

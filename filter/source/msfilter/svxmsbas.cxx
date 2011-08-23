@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ using namespace com::sun::star;
 
 using rtl::OUString;
 
-static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) );
+static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) ); 
 
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
@@ -251,7 +251,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
         SFX_APP()->EnterBasicCall();
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
-
+        
         if( !bAsComment ) try
         {
             Reference< vba::XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY_THROW );
@@ -365,7 +365,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         DBG_ERRORFILE( "SvxImportMSVBasic::ImportCode_Impl - unknown module type" );
                         break;
                 }
-                static ::rtl::OUString sClassOption( RTL_CONSTASCII_USTRINGPARAM( "Option ClassModule\n" ) );
+                static ::rtl::OUString sClassOption( RTL_CONSTASCII_USTRINGPARAM( "Option ClassModule\n" ) ); 
                 if ( !bAsComment )
                 {
                     modeTypeComment += sVBAOption;
@@ -402,7 +402,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         const String sAttribute(String::CreateFromAscii(
                             bAsComment ? "Rem Attribute" : "Attribute"));
                         nBegin = 0;
-                        while (STRING_NOTFOUND != (nBegin = pStr->Search(sAttribute, nBegin)))
+                        while (STRING_NOTFOUND != (nBegin =	pStr->Search(sAttribute, nBegin)))
                         {
                             if ((nBegin) && pStr->GetChar(nBegin-1) != cLineEnd)
                             {
@@ -475,7 +475,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         {
                             try
                             {
-                                sModuleInfo.ModuleObject.set( xVBACodeNamedObjectAccess->getByName( it->first ), uno::UNO_QUERY );
+                                sModuleInfo.ModuleObject.set( xVBACodeNamedObjectAccess->getByName( it->first ), uno::UNO_QUERY );    
                                 OSL_TRACE("** Straight up creation of Module");
                             }
                             catch(uno::Exception& e)
@@ -486,7 +486,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                     }
                     xVBAModuleInfo->insertModuleInfo( it->first, sModuleInfo );
                 }
-
+                     
                 if( xLib->hasByName( it->first ) )
                     xLib->replaceByName( it->first, it->second );
                 else

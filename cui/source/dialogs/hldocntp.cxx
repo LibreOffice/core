@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,15 +112,15 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
 |************************************************************************/
 
 SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& rItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ), rItemSet ),
-    maGrpNewDoc     ( this, CUI_RES (GRP_NEWDOCUMENT) ),
-    maRbtEditNow    ( this, CUI_RES (RB_EDITNOW) ),
-    maRbtEditLater  ( this, CUI_RES (RB_EDITLATER) ),
-    maFtPath        ( this, CUI_RES (FT_PATH_NEWDOC) ),
-    maCbbPath       ( this, INET_PROT_FILE ),
-    maBtCreate      ( this, CUI_RES (BTN_CREATE) ),
-    maFtDocTypes    ( this, CUI_RES (FT_DOCUMENT_TYPES) ),
-    maLbDocTypes    ( this, CUI_RES (LB_DOCUMENT_TYPES) )
+:	SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ), rItemSet ),
+    maGrpNewDoc		( this, CUI_RES (GRP_NEWDOCUMENT) ),
+    maRbtEditNow	( this, CUI_RES (RB_EDITNOW) ),
+    maRbtEditLater	( this, CUI_RES (RB_EDITLATER) ),
+    maFtPath		( this, CUI_RES (FT_PATH_NEWDOC) ),
+    maCbbPath		( this, INET_PROT_FILE ),
+    maBtCreate		( this, CUI_RES (BTN_CREATE) ),
+    maFtDocTypes	( this, CUI_RES (FT_DOCUMENT_TYPES) ),
+    maLbDocTypes	( this, CUI_RES (LB_DOCUMENT_TYPES) )
 {
     // Set HC bitmaps and disable display of bitmap names.
     maBtCreate.SetModeImage( Image( CUI_RES( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
@@ -135,12 +135,12 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
                                 LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbPath.Show();
     maCbbPath.SetBaseURL(SvtPathOptions().GetWorkPath());
-//  maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
+//	maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
 
     // set defaults
     maRbtEditNow.Check();
 
-    maBtCreate.SetClickHdl        ( LINK ( this, SvxHyperlinkNewDocTp, ClickNewHdl_Impl ) );
+    maBtCreate.SetClickHdl		  ( LINK ( this, SvxHyperlinkNewDocTp, ClickNewHdl_Impl ) );
 
     FillDocumentList ();
 }
@@ -171,7 +171,7 @@ void SvxHyperlinkNewDocTp::FillDlgFields ( String& /*aStrURL*/ )
 #define INTERNETSHORTCUT_TARGET_TAG   "Target"
 #define INTERNETSHORTCUT_FOLDER_TAG   "Folder"
 #define INTERNETSHORTCUT_URL_TAG      "URL"
-#define INTERNETSHORTCUT_ICONID_TAG   "IconIndex"
+#define INTERNETSHORTCUT_ICONID_TAG	  "IconIndex"
 
 void SvxHyperlinkNewDocTp::ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder )
 {
@@ -238,8 +238,8 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
         // Insert into listbox
         if ( aDocumentUrl.getLength() )
         {
-            if ( aDocumentUrl.equalsAscii( "private:factory/simpress?slot=6686" ) )             // SJ: #106216# do not start
-                aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
+            if ( aDocumentUrl.equalsAscii( "private:factory/simpress?slot=6686" ) )				// SJ: #106216# do not start
+                aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) );	// the AutoPilot for impress
 
             // insert private-url and default-extension as user-data
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilterFromFactory( aDocumentUrl );
@@ -406,8 +406,8 @@ void SvxHyperlinkNewDocTp::DoApply ()
                                                                            &aFrame, &aReferer, 0L );
 
                     // save new doc
-                    const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );  // SJ: pReturn is NULL if the Hyperlink
-                    if ( pItem )                                                            // creation is cancelled #106216#
+                    const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );	// SJ: pReturn is NULL if the Hyperlink
+                    if ( pItem )															// creation is cancelled #106216#
                     {
                         pViewFrame = pItem->GetFrame();
                         if (pViewFrame)
@@ -451,18 +451,18 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
 IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
 {
-    rtl::OUString                       aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-    uno::Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    uno::Reference < XFolderPicker >            xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
+    rtl::OUString						aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+    uno::Reference < XMultiServiceFactory >	xFactory( ::comphelper::getProcessServiceFactory() );
+    uno::Reference < XFolderPicker >			xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
 
-    String              aStrURL;
-    String              aTempStrURL( maCbbPath.GetText() );
+    String				aStrURL;
+    String				aTempStrURL( maCbbPath.GetText() );
     utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, maCbbPath.GetBaseURL(), aStrURL );
 
-    String              aStrPath = aStrURL;
-    BOOL                bZeroPath = ( aStrPath.Len() == 0 );
-    BOOL                bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
-                                                        //  as file name, otherwise we do not yet know
+    String				aStrPath = aStrURL;
+    BOOL				bZeroPath = ( aStrPath.Len() == 0 );
+    BOOL				bHandleFileName = bZeroPath;	// when path has length of 0, then the rest should always be handled
+                                                        //	as file name, otherwise we do not yet know
 
     if( bZeroPath )
         aStrPath = SvtPathOptions().GetWorkPath();
@@ -475,15 +475,15 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
     DisableClose( sal_False );
     if( ExecutableDialogResults::OK == nResult )
     {
-        sal_Char const  sSlash[] = "/";
+        sal_Char const	sSlash[] = "/";
 
-        INetURLObject   aURL( aStrURL, INET_PROT_FILE );
-        String          aStrName;
+        INetURLObject	aURL( aStrURL, INET_PROT_FILE );
+        String			aStrName;
         if( bHandleFileName )
             aStrName = bZeroPath? aTempStrURL : String(aURL.getName());
 
         maCbbPath.SetBaseURL( xFolderPicker->getDirectory() );
-        String          aStrTmp( xFolderPicker->getDirectory() );
+        String			aStrTmp( xFolderPicker->getDirectory() );
 
         if( aStrTmp.GetChar( aStrTmp.Len() - 1 ) != sSlash[0] )
             aStrTmp.AppendAscii( sSlash );
@@ -492,7 +492,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
         if( bHandleFileName )
             aStrTmp += aStrName;
 
-        INetURLObject   aNewURL( aStrTmp );
+        INetURLObject	aNewURL( aStrTmp );
 
         if( aStrName.Len() > 0 && aNewURL.getExtension().getLength() > 0 &&
             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )

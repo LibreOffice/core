@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,12 +28,12 @@
 #ifndef _VOS_STREAM_HXX_
 #define _VOS_STREAM_HXX_
 
-#   include <vos/types.hxx>
-#   include <vos/object.hxx>
-#   include <vos/istream.hxx>
+#	include <vos/types.hxx>
+#	include <vos/object.hxx>
+#	include <vos/istream.hxx>
 
 namespace vos
-{
+{     
 
 /** Adds seeking capabilities to IStream
 */
@@ -45,7 +45,7 @@ public:
     typedef sal_Int32 Offset;
 
 public:
-
+    
     ///
     virtual sal_Bool SAL_CALL seekTo(Offset position) const = 0;
 
@@ -54,7 +54,7 @@ public:
 
     ///
     virtual sal_Bool SAL_CALL seekToEnd() const = 0;
-
+    
     ///
     virtual sal_Bool SAL_CALL changeSize(sal_uInt32 new_size) = 0;
 
@@ -65,17 +65,17 @@ public:
     ///
     virtual Offset SAL_CALL getOffset() const = 0;
 
-
+    
 protected:
     IPositionableStream() { }
     virtual ~IPositionableStream() { }
-
+    
 };
 
 
 /** Implements IPositionableStream
 */
-class OStream : public NAMESPACE_VOS(OObject),
+class OStream : public NAMESPACE_VOS(OObject), 
                 public NAMESPACE_VOS(IPositionableStream)
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OStream, vos));
@@ -83,7 +83,7 @@ class OStream : public NAMESPACE_VOS(OObject),
 public:
 
     ///
-    OStream(IPositionableStream& rStream);
+    OStream(IPositionableStream& rStream);	
 
     ///
     virtual ~OStream ();
@@ -94,8 +94,8 @@ public:
     virtual sal_Int32 SAL_CALL read(void* pbuffer, sal_uInt32 n) const;
 
     ///
-    sal_Int32 SAL_CALL read(IPositionableStream::Offset offset,
-                 void* pbuffer,
+    sal_Int32 SAL_CALL read(IPositionableStream::Offset offset, 
+                 void* pbuffer, 
                  sal_uInt32 n) const;
 
     ///
@@ -109,15 +109,15 @@ public:
 
     ///
     inline sal_Bool SAL_CALL read(sal_uInt8& value) const;
-
+   
     // ----------------- Write operations ------------------------
 
     ///
     virtual sal_Int32 SAL_CALL write(const void* pbuffer, sal_uInt32 n);
 
     ///
-    sal_Int32 SAL_CALL write(IPositionableStream::Offset offset,
-                  const void* pbuffer,
+    sal_Int32 SAL_CALL write(IPositionableStream::Offset offset, 
+                  const void* pbuffer, 
                   sal_uInt32 n);
     ///
     inline sal_Bool SAL_CALL write(sal_Int32 value);
@@ -133,7 +133,7 @@ public:
 
     ///
     sal_Bool SAL_CALL append(void* pbuffer, sal_uInt32 n); // Write at the end of the Stream.
-
+    
     // ------------- Positioning and sizing operations ----------
 
     ///
@@ -149,15 +149,15 @@ public:
 
     ///
     virtual sal_Bool SAL_CALL seekRelative(IPositionableStream::Offset change) const;
-
+    
     ///
     virtual sal_Bool SAL_CALL changeSize(sal_uInt32 new_size);
+    
+    ///
+    virtual sal_uInt32 SAL_CALL getSize() const;	
 
     ///
-    virtual sal_uInt32 SAL_CALL getSize() const;
-
-    ///
-    virtual sal_Bool SAL_CALL isEof() const;
+    virtual sal_Bool SAL_CALL isEof() const;	
 
     ///
     virtual IPositionableStream::Offset SAL_CALL getOffset() const;
@@ -223,62 +223,62 @@ inline sal_Bool OStream::seekToBegin() const
 }
 
 inline const OStream& operator>> (OStream& rStream, sal_Int32& value)
-{
-    rStream.read(value);
-
-    return (rStream);
+{ 
+    rStream.read(value); 
+    
+    return (rStream); 
 }
-
+    
 inline const OStream& operator>> (OStream& rStream, sal_Int16& value)
-{
-    rStream.read(value);
-
-    return (rStream);
+{ 
+    rStream.read(value); 
+    
+    return (rStream); 
 }
-
+    
 inline const OStream& operator>> (OStream& rStream, sal_uInt8& value)
-{
-    rStream.read(value);
-
-    return (rStream);
+{ 
+    rStream.read(value); 
+    
+    return (rStream); 
 }
-
+    
 inline const OStream& operator>> (OStream& rStream, sal_Char& value)
-{
-    rStream.read(value);
-
-    return (rStream);
+{ 
+    rStream.read(value); 
+    
+    return (rStream); 
 }
-
+    
 inline OStream& operator<< (OStream& rStream, sal_Int32 value)
-{
-    rStream.write(value);
-
-    return (rStream);
+{ 
+    rStream.write(value); 
+    
+    return (rStream); 
 }
-
+    
 inline OStream& operator<< (OStream& rStream, sal_Int16 value)
-{
-    rStream.write(value);
-
-    return (rStream);
+{ 
+    rStream.write(value); 
+    
+    return (rStream); 
 }
-
+    
 inline OStream& operator<< (OStream& rStream, sal_uInt8 value)
-{
-    rStream.write(value);
-
-    return (rStream);
+{ 
+    rStream.write(value); 
+    
+    return (rStream); 
 }
-
+    
 inline OStream& operator<< (OStream& rStream, sal_Char value)
-{
-    rStream.write(value);
-
-    return (rStream);
+{ 
+    rStream.write(value); 
+    
+    return (rStream); 
 }
 
-}
+}     
 
 #endif // _VOS_STREAM_HXX_
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,51 +43,51 @@ class ScDocOptions;
 class ScTpCalcOptions : public SfxTabPage
 {
 public:
-    static  SfxTabPage* Create          ( Window*               pParent,
-                                          const SfxItemSet&     rCoreSet );
-    static  USHORT*     GetRanges       ();
-    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
-    virtual void        Reset           ( const SfxItemSet& rCoreSet );
+    static	SfxTabPage* Create			( Window*				pParent,
+                                          const SfxItemSet& 	rCoreSet );
+    static	USHORT* 	GetRanges		();
+    virtual BOOL		FillItemSet 	( SfxItemSet& rCoreSet );
+    virtual void		Reset			( const SfxItemSet& rCoreSet );
     using SfxTabPage::DeactivatePage;
-    virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
+    virtual int 		DeactivatePage	( SfxItemSet* pSet = NULL );
 
 private:
-                ScTpCalcOptions( Window*            pParent,
-                                 const SfxItemSet&  rCoreSet );
+                ScTpCalcOptions( Window*			pParent,
+                                 const SfxItemSet&	rCoreSet );
                 ~ScTpCalcOptions();
 
 private:
     FixedLine       aGbZRefs;
     CheckBox        aBtnIterate;
-    FixedText       aFtSteps;
-    NumericField    aEdSteps;
-    FixedText       aFtEps;
+    FixedText		aFtSteps;
+    NumericField	aEdSteps;
+    FixedText		aFtEps;
     ScDoubleField   aEdEps;
 
     FixedLine       aSeparatorFL;
     FixedLine       aGbDate;
     RadioButton     aBtnDateStd;
-    RadioButton     aBtnDateSc10;
-    RadioButton     aBtnDate1904;
+    RadioButton 	aBtnDateSc10;
+    RadioButton 	aBtnDate1904;
 
     FixedLine       aHSeparatorFL;
     CheckBox        aBtnCase;
-    CheckBox        aBtnCalc;
-    CheckBox        aBtnMatch;
+    CheckBox		aBtnCalc;
+    CheckBox		aBtnMatch;
     CheckBox        aBtnRegex;
-    CheckBox        aBtnLookUp;
-    CheckBox        aBtnGeneralPrec;
+    CheckBox		aBtnLookUp;
+    CheckBox		aBtnGeneralPrec;
 
-    FixedText       aFtPrec;
-    NumericField    aEdPrec;
+    FixedText		aFtPrec;
+    NumericField	aEdPrec;
 
-    ScDocOptions*   pOldOptions;
-    ScDocOptions*   pLocalOptions;
-    USHORT          nWhichCalc;
+    ScDocOptions*	pOldOptions;
+    ScDocOptions*	pLocalOptions;
+    USHORT			nWhichCalc;
 
 #ifdef _TPCALC_CXX
 private:
-    void            Init();
+    void			Init();
 
     //------------------------------------
     // Handler:

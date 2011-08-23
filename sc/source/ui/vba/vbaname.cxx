@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaName::ScVbaName(const css::uno::Reference< ov::XHelperInterface >& xParent,
+ScVbaName::ScVbaName(const css::uno::Reference< ov::XHelperInterface >& xParent, 
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::sheet::XNamedRange >& xName,
             const css::uno::Reference< css::sheet::XNamedRanges >& xNames,
             const css::uno::Reference< css::frame::XModel >& xModel ):
-            NameImpl_BASE(  xParent , xContext ),
+            NameImpl_BASE(  xParent , xContext ), 
             mxModel( xModel ),
             mxNamedRange( xName ),
             mxNames( xNames )
@@ -122,7 +122,7 @@ ScVbaName::getValue() throw (css::uno::RuntimeException)
         {
             ::rtl::OUString sTmp = sTmpValue.copy( 1 );
             sTmp = sTmp.replaceAt(0, (sSheetName + ::rtl::OUString::createFromAscii(".")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("!"));
-            sResult += sTmp;
+            sResult += sTmp; 
             sResult += sNewSegmentation;
         }
         nFrom = nTo + 1;
@@ -142,7 +142,7 @@ ScVbaName::getValue() throw (css::uno::RuntimeException)
     return sResult;
 }
 
-void
+void 
 ScVbaName::setValue( const ::rtl::OUString & rValue ) throw (css::uno::RuntimeException)
 {
     ::rtl::OUString sSheetName = getWorkSheet()->getName();
@@ -181,25 +181,25 @@ ScVbaName::setValue( const ::rtl::OUString & rValue ) throw (css::uno::RuntimeEx
     mxNamedRange->setContent(sResult);
 }
 
-::rtl::OUString
+::rtl::OUString 
 ScVbaName::getRefersTo() throw (css::uno::RuntimeException)
 {
     return getValue();
 }
 
-void
+void 
 ScVbaName::setRefersTo( const ::rtl::OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
     setValue( rRefersTo );
 }
 
-::rtl::OUString
+::rtl::OUString 
 ScVbaName::getRefersToLocal() throw (css::uno::RuntimeException)
 {
     return getRefersTo();
 }
 
-void
+void 
 ScVbaName::setRefersToLocal( const ::rtl::OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
     setRefersTo( rRefersTo );
@@ -217,7 +217,7 @@ ScVbaName::setRefersToR1C1( const ::rtl::OUString & rRefersTo ) throw (css::uno:
     setRefersTo( rRefersTo );
 }
 
-::rtl::OUString
+::rtl::OUString 
 ScVbaName::getRefersToR1C1Local() throw (css::uno::RuntimeException)
 {
     return getRefersTo();
@@ -245,7 +245,7 @@ ScVbaName::setRefersToRange( const css::uno::Reference< ov::excel::XRange > /*rR
 void
 ScVbaName::Delete() throw (css::uno::RuntimeException)
 {
-    mxNames->removeByName( mxNamedRange->getName() );
+    mxNames->removeByName( mxNamedRange->getName() );	
 }
 
 rtl::OUString&

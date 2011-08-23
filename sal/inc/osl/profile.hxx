@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace osl {
             if( ! profile )
                 throw std::exception();
         }
-
+                
 
         /** Close the opened profile an flush all data to the disk.
             @param Profile handle to a opened profile.
@@ -74,7 +74,7 @@ namespace osl {
             return osl_flushProfile(profile);
         }
 
-        rtl::OString readString( const rtl::OString& rSection, const rtl::OString& rEntry,
+        rtl::OString readString( const rtl::OString& rSection, const rtl::OString& rEntry, 
                                  const rtl::OString& rDefault)
         {
             sal_Char aBuf[1024];
@@ -92,7 +92,7 @@ namespace osl {
             return osl_readProfileBool( profile, rSection, rEntry, bDefault );
         }
 
-        sal_uInt32 readIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
+        sal_uInt32 readIdent(const rtl::OString& rSection, const rtl::OString& rEntry, 
                              sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
                              sal_uInt32 nDefault)
         {
@@ -111,7 +111,7 @@ namespace osl {
             return nRet;
         }
 
-        sal_Bool writeString(const rtl::OString& rSection, const rtl::OString& rEntry,
+        sal_Bool writeString(const rtl::OString& rSection, const rtl::OString& rEntry, 
                              const rtl::OString& rString)
         {
             return osl_writeProfileString(profile, rSection, rEntry, rString);
@@ -122,8 +122,8 @@ namespace osl {
             return osl_writeProfileBool(profile, rSection, rEntry, Value);
         }
 
-        sal_Bool writeIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
-                            sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
+        sal_Bool writeIdent(const rtl::OString& rSection, const rtl::OString& rEntry, 
+                            sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings, 
                             sal_uInt32 nValue)
         {
             int nItems = rStrings.size();
@@ -199,6 +199,6 @@ namespace osl {
     };
 }
 
-#endif  /* _OSL_PROFILE_HXX_ */
+#endif	/* _OSL_PROFILE_HXX_ */
 
 

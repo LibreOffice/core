@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ class SvUShorts;
 class FilterPropertiesInfos_Impl;
 class SvXMLExport;
 
-#define XML_EXPORT_FLAG_DEFAULTS    0x0001      // export also default items
-#define XML_EXPORT_FLAG_DEEP        0x0002      // export also items from
+#define XML_EXPORT_FLAG_DEFAULTS	0x0001		// export also default items
+#define XML_EXPORT_FLAG_DEEP		0x0002		// export also items from
                                                 // parent item sets
-#define XML_EXPORT_FLAG_EMPTY       0x0004      // export attribs element
+#define XML_EXPORT_FLAG_EMPTY		0x0004		// export attribs element
                                                 // even if its empty
-#define XML_EXPORT_FLAG_IGN_WS      0x0008
+#define XML_EXPORT_FLAG_IGN_WS		0x0008
 
 class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public UniRefBase
 {
@@ -201,4 +201,4 @@ public:
     void SetStyleName( const rtl::OUString& rStyleName ) { maStyleName = rStyleName; }
 };
 
-#endif  //  _XMLOFF_XMLEXPPR_HXX
+#endif	//  _XMLOFF_XMLEXPPR_HXX

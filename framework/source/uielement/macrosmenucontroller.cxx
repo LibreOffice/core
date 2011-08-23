@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ using namespace ::com::sun::star::frame;
 
 namespace framework
 {
-class
-DEFINE_XSERVICEINFO_MULTISERVICE        (   MacrosMenuController                    ,
+class 
+DEFINE_XSERVICEINFO_MULTISERVICE        (   MacrosMenuController				    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
+                                            SERVICENAME_POPUPMENUCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_MACROSMENUCONTROLLER
                                         )
 
@@ -86,16 +86,16 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
 {
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*     pPopupMenu    = 0;
-
+    
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
+    
     resetPopupMenu( rPopupMenu );
     if ( pVCLPopupMenu )
         pPopupMenu = (PopupMenu *)pVCLPopupMenu->GetMenu();
 
     if (!pPopupMenu)
         return;
-
+        
     // insert basic
     String aCommand = String::CreateFromAscii( ".uno:MacroDialog" );
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
@@ -118,7 +118,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xServiceManager.clear();
-
+    
     if ( m_xPopupMenu.is() )
     {
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
@@ -149,11 +149,11 @@ void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatc
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
-        //pExecuteInfo->aArgs         = aArgs;
+        //pExecuteInfo->aArgs         = aArgs; 
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
             UiEventLogHelper(::rtl::OUString::createFromAscii("MacrosMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
 //                xDispatch->dispatch( aTargetURL, aArgs );
-        Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo ); 
     }
     else
     {
@@ -175,7 +175,7 @@ IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*
    }
    delete pExecuteInfo;
    return 0;
-}
+} 
 
 String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
 {
@@ -190,7 +190,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
     const ::rtl::OUString providerKey =
     ::rtl::OUString::createFromAscii("com.sun.star.script.provider.ScriptProviderFor" );
     const ::rtl::OUString languageProviderName =
-        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );
+        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );    
     USHORT itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
@@ -203,7 +203,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
             break;
         }
         Sequence< ::rtl::OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
-
+                    
         if ( serviceNames.getLength() > 0 )
         {
             for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )

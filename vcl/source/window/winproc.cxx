@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -479,9 +479,9 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             MouseEvent aMEvt( aChildPos, pWinFrameData->mnClickCount, nMode, nCode, nCode );
             NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
             Application::CallEventHooks( aNEvt );
-
+            
             if( pChild->IsCallHandlersOnInputDisabled() )
-            {
+            {                
                 pWinFrameData->mpMouseMoveWin = pChild;
                 pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
             }
@@ -1258,7 +1258,7 @@ static long ImplHandleExtTextInput( Window* pWindow,
 {
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pChild = NULL;
-
+    
     int nTries = 200;
     while( nTries-- )
     {
@@ -1544,7 +1544,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
             }
         }
     }
-
+    
     // close floaters
     if( ! bIsFloat && pSVData->maWinData.mpFirstFloat )
     {
@@ -1695,7 +1695,7 @@ static void ImplHandleMove( Window* pWindow )
         pWindow->ImplGetWindowImpl()->mbCallMove = TRUE; // make sure the framepos will be updated on the next Show()
 
     if ( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplGetWindowImpl()->mpClientWindow )
-        pWindow->ImplGetWindowImpl()->mpClientWindow->ImplCallMove();   // notify client to update geometry
+        pWindow->ImplGetWindowImpl()->mpClientWindow->ImplCallMove();	// notify client to update geometry
 
 }
 
@@ -2276,7 +2276,7 @@ static long ImplHandleShowDialog( Window* pWindow, int nDialogId )
 {
     if( ! pWindow )
         return FALSE;
-
+    
     if( pWindow->GetType() == WINDOW_BORDERWINDOW )
     {
         Window* pWrkWin = pWindow->GetWindow( WINDOW_CLIENT );

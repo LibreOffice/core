@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace drawinglayer
         //////////////////////////////////////////////////////////////////////////////
 
         AnimationEntryFixed::AnimationEntryFixed(double fDuration, double fState)
-        :   mfDuration(fDuration),
+        :	mfDuration(fDuration),
             mfState(fState)
         {
         }
@@ -68,7 +68,7 @@ namespace drawinglayer
         {
             const AnimationEntryFixed* pCompare = dynamic_cast< const AnimationEntryFixed* >(&rCandidate);
 
-            return (pCompare
+            return (pCompare 
                 && basegfx::fTools::equal(mfDuration, pCompare->mfDuration)
                 && basegfx::fTools::equal(mfState, pCompare->mfState));
         }
@@ -98,7 +98,7 @@ namespace drawinglayer
         //////////////////////////////////////////////////////////////////////////////
 
         AnimationEntryLinear::AnimationEntryLinear(double fDuration, double fFrequency, double fStart, double fStop)
-        :   mfDuration(fDuration),
+        :	mfDuration(fDuration),
             mfFrequency(fFrequency),
             mfStart(fStart),
             mfStop(fStop)
@@ -117,8 +117,8 @@ namespace drawinglayer
         bool AnimationEntryLinear::operator==(const AnimationEntry& rCandidate) const
         {
             const AnimationEntryLinear* pCompare = dynamic_cast< const AnimationEntryLinear* >(&rCandidate);
-
-            return (pCompare
+            
+            return (pCompare 
                 && basegfx::fTools::equal(mfDuration, pCompare->mfDuration)
                 && basegfx::fTools::equal(mfStart, pCompare->mfStart)
                 && basegfx::fTools::equal(mfStop, pCompare->mfStop));
@@ -187,7 +187,7 @@ namespace drawinglayer
         }
 
         AnimationEntryList::AnimationEntryList()
-        :   mfDuration(0.0)
+        :	mfDuration(0.0)
         {
         }
 
@@ -202,19 +202,19 @@ namespace drawinglayer
         AnimationEntry* AnimationEntryList::clone() const
         {
             AnimationEntryList* pNew = new AnimationEntryList();
-
+            
             for(sal_uInt32 a(0L); a < maEntries.size(); a++)
             {
                 pNew->append(*maEntries[a]);
             }
-
+            
             return pNew;
         }
 
         bool AnimationEntryList::operator==(const AnimationEntry& rCandidate) const
         {
             const AnimationEntryList* pCompare = dynamic_cast< const AnimationEntryList* >(&rCandidate);
-
+            
             if(pCompare && mfDuration == pCompare->mfDuration)
             {
                 for(sal_uInt32 a(0L); a < maEntries.size(); a++)
@@ -284,7 +284,7 @@ namespace drawinglayer
         //////////////////////////////////////////////////////////////////////////////
 
         AnimationEntryLoop::AnimationEntryLoop(sal_uInt32 nRepeat)
-        :   AnimationEntryList(),
+        :	AnimationEntryList(),
             mnRepeat(nRepeat)
         {
         }
@@ -296,20 +296,20 @@ namespace drawinglayer
         AnimationEntry* AnimationEntryLoop::clone() const
         {
             AnimationEntryLoop* pNew = new AnimationEntryLoop(mnRepeat);
-
+            
             for(sal_uInt32 a(0L); a < maEntries.size(); a++)
             {
                 pNew->append(*maEntries[a]);
             }
-
+            
             return pNew;
         }
 
         bool AnimationEntryLoop::operator==(const AnimationEntry& rCandidate) const
         {
             const AnimationEntryLoop* pCompare = dynamic_cast< const AnimationEntryLoop* >(&rCandidate);
-
-            return (pCompare
+            
+            return (pCompare 
                 && mnRepeat == pCompare->mnRepeat
                 && AnimationEntryList::operator==(rCandidate));
         }
@@ -353,7 +353,7 @@ namespace drawinglayer
                     const double fTimeAtLoopStart((double)nCurrentLoop * mfDuration);
                     const double fRelativeTime(fTime - fTimeAtLoopStart);
                     const double fNextEventAtLoop(AnimationEntryList::getNextEventTime(fRelativeTime));
-
+                    
                     if(!basegfx::fTools::equalZero(fNextEventAtLoop))
                     {
                         fNewTime = fNextEventAtLoop + fTimeAtLoopStart;

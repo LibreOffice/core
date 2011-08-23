@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@ using namespace com::sun::star::linguistic2;
 
 namespace linguistic
 {
-
+    
 ///////////////////////////////////////////////////////////////////////////
 
 
-#define MAX_PROPOSALS   40
+#define MAX_PROPOSALS	40
 
 Reference< XSpellAlternatives > MergeProposals(
             Reference< XSpellAlternatives > &rxAlt1,
@@ -86,8 +86,8 @@ Reference< XSpellAlternatives > MergeProposals(
         INT32 i = 0;
         for (int j = 0;  j < 2;  j++)
         {
-            INT32           nCount  = j == 0 ? nAltCount1 : nAltCount2;
-            const OUString  *pAlt   = j == 0 ? pAlt1 : pAlt2;
+            INT32 			nCount 	= j == 0 ? nAltCount1 : nAltCount2;
+            const OUString  *pAlt 	= j == 0 ? pAlt1 : pAlt2;
             for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
             {
                 if (pAlt[i].getLength())
@@ -108,8 +108,8 @@ Reference< XSpellAlternatives > MergeProposals(
 }
 
 
-BOOL SeqHasEntry(
-        const Sequence< OUString > &rSeq,
+BOOL SeqHasEntry( 
+        const Sequence< OUString > &rSeq, 
         const OUString &rTxt)
 {
     BOOL bRes = FALSE;
@@ -124,7 +124,7 @@ BOOL SeqHasEntry(
 }
 
 
-void SearchSimilarText( const OUString &rText, INT16 nLanguage,
+void SearchSimilarText( const OUString &rText, INT16 nLanguage, 
         Reference< XDictionaryList > &xDicList,
         std::vector< OUString > & rDicListProps )
 {
@@ -171,8 +171,8 @@ void SearchSimilarText( const OUString &rText, INT16 nLanguage,
 }
 
 
-void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
-        Reference< XDictionaryList > &rxDicList,
+void SeqRemoveNegEntries( Sequence< OUString > &rSeq, 
+        Reference< XDictionaryList > &rxDicList, 
         INT16 nLanguage )
 {
     static const OUString aEmpty;
@@ -181,7 +181,7 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
     OUString *pEntries = rSeq.getArray();
     for (INT32 i = 0;  i < nLen;  ++i)
     {
-        Reference< XDictionaryEntry > xNegEntry( SearchDicList( rxDicList,
+        Reference< XDictionaryEntry > xNegEntry( SearchDicList( rxDicList, 
                     pEntries[i], nLanguage, FALSE, TRUE ) );
         if (xNegEntry.is())
         {
@@ -229,7 +229,7 @@ Sequence< OUString > MergeProposalSeqs(
             const OUString  *pAlt   = j == 0 ? pAlt1 : pAlt2;
             for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
             {
-                if (pAlt[i].getLength() &&
+                if (pAlt[i].getLength() && 
                     (bAllowDuplicates || !SeqHasEntry(aMerged, pAlt[i] )))
                     pMerged[ nIndex++ ] = pAlt[ i ];
             }
@@ -246,16 +246,16 @@ Sequence< OUString > MergeProposalSeqs(
 
 SpellAlternatives::SpellAlternatives()
 {
-    nLanguage   = LANGUAGE_NONE;
-    nType       = SpellFailure::IS_NEGATIVE_WORD;
+    nLanguage	= LANGUAGE_NONE;
+    nType 		= SpellFailure::IS_NEGATIVE_WORD;
 }
 
 
-SpellAlternatives::SpellAlternatives(
+SpellAlternatives::SpellAlternatives( 
             const OUString &rWord, INT16 nLang,
             INT16 nFailureType, const OUString &rRplcWord ) :
     aAlt        ( Sequence< OUString >(1) ),
-    aWord       (rWord),
+    aWord		(rWord),
     nType       (nFailureType),
     nLanguage   (nLang)
 {
@@ -285,7 +285,7 @@ SpellAlternatives::~SpellAlternatives()
 OUString SAL_CALL SpellAlternatives::getWord()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aWord;
 }
 
@@ -293,7 +293,7 @@ OUString SAL_CALL SpellAlternatives::getWord()
 Locale SAL_CALL SpellAlternatives::getLocale()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return CreateLocale( nLanguage );
 }
 
@@ -301,7 +301,7 @@ Locale SAL_CALL SpellAlternatives::getLocale()
 sal_Int16 SAL_CALL SpellAlternatives::getFailureType()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return nType;
 }
 
@@ -309,7 +309,7 @@ sal_Int16 SAL_CALL SpellAlternatives::getFailureType()
 sal_Int16 SAL_CALL SpellAlternatives::getAlternativesCount()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return (INT16) aAlt.getLength();
 }
 
@@ -317,12 +317,12 @@ sal_Int16 SAL_CALL SpellAlternatives::getAlternativesCount()
 Sequence< OUString > SAL_CALL SpellAlternatives::getAlternatives()
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aAlt;
 }
 
 
-void SAL_CALL SpellAlternatives::setAlternatives( const uno::Sequence< OUString >& rAlternatives )
+void SAL_CALL SpellAlternatives::setAlternatives( const uno::Sequence< OUString >& rAlternatives ) 
 throw (uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -330,7 +330,7 @@ throw (uno::RuntimeException)
 }
 
 
-void SAL_CALL SpellAlternatives::setFailureType( sal_Int16 nFailureType )
+void SAL_CALL SpellAlternatives::setFailureType( sal_Int16 nFailureType ) 
 throw (uno::RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -340,7 +340,7 @@ throw (uno::RuntimeException)
 
 void SpellAlternatives::SetWordLanguage(const OUString &rWord, INT16 nLang)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     aWord = rWord;
     nLanguage = nLang;
 }
@@ -348,19 +348,19 @@ void SpellAlternatives::SetWordLanguage(const OUString &rWord, INT16 nLang)
 
 void SpellAlternatives::SetFailureType(INT16 nTypeP)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     nType = nTypeP;
 }
 
 
 void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     aAlt = rAlt;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 

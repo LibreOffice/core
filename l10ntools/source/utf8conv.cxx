@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@
 // class UTF8Converter
 //
 
-#define MAX_CONV_BUFFER_SIZE    0xFF00
+#define MAX_CONV_BUFFER_SIZE	0xFF00
 
-#define TO_CVTFLAGS     (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |\
+#define TO_CVTFLAGS		(RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |\
                           RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |\
                           RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT)
 
-#define FROM_CVTFLAGS   (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |\
+#define FROM_CVTFLAGS  	(RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |\
                              RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |\
                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |\
                             RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0)

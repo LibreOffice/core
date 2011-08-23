@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ using namespace com::sun::star::uno;
 
 //------------------------------------------------------------------
 
-//  Version, ab der das Item kompatibel ist
+//	Version, ab der das Item kompatibel ist
 #define SC_VERSION ((USHORT)351)
 
 
@@ -81,15 +81,15 @@ ScInputOptions::~ScInputOptions()
 
 void ScInputOptions::SetDefaults()
 {
-    nMoveDir        = DIR_BOTTOM;
-    bMoveSelection  = TRUE;
-    bEnterEdit      = FALSE;
-    bExtendFormat   = FALSE;
-    bRangeFinder    = TRUE;
-    bExpandRefs     = FALSE;
-    bMarkHeader     = TRUE;
-    bUseTabCol      = FALSE;
-    bTextWysiwyg    = FALSE;
+    nMoveDir		= DIR_BOTTOM;
+    bMoveSelection	= TRUE;
+    bEnterEdit		= FALSE;
+    bExtendFormat	= FALSE;
+    bRangeFinder	= TRUE;
+    bExpandRefs		= FALSE;
+    bMarkHeader		= TRUE;
+    bUseTabCol		= FALSE;
+    bTextWysiwyg	= FALSE;
     bReplCellsWarn  = TRUE;
 }
 
@@ -97,15 +97,15 @@ void ScInputOptions::SetDefaults()
 
 const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 {
-    nMoveDir        = rCpy.nMoveDir;
-    bMoveSelection  = rCpy.bMoveSelection;
-    bEnterEdit      = rCpy.bEnterEdit;
-    bExtendFormat   = rCpy.bExtendFormat;
-    bRangeFinder    = rCpy.bRangeFinder;
-    bExpandRefs     = rCpy.bExpandRefs;
-    bMarkHeader     = rCpy.bMarkHeader;
-    bUseTabCol      = rCpy.bUseTabCol;
-    bTextWysiwyg    = rCpy.bTextWysiwyg;
+    nMoveDir		= rCpy.nMoveDir;
+    bMoveSelection	= rCpy.bMoveSelection;
+    bEnterEdit		= rCpy.bEnterEdit;
+    bExtendFormat	= rCpy.bExtendFormat;
+    bRangeFinder	= rCpy.bRangeFinder;
+    bExpandRefs		= rCpy.bExpandRefs;
+    bMarkHeader		= rCpy.bMarkHeader;
+    bUseTabCol		= rCpy.bUseTabCol;
+    bTextWysiwyg	= rCpy.bTextWysiwyg;
     bReplCellsWarn  = rCpy.bReplCellsWarn;
 
     return *this;
@@ -113,20 +113,20 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 
 
 //==================================================================
-//  Config Item containing input options
+//	Config Item containing input options
 //==================================================================
 
-#define CFGPATH_INPUT           "Office.Calc/Input"
+#define CFGPATH_INPUT			"Office.Calc/Input"
 
-#define SCINPUTOPT_MOVEDIR          0
-#define SCINPUTOPT_MOVESEL          1
-#define SCINPUTOPT_EDTEREDIT        2
-#define SCINPUTOPT_EXTENDFMT        3
-#define SCINPUTOPT_RANGEFIND        4
-#define SCINPUTOPT_EXPANDREFS       5
-#define SCINPUTOPT_MARKHEADER       6
-#define SCINPUTOPT_USETABCOL        7
-#define SCINPUTOPT_TEXTWYSIWYG      8
+#define SCINPUTOPT_MOVEDIR			0
+#define SCINPUTOPT_MOVESEL			1
+#define SCINPUTOPT_EDTEREDIT		2
+#define SCINPUTOPT_EXTENDFMT		3
+#define SCINPUTOPT_RANGEFIND		4
+#define SCINPUTOPT_EXPANDREFS		5
+#define SCINPUTOPT_MARKHEADER		6
+#define SCINPUTOPT_USETABCOL		7
+#define SCINPUTOPT_TEXTWYSIWYG		8
 #define SCINPUTOPT_REPLCELLSWARN    9
 #define SCINPUTOPT_COUNT            10
 
@@ -134,14 +134,14 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "MoveSelectionDirection",   // SCINPUTOPT_MOVEDIR
-        "MoveSelection",            // SCINPUTOPT_MOVESEL
-        "SwitchToEditMode",         // SCINPUTOPT_EDTEREDIT
-        "ExpandFormatting",         // SCINPUTOPT_EXTENDFMT
-        "ShowReference",            // SCINPUTOPT_RANGEFIND
-        "ExpandReference",          // SCINPUTOPT_EXPANDREFS
-        "HighlightSelection",       // SCINPUTOPT_MARKHEADER
-        "UseTabCol",                // SCINPUTOPT_USETABCOL
+        "MoveSelectionDirection",	// SCINPUTOPT_MOVEDIR
+        "MoveSelection",			// SCINPUTOPT_MOVESEL
+        "SwitchToEditMode",			// SCINPUTOPT_EDTEREDIT
+        "ExpandFormatting",			// SCINPUTOPT_EXTENDFMT
+        "ShowReference",			// SCINPUTOPT_RANGEFIND
+        "ExpandReference",			// SCINPUTOPT_EXPANDREFS
+        "HighlightSelection",		// SCINPUTOPT_MARKHEADER
+        "UseTabCol",				// SCINPUTOPT_USETABCOL
         "UsePrinterMetrics",        // SCINPUTOPT_TEXTWYSIWYG
         "ReplaceCellsWarning"       // SCINPUTOPT_REPLCELLSWARN
     };

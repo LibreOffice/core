@@ -45,7 +45,7 @@ public class Test01 implements EmbeddingTest {
             }
 
             xLoad.initNew();
-
+            
             XDrawPagesSupplier xDPSupply = (XDrawPagesSupplier) UnoRuntime.queryInterface( XDrawPagesSupplier.class, oDoc );
             if ( xDPSupply == null )
             {
@@ -73,7 +73,7 @@ public class Test01 implements EmbeddingTest {
                 m_aTestHelper.Error( "Can not get access to drawing page!" );
                 return false;
             }
-
+    
             XMultiServiceFactory xDrFactory = ( XMultiServiceFactory ) UnoRuntime.queryInterface( XMultiServiceFactory.class,
                                                                                                   oDoc );
             if ( xDrFactory == null )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,9 +106,9 @@ BOOL MainWindow::Close()
 
 void MainWindow::FileExit()
 {
-/*  WriteSTBProfile();*/
+/*	WriteSTBProfile();*/
 
-//  if (pApp->CloseAll())
+//	if (pApp->CloseAll())
         pApp->Quit();
 }
 
@@ -154,23 +154,23 @@ void MainWindow::SysDlg()
 
 /*
 
-#define WB_OK                   ((WinBits)0x0010)
-#define WB_OK_CANCEL            ((WinBits)0x0020)
-#define WB_YES_NO               ((WinBits)0x0040)
-#define WB_YES_NO_CANCEL        ((WinBits)0x0080)
-#define WB_RETRY_CANCEL         ((WinBits)0x0100)
+#define WB_OK					((WinBits)0x0010)
+#define WB_OK_CANCEL			((WinBits)0x0020)
+#define WB_YES_NO				((WinBits)0x0040)
+#define WB_YES_NO_CANCEL		((WinBits)0x0080)
+#define WB_RETRY_CANCEL			((WinBits)0x0100)
 
-#define WB_DEF_OK               ((WinBits)0x0200)
-#define WB_DEF_CANCEL           ((WinBits)0x0400)
-#define WB_DEF_RETRY            ((WinBits)0x0800)
-#define WB_DEF_YES              ((WinBits)0x1000)
-#define WB_DEF_NO               ((WinBits)0x2000)
+#define WB_DEF_OK				((WinBits)0x0200)
+#define WB_DEF_CANCEL			((WinBits)0x0400)
+#define WB_DEF_RETRY			((WinBits)0x0800)
+#define WB_DEF_YES				((WinBits)0x1000)
+#define WB_DEF_NO				((WinBits)0x2000)
 
-#define RET_OK               TRUE
-#define RET_CANCEL           FALSE
-#define RET_YES              2
-#define RET_NO               3
-#define RET_RETRY            4
+#define RET_OK				 TRUE
+#define RET_CANCEL			 FALSE
+#define RET_YES				 2
+#define RET_NO				 3
+#define RET_RETRY			 4
 */
 }
 
@@ -189,7 +189,7 @@ void MyApp::Property( ApplicationProperty& rProp )
         pTTProperties->nPropertyVersion = TT_PROPERTIES_VERSION;
         switch ( pTTProperties->nActualPR )
         {
-/*          case TT_PR_SLOTS:
+/*			case TT_PR_SLOTS:
             {
                 pTTProperties->nSidOpenUrl = SID_OPENURL;
                 pTTProperties->nSidFileName = SID_FILE_NAME;
@@ -219,7 +219,7 @@ void MyApp::Property( ApplicationProperty& rProp )
                 }
             }
             break;
-/*          case TT_PR_IMG:
+/*			case TT_PR_IMG:
             {
                 SvDataMemberObjectRef aDataObject = new SvDataMemberObject();
                 SvData* pDataBmp = new SvData( FORMAT_BITMAP );
@@ -246,11 +246,11 @@ USHORT MyDispatcher::ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs, USHORT 
 
     switch (nSID)
     {
-        case IDM_FILE_EXIT:       pMainWin->FileExit();             break;
-        case IDM_FILE_OPEN_TEST:  pMainWin->FileOpen();             break;
-        case IDM_TEST_GROSS:      pMainWin->TestGross();            break;
-        case IDM_TEST_WINTREE:    pMainWin->WinTree();              break;
-        case IDM_SYS_DLG:         pMainWin->SysDlg();               break;
+        case IDM_FILE_EXIT:       pMainWin->FileExit();				break;
+        case IDM_FILE_OPEN_TEST:  pMainWin->FileOpen();				break;
+        case IDM_TEST_GROSS:      pMainWin->TestGross();			break;
+        case IDM_TEST_WINTREE:	  pMainWin->WinTree();				break;
+        case IDM_SYS_DLG:		  pMainWin->SysDlg();				break;
         default:
             {
                 DBG_ERROR1("Dispatcher kennt Funktion nicht %s",ByteString::CreateFromInt64(nSID).GetBuffer());
@@ -275,7 +275,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
         exit( 1 );
     }
     OSL_ASSERT( path.lastIndexOf( '/' ) >= 0 );
-
+    
 
     ::rtl::OUStringBuffer bufServices( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
     bufServices.appendAscii("services.rdb");
@@ -284,8 +284,8 @@ Reference< XContentProviderManager > InitializeUCB( void )
     ::rtl::OUStringBuffer bufTypes( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
     bufTypes.appendAscii("types.rdb");
     OUString types = bufTypes.makeStringAndClear();
-
-
+    
+    
     Reference< XMultiServiceFactory > xSMgr;
     try
     {
@@ -298,7 +298,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
         InfoBox( NULL, String( exc.Message ) ).Execute();
         throw ;
     }
-
+        
 
     //////////////////////////////////////////////////////////////////////
     // set global factory

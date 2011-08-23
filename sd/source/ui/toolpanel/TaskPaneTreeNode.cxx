@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -250,7 +250,7 @@ TaskPaneShellManager* TreeNode::GetShellManager (void)
 void TreeNode::AddStateChangeListener (const Link& rListener)
 {
     if (::std::find (
-        maStateChangeListeners.begin(),
+        maStateChangeListeners.begin(), 
         maStateChangeListeners.end(),
         rListener) == maStateChangeListeners.end())
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class SfxProgress;
 class SwLayAction
 {
     SwRootFrm  *pRoot;
-    SwViewImp  *pImp;   //Hier Meldet sich die Action an und ab.
+    SwViewImp  *pImp;	//Hier Meldet sich die Action an und ab.
 
     //Zur Optimierung, damit die Tabellen etwas besser am Crsr kleben beim
     //Return/Backspace davor.
@@ -73,33 +73,33 @@ class SwLayAction
     //hier ein. Die Steuerung der InternalAction kann dann geeignet reagieren.
     USHORT nPreInvaPage;
 
-    ULONG nStartTicks;  //Startzeitpunkt der Aktion, vergeht zu viel Zeit kann
+    ULONG nStartTicks;	//Startzeitpunkt der Aktion, vergeht zu viel Zeit kann
                         //der WaitCrsr per CheckWaitCrsr() eingeschaltet werden.
 
-    USHORT nInputType;  //Bei welchem Input soll die Verarbeitung abgebrochen
+    USHORT nInputType;	//Bei welchem Input soll die Verarbeitung abgebrochen
                         //werden?
-    USHORT nEndPage;    //StatBar Steuerung.
+    USHORT nEndPage;	//StatBar Steuerung.
     USHORT nCheckPageNum; //CheckPageDesc() wurde verzoegert wenn != USHRT_MAX
                           //ab dieser Seite Checken.
 
-    BOOL bPaint;        //Painten oder nur Formatieren?
-    BOOL bComplete;     //Alles bis zum sichtbaren Bereich Formatieren oder
+    BOOL bPaint; 		//Painten oder nur Formatieren?
+    BOOL bComplete;		//Alles bis zum sichtbaren Bereich Formatieren oder
                         //oder nur den sichtbaren Bereich?
-    BOOL bCalcLayout;   //Vollstaendige Reformatierung?
-    BOOL bAgain;        //Zur automatisch wiederholten Action wenn Seiten
+    BOOL bCalcLayout;	//Vollstaendige Reformatierung?
+    BOOL bAgain;		//Zur automatisch wiederholten Action wenn Seiten
                         //geloscht werden.
-    BOOL bNextCycle;    //Wiederaufsetzen bei der ersten Ungueltigen Seite.
-    BOOL bInput;        //Zum Abbrechen der Verarbeitung wenn ein Input anliegt.
-    BOOL bIdle;         //True wenn die Layaction vom Idler ausgeloest wurde.
-    BOOL bReschedule;   //Soll das Reschedule - abhaengig vom Progress -
+    BOOL bNextCycle;	//Wiederaufsetzen bei der ersten Ungueltigen Seite.
+    BOOL bInput;		//Zum Abbrechen der Verarbeitung wenn ein Input anliegt.
+    BOOL bIdle;			//True wenn die Layaction vom Idler ausgeloest wurde.
+    BOOL bReschedule;	//Soll das Reschedule - abhaengig vom Progress -
                         //gerufen werden?
     BOOL bCheckPages;   //CheckPageDescs() ausfuehren oder verzoegern.
     BOOL bUpdateExpFlds;//Wird gesetzt wenn nach dem Formatierien noch eine
                         //Runde fuer den ExpFld laufen muss.
     BOOL bBrowseActionStop; //Action fruehzeitig beenden (per bInput) und den
                             //Rest dem Idler ueberlassen.
-    BOOL bWaitAllowed;      //Wartecursor erlaubt?
-    BOOL bPaintExtraData;   //Anzeige von Zeilennumerierung o. ae. eingeschaltet?
+    BOOL bWaitAllowed;		//Wartecursor erlaubt?
+    BOOL bPaintExtraData;	//Anzeige von Zeilennumerierung o. ae. eingeschaltet?
     BOOL bActionInProgress; // wird in Action() anfangs gesetzt und zum Schluss geloescht
 
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
@@ -139,52 +139,52 @@ public:
     ~SwLayAction();
 
 #ifdef _LAYACT_CXX
-    void SetIdle            ( BOOL bNew )   { bIdle = bNew; }
-    void SetCheckPages      ( BOOL bNew )   { bCheckPages = bNew; }
-    void SetBrowseActionStop(BOOL bNew  )   { bBrowseActionStop = bNew; }
-    void SetNextCycle       ( BOOL bNew )   { bNextCycle = bNew; }
+    void SetIdle			( BOOL bNew )	{ bIdle = bNew; }
+    void SetCheckPages		( BOOL bNew )	{ bCheckPages = bNew; }
+    void SetBrowseActionStop(BOOL bNew  )	{ bBrowseActionStop = bNew; }
+    void SetNextCycle		( BOOL bNew )	{ bNextCycle = bNew; }
 
-    BOOL IsWaitAllowed()        const       { return bWaitAllowed; }
-    BOOL IsNextCycle()          const       { return bNextCycle; }
-    BOOL IsInput()              const       { return bInput; }
-    BOOL IsWait()               const       { return 0 != pWait;  }
-    BOOL IsPaint()              const       { return bPaint; }
-    BOOL IsIdle()               const       { return bIdle;  }
-    BOOL IsReschedule()         const       { return bReschedule;  }
-    BOOL IsPaintExtraData()     const       { return bPaintExtraData;}
+    BOOL IsWaitAllowed()		const		{ return bWaitAllowed; }
+    BOOL IsNextCycle()			const		{ return bNextCycle; }
+    BOOL IsInput() 				const		{ return bInput; }
+    BOOL IsWait()  				const		{ return 0 != pWait;  }
+    BOOL IsPaint() 				const		{ return bPaint; }
+    BOOL IsIdle()  				const		{ return bIdle;  }
+    BOOL IsReschedule() 		const		{ return bReschedule;  }
+    BOOL IsPaintExtraData()		const 		{ return bPaintExtraData;}
     BOOL IsStopPrt()          const;
     BOOL IsInterrupt()        const { return IsInput() || IsStopPrt(); }
 
-    USHORT GetInputType()    const { return nInputType; }
+    USHORT GetInputType() 	 const { return nInputType; }
 #endif
 
     //Einstellen der Action auf das gewuenschte Verhalten.
-    void SetPaint       ( BOOL bNew )   { bPaint = bNew; }
-    void SetComplete    ( BOOL bNew )   { bComplete = bNew; }
-    void SetStatBar     ( BOOL bNew );
-    void SetInputType   ( USHORT nNew ) { nInputType = nNew; }
-    void SetCalcLayout  ( BOOL bNew )   { bCalcLayout = bNew; }
-    void SetReschedule  ( BOOL bNew )   { bReschedule = bNew; }
-    void SetWaitAllowed ( BOOL bNew )   { bWaitAllowed = bNew; }
+    void SetPaint		( BOOL bNew )	{ bPaint = bNew; }
+    void SetComplete	( BOOL bNew )	{ bComplete = bNew; }
+    void SetStatBar		( BOOL bNew );
+    void SetInputType	( USHORT nNew )	{ nInputType = nNew; }
+    void SetCalcLayout	( BOOL bNew )	{ bCalcLayout = bNew; }
+    void SetReschedule	( BOOL bNew )	{ bReschedule = bNew; }
+    void SetWaitAllowed	( BOOL bNew )	{ bWaitAllowed = bNew; }
 
-    void SetAgain()         { bAgain = TRUE; }
-    void SetUpdateExpFlds() {bUpdateExpFlds = TRUE; }
+    void SetAgain()			{ bAgain = TRUE; }
+    void SetUpdateExpFlds()	{bUpdateExpFlds = TRUE; }
     void SetProgress(SfxProgress * _pProgress = NULL)
     { pProgress = _pProgress; }
 
     inline void SetCheckPageNum( USHORT nNew );
     inline void SetCheckPageNumDirect( USHORT nNew ) { nCheckPageNum = nNew; }
 
-    void Action();  //Jetzt gehts loos...
-    void Reset();   //Zurueck auf CTor-Defaults.
+    void Action();	//Jetzt gehts loos...
+    void Reset();	//Zurueck auf CTor-Defaults.
 
-    BOOL IsAgain()      const { return bAgain; }
-    BOOL IsComplete()   const { return bComplete; }
-    BOOL IsExpFlds()    const { return bUpdateExpFlds; }
+    BOOL IsAgain()		const { return bAgain; }
+    BOOL IsComplete()	const { return bComplete; }
+    BOOL IsExpFlds()	const { return bUpdateExpFlds; }
     BOOL IsCalcLayout() const { return bCalcLayout;  }
     BOOL IsCheckPages() const { return bCheckPages;  }
-    BOOL IsBrowseActionStop() const { return bBrowseActionStop; }
-    BOOL IsActionInProgress() const { return bActionInProgress; }
+    BOOL IsBrowseActionStop() const	{ return bBrowseActionStop; }
+    BOOL IsActionInProgress() const { return bActionInProgress;	}
 
     USHORT GetCheckPageNum() const { return nCheckPageNum; }
 
@@ -203,11 +203,11 @@ class SwLayIdle
 {
 
     SwRootFrm *pRoot;
-    SwViewImp  *pImp;           // Hier Meldet sich der Idler an und ab.
-    SwCntntNode *pCntntNode;    // Hier wird die aktuelle Cursorposition
-    xub_StrLen  nTxtPos;        // zwischengespeichert.
-    BOOL        bPageValid;     // Konnte die Seite alles validiert werden?
-    BOOL        bAllValid;      // Konnte alles validiert werden?
+    SwViewImp  *pImp;			// Hier Meldet sich der Idler an und ab.
+    SwCntntNode *pCntntNode;	// Hier wird die aktuelle Cursorposition
+    xub_StrLen	nTxtPos;		// zwischengespeichert.
+    BOOL		bPageValid;		// Konnte die Seite alles validiert werden?
+    BOOL		bAllValid;      // Konnte alles validiert werden?
 
 #ifdef DBG_UTIL
     BOOL bIndicator;
@@ -236,4 +236,4 @@ inline void SwLayAction::SetCheckPageNum( USHORT nNew )
         nCheckPageNum = nNew;
 }
 
-#endif  //_LAYACT_HXX
+#endif	//_LAYACT_HXX

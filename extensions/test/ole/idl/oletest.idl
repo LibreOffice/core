@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ interface XTestSequence: com::sun::star::uno::XInterface
     sequence<unsigned long> methodULong( [in] sequence<unsigned long> aSeq);
     sequence<string> methodString( [in] sequence<string> aSeq);
     sequence<char> methodChar( [in] sequence<char> aSeq);
-    sequence<any> methodAny ( [in] sequence<any> aSeq);
-    sequence<type> methodType   ( [in] sequence<type> aSeq);
+    sequence<any> methodAny	( [in] sequence<any> aSeq);
+    sequence<type> methodType	( [in] sequence<type> aSeq);
     sequence<com::sun::star::uno::XInterface> methodXInterface ( [in] sequence<com::sun::star::uno::XInterface> aSeq);
     sequence< sequence <long> > methodSequence( [in] sequence< sequence< long > > aSeq);
     sequence< sequence <sequence <long> > > methodSequence2( [in] sequence< sequence< sequence<long> > > aSeq);
@@ -83,7 +83,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     [attribute] any AAny;
     [attribute] type AType;
     [attribute] com::sun::star::uno::XInterface  AXInterface;
-    [attribute] com::sun::star::script::XInvocation  AXInvocation;
+    [attribute] com::sun::star::script::XInvocation  AXInvocation;    
 
     void testout_methodByte( [out] byte rOut );
     void testout_methodFloat( [out] float rOut);
@@ -97,8 +97,8 @@ interface XTestSequence: com::sun::star::uno::XInterface
      void testout_methodUHyper( [out] unsigned hyper rOut);
     void testout_methodString( [out] string rOut);
     void testout_methodChar( [out] char rOut);
-    void testout_methodAny  ( [out] any rOut);
-    void testout_methodType ( [out] type rOut);
+    void testout_methodAny	( [out] any rOut);
+    void testout_methodType	( [out] type rOut);
     void testout_methodSequence( [out] sequence< long > rOut);
     void testout_methodSequence2( [out] sequence < sequence< long > > rOut);
     void testout_methodXInterface( [out] com::sun::star::uno::XInterface rOut);
@@ -120,8 +120,8 @@ interface XTestSequence: com::sun::star::uno::XInterface
     void testinout_methodUHyper( [inout] unsigned hyper rOut);
     void testinout_methodString( [inout] string rOut);
     void testinout_methodChar( [inout] char rOut);
-    void testinout_methodAny    ( [inout] any rOut);
-    void testinout_methodType   ( [inout] type rOut);
+    void testinout_methodAny	( [inout] any rOut);
+    void testinout_methodType	( [inout] type rOut);
     void testinout_methodSequence( [inout] sequence< long > rOut);
     void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut);
     void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut);
@@ -135,7 +135,7 @@ interface XTestStruct: com::sun::star::uno::XInterface
 {
 // Method taking structs as arguments
     void methodStruct( [in] com::sun::star::beans::Property aProp);
-//  Methods returning structs
+//	Methods returning structs
     com::sun::star::beans::Property retMethodStruct();
 // Attributes as structs
     [attribute] com::sun::star::beans::Property AttrStruct;
@@ -163,8 +163,8 @@ interface XTestInParameters: com::sun::star::uno::XInterface
     unsigned hyper in_methodUHyper( [in] unsigned hyper rIn);
     string in_methodString( [in] string rIn);
     char in_methodChar( [in] char rIn);
-    any in_methodAny    ( [in] any rIn);
-    type in_methodType  ( [in] type rIn);
+    any in_methodAny	( [in] any rIn);
+    type in_methodType	( [in] type rIn);
     com::sun::star::uno::XInterface in_methodXInterface([in] com::sun::star::uno::XInterface rIn);
     com::sun::star::script::XInvocation in_methodInvocation( [in] com::sun::star::script::XInvocation inv);
     SimpleStruct in_methodStruct( [in] SimpleStruct aStruct);
@@ -242,7 +242,7 @@ interface XCallback: com::sun::star::uno::XInterface
                        [out] string outString,
                        [out] float outFloat,
                        [out] double outDouble,
-                       [out] byte   outByte,
+                       [out] byte	outByte,
                        [out] short outShort,
                        [out] long outLong);
 // IN OUT parameters
@@ -280,7 +280,7 @@ interface XCallback: com::sun::star::uno::XInterface
     void inSeqByte( [in] sequence<byte> val);
     void inSeqXEventListener( [in] sequence<com::sun::star::lang::XEventListener> listener, [in]
                               sequence<com::sun::star::lang::EventObject> events);
-
+    
     // Attributes
     [attribute] oletest::XSimple simple;
 

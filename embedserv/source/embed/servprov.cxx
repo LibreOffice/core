@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ void o2u_attachCurrentThread()
 
     if ( oleThreadData.getData() != 0 )
     {
-        HINSTANCE inst= LoadLibrary( _T("ole32.dll"));
+        HINSTANCE inst=	LoadLibrary( _T("ole32.dll"));
         if( inst )
         {
             HRESULT hr;
@@ -225,25 +225,25 @@ EmbedProviderFactory_Impl::~EmbedProviderFactory_Impl()
 sal_Bool EmbedProviderFactory_Impl::registerClass()
 {
     HRESULT hresult;
-
+    
     o2u_attachCurrentThread();
 
-    hresult = CoRegisterClassObject(
+    hresult = CoRegisterClassObject(				
             m_guid,
             this,
             CLSCTX_LOCAL_SERVER,
             REGCLS_MULTIPLEUSE,
             &m_factoryHandle);
-
-    return (hresult == NOERROR);
-}
+            
+    return (hresult == NOERROR);			
+}	
 
 sal_Bool EmbedProviderFactory_Impl::deregisterClass()
 {
     HRESULT hresult = CoRevokeClassObject( m_factoryHandle );
 
-    return (hresult == NOERROR);
-}
+    return (hresult == NOERROR);			
+}	
 
 STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void FAR* FAR* ppv)
 {
@@ -252,7 +252,7 @@ STDMETHODIMP EmbedProviderFactory_Impl::QueryInterface(REFIID riid, void FAR* FA
         AddRef();
         *ppv = (IUnknown*) (IClassFactory*) this;
         return NOERROR;
-    }
+    } 
     else if (IsEqualIID(riid, IID_IClassFactory))
     {
         AddRef();
@@ -275,9 +275,9 @@ STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()
     sal_Int32 nCount = --m_refCount;
     if ( nCount == 0 )
     {
-        delete this;
+        delete this;		
     }
-
+    
     return nCount;
 }
 
@@ -286,9 +286,9 @@ STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
                                                        void FAR* FAR* ppv)
 {
     punkOuter = NULL;
-
+    
     IUnknown* pEmbedDocument = (IUnknown*)(IPersistStorage*)( new EmbedDocument_Impl( m_xFactory, &m_guid ) );
-
+    
     return pEmbedDocument->QueryInterface( riid, ppv );
 }
 
@@ -297,7 +297,7 @@ STDMETHODIMP EmbedProviderFactory_Impl::LockServer( int /*fLock*/ )
     return NOERROR;
 }
 
-// Fix strange warnings about some
+// Fix strange warnings about some 
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

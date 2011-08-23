@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #define INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include "unotools/unotoolsdllapi.h"
@@ -40,21 +40,21 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//  types, enums, ...
+//	types, enums, ...
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @descr          The method GetList() returns a list of property values.
+    @descr			The method GetList() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
 
-#define HISTORY_PROPERTYNAME_URL            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"       ))
-#define HISTORY_PROPERTYNAME_FILTER         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Filter"    ))
-#define HISTORY_PROPERTYNAME_TITLE          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"     ))
-#define HISTORY_PROPERTYNAME_PASSWORD       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password"  ))
+#define	HISTORY_PROPERTYNAME_URL			::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"		))
+#define	HISTORY_PROPERTYNAME_FILTER			::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Filter"	))
+#define	HISTORY_PROPERTYNAME_TITLE			::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"		))
+#define	HISTORY_PROPERTYNAME_PASSWORD		::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password"	))
 
 /*-************************************************************************************************************//**
-    @descr          You can use these enum values to specify right history if you call ouer interface methods.
+    @descr			You can use these enum values to specify right history if you call ouer interface methods.
 *//*-*************************************************************************************************************/
 
 enum EHistoryType
@@ -65,12 +65,12 @@ enum EHistoryType
 };
 
 //_________________________________________________________________________________________________________________
-//  forward declarations
+//	forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
+    @short			forward declaration to our private date container implementation
+    @descr			We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -78,156 +78,156 @@ enum EHistoryType
 class SvtHistoryOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          collect informations about history features
+    @short			collect informations about history features
     @descr          -
 
-    @implements     -
-    @base           -
+    @implements		-
+    @base			-
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 
 class UNOTOOLS_DLLPUBLIC SvtHistoryOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
+            @short		standard constructor and destructor
+            @descr		This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
+            @seealso	member m_nRefCount
+            @seealso	member m_pDataContainer
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
          SvtHistoryOptions();
         virtual ~SvtHistoryOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //  interface
+        //	interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/History/..."
-            @descr      key "PickList"  : The last used documents displayed in the file menu.
-                        key "History"   : The last opened documents general.
+            @short		interface methods to get and set value of config key "org.openoffice.Office.Common/History/..."
+            @descr		key "PickList"	: The last used documents displayed in the file menu.
+                        key "History"	: The last opened documents general.
         *//*-*****************************************************************************************************/
 
         /*-****************************************************************************************************//**
-            @short      set/get max size of specified history
-            @descr      Call this methods to get information about max. size of specified list.
+            @short		set/get max size of specified history
+            @descr		Call this methods to get information about max. size of specified list.
                         These value lay down the max count of items in these history. If a new one
                         is add to it the oldest one is deleted automaticly!
 
-            @seealso    -
+            @seealso	-
 
-            @param      "eHistory" select right history.
-            @param      "nSize" is the new max size of specified list. If new size smaller then the old one
+            @param		"eHistory" select right history.
+            @param		"nSize" is the new max size of specified list. If new size smaller then the old one
                         some oldest entries will be destroyed automaticly!
-            @return     Current max size of specified list.
+            @return		Current max size of specified list.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        sal_uInt32  GetSize( EHistoryType eHistory                      ) const ;
-        void        SetSize( EHistoryType eHistory, sal_uInt32 nSize    )       ;
+        sal_uInt32	GetSize( EHistoryType eHistory						) const	;
+        void		SetSize( EHistoryType eHistory, sal_uInt32 nSize	)		;
 
         /*-****************************************************************************************************//**
-            @short      clear complete sepcified list
-            @descr      Call this methods to clear the whole list. After that GetItemCount() will return 0 ...
+            @short		clear complete sepcified list
+            @descr		Call this methods to clear the whole list. After that GetItemCount() will return 0 ...
                         but GetSize() will return the old value!
 
-            @seealso    -
+            @seealso	-
 
-            @param      "eHistory" select right history.
-            @return     -
+            @param		"eHistory" select right history.
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         void Clear( EHistoryType eHistory );
 
         /*-****************************************************************************************************//**
-            @short      return complete sepcified list
-            @descr      If you will show the whole list call this method to get it completly.
+            @short		return complete sepcified list
+            @descr		If you will show the whole list call this method to get it completly.
 
-            @seealso    -
+            @seealso	-
 
-            @param      "eHistory" select right history.
-            @return     A list of history items is returned.
+            @param		"eHistory" select right history.
+            @return		A list of history items is returned.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList( EHistoryType eHistory ) const ;
 
         /*-****************************************************************************************************//**
-            @short      append a new item to specified list
-            @descr      You can append items to a list only - removing isn't allowed for a special item!
+            @short		append a new item to specified list
+            @descr		You can append items to a list only - removing isn't allowed for a special item!
                         The oldest entry is deleted automaticly if max size arrived or you can call Clear() ...
                         It exist two different overload methods to do this.
                         One for user which have an complete history item and another one for uncompletly data sets!
 
-            @seealso    method SetSize()
-            @seealso    method Clear()
+            @seealso	method SetSize()
+            @seealso	method Clear()
 
-            @param      "eHistory" select right history.
-            @param      "sURL" URL to save in history
-            @param      "sFilter" filter name to save in history
-            @param      "sTitle" document title to save in history
-            @param      "sPassword" password to save in history
-            @return     -
+            @param		"eHistory" select right history.
+            @param		"sURL" URL to save in history
+            @param		"sFilter" filter name to save in history
+            @param		"sTitle" document title to save in history
+            @param		"sPassword" password to save in history
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        void AppendItem(            EHistoryType        eHistory    ,
-                            const   ::rtl::OUString&    sURL        ,
-                            const   ::rtl::OUString&    sFilter     ,
-                            const   ::rtl::OUString&    sTitle      ,
-                            const   ::rtl::OUString&    sPassword   );
+        void AppendItem(			EHistoryType		eHistory	,
+                            const	::rtl::OUString&	sURL		,
+                            const	::rtl::OUString&	sFilter		,
+                            const	::rtl::OUString&	sTitle		,
+                            const	::rtl::OUString&	sPassword	);
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return a reference to a static mutex
-            @descr      Make these class threadsafe.
+            @short		return a reference to a static mutex
+            @descr		Make these class threadsafe.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A reference to a static mutex member.
+            @param		-
+            @return		A reference to a static mutex member.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -240,9 +240,9 @@ class UNOTOOLS_DLLPUBLIC SvtHistoryOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtHistoryOptions_Impl*  m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
+        static SvtHistoryOptions_Impl*	m_pDataContainer	;	/// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32				m_nRefCount			;	/// internal ref count mechanism
 
-};      // class SvtHistoryOptions
+};		// class SvtHistoryOptions
 
-#endif  // #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
+#endif	// #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX

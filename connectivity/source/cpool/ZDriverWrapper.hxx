@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ namespace connectivity
     //====================================================================
     //= ODriverWrapper
     //====================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdbc::XDriver
-                                    >   ODriverWrapper_BASE;
+    typedef ::cppu::WeakImplHelper1	<	::com::sun::star::sdbc::XDriver
+                                    >	ODriverWrapper_BASE;
 
     class ODriverWrapper : public ODriverWrapper_BASE
     {
@@ -52,7 +52,7 @@ namespace connectivity
                             m_xDriverAggregate;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >
                             m_xDriver;
-        OConnectionPool*    m_pConnectionPool;
+        OConnectionPool*	m_pConnectionPool;
 
     public:
         /** creates a new wrapper for a driver
@@ -64,7 +64,7 @@ namespace connectivity
             OConnectionPool* _pPool
             );
 
-
+        
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
@@ -81,7 +81,7 @@ namespace connectivity
     };
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 
 #endif // _CONNECTIVITY_CPOOL_ZDRIVERWRAPPER_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@
 #include <sfx2/viewsh.hxx>
 #include "nochaos.hxx"
 #include <sfx2/fcontnr.hxx>
-#include "helper.hxx"   // SfxContentHelper::Kill()
+#include "helper.hxx"	// SfxContentHelper::Kill()
 #include "sfxpicklist.hxx"
 
 #ifdef UNX
@@ -193,8 +193,8 @@ Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServ
 
 //====================================================================
 
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
+#define DOSTRING( x )			   			#x
+#define STRING( x )				   			DOSTRING( x )
 
 typedef bool ( *PFunc_getSpecialCharsForEdit)( Window* i_pParent, const Font& i_rFont, String& o_rOutString );
 
@@ -259,8 +259,8 @@ FASTBOOL SfxApplication::Initialize_Impl()
     Help::EnableExtHelp();
 
     SvtLocalisationOptions aLocalisation;
-    Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
-    Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
+    Application::EnableAutoMnemonic	( aLocalisation.IsAutoMnemonic() );
+    Application::SetDialogScaleX	( (short)(aLocalisation.GetDialogScale()) );
 
 
 #ifdef DBG_UTIL

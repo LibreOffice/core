@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_TABLE), aSvxMapProvider.GetPropertySet(SVXMAP_TABLE, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_TABLE), aSvxMapProvider.GetPropertySet(SVXMAP_TABLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ) );
 }
@@ -59,10 +59,10 @@ SvxTableShape::~SvxTableShape() throw()
 
 //----------------------------------------------------------------------
 
-bool SvxTableShape::setPropertyValueImpl(
-    const ::rtl::OUString& rName,
-    const SfxItemPropertySimpleEntry* pProperty,
-    const ::com::sun::star::uno::Any& rValue )
+bool SvxTableShape::setPropertyValueImpl( 
+    const ::rtl::OUString& rName, 
+    const SfxItemPropertySimpleEntry* pProperty, 
+    const ::com::sun::star::uno::Any& rValue ) 
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
@@ -70,7 +70,7 @@ bool SvxTableShape::setPropertyValueImpl(
     case OWN_ATTR_TABLETEMPLATE:
     {
         Reference< XIndexAccess > xTemplate;
-
+        
         if( !(rValue >>= xTemplate) )
             throw IllegalArgumentException();
 
@@ -92,12 +92,12 @@ bool SvxTableShape::setPropertyValueImpl(
 
             switch( pProperty->nWID )
             {
-            case OWN_ATTR_TABLETEMPLATE_FIRSTROW:           rValue >>= aSettings.mbUseFirstRow; break;
-            case OWN_ATTR_TABLETEMPLATE_LASTROW:            rValue >>= aSettings.mbUseLastRow; break;
-            case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:        rValue >>= aSettings.mbUseFirstColumn; break;
-            case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:         rValue >>= aSettings.mbUseLastColumn; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:        rValue >>= aSettings.mbUseRowBanding; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:    rValue >>= aSettings.mbUseColumnBanding; break;
+            case OWN_ATTR_TABLETEMPLATE_FIRSTROW:			rValue >>= aSettings.mbUseFirstRow; break;
+            case OWN_ATTR_TABLETEMPLATE_LASTROW:			rValue >>= aSettings.mbUseLastRow; break;
+            case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:		rValue >>= aSettings.mbUseFirstColumn; break;
+            case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:			rValue >>= aSettings.mbUseLastColumn; break;
+            case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:		rValue >>= aSettings.mbUseRowBanding; break;
+            case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:	rValue >>= aSettings.mbUseColumnBanding; break;
             }
 
             static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->setTableStyleSettings(aSettings);
@@ -114,10 +114,10 @@ bool SvxTableShape::setPropertyValueImpl(
 
 extern Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector );
 
-bool SvxTableShape::getPropertyValueImpl(
-    const ::rtl::OUString& rName,
-    const SfxItemPropertySimpleEntry* pProperty,
-    ::com::sun::star::uno::Any& rValue )
+bool SvxTableShape::getPropertyValueImpl( 
+    const ::rtl::OUString& rName, 
+    const SfxItemPropertySimpleEntry* pProperty, 
+    ::com::sun::star::uno::Any& rValue ) 
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
@@ -160,12 +160,12 @@ bool SvxTableShape::getPropertyValueImpl(
 
             switch( pProperty->nWID )
             {
-            case OWN_ATTR_TABLETEMPLATE_FIRSTROW:           rValue <<= aSettings.mbUseFirstRow; break;
-            case OWN_ATTR_TABLETEMPLATE_LASTROW:            rValue <<= aSettings.mbUseLastRow; break;
-            case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:        rValue <<= aSettings.mbUseFirstColumn; break;
-            case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:         rValue <<= aSettings.mbUseLastColumn; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:        rValue <<= aSettings.mbUseRowBanding; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:    rValue <<= aSettings.mbUseColumnBanding; break;
+            case OWN_ATTR_TABLETEMPLATE_FIRSTROW:			rValue <<= aSettings.mbUseFirstRow; break;
+            case OWN_ATTR_TABLETEMPLATE_LASTROW:			rValue <<= aSettings.mbUseLastRow; break;
+            case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:		rValue <<= aSettings.mbUseFirstColumn; break;
+            case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:			rValue <<= aSettings.mbUseLastColumn; break;
+            case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:		rValue <<= aSettings.mbUseRowBanding; break;
+            case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:	rValue <<= aSettings.mbUseColumnBanding; break;
             }
         }
 

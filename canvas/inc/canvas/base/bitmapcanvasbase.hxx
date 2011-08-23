@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,42 +66,42 @@ namespace canvas
         @see CanvasBase for further contractual requirements towards
         the CanvasHelper type, and some examples.
      */
-    template< class Base,
-              class CanvasHelper,
-              class Mutex=::osl::MutexGuard,
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class BitmapCanvasBase :
+    template< class Base, 
+              class CanvasHelper, 
+              class Mutex=::osl::MutexGuard, 
+              class UnambiguousBase=::com::sun::star::uno::XInterface > class BitmapCanvasBase : 
         public CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
     {
     public:
-        typedef CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >    BaseType;
+        typedef CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >	BaseType;
 
         // XBitmapCanvas
-        virtual void SAL_CALL copyRect( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >&   sourceCanvas,
-                                        const ::com::sun::star::geometry::RealRectangle2D&                                      sourceRect,
-                                        const ::com::sun::star::rendering::ViewState&                                           sourceViewState,
-                                        const ::com::sun::star::rendering::RenderState&                                         sourceRenderState,
-                                        const ::com::sun::star::geometry::RealRectangle2D&                                      destRect,
-                                        const ::com::sun::star::rendering::ViewState&                                           destViewState,
-                                        const ::com::sun::star::rendering::RenderState&                                         destRenderState ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual void SAL_CALL copyRect( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& 	sourceCanvas, 
+                                        const ::com::sun::star::geometry::RealRectangle2D& 										sourceRect, 
+                                        const ::com::sun::star::rendering::ViewState& 											sourceViewState, 
+                                        const ::com::sun::star::rendering::RenderState& 										sourceRenderState, 
+                                        const ::com::sun::star::geometry::RealRectangle2D& 										destRect, 
+                                        const ::com::sun::star::rendering::ViewState& 											destViewState, 
+                                        const ::com::sun::star::rendering::RenderState& 										destRenderState ) throw (::com::sun::star::lang::IllegalArgumentException, 
                                                                                                                                                          ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
-                              destRect, destViewState, destRenderState,
+            tools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState, 
+                              destRect, destViewState, destRenderState, 
                               BOOST_CURRENT_FUNCTION,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
-
+            
             BaseType::mbSurfaceDirty = true;
             BaseType::maCanvasHelper.modifying();
 
-            BaseType::maCanvasHelper.copyRect( this,
-                                               sourceCanvas,
-                                               sourceRect,
-                                               sourceViewState,
-                                               sourceRenderState,
-                                               destRect,
-                                               destViewState,
+            BaseType::maCanvasHelper.copyRect( this, 
+                                               sourceCanvas, 
+                                               sourceRect, 
+                                               sourceViewState, 
+                                               sourceRenderState, 
+                                               destRect, 
+                                               destViewState, 
                                                destRenderState );
         }
 
@@ -110,7 +110,7 @@ namespace canvas
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            return BaseType::maCanvasHelper.getSize();
+            return BaseType::maCanvasHelper.getSize();            
         }
 
         virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -120,8 +120,8 @@ namespace canvas
             return BaseType::maCanvasHelper.hasAlpha();
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize,
-                                                                                                                   sal_Bool                                      beFast ) throw (::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize, 
+                                                                                                                   sal_Bool 									 beFast ) throw (::com::sun::star::uno::RuntimeException)
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

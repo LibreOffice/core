@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,22 +36,22 @@ class ScViewData;
 class ScTabSplitter : public Splitter
 {
 private:
-    ScViewData*     pViewData;
-    BOOL            bFixed;
+    ScViewData*		pViewData;
+    BOOL			bFixed;
 
 protected:
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
 
-    virtual void    Splitting( Point& rSplitPos );
+    virtual void	Splitting( Point& rSplitPos );
 
 public:
                     ScTabSplitter( Window* pParent, WinBits nWinStyle,
                                     ScViewData* pData );
                     ~ScTabSplitter();
 
-    void            SetFixed(BOOL bSet);
+    void			SetFixed(BOOL bSet);
 };
 
 

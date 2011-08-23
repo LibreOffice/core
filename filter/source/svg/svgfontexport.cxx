@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "svgfontexport.hxx"
 
-static const sal_Int32  nFontEM = 2048;
+static const sal_Int32	nFontEM = 2048;
 
 // -----------------
 // - SVGFontExport -
@@ -54,8 +54,8 @@ SVGFontExport::~SVGFontExport()
 
 void SVGFontExport::implCollectGlyphs()
 {
-    VirtualDevice                   aVDev;
-    ObjectVector::const_iterator    aIter( maObjects.begin() );
+    VirtualDevice					aVDev;
+    ObjectVector::const_iterator	aIter( maObjects.begin() );
 
     aVDev.EnableOutput( sal_False );
 
@@ -69,9 +69,9 @@ void SVGFontExport::implCollectGlyphs()
 
             for( sal_uInt32 i = 0, nCount = rMtf.GetActionCount(); i < nCount; ++i )
             {
-                ::rtl::OUString     aText;
-                MetaAction*         pAction = rMtf.GetAction( i );
-                const USHORT        nType = pAction->GetType();
+                ::rtl::OUString		aText;
+                MetaAction*			pAction = rMtf.GetAction( i );
+                const USHORT		nType = pAction->GetType();
 
                 switch( nType )
                 {
@@ -79,7 +79,7 @@ void SVGFontExport::implCollectGlyphs()
                     {
                         const MetaTextAction* pA = (const MetaTextAction*) pAction;
                         aText = String( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    }
+                    }			
                     break;
 
                     case( META_TEXTRECT_ACTION ):
@@ -89,9 +89,9 @@ void SVGFontExport::implCollectGlyphs()
                     }
                     break;
 
-                    case( META_TEXTARRAY_ACTION ):
+                    case( META_TEXTARRAY_ACTION	):
                     {
-                        const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
+                        const MetaTextArrayAction*	pA = (const MetaTextArrayAction*) pAction;
                         aText = String( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                     }
                     break;
@@ -110,8 +110,8 @@ void SVGFontExport::implCollectGlyphs()
 
                 if( aText.getLength() )
                 {
-                    const String&       rFontName = aVDev.GetFont().GetName();
-                    const sal_Unicode*  pStr = aText.getStr();
+                    const String&		rFontName = aVDev.GetFont().GetName();
+                    const sal_Unicode*	pStr = aText.getStr();
 
                     for( sal_uInt32 j = 0, nLen = aText.getLength(); j < nLen; ++j )
                         maGlyphs[ rFontName ].insert( pStr[ j ] );
@@ -130,15 +130,15 @@ void SVGFontExport::implCollectGlyphs()
 void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std::set< sal_Unicode >& rGlyphs )
 {
 #ifdef _SVG_EMBED_FONTS
-    ::std::set< sal_Unicode >::const_iterator   aIter( rGlyphs.begin() );
-    const ::rtl::OUString                       aEmbeddedFontStr( B2UCONST( "EmbeddedFont_" ) );
+    ::std::set< sal_Unicode >::const_iterator	aIter( rGlyphs.begin() );
+    const ::rtl::OUString						aEmbeddedFontStr( B2UCONST( "EmbeddedFont_" ) );
 
     {
-        SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", TRUE, TRUE );
-        ::rtl::OUString     aCurIdStr( aEmbeddedFontStr );
-        ::rtl::OUString     aUnitsPerEM( SVGActionWriter::GetValueString( nFontEM ) );
-        VirtualDevice       aVDev;
-        Font                aFont( rFontName, Size( 0, nFontEM ) );
+        SvXMLElementExport	aExp( mrExport, XML_NAMESPACE_NONE, "defs", TRUE, TRUE );
+        ::rtl::OUString		aCurIdStr( aEmbeddedFontStr );
+        ::rtl::OUString		aUnitsPerEM( SVGActionWriter::GetValueString( nFontEM ) );
+        VirtualDevice		aVDev;
+        Font			    aFont( rFontName, Size( 0, nFontEM ) );
 
         aVDev.SetMapMode( MAP_100TH_MM );
         aFont.SetAlign( ALIGN_BASELINE );
@@ -152,7 +152,7 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
             Point               aPos;
             Size                aSize( nFontEM, nFontEM );
             PolyPolygon         aMissingGlyphPolyPoly( Rectangle( aPos, aSize ) );
-
+    
             aMissingGlyphPolyPoly.Move( 0, -nFontEM );
             aMissingGlyphPolyPoly.Scale( 1.0, -1.0 );
 
@@ -177,7 +177,7 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
                     SvXMLElementExport aExp4( mrExport, XML_NAMESPACE_NONE, "path", TRUE, TRUE );
                 }
             }
-
+            
             while( aIter != rGlyphs.end() )
             {
                 implEmbedGlyph( aVDev, ::rtl::OUString( *aIter ) );
@@ -192,9 +192,9 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
 
 void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rGlyphs )
 {
-    PolyPolygon         aPolyPoly;
-    ::rtl::OUString     aStr( rGlyphs );
-    const sal_Unicode   nSpace = ' ';
+    PolyPolygon     	aPolyPoly;
+    ::rtl::OUString 	aStr( rGlyphs );
+    const sal_Unicode	nSpace = ' ';
 
     if( rOut.GetTextOutline( aPolyPoly, aStr ) )
     {
@@ -204,22 +204,22 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
 
         if( !rOut.GetTextBoundRect( aBoundRect, aStr ) )
             aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( aStr ), 0 ) );
-
+    
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "unicode", aStr );
-
+        
         if( rGlyphs[ 0 ] == nSpace )
             aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( sal_Unicode( 'x' ) ), 0 ) );
-
+        
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aBoundRect.GetWidth() ) );
 
         {
             SvXMLElementExport    aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
             const ::rtl::OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
-
+                  
             if( aPathString.getLength() )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", aPathString );
-
+    
                 {
                     SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), TRUE, TRUE );
                 }

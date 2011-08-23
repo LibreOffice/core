@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -225,7 +225,7 @@ lcl_checkRangeDimensions(
     const bool bSameCols(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetCol));
     const bool bSameRows(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetRow));
     const bool bSameTabs(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetTab));
-
+        
     // Test if exactly two dimensions are equal
     if (!(bSameCols ^ bSameRows ^ bSameTabs)
             && (bSameCols || bSameRows || bSameTabs))
@@ -677,9 +677,9 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
        intersection must be empty set.
     */
 
-    // Detect the simple case of exactly one reference in advance without all
+    // Detect the simple case of exactly one reference in advance without all 
     // overhead.
-    // #i107741# Doing so actually makes outlines using SUBTOTAL(x;reference)
+    // #i107741# Doing so actually makes outlines using SUBTOTAL(x;reference) 
     // work again, where the function does not have only references.
     if (HasOneReference( rRange))
         return true;

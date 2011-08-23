@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <sfx2/app.hxx>
 #include <svl/slstitm.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>               	// fuer Undo-Ids
 #include <swdtflvr.hxx>
 
 #ifndef _WRTSH_HRC
@@ -106,7 +106,7 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
         SwTransferable::CreateSelection( *this );
 
     // Bug 32918: nach loeschen der Numerierung bleibt die Obj. Leiste stehen
-    //          Warum wird hier nicht immer ein CallChgLink gerufen?
+    //			Warum wird hier nicht immer ein CallChgLink gerufen?
     CallChgLnk();
 }
 

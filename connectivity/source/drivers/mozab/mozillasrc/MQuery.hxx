@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -209,7 +209,7 @@ namespace connectivity
             const OColumnAlias&             m_rColumnAlias;
             ::com::sun::star::mozilla::MozillaProductType
                                             m_Product;
-            ::rtl::OUString                 m_Profile;
+            ::rtl::OUString					m_Profile;
             ErrorDescriptor                 m_aError;
 
             void construct();
@@ -227,14 +227,14 @@ namespace connectivity
             sal_Int32                       executeQuery(OConnection* _pCon);
             sal_Int32                       executeQueryProxied(OConnection* _pCon); //Used only by MNSMozabProxy
 
-            sal_Int32                       createNewCard(); //return Row count number
-            sal_Int32                       deleteRow(const sal_Int32 rowIndex);
-            sal_Int32                       commitRow(const sal_Int32 rowIndex);
-            sal_Bool                        resyncRow(sal_Int32 nDBRow);
+            sal_Int32						createNewCard(); //return Row count number
+            sal_Int32 						deleteRow(const sal_Int32 rowIndex);
+            sal_Int32 						commitRow(const sal_Int32 rowIndex);
+            sal_Bool						resyncRow(sal_Int32	nDBRow);
 
-            sal_Bool                        isWritable(OConnection* _pCon);
+            sal_Bool						isWritable(OConnection* _pCon);
 
-            sal_uInt32                      InsertLoginInfo(OConnection* _pCon);
+            sal_uInt32						InsertLoginInfo(OConnection* _pCon);
 
             void                            setAddressbook( ::rtl::OUString&);
             ::rtl::OUString                 getAddressbook(void) const;
@@ -262,14 +262,14 @@ namespace connectivity
                                                          sal_Int32 nDBRow,
                                                          const rtl::OUString& aDBColumnName,
                                                          sal_Int32 nType ) const;
-            sal_Int32                       getRowStates(sal_Int32 nDBRow);
-            sal_Bool                        setRowStates(sal_Int32 nDBRow,sal_Int32 aState);
+            sal_Int32						getRowStates(sal_Int32 nDBRow);
+            sal_Bool						setRowStates(sal_Int32 nDBRow,sal_Int32 aState);
 
             bool                            hadError() const { return m_aError.is(); }
             inline const ErrorDescriptor&   getError() const { return m_aError; }
 
         public:
-//          MQuery();
+//			MQuery();
             MQuery( const OColumnAlias& _ca );
             virtual ~MQuery();
             static MNameMapper* CreateNameMapper();

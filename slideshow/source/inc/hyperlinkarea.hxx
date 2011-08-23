@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ namespace slideshow
             virtual HyperlinkRegions getHyperlinkRegions() const = 0;
 
             /** Retrieve priority of link area
-
+                
                 @return the priority of the link area. Link areas with
                 higher priority will receive hyperlink clicks in favor
                 of areas with less priority, if they cover the same
@@ -85,12 +85,12 @@ namespace slideshow
                 // make functor adaptable (to boost::bind)
                 typedef bool result_type;
 
-                bool operator()(const boost::shared_ptr< HyperlinkArea >& rLHS,
+                bool operator()(const boost::shared_ptr< HyperlinkArea >& rLHS, 
                                 const boost::shared_ptr< HyperlinkArea >& rRHS) const
                 {
                     const double nPrioL( rLHS->getHyperlinkPriority() );
                     const double nPrioR( rRHS->getHyperlinkPriority() );
-
+            
                     // if prios are equal, tie-break on ptr value
                     return nPrioL == nPrioR ? rLHS.get() < rRHS.get() : nPrioL < nPrioR;
                 }

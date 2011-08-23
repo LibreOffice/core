@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,14 +87,14 @@ namespace dbaccess
     class OTable;
     class OTableContainer;
     class OContainerMediator;
-
+    
     class OTableContainer :  public OFilteredContainer,
                              public OTableContainer_Base
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTableDefinitions;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >	m_xTableDefinitions;
         ::rtl::Reference< OContainerMediator >                                          m_pTableMediator;
-        sal_Bool                m_bInDrop;                  // set when we are in the drop method
-
+        sal_Bool				m_bInDrop;					// set when we are in the drop method
+        
 
         // OFilteredContainer
         virtual void addMasterContainerListener();
@@ -102,8 +102,8 @@ namespace dbaccess
         virtual ::rtl::OUString getTableTypeRestriction() const;
 
         // ::connectivity::sdbcx::OCollection
-        virtual connectivity::sdbcx::ObjectType     createObject(const ::rtl::OUString& _rName);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor();
+        virtual connectivity::sdbcx::ObjectType		createObject(const ::rtl::OUString& _rName);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	createDescriptor();
         virtual connectivity::sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
 
@@ -124,19 +124,19 @@ namespace dbaccess
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
-            @param          _rParent            the object which acts as parent for the container.
+            @param			_rParent			the object which acts as parent for the container.
                                                 all refcounting is rerouted to this object
-            @param          _rMutex             the access safety object of the parent
-            @param          _rTableFilter       restricts the visible tables by name
-            @param          _rTableTypeFilter   restricts the visible tables by type
-            @see            construct
+            @param			_rMutex				the access safety object of the parent
+            @param			_rTableFilter		restricts the visible tables by name
+            @param			_rTableTypeFilter	restricts the visible tables by type
+            @see			construct
         */
         OTableContainer( ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
             sal_Bool _bCase,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  _xTableDefinitions,
-            IRefreshListener*   _pRefreshListener,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&	_xTableDefinitions,
+            IRefreshListener*	_pRefreshListener,
             ::dbtools::IWarningsContainer* _pWarningsContainer,
             oslInterlockedCount& _nInAppend
             );

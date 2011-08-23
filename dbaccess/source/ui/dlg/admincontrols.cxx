@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,18 +151,18 @@ namespace dbaui
     //--------------------------------------------------------------------
     MySQLNativeSettings::MySQLNativeSettings( Window& _rParent, const Link& _rControlModificationLink )
         :Control( &_rParent, ModuleRes( RID_MYSQL_NATIVE_SETTINGS ).SetAutoRelease( FALSE ) )
-        ,m_aDatabaseNameLabel   ( this, ModuleRes( FT_MYSQL_DATABASE_NAME ) )
-        ,m_aDatabaseName        ( this, ModuleRes( ED_MYSQL_DATABASE_NAME ) )
+        ,m_aDatabaseNameLabel	( this, ModuleRes( FT_MYSQL_DATABASE_NAME ) )
+        ,m_aDatabaseName	    ( this, ModuleRes( ED_MYSQL_DATABASE_NAME ) )
         ,m_aHostPortRadio       ( this, ModuleRes( RB_MYSQL_HOST_PORT ) )
-        ,m_aSocketRadio         ( this, ModuleRes( RB_MYSQL_SOCKET ) )
-        ,m_aNamedPipeRadio      ( this, ModuleRes( RB_MYSQL_NAMED_PIPE ) )
-        ,m_aHostNameLabel       ( this, ModuleRes( FT_COMMON_HOST_NAME ) )
-        ,m_aHostName            ( this, ModuleRes( ED_COMMON_HOST_NAME ) )
-        ,m_aPortLabel           ( this, ModuleRes( FT_COMMON_PORT ) )
-        ,m_aPort                ( this, ModuleRes( NF_COMMON_PORT ) )
+        ,m_aSocketRadio		    ( this, ModuleRes( RB_MYSQL_SOCKET ) )
+        ,m_aNamedPipeRadio		( this, ModuleRes( RB_MYSQL_NAMED_PIPE ) )
+        ,m_aHostNameLabel		( this, ModuleRes( FT_COMMON_HOST_NAME ) )
+        ,m_aHostName		    ( this, ModuleRes( ED_COMMON_HOST_NAME ) )
+        ,m_aPortLabel	        ( this, ModuleRes( FT_COMMON_PORT ) )
+        ,m_aPort	            ( this, ModuleRes( NF_COMMON_PORT ) )
         ,m_aDefaultPort         ( this, ModuleRes( FT_COMMON_PORT_DEFAULT ) )
-        ,m_aSocket              ( this, ModuleRes( ED_MYSQL_SOCKET ) )
-        ,m_aNamedPipe           ( this, ModuleRes( ED_MYSQL_NAMED_PIPE ) )
+        ,m_aSocket		        ( this, ModuleRes( ED_MYSQL_SOCKET ) )
+        ,m_aNamedPipe		    ( this, ModuleRes( ED_MYSQL_NAMED_PIPE ) )
     {
         FreeResource();
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,15 +58,15 @@ enum SlideViewFocusMove
 // - SdSlideView -
 // ---------------
 
-class SlideView
+class SlideView 
     : public ::sd::View
 {
 public:
     TYPEINFO();
 
     SlideView (
-        SdDrawDocument* pDoc,
-        ::Window* pWindow,
+        SdDrawDocument* pDoc, 
+        ::Window* pWindow, 
         SlideViewShell* pSlideVShell);
     virtual ~SlideView (void);
 
@@ -89,18 +89,18 @@ public:
     void                Paint(const Rectangle& rRect, OutputDevice* pOut);
     void                DrawSelectionRect(USHORT nPage);
 
-    Point               CalcPagePos( USHORT nPageNo ) const;
+    Point	            CalcPagePos( USHORT nPageNo ) const;
     Rectangle           GetPageArea( USHORT nPageNo ) const;
-    ULONG               GetPageGap() const;
+    ULONG	            GetPageGap() const;
     Rectangle           GetFadeIconArea( USHORT nPageNo ) const;
     SdPage*             GetHitPage( const Point& rPos ) const;
     SdPage*             GetFadePage( const Point& rPos ) const;
     SdPage*             GetNearestPage( const Point& rPos ) const;
-
+    
     void                DeleteMarked();
     void                MoveMarked( USHORT nTargetPage );
 
-    void                    AddToCache( SdPage* pPage, const Bitmap& rBitmap, long nZoom );
+    void		            AddToCache( SdPage* pPage, const Bitmap& rBitmap, long nZoom ); 
     const GraphicObject*    GetFromCache( SdPage* pPage, long& rZoom, long nZoomTolerance ) const;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -111,29 +111,29 @@ public:
 
     virtual void        StartDrag( const Point& rDragPt, ::Window* pWindow );
     virtual void        DragFinished( sal_Int8 nDropAction );
-
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                    ::sd::Window* pTargetWindow = NULL,
-                                    USHORT nPage = SDRPAGE_NOTFOUND,
+    
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper, 
+                                    ::sd::Window* pTargetWindow = NULL, 
+                                    USHORT nPage = SDRPAGE_NOTFOUND, 
                                     USHORT nLayer = SDRPAGE_NOTFOUND );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                     ::sd::Window* pTargetWindow = NULL,
-                                     USHORT nPage = SDRPAGE_NOTFOUND,
+                                     ::sd::Window* pTargetWindow = NULL, 
+                                     USHORT nPage = SDRPAGE_NOTFOUND, 
                                      USHORT nLayer = SDRPAGE_NOTFOUND );
 
-    void                UpdateAllPages();
+    void 	            UpdateAllPages();
 
 private:
-    Timer               aDelayedPaintTimer;
-    List                aDelayedPaints;
-    SlideViewShell*     pSlideViewShell;
-    BitmapCache*        pCache;
-    VirtualDevice*      mpVDev;
-    USHORT              nAllowInvalidateSmph;
-    USHORT              nPagesPerRow;
+    Timer				aDelayedPaintTimer;
+    List				aDelayedPaints;
+    SlideViewShell*		pSlideViewShell;
+    BitmapCache*		pCache;
+    VirtualDevice*		mpVDev;
+    USHORT				nAllowInvalidateSmph;
+    USHORT				nPagesPerRow;
     USHORT              nFocusPage;
-    BOOL                bInPaint;
-    BOOL                bInDelayedPaint;
+    BOOL				bInPaint;
+    BOOL				bInDelayedPaint;
 
                         DECL_LINK( PaintDelayed, Timer * );
     void CreateSlideTransferable (::Window* pWindow, BOOL bDrag);

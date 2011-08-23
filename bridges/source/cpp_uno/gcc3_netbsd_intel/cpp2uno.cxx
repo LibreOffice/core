@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,10 @@ static typelib_TypeClass cpp2uno_call(
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-
+    
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
-
+    
     if (pReturnTypeDescr)
     {
         if (cppu_isSimpleType( pReturnTypeDescr ))
@@ -83,7 +83,7 @@ static typelib_TypeClass cpp2uno_call(
         {
             pCppReturn = *(void **)pCppStack;
             pCppStack += sizeof(void *);
-
+            
             pUnoReturn = (cppu_relatesToInterface( pReturnTypeDescr )
                           ? alloca( pReturnTypeDescr->nSize )
                           : pCppReturn); // direct way
@@ -101,9 +101,9 @@ static typelib_TypeClass cpp2uno_call(
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-
+    
     sal_Int32 nTempIndizes   = 0;
-
+    
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
@@ -155,14 +155,14 @@ static typelib_TypeClass cpp2uno_call(
         }
         pCppStack += sizeof(sal_Int32); // standard parameter length
     }
-
+    
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
     uno_Any * pUnoExc = &aUnoExc;
 
     // invoke uno dispatch call
     (*pThis->pUnoI->pDispatcher)( pThis->pUnoI, pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
-
+    
     // in case an exception occured...
     if (pUnoExc)
     {
@@ -170,14 +170,14 @@ static typelib_TypeClass cpp2uno_call(
         for ( ; nTempIndizes--; )
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-
+            
             if (pParams[nIndex].bIn) // is in/inout => was constructed
                 uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-
+        
         raiseException( &aUnoExc, &pThis->pBridge->aUno2Cpp ); // has to destruct the any
         // is here for dummy
         return typelib_TypeClass_VOID;
@@ -189,7 +189,7 @@ static typelib_TypeClass cpp2uno_call(
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-
+            
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
@@ -199,7 +199,7 @@ static typelib_TypeClass cpp2uno_call(
             }
             // destroy temp uno param
             uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
-
+            
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return
@@ -234,7 +234,7 @@ static typelib_TypeClass cpp_mediate(
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
     OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
-
+    
     // pCallStack: ret adr, [ret *], this, params
     // _this_ ptr is patched cppu_XInterfaceProxy object
     cppu_cppInterfaceProxy * pCppI = NULL;
@@ -247,9 +247,9 @@ static typelib_TypeClass cpp_mediate(
     {
         pCppI = (cppu_cppInterfaceProxy *)(XInterface *)*(pCallStack +1);
     }
-
+    
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->pTypeDescr;
-
+    
     OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nVtableCall >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
@@ -257,14 +257,14 @@ static typelib_TypeClass cpp_mediate(
             OUString::createFromAscii("illegal vtable index!"),
             (XInterface *)pCppI );
     }
-
+    
     // determine called method
     OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nVtableCall];
     OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
-
+    
     typelib_TypeClass eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
@@ -285,9 +285,9 @@ static typelib_TypeClass cpp_mediate(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
-
+            aParam.bIn		= sal_True;
+            aParam.bOut		= sal_False;
+            
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
                 0, // indicates void return
@@ -319,7 +319,7 @@ static typelib_TypeClass cpp_mediate(
                 (*pCppI->pBridge->pCppEnv->getRegisteredInterface)(
                     pCppI->pBridge->pCppEnv,
                     (void **)&pInterface, pCppI->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
-
+            
                 if (pInterface)
                 {
                     ::uno_any_construct(
@@ -368,7 +368,7 @@ void cpp_vtable_call( int nTableEntry, void** pCallStack )
 {
     volatile long nRegReturn[2];
     typelib_TypeClass aType = cpp_mediate( nTableEntry, pCallStack, (sal_Int64*)nRegReturn );
-
+    
     switch( aType )
     {
         case typelib_TypeClass_HYPER:
@@ -389,11 +389,11 @@ void cpp_vtable_call( int nTableEntry, void** pCallStack )
                      "fldl %0\n"
                      : : "m"(*(double *)nRegReturn) );
             break;
-//      case typelib_TypeClass_UNSIGNED_SHORT:
-//      case typelib_TypeClass_SHORT:
-//          __asm__( "movswl %0, %%eax\n"
-//                   : : "m"(nRegReturn) );
-//      break;
+// 		case typelib_TypeClass_UNSIGNED_SHORT:
+// 		case typelib_TypeClass_SHORT:
+// 			__asm__( "movswl %0, %%eax\n"
+// 					 : : "m"(nRegReturn) );
+// 		break;
         default:
             __asm__( "movl %0, %%eax\n"
                      : : "m"(nRegReturn[0]) );
@@ -408,10 +408,10 @@ class MediateClassData
     typedef ::std::hash_map< OUString, void *, OUStringHash > t_classdata_map;
     t_classdata_map m_map;
     Mutex m_mutex;
-
+    
 public:
     void const * get_vtable( typelib_InterfaceTypeDescription * pTD ) SAL_THROW( () );
-
+    
     inline MediateClassData() SAL_THROW( () )
         {}
     ~MediateClassData() SAL_THROW( () );
@@ -420,7 +420,7 @@ public:
 MediateClassData::~MediateClassData() SAL_THROW( () )
 {
     OSL_TRACE( "> calling ~MediateClassData(): freeing mediate vtables." );
-
+    
     for ( t_classdata_map::const_iterator iPos( m_map.begin() ); iPos != m_map.end(); ++iPos )
     {
         ::rtl_freeMemory( iPos->second );
@@ -447,7 +447,7 @@ static inline void codeSnippet( char * code, sal_uInt32 vtable_pos, bool simple_
 void const * MediateClassData::get_vtable( typelib_InterfaceTypeDescription * pTD ) SAL_THROW( () )
 {
     void * buffer;
-
+    
     // avoiding locked counts
     OUString const & unoName = *(OUString const *)&((typelib_TypeDescription *)pTD)->pTypeName;
     {
@@ -458,16 +458,16 @@ void const * MediateClassData::get_vtable( typelib_InterfaceTypeDescription * pT
         // create new vtable
         sal_Int32 nSlots = pTD->nMapFunctionIndexToMemberIndex;
         buffer = ::rtl_allocateMemory( ((2+ nSlots) * sizeof (void *)) + (nSlots *20) );
-
+        
         ::std::pair< t_classdata_map::iterator, bool > insertion(
             m_map.insert( t_classdata_map::value_type( unoName, buffer ) ) );
         OSL_ENSURE( insertion.second, "### inserting new vtable buffer failed?!" );
-
+        
         void ** slots = (void **)buffer;
         *slots++ = 0;
         *slots++ = 0; // rtti
         char * code = (char *)(slots + nSlots);
-
+        
         sal_uInt32 vtable_pos = 0;
         sal_Int32 nAllMembers = pTD->nAllMembers;
         typelib_TypeDescriptionReference ** ppAllMembers = pTD->ppAllMembers;
@@ -509,7 +509,7 @@ void const * MediateClassData::get_vtable( typelib_InterfaceTypeDescription * pT
         buffer = iFind->second;
     }
     }
-
+    
     return ((void **)buffer +2);
 }
 

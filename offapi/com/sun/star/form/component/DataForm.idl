@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -196,7 +196,7 @@ published service DataForm
 
     //-------------------------------------------------------------------------
     /** determines if insertions into the form's row set are allowed.
-
+    
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for insertions done via the API, even
         if the property is set to <FALSE/>, but the user interface should respect the property
@@ -206,7 +206,7 @@ published service DataForm
 
     //-------------------------------------------------------------------------
     /** determines if modifications of the current record of the form are allowed.
-
+    
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for updates done via the API, even
         if the property is set to <FALSE/>, but the user interface should respect the property
@@ -216,7 +216,7 @@ published service DataForm
 
     //-------------------------------------------------------------------------
     /** determines if deletions of records of the form are allowed.
-
+    
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for deletions done via the API, even
         if the property is set to <FALSE/>, but the user interface should respect the property

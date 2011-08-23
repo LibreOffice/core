@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,12 +44,12 @@ using namespace rtl;
 // Die Konversion eines Items auf String wird ueber die Put-Methoden
 // der einzelnen Datentypen abgewickelt, um doppelten Code zu vermeiden.
 
-XubString ImpGetString( const SbxValues* p )
+::rtl::OUString ImpGetString( const SbxValues* p )
 {
     SbxValues aTmp;
-    XubString aRes;
+    ::rtl::OUString aRes;
     aTmp.eType = SbxSTRING;
-    aTmp.pString = &aRes;
+    aTmp.pOUString = &aRes;
     switch( +p->eType )
     {
         case SbxNULL:
@@ -86,8 +86,8 @@ XubString ImpGetString( const SbxValues* p )
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( p->pString )
-                aRes = *p->pString;
+            if ( p->pOUString )
+                *aTmp.pOUString = *p->pOUString;
             break;
         case SbxOBJECT:
         {
@@ -109,7 +109,7 @@ XubString ImpGetString( const SbxValues* p )
         case SbxERROR:
             // Hier wird der String "Error n" erzeugt
             aRes = SbxRes( STRING_ERRORMSG );
-            aRes += p->nUShort; break;
+            aRes += ::rtl::OUString( p->nUShort ); break;
         case SbxDATE:
             ImpPutDate( &aTmp, p->nDouble ); break;
 
@@ -145,7 +145,7 @@ XubString ImpGetString( const SbxValues* p )
 }
 
 // AB 10.4.97, neue Funktion fuer SbxValue::GetCoreString()
-XubString ImpGetCoreString( const SbxValues* p )
+::rtl::OUString ImpGetCoreString( const SbxValues* p )
 {
     // Vorerst nur fuer double
     if( ( p->eType & (~SbxBYREF) ) == SbxDOUBLE )
@@ -153,7 +153,6 @@ XubString ImpGetCoreString( const SbxValues* p )
         SbxValues aTmp;
         XubString aRes;
         aTmp.eType = SbxSTRING;
-        aTmp.pString = &aRes;
         if( p->eType == SbxDOUBLE )
             ImpPutDouble( &aTmp, p->nDouble, /*bCoreString=*/TRUE );
         else
@@ -164,15 +163,15 @@ XubString ImpGetCoreString( const SbxValues* p )
         return ImpGetString( p );
 }
 
-void ImpPutString( SbxValues* p, const XubString* n )
+void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
 {
     SbxValues aTmp;
     aTmp.eType = SbxSTRING;
-    XubString* pTmp = NULL;
+    ::rtl::OUString* pTmp = NULL;
     // Sicherheitshalber, falls ein NULL-Ptr kommt
     if( !n )
-        n = pTmp = new XubString;
-    aTmp.pString = (XubString*) n;
+        n = pTmp = new ::rtl::OUString;
+    aTmp.pOUString = (::rtl::OUString*)n;
     switch( +p->eType )
     {
         case SbxCHAR:
@@ -209,14 +208,15 @@ void ImpPutString( SbxValues* p, const XubString* n )
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( n->Len() )
+            if( n->getLength() )
             {
-                if( !p->pString )
-                    p->pString = new XubString;
-                *p->pString = *n;
+                if( !p->pOUString )
+                    p->pOUString = new ::rtl::OUString( *n );
+                else
+                    *p->pOUString = *n;
             }
             else
-                delete p->pString, p->pString = NULL;
+                delete p->pOUString, p->pOUString = NULL;
             break;
         case SbxOBJECT:
         {
@@ -258,39 +258,39 @@ void ImpPutString( SbxValues* p, const XubString* n )
 }
 
 // Convert string to an array of bytes, preserving unicode (2bytes per character)
-SbxArray* StringToByteArray(const String& rStr)
+SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
 {
-    USHORT nArraySize = rStr.Len() * 2;
-    const sal_Unicode* pSrc = rStr.GetBuffer();
+    sal_Int32 nArraySize = rStr.getLength() * 2;
+    const sal_Unicode* pSrc = rStr.getStr();
     SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
     bool bIncIndex = ( IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
     if( nArraySize )
     {
         if( bIncIndex )
-            pArray->AddDim( 1, nArraySize );
+            pArray->AddDim32( 1, nArraySize );
         else
-            pArray->AddDim( 0, nArraySize-1 );
+            pArray->AddDim32( 0, nArraySize-1 );
     }
     else
     {
         pArray->unoAddDim( 0, -1 );
     }
 
-    for( USHORT i=0; i< nArraySize; i++)
+    for( USHORT	i=0; i< nArraySize; i++)
     {
         SbxVariable* pNew = new SbxVariable( SbxBYTE );
         BYTE aByte = static_cast< BYTE >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
         pNew->PutByte( aByte );
         pNew->SetFlag( SBX_WRITE );
-        pArray->Put( pNew, i );
+        pArray->Put( pNew, i );	
         if( i%2 )
             pSrc++;
     }
     return pArray;
-}
+}	
 
 // Convert an array of bytes to string (2bytes per character)
-String ByteArrayToString(SbxArray* pArr)
+::rtl::OUString ByteArrayToString(SbxArray* pArr)
 {
     USHORT nCount = pArr->Count();
     OUStringBuffer aStrBuf;
@@ -306,16 +306,14 @@ String ByteArrayToString(SbxArray* pArr)
         }
         else
         {
-            aChar = aTempChar;
+            aChar = aTempChar;	
         }
     }
-
+    
     if( nCount%2 )
     {
         aStrBuf.append(aChar);
     }
 
-    String aStr(aStrBuf.makeStringAndClear());
-
-    return aStr;
+    return aStrBuf.makeStringAndClear();
 }

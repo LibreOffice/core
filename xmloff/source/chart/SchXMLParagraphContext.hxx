@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,4 +61,4 @@ public:
     virtual void Characters( const rtl::OUString& rChars );
 };
 
-#endif  // _SCH_XMLPARAGRAPHCONTEXT_HXX_
+#endif	// _SCH_XMLPARAGRAPHCONTEXT_HXX_

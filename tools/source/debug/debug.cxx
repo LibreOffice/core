@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1206,7 +1206,7 @@ void* DbgFunc( USHORT nAction, void* pParam )
             case DBG_FUNC_SAVEDATA:
                 {
                 const DbgData* pData = static_cast< const DbgData* >( pParam );
-
+                
                 sal_Char aBuf[ 4096 ];
                 DbgGetDbgFileName( aBuf, sizeof( aBuf ) );
                 FILETYPE pIniFile = FileOpen( aBuf, "w" );

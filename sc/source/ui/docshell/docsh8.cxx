@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,24 +83,24 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-#define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_DRVMAN           "com.sun.star.sdbc.DriverManager"
+#define SC_SERVICE_ROWSET			"com.sun.star.sdb.RowSet"
+#define SC_SERVICE_DRVMAN			"com.sun.star.sdbc.DriverManager"
 
-//! move to a header file?
-//#define SC_DBPROP_DATASOURCENAME  "DataSourceName"
-#define SC_DBPROP_ACTIVECONNECTION  "ActiveConnection"
-#define SC_DBPROP_COMMAND           "Command"
-#define SC_DBPROP_COMMANDTYPE       "CommandType"
+//!	move to a header file?
+//#define SC_DBPROP_DATASOURCENAME	"DataSourceName"
+#define SC_DBPROP_ACTIVECONNECTION	"ActiveConnection"
+#define SC_DBPROP_COMMAND			"Command"
+#define SC_DBPROP_COMMANDTYPE		"CommandType"
 
-#define SC_DBPROP_NAME              "Name"
-#define SC_DBPROP_TYPE              "Type"
-#define SC_DBPROP_PRECISION         "Precision"
-#define SC_DBPROP_SCALE             "Scale"
+#define SC_DBPROP_NAME				"Name"
+#define SC_DBPROP_TYPE				"Type"
+#define SC_DBPROP_PRECISION			"Precision"
+#define SC_DBPROP_SCALE				"Scale"
 
-#define SC_DBPROP_EXTENSION         "Extension"
-#define SC_DBPROP_CHARSET           "CharSet"
+#define SC_DBPROP_EXTENSION			"Extension"
+#define SC_DBPROP_CHARSET			"CharSet"
 
-#define SC_ROWCOUNT_ERROR       (-1)
+#define SC_ROWCOUNT_ERROR		(-1)
 
 namespace
 {
@@ -140,7 +140,7 @@ namespace
         } // if ( aIter == aMap.end() )
         rtl::OUString aCharSetStr;
         if ( RTL_TEXTENCODING_DONTKNOW != *aIter )
-        {   // it's not the virtual "system charset"
+        {	// it's not the virtual "system charset"
             const char* pIanaName = rtl_getMimeCharsetFromTextEncoding( *aIter );
             OSL_ENSURE( pIanaName, "invalid mime name!" );
             if ( pIanaName )
@@ -261,7 +261,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         if ( !xConnection.is() || !xDrvMan.is() )
             return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);
-
+        
         long nRowCount = 0;
         if ( nRowCount < 0 )
         {
@@ -302,12 +302,12 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         if ( xMetaSupp.is() )
             xMeta = xMetaSupp->getMetaData();
         if ( xMeta.is() )
-            nColCount = xMeta->getColumnCount();    // this is the number of real columns
+            nColCount = xMeta->getColumnCount();	// this is the number of real columns
 
         if ( nColCount > MAXCOL+1 )
         {
             nColCount = MAXCOL+1;
-            nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning
+            nErr = SCWARN_IMPORT_RANGE_OVERFLOW;	// warning
         }
 
         if ( nColCount > 0 )
@@ -319,13 +319,13 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         if (!xRow.is()) return SCERR_IMPORT_CONNECT;
 
         // currency flag is not needed for dBase
-        uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
+        uno::Sequence<sal_Int32> aColTypes( nColCount );	// column types
         sal_Int32* pTypeArr = aColTypes.getArray();
         for (i=0; i<nColCount; i++)
             pTypeArr[i] = xMeta->getColumnType( i+1 );
 
-        //  read column names
-        //! add type descriptions
+        //	read column names
+        //!	add type descriptions
 
         for (i=0; i<nColCount; i++)
         {
@@ -363,7 +363,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
             aDocument.SetString( static_cast<SCCOL>(i), 0, 0, aHeader );
         }
 
-        SCROW nRow = 1;     // 0 is column titles
+        SCROW nRow = 1;		// 0 is column titles
         BOOL bEnd = FALSE;
         while ( !bEnd && xRowSet->next() )
         {
@@ -379,10 +379,10 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
                 }
                 ++nRow;
             }
-            else        // past the end of the spreadsheet
+            else		// past the end of the spreadsheet
             {
-                bEnd = TRUE;                            // don't continue
-                nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning message
+                bEnd = TRUE;							// don't continue
+                nErr = SCWARN_IMPORT_RANGE_OVERFLOW;	// warning message
             }
 
             if ( nRowCount )
@@ -420,9 +420,9 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                             sal_Int32* pColLengths, sal_Int32* pColScales,
                             BOOL& bHasMemo, CharSet eCharSet )
 {
-    //  updating of column titles didn't work in 5.2 and isn't always wanted
-    //  (saving normally shouldn't modify the document)
-    //! read flag from configuration
+    //	updating of column titles didn't work in 5.2 and isn't always wanted
+    //	(saving normally shouldn't modify the document)
+    //!	read flag from configuration
     BOOL bUpdateTitles = FALSE;
 
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -527,7 +527,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                 aFieldName.Erase( 10 );
             StrData* pStrData = new StrData( aFieldName );
             if ( !aFieldNamesCollection.Insert( pStrData ) )
-            {   // doppelter Feldname, numerisch erweitern
+            {	// doppelter Feldname, numerisch erweitern
                 USHORT nSub = 1;
                 String aFixPart( aFieldName );
                 do
@@ -549,7 +549,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
         }
 
         if ( !bTypeDefined )
-        {   // Feldtyp
+        {	// Feldtyp
             ScBaseCell* pCell;
             pDoc->GetCell( nCol, nFirstDataRow, nTab, pCell );
             if ( !pCell || pCell->HasStringData() )
@@ -588,14 +588,14 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
         BOOL bSdbLenBad = FALSE;
         // Feldlaenge
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
-        {   // maximale Feldbreite bestimmen
+        {	// maximale Feldbreite bestimmen
             nFieldLen = pDoc->GetMaxStringLen( nTab, nCol, nFirstDataRow,
                 nLastRow, eCharSet );
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
         }
         else if ( nDbType == sdbc::DataType::DECIMAL )
-        {   // maximale Feldbreite und Nachkommastellen bestimmen
+        {	// maximale Feldbreite und Nachkommastellen bestimmen
             xub_StrLen nLen;
             sal_uInt16 nPrec;
             nLen = pDoc->GetMaxNumberStringLen( nPrec, nTab, nCol,
@@ -606,11 +606,11 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
             if ( nPrec > 15 )
                 nPrec = 15;
             if ( bPrecDefined && nPrecision != nPrec )
-            {   // Laenge auf vorgegebene Nachkommastellen anpassen
+            {	// Laenge auf vorgegebene Nachkommastellen anpassen
                 if ( nPrecision )
                     nLen = sal::static_int_cast<xub_StrLen>( nLen + ( nPrecision - nPrec ) );
                 else
-                    nLen -= nPrec+1;            // auch den . mit raus
+                    nLen -= nPrec+1;			// auch den . mit raus
             }
             if ( nLen > nFieldLen && !bTypeDefined )
                 nFieldLen = nLen;
@@ -619,9 +619,9 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
             else if ( nFieldLen > 19 )
-                nFieldLen = 19;     // dBaseIII Limit Feldlaenge numerisch: 19
+                nFieldLen = 19;		// dBaseIII Limit Feldlaenge numerisch: 19
             if ( nPrecision && nFieldLen < nPrecision + 2 )
-                nFieldLen = nPrecision + 2;     // 0. muss mit reinpassen
+                nFieldLen = nPrecision + 2;		// 0. muss mit reinpassen
             // 538 MUST: Sdb internal representation adds 2 to the field length!
             // To give the user what he wants we must substract it here.
              //! CAVEAT! There is no way to define a numeric field with a length
@@ -634,13 +634,13 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
         if ( nFieldLen > 254 )
         {
             if ( nDbType == sdbc::DataType::VARCHAR )
-            {   // zu lang fuer normales Textfeld => Memofeld
+            {	// zu lang fuer normales Textfeld => Memofeld
                 nDbType = sdbc::DataType::LONGVARCHAR;
                 nFieldLen = 10;
                 bHasMemo = TRUE;
             }
             else
-                nFieldLen = 254;                    // dumm gelaufen..
+                nFieldLen = 254;					// dumm gelaufen..
         }
 
         pColNames[nField] = aFieldName;
@@ -653,10 +653,10 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
         {
             nFieldLen = SvDbaseConverter::ConvertPrecisionToDbase( nFieldLen, nPrecision );
             if ( bSdbLenBad && nFieldLen == 1 )
-                nFieldLen = 2;      // THIS is reality
+                nFieldLen = 2;		// THIS is reality
         }
         if ( bUpdateTitles )
-        {   // Angabe anpassen und ausgeben
+        {	// Angabe anpassen und ausgeben
             String aOutString = aFieldName;
             switch ( nDbType )
             {
@@ -733,7 +733,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
 
     BOOL bHasFieldNames = TRUE;
     for ( SCCOL nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
-    {   // nur Strings in erster Zeile => sind Feldnamen
+    {	// nur Strings in erster Zeile => sind Feldnamen
         if ( !aDocument.HasStringData( nDocCol, nFirstRow, nTab ) )
             bHasFieldNames = FALSE;
     }
@@ -767,7 +767,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         // get dBase driver
         uno::Reference< sdbc::XDriverAccess> xAccess(xDrvMan,uno::UNO_QUERY);
         uno::Reference< sdbcx::XDataDefinitionSupplier > xDDSup( xAccess->getDriverByURL( xConnection->getMetaData()->getURL() ), uno::UNO_QUERY );
-        if ( !xDDSup.is() )
+        if ( !xDDSup.is() ) 
             return SCERR_EXPORT_CONNECT;
 
         // create table
@@ -842,9 +842,9 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         xTablesAppend->appendByDescriptor( xTableDesc );
 
         // re-open connection
-//      xConnection = xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
-//      DBG_ASSERT( xConnection.is(), "can't get Connection" );
-//      if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
+//		xConnection = xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
+//		DBG_ASSERT( xConnection.is(), "can't get Connection" );
+//		if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
 
         // get row set for writing
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
@@ -900,7 +900,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                             if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
                             {
                                 if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                {   // #60761# Paragraphs erhalten
+                                {	// #60761# Paragraphs erhalten
                                     lcl_getLongVarCharEditString( aString,
                                             pCell, aEditEngine);
                                 }
@@ -940,8 +940,8 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                             }
                             else
                             {
-                                Date aDate = *(pNumFmt->GetNullDate());     // tools date
-                                aDate += (long)fVal;                        //! approxfloor?
+                                Date aDate = *(pNumFmt->GetNullDate());		// tools date
+                                aDate += (long)fVal;						//! approxfloor?
                                 util::Date aUnoDate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
                                 xRowUpdate->updateDate( nCol+1, aUnoDate );
                             }
@@ -971,11 +971,11 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
 
             xResultUpdate->insertRow();
 
-            //! error handling and recovery of old
-            //! ScDocShell::SbaSdbExport is still missing!
+            //!	error handling and recovery of old
+            //!	ScDocShell::SbaSdbExport is still missing!
 
             if ( !aProgress.SetStateOnPercent( nDocRow - nFirstRow ) )
-            {   // UserBreak
+            {	// UserBreak
                 nErr = SCERR_EXPORT_DATA;
                 break;
             }

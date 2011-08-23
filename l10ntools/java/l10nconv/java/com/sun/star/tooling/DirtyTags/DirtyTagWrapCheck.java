@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 /*
  * Created on 2005
- *  by Christian Schmidt
+ *	by Christian Schmidt
  */
 package com.sun.star.tooling.DirtyTags;
 
@@ -42,7 +42,7 @@ public class DirtyTagWrapCheck {
     static String line="";
     public static void main(String[] args) {
         try {
-            File fi = new File("D:\\Testfiles\\KID_helpcontent.sdf");//Copy of
+            File fi = new File("D:\\Testfiles\\KID_helpcontent.sdf");//Copy of 
             FileReader fr = new FileReader(fi);
             BufferedReader br = new BufferedReader(fr);
 
@@ -68,15 +68,15 @@ public class DirtyTagWrapCheck {
              }
             System.out.println("Fertig "+readCounter+" "+missCounter+" "+lineErrorCounter);
         } catch (FileNotFoundException e) {
-            //
+            // 
             e.printStackTrace();
         } catch (IOException e) {
-            //
+            // 
             e.printStackTrace();
         } catch (DirtyTagWrapper.TagWrapperException e) {
             System.out.println(e.getMessage()+"\n"+line+"\n");
-
+            
         }
-
+      
     }
 }

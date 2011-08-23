@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -258,7 +258,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
 
 Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     ( const Reference < XNameContainer >& /*xLib*/,
-      const OUString& /*aElementName */, const OUString& aFile,
+      const OUString& /*aElementName */, const OUString& aFile, 
       const uno::Reference< io::XInputStream >& xElementStream )
 {
     Any aRetAny;
@@ -267,8 +267,8 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     //Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
     //if( !xMSF.is() )
     //{
-    //  OSL_ENSURE( 0, "### couln't get ProcessServiceFactory\n" );
-    //  return aRetAny;
+    //	OSL_ENSURE( 0, "### couln't get ProcessServiceFactory\n" );
+    //	return aRetAny;
     //}
 
     Reference< XParser > xParser( mxMSF->createInstance(
@@ -318,7 +318,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
 
     InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId    = aFile;
+    source.sSystemId 	= aFile;
 
     try {
         // start parsing
@@ -364,7 +364,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
     bool bReadOnly = pDialogLibrary->mbReadOnly;
 
     // get ui locale
-    ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    ::com::sun	::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
     OUString aComment = aResourceFileCommentBase;
     aComment += aLibName;

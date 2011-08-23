@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
         aAuthFields[i] = rCopy.aAuthFields[i];
 }
 // --------------------------------------------------------
-BOOL    SwAuthEntry::operator==(const SwAuthEntry& rComp)
+BOOL 	SwAuthEntry::operator==(const SwAuthEntry& rComp)
 {
     for(USHORT i = 0; i < AUTH_FIELD_END; i++)
         if(aAuthFields[i] != rComp.aAuthFields[i])
@@ -134,7 +134,7 @@ SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
  --------------------------------------------------*/
 SwAuthorityFieldType::~SwAuthorityFieldType()
 {
-//  DBG_ASSERT(!m_pDataArr->Count(), "Array is not empty");
+//	DBG_ASSERT(!m_pDataArr->Count(), "Array is not empty");
     m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
     delete m_pSortKeyArr;
     delete m_pSequArr;
@@ -143,14 +143,14 @@ SwAuthorityFieldType::~SwAuthorityFieldType()
 /*-- 14.09.99 16:22:09---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwFieldType*    SwAuthorityFieldType::Copy()  const
+SwFieldType* 	SwAuthorityFieldType::Copy()  const
 {
     return new SwAuthorityFieldType(m_pDoc);
 }
 /* -----------------17.09.99 13:43-------------------
 
  --------------------------------------------------*/
-void    SwAuthorityFieldType::RemoveField(long nHandle)
+void	SwAuthorityFieldType::RemoveField(long nHandle)
 {
 #ifdef DBG_UTIL
     BOOL bRemoved = FALSE;
@@ -181,7 +181,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
 /* -----------------17.09.99 13:43-------------------
 
  --------------------------------------------------*/
-long    SwAuthorityFieldType::AddField(const String& rFieldContents)
+long	SwAuthorityFieldType::AddField(const String& rFieldContents)
 {
     long nRet = 0;
     SwAuthEntry* pEntry = new SwAuthEntry;
@@ -235,7 +235,7 @@ BOOL SwAuthorityFieldType::AddField(long nHandle)
 /* -----------------17.09.99 14:52-------------------
 
  --------------------------------------------------*/
-const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
+const SwAuthEntry*	SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
 {
     const SwAuthEntry* pRet = 0;
     for(USHORT j = 0; j < m_pDataArr->Count(); j++)
@@ -267,7 +267,7 @@ void SwAuthorityFieldType::GetAllEntryIdentifiers(
 /* -----------------21.09.99 13:34-------------------
 
  --------------------------------------------------*/
-const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
+const SwAuthEntry* 	SwAuthorityFieldType::GetEntryByIdentifier(
                                 const String& rIdentifier)const
 {
     const SwAuthEntry* pRet = 0;
@@ -304,10 +304,10 @@ bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
     return bChanged;
 }
 /*-- 11.10.99 08:49:22---------------------------------------------------
-    Description:    appends a new entry (if new) and returns the array position
+    Description: 	appends a new entry (if new) and returns the array position
 
   -----------------------------------------------------------------------*/
-USHORT  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
+USHORT	SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 {
     USHORT nRet = 0;
     for( nRet = 0; nRet < m_pDataArr->Count(); ++nRet )
@@ -330,7 +330,7 @@ USHORT  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 /*-- 11.10.99 08:49:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-long    SwAuthorityFieldType::GetHandle(USHORT nPos)
+long	SwAuthorityFieldType::GetHandle(USHORT nPos)
 {
     long nRet = 0;
     if( nPos < m_pDataArr->Count() )
@@ -343,7 +343,7 @@ long    SwAuthorityFieldType::GetHandle(USHORT nPos)
 /* -----------------19.10.99 13:46-------------------
 
  --------------------------------------------------*/
-USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
+USHORT	SwAuthorityFieldType::GetSequencePos(long nHandle)
 {
     //find the field in a sorted array of handles,
 #ifdef DBG_UTIL
@@ -480,7 +480,7 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
                      sProp2( C2U(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING)));
             for(sal_uInt16 i = 0; i < m_pSortKeyArr->Count(); i++)
             {
-                const SwTOXSortKey* pKey = (*m_pSortKeyArr)[i];
+                const SwTOXSortKey*	pKey = (*m_pSortKeyArr)[i];
                 pValues[i].realloc(2);
                 PropertyValue* pValue = pValues[i].getArray();
                 pValue[0].Name = sProp1;
@@ -641,7 +641,7 @@ SwAuthorityField::~SwAuthorityField()
 /*-- 14.09.99 16:20:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-String  SwAuthorityField::Expand() const
+String	SwAuthorityField::Expand() const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     String sRet;
@@ -652,7 +652,7 @@ String  SwAuthorityField::Expand() const
     {
        if(!pAuthType->GetDoc()->IsExpFldsLocked())
            m_nTempSequencePos = pAuthType->GetSequencePos( m_nHandle );
-       if( m_nTempSequencePos >= 0 )
+       if( m_nTempSequencePos >= 0 ) 
            sRet += String::CreateFromInt32( m_nTempSequencePos );
     }
     else
@@ -677,7 +677,7 @@ SwField* SwAuthorityField::Copy() const
 /* -----------------21.09.99 12:55-------------------
 
  --------------------------------------------------*/
-const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
+const String&	SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle( m_nHandle );
@@ -686,7 +686,7 @@ const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
 /* -----------------21.09.99 14:57-------------------
 
  --------------------------------------------------*/
-void    SwAuthorityField::SetPar1(const String& rStr)
+void	SwAuthorityField::SetPar1(const String& rStr)
 {
     SwAuthorityFieldType* pInitType = (SwAuthorityFieldType* )GetTyp();
     pInitType->RemoveField(m_nHandle);

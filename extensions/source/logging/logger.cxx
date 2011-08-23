@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ namespace logging
             return sal_False;
         }
     }
-
+    
     //====================================================================
     //= EventLogger - declaration
     //====================================================================
@@ -216,7 +216,7 @@ namespace logging
 
         return true;
     }
-
+    
     //--------------------------------------------------------------------
     void EventLogger::impl_ts_logEvent_nothrow( const LogRecord& _rRecord )
     {
@@ -236,35 +236,35 @@ namespace logging
     {
         return m_sName;
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL EventLogger::getLevel() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_nLogLevel;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EventLogger::setLevel( ::sal_Int32 _level ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_nLogLevel = _level;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EventLogger::addLogHandler( const Reference< XLogHandler >& _rxLogHandler ) throw (RuntimeException)
     {
         if ( _rxLogHandler.is() )
             m_aHandlers.addInterface( _rxLogHandler );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EventLogger::removeLogHandler( const Reference< XLogHandler >& _rxLogHandler ) throw (RuntimeException)
     {
         if ( _rxLogHandler.is() )
             m_aHandlers.removeInterface( _rxLogHandler );
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EventLogger::isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException)
     {
@@ -282,7 +282,7 @@ namespace logging
             osl_incrementInterlockedCount( &m_nEventNumber )
         ) );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL EventLogger::logp( ::sal_Int32 _nLevel, const ::rtl::OUString& _rSourceClass, const ::rtl::OUString& _rSourceMethod, const ::rtl::OUString& _rMessage ) throw (RuntimeException)
     {
@@ -301,13 +301,13 @@ namespace logging
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.EventLogger" ) );
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool EventLogger::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
     {
         return lcl_supportsService_nothrow( *this, _rServiceName );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL EventLogger::getSupportedServiceNames() throw(RuntimeException)
     {
@@ -330,13 +330,13 @@ namespace logging
     {
         return getImplementationName_static();
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL LoggerPool::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
     {
         return lcl_supportsService_nothrow( *this, _rServiceName );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL LoggerPool::getSupportedServiceNames() throw(RuntimeException)
     {
@@ -348,7 +348,7 @@ namespace logging
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.LoggerPool" ) );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL LoggerPool::getSupportedServiceNames_static()
     {
@@ -385,7 +385,7 @@ namespace logging
 
         return xLogger;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XLogger > SAL_CALL LoggerPool::getDefaultLogger(  ) throw (RuntimeException)
     {

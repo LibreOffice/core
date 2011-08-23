@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,31 +56,31 @@ class ScDocument;
 class ScSimpleRefDlg: public ScAnyRefDlg
 {
 private:
-    Link            aCloseHdl;
-    Link            aDoneHdl;
-    Link            aAbortedHdl;
-    Link            aChangeHdl;
+    Link			aCloseHdl;
+    Link			aDoneHdl;
+    Link			aAbortedHdl;
+    Link			aChangeHdl;
 
-    FixedText       aFtAssign;
-    formula::RefEdit        aEdAssign;
-    formula::RefButton      aRbAssign;
+    FixedText		aFtAssign;
+    formula::RefEdit		aEdAssign;
+    formula::RefButton		aRbAssign;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
-    ScViewData*     pViewData;
-    ScDocument*     pDoc;
-    BOOL            bRefInputMode;
+    ScViewData*		pViewData;
+    ScDocument*		pDoc;
+    BOOL			bRefInputMode;
 
-    ScRange         theCurArea;
-    BOOL            bCloseFlag;
-    BOOL            bAutoReOpen;
-    BOOL            bCloseOnButtonUp;
-    BOOL            bSingleCell;
+    ScRange			theCurArea;
+    BOOL			bCloseFlag;
+    BOOL			bAutoReOpen;
+    BOOL			bCloseOnButtonUp;
+    BOOL			bSingleCell;
     BOOL            bMultiSelection;
 
-    void            Init();
+    void			Init();
 
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( OkBtnHdl, void * );
@@ -88,32 +88,32 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( BOOL bForced = FALSE );
+    virtual void	RefInputDone( BOOL bForced = FALSE );
 
 public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                 ScViewData*    ptrViewData );
+                                 ScViewData*	ptrViewData );
                     ~ScSimpleRefDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const;
-    virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual BOOL	IsRefInputMode() const;
+    virtual void	SetActive();
+    virtual BOOL	Close();
 
-    void            StartRefInput();
+    void			StartRefInput();
 
-    virtual String  GetRefString() const;
-    virtual void    SetRefString(const String &rStr);
+    virtual	String	GetRefString() const;
+    virtual	void	SetRefString(const String &rStr);
     virtual void    FillInfo(SfxChildWinInfo&) const;
 
-    void            SetCloseHdl( const Link& rLink );
-    void            SetUnoLinks( const Link& rDone, const Link& rAbort,
+    void			SetCloseHdl( const Link& rLink );
+    void			SetUnoLinks( const Link& rDone, const Link& rAbort,
                                 const Link& rChange );
 
     void            SetFlags( BOOL bSetCloseOnButtonUp, BOOL bSetSingleCell, BOOL bSetMultiSelection );
 
-    void            SetAutoReOpen(BOOL bFlag) {bAutoReOpen=bFlag;}
+    void			SetAutoReOpen(BOOL bFlag) {bAutoReOpen=bFlag;}
 };
 
 

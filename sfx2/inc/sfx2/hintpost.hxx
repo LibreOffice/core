@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class SfxHint;
 
 class SfxHintPoster: public SvRefBase
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit Instanzen dieser Klasse k"onnen eindeutige Events per PostUserEvent
     "uber die StarView-Application verschickt werden. Wenn das User-Event
@@ -52,25 +52,25 @@ class SfxHintPoster: public SvRefBase
 */
 
 {
-    ULONG           nId;
-    GenLink         aLink;
+    ULONG			nId;
+    GenLink 		aLink;
 
 private:
-    void            RegisterEvent();
+    void			RegisterEvent();
 //#if 0 // _SOLAR__PRIVATE
                     DECL_LINK( DoEvent_Impl, SfxHint * );
 //#endif
 
 protected:
     virtual         ~SfxHintPoster();
-    virtual void    Event( SfxHint* pPostedHint );
+    virtual void	Event( SfxHint* pPostedHint );
 
 public:
                     SfxHintPoster();
                     SfxHintPoster( const GenLink& rLink );
 
-    void            Post( SfxHint* pHint = 0 );
-    void            SetEventHdl( const GenLink& rLink );
+    void			Post( SfxHint* pHint = 0 );
+    void			SetEventHdl( const GenLink& rLink );
 };
 
 //-------------------------------------------------------------------

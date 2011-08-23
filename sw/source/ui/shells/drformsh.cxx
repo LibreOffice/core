@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                         //issue a new command to insert the link
                         rTempView.GetViewFrame()->GetDispatcher()->Execute(
                                 SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON, &rHLinkItem, 0);
-                    }
+                    }            
                     else
                     {
                         uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();

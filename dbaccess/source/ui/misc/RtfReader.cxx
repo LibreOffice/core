@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,13 +68,13 @@ DBG_NAME(ORTFReader)
 // ==========================================================================
 // ORTFReader
 // ==========================================================================
-ORTFReader::ORTFReader( SvStream& rIn,
+ORTFReader::ORTFReader(	SvStream& rIn,
                         const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* pList,
                         const OTypeInfoMap* _pInfoMap)
-    :SvRTFParser(rIn)
+    :SvRTFParser(rIn) 
     ,ODatabaseExport( _rxConnection, _rxNumberF, _rM, pList, _pInfoMap, rIn )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::ORTFReader" );
@@ -90,7 +90,7 @@ ORTFReader::ORTFReader(SvStream& rIn,
                        const TColumnVector* pList,
                        const OTypeInfoMap* _pInfoMap,
                        sal_Bool _bAutoIncrementEnabled)
-   :SvRTFParser(rIn)
+   :SvRTFParser(rIn) 
    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rM, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::ORTFReader" );
@@ -121,7 +121,7 @@ void ORTFReader::NextToken( int nToken )
     if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
         return;
 
-    if(m_xConnection.is())    // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
+    if(m_xConnection.is())	  // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
     {
         switch(nToken)
         {
@@ -137,9 +137,9 @@ void ORTFReader::NextToken( int nToken )
                         {
                             switch(nTmpToken2)
                             {
-                                case RTF_RED:   aColor.SetRed((sal_uInt8)nTokenValue); break;
-                                case RTF_BLUE:  aColor.SetBlue((sal_uInt8)nTokenValue); break;
-                                case RTF_GREEN: aColor.SetGreen((sal_uInt8)nTokenValue); break;
+                                case RTF_RED:	aColor.SetRed((sal_uInt8)nTokenValue); break;
+                                case RTF_BLUE:	aColor.SetBlue((sal_uInt8)nTokenValue); break;
+                                case RTF_GREEN:	aColor.SetGreen((sal_uInt8)nTokenValue); break;
                                 default:
                                     bNext = sal_False;
                             }
@@ -277,7 +277,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     String aTableName(ModuleRes(STR_TBL_TITLE));
     aTableName = aTableName.GetToken(0,' ');
     aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
-
+    
     int nTmpToken2 = nToken;
     String aColumnName;
 
@@ -314,8 +314,8 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 }
                 break;
             case RTF_CF:
-                //  if(nTokenValue < m_vecColor.size())
-                    //  m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[nTokenValue]));
+                //	if(nTokenValue < m_vecColor.size())
+                    //	m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[nTokenValue]));
                 break;
             case RTF_B:
                 aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;
@@ -343,15 +343,15 @@ sal_Bool ORTFReader::CreateTable(int nToken)
             CreateDefaultColumn(aColumnName);
         }
 
-        m_bInTbl        = sal_False;
-        m_bFoundTable   = sal_True;
+        m_bInTbl		= sal_False;
+        m_bFoundTable	= sal_True;
 
         if ( isCheckEnabled() )
             return sal_True;
         Any aTextColor;
         if(!m_vecColor.empty())
             aTextColor <<= m_vecColor[0];
-
+        
         bOk = !executeWizard(aTableName,aTextColor,aFont) && m_xTable.is();
     }
     return bOk;

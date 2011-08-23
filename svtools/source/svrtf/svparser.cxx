@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,25 +40,25 @@
 
 #define SVPAR_CSM_
 
-#define SVPAR_CSM_ANSI      0x0001U
-#define SVPAR_CSM_UTF8      0x0002U
-#define SVPAR_CSM_UCS2B     0x0004U
-#define SVPAR_CSM_UCS2L     0x0008U
-#define SVPAR_CSM_SWITCH    0x8000U
+#define SVPAR_CSM_ANSI		0x0001U
+#define SVPAR_CSM_UTF8		0x0002U
+#define SVPAR_CSM_UCS2B		0x0004U
+#define SVPAR_CSM_UCS2L		0x0008U
+#define SVPAR_CSM_SWITCH	0x8000U
 
 // Struktur, um sich die akt. Daten zumerken
 struct SvParser_Impl
 {
-    String          aToken;             // gescanntes Token
-    ULONG           nFilePos;           // akt. Position im Stream
-    ULONG           nlLineNr;           // akt. Zeilen Nummer
-    ULONG           nlLinePos;          // akt. Spalten Nummer
-    long            nTokenValue;        // zusaetzlicher Wert (RTF)
-    BOOL            bTokenHasValue;     // indicates whether nTokenValue is valid
-    int             nToken;             // akt. Token
-    sal_Unicode     nNextCh;            // akt. Zeichen
+    String 	  		aToken;				// gescanntes Token
+    ULONG 			nFilePos;			// akt. Position im Stream
+    ULONG	  		nlLineNr;			// akt. Zeilen Nummer
+    ULONG	  		nlLinePos;			// akt. Spalten Nummer
+    long            nTokenValue;		// zusaetzlicher Wert (RTF)
+    BOOL			bTokenHasValue;		// indicates whether nTokenValue is valid
+    int 			nToken;				// akt. Token
+    sal_Unicode		nNextCh;    		// akt. Zeichen
 
-    int             nSaveToken;         // das Token vom Continue
+    int 			nSaveToken;			// das Token vom Continue
 
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
@@ -261,13 +261,13 @@ sal_Unicode SvParser::GetNextChar()
         sal_Size nChars = 0;
         do
         {
-            sal_Char c1;    // signed, that's the text converter expects
+            sal_Char c1;	// signed, that's the text converter expects
             rInput >> c1;
             bErr = rInput.IsEof() || rInput.GetError();
             if( !bErr )
             {
                 if (
-                     RTL_TEXTENCODING_DONTKNOW == eSrcEnc ||
+                     RTL_TEXTENCODING_DONTKNOW == eSrcEnc || 
                      RTL_TEXTENCODING_SYMBOL == eSrcEnc
                    )
                 {
@@ -319,11 +319,11 @@ sal_Unicode SvParser::GetNextChar()
                                 }
                                 else if( 0 != nChars || 0 != nInfo )
                                 {
-                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0, 
                                         "source buffer is to small" );
                                     DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)) == 0,
                                          "there is a conversion error" );
-                                    DBG_ASSERT( 0 == nChars,
+                                    DBG_ASSERT( 0 == nChars, 
                                        "there is a converted character, but an error" );
                                     // There are still errors, but nothing we can
                                     // do
@@ -363,13 +363,13 @@ sal_Unicode SvParser::GetNextChar()
                                 }
                                 else
                                 {
-                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0, 
                                         "source buffer is to small" );
                                     DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)) == 0,
                                          "there is a conversion error" );
-                                    DBG_ASSERT( 0 == nChars,
+                                    DBG_ASSERT( 0 == nChars, 
                                        "there is a converted character, but an error" );
-
+                                    
                                     // There are still errors, so we use the first
                                     // character and restart after that.
                                     c = (sal_Unicode)sBuffer[0];
@@ -388,9 +388,9 @@ sal_Unicode SvParser::GetNextChar()
                     }
                     else if( 0 != nChars || 0 != nInfo )
                     {
-                        DBG_ASSERT( 0 == nChars,
+                        DBG_ASSERT( 0 == nChars, 
                                 "there is a converted character, but an error" );
-                        DBG_ASSERT( 0 != nInfo,
+                        DBG_ASSERT( 0 != nInfo, 
                                 "there is no converted character and no error" );
                         // #73398#: If the character could not be converted,
                         // because a conversion is not available, do no conversion at all.
@@ -436,8 +436,8 @@ int SvParser::GetNextToken()
 
     if( !nTokenStackPos )
     {
-        aToken.Erase();     // Token-Buffer loeschen
-        nTokenValue = -1;   // Kennzeichen fuer kein Value gelesen
+        aToken.Erase();		// Token-Buffer loeschen
+        nTokenValue = -1;	// Kennzeichen fuer kein Value gelesen
         bTokenHasValue = false;
 
         nRet = _GetNextToken();
@@ -467,12 +467,12 @@ int SvParser::GetNextToken()
         pTokenStackPos->nTokenId = nRet;
     }
     else if( SVPAR_ACCEPTED != eState && SVPAR_PENDING != eState )
-        eState = SVPAR_ERROR;       // irgend ein Fehler
+        eState = SVPAR_ERROR;		// irgend ein Fehler
 
     return nRet;
 }
 
-int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
+int SvParser::SkipToken( short nCnt )		// n Tokens zurueck "skippen"
 {
     pTokenStackPos = GetStackPtr( nCnt );
     short nTmp = nTokenStackPos - nCnt;
@@ -644,7 +644,7 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
             pThis->rInput.ResetError();
 
         if( SVPAR_PENDING != pThis->eState )
-            pThis->ReleaseRef();                    // ansonsten sind wir fertig!
+            pThis->ReleaseRef();					// ansonsten sind wir fertig!
         break;
 
     case SVPAR_WAITFORDATA:
@@ -656,7 +656,7 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
         break;
 
     default:
-        pThis->ReleaseRef();                    // ansonsten sind wir fertig!
+        pThis->ReleaseRef();					// ansonsten sind wir fertig!
         break;
     }
 

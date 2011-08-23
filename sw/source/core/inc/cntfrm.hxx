@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ extern BOOL GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
 
 class SwCntntFrm: public SwFrm, public SwFlowFrm
 {
-    friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    //ruft MakePrtArea
+    friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );	//ruft MakePrtArea
 
     // --> OD 2007-11-26 #b6614158#
     // parameter <bObjsInNewUpper>, indicating that objects are existing in
@@ -72,32 +72,32 @@ protected:
 
 public:
     virtual ~SwCntntFrm();
-    TYPEINFO(); //bereits in Basisklassen drin
+    TYPEINFO();	//bereits in Basisklassen drin
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
-    inline       SwCntntNode *GetNode();
+    inline 		 SwCntntNode *GetNode();
     inline const SwCntntNode *GetNode() const;
-                 USHORT       GetSectionLevel();
+                 USHORT 	  GetSectionLevel();
 
     inline const SwCntntFrm *GetFollow() const;
-    inline       SwCntntFrm *GetFollow();
+    inline		 SwCntntFrm *GetFollow();
     SwTxtFrm* FindMaster() const;
 
         //Layoutabhaengiges Cursortravelling
-    virtual BOOL    LeftMargin( SwPaM * ) const;
-    virtual BOOL    RightMargin( SwPaM *, BOOL bAPI = FALSE ) const;
-    virtual BOOL    UnitUp( SwPaM *, const SwTwips nOffset = 0,
+    virtual BOOL	LeftMargin( SwPaM * ) const;
+    virtual BOOL	RightMargin( SwPaM *, BOOL bAPI = FALSE ) const;
+    virtual BOOL	UnitUp( SwPaM *, const SwTwips nOffset = 0,
                             BOOL bSetInReadOnly = FALSE ) const;
-    virtual BOOL    UnitDown( SwPaM *, const SwTwips nOffset = 0,
+    virtual BOOL	UnitDown( SwPaM *, const SwTwips nOffset = 0,
                             BOOL bSetInReadOnly = FALSE ) const;
-    inline  BOOL    StartNextPage( SwPaM * ) const;
-    inline  BOOL    StartPrevPage( SwPaM * ) const;
-    inline  BOOL    StartCurrPage( SwPaM * ) const;
-    inline  BOOL    EndCurrPage( SwPaM * ) const;
-    inline  BOOL    EndNextPage( SwPaM * ) const;
-    inline  BOOL    EndPrevPage( SwPaM * ) const;
+    inline	BOOL	StartNextPage( SwPaM * ) const;
+    inline	BOOL	StartPrevPage( SwPaM * ) const;
+    inline	BOOL	StartCurrPage( SwPaM * ) const;
+    inline	BOOL	EndCurrPage( SwPaM * ) const;
+    inline	BOOL	EndNextPage( SwPaM * ) const;
+    inline	BOOL	EndPrevPage( SwPaM * ) const;
 
     // nMaxHeight is the required height
     // bSplit indicates, that the paragraph has to be split

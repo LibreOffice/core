@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,22 +48,22 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
     // Methods to distinguish between different library types
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const ::rtl::OUString& aName );
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
-        ( const ::rtl::OUString& aName, const ::rtl::OUString& aLibInfoFileURL,
+        ( const ::rtl::OUString& aName, const ::rtl::OUString& aLibInfoFileURL, 
           const ::rtl::OUString& StorageURL, sal_Bool ReadOnly );
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void );
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
     virtual void SAL_CALL writeLibraryElement
-    (
+    ( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
-        const ::rtl::OUString& aElementName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
+        const ::rtl::OUString& aElementName, 
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput 
     )
         throw(::com::sun::star::uno::Exception);
 
     virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
-    (
+    ( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
-        const ::rtl::OUString& aElementName,
+        const ::rtl::OUString& aElementName, 
         const ::rtl::OUString& aFile,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream );
 
@@ -88,7 +88,7 @@ public:
             throw (::com::sun::star::uno::RuntimeException);
 
     // Resource handling
-    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
+    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence > 
         implCreateStringResource( class SfxDialogLibrary* pDialog );
 
     // Methods XServiceInfo
@@ -101,7 +101,7 @@ public:
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static();
     static ::rtl::OUString getImplementationName_static();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create
-        ( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xServiceManager )
+        ( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xServiceManager ) 
             throw( ::com::sun::star::uno::Exception );
 };
 
@@ -113,10 +113,10 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::resource::XStringResourceSuppl
 class SfxDialogLibrary  :public SfxLibrary
                         ,public SfxDialogLibrary_BASE
 {
-    SfxDialogLibraryContainer*                                      m_pParent;
+    SfxDialogLibraryContainer*										m_pParent;
     ::com::sun::star::uno::Reference
-        < ::com::sun::star::resource::XStringResourcePersistence>   m_xStringResourcePersistence;
-    ::rtl::OUString                                                 m_aName;
+        < ::com::sun::star::resource::XStringResourcePersistence>	m_xStringResourcePersistence;
+    ::rtl::OUString													m_aName;
 
     // Provide modify state including resources
     virtual sal_Bool isModified( void );
@@ -151,13 +151,13 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XStringResourceSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > 
         SAL_CALL getStringResource(  ) throw (::com::sun::star::uno::RuntimeException);
 
     ::rtl::OUString getName( void )
         { return m_aName; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
+    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence > 
         getStringResourcePersistence( void )
     {
         return m_xStringResourcePersistence;

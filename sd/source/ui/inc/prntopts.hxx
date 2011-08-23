@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,34 +54,34 @@ class SdPrintOptions : public SfxTabPage
 private:
     FixedLine           aGrpPrint;
     CheckBox            aCbxDraw;
-    CheckBox            aCbxNotes;
-    CheckBox            aCbxHandout;
-    CheckBox            aCbxOutline;
+    CheckBox			aCbxNotes;
+    CheckBox			aCbxHandout;
+    CheckBox			aCbxOutline;
 
     FixedLine           aSeparator1FL;
     FixedLine           aGrpOutput;
     RadioButton         aRbtColor;
-    RadioButton         aRbtGrayscale;
-    RadioButton         aRbtBlackWhite;
+    RadioButton			aRbtGrayscale;
+    RadioButton			aRbtBlackWhite;
 
     FixedLine           aGrpPrintExt;
     CheckBox            aCbxPagename;
-    CheckBox            aCbxDate;
-    CheckBox            aCbxTime;
+    CheckBox			aCbxDate;
+    CheckBox			aCbxTime;
     CheckBox            aCbxHiddenPages;
 
     FixedLine           aSeparator2FL;
     FixedLine           aGrpPageoptions;
     RadioButton         aRbtDefault;
-    RadioButton         aRbtPagesize;
-    RadioButton         aRbtPagetile;
-    RadioButton         aRbtBooklet;
-    CheckBox            aCbxFront;
-    CheckBox            aCbxBack;
+    RadioButton 		aRbtPagesize;
+    RadioButton			aRbtPagetile;
+    RadioButton			aRbtBooklet;
+    CheckBox			aCbxFront;
+    CheckBox			aCbxBack;
 
-    CheckBox            aCbxPaperbin;
+    CheckBox			aCbxPaperbin;
 
-    const SfxItemSet&   rOutAttrs;
+    const SfxItemSet&	rOutAttrs;
 
     DECL_LINK( ClickCheckboxHdl, CheckBox * );
     DECL_LINK( ClickBookletHdl, CheckBox * );
@@ -93,13 +93,13 @@ public:
             SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs);
             ~SdPrintOptions();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static	SfxTabPage* Create( Window*, const SfxItemSet& );
 
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     void    SetDrawMode();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void		PageCreated (SfxAllItemSet aSet);
 };
 
 

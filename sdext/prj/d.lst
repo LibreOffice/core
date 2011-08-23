@@ -1,6 +1,9 @@
 mkdir: %_DEST%\bin%_EXT%\minimizer
 mkdir: %_DEST%\bin%_EXT%\presenter
 mkdir: %_DEST%\bin%_EXT%\pdfimport
+..\%__SRC%\bin\presentation-minimizer.oxt %_DEST%\bin%_EXT%\presentation-minimizer.oxt
+..\%__SRC%\bin\presenter-screen.oxt %_DEST%\bin%_EXT%\presenter-screen.oxt
+..\%__SRC%\bin\pdfimport.oxt %_DEST%\bin%_EXT%\pdfimport.oxt
 ..\%__SRC%\bin\pdf2xml.* %_DEST%\bin%_EXT%\pdf2xml.*
 ..\%__SRC%\bin\pdfunzip.* %_DEST%\bin%_EXT%\pdfunzip.*
 ..\%__SRC%\bin\pdfimport.oxt %_DEST%\bin%_EXT%\pdfimport\pdfimport.oxt

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,15 +154,15 @@ StringSequence ONumericModel::getSupportedServiceNames() throw()
 void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
-        DECL_PROP3(DEFAULT_VALUE,   double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
+        DECL_PROP3(DEFAULT_VALUE,	double,				BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP1(TABINDEX,		sal_Int16,			BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ONumericModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_NUMERICFIELD;  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_NUMERICFIELD;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -217,6 +217,6 @@ void ONumericModel::resetNoBroadcast()
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 

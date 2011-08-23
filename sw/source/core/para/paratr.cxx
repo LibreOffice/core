@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@ TYPEINIT1_AUTOFACTORY( SwNumRuleItem, SfxStringItem);
 TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 
 /*************************************************************************
-|*    Beschreibung      Methoden von SwFmtDrop
-|*    Ersterstellung    MS  19.02.91
-|*    Letzte Aenderung  JP 08.08.94
+|*    Beschreibung		Methoden von SwFmtDrop
+|*    Ersterstellung	MS  19.02.91
+|*    Letzte Aenderung	JP 08.08.94
 *************************************************************************/
 
 
@@ -127,10 +127,10 @@ void SwFmtDrop::Modify( SfxPoolItem *, SfxPoolItem * )
             // die Abpruefung nicht hinauskommt.
             SwClientIter aIter( *pDefinedIn );
             SwClient * pLast = aIter.GoStart();
-            if( pLast )     // konnte zum Anfang gesprungen werden ??
+            if( pLast ) 	// konnte zum Anfang gesprungen werden ??
                 do {
                     pLast->Modify( this, this );
-                    if( !pDefinedIn->GetDepends() ) // Baum schon Weg ??
+                    if( !pDefinedIn->GetDepends() )	// Baum schon Weg ??
                         break;
                 } while( 0 != ( pLast = aIter++ ));
         }
@@ -168,9 +168,9 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_DROPCAP_FORMAT:
         {
              style::DropCapFormat aDrop;
-            aDrop.Lines = nLines   ;
-            aDrop.Count = nChars   ;
-            aDrop.Distance  = TWIP_TO_MM100_UNSIGNED(nDistance);
+            aDrop.Lines	= nLines   ;
+            aDrop.Count	= nChars   ;
+            aDrop.Distance	= TWIP_TO_MM100_UNSIGNED(nDistance);
             rVal.setValue(&aDrop, ::getCppuType((const style::DropCapFormat*)0));
         }
         break;
@@ -224,9 +224,9 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(rVal.getValueType()  == ::getCppuType((const style::DropCapFormat*)0))
             {
                 const style::DropCapFormat* pDrop = (const style::DropCapFormat*)rVal.getValue();
-                nLines      = pDrop->Lines;
-                nChars      = pDrop->Count;
-                nDistance   = MM100_TO_TWIP(pDrop->Distance);
+                nLines 		= pDrop->Lines;
+                nChars 		= pDrop->Count;
+                nDistance 	= MM100_TO_TWIP(pDrop->Distance);
             }
             else {
                 //exception( wrong_type)

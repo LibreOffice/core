@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,23 +44,23 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 {
     ImageList       aImageList;
     ImageList       aImageListHC;
-    Image           aDBBMP;
-    Image           aTableBMP;
-    Image           aQueryBMP;
+    Image			aDBBMP;
+    Image			aTableBMP;
+    Image			aQueryBMP;
 
-    String          sDefDBName;
-    BOOL            bInitialized;
-    BOOL            bShowColumns;
+    String			sDefDBName;
+    BOOL			bInitialized;
+    BOOL			bShowColumns;
 
     SwDBTreeList_Impl* pImpl;
 
     SW_DLLPRIVATE DECL_LINK( DBCompare, SvSortData* );
 
-    SW_DLLPRIVATE void          InitTreeList();
-    SW_DLLPRIVATE virtual void  RequestingChilds( SvLBoxEntry* pParent );
+    SW_DLLPRIVATE void			InitTreeList();
+    SW_DLLPRIVATE virtual void	RequestingChilds( SvLBoxEntry* pParent );
 
     SW_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-    SW_DLLPRIVATE virtual void  StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    SW_DLLPRIVATE virtual void 	StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     using SvTreeListBox::Select;
 
@@ -73,12 +73,12 @@ public:
 
     String  GetDBName( String& rTableName, String& rColumnName, BOOL* pbIsTable = 0);
 
-    void    Select( const String& rDBName, const String& rTableName,
+    void	Select( const String& rDBName, const String& rTableName,
                     const String& rColumnName );
 
-    void    ShowColumns(BOOL bShowCol);
+    void	ShowColumns(BOOL bShowCol);
     void    SetWrtShell(SwWrtShell& rSh);
-
+    
     void    AddDataSource(const String& rSource);
 };
 

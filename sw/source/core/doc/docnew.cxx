@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#define ROLBCK_HISTORY_ONLY     // Der Kampf gegen die CLOOK's
+#define ROLBCK_HISTORY_ONLY 	// Der Kampf gegen die CLOOK's
 #include <doc.hxx>
 #include <dcontact.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -77,8 +77,8 @@
 #include <poolfmt.hxx>          // fuer die Pool-Vorlage
 #include <dbmgr.hxx>
 #include <docsh.hxx>
-#include <acorrect.hxx>         // fuer die autom. Aufnahme von Ausnahmen
-#include <visiturl.hxx>         // fuer die URL-Change Benachrichtigung
+#include <acorrect.hxx>			// fuer die autom. Aufnahme von Ausnahmen
+#include <visiturl.hxx>			// fuer die URL-Change Benachrichtigung
 #include <docary.hxx>
 #include <lineinfo.hxx>
 #include <drawdoc.hxx>
@@ -176,7 +176,7 @@ void StartGrammarChecking( SwDoc &rDoc )
             bVisible = true;
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, sal_False );
     }
-
+    
     //!! only documents with visible views need to be checked
     //!! (E.g. don't check temporary documents created for printing, see printing of notes and selections.
     //!! Those get created on the fly and get hard deleted a bit later as well, and no one should have
@@ -238,7 +238,7 @@ SwDoc::SwDoc() :
     pGrfFmtCollTbl( new SwGrfFmtColls() ),
     pTOXTypes( new SwTOXTypes() ),
     pDefTOXBases( new SwDefTOXBase_Impl() ),
-    pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
+    pLayout( 0 ),					// Rootframe des spezifischen Layouts.
     pDrawModel( 0 ),
     pUndos( new SwUndos( 0, 20 ) ),
     pUpdtFlds( new SwDocUpdtFld() ),
@@ -383,6 +383,8 @@ SwDoc::SwDoc() :
     // --> OD 2008-06-05 #i89181#
     mbTabAtLeftIndentForParagraphsInList    = false;        // hidden
     // <--
+    mbInvertBorderSpacing                   = false;        // hidden
+    mbCollapseEmptyCellPara                 = true;        // hidden
 
     //
     // COMPATIBILITY FLAGS END
@@ -503,7 +505,7 @@ SwDoc::~SwDoc()
     SwFmtCharFmt aCharFmt(NULL);
     SetDefault(aCharFmt);
 
-    StopIdling();   // stop idle timer
+    StopIdling();	// stop idle timer
 
     delete pUnoCallBack, pUnoCallBack = 0;
     delete pURLStateChgd;
@@ -522,7 +524,7 @@ SwDoc::~SwDoc()
 
     delete pPgPViewPrtData;
 
-    mbUndo = FALSE;         // immer das Undo abschalten !!
+    mbUndo = FALSE;			// immer das Undo abschalten !!
     // damit die Fussnotenattribute die Fussnotennodes in Frieden lassen.
     mbDtor = TRUE;
 
@@ -554,7 +556,7 @@ SwDoc::~SwDoc()
 
     pFtnIdxs->Remove( USHORT(0), pFtnIdxs->Count() );
 
-    pUndos->DeleteAndDestroy( 0, pUndos->Count() ); //Es koennen in den Attributen noch
+    pUndos->DeleteAndDestroy( 0, pUndos->Count() );	//Es koennen in den Attributen noch
                                                     //noch indizes angemeldet sein.
 
     // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
@@ -572,7 +574,7 @@ SwDoc::~SwDoc()
     }
 
 //JP: alt - loeschen ohne Flag ist teuer; Modify wird verschickt!
-//  aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
+//	aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
     {
         for( USHORT n = pTOXTypes->Count(); n; )
         {
@@ -614,8 +616,8 @@ SwDoc::~SwDoc()
             "Default-Text-Collection muss immer am Anfang stehen" );
 
     // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
-    //              steht, sollte das als letztes geloescht werden, damit
-    //              die ganze Umhaengerei der Formate vermieden wird!
+    // 				steht, sollte das als letztes geloescht werden, damit
+    //				die ganze Umhaengerei der Formate vermieden wird!
     if( 2 < pTxtFmtCollTbl->Count() )
         pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
@@ -626,7 +628,7 @@ SwDoc::~SwDoc()
 
     pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
 // ergibt sich automatisch - kein _DEL Array!
-//  pGrfFmtCollTbl->Remove( 0, n );
+//	pGrfFmtCollTbl->Remove( 0, n );
     delete pGrfFmtCollTbl;
 
     /*
@@ -652,7 +654,7 @@ SwDoc::~SwDoc()
     //Ausserdem koennen vorher noch DrawContacts existieren.
     ReleaseDrawModel();
     //JP 28.01.99: DrawModel vorm LinkManager zerstoeren, da am DrawModel
-    //          dieser immer gesetzt ist.
+    // 			dieser immer gesetzt ist.
     DELETEZ( pLinkMgr );
 
     //Tables vor dem loeschen der Defaults leeren, sonst GPF wegen Def-Abhaengigen.
@@ -739,7 +741,7 @@ SfxPrinter& SwDoc::CreatePrinter_() const
     // Das ItemSet wird vom Sfx geloescht!
     SfxItemSet *pSet = new SfxItemSet( ((SwDoc*)this)->GetAttrPool(),
                     FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,  SID_HTML_MODE,
+                    SID_HTML_MODE,	SID_HTML_MODE,
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
@@ -795,7 +797,7 @@ void SwDoc::ClearDoc()
 {
     BOOL bOldUndo = mbUndo;
     DelAllUndoObj();
-    mbUndo = FALSE;         // immer das Undo abschalten !!
+    mbUndo = FALSE;			// immer das Undo abschalten !!
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -873,8 +875,8 @@ void SwDoc::ClearDoc()
     if( pFtnColl ) pFtnColl->Remove( pEndNoteInfo );
 
     // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
-    //              steht, sollte das als letztes geloescht werden, damit
-    //              die ganze Umhaengerei der Formate vermieden wird!
+    // 				steht, sollte das als letztes geloescht werden, damit
+    //				die ganze Umhaengerei der Formate vermieden wird!
     if( 2 < pTxtFmtCollTbl->Count() )
         pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
@@ -926,7 +928,7 @@ void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
 /* -----------------------------06.01.00 14:03--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwModify*   SwDoc::GetUnoCallBack() const
+SwModify*	SwDoc::GetUnoCallBack() const
 {
     return pUnoCallBack;
 }
@@ -1153,7 +1155,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     SfxObjectShellRef xRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
     if( bCallInitNew )
         xRetShell->DoInitNew();
-    //copy content
+    //copy content 
     pRet->Paste( *this );
     pRet->SetRefForDocShell( 0 );
     return xRetShell;

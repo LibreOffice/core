@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace accessibility {
 
 class IAccessibleViewForwarder;
 
-/** <p>The purpose of this interface is to notify a user of an
+/**	<p>The purpose of this interface is to notify a user of an
     IAccessibleViewForwarder when that view forwarder changes its
     properties.  Such a change may be one of the following:
     <ul>
@@ -51,9 +51,9 @@ public:
     /** Enumeration of the different change types.
     */
     enum ChangeType {TRANSFORMATION, VISIBLE_AREA, STATE};
-
+    
     /** This method is called to indicate a change of the specified view
-        forwarder.
+        forwarder. 
         @param aChangeType
             The type of the change.  TRANSFORMATION indicates a change of
             the coordinate transformation with a constant visible area.  If

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,9 +131,9 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle ) :
      // WB_CLIPCHILDREN an, da ScrollBars auf dem Fenster liegen!
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
 
-    _pCurKeyEvent   ( NULL ),
-    _pImp           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) ),
-    _bAutoFontColor ( FALSE )
+    _pCurKeyEvent	( NULL ),
+    _pImp			( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) ),
+    _bAutoFontColor	( FALSE )
 
 {
     SetLineColor();
@@ -146,9 +146,9 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, const ResId& rResId ) :
 
     Control( pParent, rResId ),
 
-    _pCurKeyEvent   ( NULL ),
-    _pImp           ( new SvxIconChoiceCtrl_Impl( this, WB_BORDER ) ),
-    _bAutoFontColor ( FALSE )
+    _pCurKeyEvent	( NULL ),
+    _pImp			( new SvxIconChoiceCtrl_Impl( this, WB_BORDER ) ),
+    _bAutoFontColor	( FALSE )
 
 {
     SetLineColor();

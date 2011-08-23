@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,27 +41,27 @@ class ScDocument;
 class ScRange;
 class SvNumberFormatter;
 
-// Return-Werte Im-/Exportfilter    (ULONG)
+// Return-Werte Im-/Exportfilter	(ULONG)
 
 typedef ULONG FltError;
 //enum FltError {
 
-#define eERR_OK         ERRCODE_NONE                // kein Fehler, alles OK
-#define eERR_OPEN       SCERR_IMPORT_OPEN           // ...
-#define eERR_UNBEK      SCERR_IMPORT_UNKNOWN        // unbekannter Fehler, auch historische Bedeutung
-#define eERR_NOMEM      SCERR_IMPORT_OUTOFMEM       // nicht mehr genuegend Speicher zur Verfuegung
-#define eERR_UNKN_WK    SCERR_IMPORT_UNKNOWN_WK     // unbekanntes WK?-Format (Lotus 1-2-3)
-#define eERR_FORMAT     SCERR_IMPORT_FORMAT         // Formatfehler beim Lesen (kein Formel-Fehler!)
-#define eERR_NI         SCERR_IMPORT_NI             // Nicht implementierter Filter
-#define eERR_UNKN_BIFF  SCERR_IMPORT_UNKNOWN_BIFF   // unbekanntes BIFF-Format (Excel)
-#define eERR_NI_BIFF    SCERR_IMPORT_NI_BIFF        // nicht implementiertes BIFF-Format
-#define eERR_FILEPASSWD SCERR_IMPORT_FILEPASSWD     // File Passwordgeschuetzt
-#define eERR_INTERN     SCERR_IMPORT_INTERNAL       // interner Fehler
-#define eERR_RNGOVRFLW  SCWARN_IMPORT_RANGE_OVERFLOW// ueberlauf der Zellkoordinaten:
-                                                    //  Tabelle abgschnitten auf erlaubtem Bereich
+#define eERR_OK  		ERRCODE_NONE				// kein Fehler, alles OK
+#define	eERR_OPEN		SCERR_IMPORT_OPEN			// ...
+#define	eERR_UNBEK		SCERR_IMPORT_UNKNOWN		// unbekannter Fehler, auch historische Bedeutung
+#define	eERR_NOMEM		SCERR_IMPORT_OUTOFMEM		// nicht mehr genuegend Speicher zur Verfuegung
+#define	eERR_UNKN_WK	SCERR_IMPORT_UNKNOWN_WK		// unbekanntes WK?-Format (Lotus 1-2-3)
+#define	eERR_FORMAT		SCERR_IMPORT_FORMAT			// Formatfehler beim Lesen (kein Formel-Fehler!)
+#define	eERR_NI			SCERR_IMPORT_NI				// Nicht implementierter Filter
+#define	eERR_UNKN_BIFF	SCERR_IMPORT_UNKNOWN_BIFF	// unbekanntes BIFF-Format (Excel)
+#define	eERR_NI_BIFF	SCERR_IMPORT_NI_BIFF		// nicht implementiertes BIFF-Format
+#define	eERR_FILEPASSWD	SCERR_IMPORT_FILEPASSWD		// File Passwordgeschuetzt
+#define	eERR_INTERN		SCERR_IMPORT_INTERNAL		// interner Fehler
+#define	eERR_RNGOVRFLW	SCWARN_IMPORT_RANGE_OVERFLOW// ueberlauf der Zellkoordinaten:
+                                                    //	Tabelle abgschnitten auf erlaubtem Bereich
 // mehr Fehlercodes siehe scerrors.hxx
 
-//  };
+//	};
 
 
 // fuer Import
@@ -73,12 +73,12 @@ enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5, ExpB
 
 
 // Optionen fuer DIF-Im-/Export (Kombination ueber '|')
-#define SC_DIFOPT_PLAIN     0x00000000
-#define SC_DIFOPT_DATE      0x00000001
-#define SC_DIFOPT_TIME      0x00000002
-#define SC_DIFOPT_CURRENCY  0x00000004
+#define	SC_DIFOPT_PLAIN		0x00000000
+#define SC_DIFOPT_DATE		0x00000001
+#define SC_DIFOPT_TIME		0x00000002
+#define SC_DIFOPT_CURRENCY	0x00000004
 
-#define SC_DIFOPT_EXCEL     (SC_DIFOPT_DATE|SC_DIFOPT_TIME|SC_DIFOPT_CURRENCY)
+#define SC_DIFOPT_EXCEL		(SC_DIFOPT_DATE|SC_DIFOPT_TIME|SC_DIFOPT_CURRENCY)
 
 // These are implemented inside the scfilt library and lazy loaded
 
@@ -90,8 +90,8 @@ class ScEEAbsImport {
     virtual ~ScEEAbsImport() {}
     virtual ULONG   Read( SvStream& rStream, const String& rBaseURL ) = 0;
     virtual ScRange GetRange() = 0;
-    virtual void    WriteToDocument(
-        BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0,
+    virtual void    WriteToDocument( 
+        BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0, 
         SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
 };
 
@@ -101,15 +101,15 @@ class ScFormatFilterPlugin {
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet eSrc = RTL_TEXTENCODING_DONTKNOW ) = 0;
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc ) = 0;
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) = 0;
-        // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
-        // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
-        // eFormat == EIF_BIFF8 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
+        // eFormat == EIF_AUTO	-> passender Filter wird automatisch verwendet
+        // eFormat == EIF_BIFF5	-> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
+        // eFormat == EIF_BIFF8	-> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
         // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
-    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
+    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, 
                                    BOOL bCalcWidthHeight = TRUE, SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
 
     // various import helpers

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ class SVX_DLLPUBLIC SvxXMeasurePreview : public Control
  friend class SvxMeasurePage;
 
 private:
-    const SfxItemSet&   rAttrs;
-    SdrMeasureObj*      pMeasureObj;
+    const SfxItemSet&	rAttrs;
+    SdrMeasureObj*		pMeasureObj;
     SdrModel*           pModel;
 
 public:
@@ -61,7 +61,7 @@ public:
     virtual void Paint( const Rectangle& rRect );
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
-    void         SetAttributes( const SfxItemSet& rInAttrs );
+    void		 SetAttributes( const SfxItemSet& rInAttrs );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };

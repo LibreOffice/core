@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
-#include <viewopt.hxx>  // SwViewOptions
+#include <viewopt.hxx>	// SwViewOptions
 #include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
 #include <porfld.hxx>
 #include <inftxt.hxx>
-#include <blink.hxx>    // pBlink
+#include <blink.hxx>	// pBlink
 #include <frmtool.hxx>  // DrawGraphic
 #include <viewsh.hxx>
 #ifndef _DOCSH_HXX
@@ -162,7 +162,7 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 // 8653: in keinem Fall nur SetLen(0);
 
 /*************************************************************************
- *   Hilfsklasse SwFldSlot
+ *	 Hilfsklasse SwFldSlot
  **************************************************************************/
 
 class SwFldSlot
@@ -416,12 +416,12 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         //        case CHAR_RLM :
         //        case CHAR_LRM :
                 // <--
-                // --> OD 2010-06-03 #i111750#
+                // --> OD 2010-06-03 #i111750# 
                 // - Erasing further control characters from field string in
                 // to avoid loop.
                 case CH_TXTATR_BREAKWORD:
-                case CH_TXTATR_INWORD:
-                // <--
+                case CH_TXTATR_INWORD:                    
+                // <--                    
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;
@@ -667,8 +667,8 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
 {
-/*  Ein FormatEOL deutet daraufhin, dass der folgende Text
- *  nicht mit auf die Zeile passte. Damit die Numerierung mitwandert,
+/*	Ein FormatEOL deutet daraufhin, dass der folgende Text
+ *	nicht mit auf die Zeile passte. Damit die Numerierung mitwandert,
  *  wird diese NumberPortion verborgen.
  */
 
@@ -685,8 +685,8 @@ void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
 
 void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-/*  Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
- *  Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
+/*	Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
+ * 	Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
  */
 
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
@@ -952,8 +952,8 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( DontPaint() )
         return;
-/*  Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
- *  Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
+/*	Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
+ * 	Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
  */
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
@@ -1137,7 +1137,7 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
         aExpand.Erase( 6 );
     // Initialization of the scripttype array,
     // the arrays of width and position are filled by the format function
-    if( pBreakIt->GetBreakIter().is() )
+    if(	pBreakIt->GetBreakIter().is() )
     {
         BYTE nScr = SW_SCRIPTS;
         for( USHORT i = 0; i < rTxt.Len(); ++i )
@@ -1184,7 +1184,7 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
         USHORT nTop = ( nCount + 1 ) / 2;
 
         SwFont aTmpFont( *rInf.GetFont() );
-        aTmpFont.SetProportion( nProportion );  // a smaller font
+        aTmpFont.SetProportion( nProportion );	// a smaller font
         SwFontSave aFontSave( rInf, &aTmpFont );
 
         USHORT i = 0;
@@ -1193,9 +1193,9 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
         while( i < nCount )
         {
             if( i == nTop ) // change the row
-                aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
-            aOutPos.X() = aOldPos.X() + aPos[i];        // X position
-            const BYTE nAct = aScrType[i];              // script type
+                aOutPos.Y() = aOldPos.Y() + nLowPos;	// Y of the second row
+            aOutPos.X() = aOldPos.X() + aPos[i];		// X position
+            const BYTE nAct = aScrType[i];				// script type
             aTmpFont.SetActual( nAct );
             // if there're more than 4 characters to display, we choose fonts
             // with 2/3 of the original font width.
@@ -1357,10 +1357,10 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     aPos[0] = 0;
     switch( nCount )
     {
-        case 5: aPos[4] = aPos[3] + nBotDiff;   // no break
-        case 3: aPos[nTop] = nBotDiff;          break;
-        case 6: aPos[4] = aPos[3] + nBotDiff;   // no break
-        case 4: aPos[nTop] = 0;                 // no break
+        case 5: aPos[4] = aPos[3] + nBotDiff;	// no break
+        case 3: aPos[nTop] = nBotDiff;			break;
+        case 6: aPos[4] = aPos[3] + nBotDiff;	// no break
+        case 4: aPos[nTop] = 0;					// no break
         case 2: aPos[nCount-1] = Width() - aPos[nCount-1];
     }
 
@@ -1368,7 +1368,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
     if( bFull )
     {
-        if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFldGrp()
+        if( rInf.GetLineStart() == rInf.GetIdx() &&	(!rInf.GetLast()->InFldGrp()
             || !((SwFldPortion*)rInf.GetLast())->IsFollow() ) )
             Width( (USHORT)( rInf.Width() - rInf.X() ) );
         else
@@ -1389,7 +1389,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 
 KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    if( !GetLen() ) // for the dummy part at the end of the line, where
-        return 0;   // the combined portion doesn't fit.
+    if( !GetLen() )	// for the dummy part at the end of the line, where
+        return 0;	// the combined portion doesn't fit.
     return SwFldPortion::GetViewWidth( rInf );
 }

@@ -1,8 +1,8 @@
-/* ListStyle: Stores (and writes) list-based information that is
+/* ListStyle: Stores (and writes) list-based information that is 
  * needed at the head of an OO document.
  *
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -21,20 +21,20 @@
  *
  */
 
-/* "This product is not manufactured, approved, or supported by
+/* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
 #include "FilterInternal.hxx"
 #include "ListStyle.hxx"
 #include "DocumentElement.hxx"
 
-OrderedListLevelStyle::OrderedListLevelStyle(const WPXPropertyList &xPropList) :
+OrderedListLevelStyle::OrderedListLevelStyle(const WPXPropertyList &xPropList) : 
         mPropList(xPropList)
 {
 }
 
-void OrderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &xPropList)
-{
+void OrderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &xPropList) 
+{ 
     if (iLevel < 0)
         return;
     if (!isListLevelDefined(iLevel))
@@ -77,8 +77,8 @@ UnorderedListLevelStyle::UnorderedListLevelStyle(const WPXPropertyList &xPropLis
 {
 }
 
-void UnorderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &xPropList)
-{
+void UnorderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &xPropList) 
+{ 
     if (iLevel < 0)
         return;
     if (!isListLevelDefined(iLevel))
@@ -117,7 +117,7 @@ ListStyle::ListStyle(const char *psName, const int iListID) :
 {
     for (int i=0; i<WP6_NUM_LIST_LEVELS; i++)
         mppListLevels[i] = NULL;
-
+    
 }
 
 ListStyle::~ListStyle()
@@ -131,18 +131,18 @@ ListStyle::~ListStyle()
 
 bool ListStyle::isListLevelDefined(int iLevel) const
 {
-    if (mppListLevels[iLevel] == NULL)
+    if (mppListLevels[iLevel] == NULL) 
         return false;
-
+    
     return true;
 }
 
 void ListStyle::setListLevel(int iLevel, ListLevelStyle *iListLevelStyle)
 {
-    // can't uncomment this next line without adding some extra logic.
+    // can't uncomment this next line without adding some extra logic. 
     // figure out which is best: use the initial message, or constantly
     // update?
-    if (mppListLevels[iLevel] == NULL)
+    if (mppListLevels[iLevel] == NULL) 
         mppListLevels[iLevel] = iListLevelStyle;
 }
 
@@ -153,8 +153,8 @@ void ListStyle::write(DocumentHandler *pHandler) const
     listStyleOpenElement.write(pHandler);
 
     for (int i=0; i<WP6_NUM_LIST_LEVELS; i++) {
-        if (mppListLevels[i] != NULL)
-            mppListLevels[i]->write(pHandler, i);
+        if (mppListLevels[i] != NULL) 
+            mppListLevels[i]->write(pHandler, i);		
     }
 
     pHandler->endElement("text:list-style");

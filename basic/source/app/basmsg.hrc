@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@
 ///////////////////////////////
 // Fehlermeldungen, die in das Resultfile gelangen.
 // *********************
-// ***  !!ACHTUNG!!  ***
+// ***  !!ACHTUNG!!	 ***
 // *********************
 // Die Nummern dürfen sich NIE! ändern,
 // da sie in den Resultfiles gespeichert sind, und bei erneutem Anzeigen
 // statdessen die entsprechenden neuen oder garkeine Strings angzeigt werden.
 ///////////////////////////////
 
-#define S_PROG_START                    ( BAS_START +   0 )
-#define S_ERROR_OUTSIDE_TESTCASE        ( BAS_START +   1 )
-#define S_WARNING_PREFIX                ( BAS_START +   2 )
+#define S_PROG_START					( BAS_START +   0 )
+#define S_ERROR_OUTSIDE_TESTCASE		( BAS_START +   1 )
+#define S_WARNING_PREFIX				( BAS_START +   2 )

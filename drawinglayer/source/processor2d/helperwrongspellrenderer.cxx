@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ using namespace com::sun::star;
 namespace drawinglayer
 {
     bool renderWrongSpellPrimitive2D(
-        const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate,
-        OutputDevice& rOutputDevice,
+        const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate, 
+        OutputDevice& rOutputDevice, 
         const basegfx::B2DHomMatrix& rObjectToViewTransformation,
         const basegfx::BColorModifierStack& rBColorModifierStack)
     {
@@ -52,9 +52,9 @@ namespace drawinglayer
         const basegfx::B2DVector aFontVectorPixel(aLocalTransform * basegfx::B2DVector(0.0, 1.0));
         const sal_uInt32 nFontPixelHeight(basegfx::fround(aFontVectorPixel.getLength()));
 
-        static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN         5
-        static const sal_uInt32 nSmallFontHeight(11);  // #define WRONG_SHOW_SMALL      11
-        static const sal_uInt32 nMediumFontHeight(15); // #define WRONG_SHOW_MEDIUM     15
+        static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN 		 5
+        static const sal_uInt32 nSmallFontHeight(11);  // #define WRONG_SHOW_SMALL 	    11
+        static const sal_uInt32 nMediumFontHeight(15); // #define WRONG_SHOW_MEDIUM 	15
 
         if(nFontPixelHeight > nMinimumFontHeight)
         {
@@ -72,14 +72,14 @@ namespace drawinglayer
             {
                 nWaveStyle = WAVE_SMALL;
             }
-
+            
             // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
             // e.g. when used with mask/transparence buffer device
             const Point aOrigin(rOutputDevice.GetMapMode().GetOrigin());
 
             const basegfx::BColor aProcessedColor(rBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
             const bool bMapModeEnabledState(rOutputDevice.IsMapModeEnabled());
-
+        
             rOutputDevice.EnableMapMode(false);
             rOutputDevice.SetLineColor(Color(aProcessedColor));
             rOutputDevice.SetFillColor();

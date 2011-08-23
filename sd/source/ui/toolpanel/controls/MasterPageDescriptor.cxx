@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ MasterPageDescriptor::MasterPageDescriptor (
       mnUseCount(0)
 {
 }
-
+   
 
 
 
@@ -131,31 +131,31 @@ Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize)
         meOrigin = rDescriptor.meOrigin;
         bIndexChanged = true;
     }
-
+    
     if (msURL.getLength()==0 && rDescriptor.msURL.getLength()!=0)
     {
         msURL = rDescriptor.msURL;
         bDataChanged = true;
     }
-
+    
     if (msPageName.getLength()==0 && rDescriptor.msPageName.getLength()!=0)
     {
         msPageName = rDescriptor.msPageName;
         bDataChanged = true;
     }
-
+    
     if (msStyleName.getLength()==0 && rDescriptor.msStyleName.getLength()!=0)
     {
         msStyleName = rDescriptor.msStyleName;
         bDataChanged = true;
     }
-
+    
     if (mpPageObjectProvider.get()==NULL && rDescriptor.mpPageObjectProvider.get()!=NULL)
     {
         mpPageObjectProvider = rDescriptor.mpPageObjectProvider;
         bDataChanged = true;
     }
-
+    
      if (mpPreviewProvider.get()==NULL && rDescriptor.mpPreviewProvider.get()!=NULL)
      {
          mpPreviewProvider = rDescriptor.mpPreviewProvider;
@@ -180,7 +180,7 @@ Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize)
          if (bPreviewChanged)
              pResult->push_back(MasterPageContainerChangeEvent::PREVIEW_CHANGED);
      }
-
+     
      return pResult;
 }
 
@@ -192,14 +192,14 @@ bool MasterPageDescriptor::UpdatePageObject (
     SdDrawDocument* pDocument)
 {
     bool bModified (false);
-
+    
     // Update the page object when that is not yet known.
     if (mpMasterPage == NULL
         && mpPageObjectProvider.get()!=NULL
         && (nCostThreshold<0 || mpPageObjectProvider->GetCostIndex()<=nCostThreshold))
     {
         // Note that pDocument may be NULL.
-
+            
         SdPage* pPage = (*mpPageObjectProvider)(pDocument);
         if (meOrigin == MasterPageContainer::MASTERPAGE)
         {
@@ -249,7 +249,7 @@ bool MasterPageDescriptor::UpdatePreview (
     ::sd::PreviewRenderer& rRenderer)
 {
     bool bModified (false);
-
+    
     // Update the preview when that is not yet known.
     if (maLargePreview.GetSizePixel().Width()==0
         && mpPreviewProvider.get()!=NULL
@@ -309,7 +309,7 @@ MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassificati
             meURLClassification = URLCLASS_USER;
         }
     }
-
+    
     return meURLClassification;
 }
 
@@ -361,7 +361,7 @@ bool MasterPageDescriptor::StyleNameComparator::operator() (
 
 //===== PageObjectComparator ==================================================
 
-MasterPageDescriptor::PageObjectComparator::PageObjectComparator (const SdPage* pPageObject)
+MasterPageDescriptor::PageObjectComparator::PageObjectComparator (const SdPage* pPageObject) 
     : mpMasterPage(pPageObject)
 {
 }

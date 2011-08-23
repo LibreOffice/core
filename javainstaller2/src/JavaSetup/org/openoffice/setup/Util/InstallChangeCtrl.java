@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ import java.util.Enumeration;
 
 
 public class InstallChangeCtrl {
-
+    
     private InstallChangeCtrl() {
     }
 
@@ -52,7 +52,7 @@ public class InstallChangeCtrl {
             }
         }
     }
-
+    
     static private void setChangeInstallDir(InstallData installData, Installer installer) {
         // setting the new install dir after analyzing the installation directory
         // of the installed update package.
@@ -68,7 +68,7 @@ public class InstallChangeCtrl {
     // static public void checkInstallChange(InstallData data, ChooseDirectory panel) {
     static public void checkInstallChange(InstallData data) {
 
-        Installer installer = InstallerFactory.getInstance();
+        Installer installer = InstallerFactory.getInstance();            
         PackageDescription packageData = SetupDataProvider.getPackageDescription();
 
         if ( data.getUpdatePackage() == null ) {
@@ -80,7 +80,7 @@ public class InstallChangeCtrl {
             // resetting values, if database was changed during user installation
             data.setOlderVersionExists(false);
             data.setNewerVersionExists(false);
-            data.setSameVersionExists(false);
+            data.setSameVersionExists(false);        	
 
             boolean packageIsInstalled = installer.isPackageInstalled(data.getUpdatePackage(), data);
             if ( packageIsInstalled ) {
@@ -101,12 +101,12 @@ public class InstallChangeCtrl {
                     {
                         data.setMajorUpgrade(true);
                         System.err.println("Major Upgrade");
-                    }
+                    }                    
                 } else if ( installer.isInstallSetPackageOlder(data.getUpdatePackage(), data) ) {
                     data.setNewerVersionExists(true);
                     System.err.println("A newer product is installed");
                 } else {
-                    data.setSameVersionExists(true);
+                    data.setSameVersionExists(true);        	
                     System.err.println("Same product is installed");
                 }
 
@@ -122,7 +122,7 @@ public class InstallChangeCtrl {
                 // directory (ChooseDirectoryCtrl.java).
                 if ( data.isRootInstallation() && data.dontUpdate() && data.olderVersionExists() ) {
                     System.err.println("Error: An older version is already installed in directory " + data.getInstallDir() + "!");
-                    String message1 = ResourceManager.getString("String_Older_Version_Installed_Found")
+                    String message1 = ResourceManager.getString("String_Older_Version_Installed_Found") 
                                     + "\n" + data.getInstallDir() + "\n";
                     String message2 = ResourceManager.getString("String_Older_Version_Installed_Remove");
                     String message = message1 + "\n" + message2;
@@ -131,7 +131,7 @@ public class InstallChangeCtrl {
                     System.exit(1);
                 }
             }
-        }
+        }   
     }
 
 }

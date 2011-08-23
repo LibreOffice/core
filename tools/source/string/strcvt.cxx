@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,19 +114,19 @@ ByteString::ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
 
 static sal_uChar aImplByteTab[256] =
 {
-    0,   1,   2,   3,   4,   5,   6,   7,
-    8,   9,  10,  11,  12,  13,  14,  15,
-   16,  17,  18,  19,  20,  21,  22,  23,
-   24,  25,  26,  27,  28,  29,  30,  31,
-   32,  33,  34,  35,  36,  37,  38,  39,
-   40,  41,  42,  43,  44,  45,  46,  47,
-   48,  49,  50,  51,  52,  53,  54,  55,
-   56,  57,  58,  59,  60,  61,  62,  63,
-   64,  65,  66,  67,  68,  69,  70,  71,
-   72,  73,  74,  75,  76,  77,  78,  79,
-   80,  81,  82,  83,  84,  85,  86,  87,
-   88,  89,  90,  91,  92,  93,  94,  95,
-   96,  97,  98,  99, 100, 101, 102, 103,
+    0,	 1,   2,   3,	4,	 5,   6,   7,
+    8,	 9,  10,  11,  12,	13,  14,  15,
+   16,	17,  18,  19,  20,	21,  22,  23,
+   24,	25,  26,  27,  28,	29,  30,  31,
+   32,	33,  34,  35,  36,	37,  38,  39,
+   40,	41,  42,  43,  44,	45,  46,  47,
+   48,	49,  50,  51,  52,	53,  54,  55,
+   56,	57,  58,  59,  60,	61,  62,  63,
+   64,	65,  66,  67,  68,	69,  70,  71,
+   72,	73,  74,  75,  76,	77,  78,  79,
+   80,	81,  82,  83,  84,	85,  86,  87,
+   88,	89,  90,  91,  92,	93,  94,  95,
+   96,	97,  98,  99, 100, 101, 102, 103,
   104, 105, 106, 107, 108, 109, 110, 111,
   112, 113, 114, 115, 116, 117, 118, 119,
   120, 121, 122, 123, 124, 125, 126, 127,
@@ -152,20 +152,20 @@ static sal_uChar aImplByteTab[256] =
 
 struct Impl1ByteUnicodeTabData
 {
-    rtl_TextEncoding            meTextEncoding;
-    sal_Unicode                 maUniTab[256];
-    Impl1ByteUnicodeTabData*    mpNext;
+    rtl_TextEncoding			meTextEncoding;
+    sal_Unicode 				maUniTab[256];
+    Impl1ByteUnicodeTabData*	mpNext;
 };
 
 // -----------------------------------------------------------------------
 
 struct Impl1ByteConvertTabData
 {
-    rtl_TextEncoding            meSrcTextEncoding;
-    rtl_TextEncoding            meDestTextEncoding;
-    sal_uChar                   maConvertTab[256];
-    sal_uChar                   maRepConvertTab[256];
-    Impl1ByteConvertTabData*    mpNext;
+    rtl_TextEncoding			meSrcTextEncoding;
+    rtl_TextEncoding			meDestTextEncoding;
+    sal_uChar					maConvertTab[256];
+    sal_uChar					maRepConvertTab[256];
+    Impl1ByteConvertTabData*	mpNext;
 };
 
 // =======================================================================
@@ -173,11 +173,11 @@ struct Impl1ByteConvertTabData
 sal_Unicode* ImplGet1ByteUnicodeTab( rtl_TextEncoding eTextEncoding )
 {
 #ifndef BOOTSTRAP
-    TOOLSINDATA*                pToolsData = ImplGetToolsInData();
+    TOOLSINDATA*				pToolsData = ImplGetToolsInData();
 #else
-    TOOLSINDATA*                pToolsData = 0x0;
+    TOOLSINDATA*				pToolsData = 0x0;
 #endif
-    Impl1ByteUnicodeTabData*    pTab = pToolsData->mpFirstUniTabData;
+    Impl1ByteUnicodeTabData*	pTab = pToolsData->mpFirstUniTabData;
 
     while ( pTab )
     {
@@ -197,10 +197,10 @@ sal_Unicode* ImplGet1ByteUnicodeTab( rtl_TextEncoding eTextEncoding )
         pTab->meTextEncoding = eTextEncoding;
         pTab->mpNext = pToolsData->mpFirstUniTabData;
 
-        rtl_TextToUnicodeConverter  hConverter;
-        sal_uInt32                  nInfo;
-        sal_Size                    nSrcBytes;
-        sal_Size                    nDestChars;
+        rtl_TextToUnicodeConverter	hConverter;
+        sal_uInt32					nInfo;
+        sal_Size					nSrcBytes;
+        sal_Size					nDestChars;
         hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
         nDestChars = rtl_convertTextToUnicode( hConverter, 0,
                                                (const sal_Char*)aImplByteTab, 256,
@@ -230,11 +230,11 @@ static sal_uChar* ImplGet1ByteConvertTab( rtl_TextEncoding eSrcTextEncoding,
                                           BOOL bReplace )
 {
 #ifndef BOOTSTRAP
-    TOOLSINDATA*                pToolsData = ImplGetToolsInData();
+    TOOLSINDATA*				pToolsData = ImplGetToolsInData();
 #else
-    TOOLSINDATA*                pToolsData = 0x0;
+    TOOLSINDATA*				pToolsData = 0x0;
 #endif
-    Impl1ByteConvertTabData*    pTab = pToolsData->mpFirstConvertTabData;
+    Impl1ByteConvertTabData*	pTab = pToolsData->mpFirstConvertTabData;
 
     while ( pTab )
     {
@@ -265,14 +265,14 @@ static sal_uChar* ImplGet1ByteConvertTab( rtl_TextEncoding eSrcTextEncoding,
         pTab->meDestTextEncoding = eDestTextEncoding;
         pTab->mpNext = pToolsData->mpFirstConvertTabData;
 
-        rtl_TextToUnicodeConverter  hConverter;
-        rtl_UnicodeToTextConverter  hConverter2;
-        sal_uInt32                  nInfo;
-        sal_Size                    nSrcBytes;
-        sal_Size                    nDestChars;
-        sal_Size                    nSrcChars;
-        sal_Size                    nDestBytes;
-        sal_Unicode                 aTempBuf[256];
+        rtl_TextToUnicodeConverter	hConverter;
+        rtl_UnicodeToTextConverter	hConverter2;
+        sal_uInt32					nInfo;
+        sal_Size					nSrcBytes;
+        sal_Size					nDestChars;
+        sal_Size					nSrcChars;
+        sal_Size					nDestBytes;
+        sal_Unicode 				aTempBuf[256];
         hConverter = rtl_createTextToUnicodeConverter( eSrcTextEncoding );
         nDestChars = rtl_convertTextToUnicode( hConverter, 0,
                                                (const sal_Char*)aImplByteTab, 256,
@@ -325,12 +325,12 @@ static sal_uChar* ImplGet1ByteConvertTab( rtl_TextEncoding eSrcTextEncoding,
 void ImplDeleteCharTabData()
 {
 #ifndef BOOTSTRAP
-    TOOLSINDATA*                pToolsData = ImplGetToolsInData();
+    TOOLSINDATA*				pToolsData = ImplGetToolsInData();
 #else
-    TOOLSINDATA*                pToolsData = 0x0;
+    TOOLSINDATA*				pToolsData = 0x0;
 #endif
-    Impl1ByteUnicodeTabData*    pTempUniTab;
-    Impl1ByteUnicodeTabData*    pUniTab = pToolsData->mpFirstUniTabData;
+    Impl1ByteUnicodeTabData*	pTempUniTab;
+    Impl1ByteUnicodeTabData*	pUniTab = pToolsData->mpFirstUniTabData;
     while ( pUniTab )
     {
         pTempUniTab = pUniTab->mpNext;
@@ -339,8 +339,8 @@ void ImplDeleteCharTabData()
     }
     pToolsData->mpFirstUniTabData = NULL;
 
-    Impl1ByteConvertTabData*    pTempConvertTab;
-    Impl1ByteConvertTabData*    pConvertTab = pToolsData->mpFirstConvertTabData;
+    Impl1ByteConvertTabData*	pTempConvertTab;
+    Impl1ByteConvertTabData*	pConvertTab = pToolsData->mpFirstConvertTabData;
     while ( pConvertTab )
     {
         pTempConvertTab = pConvertTab->mpNext;
@@ -374,12 +374,12 @@ void ByteString::ImplStringConvert(
     }
     else
     {
-        rtl_UnicodeToTextConverter  hSrcConverter = rtl_createTextToUnicodeConverter( eSource );
-        sal_uInt32                  nInfo;
-        sal_Size                    nSrcBytes;
-        sal_Size                    nDestChars;
-        sal_Size                    nTempLen;
-        sal_Unicode*                pTempBuf;
+        rtl_UnicodeToTextConverter	hSrcConverter = rtl_createTextToUnicodeConverter( eSource );
+        sal_uInt32					nInfo;
+        sal_Size					nSrcBytes;
+        sal_Size					nDestChars;
+        sal_Size					nTempLen;
+        sal_Unicode*				pTempBuf;
         nTempLen = mpData->mnLen;
         pTempBuf = new sal_Unicode[nTempLen];
         nDestChars = rtl_convertTextToUnicode( hSrcConverter, 0,
@@ -482,8 +482,8 @@ sal_Unicode ByteString::ConvertToUnicode( char c, rtl_TextEncoding eTextEncoding
 
 char ByteString::ConvertFromUnicode( sal_Unicode c, rtl_TextEncoding eTextEncoding, BOOL bReplace )
 {
-    sal_Size    nLen;
-    char        aBuf[30];
+    sal_Size	nLen;
+    char		aBuf[30];
     nLen = ConvertFromUnicode( c, aBuf, sizeof( aBuf ), eTextEncoding, bReplace );
     if ( nLen == 1 )
         return aBuf[0];
@@ -499,11 +499,11 @@ sal_Unicode ByteString::ConvertToUnicode( const char* pChar, sal_Size* pLen, rtl
     if ( eTextEncoding == RTL_TEXTENCODING_DONTKNOW )
         return 0;
 
-    rtl_TextToUnicodeConverter  hConverter;
-    sal_uInt32                  nInfo;
-    sal_Size                    nSrcBytes;
-    sal_Size                    nDestChars;
-    sal_Unicode                 nConvChar;
+    rtl_TextToUnicodeConverter	hConverter;
+    sal_uInt32					nInfo;
+    sal_Size					nSrcBytes;
+    sal_Size					nDestChars;
+    sal_Unicode 				nConvChar;
     hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
     nDestChars = rtl_convertTextToUnicode( hConverter, 0,
                                            (const sal_Char*)pChar, *pLen,
@@ -536,12 +536,12 @@ sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBu
     if ( eTextEncoding == RTL_TEXTENCODING_DONTKNOW )
         return '\0';
 
-    rtl_UnicodeToTextConverter  hConverter;
-    sal_uInt32                  nInfo;
-    sal_Size                    nSrcChars;
-    sal_Size                    nDestBytes;
-    sal_Unicode                 cUni = c;
-    sal_uInt32                  nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
+    rtl_UnicodeToTextConverter	hConverter;
+    sal_uInt32					nInfo;
+    sal_Size					nSrcChars;
+    sal_Size					nDestBytes;
+    sal_Unicode 				cUni = c;
+    sal_uInt32					nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
                                          RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE |
                                          RTL_UNICODETOTEXT_FLAGS_FLUSH;
     if ( bReplace )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
 
 FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                  SdDrawDocument* pDoc, SfxRequest& rReq )
-:   FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+:	FuPoor(pViewSh, pWin, pView, pDoc, rReq),
     mrReq(rReq),
     mpArgs( rReq.GetArgs() ),
     mpBackgroundObjUndoAction( 0 ),
@@ -287,10 +287,10 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             }
             else
             {
-                if(pStyleSheet
+                if(pStyleSheet 
                     && XFILL_NONE != ((const XFillStyleItem&)pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
                 {
-                    // if the page has no fill style, use the settings from the
+                    // if the page has no fill style, use the settings from the 
                     // background stylesheet (if used)
                     mergeItemSetsImpl(aMergedAttr, pStyleSheet->GetItemSet());
                 }
@@ -307,11 +307,11 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
     if( GetSlotID() == SID_SELECT_BACKGROUND )
     {
-        SvxOpenGraphicDialog    aDlg(SdResId(STR_SET_BACKGROUND_PICTURE));
+        SvxOpenGraphicDialog	aDlg(SdResId(STR_SET_BACKGROUND_PICTURE));
 
         if( aDlg.Execute() == GRFILTER_OK )
         {
-            Graphic     aGraphic;
+            Graphic		aGraphic;
             int nError = aDlg.GetGraphic(aGraphic);
             if( nError == GRFILTER_OK )
             {
@@ -472,7 +472,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             SdrPage& rUsedMasterPage = mpPage->IsMasterPage() ? *mpPage : mpPage->TRG_GetMasterPage();
             OSL_ENSURE(rUsedMasterPage.IsMasterPage(), "No MasterPage (!)");
             rUsedMasterPage.getSdrPageProperties().ClearItem();
-            OSL_ENSURE(0 != rUsedMasterPage.getSdrPageProperties().GetStyleSheet(),
+            OSL_ENSURE(0 != rUsedMasterPage.getSdrPageProperties().GetStyleSheet(), 
                 "MasterPage without StyleSheet detected (!)");
         }
 
@@ -498,10 +498,10 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     const SfxPoolItem*  pPoolItem;
     BOOL                bSetPageSizeAndBorder = FALSE;
     Size                aNewSize(maSize);
-    INT32               nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
-    BOOL                bScaleAll = TRUE;
+    INT32	            nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
+    BOOL	            bScaleAll = TRUE;
     Orientation         eOrientation = mpPage->GetOrientation();
-    SdPage*             pMasterPage = mpPage->IsMasterPage() ? mpPage : &(SdPage&)(mpPage->TRG_GetMasterPage());
+    SdPage*				pMasterPage = mpPage->IsMasterPage() ? mpPage : &(SdPage&)(mpPage->TRG_GetMasterPage());
     BOOL                bFullSize = pMasterPage->IsBackgroundFullSize();
     USHORT              nPaperBin = mpPage->GetPaperBin();
 

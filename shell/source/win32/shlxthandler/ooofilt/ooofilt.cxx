@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 //--------------------------------------------------------------------------
 //  File:       ooofilt.cxx
 //
-//  Contents:   Filter Implementation for OpenOffice.Org Document using
+//  Contents:   Filter Implementation for OpenOffice.Org Document using 
 //              Indexing Service
 //
 //  Summary:    The OpenOffice.org filter reads OpenOffice.org files (with the
@@ -68,7 +68,7 @@
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 #include <string.h>
 #include <filter.h>
 #include <filterr.h>
@@ -114,7 +114,7 @@ COooFilter::COooFilter() :
     m_ulCurrentPropertyNum(0),
     m_ulChunkID(1),
     m_fContents(FALSE),
-    m_fEof(FALSE),
+    m_fEof(FALSE),    
     m_ChunkPosition(0),
     m_cAttributes(0),
     m_pAttributes(0),
@@ -270,7 +270,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
             m_cAttributes = 0;
         }
         if( 0 < cAttributes )
-        {
+        {            
             // Filter properties specified in aAttributes
             if ( 0 == aAttributes )
                 return E_INVALIDARG;
@@ -281,8 +281,8 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
             ULONG ulNumAttr;
             for ( ulNumAttr = 0 ; ulNumAttr < cAttributes; ulNumAttr++ )
             {
-                if ( pAttrib[ulNumAttr].IsPropertyPropid() &&
-                     pAttrib[ulNumAttr].GetPropertyPropid() == PID_STG_CONTENTS &&
+                if ( pAttrib[ulNumAttr].IsPropertyPropid() && 
+                     pAttrib[ulNumAttr].GetPropertyPropid() == PID_STG_CONTENTS && 
                      pAttrib[ulNumAttr].GetPropSet() == guidStorage )
                 {
                     m_fContents = TRUE;
@@ -292,10 +292,10 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
             }
         }
         else if ( grfFlags & IFILTER_INIT_APPLY_INDEX_ATTRIBUTES )
-        {
+        {            
             // Filter contents and all pseudo-properties
             m_fContents = TRUE;
-
+            
             m_pAttributes = new CFullPropSpec[COUNT_ATTRIBUTES];
             m_cAttributes = COUNT_ATTRIBUTES;
             m_pAttributes[0].SetPropSet( FMTID_SummaryInformation );
@@ -310,7 +310,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
             m_pAttributes[4].SetProperty( PIDSI_COMMENTS );
         }
         else if ( 0 == grfFlags )
-        {
+        {         
             // Filter only contents
             m_fContents = TRUE;
         }
@@ -324,7 +324,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
             m_ulUnicodeCharsRead = 0;
             m_ChunkPosition = 0;
         }
-        else
+        else 
         {
             m_fEof = TRUE;
             m_eState = FilteringProperty;
@@ -342,7 +342,7 @@ SCODE STDMETHODCALLTYPE COooFilter::Init(
 //
 //  Method:     COooFilter::GetChunk            (IFilter::GetChunk)
 //
-//  Summary:    Gets the next chunk
+//  Summary:    Gets the next chunk 
 //
 //  Arguments:  ppStat
 //                  [out] Pointer to description of current chunk
@@ -405,7 +405,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
         {
             if ( m_cAttributes ==  0 )
                 return FILTER_E_END_OF_CHUNKS;
-            while(  !( ( m_pAttributes[m_ulPropertyNum].IsPropertyPropid() ) &&
+            while(  !( ( m_pAttributes[m_ulPropertyNum].IsPropertyPropid() ) && 
                        ( m_pAttributes[m_ulPropertyNum].GetPropSet() == FMTID_SummaryInformation ) )||
                      ( ( m_pAttributes[m_ulPropertyNum].GetPropertyPropid() != PIDSI_AUTHOR ) &&
                        ( m_pAttributes[m_ulPropertyNum].GetPropertyPropid() != PIDSI_TITLE ) &&
@@ -479,7 +479,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
         }
         // Copy UNICODE characters in chunk buffer to output UNICODE buffer
         ULONG ulToCopy = min( *pcwcBuffer, m_ulUnicodeBufferLen - m_ulUnicodeCharsRead );
-        ZeroMemory(awcBuffer, sizeof(awcBuffer));
+        ZeroMemory(awcBuffer, sizeof(awcBuffer));    
         wmemcpy( awcBuffer, m_pwsBuffer.c_str() + m_ulUnicodeCharsRead, ulToCopy );
         m_ulUnicodeCharsRead += ulToCopy;
         *pcwcBuffer = ulToCopy;
@@ -499,7 +499,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
 //
 //  Method:     GetMetaInfoNameFromPropertyId
 //
-//  Summary:    helper function to convert PropertyID into respective
+//  Summary:    helper function to convert PropertyID into respective 
 //              MetaInfo names.
 //
 //  Arguments:  ulPropID
@@ -662,9 +662,9 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
     try
     {
         if (m_pMetaInfoReader)
-            delete m_pMetaInfoReader;
+            delete m_pMetaInfoReader;             
         m_pMetaInfoReader = new CMetaInfoReader(WStringToString(m_pwszFileName));
-
+        
         if (m_pContentReader)
             delete m_pContentReader;
         m_pContentReader = new CContentReader(WStringToString(m_pwszFileName), m_pMetaInfoReader->getDefaultLocale());
@@ -726,12 +726,12 @@ SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
 //
 //  Arguments:  pStm
 //                  [in] Pointer to stream from which object should be loaded
-//
+//                    
 //
 //  Returns:    S_OK
-//              E_OUTOFMEMORY
-//              E_FAIL
-//
+//				E_OUTOFMEMORY
+//				E_FAIL
+//                 
 //
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
@@ -739,13 +739,13 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
     zlib_filefunc_def z_filefunc;
 
     m_pStream = PrepareIStream( pStm, z_filefunc );
-
+  
     try
     {
         if (m_pMetaInfoReader)
-            delete m_pMetaInfoReader;
+            delete m_pMetaInfoReader;             
         m_pMetaInfoReader = new CMetaInfoReader((void*)m_pStream, &z_filefunc);
-
+        
         if (m_pContentReader)
             delete m_pContentReader;
         m_pContentReader = new CContentReader((void*)m_pStream, m_pMetaInfoReader->getDefaultLocale(), &z_filefunc);
@@ -764,15 +764,15 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 //  Summary:    Returns the size in bytes of the stream neede to save the object.
 //
 //  Arguments:  pcbSize
-//                  [out] Pointer to a 64 bit unsigned int indicating the size needed
+//                  [out] Pointer to a 64 bit unsigned int indicating the size needed 
 //
 //  Returns:    E_NOTIMPL
-//
+//                  
 //
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 {
-    //
+    // 
     return E_NOTIMPL;
 }
 
@@ -786,15 +786,15 @@ SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 //                  [in] Pointer to stream
 //
 //              fClearDirty
-//                  [in] Indicates whether to clear dirty flag
-//
+//					[in] Indicates whether to clear dirty flag
+//				
 //  Returns:    E_NOTIMPL
-//
+//                 
 //
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
 {
-    //
+    // 
     return E_NOTIMPL;
 }
 
@@ -922,7 +922,7 @@ ULONG STDMETHODCALLTYPE COooFilterCF::AddRef()
 ULONG STDMETHODCALLTYPE COooFilterCF::Release()
 {
     ULONG ulTmp = InterlockedDecrement( &m_lRefs );
-
+    
     if ( 0 == ulTmp )
         delete this;
     return ulTmp;
@@ -1055,9 +1055,9 @@ extern "C" BOOL WINAPI DllMain(
 //                  [out] Address that receives requested interface pointer
 //
 //  Returns:    S_OK
-//                  Class factory object was created successfully
+//                  Class factory object was created successfully 
 //              CLASS_E_CLASSNOTAVAILABLE
-//                  DLL does not support the requested class
+//                  DLL does not support the requested class 
 //              E_INVALIDARG
 //                  (not implemented
 //              E_OUTOFMEMORY
@@ -1104,7 +1104,7 @@ extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
 //  Returns:    S_OK
 //                  DLL can be unloaded now
 //              S_FALSE
-//                  DLL must remain loaded
+//                  DLL must remain loaded 
 //
 //--------------------------------------------------------------------------
 extern "C" SCODE STDMETHODCALLTYPE DllCanUnloadNow()
@@ -1172,92 +1172,92 @@ namespace /* private */
     const char* INDEXING_FILTER_DLLSTOREGISTER      = "SYSTEM\\CurrentControlSet\\Control\\ContentIndex";
 
     //---------------------------
-    // "String Placeholder" ->
+    // "String Placeholder" -> 
     // "String Replacement"
     //---------------------------
-
+    
     void SubstitutePlaceholder(std::string& String, const std::string& Placeholder, const std::string& Replacement)
     {
-        std::string::size_type idx = String.find(Placeholder);
+        std::string::size_type idx = String.find(Placeholder);		
         std::string::size_type len = Placeholder.length();
-
+    
         while (std::string::npos != idx)
         {
             String.replace(idx, len, Replacement);
             idx = String.find(Placeholder);
-        }
+        }	
     }
-
+    
     //----------------------------------------------
     // Make the registry entry and set Filter Handler
     // HKCR\CLSID\{7BC0E710-5703-45be-A29D-5D46D8B39262} = OpenOffice.org Filter
-    //                   InProcServer32  (Default)       = Path\ooofilt.dll
-    //                                   ThreadingModel  = Both
+    //		             InProcServer32	 (Default)       = Path\ooofilt.dll
+    //			                         ThreadingModel  = Both
     //----------------------------------------------
-
+    
     HRESULT RegisterFilterHandler(const char* FilePath, const CLSID& FilterGuid)
     {
         std::string ClsidEntry = CLSID_GUID_ENTRY;
         SubstitutePlaceholder(ClsidEntry, GUID_PLACEHOLDER, ClsidToString(FilterGuid));
-
+    
         if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry.c_str(), "", "OpenOffice.org Filter"))
-            return E_FAIL;
-
+            return E_FAIL;	
+        
         ClsidEntry = CLSID_GUID_INPROC_ENTRY;
         SubstitutePlaceholder(ClsidEntry, GUID_PLACEHOLDER, ClsidToString(FilterGuid));
-
+    
         if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry.c_str(), "", FilePath))
-            return E_FAIL;
+            return E_FAIL;	
 
         if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry.c_str(), "ThreadingModel", "Both"))
             return E_FAIL;
-
+    
         return S_OK;
     }
 
     //----------------------------------------------
     // Make the registry entry and set Persistent Handler
     // HKCR\CLSID\{7BC0E713-5703-45be-A29D-5D46D8B39262}  = OpenOffice.org Persistent Handler
-    //      PersistentAddinsRegistered
-    //          {89BCB740-6119-101A-BCB7-00DD010655AF} = {7BC0E710-5703-45be-A29D-5D46D8B39262}
+    //		PersistentAddinsRegistered	 
+    //			{89BCB740-6119-101A-BCB7-00DD010655AF} = {7BC0E710-5703-45be-A29D-5D46D8B39262}
     //----------------------------------------------
-
+    
     HRESULT RegisterPersistentHandler(const CLSID& FilterGuid, const CLSID& PersistentGuid)
     {
         std::string ClsidEntry_Persist = CLSID_GUID_ENTRY;
         SubstitutePlaceholder(ClsidEntry_Persist, GUID_PLACEHOLDER, ClsidToString(PersistentGuid));
-
-
+    
+        
         if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist.c_str(), "", "OpenOffice.org Persistent Handler"))
-            return E_FAIL;
+            return E_FAIL;	
 
-        // Add missing entry
+        // Add missing entry 
         std::string ClsidEntry_Persist_Entry = CLSID_PERSIST_ENTRY;
-        SubstitutePlaceholder(ClsidEntry_Persist_Entry,
-                              GUID_PLACEHOLDER,
-                              ClsidToString(PersistentGuid));
+        SubstitutePlaceholder(ClsidEntry_Persist_Entry, 
+                              GUID_PLACEHOLDER, 
+                              ClsidToString(PersistentGuid));		
 
         if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist_Entry.c_str(), "", ClsidToString(PersistentGuid).c_str()))
             return E_FAIL;
-
+        
         std::string ClsidEntry_Persist_Addin = CLSID_GUID_PERSIST_ADDIN_ENTRY;
-        SubstitutePlaceholder(ClsidEntry_Persist_Addin,
-                              GUID_PLACEHOLDER,
+        SubstitutePlaceholder(ClsidEntry_Persist_Addin, 
+                              GUID_PLACEHOLDER, 
                               ClsidToString(PersistentGuid));
-        SubstitutePlaceholder(ClsidEntry_Persist_Addin,
-                              GUID_PERSIST_PLACEHOLDER,
+        SubstitutePlaceholder(ClsidEntry_Persist_Addin, 
+                              GUID_PERSIST_PLACEHOLDER, 
                               ClsidToString(CLSID_PERSISTENT_HANDLER_ADDIN));
-
+    
         if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist_Addin.c_str(), "", ClsidToString(FilterGuid).c_str() ))
             return E_FAIL;
-
+    
         return S_OK;
     }
 
     //---------------------------
     // Unregister Filter Handler or persistent handler
     //---------------------------
-
+    
     HRESULT UnregisterHandler(const CLSID& Guid)
     {
         std::string tmp = "CLSID\\";
@@ -1270,25 +1270,25 @@ namespace /* private */
     // HKCR\{EXT}\PersistentHandler = {7BC0E713-5703-45be-A29D-5D46D8B39262}
     // HKCR\{GUID\PersistentHandler = {7BC0E713-5703-45be-A29D-5D46D8B39262}
     //---------------------------
-
+    
     HRESULT RegisterSearchHandler(const char* ModuleFileName)
     {
         if (FAILED(RegisterFilterHandler(ModuleFileName, CLSID_FILTER_HANDLER)))
             return E_FAIL;
-
+    
         if (FAILED(RegisterPersistentHandler(CLSID_FILTER_HANDLER, CLSID_PERSISTENT_HANDLER )))
             return E_FAIL;
 
         std::string sExtPersistEntry;
-
+    
         for(size_t i = 0; i < OOFileExtensionTableSize; i++)
         {
             // first, register extension.
             sExtPersistEntry = EXT_PERSIST_ENTRY;
             SubstitutePlaceholder(sExtPersistEntry, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
-            if (!SetRegistryKey(HKEY_CLASSES_ROOT,
-                                sExtPersistEntry.c_str(),
-                                "",
+            if (!SetRegistryKey(HKEY_CLASSES_ROOT, 
+                                sExtPersistEntry.c_str(), 
+                                "", 
                                 ClsidToString(CLSID_PERSISTENT_HANDLER).c_str()))
                 return E_FAIL;
 
@@ -1303,35 +1303,35 @@ namespace /* private */
                 if (QueryRegistryKey( HKEY_CLASSES_ROOT, extCLSIDName.c_str(), "", extCLSID, MAX_PATH))
                 {
                     std::string ClsidEntry_CLSID_Persist = CLSID_PERSIST_ENTRY;
-                    SubstitutePlaceholder(ClsidEntry_CLSID_Persist,
-                                        GUID_PLACEHOLDER,
+                    SubstitutePlaceholder(ClsidEntry_CLSID_Persist, 
+                                        GUID_PLACEHOLDER, 
                                         extCLSID);
-
-                    if (!SetRegistryKey(HKEY_CLASSES_ROOT,
-                                        ClsidEntry_CLSID_Persist.c_str(),
-                                        "",
+            
+                    if (!SetRegistryKey(HKEY_CLASSES_ROOT, 
+                                        ClsidEntry_CLSID_Persist.c_str(), 
+                                        "", 
                                         ClsidToString(CLSID_PERSISTENT_HANDLER).c_str() ))
                         return E_FAIL;
                 }
             }
         }
-
+    
         return S_OK;
     }
-
-    // Register Indexing Service ext and class.
+      
+    // Register Indexing Service ext and class.        
     HRESULT UnregisterSearchHandler()
     {
         std::string sExtPersistEntry;
-
+    
         for (size_t i = 0; i < OOFileExtensionTableSize; i++)
         {
-            // first, unregister extension
+            // first, unregister extension 
             sExtPersistEntry = EXT_PERSIST_ENTRY;
             SubstitutePlaceholder(sExtPersistEntry, EXTENSION_PLACEHOLDER, OOFileExtensionTable[i].ExtensionAnsi);
             DeleteRegistryKey(HKEY_CLASSES_ROOT, sExtPersistEntry.c_str());
 
-            // second, unregister class
+            // second, unregister class 
             char extClassName[MAX_PATH];
             if (QueryRegistryKey(HKEY_CLASSES_ROOT, OOFileExtensionTable[i].ExtensionAnsi, "", extClassName,MAX_PATH))
             {
@@ -1342,28 +1342,28 @@ namespace /* private */
                 if (QueryRegistryKey( HKEY_CLASSES_ROOT, extCLSIDName.c_str(), "", extCLSID, MAX_PATH))
                 {
                     std::string ClsidEntry_CLSID_Persist = CLSID_PERSIST_ENTRY;
-                    SubstitutePlaceholder(ClsidEntry_CLSID_Persist,
-                                        GUID_PLACEHOLDER,
+                    SubstitutePlaceholder(ClsidEntry_CLSID_Persist, 
+                                        GUID_PLACEHOLDER, 
                                         extCLSID);
-
+            
                     DeleteRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_CLSID_Persist.c_str());
                 }
             }
         }
-
+    
         return ((UnregisterHandler(CLSID_FILTER_HANDLER)==S_OK) && (UnregisterHandler(CLSID_PERSISTENT_HANDLER)==S_OK))?S_OK:E_FAIL;
     }
 
     //---------------------------
-    //    add or remove an entry to DllsToRegister entry of Indexing
-    //    Filter to let Indexing Service register our filter automatically
-    //    each time.
+    //    add or remove an entry to DllsToRegister entry of Indexing  
+    //    Filter to let Indexing Service register our filter automatically  
+    //	  each time.
     //---------------------------
-    HRESULT AddOrRemoveDllsToRegisterList( const ::std::string & DllPath, bool isAdd )
+    HRESULT AddOrRemoveDllsToRegisterList( const ::std::string & DllPath, bool isAdd ) 
     {
         char DllsToRegisterList[4096];
-        if (QueryRegistryKey(HKEY_LOCAL_MACHINE,
-                             INDEXING_FILTER_DLLSTOREGISTER,
+        if (QueryRegistryKey(HKEY_LOCAL_MACHINE, 
+                             INDEXING_FILTER_DLLSTOREGISTER, 
                              "DLLsToRegister",
                              DllsToRegisterList,
                              4096))
@@ -1374,13 +1374,13 @@ namespace /* private */
                     *pChar = ';';
             *pChar = ';';
             *(pChar+1) = '\0';
-
+            
             ::std::string DllList(DllsToRegisterList);
             if ( ( isAdd )&&( DllList.find( DllPath ) == ::std::string::npos ) )
                 DllList.append( DllPath );
             else if ( ( !isAdd )&&( DllList.find( DllPath ) != ::std::string::npos ) )
                 DllList.erase( DllList.find( DllPath )-1, DllPath.length()+1 );
-            else
+            else 
                 return S_OK;
 
             pChar = DllsToRegisterList;
@@ -1394,23 +1394,23 @@ namespace /* private */
             *pChar = *( pChar+1 ) ='\0';
 
             HKEY hSubKey;
-            int rc = RegCreateKeyExA(HKEY_LOCAL_MACHINE,
-                                    INDEXING_FILTER_DLLSTOREGISTER,
-                                    0,
-                                    "",
-                                    REG_OPTION_NON_VOLATILE,
-                                    KEY_WRITE,
-                                    0,
-                                    &hSubKey,
+            int rc = RegCreateKeyExA(HKEY_LOCAL_MACHINE, 
+                                    INDEXING_FILTER_DLLSTOREGISTER, 
+                                    0, 
+                                    "", 
+                                    REG_OPTION_NON_VOLATILE, 
+                                    KEY_WRITE, 
+                                    0, 
+                                    &hSubKey, 
                                     0);
-
+            
             if (ERROR_SUCCESS == rc)
             {
-                rc = RegSetValueExA( hSubKey,
-                                    "DLLsToRegister",
-                                    0,
-                                    REG_MULTI_SZ,
-                                    reinterpret_cast<const BYTE*>(DllsToRegisterList),
+                rc = RegSetValueExA( hSubKey, 
+                                    "DLLsToRegister", 
+                                    0, 
+                                    REG_MULTI_SZ, 
+                                    reinterpret_cast<const BYTE*>(DllsToRegisterList), 
                                     DllList.length() + 2);
 
                 RegCloseKey(hSubKey);
@@ -1421,11 +1421,11 @@ namespace /* private */
 
         return S_OK;
     }
-
+    
 } // namespace /* private */
 
 STDAPI DllRegisterServer()
-{
+{	
     /*
     TCHAR ModuleFileName[MAX_PATH];
 
@@ -1433,12 +1433,12 @@ STDAPI DllRegisterServer()
         GetModuleHandle(MODULE_NAME_FILTER),
         ModuleFileName,
         sizeof(ModuleFileName));
-
+    
     HRESULT hr = S_OK;
 
 
-// register search handler
-#ifdef UNICODE
+// register search handler	
+#ifdef UNICODE	
     if (FAILED(RegisterSearchHandler(WStringToString(ModuleFileName).c_str())))
         hr = E_FAIL;
     if (FAILED(AddOrRemoveDllsToRegisterList(WStringToString(ModuleFileName).c_str(), true)))
@@ -1449,7 +1449,7 @@ STDAPI DllRegisterServer()
     if (FAILED(AddOrRemoveDllsToRegisterList(ModuleFileName, true)))
         hr = E_FAIL;
 #endif
-
+    
 
     return hr;
     */
@@ -1469,14 +1469,14 @@ STDAPI DllUnregisterServer()
         GetModuleHandle(MODULE_NAME_FILTER),
         ModuleFileName,
         sizeof(ModuleFileName));
-
+    
     HRESULT hr = S_OK;
 
-    // unregister search handler
+    // unregister search handler	
     if (FAILED(UnregisterSearchHandler()))
         hr = E_FAIL;
 
-#ifdef UNICODE
+#ifdef UNICODE	
     if (FAILED(AddOrRemoveDllsToRegisterList(WStringToString(ModuleFileName).c_str(),false)))
         hr = E_FAIL;
 #else

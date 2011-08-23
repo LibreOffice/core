@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
     if (xCC.is())
         xCC->removeResourceFactoryForReference(this);
     mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
-
+        
     // Dispose the panes in the cache.
     if (mpResourceCache.get() != NULL)
     {
@@ -168,7 +168,7 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
 
 
 //----- XPaneFactory ----------------------------------------------------------
-
+    
 Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
     throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
@@ -259,11 +259,11 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
 {
     if ( ! rxPaneId.is())
         return NULL;
-
+        
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
     if ( ! xCC.is())
         return NULL;
-
+    
     Reference<XComponentContext> xContext (mxComponentContextWeak);
     if ( ! xContext.is())
         return NULL;
@@ -328,7 +328,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
         UNO_QUERY);
     aArguments[5] <<= bIsSpritePane ? false : true;
     xPane->initialize(aArguments);
-
+        
     // Store pane and canvases and windows in container.
     ::rtl::Reference<PresenterPaneContainer> pContainer (
         mpPresenterController->GetPaneContainer());

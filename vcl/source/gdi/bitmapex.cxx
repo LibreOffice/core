@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,25 +52,25 @@
 
 BitmapEx::BitmapEx() :
         eTransparent( TRANSPARENT_NONE ),
-        bAlpha      ( FALSE )
+        bAlpha		( FALSE )
 {
 }
 
 // ------------------------------------------------------------------
 
 BitmapEx::BitmapEx( const BitmapEx& rBitmapEx ) :
-        aBitmap             ( rBitmapEx.aBitmap ),
-        aMask               ( rBitmapEx.aMask ),
-        aBitmapSize         ( rBitmapEx.aBitmapSize ),
-        aTransparentColor   ( rBitmapEx.aTransparentColor ),
-        eTransparent        ( rBitmapEx.eTransparent ),
-        bAlpha              ( rBitmapEx.bAlpha )
+        aBitmap				( rBitmapEx.aBitmap ),
+        aMask				( rBitmapEx.aMask ),
+        aBitmapSize			( rBitmapEx.aBitmapSize ),
+        aTransparentColor	( rBitmapEx.aTransparentColor ),
+        eTransparent		( rBitmapEx.eTransparent ),
+        bAlpha				( rBitmapEx.bAlpha )
 {
 }
 
 BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize ) :
         eTransparent( TRANSPARENT_NONE ),
-        bAlpha      ( FALSE )
+        bAlpha		( FALSE )
 {
     if( rBitmapEx.IsEmpty() )
         return;
@@ -84,7 +84,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize ) :
     }
     else if( rBitmapEx.IsTransparent() )
         aMask = Bitmap( aSize, rBitmapEx.aMask.GetBitCount() );
-
+                
     Rectangle aDestRect( Point( 0, 0 ), aSize );
     Rectangle aSrcRect( aSrc, aSize );
     CopyPixel( aDestRect, aSrcRect, &rBitmapEx );
@@ -94,21 +94,21 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize ) :
 
 BitmapEx::BitmapEx( const ResId& rResId ) :
         eTransparent( TRANSPARENT_NONE ),
-        bAlpha      ( FALSE )
+        bAlpha		( FALSE )
 {
-    static ImplImageTreeSingletonRef    aImageTree;
-    ResMgr*                             pResMgr = NULL;
+    static ImplImageTreeSingletonRef	aImageTree;
+    ResMgr* 							pResMgr = NULL;
 
     ResMgr::GetResourceSkipHeader( rResId.SetRT( RSC_BITMAP ), &pResMgr );
     pResMgr->ReadLong();
     pResMgr->ReadLong();
-
+    
     const String aFileName( pResMgr->ReadString() );
     ::rtl::OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
-
+    
     if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this ) )
     {
-#ifdef DBG_UTIL
+#ifdef DBG_UTIL		
         ByteString aErrorStr( "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <" );
         DBG_ERROR( ( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
 #endif
@@ -118,21 +118,21 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
 // ------------------------------------------------------------------
 
 BitmapEx::BitmapEx( const Bitmap& rBmp ) :
-        aBitmap     ( rBmp ),
-        aBitmapSize ( aBitmap.GetSizePixel() ),
+        aBitmap		( rBmp ),
+        aBitmapSize	( aBitmap.GetSizePixel() ),
         eTransparent( TRANSPARENT_NONE ),
-        bAlpha      ( FALSE )
+        bAlpha		( FALSE )
 {
 }
 
 // ------------------------------------------------------------------
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
-        aBitmap         ( rBmp ),
-        aMask           ( rMask ),
-        aBitmapSize     ( aBitmap.GetSizePixel() ),
-        eTransparent    ( !rMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
-        bAlpha          ( FALSE )
+        aBitmap			( rBmp ),
+        aMask			( rMask ),
+        aBitmapSize		( aBitmap.GetSizePixel() ),
+        eTransparent	( !rMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
+        bAlpha			( FALSE )
 {
     DBG_ASSERT( !rMask || rBmp.GetSizePixel() == rMask.GetSizePixel(),
                 "BitmapEx::BitmapEx(): size mismatch for bitmap and mask." );
@@ -148,18 +148,18 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
 // ------------------------------------------------------------------
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
-        aBitmap         ( rBmp ),
-        aMask           ( rAlphaMask.ImplGetBitmap() ),
-        aBitmapSize     ( aBitmap.GetSizePixel() ),
-        eTransparent    ( !rAlphaMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
-        bAlpha          ( !rAlphaMask ? FALSE : TRUE )
+        aBitmap			( rBmp ),
+        aMask			( rAlphaMask.ImplGetBitmap() ),
+        aBitmapSize		( aBitmap.GetSizePixel() ),
+        eTransparent	( !rAlphaMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
+        bAlpha			( !rAlphaMask ? FALSE : TRUE )
 {
     DBG_ASSERT( !rAlphaMask || rBmp.GetSizePixel() == rAlphaMask.GetSizePixel(),
                 "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask." );
 
     // #i75531# the workaround below can go when
     // X11SalGraphics::drawAlphaBitmap()'s render acceleration
-    // can handle the bitmap depth mismatch directly
+    // can handle the bitmap depth mismatch directly 
     if( aBitmap.GetBitCount() < aMask.GetBitCount() )
         aBitmap.Convert( BMP_CONVERSION_24BIT );
 }
@@ -167,11 +167,11 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
 // ------------------------------------------------------------------
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :
-        aBitmap             ( rBmp ),
-        aBitmapSize         ( aBitmap.GetSizePixel() ),
-        aTransparentColor   ( rTransparentColor ),
-        eTransparent        ( TRANSPARENT_BITMAP ),
-        bAlpha              ( FALSE )
+        aBitmap				( rBmp ),
+        aBitmapSize			( aBitmap.GetSizePixel() ),
+        aTransparentColor	( rTransparentColor ),
+        eTransparent		( TRANSPARENT_BITMAP ),
+        bAlpha				( FALSE )
 {
     aMask = aBitmap.CreateMask( aTransparentColor );
 
@@ -303,7 +303,7 @@ Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
 BitmapEx BitmapEx::GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const
 {
     BitmapEx aRet;
-
+    
     if( BMP_COLOR_HIGHCONTRAST == eColorMode )
     {
         aRet = *this;
@@ -314,7 +314,7 @@ BitmapEx BitmapEx::GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const
     {
         aRet = *this;
         aRet.aBitmap = aRet.aBitmap.GetColorTransformedBitmap( eColorMode );
-
+        
         if( !aRet.aMask.IsEmpty() )
         {
             aRet.aMask.CombineSimple( aRet.aBitmap, BMP_COMBINE_OR );
@@ -370,8 +370,8 @@ ULONG BitmapEx::GetSizeBytes() const
 
 ULONG BitmapEx::GetChecksum() const
 {
-    sal_uInt32  nCrc = aBitmap.GetChecksum();
-    SVBT32      aBT32;
+    sal_uInt32	nCrc = aBitmap.GetChecksum();
+    SVBT32		aBT32;
 
     UInt32ToSVBT32( (long) eTransparent, aBT32 );
     nCrc = rtl_crc32( nCrc, aBT32, 4 );
@@ -617,8 +617,8 @@ BOOL BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                     }
                     else
                     {
-                        sal_uInt8   cBlack = 0;
-                        AlphaMask*  pAlpha = new AlphaMask( GetSizePixel(), &cBlack );
+                        sal_uInt8	cBlack = 0;
+                        AlphaMask*	pAlpha = new AlphaMask( GetSizePixel(), &cBlack );
 
                         aMask = pAlpha->ImplGetBitmap();
                         delete pAlpha;
@@ -646,7 +646,7 @@ BOOL BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                 }
                 else if( IsAlpha() )
                 {
-                    sal_uInt8         cBlack = 0;
+                    sal_uInt8	      cBlack = 0;
                     const AlphaMask   aAlphaSrc( pBmpExSrc->GetSizePixel(), &cBlack );
 
                     aMask.CopyPixel( rRectDst, rRectSrc, &aAlphaSrc.ImplGetBitmap() );
@@ -858,8 +858,8 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
     if( !rIStm.GetError() )
     {
         const ULONG nStmPos = rIStm.Tell();
-        UINT32      nMagic1 = 0;
-        UINT32      nMagic2 = 0;
+        UINT32		nMagic1 = 0;
+        UINT32		nMagic2 = 0;
 
         rIStm >> nMagic1 >> nMagic2;
 

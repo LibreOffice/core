@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
-#ifndef _SOT_STORAGE_HXX
+#ifndef _SOT_STORAGE_HXX 
 #include <sot/storage.hxx>
 #endif
 #ifndef DBAUI_TABLEROW_HXX

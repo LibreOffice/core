@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,16 +54,16 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_ 
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _SV_SPLIT_HXX
+#ifndef _SV_SPLIT_HXX 
 #include <vcl/split.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX
+#ifndef _SV_SVAPP_HXX 
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _COMPHELPER_TYPES_HXX_
+#ifndef _COMPHELPER_TYPES_HXX_ 
 #include <comphelper/types.hxx>
 #endif
 #ifndef DBAUI_QUERYDESIGNVIEW_HXX
@@ -89,14 +89,14 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     m_pEdit->SaveValue();
     m_pEdit->SetPosPixel( Point( 0, 0 ) );
     m_pEdit->Show();
-    //  m_pEdit->GrabFocus();
+    //	m_pEdit->GrabFocus();
 }
 // -----------------------------------------------------------------------------
 OQueryTextView::~OQueryTextView()
 {
     DBG_DTOR(OQueryTextView,NULL);
     ::std::auto_ptr<Window> aTemp(m_pEdit);
-    m_pEdit = NULL;
+    m_pEdit = NULL;	
 }
 // -----------------------------------------------------------------------------
 void OQueryTextView::GetFocus()

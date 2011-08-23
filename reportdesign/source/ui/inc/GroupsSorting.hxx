@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,49 +65,49 @@ class OReportController;
 |*
 \************************************************************************/
 
-class OGroupsSortingDialog :    public FloatingWindow
-                            ,   public ::cppu::BaseMutex
-                                ,   public ::comphelper::OPropertyChangeListener
+class OGroupsSortingDialog :	public FloatingWindow
+                            ,	public ::cppu::BaseMutex
+                                ,	public ::comphelper::OPropertyChangeListener
                            ,public dbaui::OToolBoxHelper
                            ,public vcl::IImageListProvider
 {
     friend class OFieldExpressionControl;
 
-    FixedLine                               m_aFL2;
-    FixedText                               m_aMove;
-//BTN   ImageButton                             m_aPB_Up;
-//BTN   ImageButton                             m_aPB_Down;
-//BTN   ImageButton                             m_aPB_Delete;
+    FixedLine								m_aFL2;
+    FixedText								m_aMove;
+//BTN 	ImageButton								m_aPB_Up;
+//BTN 	ImageButton								m_aPB_Down;
+//BTN 	ImageButton								m_aPB_Delete;
     ToolBox                                 m_aToolBox;
 
-    FixedLine                               m_aFL3;
-    FixedText                               m_aOrder;
-    ListBox                                 m_aOrderLst;
-    FixedText                               m_aHeader;
-    ListBox                                 m_aHeaderLst;
-    FixedText                               m_aFooter;
-    ListBox                                 m_aFooterLst;
-    FixedText                               m_aGroupOn;
-    ListBox                                 m_aGroupOnLst;
-    FixedText                               m_aGroupInterval;
-    NumericField                            m_aGroupIntervalEd;
-    FixedText                               m_aKeepTogether;
-    ListBox                                 m_aKeepTogetherLst;
-    FixedLine                               m_aFL;
-    FixedText                               m_aHelpWindow;
+    FixedLine								m_aFL3;
+    FixedText								m_aOrder;
+    ListBox									m_aOrderLst;
+    FixedText								m_aHeader;
+    ListBox									m_aHeaderLst;
+    FixedText								m_aFooter;
+    ListBox									m_aFooterLst;
+    FixedText								m_aGroupOn;
+    ListBox									m_aGroupOnLst;
+    FixedText								m_aGroupInterval;
+    NumericField							m_aGroupIntervalEd;
+    FixedText								m_aKeepTogether;
+    ListBox									m_aKeepTogetherLst;	
+    FixedLine								m_aFL;
+    FixedText								m_aHelpWindow;
 
-    OFieldExpressionControl*                m_pFieldExpression;
-    ::rptui::OReportController*             m_pController;
-    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pCurrentGroupListener;
-    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pReportListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups>            m_xGroups;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
-    sal_Bool                                m_bReadOnly;
+    OFieldExpressionControl*				m_pFieldExpression;
+    ::rptui::OReportController*				m_pController;
+    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>	                    m_pCurrentGroupListener;
+    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   	m_pReportListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups>			m_xGroups;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xColumns;
+    sal_Bool								m_bReadOnly;
 private:
     DECL_LINK( OnControlFocusLost, Control* );
     DECL_LINK( OnControlFocusGot, Control* );
     DECL_LINK( LBChangeHdl, ListBox* );
-//BTN   DECL_LINK( ClickHdl, ImageButton* );
+//BTN	DECL_LINK( ClickHdl, ImageButton* );
     DECL_LINK( OnFormatAction,      ToolBox* );
 
     /** returns the groups
@@ -115,19 +115,19 @@ private:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups>& getGroups() { return m_xGroups; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup> getGroup(sal_Int32 _nPos)
-    {
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup> getGroup(sal_Int32 _nPos) 
+    { 
         OSL_ENSURE(_nPos >= 0 && _nPos < m_xGroups->getCount(),"Invalid count!");
         return ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>(m_xGroups->getByIndex(_nPos),::com::sun::star::uno::UNO_QUERY);
     }
 
     /** updates the listboxes with the new group properties
-        @param  _nRow   the new group pos
+        @param	_nRow	the new group pos
     */
     void DisplayData( sal_Int32 _nRow );
 
     /** saves the values from the listboxes into the group at position _nRow
-        @param  _nRow   the group pos to store in
+        @param	_nRow	the group pos to store in
     */
     void SaveData( sal_Int32 _nRow );
 
@@ -141,20 +141,20 @@ private:
     sal_Int32 getColumnDataType(const ::rtl::OUString& _sColumnName);
 
     /** shows the text given by the id in the multiline edit
-        @param  _nResId the string id
+        @param	_nResId	the string id
     */
     void showHelpText(USHORT _nResId);
     /** display the group props
-        @param  _xGroup the group to display
+        @param	_xGroup the group to display
     */
     void displayGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup);
 
     /** enables or diables the up and down button
-        @param  _nRow   the row which will be active
+        @param	_nRow	the row which will be active
     */
     void checkButtons(sal_Int32 _nRow);
 
-    /** clears the m_xColumns member and reset the fields
+    /** clears the m_xColumns member and reset the fields 
     *
     */
     void fillColumns();
@@ -162,9 +162,9 @@ private:
     void operator =(OGroupsSortingDialog&);
 protected:
     // window
-    virtual void    Resize();
+    virtual void	Resize();
     // OPropertyChangeListener
-    virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void	_propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
 public:
     OGroupsSortingDialog( Window* pParent
                         ,sal_Bool _bReadOnly
@@ -172,7 +172,7 @@ public:
     virtual ~OGroupsSortingDialog();
 
     /** sets the newe columns at the groups dialog.
-        @param  _xColumns the new columns
+        @param	_xColumns the new columns
     */
     void setColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xColumns);
 
@@ -181,15 +181,15 @@ public:
     void UpdateData( );
 
         /** will be called when the controls need to be resized.
-            @param  _rDiff
+            @param	_rDiff
                 Contains the difference of the old and new toolbox size.
         */
         virtual void resizeControls(const Size& _rDiff);
 
         /** will be called when the image list is needed.
-            @param  _eSymbolsSize
+            @param	_eSymbolsSize
                 <svtools/imgdef.hxx>
-            @param  _bHiContast
+            @param	_bHiContast
                 <TRUE/> when in high contrast mode.
         */
     virtual ImageList getImageList(sal_Int16 _eSymbolsSize,sal_Bool _bHiContast) const;

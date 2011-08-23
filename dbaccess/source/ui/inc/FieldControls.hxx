@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,13 +27,13 @@
 #ifndef DBAUI_FIELDCONTROLS_HXX
 #define DBAUI_FIELDCONTROLS_HXX
 
-#ifndef _SV_FIELD_HXX
+#ifndef _SV_FIELD_HXX 
 #include <vcl/field.hxx>
 #endif
-#ifndef _SV_LSTBOX_HXX
+#ifndef _SV_LSTBOX_HXX 
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX
+#ifndef _SV_SVAPP_HXX 
 #include <vcl/svapp.hxx>
 #endif
 #ifndef DBAUI_SQLNAMEEDIT_HXX
@@ -61,8 +61,8 @@ namespace dbaui
     class OPropColumnEditCtrl : public OSQLNameEdit
     {
         OModuleClient m_aModuleClient;
-        short                m_nPos;
-        String               m_strHelpText;
+        short	             m_nPos;
+        String	             m_strHelpText;
     public:
         inline OPropColumnEditCtrl(Window* pParent, ::rtl::OUString& _rAllowedChars, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
@@ -78,9 +78,9 @@ namespace dbaui
         }
     };
     inline OPropColumnEditCtrl::OPropColumnEditCtrl(Window* pParent,
-                                                    ::rtl::OUString& _rAllowedChars,
-                                                    USHORT nHelpId,
-                                                    short nPosition,
+                                                    ::rtl::OUString& _rAllowedChars, 
+                                                    USHORT nHelpId, 
+                                                    short nPosition, 
                                                     WinBits nWinStyle)
         :OSQLNameEdit(pParent, _rAllowedChars,nWinStyle)
         ,m_nPos(nPosition)
@@ -88,11 +88,11 @@ namespace dbaui
         m_strHelpText=String(ModuleRes(nHelpId));
     }
     //==================================================================
-    class OPropEditCtrl :   public Edit
+    class OPropEditCtrl :	public Edit 
     {
         OModuleClient m_aModuleClient;
-        short                m_nPos;
-        String               m_strHelpText;
+        short	             m_nPos;
+        String	             m_strHelpText;
 
     public:
         inline OPropEditCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
@@ -126,8 +126,8 @@ namespace dbaui
     //==================================================================
     class OPropNumericEditCtrl : public NumericField
     {
-        short   m_nPos;
-        String  m_strHelpText;
+        short	m_nPos;
+        String	m_strHelpText;
 
     public:
         inline OPropNumericEditCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
@@ -161,8 +161,8 @@ namespace dbaui
     //==================================================================
     class OPropListBoxCtrl : public ListBox
     {
-        short   m_nPos;
-        String  m_strHelpText;
+        short	m_nPos;
+        String	m_strHelpText;
 
     public:
         inline OPropListBoxCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);

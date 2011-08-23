@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,35 +35,35 @@ package org.openoffice.xmerge.converter.xml.sxc;
  */
 public class ColumnRowInfo {
 
-    final public static int COLUMN  = 0x01;
-    final public static int ROW     = 0x02;
+    final public static int COLUMN	= 0x01;
+    final public static int ROW		= 0x02;
 
-    final private static int DEFAULTROWSIZE_MIN = 250;
-    final private static int DEFAULTROWSIZE_MAX = 260;
+    final private static int DEFAULTROWSIZE_MIN	= 250;
+    final private static int DEFAULTROWSIZE_MAX	= 260;
 
     private int type;
-    private int dimension   = 0;
-    private int repeated    = 1;
+    private int dimension	= 0;
+    private int repeated	= 1;
     private boolean userDefined = true;
     private Format fmt = new Format();
 
     /**
      * Constructor for a <code>ColumnRowInfo</code>
      *
-     * @param dimension if it's a row the height, a column the width
-     * @param repeated
+     * @param dimension if it's a row the height, a column the width 
+     * @param repeated 
      */
     public ColumnRowInfo(int type) {
 
         this.type = type;
     }
-
+    
     /**
      * Constructor for a <code>ColumnRowInfo</code>
      *
-     * @param dimension if it's a row the height, a column the width
+     * @param dimension if it's a row the height, a column the width 
      * @param repeated how many times it is repeated
-     * @param type whether Row or column record
+     * @param type whether Row or column record 
      */
     public ColumnRowInfo(int dimension, int repeated, int type) {
 
@@ -78,13 +78,13 @@ public class ColumnRowInfo {
      * @param userDefined whether the record is manually set
      */
     public ColumnRowInfo(int dimension, int repeated, int type, boolean userDefined) {
-
+    
         this(dimension, repeated, type);
         this.userDefined = userDefined;
     }
-
+    
     /**
-     * sets the definition
+     * sets the definition 
      *
      * @param newDefinition sets the definition
      */
@@ -94,8 +94,8 @@ public class ColumnRowInfo {
     }
 
     /**
-     * returns Name of the definition
-     *
+     * returns Name of the definition 
+     * 
      * @return the name which identifies the definition
      */
     public Format getFormat() {
@@ -104,17 +104,17 @@ public class ColumnRowInfo {
     }
 
     /**
-     * returns Name of the definition
-     *
+     * returns Name of the definition 
+     * 
      * @return the name which identifies the definition
      */
     public int getSize() {
 
         return dimension;
     }
-
+    
     /**
-     * sets the definition
+     * sets the definition 
      *
      * @param newDefinition sets the definition
      */
@@ -125,46 +125,46 @@ public class ColumnRowInfo {
     /**
      * Returns the definition itself
      *
-     * @return the definition
+     * @return the definition 
      */
     public int getRepeated() {
-
+    
         return repeated;
     }
 
     /**
-     * Returns the base Cell address
-     *
+     * Returns the base Cell address 
+     * 
      * @return the base cell address
      */
     public void setRepeated(int repeated) {
 
         this.repeated = repeated;
     }
-
+    
     /**
      * Returns the definition itself
      *
-     * @return the definition
+     * @return the definition 
      */
     public boolean isRow() {
-
+    
         if(type==ROW)
             return true;
-        else
+        else 
             return false;
     }
 
     /**
-     * Returns the base Cell address
-     *
+     * Returns the base Cell address 
+     * 
      * @return the base cell address
      */
     public boolean isColumn() {
 
         if(type==COLUMN)
             return true;
-        else
+        else 
             return false;
     }
 
@@ -177,7 +177,7 @@ public class ColumnRowInfo {
 
         return userDefined;
     }
-
+    
     /**
      * Test if the row height is default
      *
@@ -185,11 +185,11 @@ public class ColumnRowInfo {
      */
     public boolean isDefaultSize() {
 
-        if( type==ROW &&
+        if(	type==ROW &&
             dimension>DEFAULTROWSIZE_MIN &&
             dimension<DEFAULTROWSIZE_MAX)
             return true;
-        else
+        else 
             return false;
-    }
+    }		
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,36 +36,36 @@ namespace sd
 class DialogListBox : public Control
 {
 private:
-    ScrollBar*          mpHScrollBar;
-    ScrollBar*          mpVScrollBar;
-    ScrollBarBox*       mpScrollBarBox;
-    ::Window*           mpChild;
-    bool                mbVScroll;
-    bool                mbHScroll;
-    bool                mbAutoHScroll;
-    Size                maMinSize, maInnerSize;
+    ScrollBar*			mpHScrollBar;
+    ScrollBar*			mpVScrollBar;
+    ScrollBarBox*		mpScrollBarBox;
+    ::Window*			mpChild;
+    bool				mbVScroll;
+    bool				mbHScroll;
+    bool				mbAutoHScroll;
+    Size				maMinSize, maInnerSize;
 
 protected:
-    virtual void        GetFocus();
-    virtual void        StateChanged( StateChangedType nType );
+    virtual void		GetFocus();
+    virtual void		StateChanged( StateChangedType nType );
 
-    long                Notify( NotifyEvent& rNEvt );
+    long 				Notify( NotifyEvent& rNEvt );
 
-    void                ImplResizeControls();
-    void                ImplCheckScrollBars();
-    void                ImplInitScrollBars();
-    void                ImplResizeChild();
+    void				ImplResizeControls();
+    void				ImplCheckScrollBars();
+    void				ImplInitScrollBars();
+    void				ImplResizeChild();
 
-    DECL_LINK(          ScrollBarHdl, ScrollBar* );
+    DECL_LINK(			ScrollBarHdl, ScrollBar* );
 
 public:
                     DialogListBox( ::Window* pParent, WinBits nWinStyle );
                     ~DialogListBox();
 
-    void            SetChildWindow( ::Window* pChild, const Size& rMinSize );
+    void			SetChildWindow( ::Window* pChild, const Size& rMinSize );
 
-    ::Window*           GetPreferredKeyInputWindow();
-    void            Resize();
+    ::Window*			GetPreferredKeyInputWindow();
+    void			Resize();
 
 };
 

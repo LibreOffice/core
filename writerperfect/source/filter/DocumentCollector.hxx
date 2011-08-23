@@ -35,6 +35,7 @@
 #if defined _MSC_VER
 #pragma warning( push, 1 )
 #endif
+#include <libwps/libwps.h>
 #include <libwpd/libwpd.h>
 #if defined _MSC_VER
 #pragma warning( pop )
@@ -82,7 +83,7 @@ struct ltstr
 class DocumentCollector : public WPXHLListenerImpl
 {
 public:
-    DocumentCollector(WPXInputStream *pInput, DocumentHandler *pHandler);
+    DocumentCollector(WPSInputStream *pInput, DocumentHandler *pHandler);
     virtual ~DocumentCollector();
     bool filter();
 
@@ -133,7 +134,7 @@ public:
     virtual void closeTableCell();
     virtual void insertCoveredTableCell(const WPXPropertyList &propList);
      virtual void closeTable();
-    virtual bool parseSourceDocument(WPXInputStream &input) = 0;
+    virtual bool parseSourceDocument(WPSInputStream &input) = 0;
 
 protected:
     void _resetDocumentState();
@@ -147,7 +148,7 @@ private:
     void _openListLevel(TagOpenElement *pListLevelOpenElement);
     void _closeListLevel(const char *szListType);
 
-        WPXInputStream *mpInput;
+        WPSInputStream *mpInput;
         DocumentHandler *mpHandler;
     bool mbUsed; // whether or not it has been before (you can only use me once!)
 

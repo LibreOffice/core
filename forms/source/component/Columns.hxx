@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,23 +58,23 @@ namespace frm
 //==================================================================
 typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::lang::XUnoTunnel
                                             ,   ::com::sun::star::util::XCloneable > OGridColumn_BASE;
-class OGridColumn   :public ::comphelper::OBaseMutex
+class OGridColumn	:public ::comphelper::OBaseMutex
                     ,public OGridColumn_BASE
                     ,public OPropertySetAggregationHelper
                     ,public OCloneableAggregation
 {
 protected:
 // [properties]
-    ::com::sun::star::uno::Any  m_aWidth;                   // column width
-    ::com::sun::star::uno::Any  m_aAlign;                   // column alignment
-    ::com::sun::star::uno::Any  m_aHidden;                  // column hidden?
+    ::com::sun::star::uno::Any	m_aWidth;					// column width
+    ::com::sun::star::uno::Any	m_aAlign;					// column alignment
+    ::com::sun::star::uno::Any	m_aHidden;					// column hidden?
 // [properties]
 
     ::comphelper::ComponentContext  m_aContext;
-    ::rtl::OUString                 m_aModelName;
+    ::rtl::OUString				    m_aModelName;
 
 // [properties]
-    ::rtl::OUString             m_aLabel;                   // Name der Spalte
+    ::rtl::OUString				m_aLabel;					// Name der Spalte
 // [properties]
 
 public:
@@ -91,8 +91,8 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<sal_Int8>& _rIdentifier) throw(::com::sun::star::uno::RuntimeException);
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8>			SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
 
     // OComponentHelper
     virtual void SAL_CALL disposing();
@@ -129,28 +129,28 @@ protected:
     virtual OGridColumn* createCloneColumn() const = 0;
 };
 
-#define DECL_COLUMN(ClassName)                                                                              \
-class ClassName                                                                                             \
-    :public OGridColumn                                                                                     \
-    ,public OAggregationArrayUsageHelper< ClassName >                                                       \
-{                                                                                                           \
-public:                                                                                                     \
+#define DECL_COLUMN(ClassName)										                                        \
+class ClassName														                                        \
+    :public OGridColumn												                                        \
+    ,public OAggregationArrayUsageHelper< ClassName >				                                        \
+{																	                                        \
+public:																                                        \
     ClassName(const ::comphelper::ComponentContext& _rContext );                                            \
     ClassName(const ClassName* _pCloneFrom);                                                                \
                                                                                                             \
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);  \
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();                                         \
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);	\
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();	                                        \
                                                                                                             \
-    virtual void fillProperties(                                                                            \
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,          \
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps  \
-        ) const;                                                                                            \
+    virtual void fillProperties(	                                                                        \
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,	        \
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps	\
+        ) const;	                                                                                        \
                                                                                                             \
     virtual OGridColumn* createCloneColumn() const;                                                         \
 };
 
 
-#define IMPL_COLUMN(ClassName, Model, bAllowDropDown)                               \
+#define IMPL_COLUMN(ClassName, Model, bAllowDropDown)								\
     ClassName::ClassName( const ::comphelper::ComponentContext& _rContext ) \
     :OGridColumn(_rContext, Model) \
 { \
@@ -186,16 +186,16 @@ OGridColumn* ClassName::createCloneColumn() const \
 } \
  \
 // column type ids
-#define TYPE_CHECKBOX       0
-#define TYPE_COMBOBOX       1
+#define TYPE_CHECKBOX		0
+#define TYPE_COMBOBOX		1
 #define TYPE_CURRENCYFIELD  2
-#define TYPE_DATEFIELD      3
-#define TYPE_FORMATTEDFIELD 4
-#define TYPE_LISTBOX        5
-#define TYPE_NUMERICFIELD   6
-#define TYPE_PATTERNFIELD   7
-#define TYPE_TEXTFIELD      8
-#define TYPE_TIMEFIELD      9
+#define TYPE_DATEFIELD		3
+#define TYPE_FORMATTEDFIELD	4
+#define TYPE_LISTBOX		5
+#define TYPE_NUMERICFIELD	6
+#define TYPE_PATTERNFIELD	7
+#define TYPE_TEXTFIELD		8
+#define TYPE_TIMEFIELD		9
 
 // liste aller bekannten columns
 const StringSequence& getColumnTypes();
@@ -216,6 +216,6 @@ DECL_COLUMN(FormattedFieldColumn)
 #endif // _FRM_COLUMNS_HXX
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 

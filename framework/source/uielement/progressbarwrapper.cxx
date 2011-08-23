@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,41 +33,41 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/statusindicator.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <uielement/statusindicatorinterfacewrapper.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 using namespace ::com::sun::star;
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 ProgressBarWrapper::ProgressBarWrapper() :
@@ -120,7 +120,7 @@ uno::Reference< awt::XWindow > ProgressBarWrapper::getStatusBar() const
 }
 
 // wrapped methods of ::com::sun::star::task::XStatusIndicator
-void ProgressBarWrapper::start( const ::rtl::OUString& Text, ::sal_Int32 Range )
+void ProgressBarWrapper::start( const ::rtl::OUString& Text, ::sal_Int32 Range ) 
 throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
@@ -131,7 +131,7 @@ throw (uno::RuntimeException)
 
         if ( m_bDisposed )
             return;
-
+        
         xWindow  = m_xStatusBar;
         m_nValue = 0;
         m_nRange = Range;
@@ -152,7 +152,7 @@ throw (uno::RuntimeException)
                 pStatusBar->SetUpdateMode( FALSE );
                 pStatusBar->EndProgressMode();
                 pStatusBar->StartProgressMode( Text );
-                pStatusBar->SetProgressValue( USHORT( nValue ));
+                pStatusBar->SetProgressValue( USHORT( nValue )); 
                 pStatusBar->SetUpdateMode( TRUE );
             }
             pStatusBar->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
@@ -160,7 +160,7 @@ throw (uno::RuntimeException)
     }
 }
 
-void ProgressBarWrapper::end()
+void ProgressBarWrapper::end() 
 throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
@@ -170,7 +170,7 @@ throw (uno::RuntimeException)
 
         if ( m_bDisposed )
             return;
-
+        
         xWindow  = m_xStatusBar;
         m_nRange = 100;
         m_nValue = 0;
@@ -189,7 +189,7 @@ throw (uno::RuntimeException)
     }
 }
 
-void ProgressBarWrapper::setText( const ::rtl::OUString& Text )
+void ProgressBarWrapper::setText( const ::rtl::OUString& Text ) 
 throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
@@ -200,7 +200,7 @@ throw (uno::RuntimeException)
 
         if ( m_bDisposed )
             return;
-
+        
         xWindow  = m_xStatusBar;
         m_aText  = Text;
         nValue   = m_nValue;
@@ -218,7 +218,7 @@ throw (uno::RuntimeException)
                 pStatusBar->SetUpdateMode( FALSE );
                 pStatusBar->EndProgressMode();
                 pStatusBar->StartProgressMode( Text );
-                pStatusBar->SetProgressValue( USHORT( nValue ));
+                pStatusBar->SetProgressValue( USHORT( nValue )); 
                 pStatusBar->SetUpdateMode( TRUE );
             }
             else
@@ -227,7 +227,7 @@ throw (uno::RuntimeException)
     }
 }
 
-void ProgressBarWrapper::setValue( ::sal_Int32 nValue )
+void ProgressBarWrapper::setValue( ::sal_Int32 nValue ) 
 throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
@@ -239,7 +239,7 @@ throw (uno::RuntimeException)
 
         if ( m_bDisposed )
             return;
-
+        
         xWindow  = m_xStatusBar;
 
         double fVal( 0 );
@@ -248,7 +248,7 @@ throw (uno::RuntimeException)
             fVal = ( double( nValue ) / double( m_nRange )) * 100;
             fVal = std::max( double( 0 ), std::min( fVal, double( 100 )));
         }
-
+        
         if ( m_nValue != sal_Int32( fVal ))
         {
             m_nValue = sal_Int32( fVal );
@@ -273,7 +273,7 @@ throw (uno::RuntimeException)
     }
 }
 
-void ProgressBarWrapper::reset()
+void ProgressBarWrapper::reset() 
 throw (uno::RuntimeException)
 {
     setText( rtl::OUString() );
@@ -281,30 +281,30 @@ throw (uno::RuntimeException)
 }
 
 // XInitialization
-void SAL_CALL ProgressBarWrapper::initialize( const uno::Sequence< uno::Any >& )
+void SAL_CALL ProgressBarWrapper::initialize( const uno::Sequence< uno::Any >& ) 
 throw (uno::Exception, uno::RuntimeException)
 {
     // dummy - do nothing
 }
 
 // XUpdatable
-void SAL_CALL ProgressBarWrapper::update()
+void SAL_CALL ProgressBarWrapper::update() 
 throw (uno::RuntimeException)
 {
     // dummy - do nothing
 }
 
 // XComponent
-void SAL_CALL ProgressBarWrapper::dispose()
+void SAL_CALL ProgressBarWrapper::dispose() 
 throw (uno::RuntimeException)
 {
-    uno::Reference< lang::XComponent > xThis(
-        static_cast< cppu::OWeakObject* >(this),
+    uno::Reference< lang::XComponent > xThis( 
+        static_cast< cppu::OWeakObject* >(this), 
         uno::UNO_QUERY );
 
     {
         ResetableGuard aLock( m_aLock );
-
+    
         if ( m_bDisposed )
             return;
     }
@@ -312,7 +312,7 @@ throw (uno::RuntimeException)
     {
         lang::EventObject aEvent( xThis );
         m_aListenerContainer.disposeAndClear( aEvent );
-
+        
         ResetableGuard aLock( m_aLock );
         if ( m_bOwnsInstance )
         {
@@ -326,14 +326,14 @@ throw (uno::RuntimeException)
             {
             }
         }
-
+        
         m_xStatusBar.clear();
         m_bDisposed = sal_True;
     }
 }
 
 // XUIElement
-uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface()
+uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface() 
 throw (uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -347,19 +347,19 @@ throw (uno::RuntimeException)
         uno::Reference< uno::XInterface > xComp( m_xProgressBarIfacWrapper );
         if ( !xComp.is() )
         {
-            StatusIndicatorInterfaceWrapper* pWrapper =
-                new StatusIndicatorInterfaceWrapper(
-                    uno::Reference< lang::XComponent >(
-                        static_cast< cppu::OWeakObject* >( this ),
+            StatusIndicatorInterfaceWrapper* pWrapper = 
+                new StatusIndicatorInterfaceWrapper( 
+                    uno::Reference< lang::XComponent >( 
+                        static_cast< cppu::OWeakObject* >( this ), 
                         uno::UNO_QUERY ));
                 xComp = uno::Reference< uno::XInterface >(
-                    static_cast< cppu::OWeakObject* >( pWrapper ),
+                    static_cast< cppu::OWeakObject* >( pWrapper ), 
                     uno::UNO_QUERY );
              m_xProgressBarIfacWrapper = xComp;
         }
-
+        
         return xComp;
     }
 }
 
-}       //  namespace framework
+}		//	namespace framework

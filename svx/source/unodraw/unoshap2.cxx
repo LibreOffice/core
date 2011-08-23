@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -205,14 +205,14 @@ void SAL_CALL SvxShapeGroup::setSize( const awt::Size& rSize )
 void SAL_CALL SvxShapeGroup::enterGroup(  ) throw(uno::RuntimeException)
 {
     // Todo
-//  pDrView->EnterMarkedGroup();
+//	pDrView->EnterMarkedGroup();
 }
 
 //----------------------------------------------------------------------
 void SAL_CALL SvxShapeGroup::leaveGroup(  ) throw(uno::RuntimeException)
 {
     // Todo
-//  pDrView->LeaveOneGroup();
+//	pDrView->LeaveOneGroup();
 }
 
 //----------------------------------------------------------------------
@@ -702,16 +702,16 @@ SvxShapeControlPropertyMapping[] =
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_STRIKEOUT), MAP_CHAR_LEN("FontStrikeout") },
     { MAP_CHAR_LEN("CharKerning"), MAP_CHAR_LEN("FontKerning") },
     { MAP_CHAR_LEN("CharWordMode"), MAP_CHAR_LEN("FontWordLineMode" ) },
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_COLOR),   MAP_CHAR_LEN("TextColor") },
-    { MAP_CHAR_LEN("CharRelief"),   MAP_CHAR_LEN("FontRelief") },
-    { MAP_CHAR_LEN("CharUnderlineColor"),   MAP_CHAR_LEN("TextLineColor") },
+    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_COLOR),	MAP_CHAR_LEN("TextColor") },
+    { MAP_CHAR_LEN("CharRelief"),	MAP_CHAR_LEN("FontRelief") },
+    { MAP_CHAR_LEN("CharUnderlineColor"),	MAP_CHAR_LEN("TextLineColor") },
     { MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_ADJUST), MAP_CHAR_LEN("Align") },
     { MAP_CHAR_LEN("TextVerticalAdjust"), MAP_CHAR_LEN("VerticalAlign") },
     { MAP_CHAR_LEN("ControlBackground"), MAP_CHAR_LEN("BackgroundColor") },
     { MAP_CHAR_LEN("ControlSymbolColor"), MAP_CHAR_LEN("SymbolColor") },
     { MAP_CHAR_LEN("ControlBorder"), MAP_CHAR_LEN("Border") },
     { MAP_CHAR_LEN("ControlBorderColor"), MAP_CHAR_LEN("BorderColor") },
-    { MAP_CHAR_LEN("ControlTextEmphasis"),  MAP_CHAR_LEN("FontEmphasisMark") },
+    { MAP_CHAR_LEN("ControlTextEmphasis"),	MAP_CHAR_LEN("FontEmphasisMark") },
     { MAP_CHAR_LEN("ImageScaleMode"),  MAP_CHAR_LEN("ScaleMode") },
     { MAP_CHAR_LEN("ControlWritingMode"), MAP_CHAR_LEN("WritingMode") },
     { NULL,0, NULL, 0 }
@@ -744,11 +744,11 @@ namespace
         // note that order matters:
         // lcl_convertTextAlignmentToParaAdjustment and lcl_convertParaAdjustmentToTextAlignment search this map from the _beginning_
         // and use the first matching entry
-        {style::ParagraphAdjust_LEFT,           (sal_Int16)awt::TextAlign::LEFT},
-        {style::ParagraphAdjust_CENTER,         (sal_Int16)awt::TextAlign::CENTER},
-        {style::ParagraphAdjust_RIGHT,          (sal_Int16)awt::TextAlign::RIGHT},
-        {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::RIGHT},
-        {style::ParagraphAdjust_STRETCH,        (sal_Int16)awt::TextAlign::LEFT},
+        {style::ParagraphAdjust_LEFT,			(sal_Int16)awt::TextAlign::LEFT},
+        {style::ParagraphAdjust_CENTER,			(sal_Int16)awt::TextAlign::CENTER},
+        {style::ParagraphAdjust_RIGHT,			(sal_Int16)awt::TextAlign::RIGHT},
+        {style::ParagraphAdjust_BLOCK,			(sal_Int16)awt::TextAlign::RIGHT},
+        {style::ParagraphAdjust_STRETCH,		(sal_Int16)awt::TextAlign::LEFT},
         {-1,-1}
     };
 
@@ -1011,7 +1011,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aP
 
 //----------------------------------------------------------------------
 SvxShapeDimensioning::SvxShapeDimensioning( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_DIMENSIONING), aSvxMapProvider.GetPropertySet(SVXMAP_DIMENSIONING, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_DIMENSIONING), aSvxMapProvider.GetPropertySet(SVXMAP_DIMENSIONING, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1032,7 +1032,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeDimensioning::getSupportedServiceName
 
 //----------------------------------------------------------------------
 SvxShapeCircle::SvxShapeCircle( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CIRCLE), aSvxMapProvider.GetPropertySet(SVXMAP_CIRCLE, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CIRCLE), aSvxMapProvider.GetPropertySet(SVXMAP_CIRCLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1081,7 +1081,7 @@ basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( c
         basegfx::B2DPolygon aNewPolygon;
 
         // Zeiger auf Arrays holen
-        const awt::Point* pArray    = pInnerSequence->getConstArray();
+        const awt::Point* pArray	= pInnerSequence->getConstArray();
         const awt::Point* pArrayEnd = pArray + pInnerSequence->getLength();
 
         for(;pArray != pArrayEnd;++pArray)
@@ -1143,7 +1143,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const ::rtl::OUString& rName, co
 
             // Zeiger auf Arrays holen
             // Zeiger auf Arrays holen
-            const awt::Point* pArray    = pSequence->getConstArray();
+            const awt::Point* pArray	= pSequence->getConstArray();
             const awt::Point* pArrayEnd = pArray + pSequence->getLength();
 
             for(;pArray != pArrayEnd;++pArray)
@@ -1324,8 +1324,8 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames
 #include <com/sun/star/drawing/FlagSequence.hpp>
 //----------------------------------------------------------------------
 SvxShapePolyPolygonBezier::SvxShapePolyPolygonBezier( SdrObject* pObj , drawing::PolygonKind eNew ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGONBEZIER), aSvxMapProvider.GetPropertySet(SVXMAP_POLYPOLYGONBEZIER, SdrObject::GetGlobalDrawObjectItemPool()) )
-,   mePolygonKind( eNew )
+:	SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGONBEZIER), aSvxMapProvider.GetPropertySet(SVXMAP_POLYPOLYGONBEZIER, SdrObject::GetGlobalDrawObjectItemPool()) )
+,	mePolygonKind( eNew )
 {
 }
 
@@ -1632,7 +1632,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 
 //----------------------------------------------------------------------
 SvxGraphicObject::SvxGraphicObject( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_GRAPHICOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
+:	SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_GRAPHICOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1655,8 +1655,8 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
             if( rValue.getValueType() == ::getCppuType(( const uno::Sequence< sal_Int8 >*)0) )
             {
                 uno::Sequence<sal_Int8>* pSeq( (uno::Sequence<sal_Int8>*)rValue.getValue() );
-                SvMemoryStream  aMemStm;
-                Graphic         aGraphic;
+                SvMemoryStream	aMemStm;
+                Graphic			aGraphic;
 
                 aMemStm.SetBuffer( (char*)pSeq->getConstArray(), pSeq->getLength(), sal_False, pSeq->getLength() );
 
@@ -1704,8 +1704,8 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
                 GraphicObject aGrafObj( aUniqueID );
 
                 // #101808# since loading a graphic can cause a reschedule of the office
-                //          it is possible that our shape is removed while where in this
-                //          method.
+                //			it is possible that our shape is removed while where in this
+                //			method.
                 if( mpObj.is() )
                 {
                     static_cast<SdrGrafObj*>(mpObj.get())->ReleaseGraphicLink();
@@ -1715,9 +1715,9 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
             else if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
             {
                 // normal link
-                String              aFilterName;
-                const SfxFilter*    pSfxFilter = NULL;
-                SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+                String				aFilterName;
+                const SfxFilter*	pSfxFilter = NULL;
+                SfxMedium			aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
 
                 SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
@@ -1743,8 +1743,8 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
                     aFilterName = pSfxFilter->GetFilterName();
 
                 // #101808# since loading a graphic can cause a reschedule of the office
-                //          it is possible that our shape is removed while where in this
-                //          method.
+                //			it is possible that our shape is removed while where in this
+                //			method.
                 if( mpObj.is() )
                     static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicLink( aURL, aFilterName );
 
@@ -1843,7 +1843,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
 
     case OWN_ATTR_GRAFSTREAMURL:
     {
-        const OUString  aStreamURL( ( (SdrGrafObj*) mpObj.get() )->GetGrafStreamURL() );
+        const OUString	aStreamURL( ( (SdrGrafObj*) mpObj.get() )->GetGrafStreamURL() );
         if( aStreamURL.getLength() )
             rValue <<= aStreamURL;
         break;
@@ -1851,7 +1851,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
 
     case OWN_ATTR_VALUE_GRAPHIC:
     {
-        Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() );
+        Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() ); 
         rValue <<= xGraphic;
         break;
     }
@@ -1978,7 +1978,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
         Rectangle aRectangle( aRect );
 
         if ( bMirroredX || bMirroredY )
-        {   // we have to retrieve the unmirrored rect
+        {	// we have to retrieve the unmirrored rect
 
             GeoStat aNewGeo( aCustomShapeGeoData.aGeo );
             if ( bMirroredX )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,24 +38,24 @@ import java.io.IOException;
      * designated with a byte value. See @link PocketExcelBiffConstants
      * for a list of the BIFF constants and what they mean.
      *
-     * @return byte The BIFF record value.
+     * @return byte The BIFF record value. 
      */
     public short getBiffType();
-
+    
     /**
-     * Read from the input stream <b>NB</b>The input stream is assumed to be in
+     * Read from the input stream <b>NB</b>The input stream is assumed to be in 
      * Little Endian format. The Biff identifier is expected to be in the stream.
      *
      *  @param input The InputStream to read from.
      *  @return The number of bytes that were read in.
      */
     public int read(InputStream input) throws IOException;
-
+    
     /**
      * Writes the record, including the BIFF record byte to the outputstream
      * @param output The output stream to write to in LittleEndian format.
      */
     public void write(OutputStream output) throws IOException;
-
+    
 }
 

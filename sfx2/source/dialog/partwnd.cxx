@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,13 +152,13 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet(
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet( 
         xFrame, ::com::sun::star::uno::UNO_QUERY );
     try
     {
         const ::rtl::OUString aLayoutManager( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xLMPropSet;
-
+        
         ::com::sun::star::uno::Any a = xPropSet->getPropertyValue( aLayoutManager );
         if ( a >>= xLMPropSet )
         {
@@ -202,7 +202,7 @@ Rectangle impl_Rectangle_Struct2Object( const ::com::sun::star::awt::Rectangle& 
 
 void SfxPartDockWnd_Impl::Resize()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
     Anpassung der Gr"osse der Controls an die neue Windowgr"osse
 */
 

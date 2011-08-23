@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -282,7 +282,7 @@ void VSeriesPlotter::releaseShapes()
 
             ::std::vector< VDataSeries* >::iterator             aSeriesIter = pSeriesList->begin();
             const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-
+            
             //iterate through all series in this x slot
             for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
             {
@@ -546,7 +546,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 xProp->setPropertyValue( C2U( "Transformation" ), ShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
-
+        
         if( xSymbol.is() )
         {
             const awt::Point aOldTextPos( xTextShape->getPosition() );
@@ -554,7 +554,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
             awt::Size aSymbolSize( xSymbol->getSize() );
             awt::Size aTextSize( xTextShape->getSize() );
-
+            
             if( !bMultiLineLabel || nLineCountForSymbolsize <= 0 )
                 nLineCountForSymbolsize = 1;
             sal_Int32 nYDiff = aTextSize.Height/nLineCountForSymbolsize;
@@ -582,7 +582,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 || LABEL_ALIGN_RIGHT_TOP==eAlignment
                 || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment )
             {
-                aNewTextPos.X += nXDiff;
+                aNewTextPos.X += nXDiff;            
             }
             else if(LABEL_ALIGN_TOP==eAlignment
                 || LABEL_ALIGN_BOTTOM==eAlignment
@@ -591,10 +591,10 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 aSymbolPosition.X -= nXDiff/2;
                 aNewTextPos.X += nXDiff/2;
             }
-
+            
             xSymbol->setSize( aSymbolSize );
             xSymbol->setPosition( aSymbolPosition );
-
+            
             //set position
             xTextShape->setPosition( aNewTextPos );
         }
@@ -795,7 +795,7 @@ void VSeriesPlotter::createErrorBar(
         drawing::Position3D aUnscaledLogicPosition(rUnscaledLogicPosition);
         if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION)
             aUnscaledLogicPosition.PositionY = rVDataSeries.getYMeanValue();
-
+        
         bool bCreateNegativeBorder = false;//make a vertical line at the negative end of the error bar
         bool bCreatePositiveBorder = false;//make a vertical line at the positive end of the error bar
         drawing::Position3D aMiddle(aUnscaledLogicPosition);
@@ -1135,7 +1135,7 @@ double VSeriesPlotter::getMinimumX()
     if( m_bCategoryXAxis )
     {
         double fRet = 1.0;//first category (index 0) matches with real number 1.0
-        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
+        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() ) 
             fRet -= 0.5;
         return fRet;
     }
@@ -1150,7 +1150,7 @@ double VSeriesPlotter::getMaximumX()
     {
         //return category count
         double fRet = getPointCount();//first category (index 0) matches with real number 1.0
-        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
+        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() ) 
             fRet += 0.5;
         return fRet;
     }
@@ -1805,12 +1805,12 @@ Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
 
                         //todo: respect direction of axis in future
                     }
-
+                    
                     if(bReverse)
                         aResult.insert( aResult.begin(), aSeriesEntries.begin(), aSeriesEntries.end() );
                     else
                         aResult.insert( aResult.end(), aSeriesEntries.begin(), aSeriesEntries.end() );
-                }
+                }                
             }
         }
 
@@ -1828,7 +1828,7 @@ Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
 
 LegendSymbolStyle VSeriesPlotter::getLegendSymbolStyle()
 {
-    return chart2::LegendSymbolStyle_BOX;
+    return chart2::LegendSymbolStyle_BOX; 
 }
 
 
@@ -1872,7 +1872,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
 
 Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
                   const VDataSeries& rSeries
-                , sal_Int32 nPointIndex
+                , sal_Int32 nPointIndex 
                 , const Reference< drawing::XShapes >& xTarget
                 , const Reference< lang::XMultiServiceFactory >& xShapeFactory )
 {
@@ -1905,7 +1905,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
     if( rSeries.isAttributedDataPoint( nPointIndex ) )
         xPointSet.set( rSeries.getPropertiesOfPoint( nPointIndex ));
 
-    // if a data point has no own color use a color fom the diagram's color scheme
+    // if a data point has no own color use a color fom the diagram's color scheme 
     if( ! rSeries.hasPointOwnColor( nPointIndex ))
     {
         Reference< util::XCloneable > xCloneable( xPointSet,uno::UNO_QUERY );
@@ -1937,7 +1937,7 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
             )
 {
     std::vector< ViewLegendEntry > aResult;
-
+    
     if( ! ( xShapeFactory.is() && xTarget.is() && xContext.is() ) )
         return aResult;
 
@@ -1965,7 +1965,7 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
                 if( xShape.is() )
                 {
                     aEntry.aSymbol = uno::Reference< drawing::XShape >( xSymbolGroup, uno::UNO_QUERY );
-
+                    
                     OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_DATA_POINT, nIdx ) );
                     aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                     OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
@@ -2028,7 +2028,7 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
 
                     // symbol
                     uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory(xShapeFactory).createGroup2D( xTarget ));
-
+                    
                     // create the symbol
                     Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol(
                         xSymbolGroup, chart2::LegendSymbolStyle_DIAGONAL_LINE, xShapeFactory,
@@ -2039,7 +2039,7 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
                     if( xShape.is())
                     {
                         aEntry.aSymbol = uno::Reference< drawing::XShape >( xSymbolGroup, uno::UNO_QUERY );
-
+                        
                         bool bAverageLine = false;//@todo find out wether this is an average line or a regression curve
                         ObjectType eObjectType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;
                         OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( eObjectType, i ) );

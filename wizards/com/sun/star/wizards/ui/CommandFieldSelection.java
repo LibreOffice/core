@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -278,7 +278,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
     }
 
     /** returns the selected entry index in the commandListbox
-     *
+     * 
      * @return
      * @throws com.sun.star.wizards.common.TerminateWizardException
      */

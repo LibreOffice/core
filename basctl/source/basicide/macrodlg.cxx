@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <macrodlg.hrc>
 #include <basidesh.hrc>
 #include <basidesh.hxx>
-#include <baside2.hrc>      // ID's fuer Imagese
+#include <baside2.hrc>		// ID's fuer Imagese
 #include <basobj.hxx>
 #include <baside3.hxx>
 
@@ -64,23 +64,23 @@ using namespace ::com::sun::star::uno;
 DECLARE_LIST( MacroList, SbMethod* )
 
 MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
-        SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
-        aMacroNameTxt(      this,   IDEResId( RID_TXT_MACRONAME ) ),
-        aMacroNameEdit(     this,   IDEResId( RID_ED_MACRONAME ) ),
-        aMacroFromTxT(      this,   IDEResId( RID_TXT_MACROFROM ) ),
-        aMacrosSaveInTxt(   this,   IDEResId( RID_TXT_SAVEMACRO ) ),
-        aBasicBox(          this,   IDEResId( RID_CTRL_LIB ) ),
-        aMacrosInTxt(       this,   IDEResId( RID_TXT_MACROSIN ) ),
-        aMacroBox(          this,   IDEResId( RID_CTRL_MACRO ) ),
-        aRunButton(         this,   IDEResId( RID_PB_RUN ) ),
-        aCloseButton(       this,   IDEResId( RID_PB_CLOSE ) ),
-        aAssignButton(      this,   IDEResId( RID_PB_ASSIGN ) ),
-        aEditButton(        this,   IDEResId( RID_PB_EDIT ) ),
-        aNewDelButton(      this,   IDEResId( RID_PB_DEL ) ),
-        aOrganizeButton(    this,   IDEResId( RID_PB_ORG ) ),
-        aHelpButton(        this,   IDEResId( RID_PB_HELP ) ),
-        aNewLibButton(      this,   IDEResId( RID_PB_NEWLIB ) ),
-        aNewModButton(      this,   IDEResId( RID_PB_NEWMOD ) )
+        SfxModalDialog( 	pParnt,	IDEResId( RID_MACROCHOOSER ) ),
+        aMacroNameTxt(		this,	IDEResId( RID_TXT_MACRONAME ) ),
+        aMacroNameEdit(		this,	IDEResId( RID_ED_MACRONAME ) ),
+        aMacroFromTxT(		this,	IDEResId( RID_TXT_MACROFROM ) ),
+        aMacrosSaveInTxt(	this,	IDEResId( RID_TXT_SAVEMACRO ) ),
+        aBasicBox(			this,	IDEResId( RID_CTRL_LIB ) ),
+        aMacrosInTxt(		this,	IDEResId( RID_TXT_MACROSIN ) ),
+        aMacroBox(			this,	IDEResId( RID_CTRL_MACRO ) ),
+        aRunButton(			this,	IDEResId( RID_PB_RUN ) ),
+        aCloseButton(	    this,	IDEResId( RID_PB_CLOSE ) ),
+        aAssignButton(		this,	IDEResId( RID_PB_ASSIGN ) ),
+        aEditButton(		this,	IDEResId( RID_PB_EDIT ) ),
+        aNewDelButton(		this,	IDEResId( RID_PB_DEL ) ),
+        aOrganizeButton(	this,	IDEResId( RID_PB_ORG ) ),
+        aHelpButton(		this,	IDEResId( RID_PB_HELP ) ),
+        aNewLibButton(	    this,	IDEResId( RID_PB_NEWLIB ) ),
+        aNewModButton(	    this,	IDEResId( RID_PB_NEWMOD ) )
 {
     FreeResource();
 
@@ -107,9 +107,9 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
     // Buttons only for MACROCHOOSER_RECORDING
     aNewLibButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
     aNewModButton.SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );
-    aNewLibButton.Hide();       // default
-    aNewModButton.Hide();       // default
-    aMacrosSaveInTxt.Hide();    // default
+    aNewLibButton.Hide();		// default
+    aNewModButton.Hide();		// default
+    aMacrosSaveInTxt.Hide();	// default
 
     aMacrosInTxt.SetStyle( WB_NOMULTILINE | WB_PATHELLIPSIS );
 
@@ -121,7 +121,7 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
     aMacroBox.SetSelectHdl( LINK( this, MacroChooser, MacroSelectHdl ) );
 
     aBasicBox.SetMode( BROWSEMODE_MODULES );
-    aBasicBox.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT |
+    aBasicBox.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT | 
                              WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                              WB_HSCROLL );
 
@@ -390,13 +390,13 @@ SbMethod* MacroChooser::CreateMacro()
                 aModName = aModName.GetToken( 0, ' ', nIndex );
             }
             pModule = pBasic->FindModule( aModName );
-        }
+        }    
         else if ( pBasic->GetModules()->Count() )
             pModule = (SbModule*)pBasic->GetModules()->Get( 0 );
 
         if ( !pModule )
         {
-            pModule = createModImpl( static_cast<Window*>( this ),
+            pModule = createModImpl( static_cast<Window*>( this ), 
                 aDocument, aBasicBox, aLibName, aModName );
         }
 
@@ -422,7 +422,7 @@ void MacroChooser::SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry )
 
 void MacroChooser::CheckButtons()
 {
-    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();    
     BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     SvLBoxEntry* pMacroEntry = aMacroBox.FirstSelected();
     SbMethod* pMethod = GetMacro();
@@ -554,11 +554,15 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
         // Die Macros sollen in der Reihenfolge angezeigt werden,
         // wie sie im Modul stehen.
         MacroList aMacros;
-        USHORT nMacros = pModule->GetMethods()->Count();
-        USHORT nMethod;
-        for ( nMethod = 0; nMethod  < nMacros; nMethod++ )
+        USHORT nMacroCount = pModule->GetMethods()->Count();
+        USHORT nRealMacroCount = 0;
+        USHORT iMeth;
+        for ( iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
-            SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( nMethod );
+            SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( iMeth );
+            if( pMethod->IsHidden() )
+                continue;
+            ++nRealMacroCount;
             DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
             ULONG nPos = LIST_APPEND;
             // Eventuell weiter vorne ?
@@ -580,8 +584,8 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
         }
 
         aMacroBox.SetUpdateMode( FALSE );
-        for ( nMethod = 0; nMethod < nMacros; nMethod++ )
-            aMacroBox.InsertEntry( aMacros.GetObject( nMethod )->GetName() );
+        for ( iMeth = 0; iMeth < nRealMacroCount; iMeth++ )
+            aMacroBox.InsertEntry( aMacros.GetObject( iMeth )->GetName() );
         aMacroBox.SetUpdateMode( TRUE );
 
         if ( aMacroBox.GetEntryCount() )
@@ -758,8 +762,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 }
                 CheckButtons();
                 UpdateFields();
-                //if ( aMacroBox.GetCurEntry() )    // OV-Bug ?
-                //  aMacroBox.Select( aMacroBox.GetCurEntry() );
+                //if ( aMacroBox.GetCurEntry() )	// OV-Bug ?
+                //	aMacroBox.Select( aMacroBox.GetCurEntry() );
             }
             else
             {
@@ -829,7 +833,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         ScriptDocument aDocument( aDesc.GetDocument() );
         String aLibName( aDesc.GetLibName() );
         String aModName;
-        createModImpl( static_cast<Window*>( this ), aDocument,
+        createModImpl( static_cast<Window*>( this ), aDocument, 
             aBasicBox, aLibName, aModName, true );
     }
     else if ( pButton == &aOrganizeButton )
@@ -841,7 +845,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         USHORT nRet = pDlg->Execute();
         delete pDlg;
 
-        if ( nRet ) // Nicht einfach nur geschlossen
+        if ( nRet )	// Nicht einfach nur geschlossen
         {
             EndDialog( MACRO_EDIT );
             return 0;
@@ -860,8 +864,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
 void MacroChooser::UpdateFields()
 {
-    SvLBoxEntry*    pMacroEntry = aMacroBox.GetCurEntry();
-    String          aEmptyStr;
+    SvLBoxEntry*	pMacroEntry = aMacroBox.GetCurEntry();
+    String			aEmptyStr;
 
     aMacroNameEdit.SetText( aEmptyStr );
     if ( pMacroEntry )

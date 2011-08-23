@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,15 +66,15 @@ public:
     */
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw(css::uno::Exception,css::uno::RuntimeException);
-
+ 
 
     // XSlidePreviewCache
-
+    
     virtual void SAL_CALL setDocumentSlides (
         const css::uno::Reference<css::container::XIndexAccess>& rxSlides,
         const css::uno::Reference<css::uno::XInterface>& rxDocument)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL setVisibleRange (
         sal_Int32 nFirstVisibleSlideIndex,
         sal_Int32 nLastVisibleSlideIndex)

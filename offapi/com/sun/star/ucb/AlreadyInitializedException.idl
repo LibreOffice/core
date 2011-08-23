@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 
 //=============================================================================
 
-module com { module sun { module star { module ucb {
+module com { module sun { module star { module ucb { 
 
 //=============================================================================
 /** This exception is thrown to indicate that an attempt was made to
-    reinitialize an object that can only be initialized once.
-
-    @version    1.0
-    @author     Kai Sommerfeld
+    reinitialize an object that can only be	initialized once.
+    
+    @version	1.0
+    @author 	Kai Sommerfeld
 */
 published exception AlreadyInitializedException: com::sun::star::uno::Exception
 {
@@ -49,6 +49,6 @@ published exception AlreadyInitializedException: com::sun::star::uno::Exception
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

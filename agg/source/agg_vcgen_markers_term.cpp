@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -83,7 +83,7 @@ namespace agg
     //------------------------------------------------------------------------
     unsigned vcgen_markers_term::vertex(double* x, double* y)
     {
-        if(m_curr_id > 2 || m_curr_idx >= m_markers.size())
+        if(m_curr_id > 2 || m_curr_idx >= m_markers.size()) 
         {
             return path_cmd_stop;
         }

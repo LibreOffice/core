@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ void getOwnUpdateInfos(
                 infos(getUpdateInformation(updateInformation, urls, id, anyError));
             if (anyError.hasValue())
                 out_errors.push_back(std::make_pair(i->second.extension, anyError));
-
+            
             for (sal_Int32 j = 0; j < infos.getLength(); ++j)
             {
                 dp_misc::DescriptionInfoset infoset(
@@ -122,7 +122,7 @@ void getOwnUpdateInfos(
                 if (!infoset.hasDescription())
                     continue;
                 boost::optional< OUString > id2(infoset.getIdentifier());
-                if (!id2)
+                if (!id2) 
                     continue;
                 OSL_ASSERT(*id2 == id);
                 if (*id2 == id)
@@ -155,7 +155,7 @@ void getDefaultUpdateInfos(
     Sequence< Reference< xml::dom::XElement > >
         infos(
             getUpdateInformation(
-                updateInformation,
+                updateInformation, 
                 Sequence< OUString >(&sDefaultURL, 1), OUString(), anyError));
     if (anyError.hasValue())
         out_errors.push_back(std::make_pair(Reference<deployment::XPackage>(), anyError));
@@ -231,7 +231,7 @@ UPDATE_SOURCE isUpdateUserExtension(
                 retVal = UPDATE_SOURCE_BUNDLED;
             else if (index == 3)
                 retVal = UPDATE_SOURCE_ONLINE;
-
+            
         }
         else if (bundledVersion.getLength())
         {
@@ -255,7 +255,7 @@ UPDATE_SOURCE isUpdateUserExtension(
                 retVal = UPDATE_SOURCE_ONLINE;
         }
     }
-
+        
     return retVal;
 }
 
@@ -268,7 +268,7 @@ UPDATE_SOURCE isUpdateSharedExtension(
     if (bReadOnlyShared)
         return UPDATE_SOURCE_NONE;
     UPDATE_SOURCE retVal = UPDATE_SOURCE_NONE;
-
+    
     if (sharedVersion.getLength())
     {
         int index = determineHighestVersion(
@@ -309,9 +309,9 @@ getExtensionWithHighestVersion(
         //greatest has a value
         if (! current.is())
             continue;
-
+        
         if (dp_misc::compareVersions(current->getVersion(), greatest->getVersion()) == dp_misc::GREATER)
-            greatest = current;
+            greatest = current;   
     }
     return greatest;
 }
@@ -324,7 +324,7 @@ extension(ext)
 
 
 UpdateInfoMap getOnlineUpdateInfos(
-    Reference<uno::XComponentContext> const &xContext,
+    Reference<uno::XComponentContext> const &xContext, 
     Reference<deployment::XExtensionManager> const & xExtMgr,
     Reference<deployment::XUpdateInformationProvider > const & updateInformation,
     std::vector<Reference<deployment::XPackage > > const * extensionList,
@@ -339,15 +339,15 @@ UpdateInfoMap getOnlineUpdateInfos(
     {
         const uno::Sequence< uno::Sequence< Reference<deployment::XPackage > > > seqAllExt =  xExtMgr->getAllExtensions(
             Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
-
+        
         //fill the UpdateInfoMap. key = extension identifier, value = UpdateInfo
         for (int pos = seqAllExt.getLength(); pos --; )
         {
             uno::Sequence<Reference<deployment::XPackage> > const &   seqExt = seqAllExt[pos];
-
+            
             Reference<deployment::XPackage> extension = getExtensionWithHighestVersion(seqExt);
             OSL_ASSERT(extension.is());
-
+            
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(extension), UpdateInfo(extension)));
@@ -363,7 +363,7 @@ UpdateInfoMap getOnlineUpdateInfos(
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(*i), UpdateInfo(*i)));
-            OSL_ASSERT(insertRet.second == true);
+            OSL_ASSERT(insertRet.second == true);            
         }
     }
 
@@ -391,7 +391,7 @@ OUString getHighestVersion(
     case 3: return onlineVersion;
     default: OSL_ASSERT(0);
     }
-
+        
     return OUString();
 }
 } //namespace dp_misc

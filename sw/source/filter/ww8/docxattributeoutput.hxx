@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ public:
 
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
-
+    
     /// Output text (without markup).
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
@@ -247,7 +247,7 @@ public:
 
     /// Start of the abstract numbering definition instance.
     virtual void StartAbstractNumbering( USHORT nId );
-
+    
     /// End of the abstract numbering definition instance.
     virtual void EndAbstractNumbering();
 
@@ -298,13 +298,13 @@ private:
 
     /// Output graphic fly frames.
     void FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize );
-
+    
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
+    
     void StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
     void TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
@@ -511,7 +511,7 @@ protected:
 
     virtual void RefField( const SwField& rFld, const String& rRef );
     virtual void HiddenField( const SwField& rFld );
-    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd );
+    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd ); 
     virtual void PostitField( const SwField* pFld );
     virtual bool DropdownField( const SwField* pFld );
 
@@ -577,7 +577,7 @@ private:
 
     bool m_bParagraphOpened;
 
-    // Remember that a column break has to be opened at the
+    // Remember that a column break has to be opened at the 
     // beginning of the next paragraph
     DocxColBreakStatus m_nColBreakStatus;
 
@@ -594,13 +594,13 @@ public:
 
     /// Occasionnaly need to use this serializer from the outside
     ::sax_fastparser::FSHelperPtr GetSerializer( ) { return m_pSerializer; }
-
+    
     /// Do we have any footnotes?
     bool HasFootnotes();
 
     /// Do we have any endnotes?
     bool HasEndnotes();
-
+    
     /// Output the content of the footnotes.xml resp. endnotes.xml
     void FootnotesEndnotes( bool bFootnotes );
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
 #endif
-#ifndef _STREAM_HXX
+#ifndef _STREAM_HXX 
 #include <tools/stream.hxx>
 #endif
 
@@ -44,25 +44,25 @@ namespace dbaui
 {
     class ORTFReader : public SvRTFParser , public ODatabaseExport
     {
-        ::std::vector<sal_Int32>    m_vecColor;
+        ::std::vector<sal_Int32>	m_vecColor;
 
-        //  void insertValueIntoColumn();
+        //	void insertValueIntoColumn();
     protected:
-        virtual sal_Bool        CreateTable(int nToken);
-        virtual void            NextToken( int nToken ); // Basisklasse
+        virtual sal_Bool		CreateTable(int nToken);
+        virtual void			NextToken( int nToken ); // Basisklasse
         virtual TypeSelectionPageFactory
                                 getTypeSelectionPageFactory();
 
         ~ORTFReader();
     public:
-        ORTFReader( SvStream& rIn,
+        ORTFReader(	SvStream& rIn,
                     const SharedConnection& _rxConnection,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                     const TColumnVector* rList = 0,
                     const OTypeInfoMap* _pInfoMap = 0);
         // wird f"ur auto. Typ-Erkennung gebraucht
-        ORTFReader( SvStream& rIn,
+        ORTFReader(	SvStream& rIn,
                     sal_Int32 nRows,
                     const TPositions &_rColumnPositions,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
@@ -71,8 +71,8 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap,
                     sal_Bool _bAutoIncrementEnabled);
 
-        virtual SvParserState   CallParser();// Basisklasse
-        virtual void            release();
+        virtual	SvParserState	CallParser();// Basisklasse
+        virtual void			release();
         // birgt nur korrekte Daten, wenn der 2. CTOR benutzt wurde
         // ansonsten wird die SbaColumnList ohne "Anderung zur"uckgegeben
     };

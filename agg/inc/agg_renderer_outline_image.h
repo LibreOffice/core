@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -30,7 +30,7 @@ namespace agg
         typedef typename Source::color_type color_type;
 
         line_image_scale(const Source& src, double height) :
-            m_source(src),
+            m_source(src), 
             m_height(height),
             m_scale(src.height() / height)
         {
@@ -39,8 +39,8 @@ namespace agg
         double width()  const { return m_source.width(); }
         double height() const { return m_height; }
 
-        color_type pixel(int x, int y) const
-        {
+        color_type pixel(int x, int y) const 
+        { 
             double src_y = (y + 0.5) * m_scale - 0.5;
             int h = int(m_source.height()) - 1;
             int y1 = int(floor(src_y));
@@ -90,7 +90,7 @@ namespace agg
 
         // Create
         //--------------------------------------------------------------------
-        template<class Source>
+        template<class Source> 
         line_image_pattern(const Filter& filter, const Source& src) :
             m_filter(&filter),
             m_dilation(filter.dilation() + 1),
@@ -119,8 +119,8 @@ namespace agg
             delete [] m_data;
             m_data = new color_type [(m_width + m_dilation * 2) * (m_height + m_dilation * 2)];
 
-            m_buf.attach(m_data, m_width  + m_dilation * 2,
-                                 m_height + m_dilation * 2,
+            m_buf.attach(m_data, m_width  + m_dilation * 2, 
+                                 m_height + m_dilation * 2, 
                                  m_width  + m_dilation * 2);
             unsigned x, y;
             color_type* d1;
@@ -174,8 +174,8 @@ namespace agg
         //--------------------------------------------------------------------
         void pixel(color_type* p, int x, int y) const
         {
-            m_filter->pixel_high_res(m_buf.rows(),
-                                     p,
+            m_filter->pixel_high_res(m_buf.rows(), 
+                                     p, 
                                      x % m_width_hr + m_dilation_hr,
                                      y + m_offset_y_hr);
         }
@@ -185,7 +185,7 @@ namespace agg
 
     private:
         line_image_pattern(const line_image_pattern<filter_type>&);
-        const line_image_pattern<filter_type>&
+        const line_image_pattern<filter_type>& 
             operator = (const line_image_pattern<filter_type>&);
 
     protected:
@@ -207,32 +207,32 @@ namespace agg
 
 
     //=================================================line_image_pattern_pow2
-    template<class Filter> class line_image_pattern_pow2 :
+    template<class Filter> class line_image_pattern_pow2 : 
     public line_image_pattern<Filter>
     {
     public:
         typedef Filter filter_type;
         typedef typename filter_type::color_type color_type;
         typedef line_image_pattern<Filter> base_type;
-
+    
         //--------------------------------------------------------------------
         line_image_pattern_pow2(const Filter& filter) :
             line_image_pattern<Filter>(filter), m_mask(line_subpixel_mask) {}
 
         //--------------------------------------------------------------------
-        template<class Source>
+        template<class Source> 
         line_image_pattern_pow2(const Filter& filter, const Source& src) :
             line_image_pattern<Filter>(filter), m_mask(line_subpixel_mask)
         {
             create(src);
         }
-
+            
         //--------------------------------------------------------------------
         template<class Source> void create(const Source& src)
         {
             line_image_pattern<Filter>::create(src);
             m_mask = 1;
-            while(m_mask < base_type::m_width)
+            while(m_mask < base_type::m_width) 
             {
                 m_mask <<= 1;
                 m_mask |= 1;
@@ -246,7 +246,7 @@ namespace agg
         void pixel(color_type* p, int x, int y) const
         {
             base_type::m_filter->pixel_high_res(
-                    base_type::m_buf.rows(),
+                    base_type::m_buf.rows(), 
                     p,
                     (x & m_mask) + base_type::m_dilation_hr,
                     y + base_type::m_offset_y_hr);
@@ -254,13 +254,13 @@ namespace agg
     private:
         unsigned m_mask;
     };
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
     //===================================================distance_interpolator4
     class distance_interpolator4
     {
@@ -268,7 +268,7 @@ namespace agg
         //---------------------------------------------------------------------
         distance_interpolator4() {}
         distance_interpolator4(int x1,  int y1, int x2, int y2,
-                               int sx,  int sy, int ex, int ey,
+                               int sx,  int sy, int ex, int ey, 
                                int len, double scale, int x, int y) :
             m_dx(x2 - x1),
             m_dy(y2 - y1),
@@ -277,13 +277,13 @@ namespace agg
             m_dx_end(line_mr(ex) - line_mr(x2)),
             m_dy_end(line_mr(ey) - line_mr(y2)),
 
-            m_dist(int(double(x + line_subpixel_size/2 - x2) * double(m_dy) -
+            m_dist(int(double(x + line_subpixel_size/2 - x2) * double(m_dy) - 
                        double(y + line_subpixel_size/2 - y2) * double(m_dx))),
 
-            m_dist_start((line_mr(x + line_subpixel_size/2) - line_mr(sx)) * m_dy_start -
+            m_dist_start((line_mr(x + line_subpixel_size/2) - line_mr(sx)) * m_dy_start - 
                          (line_mr(y + line_subpixel_size/2) - line_mr(sy)) * m_dx_start),
 
-            m_dist_end((line_mr(x + line_subpixel_size/2) - line_mr(ex)) * m_dy_end -
+            m_dist_end((line_mr(x + line_subpixel_size/2) - line_mr(ex)) * m_dy_end - 
                        (line_mr(y + line_subpixel_size/2) - line_mr(ey)) * m_dx_end),
             m_len(int(len / scale))
         {
@@ -292,8 +292,8 @@ namespace agg
             int dy = int(((y2 - y1) << line_subpixel_shift) / d);
             m_dx_pict   = -dy;
             m_dy_pict   =  dx;
-            m_dist_pict =  ((x + line_subpixel_size/2 - (x1 - dy)) * m_dy_pict -
-                            (y + line_subpixel_size/2 - (y1 + dx)) * m_dx_pict) >>
+            m_dist_pict =  ((x + line_subpixel_size/2 - (x1 - dy)) * m_dy_pict - 
+                            (y + line_subpixel_size/2 - (y1 + dx)) * m_dx_pict) >> 
                            line_subpixel_shift;
 
             m_dx       <<= line_subpixel_shift;
@@ -305,60 +305,60 @@ namespace agg
         }
 
         //---------------------------------------------------------------------
-        void inc_x()
-        {
-            m_dist += m_dy;
-            m_dist_start += m_dy_start;
-            m_dist_pict += m_dy_pict;
-            m_dist_end += m_dy_end;
+        void inc_x() 
+        { 
+            m_dist += m_dy; 
+            m_dist_start += m_dy_start; 
+            m_dist_pict += m_dy_pict; 
+            m_dist_end += m_dy_end; 
         }
 
         //---------------------------------------------------------------------
-        void dec_x()
-        {
-            m_dist -= m_dy;
-            m_dist_start -= m_dy_start;
-            m_dist_pict -= m_dy_pict;
-            m_dist_end -= m_dy_end;
+        void dec_x() 
+        { 
+            m_dist -= m_dy; 
+            m_dist_start -= m_dy_start; 
+            m_dist_pict -= m_dy_pict; 
+            m_dist_end -= m_dy_end; 
         }
 
         //---------------------------------------------------------------------
-        void inc_y()
-        {
-            m_dist -= m_dx;
-            m_dist_start -= m_dx_start;
-            m_dist_pict -= m_dx_pict;
-            m_dist_end -= m_dx_end;
+        void inc_y() 
+        { 
+            m_dist -= m_dx; 
+            m_dist_start -= m_dx_start; 
+            m_dist_pict -= m_dx_pict; 
+            m_dist_end -= m_dx_end; 
         }
 
         //---------------------------------------------------------------------
-        void dec_y()
-        {
-            m_dist += m_dx;
-            m_dist_start += m_dx_start;
-            m_dist_pict += m_dx_pict;
-            m_dist_end += m_dx_end;
+        void dec_y() 
+        { 
+            m_dist += m_dx; 
+            m_dist_start += m_dx_start; 
+            m_dist_pict += m_dx_pict; 
+            m_dist_end += m_dx_end; 
         }
 
         //---------------------------------------------------------------------
         void inc_x(int dy)
         {
-            m_dist       += m_dy;
-            m_dist_start += m_dy_start;
-            m_dist_pict  += m_dy_pict;
+            m_dist       += m_dy; 
+            m_dist_start += m_dy_start; 
+            m_dist_pict  += m_dy_pict; 
             m_dist_end   += m_dy_end;
             if(dy > 0)
             {
-                m_dist       -= m_dx;
-                m_dist_start -= m_dx_start;
-                m_dist_pict  -= m_dx_pict;
+                m_dist       -= m_dx; 
+                m_dist_start -= m_dx_start; 
+                m_dist_pict  -= m_dx_pict; 
                 m_dist_end   -= m_dx_end;
             }
             if(dy < 0)
             {
-                m_dist       += m_dx;
-                m_dist_start += m_dx_start;
-                m_dist_pict  += m_dx_pict;
+                m_dist       += m_dx; 
+                m_dist_start += m_dx_start; 
+                m_dist_pict  += m_dx_pict; 
                 m_dist_end   += m_dx_end;
             }
         }
@@ -366,22 +366,22 @@ namespace agg
         //---------------------------------------------------------------------
         void dec_x(int dy)
         {
-            m_dist       -= m_dy;
-            m_dist_start -= m_dy_start;
-            m_dist_pict  -= m_dy_pict;
+            m_dist       -= m_dy; 
+            m_dist_start -= m_dy_start; 
+            m_dist_pict  -= m_dy_pict; 
             m_dist_end   -= m_dy_end;
             if(dy > 0)
             {
-                m_dist       -= m_dx;
-                m_dist_start -= m_dx_start;
-                m_dist_pict  -= m_dx_pict;
+                m_dist       -= m_dx; 
+                m_dist_start -= m_dx_start; 
+                m_dist_pict  -= m_dx_pict; 
                 m_dist_end   -= m_dx_end;
             }
             if(dy < 0)
             {
-                m_dist       += m_dx;
-                m_dist_start += m_dx_start;
-                m_dist_pict  += m_dx_pict;
+                m_dist       += m_dx; 
+                m_dist_start += m_dx_start; 
+                m_dist_pict  += m_dx_pict; 
                 m_dist_end   += m_dx_end;
             }
         }
@@ -389,22 +389,22 @@ namespace agg
         //---------------------------------------------------------------------
         void inc_y(int dx)
         {
-            m_dist       -= m_dx;
-            m_dist_start -= m_dx_start;
-            m_dist_pict  -= m_dx_pict;
+            m_dist       -= m_dx; 
+            m_dist_start -= m_dx_start; 
+            m_dist_pict  -= m_dx_pict; 
             m_dist_end   -= m_dx_end;
             if(dx > 0)
             {
-                m_dist       += m_dy;
-                m_dist_start += m_dy_start;
-                m_dist_pict  += m_dy_pict;
+                m_dist       += m_dy; 
+                m_dist_start += m_dy_start; 
+                m_dist_pict  += m_dy_pict; 
                 m_dist_end   += m_dy_end;
             }
             if(dx < 0)
             {
-                m_dist       -= m_dy;
-                m_dist_start -= m_dy_start;
-                m_dist_pict  -= m_dy_pict;
+                m_dist       -= m_dy; 
+                m_dist_start -= m_dy_start; 
+                m_dist_pict  -= m_dy_pict; 
                 m_dist_end   -= m_dy_end;
             }
         }
@@ -412,22 +412,22 @@ namespace agg
         //---------------------------------------------------------------------
         void dec_y(int dx)
         {
-            m_dist       += m_dx;
-            m_dist_start += m_dx_start;
-            m_dist_pict  += m_dx_pict;
+            m_dist       += m_dx; 
+            m_dist_start += m_dx_start; 
+            m_dist_pict  += m_dx_pict; 
             m_dist_end   += m_dx_end;
             if(dx > 0)
             {
-                m_dist       += m_dy;
-                m_dist_start += m_dy_start;
-                m_dist_pict  += m_dy_pict;
+                m_dist       += m_dy; 
+                m_dist_start += m_dy_start; 
+                m_dist_pict  += m_dy_pict; 
                 m_dist_end   += m_dy_end;
             }
             if(dx < 0)
             {
-                m_dist       -= m_dy;
-                m_dist_start -= m_dy_start;
-                m_dist_pict  -= m_dy_pict;
+                m_dist       -= m_dy; 
+                m_dist_start -= m_dy_start; 
+                m_dist_pict  -= m_dy_pict; 
                 m_dist_end   -= m_dy_end;
             }
         }
@@ -479,20 +479,20 @@ namespace agg
         typedef typename Renderer::color_type color_type;
 
         //---------------------------------------------------------------------
-        enum
-        {
+        enum 
+        { 
             max_half_width = 64
         };
 
         //---------------------------------------------------------------------
         line_interpolator_image(renderer_type& ren, const line_parameters& lp,
-                                int sx, int sy, int ex, int ey,
+                                int sx, int sy, int ex, int ey, 
                                 int pattern_start,
                                 double scale_x) :
             m_lp(lp),
             m_li(lp.vertical ? line_dbl_hr(lp.x2 - lp.x1) :
                                line_dbl_hr(lp.y2 - lp.y1),
-                 lp.vertical ? abs(lp.y2 - lp.y1) :
+                 lp.vertical ? abs(lp.y2 - lp.y1) : 
                                abs(lp.x2 - lp.x1) + 1),
             m_di(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy, ex, ey, lp.len, scale_x,
                  lp.x1 & ~line_subpixel_mask, lp.y1 & ~line_subpixel_mask),
@@ -508,7 +508,7 @@ namespace agg
             m_start(pattern_start + (m_max_extent + 2) * ren.pattern_width()),
             m_step(0)
         {
-            agg::dda2_line_interpolator li(0, lp.vertical ?
+            agg::dda2_line_interpolator li(0, lp.vertical ? 
                                               (lp.dy << agg::line_subpixel_shift) :
                                               (lp.dx << agg::line_subpixel_shift),
                                            lp.len);
@@ -540,7 +540,7 @@ namespace agg
 
                     m_old_x = m_x;
 
-                    dist1_start = dist2_start = m_di.dist_start();
+                    dist1_start = dist2_start = m_di.dist_start(); 
 
                     int dx = 0;
                     if(dist1_start < 0) ++npix;
@@ -573,7 +573,7 @@ namespace agg
 
                     m_old_y = m_y;
 
-                    dist1_start = dist2_start = m_di.dist_start();
+                    dist1_start = dist2_start = m_di.dist_start(); 
 
                     int dy = 0;
                     if(dist1_start < 0) ++npix;
@@ -645,7 +645,7 @@ namespace agg
                 dist_end   -= m_di.dx_end();
                 p1->clear();
                 if(dist_end > 0 && dist_start <= 0)
-                {
+                {   
                     if(m_lp.inc > 0) dist = -dist;
                     m_ren.pixel(p1, dist_pict, s2 - dist);
                     ++npix;
@@ -666,17 +666,17 @@ namespace agg
                 --p0;
                 p0->clear();
                 if(dist_end > 0 && dist_start <= 0)
-                {
+                {   
                     if(m_lp.inc > 0) dist = -dist;
                     m_ren.pixel(p0, dist_pict, s2 + dist);
                     ++npix;
                 }
                 ++dy;
             }
-            m_ren.blend_color_vspan(m_x,
-                                    m_y - dy + 1,
-                                    unsigned(p1 - p0),
-                                    p0);
+            m_ren.blend_color_vspan(m_x, 
+                                    m_y - dy + 1, 
+                                    unsigned(p1 - p0), 
+                                    p0); 
             return npix && ++m_step < m_count;
         }
 
@@ -731,7 +731,7 @@ namespace agg
                 dist_end   += m_di.dy_end();
                 p1->clear();
                 if(dist_end > 0 && dist_start <= 0)
-                {
+                {   
                     if(m_lp.inc > 0) dist = -dist;
                     m_ren.pixel(p1, dist_pict, s2 + dist);
                     ++npix;
@@ -752,16 +752,16 @@ namespace agg
                 --p0;
                 p0->clear();
                 if(dist_end > 0 && dist_start <= 0)
-                {
+                {   
                     if(m_lp.inc > 0) dist = -dist;
                     m_ren.pixel(p0, dist_pict, s2 - dist);
                     ++npix;
                 }
                 ++dx;
             }
-            m_ren.blend_color_hspan(m_x - dx + 1,
-                                    m_y,
-                                    unsigned(p1 - p0),
+            m_ren.blend_color_hspan(m_x - dx + 1, 
+                                    m_y, 
+                                    unsigned(p1 - p0), 
                                     p0);
             return npix && ++m_step < m_count;
         }
@@ -783,7 +783,7 @@ namespace agg
     protected:
         const line_parameters& m_lp;
         dda2_line_interpolator m_li;
-        distance_interpolator4 m_di;
+        distance_interpolator4 m_di; 
         renderer_type&         m_ren;
         int m_plen;
         int m_x;
@@ -807,7 +807,7 @@ namespace agg
 
 
     //===================================================renderer_outline_image
-    template<class BaseRenderer, class ImagePattern>
+    template<class BaseRenderer, class ImagePattern> 
     class renderer_outline_image
     {
     public:
@@ -865,7 +865,7 @@ namespace agg
         static bool accurate_join_only() { return true; }
 
         //-------------------------------------------------------------------------
-        template<class Cmp>
+        template<class Cmp> 
         void semidot(Cmp, int, int, int, int)
         {
         }
@@ -886,14 +886,14 @@ namespace agg
         }
 
         //-------------------------------------------------------------------------
-        void line3(const line_parameters& lp,
+        void line3(const line_parameters& lp, 
                    int sx, int sy, int ex, int ey)
         {
             fix_degenerate_bisectrix_start(lp, &sx, &sy);
             fix_degenerate_bisectrix_end(lp, &ex, &ey);
-            line_interpolator_image<self_type> li(*this, lp,
-                                                  sx, sy,
-                                                  ex, ey,
+            line_interpolator_image<self_type> li(*this, lp, 
+                                                  sx, sy, 
+                                                  ex, ey, 
                                                   m_start, m_scale_x);
             if(li.vertical())
             {

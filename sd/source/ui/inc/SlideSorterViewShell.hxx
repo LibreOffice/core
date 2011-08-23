@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public:
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
 
     static ::boost::shared_ptr<SlideSorterViewShell> Create(
-        SfxViewFrame* pFrame,
+        SfxViewFrame* pFrame, 
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
         FrameView* pFrameView);
@@ -77,10 +77,10 @@ public:
 
     virtual void GetFocus (void);
     virtual void LoseFocus (void);
-    virtual SdPage* GetActualPage (void);
+    virtual SdPage*	GetActualPage (void);
 
     /// inherited from sd::ViewShell
-    virtual SdPage* getCurrentPage() const;
+    virtual SdPage* getCurrentPage() const; 
 
     void ExecCtrl (SfxRequest& rRequest);
     virtual void GetCtrlState (SfxItemSet &rSet);
@@ -129,15 +129,15 @@ public:
         sal_Int8 nDropAction);
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
-        DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
+        DropTargetHelper& rTargetHelper, 
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
         USHORT nLayer = SDRPAGE_NOTFOUND );
     virtual sal_Int8 ExecuteDrop (
-        const ExecuteDropEvent& rEvt,
+        const ExecuteDropEvent& rEvt, 
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
         USHORT nLayer = SDRPAGE_NOTFOUND);
 
     typedef ::std::vector<SdPage*> PageSelection;
@@ -198,7 +198,7 @@ private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;
 
     SlideSorterViewShell (
-        SfxViewFrame* pFrame,
+        SfxViewFrame* pFrame, 
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
         FrameView* pFrameView);

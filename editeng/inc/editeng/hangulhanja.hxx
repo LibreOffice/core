@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ namespace editeng
     public:
         enum ReplacementAction
         {
-            eExchange,              // simply exchange one text with another
-            eReplacementBracketed,  // keep the original, and put the replacement in brackets after it
-            eOriginalBracketed,     // replace the original text, but put it in brackeds after the replacement
-            eReplacementAbove,      // keep the original, and put the replacement text as ruby text above it
-            eOriginalAbove,         // replace the original text, but put it as ruby text above it
-            eReplacementBelow,      // keep the original, and put the replacement text as ruby text below it
-            eOriginalBelow          // replace the original text, but put it as ruby text below it
+            eExchange,				// simply exchange one text with another
+            eReplacementBracketed,	// keep the original, and put the replacement in brackets after it
+            eOriginalBracketed,		// replace the original text, but put it in brackeds after the replacement
+            eReplacementAbove,		// keep the original, and put the replacement text as ruby text above it
+            eOriginalAbove,			// replace the original text, but put it as ruby text above it
+            eReplacementBelow,		// keep the original, and put the replacement text as ruby text below it
+            eOriginalBelow			// replace the original text, but put it as ruby text below it
         };
 
         enum ConversionType             // does not specify direction...
@@ -79,11 +79,11 @@ namespace editeng
             eConvSimplifiedTraditional  // Chinese simplified / Chinese traditional conversion
         };
 
-        // Note: conversion direction for eConvSimplifiedTraditional is
+        // Note: conversion direction for eConvSimplifiedTraditional is 
         // specified by source language.
         // This one is for Hangul/Hanja where source and target language
         // are the same.
-        enum ConversionDirection
+        enum ConversionDirection    
         {
             eHangulToHanja,
             eHanjaToHangul
@@ -101,12 +101,12 @@ namespace editeng
         };
 
     private:
-        ::std::auto_ptr< HangulHanjaConversion_Impl >   m_pImpl;
+        ::std::auto_ptr< HangulHanjaConversion_Impl >	m_pImpl;
 
         // used to set initial values of m_pImpl object from saved ones
-        static sal_Bool             m_bUseSavedValues;  // defines if the followng two values should be used for initialization
-        static sal_Bool             m_bTryBothDirectionsSave;
-        static ConversionDirection  m_ePrimaryConversionDirectionSave;
+        static sal_Bool				m_bUseSavedValues;	// defines if the followng two values should be used for initialization
+        static sal_Bool				m_bTryBothDirectionsSave;
+        static ConversionDirection	m_ePrimaryConversionDirectionSave;
 
         // Forbidden and not implemented.
         HangulHanjaConversion (const HangulHanjaConversion &);
@@ -145,7 +145,7 @@ namespace editeng
         // initial conversion direction for the next incarnation.
         // (A hack used to transport a state information from
         // one incarnation to the next. Used in Writers text conversion...)
-        static void     SetUseSavedConversionDirectionState( sal_Bool bVal );
+        static void		SetUseSavedConversionDirectionState( sal_Bool bVal );
         static sal_Bool IsUseSavedConversionDirectionState();
 
     protected:
@@ -161,8 +161,8 @@ namespace editeng
                 too look for even if the 'source' language usually is only 'simplified'
                 or 'traditional'.)
         */
-        virtual void    GetNextPortion(
-                ::rtl::OUString& /* [out] */ _rNextPortion,
+        virtual void    GetNextPortion( 
+                ::rtl::OUString& /* [out] */ _rNextPortion, 
                 LanguageType& /* [out] */ _rLangOfPortion,
                 sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText );
 
@@ -194,7 +194,7 @@ namespace editeng
 
             @see GetNextPortion
         */
-        virtual void    HandleNewUnit( const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd );
+        virtual void	HandleNewUnit( const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd );
 
         /** replaces a text unit within a text portion with a new text
 
@@ -215,7 +215,7 @@ namespace editeng
             the target language (as given by 'GetTargetLanguage') for example
             when converting simplified Chinese from/to traditional Chinese
             the language attribute of the new text has to be changed as well,
-            **and** the font is to be set to the default (document) font for
+            **and** the font is to be set to the default (document) font for 
             that language.</p>
 
             @param _nUnitStart
@@ -238,10 +238,10 @@ namespace editeng
                 An sequence matching the indices (characters) of _rReplaceWith
                 to the indices of the characters in the original text they are
                 replacing.
-                This is necessary since some portions of the text may get
+                This is necessary since some portions of the text may get 
                 converted in portions of different length than the original.
-                The sequence will be empty if all conversions in the text are
-                of equal length. That is if always the character at index i in
+                The sequence will be empty if all conversions in the text are 
+                of equal length. That is if always the character at index i in 
                 _rOffsets is replacing the character at index i in the original
                 text for all valid index values of i.
 
@@ -253,10 +253,10 @@ namespace editeng
                 is specified here. If the language is to be left unchanged this
                 is the 0 pointer.
         */
-        virtual void    ReplaceUnit(
+        virtual void	ReplaceUnit(
                             const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd,
                             const ::rtl::OUString& _rOrigText,
-                            const ::rtl::OUString& _rReplaceWith,
+                            const ::rtl::OUString& _rReplaceWith, 
                             const ::com::sun::star::uno::Sequence< sal_Int32 > &_rOffsets,
                             ReplacementAction _eAction,
                             LanguageType *pNewUnitLanguage
@@ -296,7 +296,7 @@ namespace editeng
     }
 
 //.............................................................................
-}   // namespace svx
+}	// namespace svx
 //.............................................................................
 
 #endif // SVX_HANGUL_HANJA_CONVERSION_HXX

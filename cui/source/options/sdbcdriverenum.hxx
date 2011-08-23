@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,20 +55,20 @@ namespace offapp
     class ODriverEnumeration
     {
     private:
-        ODriverEnumerationImpl* m_pImpl;
+        ODriverEnumerationImpl*	m_pImpl;
 
     public:
         ODriverEnumeration() throw();
         ~ODriverEnumeration() throw();
         typedef ::std::vector< ::rtl::OUString >::const_iterator const_iterator;
 
-        const_iterator  begin() const throw();
-        const_iterator  end() const throw();
+        const_iterator	begin() const throw();
+        const_iterator	end() const throw();
         sal_Int32 size() const throw();
     };
 
 //........................................................................
-}   // namespace offapp
+}	// namespace offapp
 //........................................................................
 
 #endif // _OFFMGR_SDBCDRIVERENUMERATION_HXX_

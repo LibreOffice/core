@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -210,7 +210,7 @@ namespace dbaccess
             ::rtl::OUStringBuffer aReset( aNewNodeName );
             sNewNodeName = aNewNodeName.makeStringAndClear();
             sal_Int32 i=2;
-            while ( m_aConfigurationRoot.hasByName( sNewNodeName ) )
+            while ( m_aConfigurationRoot.hasByName( sNewNodeName ) ) 
             {
                 aNewNodeName = aReset;
                 aNewNodeName.appendAscii( " " );
@@ -254,7 +254,7 @@ namespace dbaccess
         ::utl::OConfigurationNode aNodeForName = impl_getNodeForName_nothrow( _Name );
         return aNodeForName.isValid();
     }
-
+    
     //------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL DatabaseRegistrations::getRegistrationNames() throw (RuntimeException)
     {
@@ -273,7 +273,7 @@ namespace dbaccess
         {
             ::utl::OConfigurationNode aRegistrationNode = m_aConfigurationRoot.openNode( *pName );
             OSL_VERIFY( aRegistrationNode.getNodeValue( getNameNodeName() ) >>= *pDisplayName );
-
+            
         }
 
         return aDisplayNames;
@@ -292,7 +292,7 @@ namespace dbaccess
 
         return sLocation;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL DatabaseRegistrations::registerDatabaseLocation( const ::rtl::OUString& _Name, const ::rtl::OUString& _Location ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
     {
@@ -311,7 +311,7 @@ namespace dbaccess
         aGuard.clear();
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::registeredDatabaseLocation, aEvent );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL DatabaseRegistrations::revokeDatabaseLocation( const ::rtl::OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
     {
@@ -337,7 +337,7 @@ namespace dbaccess
         aGuard.clear();
         m_aRegistrationListeners.notifyEach( &XDatabaseRegistrationsListener::revokedDatabaseLocation, aEvent );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL DatabaseRegistrations::changeDatabaseLocation( const ::rtl::OUString& _Name, const ::rtl::OUString& _NewLocation ) throw (IllegalArgumentException, NoSuchElementException, IllegalAccessException, RuntimeException)
     {

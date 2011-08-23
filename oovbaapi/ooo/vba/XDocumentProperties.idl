@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <ooo/vba/XCollection.idl>
 #endif
 
-module ooo { module vba {
+module ooo { module vba { 
 interface XDocumentProperty;
 interface XDocumentProperties
 {
@@ -57,7 +57,7 @@ interface XDocumentProperties
      * @param LinkSource Ignored if LinkToContent is False. The source of the linked property. The container application determines
      * what types of source linking you can use.
      */
-    XDocumentProperty Add([in] string Name, [in] boolean LinkToContent, [in] /* MsoDocProperties */ byte Type, [in] any Value,
+    XDocumentProperty Add([in] string Name, [in] boolean LinkToContent, [in] /* MsoDocProperties */ byte Type, [in] any Value, 
         [in] /*optional*/ any LinkSource)
         raises (com::sun::star::script::BasicErrorException);
 };

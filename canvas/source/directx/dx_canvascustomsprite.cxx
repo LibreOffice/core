@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,11 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& 	rSpriteSize,
                                             const SpriteCanvasRef&                          rRefDevice,
-                                            const IDXRenderModuleSharedPtr&                 rRenderModule,
-                                            const ::canvas::ISurfaceProxyManagerSharedPtr&  rSurfaceProxy,
-                                            bool                                            bShowSpriteBounds ) :
+                                            const IDXRenderModuleSharedPtr&					rRenderModule,
+                                            const ::canvas::ISurfaceProxyManagerSharedPtr&	rSurfaceProxy,
+                                            bool											bShowSpriteBounds ) :
         mpSpriteCanvas( rRefDevice ),
         mpSurface()
     {

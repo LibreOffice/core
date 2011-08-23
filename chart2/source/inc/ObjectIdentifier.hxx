@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS ObjectIdentifier
     //where DragParameterString is any string you like to transport information to your special drag service
     //                            only semicolon, colon, equal sign and slash are not allowed characters
     //                            also the keywors used in the ObjectIdentifiers are not allowed
-
+    
     //where ObjectID: Parent-Particle:Particle //e.g. Series=2:Point=22
     //where Particle: Type=ParticleID //e.g. Point=22
     //where Type: getStringForType( ObjectType eType ) or other string
@@ -177,7 +177,7 @@ public:
         , const rtl::OUString& rParentPartical //e.g. "Series=SeriesID" or "Grid=GridId"
         , const rtl::OUString& rDragMethodServiceName = rtl::OUString()
         , const rtl::OUString& rDragParameterString = rtl::OUString()
-        );
+        ); 
 
     static bool isCID( const rtl::OUString& rName );
     static rtl::OUString getDragMethodServiceName( const rtl::OUString& rClassifiedIdentifier );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ BOOL Process::Start()
     {
         bWasGPF = FALSE;
 #ifdef WNT
-//      sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
+//		sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
         sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_NOGPFAULTERRORBOX);
         try
         {
@@ -174,7 +174,7 @@ BOOL Process::Start()
                             ( NAMESPACE_VOS(OProcess)::TOption_SearchPath
                             /*| NAMESPACE_VOS(OProcess)::TOption_Detached*/
                             /*| NAMESPACE_VOS(OProcess)::TOption_Wait*/ ),
-                            *pArgumentList,
+                            *pArgumentList, 
                             *pEnvList ) == NAMESPACE_VOS(OProcess)::E_None;
             }
             else
@@ -187,7 +187,7 @@ BOOL Process::Start()
             }
 #ifdef WNT
         }
-        catch( ... )
+        catch( ... ) 
         {
             bWasGPF = TRUE;
             // TODO: Output debug message !!

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -327,7 +327,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     if(    !pName || pName->EqualsIgnoreCaseAscii( "_Toc", 0, 4 )
         || pName->EqualsIgnoreCaseAscii( "_Hlt", 0, 4 ) )
         return 0;
-#endif
+#endif 
 
     //JP 16.11.98: ToUpper darf auf keinen Fall gemacht werden, weil der
     //Bookmark- name ein Hyperlink-Ziel sein kann!
@@ -788,7 +788,7 @@ FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
     return msMarkType;
 }
 
-void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
+void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName) 
 {
     msBookmarkName=bookmarkName;
 }
@@ -908,7 +908,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         &SwWW8ImplReader::Read_F_Hyperlink,         // 88
         0,                                          // 89
         0,                                          // 90
-        0,                                          // 91
+        &SwWW8ImplReader::Read_F_HTMLControl,       // 91
         0,                                          // 92
         0,                                          // 93
         0,                                          // 94

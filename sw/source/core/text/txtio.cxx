@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@
 // #define AMA_LAYOUT
 #ifdef AMA_LAYOUT
 #include <stdio.h>
-#include <stdlib.h>         // getenv()
+#include <stdlib.h> 		// getenv()
 #include <flowfrm.hxx>
 #include <pagefrm.hxx>
 #include <svx/svdobj.hxx>
@@ -514,7 +514,7 @@ const char *GetLangName( const MSHORT /*nLang*/ )
 SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     rOs << " {";
-    rOs <<  "L:" << nLineLength;
+    rOs <<	"L:" << nLineLength;
     rOs << " H:" << Height();
     rOs << " W:" << PrtWidth();
     rOs << " A:" << nAscent;

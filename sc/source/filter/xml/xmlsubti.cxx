@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ using ::std::auto_ptr;
 using namespace com::sun::star;
 
 ScMyTableData::ScMyTableData(sal_Int32 nSheet, sal_Int32 nCol, sal_Int32 nRow)
-    :   nColsPerCol(nDefaultColCount, 1),
+    : 	nColsPerCol(nDefaultColCount, 1),
         nRealCols(nDefaultColCount + 1, 0),
         nRowsPerRow(nDefaultRowCount, 1),
         nRealRows(nDefaultRowCount + 1, 0),
@@ -456,7 +456,7 @@ void ScMyTables::InsertColumn()
 
             //insert Cell
             sheet::CellInsertMode aCellInsertMode(sheet::CellInsertMode_RIGHT);
-            uno::Reference <sheet::XCellRangeMovement>  xCellRangeMovement (xCurrentSheet, uno::UNO_QUERY);
+            uno::Reference <sheet::XCellRangeMovement>	xCellRangeMovement (xCurrentSheet, uno::UNO_QUERY);
             xCellRangeMovement->insertCells(aTempCellAddress, aCellInsertMode);
 
             //merge
@@ -484,7 +484,7 @@ void ScMyTables::NewColumn(sal_Bool bIsCovered)
             {
                 sal_Int32 FirstColsSpanned(nSpannedCols / nColCount);
                 sal_Int32 LastColSpanned(FirstColsSpanned
-                    + (nSpannedCols % nColCount));
+                    + (nSpannedCols	% nColCount));
                 for (sal_Int32 i = 0; i < nColCount - 1; ++i)
                 {
                     aTableVec[nTableCount - 1]->SetColsPerCol(i, FirstColsSpanned);
@@ -528,7 +528,7 @@ void ScMyTables::AddColumn(sal_Bool bIsCovered)
     else
     {
         NewColumn(bIsCovered);
-    //  if (!bIsCovered)
+    //	if (!bIsCovered)
             aTableVec[nTableCount - 1]->SetRealCols(aTableVec[nTableCount - 1]->GetColumn() + 1,
                 aTableVec[nTableCount - 1]->GetRealCols(aTableVec[nTableCount - 1]->GetColumn())
                 + aTableVec[nTableCount - 1]->GetColsPerCol(aTableVec[nTableCount - 1]->GetColumn()));
@@ -678,7 +678,7 @@ void ScMyTables::DeleteTable()
             rImport.GetDocument()->RenameTab( static_cast<SCTAB>(nCurrentSheet),
                 sCurrentSheetName, sal_False, sal_True);
 
-/*          rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Could not create a table with the name "));
+/*			rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Could not create a table with the name "));
             sErrorMessage += sCurrentSheetName;
             sErrorMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(". The new name is "));
             sErrorMessage += sCurrentName;

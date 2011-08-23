@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <vcl/graphite_features.hxx>
 #endif
 
-#include <rtl/ustring.hxx>      // used only for string=>hashvalue
+#include <rtl/ustring.hxx>		// used only for string=>hashvalue
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 
@@ -228,9 +228,9 @@ ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
     if( nFontId <= 0 )
         return NULL;
 
-    // the FontList's key mpFontData member is reinterpreted as font id
+    // the FontList's key mpFontData member is reinterpreted as font id 
     ImplFontSelectData aFontSelData = rFontSelData;
-    aFontSelData.mpFontData = reinterpret_cast<ImplFontData*>( nFontId );
+    aFontSelData.mpFontData = reinterpret_cast<ImplFontData*>( nFontId ); 
     FontList::iterator it = maFontList.find( aFontSelData );
     if( it != maFontList.end() )
     {

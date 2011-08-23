@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #include "AccessibilityOptTest.hxx"
 #include "configitems/accessibilityoptions_const.hxx"
 
@@ -60,14 +60,14 @@ void AccessibilityOptTest::impl_checkGetAutoDetectSystemHC()
     sal_Bool bAutoDetectSystemHC;
     sal_Bool bAutoDetectSystemHC_;
 
-    bAutoDetectSystemHC  = aAccessibilityOpt.GetAutoDetectSystemHC();
-    xSet->setPropertyValue( s_sAutoDetectSystemHC, css::uno::makeAny(bAutoDetectSystemHC ? sal_False:sal_True) );
+    bAutoDetectSystemHC  = aAccessibilityOpt.GetAutoDetectSystemHC();	
+    xSet->setPropertyValue( s_sAutoDetectSystemHC, css::uno::makeAny(bAutoDetectSystemHC ? sal_False:sal_True) );	
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
     bAutoDetectSystemHC_ = aAccessibilityOpt.GetAutoDetectSystemHC();
 
     if ( bAutoDetectSystemHC_ == bAutoDetectSystemHC )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetAutoDetectSystemHC() error!")), 0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetAutoDetectSystemHC() error!")),	0);
 }
 
 //=============================================================================
@@ -79,13 +79,13 @@ void AccessibilityOptTest::impl_checkGetIsForPagePreviews()
     sal_Bool bIsForPagePreviews_;
 
     bIsForPagePreviews  = aAccessibilityOpt.GetIsForPagePreviews();
-    xSet->setPropertyValue( s_sIsForPagePreviews, css::uno::makeAny(bIsForPagePreviews ? sal_False:sal_True) );
+    xSet->setPropertyValue( s_sIsForPagePreviews, css::uno::makeAny(bIsForPagePreviews ? sal_False:sal_True) );	
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
     bIsForPagePreviews_ = aAccessibilityOpt.GetIsForPagePreviews();
 
     if ( bIsForPagePreviews_ == bIsForPagePreviews )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsForPagePreviews() error!")),  0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsForPagePreviews() error!")),	0);
 }
 
 //=============================================================================
@@ -97,13 +97,13 @@ void AccessibilityOptTest::impl_checkGetIsHelpTipsDisappear()
     sal_Bool bIsHelpTipsDisappear_;
 
     bIsHelpTipsDisappear  = aAccessibilityOpt.GetIsHelpTipsDisappear();
-    xSet->setPropertyValue( s_sIsHelpTipsDisappear, css::uno::makeAny(bIsHelpTipsDisappear ? sal_False:sal_True) );
+    xSet->setPropertyValue( s_sIsHelpTipsDisappear, css::uno::makeAny(bIsHelpTipsDisappear ? sal_False:sal_True) );	
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
     bIsHelpTipsDisappear_ = aAccessibilityOpt.GetIsHelpTipsDisappear();
 
     if ( bIsHelpTipsDisappear_ == bIsHelpTipsDisappear )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsHelpTipsDisappear() error!")),    0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsHelpTipsDisappear() error!")),	0);
 }
 
 //=============================================================================
@@ -115,13 +115,13 @@ void AccessibilityOptTest::impl_checkGetIsAllowAnimatedGraphics()
     sal_Bool bIsAllowAnimatedGraphics_;
 
     bIsAllowAnimatedGraphics  = aAccessibilityOpt.GetIsAllowAnimatedGraphics();
-    xSet->setPropertyValue( s_sIsAllowAnimatedGraphics, css::uno::makeAny(bIsAllowAnimatedGraphics ? sal_False:sal_True) );
+    xSet->setPropertyValue( s_sIsAllowAnimatedGraphics, css::uno::makeAny(bIsAllowAnimatedGraphics ? sal_False:sal_True) );	
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
     bIsAllowAnimatedGraphics_ = aAccessibilityOpt.GetIsAllowAnimatedGraphics();
 
     if ( bIsAllowAnimatedGraphics_ == bIsAllowAnimatedGraphics )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsAllowAnimatedGraphics() error!")),    0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsAllowAnimatedGraphics() error!")),	0);
 }
 
 //=============================================================================
@@ -133,13 +133,13 @@ void AccessibilityOptTest::impl_checkGetIsAllowAnimatedText()
     sal_Bool bIsAllowAnimatedText_;
 
     bIsAllowAnimatedText  = aAccessibilityOpt.GetIsAllowAnimatedText();
-    xSet->setPropertyValue( s_sIsAllowAnimatedText, css::uno::makeAny(bIsAllowAnimatedText ? sal_False:sal_True) );
+    xSet->setPropertyValue( s_sIsAllowAnimatedText, css::uno::makeAny(bIsAllowAnimatedText ? sal_False:sal_True) );	
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
     bIsAllowAnimatedText_ = aAccessibilityOpt.GetIsAllowAnimatedText();
 
     if ( bIsAllowAnimatedText_ == bIsAllowAnimatedText )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsAllowAnimatedText() error!")),    0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsAllowAnimatedText() error!")),	0);
 }
 
 //=============================================================================
@@ -151,13 +151,13 @@ void AccessibilityOptTest::impl_checkGetIsAutomaticFontColor()
     sal_Bool bIsAutomaticFontColor_;
 
     bIsAutomaticFontColor  = aAccessibilityOpt.GetIsAutomaticFontColor();
-    xSet->setPropertyValue( s_sIsAutomaticFontColor, css::uno::makeAny(bIsAutomaticFontColor ? sal_False:sal_True) );
+    xSet->setPropertyValue( s_sIsAutomaticFontColor, css::uno::makeAny(bIsAutomaticFontColor ? sal_False:sal_True) );	
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
     bIsAutomaticFontColor_ = aAccessibilityOpt.GetIsAutomaticFontColor();
 
     if ( bIsAutomaticFontColor_ == bIsAutomaticFontColor )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsAutomaticFontColor() error!")),   0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsAutomaticFontColor() error!")),	0);
 }
 
 //=============================================================================
@@ -169,13 +169,13 @@ void AccessibilityOptTest::impl_checkGetIsSystemFont()
     sal_Bool bIsSystemFont_;
 
     bIsSystemFont  = aAccessibilityOpt.GetIsSystemFont();
-    xSet->setPropertyValue( s_sIsSystemFont, css::uno::makeAny(bIsSystemFont ? sal_False:sal_True) );
+    xSet->setPropertyValue( s_sIsSystemFont, css::uno::makeAny(bIsSystemFont ? sal_False:sal_True) );	
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
     bIsSystemFont_ = aAccessibilityOpt.GetIsSystemFont();
 
     if ( bIsSystemFont_ == bIsSystemFont )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsSystemFont() error!")),   0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetIsSystemFont() error!")),	0);
 }
 
 //=============================================================================
@@ -193,7 +193,7 @@ void AccessibilityOptTest::impl_checkGetHelpTipSeconds()
 
     if ( nHelpTipSeconds_ == nHelpTipSeconds )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetHelpTipSeconds() error!")), 0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetHelpTipSeconds() error!")),	0);
 }
 
 //=============================================================================
@@ -205,13 +205,13 @@ void AccessibilityOptTest::impl_checkIsSelectionInReadonly()
     sal_Bool bIsSelectionInReadonly_;
 
     bIsSelectionInReadonly  = aAccessibilityOpt.IsSelectionInReadonly();
-    xSet->setPropertyValue( s_sIsSelectionInReadonly, css::uno::makeAny(bIsSelectionInReadonly ? sal_False:sal_True) );
+    xSet->setPropertyValue( s_sIsSelectionInReadonly, css::uno::makeAny(bIsSelectionInReadonly ? sal_False:sal_True) );	
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
     bIsSelectionInReadonly_ = aAccessibilityOpt.IsSelectionInReadonly();
 
     if ( bIsSelectionInReadonly_ == bIsSelectionInReadonly )//old config item will not throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSelectionInReadonly() error!")), 0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSelectionInReadonly() error!")),	0);
 }
 
 //=============================================================================
@@ -228,7 +228,7 @@ void AccessibilityOptTest::impl_checkSetAutoDetectSystemHC()
 
     if ( bAutoDetectSystemHC_ == bAutoDetectSystemHC )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetAutoDetectSystemHC() error!")), 0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetAutoDetectSystemHC() error!")),	0);
 }
 
 //=============================================================================
@@ -245,7 +245,7 @@ void AccessibilityOptTest::impl_checkSetIsForPagePreviews()
 
     if ( bIsForPagePreviews_ == bIsForPagePreviews )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsForPagePreviews() error!")),  0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsForPagePreviews() error!")),	0);
 }
 
 //=============================================================================
@@ -262,7 +262,7 @@ void AccessibilityOptTest::impl_checkSetIsHelpTipsDisappear()
 
     if ( bIsHelpTipsDisappear_ == bIsHelpTipsDisappear )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsHelpTipsDisappear() error!")),    0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsHelpTipsDisappear() error!")),	0);
 }
 
 //=============================================================================
@@ -279,7 +279,7 @@ void AccessibilityOptTest::impl_checkSetIsAllowAnimatedGraphics()
 
     if ( bIsAllowAnimatedGraphics_ == bIsAllowAnimatedGraphics )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsAllowAnimatedGraphics() error!")),    0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsAllowAnimatedGraphics() error!")),	0);
 }
 
 //=============================================================================
@@ -296,7 +296,7 @@ void AccessibilityOptTest::impl_checkSetIsAllowAnimatedText()
 
     if ( bIsAllowAnimatedText_ == bIsAllowAnimatedText )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsAllowAnimatedText() error!")),    0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsAllowAnimatedText() error!")),	0);
 }
 
 //=============================================================================
@@ -313,7 +313,7 @@ void AccessibilityOptTest::impl_checkSetIsAutomaticFontColor()
 
     if ( bIsAutomaticFontColor_ == bIsAutomaticFontColor )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsAutomaticFontColor() error!")),   0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsAutomaticFontColor() error!")),	0);
 }
 
 //=============================================================================
@@ -330,7 +330,7 @@ void AccessibilityOptTest::impl_checkSetIsSystemFont()
 
     if ( bIsSystemFont_ == bIsSystemFont )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsSystemFont() error!")),   0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetIsSystemFont() error!")),	0);
 }
 
 //=============================================================================
@@ -347,7 +347,7 @@ void AccessibilityOptTest::impl_checkSetHelpTipSeconds()
 
     if ( nHelpTipSeconds_ == nHelpTipSeconds )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetHelpTipSeconds() error!")), 0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetHelpTipSeconds() error!")),	0);
 }
 
 //=============================================================================
@@ -364,12 +364,12 @@ void AccessibilityOptTest::impl_checkSetSelectionInReadonly()
 
     if ( bIsSelectionInReadonly_ == bIsSelectionInReadonly )//old config item will throw error
         throw css::uno::RuntimeException(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetSelectionInReadonly() error!")),    0);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetSelectionInReadonly() error!")),	0);
 }
 
 //=============================================================================
 void AccessibilityOptTest::impl_checkAccessibilityOptions()
-{
+{	
     impl_checkGetAutoDetectSystemHC();
     impl_checkGetIsForPagePreviews();
     impl_checkGetIsHelpTipsDisappear();

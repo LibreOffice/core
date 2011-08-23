@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace sdr
     namespace contact
     {
         ObjectContact::ObjectContact()
-        :   maViewObjectContactVector(),
+        :	maViewObjectContactVector(),
             maPrimitiveAnimator(),
             mpEventHandler(0),
             mpViewObjectContactRedirector(0),
@@ -102,12 +102,12 @@ namespace sdr
         {
             maViewObjectContactVector.push_back(&rVOContact);
         }
-
+        
         // A ViewObjectContact was deleted and shall be forgotten.
         void ObjectContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
         {
             std::vector< ViewObjectContact* >::iterator aFindResult = std::find(maViewObjectContactVector.begin(), maViewObjectContactVector.end(), &rVOContact);
-
+            
             if(aFindResult != maViewObjectContactVector.end())
             {
                 maViewObjectContactVector.erase(aFindResult);
@@ -133,7 +133,7 @@ namespace sdr
             // default has no active VC
             return 0;
         }
-
+        
         // Invalidate given rectangle at the window/output which is represented by
         // this ObjectContact.
         void ObjectContact::InvalidatePartOfView(const basegfx::B2DRange& /*rRange*/) const
@@ -288,7 +288,7 @@ namespace sdr
         {
             return 0;
         }
-
+        
         // access to OutputDevice. Default implementation returns NULL
         OutputDevice* ObjectContact::TryToGetOutputDevice() const
         {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,16 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_UnoControlGridModel_idl__
-#define __com_sun_star_awt_grid_UnoControlGridModel_idl__
+#ifndef __com_sun_star_awt_grid_UnoControlGridModel_idl__ 
+#define __com_sun_star_awt_grid_UnoControlGridModel_idl__ 
 
-#include <com/sun/star/awt/grid/XGridColumnModel.idl>
+#include <com/sun/star/awt/grid/XGridColumnModel.idl> 
 
-#include <com/sun/star/awt/grid/XGridDataModel.idl>
+#include <com/sun/star/awt/grid/XGridDataModel.idl> 
 
-#include <com/sun/star/awt/grid/ScrollBarMode.idl>
+#include <com/sun/star/awt/grid/ScrollBarMode.idl> 
 
-#include <com/sun/star/awt/UnoControlModel.idl>
+#include <com/sun/star/awt/UnoControlModel.idl> 
 
 #include <com/sun/star/view/SelectionType.idl>
 
@@ -43,50 +43,50 @@
 
 #include <com/sun/star/util/Color.idl>
 
-//=============================================================================
-
-module com {  module sun {  module star {  module awt { module grid {
-
-//=============================================================================
-
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module awt { module grid { 
+ 
+//============================================================================= 
+ 
 /** specifies the standard model of a <type>UnoControlGridModel</type>.
 
     @since OOo 3.3.0
  */
 service UnoControlGridModel
-{
+{ 
     /** specifies the standard model of an <type scope="com::sun::star::awt">UnoControl</type>. */
-    service com::sun::star::awt::UnoControlModel;
-
+    service com::sun::star::awt::UnoControlModel; 
+ 
     /** Specifies whether the grid control should display a special header column.
         <p>The default value is <FALSE/></p>
     */
     [property] boolean ShowRowHeader;
-
+    
     /** Specifies whether the grid control should display a title row.
         <p>The default value is <TRUE/></p>
     */
     [property] boolean ShowColumnHeader;
-
-    /** Specifies the <type>XGridColumnModel</type> that is providing the column structure.
+    
+    /**	Specifies the <type>XGridColumnModel</type> that is providing the column structure.
 
         <p>You can implement your own instance of <type>XGridColumnModel</type> or use
         the <type>DefaultGridColumnModel</type>.
     */
     [property] XGridColumnModel ColumnModel;
-
-    /** Specifies the <type>XGridDataModel</type> that is providing the hierarchical data.
+    
+    /**	Specifies the <type>XGridDataModel</type> that is providing the hierarchical data.
 
         <p>You can implement your own instance of <type>XGridDataModel</type> or use
         the <type>DefaultGridDataModel</type>.
     */
     [property] XGridDataModel DataModel;
-
+    
     /** Specifies the vertical scrollbar mode.
         <p>The default value is <FALSE/></p>
     */
     [property] boolean HScroll;
-
+    
     /** Specifies the horizontal scrollbar mode.
         <p>The default value is <FALSE/></p>
     */
@@ -94,14 +94,14 @@ service UnoControlGridModel
 
     /** Specifies that the control can be reached with the TAB key.
      */
-    [property] boolean Tabstop;
+    [property] boolean Tabstop; 
 
     /** Specifies the selection mode that is enabled for this grid control.
         <p>The default value is <member scope="com::sun::star::view">SelectionType::SINGLE</member></p>
     */
     [property] ::com::sun::star::view::SelectionType SelectionModel;
 
-    /** Specifies the background color of rows. If color for even rows is set, then specifies
+    /** Specifies the background color of rows. If color for even rows is set, then specifies 
         the color of odd rows. Default value is white.
     */
     [property] ::com::sun::star::util::Color RowBackgroundColor;
@@ -121,7 +121,7 @@ service UnoControlGridModel
     /** Specifies the line color. Default value is white.
     */
     [property] ::com::sun::star::util::Color LineColor;
-
+    
     /** specifies the vertical alignment of the content in the control.
 
         <pre>
@@ -129,9 +129,9 @@ service UnoControlGridModel
             MIDDLE
             BOTTOM
         </pre>
-     */
+     */	
     [property] com::sun::star::style::VerticalAlignment VerticalAlign;
-
+    
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
@@ -154,10 +154,10 @@ service UnoControlGridModel
      */
     [property] string HelpURL;
 
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; }; 
+ 
+#endif 

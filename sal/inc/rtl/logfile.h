@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 
-/** This function allows to log arbitrary messages even in a product-environment.
+/**	This function allows to log arbitrary messages even in a product-environment.
 
     The logfile is created on first access and closed, when the sal-library gets unloaded.
     The file is line buffered. A log file is not created if no log messages are
@@ -93,9 +93,9 @@ sal_Bool SAL_CALL rtl_logfile_hasLogFile( void );
              rtl_logfile_trace( frmt, arg1 , arg2 , arg3 ); \
              rtl_logfile_trace( "\n" )
 
-//  Now the macros with project and author arguments.  The strings
-//  are formatted in a way, so that the log file can be parsed by
-//  post processing scripts.
+//	Now the macros with project and author arguments.  The strings
+//	are formatted in a way, so that the log file can be parsed by
+//	post processing scripts.
 #define RTL_LOGFILE_TRACE_AUTHOR( project, author, string )  \
              rtl_logfile_longTrace( "| %s (%s) : %s\n", \
                                 project,\

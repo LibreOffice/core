@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ LocaleDataWrapper::LocaleDataWrapper(
         }
     }
     else
-    {   // try to get an instance somehow
+    {	// try to get an instance somehow
         DBG_ERRORFILE( "LocaleDataWrapper: no service manager, trying own" );
         try
         {
@@ -466,7 +466,7 @@ void LocaleDataWrapper::invalidateData()
 
         // In checks, exclude known problems because no MS-LCID defined.
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW
-//              && !aDebugLocale.EqualsAscii( "br_AE" ) // ?!? Breton in United Arabic Emirates
+//				&& !aDebugLocale.EqualsAscii( "br_AE" )	// ?!? Breton in United Arabic Emirates
             )
         {
             String aMsg( RTL_CONSTASCII_USTRINGPARAM(
@@ -491,10 +491,10 @@ void LocaleDataWrapper::invalidateData()
                 // In checks, exclude known problems because no MS-LCID defined
                 // and default for Language found.
                 if ( areChecksEnabled()
-                        && !aDebugLocale.EqualsAscii( "ar_SD" ) // Sudan/ar
-                        && !aDebugLocale.EqualsAscii( "en_CB" ) // Carribean is not a country
-//                      && !aDebugLocale.EqualsAscii( "en_BG" ) // ?!? Bulgaria/en
-//                      && !aDebugLocale.EqualsAscii( "es_BR" ) // ?!? Brazil/es
+                        && !aDebugLocale.EqualsAscii( "ar_SD" )	// Sudan/ar
+                        && !aDebugLocale.EqualsAscii( "en_CB" )	// Carribean is not a country
+//						&& !aDebugLocale.EqualsAscii( "en_BG" )	// ?!? Bulgaria/en
+//						&& !aDebugLocale.EqualsAscii( "es_BR" )	// ?!? Brazil/es
                     )
                 {
                     String aMsg( RTL_CONSTASCII_USTRINGPARAM(
@@ -533,7 +533,7 @@ const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
         return aLocaleItem[0];
     }
     if ( aLocaleItem[nItem].Len() == 0 )
-    {   // no cached content
+    {	// no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getOneLocaleItemImpl( nItem );
     }
@@ -629,7 +629,7 @@ const String& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
         nWord = reservedWords::FALSE_WORD;
     }
     if ( aReservedWord[nWord].Len() == 0 )
-    {   // no cached content
+    {	// no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getOneReservedWordImpl( nWord );
     }
@@ -675,7 +675,7 @@ const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar > LocaleDataWrapper:
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!xDefaultCalendar)
-    {   // no cached content
+    {	// no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getDefaultCalendarImpl();
     }
@@ -859,7 +859,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
                 break;
                 default:
                     if ( !nInSection && nSym == STRING_NOTFOUND && rCode.Equals( aCurrSymbol, (xub_StrLen)(p-pStr), aCurrSymbol.Len() ) )
-                    {   // currency symbol not surrounded by [$...]
+                    {	// currency symbol not surrounded by [$...]
                         nSym = (xub_StrLen)(p - pStr);
                         if ( nBlank == STRING_NOTFOUND && pStr < p && *(p-1) == ' ' )
                             nBlank = (xub_StrLen)(p - pStr - 1);
@@ -881,7 +881,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::CURRENCY );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
-    {   // bad luck
+    {	// bad luck
         if (areChecksEnabled())
         {
             String aMsg( RTL_CONSTASCII_USTRINGPARAM(
@@ -940,16 +940,16 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     if ( nBlank == STRING_NOTFOUND )
     {
         if ( nSym < nNum )
-            nCurrPositiveFormat = 0;    // $1
+            nCurrPositiveFormat = 0;	// $1
         else
-            nCurrPositiveFormat = 1;    // 1$
+            nCurrPositiveFormat = 1;	// 1$
     }
     else
     {
         if ( nSym < nNum )
-            nCurrPositiveFormat = 2;    // $ 1
+            nCurrPositiveFormat = 2;	// $ 1
         else
-            nCurrPositiveFormat = 3;    // 1 $
+            nCurrPositiveFormat = 3;	// 1 $
     }
 
     // negative format
@@ -973,24 +973,24 @@ void LocaleDataWrapper::getCurrFormatsImpl()
             if ( nSym < nNum )
             {
                 if ( nPar < nSym )
-                    nCurrNegativeFormat = 0;    // ($1)
+                    nCurrNegativeFormat = 0;	// ($1)
                 else if ( nSign < nSym )
-                    nCurrNegativeFormat = 1;    // -$1
+                    nCurrNegativeFormat = 1;	// -$1
                 else if ( nNum < nSign )
-                    nCurrNegativeFormat = 3;    // $1-
+                    nCurrNegativeFormat = 3;	// $1-
                 else
-                    nCurrNegativeFormat = 2;    // $-1
+                    nCurrNegativeFormat = 2;	// $-1
             }
             else
             {
                 if ( nPar < nNum )
-                    nCurrNegativeFormat = 4;    // (1$)
+                    nCurrNegativeFormat = 4;	// (1$)
                 else if ( nSign < nNum )
-                    nCurrNegativeFormat = 5;    // -1$
+                    nCurrNegativeFormat = 5;	// -1$
                 else if ( nSym < nSign )
-                    nCurrNegativeFormat = 7;    // 1$-
+                    nCurrNegativeFormat = 7;	// 1$-
                 else
-                    nCurrNegativeFormat = 6;    // 1-$
+                    nCurrNegativeFormat = 6;	// 1-$
             }
         }
         else
@@ -998,24 +998,24 @@ void LocaleDataWrapper::getCurrFormatsImpl()
             if ( nSym < nNum )
             {
                 if ( nPar < nSym )
-                    nCurrNegativeFormat = 14;   // ($ 1)
+                    nCurrNegativeFormat = 14;	// ($ 1)
                 else if ( nSign < nSym )
-                    nCurrNegativeFormat = 9;    // -$ 1
+                    nCurrNegativeFormat = 9;	// -$ 1
                 else if ( nNum < nSign )
-                    nCurrNegativeFormat = 12;   // $ 1-
+                    nCurrNegativeFormat = 12;	// $ 1-
                 else
-                    nCurrNegativeFormat = 11;   // $ -1
+                    nCurrNegativeFormat = 11;	// $ -1
             }
             else
             {
                 if ( nPar < nNum )
-                    nCurrNegativeFormat = 15;   // (1 $)
+                    nCurrNegativeFormat = 15;	// (1 $)
                 else if ( nSign < nNum )
-                    nCurrNegativeFormat = 8;    // -1 $
+                    nCurrNegativeFormat = 8;	// -1 $
                 else if ( nSym < nSign )
-                    nCurrNegativeFormat = 10;   // 1 $-
+                    nCurrNegativeFormat = 10;	// 1 $-
                 else
-                    nCurrNegativeFormat = 13;   // 1- $
+                    nCurrNegativeFormat = 13;	// 1- $
             }
         }
     }
@@ -1060,9 +1060,9 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
     xub_StrLen nMonth = rCode.Search( 'M' );
     xub_StrLen nYear = rCode.Search( 'Y' );
     if ( nDay == STRING_NOTFOUND || nMonth == STRING_NOTFOUND || nYear == STRING_NOTFOUND )
-    {   // This algorithm assumes that all three parts (DMY) are present
+    {	// This algorithm assumes that all three parts (DMY) are present
         if ( nMonth == STRING_NOTFOUND )
-        {   // only Finnish has something else than 'M' for month
+        {	// only Finnish has something else than 'M' for month
             nMonth = rCode.Search( 'K' );
             if ( nMonth != STRING_NOTFOUND )
             {
@@ -1071,30 +1071,30 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
             }
         }
         else if ( nDay == STRING_NOTFOUND )
-        {   // We have a month 'M' if we reach this branch.
+        {	// We have a month 'M' if we reach this branch.
             // Possible languages containing 'M' but no 'D':
             // German, French, Italian
-            nDay = rCode.Search( 'T' );         // German
+            nDay = rCode.Search( 'T' );			// German
             if ( nDay != STRING_NOTFOUND )
                 nYear = rCode.Search( 'J' );
             else
             {
-                nYear = rCode.Search( 'A' );    // French, Italian
+                nYear = rCode.Search( 'A' );	// French, Italian
                 if ( nYear != STRING_NOTFOUND )
                 {
-                    nDay = rCode.Search( 'J' ); // French
+                    nDay = rCode.Search( 'J' );	// French
                     if ( nDay == STRING_NOTFOUND )
-                        nDay = rCode.Search( 'G' ); // Italian
+                        nDay = rCode.Search( 'G' );	// Italian
                 }
             }
         }
         else
-        {   // We have a month 'M' and a day 'D'.
+        {	// We have a month 'M' and a day 'D'.
             // Possible languages containing 'D' and 'M' but not 'Y':
             // Spanish, Dutch
-            nYear = rCode.Search( 'A' );        // Spanish
+            nYear = rCode.Search( 'A' );		// Spanish
             if ( nYear == STRING_NOTFOUND )
-                nYear = rCode.Search( 'J' );    // Dutch
+                nYear = rCode.Search( 'J' );	// Dutch
         }
         if ( nDay == STRING_NOTFOUND || nMonth == STRING_NOTFOUND || nYear == STRING_NOTFOUND )
         {
@@ -1114,7 +1114,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
     }
     // compare with <= because each position may equal rCode.Len()
     if ( nDay <= nMonth && nMonth <= nYear )
-        return DMY;     // also if every position equals rCode.Len()
+        return DMY;		// also if every position equals rCode.Len()
     else if ( nMonth <= nDay && nDay <= nYear )
         return MDY;
     else if ( nYear <= nMonth && nMonth <= nDay )
@@ -1139,7 +1139,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
         = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::DATE );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
-    {   // bad luck
+    {	// bad luck
         if (areChecksEnabled())
         {
             String aMsg( RTL_CONSTASCII_USTRINGPARAM(
@@ -1263,7 +1263,7 @@ const ::com::sun::star::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGr
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (!aGrouping.getLength() || aGrouping[0] == 0)
-    {   // no cached content
+    {	// no cached content
         aGuard.changeReadToWrite();
         ((LocaleDataWrapper*)this)->getDigitGroupingImpl();
     }
@@ -1400,9 +1400,9 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
 {
     sal_Unicode aNumBuf[64];
     sal_Unicode* pNumBuf;
-    USHORT  nNumLen;
-    USHORT  i = 0;
-    BOOL    bNeg;
+    USHORT	nNumLen;
+    USHORT	i = 0;
+    BOOL	bNeg;
 
     // negative number
     if ( nNumber < 0 )
@@ -1714,7 +1714,7 @@ String LocaleDataWrapper::getNum( sal_Int64 nNumber, USHORT nDecimals,
         BOOL bUseThousandSep, BOOL bTrailingZeros ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    sal_Unicode aBuf[128];      // big enough for 64-bit long and crazy grouping
+    sal_Unicode aBuf[128];		// big enough for 64-bit long and crazy grouping
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
     sal_Unicode* const pBuffer = (nGuess < 118 ? aBuf :

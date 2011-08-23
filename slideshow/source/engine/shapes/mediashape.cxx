@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,9 +70,9 @@ namespace slideshow
                 Externally-determined shape priority (used e.g. for
                 paint ordering). This number _must be_ unique!
              */
-            MediaShape( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::drawing::XShape >& xShape,
-                        double                                      nPrio,
+            MediaShape( const ::com::sun::star::uno::Reference< 
+                               ::com::sun::star::drawing::XShape >&	xShape,
+                        double										nPrio,
                         const SlideShowContext&                     rContext ); // throw ShapeLoadFailedException;
 
         private:
@@ -80,15 +80,15 @@ namespace slideshow
             // View layer methods
             //------------------------------------------------------------------
 
-            virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
-                                       bool                         bRedrawLayer );
-            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer );
+            virtual void addViewLayer( const ViewLayerSharedPtr& 	rNewLayer,
+                                       bool							bRedrawLayer );
+            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer );			
             virtual bool clearAllViewLayers();
 
 
             // ExternalShapeBase methods
             //------------------------------------------------------------------
-
+            
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const;
             virtual void implViewChanged( const UnoViewSharedPtr& rView );
             virtual void implViewsChanged();
@@ -106,7 +106,7 @@ namespace slideshow
 
 
         MediaShape::MediaShape( const uno::Reference< drawing::XShape >& xShape,
-                                  double                                     nPrio,
+                                  double									 nPrio,
                                 const SlideShowContext&                  rContext ) :
             ExternalShapeBase( xShape, nPrio, rContext ),
             maViewMediaShapes(),
@@ -114,7 +114,7 @@ namespace slideshow
         {
         }
 
-        // ---------------------------------------------------------------------
+        // ---------------------------------------------------------------------		
 
         void MediaShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
@@ -137,8 +137,8 @@ namespace slideshow
             // resize all ViewShapes
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
-                             ::boost::bind(
-                                 &ViewMediaShape::resize,
+                             ::boost::bind( 
+                                 &ViewMediaShape::resize, 
                                  _1,
                                  ::boost::cref( getBounds())) );
         }
@@ -146,30 +146,30 @@ namespace slideshow
         // ---------------------------------------------------------------------
 
         void MediaShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
-                                       bool                      bRedrawLayer )
+                                       bool						 bRedrawLayer )
         {
-            maViewMediaShapes.push_back(
-                ViewMediaShapeSharedPtr( new ViewMediaShape( rNewLayer,
+            maViewMediaShapes.push_back( 
+                ViewMediaShapeSharedPtr( new ViewMediaShape( rNewLayer, 
                                                              getXShape(),
                                                              mxComponentContext )));
-
-            // push new size to view shape
+                
+            // push new size to view shape  
             maViewMediaShapes.back()->resize( getBounds() );
-
-            // render the Shape on the newly added ViewLayer
+            
+            // render the Shape on the newly added ViewLayer    
             if( bRedrawLayer )
                 maViewMediaShapes.back()->render( getBounds() );
         }
 
         // ---------------------------------------------------------------------
-
+        
         bool MediaShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
         {
             const ViewMediaShapeVector::iterator aEnd( maViewMediaShapes.end() );
 
-            OSL_ENSURE( ::std::count_if(maViewMediaShapes.begin(),
-                                        aEnd,
-                                        ::boost::bind<bool>(
+            OSL_ENSURE( ::std::count_if(maViewMediaShapes.begin(), 
+                                        aEnd, 
+                                        ::boost::bind<bool>( 
                                             ::std::equal_to< ViewLayerSharedPtr >(),
                                             ::boost::bind( &ViewMediaShape::getViewLayer, _1 ),
                                             ::boost::cref( rLayer ) ) ) < 2,
@@ -177,9 +177,9 @@ namespace slideshow
 
             ViewMediaShapeVector::iterator aIter;
 
-            if( (aIter=::std::remove_if( maViewMediaShapes.begin(),
-                                         aEnd,
-                                         ::boost::bind<bool>(
+            if( (aIter=::std::remove_if( maViewMediaShapes.begin(), 
+                                         aEnd, 
+                                         ::boost::bind<bool>( 
                                              ::std::equal_to< ViewLayerSharedPtr >(),
                                              ::boost::bind( &ViewMediaShape::getViewLayer,
                                                             _1 ),
@@ -196,7 +196,7 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-
+        
         bool MediaShape::clearAllViewLayers()
         {
             maViewMediaShapes.clear();
@@ -210,13 +210,13 @@ namespace slideshow
             // redraw all view shapes, by calling their update() method
             if( ::std::count_if( maViewMediaShapes.begin(),
                                  maViewMediaShapes.end(),
-                                 ::boost::bind<bool>(
-                                     ::boost::mem_fn( &ViewMediaShape::render ),
+                                 ::boost::bind<bool>( 
+                                     ::boost::mem_fn( &ViewMediaShape::render ), 
                                      _1,
-                                     ::boost::cref( rCurrBounds ) ) )
+                                     ::boost::cref( rCurrBounds ) ) ) 
                 != static_cast<ViewMediaShapeVector::difference_type>(maViewMediaShapes.size()) )
             {
-                // at least one of the ViewShape::update() calls did return
+                // at least one of the ViewShape::update() calls did return 
                 // false - update failed on at least one ViewLayer
                 return false;
             }
@@ -225,7 +225,7 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-
+    
         bool MediaShape::implStartIntrinsicAnimation()
         {
             ::std::for_each( maViewMediaShapes.begin(),
@@ -236,9 +236,9 @@ namespace slideshow
 
             return true;
         }
-
+        
         // ---------------------------------------------------------------------
-
+        
         bool MediaShape::implEndIntrinsicAnimation()
         {
             ::std::for_each( maViewMediaShapes.begin(),

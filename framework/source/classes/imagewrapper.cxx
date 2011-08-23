@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
 
 
 ImageWrapper::ImageWrapper( const Image& aImage ) : ThreadHelpBase( &Application::GetSolarMutex() )
-                                                    ,   m_aImage( aImage )
+                                                    ,	m_aImage( aImage )
 {
 }
 
@@ -69,17 +69,17 @@ Sequence< sal_Int8 > ImageWrapper::GetUnoTunnelId()
 // XBitmap
 com::sun::star::awt::Size SAL_CALL ImageWrapper::getSize() throw ( RuntimeException )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    vos::OGuard	aGuard( Application::GetSolarMutex() );
 
-    BitmapEx    aBitmapEx( m_aImage.GetBitmapEx() );
-    Size        aBitmapSize( aBitmapEx.GetSizePixel() );
+    BitmapEx	aBitmapEx( m_aImage.GetBitmapEx() );
+    Size		aBitmapSize( aBitmapEx.GetSizePixel() );
 
     return com::sun::star::awt::Size( aBitmapSize.Width(), aBitmapSize.Height() );
 }
 
 Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    vos::OGuard	aGuard( Application::GetSolarMutex() );
 
     SvMemoryStream aMem;
     aMem << m_aImage.GetBitmapEx().GetBitmap();
@@ -88,8 +88,8 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException )
 
 Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB() throw ( RuntimeException )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
-    BitmapEx    aBmpEx( m_aImage.GetBitmapEx() );
+    vos::OGuard	aGuard( Application::GetSolarMutex() );
+    BitmapEx 	aBmpEx( m_aImage.GetBitmapEx() );
 
     if ( aBmpEx.IsAlpha() )
     {

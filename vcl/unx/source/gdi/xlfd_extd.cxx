@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,12 +79,12 @@ sal_IntPtr ImplX11FontData::GetFontId() const
 ExtendedXlfd::EncodingInfo&
 ExtendedXlfd::EncodingInfo::operator= ( const Xlfd *pXlfd )
 {
-    mcSpacing     = pXlfd->mcSpacing;
+    mcSpacing	  = pXlfd->mcSpacing;
     mnResolutionX = pXlfd->mnResolutionX;
     mnResolutionY = pXlfd->mnResolutionY;
     mnAddstyle    = pXlfd->mnAddstyle;
     mnCharset     = pXlfd->mnCharset;
-    mnEncoding    = pXlfd->GetEncoding();
+    mnEncoding	  = pXlfd->GetEncoding();
 
     return *this;
 }
@@ -273,9 +273,9 @@ ExtendedXlfd::ToString( ByteString &rString,
         unsigned short /*nPixelSize*/, rtl_TextEncoding /*nEncoding*/ ) const
 {
     AppendAttribute( mpFactory->RetrieveFoundry(mnFoundry),   rString );
-    AppendAttribute( mpFactory->RetrieveFamily(mnFamily),     rString );
-    AppendAttribute( mpFactory->RetrieveWeight(mnWeight),     rString );
-    AppendAttribute( mpFactory->RetrieveSlant(mnSlant),       rString );
+    AppendAttribute( mpFactory->RetrieveFamily(mnFamily), 	  rString );
+    AppendAttribute( mpFactory->RetrieveWeight(mnWeight), 	  rString );
+    AppendAttribute( mpFactory->RetrieveSlant(mnSlant), 	  rString );
     AppendAttribute( mpFactory->RetrieveSetwidth(mnSetwidth), rString );
 }
 
@@ -284,9 +284,9 @@ ExtendedXlfd::ToString( ByteString &rString,
         unsigned short /*nPixelSize*/, char* /*pMatricsString*/, rtl_TextEncoding /*nEncoding*/ ) const
 {
     AppendAttribute( mpFactory->RetrieveFoundry(mnFoundry),   rString );
-    AppendAttribute( mpFactory->RetrieveFamily(mnFamily),     rString );
-    AppendAttribute( mpFactory->RetrieveWeight(mnWeight),     rString );
-    AppendAttribute( mpFactory->RetrieveSlant(mnSlant),       rString );
+    AppendAttribute( mpFactory->RetrieveFamily(mnFamily), 	  rString );
+    AppendAttribute( mpFactory->RetrieveWeight(mnWeight), 	  rString );
+    AppendAttribute( mpFactory->RetrieveSlant(mnSlant), 	  rString );
     AppendAttribute( mpFactory->RetrieveSetwidth(mnSetwidth), rString );
 }
 
@@ -854,7 +854,7 @@ VirtualXlfd::ToString( ByteString &rString, unsigned short nPixelSize,
     AppendAttribute( mpFactory->RetrieveFoundry(rExtInfo.mnFoundry),   rString );
     AppendAttribute( mpFactory->RetrieveFamily(rExtInfo.mnFamily),     rString );
     AppendAttribute( mpFactory->RetrieveWeight(rExtInfo.mnWeight),     rString );
-    AppendAttribute( mpFactory->RetrieveSlant(rExtInfo.mnSlant),       rString );
+    AppendAttribute( mpFactory->RetrieveSlant(rExtInfo.mnSlant), 	   rString );
     AppendAttribute( mpFactory->RetrieveSetwidth(rExtInfo.mnSetwidth), rString );
 
     EncodingInfo& rInfo = mpEncodingInfo[ nIdx ];
@@ -882,7 +882,7 @@ VirtualXlfd::ToString( ByteString &rString, unsigned short nPixelSize,
     AppendAttribute( mpFactory->RetrieveFoundry(rExtInfo.mnFoundry),   rString );
     AppendAttribute( mpFactory->RetrieveFamily(rExtInfo.mnFamily),     rString );
     AppendAttribute( mpFactory->RetrieveWeight(rExtInfo.mnWeight),     rString );
-    AppendAttribute( mpFactory->RetrieveSlant(rExtInfo.mnSlant),       rString );
+    AppendAttribute( mpFactory->RetrieveSlant(rExtInfo.mnSlant), 	   rString );
     AppendAttribute( mpFactory->RetrieveSetwidth(rExtInfo.mnSetwidth), rString );
 
     EncodingInfo& rInfo = mpEncodingInfo[ nIdx ];
@@ -913,7 +913,7 @@ ImplFontData* VirtualXlfd::GetImplFontData() const
     pFontData->meWidthType  = WIDTH_NORMAL;
     pFontData->mePitch      = PITCH_VARIABLE;
 
-    pFontData->mbSymbolFlag = false;
+    pFontData->mbSymbolFlag	= false;
     pFontData->mbOrientation= false;
     pFontData->mbDevice     = true;
     pFontData->mnQuality    = 100;

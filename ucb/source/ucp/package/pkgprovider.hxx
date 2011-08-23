@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace package_ucp {
 // create instances of the provider.
 #define PACKAGE_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.PackageContentProvider"
-#define PACKAGE_CONTENT_PROVIDER_SERVICE_NAME_LENGTH    39
+#define PACKAGE_CONTENT_PROVIDER_SERVICE_NAME_LENGTH	39
 
 // UCB Content Type.
 #define PACKAGE_FOLDER_CONTENT_TYPE \

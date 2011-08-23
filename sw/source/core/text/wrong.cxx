@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 /*************************************************************************
  * SwWrongList::SwWrongList()
  *************************************************************************/
-SwWrongList::SwWrongList( WrongListType eType ) :
+SwWrongList::SwWrongList( WrongListType eType ) : 
     meType       (eType),
     nBeginInvalid(STRING_LEN),  // everything correct... (the invalid area starts beyond the string)
     nEndInvalid  (STRING_LEN)
@@ -132,7 +132,7 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
     if( nEnd == rChk )
     {
         ++nPos;
-        if( nPos == Count() )
+        if( nPos == Count()	)
             return sal_False;
         else
         {
@@ -258,7 +258,7 @@ void SwWrongList::_Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
 }
 
 void SwWrongList::SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd )
-{
+{ 
     nBeginInvalid = nBegin;
     nEndInvalid = nEnd;
 }
@@ -402,7 +402,7 @@ void SwWrongList::Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
 {
     if (STRING_LEN == GetBeginInv())
         SetInvalid( nBegin, nEnd );
-    else
+    else 
         _Invalidate( nBegin, nEnd );
 }
 

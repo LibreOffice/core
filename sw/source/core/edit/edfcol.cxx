@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 #include <hintids.hxx>
 #include <editeng/brkitem.hxx>
 #include <editsh.hxx>
-#include <doc.hxx>      // fuer SwTxtFmtColls
-#include <edimp.hxx>    // fuer MACROS
+#include <doc.hxx>		// fuer SwTxtFmtColls
+#include <edimp.hxx>	// fuer MACROS
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <fmtpdsc.hxx>
@@ -123,9 +123,9 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, BOOL bReset)
     if( pSet )
     {
         // JP 05.10.98: falls eines der Attribute Break/PageDesc/NumRule(auto)
-        //      im ItemSet steht, so entferne die VORM setzen an der Collection.
-        //      Ansonst wird zu viel gemacht oder falsche gemacht (NumRules!)
-        //      Bug 57568
+        //		im ItemSet steht, so entferne die VORM setzen an der Collection.
+        //		Ansonst wird zu viel gemacht oder falsche gemacht (NumRules!)
+        //		Bug 57568
 
         // AutoNumRules NICHT in die Vorlagen uebernehmen
         const SfxPoolItem* pItem;

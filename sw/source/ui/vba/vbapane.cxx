@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ SwVbaPane::~SwVbaPane()
 uno::Any SAL_CALL
 SwVbaPane::View() throw ( css::uno::RuntimeException )
 {
-    return uno::makeAny( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, mxModel ) ) );
+    return uno::makeAny( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, mxModel ) ) );    
 }
 
 void SAL_CALL
@@ -55,14 +55,14 @@ SwVbaPane::Close( ) throw ( css::uno::RuntimeException )
     dispatchRequests( mxModel,url );
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaPane::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaPane") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaPane::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

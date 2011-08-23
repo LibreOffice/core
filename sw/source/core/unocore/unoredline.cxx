@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -211,17 +211,17 @@ uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException)
  ---------------------------------------------------------------------------*/
 sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException)
 {
-    return sal_True;    // we always have a content index
+    return sal_True; 	// we always have a content index
 }
 /* -----------------------------19.12.00 11:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXRedlinePortion::SwXRedlinePortion(   const SwRedline* pRed,
+SwXRedlinePortion::SwXRedlinePortion(	const SwRedline* pRed,
                         const SwUnoCrsr* pPortionCrsr,
                         uno::Reference< text::XText >  xParent, BOOL bStart) :
     SwXTextPortion(pPortionCrsr, xParent, bStart ? PORTION_REDLINE_START : PORTION_REDLINE_END),
-//  SwXText(pPortionCrsr->GetDoc(), CURSOR_REDLINE),
-//  SwXRedlineText(pPortionCrsr->GetDoc(), *pRed->GetContentIdx()),
+//	SwXText(pPortionCrsr->GetDoc(), CURSOR_REDLINE),
+//	SwXRedlineText(pPortionCrsr->GetDoc(), *pRed->GetContentIdx()),
     pRedline(pRed)
 {
     SetCollapsed(!pRedline->HasMark());
@@ -240,8 +240,8 @@ static util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
     util::DateTime aRetDT;
     aRetDT.Year = rDT.GetYear();
     aRetDT.Month= rDT.GetMonth();
-    aRetDT.Day      = rDT.GetDay();
-    aRetDT.Hours    = rDT.GetHour();
+    aRetDT.Day  	= rDT.GetDay();
+    aRetDT.Hours	= rDT.GetHour();
     aRetDT.Minutes = rDT.GetMin();
     aRetDT.Seconds = rDT.GetSec();
     aRetDT.HundredthSeconds = rDT.Get100Sec();
@@ -490,9 +490,9 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME)))
     {
         DBG_ERROR("currently not available");
-//      util::DateTime aDT;
-//      if(aValue >>= aDT)
-//              pRedline->SetTimeStamp(lcl_DateTimeFromUno(aDT));
+//		util::DateTime aDT;
+//		if(aValue >>= aDT)
+//				pRedline->SetTimeStamp(lcl_DateTimeFromUno(aDT));
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT)))
     {
@@ -505,12 +505,12 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
         OUString sTmp; aValue >>= sTmp;
         if(!sTmp.getLength())
             throw lang::IllegalArgumentException();
-//      pRedline->SetType(lcl_OUStringToRedlineType(sTmp));
+//		pRedline->SetType(lcl_OUStringToRedlineType(sTmp));
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))
     {
         DBG_ERROR("currently not available");
-/*      SwRedlineData* pNext = pRedline->GetRedlineData().Next();
+/*		SwRedlineData* pNext = pRedline->GetRedlineData().Next();
         uno::Sequence<beans::PropertyValue> aValues;
         if(!(aValue =>> aValues) || !pNext)
             throw lang::IllegalArgumentException();
@@ -539,7 +539,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
                 pNext->SetType(lcl_OUStringToRedlineType(sTmp);
             }
         }
-*/  }
+*/	}
     else
     {
         throw lang::IllegalArgumentException();
@@ -708,7 +708,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
     if(!pDoc)
         throw uno::RuntimeException();
 
-    uno::Reference< text::XTextCursor >     xRet;
+    uno::Reference< text::XTextCursor >  	xRet;
     SwNodeIndex* pNodeIndex = pRedline->GetContentIdx();
     if(pNodeIndex)
     {

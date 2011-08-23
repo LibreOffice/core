@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,15 +60,15 @@ PageObjectViewContact::~PageObjectViewContact (void)
 
 
 
-ViewObjectContact&
+ViewObjectContact& 
     PageObjectViewContact::CreateObjectSpecificViewObjectContact(
         ObjectContact& rObjectContact)
 {
     OSL_ASSERT(mpDescriptor.get()!=NULL);
-
-    ViewObjectContact* pResult
+    
+    ViewObjectContact* pResult 
         = mpDescriptor->GetPageObjectFactory().CreateViewObjectContact (
-            rObjectContact,
+            rObjectContact, 
             *this);
     DBG_ASSERT (pResult!=NULL,
         "PageObjectViewContact::CreateObjectSpecificViewObjectContact() was not able to create object.");

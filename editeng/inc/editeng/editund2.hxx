@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ class EDITENG_DLLPUBLIC EditUndoManager : public SfxUndoManager
     using SfxUndoManager::Redo;
 
 private:
-    ImpEditEngine*  pImpEE;
+    ImpEditEngine*	pImpEE;
 public:
                     EditUndoManager( ImpEditEngine* pImpEE );
 
-    virtual BOOL    Undo( USHORT nCount=1 );
-    virtual BOOL    Redo( USHORT nCount=1 );
+    virtual BOOL	Undo( USHORT nCount=1 );
+    virtual BOOL	Redo( USHORT nCount=1 );
 };
 
 // -----------------------------------------------------------------------
@@ -53,24 +53,24 @@ public:
 class EDITENG_DLLPUBLIC EditUndo : public SfxUndoAction
 {
 private:
-    USHORT          nId;
-    ImpEditEngine*  pImpEE;
+    USHORT 			nId;
+    ImpEditEngine*	pImpEE;
 
 public:
                     TYPEINFO();
                     EditUndo( USHORT nI, ImpEditEngine* pImpEE );
-    virtual         ~EditUndo();
+    virtual 		~EditUndo();
 
-    ImpEditEngine*  GetImpEditEngine() const    { return pImpEE; }
+    ImpEditEngine*	GetImpEditEngine() const	{ return pImpEE; }
 
-    virtual void    Undo()      = 0;
-    virtual void    Redo()      = 0;
+    virtual void	Undo() 		= 0;
+    virtual void	Redo()		= 0;
 
-    virtual BOOL    CanRepeat(SfxRepeatTarget&) const;
-    virtual String  GetComment() const;
-    virtual USHORT  GetId() const;
+    virtual BOOL	CanRepeat(SfxRepeatTarget&) const;
+    virtual String	GetComment() const;
+    virtual USHORT	GetId() const;
 };
 
-#endif  // _EDITUND2_HXX
+#endif	// _EDITUND2_HXX
 
 

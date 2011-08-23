@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ SwXMLBlockListExport::SwXMLBlockListExport(
     SwXMLTextBlocks & rBlocks,
     const rtl::OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+:	SvXMLExport( xServiceFactory, rFileName, rHandler ),
     rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
@@ -91,7 +91,7 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
     SwXMLTextBlocks & rBlocks,
     const rtl::OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+:	SvXMLExport( xServiceFactory, rFileName, rHandler ),
     rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),

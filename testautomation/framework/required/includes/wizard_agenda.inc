@@ -81,17 +81,16 @@ testcase tUpdtWizardAgenda
         hWaitForObject( TemplateName, 3000 )
         TemplateName.setText( cTemplateName )
         hSetTemplateSavePath( cTemplatePath )    
-            
-        hFinishWizard( 1 )
+
+        kontext "AutopilotAgenda"
+        hClickButton( CreateButton )
         
-        iErr = hHandleSaveError()
-        if ( iErr = 1 ) then
+        if ( hHandleSaveError() = 1 ) then
             kontext "AutopilotAgenda"
-            hFinishWizard( 1 )
+            hClickButton( CreateButton )
         endif    
         
-        brc = hDestroyDocument()
-        if ( not brc ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
+        if ( not hDestroyDocument() ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
 
         hFileCloseAll()
         hDeleteFile( cTemplatePath )

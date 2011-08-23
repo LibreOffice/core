@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,9 +73,9 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
         XTextProperty aTextProperty;
         aTextProperty.value = 0;
         int i;
-
+        
         static Atom nResMgrAtom = XInternAtom( mpDisplay, "RESOURCE_MANAGER", False );
-
+        
         if( XGetTextProperty( mpDisplay,
                               RootWindow( mpDisplay, 0 ),
                               &aTextProperty,
@@ -123,7 +123,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                     for( ; nPos >= 0 && aLine.GetChar( nPos ) != '*'; nPos-- )
                         ;
                     int nNumber = aLine.Copy( ++nPos ).ToInt32();
-
+                    
                     DBG_TRACE2( "found palette %d in resource \"%s\"", nNumber, aLine.GetBuffer() );
 
                     // found no documentation what this number actually means;
@@ -133,7 +133,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                         continue;
 
                     DBG_TRACE1( "Palette file is \"%s\".\n", aPaletteFile.GetBuffer() );
-
+                    
                     String aPath( aHomeDir );
                     aPath.AppendAscii( "/.dt/palettes/" );
                     aPath += String( aPaletteFile, gsl_getSystemTextEncoding() );
@@ -162,12 +162,12 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                             aColors[nIndex] = Color(
                                 getHexDigit( pArr[1] )
                                 | ( getHexDigit( pArr[0] ) << 4 ),
-                                getHexDigit( pArr[5] )
+                                getHexDigit( pArr[5] ) 
                                 | ( getHexDigit( pArr[4] ) << 4 ),
                                 getHexDigit( pArr[9] )
                                 | ( getHexDigit( pArr[8] ) << 4 )
                                 );
-
+                            
                             DBG_TRACE1( "\t\t%lx\n", aColors[nIndex].GetColor() );
                         }
                     }
@@ -177,14 +177,14 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                 }
             }
         }
-
+        
         if( ppStringList )
             XFreeStringList( ppStringList );
         if( aTextProperty.value )
             XFree( aTextProperty.value );
     }
 
-
+    
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
     // #i48001# set a default blink rate
     aStyleSettings.SetCursorBlinkTime( 500 );
@@ -199,13 +199,13 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
         aStyleSettings.SetDeactiveBorderColor( aColors[0] );
 
         Color aActive =
-            aColors[ 0 ].GetBlue() < 128        ||
-            aColors[ 0 ].GetGreen() < 128       ||
+            aColors[ 0 ].GetBlue() < 128		||
+            aColors[ 0 ].GetGreen() < 128		||
             aColors[ 0 ].GetRed() < 128
             ? Color( COL_WHITE ) : Color( COL_BLACK );
         Color aDeactive =
-            aColors[ 1 ].GetBlue() < 128        ||
-            aColors[ 1 ].GetGreen() < 128       ||
+            aColors[ 1 ].GetBlue() < 128		||
+            aColors[ 1 ].GetGreen() < 128		||
             aColors[ 1 ].GetRed() < 128
             ? Color( COL_WHITE ) : Color( COL_BLACK );
         aStyleSettings.SetActiveTextColor( aActive );

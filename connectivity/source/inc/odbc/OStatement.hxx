@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace connectivity
     namespace odbc
     {
 
-        typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper6<	::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable,
@@ -65,23 +65,23 @@ namespace connectivity
         //**************************************************************
         class OOO_DLLPUBLIC_ODBCBASE OStatement_Base :
                                         public comphelper::OBaseMutex,
-                                        public  OStatement_BASE,
-                                        public  ::cppu::OPropertySetHelper,
-                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
+                                        public	OStatement_BASE,
+                                        public	::cppu::OPropertySetHelper,
+                                        public	::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
 
         {
         ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
         protected:
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>   m_xResultSet;   // The last ResultSet created
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       m_xGeneratedStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>		m_xGeneratedStatement;
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>   m_aBatchList;
-            ::rtl::OUString                 m_sSqlStatement;
+            ::std::list< ::rtl::OUString>	m_aBatchList;
+            ::rtl::OUString					m_sSqlStatement;
 
-            OConnection*                    m_pConnection;// The owning Connection object
-            SQLHANDLE                       m_aStatementHandle;
-            SQLUSMALLINT*                   m_pRowStatusArray;
+            OConnection*					m_pConnection;// The owning Connection object
+            SQLHANDLE						m_aStatementHandle;
+            SQLUSMALLINT*					m_pRowStatusArray;
             ::cppu::OBroadcastHelper&       rBHelper;
 
         protected:
@@ -89,26 +89,26 @@ namespace connectivity
             sal_Int32 getQueryTimeOut()         const;
             sal_Int32 getMaxFieldSize()         const;
             sal_Int32 getMaxRows()              const;
-            sal_Int32 getResultSetConcurrency() const;
+            sal_Int32 getResultSetConcurrency()	const;
             sal_Int32 getResultSetType()        const;
             sal_Int32 getFetchDirection()       const;
             sal_Int32 getFetchSize()            const;
             ::rtl::OUString getCursorName()     const;
-            sal_Bool isUsingBookmarks()         const;
+            sal_Bool isUsingBookmarks()			const;
             sal_Bool getEscapeProcessing()      const;
             sal_Int32 getStmtOption (short fOption) const;
 
-            void setQueryTimeOut(sal_Int32 _par0)           ;
-            void setMaxFieldSize(sal_Int32 _par0)           ;
-            void setMaxRows(sal_Int32 _par0)                ;
-            void setFetchDirection(sal_Int32 _par0)         ;
-            void setFetchSize(sal_Int32 _par0)              ;
+            void setQueryTimeOut(sal_Int32 _par0)			;
+            void setMaxFieldSize(sal_Int32 _par0)			;
+            void setMaxRows(sal_Int32 _par0)				;
+            void setFetchDirection(sal_Int32 _par0)			;
+            void setFetchSize(sal_Int32 _par0)				;
             void setCursorName(const ::rtl::OUString &_par0);
             void setEscapeProcessing( const sal_Bool _bEscapeProc );
 
-            virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
-            virtual void setResultSetType(sal_Int32 _par0)          ;
-            virtual void setUsingBookmarks(sal_Bool _bUseBookmark)  ;
+            virtual void setResultSetConcurrency(sal_Int32 _par0)	;
+            virtual void setResultSetType(sal_Int32 _par0)			;
+            virtual void setUsingBookmarks(sal_Bool _bUseBookmark)	;
 
             void reset () throw( ::com::sun::star::sdbc::SQLException);
             void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
@@ -196,8 +196,8 @@ namespace connectivity
             SQLHANDLE getConnectionHandle() { return m_pConnection->getConnection(); }
             OConnection* getOwnConnection() const { return m_pConnection;}
             /** getCursorProperties return the properties for a specific cursor type
-                @param _nCursorType     the CursorType
-                @param bFirst           when true the first property set is returned
+                @param _nCursorType		the CursorType
+                @param bFirst			when true the first property set is returned
 
                 @return the cursor properties
             */

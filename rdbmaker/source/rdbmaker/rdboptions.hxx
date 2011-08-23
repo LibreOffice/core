@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,30 +28,30 @@
 #ifndef _RDBMAKER_RDBOPTIONS_HXX_
 #define _RDBMAKER_RDBOPTIONS_HXX_
 
-#include    <codemaker/options.hxx>
+#include	<codemaker/options.hxx>
 
 class RdbOptions : public Options
 {
 public:
     RdbOptions()
-        : Options()
+        : Options() 
         , m_generateTypeList(sal_False)
         {}
 
     ~RdbOptions() {}
 
-    sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
+    sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False) 
             throw( IllegalArgument );
 
-    ::rtl::OString  prepareHelp();
+    ::rtl::OString	prepareHelp();
 
-    ::rtl::OString  prepareVersion();
-
+    ::rtl::OString	prepareVersion();
+    
     sal_Bool generateTypeList()
         { return m_generateTypeList; }
 
 protected:
     sal_Bool m_generateTypeList;
 };
-
+    
 #endif // _RDBMAKER_RDBOPTIONS_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ TextListStyle::TextListStyle()
 {
     for ( int i = 0; i < 9; i++ )
     {
-        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );
+        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );	
         maAggregationListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );
     }
 }

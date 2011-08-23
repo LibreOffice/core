@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,70 +24,70 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_FocusChangeReason_idl__
-#define __com_sun_star_awt_FocusChangeReason_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
-/** A combination of these values can be used to specify the reason
+#ifndef __com_sun_star_awt_FocusChangeReason_idl__ 
+#define __com_sun_star_awt_FocusChangeReason_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
+/** A combination of these values can be used to specify the reason 
     for a focus change.
  */
 published constants FocusChangeReason
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+        
     /** Focus changed because TAB was pressed.
      */
-    const long TAB = 1;
-
-    //-------------------------------------------------------------------------
-
+    const long TAB = 1; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** Focus changed because KeyLeft/Right/Up/Down was pressed.
      */
-    const long CURSOR = 2;
-
-    //-------------------------------------------------------------------------
-
+    const long CURSOR = 2; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** Focus changed because mnemonic key was pressed.
      */
-    const long MNEMONIC = 4;
-
-    //-------------------------------------------------------------------------
-
+    const long MNEMONIC = 4; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** Changed Focus to the next control.
      */
-    const long FORWARD = 16;
-
-    //-------------------------------------------------------------------------
-
+    const long FORWARD = 16; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** Changed Focus to the previous control.
      */
-    const long BACKWARD = 32;
-
-    //-------------------------------------------------------------------------
-
+    const long BACKWARD = 32; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** Changed Focus forward from last to first or backward from first to
         last.
      */
-    const long AROUND = 64;
-
-    //-------------------------------------------------------------------------
-
+    const long AROUND = 64; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** Focus changed because mnemonic key was pressed and this mnemonic is
         unique.
      */
-    const long UNIQUEMNEMONIC = 256;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-
-#endif
+    const long UNIQUEMNEMONIC = 256; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+ 
+#endif 

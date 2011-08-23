@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ enum PresObjKind
     PRESOBJ_SLIDENUMBER,
     PRESOBJ_CALC,
     PRESOBJ_MEDIA,
-
+    
     PRESOBJ_MAX
 };
 
@@ -56,22 +56,22 @@ enum AutoLayout
 {
     // new layouts with enum/text/chart/org/clip merged to content
     AUTOLAYOUT__START = 0,
-    AUTOLAYOUT_TITLE = 0,                       // Title Slide
-    AUTOLAYOUT_TITLE_CONTENT = 1,               // Title, Content
-    AUTOLAYOUT_TITLE_2CONTENT = 3,              // Title and 2 Content
-    AUTOLAYOUT_TITLE_ONLY = 19,                 // Title Only
-    AUTOLAYOUT_NONE = 20,                       // Blank Slide
-    AUTOLAYOUT_ONLY_TEXT = 32,                  // Centered Text
-    AUTOLAYOUT_TITLE_CONTENT_2CONTENT = 12,     // Title, Content and 2 Content
-    AUTOLAYOUT_TITLE_2CONTENT_CONTENT = 15,     // Title, 2 Content and Content
+    AUTOLAYOUT_TITLE = 0,						// Title Slide
+    AUTOLAYOUT_TITLE_CONTENT = 1,				// Title, Content
+    AUTOLAYOUT_TITLE_2CONTENT = 3,				// Title and 2 Content
+    AUTOLAYOUT_TITLE_ONLY = 19,					// Title Only
+    AUTOLAYOUT_NONE = 20,						// Blank Slide
+    AUTOLAYOUT_ONLY_TEXT = 32,					// Centered Text
+    AUTOLAYOUT_TITLE_CONTENT_2CONTENT = 12,		// Title, Content and 2 Content
+    AUTOLAYOUT_TITLE_2CONTENT_CONTENT = 15,		// Title, 2 Content and Content
     AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT = 16,// Title, 2 Content over Content
-    AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT = 14, // Title, Content over Content
-    AUTOLAYOUT_TITLE_4CONTENT = 18,             // Title, 4 Content
-    AUTOLAYOUT_TITLE_6CONTENT = 34,             // Title, 6 Content
+    AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT = 14,	// Title, Content over Content
+    AUTOLAYOUT_TITLE_4CONTENT = 18,				// Title, 4 Content
+    AUTOLAYOUT_TITLE_6CONTENT = 34,				// Title, 6 Content
     AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT = 27, // Vertical Title, Vertical Content over Vertical Content
-    AUTOLAYOUT_VTITLE_VCONTENT = 28,            // Vertical Title, Vertical Content over Vertical Content
-    AUTOLAYOUT_TITLE_VCONTENT = 29,             // Title, Vertical Content
-    AUTOLAYOUT_TITLE_2VTEXT = 30,               // Title, 2 Vertical Content
+    AUTOLAYOUT_VTITLE_VCONTENT = 28,			// Vertical Title, Vertical Content over Vertical Content
+    AUTOLAYOUT_TITLE_VCONTENT = 29,				// Title, Vertical Content
+    AUTOLAYOUT_TITLE_2VTEXT = 30,				// Title, 2 Vertical Content
 
     // deprecated
     AUTOLAYOUT_ENUM = 1,
@@ -137,5 +137,5 @@ enum NavigatorDragType
 };
 #define NAVIGATOR_DRAGTYPE_COUNT 4
 
-#endif  // _PRESENTATION_HXX
+#endif	// _PRESENTATION_HXX
 

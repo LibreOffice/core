@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,24 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XInterfaceAttributeTypeDescription_idl__
-#define __com_sun_star_reflection_XInterfaceAttributeTypeDescription_idl__
-
-#ifndef __com_sun_star_reflection_XInterfaceMemberTypeDescription_idl__
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.idl>
-#endif
-
-#ifndef __com_sun_star_reflection_XTypeDescription_idl__
-#include <com/sun/star/reflection/XTypeDescription.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module reflection {
-
-//=============================================================================
-
+#ifndef __com_sun_star_reflection_XInterfaceAttributeTypeDescription_idl__ 
+#define __com_sun_star_reflection_XInterfaceAttributeTypeDescription_idl__ 
+ 
+#ifndef __com_sun_star_reflection_XInterfaceMemberTypeDescription_idl__ 
+#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_reflection_XTypeDescription_idl__ 
+#include <com/sun/star/reflection/XTypeDescription.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module reflection {  
+ 
+//============================================================================= 
+ 
 /** Reflects an interface attribute type.
 
     <p>This type is superseded by
@@ -51,27 +51,27 @@
     The type class of this type is TypeClass_INTERFACE_ATTRIBUTE.
 */
 published interface XInterfaceAttributeTypeDescription: com::sun::star::reflection::XInterfaceMemberTypeDescription
-{
+{ 
     /** Returns true, if this attribute is read-only.
 
         @return
                 true, if attribute is read-only
     */
-    boolean isReadOnly();
-
+    boolean isReadOnly(); 
+    
     /** Returns the type of the attribute.
 
         @return
                 type of attribute
     */
     com::sun::star::reflection::XTypeDescription getType();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

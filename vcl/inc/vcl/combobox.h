@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,10 +28,10 @@
 #ifndef _SV_COMBOBOX_H
 #define _SV_COMBOBOX_H
 
-#define COMBOBOX_APPEND             ((USHORT)0xFFFF)
-#define COMBOBOX_ENTRY_NOTFOUND     ((USHORT)0xFFFF)
-#define COMBOBOX_ERROR              ((USHORT)0xFFFF)
+#define COMBOBOX_APPEND			   	((USHORT)0xFFFF)
+#define COMBOBOX_ENTRY_NOTFOUND	   	((USHORT)0xFFFF)
+#define COMBOBOX_ERROR			   	((USHORT)0xFFFF)
 
-#define COMBOBOX_USERDRAW_SELECTED  ((USHORT)0x0001)
+#define COMBOBOX_USERDRAW_SELECTED	((USHORT)0x0001)
 
-#endif  // _SV_COMBOBOX_H
+#endif	// _SV_COMBOBOX_H

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -663,7 +663,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
         createLongNameEA(aFileNameA.GetBuffer(),  FILE_NORMAL, aDirEntry.GetName());
 
         // und wieder oeffnen
-        ReOpen();
+        ReOpen();		
     }
 #endif
 

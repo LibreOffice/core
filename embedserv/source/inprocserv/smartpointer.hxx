@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ template< class T > class ComSmart
             pInterface->Release();
         }
     }
-
+    
 public:
     ComSmart()
     : m_pInterface( NULL )
@@ -78,7 +78,7 @@ public:
          if ( m_pInterface != NULL )
             m_pInterface->AddRef();
     }
-
+ 
     ~ComSmart()
     {
         OwnRelease();
@@ -95,7 +95,7 @@ public:
 
         return *this;
     }
-
+ 
     ComSmart<T>& operator=( T* pInterface )
     {
         OwnRelease();
@@ -117,7 +117,7 @@ public:
     {
         return *m_pInterface;
     }
-
+     
     T** operator&()
     {
         OwnRelease();

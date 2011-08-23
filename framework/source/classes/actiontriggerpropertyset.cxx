@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace framework
 ActionTriggerPropertySet::ActionTriggerPropertySet( const Reference< XMultiServiceFactory >& /*xServiceManager*/ )
     : ThreadHelpBase           ( &Application::GetSolarMutex()               )
     , OBroadcastHelper         ( m_aLock.getShareableOslMutex()              )
-    ,   OPropertySetHelper       ( *SAL_STATIC_CAST( OBroadcastHelper *, this ))
+    ,	OPropertySetHelper       ( *SAL_STATIC_CAST( OBroadcastHelper *, this ))
     , OWeakObject              ()
     , m_xBitmap                ( 0 )
     , m_xActionTriggerContainer( 0 )
@@ -147,11 +147,11 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XPropertySet           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XFastPropertySet       >*)NULL ) ,
-                        ::getCppuType(( const Reference< XMultiPropertySet      >*)NULL ) ,
-                        ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
+                        ::getCppuType(( const Reference< XPropertySet			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XFastPropertySet		>*)NULL	) ,
+                        ::getCppuType(( const Reference< XMultiPropertySet		>*)NULL	) ,
+                        ::getCppuType(( const Reference< XServiceInfo			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XTypeProvider			>*)NULL ) ) ;
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -190,21 +190,21 @@ Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId() th
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  OPropertySetHelper implementation
+//	OPropertySetHelper implementation
 //---------------------------------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
-    Any&        aConvertedValue,
-    Any&        aOldValue,
-    sal_Int32   nHandle,
-    const Any&  aValue  )
+    Any&		aConvertedValue,
+    Any&		aOldValue,
+    sal_Int32	nHandle,
+    const Any&	aValue	)
 throw( IllegalArgumentException )
 {
-    //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
-    //  Return TRUE, if changed - else return FALSE.
-    //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
-    //  Initialize return value with FALSE !!!
-    //  (Handle can be invalid)
+    //	Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
+    //	Return TRUE, if changed - else return FALSE.
+    //	Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
+    //	Initialize return value with FALSE !!!
+    //	(Handle can be invalid)
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
@@ -350,11 +350,11 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
 {
     static const Property pActionTriggerPropertys[] =
     {
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL"    )), HANDLE_COMMANDURL   , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL"       )), HANDLE_HELPURL      , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Image"        )), HANDLE_IMAGE     , ::getCppuType((Reference<XBitmap>*)0)     , PropertyAttribute::TRANSIENT  ),
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SubContainer"  )), HANDLE_SUBCONTAINER , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text"          )), HANDLE_TEXT         , ::getCppuType((Reference<XInterface>*)0)  , PropertyAttribute::TRANSIENT  )
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL"	)), HANDLE_COMMANDURL	, ::getCppuType((::rtl::OUString*)0)				, PropertyAttribute::TRANSIENT	),
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL"		)), HANDLE_HELPURL		, ::getCppuType((::rtl::OUString*)0)				, PropertyAttribute::TRANSIENT	),
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Image"        )), HANDLE_IMAGE		, ::getCppuType((Reference<XBitmap>*)0)		, PropertyAttribute::TRANSIENT	),
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SubContainer"	)), HANDLE_SUBCONTAINER	, ::getCppuType((::rtl::OUString*)0)				, PropertyAttribute::TRANSIENT	),
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text"       	)), HANDLE_TEXT			, ::getCppuType((Reference<XInterface>*)0)	, PropertyAttribute::TRANSIENT	)
     };
 
     // Use it to initialize sequence!
@@ -366,13 +366,13 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
 
 
 //******************************************************************************************************************************
-//  private method
+//	private method
 //******************************************************************************************************************************
 sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
-    const   ::rtl::OUString&    sCurrentValue   ,
-    const   Any&        aNewValue       ,
-    Any&        aOldValue       ,
-    Any&        aConvertedValue )
+    const	::rtl::OUString&	sCurrentValue	,
+    const	Any&		aNewValue		,
+    Any&		aOldValue		,
+    Any&		aConvertedValue	)
 throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
@@ -386,16 +386,16 @@ throw( IllegalArgumentException )
     if( sValue != sCurrentValue )
     {
         // ... set information of change.
-        aOldValue       <<= sCurrentValue   ;
-        aConvertedValue <<= sValue          ;
+        aOldValue		<<= sCurrentValue	;
+        aConvertedValue	<<= sValue			;
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }
     else
     {
         // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
+        aOldValue.clear			() ;
+        aConvertedValue.clear	() ;
         // Return NOTHING - "value will not be change ..."
         bReturn = sal_False;
     }
@@ -405,10 +405,10 @@ throw( IllegalArgumentException )
 
 
 sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
-    const Reference< XBitmap >  aCurrentValue   ,
-    const Any&                  aNewValue       ,
-    Any&                        aOldValue       ,
-    Any&                        aConvertedValue )
+    const Reference< XBitmap >	aCurrentValue	,
+    const Any&					aNewValue		,
+    Any&						aOldValue		,
+    Any&						aConvertedValue	)
 throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
@@ -422,16 +422,16 @@ throw( IllegalArgumentException )
     if( aValue != aCurrentValue )
     {
         // ... set information of change.
-        aOldValue       <<= aCurrentValue   ;
-        aConvertedValue <<= aValue          ;
+        aOldValue		<<= aCurrentValue	;
+        aConvertedValue	<<= aValue			;
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }
     else
     {
         // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
+        aOldValue.clear			() ;
+        aConvertedValue.clear	() ;
         // Return NOTHING - "value will not be change ..."
         bReturn = sal_False;
     }
@@ -440,10 +440,10 @@ throw( IllegalArgumentException )
 }
 
 sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
-    const Reference< XInterface >   aCurrentValue   ,
-    const Any&                      aNewValue       ,
-    Any&                            aOldValue       ,
-    Any&                            aConvertedValue )
+    const Reference< XInterface >	aCurrentValue	,
+    const Any&						aNewValue		,
+    Any&							aOldValue		,
+    Any&							aConvertedValue	)
 throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
@@ -457,16 +457,16 @@ throw( IllegalArgumentException )
     if( aValue != aCurrentValue )
     {
         // ... set information of change.
-        aOldValue       <<= aCurrentValue   ;
-        aConvertedValue <<= aValue          ;
+        aOldValue		<<= aCurrentValue	;
+        aConvertedValue	<<= aValue			;
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }
     else
     {
         // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
+        aOldValue.clear			() ;
+        aConvertedValue.clear	() ;
         // Return NOTHING - "value will not be change ..."
         bReturn = sal_False;
     }

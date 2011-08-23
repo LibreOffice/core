@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,25 +36,25 @@
 
 //=========================================================================
 //= SvNumberFormatsSupplierServiceObject - a number formats supplier which
-//=             - can be instantiated as an service
-//=             - supports the ::com::sun::star::io::XPersistObject interface
-//=             - works with it's own SvNumberFormatter instance
-//=             - can be initialized (::com::sun::star::lang::XInitialization)
-//=                 with a specific language (i.e. ::com::sun::star::lang::Locale)
+//=				- can be instantiated as an service
+//=				- supports the ::com::sun::star::io::XPersistObject interface
+//=				- works with it's own SvNumberFormatter instance
+//=				- can be initialized (::com::sun::star::lang::XInitialization)
+//=					with a specific language (i.e. ::com::sun::star::lang::Locale)
 //=========================================================================
 class SvNumberFormatsSupplierServiceObject
             :protected SvNumberFormatsSupplierObj
             ,public ::com::sun::star::lang::XInitialization
             ,public ::com::sun::star::io::XPersistObject
             ,public ::com::sun::star::lang::XServiceInfo
-{   // don't want the Set-/GetNumberFormatter to be accessable from outside
+{	// don't want the Set-/GetNumberFormatter to be accessable from outside
 
     friend ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
 protected:
-    SvNumberFormatter*  m_pOwnFormatter;
+    SvNumberFormatter*	m_pOwnFormatter;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         m_xORB;
 

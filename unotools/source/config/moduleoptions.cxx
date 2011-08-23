@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/moduleoptions.hxx>
@@ -55,7 +55,7 @@
 #include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
 #ifndef css
@@ -63,7 +63,7 @@ namespace css = ::com::sun::star;
 #endif
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -373,32 +373,32 @@ typedef FactoryInfo   FactoryInfoList[FACTORYCOUNT];
                     a refcount and make it threadsafe by using an osl mutex. So we don't must do anything for that.
                     We can implement pure functionality to read/write configuration data only.
 
-    @implements     -
+    @implements		-
     @base           ConfigItem
 
-    @devstatus      ready to use
+    @devstatus		ready to use
     @threadsafe     no
 *//*-*************************************************************************************************************/
 class SvtModuleOptions_Impl : public ::utl::ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
          SvtModuleOptions_Impl(SvtModuleOptions* pOutsideClass);
         ~SvtModuleOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
+        //	overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
         virtual void Notify( const css::uno::Sequence< ::rtl::OUString >& lPropertyNames );
         virtual void Commit(                                                             );
 
         //---------------------------------------------------------------------------------------------------------
-        //  public interface
+        //	public interface
         //---------------------------------------------------------------------------------------------------------
         sal_Bool        IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
         ::com::sun::star::uno::Sequence < ::rtl::OUString > GetAllServiceNames();
@@ -421,7 +421,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         void            MakeReadonlyStatesAvailable();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
         static css::uno::Sequence< ::rtl::OUString > impl_ExpandSetNames ( const css::uno::Sequence< ::rtl::OUString >& lSetNames   );
@@ -433,7 +433,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     private:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
     private:
         FactoryInfoList     m_lFactories;
@@ -442,7 +442,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 };
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -560,8 +560,8 @@ void SvtModuleOptions_Impl::Commit()
         sBasePath  = PATHSEPERATOR + pInfo->getFactory() + PATHSEPERATOR;
 
         const css::uno::Sequence< css::beans::PropertyValue > lChangedProperties = pInfo->getChangedProperties ( sBasePath );
-        const css::beans::PropertyValue*                      pChangedProperties = lChangedProperties.getConstArray();
-        sal_Int32                                             nPropertyCount     = lChangedProperties.getLength();
+        const css::beans::PropertyValue*					  pChangedProperties = lChangedProperties.getConstArray();
+        sal_Int32											  nPropertyCount     = lChangedProperties.getLength();
         for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
         {
             lCommitProperties[nRealCount] = pChangedProperties[nProperty];
@@ -881,7 +881,7 @@ css::uno::Sequence< ::rtl::OUString > SvtModuleOptions_Impl::impl_ExpandSetNames
 {
     sal_Int32                             nCount     = lSetNames.getLength() ;
     css::uno::Sequence< ::rtl::OUString > lPropNames ( nCount*PROPERTYCOUNT );
-    ::rtl::OUString*                      pPropNames = lPropNames.getArray() ;
+    ::rtl::OUString*					  pPropNames = lPropNames.getArray() ;
     sal_Int32                             nPropStart = 0                     ;
 
     for( sal_Int32 nName=0; nName<nCount; ++nName )
@@ -1091,9 +1091,9 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
 }
 
 //*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further informations
+//	initialize static member
+//	DON'T DO IT IN YOUR HEADER!
+//	see definition for further informations
 //*****************************************************************************************************************
 SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL  ;
 sal_Int32               SvtModuleOptions::m_nRefCount       = 0     ;
@@ -1393,7 +1393,7 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
         case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString::createFromAscii("Math"); }
         case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString::createFromAscii("Chart"); }
         case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString::createFromAscii("Basic"); }
-        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString::createFromAscii("Database"); }
+        case SvtModuleOptions::E_DATABASE		:   { return ::rtl::OUString::createFromAscii("Database"); }
         default:
             OSL_ASSERT( "unknown factory" );
             break;

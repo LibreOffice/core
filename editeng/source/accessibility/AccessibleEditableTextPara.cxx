@@ -185,7 +185,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        lang::Locale        aLocale;
+        lang::Locale		aLocale;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
@@ -226,8 +226,8 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        SvxTextForwarder&   rCacheTF = GetTextForwarder();
-        const sal_Int32     nParaIndex = GetParagraphIndex();
+        SvxTextForwarder&	rCacheTF = GetTextForwarder();
+        const sal_Int32		nParaIndex = GetParagraphIndex();
 
         DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= USHRT_MAX,
                    "AccessibleEditableTextPara::implGetLineBoundary: paragraph index value overflow");
@@ -424,7 +424,7 @@ namespace accessibility
         if( nIndex < 0 || nIndex >= getCharacterCount() )
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleEditableTextPara: character index out of bounds")),
                                                   uno::Reference< uno::XInterface >
-                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
+                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) );	// disambiguate hierarchy
     }
 
     void AccessibleEditableTextPara::CheckPosition( sal_Int32 nIndex ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
@@ -434,7 +434,7 @@ namespace accessibility
         if( nIndex < 0 || nIndex > getCharacterCount() )
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleEditableTextPara: character position out of bounds")),
                                                   uno::Reference< uno::XInterface >
-                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
+                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) );	// disambiguate hierarchy
     }
 
     void AccessibleEditableTextPara::CheckRange( sal_Int32 nStart, sal_Int32 nEnd ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
@@ -549,7 +549,7 @@ namespace accessibility
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No edit source, object is defunct")),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) );	// disambiguate hierarchy
     }
 
     SvxAccessibleTextAdapter& AccessibleEditableTextPara::GetTextForwarder() const SAL_THROW((uno::RuntimeException))
@@ -563,7 +563,7 @@ namespace accessibility
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch text forwarder, object is defunct")),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) );	// disambiguate hierarchy
 
         if( pTextForwarder->IsValid() )
             return *pTextForwarder;
@@ -571,7 +571,7 @@ namespace accessibility
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text forwarder is invalid, object is defunct")),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) );	// disambiguate hierarchy
     }
 
     SvxViewForwarder& AccessibleEditableTextPara::GetViewForwarder() const SAL_THROW((uno::RuntimeException))
@@ -586,7 +586,7 @@ namespace accessibility
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch view forwarder, object is defunct")),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) );	// disambiguate hierarchy
         }
 
         if( pViewForwarder->IsValid() )
@@ -595,7 +595,7 @@ namespace accessibility
             throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object is defunct")),
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
+                                          ( const_cast< AccessibleEditableTextPara* > (this) )  ) );	// disambiguate hierarchy
     }
 
     SvxAccessibleTextEditViewAdapter& AccessibleEditableTextPara::GetEditViewForwarder( sal_Bool bCreate ) const SAL_THROW((uno::RuntimeException))
@@ -611,12 +611,12 @@ namespace accessibility
                 throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to fetch view forwarder, object is defunct")),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* >
-                                              ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                              ( const_cast< AccessibleEditableTextPara* > (this) ) ) );	// disambiguate hierarchy
             else
                 throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No view forwarder, object not in edit mode")),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* >
-                                              ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+                                              ( const_cast< AccessibleEditableTextPara* > (this) ) ) );	// disambiguate hierarchy
         }
 
         if( pTextEditViewForwarder->IsValid() )
@@ -627,12 +627,12 @@ namespace accessibility
                 throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object is defunct")),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* >
-                                              ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
+                                              ( const_cast< AccessibleEditableTextPara* > (this) )  ) );	// disambiguate hierarchy
             else
                 throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("View forwarder is invalid, object not in edit mode")),
                                             uno::Reference< uno::XInterface >
                                             ( static_cast< ::cppu::OWeakObject* >
-                                              ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
+                                              ( const_cast< AccessibleEditableTextPara* > (this) )  ) );	// disambiguate hierarchy
         }
     }
 
@@ -859,12 +859,12 @@ namespace accessibility
         if( !HaveChildren() )
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No childs available")),
                                                   uno::Reference< uno::XInterface >
-                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
+                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) );	// static_cast: disambiguate hierarchy
 
         if( i != 0 )
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid child index")),
                                                   uno::Reference< uno::XInterface >
-                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
+                                                  ( static_cast< ::cppu::OWeakObject* > (this) ) );	// static_cast: disambiguate hierarchy
 
         WeakBullet::HardRefType aChild( maImageBullet.get() );
 
@@ -1153,7 +1153,7 @@ namespace accessibility
 
         throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot access parent")),
                                     uno::Reference< uno::XInterface >
-                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+                                    ( static_cast< XAccessible* > (this) ) );	// disambiguate hierarchy
     }
 
     awt::Size SAL_CALL AccessibleEditableTextPara::getSize(  ) throw (uno::RuntimeException)
@@ -1244,7 +1244,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        CheckIndex(nIndex); // may throw IndexOutOfBoundsException
+        CheckIndex(nIndex);	// may throw IndexOutOfBoundsException
 
         // get default attribues...
         ::comphelper::SequenceAsHashMap aPropHashMap( getDefaultAttributes( rRequestedAttributes ) );
@@ -1466,7 +1466,7 @@ namespace accessibility
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getText() throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-
+        
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -1686,7 +1686,7 @@ namespace accessibility
         try
         {
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();	// MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::cutText: index value overflow");
@@ -1716,7 +1716,7 @@ namespace accessibility
         try
         {
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();	// MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::pasteText: index value overflow");
@@ -1748,7 +1748,7 @@ namespace accessibility
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
             GetEditViewForwarder( sal_True );
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();	// MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::deleteText: index value overflow");
@@ -1781,7 +1781,7 @@ namespace accessibility
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
             GetEditViewForwarder( sal_True );
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();	// MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::insertText: index value overflow");
@@ -1816,7 +1816,7 @@ namespace accessibility
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
             GetEditViewForwarder( sal_True );
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();	// MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::replaceText: index value overflow");
@@ -1851,7 +1851,7 @@ namespace accessibility
             // #102710# Request edit view when doing changes
             // AccessibleEmptyEditSource relies on this behaviour
             GetEditViewForwarder( sal_True );
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();	// MUST be after GetEditViewForwarder(), see method docs
             USHORT nPara = static_cast< USHORT >( GetParagraphIndex() );
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
@@ -1874,7 +1874,7 @@ namespace accessibility
 
             // convert from PropertyValue to Any
             sal_Int32 i, nLength( aAttributeSet.getLength() );
-            const beans::PropertyValue* pPropArray = aAttributeSet.getConstArray();
+            const beans::PropertyValue*	pPropArray = aAttributeSet.getConstArray();
             for(i=0; i<nLength; ++i)
             {
                 try
@@ -2094,7 +2094,7 @@ namespace accessibility
 
         return aOutSequence;
     }
-
+    
     // XAccessibleHypertext
     ::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkCount(  ) throw (::com::sun::star::uno::RuntimeException)
     {
@@ -2142,12 +2142,12 @@ namespace accessibility
 
         return xRef;
     }
-
+    
     ::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkIndex( ::sal_Int32 nCharIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
     {
         const sal_Int32 nPara = GetParagraphIndex();
         SvxAccessibleTextAdapter& rT = GetTextForwarder();
-
+        
 //        SvxAccessibleTextIndex aIndex;
 //        aIndex.SetIndex(nPara, nCharIndex, rT);
 //        const USHORT nEEIndex = aIndex.GetEEIndex();
@@ -2169,10 +2169,10 @@ namespace accessibility
                 nHyperLink++;
             }
         }
-
+        
         return nHLIndex;
     }
-
+    
     // XAccessibleMultiLineText
     sal_Int32 SAL_CALL AccessibleEditableTextPara::getLineNumberAtIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {

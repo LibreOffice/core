@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <i18npool/lang.h>
 #include <vos/ref.hxx>
@@ -58,23 +59,23 @@
 DBG_NAMEEX( EditView )
 DBG_NAMEEX( EditEngine )
 
-#define PIMPEE      pImpEditView->pEditEngine->pImpEditEngine
+#define PIMPEE		pImpEditView->pEditEngine->pImpEditEngine
 
-#define DEL_LEFT    1
-#define DEL_RIGHT   2
-#define TRAVEL_X_DONTKNOW   0xFFFFFFFF
-#define CURSOR_BIDILEVEL_DONTKNOW   0xFFFF
-#define MAXCHARSINPARA      0x3FFF-CHARPOSGROW  // Max 16K, because WYSIWYG array
+#define DEL_LEFT	1
+#define DEL_RIGHT	2
+#define TRAVEL_X_DONTKNOW	0xFFFFFFFF
+#define CURSOR_BIDILEVEL_DONTKNOW	0xFFFF
+#define MAXCHARSINPARA		0x3FFF-CHARPOSGROW	// Max 16K, because WYSIWYG array
 
-#define ATTRSPECIAL_WHOLEWORD   1
-#define ATTRSPECIAL_EDGE        2
+#define ATTRSPECIAL_WHOLEWORD	1
+#define ATTRSPECIAL_EDGE		2
 
-#define GETCRSR_TXTONLY             0x0001
-#define GETCRSR_STARTOFLINE         0x0002
-#define GETCRSR_ENDOFLINE           0x0004
+#define GETCRSR_TXTONLY		        0x0001
+#define GETCRSR_STARTOFLINE	        0x0002
+#define GETCRSR_ENDOFLINE	        0x0004
 #define GETCRSR_PREFERPORTIONSTART  0x0008
 
-#define LINE_SEP    0x0A
+#define LINE_SEP	0x0A
 
 typedef EENotify* EENotifyPtr;
 SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 )    // IMPL is in outliner.cxx, move to EE later and share declaration, or use BlockNotifications from EE directly
@@ -113,19 +114,19 @@ namespace svtools {
 
 struct DragAndDropInfo
 {
-    Rectangle           aCurCursor;
-    Rectangle           aCurSavedCursor;
-    sal_uInt16          nSensibleRange;
-    sal_uInt16          nCursorWidth;
+    Rectangle			aCurCursor;
+    Rectangle			aCurSavedCursor;
+    sal_uInt16			nSensibleRange;
+    sal_uInt16			nCursorWidth;
     ESelection          aBeginDragSel;
-    EditPaM             aDropDest;
+    EditPaM				aDropDest;
     USHORT              nOutlinerDropDest;
-    ESelection          aDropSel;
-    VirtualDevice*      pBackground;
-    const SvxFieldItem* pField;
-    sal_Bool            bVisCursor              : 1;
-    sal_Bool            bDroppedInMe            : 1;
-    sal_Bool            bStarterOfDD            : 1;
+    ESelection			aDropSel;
+    VirtualDevice*		pBackground;
+    const SvxFieldItem*	pField;
+    sal_Bool			bVisCursor 				: 1;
+    sal_Bool			bDroppedInMe			: 1;
+    sal_Bool			bStarterOfDD			: 1;
     sal_Bool            bHasValidData           : 1;
     sal_Bool            bUndoAction             : 1;
     sal_Bool            bOutlinerMode           : 1;
@@ -143,16 +144,16 @@ struct ImplIMEInfos
 {
     String      aOldTextAfterStartPos;
     sal_uInt16* pAttribs;
-    EditPaM     aPos;
-    sal_uInt16  nLen;
-    sal_Bool    bCursor;
-    sal_Bool    bWasCursorOverwrite;
+    EditPaM		aPos;
+    sal_uInt16	nLen;
+    sal_Bool	bCursor;
+    sal_Bool	bWasCursorOverwrite;
 
             ImplIMEInfos( const EditPaM& rPos, const String& rOldTextAfterStartPos );
             ~ImplIMEInfos();
 
-    void    CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL );
-    void    DestroyAttribs();
+    void	CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL );
+    void	DestroyAttribs();
 };
 
 // #i18881# to be able to identify the postions of changed words
@@ -161,12 +162,12 @@ typedef std::vector<EditSelection>  SpellContentSelections;
 
 struct SpellInfo
 {
-    EESpellState    eState;
-    EPaM            aSpellStart;
-    EPaM            aSpellTo;
-    EditPaM         aCurSentenceStart;
-    sal_Bool        bSpellToEnd;
-    sal_Bool        bMultipleDoc;
+    EESpellState	eState;
+    EPaM			aSpellStart;
+    EPaM			aSpellTo;
+    EditPaM			aCurSentenceStart;
+    sal_Bool		bSpellToEnd;
+    sal_Bool		bMultipleDoc;
     ::svx::SpellPortions    aLastSpellPortions;
     SpellContentSelections  aLastSpellContentSelections;
     SpellInfo()
@@ -190,29 +191,29 @@ struct FormatterFontMetric
     sal_uInt16 nMaxAscent;
     sal_uInt16 nMaxDescent;
 
-    FormatterFontMetric()               { nMaxAscent = 0; nMaxDescent = 0; /* nMinLeading = 0xFFFF; */ }
+    FormatterFontMetric()				{ nMaxAscent = 0; nMaxDescent = 0; /* nMinLeading = 0xFFFF; */ }
     sal_uInt16  GetHeight() const       { return nMaxAscent+nMaxDescent; }
 };
 
 class IdleFormattter : public Timer
 {
 private:
-    EditView*   pView;
-    int         nRestarts;
+    EditView* 	pView;
+    int			nRestarts;
 
 public:
                 IdleFormattter();
                 ~IdleFormattter();
 
-    void        DoIdleFormat( EditView* pV );
-    void        ForceTimeout();
-    void        ResetRestarts() { nRestarts = 0; }
-    EditView*   GetView()       { return pView; }
+    void		DoIdleFormat( EditView* pV );
+    void		ForceTimeout();
+    void		ResetRestarts() { nRestarts = 0; }
+    EditView*	GetView()		{ return pView; }
 };
 
-// ----------------------------------------------------------------------
-//  class ImpEditView
-//  ----------------------------------------------------------------------
+//	----------------------------------------------------------------------
+//	class ImpEditView
+//	----------------------------------------------------------------------
 class ImpEditView : public vcl::unohelper::DragAndDropClient
 {
     friend class EditView;
@@ -224,32 +225,32 @@ class ImpEditView : public vcl::unohelper::DragAndDropClient
 
 private:
     EditView*           pEditView;
-    Cursor*             pCursor;
-    Color*              pBackgroundColor;
-    EditEngine*         pEditEngine;
-    Window*             pOutWin;
-    Pointer*            pPointer;
-    DragAndDropInfo*    pDragAndDropInfo;
+    Cursor*				pCursor;
+    Color*				pBackgroundColor;
+    EditEngine*			pEditEngine;
+    Window*				pOutWin;
+    Pointer*			pPointer;
+    DragAndDropInfo*	pDragAndDropInfo;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
 
-    long                nInvMore;
-    ULONG               nControl;
-    sal_uInt32          nTravelXPos;
+    long				nInvMore;
+    ULONG				nControl;
+    sal_uInt32			nTravelXPos;
     sal_uInt16          nExtraCursorFlags;
     sal_uInt16          nCursorBidiLevel;
-    sal_uInt16          nScrollDiffX;
-    sal_Bool            bReadOnly;
+    sal_uInt16			nScrollDiffX;
+    sal_Bool			bReadOnly;
     sal_Bool            bClickedInSelection;
     sal_Bool            bActiveDragAndDropListener;
 
-    Point               aAnchorPoint;
-    Rectangle           aOutArea;
-    Point               aVisDocStartPos;
-    EESelectionMode     eSelectionMode;
-    EditSelection       aEditSelection;
-    EVAnchorMode        eAnchorMode;
+    Point				aAnchorPoint;
+    Rectangle			aOutArea;
+    Point				aVisDocStartPos;
+    EESelectionMode		eSelectionMode;
+    EditSelection		aEditSelection;
+    EVAnchorMode		eAnchorMode;
 
 protected:
 
@@ -272,114 +273,114 @@ public:
 
     EditView*       GetEditViewPtr() { return pEditView; }
 
-    sal_uInt16      GetScrollDiffX() const          { return nScrollDiffX; }
-    void            SetScrollDiffX( sal_uInt16 n )  { nScrollDiffX = n; }
+    sal_uInt16		GetScrollDiffX() const 			{ return nScrollDiffX; }
+    void			SetScrollDiffX( sal_uInt16 n ) 	{ nScrollDiffX = n; }
 
     sal_uInt16      GetCursorBidiLevel() const      { return nCursorBidiLevel; }
     void            SetCursorBidiLevel( sal_uInt16 n ) { nCursorBidiLevel = n; }
 
-    Point           GetDocPos( const Point& rWindowPos ) const;
-    Point           GetWindowPos( const Point& rDocPos ) const;
-    Rectangle       GetWindowPos( const Rectangle& rDocPos ) const;
+    Point			GetDocPos( const Point& rWindowPos ) const;
+    Point			GetWindowPos( const Point& rDocPos ) const;
+    Rectangle 		GetWindowPos( const Rectangle& rDocPos ) const;
 
-    void                SetOutputArea( const Rectangle& rRec );
-    void                ResetOutputArea( const Rectangle& rRec );
-    const Rectangle&    GetOutputArea() const   { return aOutArea; }
+    void				SetOutputArea( const Rectangle& rRec );
+    void				ResetOutputArea( const Rectangle& rRec );
+    const Rectangle&	GetOutputArea() const 	{ return aOutArea; }
 
-    BOOL            IsVertical() const;
+    BOOL			IsVertical() const;
 
-    BOOL            PostKeyEvent( const KeyEvent& rKeyEvent );
+    BOOL			PostKeyEvent( const KeyEvent& rKeyEvent );
 
-    BOOL            MouseButtonUp( const MouseEvent& rMouseEvent );
-    BOOL            MouseButtonDown( const MouseEvent& rMouseEvent );
-    BOOL            MouseMove( const MouseEvent& rMouseEvent );
-    void            Command( const CommandEvent& rCEvt );
+    BOOL			MouseButtonUp( const MouseEvent& rMouseEvent );
+    BOOL			MouseButtonDown( const MouseEvent& rMouseEvent );
+    BOOL			MouseMove( const MouseEvent& rMouseEvent );
+    void			Command( const CommandEvent& rCEvt );
 
     void            CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, sal_Bool bCut );
     void            Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, sal_Bool bUseSpecial = sal_False );
 
-    void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
-    const Point&    GetVisDocStartPos() const { return aVisDocStartPos; }
+    void			SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
+    const Point&	GetVisDocStartPos() const { return aVisDocStartPos; }
 
-    long            GetVisDocLeft() const { return aVisDocStartPos.X(); }
-    long            GetVisDocTop() const { return aVisDocStartPos.Y(); }
-    long            GetVisDocRight() const { return aVisDocStartPos.X() + ( !IsVertical() ? aOutArea.GetWidth() : aOutArea.GetHeight() ); }
-    long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
-    Rectangle       GetVisDocArea() const;
+    long			GetVisDocLeft() const { return aVisDocStartPos.X(); }
+    long			GetVisDocTop() const { return aVisDocStartPos.Y(); }
+    long			GetVisDocRight() const { return aVisDocStartPos.X() + ( !IsVertical() ? aOutArea.GetWidth() : aOutArea.GetHeight() ); }
+    long			GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
+    Rectangle		GetVisDocArea() const;
 
-    EditSelection&  GetEditSelection()          { return aEditSelection; }
-    void            SetEditSelection( const EditSelection& rEditSelection );
-    sal_Bool        HasSelection() const { return aEditSelection.HasRange(); }
+    EditSelection&	GetEditSelection() 			{ return aEditSelection; }
+    void			SetEditSelection( const EditSelection& rEditSelection );
+    sal_Bool		HasSelection() const { return aEditSelection.HasRange(); }
 
-    void            DrawSelection() { DrawSelection( aEditSelection ); }
-    void            DrawSelection( EditSelection, Region* pRegion = NULL );
-    Region*         CalcSelectedRegion();
+    void			DrawSelection() { DrawSelection( aEditSelection ); }
+    void			DrawSelection( EditSelection, Region* pRegion = NULL );
+    Region*			CalcSelectedRegion();
 
-    Window*         GetWindow() const           { return pOutWin; }
+    Window*			GetWindow()	const 			{ return pOutWin; }
 
-    EESelectionMode GetSelectionMode() const    { return eSelectionMode; }
-    void            SetSelectionMode( EESelectionMode eMode );
+    EESelectionMode	GetSelectionMode() const 	{ return eSelectionMode; }
+    void			SetSelectionMode( EESelectionMode eMode );
 
-    inline void     SetPointer( const Pointer& rPointer );
-    inline const Pointer&   GetPointer();
+    inline void		SetPointer( const Pointer& rPointer );
+    inline const Pointer&	GetPointer();
 
-    inline void     SetCursor( const Cursor& rCursor );
-    inline Cursor*  GetCursor();
+    inline void		SetCursor( const Cursor& rCursor );
+    inline Cursor*	GetCursor();
 
     void            AddDragAndDropListeners();
     void            RemoveDragAndDropListeners();
 
     BOOL            IsBulletArea( const Point& rPos, sal_uInt16* pPara );
 
-//  Fuer die SelectionEngine...
-    void            CreateAnchor();
-    void            DeselectAll();
-    sal_Bool        SetCursorAtPoint( const Point& rPointPixel );
-    sal_Bool        IsSelectionAtPoint( const Point& rPosPixel );
-    sal_Bool        IsInSelection( const EditPaM& rPaM );
+//	Fuer die SelectionEngine...
+    void			CreateAnchor();
+    void			DeselectAll();
+    sal_Bool 		SetCursorAtPoint( const Point& rPointPixel );
+    sal_Bool 		IsSelectionAtPoint( const Point& rPosPixel );
+    sal_Bool 		IsInSelection( const EditPaM& rPaM );
 
 
-    void            SetAnchorMode( EVAnchorMode eMode );
-    EVAnchorMode    GetAnchorMode() const           { return eAnchorMode; }
-    void            CalcAnchorPoint();
-    void            RecalcOutputArea();
+    void			SetAnchorMode( EVAnchorMode eMode );
+    EVAnchorMode	GetAnchorMode() const 			{ return eAnchorMode; }
+    void			CalcAnchorPoint();
+    void			RecalcOutputArea();
 
-    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, BOOL test );
-    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, USHORT nShowCursorFlags = 0 );
-    Pair            Scroll( long ndX, long ndY, BYTE nRangeCheck = RGCHK_NEG );
+    void			ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, BOOL test );
+    void			ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, USHORT nShowCursorFlags = 0 );
+    Pair 			Scroll( long ndX, long ndY, BYTE nRangeCheck = RGCHK_NEG );
 
-    void            SetInsertMode( sal_Bool bInsert );
-    sal_Bool            IsInsertMode() const            { return ( ( nControl & EV_CNTRL_OVERWRITE ) == 0 ); }
+    void			SetInsertMode( sal_Bool bInsert );
+    sal_Bool			IsInsertMode() const 			{ return ( ( nControl & EV_CNTRL_OVERWRITE ) == 0 ); }
 
-    void                EnablePaste( sal_Bool bEnable )     { SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
-    sal_Bool            IsPasteEnabled() const          { return ( ( nControl & EV_CNTRL_ENABLEPASTE ) != 0 ); }
+    void			    EnablePaste( sal_Bool bEnable ) 	{ SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
+    sal_Bool			IsPasteEnabled() const			{ return ( ( nControl & EV_CNTRL_ENABLEPASTE ) != 0 ); }
 
-    sal_Bool            DoSingleLinePaste() const       { return ( ( nControl & EV_CNTRL_SINGLELINEPASTE ) != 0 ); }
-    sal_Bool            DoAutoScroll() const            { return ( ( nControl & EV_CNTRL_AUTOSCROLL ) != 0 ); }
-    sal_Bool            DoBigScroll() const             { return ( ( nControl & EV_CNTRL_BIGSCROLL ) != 0 ); }
-    sal_Bool            DoAutoSize() const              { return ( ( nControl & EV_CNTRL_AUTOSIZE ) != 0 ); }
-    sal_Bool            DoAutoWidth() const             { return ( ( nControl & EV_CNTRL_AUTOSIZEX) != 0 ); }
-    sal_Bool            DoAutoHeight() const            { return ( ( nControl & EV_CNTRL_AUTOSIZEY) != 0 ); }
-    sal_Bool            DoInvalidateMore() const        { return ( ( nControl & EV_CNTRL_INVONEMORE ) != 0 ); }
+    sal_Bool			DoSingleLinePaste() const		{ return ( ( nControl & EV_CNTRL_SINGLELINEPASTE ) != 0 ); }
+    sal_Bool			DoAutoScroll() const			{ return ( ( nControl & EV_CNTRL_AUTOSCROLL ) != 0 ); }
+    sal_Bool			DoBigScroll() const				{ return ( ( nControl & EV_CNTRL_BIGSCROLL ) != 0 ); }
+    sal_Bool			DoAutoSize() const				{ return ( ( nControl & EV_CNTRL_AUTOSIZE ) != 0 ); }
+    sal_Bool			DoAutoWidth() const				{ return ( ( nControl & EV_CNTRL_AUTOSIZEX) != 0 ); }
+    sal_Bool			DoAutoHeight() const			{ return ( ( nControl & EV_CNTRL_AUTOSIZEY) != 0 ); }
+    sal_Bool			DoInvalidateMore() const		{ return ( ( nControl & EV_CNTRL_INVONEMORE ) != 0 ); }
 
-    void            SetBackgroundColor( const Color& rColor );
-    const Color&    GetBackgroundColor() const {
+    void 			SetBackgroundColor( const Color& rColor );
+    const Color&	GetBackgroundColor() const {
                         return ( pBackgroundColor ? *pBackgroundColor : pOutWin->GetBackground().GetColor() ); }
 
-    sal_Bool            IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong );
-    String          SpellIgnoreOrAddWord( sal_Bool bAdd );
+    sal_Bool			IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong );
+    String			SpellIgnoreOrAddWord( sal_Bool bAdd );
 
     const SvxFieldItem* GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const;
     void                DeleteSelected();
 
     // Ggf. mehr als OutputArea invalidieren, fuer den DrawingEngine-Textrahmen...
-    void            SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
-    sal_uInt16      GetInvalidateMore() const { return (sal_uInt16)nInvMore; }
+    void			SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
+    sal_uInt16		GetInvalidateMore() const { return (sal_uInt16)nInvMore; }
 };
 
-//  ----------------------------------------------------------------------
-//  ImpEditEngine
-//  ----------------------------------------------------------------------
+//	----------------------------------------------------------------------
+//	ImpEditEngine
+//	----------------------------------------------------------------------
 
 typedef EditView* EditViewPtr;
 SV_DECL_PTRARR( EditViews, EditViewPtr, 0, 1 )
@@ -398,11 +399,11 @@ class ImpEditEngine : public SfxListener
 
     friend class EditView;
     friend class ImpEditView;
-    friend class EditEngine;        // Fuer Zugriff auf Imp-Methoden
-    friend class EditRTFParser;     // Fuer Zugriff auf Imp-Methoden
-    friend class EditHTMLParser;    // Fuer Zugriff auf Imp-Methoden
-    friend class EdtAutoCorrDoc;    // Fuer Zugriff auf Imp-Methoden
-    friend class EditDbg;           // DebugRoutinen
+    friend class EditEngine;		// Fuer Zugriff auf Imp-Methoden
+    friend class EditRTFParser;		// Fuer Zugriff auf Imp-Methoden
+    friend class EditHTMLParser;	// Fuer Zugriff auf Imp-Methoden
+    friend class EdtAutoCorrDoc;	// Fuer Zugriff auf Imp-Methoden
+    friend class EditDbg;			// DebugRoutinen
 
 private:
 
@@ -411,217 +412,217 @@ private:
     // ================================================================
 
     // Dokument-Spezifische Daten...
-    ParaPortionList     aParaPortionList;       // Formatierung
-    Size                aPaperSize;             // Layout
-    Size                aMinAutoPaperSize;      // Layout ?
-    Size                aMaxAutoPaperSize;      // Layout ?
-    EditDoc             aEditDoc;               // Dokumenteninhalt
+    ParaPortionList		aParaPortionList;		// Formatierung
+    Size				aPaperSize;				// Layout
+    Size				aMinAutoPaperSize;		// Layout ?
+    Size				aMaxAutoPaperSize;		// Layout ?
+    EditDoc				aEditDoc;				// Dokumenteninhalt
 
     // Engine-Spezifische Daten....
-    EditEngine*         pEditEngine;
-    EditViews           aEditViews;
-    EditView*           pActiveView;
-    TextRanger*         pTextRanger;
+    EditEngine*			pEditEngine;
+    EditViews			aEditViews;
+    EditView*			pActiveView;
+    TextRanger*			pTextRanger;
 
-    SfxStyleSheetPool*  pStylePool;
-    SfxItemPool*        pTextObjectPool;
+    SfxStyleSheetPool*	pStylePool;
+    SfxItemPool*		pTextObjectPool;
 
-    VirtualDevice*      pVirtDev;
-    OutputDevice*       pRefDev;
+    VirtualDevice*		pVirtDev;
+    OutputDevice*		pRefDev;
 
     svtools::ColorConfig*   pColorConfig;
     mutable SvtCTLOptions*  pCTLOptions;
 
-    SfxItemSet*         pEmptyItemSet;
-    EditUndoManager*    pUndoManager;
-    ESelection*         pUndoMarkSelection;
+    SfxItemSet*			pEmptyItemSet;
+    EditUndoManager*	pUndoManager;
+    ESelection*			pUndoMarkSelection;
 
-    ImplIMEInfos*       mpIMEInfos;
+    ImplIMEInfos*		mpIMEInfos;
 
     NotifyList          aNotifyCache;
 
-    XubString           aWordDelimiters;
-    XubString           aGroupChars;
+    XubString			aWordDelimiters;
+    XubString			aGroupChars;
 
-    EditSelFunctionSet  aSelFuncSet;
-    EditSelectionEngine aSelEngine;
+    EditSelFunctionSet	aSelFuncSet;
+    EditSelectionEngine	aSelEngine;
 
-    Color               maBackgroundColor;
+    Color				maBackgroundColor;
 
     sal_uInt32          nBlockNotifications;
-    sal_uInt16          nStretchX;
-    sal_uInt16          nStretchY;
+    sal_uInt16			nStretchX;
+    sal_uInt16			nStretchY;
 
     USHORT              nAsianCompressionMode;
-    BOOL                bKernAsianPunctuation;
+    BOOL				bKernAsianPunctuation;
     BOOL                bAddExtLeading;
 
     EEHorizontalTextDirection eDefaultHorizontalTextDirection;
 
-    sal_uInt16          nBigTextObjectStart;
+    sal_uInt16			nBigTextObjectStart;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 > xSpeller;
+        ::com::sun::star::linguistic2::XSpellChecker1 >	xSpeller;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    xHyphenator;
-    SpellInfo*          pSpellInfo;
+        ::com::sun::star::linguistic2::XHyphenator >	xHyphenator;
+    SpellInfo*			pSpellInfo;
     mutable ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > xBI;
     mutable ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > xISC;
 
     ConvInfo *          pConvInfo;
 
-    XubString           aAutoCompleteText;
+    XubString			aAutoCompleteText;
 
-    InternalEditStatus  aStatus;
+    InternalEditStatus	aStatus;
 
-    LanguageType        eDefLanguage;
+    LanguageType		eDefLanguage;
 
     OnDemandLocaleDataWrapper       xLocaleDataWrapper;
     OnDemandTransliterationWrapper  xTransliterationWrapper;
 
-    sal_Bool            bIsFormatting;
-    sal_Bool            bFormatted;
-    sal_Bool            bInSelection;
-    sal_Bool            bIsInUndo;
-    sal_Bool            bUpdate;
-    sal_Bool            bUndoEnabled;
-    sal_Bool            bOwnerOfRefDev;
-    sal_Bool            bDowning;
+    sal_Bool			bIsFormatting;
+    sal_Bool			bFormatted;
+    sal_Bool			bInSelection;
+    sal_Bool			bIsInUndo;
+    sal_Bool			bUpdate;
+    sal_Bool			bUndoEnabled;
+    sal_Bool			bOwnerOfRefDev;
+    sal_Bool			bDowning;
     sal_Bool            bUseAutoColor;
     sal_Bool            bForceAutoColor;
-    sal_Bool            bCallParaInsertedOrDeleted;
+    sal_Bool			bCallParaInsertedOrDeleted;
     sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
     sal_Bool            bFirstWordCapitalization;   // specifies if auto-correction should capitalize the first word or not
 
     // Fuer Formatierung / Update....
-    DeletedNodesList    aDeletedNodes;
-    Rectangle           aInvalidRec;
-    sal_uInt32          nCurTextHeight;
-    sal_uInt16          nOnePixelInRef;
+    DeletedNodesList	aDeletedNodes;
+    Rectangle			aInvalidRec;
+    sal_uInt32			nCurTextHeight;
+    sal_uInt16			nOnePixelInRef;
 
-    IdleFormattter      aIdleFormatter;
+    IdleFormattter		aIdleFormatter;
 
-    Timer               aOnlineSpellTimer;
+    Timer				aOnlineSpellTimer;
 
     // Wenn an einer Stelle erkannt wird, dass der StatusHdl gerufen werden
     // muss, dies aber nicht sofort geschehen darf (kritischer Abschnitt):
-    Timer               aStatusTimer;
-    Link                aStatusHdlLink;
-    Link                aNotifyHdl;
-    Link                aImportHdl;
+    Timer				aStatusTimer;
+    Link				aStatusHdlLink;
+    Link				aNotifyHdl;
+    Link				aImportHdl;
     Link                aBeginMovingParagraphsHdl;
     Link                aEndMovingParagraphsHdl;
     Link                aBeginPasteOrDropHdl;
     Link                aEndPasteOrDropHdl;
     Link                aModifyHdl;
-    Link                maBeginDropHdl;
-    Link                maEndDropHdl;
+    Link				maBeginDropHdl;
+    Link				maEndDropHdl;
 
-    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
+    vos::ORef<SvxForbiddenCharactersTable>	xForbiddenCharsTable;
 
 
     // ================================================================
     // Methoden...
     // ================================================================
 
-    void                CursorMoved( ContentNode* pPrevNode );
-    void                ParaAttribsChanged( ContentNode* pNode );
-    void                TextModified();
-    void                CalcHeight( ParaPortion* pPortion );
+    void				CursorMoved( ContentNode* pPrevNode );
+    void				ParaAttribsChanged( ContentNode* pNode );
+    void			    TextModified();
+    void				CalcHeight( ParaPortion* pPortion );
 
     // ggf. lieber inline, aber so einiges...
-    void                InsertUndo( EditUndo* pUndo, sal_Bool bTryMerge = sal_False );
-    void                ResetUndoManager();
-    sal_Bool            HasUndoManager() const  { return pUndoManager ? sal_True : sal_False; }
+    void				InsertUndo( EditUndo* pUndo, sal_Bool bTryMerge = sal_False );
+    void				ResetUndoManager();
+    sal_Bool			HasUndoManager() const	{ return pUndoManager ? sal_True : sal_False; }
 
     EditUndoSetAttribs* CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet );
 
-    EditPaM             GetPaM( Point aDocPos, sal_Bool bSmart = sal_True );
-    EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, sal_Bool bSmart = sal_True );
-    long                GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT nIndex, BOOL bPreferPortionStart = FALSE );
+    EditPaM				GetPaM( Point aDocPos, sal_Bool bSmart = sal_True );
+    EditPaM				GetPaM( ParaPortion* pPortion, Point aPos, sal_Bool bSmart = sal_True );
+    long 				GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT nIndex, BOOL bPreferPortionStart = FALSE );
     long                GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLine, USHORT nTextPortion );
-    USHORT              GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nX, BOOL bSmart = TRUE );
-    Range               GetInvalidYOffsets( ParaPortion* pPortion );
+    USHORT				GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nX, BOOL bSmart = TRUE );
+    Range				GetInvalidYOffsets( ParaPortion* pPortion );
     Range               GetLineXPosStartEnd( ParaPortion* pParaPortion, EditLine* pLine );
 
-    void                SetParaAttrib( BYTE nFunc, EditSelection aSel, sal_uInt16 nValue );
-    sal_uInt16          GetParaAttrib( BYTE nFunc, EditSelection aSel );
-    void                SetCharAttrib( EditSelection aSel, const SfxPoolItem& rItem );
-    void                ParaAttribsToCharAttribs( ContentNode* pNode );
-    void                GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
+    void				SetParaAttrib( BYTE nFunc, EditSelection aSel, sal_uInt16 nValue );
+    sal_uInt16			GetParaAttrib( BYTE nFunc, EditSelection aSel );
+    void				SetCharAttrib( EditSelection aSel, const SfxPoolItem& rItem );
+    void				ParaAttribsToCharAttribs( ContentNode* pNode );
+    void				GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
 
-    EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
-    void                StoreBinTextObject( SvStream& rOStream, BinTextObject& rTextObject );
-    EditSelection       InsertBinTextObject( BinTextObject&, EditPaM aPaM );
+    EditTextObject*		CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
+    void 				StoreBinTextObject( SvStream& rOStream, BinTextObject& rTextObject );
+    EditSelection		InsertBinTextObject( BinTextObject&, EditPaM aPaM );
     EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, BOOL bUseSpecial );
 
-    EditPaM             Clear();
-    EditPaM             RemoveText();
-    EditPaM             RemoveText( EditSelection aEditSelection );
-    sal_Bool            CreateLines( USHORT nPara, sal_uInt32 nStartPosY );
-    void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 nStartPosY );
-    sal_Bool            FinishCreateLines( ParaPortion* pParaPortion );
-    void                CalcCharPositions( ParaPortion* pParaPortion );
-    void                CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& rStartPos /*, sal_Bool bCreateBlockPortions */ );
-    void                RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nStartPos, short nNewChars );
-    sal_uInt16          SplitTextPortion( ParaPortion* pParaPortion, sal_uInt16 nPos,  EditLine* pCurLine = 0 );
-    void                SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0 );
-    void                RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics, SvxFont& rFont );
-    void                CheckAutoPageSize();
+    EditPaM				Clear();
+    EditPaM				RemoveText();
+    EditPaM				RemoveText( EditSelection aEditSelection );
+    sal_Bool			CreateLines( USHORT nPara, sal_uInt32 nStartPosY );
+    void				CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 nStartPosY );
+    sal_Bool			FinishCreateLines( ParaPortion* pParaPortion );
+    void				CalcCharPositions( ParaPortion* pParaPortion );
+    void				CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& rStartPos /*, sal_Bool bCreateBlockPortions */ );
+    void				RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nStartPos, short nNewChars );
+    sal_uInt16			SplitTextPortion( ParaPortion* pParaPortion, sal_uInt16 nPos,  EditLine* pCurLine = 0 );
+    void				SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0 );
+    void				RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics, SvxFont& rFont );
+    void				CheckAutoPageSize();
 
-    void                ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion* pPortion, sal_uInt16 nPortionStart, long nRemainingWidth, sal_Bool bCanHyphenate );
-    void                ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, long nRemainingSpace );
-    EditPaM             ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, sal_Bool bBackward = sal_False );
-    EditPaM             ImpDeleteSelection( EditSelection aEditSelection);
-    EditPaM             ImpInsertParaBreak( const EditPaM& rPaM, sal_Bool bKeepEndingAttribs = sal_True );
-    EditPaM             ImpInsertParaBreak( const EditSelection& rEditSelection, sal_Bool bKeepEndingAttribs = sal_True );
-    EditPaM             ImpInsertText( EditSelection aCurEditSelection, const String& rStr );
-    EditPaM             ImpInsertFeature( EditSelection aEditSelection, const SfxPoolItem& rItem );
-    void                ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, EditUndoRemoveChars* pCurUndo = 0 );
-    void                ImpRemoveParagraph( sal_uInt16 nPara );
-    EditSelection       ImpMoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos );
+    void				ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion* pPortion, sal_uInt16 nPortionStart, long nRemainingWidth, sal_Bool bCanHyphenate );
+    void				ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, long nRemainingSpace );
+    EditPaM				ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, sal_Bool bBackward = sal_False );
+    EditPaM				ImpDeleteSelection( EditSelection aEditSelection);
+    EditPaM				ImpInsertParaBreak( const EditPaM& rPaM, sal_Bool bKeepEndingAttribs = sal_True );
+    EditPaM				ImpInsertParaBreak( const EditSelection& rEditSelection, sal_Bool bKeepEndingAttribs = sal_True );
+    EditPaM				ImpInsertText( EditSelection aCurEditSelection, const String& rStr );
+    EditPaM				ImpInsertFeature( EditSelection aEditSelection, const SfxPoolItem& rItem );
+    void				ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, EditUndoRemoveChars* pCurUndo = 0 );
+    void				ImpRemoveParagraph( sal_uInt16 nPara );
+    EditSelection		ImpMoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos );
 
-    EditPaM             ImpFastInsertText( EditPaM aPaM, const String& rStr );
-    EditPaM             ImpFastInsertParagraph( sal_uInt16 nPara );
+    EditPaM				ImpFastInsertText( EditPaM aPaM, const String& rStr );
+    EditPaM 			ImpFastInsertParagraph( sal_uInt16 nPara );
 
-    sal_Bool            ImpCheckRefMapMode();
+    sal_Bool			ImpCheckRefMapMode();
 
     BOOL                ImplHasText() const;
 
     void                ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT nEnd, SvUShorts& rArray );
 
-    void                InsertContent( ContentNode* pNode, sal_uInt16 nPos );
-    EditPaM             SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos );
-    EditPaM             ConnectContents( sal_uInt16 nLeftNode, sal_Bool bBackward );
+    void				InsertContent( ContentNode* pNode, sal_uInt16 nPos );
+    EditPaM 			SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos );
+    EditPaM 			ConnectContents( sal_uInt16 nLeftNode, sal_Bool bBackward );
 
-    void                ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow );
-    sal_Bool            IsParagraphVisible( sal_uInt16 nParagraph );
+    void 				ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow );
+    sal_Bool 			IsParagraphVisible( sal_uInt16 nParagraph );
 
-    EditPaM             PageUp( const EditPaM& rPaM, EditView* pView);
-    EditPaM             PageDown( const EditPaM& rPaM, EditView* pView);
-    EditPaM             CursorUp( const EditPaM& rPaM, EditView* pEditView );
-    EditPaM             CursorDown( const EditPaM& rPaM, EditView* pEditView );
-    EditPaM             CursorLeft( const EditPaM& rPaM, USHORT nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
-    EditPaM             CursorRight( const EditPaM& rPaM, USHORT nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
-    EditPaM             CursorStartOfLine( const EditPaM& rPaM );
-    EditPaM             CursorEndOfLine( const EditPaM& rPaM );
-    EditPaM             CursorStartOfParagraph( const EditPaM& rPaM );
-    EditPaM             CursorEndOfParagraph( const EditPaM& rPaM );
-    EditPaM             CursorStartOfDoc();
-    EditPaM             CursorEndOfDoc();
-    EditPaM             WordLeft( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             WordRight( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, BOOL bAcceptStartOfWord = TRUE );
+    EditPaM				PageUp( const EditPaM& rPaM, EditView* pView);
+    EditPaM				PageDown( const EditPaM& rPaM, EditView* pView);
+    EditPaM				CursorUp( const EditPaM& rPaM, EditView* pEditView );
+    EditPaM				CursorDown( const EditPaM& rPaM, EditView* pEditView );
+    EditPaM				CursorLeft( const EditPaM& rPaM, USHORT nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
+    EditPaM				CursorRight( const EditPaM& rPaM, USHORT nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
+    EditPaM				CursorStartOfLine( const EditPaM& rPaM );
+    EditPaM				CursorEndOfLine( const EditPaM& rPaM );
+    EditPaM				CursorStartOfParagraph( const EditPaM& rPaM );
+    EditPaM				CursorEndOfParagraph( const EditPaM& rPaM );
+    EditPaM				CursorStartOfDoc();
+    EditPaM				CursorEndOfDoc();
+    EditPaM				WordLeft( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM				WordRight( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM				StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM				EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditSelection		SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, BOOL bAcceptStartOfWord = TRUE );
     EditSelection       SelectSentence( const EditSelection& rCurSel );
     EditPaM             CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, USHORT nCharacterIteratorMode, BOOL bToLeft );
     EditPaM             CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, BOOL bStart );
 
 
-    void                InitScriptTypes( USHORT nPara );
-    USHORT              GetScriptType( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
-    USHORT              GetScriptType( const EditSelection& rSel ) const;
-    BOOL                IsScriptChange( const EditPaM& rPaM ) const;
+    void				InitScriptTypes( USHORT nPara );
+    USHORT				GetScriptType( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
+    USHORT				GetScriptType( const EditSelection& rSel ) const;
+    BOOL				IsScriptChange( const EditPaM& rPaM ) const;
     BOOL                HasScriptType( USHORT nPara, USHORT nType ) const;
 
     BOOL                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, sal_Int32* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray );
@@ -630,60 +631,60 @@ private:
     void                ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USHORT nIndex );
     void                ImplInitDigitMode( OutputDevice* pOutDev, String* pString, xub_StrLen nStt, xub_StrLen nLen, LanguageType eLang );
 
-    EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
-    EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
-    EditPaM             ReadXML( SvStream& rInput, EditSelection aSel );
+    EditPaM				ReadText( SvStream& rInput, EditSelection aSel );
+    EditPaM				ReadRTF( SvStream& rInput, EditSelection aSel );
+    EditPaM				ReadXML( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadHTML( SvStream& rInput, const String& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
-    EditPaM             ReadBin( SvStream& rInput, EditSelection aSel );
-    sal_uInt32          WriteText( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteXML( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteHTML( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, BOOL bStoreUnicode = FALSE ) const;
+    EditPaM				ReadBin( SvStream& rInput, EditSelection aSel );
+    sal_uInt32			WriteText( SvStream& rOutput, EditSelection aSel );
+    sal_uInt32			WriteRTF( SvStream& rOutput, EditSelection aSel );
+    sal_uInt32			WriteXML( SvStream& rOutput, EditSelection aSel );
+    sal_uInt32			WriteHTML( SvStream& rOutput, EditSelection aSel );
+    sal_uInt32			WriteBin( SvStream& rOutput, EditSelection aSel, BOOL bStoreUnicode = FALSE ) const;
 
-    void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
+    void				WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
-    sal_Bool            WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
+    sal_Bool			WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
-    long                LogicToTwips( long n );
+    long			    LogicToTwips( long n );
 
-    inline short        GetXValue( short nXValue ) const;
-    inline sal_uInt16   GetXValue( sal_uInt16 nXValue ) const;
-    inline long         GetXValue( long nXValue ) const;
+    inline short		GetXValue( short nXValue ) const;
+    inline sal_uInt16	GetXValue( sal_uInt16 nXValue ) const;
+    inline long			GetXValue( long nXValue ) const;
 
-    inline short        GetYValue( short nYValue ) const;
-    inline sal_uInt16   GetYValue( sal_uInt16 nYValue ) const;
+    inline short		GetYValue( short nYValue ) const;
+    inline sal_uInt16	GetYValue( sal_uInt16 nYValue ) const;
 
-    ContentNode*        GetPrevVisNode( ContentNode* pCurNode );
-    ContentNode*        GetNextVisNode( ContentNode* pCurNode );
+    ContentNode*		GetPrevVisNode( ContentNode* pCurNode );
+    ContentNode*		GetNextVisNode( ContentNode* pCurNode );
 
-    ParaPortion*        GetPrevVisPortion( ParaPortion* pCurPortion );
-    ParaPortion*        GetNextVisPortion( ParaPortion* pCurPortion );
+    ParaPortion*		GetPrevVisPortion( ParaPortion* pCurPortion );
+    ParaPortion*		GetNextVisPortion( ParaPortion* pCurPortion );
 
-    void                SetBackgroundColor( const Color& rColor ) { maBackgroundColor = rColor; }
-    Color               GetBackgroundColor() const { return maBackgroundColor; }
+    void				SetBackgroundColor( const Color& rColor ) { maBackgroundColor = rColor; }
+    Color				GetBackgroundColor() const { return maBackgroundColor; }
 
-    Color               GetAutoColor() const;
+    Color				GetAutoColor() const;
     void                EnableAutoColor( BOOL b ) { bUseAutoColor = b; }
     BOOL                IsAutoColorEnabled() const { return bUseAutoColor; }
     void                ForceAutoColor( BOOL b ) { bForceAutoColor = b; }
     BOOL                IsForceAutoColor() const { return bForceAutoColor; }
 
-    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, ULONG nDrawMode );
-    inline void             EraseVirtualDevice();
+    inline VirtualDevice*	GetVirtualDevice( const MapMode& rMapMode, ULONG nDrawMode );
+    inline void				EraseVirtualDevice();
 
     DECL_LINK( StatusTimerHdl, Timer * );
     DECL_LINK( IdleFormatHdl, Timer * );
     DECL_LINK( OnlineSpellHdl, Timer * );
     DECL_LINK( DocModified, void* );
 
-    void                CheckIdleFormatter();
+    void				CheckIdleFormatter();
 
-    inline ParaPortion* FindParaPortion( ContentNode* pNode ) const;
+    inline ParaPortion*	FindParaPortion( ContentNode* pNode ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection ) const;
 
-    void                SetValidPaperSize( const Size& rSz );
+    void				SetValidPaperSize( const Size& rSz );
 
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
@@ -701,233 +702,233 @@ private:
     SpellInfo *     CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs );
 
 protected:
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 public:
                             ImpEditEngine( EditEngine* pEditEngine, SfxItemPool* pPool );
                             ~ImpEditEngine();
 
-    void                    InitDoc( BOOL bKeepParaAttribs );
-    EditDoc&                GetEditDoc()            { return aEditDoc; }
-    const EditDoc&          GetEditDoc() const      { return aEditDoc; }
+    void					InitDoc( BOOL bKeepParaAttribs );
+    EditDoc&				GetEditDoc()			{ return aEditDoc; }
+    const EditDoc&			GetEditDoc() const		{ return aEditDoc; }
 
-    inline EditUndoManager& GetUndoManager();
+    inline EditUndoManager&	GetUndoManager();
 
-    void                    SetUpdateMode( sal_Bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
-    sal_Bool                GetUpdateMode() const   { return bUpdate; }
+    void					SetUpdateMode( sal_Bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
+    sal_Bool				GetUpdateMode()	const	{ return bUpdate; }
 
-    const ParaPortionList&  GetParaPortions() const { return aParaPortionList; }
-    ParaPortionList&        GetParaPortions()       { return aParaPortionList; }
-    EditViews&              GetEditViews()          { return aEditViews; }
+    const ParaPortionList&	GetParaPortions() const	{ return aParaPortionList; }
+    ParaPortionList&		GetParaPortions() 		{ return aParaPortionList; }
+    EditViews&				GetEditViews() 			{ return aEditViews; }
 
-    const Size&             GetPaperSize() const                    { return aPaperSize; }
-    void                    SetPaperSize( const Size& rSz )         { aPaperSize = rSz; }
+    const Size&				GetPaperSize() const					{ return aPaperSize; }
+    void					SetPaperSize( const Size& rSz ) 		{ aPaperSize = rSz; }
 
-    void                    SetVertical( BOOL bVertical );
-    BOOL                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
+    void					SetVertical( BOOL bVertical );
+    BOOL					IsVertical() const 						{ return GetEditDoc().IsVertical(); }
 
-    void                    SetFixedCellHeight( BOOL bUseFixedCellHeight );
-    BOOL                    IsFixedCellHeight() const { return GetEditDoc().IsFixedCellHeight(); }
+    void					SetFixedCellHeight( BOOL bUseFixedCellHeight );
+    BOOL					IsFixedCellHeight() const { return GetEditDoc().IsFixedCellHeight(); }
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir ) { eDefaultHorizontalTextDirection = eHTextDir; }
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const { return eDefaultHorizontalTextDirection; }
 
 
-    void                    InitWritingDirections( USHORT nPara );
+    void				    InitWritingDirections( USHORT nPara );
     BOOL                    IsRightToLeft( USHORT nPara ) const;
     BYTE                    GetRightToLeft( USHORT nPara, USHORT nChar, USHORT* pStart = NULL, USHORT* pEnd = NULL );
     BOOL                    HasDifferentRTLLevels( const ContentNode* pNode );
 
-    void                    SetTextRanger( TextRanger* pRanger );
-    TextRanger*             GetTextRanger() const { return pTextRanger; }
+    void					SetTextRanger( TextRanger* pRanger );
+    TextRanger*				GetTextRanger() const { return pTextRanger; }
 
-    const Size&             GetMinAutoPaperSize() const             { return aMinAutoPaperSize; }
-    void                    SetMinAutoPaperSize( const Size& rSz )  { aMinAutoPaperSize = rSz; }
+    const Size&				GetMinAutoPaperSize() const				{ return aMinAutoPaperSize; }
+    void					SetMinAutoPaperSize( const Size& rSz )	{ aMinAutoPaperSize = rSz; }
 
-    const Size&             GetMaxAutoPaperSize() const             { return aMaxAutoPaperSize; }
-    void                    SetMaxAutoPaperSize( const Size& rSz )  { aMaxAutoPaperSize = rSz; }
+    const Size&				GetMaxAutoPaperSize() const				{ return aMaxAutoPaperSize; }
+    void					SetMaxAutoPaperSize( const Size& rSz )	{ aMaxAutoPaperSize = rSz; }
 
-    void                    FormatDoc();
-    void                    FormatFullDoc();
-    void                    UpdateViews( EditView* pCurView = 0 );
-    void                    Paint( ImpEditView* pView, const Rectangle& rRect, sal_Bool bUseVirtDev = sal_False );
-    void                    Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aStartPos, sal_Bool bStripOnly = sal_False, short nOrientation = 0 );
+    void					FormatDoc();
+    void					FormatFullDoc();
+    void					UpdateViews( EditView* pCurView = 0 );
+    void					Paint( ImpEditView* pView, const Rectangle& rRect, sal_Bool bUseVirtDev = sal_False );
+    void					Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aStartPos, sal_Bool bStripOnly = sal_False, short nOrientation = 0 );
 
-    sal_Bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
-    sal_Bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );
-    sal_Bool                MouseMove( const MouseEvent& rMouseEvent, EditView* pView );
-    void                    Command( const CommandEvent& rCEvt, EditView* pView );
+    sal_Bool				MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
+    sal_Bool				MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );
+    sal_Bool				MouseMove( const MouseEvent& rMouseEvent, EditView* pView );
+    void 					Command( const CommandEvent& rCEvt, EditView* pView );
 
-    EditSelectionEngine&    GetSelEngine() { return aSelEngine; }
-    XubString               GetSelected( const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF ) const;
+    EditSelectionEngine& 	GetSelEngine() { return aSelEngine; }
+    XubString				GetSelected( const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF ) const;
 
-    const SfxItemSet&       GetEmptyItemSet();
+    const SfxItemSet&		GetEmptyItemSet();
 
-    void                    UpdateSelections();
+    void					UpdateSelections();
 
-    void                    EnableUndo( sal_Bool bEnable );
-    sal_Bool                IsUndoEnabled()         { return bUndoEnabled; }
-    void                    SetUndoMode( sal_Bool b )   { bIsInUndo = b; }
-    sal_Bool                IsInUndo()              { return bIsInUndo; }
+    void					EnableUndo( sal_Bool bEnable );
+    sal_Bool				IsUndoEnabled()			{ return bUndoEnabled; }
+    void					SetUndoMode( sal_Bool b ) 	{ bIsInUndo = b; }
+    sal_Bool				IsInUndo()				{ return bIsInUndo; }
 
-    void                    SetCallParaInsertedOrDeleted( sal_Bool b ) { bCallParaInsertedOrDeleted = b; }
-    sal_Bool                IsCallParaInsertedOrDeleted() const { return bCallParaInsertedOrDeleted; }
+    void					SetCallParaInsertedOrDeleted( sal_Bool b ) { bCallParaInsertedOrDeleted = b; }
+    sal_Bool				IsCallParaInsertedOrDeleted() const { return bCallParaInsertedOrDeleted; }
 
-    sal_Bool                IsFormatted() const { return bFormatted; }
-    sal_Bool                IsFormatting() const { return bIsFormatting; }
+    sal_Bool				IsFormatted() const { return bFormatted; }
+    sal_Bool				IsFormatting() const { return bIsFormatting; }
 
-    void            SetText( const String& rText );
-    EditPaM         DeleteSelected( EditSelection aEditSelection);
+    void 			SetText( const String& rText );
+    EditPaM			DeleteSelected( EditSelection aEditSelection);
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput = sal_False );
-    EditPaM         InsertText( EditSelection aCurEditSelection, const String& rStr );
-    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite );
-    EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, BYTE nMode, BYTE nDelMode = DELMODE_SIMPLE );
-    EditPaM         InsertParaBreak( EditSelection aEditSelection );
-    EditPaM         InsertLineBreak( EditSelection aEditSelection );
-    EditPaM         InsertTab( EditSelection aEditSelection );
-    EditPaM         InsertField( EditSelection aEditSelection, const SvxFieldItem& rFld );
-    sal_Bool        UpdateFields();
+    EditPaM			InsertText( EditSelection aCurEditSelection, const String& rStr );
+    EditPaM			AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite );
+    EditPaM			DeleteLeftOrRight( const EditSelection& rEditSelection, BYTE nMode, BYTE nDelMode = DELMODE_SIMPLE );
+    EditPaM			InsertParaBreak( EditSelection aEditSelection );
+    EditPaM			InsertLineBreak( EditSelection aEditSelection );
+    EditPaM			InsertTab( EditSelection aEditSelection );
+    EditPaM			InsertField( EditSelection aEditSelection, const SvxFieldItem& rFld );
+    sal_Bool		UpdateFields();
 
     EditPaM         Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
-    void            Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel );
+    void			Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel );
 
-    EditTextObject* CreateTextObject();
-    EditTextObject* CreateTextObject( EditSelection aSel );
-    void            SetText( const EditTextObject& rTextObject );
-    EditSelection   InsertText( const EditTextObject& rTextObject, EditSelection aSel );
+    EditTextObject*	CreateTextObject();
+    EditTextObject*	CreateTextObject( EditSelection aSel );
+    void			SetText( const EditTextObject& rTextObject );
+    EditSelection	InsertText( const EditTextObject& rTextObject, EditSelection aSel );
 
-    EditSelection   MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView );
+    EditSelection	MoveCursor( const KeyEvent& rKeyEvent, EditView* pEditView );
 
-    EditSelection   MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos, EditView* pCurView );
+    EditSelection	MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos, EditView* pCurView );
 
-    sal_uInt32      CalcTextHeight();
-    sal_uInt32      GetTextHeight() const;
-    sal_uInt32      CalcTextWidth( BOOL bIgnoreExtraSpace );
-    sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace );
-    sal_uInt16      GetLineCount( sal_uInt16 nParagraph ) const;
+    sal_uInt32		CalcTextHeight();
+    sal_uInt32		GetTextHeight() const;
+    sal_uInt32		CalcTextWidth( BOOL bIgnoreExtraSpace );
+    sal_uInt32 		CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace );
+    sal_uInt16		GetLineCount( sal_uInt16 nParagraph ) const;
     sal_uInt16      GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
     void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
     USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const;
-    sal_uInt16      GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine );
-    sal_uInt32      GetParaHeight( sal_uInt16 nParagraph );
+    sal_uInt16		GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine );
+    sal_uInt32		GetParaHeight( sal_uInt16 nParagraph );
 
     SfxItemSet      GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, sal_uInt8 nFlags = 0xFF ) const;
-    SfxItemSet      GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib = FALSE  );
-    void            SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE nSpecial = 0 );
-    void            RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich = 0 );
-    void            RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0, sal_Bool bRemoveFeatures = sal_False );
-    void            SetFlatMode( sal_Bool bFlat );
+    SfxItemSet		GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib = FALSE  );
+    void			SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE nSpecial = 0 );
+    void			RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich = 0 );
+    void			RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0, sal_Bool bRemoveFeatures = sal_False );
+    void			SetFlatMode( sal_Bool bFlat );
 
-    void                SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
-    const SfxItemSet&   GetParaAttribs( sal_uInt16 nPara ) const;
+    void				SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
+    const SfxItemSet& 	GetParaAttribs( sal_uInt16 nPara ) const;
 
-    sal_Bool            HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
-    const SfxPoolItem&  GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
+    sal_Bool			HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
+    const SfxPoolItem&	GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
 
-    Rectangle       PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags = 0 );
-    Rectangle       GetEditCursor( ParaPortion* pPortion, sal_uInt16 nIndex, sal_uInt16 nFlags = 0 );
+    Rectangle		PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags = 0 );
+    Rectangle		GetEditCursor( ParaPortion* pPortion, sal_uInt16 nIndex, sal_uInt16 nFlags = 0 );
 
-    sal_Bool        IsModified() const      { return aEditDoc.IsModified(); }
-    void            SetModifyFlag( sal_Bool b ) { aEditDoc.SetModified( b ); }
+    sal_Bool		IsModified() const 		{ return aEditDoc.IsModified(); }
+    void			SetModifyFlag( sal_Bool b ) { aEditDoc.SetModified( b ); }
     void            SetModifyHdl( const Link& rLink ) { aModifyHdl = rLink; }
     Link            GetModifyHdl() const { return aModifyHdl; }
 
 
-    sal_Bool        IsInSelectionMode() { return bInSelection; }
-    void            StopSelectionMode();
+    sal_Bool		IsInSelectionMode() { return bInSelection; }
+    void			StopSelectionMode();
 
-    void            IndentBlock( EditView* pView, sal_Bool bRight );
+    void			IndentBlock( EditView* pView, sal_Bool bRight );
 
-//  Fuer Undo/Redo
-    sal_Bool        Undo( EditView* pView );
-    sal_Bool        Redo( EditView* pView );
-    sal_Bool        Repeat( EditView* pView );
+//	Fuer Undo/Redo
+    sal_Bool 		Undo( EditView* pView );
+    sal_Bool 		Redo( EditView* pView );
+    sal_Bool 		Repeat( EditView* pView );
 
-//  OV-Special
-    void            InvalidateFromParagraph( sal_uInt16 nFirstInvPara );
-    EditPaM         InsertParagraph( sal_uInt16 nPara );
-    EditSelection*  SelectParagraph( sal_uInt16 nPara );
+//	OV-Special
+    void			InvalidateFromParagraph( sal_uInt16 nFirstInvPara );
+    EditPaM			InsertParagraph( sal_uInt16 nPara );
+    EditSelection*	SelectParagraph( sal_uInt16 nPara );
 
-    void            SetStatusEventHdl( const Link& rLink )  { aStatusHdlLink = rLink; }
-    Link            GetStatusEventHdl() const               { return aStatusHdlLink; }
+    void			SetStatusEventHdl( const Link& rLink )	{ aStatusHdlLink = rLink; }
+    Link			GetStatusEventHdl() const   			{ return aStatusHdlLink; }
 
-    void            SetNotifyHdl( const Link& rLink )       { aNotifyHdl = rLink; }
-    Link            GetNotifyHdl() const            { return aNotifyHdl; }
+    void			SetNotifyHdl( const Link& rLink )	    { aNotifyHdl = rLink; }
+    Link			GetNotifyHdl() const   			{ return aNotifyHdl; }
 
-    void            FormatAndUpdate( EditView* pCurView = 0 );
-    inline void     IdleFormatAndUpdate( EditView* pCurView = 0 );
+    void			FormatAndUpdate( EditView* pCurView = 0 );
+    inline void		IdleFormatAndUpdate( EditView* pCurView = 0 );
 
     svtools::ColorConfig& GetColorConfig();
     BOOL            IsVisualCursorTravelingEnabled();
     BOOL            DoVisualCursorTraveling( const ContentNode* pNode );
 
-    EditSelection           ConvertSelection( sal_uInt16 nStartPara, sal_uInt16 nStartPos, sal_uInt16 nEndPara, sal_uInt16 nEndPos ) const;
-    inline EPaM             CreateEPaM( const EditPaM& rPaM );
-    inline EditPaM          CreateEditPaM( const EPaM& rEPaM );
-    inline ESelection       CreateESel( const EditSelection& rSel );
-    inline EditSelection    CreateSel( const ESelection& rSel );
+    EditSelection			ConvertSelection( sal_uInt16 nStartPara, sal_uInt16 nStartPos, sal_uInt16 nEndPara, sal_uInt16 nEndPos ) const;
+    inline EPaM				CreateEPaM( const EditPaM& rPaM );
+    inline EditPaM			CreateEditPaM( const EPaM& rEPaM );
+    inline ESelection		CreateESel( const EditSelection& rSel );
+    inline EditSelection	CreateSel( const ESelection& rSel );
 
 
-    void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
-    SfxStyleSheetPool*  GetStyleSheetPool() const { return pStylePool; }
+    void				SetStyleSheetPool( SfxStyleSheetPool* pSPool );
+    SfxStyleSheetPool*	GetStyleSheetPool() const { return pStylePool; }
 
-    void                SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle );
-    void                SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle );
-    SfxStyleSheet*      GetStyleSheet( sal_uInt16 nPara ) const;
+    void				SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle );
+    void				SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle );
+    SfxStyleSheet*		GetStyleSheet( sal_uInt16 nPara ) const;
 
-    void                UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle );
-    void                RemoveStyleFromParagraphs( SfxStyleSheet* pStyle );
+    void				UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle );
+    void 				RemoveStyleFromParagraphs( SfxStyleSheet* pStyle );
 
-    OutputDevice*       GetRefDevice() const { return pRefDev; }
-    void                SetRefDevice( OutputDevice* pRefDef );
+    OutputDevice*		GetRefDevice() const { return pRefDev; }
+    void				SetRefDevice( OutputDevice* pRefDef );
 
-    const MapMode&      GetRefMapMode() { return pRefDev->GetMapMode(); }
-    void                SetRefMapMode( const MapMode& rMapMode );
+    const MapMode&		GetRefMapMode() { return pRefDev->GetMapMode(); }
+    void				SetRefMapMode( const MapMode& rMapMode );
 
-    InternalEditStatus& GetStatus() { return aStatus; }
-    void                CallStatusHdl();
-    void                DelayedCallStatusHdl()  { aStatusTimer.Start(); }
+    InternalEditStatus&	GetStatus()	{ return aStatus; }
+    void				CallStatusHdl();
+    void				DelayedCallStatusHdl()	{ aStatusTimer.Start(); }
 
     void                CallNotify( EENotify& rNotify );
     void                EnterBlockNotifications();
     void                LeaveBlockNotifications();
 
 
-    EditSelection       MatchGroup( const EditSelection& rSel );
+    EditSelection 		MatchGroup( const EditSelection& rSel );
 
-    void                UndoActionStart( sal_uInt16 nId );
-    void                UndoActionStart( sal_uInt16 nId, const ESelection& rSel );
-    void                UndoActionEnd( sal_uInt16 nId );
+    void				UndoActionStart( sal_uInt16 nId );
+    void				UndoActionStart( sal_uInt16 nId, const ESelection& rSel );
+    void				UndoActionEnd( sal_uInt16 nId );
 
-    EditView*           GetActiveView() const   { return pActiveView; }
-    void                SetActiveView( EditView* pView );
+    EditView*			GetActiveView()	const	{ return pActiveView; }
+    void				SetActiveView( EditView* pView );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >
                         GetSpeller();
-    void                SetSpeller( ::com::sun::star::uno::Reference<
+    void				SetSpeller( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl )
                             { xSpeller = xSpl; }
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >
                         GetHyphenator() const { return xHyphenator; }
-    void                SetHyphenator( ::com::sun::star::uno::Reference<
+    void				SetHyphenator( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XHyphenator >  &xHyph )
                             { xHyphenator = xHyph; }
-    SpellInfo*          GetSpellInfo() const { return pSpellInfo; }
+    SpellInfo*			GetSpellInfo() const { return pSpellInfo; }
 
-    void                SetDefaultLanguage( LanguageType eLang ) { eDefLanguage = eLang; }
-    LanguageType        GetDefaultLanguage() const { return eDefLanguage; }
+    void				SetDefaultLanguage( LanguageType eLang ) { eDefLanguage = eLang; }
+    LanguageType		GetDefaultLanguage() const { return eDefLanguage; }
 
 
     LanguageType        GetLanguage( const EditSelection rSelection ) const;
-    LanguageType        GetLanguage( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
+    LanguageType		GetLanguage( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
     ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;
 
-    void                DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, sal_Bool bSpellAtCursorPos = sal_False, sal_Bool bInteruptable = sal_True );
-    EESpellState        Spell( EditView* pEditView, sal_Bool bMultipleDoc );
-    EESpellState        HasSpellErrors();
-    EESpellState        StartThesaurus( EditView* pEditView );
+    void				DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, sal_Bool bSpellAtCursorPos = sal_False, sal_Bool bInteruptable = sal_True );
+    EESpellState		Spell( EditView* pEditView, sal_Bool bMultipleDoc );
+    EESpellState		HasSpellErrors();
+    EESpellState		StartThesaurus( EditView* pEditView );
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
                         ImpSpell( EditView* pEditView );
@@ -973,57 +974,59 @@ public:
                         bool bIsField );
 
     sal_Bool            Search( const SvxSearchItem& rSearchItem, EditView* pView );
-    sal_Bool            ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );
-    sal_uInt16          StartSearchAndReplace( EditView* pEditView, const SvxSearchItem& rSearchItem );
-    sal_Bool            HasText( const SvxSearchItem& rSearchItem );
+    sal_Bool			ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );
+    sal_uInt16			StartSearchAndReplace( EditView* pEditView, const SvxSearchItem& rSearchItem );
+    sal_Bool			HasText( const SvxSearchItem& rSearchItem );
 
-    void                SetEditTextObjectPool( SfxItemPool* pP )    { pTextObjectPool = pP; }
-    SfxItemPool*        GetEditTextObjectPool() const               { return pTextObjectPool; }
+    void				SetEditTextObjectPool( SfxItemPool* pP )	{ pTextObjectPool = pP; }
+    SfxItemPool*		GetEditTextObjectPool() const				{ return pTextObjectPool; }
 
     const SvxNumberFormat * GetNumberFormat( const ContentNode* pNode ) const;
     sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode *pNode, sal_Int32 *pnSpaceBefore = 0, sal_Int32 *pnMinLabelWidth = 0 ) const;
 
-    const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode* pNode );
+    const SvxLRSpaceItem&	GetLRSpaceItem( ContentNode* pNode );
     SvxAdjust               GetJustification( USHORT nPara ) const;
 
-    void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
-    inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY );
-    void                DoStretchChars( sal_uInt16 nX, sal_uInt16 nY );
+    void				SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
+    inline void			GetCharStretching( sal_uInt16& rX, sal_uInt16& rY );
+    void 				DoStretchChars( sal_uInt16 nX, sal_uInt16 nY );
 
-    void                SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount )    { nBigTextObjectStart = nStartAtPortionCount; }
-    sal_uInt16          GetBigTextObjectStart() const                               { return nBigTextObjectStart; }
+    void				SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount )	{ nBigTextObjectStart = nStartAtPortionCount; }
+    sal_uInt16			GetBigTextObjectStart() const								{ return nBigTextObjectStart; }
 
-    inline EditEngine*  GetEditEnginePtr() const    { return pEditEngine; }
+    inline EditEngine*	GetEditEnginePtr() const	{ return pEditEngine; }
 
-    void                StartOnlineSpellTimer()     { aOnlineSpellTimer.Start(); }
-    void                StopOnlineSpellTimer()      { aOnlineSpellTimer.Stop(); }
+    void				StartOnlineSpellTimer()		{ aOnlineSpellTimer.Start(); }
+    void				StopOnlineSpellTimer()		{ aOnlineSpellTimer.Stop(); }
 
-    const XubString&    GetAutoCompleteText() const { return aAutoCompleteText; }
-    void                SetAutoCompleteText( const String& rStr, sal_Bool bUpdateTipWindow );
+    const XubString&	GetAutoCompleteText() const { return aAutoCompleteText; }
+    void				SetAutoCompleteText( const String& rStr, sal_Bool bUpdateTipWindow );
 
-    EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
+    EditSelection		TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
+    short               ReplaceTextOnly( ContentNode* pNode, USHORT nCurrentStart, xub_StrLen nLen, const String& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rOffsets );
+
 
     void                SetAsianCompressionMode( USHORT n );
     USHORT              GetAsianCompressionMode() const { return nAsianCompressionMode; }
 
     void                SetKernAsianPunctuation( BOOL b );
-    BOOL                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
+    BOOL				IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
 
     void                SetAddExtLeading( BOOL b );
     BOOL                IsAddExtLeading() const { return bAddExtLeading; }
 
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
-    void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
+    vos::ORef<SvxForbiddenCharactersTable>	GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
+    void				SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
 
-    BOOL                mbLastTryMerge;
+    BOOL				mbLastTryMerge;
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
-    void                SetBeginDropHdl( const Link& rLink ) { maBeginDropHdl = rLink; }
-    Link                GetBeginDropHdl() const { return maBeginDropHdl; }
+    void				SetBeginDropHdl( const Link& rLink ) { maBeginDropHdl = rLink; }
+    Link				GetBeginDropHdl() const { return maBeginDropHdl; }
 
     /** sets a link that is called at the end of a drag operation at an edit view */
-    void            SetEndDropHdl( const Link& rLink ) { maEndDropHdl = rLink; }
-    Link            GetEndDropHdl() const { return maEndDropHdl; }
+    void			SetEndDropHdl( const Link& rLink ) { maEndDropHdl = rLink; }
+    Link			GetEndDropHdl() const { return maEndDropHdl; }
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( BOOL bCapitalize )  { bFirstWordCapitalization = bCapitalize; }
@@ -1099,7 +1102,7 @@ inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
 }
 
 #ifndef SVX_LIGHT
-inline EditUndoManager& ImpEditEngine::GetUndoManager()
+inline EditUndoManager&	ImpEditEngine::GetUndoManager()
 {
     if ( !pUndoManager )
         pUndoManager = new EditUndoManager( this );
@@ -1107,14 +1110,14 @@ inline EditUndoManager& ImpEditEngine::GetUndoManager()
 }
 #endif
 
-inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
+inline ParaPortion*	ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
 {
     sal_uInt16 nPos = aEditDoc.GetPos( pNode );
     DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
     return GetParaPortions()[ nPos ];
 }
 
-inline void ImpEditEngine::GetCharStretching( sal_uInt16& rX, sal_uInt16& rY )
+inline void	ImpEditEngine::GetCharStretching( sal_uInt16& rX, sal_uInt16& rY )
 {
     rX = nStretchX;
     rY = nStretchY;

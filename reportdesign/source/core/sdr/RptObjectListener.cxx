@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ DBG_NAME(rpt_OObjectListener)
 OObjectListener::OObjectListener(OObjectBase* _pObject)
           :m_pObject(_pObject)
 {
-    DBG_CTOR(rpt_OObjectListener,NULL);
+    DBG_CTOR(rpt_OObjectListener,NULL);    
 }
 
 //----------------------------------------------------------------------------
 
 OObjectListener::~OObjectListener()
 {
-    DBG_DTOR(rpt_OObjectListener,NULL);
+    DBG_DTOR(rpt_OObjectListener,NULL);    
 }
 
 // XEventListener

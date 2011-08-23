@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
@@ -41,7 +41,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
@@ -51,7 +51,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -59,7 +59,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadEventsDocumentHandler :  private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
+class OReadEventsDocumentHandler :	private ThreadHelpBase,	// Struct for right initalization of lock member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -82,45 +82,45 @@ class OReadEventsDocumentHandler :  private ThreadHelpBase, // Struct for right 
             EV_NS_XLINK,
             EV_XML_NAMESPACES_COUNT
         };
-
+        
         OReadEventsDocumentHandler( EventsConfig& aItems );
-
+        
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-        throw ( ::com::sun::star::xml::sax::SAXException,
+        throw (	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endDocument(void)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
                                                     const rtl::OUString& aData)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL setDocumentLocator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
     protected:
@@ -129,10 +129,10 @@ class OReadEventsDocumentHandler :  private ThreadHelpBase, // Struct for right 
     private:
         ::rtl::OUString getErrorLineString();
 
-        class EventsHashMap : public ::std::hash_map<   ::rtl::OUString                 ,
-                                                        Events_XML_Entry                ,
-                                                        OUStringHashCode                ,
-                                                        ::std::equal_to< ::rtl::OUString >  >
+        class EventsHashMap : public ::std::hash_map<	::rtl::OUString					,
+                                                        Events_XML_Entry				,
+                                                        OUStringHashCode				,
+                                                        ::std::equal_to< ::rtl::OUString >	>
         {
             public:
                 inline void free()
@@ -141,12 +141,12 @@ class OReadEventsDocumentHandler :  private ThreadHelpBase, // Struct for right 
                 }
         };
 
-        sal_Bool                                                                    m_bEventsStartFound;
-        sal_Bool                                                                    m_bEventsEndFound;
-        sal_Bool                                                                    m_bEventStartFound;
-        EventsHashMap                                                               m_aEventsMap;
-        EventsConfig&                                                               m_aEventItems;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
+        sal_Bool																	m_bEventsStartFound;
+        sal_Bool																	m_bEventsEndFound;
+        sal_Bool																	m_bEventStartFound;
+        EventsHashMap																m_aEventsMap;
+        EventsConfig&																m_aEventItems;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >	m_xLocator;
 };
 
 class OWriteEventsDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
@@ -160,26 +160,26 @@ class OWriteEventsDocumentHandler : private ThreadHelpBase // Struct for right i
         void WriteEventsDocument() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
-
+    
     protected:
-        virtual void WriteEvent(
-                const ::rtl::OUString& aEventName,
+        virtual void WriteEvent( 
+                const ::rtl::OUString& aEventName, 
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aPropertyValue ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        const EventsConfig&                                                                 m_aItems;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
-        ::rtl::OUString                                                                     m_aXMLEventNS;
-        ::rtl::OUString                                                                     m_aXMLXlinkNS;
-        ::rtl::OUString                                                                     m_aAttributeType;
-        ::rtl::OUString                                                                     m_aAttributeURL;
-        ::rtl::OUString                                                                     m_aAttributeLanguage;
-        ::rtl::OUString                                                                     m_aAttributeLinkType;
-        ::rtl::OUString                                                                     m_aAttributeMacroName;
-        ::rtl::OUString                                                                     m_aAttributeLibrary;
-        ::rtl::OUString                                                                     m_aAttributeName;
+        const EventsConfig&																	m_aItems;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >	m_xWriteDocumentHandler;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >		m_xEmptyList;
+        ::rtl::OUString																		m_aXMLEventNS;
+        ::rtl::OUString																		m_aXMLXlinkNS;
+        ::rtl::OUString																		m_aAttributeType;
+        ::rtl::OUString																		m_aAttributeURL;
+        ::rtl::OUString																		m_aAttributeLanguage;
+        ::rtl::OUString																		m_aAttributeLinkType;
+        ::rtl::OUString																		m_aAttributeMacroName;
+        ::rtl::OUString																		m_aAttributeLibrary;
+        ::rtl::OUString																		m_aAttributeName;
 };
 
 } // namespace framework

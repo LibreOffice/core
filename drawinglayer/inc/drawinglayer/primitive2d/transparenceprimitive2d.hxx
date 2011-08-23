@@ -49,7 +49,7 @@ namespace drawinglayer
             This is the basic primitive for applying freely defined transparence
             to freely defined content. The basic idea is to associate a content
             which is defined as a sequence of primitives and hold as child content
-            in the GroupPrimitive2D with a transparence channel also defined as a sequence
+            in the GroupPrimitive2D with a transparence channel also defined as a sequence 
             of primitives and hold in the transparence member.
 
             The basic definition is to use the transparence content as transparence-Mask by
@@ -58,14 +58,14 @@ namespace drawinglayer
 
             The defining geometry is the Range of the child primitive sequence,
             this means the renderers will/shall use this geometric information for
-            rendering, not the transparent one. The transparent one should/will be clipped
+            rendering, not the transparent one. The transparent one should/will be clipped 
             accordingly.
          */
         class TransparencePrimitive2D : public GroupPrimitive2D
         {
         private:
             /// The transparence-Mask who's RGB-Values are interpreted as Luminance
-            Primitive2DSequence                     maTransparence;
+            Primitive2DSequence						maTransparence;
 
         public:
             /** constructor
@@ -80,7 +80,7 @@ namespace drawinglayer
                 using the common RGB_to_luminance definitions
              */
             TransparencePrimitive2D(
-                const Primitive2DSequence& rChildren,
+                const Primitive2DSequence& rChildren, 
                 const Primitive2DSequence& rTransparence);
 
             /// data read access

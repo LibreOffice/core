@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Beschreibung:	Der Traeger des Dialoges
  --------------------------------------------------------------------*/
 
 
@@ -85,11 +85,11 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
 
     GetOKButton().SetText(String(SW_RES(STR_FLD_INSERT)));
     GetOKButton().SetHelpId(HID_FIELD_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);	// Damit generierter Hilfetext verwendet wird
 
     GetCancelButton().SetText(String(SW_RES(STR_FLD_CLOSE)));
     GetCancelButton().SetHelpId(HID_FIELD_CLOSE);
-    GetCancelButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetCancelButton().SetHelpText(aEmptyStr);	// Damit generierter Hilfetext verwendet wird
 
     FreeResource();
 
@@ -233,10 +233,10 @@ IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
 {
     if (GetOKButton().IsEnabled())
     {
-        SfxTabPage* pPage = GetTabPage(GetCurPageId());
+        SfxTabPage*	pPage = GetTabPage(GetCurPageId());
         pPage->FillItemSet(*(SfxItemSet*)0);
 
-        GetOKButton().GrabFocus();  // Wegen InputField-Dlg
+        GetOKButton().GrabFocus();	// Wegen InputField-Dlg
     }
 
     return 0;
@@ -288,7 +288,7 @@ void SwFldDlg::ReInitTabPage( USHORT nPageId, BOOL bOnlyActivate )
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
 
     if ( pPage )
-        pPage->EditNewField( bOnlyActivate );   // TabPage neu initialisieren
+        pPage->EditNewField( bOnlyActivate );	// TabPage neu initialisieren
 }
 
 /*--------------------------------------------------------------------

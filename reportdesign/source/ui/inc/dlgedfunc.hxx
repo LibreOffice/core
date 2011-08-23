@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ class DlgEdFunc /* : public LinkHdl */
 protected:
     OReportSection* m_pParent;
     OSectionView&   m_rView;
-    Timer           aScrollTimer;
+    Timer			aScrollTimer;
     Point           m_aMDPos;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> m_xOverlappingObj;
     SdrObject *     m_pOverlappingObj;
@@ -62,16 +62,16 @@ protected:
     bool            m_bShowPropertyBrowser;
 
     DECL_LINK( ScrollTimeout, Timer * );
-    void    ForceScroll( const Point& rPos );
+    void	ForceScroll( const Point& rPos );
     /** checks that no other object is overlapped.
     *
-    * \param rMEvt
+    * \param rMEvt 
     */
     void    checkMovementAllowed(const MouseEvent& rMEvt);
 
     /** sets the correct mouse pointer when moving a object
     *
-    * \param rMEvt
+    * \param rMEvt 
     * \return <TRUE/> when the pointer was already set.
     */
     bool    setMovementPointer(const MouseEvent& rMEvt);
@@ -98,14 +98,14 @@ public:
     virtual BOOL MouseMove( const MouseEvent& rMEvt );
 
     /** checks if the keycode is known by the child windows
-        @param  _rCode  the keycode
+        @param	_rCode	the keycode
         @return <TRUE/> if the keycode is handled otherwise <FALSE/>
     */
-    virtual sal_Bool    handleKeyEvent(const KeyEvent& _rEvent);
+    virtual sal_Bool	handleKeyEvent(const KeyEvent& _rEvent);
 
     /** returns <TRUE/> if the mouse event is over an existing object
     *
-    * \param rMEvt
+    * \param rMEvt 
     * \return <TRUE/> if overlapping, otherwise <FALSE/>
     */
     bool isOverlapping(const MouseEvent& rMEvt);
@@ -121,7 +121,7 @@ protected:
     void colorizeOverlappedObject(SdrObject* _pOverlappedObj);
     void unColorizeOverlappedObj();
 
-
+    
 };
 
 //============================================================================

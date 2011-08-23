@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -446,7 +446,7 @@ namespace dbaui
         // auto-generated values?
         if ( rFeatures.supportsGeneratedValues() )
             AddTabPage( PAGE_GENERATED_VALUES, String( ModuleRes( STR_GENERATED_VALUE ) ), ODriversSettings::CreateGeneratedValuesPage, NULL );
-
+        
         // any "special settings"?
         if ( rFeatures.supportsAnySpecialSetting() )
             AddTabPage( PAGE_ADVANCED_SETTINGS_SPECIAL, String( ModuleRes( STR_DS_BEHAVIOUR ) ), ODriversSettings::CreateSpecialSettingsPage, NULL );
@@ -531,7 +531,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
+    ::rtl::OUString	AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -687,7 +687,7 @@ namespace rtl_OStringBuffer
     {
         void ensureCapacity_001()
         {
-            sal_Int32          expVal = 16;
+            sal_Int32 		   expVal = 16;
             ::rtl::OStringBuffer   aStrBuf;
             sal_Int32              input = 5;
 
@@ -703,7 +703,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_002()
         {
-            sal_Int32          expVal = 16;
+            sal_Int32 		   expVal = 16;
             ::rtl::OStringBuffer   aStrBuf;
             sal_Int32              input = -5;
 
@@ -719,7 +719,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_003()
         {
-            sal_Int32          expVal = 16;
+            sal_Int32 		   expVal = 16;
             ::rtl::OStringBuffer   aStrBuf;
             sal_Int32              input = 0;
 
@@ -735,7 +735,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_004()           //the testcase is based on comments
         {
-            sal_Int32          expVal = 20;
+            sal_Int32 		   expVal = 20;
             ::rtl::OStringBuffer   aStrBuf;
             sal_Int32              input = 20;
 
@@ -751,7 +751,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_005()
         {
-            sal_Int32          expVal = 50;
+            sal_Int32 		   expVal = 50;
             ::rtl::OStringBuffer   aStrBuf;
             sal_Int32              input = 50;
 
@@ -767,7 +767,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_006()
         {
-            sal_Int32          expVal = 20;
+            sal_Int32 		   expVal = 20;
             ::rtl::OStringBuffer   aStrBuf( 6 );
             sal_Int32              input = 20;
 
@@ -783,7 +783,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_007()
         {
-            sal_Int32          expVal = 6;
+            sal_Int32 		   expVal = 6;
             ::rtl::OStringBuffer   aStrBuf( 6 );
             sal_Int32              input = 2;
 
@@ -799,7 +799,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_008()
         {
-            sal_Int32          expVal = 6;
+            sal_Int32 		   expVal = 6;
             ::rtl::OStringBuffer   aStrBuf( 6 );
             sal_Int32              input = -6;
 
@@ -815,7 +815,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_009()      //the testcase is based on comments
         {
-            sal_Int32          expVal = 10;
+            sal_Int32 		   expVal = 10;
             ::rtl::OStringBuffer   aStrBuf( 6 );
             sal_Int32              input = 10;
 
@@ -831,7 +831,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_010()
         {
-            sal_Int32          expVal = 6;
+            sal_Int32 		   expVal = 6;
             ::rtl::OStringBuffer   aStrBuf( 0 );
             sal_Int32              input = 6;
 
@@ -847,7 +847,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_011()       //the testcase is based on comments
         {
-            sal_Int32          expVal = 2;  // capacity is x = (str->length + 1) * 2; minimum < x ? x : minimum
+            sal_Int32 		   expVal = 2;  // capacity is x = (str->length + 1) * 2; minimum < x ? x : minimum
             ::rtl::OStringBuffer   aStrBuf( 0 );
             sal_Int32              input = 1;
 
@@ -863,7 +863,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_012()
         {
-            sal_Int32          expVal = 0;
+            sal_Int32 		   expVal = 0;
             ::rtl::OStringBuffer   aStrBuf( 0 );
             sal_Int32              input = -1;
 
@@ -879,7 +879,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         void ensureCapacity_013()             //will core dump
         {
-            sal_Int32          expVal = kSInt32Max;
+            sal_Int32 		   expVal = kSInt32Max;
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
             sal_Int32              input = 65535;
 
@@ -895,7 +895,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_014()             //will core dump
         {
-            sal_Int32          expVal = kSInt32Max;
+            sal_Int32 		   expVal = kSInt32Max;
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
             sal_Int32              input = kSInt32Max;
 
@@ -911,7 +911,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_015()             //will core dump
         {
-            sal_Int32          expVal = kSInt32Max;
+            sal_Int32 		   expVal = kSInt32Max;
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
             sal_Int32              input = -1;
 
@@ -927,7 +927,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_016()             //will core dump
         {
-            sal_Int32          expVal = kSInt32Max;
+            sal_Int32 		   expVal = kSInt32Max;
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
             sal_Int32              input = 0;
 
@@ -943,7 +943,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_017()             //will core dump
         {
-            sal_Int32          expVal = kSInt32Max;
+            sal_Int32 		   expVal = kSInt32Max;
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
             sal_Int32              input = kNonSInt32Max;
 
@@ -959,7 +959,7 @@ namespace rtl_OStringBuffer
 #endif
         void ensureCapacity_018()
         {
-            sal_Int32          expVal = 65535;
+            sal_Int32 		   expVal = 65535;
             ::rtl::OStringBuffer   aStrBuf( kNonSInt32Max );
             sal_Int32              input = 65535;
 
@@ -975,7 +975,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         void ensureCapacity_019()               //will core dump
         {
-            sal_Int32          expVal = 2147483647;
+            sal_Int32 		   expVal = 2147483647;
             ::rtl::OStringBuffer   aStrBuf( kNonSInt32Max );
             sal_Int32              input = 2147483647;
 
@@ -991,7 +991,7 @@ namespace rtl_OStringBuffer
 #endif
         void ensureCapacity_020()
         {
-            sal_Int32          expVal = 2;
+            sal_Int32 		   expVal = 2;
             ::rtl::OStringBuffer   aStrBuf( kNonSInt32Max );
             sal_Int32              input = -1;
 
@@ -1007,7 +1007,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_021()
         {
-            sal_Int32          expVal = 2;
+            sal_Int32 		   expVal = 2;
             ::rtl::OStringBuffer   aStrBuf( kNonSInt32Max );
             sal_Int32              input = 0;
 
@@ -1023,7 +1023,7 @@ namespace rtl_OStringBuffer
 
         void ensureCapacity_022()
         {
-            sal_Int32          expVal = kNonSInt32Max;
+            sal_Int32 		   expVal = kNonSInt32Max;
             ::rtl::OStringBuffer   aStrBuf( kNonSInt32Max );
             sal_Int32              input = kNonSInt32Max;
 

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -93,15 +93,15 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    inline void vcgen_vertex_sequence::rewind(unsigned)
-    {
+    inline void vcgen_vertex_sequence::rewind(unsigned) 
+    { 
         if(!m_ready)
         {
             m_src_vertices.close(is_closed(m_flags));
             shorten_path(m_src_vertices, m_shorten, get_close_flag(m_flags));
         }
         m_ready = true;
-        m_cur_vertex = 0;
+        m_cur_vertex = 0; 
     }
 
     //------------------------------------------------------------------------

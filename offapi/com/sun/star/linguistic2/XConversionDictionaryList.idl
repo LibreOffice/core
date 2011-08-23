@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ module com { module sun { module star { module linguistic2 {
 
     <p>The dictionaries added to the list may or may not support the
     <type scope="com::sun::star::util">XFlushable</type> interface.
-    If they do those dictionaries have to be flushed upon termination
+    If they do those dictionaries have to be flushed upon termination 
     of the dictionary list.</p>
 
      @since OOo 1.1.2
@@ -74,19 +74,19 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         @returns
             the name container interface to the dictionaries in the list.
 
-        <p>The interface can be used to add, remove or retrieve dictionaries
-        from the list by specifying the name of the dictionary, and
-        (in case of inserting) the interface to the dictionary as second
+        <p>The interface can be used to add, remove or retrieve dictionaries 
+        from the list by specifying the name of the dictionary, and 
+        (in case of inserting) the interface to the dictionary as second 
         parameter.</p>
 
-        <p>A dictionary to be added must support the
+        <p>A dictionary to be added must support the 
         <type scope="com::sun::star::linguistic2">XConversionDictionary</type>
         interface.
         The dictionary to be added needs not necessarily be created by
         this service.</p>
 
         <p>The <member scope="com::sun::star::container::XNameReplace">replaceByName</member>
-        function is implemented empty since renaming of dictionaries
+        function is implemented empty since renaming of dictionaries 
         is not allowed.</p>
     */
     com::sun::star::container::XNameContainer   getDictionaryContainer();
@@ -131,7 +131,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         for entries matching the given text.</p>
 
         <p>The exact string to be looked for is the substring from the
-        aText parameter that starts at position nStartPos and has the
+        aText parameter that starts at position nStartPos and has the 
         length nLength.</p>
 
         @returns
@@ -148,7 +148,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
 
         @param aLocale
             Locale the conversion is refered to.
-
+        
         @param nConversionDictionaryType
             specifies the type of conversion the dictionary
             can be used for. It is one of
@@ -160,11 +160,11 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
             <type scope="com::sun::star::linguistic2">ConversionDirection</type>.
 
         @param nTextConversionOptions
-            Combination of <type scope="com::sun::star::i18n">TextConversionOption</type>
+            Combination of <type scope="com::sun::star::i18n">TextConversionOption</type> 
             values.
 
-        @throws com::sun::star::lang::IllegalArgumentException
-            if the nTextConversionOptions parameter is invalid for
+        @throws com::sun::star::lang::IllegalArgumentException 
+            if the nTextConversionOptions parameter is invalid for 
             the given locale.
 
         @throws NoSupportException
@@ -180,11 +180,11 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
             [in] short nConversionDictionaryType,
             [in] com::sun::star::linguistic2::ConversionDirection eDirection,
             [in] long nTextConversionOptions )
-        raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::lang::NoSupportException );
+        raises( com::sun::star::lang::IllegalArgumentException, 
+                com::sun::star::lang::NoSupportException ); 
 
     //-------------------------------------------------------------------------
-    /** returns the maximum number of characters used as left or right text
+    /** returns the maximum number of characters used as left or right text 
         in entries.
 
         <p>All active dictionaries of the specified locale and type

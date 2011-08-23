@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,7 +184,7 @@ struct AdapterImpl
     void invoke(
         const typelib_TypeDescription * pMemberType,
         void * pReturn, void * pArgs[], uno_Any ** ppException );
-
+    
     bool coerce_assign(
         void * pDest, typelib_TypeDescriptionReference * pType,
         uno_Any * pSource, uno_Any * pExc );
@@ -302,7 +302,7 @@ bool AdapterImpl::coerce_assign(
         (*m_pFactory->m_pConverter->pDispatcher)(
             m_pFactory->m_pConverter,
             m_pFactory->m_pConvertToTD, &ret, args, &p_exc );
-
+        
         if (p_exc) // exception occured
         {
             OSL_ASSERT(

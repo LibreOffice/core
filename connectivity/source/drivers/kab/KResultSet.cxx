@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(KabResultSet, "com.sun.star.sdbc.drivers.KabResultSet", "com.sun.star.sdbc.ResultSet");
 // -------------------------------------------------------------------------
-KabResultSet::KabResultSet(KabCommonStatement* pStmt)
+KabResultSet::KabResultSet(KabCommonStatement* pStmt) 
     : KabResultSet_BASE(m_aMutex),
       OPropertySetHelper(KabResultSet_BASE::rBHelper),
       m_xStatement(pStmt),
@@ -163,13 +163,13 @@ sal_Int32 SAL_CALL KabResultSet::findColumn(const ::rtl::OUString& columnName) t
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-    // find the first column with the name columnName
+    // find the first column with the name columnName 
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
 
     for (sal_Int32 i = 1; i <= nLen; ++i)
         if (xMeta->isCaseSensitive(i) ?
-            columnName == xMeta->getColumnName(i) :
+            columnName == xMeta->getColumnName(i) : 
             columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
                 return i;
 
@@ -179,7 +179,7 @@ sal_Int32 SAL_CALL KabResultSet::findColumn(const ::rtl::OUString& columnName) t
             "$columnname$",columnName
          ) );
     ::dbtools::throwGenericSQLException(sError,NULL);
-
+    
     // Unreachable:
     OSL_ASSERT(false);
     return 0;
@@ -501,7 +501,7 @@ void SAL_CALL KabResultSet::beforeFirst() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
-
+        
     // move before the first row
     m_nRowPos = -1;
 }
@@ -615,7 +615,7 @@ sal_Bool SAL_CALL KabResultSet::rowDeleted() throw(SQLException, RuntimeExceptio
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL KabResultSet::rowInserted() throw(SQLException, RuntimeException)
-{
+{	
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
@@ -665,7 +665,7 @@ void SAL_CALL KabResultSet::updateRow() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
-
+        
     // only when you allow updates
 }
 // -------------------------------------------------------------------------
@@ -685,7 +685,7 @@ void SAL_CALL KabResultSet::moveToInsertRow() throw(SQLException, RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
-
+        
     // only when you allow inserts
 }
 // -------------------------------------------------------------------------
@@ -898,7 +898,7 @@ Sequence< sal_Int32 > SAL_CALL KabResultSet::deleteRows(const  Sequence<  Any >&
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
-
+        
     return Sequence< sal_Int32 >();
 }
 // -------------------------------------------------------------------------
@@ -907,12 +907,12 @@ IPropertyArrayHelper* KabResultSet::createArrayHelper() const
     Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
-    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-    DECL_PROP0(FETCHSIZE,               sal_Int32);
+    DECL_PROP1IMPL(CURSORNAME,			::rtl::OUString) PropertyAttribute::READONLY);
+    DECL_PROP0(FETCHDIRECTION,			sal_Int32);
+    DECL_PROP0(FETCHSIZE,				sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(RESULTSETTYPE,		sal_Int32) PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
 }

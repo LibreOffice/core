@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 //   Vorausdeklarationen
 //************************************************************
 
-namespace sdr { namespace properties {
+namespace sdr {	namespace properties {
     class CircleProperties;
 }}
 
@@ -47,8 +47,8 @@ namespace sdr { namespace properties {
 class SdrCircObjGeoData : public SdrTextObjGeoData
 {
 public:
-    long                        nStartWink;
-    long                        nEndWink;
+    long						nStartWink;
+    long						nEndWink;
 };
 
 //************************************************************
@@ -68,12 +68,12 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    SdrObjKind                  meCircleKind;
-    long                        nStartWink;
-    long                        nEndWink;
+    SdrObjKind					meCircleKind;
+    long						nStartWink;
+    long						nEndWink;
 
     // bitfield
-    unsigned                    mbPolygonIsLine : 1;
+    unsigned					mbPolygonIsLine : 1;
 
 private:
      SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
@@ -119,7 +119,7 @@ public:
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-
+    
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;

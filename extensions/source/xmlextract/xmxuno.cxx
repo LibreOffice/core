@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ sal_Bool SAL_CALL component_writeInfo(
             REF( NMSP_REGISTRY::XRegistryKey ) xNewKey(
                 reinterpret_cast< NMSP_REGISTRY::XRegistryKey * >( pRegistryKey )->createKey(
                     NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM("/com.sun.star.comp.io.XMLExtractor/UNO/SERVICES/com.sun.star.io.XMLExtractor") ) ) );
-
+            
             return sal_True;
         }
         catch (NMSP_REGISTRY::InvalidRegistryException &)
@@ -77,7 +77,7 @@ void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
-
+    
     if (rtl_str_compare( pImplName, "com.sun.star.comp.io.XMLExtractor" ) == 0)
     {
         NMSP_RTL::OUString aServiceName( B2UCONST( "com.sum.star.io.XMLExtractor" ) );
@@ -87,14 +87,14 @@ void * SAL_CALL component_getFactory(
             NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.io.XMLExtractor") ),
             create_XMLExtractor,
             SEQ( NMSP_RTL::OUString )( &aServiceName, 1 ) ) );
-
+        
         if (xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
         }
     }
-
+    
     return pRet;
 }
 }

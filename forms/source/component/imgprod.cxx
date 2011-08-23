@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@
 
 class ImgProdLockBytes : public SvLockBytes
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >      xStmRef;
-    ::com::sun::star::uno::Sequence<sal_Int8>       maSeq;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > 		xStmRef;
+    ::com::sun::star::uno::Sequence<sal_Int8>		maSeq;
 
                         ImgProdLockBytes() {};
 
@@ -57,13 +57,13 @@ public:
 
                         ImgProdLockBytes( SvStream* pStm, sal_Bool bOwner );
                         ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStreamRef );
-    virtual             ~ImgProdLockBytes();
+    virtual				~ImgProdLockBytes();
 
-    virtual ErrCode     ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const;
-    virtual ErrCode     WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten );
-    virtual ErrCode     Flush() const;
-    virtual ErrCode     SetSize( sal_Size nSize );
-    virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
+    virtual ErrCode		ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const;
+    virtual ErrCode		WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten );
+    virtual ErrCode		Flush() const;
+    virtual ErrCode		SetSize( sal_Size nSize );
+    virtual ErrCode		Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
 };
 
 // ------------------------------------------------------------------------
@@ -80,13 +80,13 @@ ImgProdLockBytes::ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun
 {
     if( xStmRef.is() )
     {
-        const sal_uInt32    nBytesToRead = 65535;
-        sal_uInt32          nRead;
+        const sal_uInt32	nBytesToRead = 65535;
+        sal_uInt32			nRead;
 
         do
         {
             ::com::sun::star::uno::Sequence< sal_Int8 > aReadSeq;
-
+            
             nRead = xStmRef->readSomeBytes( aReadSeq, nBytesToRead );
 
             if( nRead )
@@ -189,8 +189,8 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
 // -----------------
 
 ImageProducer::ImageProducer() :
-    mpStm       ( NULL ),
-    mbConsInit  ( sal_False )
+    mpStm		( NULL ),
+    mbConsInit	( sal_False )
 {
     mpGraphic = new Graphic;
     DBG_ASSERT( Application::GetFilterHdl().IsSet(), "ImageProducer::ImageProducer(): No filter handler set" );
@@ -334,8 +334,8 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
         if ( bNotifyEmptyGraphics )
         {
             // reset image
-            List    aTmp;
-            void*   pCons;
+            List	aTmp;
+            void*	pCons;
 
             // create temporary list to hold interfaces
             for( pCons = maConsList.First(); pCons; pCons = maConsList.Next() )
@@ -380,8 +380,8 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 
     if( mbConsInit && maConsList.Count() )
     {
-        List    aTmp;
-        void*   pCons;
+        List	aTmp;
+        void*	pCons;
 
         ImplUpdateConsumer( rGraphic );
         mbConsInit = sal_False;
@@ -404,10 +404,10 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 
 void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 {
-    Bitmap              aBmp( rGraphic.GetBitmapEx().GetBitmap() );
-    BitmapReadAccess*   pBmpAcc = aBmp.AcquireReadAccess();
+    Bitmap				aBmp( rGraphic.GetBitmapEx().GetBitmap() );
+    BitmapReadAccess*	pBmpAcc = aBmp.AcquireReadAccess();
 
-    if( pBmpAcc )
+    if(	pBmpAcc )
     {
         List             aTmp;
         void *           pCons;
@@ -416,7 +416,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
         sal_uInt32       nGMask = 0;
         sal_uInt32       nBMask = 0;
         sal_uInt32       nAMask = 0;
-        ::com::sun::star::uno::Sequence< sal_Int32 >    aRGBPal;
+        ::com::sun::star::uno::Sequence< sal_Int32 >	aRGBPal;
 
         if( pBmpAcc->HasPalette() )
         {
@@ -425,7 +425,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
             if( nPalCount )
             {
                 aRGBPal = ::com::sun::star::uno::Sequence< sal_Int32 >( nPalCount + 1 );
-
+                
                 sal_Int32* pTmp = aRGBPal.getArray();
 
                 for( sal_uInt32 i = 0; i < nPalCount; i++, pTmp++ )
@@ -483,24 +483,24 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 
 void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 {
-    BitmapEx            aBmpEx( rGraphic.GetBitmapEx() );
-    Bitmap              aBmp( aBmpEx.GetBitmap() );
-    BitmapReadAccess*   pBmpAcc = aBmp.AcquireReadAccess();
+    BitmapEx			aBmpEx( rGraphic.GetBitmapEx() );
+    Bitmap				aBmp( aBmpEx.GetBitmap() );
+    BitmapReadAccess*	pBmpAcc = aBmp.AcquireReadAccess();
 
     if( pBmpAcc )
     {
-        List                aTmp;
-        void*               pCons;
-        Bitmap              aMask( aBmpEx.GetMask() );
-        BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : NULL;
-        const long          nWidth = pBmpAcc->Width();
-        const long          nHeight = pBmpAcc->Height();
-        const long          nStartX = 0L;
-        const long          nEndX = nWidth - 1L;
-        const long          nStartY = 0L;
-        const long          nEndY = nHeight - 1L;
-        const long          nPartWidth = nEndX - nStartX + 1;
-        const long          nPartHeight = nEndY - nStartY + 1;
+        List				aTmp;
+        void*				pCons;
+        Bitmap				aMask( aBmpEx.GetMask() );
+        BitmapReadAccess*	pMskAcc = !!aMask ? aMask.AcquireReadAccess() : NULL;
+        const long			nWidth = pBmpAcc->Width();
+        const long			nHeight = pBmpAcc->Height();
+        const long			nStartX = 0L;
+        const long			nEndX = nWidth - 1L;
+        const long			nStartY = 0L;
+        const long			nEndY = nHeight - 1L;
+        const long			nPartWidth = nEndX - nStartX + 1;
+        const long			nPartHeight = nEndY - nStartY + 1;
 
         if( !pMskAcc )
         {
@@ -519,8 +519,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
             if( mnTransIndex < 256 )
             {
-                ::com::sun::star::uno::Sequence<sal_Int8>   aData( nPartWidth * nPartHeight );
-                sal_Int8*                                   pTmp = aData.getArray();
+                ::com::sun::star::uno::Sequence<sal_Int8>	aData( nPartWidth * nPartHeight );
+                sal_Int8*									pTmp = aData.getArray();
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
@@ -541,8 +541,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
             }
             else
             {
-                ::com::sun::star::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
-                sal_Int32*                                  pTmp = aData.getArray();
+                ::com::sun::star::uno::Sequence<sal_Int32>	aData( nPartWidth * nPartHeight );
+                sal_Int32*									pTmp = aData.getArray();
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
@@ -563,9 +563,9 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
         }
         else
         {
-            ::com::sun::star::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
-            const BitmapColor                           aWhite( pMskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
-            sal_Int32*                                  pTmp = aData.getArray();
+            ::com::sun::star::uno::Sequence<sal_Int32> 	aData( nPartWidth * nPartHeight );
+            const BitmapColor							aWhite( pMskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+            sal_Int32*									pTmp = aData.getArray();
 
             for( long nY = nStartY; nY <= nEndY; nY++ )
             {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ struct StyleRequestData;
 
 namespace sd {
 
-class FuInsertFile
+class FuInsertFile 
     : public FuPoor
 {
 public:
@@ -49,15 +49,15 @@ public:
 
 private:
     FuInsertFile (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
+        ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
-
+    
     String          aLayoutName;    // Layoutname der aktuell eingefuegten Seite
     String          aFilterName;    // gewaehlter Dateifilter
-    String          aFile;          // gewaehlter Dateiname
+    String          aFile;			// gewaehlter Dateiname
 
     void            InsTextOrRTFinOlMode(SfxMedium* pMedium);
     BOOL            InsSDDinOlMode(SfxMedium* pMedium);

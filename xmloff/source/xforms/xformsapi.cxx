@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ Reference<XPropertySet> lcl_createXFormsBinding()
     return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Binding" ) );
 }
 
-void lcl_addXFormsModel(
+void lcl_addXFormsModel( 
     const Reference<frame::XModel>& xDocument,
     const Reference<XPropertySet>& xModel )
 {
@@ -118,7 +118,7 @@ void lcl_addXFormsModel(
     DBG_ASSERT( bSuccess, "can't import model" );
 }
 
-Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
+Reference<XPropertySet> lcl_findXFormsBindingOrSubmission( 
     Reference<frame::XModel>& xDocument,
     const rtl::OUString& rBindingID,
     bool bBinding )
@@ -143,18 +143,18 @@ Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
                 sal_Int32 nNames = aNames.getLength();
                 for( sal_Int32 n = 0; (n < nNames) && !xRet.is(); n++ )
                 {
-                    Reference<xforms::XModel> xModel(
+                    Reference<xforms::XModel> xModel( 
                         xForms->getByName( pNames[n] ), UNO_QUERY );
                     if( xModel.is() )
                     {
                         // ask model for bindings
                         Reference<XNameAccess> xBindings(
                             bBinding
-                                ? xModel->getBindings()
+                                ? xModel->getBindings() 
                                 : xModel->getSubmissions(),
                             UNO_QUERY_THROW );
 
-                        // finally, ask binding for name
+                        // finally, ask binding for name 
                         if( xBindings->hasByName( rBindingID ) )
                             xRet.set( xBindings->getByName( rBindingID ),
                                       UNO_QUERY );
@@ -173,14 +173,14 @@ Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
     return xRet;
 }
 
-Reference<XPropertySet> lcl_findXFormsBinding(
+Reference<XPropertySet> lcl_findXFormsBinding( 
     Reference<frame::XModel>& xDocument,
     const rtl::OUString& rBindingID )
 {
     return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, true );
 }
 
-Reference<XPropertySet> lcl_findXFormsSubmission(
+Reference<XPropertySet> lcl_findXFormsSubmission( 
     Reference<frame::XModel>& xDocument,
     const rtl::OUString& rBindingID )
 {
@@ -238,7 +238,7 @@ static SvXMLTokenMapEntry aTypes[] =
     XML_TOKEN_MAP_END
 };
 
-sal_uInt16 lcl_getTypeClass(
+sal_uInt16 lcl_getTypeClass( 
     const Reference<XDataTypeRepository>&
     #ifdef DBG_UTIL
     xRepository
@@ -296,7 +296,7 @@ sal_uInt16 lcl_getTypeClass(
         case XML_MONTH:
             nTypeClass = com::sun::star::xsd::DataTypeClass::gMonth;
             break;
-
+ 
             /* data types not yet supported:
             nTypeClass = com::sun::star::xsd::DataTypeClass::DURATION;
             nTypeClass = com::sun::star::xsd::DataTypeClass::gYearMonth;
@@ -313,7 +313,7 @@ sal_uInt16 lcl_getTypeClass(
 }
 
 
-rtl::OUString lcl_getTypeName(
+rtl::OUString lcl_getTypeName( 
     const Reference<XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
@@ -322,12 +322,12 @@ rtl::OUString lcl_getTypeName(
     sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName(rXMLName, &sLocalName);
     SvXMLTokenMap aMap( aTypes );
     sal_uInt16 mnToken = aMap.Get( nPrefix, sLocalName );
-    return ( mnToken == XML_TOK_UNKNOWN )
-        ? rXMLName
+    return ( mnToken == XML_TOK_UNKNOWN ) 
+        ? rXMLName 
         : lcl_getBasicTypeName( xRepository, rNamespaceMap, rXMLName );
 }
 
-rtl::OUString lcl_getBasicTypeName(
+rtl::OUString lcl_getBasicTypeName( 
     const Reference<XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
@@ -335,8 +335,8 @@ rtl::OUString lcl_getBasicTypeName(
     OUString sTypeName = rXMLName;
     try
     {
-        sTypeName =
-            xRepository->getBasicDataType(
+        sTypeName = 
+            xRepository->getBasicDataType( 
                 lcl_getTypeClass( xRepository, rNamespaceMap, rXMLName ) )
             ->getName();
     }

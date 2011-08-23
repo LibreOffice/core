@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,12 +67,12 @@ static void sal_PrintImage( char *s, XImage*p )
 // -----------------------------------------------------------------------------
 
 #if (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
-#define DBG_TESTTRANS( _def_drawable )                              \
-{                                                                   \
-    XCopyArea( pXDisp, _def_drawable, aDrawable, GetCopyGC(),       \
-               0, 0,                                                \
-               pPosAry->mnDestWidth, pPosAry->mnDestHeight,         \
-               0, 0 );                                              \
+#define DBG_TESTTRANS( _def_drawable )								\
+{																	\
+    XCopyArea( pXDisp, _def_drawable, aDrawable, GetCopyGC(),		\
+               0, 0,												\
+               pPosAry->mnDestWidth, pPosAry->mnDestHeight,			\
+               0, 0 );												\
 }
 #else // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 #define DBG_TESTTRANS( _def_drawable )
@@ -129,14 +129,14 @@ GC X11SalGraphics::CreateGC( Drawable hDrawable, unsigned long nMask )
 {
     XGCValues values;
 
-    values.graphics_exposures   = False;
-    values.foreground           = m_pColormap->GetBlackPixel()
+    values.graphics_exposures	= False;
+    values.foreground			= m_pColormap->GetBlackPixel()
                                   ^ m_pColormap->GetWhitePixel();
-    values.function             = GXxor;
-    values.line_width           = 1;
-    values.fill_style           = FillStippled;
-    values.stipple              = GetDisplay()->GetInvert50( m_nScreen );
-    values.subwindow_mode       = ClipByChildren;
+    values.function				= GXxor;
+    values.line_width			= 1;
+    values.fill_style			= FillStippled;
+    values.stipple				= GetDisplay()->GetInvert50( m_nScreen );
+    values.subwindow_mode		= ClipByChildren;
 
     return XCreateGC( GetXDisplay(), hDrawable, nMask | GCSubwindowMode, &values );
 }
@@ -197,12 +197,12 @@ GC X11SalGraphics::GetInvert50GC()
     {
         XGCValues values;
 
-        values.graphics_exposures   = False;
-        values.foreground           = m_pColormap->GetWhitePixel();
-        values.background           = m_pColormap->GetBlackPixel();
-        values.function             = GXinvert;
-        values.line_width           = 1;
-        values.line_style           = LineSolid;
+        values.graphics_exposures	= False;
+        values.foreground			= m_pColormap->GetWhitePixel();
+        values.background			= m_pColormap->GetBlackPixel();
+        values.function				= GXinvert;
+        values.line_width			= 1;
+        values.line_style			= LineSolid;
         unsigned long nValueMask =
                                   GCGraphicsExposures
                                   | GCForeground
@@ -221,8 +221,8 @@ GC X11SalGraphics::GetInvert50GC()
         }
         else
         {
-            values.fill_style           = FillStippled;
-            values.stipple              = GetDisplay()->GetInvert50( m_nScreen );
+            values.fill_style			= FillStippled;
+            values.stipple				= GetDisplay()->GetInvert50( m_nScreen );
         }
 
         pInvert50GC_ = XCreateGC( GetXDisplay(), GetDrawable(),
@@ -363,7 +363,7 @@ GC X11SalGraphics::SetMask( int           &nX,
     }
 
     // - - - - create alternate clip pixmap for region clipping - - - -
-    Pixmap hPixmap  = XCreatePixmap( pDisplay, hClipMask, nDX, nDY, 1 );
+    Pixmap hPixmap	= XCreatePixmap( pDisplay, hClipMask, nDX, nDY, 1 );
 
     if( !hPixmap )
     {
@@ -384,12 +384,12 @@ GC X11SalGraphics::SetMask( int           &nX,
     GC pMonoGC = GetMonoGC( hPixmap );
     XSetClipOrigin( pDisplay, pMonoGC, -nX, -nY );
     XCopyArea( pDisplay,
-               hClipMask,           // Source
-               hPixmap,             // Destination
+               hClipMask,			// Source
+               hPixmap,				// Destination
                pMonoGC,
-               nSrcX, nSrcY,        // Source
-               nDX,   nDY,          // Width & Height
-               0,     0 );          // Destination
+               nSrcX, nSrcY,		// Source
+               nDX,   nDY,			// Width & Height
+               0,     0 );			// Destination
 
     XSetClipMask( pDisplay, pMaskGC_, hPixmap );
     XSetClipOrigin( pDisplay, pMaskGC_, nX, nY );
@@ -401,7 +401,7 @@ GC X11SalGraphics::SetMask( int           &nX,
 // -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-extern "C"
+extern "C" 
 {
     static Bool GraphicsExposePredicate( Display*, XEvent* pEvent, XPointer pFrameWindow )
     {
@@ -460,12 +460,12 @@ void X11SalGraphics::YieldGraphicsExpose()
 }
 
 void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
-                                  SalGraphics      *pSSrcGraphics )
+                                  SalGraphics	   *pSSrcGraphics )
 {
     X11SalGraphics* pSrcGraphics = pSSrcGraphics
         ? static_cast<X11SalGraphics*>(pSSrcGraphics)
         : this;
-
+    
     if( pPosAry->mnSrcWidth <= 0
         || pPosAry->mnSrcHeight <= 0
         || pPosAry->mnDestWidth <= 0
@@ -473,7 +473,7 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
     {
         return;
     }
-
+    
     int n;
     if( pSrcGraphics == this )
     {
@@ -500,9 +500,9 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
     }
     else
         n = 0;
-
+    
     if( n == 2
-        && pPosAry->mnSrcWidth  == pPosAry->mnDestWidth
+        && pPosAry->mnSrcWidth	== pPosAry->mnDestWidth
         && pPosAry->mnSrcHeight == pPosAry->mnDestHeight
         )
     {
@@ -510,7 +510,7 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
         // obscured areas beneath overlapping windows), src and dest
         // are the same window.
         const bool bNeedGraphicsExposures( pSrcGraphics == this &&
-                                           !bVirDev_ &&
+                                           !bVirDev_ && 
                                            pSrcGraphics->bWindow_ );
 
         GC pCopyGC;
@@ -520,7 +520,7 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
             && (GetDisplay()->GetProperties() & PROPERTY_BUG_XCopyArea_GXxor) )
         {
             Pixmap hPixmap = XCreatePixmap( GetXDisplay(),
-                                            pSrcGraphics->GetDrawable(),        // source
+                                            pSrcGraphics->GetDrawable(),		// source
                                             pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                                             pSrcGraphics->GetBitCount() );
 
@@ -532,17 +532,17 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
                                        True );
 
             XCopyArea( GetXDisplay(),
-                       pSrcGraphics->GetDrawable(),     // source
-                       hPixmap,                         // destination
-                       pCopyGC,                         // no clipping
+                       pSrcGraphics->GetDrawable(),		// source
+                       hPixmap,							// destination
+                       pCopyGC,							// no clipping
                        pPosAry->mnSrcX,     pPosAry->mnSrcY,
                        pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
-                       0,                   0 );            // destination
+                       0,    				0 );			// destination
             XCopyArea( GetXDisplay(),
-                       hPixmap,                             // source
-                       GetDrawable(),                       // destination
-                       GetInvertGC(),       // destination clipping
-                       0,                   0,              // source
+                       hPixmap,								// source
+                       GetDrawable(),						// destination
+                       GetInvertGC(),		// destination clipping
+                       0,				    0,				// source
                        pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                        pPosAry->mnDestX,    pPosAry->mnDestY );
             XFreePixmap( GetXDisplay(), hPixmap );
@@ -550,16 +550,16 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
         else
         {
             pCopyGC = GetCopyGC();
-
+            
             if( bNeedGraphicsExposures )
                 XSetGraphicsExposures( GetXDisplay(),
                                        pCopyGC,
                                        True );
 
             XCopyArea( GetXDisplay(),
-                       pSrcGraphics->GetDrawable(),     // source
-                       GetDrawable(),                   // destination
-                       pCopyGC,                         // destination clipping
+                       pSrcGraphics->GetDrawable(),		// source
+                       GetDrawable(),					// destination
+                       pCopyGC,							// destination clipping
                        pPosAry->mnSrcX,     pPosAry->mnSrcY,
                        pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                        pPosAry->mnDestX,    pPosAry->mnDestY );
@@ -584,18 +584,18 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
                                                    pPosAry->mnSrcY,
                                                    pPosAry->mnSrcWidth,
                                                    pPosAry->mnSrcHeight );
-
+        
         if( !pDDB )
         {
             stderr0( "SalGraphics::CopyBits !pSrcGraphics->GetBitmap()\n" );
             return;
         }
-
+        
         SalTwoRect aPosAry( *pPosAry );
-
-        aPosAry.mnSrcX = 0, aPosAry.mnSrcY = 0;
+        
+        aPosAry.mnSrcX = 0,	aPosAry.mnSrcY = 0;
         drawBitmap( &aPosAry, *pDDB );
-
+        
         delete pDDB;
     }
     else {
@@ -611,17 +611,17 @@ void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
                                 USHORT )
 {
     SalTwoRect aPosAry;
-
+    
     aPosAry.mnDestX = nDestX;
     aPosAry.mnDestY = nDestY;
     aPosAry.mnDestWidth  = nSrcWidth;
     aPosAry.mnDestHeight = nSrcHeight;
-
+    
     aPosAry.mnSrcX = nSrcX;
     aPosAry.mnSrcY = nSrcY;
     aPosAry.mnSrcWidth  = nSrcWidth;
     aPosAry.mnSrcHeight = nSrcHeight;
-
+    
     copyBits ( &aPosAry, 0 );
 }
 
@@ -629,14 +629,14 @@ void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
 void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
 {
     const SalDisplay*   pSalDisp = GetDisplay();
-    Display*            pXDisp = pSalDisp->GetDisplay();
-    const Drawable      aDrawable( GetDrawable() );
-    const SalColormap&  rColMap = pSalDisp->GetColormap( m_nScreen );
-    const long          nDepth = GetDisplay()->GetVisual( m_nScreen ).GetDepth();
-    GC                  aGC( GetCopyGC() );
-    XGCValues           aOldVal, aNewVal;
-    int                 nValues = GCForeground | GCBackground;
-
+    Display*			pXDisp = pSalDisp->GetDisplay();
+    const Drawable		aDrawable( GetDrawable() );
+    const SalColormap&	rColMap = pSalDisp->GetColormap( m_nScreen );
+    const long			nDepth = GetDisplay()->GetVisual( m_nScreen ).GetDepth();
+    GC					aGC( GetCopyGC() );
+    XGCValues			aOldVal, aNewVal;
+    int					nValues = GCForeground | GCBackground;
+    
     if( rSalBitmap.GetBitCount() == 1 )
     {
         // set foreground/background values for 1Bit bitmaps
@@ -644,9 +644,9 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
         aNewVal.foreground = rColMap.GetWhitePixel(), aNewVal.background = rColMap.GetBlackPixel();
         XChangeGC( pXDisp, aGC, nValues, &aNewVal );
     }
-
+    
     static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, m_nScreen, nDepth, *pPosAry, aGC );
-
+    
     if( rSalBitmap.GetBitCount() == 1 )
         XChangeGC( pXDisp, aGC, nValues, &aOldVal );
     XFlush( pXDisp );
@@ -686,23 +686,23 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
     // figure work mode depth. If this is a VDev Drawable, use its
     // bitdepth to create pixmaps for, otherwise, XCopyArea will
     // refuse to work.
-    const USHORT    nDepth( m_pVDev ?
+    const USHORT	nDepth( m_pVDev ? 
                             m_pVDev->GetDepth() :
                             pSalDisp->GetVisual( m_nScreen ).GetDepth() );
-    Pixmap          aFG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
+    Pixmap			aFG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
                                         pPosAry->mnDestHeight, nDepth ) );
-    Pixmap          aBG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
+    Pixmap			aBG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
                                         pPosAry->mnDestHeight, nDepth ) );
-
+    
     if( aFG && aBG )
     {
-        GC                  aTmpGC;
-        XGCValues           aValues;
-        const SalColormap&  rColMap = pSalDisp->GetColormap( m_nScreen );
-        const int           nBlack = rColMap.GetBlackPixel(), nWhite = rColMap.GetWhitePixel();
-        const int           nValues = GCFunction | GCForeground | GCBackground;
-        SalTwoRect          aTmpRect( *pPosAry ); aTmpRect.mnDestX = aTmpRect.mnDestY = 0;
-
+        GC					aTmpGC;
+        XGCValues			aValues;
+        const SalColormap&	rColMap = pSalDisp->GetColormap( m_nScreen );
+        const int			nBlack = rColMap.GetBlackPixel(), nWhite = rColMap.GetWhitePixel();
+        const int			nValues = GCFunction | GCForeground | GCBackground;
+        SalTwoRect			aTmpRect( *pPosAry ); aTmpRect.mnDestX = aTmpRect.mnDestY = 0;
+        
         // draw paint bitmap in pixmap #1
         aValues.function = GXcopy, aValues.foreground = nWhite, aValues.background = nBlack;
         aTmpGC = XCreateGC( pXDisp, aFG, nValues, &aValues );
@@ -716,14 +716,14 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
                    0, 0 );
 
         DBG_TESTTRANS( aBG );
-
+        
         // mask out paint bitmap in pixmap #1 (transparent areas 0)
         aValues.function = GXand, aValues.foreground = 0x00000000, aValues.background = 0xffffffff;
         XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
         static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aFG, m_nScreen, 1, aTmpRect, aTmpGC );
-
+        
         DBG_TESTTRANS( aFG );
-
+        
         // #105055# For XOR mode, keep background behind bitmap intact
         if( !bXORMode_ )
         {
@@ -731,10 +731,10 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
             aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
             XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
             static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aBG, m_nScreen, 1, aTmpRect, aTmpGC );
-
+            
             DBG_TESTTRANS( aBG );
         }
-
+        
         // merge pixmap #1 and pixmap #2 in pixmap #2
         aValues.function = GXxor, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
         XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
@@ -743,30 +743,30 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
                    pPosAry->mnDestWidth, pPosAry->mnDestHeight,
                    0, 0 );
         DBG_TESTTRANS( aBG );
-
+        
         // #105055# Disable XOR temporarily
         BOOL bOldXORMode( bXORMode_ );
         bXORMode_ = FALSE;
-
+        
         // copy pixmap #2 (result) to background
         XCopyArea( pXDisp, aBG, aDrawable, GetCopyGC(),
                    0, 0,
                    pPosAry->mnDestWidth, pPosAry->mnDestHeight,
                    pPosAry->mnDestX, pPosAry->mnDestY );
-
+        
         DBG_TESTTRANS( aBG );
-
+        
         bXORMode_ = bOldXORMode;
-
+        
         XFreeGC( pXDisp, aTmpGC );
         XFlush( pXDisp );
     }
     else
         drawBitmap( pPosAry, rSalBitmap );
-
+    
     if( aFG )
         XFreePixmap( pXDisp, aFG );
-
+    
     if( aBG )
         XFreePixmap( pXDisp, aBG );
 }
@@ -782,7 +782,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     // horizontal mirroring not implemented yet
     if( rTR.mnDestWidth < 0 )
         return false;
-
+    
     // stretched conversion is not implemented yet
     if( rTR.mnDestWidth != rTR.mnSrcWidth )
         return false;
@@ -890,7 +890,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     // set clipping
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
         rPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
-
+    
     // paint source * mask over destination picture
     rPeer.CompositePicture( PictOpOver, aSrcPic, aAlphaPic, aDstPic,
         rTR.mnSrcX, rTR.mnSrcY, 0, 0,
@@ -904,29 +904,29 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
+bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth, 
                                     long nHeight, sal_uInt8 nTransparency )
 {
     if( ! m_pFrame && ! m_pVDev )
         return false;
-
+    
     if( bPenGC_ || !bBrushGC_ || bXORMode_ )
         return false; // can only perform solid fills without XOR.
-
+    
     if( m_pVDev && m_pVDev->GetDepth() < 8 )
         return false;
 
     XRenderPeer& rPeer = XRenderPeer::GetInstance();
     if( rPeer.GetVersion() < 0x02 ) // TODO: replace with better test
         return false;
-
+    
     Picture aDstPic = GetXRenderPicture();
     if( !aDstPic )
         return false;
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
     const XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency);
-
+    
     rPeer.FillRectangle( PictOpOver,
                          aDstPic,
                          &aRenderColor,
@@ -950,30 +950,30 @@ void X11SalGraphics::drawMask( const SalTwoRect* pPosAry,
                                SalColor nMaskColor )
 {
     const SalDisplay*   pSalDisp = GetDisplay();
-    Display*            pXDisp = pSalDisp->GetDisplay();
+    Display*	        pXDisp = pSalDisp->GetDisplay();
     Drawable            aDrawable( GetDrawable() );
     Pixmap              aStipple( XCreatePixmap( pXDisp, aDrawable,
                                                  pPosAry->mnDestWidth,
                                                  pPosAry->mnDestHeight, 1 ) );
-
+    
     if( aStipple )
     {
-        SalTwoRect  aTwoRect( *pPosAry ); aTwoRect.mnDestX = aTwoRect.mnDestY = 0;
-        GC          aTmpGC;
-        XGCValues   aValues;
-
+        SalTwoRect	aTwoRect( *pPosAry ); aTwoRect.mnDestX = aTwoRect.mnDestY = 0;
+        GC			aTmpGC;
+        XGCValues	aValues;
+        
         // create a stipple bitmap first (set bits are changed to unset bits and vice versa)
         aValues.function = GXcopyInverted;
         aValues.foreground = 1, aValues.background = 0;
         aTmpGC = XCreateGC( pXDisp, aStipple, GCFunction | GCForeground | GCBackground, &aValues );
         static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aStipple, m_nScreen, 1, aTwoRect, aTmpGC );
-
+        
         XFreeGC( pXDisp, aTmpGC );
-
+        
         // Set stipple and draw rectangle
-        GC  aStippleGC( GetStippleGC() );
-        int nX = pPosAry->mnDestX, nY = pPosAry->mnDestY;
-
+        GC	aStippleGC( GetStippleGC() );
+        int	nX = pPosAry->mnDestX, nY = pPosAry->mnDestY;
+        
         XSetStipple( pXDisp, aStippleGC, aStipple );
         XSetTSOrigin( pXDisp, aStippleGC, nX, nY );
         XSetForeground( pXDisp, aStippleGC, GetPixel( nMaskColor ) );
@@ -992,7 +992,7 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
     if( bPrinter_ && !bVirDev_ )
         return NULL;
-
+    
     bool bFakeWindowBG = false;
 
     // normalize
@@ -1008,9 +1008,9 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     }
 
     if( bWindow_ && !bVirDev_ )
-    {
+    {        
         XWindowAttributes aAttrib;
-
+        
         XGetWindowAttributes( GetXDisplay(), GetDrawable(), &aAttrib );
         if( aAttrib.map_state != IsViewable )
             bFakeWindowBG = true;
@@ -1033,7 +1033,7 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
                 nDX = aAttrib.width  - nX;
             if( nY + nDY > aAttrib.height )
                 nDY = aAttrib.height - nY;
-
+        
             // inside ?
             if( nDX <= 0 || nDY <= 0 )
             {
@@ -1043,13 +1043,13 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
             }
         }
     }
-
-    X11SalBitmap*   pSalBitmap = new X11SalBitmap;
-    USHORT          nBitCount = GetBitCount();
-
+    
+    X11SalBitmap*	pSalBitmap = new X11SalBitmap;
+    USHORT			nBitCount = GetBitCount();
+    
     if( &GetDisplay()->GetColormap( m_nScreen ) != &GetColormap() )
         nBitCount = 1;
-
+    
     if( ! bFakeWindowBG )
         pSalBitmap->ImplCreateFromDrawable( GetDrawable(), m_nScreen, nBitCount, nX, nY, nDX, nDY );
     else
@@ -1064,7 +1064,7 @@ SalColor X11SalGraphics::getPixel( long nX, long nY )
     if( bWindow_ && !bVirDev_ )
     {
         XWindowAttributes aAttrib;
-
+        
         XGetWindowAttributes( GetXDisplay(), GetDrawable(), &aAttrib );
         if( aAttrib.map_state != IsViewable )
         {
@@ -1072,7 +1072,7 @@ SalColor X11SalGraphics::getPixel( long nX, long nY )
             return 0;
         }
     }
-
+    
     XImage *pXImage = XGetImage( GetXDisplay(),
                                      GetDrawable(),
                                  nX, nY,
@@ -1084,21 +1084,21 @@ SalColor X11SalGraphics::getPixel( long nX, long nY )
         stderr0( "X11SalGraphics::GetPixel !XGetImage()\n" );
         return 0;
     }
-
+    
     XColor aXColor;
-
+    
     aXColor.pixel = XGetPixel( pXImage, 0, 0 );
     XDestroyImage( pXImage );
-
+    
     return GetColormap().GetColor( aXColor.pixel );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::invert( long       nX,
-                                long        nY,
-                                long        nDX,
-                                long        nDY,
-                                SalInvert   nFlags )
+void X11SalGraphics::invert( long		nX,
+                                long		nY,
+                                long		nDX,
+                                long		nDY,
+                                SalInvert	nFlags )
 {
     GC pGC;
     if( SAL_INVERT_50 & nFlags )
@@ -1131,10 +1131,10 @@ bool X11SalGraphics::supportsOperation( OutDevSupportType eType ) const
         {
             XRenderPeer& rPeer = XRenderPeer::GetInstance();
             if( rPeer.GetVersion() >= 0x02 )
-            {
+            {        
                 const SalDisplay* pSalDisp = GetDisplay();
                 const SalVisual& rSalVis = pSalDisp->GetVisual( m_nScreen );
-
+            
                 Visual* pDstXVisual = rSalVis.GetVisual();
                 XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
                 if( pDstVisFmt )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowContr
     const Reference<frame::XController>& rxController)
 {
     Reference<presentation::XSlideShowController> xSlideShowController;
-
+    
     if( rxController.is() ) try
     {
         Reference<XPresentationSupplier> xPS ( rxController->getModel(), UNO_QUERY_THROW);

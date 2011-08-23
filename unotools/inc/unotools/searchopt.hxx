@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class SvtSearchOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtSearchOptions
 {
-    SvtSearchOptions_Impl   *pImpl;
+    SvtSearchOptions_Impl	*pImpl;
 
     // disallow copy-constructor and assignment-operator for now
     SvtSearchOptions( const SvtSearchOptions & );
@@ -47,71 +47,71 @@ public:
     SvtSearchOptions();
     ~SvtSearchOptions();
 
-    INT32   GetTransliterationFlags() const;
+    INT32	GetTransliterationFlags() const;
 
     //
     // General Options
     //
 
-    BOOL    IsWholeWordsOnly() const;
-    BOOL    IsBackwards() const;
-    BOOL    IsUseRegularExpression() const;
-    BOOL    IsSearchForStyles() const;
-    BOOL    IsSimilaritySearch() const;
-    BOOL    IsUseAsianOptions() const;
-    BOOL    IsMatchCase() const;            // also Japanese search option
-    BOOL    IsNotes() const;
+    BOOL	IsWholeWordsOnly() const;
+    BOOL	IsBackwards() const;
+    BOOL	IsUseRegularExpression() const;
+    BOOL	IsSearchForStyles() const;
+    BOOL	IsSimilaritySearch() const;
+    BOOL	IsUseAsianOptions() const;
+    BOOL	IsMatchCase() const;			// also Japanese search option
+    BOOL	IsNotes() const;
 
-    void    SetWholeWordsOnly( BOOL bVal );
-    void    SetBackwards( BOOL bVal );
-    void    SetUseRegularExpression( BOOL bVal );
-    void    SetSearchForStyles( BOOL bVal );
-    void    SetSimilaritySearch( BOOL bVal );
-    void    SetUseAsianOptions( BOOL bVal );
-    void    SetMatchCase( BOOL bVal );      // also Japanese search option
-    void    SetNotes( BOOL bVal);
+    void	SetWholeWordsOnly( BOOL bVal );
+    void	SetBackwards( BOOL bVal );
+    void	SetUseRegularExpression( BOOL bVal );
+    void	SetSearchForStyles( BOOL bVal );
+    void	SetSimilaritySearch( BOOL bVal );
+    void	SetUseAsianOptions( BOOL bVal );
+    void	SetMatchCase( BOOL bVal );		// also Japanese search option
+    void 	SetNotes( BOOL bVal);
 
     //
     // Japanese search options
     //
 
-    BOOL    IsMatchFullHalfWidthForms() const;
-    BOOL    IsMatchHiraganaKatakana() const;
-    BOOL    IsMatchContractions() const;
-    BOOL    IsMatchMinusDashChoon() const;
-    BOOL    IsMatchRepeatCharMarks() const;
-    BOOL    IsMatchVariantFormKanji() const;
-    BOOL    IsMatchOldKanaForms() const;
-    BOOL    IsMatchDiziDuzu() const;
-    BOOL    IsMatchBavaHafa() const;
-    BOOL    IsMatchTsithichiDhizi() const;
-    BOOL    IsMatchHyuiyuByuvyu() const;
-    BOOL    IsMatchSesheZeje() const;
-    BOOL    IsMatchIaiya() const;
-    BOOL    IsMatchKiku() const;
-    BOOL    IsIgnorePunctuation() const;
-    BOOL    IsIgnoreWhitespace() const;
-    BOOL    IsIgnoreProlongedSoundMark() const;
-    BOOL    IsIgnoreMiddleDot() const;
+    BOOL	IsMatchFullHalfWidthForms() const;
+    BOOL	IsMatchHiraganaKatakana() const;
+    BOOL	IsMatchContractions() const;
+    BOOL	IsMatchMinusDashChoon() const;
+    BOOL	IsMatchRepeatCharMarks() const;
+    BOOL	IsMatchVariantFormKanji() const;
+    BOOL	IsMatchOldKanaForms() const;
+    BOOL	IsMatchDiziDuzu() const;
+    BOOL	IsMatchBavaHafa() const;
+    BOOL	IsMatchTsithichiDhizi() const;
+    BOOL	IsMatchHyuiyuByuvyu() const;
+    BOOL	IsMatchSesheZeje() const;
+    BOOL	IsMatchIaiya() const;
+    BOOL	IsMatchKiku() const;
+    BOOL	IsIgnorePunctuation() const;
+    BOOL	IsIgnoreWhitespace() const;
+    BOOL	IsIgnoreProlongedSoundMark() const;
+    BOOL	IsIgnoreMiddleDot() const;
 
-    void    SetMatchFullHalfWidthForms( BOOL bVal );
-    void    SetMatchHiraganaKatakana( BOOL bVal );
-    void    SetMatchContractions( BOOL bVal );
-    void    SetMatchMinusDashChoon( BOOL bVal );
-    void    SetMatchRepeatCharMarks( BOOL bVal );
-    void    SetMatchVariantFormKanji( BOOL bVal );
-    void    SetMatchOldKanaForms( BOOL bVal );
-    void    SetMatchDiziDuzu( BOOL bVal );
-    void    SetMatchBavaHafa( BOOL bVal );
-    void    SetMatchTsithichiDhizi( BOOL bVal );
-    void    SetMatchHyuiyuByuvyu( BOOL bVal );
-    void    SetMatchSesheZeje( BOOL bVal );
-    void    SetMatchIaiya( BOOL bVal );
-    void    SetMatchKiku( BOOL bVal );
-    void    SetIgnorePunctuation( BOOL bVal );
-    void    SetIgnoreWhitespace( BOOL bVal );
-    void    SetIgnoreProlongedSoundMark( BOOL bVal );
-    void    SetIgnoreMiddleDot( BOOL bVal );
+    void	SetMatchFullHalfWidthForms( BOOL bVal );
+    void	SetMatchHiraganaKatakana( BOOL bVal );
+    void	SetMatchContractions( BOOL bVal );
+    void	SetMatchMinusDashChoon( BOOL bVal );
+    void	SetMatchRepeatCharMarks( BOOL bVal );
+    void	SetMatchVariantFormKanji( BOOL bVal );
+    void	SetMatchOldKanaForms( BOOL bVal );
+    void	SetMatchDiziDuzu( BOOL bVal );
+    void	SetMatchBavaHafa( BOOL bVal );
+    void	SetMatchTsithichiDhizi( BOOL bVal );
+    void	SetMatchHyuiyuByuvyu( BOOL bVal );
+    void	SetMatchSesheZeje( BOOL bVal );
+    void	SetMatchIaiya( BOOL bVal );
+    void	SetMatchKiku( BOOL bVal );
+    void	SetIgnorePunctuation( BOOL bVal );
+    void	SetIgnoreWhitespace( BOOL bVal );
+    void	SetIgnoreProlongedSoundMark( BOOL bVal );
+    void	SetIgnoreMiddleDot( BOOL bVal );
 };
 
 

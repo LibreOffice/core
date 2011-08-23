@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ bool produceType(
     rtl::OString const & type, TypeManager const & manager,
     codemaker::GeneratedTypeSet & generated, JavaOptions * pOptions);
 
-bool produceType(RegistryKey& typeName, bool bIsExtraType, TypeManager const & typeMgr,
+bool produceType(RegistryKey& typeName, bool bIsExtraType, TypeManager const & typeMgr, 
                  codemaker::GeneratedTypeSet & generated,
                  JavaOptions* pOptions);
 

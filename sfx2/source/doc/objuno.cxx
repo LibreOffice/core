@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ using namespace ::com::sun::star;
 #define PROPERTY_UNBOUND 0
 #define PROPERTY_MAYBEVOID ::com::sun::star::beans::PropertyAttribute::MAYBEVOID
 
-const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap() 
 {
     static SfxItemPropertyMapEntry aDocInfoPropertyMap_Impl[] =
     {
@@ -262,7 +262,7 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
     ::comphelper::SequenceAsVector< ::com::sun::star::beans::Property > lProps;
 
     // copy "fix" props
-    //todo: os: this ugly thing should be replaced
+    //todo: os: this ugly thing should be replaced 
     const SfxItemPropertyMapEntry* pFixProp = lcl_GetDocInfoPropertyMap();
 
     while(pFixProp && pFixProp->pName)
@@ -303,7 +303,7 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
 
 //-----------------------------------------------------------------------------
 
-::com::sun::star::beans::Property SAL_CALL MixedPropertySetInfo::getPropertyByName(
+::com::sun::star::beans::Property SAL_CALL MixedPropertySetInfo::getPropertyByName( 
     const ::rtl::OUString& sName )
     throw(::com::sun::star::beans::UnknownPropertyException,
           ::com::sun::star::uno::RuntimeException          )
@@ -324,7 +324,7 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return _aPropertyMap.hasPropertyByName( sName ) ? // "fix" prop?
-        sal_True :
+        sal_True : 
         _xUDProps->getPropertySetInfo()->hasPropertyByName(sName); // "dynamic" prop?
 }
 
@@ -332,8 +332,8 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
 
 struct SfxDocumentInfoObject_Impl
 {
-    ::osl::Mutex                        _aMutex;
-    ::cppu::OInterfaceContainerHelper   _aDisposeContainer;
+    ::osl::Mutex						_aMutex;
+    ::cppu::OInterfaceContainerHelper	_aDisposeContainer;
 
     sal_Bool            bDisposed;
 

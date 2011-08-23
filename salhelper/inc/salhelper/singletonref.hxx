@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace salhelper{
                     <li>b) The singleton class can call a special impl_init()
                            method implicit for every called interface method.</li>
                 </ul>
-
+                
                 Note further that this singleton pattern can work only, if
                 all user of such singleton are located inside the same library!
                 Because static values cant be exported - e.g. from windows libraries.

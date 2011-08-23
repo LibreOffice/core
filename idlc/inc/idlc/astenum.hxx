@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public:
 
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 private:
-    sal_Int32   m_enumValueCount;
+    sal_Int32 	m_enumValueCount;
 };
 
 #endif // _IDLC_ASTENUM_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@
 #include <osl/thread.hxx>
 #include <MNSTerminateListener.hxx>
 
-static nsIServiceManager*   sServiceManager = nsnull;
-static sal_Int32            sInitCounter = 0;
-static sal_Bool             s_bProfilePresentAfterInitialized = sal_False;
+static nsIServiceManager*	sServiceManager = nsnull;
+static sal_Int32 			sInitCounter = 0;
+static sal_Bool 			s_bProfilePresentAfterInitialized = sal_False;
 
 static NS_DEFINE_CID(kProfileCID, NS_PROFILE_CID);
 static NS_DEFINE_CID(kPrefCID, NS_PREF_CID);
@@ -85,9 +85,9 @@ extern "C" void NS_SetupRegistry();
         {
             // compare the current and the preferred profile
             // (by looping through the characters)
-            const PRUnichar* pCurrent   = *pLoop;
-            const PRUnichar* pPref      = pPreferredProfile;
-            while ( *pCurrent && ( *pCurrent == *pPref ) )  // testing one of them against 0 is enough because of the second clause
+            const PRUnichar* pCurrent	= *pLoop;
+            const PRUnichar* pPref		= pPreferredProfile;
+            while ( *pCurrent && ( *pCurrent == *pPref ) )	// testing one of them against 0 is enough because of the second clause
             {
                 ++pCurrent;
                 ++pPref;
@@ -153,8 +153,8 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
     // Initialise XPCOM
     NS_InitXPCOM2(&sServiceManager, binDir, NULL);
 
-//      if (!sServiceManager)
-//          return sal_False;
+//		if (!sServiceManager)
+//			return sal_False;
 
 #ifdef HACK_AROUND_NONREENTRANT_INITXPCOM
         sXPCOMInitializedFlag = PR_TRUE;
@@ -174,10 +174,10 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
 
     eventQService->CreateThreadEventQueue();
 
-//  nsCOMPtr<nsIObserver> mStartupNotifier = do_CreateInstance(NS_APPSTARTUPNOTIFIER_CONTRACTID, &rv);
-//  if(NS_FAILED(rv))
-//      return rv;
-//  mStartupNotifier->Observe(nsnull, APPSTARTUP_TOPIC, nsnull);
+//	nsCOMPtr<nsIObserver> mStartupNotifier = do_CreateInstance(NS_APPSTARTUPNOTIFIER_CONTRACTID, &rv);
+//	if(NS_FAILED(rv))
+//		return rv;
+//	mStartupNotifier->Observe(nsnull, APPSTARTUP_TOPIC, nsnull);
 
 #ifdef HACK_AROUND_THREADING_ISSUES
     // XXX force certain objects to be created on the main thread
@@ -276,7 +276,7 @@ extern "C" void MNS_Mozilla_UI_Thread( void *arg )
 #endif
     }
 
-    m_aUI_Thread_Condition.set();   //release all blocks
+    m_aUI_Thread_Condition.set();	//release all blocks
 
     OSL_TRACE( "OUT : MNS_Mozilla_UI_Thread() \n" );
 

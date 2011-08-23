@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
 {
     ::boost::shared_ptr< formula::IFunctionManager > m_aFunctionManager;
     formula::FormEditData*      m_pFormulaData;
-    OAddFieldWindow*            m_pAddField;
+    OAddFieldWindow*		    m_pAddField;
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >          m_xRowSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFormulaParser>   m_xParser;
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
@@ -73,7 +73,7 @@ public:
     virtual void fill();
     virtual bool calculateValue(const String& _sExpression,String& _rResult);
     virtual void doClose(BOOL _bOk);
-    virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
+    virtual void insertEntryToLRUList(const formula::IFunctionDescription*	pDesc);
     virtual void showReference(const String& _sFormula);
     virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked);
     virtual void setDispatcherLock( BOOL bLock );
@@ -101,7 +101,7 @@ public:
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 
 protected:
-    void         HighlightFunctionParas(const String& aFormula);
+    void		 HighlightFunctionParas(const String& aFormula);
 };
 
 // =============================================================================

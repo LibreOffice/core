@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#define MAX_TOGGLEAREA_WIDTH        20
-#define MAX_TOGGLEAREA_HEIGHT       20
+#define MAX_TOGGLEAREA_WIDTH 		20
+#define MAX_TOGGLEAREA_HEIGHT		20
 
 using namespace ::com::sun::star;
 
@@ -73,11 +73,11 @@ static const int NUM_OF_DOCKINGWINDOWS = 10;
 class SfxTitleDockingWindow;
 class SfxTitleDockingWindow : public SfxDockingWindow
 {
-    Window*             m_pWrappedWindow;
+    Window*				m_pWrappedWindow;
     USHORT              m_nID;
 
 public:
-                        SfxTitleDockingWindow(
+                        SfxTitleDockingWindow( 
                             SfxBindings* pBindings ,
                             SfxChildWindow* pChildWin ,
                             Window* pParent ,
@@ -85,12 +85,12 @@ public:
                             USHORT  nID);
     virtual             ~SfxTitleDockingWindow();
 
-    Window*             GetWrappedWindow() const { return m_pWrappedWindow; }
-    void                SetWrappedWindow(Window* const pWindow);
-
+    Window*				GetWrappedWindow() const { return m_pWrappedWindow; }
+    void				SetWrappedWindow(Window* const pWindow);
+                        
     virtual void        StateChanged( StateChangedType nType );
     virtual long        Notify( NotifyEvent& rNEvt );
-    virtual void        Resize();
+    virtual void 		Resize();
     virtual void        Resizing( Size& rSize );
     virtual BOOL        Close();
 };
@@ -109,7 +109,7 @@ static uno::WeakReference< frame::XModuleManager >  m_xModuleManager;
 static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& xWindowStateMgr, const ::rtl::OUString& rResourceURL, WindowState& rWindowState )
 {
     bool bResult = false;
-
+    
     try
     {
         uno::Any a;
@@ -125,7 +125,7 @@ static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& 
                 }
             }
         }
-
+        
         bResult = true;
     }
     catch ( container::NoSuchElementException& )
@@ -144,7 +144,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
     const rtl::OUString aDockWindowResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/dockingwindow/" ));
-
+    
     SfxTitleDockingWindow* pTitleDockWindow = new SfxTitleDockingWindow( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE, nId);
     pWindow = pTitleDockWindow;
@@ -152,12 +152,12 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
 
     // Use factory manager to retrieve XWindow factory. That can be used to instanciate
     // the real window factory.
-    uno::Reference< lang::XSingleComponentFactory > xFactoryMgr(
-            xServiceManager->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ui.WindowContentFactoryManager"))),
+    uno::Reference< lang::XSingleComponentFactory > xFactoryMgr( 
+            xServiceManager->createInstance( 
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
+                    "com.sun.star.ui.WindowContentFactoryManager"))), 
                 uno::UNO_QUERY );
-
+    
     if (xFactoryMgr.is())
     {
         SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
@@ -168,7 +168,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
         aPropValue.Value = uno::makeAny( xFrame );
         aArgs[0] <<= aPropValue;
         aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
-
+        
         // create a resource URL from the nId provided by the sfx2
         ::rtl::OUString aResourceURL( aDockWindowResourceURL );
         aResourceURL += ::rtl::OUString::valueOf(sal_Int32(nId));
@@ -180,40 +180,40 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
         {
             uno::Reference< beans::XPropertySet >    xProps( xServiceManager, uno::UNO_QUERY );
             uno::Reference< uno::XComponentContext > xContext;
-
+            
             if ( xProps.is() )
                 xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
             if ( xContext.is() )
             {
-                xWindow = uno::Reference< awt::XWindow>(
+                xWindow = uno::Reference< awt::XWindow>( 
                             xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
                           uno::UNO_QUERY );
             }
-
+            
             uno::Reference< frame::XModuleManager > xModuleManager( m_xModuleManager );
             if ( !xModuleManager.is() )
             {
                 xModuleManager = uno::Reference< frame::XModuleManager >(
-                                    xServiceManager->createInstance(
+                                    xServiceManager->createInstance( 
                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
                                     uno::UNO_QUERY );
                 m_xModuleManager = xModuleManager;
             }
-
+            
             uno::Reference< container::XNameAccess > xWindowStateConfiguration( m_xWindowStateConfiguration );
             if ( !xWindowStateConfiguration.is() )
             {
                 xWindowStateConfiguration = uno::Reference< container::XNameAccess >(
-                                                xServiceManager->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.WindowStateConfiguration" ))),
+                                                xServiceManager->createInstance( 
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.WindowStateConfiguration" ))), 
                                                 uno::UNO_QUERY );
                 m_xWindowStateConfiguration = xWindowStateConfiguration;
             }
 
             ::rtl::OUString sModuleIdentifier = xModuleManager->identify( xFrame );
-
+            
             uno::Reference< container::XNameAccess > xModuleWindowState(
-                                                        xWindowStateConfiguration->getByName( sModuleIdentifier ),
+                                                        xWindowStateConfiguration->getByName( sModuleIdentifier ), 
                                                         uno::UNO_QUERY );
             if ( xModuleWindowState.is() )
             {
@@ -231,49 +231,49 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
         catch ( uno::Exception& )
         {
         }
-
+        
         Window* pContentWindow = VCLUnoHelper::GetWindow(xWindow);
         if ( pContentWindow )
             pContentWindow->SetStyle( pContentWindow->GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
         pTitleDockWindow->SetWrappedWindow(pContentWindow);
     }
-
+    
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
     SetHideNotDelete( TRUE );
 }
 
-SfxChildWindow*  SfxDockingWrapper::CreateImpl(
+SfxChildWindow*  SfxDockingWrapper::CreateImpl( 
 Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo )
-{
-    SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo); return pWin;
-}
+{ 
+    SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo); return pWin; 
+} 
 
-sal_uInt16 SfxDockingWrapper::GetChildWindowId ()
-{
+sal_uInt16 SfxDockingWrapper::GetChildWindowId () 
+{ 
     DBG_ASSERT( false, "This method shouldn't be called!" );
     return 0;
-}
+} 
 
 void SfxDockingWrapper::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)
-{
+{ 
     // pre-register a couple of docking windows
     for (int i=0; i < NUM_OF_DOCKINGWINDOWS; i++ )
     {
         USHORT nID = USHORT(SID_DOCKWIN_START+i);
-        SfxChildWinFactory *pFact = new SfxChildWinFactory( SfxDockingWrapper::CreateImpl, nID, 0xffff );
-        pFact->aInfo.nFlags |= nFlags;
-        pFact->aInfo.bVisible = bVis;
-        SfxChildWindow::RegisterChildWindow(pMod, pFact);
+        SfxChildWinFactory *pFact = new SfxChildWinFactory( SfxDockingWrapper::CreateImpl, nID, 0xffff );   
+        pFact->aInfo.nFlags |= nFlags; 
+        pFact->aInfo.bVisible = bVis; 
+        SfxChildWindow::RegisterChildWindow(pMod, pFact); 
     }
-}
+} 
 
-SfxChildWinInfo  SfxDockingWrapper::GetInfo() const
-{
-    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-    ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );
-    return aInfo;
+SfxChildWinInfo  SfxDockingWrapper::GetInfo() const 
+{ 
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo(); 
+    ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo ); 
+    return aInfo; 
 };
 
 SfxTitleDockingWindow::SfxTitleDockingWindow( SfxBindings* pBind ,
@@ -296,7 +296,7 @@ SfxTitleDockingWindow::~SfxTitleDockingWindow()
 }
 
 void SfxTitleDockingWindow::SetWrappedWindow( Window* const pWindow )
-{
+{ 
     m_pWrappedWindow = pWindow;
     if (m_pWrappedWindow)
     {
@@ -384,14 +384,14 @@ static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::
 
 /*
     Factory function used by the framework layout manager to "create" a docking window with a special name.
-    The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot range located
+    The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot range located 
     in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
 void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     USHORT nID = USHORT(rDockingWindowName.toInt32());
-
+    
     // Check the range of the provided ID otherwise nothing will happen
     if ( lcl_checkDockingWindowID( nID ))
     {
@@ -409,16 +409,16 @@ void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rF
 }
 
 /*
-    Function used by the framework layout manager to determine the visibility state of a docking window with
-    a special name. The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot
+    Function used by the framework layout manager to determine the visibility state of a docking window with 
+    a special name. The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot 
     range located in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
 bool SAL_CALL IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
+    
     USHORT nID = USHORT(rDockingWindowName.toInt32());
-
+    
     // Check the range of the provided ID otherwise nothing will happen
     if ( lcl_checkDockingWindowID( nID ))
     {
@@ -430,7 +430,7 @@ bool SAL_CALL IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFr
                 return true;
         }
     }
-
+    
     return false;
 }
 
@@ -438,36 +438,36 @@ class SfxDockingWindow_Impl
 {
 friend class SfxDockingWindow;
 
-    SfxChildAlignment   eLastAlignment;
-    SfxChildAlignment   eDockAlignment;
-    BOOL                bConstructed;
-    Size                aMinSize;
-    SfxSplitWindow*     pSplitWin;
-    BOOL                bSplitable;
-//  BOOL                bAutoHide;
+    SfxChildAlignment	eLastAlignment;
+    SfxChildAlignment	eDockAlignment;
+    BOOL				bConstructed;
+    Size				aMinSize;
+    SfxSplitWindow*		pSplitWin;
+    BOOL				bSplitable;
+//	BOOL				bAutoHide;
     Timer               aMoveTimer;
 
     // Folgende members sind nur in der Zeit von StartDocking bis EndDocking
     // g"ultig:
-    BOOL                bEndDocked;
-    Size                aSplitSize;
+    BOOL				bEndDocked;
+    Size				aSplitSize;
     long                nHorizontalSize;
     long                nVerticalSize;
-    USHORT              nLine;
-    USHORT              nPos;
-    USHORT              nDockLine;
-    USHORT              nDockPos;
-    BOOL                bNewLine;
-    BOOL                bDockingPrevented;
+    USHORT				nLine;
+    USHORT 				nPos;
+    USHORT 				nDockLine;
+    USHORT				nDockPos;
+    BOOL				bNewLine;
+    BOOL 				bDockingPrevented;
     ByteString          aWinState;
 
-    SfxChildAlignment   GetLastAlignment() const
+    SfxChildAlignment	GetLastAlignment() const
                         { return eLastAlignment; }
-    void                SetLastAlignment(SfxChildAlignment eAlign)
+    void				SetLastAlignment(SfxChildAlignment eAlign)
                         { eLastAlignment = eAlign; }
-    SfxChildAlignment   GetDockAlignment() const
+    SfxChildAlignment	GetDockAlignment() const
                         { return eDockAlignment; }
-    void                SetDockAlignment(SfxChildAlignment eAlign)
+    void				SetDockAlignment(SfxChildAlignment eAlign)
                         { eDockAlignment = eAlign; }
 };
 
@@ -591,7 +591,7 @@ void SfxDockingWindow::ToggleFloatingMode()
 */
 {
     if ( !pImp->bConstructed || !pMgr )
-        return;                 // Kein Handler-Aufruf
+        return;					// Kein Handler-Aufruf
 
     // Altes Alignment merken und dann umschalten.
     // Sv hat jetzt schon umgeschaltet, aber Alignment am SfxDockingWindow
@@ -884,7 +884,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
 
 void SfxDockingWindow::Resizing( Size& /*rSize*/ )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Virtuelle Methode der Klasse DockingWindow.
     Hier kann das interaktive Umgr"o\sern im FloatingMode beeinflu\t werden,
@@ -931,7 +931,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->bDockingPrevented = FALSE;
 
     pImp->bSplitable = TRUE;
-//  pImp->bAutoHide = FALSE;
+//	pImp->bAutoHide = FALSE;
 
     // Zun"achst auf Defaults setzen; das Alignment wird in der Subklasse gesetzt
     pImp->nLine = pImp->nDockLine = 0;
@@ -941,7 +941,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->aMoveTimer.SetTimeout(50);
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
 
-//  DBG_ASSERT(pMgr,"DockingWindow erfordert ein SfxChildWindow!");
+//	DBG_ASSERT(pMgr,"DockingWindow erfordert ein SfxChildWindow!");
 }
 
 //-------------------------------------------------------------------------
@@ -971,7 +971,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->bDockingPrevented = FALSE;
 
     pImp->bSplitable = TRUE;
-//  pImp->bAutoHide = FALSE;
+//	pImp->bAutoHide = FALSE;
 
     // Zun"achst auf Defaults setzen; das Alignment wird in der Subklasse gesetzt
     pImp->nLine = pImp->nDockLine = 0;
@@ -981,7 +981,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->aMoveTimer.SetTimeout(50);
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
 
-//  DBG_ASSERT(pMgr,"DockingWindow erfordert ein SfxChildWindow!");
+//	DBG_ASSERT(pMgr,"DockingWindow erfordert ein SfxChildWindow!");
 }
 
 //-------------------------------------------------------------------------
@@ -1102,8 +1102,8 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     {
         // check if SfxWorkWindow is able to allow docking at its border
         if (
-            !pWorkWin->IsDockingAllowed() ||
-            !pWorkWin->IsInternalDockingAllowed() ||
+            !pWorkWin->IsDockingAllowed() || 
+            !pWorkWin->IsInternalDockingAllowed() || 
             ( (GetFloatStyle() & WB_STANDALONE) && Application::IsInModalMode()) )
         {
             SetAlignment( SFX_ALIGN_NOALIGNMENT );
@@ -1147,7 +1147,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 
         if ( pImp->bSplitable )
         {
-//          pImp->bAutoHide = ( pInfo->nFlags & SFX_CHILDWIN_AUTOHIDE) != 0;
+//			pImp->bAutoHide = ( pInfo->nFlags & SFX_CHILDWIN_AUTOHIDE) != 0;
             pImp->pSplitWin = pWorkWin->GetSplitWindow_Impl(GetAlignment());
             pImp->pSplitWin->InsertWindow(this, pImp->aSplitSize);
         }
@@ -1349,11 +1349,11 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
     // shrink area for floating mode if possible
     Rectangle aInRect = GetInnerRect();
     if ( aInRect.GetWidth() > nLRBorder )
-        aInRect.Left()   += nLRBorder/2;
+        aInRect.Left()	 += nLRBorder/2;
     if ( aInRect.GetWidth() > nLRBorder )
         aInRect.Right()  -= nLRBorder/2;
     if ( aInRect.GetHeight() > nTBBorder )
-        aInRect.Top()    += nTBBorder/2;
+        aInRect.Top()	 += nTBBorder/2;
     if ( aInRect.GetHeight() > nTBBorder )
         aInRect.Bottom() -= nTBBorder/2;
 
@@ -1660,7 +1660,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
 
 Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Virtuelle Methode der Klasse SfxDockingWindow.
     Hier wird festgelegt, wie sich die Gr"o\se des DockingWindows abh"angig vom
@@ -1713,7 +1713,7 @@ Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
 SfxChildAlignment SfxDockingWindow::CheckAlignment(SfxChildAlignment,
     SfxChildAlignment eAlign)
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Virtuelle Methode der Klasse SfxDockingWindow.
     Hier kann eine abgeleitete Klasse bestimmte Alignments verbieten.
@@ -1728,7 +1728,7 @@ SfxChildAlignment SfxDockingWindow::CheckAlignment(SfxChildAlignment,
 
 BOOL SfxDockingWindow::Close()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Das Fenster wird geschlossen, indem das ChildWindow durch Ausf"uhren des
     ChildWindow-Slots zerst"ort wird.
@@ -1753,7 +1753,7 @@ BOOL SfxDockingWindow::Close()
 
 void SfxDockingWindow::Paint(const Rectangle& /*rRect*/)
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Es wird im angedockten Zustand eine Begrenzungslinie an der angedockten
     Kante und ein Rahmen ausgegeben. Dabei wird SVLOOK ber"ucksichtigt.
@@ -1806,7 +1806,7 @@ void SfxDockingWindow::Paint(const Rectangle& /*rRect*/)
 
 void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode kann eine minimale OutpuSize gesetzt werden, die
     im Resizing()-Handler abgefragt wird.
@@ -1821,7 +1821,7 @@ void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
 
 Size SfxDockingWindow::GetMinOutputSizePixel() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die gesetzte minimale Gr"o\se wird zur"uckgegeben.
 */
@@ -1881,8 +1881,8 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
 USHORT SfxDockingWindow::GetWinBits_Impl() const
 {
     USHORT nBits = 0;
-//  if ( pImp->bAutoHide )
-//      nBits |= SWIB_AUTOHIDE;
+//	if ( pImp->bAutoHide )
+//		nBits |= SWIB_AUTOHIDE;
     return nBits;
 }
 

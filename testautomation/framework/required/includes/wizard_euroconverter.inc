@@ -53,12 +53,7 @@ testcase tUpdtWizardEuroconverter
 
     hInitSingleDoc()
     
-    irc = hOpenWizardWithMenu( "EUROCONV" )
-    if ( irc <> 0 ) then
-        warnlog( "Failed to open the Euroconverter, aborting test" )
-        hDestroyDocument()
-        goto endsub
-    endif
+    FileWizardEuroConverter
     
     kontext "AutopilotEuroKonverter"
     call DialogTest( AutopilotEuroKonverter , 1 )
@@ -124,7 +119,7 @@ testcase tUpdtWizardEuroconverter
     kontext "AutopilotEuroKonverter"
     call DialogTest( AutopilotEuroKonverter , 2 )
 
-    hFinishWizard( 1 )
+    hClickButton( Konvertieren )
     hDestroyDocument() 
     hDeleteFile( cTargetDir & TARGET_FILE )
     

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -995,11 +995,11 @@ namespace svxform
 
             //////////////////////////////////////////////////////////////////////
             // Gleichen Eintrag gefunden
-            if  (   (aChildText == pEntryData->GetText())
-                &&  (pEntryData!=pChildData)
+            if	(	(aChildText == pEntryData->GetText())
+                &&	(pEntryData!=pChildData)
                 )
             {
-
+                
 
                 SQLContext aError;
                 aError.Message = String(SVX_RES(RID_ERR_CONTEXT_ADDFORM));
@@ -1120,7 +1120,7 @@ namespace svxform
     }
 
 //............................................................................
-}   // namespace svxform
+}	// namespace svxform
 //............................................................................
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ XMLTrackedChangesImportContext::~XMLTrackedChangesImportContext()
 {
 }
 
-void XMLTrackedChangesImportContext::StartElement(
+void XMLTrackedChangesImportContext::StartElement( 
     const Reference<XAttributeList> & xAttrList )
 {
     sal_Bool bTrackChanges = sal_True;
@@ -78,7 +78,7 @@ void XMLTrackedChangesImportContext::StartElement(
             if ( IsXMLToken( sLocalName, XML_TRACK_CHANGES ) )
             {
                 sal_Bool bTmp;
-                if( SvXMLUnitConverter::convertBool(
+                if( SvXMLUnitConverter::convertBool( 
                     bTmp, xAttrList->getValueByIndex(i)) )
                 {
                     bTrackChanges = bTmp;
@@ -89,7 +89,7 @@ void XMLTrackedChangesImportContext::StartElement(
 
     // set tracked changes
     GetImport().GetTextImport()->SetRecordChanges( bTrackChanges );
-}
+}  
 
 
 SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
@@ -102,13 +102,13 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          IsXMLToken( rLocalName, XML_CHANGED_REGION ) )
     {
-        pContext = new XMLChangedRegionImportContext(GetImport(),
+        pContext = new XMLChangedRegionImportContext(GetImport(), 
                                                      nPrefix, rLocalName);
     }
 
     if (NULL == pContext)
     {
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, 
                                                           xAttrList);
     }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ namespace comphelper
  * Search for the user registry using the following rules:
  * <dl>
  * <dt> 1. (for further use) search in sversion.ini (.sversionrc) for an entry
- *      REGISTRY_VERSION_STRING (example: UserRegistry 5.0/505=test.rdb) in the section
- *      [Registry]. If found, then take this value instead of the name "user.rdb".
+ *		REGISTRY_VERSION_STRING (example: UserRegistry 5.0/505=test.rdb) in the section
+ *		[Registry]. If found, then take this value instead of the name "user.rdb".
  * <dt> 2. Search in the config directory of the user for a file "user.rdb". If
- *      found return the full path and name of the file. If not found, retry this
- *      step with a dot before ".user.rdb".
+ *		found return the full path and name of the file. If not found, retry this
+ *		step with a dot before ".user.rdb".
  * <dt> 3. If not found a new user registry with name "user.rdb" will be created in the user
- *      config directory.
+ *		config directory.
  * </dl>
  *<BR>
  * @author Juergen Schmidt

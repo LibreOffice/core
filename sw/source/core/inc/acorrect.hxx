@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,9 +78,9 @@ public:
     // Dieser darf nicht leer sein!
     // Gibt es diesen nicht oder gibt es davor nur Leere, dann returne 0
     // Das Flag gibt an:
-    //      TRUE: den, vor der normalen Einfuegeposition (TRUE)
-    //      FALSE: den, in den das korrigierte Wort eingfuegt wurde.
-    //              (Muss nicht der gleiche Absatz sein!!!!)
+    //		TRUE: den, vor der normalen Einfuegeposition (TRUE)
+    // 		FALSE: den, in den das korrigierte Wort eingfuegt wurde.
+    //				(Muss nicht der gleiche Absatz sein!!!!)
     virtual const String* GetPrevPara( BOOL bAtNormalPos );
 
     virtual BOOL ChgAutoCorrWord( xub_StrLen& rSttPos, xub_StrLen nEndPos,
@@ -88,8 +88,8 @@ public:
                                   const String** ppPara );
 
     // wird nach dem austauschen der Zeichen von den Funktionen
-    //  - FnCptlSttWrd
-    //  - FnCptlSttSntnc
+    //	- FnCptlSttWrd
+    // 	- FnCptlSttSntnc
     // gerufen. Dann koennen die Worte ggfs. in die Ausnahmelisten
     // aufgenommen werden.
     virtual void SaveCpltSttWord( ULONG nFlag, xub_StrLen nPos,
@@ -113,7 +113,7 @@ public:
         cChar(cChr), eLanguage(eLang), bDeleted(FALSE)
     {}
 
-    BOOL IsDeleted() const                          { return bDeleted; }
+    BOOL IsDeleted() const							{ return bDeleted; }
     void CheckChar( const SwPosition& rPos, sal_Unicode cChar );
     BOOL CheckDelChar( const SwPosition& rPos );
 };

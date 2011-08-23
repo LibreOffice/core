@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,10 @@ key [value]
 
 // error codes:
 
-#define IP_NO_ERROR         0x0000
-#define IP_UNEXPECTED_EOF   0x0001
+#define IP_NO_ERROR			0x0000
+#define IP_UNEXPECTED_EOF	0x0001
 
-#define REPLACE_VARIABLES   TRUE
+#define REPLACE_VARIABLES	TRUE
 
 class TOOLS_DLLPUBLIC InformationParser
 {

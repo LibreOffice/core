@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@ namespace connectivity
     class OTableHelper;
     class OOO_DLLPUBLIC_DBTOOLS OTableKeyHelper : public connectivity::sdbcx::OKey
     {
-        OTableHelper*   m_pTable;
+        OTableHelper*	m_pTable;
     public:
         virtual void refreshColumns();
     public:
-        OTableKeyHelper(    OTableHelper* _pTable);
-        OTableKeyHelper(    OTableHelper* _pTable
+        OTableKeyHelper(	OTableHelper* _pTable);
+        OTableKeyHelper(	OTableHelper* _pTable
                 ,const ::rtl::OUString& _Name
                 ,const sdbcx::TKeyProperties& _rProps
             );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,22 +30,22 @@
 
 #define _NO_BOOL_TYPE_
 
-typedef short       Bool;
-#define True        1
-#define False       0
+typedef	short    	Bool;
+#define True		1
+#define False		0
 
 
 
-typedef long        intt;
+typedef long	  	intt;
 
 #define AND &&
-#define OR  ||
+#define OR	||
 #define NOT !
 
 
 #define REF( x )  (&(x))
 #define MREF( x )  (&(pThis->x))
-#define THIS_       pThis
+#define THIS_ 		pThis
 
 
 

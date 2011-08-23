@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 
 #include <algorithm>
 
-using namespace ::comphelper;
-using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+using namespace	::comphelper;
+using namespace	::com::sun::star::accessibility;
+using namespace	::com::sun::star::uno;
+using namespace	::com::sun::star::lang;
 
 //.............................................................................
 namespace comphelper
@@ -52,7 +52,7 @@ namespace comphelper
             : public ::std::unary_function< AccessibleMap::value_type, void >
     {
     private:
-        Reference< XEventListener > m_xListener;
+        Reference< XEventListener >	m_xListener;
 
     public:
         RemoveEventListener( const Reference< XEventListener >& _rxListener )
@@ -112,7 +112,7 @@ namespace comphelper
     {
         AccessibleMap::iterator aRemovedPos = m_aChildrenMap.find( _rxKey );
         if ( m_aChildrenMap.end() != aRemovedPos )
-        {   // it was cached
+        {	// it was cached
             // remove ourself as event listener
             RemoveEventListener aOperator( this );
             aOperator( *aRemovedPos );
@@ -133,7 +133,7 @@ namespace comphelper
 
     //-------------------------------------------------------------------------
     Reference< XAccessible > OWrappedAccessibleChildrenManager::getAccessibleWrapperFor(
-        const Reference< XAccessible >& _rxKey, sal_Bool _bCreate )
+        const Reference< XAccessible >& _rxKey,	sal_Bool _bCreate )
     {
         Reference< XAccessible > xValue;
 
@@ -150,7 +150,7 @@ namespace comphelper
             xValue = aPos->second;
         }
         else if ( _bCreate )
-        {   // not found in the cache, and allowed to create
+        {	// not found in the cache, and allowed to create
             // -> new wrapper
             xValue = new OAccessibleWrapper( m_xORB, _rxKey, (Reference< XAccessible >)m_aOwningAccessible );
 
@@ -258,7 +258,7 @@ namespace comphelper
     void OWrappedAccessibleChildrenManager::handleChildNotification( const AccessibleEventObject& _rEvent )
     {
         if ( AccessibleEventId::INVALIDATE_ALL_CHILDREN == _rEvent.EventId )
-        {   // clear our child map
+        {	// clear our child map
             invalidateAll( );
         }
         else if ( AccessibleEventId::CHILD == _rEvent.EventId )
@@ -325,7 +325,7 @@ namespace comphelper
     {
         if ( !m_rBHelper.bDisposed )
         {
-            acquire();  // to prevent duplicate dtor calls
+            acquire();	// to prevent duplicate dtor calls
             dispose();
         }
     }
@@ -679,5 +679,5 @@ namespace comphelper
     }
 
 //.............................................................................
-}   // namespace accessibility
+}	// namespace accessibility
 //.............................................................................

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ using namespace com::sun::star;
 using namespace ucbhelper;
 
 //=========================================================================
-SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity,
+SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity, 
                                                                         const com::sun::star::uno::Reference<com::sun::star::security::XCertificate> pCertificate,
                                                                         const rtl::OUString & hostname)
 {
@@ -43,9 +43,9 @@ SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( const sa
     aRequest.CertificateValidity = lCertificateValidity;
     aRequest.Certificate = pCertificate;
     aRequest.HostName = hostname;
-
+    
     setRequest( uno::makeAny( aRequest ) );
-
+ 
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
     aContinuations[ 0 ] = new InteractionAbort( this );
     aContinuations[ 1 ] = new InteractionApprove( this );

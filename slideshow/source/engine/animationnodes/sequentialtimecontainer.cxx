@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ void SequentialTimeContainer::activate_st()
             OSL_ENSURE( false, "### resolving child failed!" );
         }
     }
-
+    
     if (isDurationIndefinite() &&
         (maChildren.empty() || mnFinishedChildren >= maChildren.size()))
     {
@@ -112,20 +112,20 @@ bool SequentialTimeContainer::resolveChild(
             mpCurrentSkipEvent->dispose();
         if (mpCurrentRewindEvent)
             mpCurrentRewindEvent->dispose();
-
+        
         // event that will deactivate the resolved/running child:
         mpCurrentSkipEvent = makeEvent(
-            boost::bind( &SequentialTimeContainer::skipEffect,
+            boost::bind( &SequentialTimeContainer::skipEffect, 
                          boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ),
             "SequentialTimeContainer::skipEffect, resolveChild");
         // event that will reresolve the resolved/activated child:
         mpCurrentRewindEvent = makeEvent(
-            boost::bind( &SequentialTimeContainer::rewindEffect,
+            boost::bind( &SequentialTimeContainer::rewindEffect, 
                          boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ),
             "SequentialTimeContainer::rewindEffect, resolveChild");
-
+        
         // deactivate child node when skip event occurs:
         getContext().mrUserEventQueue.registerSkipEffectEvent(
             mpCurrentSkipEvent,
@@ -142,13 +142,13 @@ void SequentialTimeContainer::notifyDeactivating(
 {
     if (notifyDeactivatedChild( rNotifier ))
         return;
-
+    
     OSL_ASSERT( mnFinishedChildren < maChildren.size() );
     AnimationNodeSharedPtr const& pNextChild = maChildren[mnFinishedChildren];
     OSL_ASSERT( pNextChild->getState() == UNRESOLVED );
-
+    
     if (! resolveChild( pNextChild )) {
-        // could not resolve child - since we risk to
+        // could not resolve child - since we risk to 
         // stall the chain of events here, play it safe
         // and deactivate this node (only if we have
         // indefinite duration - otherwise, we'll get a

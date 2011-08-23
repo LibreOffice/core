@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,34 +49,34 @@ typedef std::vector< rtl::Reference< AnnotationTag > > AnnotationTagVector;
 
 namespace tools {
 class EventMultiplexerEvent;
-}
+} 
 
 typedef ::cppu::WeakComponentImplHelper1 <
     com::sun::star::document::XEventListener
     > AnnotationManagerImplBase;
-
+    
 class AnnotationManagerImpl : private ::cppu::BaseMutex, public AnnotationManagerImplBase
 {
 public:
     AnnotationManagerImpl( ViewShellBase& rViewShellBase );
-
+    
     void init();
 
     // WeakComponentImplHelper1
     virtual void SAL_CALL disposing ();
-
+        
     // XEventListener
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
-    //
+    //    
     void ExecuteAnnotation (SfxRequest& rRequest);
     void GetAnnotationState (SfxItemSet& rItemSet);
-
+    
     void ExecuteInsertAnnotation(SfxRequest& rReq);
-    void ExecuteDeleteAnnotation(SfxRequest& rReq);
+    void ExecuteDeleteAnnotation(SfxRequest& rReq);    
     void ExecuteReplyToAnnotation(SfxRequest& rReq);
-
+    
     void SelectNextAnnotation(bool bForeward);
 
     void SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit = FALSE );
@@ -88,16 +88,16 @@ public:
     void DeleteAllAnnotations();
 
     void ExecuteAnnotationContextMenu( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, ::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );
-
+    
     Color GetColorDark(sal_uInt16 aAuthorIndex);
     Color GetColorLight(sal_uInt16 aAuthorIndex);
     Color GetColor(sal_uInt16 aAuthorIndex);
 
-
+    
     // callbacks
-    void onTagSelected( AnnotationTag& rTag );
+    void onTagSelected(	AnnotationTag& rTag );
     void onTagDeselected( AnnotationTag& rTag );
-
+    
     void onSelectionChanged();
 #if 0
     rtl::OUString GetHelpText( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
@@ -117,18 +117,18 @@ public:
     SdPage* GetNextPage( SdPage* pPage, bool bForeward );
     SdPage* GetFirstPage();
     SdPage* GetLastPage();
-
+    
     SdPage* GetCurrentPage();
 
     SdDrawDocument* GetDoc() { return mpDoc; }
-
+    
     void ShowAnnotations(bool bShow);
-
+    
 private:
     ViewShellBase& mrBase;
     SdDrawDocument* mpDoc;
-
-    AnnotationTagVector maTagVector;
+    
+    AnnotationTagVector	maTagVector;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView > mxView;
     ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotationAccess > mxCurrentPage;

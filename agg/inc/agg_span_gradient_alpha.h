@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -21,9 +21,9 @@
 namespace agg
 {
     //======================================================span_gradient_alpha
-    template<class ColorT,
+    template<class ColorT, 
              class Interpolator,
-             class GradientF,
+             class GradientF, 
              class AlphaF>
     class span_gradient_alpha
     {
@@ -45,7 +45,7 @@ namespace agg
         span_gradient_alpha(interpolator_type& inter,
                             const GradientF& gradient_function,
                             const AlphaF& alpha_function,
-                            double d1, double d2) :
+                            double d1, double d2) : 
             m_interpolator(&inter),
             m_gradient_function(&gradient_function),
             m_alpha_function(&alpha_function),
@@ -69,14 +69,14 @@ namespace agg
 
         //--------------------------------------------------------------------
         void convert(color_type* span, int x, int y, unsigned len)
-        {
+        {   
             int dd = m_d2 - m_d1;
             if(dd < 1) dd = 1;
             m_interpolator->begin(x+0.5, y+0.5, len);
             do
             {
                 m_interpolator->coordinates(&x, &y);
-                int d = m_gradient_function->calculate(x >> downscale_shift,
+                int d = m_gradient_function->calculate(x >> downscale_shift, 
                                                        y >> downscale_shift, dd);
                 d = ((d - m_d1) * (int)m_alpha_function->size()) / dd;
                 if(d < 0) d = 0;

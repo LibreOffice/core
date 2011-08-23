@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,14 +78,14 @@ extern String* GetOldDrwCat();
 class SwSequenceOptionDialog : public SvxStandardDialog
 {
     FixedLine       aFlHeader;
-    FixedText       aFtLevel;
-    ListBox         aLbLevel;
-    FixedText       aFtDelim;
-    Edit            aEdDelim;
+    FixedText 		aFtLevel;
+    ListBox 		aLbLevel;
+    FixedText 		aFtDelim;
+    Edit 			aEdDelim;
 
     FixedLine       aFlCatAndFrame;
-    FixedText       aFtCharStyle;
-    ListBox         aLbCharStyle;
+    FixedText		aFtCharStyle;
+    ListBox			aLbCharStyle;
     CheckBox        aApplyBorderAndShadowCB;
 
     //#i61007# order of captions
@@ -94,11 +94,11 @@ class SwSequenceOptionDialog : public SvxStandardDialog
     ListBox         aLbCaptionOrder;
 
     OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    HelpButton      aHelpButton;
+    CancelButton	aCancelButton;
+    HelpButton 		aHelpButton;
 
     SwView&         rView;
-    String          aFldTypeName;
+    String			aFldTypeName;
 
 public:
     SwSequenceOptionDialog( Window *pParent, SwView &rV,
@@ -162,13 +162,13 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
 
     Link aLk = LINK( this, SwCaptionDialog, ModifyHdl );
     aCategoryBox.SetModifyHdl( aLk );
-    aTextEdit   .SetModifyHdl( aLk );
+    aTextEdit	.SetModifyHdl( aLk );
     aNumberingSeparatorED.SetModifyHdl ( aLk );
-    aSepEdit    .SetModifyHdl( aLk );
+    aSepEdit	.SetModifyHdl( aLk );
 
     aLk = LINK(this, SwCaptionDialog, SelectHdl);
     aCategoryBox.SetSelectHdl( aLk );
-    aFormatBox  .SetSelectHdl( aLk );
+    aFormatBox	.SetSelectHdl( aLk );
     aOptionButton.SetClickHdl( LINK( this, SwCaptionDialog, OptionHdl ) );
     aAutoCaptionButton.SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
 
@@ -272,7 +272,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         case nsSelectionType::SEL_FRM:
         case nsSelectionType::SEL_TXT:
             aPosBox.InsertEntry(SW_RESSTR(STR_BEGINNING));
-            aPosBox.InsertEntry(SW_RESSTR(STR_END     ));
+            aPosBox.InsertEntry(SW_RESSTR(STR_END	  ));
             break;
     }
     aPosBox.SelectEntryPos(1);
@@ -372,7 +372,7 @@ IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
 
 IMPL_LINK(SwCaptionDialog, CaptionHdl, PushButton*, EMPTYARG)
 {
-    SfxItemSet  aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
+    SfxItemSet	aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
     SwCaptionOptDlg aDlg( this, aSet );
     aDlg.Execute();
 
@@ -497,9 +497,9 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
     aFlCaptionOrder(this, SW_RES( FL_ORDER )), //#i61007# order of captions
     aFtCaptionOrder(this, SW_RES( FT_ORDER )),
     aLbCaptionOrder(this, SW_RES( LB_ORDER )),
-    aOKButton       (this, SW_RES(BTN_OK       )),
-    aCancelButton   (this, SW_RES(BTN_CANCEL   )),
-    aHelpButton     (this, SW_RES(BTN_HELP     )),
+    aOKButton		(this, SW_RES(BTN_OK	   )),
+    aCancelButton	(this, SW_RES(BTN_CANCEL   )),
+    aHelpButton		(this, SW_RES(BTN_HELP     )),
 
     rView( rV ),
     aFldTypeName( rSeqFldType )

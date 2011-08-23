@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@ using namespace ::com::sun::star::xml::sax;
 
 TYPEINIT1( XMLPersTextContentTContext, XMLPersAttrListTContext );
 
-XMLPersTextContentTContext::XMLPersTextContentTContext(
-        XMLTransformerBase& rImp,
+XMLPersTextContentTContext::XMLPersTextContentTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName ) :
     XMLPersAttrListTContext( rImp, rQName )
 {
 }
 
-XMLPersTextContentTContext::XMLPersTextContentTContext(
-        XMLTransformerBase& rImp,
+XMLPersTextContentTContext::XMLPersTextContentTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken ) :

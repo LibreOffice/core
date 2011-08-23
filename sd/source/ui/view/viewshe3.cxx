@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -229,7 +229,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     SdPage* pTemplatePage = pPage;
     if (pTemplatePage == NULL)
         if (pDocument->GetSdPage(0, ePageKind) > 0)
-            pTemplatePage = pDocument->GetSdPage(0, ePageKind);
+            pTemplatePage = pDocument->GetSdPage(0, ePageKind); 
     if (pTemplatePage != NULL && pTemplatePage->TRG_HasMasterPage())
         aVisibleLayers = pTemplatePage->TRG_GetMasterPageVisibleLayers();
     else
@@ -313,12 +313,12 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             }
 
             bIsPageBack = pIsPageBack->GetValue ();
-            bIsPageObj  = pIsPageObj->GetValue ();
+            bIsPageObj	= pIsPageObj->GetValue ();
         }
         else
         {
             Cancel();
-
+                
             if(HasCurrentFunction( SID_BEZIER_EDIT ) )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
@@ -406,11 +406,11 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             // Duplication makes no sense when pPage is NULL.
             if (pPage != NULL)
                 nNewPageIndex = pDocument->DuplicatePage (
-                    pPage,
+                    pPage, 
                     ePageKind,
-                    aStandardPageName,
+                    aStandardPageName, 
                     aNotesPageName,
-                    eStandardLayout,
+                    eStandardLayout, 
                     eNotesLayout,
                     bIsPageBack,
                     bIsPageObj);

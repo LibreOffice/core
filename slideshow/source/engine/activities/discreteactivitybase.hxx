@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ namespace slideshow
                 This method is called for each discrete time
                 instant, with nFrame denoting the frame number
                 (starting with 0)
-
+                
                 @param nFrame
                 Current frame number.
-
+                
                 @param nRepeatCount
                 Number of full repeats already performed
             */
@@ -67,19 +67,19 @@ namespace slideshow
         protected:
             virtual void startAnimation();
 
-            sal_uInt32 calcFrameIndex( sal_uInt32       nCurrCalls,
-                                       ::std::size_t    nVectorSize ) const;
+            sal_uInt32 calcFrameIndex( sal_uInt32 		nCurrCalls,
+                                       ::std::size_t 	nVectorSize ) const;
 
-            sal_uInt32 calcRepeatCount( sal_uInt32      nCurrCalls,
-                                        ::std::size_t   nVectorSize ) const;
+            sal_uInt32 calcRepeatCount( sal_uInt32 		nCurrCalls,
+                                        ::std::size_t 	nVectorSize ) const;
 
             ::std::size_t getNumberOfKeyTimes() const { return maDiscreteTimes.size(); }
 
         private:
-            WakeupEventSharedPtr            mpWakeupEvent;
-            const ::std::vector< double >   maDiscreteTimes;
-            const double                    mnSimpleDuration;
-            sal_uInt32                      mnCurrPerformCalls;
+            WakeupEventSharedPtr			mpWakeupEvent;
+            const ::std::vector< double >	maDiscreteTimes;
+            const double					mnSimpleDuration;
+            sal_uInt32						mnCurrPerformCalls;
         };
     }
 }

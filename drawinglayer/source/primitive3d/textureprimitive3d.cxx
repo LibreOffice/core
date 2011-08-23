@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@ namespace drawinglayer
     namespace primitive3d
     {
         TexturePrimitive3D::TexturePrimitive3D(
-            const Primitive3DSequence& rChildren,
-            const basegfx::B2DVector& rTextureSize,
+            const Primitive3DSequence& rChildren, 
+            const basegfx::B2DVector& rTextureSize, 
             bool bModulate, bool bFilter)
-        :   GroupPrimitive3D(rChildren),
+        :	GroupPrimitive3D(rChildren),
             maTextureSize(rTextureSize),
             mbModulate(bModulate),
             mbFilter(bFilter)
@@ -58,8 +58,8 @@ namespace drawinglayer
             if(GroupPrimitive3D::operator==(rPrimitive))
             {
                 const TexturePrimitive3D& rCompare = (TexturePrimitive3D&)rPrimitive;
-
-                return (getModulate() == rCompare.getModulate()
+                
+                return (getModulate() == rCompare.getModulate() 
                     && getFilter() == rCompare.getFilter());
             }
 
@@ -75,9 +75,9 @@ namespace drawinglayer
     namespace primitive3d
     {
         UnifiedTransparenceTexturePrimitive3D::UnifiedTransparenceTexturePrimitive3D(
-            double fTransparence,
+            double fTransparence, 
             const Primitive3DSequence& rChildren)
-        :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
+        :	TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
             mfTransparence(fTransparence)
         {
         }
@@ -136,12 +136,12 @@ namespace drawinglayer
     namespace primitive3d
     {
         GradientTexturePrimitive3D::GradientTexturePrimitive3D(
-            const attribute::FillGradientAttribute& rGradient,
-            const Primitive3DSequence& rChildren,
-            const basegfx::B2DVector& rTextureSize,
-            bool bModulate,
+            const attribute::FillGradientAttribute& rGradient, 
+            const Primitive3DSequence& rChildren, 
+            const basegfx::B2DVector& rTextureSize, 
+            bool bModulate, 
             bool bFilter)
-        :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
+        :	TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
             maGradient(rGradient)
         {
         }
@@ -151,7 +151,7 @@ namespace drawinglayer
             if(TexturePrimitive3D::operator==(rPrimitive))
             {
                 const GradientTexturePrimitive3D& rCompare = (GradientTexturePrimitive3D&)rPrimitive;
-
+                
                 return (getGradient() == rCompare.getGradient());
             }
 
@@ -171,11 +171,11 @@ namespace drawinglayer
     namespace primitive3d
     {
         BitmapTexturePrimitive3D::BitmapTexturePrimitive3D(
-            const attribute::FillBitmapAttribute& rFillBitmapAttribute,
-            const Primitive3DSequence& rChildren,
-            const basegfx::B2DVector& rTextureSize,
+            const attribute::FillBitmapAttribute& rFillBitmapAttribute, 
+            const Primitive3DSequence& rChildren, 
+            const basegfx::B2DVector& rTextureSize, 
             bool bModulate, bool bFilter)
-        :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
+        :	TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
             maFillBitmapAttribute(rFillBitmapAttribute)
         {
         }
@@ -205,10 +205,10 @@ namespace drawinglayer
     namespace primitive3d
     {
         TransparenceTexturePrimitive3D::TransparenceTexturePrimitive3D(
-            const attribute::FillGradientAttribute& rGradient,
-            const Primitive3DSequence& rChildren,
+            const attribute::FillGradientAttribute& rGradient, 
+            const Primitive3DSequence& rChildren, 
             const basegfx::B2DVector& rTextureSize)
-        :   GradientTexturePrimitive3D(rGradient, rChildren, rTextureSize, false, false)
+        :	GradientTexturePrimitive3D(rGradient, rChildren, rTextureSize, false, false)
         {
         }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ namespace oox { namespace ppt {
         return aTarget;
     }
 
-
+    
 // BEGIN CUT&PASTE from sd/source/filter/ppt/pptinanimations.cxx
 /** this adds an any to another any.
     if rNewValue is empty, rOldValue is returned.
@@ -178,7 +178,7 @@ namespace oox { namespace ppt {
             sal_Int16 nSubType;
             aAny = mpTarget->convert( pSlide, nSubType );
         }
-        else
+        else 
         {
             aAny = maValue;
         }

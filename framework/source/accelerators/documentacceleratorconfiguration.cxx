@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@
 namespace framework
 {
 
-//-----------------------------------------------
+//-----------------------------------------------    
 // XInterface, XTypeProvider, XServiceInfo
 DEFINE_XINTERFACE_2(DocumentAcceleratorConfiguration                   ,
                     XMLBasedAcceleratorConfiguration                           ,
@@ -104,7 +104,7 @@ DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(DocumentAcceleratorConfiguration ,
                                       css::lang::XServiceInfo          ,
                                       css::lang::XInitialization)
 //                                      css::ui::XUIConfigurationStorage)
-
+                       
 DEFINE_XSERVICEINFO_MULTISERVICE(DocumentAcceleratorConfiguration                   ,
                                  ::cppu::OWeakObject                                ,
                                  SERVICENAME_DOCUMENTACCELERATORCONFIGURATION       ,
@@ -119,39 +119,39 @@ DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
                         */
                     }
                    )
-
-//-----------------------------------------------
+                                    
+//-----------------------------------------------    
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
     : XMLBasedAcceleratorConfiguration(xSMGR)
 {
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
 {
     m_aPresetHandler.removeStorageListener(this);
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-
+    
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
     m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
                         ::rtl::OUString::createFromAscii("DocumentRoot"),
                         css::uno::Reference< css::embed::XStorage >());
-
+    
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
-
+    
     impl_ts_fillCache();
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
     throw(css::uno::RuntimeException)
 {
@@ -171,7 +171,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
         impl_ts_fillCache();
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException)
 {
@@ -181,7 +181,7 @@ sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void DocumentAcceleratorConfiguration::impl_ts_fillCache()
 {
     // SAFE -> ----------------------------------
@@ -231,7 +231,7 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
     {}
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void DocumentAcceleratorConfiguration::impl_ts_clearCache()
 {
     m_aPresetHandler.forgetCachedStorages();

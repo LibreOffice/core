@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,16 +50,16 @@ namespace svt
         try
         {
             // does the dialog haver a help URL property?
-            Reference< css::beans::XPropertySet >       xDialogProps( _mxFileDlg, css::uno::UNO_QUERY );
-            Reference< css::beans::XPropertySetInfo >   xInfo;
+            Reference< css::beans::XPropertySet >		xDialogProps( _mxFileDlg, css::uno::UNO_QUERY );
+            Reference< css::beans::XPropertySetInfo >	xInfo;
             if( xDialogProps.is() )
                 xInfo = xDialogProps->getPropertySetInfo( );
 
-            const OUString          sHelpURLPropertyName( RTL_CONSTASCII_USTRINGPARAM( "HelpURL" ) );
+            const OUString			sHelpURLPropertyName( RTL_CONSTASCII_USTRINGPARAM( "HelpURL" ) );
 
             if( xInfo.is() && xInfo->hasPropertyByName( sHelpURLPropertyName ) )
-            {   // yep
-                OUString                sId( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+            {	// yep
+                OUString				sId( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
                 sId += OUString::valueOf( _nHelpId );
                 xDialogProps->setPropertyValue( sHelpURLPropertyName, css::uno::makeAny( sId ) );
             }
@@ -76,16 +76,16 @@ namespace svt
         try
         {
             // does the dialog haver a help URL property?
-            Reference< css::beans::XPropertySet >       xDialogProps( _mxFileDlg, css::uno::UNO_QUERY );
-            Reference< css::beans::XPropertySetInfo >   xInfo;
+            Reference< css::beans::XPropertySet >		xDialogProps( _mxFileDlg, css::uno::UNO_QUERY );
+            Reference< css::beans::XPropertySetInfo >	xInfo;
             if( xDialogProps.is() )
                 xInfo = xDialogProps->getPropertySetInfo( );
 
-            const OUString          sHelpURLPropertyName( RTL_CONSTASCII_USTRINGPARAM( "HelpURL" ) );
+            const OUString			sHelpURLPropertyName( RTL_CONSTASCII_USTRINGPARAM( "HelpURL" ) );
 
             if( xInfo.is() && xInfo->hasPropertyByName( sHelpURLPropertyName ) )
-            {   // yep
-                OUString                sId( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+            {	// yep
+                OUString				sId( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
                 sId += OUString::valueOf( _nHelpId );
                 xDialogProps->setPropertyValue( sHelpURLPropertyName, css::uno::makeAny( sId ) );
             }

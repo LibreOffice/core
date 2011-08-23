@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,25 +44,25 @@ public class CheckConfigItems extends ComplexTestCase
 {
     //-------------------------------------------
     // some const
-
+    
     //-------------------------------------------
     // member
-
+    
     /** points to the global uno service manager. */
     private XMultiServiceFactory m_xSmgr = null;
-
+    
     /** implements real config item tests in C++. */
     private XJob m_xTest = null;
-
+        
     //-------------------------------------------
     // test environment
-
+    
     //-------------------------------------------
     /** @short  A function to tell the framework,
                 which test functions are available.
-
+                
         @return All test methods.
-        @todo   Think about selection of tests from outside ...
+        @todo   Think about selection of tests from outside ...     
      */
     public String[] getTestMethodNames()
     {
@@ -79,7 +79,7 @@ public class CheckConfigItems extends ComplexTestCase
 
     //-------------------------------------------
     /** @short  Create the environment for following tests.
-
+    
         @descr  Use either a component loader from desktop or
                 from frame
      */
@@ -88,12 +88,12 @@ public class CheckConfigItems extends ComplexTestCase
     {
         // get uno service manager from global test environment
         m_xSmgr = (XMultiServiceFactory)param.getMSF();
-
+    
         // TODO register helper service
-
+    
         // create module manager
         m_xTest = (XJob)UnoRuntime.queryInterface(
-                    XJob.class,
+                    XJob.class, 
                     m_xSmgr.createInstance("com.sun.star.comp.svl.ConfigItemTest"));
     }
 
@@ -104,7 +104,7 @@ public class CheckConfigItems extends ComplexTestCase
         throws java.lang.Exception
     {
         // TODO deregister helper service
-
+    
         m_xTest = null;
         m_xSmgr = null;
     }
@@ -144,7 +144,7 @@ public class CheckConfigItems extends ComplexTestCase
     {
         impl_triggerTest("checkPrintOptions");
     }
-
+    
     //-------------------------------------------
     /** @todo document me
      */

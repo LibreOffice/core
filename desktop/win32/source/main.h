@@ -8,6 +8,6 @@ int MainA();
 int MainW();
 
 #ifdef __cplusplus
-}   /* extern "C" */
+}	/* extern "C" */
 #endif
 

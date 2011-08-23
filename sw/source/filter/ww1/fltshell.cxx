@@ -59,15 +59,15 @@
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
-#include <fldbas.hxx>           // RES_SETEXPFLD
-#include <charatr.hxx>          // class SwFmtRefMark
-#include <swtable.hxx>          // class SwTableLines, ...
+#include <fldbas.hxx>			// RES_SETEXPFLD
+#include <charatr.hxx>			// class SwFmtRefMark
+#include <swtable.hxx>			// class SwTableLines, ...
 #include <tox.hxx>
-#include <expfld.hxx>           // SwExpField
-#include <section.hxx>          // class SwSection
-#include <tblsel.hxx>           // class SwSelBoxes
+#include <expfld.hxx>			// SwExpField
+#include <section.hxx>			// class SwSection
+#include <tblsel.hxx>			// class SwSelBoxes
 #include <pagedesc.hxx>
-#include <docsh.hxx>            // class SwDocSh
+#include <docsh.hxx>			// class SwDocSh
 #include <fltshell.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>
@@ -97,10 +97,10 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt )
 {
     // Anfang vom Bereich merken
     nMkCntnt = rStartPos.nContent.GetIndex();
-    pAttr = pHt;        // speicher eine Kopie vom Attribut
-    bOld    = FALSE;    // used for marking Attributes *before* skipping field results
-    bLocked = TRUE;     // locke das Attribut --> darf erst
-    bCopied = FALSE;    // gesetzt werden, wenn es wieder geunlocked ist
+    pAttr = pHt;		// speicher eine Kopie vom Attribut
+    bOld	= FALSE;	// used for marking Attributes *before* skipping field results
+    bLocked = TRUE; 	// locke das Attribut --> darf erst
+    bCopied = FALSE;	// gesetzt werden, wenn es wieder geunlocked ist
     bConsumedByField = FALSE;
 }
 
@@ -108,10 +108,10 @@ SwFltStackEntry::SwFltStackEntry(const SwFltStackEntry& rEntry) :
     nMkNode(rEntry.nMkNode),
     nPtNode(rEntry.nPtNode)
 {
-    pAttr   = rEntry.pAttr->Clone();
+    pAttr	= rEntry.pAttr->Clone();
     nMkCntnt= rEntry.nMkCntnt;
-    bOld    = rEntry.bOld;
-    bLocked = bCopied = TRUE; // when rEntry were NOT bLocked we would never have been called
+    bOld	= rEntry.bOld;
+    bLocked	= bCopied = TRUE; // when rEntry were NOT bLocked we would never have been called
     bConsumedByField = rEntry.bConsumedByField;
 }
 
@@ -130,7 +130,7 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     // Cursor-Position auch der Bereich vom Attribut weiter
     // verschoben wird.
     // Das ist aber nicht das gewollte!
-    bLocked = FALSE;                    // freigeben und das ENDE merken
+    bLocked = FALSE;					// freigeben und das ENDE merken
     nPtNode = rEndPos.nNode.GetIndex()-1;
     nPtCntnt = rEndPos.nContent.GetIndex();
 }
@@ -261,7 +261,7 @@ void SwFltControlStack::StealAttr(const SwPosition* pPos, USHORT nAttrId /* = 0 
         pEntry = (*this)[ nCnt ];
         if (pEntry->nPtNode.GetIndex()+1 == pPos->nNode.GetIndex() &&
             (!nAttrId || nAttrId == pEntry->pAttr->Which()))
-            DeleteAndDestroy(nCnt);     // loesche aus dem Stack
+            DeleteAndDestroy(nCnt);		// loesche aus dem Stack
     }
 }
 
@@ -319,7 +319,7 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
             if (!nAttrId ){
                 bF = true;
             }else if( nAttrId == pEntry->pAttr->Which()){
-                if( nAttrId != RES_FLTR_BOOKMARK ){     // Handle abfragen
+                if( nAttrId != RES_FLTR_BOOKMARK ){		// Handle abfragen
                     bF = true;
                 }else if( nHand == ((SwFltBookmark*)(pEntry->pAttr))->GetHandle() )
                 {
@@ -344,8 +344,8 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
             continue;
         }
         SetAttrInDoc(rPos, pEntry);
-        DeleteAndDestroy(i);        // loesche aus dem Stack
-        i--; nCnt--;        // Danach rutschen alle folgenden nach unten
+        DeleteAndDestroy(i);		// loesche aus dem Stack
+        i--; nCnt--;		// Danach rutschen alle folgenden nach unten
     }
 }
 
@@ -369,13 +369,13 @@ static void MakeBookRegionOrPoint(SwFltStackEntry* pEntry, SwDoc* pDoc,
 {
     if (pEntry->MakeRegion(pDoc, rRegion, bCheck )){
         const SwNodes& rNds = pDoc->GetNodes();
-//      BOOL b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
-//      const SwStartNode* p1 = rNds[rRegion.GetPoint()->nNode]->FindTableBoxStartNode();
-//      const SwStartNode* p2 = rNds[rRegion.GetMark()->nNode]->FindTableBoxStartNode();
+//		BOOL b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
+//		const SwStartNode* p1 =	rNds[rRegion.GetPoint()->nNode]->FindTableBoxStartNode();
+//		const SwStartNode* p2 = rNds[rRegion.GetMark()->nNode]->FindTableBoxStartNode();
         if( rNds[rRegion.GetPoint()->nNode]->FindTableBoxStartNode()
               != rNds[rRegion.GetMark()->nNode]->FindTableBoxStartNode() ){
-            rRegion.Exchange();         // Ungueltiger Bereich
-            rRegion.DeleteMark();       // -> beide auf Mark
+            rRegion.Exchange();			// Ungueltiger Bereich
+            rRegion.DeleteMark();		// -> beide auf Mark
         }
     }else{
         MakePoint(pEntry, pDoc, rRegion);
@@ -393,24 +393,24 @@ extern BOOL CheckNodesRange( const SwNodeIndex& rStt,
 // rNds sind die Doc-Nodes
 // rEnd ist Bereichs-Ende,
 // rTmpStart ist ReinRaus-Parameter: Anfang des zu untersuchenden Bereiches rein,
-//                                   Anfang des gueltigen Bereichs raus
+//									 Anfang des gueltigen Bereichs raus
 // rTmpEnd ist raus-Parameter
 // Return-Bool ist TRUE fuer gueltigen Bereich
 static BOOL IterateNumrulePiece( const SwNodeIndex& rEnd,
                                 SwNodeIndex& rTmpStart, SwNodeIndex& rTmpEnd )
 {
     while( ( rTmpStart <= rEnd )
-           && !( rTmpStart.GetNode().IsTxtNode() ) )    // suche gueltigen Anfang
+           && !( rTmpStart.GetNode().IsTxtNode() ) )	// suche gueltigen Anfang
         rTmpStart++;
 
     rTmpEnd = rTmpStart;
     while( ( rTmpEnd <= rEnd )
-           && ( rTmpEnd.GetNode().IsTxtNode() ) )       // suche gueltiges Ende + 1
+           && ( rTmpEnd.GetNode().IsTxtNode() ) )		// suche gueltiges Ende + 1
         rTmpEnd++;
 
-    rTmpEnd--;                                      // gueltiges Ende
+    rTmpEnd--;										// gueltiges Ende
 
-    return rTmpStart <= rTmpEnd;                    // gueltig ?
+    return rTmpStart <= rTmpEnd;					// gueltig ?
 }
 
 void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry)
@@ -444,7 +444,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     case RES_TXTATR_TOXMARK:
         break;
-    case RES_FLTR_NUMRULE:          // Numrule 'reinsetzen
+    case RES_FLTR_NUMRULE:			// Numrule 'reinsetzen
         {
             const String& rNumNm = ((SfxStringItem*)pEntry->pAttr)->GetValue();
             SwNumRule* pRul = pDoc->FindNumRulePtr( rNumNm );
@@ -475,7 +475,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     case RES_FLTR_NUMRULE_NUM:
         break;
-    case RES_FLTR_BOOKMARK:         // eigentlich nur fuer den Ende-Stack
+    case RES_FLTR_BOOKMARK:			// eigentlich nur fuer den Ende-Stack
         {
             SwFltBookmark* pB = (SwFltBookmark*)pEntry->pAttr;
             const String& rName = ((SwFltBookmark*)pEntry->pAttr)->GetName();
@@ -492,7 +492,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 {
                     SwFieldType* pFT = pDoc->GetFldType(RES_SETEXPFLD, rName, false);
                     if (!pFT)
-                    {                       // FieldType anlegen
+                    {						// FieldType anlegen
                         SwSetExpFieldType aS(pDoc, rName, nsSwGetSetExpType::GSE_STRING);
                         pFT = pDoc->InsertFldType(aS);
                     }
@@ -557,7 +557,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         }
         break;
     case RES_FLTR_SECTION:
-        MakePoint(pEntry, pDoc, aRegion);   // bislang immer Point==Mark
+        MakePoint(pEntry, pDoc, aRegion);	// bislang immer Point==Mark
         pDoc->InsertSwSection(aRegion,
                 *(static_cast<SwFltSection*>(pEntry->pAttr))->GetSectionData(),
                 0, 0, false);
@@ -618,7 +618,7 @@ SfxPoolItem* SwFltControlStack::GetFmtStackAttr(USHORT nWhich, USHORT * pPos)
         {
             if (pPos)
                 *pPos = nSize;
-            return (SfxPoolItem*)pEntry->pAttr;     // Ok, dann Ende
+            return (SfxPoolItem*)pEntry->pAttr;		// Ok, dann Ende
         }
     }
     return 0;
@@ -631,10 +631,10 @@ const SfxPoolItem* SwFltControlStack::GetFmtAttr(const SwPosition& rPos, USHORT 
         return (const SfxPoolItem*)pHt;
 
     // im Stack ist das Attribut nicht vorhanden, also befrage das Dokument
-//  SwCntntNode * pNd = rPaM.GetCntntNode();
+//	SwCntntNode * pNd = rPaM.GetCntntNode();
     SwCntntNode * pNd = pDoc->GetNodes()[ rPos.nNode ]->GetCntntNode();
 
-    if (!pNd)           // kein ContentNode, dann das dflt. Attribut
+    if (!pNd)			// kein ContentNode, dann das dflt. Attribut
         return &pDoc->GetAttrPool().GetDefaultItem(nWhich);
     return &pNd->GetAttr(nWhich);
 }
@@ -915,7 +915,7 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, BOOL bN
     pOutDoc = new SwFltOutDoc( *pDoc, pPaM, aStack, aEndStack );
     pOut = pOutDoc;
 
-    if( !bNewDoc ){     // in ein Dokument einfuegen ?
+    if( !bNewDoc ){		// in ein Dokument einfuegen ?
                         // Da immer ganze Zeile eingelesen werden, muessen
                         // evtl. Zeilen eingefuegt / aufgebrochen werden
         const SwPosition* pPos = pPaM->GetPoint();
@@ -923,10 +923,10 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, BOOL bN
         USHORT nCntPos = pPos->nContent.GetIndex();
         if( nCntPos && pSttNd->GetTxt().Len() )
                                             // EinfuegePos nicht in leerer Zeile
-            pDoc->SplitNode( *pPos, false );        // neue Zeile erzeugen
-        if( pSttNd->GetTxt().Len() ){       // EinfuegePos nicht am Ende der Zeile
-            pDoc->SplitNode( *pPos, false );        // neue Zeile
-            pPaM->Move( fnMoveBackward );   // gehe in leere Zeile
+            pDoc->SplitNode( *pPos, false );		// neue Zeile erzeugen
+        if( pSttNd->GetTxt().Len() ){		// EinfuegePos nicht am Ende der Zeile
+            pDoc->SplitNode( *pPos, false );		// neue Zeile
+            pPaM->Move( fnMoveBackward );	// gehe in leere Zeile
         }
 
         // verhinder das Einlesen von Tabellen in Fussnoten / Tabellen
@@ -938,7 +938,7 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, BOOL bN
             pOutDoc->SetReadNoTable();
     }
     pCurrentPageDesc =  &((SwPageDesc&)const_cast<const SwDoc *>(pDoc)
-                          ->GetPageDesc( 0 ));  // Standard
+                          ->GetPageDesc( 0 ));	// Standard
 
 }
 
@@ -948,7 +948,7 @@ SwFltShell::~SwFltShell()
 
     if (eSubMode == Style)
         EndStyle();
-    if( pOutDoc->IsInTable() )          // falls nicht ordentlich abgeschlossen
+    if( pOutDoc->IsInTable() )			// falls nicht ordentlich abgeschlossen
         EndTable();
     if( pOutDoc->IsInFly() )
         EndFly();
@@ -971,7 +971,7 @@ SwFltShell::~SwFltShell()
         const SwNode* pEndNd = &rDoc.GetNodes().GetEndOfContent();
         SwNodeIndex aEndIdx( *pEndNd, -1L );
         const SwStartNode* pSttNd = pEndNd->StartOfSectionNode();
-        SwNodeIndex aSttIdx( *pSttNd, 1L );         // +1 -> hinter StartNode
+        SwNodeIndex aSttIdx( *pSttNd, 1L );			// +1 -> hinter StartNode
                                                     // Section einfuegen
                         // Section einfuegen
         rDoc.GetNodes().InsertTextSection(
@@ -988,7 +988,7 @@ SwFltShell::~SwFltShell()
 
     GetDoc().ChgPageDesc( 0,
                           const_cast<const SwDoc &>(GetDoc()).
-                          GetPageDesc( 0 ));    // PageDesc "Standard"
+                          GetPageDesc( 0 ));	// PageDesc "Standard"
     for (i=nPageDescOffset;i<GetDoc().GetPageDescCnt();i++)
     {
         const SwPageDesc& rPD = const_cast<const SwDoc &>(GetDoc()).
@@ -1026,7 +1026,7 @@ String SwFltShell::QuoteStr( const String& rIn )
         switch( sOut.GetChar( n ) )
         {
         case 0x0a:
-            sOut.Erase( n, 1 );             // 0xd 0xa wird zu \n
+            sOut.Erase( n, 1 );				// 0xd 0xa wird zu \n
             break;
 
         case 0x0b:
@@ -1207,9 +1207,9 @@ const SfxPoolItem& SwFltOutDoc::GetNodeOrStyAttr(USHORT nWhich)
 {
     SwCntntNode * pNd = GetDoc().GetNodes()[ pPaM->GetPoint()->nNode ]
                             ->GetCntntNode();
-    if (pNd)            // ContentNode: Attribut mit Parent
+    if (pNd)			// ContentNode: Attribut mit Parent
         return pNd->GetAttr(nWhich);
-    else                // kein ContentNode, dann das dflt. Attribut
+    else				// kein ContentNode, dann das dflt. Attribut
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
 }
 
@@ -1374,7 +1374,7 @@ BOOL SwFltOutDoc::BeginTable()
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
             *pTabSavedPos, 1, 1, text::HoriOrientation::LEFT, 0, 0, FALSE, FALSE ); // TODO MULTIHEADER
     nTableWidth = 0;
-    ((SwTable*)pTable)->LockModify();   // Nichts automatisch anpassen!
+    ((SwTable*)pTable)->LockModify();	// Nichts automatisch anpassen!
 // set pam in 1. table cell
     usTableX =
     usTableY = 0;
@@ -1388,7 +1388,7 @@ SwTableBox* SwFltOutDoc::GetBox(USHORT ny, USHORT nx /*= USHRT_MAX */)
         ASSERT(pTable, "GetBox ohne Tabelle");
         return 0;
     }
-    if( nx == USHRT_MAX )   // aktuelle Zelle
+    if( nx == USHRT_MAX )	// aktuelle Zelle
         nx = usTableX;
 
 // get structs to table cells
@@ -1397,7 +1397,7 @@ SwTableBox* SwFltOutDoc::GetBox(USHORT ny, USHORT nx /*= USHRT_MAX */)
         ASSERT(FALSE, "SwFltOutDoc:GetBox:pTableLines");
         return 0;
     }
-    if( ny >= pTableLines->Count() ){   // Notbremse
+    if( ny >= pTableLines->Count() ){	// Notbremse
         ASSERT( FALSE, "SwFltOutDoc:GetBox:ny >= Count()");
         ny = pTableLines->Count() - 1;
     }
@@ -1411,7 +1411,7 @@ SwTableBox* SwFltOutDoc::GetBox(USHORT ny, USHORT nx /*= USHRT_MAX */)
         ASSERT(FALSE, "SwFltOutDoc:GetBox:pTableBoxes");
         return 0;
     }
-    if( nx >= pTableBoxes->Count() ){   // Notbremse
+    if( nx >= pTableBoxes->Count() ){	// Notbremse
         ASSERT(FALSE, "SwFltOutDoc:GetBox:nx >= Count()");
         nx = pTableBoxes->Count() - 1;
     }
@@ -1475,7 +1475,7 @@ void SwFltOutDoc::SetTableWidth(SwTwips nSwWidth)
     }
     ASSERT( nSwWidth > MINLAY, "Tabellenbreite <= MINLAY" );
     if( nSwWidth != nTableWidth ){
-        if( nTableWidth )           // Nicht beim ersten Setzen
+        if( nTableWidth )			// Nicht beim ersten Setzen
             SplitTable();
         pTable->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize(ATT_VAR_SIZE, nSwWidth));
         nTableWidth = nSwWidth;
@@ -1613,10 +1613,10 @@ void SwFltOutDoc::EndTable()
         pTableNode->MakeFrms(&pPaM->GetPoint()->nNode);
     }
 
-    *pPaM->GetPoint() = *pTabSavedPos;              // restore Cursor
+    *pPaM->GetPoint() = *pTabSavedPos;				// restore Cursor
     delete pTabSavedPos;
     pTabSavedPos = 0;
-    ((SwTable*)pTable)->UnlockModify(); // Test, nuetzt nichts gegen Assert
+    ((SwTable*)pTable)->UnlockModify();	// Test, nuetzt nichts gegen Assert
     pTable = 0;
     nTableWidth = 0;
 }
@@ -1673,7 +1673,7 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     SwFmtFrmSize aSz( ATT_VAR_SIZE, MINFLY, MINFLY );
                                         // Default: Breite 100% ( = PMW:Auto )
-    aSz.SetWidthPercent( 100 );         // Hoehe: Auto
+    aSz.SetWidthPercent( 100 );			// Hoehe: Auto
     p->Put( aSz );
     p->Put( SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::FRAME ));
     return p;
@@ -1689,7 +1689,7 @@ BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
 {
     ASSERT(!pMoreAttrs, "SwFltOutBase:BeginFly mit pMoreAttrs" );
     eFlyAnchor = eAnchor;
-    bFlyAbsPos = bAbsolutePos;      // Bloedsinn eigentlich
+    bFlyAbsPos = bAbsolutePos;		// Bloedsinn eigentlich
     return TRUE;
 }
 
@@ -1745,7 +1745,7 @@ BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
     rEndStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
 // create Fly:
-    ASSERT(pFlySavedPos == NULL, "BeginFly in Fly");    // rekursiv geht noch nicht
+    ASSERT(pFlySavedPos == NULL, "BeginFly in Fly");	// rekursiv geht noch nicht
     pFlySavedPos = new SwPosition(*pPaM->GetPoint());
 
 
@@ -1756,9 +1756,9 @@ BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
         pSet->Put(*pMoreAttrs);
 
 //  dieses NICHT bei Seitengebundenem Fly mit Seiten-NUMMER !
-    aAnchor.SetAnchor(pPaM->GetPoint());    // braucht erstaunlicherweise
+    aAnchor.SetAnchor(pPaM->GetPoint());	// braucht erstaunlicherweise
                                             // den Stack nicht
-//  aStack.NewAttr( *pPaM->GetPoint(), SwFltAnchor( pFly ) );
+//	aStack.NewAttr( *pPaM->GetPoint(), SwFltAnchor( pFly ) );
 
     pSet->Put( aAnchor );
     SwFrmFmt* pF = MakeFly( eAnchor, pSet );
@@ -1805,7 +1805,7 @@ void SwFltOutDoc::EndFly()
     rStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
     rEndStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
-    *pPaM->GetPoint() = *pFlySavedPos;              // restore Cursor
+    *pPaM->GetPoint() = *pFlySavedPos;				// restore Cursor
     delete pFlySavedPos;
     pFlySavedPos = 0;
     SwFltOutBase::EndFly();
@@ -1823,14 +1823,14 @@ void SwFltOutDoc::EndFly()
 /*virtual*/ void SwFltFormatCollection::SetFlyFrmAttr(const SfxPoolItem& rAttr)
 {
     if (!pFlyAttrs)
-        pFlyAttrs = new SfxItemSet( GetDoc().GetAttrPool(),
+        pFlyAttrs = new	SfxItemSet( GetDoc().GetAttrPool(),
                              RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     pFlyAttrs->Put( rAttr );
 }
 
 /*virtual*/ const SfxPoolItem& SwFltFormatCollection::GetFlyFrmAttr(USHORT nWhich)
 {
-//  ASSERT( pFlyAttrs, "GetFlyFrmAttr ohne Coll-FlyAttrs" );
+//	ASSERT( pFlyAttrs, "GetFlyFrmAttr ohne Coll-FlyAttrs" );
     if( pFlyAttrs )
         return pFlyAttrs->Get( nWhich, FALSE );
     else
@@ -1847,7 +1847,7 @@ BOOL SwFltFormatCollection::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
     return TRUE;
 }
 
-void SwFltFormatCollection::EndFly()    // Wird nie aufgerufen
+void SwFltFormatCollection::EndFly()	// Wird nie aufgerufen
 {
 }
 
@@ -1901,7 +1901,7 @@ void SwFltShell::EndFly()
         ASSERT(FALSE, "EndFly ohne Fly");
         return;
     }
-    if (pOutDoc->IsInTable()){      // Table verschraenkt mit Fly macht keinen Sinn
+    if (pOutDoc->IsInTable()){		// Table verschraenkt mit Fly macht keinen Sinn
         ASSERT(FALSE, "EndFly in Table ( verschraenkt )");
         EndTable();     // -> Table beenden
     }
@@ -1915,7 +1915,7 @@ void SwFltShell::EndFly()
 
 void SwFltShell::BeginFootnote()
 {
-    if( pOut->IsInFly() ){          // Passiert z.B. bei Fussnote in Fly
+    if( pOut->IsInFly() ){			// Passiert z.B. bei Fussnote in Fly
         ASSERT(FALSE, "Fussnote in Fly nicht erlaubt");
         return;
     }
@@ -1927,8 +1927,8 @@ void SwFltShell::BeginFootnote()
 // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
 // die in Fussnoten reinragen
     aStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
-//  aEndStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
-//  EndStack erstmal nicht zwangs-Schliessen, damit Bookmarks ueber
+//	aEndStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
+//	EndStack erstmal nicht zwangs-Schliessen, damit Bookmarks ueber
 //  Fussnoten im PMW uebernommen werden
 
     SwFmtFtn aFtn;
@@ -1939,7 +1939,7 @@ void SwFltShell::BeginFootnote()
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
     SwTxtAttr *const pFN = pTxt->GetTxtAttrForCharAt(
         pPaM->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
-    if( !pFN ){         // Passiert z.B. bei Fussnote in Fly
+    if( !pFN ){			// Passiert z.B. bei Fussnote in Fly
         ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
         return;
     }
@@ -1957,11 +1957,11 @@ void SwFltShell::EndFootnote()
                         // Alle Attribute schliessen, da sonst Attribute
                         // entstehen koennen, die aus Fussnoten rausragen
     aStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
-//  aEndStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
-//  EndStack erstmal nicht zwangs-Schliessen, damit Bookmarks ueber
+//	aEndStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
+//	EndStack erstmal nicht zwangs-Schliessen, damit Bookmarks ueber
 //  Fussnoten im PMW uebernommen werden
 
-    *pPaM->GetPoint() = *pSavedPos;             // restore Cursor
+    *pPaM->GetPoint() = *pSavedPos;				// restore Cursor
     delete pSavedPos;
     pSavedPos = 0;
 }
@@ -2002,21 +2002,21 @@ void SwFltShell::BeginFooter(SwPageDesc* /*pPD*/)
 
 void SwFltShell::EndHeaderFooter()
 {
-    *pPaM->GetPoint() = *pSavedPos;             // restore Cursor
+    *pPaM->GetPoint() = *pSavedPos;				// restore Cursor
     delete pSavedPos;
     pSavedPos = 0;
 }
 
 SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 {
-    if(bStdPD)                      // keine Neuen PageDescs
+    if(bStdPD)						// keine Neuen PageDescs
         return pCurrentPageDesc;
 
     BOOL bFollow = (pFirstPageDesc != 0);
     SwPageDesc* pNewPD;
     USHORT nPos;
     if (bFollow && pFirstPageDesc->GetFollow() != pFirstPageDesc)
-        return pFirstPageDesc;      // Fehler: hat schon Follow
+        return pFirstPageDesc;		// Fehler: hat schon Follow
 // Erkennung doppelter Namen fehlt noch (Wahrscheinlichkeit
 // fuer dopp. Namen ist gering)
 
@@ -2027,7 +2027,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
     pNewPD =  &((SwPageDesc&)const_cast<const SwDoc &>(GetDoc()).
                 GetPageDesc(nPos));
     if (bFollow)
-    {               // Dieser ist der folgende von pPageDesc
+    {				// Dieser ist der folgende von pPageDesc
         pFirstPageDesc->SetFollow(pNewPD);
         pNewPD->SetFollow(pNewPD);
     }
@@ -2048,7 +2048,7 @@ SwFltFormatCollection::SwFltFormatCollection(
     pFlyAttrs( 0 ),
     bHasFly( FALSE )
 {
-    Reset();            // Default-Attrs loeschen und Auto-Flag
+    Reset();			// Default-Attrs loeschen und Auto-Flag
 }
 
 SwFltFormatCollection::SwFltFormatCollection(
@@ -2058,7 +2058,7 @@ SwFltFormatCollection::SwFltFormatCollection(
     bHasFly( FALSE )
 {
     pColl = _rDoc.MakeTxtFmtColl(rName, (SwTxtFmtColl*)_rDoc.GetDfltTxtFmtColl());
-    Reset();            // Default-Attrs loeschen und Auto-Flag
+    Reset();			// Default-Attrs loeschen und Auto-Flag
 }
 
 void SwFltShell::NextStyle(USHORT nWhich, USHORT nNext)

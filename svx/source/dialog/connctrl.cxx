@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 
 SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                             const SfxItemSet& rInAttrs ) :
-                            Control ( pParent, rResId ),
+                            Control	( pParent, rResId ),
                             rAttrs  ( rInAttrs ),
                             pEdgeObj( NULL ),
                             pObjList( NULL ),
@@ -154,12 +154,12 @@ void SvxXConnectionPreview::Construct()
         aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
         SetMapMode( aMapMode );
 
-        MapMode         aDisplayMap( aMapMode );
-        Point           aNewPos;
-        Size            aNewSize;
-        const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
-        const long      nWidth = aWinSize.Width();
-        const long      nHeight = aWinSize.Height();
+        MapMode			aDisplayMap( aMapMode );
+        Point			aNewPos;
+        Size			aNewSize;
+        const Size		aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
+        const long		nWidth = aWinSize.Width();
+        const long		nHeight = aWinSize.Height();
         double          fRectWH = (double) aRect.GetWidth() / aRect.GetHeight();
         double          fWinWH = (double) nWidth / nHeight;
 
@@ -264,7 +264,7 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
         for(sal_uInt32 a(0L); a < pObjList->GetObjCount(); a++)
         {
             SdrObject* pObject = pObjList->GetObj(a);
-            DBG_ASSERT(pObject,
+            DBG_ASSERT(pObject, 
                 "SvxXConnectionPreview::Paint: Corrupt ObjectList (!)");
             aObjectVector.push_back(pObject);
         }
@@ -318,7 +318,7 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     BOOL bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
     BOOL bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    BOOL bCtrl    = rMEvt.IsMod1();
+    BOOL bCtrl	  = rMEvt.IsMod1();
 
     if( bZoomIn || bZoomOut )
     {

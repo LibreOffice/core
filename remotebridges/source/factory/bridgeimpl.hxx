@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 
 namespace remotebridges_factory {
     extern rtl_StandardModuleCount g_moduleCount;
-
+    
     struct MyMutex
     {
         ::osl::Mutex m_mutex;
@@ -62,19 +62,19 @@ namespace remotebridges_factory {
         OBridge( remote_Context *pContext );
         ~OBridge();
 
-        // XInterface
+        // XInterface 
     public:
-        ::com::sun::star::uno::Any      SAL_CALL
+        ::com::sun::star::uno::Any     	SAL_CALL
                queryInterface( const ::com::sun::star::uno::Type & aType ) throw(com::sun::star::uno::RuntimeException);
 
-        void        SAL_CALL acquire() throw()
+        void 		SAL_CALL acquire() throw()
             { OComponentHelper::acquire(); }
-        void        SAL_CALL release() throw()
+        void 		SAL_CALL release() throw()
             { OComponentHelper::release(); }
 
     public:
         virtual void SAL_CALL disposing(); // called by OComponentHelper
-
+        
     public:
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
                getInstance( const ::rtl::OUString& sInstanceName )

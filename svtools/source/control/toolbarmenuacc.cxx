@@ -209,7 +209,7 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getAccessibleIndexInParent() throw (RuntimeEx
 {
     const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ThrowIfDisposed();
-
+    
     Window* pParent = mpParent->mrMenu.GetParent();
     if( pParent )
     {
@@ -381,7 +381,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleAtPoint( const aw
     Reference< XAccessible > xRet;
 
     const Point aVclPoint( aPoint.X, aPoint.Y );
-
+    
     const int nEntryCount = mpParent->maEntryVector.size();
     for( int nEntry = 0; (nEntry < nEntryCount) && !xRet.is(); nEntry++ )
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ public:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage > impl_getDrawPage() const
         throw (::com::sun::star::uno::RuntimeException);
-
+    
 protected:
 
     // ____ chart::XChartDocument ____
@@ -207,7 +207,7 @@ private: //methods
 
 private: //member
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xDelegator;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xTitle;

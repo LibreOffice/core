@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,12 +86,12 @@ using namespace ::com::sun::star::util;
 
 class SfxEnumMenu: public PopupMenu
 {
-    USHORT          nSlot;
+    USHORT			nSlot;
     SfxEnumItem    *pItem;
     SfxBindings*    pBindings;
 
 protected:
-    virtual void    Select();
+    virtual void	Select();
 
 public:
                     SfxEnumMenu( USHORT nSlot, SfxBindings* pBind, const SfxEnumItem &rItem );
@@ -189,7 +189,7 @@ void SfxMenuControl::Bind(
 // ctor for explicit registration
 
 SfxMenuControl::SfxMenuControl( BOOL bShowStrings )
-:   pOwnMenu(0),
+:	pOwnMenu(0),
     pSubMenu(0),
     b_ShowStrings(bShowStrings)
 {
@@ -248,9 +248,9 @@ void SfxMenuControl::RemovePopup()
 
 void SfxMenuControl::StateChanged
 (
-    USHORT              nSID,
-    SfxItemState        eState,
-    const SfxPoolItem*  pState
+    USHORT 				nSID,
+    SfxItemState		eState,
+    const SfxPoolItem* 	pState
 )
 {
     (void)nSID; //unused
@@ -449,7 +449,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
     m_bWasHiContrastMode    = rSettings.GetHighContrastMode();
-    m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
+    m_bShowMenuImages		= rSettings.GetUseImagesInMenus();
 
     Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
     ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
@@ -482,8 +482,8 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
             ( bShowMenuImages != m_bShowMenuImages ))
         {
             m_nSymbolsStyle         = nSymbolsStyle;
-            m_bWasHiContrastMode    = bIsHiContrastMode;
-            m_bShowMenuImages       = bShowMenuImages;
+            m_bWasHiContrastMode	= bIsHiContrastMode;
+            m_bShowMenuImages		= bShowMenuImages;
 
             USHORT nCount = pActMenu->GetItemCount();
             for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
@@ -493,7 +493,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                 {
                     if ( bShowMenuImages )
                     {
-                        sal_Bool        bImageSet = sal_False;
+                        sal_Bool		bImageSet = sal_False;
                         ::rtl::OUString aImageId;
                         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                             (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
@@ -539,8 +539,8 @@ SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
     return new SfxUnoMenuControl( rCmd, nId, rMenu, rBindings, pVirt );
 }
 
-SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
-        USHORT nId, Menu& rMenu, const String& sItemText, const String& sHelpText,
+SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd, 
+        USHORT nId, Menu& rMenu, const String& sItemText, const String& sHelpText, 
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)
 {
     return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, sHelpText, rBindings, pVirt);
@@ -558,7 +558,7 @@ SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
     pUnoCtrl->GetNewDispatch();
 }
 
-SfxUnoMenuControl::SfxUnoMenuControl(
+SfxUnoMenuControl::SfxUnoMenuControl( 
     const String& rCmd, USHORT nSlotId, Menu& /*rMenu*/,
     const String& rItemText, const String& rHelpText,
     SfxBindings& rBindings, SfxVirtualMenu* pVirt)

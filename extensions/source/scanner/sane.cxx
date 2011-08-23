@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,63 +58,63 @@ inline void dbg_msg( const char* pString, ... )
 }
 
 #define FAIL_SHUTDOWN_STATE( x, y, z ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
-        DeInit();                                           \
-        return z;                                           \
+    if( x != SANE_STATUS_GOOD )								\
+    {														\
+        dump_state( "%s returned error %d (%s)\n",			\
+                 y, x, p_strstatus( x ) );					\
+        DeInit();											\
+        return z;											\
     }
 
 #define FAIL_STATE( x, y, z ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
-        return z;                                           \
+    if( x != SANE_STATUS_GOOD )								\
+    {														\
+        dump_state( "%s returned error %d (%s)\n",			\
+                 y, x, p_strstatus( x ) );					\
+        return z;											\
     }
 
 #define DUMP_STATE( x, y ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
+    if( x != SANE_STATUS_GOOD )								\
+    {														\
+        dump_state( "%s returned error %d (%s)\n",			\
+                 y, x, p_strstatus( x ) );					\
     }
 
 #define CHECK_STATE( x, y ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
-    }                                                       \
+    if( x != SANE_STATUS_GOOD )								\
+    {														\
+        dump_state( "%s returned error %d (%s)\n",			\
+                 y, x, p_strstatus( x ) );					\
+    }														\
     else
 
-int             Sane::nRefCount = 0;
+int				Sane::nRefCount = 0;
 oslModule       Sane::pSaneLib = 0;
-SANE_Int        Sane::nVersion = 0;
-SANE_Device**   Sane::ppDevices = 0;
-int             Sane::nDevices = 0;
+SANE_Int		Sane::nVersion = 0;
+SANE_Device**	Sane::ppDevices = 0;
+int				Sane::nDevices = 0;
 
-SANE_Status     (*Sane::p_init)( SANE_Int*,
+SANE_Status		(*Sane::p_init)( SANE_Int*,
                                  SANE_Auth_Callback ) = 0;
-void            (*Sane::p_exit)() = 0;
-SANE_Status     (*Sane::p_get_devices)( const SANE_Device***,
+void			(*Sane::p_exit)() = 0;
+SANE_Status		(*Sane::p_get_devices)( const SANE_Device***,
                                         SANE_Bool ) = 0;
-SANE_Status     (*Sane::p_open)( SANE_String_Const, SANE_Handle ) = 0;
-void            (*Sane::p_close)( SANE_Handle ) = 0;
+SANE_Status		(*Sane::p_open)( SANE_String_Const, SANE_Handle ) = 0;
+void			(*Sane::p_close)( SANE_Handle ) = 0;
 const SANE_Option_Descriptor* (*Sane::p_get_option_descriptor)(
     SANE_Handle, SANE_Int ) = 0;
-SANE_Status     (*Sane::p_control_option)( SANE_Handle, SANE_Int,
+SANE_Status		(*Sane::p_control_option)( SANE_Handle, SANE_Int,
                                            SANE_Action, void*,
                                            SANE_Int* ) = 0;
-SANE_Status     (*Sane::p_get_parameters)( SANE_Handle,
+SANE_Status		(*Sane::p_get_parameters)( SANE_Handle,
                                            SANE_Parameters* ) = 0;
-SANE_Status     (*Sane::p_start)( SANE_Handle ) = 0;
-SANE_Status     (*Sane::p_read)( SANE_Handle, SANE_Byte*, SANE_Int,
+SANE_Status		(*Sane::p_start)( SANE_Handle ) = 0;
+SANE_Status		(*Sane::p_read)( SANE_Handle, SANE_Byte*, SANE_Int,
                                  SANE_Int* ) = 0;
-void            (*Sane::p_cancel)( SANE_Handle ) = 0;
-SANE_Status     (*Sane::p_set_io_mode)( SANE_Handle, SANE_Bool ) = 0;
-SANE_Status     (*Sane::p_get_select_fd)( SANE_Handle, SANE_Int* ) = 0;
+void			(*Sane::p_cancel)( SANE_Handle ) = 0;
+SANE_Status		(*Sane::p_set_io_mode)( SANE_Handle, SANE_Bool ) = 0;
+SANE_Status		(*Sane::p_get_select_fd)( SANE_Handle, SANE_Int* ) = 0;
 SANE_String_Const (*Sane::p_strstatus)( SANE_Status ) = 0;
 
 static BOOL bSaneSymbolLoadFailed = FALSE;
@@ -134,8 +134,8 @@ inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
 SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                                  void* pData )
 {
-    SANE_Status nStatus = SANE_STATUS_GOOD;
-    SANE_Int    nInfo = 0;
+    SANE_Status	nStatus = SANE_STATUS_GOOD;
+    SANE_Int	nInfo = 0;
 
     nStatus = p_control_option( maHandle, (SANE_Int)nOption,
                                 nAction, pData, &nInfo );
@@ -158,7 +158,7 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                  pAction );
     }
 #endif
-//  if( nInfo & ( SANE_INFO_RELOAD_OPTIONS | SANE_INFO_RELOAD_PARAMS ) )
+//	if( nInfo & ( SANE_INFO_RELOAD_OPTIONS | SANE_INFO_RELOAD_PARAMS ) )
     if( nInfo &  SANE_INFO_RELOAD_OPTIONS )
         ReloadOptions();
     return nStatus;
@@ -565,7 +565,7 @@ BOOL Sane::CheckConsistency( const char* pMes, BOOL bInit )
 BOOL Sane::Start( BitmapTransporter& rBitmap )
 {
     int nStream = 0, nLine = 0, i = 0;
-    SANE_Parameters aParams;
+    SANE_Parameters	aParams;
     FrameStyleType eType = FrameStyle_Gray;
     BOOL bSuccess = TRUE;
     BOOL bWidthSet = FALSE;
@@ -573,27 +573,27 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
     if( ! maHandle )
         return FALSE;
 
-    int nWidthMM    = 0;
-    int nHeightMM   = 0;
+    int nWidthMM	= 0;
+    int nHeightMM	= 0;
     double fTLx, fTLy, fBRx, fBRy, fResl = 0.0;
     int nOption;
-    if( ( nOption = GetOptionByName( "tl-x" ) ) != -1   &&
-        GetOptionValue( nOption, fTLx, 0 )              &&
+    if( ( nOption = GetOptionByName( "tl-x" ) ) != -1	&&
+        GetOptionValue( nOption, fTLx, 0 )				&&
         GetOptionUnit( nOption ) == SANE_UNIT_MM )
     {
-        if( ( nOption = GetOptionByName( "br-x" ) ) != -1   &&
-            GetOptionValue( nOption, fBRx, 0 )              &&
+        if( ( nOption = GetOptionByName( "br-x" ) ) != -1	&&
+            GetOptionValue( nOption, fBRx, 0 )				&&
             GetOptionUnit( nOption ) == SANE_UNIT_MM )
         {
             nWidthMM = (int)fabs(fBRx - fTLx);
         }
     }
-    if( ( nOption = GetOptionByName( "tl-y" ) ) != -1   &&
-        GetOptionValue( nOption, fTLy, 0 )              &&
+    if( ( nOption = GetOptionByName( "tl-y" ) ) != -1	&&
+        GetOptionValue( nOption, fTLy, 0 )				&&
         GetOptionUnit( nOption ) == SANE_UNIT_MM )
     {
-        if( ( nOption = GetOptionByName( "br-y" ) ) != -1   &&
-            GetOptionValue( nOption, fBRy, 0 )              &&
+        if( ( nOption = GetOptionByName( "br-y" ) ) != -1	&&
+            GetOptionValue( nOption, fBRy, 0 )				&&
             GetOptionUnit( nOption ) == SANE_UNIT_MM )
         {
             nHeightMM = (int)fabs(fBRy - fTLy);
@@ -834,9 +834,9 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
                     for( i = 0; i < (aParams.pixels_per_line); i++ )
                     {
                         UINT8 nRed, nGreen, nBlue;
-                        nRed    = _ReadValue( pFrame, aParams.depth );
-                        nGreen  = _ReadValue( pFrame, aParams.depth );
-                        nBlue   = _ReadValue( pFrame, aParams.depth );
+                        nRed	= _ReadValue( pFrame, aParams.depth );
+                        nGreen	= _ReadValue( pFrame, aParams.depth );
+                        nBlue	= _ReadValue( pFrame, aParams.depth );
                         aConverter << nBlue;
                         aConverter << nGreen;
                         aConverter << nRed;

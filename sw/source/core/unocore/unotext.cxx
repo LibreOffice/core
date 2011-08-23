@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1040,8 +1040,8 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
 }
 
 //FIXME why is CheckForOwnMember duplicated in some insert methods?
-//  Description: Checks if pRange/pCursor are member of the same text interface.
-//              Only one of the pointers has to be set!
+//	Description: Checks if pRange/pCursor are member of the same text interface.
+//				Only one of the pointers has to be set!
 bool SwXText::Impl::CheckForOwnMember(
     const SwPaM & rPaM)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -1870,13 +1870,13 @@ void SwXText::copyText(
     SwXText* pText = 0;
     pText = reinterpret_cast< SwXText* >(
                    sal::static_int_cast< sal_IntPtr >( xTTunnel->getSomething( SwXText::getUnoTunnelId()) ));
-
+    
     uno::Reference< text::XText > xText( xSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextCursor > xCursor = xText->createTextCursor( );
     xCursor->gotoEnd( sal_True );
-
+    
     uno::Reference< lang::XUnoTunnel > xTunnel( xCursor, uno::UNO_QUERY_THROW );
-
+    
     OTextCursorHelper* pCursor = 0;
     pCursor = reinterpret_cast< OTextCursorHelper* >(
                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
@@ -1913,26 +1913,26 @@ void SwXText::Impl::ConvertCell(
     {
         throw lang::IllegalArgumentException();
     }
-
-    SwNodeRange aTmpRange(aStartCellPam.Start()->nNode,
+    
+    SwNodeRange aTmpRange(aStartCellPam.Start()->nNode, 
                           aEndCellPam.End()->nNode);
-    SwNodeRange * pCorrectedRange =
+    SwNodeRange * pCorrectedRange = 
         m_pDoc->GetNodes().ExpandRangeForTableBox(aTmpRange);
-
+    
     if (pCorrectedRange != NULL)
     {
         SwPaM aNewStartPaM(pCorrectedRange->aStart, 0);
         aStartCellPam = aNewStartPaM;
-
-        xub_StrLen nEndLen = 0;
+        
+        xub_StrLen nEndLen = 0;                
         SwTxtNode * pTxtNode = pCorrectedRange->aEnd.GetNode().GetTxtNode();
         if (pTxtNode != NULL)
             nEndLen = pTxtNode->Len();
-
+        
         SwPaM aNewEndPaM(pCorrectedRange->aEnd, nEndLen);
         aEndCellPam = aNewEndPaM;
     }
-
+    
     /** check the nodes between start and end
         it is allowed to have pairs of StartNode/EndNodes
      */
@@ -2656,7 +2656,7 @@ SwXBodyText::hasElements() throw (uno::RuntimeException)
 }
 
 /******************************************************************
- *  SwXHeadFootText
+ *	SwXHeadFootText
  ******************************************************************/
 
 class SwXHeadFootText::Impl

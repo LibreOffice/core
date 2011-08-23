@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_HELPER_UICONFIGELEMENTWRAPPERBASE_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -38,7 +38,7 @@
 #include <macros/xtypeprovider.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
@@ -52,7 +52,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -75,14 +75,14 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
                                    public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
         UIConfigElementWrapperBase( sal_Int16 nType,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory );
         virtual ~UIConfigElementWrapperBase();
-
+    
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider
+        //	XInterface, XTypeProvider
         //---------------------------------------------------------------------------------------------------------
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
@@ -94,7 +94,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
+        
         // XUIElementSettings
         virtual void SAL_CALL updateSettings() throw (::com::sun::star::uno::RuntimeException) = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( sal_Bool bWriteable ) throw (::com::sun::star::uno::RuntimeException);
@@ -119,11 +119,11 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
+    //	protected methods
     //-------------------------------------------------------------------------------------------------------------
     protected:
 
-        //  OPropertySetHelper
+        //	OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
                                                                                                                com::sun::star::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,

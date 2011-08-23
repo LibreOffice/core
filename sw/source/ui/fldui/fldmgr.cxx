@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@
 #include <svl/zformat.hxx>
 #include <vcl/mnemonic.hxx>
 #include <view.hxx>
-#include <wrtsh.hxx>        // Actives Fenster
-#include <doc.hxx>      // Actives Fenster
-#include <docsh.hxx>        // Actives Fenster
+#include <wrtsh.hxx>		// Actives Fenster
+#include <doc.hxx>		// Actives Fenster
+#include <docsh.hxx>		// Actives Fenster
 #include <swmodule.hxx>
 #include <charatr.hxx>
 #include <fmtinfmt.hxx>
@@ -100,44 +100,44 @@ using namespace nsSwDocInfoSubType;
  --------------------------------------------------------------------*/
 enum
 {
-    GRP_DOC_BEGIN   =  0,
-    GRP_DOC_END     =  GRP_DOC_BEGIN + 11,
+    GRP_DOC_BEGIN	=  0,
+    GRP_DOC_END   	=  GRP_DOC_BEGIN + 11,
 
-    GRP_FKT_BEGIN   =  GRP_DOC_END,
+    GRP_FKT_BEGIN 	=  GRP_DOC_END,
     GRP_FKT_END     =  GRP_FKT_BEGIN + 8,
 
-    GRP_REF_BEGIN   =  GRP_FKT_END,
-    GRP_REF_END     =  GRP_REF_BEGIN + 2,
+    GRP_REF_BEGIN 	=  GRP_FKT_END,
+    GRP_REF_END   	=  GRP_REF_BEGIN + 2,
 
-    GRP_REG_BEGIN   =  GRP_REF_END,
+    GRP_REG_BEGIN 	=  GRP_REF_END,
     GRP_REG_END     =  GRP_REG_BEGIN + 1,
 
-    GRP_DB_BEGIN    =  GRP_REG_END,
-    GRP_DB_END      =  GRP_DB_BEGIN  + 5,
+    GRP_DB_BEGIN  	=  GRP_REG_END,
+    GRP_DB_END    	=  GRP_DB_BEGIN  + 5,
 
-    GRP_VAR_BEGIN   =  GRP_DB_END,
-    GRP_VAR_END     =  GRP_VAR_BEGIN + 9
+    GRP_VAR_BEGIN 	=  GRP_DB_END,
+    GRP_VAR_END   	=  GRP_VAR_BEGIN + 9
 };
 
 enum
 {
-    GRP_WEB_DOC_BEGIN   =  0,
-    GRP_WEB_DOC_END     =  GRP_WEB_DOC_BEGIN + 9,
+    GRP_WEB_DOC_BEGIN	=  0,
+    GRP_WEB_DOC_END   	=  GRP_WEB_DOC_BEGIN + 9,
 
-    GRP_WEB_FKT_BEGIN   =  GRP_WEB_DOC_END + 2,
-    GRP_WEB_FKT_END     =  GRP_WEB_FKT_BEGIN + 0,   // Die Gruppe ist leer!
+    GRP_WEB_FKT_BEGIN 	=  GRP_WEB_DOC_END + 2,
+    GRP_WEB_FKT_END   	=  GRP_WEB_FKT_BEGIN + 0,	// Die Gruppe ist leer!
 
-    GRP_WEB_REF_BEGIN   =  GRP_WEB_FKT_END + 6,     // Die Gruppe ist leer!
-    GRP_WEB_REF_END     =  GRP_WEB_REF_BEGIN + 0,
+    GRP_WEB_REF_BEGIN 	=  GRP_WEB_FKT_END + 6,		// Die Gruppe ist leer!
+    GRP_WEB_REF_END   	=  GRP_WEB_REF_BEGIN + 0,
 
-    GRP_WEB_REG_BEGIN   =  GRP_WEB_REF_END + 2,
+    GRP_WEB_REG_BEGIN 	=  GRP_WEB_REF_END + 2,
     GRP_WEB_REG_END     =  GRP_WEB_REG_BEGIN + 1,
 
-    GRP_WEB_DB_BEGIN    =  GRP_WEB_REG_END,         // Die Gruppe ist leer!
-    GRP_WEB_DB_END      =  GRP_WEB_DB_BEGIN  + 0,
+    GRP_WEB_DB_BEGIN  	=  GRP_WEB_REG_END,			// Die Gruppe ist leer!
+    GRP_WEB_DB_END    	=  GRP_WEB_DB_BEGIN  + 0,
 
-    GRP_WEB_VAR_BEGIN   =  GRP_WEB_DB_END + 5,
-    GRP_WEB_VAR_END     =  GRP_WEB_VAR_BEGIN + 1
+    GRP_WEB_VAR_BEGIN 	=  GRP_WEB_DB_END + 5,
+    GRP_WEB_VAR_END   	=  GRP_WEB_VAR_BEGIN + 1
 };
 
 /*--------------------------------------------------------------------
@@ -173,9 +173,9 @@ static const USHORT __FAR_DATA aDBFmt[] =
     nsSwExtendedSubType::SUB_OWN_FMT
 };
 
-static const USHORT VF_COUNT        = sizeof(aGetFmt) / sizeof(USHORT);
-static const USHORT VF_USR_COUNT    = sizeof(aUsrFmt) / sizeof(USHORT);
-static const USHORT VF_DB_COUNT     = sizeof(aDBFmt)  / sizeof(USHORT);
+static const USHORT VF_COUNT		= sizeof(aGetFmt) / sizeof(USHORT);
+static const USHORT VF_USR_COUNT	= sizeof(aUsrFmt) / sizeof(USHORT);
+static const USHORT VF_DB_COUNT		= sizeof(aDBFmt)  / sizeof(USHORT);
 
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen und Subtypes
@@ -184,11 +184,11 @@ struct SwFldPack
 {
     USHORT  nTypeId;
 
-    USHORT  nSubTypeStart;
+    USHORT	nSubTypeStart;
     USHORT  nSubTypeEnd;
 
-    ULONG   nFmtBegin;
-    ULONG   nFmtEnd;
+    ULONG	nFmtBegin;
+    ULONG	nFmtEnd;
 };
 
 /*--------------------------------------------------------------------
@@ -197,54 +197,54 @@ struct SwFldPack
 static const SwFldPack __FAR_DATA aSwFlds[] =
 {
     // Dokument
-    { TYP_EXTUSERFLD,       FLD_EU_BEGIN,       FLD_EU_END,     0,                  0 },
-    { TYP_AUTHORFLD,        0,                  0,              FMT_AUTHOR_BEGIN,   FMT_AUTHOR_END },
-    { TYP_DATEFLD,          FLD_DATE_BEGIN,     FLD_DATE_END,   0,                  0 },
-    { TYP_TIMEFLD,          FLD_TIME_BEGIN,     FLD_TIME_END,   0,                  0 },
-    { TYP_PAGENUMBERFLD,    0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-1 },
-    { TYP_NEXTPAGEFLD,      0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END },
-    { TYP_PREVPAGEFLD,      0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END },
-    { TYP_FILENAMEFLD,      0,                  0,              FMT_FF_BEGIN,       FMT_FF_END },
-    { TYP_DOCSTATFLD,       FLD_STAT_BEGIN,     FLD_STAT_END,   FMT_NUM_BEGIN,      FMT_NUM_END-1 },
+    { TYP_EXTUSERFLD,	 	FLD_EU_BEGIN,	 	FLD_EU_END,	    0,     				0 },
+    { TYP_AUTHORFLD,	 	0,					0,				FMT_AUTHOR_BEGIN,	FMT_AUTHOR_END },
+    { TYP_DATEFLD,			FLD_DATE_BEGIN,		FLD_DATE_END,	0,					0 },
+    { TYP_TIMEFLD,			FLD_TIME_BEGIN,		FLD_TIME_END,	0,					0 },
+    { TYP_PAGENUMBERFLD,	0,					0,				FMT_NUM_BEGIN,   	FMT_NUM_END-1 },
+    { TYP_NEXTPAGEFLD,		0,					0,				FMT_NUM_BEGIN,		FMT_NUM_END },
+    { TYP_PREVPAGEFLD,		0,					0,				FMT_NUM_BEGIN,		FMT_NUM_END },
+    { TYP_FILENAMEFLD,		0,					0,				FMT_FF_BEGIN,    	FMT_FF_END },
+    { TYP_DOCSTATFLD,	 	FLD_STAT_BEGIN,		FLD_STAT_END,	FMT_NUM_BEGIN,		FMT_NUM_END-1 },
 
-    { TYP_CHAPTERFLD,       0,                  0,              FMT_CHAPTER_BEGIN,  FMT_CHAPTER_END },
-    { TYP_TEMPLNAMEFLD,     0,                  0,              FMT_FF_BEGIN,       FMT_FF_END },
+    { TYP_CHAPTERFLD,	 	0,					0,				FMT_CHAPTER_BEGIN, 	FMT_CHAPTER_END },
+    { TYP_TEMPLNAMEFLD,		0,					0,				FMT_FF_BEGIN,    	FMT_FF_END },
 
     // Funktion
-    { TYP_CONDTXTFLD,       0,                  0,              0,                  0 },
-    { TYP_DROPDOWN,         0,                  0,              0,                  0 },
-    { TYP_INPUTFLD,         FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0 },
-    { TYP_MACROFLD,         0,                  0,              0,                  0 },
-    { TYP_JUMPEDITFLD,      0,                  0,              FMT_MARK_BEGIN,     FMT_MARK_END },
-    { TYP_COMBINED_CHARS,   0,                  0,              0,                  0 },
-    { TYP_HIDDENTXTFLD,     0,                  0,              0,                  0 },
-    { TYP_HIDDENPARAFLD,    0,                  0,              0,                  0 },
+    { TYP_CONDTXTFLD,	 	0,					0,				0,					0 },
+    { TYP_DROPDOWN,       	0,                  0,              0,                  0 },
+    { TYP_INPUTFLD,			FLD_INPUT_BEGIN,	FLD_INPUT_END,	0,   				0 },
+    { TYP_MACROFLD,			0,					0,				0,					0 },
+    { TYP_JUMPEDITFLD, 		0,					0,				FMT_MARK_BEGIN,		FMT_MARK_END },
+    { TYP_COMBINED_CHARS,	0,					0,				0,					0 },
+    { TYP_HIDDENTXTFLD,		0,					0,				0,					0 },
+    { TYP_HIDDENPARAFLD, 	0,			   		0,				0,					0 },
 
     // Referenzen
-    { TYP_SETREFFLD,        0,                  0,              0,                  0 },
-    { TYP_GETREFFLD,        0,                  0,              FMT_REF_BEGIN,      FMT_REF_END },
+    { TYP_SETREFFLD,	 	0,					0,				0,					0 },
+    { TYP_GETREFFLD,	 	0,					0,				FMT_REF_BEGIN,		FMT_REF_END },
 
     // Ablage
-    { TYP_DOCINFOFLD,       0,                  0,              FMT_REG_BEGIN,      FMT_REG_END },
+    { TYP_DOCINFOFLD,	 	0,					0,				FMT_REG_BEGIN, 		FMT_REG_END },
 
     // Datenbank
-    { TYP_DBFLD,            0,                  0,              FMT_DBFLD_BEGIN,    FMT_DBFLD_END },
-    { TYP_DBNEXTSETFLD,     0,                  0,              0,                  0 },
-    { TYP_DBNUMSETFLD,      0,                  0,              0,                  0 },
-    { TYP_DBSETNUMBERFLD,   0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2 },
-    { TYP_DBNAMEFLD,        0,                  0,              0,                  0 },
+    { TYP_DBFLD,		 	0,					0,				FMT_DBFLD_BEGIN,	FMT_DBFLD_END },
+    { TYP_DBNEXTSETFLD,		0,					0,				0,					0 },
+    { TYP_DBNUMSETFLD,		0,					0,				0,					0 },
+    { TYP_DBSETNUMBERFLD, 	0,					0,				FMT_NUM_BEGIN,	    FMT_NUM_END-2 },
+    { TYP_DBNAMEFLD, 	 	0,					0,				0,					0 },
 
     // Variablen
-    { TYP_SETFLD,           0,                  0,              FMT_SETVAR_BEGIN,   FMT_SETVAR_END },
+    { TYP_SETFLD,		 	0,					0,				FMT_SETVAR_BEGIN,   FMT_SETVAR_END },
 
-    { TYP_GETFLD,           0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END },
-    { TYP_DDEFLD,           0,                  0,              FMT_DDE_BEGIN,      FMT_DDE_END },
-    { TYP_FORMELFLD,        0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END },
-    { TYP_INPUTFLD,         FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0 },
-    { TYP_SEQFLD,           0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2 },
-    { TYP_SETREFPAGEFLD,    FLD_PAGEREF_BEGIN,  FLD_PAGEREF_END,0,                  0 },
-    { TYP_GETREFPAGEFLD,    0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-1 },
-    { TYP_USERFLD,          0,                  0,              FMT_USERVAR_BEGIN,  FMT_USERVAR_END }
+    { TYP_GETFLD,		 	0,					0, 				FMT_GETVAR_BEGIN,	FMT_GETVAR_END },
+    { TYP_DDEFLD,		 	0,					0,				FMT_DDE_BEGIN, 		FMT_DDE_END },
+    { TYP_FORMELFLD,  		0,					0,				FMT_GETVAR_BEGIN,	FMT_GETVAR_END },
+    { TYP_INPUTFLD,			FLD_INPUT_BEGIN,	FLD_INPUT_END,	0,   				0 },
+    { TYP_SEQFLD,		 	0,					0,				FMT_NUM_BEGIN,		FMT_NUM_END-2 },
+    { TYP_SETREFPAGEFLD,	FLD_PAGEREF_BEGIN,	FLD_PAGEREF_END,0,   				0 },
+    { TYP_GETREFPAGEFLD,	0,					0,				FMT_NUM_BEGIN,   	FMT_NUM_END-1 },
+    { TYP_USERFLD,			0,					0,				FMT_USERVAR_BEGIN,	FMT_USERVAR_END }
 };
 
 /*--------------------------------------------------------------------
@@ -260,7 +260,7 @@ static SwWrtShell* lcl_GetShell()
     return 0;
 }
 
-inline USHORT GetPackCount() {  return sizeof(aSwFlds) / sizeof(SwFldPack); }
+inline USHORT GetPackCount() {	return sizeof(aSwFlds) / sizeof(SwFldPack); }
 
 /*--------------------------------------------------------------------
     Beschreibung: FieldManager regelt das Einfuegen und Updaten
@@ -366,9 +366,9 @@ SwField* SwFldMgr::GetCurFld()
     //
     const USHORT nTypeId = pCurFld->GetTypeId();
 
-    nCurFmt     = pCurFld->GetFormat();
-    aCurPar1    = pCurFld->GetPar1();
-    aCurPar2    = pCurFld->GetPar2();
+    nCurFmt  	= pCurFld->GetFormat();
+    aCurPar1 	= pCurFld->GetPar1();
+    aCurPar2 	= pCurFld->GetPar2();
 
     switch( nTypeId )
     {
@@ -392,21 +392,21 @@ const SwFldGroupRgn& SwFldMgr::GetGroupRange(BOOL bHtmlMode, USHORT nGrpId) cons
 {
 static SwFldGroupRgn __READONLY_DATA aRanges[] =
 {
-    { /* Dokument   */  GRP_DOC_BEGIN,  GRP_DOC_END },
-    { /* Funktionen */  GRP_FKT_BEGIN,  GRP_FKT_END },
-    { /* Referenzen */  GRP_REF_BEGIN,  GRP_REF_END },
-    { /* Ablage     */  GRP_REG_BEGIN,  GRP_REG_END },
-    { /* DB         */  GRP_DB_BEGIN,   GRP_DB_END },
-    { /* User       */  GRP_VAR_BEGIN,  GRP_VAR_END }
+    { /* Dokument	*/ 	GRP_DOC_BEGIN, 	GRP_DOC_END },
+    { /* Funktionen	*/ 	GRP_FKT_BEGIN,  GRP_FKT_END },
+    { /* Referenzen	*/ 	GRP_REF_BEGIN,  GRP_REF_END },
+    { /* Ablage		*/ 	GRP_REG_BEGIN,  GRP_REG_END },
+    { /* DB			*/	GRP_DB_BEGIN,	GRP_DB_END },
+    { /* User		*/	GRP_VAR_BEGIN,	GRP_VAR_END }
 };
 static SwFldGroupRgn __READONLY_DATA aWebRanges[] =
 {
-    { /* Dokument   */  GRP_WEB_DOC_BEGIN,  GRP_WEB_DOC_END },
-    { /* Funktionen */  GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END },
-    { /* Referenzen */  GRP_WEB_REF_BEGIN,  GRP_WEB_REF_END },
-    { /* Ablage     */  GRP_WEB_REG_BEGIN,  GRP_WEB_REG_END },
-    { /* DB         */  GRP_WEB_DB_BEGIN,   GRP_WEB_DB_END },
-    { /* User       */  GRP_WEB_VAR_BEGIN,  GRP_WEB_VAR_END }
+    { /* Dokument	*/ 	GRP_WEB_DOC_BEGIN, 	GRP_WEB_DOC_END },
+    { /* Funktionen	*/ 	GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END },
+    { /* Referenzen	*/ 	GRP_WEB_REF_BEGIN,  GRP_WEB_REF_END },
+    { /* Ablage		*/ 	GRP_WEB_REG_BEGIN,  GRP_WEB_REG_END },
+    { /* DB			*/	GRP_WEB_DB_BEGIN,	GRP_WEB_DB_END },
+    { /* User		*/	GRP_WEB_VAR_BEGIN,	GRP_WEB_VAR_END }
 };
 
     if (bHtmlMode)
@@ -488,10 +488,10 @@ USHORT SwFldMgr::GetPos(USHORT nTypeId)
 {
     switch( nTypeId )
     {
-        case TYP_FIXDATEFLD:        nTypeId = TYP_DATEFLD;      break;
-        case TYP_FIXTIMEFLD:        nTypeId = TYP_TIMEFLD;      break;
-        case TYP_SETINPFLD:         nTypeId = TYP_SETFLD;       break;
-        case TYP_USRINPFLD:         nTypeId = TYP_USERFLD;      break;
+        case TYP_FIXDATEFLD:		nTypeId = TYP_DATEFLD;		break;
+        case TYP_FIXTIMEFLD:      	nTypeId = TYP_TIMEFLD;		break;
+        case TYP_SETINPFLD:      	nTypeId = TYP_SETFLD;		break;
+        case TYP_USRINPFLD:      	nTypeId = TYP_USERFLD;		break;
     }
 
     for(USHORT i = 0; i < GetPackCount(); i++)
@@ -633,14 +633,14 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
             return 2;
 
         if (nTypeId == TYP_FILENAMEFLD)
-            nEnd -= 2;  // Kein Bereich oder Vorlage
+            nEnd -= 2;	// Kein Bereich oder Vorlage
 
         switch(nStart)
         {
             case FMT_GETVAR_BEGIN:
-            case FMT_SETVAR_BEGIN:  return VF_COUNT;
-            case FMT_USERVAR_BEGIN: return VF_USR_COUNT;
-            case FMT_DBFLD_BEGIN:   return VF_DB_COUNT;
+            case FMT_SETVAR_BEGIN:	return VF_COUNT;
+            case FMT_USERVAR_BEGIN:	return VF_USR_COUNT;
+            case FMT_DBFLD_BEGIN:	return VF_DB_COUNT;
             case FMT_NUM_BEGIN:
             {
                 USHORT nCount = (USHORT)(nEnd - nStart);
@@ -669,7 +669,7 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   FormatString zu einem Typ ermitteln
+    Beschreibung:	FormatString zu einem Typ ermitteln
  --------------------------------------------------------------------*/
 
 
@@ -688,7 +688,7 @@ String SwFldMgr::GetFormatStr(USHORT nTypeId, ULONG nFormatId) const
     nStart = aSwFlds[nPos].nFmtBegin;
 
     if (TYP_AUTHORFLD == nTypeId|| TYP_FILENAMEFLD == nTypeId)
-        nFormatId &= ~FF_FIXED;     // Fixed-Flag ausmaskieren
+        nFormatId &= ~FF_FIXED;		// Fixed-Flag ausmaskieren
 
     if((nStart + nFormatId) < aSwFlds[nPos].nFmtEnd)
         aRet = SW_RESSTR((USHORT)(nStart + nFormatId));
@@ -720,7 +720,7 @@ String SwFldMgr::GetFormatStr(USHORT nTypeId, ULONG nFormatId) const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   FormatId aus Pseudo-ID ermitteln
+    Beschreibung:	FormatId aus Pseudo-ID ermitteln
  --------------------------------------------------------------------*/
 
 USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
@@ -732,9 +732,9 @@ USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
     case TYP_DOCINFOFLD:
         switch( aSwFlds[ GetPos( nTypeId ) ].nFmtBegin + nFormatId )
         {
-        case FMT_REG_AUTHOR:    nId = DI_SUB_AUTHOR;    break;
-        case FMT_REG_TIME:      nId = DI_SUB_TIME;      break;
-        case FMT_REG_DATE:      nId = DI_SUB_DATE;      break;
+        case FMT_REG_AUTHOR:	nId = DI_SUB_AUTHOR;	break;
+        case FMT_REG_TIME:		nId = DI_SUB_TIME;		break;
+        case FMT_REG_DATE:		nId = DI_SUB_DATE;		break;
         }
         break;
 
@@ -753,15 +753,15 @@ USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
         {
             switch( nBegin + nFormatId )
             {
-            case FMT_NUM_ABC:               nId = SVX_NUM_CHARS_UPPER_LETTER;   break;
-            case FMT_NUM_SABC:              nId = SVX_NUM_CHARS_LOWER_LETTER;   break;
-            case FMT_NUM_ROMAN:             nId = SVX_NUM_ROMAN_UPPER;          break;
-            case FMT_NUM_SROMAN:            nId = SVX_NUM_ROMAN_LOWER;          break;
-            case FMT_NUM_ARABIC:            nId = SVX_NUM_ARABIC;               break;
-            case FMT_NUM_PAGEDESC:          nId = SVX_NUM_PAGEDESC;             break;
-            case FMT_NUM_PAGESPECIAL:       nId = SVX_NUM_CHAR_SPECIAL;         break;
-            case FMT_NUM_ABC_N:             nId = SVX_NUM_CHARS_UPPER_LETTER_N; break;
-            case FMT_NUM_SABC_N:            nId = SVX_NUM_CHARS_LOWER_LETTER_N; break;
+            case FMT_NUM_ABC:				nId = SVX_NUM_CHARS_UPPER_LETTER;	break;
+            case FMT_NUM_SABC:				nId = SVX_NUM_CHARS_LOWER_LETTER;	break;
+            case FMT_NUM_ROMAN:             nId = SVX_NUM_ROMAN_UPPER;			break;
+            case FMT_NUM_SROMAN:			nId = SVX_NUM_ROMAN_LOWER;			break;
+            case FMT_NUM_ARABIC:            nId = SVX_NUM_ARABIC;				break;
+            case FMT_NUM_PAGEDESC: 			nId = SVX_NUM_PAGEDESC; 			break;
+            case FMT_NUM_PAGESPECIAL:		nId = SVX_NUM_CHAR_SPECIAL;			break;
+            case FMT_NUM_ABC_N:				nId = SVX_NUM_CHARS_UPPER_LETTER_N; break;
+            case FMT_NUM_SABC_N:			nId = SVX_NUM_CHARS_LOWER_LETTER_N;	break;
             }
         }
         else if(xNumberingInfo.is())
@@ -980,13 +980,13 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             break;
         }
         case TYP_DOCSTATFLD:
-        {   SwDocStatFieldType* pTyp =
+        {	SwDocStatFieldType* pTyp =
                 (SwDocStatFieldType*)pCurShell->GetFldType(0, RES_DOCSTATFLD);
             pFld = new SwDocStatField(pTyp, nSubType, nFormatId);
             break;
         }
         case TYP_AUTHORFLD:
-        {   SwAuthorFieldType* pTyp =
+        {	SwAuthorFieldType* pTyp =
                 (SwAuthorFieldType*)pCurShell->GetFldType(0, RES_AUTHORFLD);
             pFld = new SwAuthorField(pTyp, nFormatId);
             break;
@@ -1029,7 +1029,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         case TYP_DDEFLD:
         {
             //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
-            //              Namen haben! Wird hier noch nicht beachtet.
+            //				Namen haben! Wird hier noch nicht beachtet.
             String sCmd( rData.sPar2 );
             USHORT nTmpPos = sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator );
             sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
@@ -1189,7 +1189,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
                                                 pCurShell->GetFldType(0, RES_DBSETNUMBERFLD);
                     pFld = new SwDBSetNumberField( pTyp, aDBData, nFormatId);
                     bExp = TRUE;
-                    break;
+                    break;	
                 }
             }
             break;
@@ -1335,7 +1335,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
                 pCurShell->EndAllAction();
                 return TRUE;
 
-/*              // In der Tabelle Tabellenformeln einfuegen
+/*				// In der Tabelle Tabellenformeln einfuegen
                 SwTblFieldType* pTyp = (SwTblFieldType*)pCurShell->GetFldType(
                                                         0, RES_TABLEFLD);
                 pFld = new SwTblField(pTyp, rData.sPar2, nsSwGetSetExpType::GSE_EXPR, nFormatId);
@@ -1376,7 +1376,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         }
         break;
         default:
-        {   ASSERT(!this, "Falscher Feldtyp");
+        {	ASSERT(!this, "Falscher Feldtyp");
             return FALSE;
         }
     }
@@ -1428,7 +1428,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
     ASSERT(pCurFld, "kein Feld an der CursorPos");
 
     bool bDelete = false;
-    SwField *pTmpFld;       // mb: fixed memory leak
+    SwField *pTmpFld;		// mb: fixed memory leak
     if (NULL != _pTmpFld)
     {
         pTmpFld = _pTmpFld;
@@ -1459,7 +1459,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
         case TYP_DDEFLD:
         {
             //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
-            //              Namen haben! Wird hier noch nicht beachtet.
+            //				Namen haben! Wird hier noch nicht beachtet.
             USHORT nTmpPos = sPar2.SearchAndReplace( ' ', sfx2::cTokenSeperator );
             sPar2.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
             break;
@@ -1541,7 +1541,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
         }
         break;
         case TYP_AUTHORITY :
-        {
+        {    
             //#i99069# changes to a bibliography field should change the field type
             SwAuthorityField* pAuthorityField = static_cast<SwAuthorityField*>(pTmpFld);
             SwAuthorityFieldType* pAuthorityType = static_cast<SwAuthorityFieldType*>(pType);
@@ -1554,10 +1554,10 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
                 pType->UpdateFlds();
                 pSh->SetModified();
             }
-
-            if( aTempEntry.GetAuthorField( AUTH_FIELD_IDENTIFIER ) ==
-                pAuthorityField->GetFieldText( AUTH_FIELD_IDENTIFIER ) )
-                bSetPar1 = FALSE; //otherwise it's a new or changed entry, the field needs to be updated
+        
+            if( aTempEntry.GetAuthorField( AUTH_FIELD_IDENTIFIER ) == 
+                pAuthorityField->GetFieldText( AUTH_FIELD_IDENTIFIER ) ) 
+                bSetPar1 = FALSE; //otherwise it's a new or changed entry, the field needs to be updated    
             bSetPar2 = FALSE;
         }
         break;
@@ -1617,7 +1617,7 @@ USHORT SwFldMgr::GetCurrLanguage() const
 
 void SwFieldType::_GetFldName()
 {
-    static const USHORT coFldCnt = STR_TYPE_END - STR_TYPE_BEGIN;
+    static const USHORT coFldCnt = STR_TYPE_END	- STR_TYPE_BEGIN;
 
     static USHORT __READONLY_DATA coFldNms[ coFldCnt ] = {
         FLD_DATE_STD,

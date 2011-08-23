@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
         //todo: remove if secondary z axis are possible somewhere
         {
             aCbSecondaryZ.Hide();
-
+            
             Size aSize( GetSizePixel() );
             //aSize.Height() -= aCbSecondaryZ.GetSizePixel().Height();
             aSize.Height() -= ( aCbSecondaryZ.GetPosPixel().Y() - aCbSecondaryY.GetPosPixel().Y() );

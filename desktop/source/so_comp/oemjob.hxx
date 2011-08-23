@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ class OEMPreloadJob : public ::cppu::WeakImplHelper3< XJob, XComponent, XService
 {
 
 private:
-    ::osl::Mutex                        m_aMutex;
-    ::cppu::OInterfaceContainerHelper   m_aListeners;
-    Reference< XMultiServiceFactory >   m_xServiceManager;
+    ::osl::Mutex						m_aMutex;
+    ::cppu::OInterfaceContainerHelper	m_aListeners;
+    Reference< XMultiServiceFactory >	m_xServiceManager;
 
     sal_Bool checkOEMPreloadFlag();
     void disableOEMPreloadFlag();
@@ -61,8 +61,8 @@ public:
     OEMPreloadJob( const Reference < XMultiServiceFactory >& xFactory );
     virtual ~OEMPreloadJob();
 
-    static ::rtl::OUString                      GetImplementationName();
-    static Sequence< rtl::OUString >            GetSupportedServiceNames();
+    static ::rtl::OUString						GetImplementationName();
+    static Sequence< rtl::OUString >			GetSupportedServiceNames();
 
 
     // XComponent
@@ -71,8 +71,8 @@ public:
     virtual void SAL_CALL removeEventListener(const Reference< XEventListener > & aListener) throw ( RuntimeException );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw ( RuntimeException );
-    virtual sal_Bool SAL_CALL           supportsService( const ::rtl::OUString& rServiceName ) throw ( RuntimeException );
+    virtual ::rtl::OUString SAL_CALL	getImplementationName() throw ( RuntimeException );
+    virtual sal_Bool SAL_CALL			supportsService( const ::rtl::OUString& rServiceName ) throw ( RuntimeException );
     virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException );
 
     //XJob

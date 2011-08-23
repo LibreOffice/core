@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -392,43 +392,43 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     const ::rtl::OUString sTextBoxServiceName;
     const ::rtl::OUString sGraphicServiceName;
 
-    ::rtl::OUString sName;
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sNextName;
-    ::rtl::OUString sHRef;
-    ::rtl::OUString sFilterName;
-    ::rtl::OUString sCode;
-    ::rtl::OUString sObject;
-    ::rtl::OUString sArchive;
-    ::rtl::OUString sMimeType;
+    ::rtl::OUString	sName;
+    ::rtl::OUString	sStyleName;
+    ::rtl::OUString	sNextName;
+    ::rtl::OUString	sHRef;
+    ::rtl::OUString	sFilterName;
+    ::rtl::OUString	sCode;
+    ::rtl::OUString	sObject;
+    ::rtl::OUString	sArchive;
+    ::rtl::OUString	sMimeType;
     ::rtl::OUString sFrameName;
     ::rtl::OUString sAppletName;
-    ::rtl::OUString sFilterService;
+    ::rtl::OUString	sFilterService;
     ::rtl::OUString sBase64CharsLeft;
-    ::rtl::OUString sTblName;
+    ::rtl::OUString	sTblName;
 
     ParamMap aParamMap;
 
-    sal_Int32   nX;
-    sal_Int32   nY;
-    sal_Int32   nWidth;
-    sal_Int32   nHeight;
-    sal_Int32   nZIndex;
-    sal_Int16   nPage;
-    sal_Int16   nRotation;
-    sal_Int16   nRelWidth;
-    sal_Int16   nRelHeight;
+    sal_Int32	nX;
+    sal_Int32	nY;
+    sal_Int32	nWidth;
+    sal_Int32	nHeight;
+    sal_Int32	nZIndex;
+    sal_Int16	nPage;
+    sal_Int16	nRotation;
+    sal_Int16	nRelWidth;
+    sal_Int16	nRelHeight;
 
     sal_uInt16 nType;
-    ::com::sun::star::text::TextContentAnchorType   eAnchorType;
+    ::com::sun::star::text::TextContentAnchorType 	eAnchorType;
 
-    sal_Bool    bMayScript : 1;
-    sal_Bool    bMinWidth : 1;
-    sal_Bool    bMinHeight : 1;
-    sal_Bool    bSyncWidth : 1;
-    sal_Bool    bSyncHeight : 1;
-    sal_Bool    bCreateFailed : 1;
-    sal_Bool    bOwnBase64Stream : 1;
+    sal_Bool	bMayScript : 1;
+    sal_Bool	bMinWidth : 1;
+    sal_Bool	bMinHeight : 1;
+    sal_Bool	bSyncWidth : 1;
+    sal_Bool	bSyncHeight : 1;
+    sal_Bool	bCreateFailed : 1;
+    sal_Bool	bOwnBase64Stream : 1;
 
     void Create( sal_Bool bHRefOrBase64 );
 
@@ -814,36 +814,36 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         TextContentAnchorType eATyp,
         sal_uInt16 nNewType,
         const Reference< XAttributeList > & rFrameAttrList )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:	SvXMLImportContext( rImport, nPrfx, rLName )
 ,   mbListContextPushed( false )
-,   sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"))
-,   sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType"))
-,   sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"))
-,   sHeight(RTL_CONSTASCII_USTRINGPARAM("Height"))
-,   sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight"))
-,   sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType"))
-,   sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight"))
-,   sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth"))
-,   sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient"))
-,   sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition"))
-,   sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"))
-,   sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition"))
-,   sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName"))
-,   sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))
-,   sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
-,   sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
-,   sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter"))
+,	sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"))
+,	sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType"))
+,	sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"))
+,	sHeight(RTL_CONSTASCII_USTRINGPARAM("Height"))
+,	sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight"))
+,	sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType"))
+,	sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight"))
+,	sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth"))
+,	sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient"))
+,	sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition"))
+,	sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"))
+,	sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition"))
+,	sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName"))
+,	sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))
+,	sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
+,	sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
+,	sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter"))
 // --> OD 2009-07-22 #i73249#
 //,   sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText"))
 ,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
 ,   sDescription(RTL_CONSTASCII_USTRINGPARAM("Description"))
 // <--
-,   sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName"))
-,   sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation"))
-,   sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))
-,   sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
-,   nType( nNewType )
-,   eAnchorType( eATyp )
+,	sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName"))
+,	sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation"))
+,	sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))
+,	sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
+,	nType( nNewType )
+,	eAnchorType( eATyp )
 {
     nX = 0;
     nY = 0;
@@ -1075,7 +1075,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         ( XML_TEXT_FRAME_APPLET  == nType && !sCode.getLength() ) ||
         ( XML_TEXT_FRAME_PLUGIN == nType &&
           sHRef.getLength() == 0 && sMimeType.getLength() == 0 ) )
-        return; // no URL: no image or OLE object
+        return;	// no URL: no image or OLE object
 
     Create( sal_True );
 }
@@ -1176,7 +1176,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
             pContext = pEContext;
         }
     }
-    if( !pContext && xOldTextCursor.is() )  // text-box
+    if( !pContext && xOldTextCursor.is() )	// text-box
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
                             GetImport(), nPrefix, rLocalName, xAttrList,
                             XML_TEXT_TYPE_TEXTBOX );
@@ -1342,18 +1342,18 @@ XMLTextFrameContext::XMLTextFrameContext(
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         TextContentAnchorType eATyp )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
-,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
-,   m_pHyperlink( 0 )
+:	SvXMLImportContext( rImport, nPrfx, rLName )
+,	m_xAttrList( new SvXMLAttributeList( xAttrList ) )
+,	m_pHyperlink( 0 )
 // --> OD 2009-07-22 #i73249#
 ,   m_sTitle()
 ,   m_sDesc()
 // <--
-,   m_eDefaultAnchorType( eATyp )
+,	m_eDefaultAnchorType( eATyp )
     // --> OD 2006-03-10 #i51726#
 ,   m_HasAutomaticStyleWithoutParentStyle( sal_False )
     // <--
-,   m_bSupportsReplacement( sal_False )
+,	m_bSupportsReplacement( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1484,8 +1484,8 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     // check, if we have a media object
                     for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
                     {
-                        OUString    aLocalName;
-                        sal_uInt16  nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
+                        OUString 	aLocalName;
+                        sal_uInt16 	nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
 
                         if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
                         {
@@ -1517,7 +1517,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                                         rLocalName, xAttrList,
                                                         m_eDefaultAnchorType,
                                                         nFrameType,
-                                                        m_xAttrList );
+                                                        m_xAttrList	);
                 }
 
                 m_xImplContext = pContext;
@@ -1615,7 +1615,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             }
         }
     }
-    else if( p_nPrefix == XML_NAMESPACE_SVG &&  // #i68101#
+    else if( p_nPrefix == XML_NAMESPACE_SVG &&	// #i68101#
                 (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
         pContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );

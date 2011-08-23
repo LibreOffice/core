@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace connectivity
     namespace macab
     {
         /*
-        **  MacabResultSet
+        **	MacabResultSet
         */
         typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
@@ -60,18 +60,18 @@ namespace connectivity
                                                         ::com::sun::star::lang::XServiceInfo> MacabResultSet_BASE;
         class MacabRecords;
 
-        class MacabResultSet : public   comphelper::OBaseMutex,
-                             public MacabResultSet_BASE,
-                             public ::cppu::OPropertySetHelper,
-                             public comphelper::OPropertyArrayUsageHelper<MacabResultSet>
+        class MacabResultSet : public	comphelper::OBaseMutex,
+                             public	MacabResultSet_BASE,
+                             public	::cppu::OPropertySetHelper,
+                             public	comphelper::OPropertyArrayUsageHelper<MacabResultSet>
         {
         protected:
-            ::rtl::Reference< MacabCommonStatement >        m_xStatement;       // the statement that has created this result set
-            ::rtl::Reference< MacabResultSetMetaData >  m_xMetaData;        // the description of the columns in this result set
-            MacabRecords *                      m_aMacabRecords;    // address book entries matching the query
-            sal_Int32                                   m_nRowPos;          // the current row within the result set
-            sal_Bool                                    m_bWasNull;         // last entry retrieved from this result set was NULL
-            ::rtl::OUString                     m_sTableName;
+            ::rtl::Reference< MacabCommonStatement >		m_xStatement;		// the statement that has created this result set
+            ::rtl::Reference< MacabResultSetMetaData >	m_xMetaData;		// the description of the columns in this result set
+            MacabRecords *						m_aMacabRecords;	// address book entries matching the query
+            sal_Int32									m_nRowPos;			// the current row within the result set
+            sal_Bool									m_bWasNull;			// last entry retrieved from this result set was NULL
+            ::rtl::OUString						m_sTableName;
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -98,7 +98,7 @@ namespace connectivity
 
         public:
             DECLARE_SERVICE_INFO();
-
+            
             MacabResultSet(MacabCommonStatement *pStmt);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()

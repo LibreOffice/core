@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ namespace drawinglayer
         class AnimationEntryFixed : public AnimationEntry
         {
         protected:
-            double                                      mfDuration;
-            double                                      mfState;
+            double										mfDuration;
+            double										mfState;
 
         public:
             AnimationEntryFixed(double fDuration, double fState = 0.0);
@@ -80,10 +80,10 @@ namespace drawinglayer
         class AnimationEntryLinear : public AnimationEntry
         {
         protected:
-            double                                      mfDuration;
-            double                                      mfFrequency;
-            double                                      mfStart;
-            double                                      mfStop;
+            double										mfDuration;
+            double										mfFrequency;
+            double										mfStart;
+            double										mfStop;
 
         public:
             AnimationEntryLinear(double fDuration, double fFrequency = 250.0, double fStart = 0.0, double fStop = 1.0);
@@ -101,8 +101,8 @@ namespace drawinglayer
         class AnimationEntryList : public AnimationEntry
         {
         protected:
-            double                                      mfDuration;
-            ::std::vector< AnimationEntry* >            maEntries;
+            double										mfDuration;
+            ::std::vector< AnimationEntry* >			maEntries;
 
             // helpers
             sal_uInt32 impGetIndexAtTime(double fTime, double &rfAddedTime) const;
@@ -124,7 +124,7 @@ namespace drawinglayer
         class AnimationEntryLoop : public AnimationEntryList
         {
         protected:
-            sal_uInt32                                  mnRepeat;
+            sal_uInt32									mnRepeat;
 
         public:
             AnimationEntryLoop(sal_uInt32 nRepeat = 0xffffffff);

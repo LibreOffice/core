@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ class InternalResMgr;
 class TOOLS_DLLPUBLIC SimpleResMgr
 {
 protected:
-    NAMESPACE_VOS(OMutex)   m_aAccessSafety;
-    InternalResMgr*         m_pResImpl;
+    NAMESPACE_VOS(OMutex)	m_aAccessSafety;
+    InternalResMgr* 		m_pResImpl;
 
 public:
                             /** creates a new SimpleResManager
@@ -61,7 +61,7 @@ public:
                                           const ::com::sun::star::lang::Locale& _rLocale);
 
                             /** creates a new SimpleResManager
-                                @param _rPrefixName
+                                @param _rPrefixName 
                                     denotes the prefix of the resource file name
                                 @param _inout_Locale
                                     denotes the locale of the resource file to load. If empty, no default handling
@@ -73,9 +73,9 @@ public:
                                     this one will be loaded as final fallback.
                             */
                             SimpleResMgr( const ::rtl::OUString& _rPrefixName, ::com::sun::star::lang::Locale& _inout_Locale );
-    virtual                 ~SimpleResMgr();
+    virtual 				~SimpleResMgr();
 
-    static SimpleResMgr*    Create( const sal_Char* pPrefixName,
+    static SimpleResMgr*	Create( const sal_Char* pPrefixName,
                                       ::com::sun::star::lang::Locale aLocale = ::com::sun::star::lang::Locale( rtl::OUString(),
                                                                                                                rtl::OUString(),
                                                                                                                rtl::OUString()));// nur in VCL
@@ -97,7 +97,7 @@ public:
             an existent string
         @seealso IsAvailable
     */
-    UniString               ReadString( sal_uInt32 nId );
+    UniString				ReadString( sal_uInt32 nId );
 
     /** checks whether a certain resource is availble
         @param  _resourceType
@@ -110,8 +110,8 @@ public:
     */
     bool                    IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId );
 
-    sal_uInt32              ReadBlob( sal_uInt32 nId, void** pBuffer );
-    void                    FreeBlob( void* pBuffer );
+    sal_uInt32				ReadBlob( sal_uInt32 nId, void** pBuffer );
+    void					FreeBlob( void* pBuffer );
 };
 
 #endif // _TOOLS_SIMPLERESMGR_HXX_

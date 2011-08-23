@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
-#include <tools/wintypes.hxx>       // for check states
+#include <tools/wintypes.hxx>		// for check states
 #include <xmloff/xmltoken.hxx>
 
 //.........................................................................
@@ -56,7 +56,7 @@ namespace xmloff
     using namespace ::com::sun::star::awt;
     using namespace ::xmloff::token;
 
-    const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
+    const SvXMLEnumMapEntry*	OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
         NULL,
         NULL,
@@ -76,7 +76,7 @@ namespace xmloff
     };
 
     //---------------------------------------------------------------------
-    const SvXMLEnumMapEntry*    OEnumMapper::getEnumMap(EnumProperties _eProperty)
+    const SvXMLEnumMapEntry*	OEnumMapper::getEnumMap(EnumProperties _eProperty)
     {
         OSL_ENSURE(_eProperty < KNOWN_ENUM_PROPERTIES, "OEnumMapper::getEnumMap: invalid index (this will crash)!");
 
@@ -197,10 +197,10 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aTextAlignMap[] =
                     {
-                        { XML_START,        TextAlign::LEFT },
-                        { XML_CENTER,       TextAlign::CENTER },
-                        { XML_END,          TextAlign::RIGHT },
-                        { XML_JUSTIFY,      (sal_uInt16)-1 },
+                        { XML_START,		TextAlign::LEFT },
+                        { XML_CENTER,		TextAlign::CENTER },
+                        { XML_END,			TextAlign::RIGHT },
+                        { XML_JUSTIFY,		(sal_uInt16)-1 },
                         { XML_JUSTIFIED,    (sal_uInt16)-1 },
                         { XML_TOKEN_INVALID, 0 }
                     };
@@ -211,16 +211,16 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aBorderTypeMap[] =
                     {
-                        { XML_NONE,     0 },
-                        { XML_HIDDEN,   0 },
-                        { XML_SOLID,    2 },
-                        { XML_DOUBLE,   2 },
-                        { XML_DOTTED,   2 },
-                        { XML_DASHED,   2 },
-                        { XML_GROOVE,   1 },
-                        { XML_RIDGE,    1 },
-                        { XML_INSET,    1 },
-                        { XML_OUTSET,   1 },
+                        { XML_NONE,	    0 },
+                        { XML_HIDDEN, 	0 },
+                        { XML_SOLID, 	2 },
+                        { XML_DOUBLE,	2 },
+                        { XML_DOTTED, 	2 },
+                        { XML_DASHED, 	2 },
+                        { XML_GROOVE, 	1 },
+                        { XML_RIDGE,  	1 },
+                        { XML_INSET,  	1 },
+                        { XML_OUTSET, 	1 },
                         { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aBorderTypeMap;
@@ -231,11 +231,11 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aFontEmphasisMap[] =
                     {
-                        { XML_NONE,     FontEmphasisMark::NONE },
-                        { XML_DOT,      FontEmphasisMark::DOT },
-                        { XML_CIRCLE,   FontEmphasisMark::CIRCLE },
-                        { XML_DISC,     FontEmphasisMark::DISC },
-                        { XML_ACCENT,   FontEmphasisMark::ACCENT },
+                        { XML_NONE,	    FontEmphasisMark::NONE },
+                        { XML_DOT,		FontEmphasisMark::DOT },
+                        { XML_CIRCLE,	FontEmphasisMark::CIRCLE },
+                        { XML_DISC,	    FontEmphasisMark::DISC },
+                        { XML_ACCENT,	FontEmphasisMark::ACCENT },
                         { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aFontEmphasisMap;
@@ -246,9 +246,9 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aFontReliefMap[] =
                     {
-                        { XML_NONE,     FontRelief::NONE },
-                        { XML_ENGRAVED, FontRelief::ENGRAVED },
-                        { XML_EMBOSSED, FontRelief::EMBOSSED },
+                        { XML_NONE,		FontRelief::NONE },
+                        { XML_ENGRAVED,	FontRelief::ENGRAVED },
+                        { XML_EMBOSSED,	FontRelief::EMBOSSED },
                         { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aFontReliefMap;
@@ -343,6 +343,6 @@ namespace xmloff
     }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 

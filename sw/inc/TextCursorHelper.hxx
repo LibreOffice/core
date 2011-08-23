@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual const SwPaM*        GetPaM() const  = 0;
-    virtual SwPaM*              GetPaM()        = 0;
-    virtual const SwDoc*        GetDoc() const  = 0;
-    virtual SwDoc*              GetDoc()        = 0;
+    virtual const SwPaM*		GetPaM() const	= 0;
+    virtual SwPaM*				GetPaM()		= 0;
+    virtual const SwDoc* 		GetDoc() const	= 0;
+    virtual SwDoc* 				GetDoc()		= 0;
 };
 
 #endif // _SW_TEXTCURSORHELPER_HXX

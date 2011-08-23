@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,34 +79,34 @@ public:
     DECLARE_STL_USTRINGACCESS_MAP(Sequence<PropertyValue>,TPropertyNameMap);
     DECLARE_STL_USTRINGACCESS_MAP( Reference<XFunction> ,TGroupFunctionMap);
 private:
-
+    
     TGroupFunctionMap                               m_aFunctions;
-    com::sun::star::uno::Any                        m_aViewSettings;
-    Reference< XComponent >                         m_xSrcDoc;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pReportElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pGroupsElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pGroupElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pSectionElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pControlElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pFunctionElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pSubDocumentElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pFormatElemTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pColumnTokenMap;
-    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pCellElemTokenMap;
+    com::sun::star::uno::Any                        m_aViewSettings;     
+    Reference< XComponent >							m_xSrcDoc;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pDocElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pReportElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pGroupsElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pGroupElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pSectionElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pComponentElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pControlElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pFunctionElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pSubDocumentElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pFormatElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pColumnTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>			m_pCellElemTokenMap;
 
-    UniReference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
-    UniReference < XMLPropertySetMapper >           m_xCellStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >           m_xColumnStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >           m_xRowStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >           m_xTableStylesPropertySetMapper;
+    UniReference < XMLPropertyHandlerFactory >	    m_xPropHdlFactory;
+    UniReference < XMLPropertySetMapper >		    m_xCellStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >		    m_xColumnStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >		    m_xRowStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >		    m_xTableStylesPropertySetMapper;
 
-    Reference<XReportDefinition>                    m_xReportDefinition;
+    Reference<XReportDefinition>					m_xReportDefinition;
     ::boost::shared_ptr<rptui::OReportModel>        m_pReportModel;
 
-    sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    sal_Bool							implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
     SvXMLImportContext* CreateStylesContext(const ::rtl::OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle );
@@ -122,9 +122,9 @@ protected:
 
     virtual XMLShapeImportHelper* CreateShapeImport();
 
-    virtual ~ORptFilter()  throw();
+    virtual	~ORptFilter()  throw();
 public:
-
+    
     ORptFilter( const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nImportFlags = IMPORT_ALL );
 
     // XFilter
@@ -144,7 +144,7 @@ public:
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
     /** return the SdrModel of the real model
     *
-    * \return
+    * \return 
     */
     ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_pReportModel; }
     void FinishStyles();
@@ -153,7 +153,7 @@ public:
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-
+    
     const SvXMLTokenMap& GetDocElemTokenMap() const;
     const SvXMLTokenMap& GetReportElemTokenMap() const;
     const SvXMLTokenMap& GetGroupElemTokenMap() const;
@@ -175,16 +175,16 @@ public:
     static ::rtl::OUString convertFormula(const ::rtl::OUString& _sFormula);
     /** inserts a new function
     *
-    * \param _xFunction
+    * \param _xFunction 
     */
     void insertFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction > & _xFunction);
     void removeFunction(const ::rtl::OUString& _sFunctionName);
     inline const TGroupFunctionMap& getFunctions() const { return m_aFunctions; }
+    
+    virtual SvXMLImport&				getGlobalContext();
 
-    virtual SvXMLImport&                getGlobalContext();
-
-    virtual void                        enterEventContext();
-    virtual void                        leaveEventContext();
+    virtual void						enterEventContext();
+    virtual void						leaveEventContext();
 
     sal_Bool                            isOldFormat() const;
 };

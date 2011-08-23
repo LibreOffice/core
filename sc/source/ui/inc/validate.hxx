@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,51 +40,51 @@
 // ============================================================================
 
 //<!--Added by PengYunQuan for Validity Cell Range Picker
-struct  ScRefHandlerCaller{
+struct	ScRefHandlerCaller{
     virtual ~ScRefHandlerCaller(){}
 };
 class ScRefHandlerHelper
 {
 protected:
-    ScRefHandlerCaller  *m_pHandler;
+    ScRefHandlerCaller	*m_pHandler;
     void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , ScDocument* );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( ScRefEdit* pEdit, ScRefButton* pButton );
     void            (ScRefHandlerCaller::*m_pRefInputStartPostHdl)( ScRefEdit* pEdit, ScRefButton* pButton );
     void            (ScRefHandlerCaller::*m_pRefInputDonePreHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
-
+    
 public:
     typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , ScDocument* );
-    typedef void            (ScRefHandlerCaller::*PCOMMONHDLTYPE)();
-    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  ScRefEdit* pEdit, ScRefButton* pButton );
+    typedef void			(ScRefHandlerCaller::*PCOMMONHDLTYPE)();
+    typedef void			(ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  ScRefEdit* pEdit, ScRefButton* pButton );
 
-    PFUNCSETREFHDLTYPE  SetSetRefHdl(  PFUNCSETREFHDLTYPE pNewHdl )
+    PFUNCSETREFHDLTYPE	SetSetRefHdl(  PFUNCSETREFHDLTYPE pNewHdl )
     {
         PFUNCSETREFHDLTYPE pOldHdl = m_pSetReferenceHdl;
         m_pSetReferenceHdl = pNewHdl;
         return pOldHdl;
     }
 
-    PCOMMONHDLTYPE  SetSetActHdl(  PCOMMONHDLTYPE pNewHdl )
+    PCOMMONHDLTYPE	SetSetActHdl(  PCOMMONHDLTYPE pNewHdl )
     {
         PCOMMONHDLTYPE pOldHdl = m_pSetActiveHdl;
         m_pSetActiveHdl = pNewHdl;
         return pOldHdl;
     }
 
-    ScRefHandlerCaller  *SetHandler( ScRefHandlerCaller *pNewHandler )
+    ScRefHandlerCaller	*SetHandler( ScRefHandlerCaller	*pNewHandler )
     {
-        ScRefHandlerCaller  *pOldHandler = m_pHandler;
+        ScRefHandlerCaller	*pOldHandler = m_pHandler;
         m_pHandler = pNewHandler;
         return pOldHandler;
     }
-    void    SetRefInputStartPreHdl( PINPUTSTARTDLTYPE pNewHdl   ){  m_pRefInputStartPreHdl = pNewHdl;   }
-    void    SetRefInputDonePostHdl( void            (ScRefHandlerCaller::*pNewHdl)()    ){  m_pRefInputDonePostHdl = pNewHdl;   }
-    void    SetRefInputStartPostHdl(    PINPUTSTARTDLTYPE pNewHdl   ){  m_pRefInputStartPostHdl = pNewHdl;  }
-    void    SetRefInputDonePreHdl( void            (ScRefHandlerCaller::*pNewHdl)() ){  m_pRefInputDonePreHdl = pNewHdl;    }
+    void	SetRefInputStartPreHdl(	PINPUTSTARTDLTYPE pNewHdl	){	m_pRefInputStartPreHdl = pNewHdl;	}
+    void	SetRefInputDonePostHdl( void            (ScRefHandlerCaller::*pNewHdl)()	){	m_pRefInputDonePostHdl = pNewHdl;	}
+    void	SetRefInputStartPostHdl(	PINPUTSTARTDLTYPE pNewHdl	){	m_pRefInputStartPostHdl = pNewHdl;	}
+    void	SetRefInputDonePreHdl( void            (ScRefHandlerCaller::*pNewHdl)()	){	m_pRefInputDonePreHdl = pNewHdl;	}
 
-    ScRefHandlerHelper():m_pHandler(NULL), m_pSetReferenceHdl( NULL ), m_pSetActiveHdl(NULL),  m_pRefInputStartPreHdl( NULL ), m_pRefInputStartPostHdl( NULL ), m_pRefInputDonePreHdl( NULL ),  m_pRefInputDonePostHdl( NULL ){}
+    ScRefHandlerHelper():m_pHandler(NULL), m_pSetReferenceHdl( NULL ), m_pSetActiveHdl(NULL),  m_pRefInputStartPreHdl( NULL ), m_pRefInputStartPostHdl( NULL ), m_pRefInputDonePreHdl( NULL ),	m_pRefInputDonePostHdl( NULL ){}
 };
 //-->Added by PengYunQuan for Validity Cell Range Picker
 
@@ -95,17 +95,17 @@ class ScValidationDlg :public ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false
 //-->Modified by PengYunQuan for Validity Cell Range Picker
 {
     //<!--Added by PengYunQuan for Validity Cell Range Picker
-    typedef ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false> ScValidationDlgBase;
+    typedef ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>	ScValidationDlgBase;
 
     //Start_Moddify by liliang 03/26/2008 SODC_13677_2
     DECL_LINK( OkHdl, Button * );
     //End_Moddify by liliang 03/26/2008 SODC_13677_2
-    bool    m_bOwnRefHdlr:1;
+    bool	m_bOwnRefHdlr:1;
 
     ScTabViewShell *m_pTabVwSh;
-    bool    m_bRefInputting:1;
-    bool    EnterRefStatus();
-    bool    LeaveRefStatus();
+    bool	m_bRefInputting:1;
+    bool	EnterRefStatus();
+    bool	LeaveRefStatus();
     //-->Added by PengYunQuan for Validity Cell Range Picker
 public:
     //<!--Modified by PengYunQuan for Validity Cell Range Picker
@@ -115,13 +115,13 @@ public:
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     virtual                     ~ScValidationDlg();
     inline static ScValidationDlg * Find1AliveObject( Window *pAncestor );
-    bool    IsAlive();
-    inline  ScTabViewShell * GetTabViewShell();
+    bool	IsAlive();
+    inline	ScTabViewShell * GetTabViewShell();
 
-    bool    SetupRefDlg();
-    bool    RemoveRefDlg( BOOL bRestoreModal = TRUE );
+    bool	SetupRefDlg();
+    bool	RemoveRefDlg( BOOL bRestoreModal = TRUE );
 
-    virtual void            SetModal( BOOL bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
+    virtual void			SetModal( BOOL bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc )
     {
@@ -135,7 +135,7 @@ public:
             (m_pHandler->*m_pSetActiveHdl)();
     }
 
-    void        CloseRefDialog()
+    void		CloseRefDialog()
     {
         DBG_ASSERT( false, "should not execute here!!!when the edit kill focus, should remove refhandler.\r\n" );
 
@@ -145,7 +145,7 @@ public:
             Close();
     }
 
-    bool IsRefInputting(){  return m_bRefInputting; }
+    bool IsRefInputting(){	return m_bRefInputting;	}
 
     virtual void        RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton = NULL )
     {
@@ -243,8 +243,8 @@ private:
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     DECL_LINK( EditSetFocusHdl, Edit *);
     DECL_LINK( KillFocusHdl, Window *);
-    void    OnClick( Button *pBtn );
-    ScRefEdit   *m_pRefEdit;
+    void	OnClick( Button *pBtn );
+    ScRefEdit	*m_pRefEdit;
     class ScRefButtonEx:public ::ScRefButton
     {
         void Click();
@@ -254,18 +254,18 @@ private:
     friend class ScRefButtonEx;
     void            SetReferenceHdl( const ScRange& , ScDocument* );
     void            SetActiveHdl();
-    void            RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton );
-    void            RefInputDonePreHdl();
-    void            RefInputDonePostHdl();
+    void			RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton );
+    void			RefInputDonePreHdl();
+    void			RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 
     //TYPEINFO();
-    void            TidyListBoxes();
+    void			TidyListBoxes();
 public:
-    USHORT          GetAllowEntryPos();
-    String          GetMinText();
-    void    SetupRefDlg();
-    void    RemoveRefDlg();
+    USHORT			GetAllowEntryPos();
+    String			GetMinText();
+    void	SetupRefDlg();
+    void	RemoveRefDlg();
     //-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
@@ -275,16 +275,16 @@ public:
 class ScTPValidationHelp : public SfxTabPage
 {
 private:
-    TriStateBox     aTsbHelp;
+    TriStateBox		aTsbHelp;
     FixedLine       aFlContent;
-    FixedText       aFtTitle;
-    Edit            aEdtTitle;
-    FixedText       aFtInputHelp;
-    MultiLineEdit   aEdInputHelp;
+    FixedText		aFtTitle;
+    Edit			aEdtTitle;
+    FixedText		aFtInputHelp;
+    MultiLineEdit	aEdInputHelp;
 
     const SfxItemSet& mrArgSet;
 
-    void    Init();
+    void	Init();
 
     // Handler ------------------------
     // DECL_LINK( SelectHdl, ListBox * );
@@ -293,10 +293,10 @@ public:
             ScTPValidationHelp( Window* pParent, const SfxItemSet& rArgSet );
             ~ScTPValidationHelp();
 
-    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    static  USHORT*     GetRanges   ();
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
-    virtual void        Reset       ( const SfxItemSet& rArgSet );
+    static	SfxTabPage*	Create		( Window* pParent, const SfxItemSet& rArgSet );
+    static	USHORT*		GetRanges	();
+    virtual	BOOL		FillItemSet	( SfxItemSet& rArgSet );
+    virtual	void		Reset		( const SfxItemSet& rArgSet );
 };
 
 //==================================================================
@@ -304,19 +304,19 @@ public:
 class ScTPValidationError : public SfxTabPage
 {
 private:
-    TriStateBox     aTsbShow;
+    TriStateBox		aTsbShow;
     FixedLine       aFlContent;
-    FixedText       aFtAction;
-    ListBox         aLbAction;
-    PushButton      aBtnSearch;
-    FixedText       aFtTitle;
-    Edit            aEdtTitle;
-    FixedText       aFtError;
-    MultiLineEdit   aEdError;
+    FixedText		aFtAction;
+    ListBox			aLbAction;
+    PushButton		aBtnSearch;
+    FixedText		aFtTitle;
+    Edit			aEdtTitle;
+    FixedText		aFtError;
+    MultiLineEdit	aEdError;
 
     const SfxItemSet& mrArgSet;
 
-    void    Init();
+    void	Init();
 
     // Handler ------------------------
     DECL_LINK( SelectActionHdl, ListBox * );
@@ -326,10 +326,10 @@ public:
             ScTPValidationError( Window* pParent, const SfxItemSet& rArgSet );
             ~ScTPValidationError();
 
-    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    static  USHORT*     GetRanges   ();
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
-    virtual void        Reset       ( const SfxItemSet& rArgSet );
+    static	SfxTabPage*	Create		( Window* pParent, const SfxItemSet& rArgSet );
+    static	USHORT*		GetRanges	();
+    virtual	BOOL		FillItemSet	( SfxItemSet& rArgSet );
+    virtual	void		Reset		( const SfxItemSet& rArgSet );
 };
 
 //<!--Added by PengYunQuan for Validity Cell Range Picker

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,13 +72,13 @@ namespace chelp {
     {
         return ((ch >= 0x0030) && (ch <= 0x0039));
     }
-
+    
     inline bool ascii_isLetter( sal_Unicode ch )
     {
-        return ( ( (ch >= 0x0041) && (ch <= 0x005A) ) ||
+        return ( ( (ch >= 0x0041) && (ch <= 0x005A) ) || 
                  ( (ch >= 0x0061) && (ch <= 0x007A) ) );
     }
-
+    
     inline bool isLetterOrDigit( sal_Unicode ch )
     {
         return ascii_isLetter( ch ) || ascii_isDigit( ch );
@@ -126,7 +126,7 @@ bool URLParameter::isErrorDocument()
 rtl::OString URLParameter::getByName( const char* par )
 {
     rtl::OUString val;
-
+    
     if( strcmp( par,"Program" ) == 0 )
         val = get_program();
     else if( strcmp( par,"Database" ) == 0 )
@@ -143,7 +143,7 @@ rtl::OString URLParameter::getByName( const char* par )
         val = get_system();
     else if( strcmp( par,"HelpPrefix" ) == 0 )
         val = get_prefix();
-
+    
     return rtl::OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
 }
 
@@ -157,13 +157,13 @@ rtl::OUString URLParameter::get_id()
                                                          get_language() );
         if( inf )
             m_aId = inf->get_id();
-
+        
         m_bStart = true;
     }
-
+    
     return m_aId;
 }
-
+        
 rtl::OUString URLParameter::get_tag()
 {
     if( isFile() )
@@ -187,16 +187,16 @@ rtl::OUString URLParameter::get_title()
     }
     else   // This must be the root
         m_aTitle = rtl::OUString::createFromAscii("root");
-
+    
     return m_aTitle;
 }
-
+        
 
 rtl::OUString URLParameter::get_language()
 {
     if( m_aLanguage.getLength() == 0 )
         return m_aDefaultLanguage;
-
+    
     return m_aLanguage;
 }
 
@@ -213,7 +213,7 @@ rtl::OUString URLParameter::get_program()
     }
     return m_aProgram;
 }
-
+            
 
 void URLParameter::init( bool bDefaultLanguageIsInitialized )
 {
@@ -222,7 +222,7 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
     m_bBerkeleyRead = false;
     m_bStart = false;
     m_bUseDB = true;
-    m_nHitCount = 100;                // The default maximum hitcount
+    m_nHitCount = 100;                // The default maximum hitcount	
 }
 
 
@@ -231,9 +231,9 @@ rtl::OUString URLParameter::get_the_tag()
     if(m_bUseDB) {
         if( ! m_bBerkeleyRead )
             readBerkeley();
-
+        
         m_bBerkeleyRead = true;
-
+        
         return m_aTag;
     }
     else
@@ -248,14 +248,14 @@ rtl::OUString URLParameter::get_the_path()
         if( ! m_bBerkeleyRead )
             readBerkeley();
         m_bBerkeleyRead = true;
-
+        
         return m_aPath;
     }
     else
         return get_id();
 }
 
-
+    
 
 rtl::OUString URLParameter::get_the_title()
 {
@@ -263,7 +263,7 @@ rtl::OUString URLParameter::get_the_title()
         if( ! m_bBerkeleyRead )
             readBerkeley();
         m_bBerkeleyRead = true;
-
+        
         return m_aTitle;
     }
     else
@@ -277,7 +277,7 @@ rtl::OUString URLParameter::get_the_jar()
         if( ! m_bBerkeleyRead )
             readBerkeley();
         m_bBerkeleyRead = true;
-
+        
         return m_aJar;
     }
     else
@@ -314,7 +314,7 @@ void URLParameter::readBerkeley()
             break;
 
         rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
-
+        
         DBHelp* pDBHelp = db->getDBHelp();
         if( pDBHelp != NULL )
         {
@@ -373,60 +373,60 @@ class InputStreamTransformer
       public XSeekable
 {
 public:
-
+    
     InputStreamTransformer( URLParameter* urlParam,
                             Databases*    pDatatabases,
                             bool isRoot = false );
-
+    
     ~InputStreamTransformer();
-
+    
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException );
     virtual void SAL_CALL acquire( void ) throw();
     virtual void SAL_CALL release( void ) throw();
 
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead )
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead ) 
         throw( NotConnectedException,
                BufferSizeExceededException,
                IOException,
                RuntimeException);
-
+    
     virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead )
         throw( NotConnectedException,
                BufferSizeExceededException,
                IOException,
                RuntimeException);
-
+    
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw( NotConnectedException,
                                                                      BufferSizeExceededException,
                                                                      IOException,
                                                                      RuntimeException );
-
+    
     virtual sal_Int32 SAL_CALL available( void ) throw( NotConnectedException,
                                                         IOException,
                                                         RuntimeException );
-
+    
     virtual void SAL_CALL closeInput( void ) throw( NotConnectedException,
                                                     IOException,
                                                     RuntimeException );
-
+    
     virtual void SAL_CALL seek( sal_Int64 location ) throw( IllegalArgumentException,
                                                             IOException,
                                                             RuntimeException );
-
+    
     virtual sal_Int64 SAL_CALL getPosition( void ) throw( IOException,RuntimeException );
-
+    
     virtual sal_Int64 SAL_CALL getLength( void ) throw( IOException,RuntimeException );
-
+    
     void addToBuffer( const char* buffer,int len );
 
     sal_Int8* getData() const { return (sal_Int8*) buffer; }
 
     sal_Int32 getLen() const { return sal_Int32( len ); }
-
+    
 private:
-
+    
     osl::Mutex m_aMutex;
-
+    
     int len,pos;
     char *buffer;
 };
@@ -446,14 +446,14 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 
     if( ! xDataSink.is() )
         return;
-
+    
     if( isPicture() )
     {
         Reference< XInputStream > xStream;
         Reference< XHierarchicalNameAccess > xNA =
             m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
                                    get_language() );
-
+        
         rtl::OUString path = get_path();
         if( xNA.is() )
         {
@@ -490,7 +490,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
     }
     else
     {
-        // a standard document or else an active help text, plug in the new input stream
+        // a standard document or else an active help text, plug in the new input stream	
         InputStreamTransformer* p = new InputStreamTransformer( this,m_pDatabases,isRoot() );
         try
         {
@@ -523,7 +523,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
         Reference< XHierarchicalNameAccess > xNA =
             m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
                                    get_language() );
-
+        
         rtl::OUString path = get_path();
         if( xNA.is() )
         {
@@ -545,7 +545,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 #endif
     }
     else
-        // a standard document or else an active help text, plug in the new input stream
+        // a standard document or else an active help text, plug in the new input stream	
         xDataSink->setInputStream( new InputStreamTransformer( this,m_pDatabases,isRoot() ) );
 }
 
@@ -556,11 +556,11 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
 {
     // fprintf(stdout,"url send to xmlhelp: %s\n",(rtl::OUStringToOString(m_aURL,RTL_TEXTENCODING_UTF8).getStr()));
     m_aExpr = m_aURL;
-
+    
     sal_Int32 lstIdx = m_aExpr.lastIndexOf( sal_Unicode( '#' ) );
     if( lstIdx != -1 )
         m_aExpr = m_aExpr.copy( 0,lstIdx );
-
+    
     if( ! scheme() ||
         ! name( module() ) ||
         ! query() ||
@@ -568,7 +568,7 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
         ! m_aSystem.getLength() )
         throw com::sun::star::ucb::IllegalIdentifierException();
 }
-
+        
 
 bool URLParameter::scheme()
 {
@@ -600,14 +600,14 @@ bool URLParameter::scheme()
     return false;
 }
 
-
+        
 bool URLParameter::module()
 {
     sal_Int32 idx = 0,length = m_aExpr.getLength();
-
-    while( idx < length && isLetterOrDigit( (m_aExpr.getStr())[idx] ) )
+    
+    while( idx < length && isLetterOrDigit( (m_aExpr.getStr())[idx] ) ) 
         ++idx;
-
+            
     if( idx != 0 )
     {
         m_aModule = m_aExpr.copy( 0,idx );
@@ -617,24 +617,24 @@ bool URLParameter::module()
     else
         return false;
 }
-
-
-
+    
+    
+    
 bool URLParameter::name( bool modulePresent )
 {
     // if modulepresent, a name may be present, but must not
 
     sal_Int32 length = m_aExpr.getLength();
-
+    
     if( length != 0 && (m_aExpr.getStr())[0] == sal_Unicode( '/' ) )
     {
         sal_Int32 idx = 1;
         while( idx < length && (m_aExpr.getStr())[idx] != '?' )
-//                ( isLetterOrDigit( (m_aExpr.getStr())[idx] )
+//                ( isLetterOrDigit( (m_aExpr.getStr())[idx] ) 
 //                  || (m_aExpr.getStr())[idx] == '/'
 //                  || (m_aExpr.getStr())[idx] == '.' ))
             ++idx;
-
+        
         if( idx != 1 && ! modulePresent )
             return false;
         else
@@ -643,28 +643,28 @@ bool URLParameter::name( bool modulePresent )
             m_aExpr = m_aExpr.copy( idx );
         }
     }
-
+    
 //    fprintf(stdout,"id %s\n",(rtl::OUStringToOString(m_aId,RTL_TEXTENCODING_UTF8).getStr()));
     return true;
 }
-
-
+        
+    
 bool URLParameter::query()
 {
     rtl::OUString query_;
-
+    
     if( ! m_aExpr.getLength() )
         return true;
     else if( (m_aExpr.getStr())[0] == sal_Unicode( '?' ) )
         query_ = m_aExpr.copy( 1 ).trim();
     else
         return false;
-
-
+        
+            
     bool ret = true;
     sal_Int32 delimIdx,equalIdx;
     rtl::OUString parameter,value;
-
+        
     while( query_.getLength() != 0 )
     {
         delimIdx = query_.indexOf( sal_Unicode( '&' ) );
@@ -680,7 +680,7 @@ bool URLParameter::query()
             value = query_.copy( equalIdx+1,delimIdx - equalIdx - 1 ).trim();
             query_ = query_.copy( delimIdx+1 ).trim();
         }
-
+        
         if( parameter.compareToAscii( "Language" ) == 0 )
             m_aLanguage = value;
         else if( parameter.compareToAscii( "Device" ) == 0 )
@@ -694,7 +694,7 @@ bool URLParameter::query()
         else if( parameter.compareToAscii( "DbPAR" ) == 0 )
             m_aDbPar = value;
         else if( parameter.compareToAscii( "Query" ) == 0 )
-        {
+        {	
             if( ! m_aQuery.getLength() )
                 m_aQuery = value;
             else
@@ -716,12 +716,12 @@ bool URLParameter::query()
         else
             ret = false;
     }
-
+            
     return ret;
 }
 
 struct UserData {
-
+    
     UserData( InputStreamTransformer* pTransformer,
               URLParameter*           pInitial,
               Databases*              pDatabases )
@@ -730,7 +730,7 @@ struct UserData {
           m_pInitial( pInitial )
     {
     }
-
+    
     InputStreamTransformer*             m_pTransformer;
     Databases*                          m_pDatabases;
     URLParameter*                       m_pInitial;
@@ -799,7 +799,7 @@ zipOpen(const char * /*URI*/) {
         {
         }
     }
-
+    
     if( xInputStream.is() )
     {
         return new Reference<XInputStream>(xInputStream);
@@ -813,7 +813,7 @@ helpOpen(const char * URI) {
 
     URLParameter urlpar( rtl::OUString::createFromAscii( URI ),
                          ugblData->m_pDatabases );
-
+        
     jar = urlpar.get_jar();
     language = urlpar.get_language();
     path = urlpar.get_path();
@@ -836,7 +836,7 @@ helpOpen(const char * URI) {
         {
         }
     }
-
+    
     if( xInputStream.is() )
         return new Reference<XInputStream>(xInputStream);
     return 0;
@@ -905,7 +905,7 @@ extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
     (void)error;
 
     // Reset error handler
-    xmlSetStructuredErrorFunc( NULL, NULL );
+    xmlSetStructuredErrorFunc( NULL, NULL ); 
 }
 */
 
@@ -935,13 +935,13 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
     else
     {
         UserData userData( this,urlParam,pDatabases );
-
+    
         // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
-
+        
         const char* parameter[47];
         rtl::OString parString[46];
         int last = 0;
-
+        
         parString[last++] = "Program";
         rtl::OString aPureProgramm( urlParam->getByName( "Program" ) );
         parString[last++] = rtl::OString('\'') + aPureProgramm + rtl::OString('\'');
@@ -964,7 +964,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             pDatabases->getProductName().getLength(),
             RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
         parString[last++] = "productversion";
-        parString[last++] = rtl::OString('\'') +
+        parString[last++] = rtl::OString('\'') + 
             rtl::OString(  pDatabases->getProductVersion().getStr(),
                           pDatabases->getProductVersion().getLength(),
                           RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
@@ -973,7 +973,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         parString[last++] = rtl::OString('\'') + pDatabases->getImagesZipFileURL() + rtl::OString('\'');
         parString[last++] = "hp";
         parString[last++] = rtl::OString('\'') + urlParam->getByName( "HelpPrefix" ) + rtl::OString('\'');
-
+        
         if( parString[last-1].getLength() )
         {
             parString[last++] = "sm";
@@ -1000,7 +1000,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             parString[last++] = "vendorshort";
             parString[last++] = rtl::OString("''");
         }
-
+        
         // Do we need to add extension path?
         ::rtl::OUString aExtensionPath;
         rtl::OUString aJar = urlParam->get_jar();
@@ -1061,10 +1061,10 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         for( int i = 0; i < last; ++i )
             parameter[i] = parString[i].getStr();
         parameter[last] = 0;
-
+        
         rtl::OUString xslURL = pDatabases->getInstallPathAsURL();
-
-        rtl::OString xslURLascii(
+        
+        rtl::OString xslURLascii( 
             xslURL.getStr(),
             xslURL.getLength(),
             RTL_TEXTENCODING_UTF8);
@@ -1076,9 +1076,9 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         xmlRegisterInputCallbacks(zipMatch, zipOpen, zipRead, uriClose);
         xmlRegisterInputCallbacks(helpMatch, helpOpen, helpRead, uriClose);
         xmlRegisterInputCallbacks(fileMatch, fileOpen, fileRead, fileClose);
-        //xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
+        //xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction ); 
 
-        xsltStylesheetPtr cur =
+        xsltStylesheetPtr cur = 
             xsltParseStylesheetFile((const xmlChar *)xslURLascii.getStr());
 
         xmlDocPtr doc = xmlParseFile("vnd.sun.star.zip:/");
@@ -1092,9 +1092,9 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             addToBuffer((const char*)doc_txt_ptr, doc_txt_len);
             xmlFree(doc_txt_ptr);
         }
-        xmlPopInputCallbacks(); //filePatch
-        xmlPopInputCallbacks(); //helpPatch
-        xmlPopInputCallbacks(); //zipMatch
+        xmlPopInputCallbacks();	//filePatch
+        xmlPopInputCallbacks();	//helpPatch
+        xmlPopInputCallbacks();	//zipMatch
         xmlFreeDoc(res);
         xmlFreeDoc(doc);
         xsltFreeStylesheet(cur);
@@ -1113,7 +1113,7 @@ Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType ) throw( 
     Any aRet = ::cppu::queryInterface( rType,
                                        SAL_STATIC_CAST( XInputStream*,this ),
                                        SAL_STATIC_CAST( XSeekable*,this ) );
-
+    
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -1146,13 +1146,13 @@ sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aDat
         curr = nBytesToRead;
     else
         curr = available_;
-
+    
     if( 0 <= curr && aData.getLength() < curr )
-        aData.realloc( curr );
-
+        aData.realloc( curr ); 
+    
     for( int k = 0; k < curr; ++k )
         aData[k] = buffer[pos++];
-
+    
     return curr > 0 ? curr : 0;
 }
 
@@ -1206,7 +1206,7 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalA
         throw IllegalArgumentException();
     else
         pos = sal::static_int_cast<sal_Int32>( location );
-
+    
     if( pos > len )
         pos = len;
 }
@@ -1225,7 +1225,7 @@ sal_Int64 SAL_CALL InputStreamTransformer::getPosition( void ) throw( IOExceptio
 sal_Int64 SAL_CALL InputStreamTransformer::getLength( void ) throw( IOException,RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
-
+    
     return len;
 }
 
@@ -1233,7 +1233,7 @@ sal_Int64 SAL_CALL InputStreamTransformer::getLength( void ) throw( IOException,
 void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
 {
     osl::MutexGuard aGuard( m_aMutex );
-
+    
     char* tmp = buffer;
     buffer = new char[ len+len_ ];
     rtl_copyMemory( (void*)(buffer),(void*)(tmp),sal_uInt32( len ) );

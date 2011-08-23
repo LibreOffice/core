@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,17 +67,17 @@
 
 //==================================================================
 
-//  static
+//	static
 void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
                                 USHORT nWhichId, USHORT nScript )
 {
-    //  take the effective item from rCoreSet according to nScript
-    //  and put in rShellSet under the (base) nWhichId
+    //	take the effective item from rCoreSet according to nScript
+    //	and put in rShellSet under the (base) nWhichId
 
     SfxItemPool& rPool = *rShellSet.GetPool();
     SvxScriptSetItem aSetItem( rPool.GetSlotId(nWhichId), rPool );
-    //  use PutExtended with eDefaultAs = SFX_ITEM_SET, so defaults from rCoreSet
-    //  (document pool) are read and put into rShellSet (MessagePool)
+    //	use PutExtended with eDefaultAs = SFX_ITEM_SET, so defaults from rCoreSet
+    //	(document pool) are read and put into rShellSet (MessagePool)
     aSetItem.GetItemSet().PutExtended( rCoreSet, SFX_ITEM_DONTCARE, SFX_ITEM_SET );
     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
     if (pI)
@@ -86,10 +86,10 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
         rShellSet.InvalidateItem( nWhichId );
 }
 
-//  static
+//	static
 USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
 {
-    //  used for thesaurus
+    //	used for thesaurus
 
     BYTE nScript = pDoc->GetScriptType( rPos.Col(), rPos.Row(), rPos.Tab() );
     USHORT nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
@@ -100,7 +100,7 @@ USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     if (pLangIt)
     {
         eLnge = (LanguageType) pLangIt->GetValue();
-        if (eLnge == LANGUAGE_DONTKNOW)                 //! can this happen?
+        if (eLnge == LANGUAGE_DONTKNOW)					//! can this happen?
         {
             LanguageType eLatin, eCjk, eCtl;
             pDoc->GetLanguage( eLatin, eCjk, eCtl );
@@ -116,7 +116,7 @@ USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     return eLnge;
 }
 
-//  static
+//	static
 sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
 {
     sal_Int32 nType = 0;
@@ -153,7 +153,7 @@ sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
     return nType;
 }
 
-//  static
+//	static
 BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument )
@@ -171,7 +171,7 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     {
         if ( rSettings.IsEveryoneButMe() )
         {
-            //  GetUser() am ChangeTrack ist der aktuelle Benutzer
+            //	GetUser() am ChangeTrack ist der aktuelle Benutzer
             ScChangeTrack* pTrack = rDocument.GetChangeTrack();
             if ( !pTrack || rAction.GetUser() == pTrack->GetUser() )
                 return FALSE;
@@ -201,7 +201,7 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         const DateTime& rFirst = rSettings.GetTheFirstDateTime();
         const DateTime& rLast  = rSettings.GetTheLastDateTime();
         switch ( rSettings.GetTheDateMode() )
-        {   // korrespondiert mit ScHighlightChgDlg::OKBtnHdl
+        {	// korrespondiert mit ScHighlightChgDlg::OKBtnHdl
             case SCDM_DATE_BEFORE:
                 if ( aDateTime > rFirst )
                     return FALSE;
@@ -365,8 +365,8 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USH
 
 BOOL ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
                                  SfxViewFrame& rFrame,
-                                 SvxFontItem&       rNewFont,
-                                 String&            rString )
+                                 SvxFontItem& 		rNewFont,
+                                 String&			rString )
 {
     BOOL bRet = FALSE;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1178,6 +1178,8 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Miles" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Point" ; FUNIT_POINT ; > ;
+        < "Char" ; FUNIT_CHAR ; > ;
+        < "Line" ; FUNIT_LINE ; > ;
     };
     };
 

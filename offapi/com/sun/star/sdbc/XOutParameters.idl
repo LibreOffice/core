@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XOutParameters_idl__
-#define __com_sun_star_sdbc_XOutParameters_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbc {
-
-
+#ifndef __com_sun_star_sdbc_XOutParameters_idl__ 
+#define __com_sun_star_sdbc_XOutParameters_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ 
 /** is used to register Out-Parameters for stored procedures.
-
-
+    
+    
     <p>
     SDBC provides a stored procedure SQL escape that allows stored procedures
     to be called in a standard way for all RDBMSs. This escape syntax has one
@@ -51,16 +51,16 @@
     </p>
  */
 published interface XOutParameters: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** registers the designated output parameter.  This version of
-        the method
+        the method 
         <member scope="com::sun::star::sdbc">XOutParameters::registerOutParameter()</member>
         should be used for a user-named or REF output parameter. Examples
         of user-named types include: STRUCT, DISTINCT, OBJECT, and named array
         types.
-
-
+        
+        
         <p>
         Before executing a stored procedure call, you must explicitly
         call
@@ -83,7 +83,7 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         </p>
         <p>
         <b>Note:</b> When reading the value of an out parameter, you
-        must use the
+        must use the 
         <code>getXXX</code>
         method whose type XXX corresponds to the
         parameter's registered SQL type.
@@ -94,29 +94,29 @@ published interface XOutParameters: com::sun::star::uno::XInterface
             the type of the column to register
         @param typeName
             the name of the type
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
      */
-    void registerOutParameter([in]long parameterIndex, [in]long sqlType,
-                              [in]string typeName)
-        raises (SQLException);
-    //-------------------------------------------------------------------------
-
+    void registerOutParameter([in]long parameterIndex, [in]long sqlType, 
+                              [in]string typeName) 
+        raises (SQLException); 
+    //------------------------------------------------------------------------- 
+     
     /** registers the OUT parameter in ordinal position
         <code>parameterIndex</code>
         to the SDBC type
         <code>sqlType</code>
         . All
         OUT parameters must be registered before a stored procedure is executed.
-
-
+        
+        
         <p>
-        The SDBC type specified by
+        The SDBC type specified by 
         <code>sqlType</code>
-        for an OUT parameter determines the type that must be used in the
+        for an OUT parameter determines the type that must be used in the 
         <code>get</code>
         method to read the value of that parameter.
-        This version of
+        This version of 
         <member scope="com::sun::star::sdbc">XOutParameters::registerOutParameter()</member>
         should be
         used when the parameter is of SDBC type
@@ -130,19 +130,19 @@ published interface XOutParameters: com::sun::star::uno::XInterface
             the type of the column to register
         @param scale
             the scale of the type
-        @throws SQLException
+        @throws SQLException 
             if a database access error occurs.
         </p>
      */
-    void registerNumericOutParameter([in]long parameterIndex, [in]long sqlType,
-                                       [in]long scale)
-        raises (SQLException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    void registerNumericOutParameter([in]long parameterIndex, [in]long sqlType, 
+                                       [in]long scale) 
+        raises (SQLException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

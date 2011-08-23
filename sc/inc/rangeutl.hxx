@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,28 +56,28 @@ public:
                 ScRangeUtil()  {}
                 ~ScRangeUtil() {}
 
-    BOOL    MakeArea            ( const String&     rAreaStr,
-                                  ScArea&           rArea,
-                                  ScDocument*       pDoc,
-                                  SCTAB         nTab,
+    BOOL	MakeArea			( const String&		rAreaStr,
+                                  ScArea&			rArea,
+                                  ScDocument*		pDoc,
+                                  SCTAB			nTab,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    void    CutPosString        ( const String&     theAreaStr,
-                                  String&           thePosStr ) const;
+    void	CutPosString		( const String&		theAreaStr,
+                                  String&			thePosStr ) const;
 
-    BOOL    IsAbsTabArea        ( const String&     rAreaStr,
-                                  ScDocument*       pDoc,
-                                  ScArea***         pppAreas    = 0,
-                                  USHORT*           pAreaCount  = 0,
-                                  BOOL              bAcceptCellRef = FALSE,
+    BOOL 	IsAbsTabArea		( const String& 	rAreaStr,
+                                  ScDocument*		pDoc,
+                                  ScArea***			pppAreas 	= 0,
+                                  USHORT*			pAreaCount	= 0,
+                                  BOOL				bAcceptCellRef = FALSE,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    IsAbsArea           ( const String& rAreaStr,
-                                  ScDocument*   pDoc,
-                                  SCTAB     nTab,
-                                  String*       pCompleteStr = 0,
-                                  ScRefAddress* pStartPos    = 0,
-                                  ScRefAddress* pEndPos      = 0,
+    BOOL	IsAbsArea			( const String& rAreaStr,
+                                  ScDocument*	pDoc,
+                                  SCTAB		nTab,
+                                  String*		pCompleteStr = 0,
+                                  ScRefAddress*	pStartPos	 = 0,
+                                  ScRefAddress*	pEndPos		 = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
     BOOL    IsRefArea           ( const String&,
@@ -87,17 +87,17 @@ public:
                                   ScRefAddress* = 0 ) const
                                       { return FALSE; }
 
-    BOOL    IsAbsPos            ( const String& rPosStr,
-                                  ScDocument*   pDoc,
-                                  SCTAB     nTab,
-                                  String*       pCompleteStr = 0,
-                                  ScRefAddress* pPosTripel   = 0,
+    BOOL	IsAbsPos			( const String&	rPosStr,
+                                  ScDocument*	pDoc,
+                                  SCTAB		nTab,
+                                  String*		pCompleteStr = 0,
+                                  ScRefAddress*	pPosTripel	 = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    MakeRangeFromName   ( const String& rName,
-                                    ScDocument*     pDoc,
-                                    SCTAB           nCurTab,
-                                    ScRange&        rRange,
+    BOOL	MakeRangeFromName	( const String&	rName,
+                                    ScDocument*		pDoc,
+                                    SCTAB			nCurTab,
+                                    ScRange&		rRange,
                                   RutlNameScope eScope=RUTL_NAMES,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 };
@@ -109,29 +109,29 @@ class SC_DLLPUBLIC ScRangeStringConverter
 public:
 
 // helper methods
-    static void         AssignString(
+    static void			AssignString(
                             ::rtl::OUString& rString,
                             const ::rtl::OUString& rNewStr,
                             sal_Bool bAppendStr,
                             sal_Unicode cSeperator = ' ');
 
-    static sal_Int32    IndexOf(
+    static sal_Int32	IndexOf(
                             const ::rtl::OUString& rString,
                             sal_Unicode cSearchChar,
                             sal_Int32 nOffset,
                             sal_Unicode cQuote = '\'');
 
-    static sal_Int32    IndexOfDifferent(
+    static sal_Int32	IndexOfDifferent(
                             const ::rtl::OUString& rString,
                             sal_Unicode cSearchChar,
                             sal_Int32 nOffset );
 
-    static sal_Int32    GetTokenCount(
+    static sal_Int32	GetTokenCount(
                             const ::rtl::OUString& rString,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
 
-    static void         GetTokenByOffset(
+    static void			GetTokenByOffset(
                             ::rtl::OUString& rToken,
                             const ::rtl::OUString& rString,
                             sal_Int32& nOffset,
@@ -139,12 +139,12 @@ public:
                             sal_Unicode cQuote = '\'');
 
     static void         AppendTableName(
-                            ::rtl::OUStringBuffer& rBuf,
+                            ::rtl::OUStringBuffer& rBuf, 
                             const ::rtl::OUString& rTabName,
                             sal_Unicode cQuote = '\'');
 
 // String to Range core
-    static sal_Bool     GetAddressFromString(
+    static sal_Bool		GetAddressFromString(
                             ScAddress& rAddress,
                             const ::rtl::OUString& rAddressStr,
                             const ScDocument* pDocument,
@@ -152,7 +152,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
-    static sal_Bool     GetRangeFromString(
+    static sal_Bool		GetRangeFromString(
                             ScRange& rRange,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
@@ -160,7 +160,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
-    static sal_Bool     GetRangeListFromString(
+    static sal_Bool		GetRangeListFromString(
                             ScRangeList& rRangeList,
                             const ::rtl::OUString& rRangeListStr,
                             const ScDocument* pDocument,
@@ -168,7 +168,7 @@ public:
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
 
-    static sal_Bool     GetAreaFromString(
+    static sal_Bool		GetAreaFromString(
                             ScArea& rArea,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
@@ -178,7 +178,7 @@ public:
                             sal_Unicode cQuote = '\'');
 
 // String to Range API
-    static sal_Bool     GetAddressFromString(
+    static sal_Bool		GetAddressFromString(
                             ::com::sun::star::table::CellAddress& rAddress,
                             const ::rtl::OUString& rAddressStr,
                             const ScDocument* pDocument,
@@ -186,7 +186,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
-    static sal_Bool     GetRangeFromString(
+    static sal_Bool		GetRangeFromString(
                             ::com::sun::star::table::CellRangeAddress& rRange,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
@@ -194,7 +194,7 @@ public:
                             sal_Int32& nOffset,
                             sal_Unicode cSeperator = ' ',
                             sal_Unicode cQuote = '\'');
-    static sal_Bool     GetRangeListFromString(
+    static sal_Bool		GetRangeListFromString(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const ::rtl::OUString& rRangeListStr,
                             const ScDocument* pDocument,
@@ -203,7 +203,7 @@ public:
                             sal_Unicode cQuote = '\'');
 
 // Range to String core
-    static void         GetStringFromAddress(
+    static void			GetStringFromAddress(
                             ::rtl::OUString& rString,
                             const ScAddress& rAddress,
                             const ScDocument* pDocument,
@@ -211,7 +211,7 @@ public:
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-    static void         GetStringFromRange(
+    static void			GetStringFromRange(
                             ::rtl::OUString& rString,
                             const ScRange& rRange,
                             const ScDocument* pDocument,
@@ -219,7 +219,7 @@ public:
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-    static void         GetStringFromRangeList(
+    static void			GetStringFromRangeList(
                             ::rtl::OUString& rString,
                             const ScRangeList* pRangeList,
                             const ScDocument* pDocument,
@@ -227,7 +227,7 @@ public:
                             sal_Unicode cSeperator = ' ',
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D));
 
-    static void         GetStringFromArea(
+    static void			GetStringFromArea(
                             ::rtl::OUString& rString,
                             const ScArea& rArea,
                             const ScDocument* pDocument,
@@ -237,7 +237,7 @@ public:
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
 // Range to String API
-    static void         GetStringFromAddress(
+    static void			GetStringFromAddress(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::table::CellAddress& rAddress,
                             const ScDocument* pDocument,
@@ -245,7 +245,7 @@ public:
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-    static void         GetStringFromRange(
+    static void			GetStringFromRange(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const ScDocument* pDocument,
@@ -253,7 +253,7 @@ public:
                             sal_Unicode cSeperator = ' ',
                             sal_Bool bAppendStr = sal_False,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
-    static void         GetStringFromRangeList(
+    static void			GetStringFromRangeList(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const ScDocument* pDocument,
@@ -264,7 +264,7 @@ public:
 // XML Range to Calc Range
     static void         GetStringFromXMLRangeString(
                             ::rtl::OUString& rString,
-                            const ::rtl::OUString& rXMLRange,
+                            const ::rtl::OUString& rXMLRange, 
                             ScDocument* pDoc );
 };
 
@@ -281,9 +281,9 @@ public:
 
             ScArea( const ScArea& r );
 
-    ScArea& operator=   ( const ScArea& r );
-    BOOL    operator==  ( const ScArea& r ) const;
-    BOOL    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
+    ScArea&	operator=	( const ScArea& r );
+    BOOL	operator==	( const ScArea& r ) const;
+    BOOL	operator!=	( const ScArea& r ) const  { return !( operator==(r) ); }
 
 public:
     SCTAB nTab;
@@ -296,24 +296,24 @@ public:
 //------------------------------------------------------------------------
 
 //
-//  gibt Bereiche mit Referenz und alle DB-Bereiche zurueck
+//	gibt Bereiche mit Referenz und alle DB-Bereiche zurueck
 //
 
 class SC_DLLPUBLIC ScAreaNameIterator
 {
 private:
-    ScRangeName*    pRangeName;
-    ScDBCollection* pDBCollection;
-    BOOL            bFirstPass;
-    USHORT          nPos;
-    String          aStrNoName;
+    ScRangeName*	pRangeName;
+    ScDBCollection*	pDBCollection;
+    BOOL			bFirstPass;
+    USHORT			nPos;
+    String			aStrNoName;
 
 public:
             ScAreaNameIterator( ScDocument* pDoc );
             ~ScAreaNameIterator() {}
 
-    BOOL    Next( String& rName, ScRange& rRange );
-    BOOL    WasDBName() const   { return !bFirstPass; }
+    BOOL	Next( String& rName, ScRange& rRange );
+    BOOL	WasDBName() const	{ return !bFirstPass; }
 };
 
 

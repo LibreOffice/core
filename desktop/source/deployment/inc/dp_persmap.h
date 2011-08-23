@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ class PersistentMap
     ::rtl::OUString m_sysPath;
     mutable Db m_db;
     void throw_rtexc( int err, char const * msg = 0 ) const;
-
+    
 public:
     ~PersistentMap();
     PersistentMap( ::rtl::OUString const & url, bool readOnly );
     /** in mem db */
     PersistentMap();
-
+    
     bool has( ::rtl::OString const & key ) const;
     bool get( ::rtl::OString * value, ::rtl::OString const & key ) const;
     t_string2string_map getEntries() const;

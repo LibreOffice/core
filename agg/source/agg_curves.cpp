@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -24,8 +24,8 @@ namespace agg
 {
 
     //------------------------------------------------------------------------
-    void curve3::init(double x1, double y1,
-                      double x2, double y2,
+    void curve3::init(double x1, double y1, 
+                      double x2, double y2, 
                       double x3, double y3)
     {
         m_start_x = x1;
@@ -38,13 +38,13 @@ namespace agg
         double dx2 = x3 - x2;
         double dy2 = y3 - y2;
 
-        double len = sqrt(dx1 * dx1 + dy1 * dy1) + sqrt(dx2 * dx2 + dy2 * dy2);
+        double len = sqrt(dx1 * dx1 + dy1 * dy1) + sqrt(dx2 * dx2 + dy2 * dy2); 
 
         m_num_steps = int(len * 0.25 * m_scale);
 
         if(m_num_steps < 2)
         {
-            m_num_steps = 2;
+            m_num_steps = 2;   
         }
 
         double subdivide_step  = 1.0 / m_num_steps;
@@ -55,7 +55,7 @@ namespace agg
 
         m_saved_fx = m_fx = x1;
         m_saved_fy = m_fy = y1;
-
+        
         m_saved_dfx = m_dfx = tmpx + (x2 - x1) * (2.0 * subdivide_step);
         m_saved_dfy = m_dfy = tmpy + (y2 - y1) * (2.0 * subdivide_step);
 
@@ -104,10 +104,10 @@ namespace agg
             --m_step;
             return path_cmd_line_to;
         }
-        m_fx  += m_dfx;
+        m_fx  += m_dfx; 
         m_fy  += m_dfy;
-        m_dfx += m_ddfx;
-        m_dfy += m_ddfy;
+        m_dfx += m_ddfx; 
+        m_dfy += m_ddfy; 
         *x = m_fx;
         *y = m_fy;
         --m_step;
@@ -127,8 +127,8 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void curve4::init(double x1, double y1,
-                      double x2, double y2,
+    void curve4::init(double x1, double y1, 
+                      double x2, double y2, 
                       double x3, double y3,
                       double x4, double y4)
     {
@@ -144,15 +144,15 @@ namespace agg
         double dx3 = x4 - x3;
         double dy3 = y4 - y3;
 
-        double len = sqrt(dx1 * dx1 + dy1 * dy1) +
-                     sqrt(dx2 * dx2 + dy2 * dy2) +
+        double len = sqrt(dx1 * dx1 + dy1 * dy1) + 
+                     sqrt(dx2 * dx2 + dy2 * dy2) + 
                      sqrt(dx3 * dx3 + dy3 * dy3);
 
         m_num_steps = int(len * 0.25 * m_scale);
 
         if(m_num_steps < 2)
         {
-            m_num_steps = 2;
+            m_num_steps = 2;   
         }
 
         double subdivide_step  = 1.0 / m_num_steps;
@@ -163,7 +163,7 @@ namespace agg
         double pre2 = 3.0 * subdivide_step2;
         double pre4 = 6.0 * subdivide_step2;
         double pre5 = 6.0 * subdivide_step3;
-
+    
         double tmp1x = x1 - x2 * 2.0 + x3;
         double tmp1y = y1 - y2 * 2.0 + y3;
 
@@ -227,12 +227,12 @@ namespace agg
             --m_step;
             return path_cmd_line_to;
         }
-        m_fx   += m_dfx;
+        m_fx   += m_dfx; 
         m_fy   += m_dfy;
-        m_dfx  += m_ddfx;
-        m_dfy  += m_ddfy;
-        m_ddfx += m_dddfx;
-        m_ddfy += m_dddfy;
+        m_dfx  += m_ddfx; 
+        m_dfy  += m_ddfy; 
+        m_ddfx += m_dddfx; 
+        m_ddfy += m_dddfy; 
         *x = m_fx;
         *y = m_fy;
         --m_step;

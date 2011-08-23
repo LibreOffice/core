@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,22 +52,22 @@ namespace drawinglayer
         {
         private:
             /// discrete HitTest position
-            basegfx::B2DPoint           maDiscreteHitPosition;
+            basegfx::B2DPoint			maDiscreteHitPosition;
 
             /// discrete HitTolerance
-            double                      mfDiscreteHitTolerance;
+            double						mfDiscreteHitTolerance;
 
             /// bitfield
-            unsigned                    mbHit : 1;
-            unsigned                    mbHitToleranceUsed : 1;
+            unsigned					mbHit : 1;
+            unsigned					mbHitToleranceUsed : 1;
 
             /*  this flag decides if primitives which are embedded to an
-                UnifiedTransparencePrimitive2D and are invisible will be taken into account for
-                HitTesting or not. Those primitives are created for objects which are else
-                completely invisible and normally their content exists of hairline
+                UnifiedTransparencePrimitive2D and are invisible will be taken into account for 
+                HitTesting or not. Those primitives are created for objects which are else 
+                completely invisible and normally their content exists of hairline 
                 primitives describing the object's contour
              */
-            unsigned                    mbUseInvisiblePrimitiveContent : 1;
+            unsigned					mbUseInvisiblePrimitiveContent : 1;
 
             /// flag to concentraze on text hits only
             unsigned                    mbHitTextOnly : 1;

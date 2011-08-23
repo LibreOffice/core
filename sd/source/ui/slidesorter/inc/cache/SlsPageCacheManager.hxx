@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ public:
 
     /** This is an information to the cache manager that the size of preview
         bitmaps in the specified cache has changed.
-
+        
     */
     ::boost::shared_ptr<Cache> ChangeSize (
         const ::boost::shared_ptr<Cache>& rpCache,
@@ -134,7 +134,7 @@ private:
         slide sorter.
     */
     const sal_uInt32 mnMaximalRecentlyCacheCount;
-
+    
     PageCacheManager (void);
     ~PageCacheManager (void);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@ class BasicManager;
 
 class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
 {
-    const BasicManager*     pBasicManager;
-    String                  aLibName;
-    String                  aModuleName;
-    String                  aMethodName;
-    String                  aCommentText;
+    const BasicManager* 	pBasicManager;
+    String					aLibName;
+    String					aModuleName;
+    String					aMethodName;
+    String					aCommentText;
 
 public:
     TYPEINFO();
@@ -52,27 +52,27 @@ public:
 
     SfxMacroInfoItem( const SfxMacroInfoItem& );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
-    String                  GetComment() const
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    String					GetComment() const
                                 { return aCommentText; }
-    void                    SetComment( const String& r )
+    void					SetComment( const String& r )
                                 { aCommentText = r; }
-    String                  GetMethod() const
+    String					GetMethod() const
                                 { return aMethodName; }
-    void                    SetMethod( const String& r )
+    void					SetMethod( const String& r )
                                 { aMethodName = r; }
-    String                  GetModule() const
+    String					GetModule() const
                                 { return aModuleName; }
-    void                    SetModule( const String& r )
+    void					SetModule( const String& r )
                                 { aModuleName = r; }
-    String                  GetLib() const
+    String					GetLib() const
                                 { return aLibName; }
-    void                    SetLib( const String& r )
+    void					SetLib( const String& r )
                                 { aLibName = r; }
-    const BasicManager*     GetBasicManager() const
+    const BasicManager* 	GetBasicManager() const
                             { return pBasicManager; }
-    String                  GetQualifiedName() const;
+    String					GetQualifiedName() const;
 };
 
 #endif

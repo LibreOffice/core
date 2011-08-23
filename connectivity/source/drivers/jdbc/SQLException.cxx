@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::lang;
 //************ Class: java.sql.SQLException
 //**************************************************************
 java_sql_SQLException::java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const Reference< XInterface> & _rContext)
-    : starsdbc::SQLException(   _rException.getMessage(),
+    : starsdbc::SQLException(	_rException.getMessage(),
                                 _rContext,
                                 _rException.getSQLState(),
                                 _rException.getErrorCode(),
@@ -80,7 +80,7 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     if( out )
     {
-        java_sql_SQLException_BASE  warn_base(t.pEnv,out);
+        java_sql_SQLException_BASE	warn_base(t.pEnv,out);
         return (starsdbc::SQLException)java_sql_SQLException(warn_base,0);
     }
 

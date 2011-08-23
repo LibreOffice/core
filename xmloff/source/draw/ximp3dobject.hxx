@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ protected:
     // the shape group this object should be created inside
 
     com::sun::star::drawing::HomogenMatrix mxHomMat;
-    BOOL                        mbSetTransform;
+    BOOL						mbSetTransform;
 
 /*
     void SetStyle();
@@ -56,9 +56,9 @@ protected:
 public:
     TYPEINFO();
 
-    SdXML3DObjectContext( SvXMLImport& rImport,
+    SdXML3DObjectContext( SvXMLImport& rImport, 
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -73,16 +73,16 @@ public:
 
 class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
 {
-    ::basegfx::B3DVector    maMinEdge;
-    ::basegfx::B3DVector    maMaxEdge;
-    BOOL                    mbMinEdgeUsed;
-    BOOL                    mbMaxEdgeUsed;
+    ::basegfx::B3DVector	maMinEdge;
+    ::basegfx::B3DVector	maMaxEdge;
+    BOOL					mbMinEdgeUsed;
+    BOOL					mbMaxEdgeUsed;
 
 public:
     TYPEINFO();
 
     SdXML3DCubeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -97,16 +97,16 @@ public:
 
 class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
 {
-    ::basegfx::B3DVector    maCenter;
-    ::basegfx::B3DVector    maSize;
-    BOOL                    mbCenterUsed;
-    BOOL                    mbSizeUsed;
+    ::basegfx::B3DVector	maCenter;
+    ::basegfx::B3DVector	maSize;
+    BOOL					mbCenterUsed;
+    BOOL					mbSizeUsed;
 
 public:
     TYPEINFO();
 
     SdXML3DSphereObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -121,14 +121,14 @@ public:
 
 class SdXML3DPolygonBasedShapeContext : public SdXML3DObjectContext
 {
-    rtl::OUString               maPoints;
-    rtl::OUString               maViewBox;
+    rtl::OUString				maPoints;
+    rtl::OUString				maViewBox;
 
 public:
     TYPEINFO();
 
     SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -147,7 +147,7 @@ public:
     TYPEINFO();
 
     SdXML3DLatheObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -166,7 +166,7 @@ public:
     TYPEINFO();
 
     SdXML3DExtrudeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -176,4 +176,4 @@ public:
     virtual void EndElement();
 };
 
-#endif  //  _XIMP3DOBJECT_HXX
+#endif	//  _XIMP3DOBJECT_HXX

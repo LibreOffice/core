@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,14 +50,14 @@ static USHORT pPrintOptRanges[] =
 
 // -----------------------------------------------------------------------
 
-ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
+ScTpPrintOptions::ScTpPrintOptions( Window*			  pParent,
                                     const SfxItemSet& rCoreAttrs )
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( RID_SCPAGE_PRINT ),
                           rCoreAttrs ),
-        aPagesFL         ( this, ScResId( FL_PAGES ) ),
+        aPagesFL	     ( this, ScResId( FL_PAGES ) ),
         aSkipEmptyPagesCB( this, ScResId( BTN_SKIPEMPTYPAGES ) ),
-        aSheetsFL        ( this, ScResId( FL_SHEETS ) ),
+        aSheetsFL		 ( this, ScResId( FL_SHEETS ) ),
         aSelectedSheetsCB( this, ScResId( BTN_SELECTEDSHEETS ) )
 {
     FreeResource();

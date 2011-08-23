@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -272,7 +272,7 @@ namespace svt { namespace table
             Reference< XAccessible > xAccParent = pParent->GetAccessible();
             if( xAccParent.is() )
             {
-                m_pAccessTable->m_pAccessible = getAccessibleFactory().createAccessibleTableControl(
+                m_pAccessTable->m_pAccessible = getAccessibleFactory().createAccessibleTableControl( 
                     xAccParent, *this
                 );
             }
@@ -612,7 +612,7 @@ IMPL_LINK( TableControl, ImplMouseButtonDownHdl, MouseEvent*, pData )
 {
     CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pData );
      return 1;
-}
+} 
 IMPL_LINK( TableControl, ImplMouseButtonUpHdl, MouseEvent*, pData )
 {
      CallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, pData );

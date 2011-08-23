@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@ private:
     ~ScRefTokenHelper();
 
 public:
-    /**
-     * Compile an array of reference tokens from a data source range string.
-     * The source range may consist of multiple ranges separated by ';'s.
+    /** 
+     * Compile an array of reference tokens from a data source range string. 
+     * The source range may consist of multiple ranges separated by ';'s. 
      */
     static void compileRangeRepresentation(
         ::std::vector<ScSharedTokenRef>& rRefTokens, const ::rtl::OUString& rRangeStr, ScDocument* pDoc,
@@ -60,7 +60,7 @@ public:
 
     static void getRangeListFromTokens(ScRangeList& rRangeList, const ::std::vector<ScSharedTokenRef>& pTokens);
 
-    /**
+    /** 
      * Create a double reference token from a range object.
      */
     static void getTokenFromRange(ScSharedTokenRef& pToken, const ScRange& rRange);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ class SVX_DLLPUBLIC SvxClipboardFmtItem : public SfxPoolItem
     SvxClipboardFmtItem_Impl* pImpl;
 protected:
 
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
 
 public:
     TYPEINFO();
@@ -52,7 +52,7 @@ public:
 
     virtual BOOL QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
     virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
-
+    
     void AddClipbrdFormat( ULONG nId, USHORT nPos = USHRT_MAX );
     void AddClipbrdFormat( ULONG nId, const String& rName,
                             USHORT nPos = USHRT_MAX );

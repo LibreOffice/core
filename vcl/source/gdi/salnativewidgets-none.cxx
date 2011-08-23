@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,11 +71,11 @@ BOOL SalGraphics::hitTestNativeControl( ControlType,
  *
  *  Draws the requested control described by nPart/nState.
  *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:         An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the complete control in VCL frame coordinates.
+ *  aValue:  		An optional value (tristate/numerical/string)
+ *  aCaption:  	A caption or title string (like button text etc)
  */
-BOOL SalGraphics::drawNativeControl(    ControlType,
+BOOL SalGraphics::drawNativeControl(	ControlType,
                             ControlPart,
                             const Rectangle&,
                             ControlState,
@@ -92,11 +92,11 @@ BOOL SalGraphics::drawNativeControl(    ControlType,
  *  OPTIONAL.  Draws the requested text for the control described by nPart/nState.
  *     Used if text not drawn by DrawNativeControl().
  *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:         An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the complete control in VCL frame coordinates.
+ *  aValue:  		An optional value (tristate/numerical/string)
+ *  aCaption:  	A caption or title string (like button text etc)
  */
-BOOL SalGraphics::drawNativeControlText(    ControlType,
+BOOL SalGraphics::drawNativeControlText(	ControlType,
                                 ControlPart,
                                 const Rectangle&,
                                 ControlState,
@@ -116,9 +116,9 @@ BOOL SalGraphics::drawNativeControlText(    ControlType,
  *  within the control that can be safely drawn into without drawing over
  *  the borders of the control.
  *
- *  rControlRegion: The bounding region of the control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:       A caption or title string (like button text etc)
+ *  rControlRegion:	The bounding region of the control in VCL frame coordinates.
+ *  aValue:		An optional value (tristate/numerical/string)
+ *  aCaption:		A caption or title string (like button text etc)
  */
 BOOL SalGraphics::getNativeControlRegion(  ControlType,
                                 ControlPart,

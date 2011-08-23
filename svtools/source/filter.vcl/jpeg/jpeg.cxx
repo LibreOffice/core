@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ extern "C" long JPEGCallback( void* pCallbackData, long nPercent )
 
 #define BUF_SIZE  4096
 
-typedef struct
+typedef struct 
 {
   struct jpeg_destination_mgr pub;  /* public fields */
 
@@ -307,12 +307,12 @@ extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void * in)
 // --------------
 
 JPEGReader::JPEGReader( SvStream& rStm, void* /*pCallData*/, sal_Bool bSetLS ) :
-        rIStm           ( rStm ),
-        pAcc            ( NULL ),
-        pAcc1           ( NULL ),
-        pBuffer         ( NULL ),
-        nLastPos        ( rStm.Tell() ),
-        nLastLines      ( 0 ),
+        rIStm			( rStm ),
+        pAcc			( NULL ),
+        pAcc1			( NULL ),
+        pBuffer			( NULL ),
+        nLastPos		( rStm.Tell() ),
+        nLastLines		( 0 ),
         bSetLogSize     ( bSetLS )
 {
     maUpperName = String::CreateFromAscii( "SVIJPEG", 7 );
@@ -360,26 +360,26 @@ void* JPEGReader::CreateBitmap( void* pParam )
     }
     else
         aBmp = Bitmap( aSize, 24 );
-
+   
     if ( bSetLogSize )
     {
         unsigned long nUnit = ((JPEGCreateBitmapParam*)pParam)->density_unit;
-
-        if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) &&
-            ( (JPEGCreateBitmapParam*) pParam )->X_density &&
+        
+        if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) && 
+            ( (JPEGCreateBitmapParam*) pParam )->X_density && 
             ( (JPEGCreateBitmapParam*) pParam )->Y_density )
         {
             Point       aEmptyPoint;
-            Fraction    aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
-            Fraction    aFractY( 1, ((JPEGCreateBitmapParam*)pParam)->Y_density );
-            MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
-            Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
+            Fraction	aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
+            Fraction	aFractY( 1, ((JPEGCreateBitmapParam*)pParam)->Y_density );
+            MapMode		aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
+            Size		aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
 
             aBmp.SetPrefSize( aPrefSize );
             aBmp.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
         }
     }
-
+    
     pAcc = aBmp.AcquireWriteAccess();
 
     if( pAcc )
@@ -415,11 +415,11 @@ void JPEGReader::FillBitmap()
 {
     if( pBuffer && pAcc )
     {
-        HPBYTE      pTmp;
-        BitmapColor aColor;
-        long        nAlignedWidth;
-        long        nWidth = pAcc->Width();
-        long        nHeight = pAcc->Height();
+        HPBYTE		pTmp;
+        BitmapColor	aColor;
+        long		nAlignedWidth;
+        long		nWidth = pAcc->Width();
+        long		nHeight = pAcc->Height();
 
         if( pAcc->GetBitCount() == 8 )
         {
@@ -467,8 +467,8 @@ void JPEGReader::FillBitmap()
 
 Graphic JPEGReader::CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines )
 {
-    Graphic     aGraphic;
-    const Size  aSizePix( rBitmap.GetSizePixel() );
+    Graphic		aGraphic;
+    const Size	aSizePix( rBitmap.GetSizePixel() );
 
     if( !nLastLines )
     {
@@ -512,11 +512,11 @@ Graphic JPEGReader::CreateIntermediateGraphic( const Bitmap& rBitmap, long nLine
 
 ReadState JPEGReader::Read( Graphic& rGraphic )
 {
-    long        nEndPos;
-    long        nLines;
-    ReadState   eReadState;
-    BOOL        bRet = FALSE;
-    BYTE        cDummy;
+    long		nEndPos;
+    long		nLines;
+    ReadState	eReadState;
+    BOOL		bRet = FALSE;
+    BYTE		cDummy;
 
 #if 1 // TODO: is it possible to get rid of this seek to the end?
     // check if the stream's end is already available
@@ -591,9 +591,9 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
 // --------------
 
 JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
-        rOStm       ( rStm ),
-        pAcc        ( NULL ),
-        pBuffer     ( NULL ),
+        rOStm		( rStm ),
+        pAcc		( NULL ),
+        pBuffer		( NULL ),
         pExpWasGrey ( pExportWasGrey )
 {
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
@@ -628,8 +628,8 @@ void* JPEGWriter::GetScanline( long nY )
         else if( pBuffer )
         {
             BitmapColor aColor;
-            long        nWidth = pAcc->Width();
-            BYTE*       pTmp = pBuffer;
+            long		nWidth = pAcc->Width();
+            BYTE*		pTmp = pBuffer;
 
             if( pAcc->HasPalette() )
             {
@@ -685,8 +685,8 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic )
 
     pAcc = aGraphicBmp.AcquireReadAccess();
 
-    if ( !bGreys )  // bitmap was not explicitely converted into greyscale,
-    {               // check if source is greyscale only
+    if ( !bGreys )	// bitmap was not explicitely converted into greyscale,
+    {				// check if source is greyscale only
 
         sal_Bool bIsGrey = sal_True;
 
@@ -704,7 +704,7 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic )
         if ( bIsGrey )
             bGreys = sal_True;
     }
-
+    
     if( pExpWasGrey )
         *pExpWasGrey = bGreys;
 
@@ -737,9 +737,9 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic )
 
 BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags )
 {
-    JPEGReader* pJPEGReader = (JPEGReader*) rGraphic.GetContext();
-    ReadState   eReadState;
-    BOOL        bRet = TRUE;
+    JPEGReader*	pJPEGReader = (JPEGReader*) rGraphic.GetContext();
+    ReadState	eReadState;
+    BOOL		bRet = TRUE;
 
     if( !pJPEGReader )
         pJPEGReader = new JPEGReader( rStm, pCallerData, ( nImportFlags & GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG ) != 0 );

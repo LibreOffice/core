@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ namespace rptui
         bool bIsField = ( getType() == Field );
         ::rtl::OUStringBuffer aFieldContent;
         if ( bIsField )
-            aFieldContent.appendAscii( "[" );
+            aFieldContent.appendAscii( "[" ); 
         aFieldContent.append( getUndecoratedContent() );
         if ( bIsField )
             aFieldContent.appendAscii( "]" );
@@ -153,9 +153,9 @@ namespace rptui
         return aFieldContent.makeStringAndClear();
     }
     //--------------------------------------------------------------------
-    const ::rtl::OUString& ReportFormula::getUndecoratedContent() const
-    {
-        return m_sUndecoratedContent;
+    const ::rtl::OUString& ReportFormula::getUndecoratedContent() const 
+    { 
+        return m_sUndecoratedContent; 
     }
     const ::rtl::OUString&  ReportFormula::getCompleteFormula() const { return m_sCompleteFormula; }
     bool                    ReportFormula::isValid() const { return getType() != Invalid; }

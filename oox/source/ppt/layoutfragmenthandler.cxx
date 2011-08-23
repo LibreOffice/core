@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,10 +67,10 @@ Reference< XFastContextHandler > LayoutFragmentHandler::createFastChildContext( 
     Reference< XFastContextHandler > xRet = getFastContextHandler();
     switch( aElementToken )
     {
-        case NMSP_PPT|XML_sldLayout:        // CT_SlideLayout
-            mpSlidePersistPtr->setLayoutValueToken( xAttribs->getOptionalValueToken( XML_type, 0 ) );   // CT_SlideLayoutType
+        case NMSP_PPT|XML_sldLayout:		// CT_SlideLayout
+            mpSlidePersistPtr->setLayoutValueToken( xAttribs->getOptionalValueToken( XML_type, 0 ) );	// CT_SlideLayoutType
         break;
-        case NMSP_PPT|XML_hf:               // CT_HeaderFooter
+        case NMSP_PPT|XML_hf:				// CT_HeaderFooter
             xRet.set( new HeaderFooterContext( *this, xAttribs, mpSlidePersistPtr->getHeaderFooter() ) );
         break;
         default:

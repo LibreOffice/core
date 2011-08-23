@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
     osl_decrementInterlockedCount( &m_refCount );
 }
 //--------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
+// TODO: VirtualFunctionFinder: This is virtual function! 
+// 
 OGroup::~OGroup()
 {
     DBG_DTOR( rpt_OGroup,NULL);
@@ -112,14 +112,14 @@ sal_Bool SAL_CALL OGroup::supportsService( const ::rtl::OUString& _rServiceName 
     return ::comphelper::existsValue(_rServiceName,getSupportedServiceNames_Static());
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroup::dispose() throw(uno::RuntimeException)
+void SAL_CALL OGroup::dispose() throw(uno::RuntimeException) 
 {
     GroupPropertySet::dispose();
-    cppu::WeakComponentImplHelperBase::dispose();
+    cppu::WeakComponentImplHelperBase::dispose(); 
 }
 // -----------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
+// TODO: VirtualFunctionFinder: This is virtual function! 
+// 
 void SAL_CALL OGroup::disposing()
 {
     m_xHeader.clear();
@@ -183,7 +183,7 @@ uno::Reference< report::XSection > SAL_CALL OGroup::getHeader() throw (container
         ::osl::MutexGuard aGuard(m_aMutex);
         xRet = m_xHeader;
     }
-
+    
     if ( !xRet.is() )
         throw container::NoSuchElementException();
     return xRet;
@@ -196,7 +196,7 @@ uno::Reference< report::XSection > SAL_CALL OGroup::getFooter() throw (container
         ::osl::MutexGuard aGuard(m_aMutex);
         xRet = m_xFooter;
     }
-
+    
     if ( !xRet.is() )
         throw container::NoSuchElementException();
     return xRet;
@@ -297,7 +297,7 @@ void SAL_CALL OGroup::setParent( const uno::Reference< uno::XInterface >& /*Pare
 // -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
-    //  return uno::Reference< beans::XPropertySetInfo >();
+    //	return uno::Reference< beans::XPropertySetInfo >();
     return GroupPropertySet::getPropertySetInfo();
 }
 // -----------------------------------------------------------------------------
@@ -331,7 +331,7 @@ void SAL_CALL OGroup::removeVetoableChangeListener( const ::rtl::OUString& Prope
     GroupPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void OGroup::setSection(     const ::rtl::OUString& _sProperty
+void OGroup::setSection(	 const ::rtl::OUString& _sProperty
                             ,const sal_Bool& _bOn
                             ,const ::rtl::OUString& _sName
                             ,uno::Reference< report::XSection>& _member)

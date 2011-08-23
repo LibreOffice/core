@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ namespace connectivity
         typedef ::std::map< ::rtl::OUString,
                         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>, comphelper::UStringMixLess > OContainer;
 
-        class ODbaseTable : public ODbaseTable_BASE
+        class ODbaseTable :	public ODbaseTable_BASE
         {
             // der Typ einer dBase datei wird mit dem ersten Byte bestimmt
         public:
-            enum DBFType  { dBaseIII         = 0x03,
+            enum DBFType  {	dBaseIII         = 0x03,
                             dBaseIV          = 0x04,
-                            dBaseV           = 0x05,
-                            VisualFoxPro     = 0x30,
+                            dBaseV	         = 0x05,
+                            VisualFoxPro	 = 0x30,
                             VisualFoxProAuto = 0x31, // Visual FoxPro w. AutoIncrement field
                             dBaseFS          = 0x43,
                             dBaseFSMemo      = 0xB3,
@@ -60,14 +60,14 @@ namespace connectivity
                             dBaseIVMemoSQL   = 0x8E,
                             FoxProMemo       = 0xF5
                           };
-            enum DBFMemoType {  MemodBaseIII = 0,
+            enum DBFMemoType {	MemodBaseIII = 0,
                                 MemodBaseIV,
                                 MemoFoxPro
                             };
 
         private:
             struct DBFHeader {                       /* Kopfsatz-Struktur            */
-                                DBFType db_typ;                         /* Dateityp                     */
+                                DBFType	db_typ;		                    /* Dateityp						*/
                                 BYTE    db_aedat[3];                    /* Datum der letzen Aenderung   */
                                                                         /* JJ MM TT                     */
                                 sal_uInt32   db_anz;                         /* Anzahl der Saetze            */
@@ -85,20 +85,20 @@ namespace connectivity
                             };
             struct DBFMemoHeader
                             {
-                                DBFMemoType db_typ;                     /* Dateityp                     */
+                                DBFMemoType	db_typ;						/* Dateityp						*/
                                 UINT32  db_next;                        /* naechster freier Block       */
                                 USHORT  db_size;                        /* Blockgroesse: dBase 3 fest   */
                             };
 
-            ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
-            ::std::vector<sal_Int32> m_aPrecisions; // same as aboth
+            ::std::vector<sal_Int32> m_aTypes;		// holds all type for columns just to avoid to ask the propertyset
+            ::std::vector<sal_Int32> m_aPrecisions;	// same as aboth
             ::std::vector<sal_Int32> m_aScales;
             ::std::vector<sal_Int32> m_aRealFieldLengths;
-            DBFHeader       m_aHeader;
-            DBFMemoHeader   m_aMemoHeader;
-            SvStream*       m_pMemoStream;
+            DBFHeader		m_aHeader;
+            DBFMemoHeader	m_aMemoHeader;
+            SvStream*		m_pMemoStream;
             rtl_TextEncoding m_eEncoding;
-            sal_Bool        m_bWriteableMemo;
+            sal_Bool		m_bWriteableMemo;
 
             void alterColumn(sal_Int32 index,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor ,
@@ -125,7 +125,7 @@ namespace connectivity
 
         protected:
             virtual void FileClose();
-//          using ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper;
+//			using ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper;
 
         public:
             virtual void refreshColumns();
@@ -161,8 +161,8 @@ namespace connectivity
             // XRename
             virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
-            BOOL    DropImpl();
-            BOOL    CreateImpl();
+            BOOL	DropImpl();
+            BOOL	CreateImpl();
 
 
             virtual BOOL InsertRow(OValueRefVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
@@ -172,8 +172,8 @@ namespace connectivity
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
 
-            static String   getEntry(file::OConnection* _pConnection,const ::rtl::OUString& _sURL );
-            static BOOL     Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
+            static String	getEntry(file::OConnection* _pConnection,const ::rtl::OUString& _sURL );
+            static BOOL		Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
 
             virtual void refreshHeader();
 

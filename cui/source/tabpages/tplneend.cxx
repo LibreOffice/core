@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@
 
 /*************************************************************************
 |*
-|*  Dialog zum Definieren von Linienenden-Stilen
+|*	Dialog zum Definieren von Linienenden-Stilen
 |*
 \************************************************************************/
 
@@ -89,7 +89,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
     aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
     aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
+    aBtnSave 		    ( this, CUI_RES( BTN_SAVE ) ),
     aFiTip              ( this, CUI_RES( FI_TIP ) ),
     aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
 
@@ -185,13 +185,13 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
                 aLbLineEnds.SelectEntryPos( *pPosLineEndLb );
                 SelectLineEndHdl_Impl( this );
             }
-            INetURLObject   aURL( pLineEndList->GetPath() );
+            INetURLObject	aURL( pLineEndList->GetPath() );
 
             aURL.Append( pLineEndList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-/*          // Ermitteln (evtl. abschneiden) des Namens und in
+/*			// Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
             if ( aURL.getBase().Len() > 18 )
             {
@@ -628,7 +628,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
                     pLineEndList->SetName( aURL.getName() );
 
-/*                  // Ermitteln (evtl. abschneiden) des Namens und in
+/*					// Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
                     String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
@@ -693,8 +693,8 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        INetURLObject   aURL( aDlg.GetPath() );
-        INetURLObject   aPathURL( aURL );
+        INetURLObject	aURL( aDlg.GetPath() );
+        INetURLObject	aPathURL( aURL );
 
         aPathURL.removeSegment();
         aPathURL.removeFinalSlash();
@@ -704,7 +704,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
         if( pLineEndList->Save() )
         {
-/*          // Ermitteln (evtl. abschneiden) des Namens und in
+/*			// Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String aString( CUI_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );

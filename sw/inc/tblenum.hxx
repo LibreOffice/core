@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,28 +43,28 @@ namespace nsTblChgWidthHeightType
 
 
     // folgende koennen hinein verodert werden
-    const TblChgWidthHeightType WH_FLAG_INSDEL  = 0x4000;           // Insert/Del-Modus: das Bigger-Flag
+    const TblChgWidthHeightType WH_FLAG_INSDEL	= 0x4000;			// Insert/Del-Modus: das Bigger-Flag
                                                                     // besagt was passiert:
                                                                     // bBigger -> Box wird entfernt
                                                                     // !bBigger-> Box wird eingefuegt
-    const TblChgWidthHeightType WH_FLAG_BIGGER  = 0x8000;           // Box wird groesser -> sonst kleiner
+    const TblChgWidthHeightType WH_FLAG_BIGGER	= 0x8000;			// Box wird groesser -> sonst kleiner
 }
 
 enum TblChgMode
 {
-    TBLFIX_CHGABS,          // Tabelle feste Breite, den Nachbar andern
-    TBLFIX_CHGPROP,         // Tabelle feste Breite, alle Nachbarn aendern
-    TBLVAR_CHGABS           // Tabelle variable, alle Nachbarn aendern
+    TBLFIX_CHGABS,			// Tabelle feste Breite, den Nachbar andern
+    TBLFIX_CHGPROP,			// Tabelle feste Breite, alle Nachbarn aendern
+    TBLVAR_CHGABS			// Tabelle variable, alle Nachbarn aendern
 };
 
 
 enum SplitTbl_HeadlineOption
 {
-    HEADLINE_NONE = 0,          // lasse alles wie es ist
-    HEADLINE_BORDERCOPY,        // von der davor obere Line der vorhergehen Line
-    HEADLINE_CNTNTCOPY,         // kopiere die 1. Line komplett mit Inhalt
-    HEADLINE_BOXATTRCOPY,       // kopiere von der 1. Line die Box Attribute
-    HEADLINE_BOXATRCOLLCOPY     // kopiere von der 1. Line die Box Attribute
+    HEADLINE_NONE = 0,     		// lasse alles wie es ist
+    HEADLINE_BORDERCOPY,     	// von der davor obere Line der vorhergehen Line
+    HEADLINE_CNTNTCOPY, 		// kopiere die 1. Line komplett mit Inhalt
+    HEADLINE_BOXATTRCOPY,		// kopiere von der 1. Line die Box Attribute
+    HEADLINE_BOXATRCOLLCOPY		// kopiere von der 1. Line die Box Attribute
                                 // und die Absatzvorlagen
 };
 

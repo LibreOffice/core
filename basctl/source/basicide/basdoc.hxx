@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@ class SfxPrinter;
 
 class BasicDocShell: public SfxObjectShell
 {
-    SfxPrinter*         pPrinter;
+    SfxPrinter*			pPrinter;
 
 protected:
-    virtual void        FillStatusBar( StatusBar& rBar);
+    virtual void		FillStatusBar( StatusBar& rBar);
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
                           USHORT nAspect = ASPECT_CONTENT );
     virtual void    FillClass( SvGlobalName * pClassName,
@@ -59,8 +59,8 @@ public:
                         BasicDocShell();
                         ~BasicDocShell();
 
-    SfxPrinter*         GetPrinter( BOOL bCreate );
-    void                SetPrinter( SfxPrinter* pPrinter );
+    SfxPrinter*			GetPrinter( BOOL bCreate );
+    void				SetPrinter( SfxPrinter* pPrinter );
 };
 
-#endif  // _BASDOC_HXX
+#endif	// _BASDOC_HXX

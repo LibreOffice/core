@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,19 +24,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_ProcedureColumn_idl__
-#define __com_sun_star_sdbc_ProcedureColumn_idl__
-
- module com {  module sun {  module star {  module sdbc {
-
-
+#ifndef __com_sun_star_sdbc_ProcedureColumn_idl__ 
+#define __com_sun_star_sdbc_ProcedureColumn_idl__ 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ 
 /** indicates the type of a procedure column.
  */
 published constants ProcedureColumn
-{
-
-    /** indicates that the type of the column is unknown. A possible value for
-             the column
+{ 
+     
+    /** indicates that the type of the column is unknown. A possible value for 
+             the column 
+             <code>COLUMN_TYPE</code>
+             in the 
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+             returned by the method 
+             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
+             .
+     */
+    const long UNKNOWN		 	= 0; 
+    //------------------------------------------------------------------------- 
+     
+    /** indicates that the column stores IN parameters. 
+             A possible value for the column 
+             <code>COLUMN_TYPE</code>
+             in the 
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+             returned by the method
+             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
+             .
+     */
+    const long IN				= 1; 
+    //------------------------------------------------------------------------- 
+     
+    /** indicates that the column stores INOUT parameters. 
+             A possible value for the column 
              <code>COLUMN_TYPE</code>
              in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
@@ -44,11 +68,11 @@ published constants ProcedureColumn
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
      */
-    const long UNKNOWN          = 0;
-    //-------------------------------------------------------------------------
-
-    /** indicates that the column stores IN parameters.
-             A possible value for the column
+    const long INOUT		 	= 2; 
+    //------------------------------------------------------------------------- 
+     
+    /** indicates that the column stores results. 
+             A possible value for the column 
              <code>COLUMN_TYPE</code>
              in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
@@ -56,11 +80,11 @@ published constants ProcedureColumn
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
      */
-    const long IN               = 1;
-    //-------------------------------------------------------------------------
-
-    /** indicates that the column stores INOUT parameters.
-             A possible value for the column
+    const long RESULT 			= 3; 
+    //------------------------------------------------------------------------- 
+     
+    /** indicates that the column stores OUT parameters. 
+             A possible value for the column 
              <code>COLUMN_TYPE</code>
              in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
@@ -68,11 +92,11 @@ published constants ProcedureColumn
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
      */
-    const long INOUT            = 2;
-    //-------------------------------------------------------------------------
-
-    /** indicates that the column stores results.
-             A possible value for the column
+    const long OUT		 		= 4; 
+    //------------------------------------------------------------------------- 
+     
+    /** Indicates that the column stores return values. 
+             A possible value for the column 
              <code>COLUMN_TYPE</code>
              in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
@@ -80,37 +104,13 @@ published constants ProcedureColumn
              <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
              .
      */
-    const long RESULT           = 3;
-    //-------------------------------------------------------------------------
-
-    /** indicates that the column stores OUT parameters.
-             A possible value for the column
-             <code>COLUMN_TYPE</code>
-             in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
-             returned by the method
-             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
-             .
-     */
-    const long OUT              = 4;
-    //-------------------------------------------------------------------------
-
-    /** Indicates that the column stores return values.
-             A possible value for the column
-             <code>COLUMN_TYPE</code>
-             in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
-             returned by the method
-             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getProcedureColumns()</member>
-             .
-     */
-    const long RETURN           = 5;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    const long RETURN 			= 5; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

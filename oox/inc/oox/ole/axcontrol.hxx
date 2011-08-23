@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ public:
     virtual             ~ControlConverter();
 
     // Generic conversion -----------------------------------------------------
-
+    
     /** Converts the passed position in 1/100 mm to UNO properties. */
     void                convertPosition(
                             PropertyMap& rPropMap,
@@ -303,7 +303,7 @@ protected:
 private:
     /** Returns the data part identifier according to the model version. */
     sal_uInt32          getDataPartId() const;
-
+    
     bool                readPartHeader( BinaryInputStream& rInStrm,
                             sal_uInt32 nExpPartId,
                             sal_uInt16 nExpMajor = SAL_MAX_UINT16,

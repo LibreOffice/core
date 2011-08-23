@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURELISTENER_HDL_
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hdl>
 #endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_ 
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTOR_HPP_
@@ -97,7 +97,7 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::view;
 
 DBG_NAME(DBTreeListBox)
-#define SPACEBETWEENENTRIES     4
+#define SPACEBETWEENENTRIES		4
 //========================================================================
 // class DBTreeListBox
 //========================================================================
@@ -123,7 +123,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
     ,m_xORB(_rxORB)
 {
     DBG_CTOR(DBTreeListBox,NULL);
-    init();
+    init();	
 }
 // -----------------------------------------------------------------------------
 void DBTreeListBox::init()
@@ -150,7 +150,7 @@ DBTreeListBox::~DBTreeListBox()
 //------------------------------------------------------------------------
 SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry* pStart, const IEntryFilter* _pFilter ) const
 {
-    SvLBoxTreeList* myModel = GetModel();
+    SvLBoxTreeList*	myModel = GetModel();
     SvTreeEntryList* pChilds = myModel->GetChildList(pStart);
     SvLBoxEntry* pEntry = NULL;
     if ( pChilds )
@@ -380,7 +380,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
-    USHORT      nCode = rKEvt.GetKeyCode().GetCode();
+    USHORT		nCode = rKEvt.GetKeyCode().GetCode();
     sal_Bool bHandled = sal_False;
 
     if(eFunc != KEYFUNC_DONTKNOW)
@@ -438,7 +438,7 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         // 2002-12-02 - 105831 - fs@openoffice.org
     }
 
-    if ( !bHandled )
+    if ( !bHandled ) 
         SvTreeListBox::KeyInput(rKEvt);
 }
 // -----------------------------------------------------------------------------
@@ -458,7 +458,7 @@ BOOL DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText 
         m_aSelectedEntries.erase( pEntry );
     }
     SetEntryText(pEntry,aEntry.aNewText);
-
+    
     return FALSE;  // we never want that the base change our text
 }
 
@@ -623,20 +623,20 @@ namespace
         throw IllegalArgumentException();
         // API bug: this should be a NoSupportException
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL SelectionSupplier::getSelection(  ) throw (RuntimeException)
     {
         return m_aSelection;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
         OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
@@ -742,7 +742,7 @@ IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
 {
     implStopSelectionTimer();
 
-    m_aSelChangeHdl.Call( NULL );
+    m_aSelChangeHdl.Call( NULL );	
     return 0L;
 }
 // -----------------------------------------------------------------------------
@@ -752,5 +752,5 @@ void DBTreeListBox::StateChanged( StateChangedType nStateChange )
         implStopSelectionTimer();
 }
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................

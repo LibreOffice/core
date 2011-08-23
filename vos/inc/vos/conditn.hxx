@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,16 +30,16 @@
 #define _VOS_CONDITN_HXX_
 
 #ifndef _OSL_CONDITN_H_
-#   include <osl/conditn.h>
+#	include <osl/conditn.h>
 #endif
 #include <osl/time.h>
-#   include <vos/object.hxx>
+#	include <vos/object.hxx>
 
 namespace vos
 {
 
 /** ICondition
-
+    
     Interface for a thread-spanning condition. If a condition-object
     is created, its initial condition is False. You can check the
     condition nonblocking with "check()" or wait for it to become set
@@ -55,9 +55,9 @@ public:
 
     ICondition() { }
     virtual ~ICondition() { }
-
-
-
+    
+    
+    
     enum TResult
     {
         result_ok          = osl_cond_result_ok,
@@ -90,7 +90,7 @@ public:
 
 
 /** OCondition
-
+    
     Implements the ICondition interface.
 
     @author  Bernd Hofner
@@ -128,11 +128,11 @@ public:
 
 protected:
 
-    oslCondition    m_Condition;
+    oslCondition	m_Condition;
 
 };
 
 }
 
-#endif  // _VOS_CONDITN_HXX_
+#endif	// _VOS_CONDITN_HXX_
 

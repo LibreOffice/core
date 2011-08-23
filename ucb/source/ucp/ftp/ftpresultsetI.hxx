@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@
 
 
 namespace ftp {
-
+    
     class ResultSetI
         : public ResultSetBase
     {
     public:
-
-        ResultSetI(
+        
+        ResultSetI( 
             const com::sun::star::uno::Reference<
             com::sun::star::lang::XMultiServiceFactory>& xMSF,
             const com::sun::star::uno::Reference<
@@ -53,10 +53,10 @@ namespace ftp {
             const com::sun::star::uno::Sequence<
             com::sun::star::ucb::NumberedSortingInfo >& seqSort,
             const std::vector<FTPDirentry>&  dirvec);
-
+        
     private:
     };
-
+    
 }
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -912,7 +912,7 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
 {
     const Image*        pImg  = 0;
     const String*       pTxt  = 0;
-          RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
+          RecovDocList*	pList = static_cast< RecovDocList* >(&aDevice);
 
     BOOL      bHC         = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -1606,22 +1606,22 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
     ErrorRepWelcomeDialog::ErrorRepWelcomeDialog( Window* _pParent, sal_Bool _bAllowBack )
             :IExtendedTabPage        ( _pParent, SVX_RES( RID_SVXPAGE_ERR_REP_WELCOME ) )
-            ,maTitleWin     ( this, SVX_RES( WIN_RECOV_TITLE ) )
+            ,maTitleWin		( this, SVX_RES( WIN_RECOV_TITLE ) )
             ,maTitleFT      ( this, SVX_RES( FT_RECOV_TITLE ) )
             ,maTitleFL      ( this, SVX_RES( FL_RECOV_TITLE ) )
-            ,maDescrFT      ( this, SVX_RES( FT_RECOV_DESCR ) )
-            ,maBottomFL     ( this, SVX_RES( FL_RECOV_BOTTOM ) )
-            ,maPrevBtn      ( this, SVX_RES( BTN_RECOV_PREV ) )
-            ,maNextBtn      ( this, SVX_RES( BTN_RECOV_NEXT ) )
-            ,maCancelBtn    ( this, SVX_RES( BTN_RECOV_CANCEL ) )
+            ,maDescrFT		( this, SVX_RES( FT_RECOV_DESCR ) )
+            ,maBottomFL		( this, SVX_RES( FL_RECOV_BOTTOM ) )
+            ,maPrevBtn		( this, SVX_RES( BTN_RECOV_PREV ) )
+            ,maNextBtn		( this, SVX_RES( BTN_RECOV_NEXT ) )
+            ,maCancelBtn	( this, SVX_RES( BTN_RECOV_CANCEL ) )
         {
             FreeResource();
 
-            Wallpaper       aBack( GetSettings().GetStyleSettings().GetWindowColor() );
+            Wallpaper		aBack( GetSettings().GetStyleSettings().GetWindowColor() );
             maTitleWin.SetBackground( aBack );
             maTitleFT.SetBackground( aBack );
 
-            Font    aFnt( maTitleFT.GetFont() );
+            Font	aFnt( maTitleFT.GetFont() );
             aFnt.SetWeight( WEIGHT_BOLD );
             maTitleFT.SetFont( aFnt );
 
@@ -1712,26 +1712,26 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         }
 
         ErrorRepSendDialog::ErrorRepSendDialog( Window* _pParent )
-            :IExtendedTabPage       ( _pParent, SVX_RES( RID_SVXPAGE_ERR_REP_SEND ) )
-            ,maTitleWin     ( this, SVX_RES( WIN_RECOV_TITLE ) )
+            :IExtendedTabPage	    ( _pParent, SVX_RES( RID_SVXPAGE_ERR_REP_SEND ) )
+            ,maTitleWin		( this, SVX_RES( WIN_RECOV_TITLE ) )
             ,maTitleFT      ( this, SVX_RES( FT_RECOV_TITLE ) )
             ,maTitleFL      ( this, SVX_RES( FL_RECOV_TITLE ) )
-            ,maDescrFT      ( this, SVX_RES( FT_RECOV_DESCR ) )
+            ,maDescrFT		( this, SVX_RES( FT_RECOV_DESCR ) )
 
-            ,maDocTypeFT    ( this, SVX_RES( FT_ERRSEND_DOCTYPE ) )
-            ,maDocTypeED    ( this, SVX_RES( ED_ERRSEND_DOCTYPE ) )
-            ,maUsingFT      ( this, SVX_RES( FT_ERRSEND_USING ) )
-            ,maUsingML      ( this, SVX_RES( ML_ERRSEND_USING ) )
-            ,maShowRepBtn   ( this, SVX_RES( BTN_ERRSEND_SHOWREP ) )
-            ,maOptBtn       ( this, SVX_RES( BTN_ERRSEND_OPT ) )
-            ,maContactCB    ( this, SVX_RES( CB_ERRSEND_CONTACT ) )
-            ,maEMailAddrFT  ( this, SVX_RES( FT_ERRSEND_EMAILADDR ) )
-            ,maEMailAddrED  ( this, SVX_RES( ED_ERRSEND_EMAILADDR ) )
+            ,maDocTypeFT	( this, SVX_RES( FT_ERRSEND_DOCTYPE ) )
+            ,maDocTypeED	( this, SVX_RES( ED_ERRSEND_DOCTYPE ) )
+            ,maUsingFT		( this, SVX_RES( FT_ERRSEND_USING ) )
+            ,maUsingML		( this, SVX_RES( ML_ERRSEND_USING ) )
+            ,maShowRepBtn	( this, SVX_RES( BTN_ERRSEND_SHOWREP ) )
+            ,maOptBtn		( this, SVX_RES( BTN_ERRSEND_OPT ) )
+            ,maContactCB	( this, SVX_RES( CB_ERRSEND_CONTACT ) )
+            ,maEMailAddrFT	( this, SVX_RES( FT_ERRSEND_EMAILADDR ) )
+            ,maEMailAddrED	( this, SVX_RES( ED_ERRSEND_EMAILADDR ) )
 
-            ,maBottomFL     ( this, SVX_RES( FL_RECOV_BOTTOM ) )
-            ,maPrevBtn      ( this, SVX_RES( BTN_RECOV_PREV ) )
-            ,maNextBtn      ( this, SVX_RES( BTN_RECOV_NEXT ) )
-            ,maCancelBtn    ( this, SVX_RES( BTN_RECOV_CANCEL ) )
+            ,maBottomFL		( this, SVX_RES( FL_RECOV_BOTTOM ) )
+            ,maPrevBtn		( this, SVX_RES( BTN_RECOV_PREV ) )
+            ,maNextBtn		( this, SVX_RES( BTN_RECOV_NEXT ) )
+            ,maCancelBtn	( this, SVX_RES( BTN_RECOV_CANCEL ) )
         {
             FreeResource();
 
@@ -1821,7 +1821,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         IMPL_LINK( ErrorRepSendDialog, ContactCBHdl, void*, EMPTYARG )
         {
-            bool    bCheck = maContactCB.IsChecked();
+            bool	bCheck = maContactCB.IsChecked();
             maEMailAddrFT.Enable( bCheck );
             maEMailAddrED.Enable( bCheck );
             return 0;
@@ -1901,7 +1901,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
     ///////////////////////////////////////////////////////////////////////
 
         ErrorRepOptionsDialog::ErrorRepOptionsDialog( Window* _pParent, ErrorRepParams& _rParams )
-            :ModalDialog    ( _pParent, SVX_RES( RID_SVX_MDLG_ERR_REP_OPTIONS ) )
+            :ModalDialog	( _pParent, SVX_RES( RID_SVX_MDLG_ERR_REP_OPTIONS ) )
             ,maProxyFL( this, SVX_RES( FL_ERROPT_PROXY ) )
             ,maSystemBtn( this, SVX_RES( BTN_ERROPT_SYSTEM ) )
             ,maDirectBtn( this, SVX_RES( BTN_ERROPT_DIRECT ) )
@@ -1971,7 +1971,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         IMPL_LINK( ErrorRepOptionsDialog, ManualBtnHdl, void*, EMPTYARG )
         {
-            bool    bCheck = maManualBtn.IsChecked();
+            bool	bCheck = maManualBtn.IsChecked();
             maProxyServerFT.Enable( bCheck );
             maProxyServerEd.Enable( bCheck );
             maProxyPortFT.Enable( bCheck );
@@ -2009,7 +2009,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             ExtMultiLineEdit( pParent, rResId )
         {
             // fixed font for error report
-            Color   aColor  = GetTextColor();
+            Color	aColor	= GetTextColor();
 
             Font aFont = OutputDevice::GetDefaultFont(
                 DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE );
@@ -2037,11 +2037,11 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
 
 #if defined(WNT) || defined(OS2)
-            OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+            OUString	ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
 #elif defined( MACOSX )
-            OUString    ustrValue = OUString::createFromAscii("~");
+            OUString	ustrValue = OUString::createFromAscii("~");
 #else
-            OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
+            OUString	ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
 #endif
             Bootstrap::expandMacros( ustrValue );
 
@@ -2052,11 +2052,11 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         }
 
 #if defined(WNT) || defined(OS2)
-#define CHKFILE "crashdat.chk"
+#define CHKFILE	"crashdat.chk"
 #define STKFILE "crashdat.stk"
 #define PRVFILE "crashdat.prv"
 #else
-#define CHKFILE ".crash_report_checksum"
+#define CHKFILE	".crash_report_checksum"
 #define STKFILE ".crash_report_frames"
 #define PRVFILE ".crash_report_preview"
 #endif
@@ -2083,7 +2083,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         static ::rtl::OUString GetPreviewURL()
         {
-            ::rtl::OUString aURL = GetCrashConfigDir();
+            ::rtl::OUString	aURL = GetCrashConfigDir();
 
             aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
             aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRVFILE ) );
@@ -2093,19 +2093,19 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         static String LoadCrashFile( const ::rtl::OUString &rURL )
         {
-            String  aFileContent;
+            String	aFileContent;
             ::osl::File aFile( rURL );
 
             printf( "Loading %s:", OString( rURL.getStr(), rURL.getLength(), osl_getThreadTextEncoding() ).getStr() );
             if ( ::osl::FileBase::E_None == aFile.open( OpenFlag_Read ) )
             {
-                ::rtl::OString  aContent;
-                ::osl::FileBase::RC result;
-                sal_uInt64  aBytesRead;
+                ::rtl::OString	aContent;
+                ::osl::FileBase::RC	result;
+                sal_uInt64	aBytesRead;
 
                 do
                 {
-                    sal_Char    aBuffer[256];
+                    sal_Char	aBuffer[256];
 
                     result = aFile.read( aBuffer, sizeof(aBuffer), aBytesRead );
 
@@ -2116,7 +2116,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                     }
                 } while ( ::osl::FileBase::E_None == result && aBytesRead );
 
-                ::rtl::OUString ustrContent( aContent.getStr(), aContent.getLength(), RTL_TEXTENCODING_UTF8 );
+                ::rtl::OUString	ustrContent( aContent.getStr(), aContent.getLength(), RTL_TEXTENCODING_UTF8 );
                 aFileContent = ustrContent;
 
                 aFile.close();
@@ -2141,7 +2141,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
             mnMinHeight = ( maContentML.GetSizePixel().Height() / 2 );
 
-            String  aPreview = LoadCrashFile( GetPreviewURL() );
+            String	aPreview = LoadCrashFile( GetPreviewURL() );
             ErrorRepSendDialog *pMainDlg = (ErrorRepSendDialog *)_pParent;
 
             String aSeperator = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\r\n\r\n================\r\n\r\n" ) );
@@ -2178,5 +2178,5 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             maOKBtn.SetPosPixel( aNewPoint );
         }
     }   // namespace DocRecovery
-}   // namespace svx
+}	// namespace svx
 

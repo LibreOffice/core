@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
+    SVX_DLLPRIVATE virtual FASTBOOL		HasMetrics() const;
 };
 
 /*************************************************************************
@@ -82,7 +82,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
+    SVX_DLLPRIVATE virtual FASTBOOL		HasMetrics() const;
 };
 
 #endif

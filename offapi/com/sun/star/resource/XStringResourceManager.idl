@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_resource_XStringResourceManager_idl__
 #define __com_sun_star_resource_XStringResourceManager_idl__
 
-#ifndef __com_sun_star_resource_MissingResourceException_idl__
-#include <com/sun/star/resource/MissingResourceException.idl>
+#ifndef __com_sun_star_resource_MissingResourceException_idl__ 
+#include <com/sun/star/resource/MissingResourceException.idl> 
 #endif
 
-#ifndef __com_sun_star_resource_XStringResourceResolver_idl__
-#include <com/sun/star/resource/XStringResourceResolver.idl>
+#ifndef __com_sun_star_resource_XStringResourceResolver_idl__ 
+#include <com/sun/star/resource/XStringResourceResolver.idl> 
 #endif
 
 #ifndef __com_sun_star_container_ElementExistException_idl__
@@ -54,26 +54,26 @@
 
 //=============================================================================
 
-module com { module sun { module star { module resource {
+module com { module sun { module star { module resource { 
 
 //=============================================================================
-/**
-    Interface to manage a resource string table containing a set of
+/** 
+    Interface to manage a resource string table containing a set of 
     strings for different locales.
 
-    The interface is derived from
+    The interface is derived from 
     <type scope="com::sun::star::resource">XStringResourceResolver</type>
     that allows to access the string table but not to modify it. This
     interface also allows to modify the string table.
-
+    
     It's designed to be used in the context of creating a string table,
     e.g. from a string table editor or from a Dialog Editor designing
     localized dialogs.
-
+    
 */
 interface XStringResourceManager: com::sun::star::resource::XStringResourceResolver
 {
-    /**
+    /** 
         Returns the resource's read only state
 
         @return  <TRUE/> if the resource is read only, otherwise <FALSE/>
@@ -87,16 +87,16 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
             Specifies the current locale to be used.
 
         @param FindClosestMatch
-            <p>If true: If the exact locale that should be set is not available
+            <p>If true: If the exact locale that should be set is not available 
             the method tries to find the closest match. E.g. if en_US is re-
             quired but not available, en would be the next choice. Finally
-            the default locale will be used <TRUE/>.
-
-            <p>If false: If the exact locale that should be set is not available
+            the default locale will be used <TRUE/>. 
+            
+            <p>If false: If the exact locale that should be set is not available 
             a <type scope="com::sun::star::lang">IllegalArgumentException</type>
             is thrown.
-
-            <p>If false: If the exact locale that should be set is not available
+            
+            <p>If false: If the exact locale that should be set is not available 
             a <type scope="com::sun::star::lang">IllegalArgumentException</type>
             is thrown.
     */
@@ -111,8 +111,8 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
     /** Sets the default locale to be used
 
         @param aLocale
-            Specifies the default locale to be used.
-            If this locale is not available a
+            Specifies the default locale to be used. 
+            If this locale is not available a 
             <type scope="com::sun::star::lang">IllegalArgumentException</type>
             is thrown.
 
@@ -153,7 +153,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         associated with it will be overwritten, otherwise a new
         entry will be created.
 
-        It's not recommended to use this method to get the best
+        It's not recommended to use this method to get the best 
         performance as the implementation may be optimized for
         the use of the current locale.
 
@@ -165,7 +165,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
         @param locale
             The locale the string should be set for.
-            The locale has to match exactly with one of the locales provided by
+            The locale has to match exactly with one of the locales provided by 
             <member>getLocales</member>. A closest match search is not supported.
 
         @throws <type scope="com::sun::star::lang">NoSupportException</type>
@@ -181,7 +181,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
 
     /**
-        Removes a Resource ID including the corresponding string for
+        Removes a Resource ID including the corresponding string for 
         the current locale.
 
         @param ResourceID
@@ -201,7 +201,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
 
     /**
-        Removes a Resource ID including the corresponding string for
+        Removes a Resource ID including the corresponding string for 
         s specific locale.
 
         @param ResourceID
@@ -209,7 +209,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
         @param locale
             The locale the Resource ID should be removed for.
-            The locale has to match exactly with one of the locales provided by
+            The locale has to match exactly with one of the locales provided by 
             <member>getLocales</member>. A closest match search is not supported.
 
         @throws
@@ -226,9 +226,9 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
 
     /**
-        Creates a new locale.
-
-        <p>For each existing ResourceID an empty string
+        Creates a new locale. 
+        
+        <p>For each existing ResourceID an empty string 
         will be created. The first locale created will
         automatically be the first default locale.
         Otherwise strings for all already created IDs
@@ -240,7 +240,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
         @throws
         <type scope="com::sun::star::lang">IllegalArgumentException</type>
-        if the Locale is not valid.
+        if the Locale is not valid.	
 
         @throws
         <type scope="com::sun::star::lang">NoSupportException</type>
@@ -272,10 +272,10 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
     /**
         Provides a numeric id that is unique within all Resource IDs
         used in the string table.
-
+        
         This method takes into account all Resource IDs starting with
-        a decimal number and only evaluates the ID until the first non
-        digit character is reached. This allows to extend unique IDs
+        a decimal number and only evaluates the ID until the first non 
+        digit character is reached. This allows to extend unique IDs 
         with individual identifiers without breaking the mechanism of
         this method.
 
@@ -285,12 +285,12 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         ID "111.MyId.Something.Else" -> numeric id 111
         ID "No Digits" -> not considered for numeric id
 
-        The id returned will be 0 for an empty string table and it will
-        be reset to 0 if all locales are removed. In all other cases
+        The id returned will be 0 for an empty string table and it will 
+        be reset to 0 if all locales are removed. In all other cases 
         this method returns the maximum numeric id used so far at the
-        beginning of a Resource ID incremented by 1. When calling this
-        method more than once always the same number will be returned
-        until this number is really used at the beginning of a new
+        beginning of a Resource ID incremented by 1. When calling this 
+        method more than once always the same number will be returned 
+        until this number is really used at the beginning of a new 
         Resource ID passed to <member>setString</member> or
         <member>setStringForLocale</member>.
 
@@ -302,7 +302,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         @throws
         <type scope="com::sun::star::lang">NoSupportException</type>
         if the next available id exceeds the range of type long.
-        So it's not recommended to use own Resource IDs starting
+        So it's not recommended to use own Resource IDs starting 
         with a decimal number near to the maximum long value if
         this methods should be used.
     */
@@ -312,6 +312,6 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

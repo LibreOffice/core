@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,15 +92,15 @@ namespace comphelper
         have UnoType be something different from XInterface, governed
         by the usage of the C++ interface)
 
-        @sample ImplementationReference< MyCppType, XMyInterface >
+        @sample ImplementationReference< MyCppType, XMyInterface > 
 
-        @sample ImplementationReference< MyAbstractCppType, XMyInterface, XInterface >
+        @sample ImplementationReference< MyAbstractCppType, XMyInterface, XInterface > 
         for an abstract C++ class
 
         @see ::rtl::Reference
 
      */
-    template < class CppType,
+    template < class CppType, 
                class UnoType,
                class XIfType=UnoType > class ImplementationReference
     {
@@ -111,7 +111,7 @@ namespace comphelper
         typedef XIfType UnambiguousXInterfaceType;
 
         /** Default-construct an ImplementationReference
-
+    
             Uno reference will be invalid, implementation pointer will
             be NULL.
          */
@@ -195,28 +195,28 @@ namespace comphelper
             Compatibility method to get an auto_ptr-compatible
             interface
          */
-        ImplementationType*         get() { return mpImpl; }
-        const ImplementationType*   get() const { return mpImpl; }
+        ImplementationType* 		get() { return mpImpl; }
+        const ImplementationType* 	get() const { return mpImpl; }        
 
         /** Release all references
 
             Compatibility method to get an auto_ptr-compatible
             interface
          */
-        void                        reset() { dispose(); }
+        void						reset() { dispose(); }
 
         /** Release all references
-
+            
             This method releases the UNO interface reference, and
             clears the C++ pointer to NULL.
          */
-        void                        dispose() { mxRef = NULL; mpImpl=NULL; }
+        void						dispose() { mxRef = NULL; mpImpl=NULL; }        
 
-        ImplementationType*         operator->() { return mpImpl; }
-        const ImplementationType*   operator->() const { return mpImpl; }
+        ImplementationType* 		operator->() { return mpImpl; }
+        const ImplementationType* 	operator->() const { return mpImpl; }
 
-        ImplementationType&         operator*() { return *mpImpl; }
-        const ImplementationType&   operator*() const { return *mpImpl; }
+        ImplementationType& 		operator*() { return *mpImpl; }
+        const ImplementationType& 	operator*() const { return *mpImpl; }
 
         /// Access to the underlying UNO reference, without extra querying
         ::com::sun::star::uno::Reference< UnoInterfaceType > getRef() { return mxRef; }
@@ -230,7 +230,7 @@ namespace comphelper
         // ImplementationReference& operator= ( const ImplementationReference& );
 
         /** Comparison operator
-
+            
             Object identity is defined to be identity of the
             implementation pointers. This is in general invalid when
             comparing pointers to UNO objects (ambiguous class
@@ -243,7 +243,7 @@ namespace comphelper
         }
 
         /** less-than operator
-
+            
             Object order is defined to be the ordering of the
             implementation pointers. This is in general invalid when
             comparing pointers to UNO objects (ambiguous class
@@ -257,15 +257,15 @@ namespace comphelper
         {
             return mpImpl < rhs.mpImpl;
         }
-
+ 
     private:
-
+        
         // the interface, hard reference to prevent object from vanishing
-        ::com::sun::star::uno::Reference< UnoInterfaceType >    mxRef;
+        ::com::sun::star::uno::Reference< UnoInterfaceType > 	mxRef;
 
         // the c++ object, for our internal stuff
-        ImplementationType*                                     mpImpl;
-
+        ImplementationType* 									mpImpl;
+    
     };
 
 }

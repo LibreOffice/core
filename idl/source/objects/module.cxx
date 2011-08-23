@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -588,7 +588,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         rOutStm << "SvIDL interface documentation" << endl << endl;
         rOutStm << "<MODULE>" << endl << GetName().GetBuffer() << endl;
         WriteDescription( rOutStm );
-        rOutStm << "</MODULE>" << endl << endl;
+        rOutStm	<< "</MODULE>" << endl << endl;
 
         rOutStm << "<CLASSES>" << endl;
         for( ULONG n = 0; n < aClassList.Count(); n++ )
@@ -649,7 +649,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 void SvMetaModule::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                              Table * pTable )
 {
-//  rOutStm << "#pragma CHARSET IBMPC" << endl;
+//	rOutStm << "#pragma CHARSET IBMPC" << endl;
     if( aSlotIdFile.Len() )
         rOutStm << "//#include <" << aSlotIdFile.GetBuffer() << '>' << endl;
     for( ULONG n = 0; n < aClassList.Count(); n++ )

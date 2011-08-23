@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <vcl/button.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>		// SvUShorts
 #include <sfx2/event.hxx>
 
 #include <sfx2/sfxsids.hrc>
@@ -97,27 +97,27 @@ public:
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT          GetVersion( USHORT nFileFormatVersion ) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT			GetVersion( USHORT nFileFormatVersion ) const;
 
     const SfxEventNamesList& GetEvents() const { return aEventsList;}
     void SetEvents( const SfxEventNamesList& rList ) { aEventsList = rList; }
-    void                    AddEvent( const String&, const String&, USHORT );
+    void					AddEvent( const String&, const String&, USHORT );
 };
 
 // -----------------------------------------------------------------------
 
-#define PROP_EVENT_TYPE     "EventType"
-#define PROP_LIBRARY        "Library"
-#define PROP_SCRIPT         "Script"
-#define PROP_MACRO_NAME     "MacroName"
-#define STAR_BASIC          "StarBasic"
+#define	PROP_EVENT_TYPE		"EventType"
+#define PROP_LIBRARY		"Library"
+#define PROP_SCRIPT			"Script"
+#define PROP_MACRO_NAME		"MacroName"
+#define STAR_BASIC			"StarBasic"
 
 class SFX2_DLLPUBLIC SfxEventConfiguration
 {
 public:
-    static void                         ConfigureEvent( ::rtl::OUString aName, const SvxMacro&, SfxObjectShell* pObjSh);
-    static SvxMacro*                    ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, BOOL bBlowUp );
+    static void							ConfigureEvent( ::rtl::OUString aName, const SvxMacro&, SfxObjectShell* pObjSh);
+    static SvxMacro*					ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, BOOL bBlowUp );
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,30 +98,30 @@
 #include <svl/lckbitem.hxx>
 
 
-#define CharSetItem                 SfxUInt16Item
-#define FontFamilyItem              SfxUInt16Item
-#define FontPitchItem               SfxUInt16Item
-#define FontAlignItem               SfxUInt16Item
-#define FontWeightItem              SfxUInt16Item
-#define FontUnderlineItem           SfxUInt16Item
-#define FontStrikeoutItem           SfxUInt16Item
-#define FontItalicItem              SfxUInt16Item
-#define SvxDbTypeItem               SfxUInt16Item
-#define SvxLineSpaceItem            SfxUInt16Item
-#define SvxInterLineSpaceItem       SfxUInt16Item
-#define SvxBreakItem                SfxUInt16Item
-#define BrushStyleItem              SfxUInt16Item
-#define SvxNumTypeItem              SfxUInt16Item
-#define SvxShadowLocationItem       SfxUInt16Item
-#define SvxDbTypeItem               SfxUInt16Item
-//#define SvxChooseControlEnumItem  SfxUInt16Item
-#define SvxDrawToolEnumItem         SfxUInt16Item
-#define SvxChooseControlItem        SfxEnumItem
-#define SvxDrawToolItem             SfxUInt16Item
-#define SvxCellHorJustifyEnumItem   SfxUInt16Item
-#define SvxCellVerJustifyEnumItem   SfxUInt16Item
-#define SvxCellOrientationEnumItem  SfxUInt16Item
-#define SvxLanguage                 SfxUInt16Item
+#define CharSetItem 				SfxUInt16Item
+#define FontFamilyItem				SfxUInt16Item
+#define FontPitchItem				SfxUInt16Item
+#define FontAlignItem				SfxUInt16Item
+#define FontWeightItem				SfxUInt16Item
+#define FontUnderlineItem			SfxUInt16Item
+#define FontStrikeoutItem			SfxUInt16Item
+#define FontItalicItem				SfxUInt16Item
+#define SvxDbTypeItem				SfxUInt16Item
+#define SvxLineSpaceItem			SfxUInt16Item
+#define SvxInterLineSpaceItem		SfxUInt16Item
+#define SvxBreakItem				SfxUInt16Item
+#define BrushStyleItem				SfxUInt16Item
+#define SvxNumTypeItem				SfxUInt16Item
+#define SvxShadowLocationItem		SfxUInt16Item
+#define SvxDbTypeItem				SfxUInt16Item
+//#define SvxChooseControlEnumItem	SfxUInt16Item
+#define SvxDrawToolEnumItem 		SfxUInt16Item
+#define SvxChooseControlItem		SfxEnumItem
+#define SvxDrawToolItem 			SfxUInt16Item
+#define SvxCellHorJustifyEnumItem	SfxUInt16Item
+#define SvxCellVerJustifyEnumItem	SfxUInt16Item
+#define SvxCellOrientationEnumItem	SfxUInt16Item
+#define SvxLanguage 				SfxUInt16Item
 //#define SfxLockBytesItem            SfxPoolItem
 #define OfaStringListItem           SfxStringListItem
 #define avmedia_MediaItem           ::avmedia::MediaItem

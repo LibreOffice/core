@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace cppu
 
         FreeReference(FreeReference<T> const & rOther)
             : m_env    (rOther.m_env),
-              m_pObject(rOther.m_pObject)
+              m_pObject(rOther.m_pObject) 
         {
             if (m_pObject)
                 m_env.get()->pExtEnv->acquireInterface(m_env.get()->pExtEnv, m_pObject);
@@ -117,7 +117,7 @@ namespace cppu
         {
             if (m_pObject)
             {
-
+                
                 m_env.get()->pExtEnv->releaseInterface(m_env.get()->pExtEnv, m_pObject);
                 m_pObject = NULL;
                 m_env.clear();
@@ -146,7 +146,7 @@ namespace cppu
             if (m_pObject)
             {
                 m_env = cssuno::Environment::getCurrent();
-
+                
                 m_env.get()->pExtEnv->acquireInterface(m_env.get()->pExtEnv, m_pObject);
             }
         }
@@ -161,6 +161,6 @@ namespace cppu
             return !operator==(rOther);
         }
     };
-}
+} 
 
 #endif

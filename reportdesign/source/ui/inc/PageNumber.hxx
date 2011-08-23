@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,28 +49,28 @@ class OReportController;
 |* Groups and Sorting dialog
 |*
 \************************************************************************/
-class OPageNumberDialog :   public ModalDialog
+class OPageNumberDialog :	public ModalDialog
 {
-    FixedLine                               m_aFormat;
-    RadioButton                             m_aPageN;
-    RadioButton                             m_aPageNofM;
+    FixedLine								m_aFormat;
+    RadioButton								m_aPageN;
+    RadioButton								m_aPageNofM;
 
-    FixedLine                               m_aPosition;
-    RadioButton                             m_aTopPage;
-    RadioButton                             m_aBottomPage;
-    FixedLine                               m_aMisc;
-    FixedText                               m_aAlignment;
-    ListBox                                 m_aAlignmentLst;
+    FixedLine								m_aPosition;
+    RadioButton								m_aTopPage;
+    RadioButton								m_aBottomPage;
+    FixedLine								m_aMisc;
+    FixedText								m_aAlignment;
+    ListBox									m_aAlignmentLst;
 
-    CheckBox                                m_aShowNumberOnFirstPage;
-    FixedLine                               m_aFl1;
-    OKButton                                m_aPB_OK;
-    CancelButton                            m_aPB_CANCEL;
-    HelpButton                              m_aPB_Help;
+    CheckBox								m_aShowNumberOnFirstPage;
+    FixedLine								m_aFl1;
+    OKButton								m_aPB_OK;
+    CancelButton							m_aPB_CANCEL;
+    HelpButton								m_aPB_Help;
 
 
-    ::rptui::OReportController*             m_pController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>
+    ::rptui::OReportController*				m_pController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>			
                                             m_xHoldAlive;
 
     OPageNumberDialog(const OPageNumberDialog&);
@@ -80,7 +80,7 @@ public:
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
     virtual ~OPageNumberDialog();
-    virtual short   Execute();
+    virtual short	Execute();
 };
 // =============================================================================
 } // namespace rptui

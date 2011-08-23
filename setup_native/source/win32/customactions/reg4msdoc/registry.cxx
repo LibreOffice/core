@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ std::wstring RegistryKeyImpl::GetName() const
 }
 
 //-----------------------------------------------------
-/**
+/** 
 */
 bool RegistryKeyImpl::IsOpen() const
 {
@@ -129,7 +129,7 @@ bool RegistryKeyImpl::IsWriteable() const
 
 //-----------------------------------------------------
 /** Convenience function to determine if the
-    Registry key at hand has the specified
+    Registry key at hand has the specified 
     value
 
     @precond IsOpen = true
@@ -151,18 +151,18 @@ struct CompareNamesCaseInsensitive
     CompareNamesCaseInsensitive(const std::wstring& Name) :
         name_(Name)
     {}
-
+    
     bool operator() (const std::wstring& value)
     {
         return (0 == StrCmpI(value.c_str(), name_.c_str()));
     }
-
+    
     std::wstring name_;
 };
 
 //-----------------------------------------------------
 /** Convenience function to determine if the
-    Registry key at hand has the specified
+    Registry key at hand has the specified 
     sub-key
 
     @precond IsOpen = true
@@ -187,14 +187,14 @@ void RegistryKeyImpl::Close()
     if (RegCloseKey(m_hSubKey) != ERROR_SUCCESS) {
         assert(false);
     }
-
+    
     m_hSubKey = 0;
     m_IsWriteable = false;
 }
 
 //-----------------------------------------------------
-/** Copies the specified value from RegistryKey to
-    the registry key at hand, if a value with this
+/** Copies the specified value from RegistryKey to 
+    the registry key at hand, if a value with this 
     name already exist under the registry key at hand
     it will be overwritten
 
@@ -207,18 +207,18 @@ void RegistryKeyImpl::Close()
             RegistryValueNotFoundException
 */
 void RegistryKeyImpl::CopyValue(const RegistryKey& RegistryKey, const std::wstring& Name)
-{
-    assert(RegistryKey->HasValue(Name));
+{	
+    assert(RegistryKey->HasValue(Name));  
 #ifdef __MINGW32__
-    SetValue((const RegistryValue&)(RegistryKey->GetValue(Name)));
+    SetValue((const RegistryValue&)(RegistryKey->GetValue(Name)));    
 #else
-    SetValue(RegistryKey->GetValue(Name));
+    SetValue(RegistryKey->GetValue(Name));    
 #endif
     assert(HasValue(Name));
 }
 
-/** Copies the specified value from RegistryKey to
-    the registry key at hand under a new name,
+/** Copies the specified value from RegistryKey to 
+    the registry key at hand under a new name, 
     if a value with this name already exist there
     it will be overwritten
 
@@ -233,10 +233,10 @@ void RegistryKeyImpl::CopyValue(const RegistryKey& RegistryKey, const std::wstri
 void RegistryKeyImpl::CopyValue(const RegistryKey& RegistryKey, const std::wstring& Name, const std::wstring& NewName)
 {
     assert(RegistryKey->HasValue(Name));
-
+    
     RegistryValue RegVal = RegistryKey->GetValue(Name);
     RegVal->SetName(NewName);
     SetValue(RegVal);
-
+    
     assert(HasValue(NewName));
 }

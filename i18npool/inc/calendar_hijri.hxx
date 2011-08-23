@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #include "calendar_gregorian.hxx"
 
 
-//  ----------------------------------------------------
-//  class Calendar_hijri
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class Calendar_hijri
+//	----------------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -53,7 +53,7 @@ protected:
     // Synodic Period (mean time between 2 successive new moon: 29d, 12 hr, 44min, 3sec
     static const double SynPeriod;
 
-    static const double SynMonth;           // Solar days in a year/SynPeriod
+    static const double SynMonth;			// Solar days in a year/SynPeriod
 
     // Julian day on Jan 1, 1900
     static const double jd1900;
@@ -63,11 +63,11 @@ protected:
     static const sal_Int32 GregRef;
 
     // Local time (Saudi Arabia)
-    static const double SA_TimeZone;        // Time Zone
+    static const double SA_TimeZone;		// Time Zone
 
     // Period between 1.30pm - 6:30pm
     static const double EveningPeriod;
-
+    
     // "Leap" years
     static const sal_Int32 LeapYear[];
 

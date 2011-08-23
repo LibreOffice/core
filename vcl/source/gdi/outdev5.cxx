@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         if ( aRoundRectPoly.GetSize() >= 2 )
         {
             const SalPoint* pPtAry = (const SalPoint*) aRoundRectPoly.GetConstPointAry();
-
+            
             if ( !mbFillColor )
                 mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );
             else
@@ -117,7 +117,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaEllipseAction( rRect ) );
 
-    if  ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
+    if	( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
         return;
 
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -190,9 +190,9 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
     if ( mbInitLineColor )
         ImplInitLineColor();
 
-    const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
-    const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    Polygon         aArcPoly( aRect, aStart, aEnd, POLY_ARC );
+    const Point 	aStart( ImplLogicToDevicePixel( rStartPt ) );
+    const Point 	aEnd( ImplLogicToDevicePixel( rEndPt ) );
+    Polygon 		aArcPoly( aRect, aStart, aEnd, POLY_ARC );
 
     if ( aArcPoly.GetSize() >= 2 )
     {
@@ -237,9 +237,9 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
     if ( mbInitLineColor )
         ImplInitLineColor();
 
-    const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
-    const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    Polygon         aPiePoly( aRect, aStart, aEnd, POLY_PIE );
+    const Point 	aStart( ImplLogicToDevicePixel( rStartPt ) );
+    const Point 	aEnd( ImplLogicToDevicePixel( rEndPt ) );
+    Polygon 		aPiePoly( aRect, aStart, aEnd, POLY_PIE );
 
     if ( aPiePoly.GetSize() >= 2 )
     {
@@ -291,9 +291,9 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
     if ( mbInitLineColor )
         ImplInitLineColor();
 
-    const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
-    const Point     aEnd( ImplLogicToDevicePixel( rEndPt ) );
-    Polygon         aChordPoly( aRect, aStart, aEnd, POLY_CHORD );
+    const Point 	aStart( ImplLogicToDevicePixel( rStartPt ) );
+    const Point 	aEnd( ImplLogicToDevicePixel( rEndPt ) );
+    Polygon 		aChordPoly( aRect, aStart, aEnd, POLY_CHORD );
 
     if ( aChordPoly.GetSize() >= 2 )
     {

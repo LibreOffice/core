@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@ namespace sdr
         }
 
         OverlayPrimitive2DSequenceObject::OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DSequence& rSequence)
-        :   OverlayObjectWithBasePosition(basegfx::B2DPoint(), Color(COL_BLACK)),
+        :	OverlayObjectWithBasePosition(basegfx::B2DPoint(), Color(COL_BLACK)),
             maSequence(rSequence)
         {
         }
-
+        
         OverlayPrimitive2DSequenceObject::~OverlayPrimitive2DSequenceObject()
         {
         }

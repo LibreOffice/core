@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
+#endif				  
 #ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
 #endif
@@ -87,7 +87,7 @@ OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORD
     ImplInitSettings( sal_True, sal_True, sal_True );
     //////////////////////////////////////////////////////////////////////
     // Childs erzeugen
-    m_pEditorCtrl   = new OTableEditorCtrl( this);
+    m_pEditorCtrl	= new OTableEditorCtrl( this);
     m_pFieldDescWin = new OTableFieldDescWin( this );
 
     m_pFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
@@ -105,7 +105,7 @@ OTableBorderWindow::~OTableBorderWindow()
 {
     //////////////////////////////////////////////////////////////////////
     // Childs zerstoeren
-    //  ::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+    //	::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pEditorCtrl->Hide();
     m_pFieldDescWin->Hide();
 
@@ -128,9 +128,9 @@ void OTableBorderWindow::Resize()
     //////////////////////////////////////////////////////////////////////
     // Abmessungen parent window
     Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
-    long nSplitPos      = m_aHorzSplitter.GetSplitPosPixel();
+    long nOutputWidth	= aOutputSize.Width();
+    long nOutputHeight	= aOutputSize.Height();
+    long nSplitPos		= m_aHorzSplitter.GetSplitPosPixel();
 
     //////////////////////////////////////////////////////////////////////
     // Verschiebebereich Splitter mittleres Drittel des Outputs
@@ -149,7 +149,7 @@ void OTableBorderWindow::Resize()
     // Fenster setzen
     m_pEditorCtrl->SetPosSizePixel( Point(0, 0), Size(nOutputWidth , nSplitPos) );
 
-    m_pFieldDescWin->SetPosSizePixel(   Point(0, nSplitPos+nSplitterHeight),
+    m_pFieldDescWin->SetPosSizePixel(	Point(0, nSplitPos+nSplitterHeight),
                         Size(nOutputWidth, nOutputHeight-nSplitPos-nSplitterHeight) );
 }
 //------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ void OTableBorderWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground,
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetPointFont( aFont );
-//      Set/*Zoomed*/PointFont( aFont );
+//		Set/*Zoomed*/PointFont( aFont );
     }
 
     if ( bFont || bForeground )
@@ -238,7 +238,7 @@ OTableDesignView::OTableDesignView( Window* pParent,
     }
 
     m_pWin = new OTableBorderWindow(this);
-    m_pWin->Show();
+    m_pWin->Show();	
 }
 
 //------------------------------------------------------------------------------
@@ -259,10 +259,10 @@ void OTableDesignView::initialize()
     GetEditorCtrl()->Init();
     GetDescWin()->Init();
     // first call after the editctrl has been set
-
+    
     GetEditorCtrl()->Show();
     GetDescWin()->Show();
-
+    
     GetEditorCtrl()->DisplayData(0);
 }
 //------------------------------------------------------------------------------
@@ -315,7 +315,7 @@ long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
                 m_eChildFocus = NONE;
             break;
     }
-
+    
     return bHandled ? 1L : ODataView::PreNotify(rNEvt);
 }
 // -----------------------------------------------------------------------------
@@ -327,7 +327,7 @@ IClipboardTest* OTableDesignView::getActiveChild() const
         case DESCRIPTION:
             pTest = GetDescWin();
             break;
-        case EDITOR:
+        case EDITOR:		
             pTest = GetEditorCtrl();
             break;
         case NONE:
@@ -357,21 +357,21 @@ sal_Bool OTableDesignView::isPasteAllowed()
 void OTableDesignView::copy()
 {
     IClipboardTest* pTest = getActiveChild();
-    if ( pTest )
+    if ( pTest ) 
         pTest->copy();
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::cut()
 {
     IClipboardTest* pTest = getActiveChild();
-    if ( pTest )
+    if ( pTest ) 
         pTest->cut();
 }
 // -----------------------------------------------------------------------------
 void OTableDesignView::paste()
 {
     IClipboardTest* pTest = getActiveChild();
-    if ( pTest )
+    if ( pTest ) 
         pTest->paste();
 }
 // -----------------------------------------------------------------------------

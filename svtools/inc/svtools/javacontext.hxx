@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ namespace svt
 // We cannot derive from  cppu::WeakImplHelper because we would export the inline
 //generated class. This conflicts with other libraries if they use the same inline
 //class.
-    class SVT_DLLPUBLIC JavaContext :
+    class SVT_DLLPUBLIC JavaContext :        
         public com::sun::star::uno::XCurrentContext
     {
-
+        
     public:
         JavaContext( const com::sun::star::uno::Reference<
                      com::sun::star::uno::XCurrentContext> & ctx);
@@ -77,8 +77,8 @@ namespace svt
         SVT_DLLPRIVATE JavaContext(); //not implemented
         SVT_DLLPRIVATE JavaContext(JavaContext&); //not implemented
         SVT_DLLPRIVATE JavaContext& operator = (JavaContext&); //not implemented
-
-        oslInterlockedCount m_aRefCount;
+        
+        oslInterlockedCount	m_aRefCount;
 
         com::sun::star::uno::Reference<
             com::sun::star::uno::XCurrentContext > m_xNextContext;

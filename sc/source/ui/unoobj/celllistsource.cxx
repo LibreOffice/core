@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -189,7 +189,7 @@ namespace calc
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sheet.OCellListSource" ) );
     }
-
+        
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OCellListSource::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
     {
@@ -202,7 +202,7 @@ namespace calc
 
         return sal_False;
     }
-
+        
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException)
     {
@@ -249,7 +249,7 @@ namespace calc
         CellRangeAddress aAddress( getRangeAddress( ) );
         return aAddress.EndRow - aAddress.StartRow + 1;
     }
-
+    
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -263,7 +263,7 @@ namespace calc
 
         return getCellTextContent_noCheck( 0, _nPosition );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException)
     {
@@ -281,7 +281,7 @@ namespace calc
 
         return aAllEntries;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException)
     {
@@ -295,7 +295,7 @@ namespace calc
 
         m_aListEntryListeners.addInterface( _rxListener );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException)
     {

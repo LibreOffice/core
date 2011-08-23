@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ namespace pcr
         PropertyMap                                                                         m_aProperties;
         /// property change listeners
         ::cppu::OInterfaceContainerHelper                                                   m_aPropertyListeners;
-        ::std::map< ::com::sun::star::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess >
+        ::std::map< ::com::sun::star::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess > 
                                                                                             m_aEnumConverters;
 
         /// has ->m_aProperties been initialized?

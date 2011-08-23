@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,28 +104,28 @@ IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, EMPTYARG )
 SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_LINENUMBERING), rSet),
-    aNumberingOnCB      ( this, SW_RES( CB_NUMBERING_ON )),
-    aCharStyleFT        ( this, SW_RES( FT_CHAR_STYLE )),
-    aCharStyleLB        ( this, SW_RES( LB_CHAR_STYLE )),
-    aFormatFT           ( this, SW_RES( FT_FORMAT )),
-    aFormatLB           ( this, SW_RES( LB_FORMAT ), INSERT_NUM_EXTENDED_TYPES),
-    aPosFT              ( this, SW_RES( FT_POS )),
-    aPosLB              ( this, SW_RES( LB_POS )),
-    aOffsetFT           ( this, SW_RES( FT_OFFSET )),
-    aOffsetMF           ( this, SW_RES( MF_OFFSET )),
-    aNumIntervalFT      ( this, SW_RES( FT_NUM_INVERVAL )),
-    aNumIntervalNF      ( this, SW_RES( NF_NUM_INVERVAL )),
-    aNumRowsFT          ( this, SW_RES( FT_NUM_ROWS )),
+    aNumberingOnCB		( this, SW_RES( CB_NUMBERING_ON )),
+    aCharStyleFT		( this, SW_RES( FT_CHAR_STYLE )),
+    aCharStyleLB		( this, SW_RES( LB_CHAR_STYLE )),
+    aFormatFT			( this, SW_RES( FT_FORMAT )),
+    aFormatLB			( this, SW_RES( LB_FORMAT ), INSERT_NUM_EXTENDED_TYPES),
+    aPosFT				( this, SW_RES( FT_POS )),
+    aPosLB				( this, SW_RES( LB_POS )),
+    aOffsetFT   		( this, SW_RES( FT_OFFSET )),
+    aOffsetMF   		( this, SW_RES( MF_OFFSET )),
+    aNumIntervalFT		( this, SW_RES( FT_NUM_INVERVAL )),
+    aNumIntervalNF		( this, SW_RES( NF_NUM_INVERVAL )),
+    aNumRowsFT			( this, SW_RES( FT_NUM_ROWS )),
     aDisplayFL          ( this, SW_RES( FL_DISPLAY )),
-    aDivisorFT          ( this, SW_RES( FT_DIVISOR )),
-    aDivisorED          ( this, SW_RES( ED_DIVISOR )),
-    aDivIntervalFT      ( this, SW_RES( FT_DIV_INTERVAL )),
-    aDivIntervalNF      ( this, SW_RES( NF_DIV_INTERVAL )),
-    aDivRowsFT          ( this, SW_RES( FT_DIV_ROWS )),
+    aDivisorFT			( this, SW_RES( FT_DIVISOR )),
+    aDivisorED			( this, SW_RES( ED_DIVISOR )),
+    aDivIntervalFT		( this, SW_RES( FT_DIV_INTERVAL )),
+    aDivIntervalNF		( this, SW_RES( NF_DIV_INTERVAL )),
+    aDivRowsFT			( this, SW_RES( FT_DIV_ROWS )),
     aDivisorFL          ( this, SW_RES( FL_DIVISOR )),
-    aCountEmptyLinesCB  ( this, SW_RES( CB_COUNT_EMPTYLINES )),
-    aCountFrameLinesCB  ( this, SW_RES( CB_COUNT_FRAMELINES )),
-    aRestartEachPageCB  ( this, SW_RES( CB_RESTART_PAGE )),
+    aCountEmptyLinesCB	( this, SW_RES( CB_COUNT_EMPTYLINES )),
+    aCountFrameLinesCB	( this, SW_RES( CB_COUNT_FRAMELINES )),
+    aRestartEachPageCB	( this, SW_RES( CB_RESTART_PAGE )),
     aCountFL            ( this, SW_RES( FL_COUNT ))
 
 {
@@ -148,7 +148,7 @@ __EXPORT SwLineNumberingPage::~SwLineNumberingPage()
     Beschreibung:
  -----------------------------------------------------------------------*/
 
-SfxTabPage* __EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*	__EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SwLineNumberingPage( pParent, rSet );
 }
@@ -177,22 +177,22 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
     }
 
     // Format
-//  SwFldMgr aMgr( pSh );
+//	SwFldMgr aMgr( pSh );
     USHORT nSelFmt = rInf.GetNumType().GetNumberingType();
-//  USHORT nCnt = aMgr.GetFormatCount( TYP_SEQFLD, FALSE );
+//	USHORT nCnt = aMgr.GetFormatCount( TYP_SEQFLD, FALSE );
 
-//  for( USHORT i = 0; i < nCnt; i++)
-//  {
-//      aFormatLB.InsertEntry(aMgr.GetFormatStr( TYP_SEQFLD, i));
-//      USHORT nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
-//      aFormatLB.SetEntryData( i, (void*)nFmtId );
-//      if( nFmtId == nSelFmt )
-//          aFormatLB.SelectEntryPos( i );
-//  }
+//	for( USHORT i = 0; i < nCnt; i++)
+//	{
+//		aFormatLB.InsertEntry(aMgr.GetFormatStr( TYP_SEQFLD, i));
+//		USHORT nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
+//		aFormatLB.SetEntryData( i, (void*)nFmtId );
+//		if( nFmtId == nSelFmt )
+//			aFormatLB.SelectEntryPos( i );
+//	}
     aFormatLB.SelectNumberingType(nSelFmt);
 
-//  if ( !aFormatLB.GetSelectEntryCount() )
-//      aFormatLB.SelectEntryPos(aFormatLB.GetEntryCount() - 1);
+//	if ( !aFormatLB.GetSelectEntryCount() )
+//		aFormatLB.SelectEntryPos(aFormatLB.GetEntryCount() - 1);
 
     // Position
     aPosLB.SelectEntryPos((USHORT)rInf.GetPos());

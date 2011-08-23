@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_component_RadioButton_idl__
-#define __com_sun_star_form_component_RadioButton_idl__
-
-#ifndef __com_sun_star_awt_UnoControlRadioButtonModel_idl__
-#include <com/sun/star/awt/UnoControlRadioButtonModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_FormControlModel_idl__
-#include <com/sun/star/form/FormControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_XReset_idl__
-#include <com/sun/star/form/XReset.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module form {  module component {
-
-//=============================================================================
-
+#ifndef __com_sun_star_form_component_RadioButton_idl__ 
+#define __com_sun_star_form_component_RadioButton_idl__ 
+ 
+#ifndef __com_sun_star_awt_UnoControlRadioButtonModel_idl__ 
+#include <com/sun/star/awt/UnoControlRadioButtonModel.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_FormControlModel_idl__ 
+#include <com/sun/star/form/FormControlModel.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_XReset_idl__ 
+#include <com/sun/star/form/XReset.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  module component { 
+ 
+//============================================================================= 
+ 
 /** specifies a component which acts as a radio button as needed in <type>HTMLForm</type>s.
 
     <p>Radio buttons are controls which can be grouped together, and in every
@@ -57,19 +57,19 @@
     same name (see <member scope="com::sun::star::form">FormComponent::Name</member>).</p>
  */
 published service RadioButton
-{
-    service com::sun::star::awt::UnoControlRadioButtonModel;
-
-    service com::sun::star::form::FormControlModel;
-
+{ 
+    service com::sun::star::awt::UnoControlRadioButtonModel; 
+    
+    service com::sun::star::form::FormControlModel; 
+    
     /** can be used to reset the control to it's default text.
 
         @see RadioButton::DefaultState
     */
-    interface com::sun::star::form::XReset;
-
-    //-------------------------------------------------------------------------
-
+    interface com::sun::star::form::XReset; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** contains a default value for the control.
 
         <p>This value is used when the control is initially displayed, and for resetting it.</p>
@@ -80,10 +80,10 @@ published service RadioButton
         @see com::sun::star::awt::UnoControlRadioButtonModel::State
         @see com::sun::star::form::XReset
      */
-    [property] short DefaultState;
-
-    //-------------------------------------------------------------------------
-
+    [property] short DefaultState; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** contains a reference value which is used for submission in a HTML
         form.
 
@@ -91,8 +91,8 @@ published service RadioButton
         <type scope="com::sun::star::form">XSubmit</type>), and the control is checked, this reference
         value is used for submission.</p>
      */
-    [property] string RefValue;
-
+    [property] string RefValue; 
+ 
 
     /** specifies a value which is to be associated with the control when it's <em>not</em>
         selected.
@@ -103,10 +103,10 @@ published service RadioButton
         the value should be associated with the control when it is <em>not</em> selected.</p>
     */
     [optional, property] string UncheckedRefValue;
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; }; 
+ 
+#endif 

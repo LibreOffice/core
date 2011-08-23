@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,10 @@ SwVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& RouteDocument )
     document.Close(SaveChanges, FileName, RouteDocument );
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaWindow::getView() throw (uno::RuntimeException)
 {
-    return uno::makeAny( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, m_xModel ) ) );
+    return uno::makeAny( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, m_xModel ) ) );    
 }
 
 void SAL_CALL SwVbaWindow::setView( const uno::Any& _view ) throw (uno::RuntimeException)
@@ -69,33 +69,33 @@ void SAL_CALL SwVbaWindow::setView( const uno::Any& _view ) throw (uno::RuntimeE
     {
         SwVbaView view( this,  mxContext, m_xModel );
         view.setType( nType );
-    }
+    }    
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaWindow::Panes( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     uno::Reference< XCollection > xPanes( new SwVbaPanes( this,  mxContext, m_xModel ) );
     if(  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::makeAny( xPanes );
 
-    return uno::Any( xPanes->Item( aIndex, uno::Any() ) );
+    return uno::Any( xPanes->Item( aIndex, uno::Any() ) );    
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaWindow::ActivePane() throw (uno::RuntimeException)
 {
-    return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( this,  mxContext, m_xModel ) ) );
+    return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( this,  mxContext, m_xModel ) ) );    
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaWindow::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaWindow") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaWindow::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

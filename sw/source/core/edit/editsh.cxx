@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@
 #include <frame.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>            // fuer SwTxtNode
+#include <ndtxt.hxx>			// fuer SwTxtNode
 #include <grfatr.hxx>
 #include <flyfrm.hxx>
 #include <swtable.hxx>
-#include <swundo.hxx>           // UNDO_START, UNDO_END
+#include <swundo.hxx> 			// UNDO_START, UNDO_END
 #include <calc.hxx>
 #include <edimp.hxx>
 #include <ndgrf.hxx>
@@ -74,7 +74,7 @@ using namespace com::sun::star;
 SV_IMPL_PTRARR(SwGetINetAttrs, SwGetINetAttr*)
 
 /******************************************************************************
- *                      void SwEditShell::Insert(char c)
+ *						void SwEditShell::Insert(char c)
  ******************************************************************************/
 
 
@@ -98,7 +98,7 @@ void SwEditShell::Insert( sal_Unicode c, BOOL bOnlyCurrCrsr )
 
 
 /******************************************************************************
- *                void SwEditShell::Insert(const String &rStr)
+ *				  void SwEditShell::Insert(const String &rStr)
  ******************************************************************************/
 
 
@@ -176,7 +176,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
 
 
 /******************************************************************************
- *              void SwEditShell::Overwrite(const String &rStr)
+ *				void SwEditShell::Overwrite(const String &rStr)
  ******************************************************************************/
 
 
@@ -195,7 +195,7 @@ void SwEditShell::Overwrite(const String &rStr)
 
 
 /******************************************************************************
- *                      long SwEditShell::SplitNode()
+ *						long SwEditShell::SplitNode()
  ******************************************************************************/
 
 long SwEditShell::SplitNode( BOOL bAutoFormat, BOOL bCheckTableStart )
@@ -243,8 +243,8 @@ sal_Bool SwEditShell::AppendTxtNode()
 }
 
 /******************************************************************************
- *        liefert einen Pointer auf einen SwGrfNode; dieser wird von
- *              GetGraphic() und GetGraphicSize() verwendet.
+ *		  liefert einen Pointer auf einen SwGrfNode; dieser wird von
+ *		  		GetGraphic() und GetGraphicSize() verwendet.
  ******************************************************************************/
 
 
@@ -259,9 +259,9 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
     return pGrfNode;
 }
 /******************************************************************************
- *      liefert Pointer auf eine Graphic, wenn CurCrsr->GetPoint() auf
- *           einen SwGrfNode zeigt (und GetMark nicht gesetzt ist
- *                   oder auf die gleiche Graphic zeigt)
+ * 		liefert Pointer auf eine Graphic, wenn CurCrsr->GetPoint() auf
+ * 			 einen SwGrfNode zeigt (und GetMark nicht gesetzt ist
+ * 					 oder auf die gleiche Graphic zeigt)
  ******************************************************************************/
 
 // --> OD 2005-02-09 #119353# - robust
@@ -330,9 +330,9 @@ USHORT SwEditShell::GetGraphicType() const
 }
 
 /******************************************************************************
- *      liefert die Groesse der Graphic, wenn CurCrsr->GetPoint() auf
- *          einen SwGrfNode zeigt (und GetMark nicht gesetzt ist
- *                  oder auf die gleiche Graphic zeigt)
+ *		liefert die Groesse der Graphic, wenn CurCrsr->GetPoint() auf
+ * 			einen SwGrfNode zeigt (und GetMark nicht gesetzt ist
+ * 					oder auf die gleiche Graphic zeigt)
  ******************************************************************************/
 
 BOOL SwEditShell::GetGrfSize(Size& rSz) const
@@ -350,8 +350,8 @@ BOOL SwEditShell::GetGrfSize(Size& rSz) const
 
 }
 /******************************************************************************
- *      erneutes Einlesen, falls Graphic nicht Ok ist. Die
- *      aktuelle wird durch die neue ersetzt.
+ * 		erneutes Einlesen, falls Graphic nicht Ok ist. Die
+ * 		aktuelle wird durch die neue ersetzt.
  ******************************************************************************/
 
 void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
@@ -364,9 +364,9 @@ void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
 
 
 /******************************************************************************
- *  liefert den Namen und den FilterNamen einer Graphic, wenn der Cursor
- *  auf einer Graphic steht
- *  Ist ein String-Ptr != 0 dann returne den entsp. Namen
+ *	liefert den Namen und den FilterNamen einer Graphic, wenn der Cursor
+ *	auf einer Graphic steht
+ *	Ist ein String-Ptr != 0 dann returne den entsp. Namen
  ******************************************************************************/
 
 
@@ -447,11 +447,11 @@ void SwEditShell::ClearAutomaticContour()
 }
 
 /******************************************************************************
- *      liefert Pointer auf ein SvInPlaceObjectRef, wenn CurCrsr->GetPoint() auf
- *          einen SwOLENode zeigt (und GetMark nicht gesetzt ist
- *                  oder auf das gleiche SvInPlaceObjectRef zeigt)
- *      besorgt den Pointer vom Doc wenn das Objekt per Namen gesucht werden
- *      soll
+ * 		liefert Pointer auf ein SvInPlaceObjectRef, wenn CurCrsr->GetPoint() auf
+ * 			einen SwOLENode zeigt (und GetMark nicht gesetzt ist
+ * 					oder auf das gleiche SvInPlaceObjectRef zeigt)
+ * 		besorgt den Pointer vom Doc wenn das Objekt per Namen gesucht werden
+ * 		soll
  ******************************************************************************/
 
 svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
@@ -502,7 +502,7 @@ void SwEditShell::UpdateCharts( const String &rName )
 
 
 /******************************************************************************
- *      Aenderung des Tabellennamens
+ * 		Aenderung des Tabellennamens
  ******************************************************************************/
 
 void SwEditShell::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
@@ -523,7 +523,7 @@ String SwEditShell::GetCurWord()
 }
 
 /****************************************************************************
- *           void SwEditShell::UpdateDocStat( SwDocStat& rStat )
+ *			 void SwEditShell::UpdateDocStat( SwDocStat& rStat )
  ****************************************************************************/
 
 
@@ -550,7 +550,7 @@ USHORT SwEditShell::GetRefMarks( SvStringsDtor* pStrings ) const
 }
 
 /******************************************************************************
- *          DropCap-SS
+ *			DropCap-SS
  ******************************************************************************/
 
 
@@ -620,18 +620,18 @@ void SwEditShell::ReplaceDropTxt( const String &rStr )
 }
 
 /******************************************************************************
- *  Methode     :
- *  Beschreibung:
- *  Erstellt    :   OK 25.04.94 13:45
- *  Aenderung   :
+ *	Methode		:
+ *	Beschreibung:
+ *	Erstellt	:	OK 25.04.94 13:45
+ *	Aenderung	:
  ******************************************************************************/
 
 String SwEditShell::Calculate()
 {
-    String  aFormel;                    // die entgueltige Formel
-    SwPaM   *pPaMLast = (SwPaM*)GetCrsr()->GetNext(),
-            *pPaM = pPaMLast;           // die Pointer auf Cursor
-    SwCalc  aCalc( *GetDoc() );
+    String 	aFormel;					// die entgueltige Formel
+    SwPaM	*pPaMLast = (SwPaM*)GetCrsr()->GetNext(),
+            *pPaM = pPaMLast;			// die Pointer auf Cursor
+    SwCalc 	aCalc( *GetDoc() );
     const CharClass& rCC = GetAppCharClass();
 
     do {
@@ -646,7 +646,7 @@ String SwEditShell::Calculate()
             rCC.toLower( aStr );
 
             sal_Unicode ch;
-            BOOL    bValidFlds = FALSE;
+            BOOL 	bValidFlds = FALSE;
             xub_StrLen nPos = 0;
 
             while( nPos < aStr.Len() )
@@ -749,7 +749,7 @@ Graphic SwEditShell::GetIMapGraphic() const
 BOOL SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL bKeepSelection )
 {
     // URL und Hinweistext (direkt oder via Selektion) notwendig
-    if( !rFmt.GetValue().Len() ||   ( !rStr.Len() && !HasSelection() ) )
+    if( !rFmt.GetValue().Len() ||	( !rStr.Len() && !HasSelection() ) )
         return FALSE;
     StartAllAction();
     GetDoc()->StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
@@ -770,7 +770,7 @@ BOOL SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL 
                 if( sTxt == rStr )
                     bDelTxt = bInsTxt = FALSE;
             }
-            else if( rFmt.GetValue() == rStr )      // Name und URL gleich?
+            else if( rFmt.GetValue() == rStr )		// Name und URL gleich?
                 bDelTxt = bInsTxt = FALSE;
 
             if( bDelTxt )
@@ -975,12 +975,12 @@ USHORT SwEditShell::GetLineCount( BOOL bActPos )
             0 != ( pCntFrm = pCNd->GetFrm() ) )
         {
             const SwStartNode *pTmp;
-            if( pCntFrm->IsInFly() )                        // Fly
+            if( pCntFrm->IsInFly() )						// Fly
                 pTmp = pCNd->FindFlyStartNode();
-            else if( pCntFrm->IsInFtn() )                   // Footnote
+            else if( pCntFrm->IsInFtn() )					// Footnote
                 pTmp = pCNd->FindFootnoteStartNode();
             else
-            {                                               // Footer/Header
+            {												// Footer/Header
                 const USHORT nTyp = FRM_HEADER | FRM_FOOTER;
                 SwFrm* pFrm = pCntFrm;
                 while( pFrm && !(pFrm->GetType() & nTyp) )
@@ -1099,8 +1099,8 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
         if( !pDel )
         {
             //JP 25.10.2001: under UNIX the cursor is moved before the Input-
-            //              Engine event comes in. So take any - normally there
-            //              exist only one at the time. -- Task 92016
+            //				Engine event comes in. So take any - normally there
+            //				exist only one at the time. -- Task 92016
             pDel = GetDoc()->GetExtTextInput();
         }
     }
@@ -1155,7 +1155,7 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 
         EndAllAction();
 
-        if( !rData.IsCursorVisible() )  // must be called after the EndAction
+        if( !rData.IsCursorVisible() )	// must be called after the EndAction
             HideCrsr();
     }
 }

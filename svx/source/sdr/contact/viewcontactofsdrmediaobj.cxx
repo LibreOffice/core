@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ Size ViewContactOfSdrMediaObj::getPreferredSize() const
     {
         ViewObjectContact* pCandidate = getViewObjectContact(a);
         Size aSize(pCandidate ? static_cast< ViewObjectContactOfSdrMediaObj* >(pCandidate)->getPreferredSize() : Size());
-
+        
         if(0 != aSize.getWidth() || 0 != aSize.getHeight())
         {
             return aSize;
@@ -102,7 +102,7 @@ Size ViewContactOfSdrMediaObj::getPreferredSize() const
 }
 
 // ------------------------------------------------------------------------------
-
+        
 void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
     // #i71805# Since we may have a whole bunch of VOCs here, make a loop
@@ -120,7 +120,7 @@ void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) co
 }
 
 // ------------------------------------------------------------------------------
-
+            
 void ViewContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
     const sal_uInt32 nCount(getViewObjectContactCount());
@@ -155,7 +155,7 @@ namespace sdr
             // GetGeoRect() to not trigger any calculations. It's the unrotated geometry which is okay for MediaObjects ATM.
             const Rectangle& rRectangle(GetSdrMediaObj().GetGeoRect());
             const basegfx::B2DRange aRange(
-                rRectangle.Left(), rRectangle.Top(),
+                rRectangle.Left(), rRectangle.Top(), 
                 rRectangle.Right(), rRectangle.Bottom());
 
             // create object transform
@@ -165,7 +165,7 @@ namespace sdr
             aTransform.set(0, 2, aRange.getMinX());
             aTransform.set(1, 2, aRange.getMinY());
 
-            // create media primitive. Always create primitives to allow the
+            // create media primitive. Always create primitives to allow the 
             // decomposition of MediaPrimitive2D to create needed invisible elements for HitTest
             // and/or BoundRect
             const basegfx::BColor aBackgroundColor(67.0 / 255.0, 67.0 / 255.0, 67.0 / 255.0);

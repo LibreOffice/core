@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_rendering_XBufferController_idl__
 #define __com_sun_star_rendering_XBufferController_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 
 module com { module sun { module star { module rendering {
 
@@ -62,14 +62,14 @@ interface XBufferController : ::com::sun::star::uno::XInterface
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if nBuffers is smaller than one.
       */
-    long    createBuffers( [in] long nBuffers )
-        raises (com::sun::star::lang::IllegalArgumentException);
+    long 	createBuffers( [in] long nBuffers )
+        raises (com::sun::star::lang::IllegalArgumentException); 
 
     //-------------------------------------------------------------------------
 
-    /** Destroy all buffers generated via this object.
+    /** Destroy all buffers generated via this object.    	
      */
-    void    destroyBuffers();
+    void 	destroyBuffers();
 
     //-------------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if nBuffer is outside the permissible range.
      */
-    boolean showBuffer( [in] boolean bUpdateAll );
+    boolean	showBuffer( [in] boolean bUpdateAll ); 
 
     //-------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
 
         @return whether the switch was performed successfully.
      */
-    boolean switchBuffer( [in] boolean bUpdateAll );
+    boolean	switchBuffer( [in] boolean bUpdateAll );
 
 };
 

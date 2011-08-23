@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,10 +185,10 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         if( aFeatureIndexList[0] != nFeatureIndex ) // do not ignore the required feature
         {
             const int nRequested = std::count( aFeatureIndexList.begin(), aFeatureIndexList.end(), nFeatureIndex);
-            if( !nRequested )   // ignore features that are not requested
+            if( !nRequested )	// ignore features that are not requested
                 continue;
             const int nAvailable = std::count( aReqFeatureTagList.begin(), aReqFeatureTagList.end(), nTag);
-            if( !nAvailable )   // some fonts don't provide features they request!
+            if( !nAvailable )	// some fonts don't provide features they request!
                 continue;
         }
 

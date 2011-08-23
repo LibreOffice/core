@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfSdrCircObj::ViewContactOfSdrCircObj(SdrCircObj& rCircObj)
-        :   ViewContactOfSdrRectObj(rCircObj)
+        :	ViewContactOfSdrRectObj(rCircObj)
         {
         }
 
@@ -56,13 +56,13 @@ namespace sdr
             const SfxItemSet& rItemSet = GetCircObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet,
+                    rItemSet, 
                     GetCircObj().getText(0)));
 
             // take unrotated snap rect (direct model data) for position and size
             const Rectangle& rRectangle = GetCircObj().GetGeoRect();
             const basegfx::B2DRange aObjectRange(
-                rRectangle.Left(), rRectangle.Top(),
+                rRectangle.Left(), rRectangle.Top(), 
                 rRectangle.Right(), rRectangle.Bottom());
             const GeoStat& rGeoStat(GetCircObj().GetGeoStat());
 
@@ -84,9 +84,9 @@ namespace sdr
             {
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrEllipsePrimitive2D(
-                        aObjectMatrix,
+                        aObjectMatrix, 
                         aAttribute));
-
+                
                 return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
             else
@@ -100,13 +100,13 @@ namespace sdr
 
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrEllipseSegmentPrimitive2D(
-                        aObjectMatrix,
-                        aAttribute,
-                        fStart,
-                        fEnd,
-                        bCloseSegment,
+                        aObjectMatrix, 
+                        aAttribute, 
+                        fStart, 
+                        fEnd, 
+                        bCloseSegment, 
                         bCloseUsingCenter));
-
+                
                 return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
         }

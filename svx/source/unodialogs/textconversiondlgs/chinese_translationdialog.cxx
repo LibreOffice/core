@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     m_aRB_To_Traditional.SetHelpId( HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL );
     m_aCB_Use_Variants.SetHelpId( HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS );
 
-    SvtLinguConfig  aLngCfg;
+    SvtLinguConfig	aLngCfg;
     sal_Bool bValue = sal_Bool();
     Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
     aAny >>= bValue;
@@ -152,7 +152,7 @@ IMPL_LINK( ChineseTranslationDialog, CommonTermsHdl, void*, EMPTYARG )
 IMPL_LINK( ChineseTranslationDialog, OkHdl, void*, EMPTYARG )
 {
     //save settings to configuration
-    SvtLinguConfig  aLngCfg;
+    SvtLinguConfig	aLngCfg;
     Any aAny;
     aAny <<= sal_Bool( !!m_aRB_To_Simplified.IsChecked() );
     aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ), aAny );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,17 +26,17 @@
  ************************************************************************/
 
 // TODO: Woher?
-#define Max( a, b )     (((a)>(b)) ? (a) : (b) )
-#define Min( a, b )     (((a)<(b)) ? (a) : (b) )
+#define Max( a, b )		(((a)>(b)) ? (a) : (b) )
+#define Min( a, b )		(((a)<(b)) ? (a) : (b) )
 
 /*
-*
+* 
 * Text2UnicodeConverter
 *
 **/
 namespace sax_expatwrap {
-
-class Text2UnicodeConverter
+    
+class Text2UnicodeConverter 
 {
 
 public:
@@ -49,11 +49,11 @@ public:
 private:
     void init( rtl_TextEncoding encoding );
 
-    rtl_TextToUnicodeConverter  m_convText2Unicode;
-    rtl_TextToUnicodeContext    m_contextText2Unicode;
-    sal_Bool                    m_bCanContinue;
-    sal_Bool                    m_bInitialized;
-    rtl_TextEncoding            m_rtlEncoding;
+    rtl_TextToUnicodeConverter 	m_convText2Unicode;
+    rtl_TextToUnicodeContext   	m_contextText2Unicode;
+    sal_Bool					m_bCanContinue;
+    sal_Bool					m_bInitialized;
+    rtl_TextEncoding			m_rtlEncoding;
     ::com::sun::star::uno::Sequence<sal_Int8> m_seqSource;
 };
 
@@ -62,7 +62,7 @@ private:
 * Unicode2TextConverter
 *
 **-----------------------------------------*/
-class Unicode2TextConverter
+class Unicode2TextConverter 
 {
 public:
     Unicode2TextConverter( rtl_TextEncoding encoding );
@@ -78,12 +78,12 @@ public:
 private:
     void init( rtl_TextEncoding encoding );
 
-    rtl_UnicodeToTextConverter  m_convUnicode2Text;
-    rtl_UnicodeToTextContext    m_contextUnicode2Text;
-    sal_Bool                    m_bCanContinue;
-    sal_Bool                    m_bInitialized;
-    rtl_TextEncoding            m_rtlEncoding;
-    ::com::sun::star::uno::Sequence<sal_Unicode>        m_seqSource;
+    rtl_UnicodeToTextConverter 	m_convUnicode2Text;
+    rtl_UnicodeToTextContext   	m_contextUnicode2Text;
+    sal_Bool					m_bCanContinue;
+    sal_Bool					m_bInitialized;
+    rtl_TextEncoding			m_rtlEncoding;
+    ::com::sun::star::uno::Sequence<sal_Unicode>		m_seqSource;
 };
 
 
@@ -103,15 +103,15 @@ public:
         {}
 
     ~XMLFile2UTFConverter();
-
+    
     void setInputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > &r ) { m_in = r; }
     void setEncoding( const ::rtl::OString &s ) { m_sEncoding = s; }
 
 
-
+    
     // @param nMaxToRead The number of chars, that should be read. Note that this is no exact number. There
     //                   may be returned less or more bytes than ordered.
-    sal_Int32 readAndConvert( ::com::sun::star::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead )
+    sal_Int32 readAndConvert( ::com::sun::star::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead ) 
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::io::NotConnectedException ,
                 ::com::sun::star::io::BufferSizeExceededException ,
@@ -132,16 +132,16 @@ private:
 
     // When encoding attribute is within the text (in the first line), it is removed.
     void removeEncoding( ::com::sun::star::uno::Sequence<sal_Int8> &seq );
-
+    
     // Initializes decoding depending on m_sEncoding setting
     void initializeDecoding();
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  m_in;
-
+        
     sal_Bool m_bStarted;
     ::rtl::OString m_sEncoding;
 
     Text2UnicodeConverter *m_pText2Unicode;
-    Unicode2TextConverter *m_pUnicode2Text;
+    Unicode2TextConverter *m_pUnicode2Text;	
 };
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,25 +77,25 @@ using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////
 
-const ULONG HTML_FRMOPTS_IMG_ALL        =
+const ULONG HTML_FRMOPTS_IMG_ALL		=
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_SIZE |
     HTML_FRMOPT_ANYSIZE |
     HTML_FRMOPT_BORDER |
     HTML_FRMOPT_NAME;
-const ULONG HTML_FRMOPTS_IMG_CNTNR      =
+const ULONG HTML_FRMOPTS_IMG_CNTNR		=
     HTML_FRMOPTS_IMG_ALL |
     HTML_FRMOPT_ABSSIZE;
-const ULONG HTML_FRMOPTS_IMG            =
+const ULONG HTML_FRMOPTS_IMG			=
     HTML_FRMOPTS_IMG_ALL |
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE |
     HTML_FRMOPT_BRCLEAR;
-const ULONG HTML_FRMOPTS_IMG_CSS1       =
+const ULONG HTML_FRMOPTS_IMG_CSS1		=
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-const ULONG HTML_FRMOPTS_DIV            =
+const ULONG HTML_FRMOPTS_DIV 			=
     HTML_FRMOPT_ID |
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SIZE |
@@ -107,22 +107,22 @@ const ULONG HTML_FRMOPTS_DIV            =
     HTML_FRMOPT_BRCLEAR |
     HTML_FRMOPT_DIR;
 
-const ULONG HTML_FRMOPTS_MULTICOL       =
+const ULONG HTML_FRMOPTS_MULTICOL		=
     HTML_FRMOPT_ID |
     HTML_FRMOPT_WIDTH |
     HTML_FRMOPT_ANYSIZE |
     HTML_FRMOPT_ABSSIZE |
     HTML_FRMOPT_DIR;
-const ULONG HTML_FRMOPTS_MULTICOL_CNTNR =
+const ULONG HTML_FRMOPTS_MULTICOL_CNTNR	=
     HTML_FRMOPTS_MULTICOL;
-const ULONG HTML_FRMOPTS_MULTICOL_CSS1  =
+const ULONG HTML_FRMOPTS_MULTICOL_CSS1	=
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SIZE |
     HTML_FRMOPT_S_SPACE |
     HTML_FRMOPT_S_BORDER|
     HTML_FRMOPT_S_BACKGROUND;
 
-const ULONG HTML_FRMOPTS_SPACER         =
+const ULONG HTML_FRMOPTS_SPACER			=
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SIZE |
     HTML_FRMOPT_ANYSIZE |
@@ -130,7 +130,7 @@ const ULONG HTML_FRMOPTS_SPACER         =
     HTML_FRMOPT_MARGINSIZE |
     HTML_FRMOPT_ABSSIZE;
 
-const ULONG HTML_FRMOPTS_CNTNR          =
+const ULONG HTML_FRMOPTS_CNTNR			=
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE |
     HTML_FRMOPT_S_WIDTH |
@@ -146,30 +146,30 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFmt );
 static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
                                           const SwFrmFmt& rFrmFmt, BOOL bSpan );
 static Writer& OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFmt,
-                                      BOOL bInCntnr );
+                                      BOOL bInCntnr	);
 
 static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFmt,
-                                      BOOL bInCntnr );
+                                      BOOL bInCntnr	);
 
 static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                                        const SdrObject& rSdrObj    );
+                                        const SdrObject& rSdrObj	);
 //-----------------------------------------------------------------------
 
 extern HTMLOutEvent __FAR_DATA aAnchorEventTable[];
 
 static HTMLOutEvent __FAR_DATA aImageEventTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_O_SDonload,           OOO_STRING_SVTOOLS_HTML_O_onload,       SVX_EVENT_IMAGE_LOAD        },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonabort,      OOO_STRING_SVTOOLS_HTML_O_onabort,  SVX_EVENT_IMAGE_ABORT       },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonerror,      OOO_STRING_SVTOOLS_HTML_O_onerror,  SVX_EVENT_IMAGE_ERROR       },
-    { 0,                        0,                  0                       }
+    { OOO_STRING_SVTOOLS_HTML_O_SDonload,			OOO_STRING_SVTOOLS_HTML_O_onload,		SVX_EVENT_IMAGE_LOAD		},
+    { OOO_STRING_SVTOOLS_HTML_O_SDonabort,		OOO_STRING_SVTOOLS_HTML_O_onabort,	SVX_EVENT_IMAGE_ABORT		},
+    { OOO_STRING_SVTOOLS_HTML_O_SDonerror,		OOO_STRING_SVTOOLS_HTML_O_onerror,	SVX_EVENT_IMAGE_ERROR		},
+    { 0,						0,					0						}
 };
 
 static HTMLOutEvent __FAR_DATA aIMapEventTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,  OOO_STRING_SVTOOLS_HTML_O_onmouseover,  SFX_EVENT_MOUSEOVER_OBJECT  },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,       OOO_STRING_SVTOOLS_HTML_O_onmouseout,       SFX_EVENT_MOUSEOUT_OBJECT   },
-    { 0,                        0,                      0                           }
+    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,	OOO_STRING_SVTOOLS_HTML_O_onmouseover,	SFX_EVENT_MOUSEOVER_OBJECT	},
+    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,		OOO_STRING_SVTOOLS_HTML_O_onmouseout,		SFX_EVENT_MOUSEOUT_OBJECT	},
+    { 0,						0,					  	0							}
 };
 
 
@@ -378,7 +378,7 @@ void SwHTMLWriter::CollectFlyFrms()
 BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos,
                               HTMLOutContext *pContext )
 {
-    BOOL bFlysLeft = FALSE; // Noch Flys an aktueller Node-Position da?
+    BOOL bFlysLeft = FALSE;	// Noch Flys an aktueller Node-Position da?
 
     // OutFlyFrm kan rekursiv aufgerufen werden. Deshalb muss man
     // manchmal wieder von vorne anfangen, nachdem ein Fly ausgegeben
@@ -411,7 +411,7 @@ BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos,
                 {
                     delete pHTMLPosFlyFrms;
                     pHTMLPosFlyFrms = 0;
-                    bRestart = TRUE;    // nicht wirklich, nur raus
+                    bRestart = TRUE; 	// nicht wirklich, nur raus
                                         // aus der Schleife
                 }
 
@@ -486,17 +486,17 @@ void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
 
     switch( nOutMode )
     {
-    case HTML_OUT_TBLNODE:      // OK
+    case HTML_OUT_TBLNODE:		// OK
         ASSERT( !pCntnrStr, "Table: Container ist hier nicht vorgesehen" );
         OutHTML_FrmFmtTableNode( *this, rFrmFmt );
         break;
-    case HTML_OUT_GRFNODE:      // OK
+    case HTML_OUT_GRFNODE:		// OK
         OutHTML_FrmFmtGrfNode( *this, rFrmFmt, pCntnrStr != 0 );
         break;
-    case HTML_OUT_OLENODE:      // OK
+    case HTML_OUT_OLENODE:		// OK
         OutHTML_FrmFmtOLENode( *this, rFrmFmt, pCntnrStr != 0 );
         break;
-    case HTML_OUT_OLEGRF:       // OK
+    case HTML_OUT_OLEGRF:		// OK
         OutHTML_FrmFmtOLENodeGrf( *this, rFrmFmt, pCntnrStr != 0 );
         break;
     case HTML_OUT_DIV:
@@ -504,14 +504,14 @@ void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
         ASSERT( !pCntnrStr, "Div: Container ist hier nicht vorgesehen" );
         OutHTML_FrmFmtAsDivOrSpan( *this, rFrmFmt, HTML_OUT_SPAN==nOutMode );
         break;
-    case HTML_OUT_MULTICOL:     // OK
+    case HTML_OUT_MULTICOL:		// OK
         OutHTML_FrmFmtAsMulticol( *this, rFrmFmt, pCntnrStr != 0 );
         break;
-    case HTML_OUT_SPACER:       // OK
+    case HTML_OUT_SPACER:		// OK
         ASSERT( !pCntnrStr, "Spacer: Container ist hier nicht vorgesehen" );
         OutHTML_FrmFmtAsSpacer( *this, rFrmFmt );
         break;
-    case HTML_OUT_CONTROL:      // OK
+    case HTML_OUT_CONTROL:		// OK
         OutHTML_DrawFrmFmtAsControl( *this,
                                     (const SwDrawFrmFmt &)rFrmFmt, *pSdrObject,
                                     pCntnrStr != 0 );
@@ -911,7 +911,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                         rBox.CalcLineSpace(BOX_LINE_RIGHT) );
 
             ASSERT( nWidth>0, "Gibt es 0 twip breite Grafiken!?" );
-            if( nWidth<=0 ) // sollte nicht passieren
+            if( nWidth<=0 )	// sollte nicht passieren
                 nWidth = 1;
 
             if( rRealSize.Width() != nWidth )
@@ -1220,7 +1220,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                 // Grafik als (JPG-)File speichern
                 if( rHTMLWrt.GetOrigFileName() )
                     rGrfName = *rHTMLWrt.GetOrigFileName();
-                USHORT nErr = XOutBitmap::WriteGraphic( *pGrf,  rGrfName,
+                USHORT nErr = XOutBitmap::WriteGraphic(	*pGrf,  rGrfName,
                         String::CreateFromAscii("JPG"),
                         (XOUTBMP_USE_GIF_IF_SENSIBLE |
                          XOUTBMP_USE_NATIVE_IF_POSSIBLE));
@@ -1368,7 +1368,7 @@ static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
 
 static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
                                           const SwFrmFmt& rFrmFmt,
-                                          BOOL bInCntnr )
+                                          BOOL bInCntnr	)
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1421,7 +1421,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     rWrt.Strm() << '>';
 
     rHTMLWrt.bLFPossible = TRUE;
-    rHTMLWrt.IncIndentLevel();  // den Inhalt von Multicol einruecken;
+    rHTMLWrt.IncIndentLevel();	// den Inhalt von Multicol einruecken;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
@@ -1438,9 +1438,9 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
 
-//  rHTMLWrt.ChangeParaToken( 0 );  // MIB 8.7.97: Passiert jetzt in Out_SwDoc
+//	rHTMLWrt.ChangeParaToken( 0 );	// MIB 8.7.97: Passiert jetzt in Out_SwDoc
 
-    rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
+    rHTMLWrt.DecIndentLevel();	// den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_multicol, FALSE );
@@ -1507,7 +1507,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags );
     rWrt.Strm() << '>';
 
-    rHTMLWrt.IncIndentLevel();  // den Inhalt einruecken
+    rHTMLWrt.IncIndentLevel();	// den Inhalt einruecken
     rHTMLWrt.bLFPossible = TRUE;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
@@ -1529,7 +1529,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
 
-    rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
+    rHTMLWrt.DecIndentLevel();	// den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, FALSE );
@@ -1613,7 +1613,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         USHORT nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGrfNm,
                 String::CreateFromAscii("JPG"), nFlags, &aMM100Size );
-        if( nErr )              // fehlerhaft, da ist nichts auszugeben
+        if( nErr )     			// fehlerhaft, da ist nichts auszugeben
         {
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
             return rWrt;
@@ -1640,7 +1640,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
 
 static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                                  const SdrObject& rSdrObj  )
+                                  const SdrObject& rSdrObj	)
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1683,7 +1683,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     sOut += (bHeader ? "HEADER" : "FOOTER" );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.GetBuffer() );
 
-    rHTMLWrt.IncIndentLevel();  // den Inhalt von Multicol einruecken;
+    rHTMLWrt.IncIndentLevel();	// den Inhalt von Multicol einruecken;
 
     // Einen Spacer fuer den Absatnd zusammenbasteln. Da durch das
     // <DL> bzw. </DL> immer einer Absatz-Abstand entsteht, wird der
@@ -1737,7 +1737,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), aSpacer.GetBuffer() );
     }
 
-    rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
+    rHTMLWrt.DecIndentLevel();	// den Inhalt von Multicol einruecken;
     rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, FALSE );
 

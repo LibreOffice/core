@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ static rtl::OUString ImplGetLocale(int category)
     return aLocaleBuffer.makeStringAndClear();
 }
 
-#elif defined(MACOSX)
+#elif defined(MACOSX) 
 
 #include <rtl/ustrbuf.hxx>
 #include <locale.h>
@@ -100,7 +100,7 @@ namespace /* private */
 
     void OUStringBufferAppendCFString(rtl::OUStringBuffer& buffer, const CFStringRef s)
     {
-        CFIndex lstr = CFStringGetLength(s);
+        CFIndex lstr = CFStringGetLength(s);	
         for (CFIndex i = 0; i < lstr; i++)
             buffer.append(CFStringGetCharacterAtIndex(s, i));
     }
@@ -119,7 +119,7 @@ namespace /* private */
     typedef CFGuard<CFStringRef> CFStringGuard;
     typedef CFGuard<CFTypeRef> CFTypeRefGuard;
 
-    /* For more information on the Apple locale concept please refer to
+    /* For more information on the Apple locale concept please refer to 
     http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFLocales/Articles/CFLocaleConcepts.html
     According to this documentation a locale identifier has the format: language[_country][_variant]*
     e.g. es_ES_PREEURO -> spain prior Euro support
@@ -131,51 +131,51 @@ namespace /* private */
     {
         CFStringRef csPref = CFStringCreateWithCString(NULL, pref, kCFStringEncodingASCII);
         CFStringGuard csRefGuard(csPref);
-
+        
         CFTypeRef ref = CFPreferencesCopyAppValue(csPref, kCFPreferencesCurrentApplication);
         CFTypeRefGuard refGuard(ref);
-
+    
         if (ref == NULL)
             return NULL;
-
+        
         CFStringRef sref = (CFGetTypeID(ref) == CFArrayGetTypeID()) ? (CFStringRef)CFArrayGetValueAtIndex((CFArrayRef)ref, 0) : (CFStringRef)ref;
-
+        
         // NOTE: this API is only available with Mac OS X >=10.3. We need to use it because
         // Apple used non-ISO values on systems <10.2 like "German" for instance but didn't
         // upgrade those values during upgrade to newer Mac OS X versions. See also #i54337#
-        return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);
+        return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);			
     }
 
     rtl::OUString ImplGetLocale(const char* pref)
     {
         CFStringRef sref = ImplGetAppPreference(pref);
         CFStringGuard srefGuard(sref);
-
+        
         rtl::OUStringBuffer aLocaleBuffer;
         aLocaleBuffer.appendAscii("en-US"); // initialize with fallback value
-
+        
         if (sref != NULL)
         {
-            // split the string into substrings; the first two (if there are two) substrings
+            // split the string into substrings; the first two (if there are two) substrings 
             // are language and country
             CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(NULL, sref, CFSTR("_"));
             CFArrayGuard subsGuard(subs);
-
+                
             if (subs != NULL)
             {
                 aLocaleBuffer.setLength(0); // clear buffer which still contains fallback value
-
+                
                 CFStringRef lang = (CFStringRef)CFArrayGetValueAtIndex(subs, 0);
                 OUStringBufferAppendCFString(aLocaleBuffer, lang);
-
+                
                 // country also available? Assumption: if the array contains more than one
                 // value the second value is always the country!
-                if (CFArrayGetCount(subs) > 1)
-                {
+                if (CFArrayGetCount(subs) > 1) 
+                {	
                     aLocaleBuffer.appendAscii("-");
                     CFStringRef country = (CFStringRef)CFArrayGetValueAtIndex(subs, 1);
                     OUStringBufferAppendCFString(aLocaleBuffer, country);
-                }
+                }					
             }
         }
         return aLocaleBuffer.makeStringAndClear();
@@ -200,7 +200,7 @@ namespace /* private */
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 
 rtl::OUString ImplGetLocale(LCID lcid)
 {
@@ -329,15 +329,15 @@ rtl::OUString SAL_CALL LocaleBackend::getBackendName(void) {
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL LocaleBackend::getImplementationName(void)
-    throw (uno::RuntimeException)
+rtl::OUString SAL_CALL LocaleBackend::getImplementationName(void) 
+    throw (uno::RuntimeException) 
 {
     return getBackendName() ;
 }
 
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
+uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void) 
 {
     uno::Sequence<rtl::OUString> aServiceNameList(1);
     aServiceNameList[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.LocaleBackend")) ;
@@ -346,22 +346,22 @@ uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void
 
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL LocaleBackend::supportsService(const rtl::OUString& aServiceName)
-    throw (uno::RuntimeException)
+sal_Bool SAL_CALL LocaleBackend::supportsService(const rtl::OUString& aServiceName) 
+    throw (uno::RuntimeException) 
 {
     uno::Sequence< rtl::OUString > const svc = getBackendServiceNames();
 
     for(sal_Int32 i = 0; i < svc.getLength(); ++i )
         if(svc[i] == aServiceName)
             return true;
-
+            
     return false;
 }
 
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(void)
-    throw (uno::RuntimeException)
+uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(void) 
+    throw (uno::RuntimeException) 
 {
     return getBackendServiceNames() ;
 }

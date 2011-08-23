@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,30 +29,30 @@
 #define __FRAMEWORK_QUERIES_H_
 
 //_________________________________________________________________________________________________________________
-//  own includes
+//	own includes
 //_________________________________________________________________________________________________________________
 
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          These values describe our supported queries for type, filter ... properties.
+    @short			These values describe our supported queries for type, filter ... properties.
                     They are used by our FilterFactory or ouer TypeDetection to return
                     subsets of our cached configuration.
 *//*-*************************************************************************************************************/
@@ -397,6 +397,6 @@ class QueryAnalyzer
 
 };      // class QueryAnalyzer
 
-}       //  namespace framework
+}		//	namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_QUERIES_H_
+#endif	//	#ifndef __FRAMEWORK_QUERIES_H_

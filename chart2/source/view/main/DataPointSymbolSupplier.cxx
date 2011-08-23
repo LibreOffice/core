@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
         xTarget->add(xGroup);
     uno::Reference< drawing::XShapes > xGroupShapes =
         uno::Reference<drawing::XShapes>( xGroup, uno::UNO_QUERY );
-
+    
     ShapeFactory aShapeFactory(xShapeFactory);
     drawing::Position3D  aPos(0,0,0);
     for(sal_Int32 nS=0;nS<ShapeFactory::getSymbolCount();nS++)

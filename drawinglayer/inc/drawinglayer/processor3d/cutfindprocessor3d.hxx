@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace drawinglayer
             /// bitfield
             bool                                    mbAnyHit : 1;
 
-            /*  this flag decides if primitives which are invisible will be taken into account for
+            /*  this flag decides if primitives which are invisible will be taken into account for 
                 HitTesting or not.
              */
             bool                                    mbUseInvisiblePrimitiveContent : 1;
@@ -71,8 +71,8 @@ namespace drawinglayer
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
         public:
-            CutFindProcessor(const geometry::ViewInformation3D& rViewInformation,
-                const basegfx::B3DPoint& rFront,
+            CutFindProcessor(const geometry::ViewInformation3D& rViewInformation, 
+                const basegfx::B3DPoint& rFront, 
                 const basegfx::B3DPoint& rBack,
                 bool bAnyHit);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,16 @@
 
 typedef cppu::ImplInheritanceHelper1< VbaPageSetupBase, ooo::vba::word::XPageSetup > SwVbaPageSetup_BASE;
 
-class SwVbaPageSetup :  public SwVbaPageSetup_BASE
+class SwVbaPageSetup :  public SwVbaPageSetup_BASE 
 {
 private:
     rtl::OUString getStyleOfFirstPage() throw (css::uno::RuntimeException);
 
 public:
-    SwVbaPageSetup( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent,
+    SwVbaPageSetup( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, 
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::frame::XModel >& xModel,
-                    const css::uno::Reference< css::beans::XPropertySet >& xProps ) throw (css::uno::RuntimeException);
+                    const css::uno::Reference< css::frame::XModel >& xModel, 
+                    const css::uno::Reference< css::beans::XPropertySet >& xProps ) throw (css::uno::RuntimeException); 
     virtual ~SwVbaPageSetup(){}
 
     // Attributes

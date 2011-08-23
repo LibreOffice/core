@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ public:
     VendorSettings();
 
     /** Gets all plugin library URLs with the corresponding vendor name.
-
+    
     It uses the /javaSelection/plugins/library element from the javavendors.xml
     to locate the library.
     Is is verified that the plug-in exist. If a plug-in does not exist then an
@@ -55,7 +55,7 @@ public:
 
     VersionInfo getVersionInformation(const ::rtl::OUString & sVendor);
 
-    ::std::vector< ::rtl::OUString> getSupportedVendors();
+    ::std::vector< ::rtl::OUString> getSupportedVendors();    
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.
@@ -69,7 +69,7 @@ namespace  BootParams
    In direct mode either of them must be set. If not an exception is thrown.
 */
 ::rtl::OUString getJREHome();
-
+    
 ::std::vector< ::rtl::OString> getVMParameters();
 
 ::rtl::OUString getUserData();

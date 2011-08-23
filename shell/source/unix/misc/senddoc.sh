@@ -11,7 +11,7 @@ fi
 # do not confuse the system mail clients with OOo and Java libraries
 unset LD_LIBRARY_PATH
 
-# tries to locate the executable specified
+# tries to locate the executable specified 
 # as first parameter in the user's path.
 which() {
     if [ ! -z "$1" ]; then
@@ -24,7 +24,7 @@ which() {
     fi
 }
 
-# checks for the original mozilla start script(s)
+# checks for the original mozilla start script(s) 
 # and restrict the "-remote" semantics to those.
 run_mozilla() {
     # find mozilla script in PATH if necessary
@@ -56,7 +56,7 @@ fi
 case `basename "$MAILER" | sed 's/-.*$//'` in
 
     iceape | mozilla | netscape | seamonkey | icedove | thunderbird)
-
+    
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
@@ -107,12 +107,12 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         if [ "$ATTACH" != "" ]; then
             COMMAND=${COMMAND:-}${COMMAND:+,}attachment=${ATTACH}
         fi
-
+        
         run_mozilla "$MAILER" "$COMMAND"
         ;;
-
+        
     kmail)
-
+    
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
@@ -144,14 +144,14 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             esac
             shift;
         done
-
+        
         ${MAILER} --composer ${CC:+--cc} ${CC:+"${CC}"} ${BCC:+--bcc} ${BCC:+"${BCC}"} \
             ${SUBJECT:+--subject} ${SUBJECT:+"${SUBJECT}"} ${BODY:+--body} ${BODY:+"${BODY}"} \
             ${ATTACH:+--attach} ${ATTACH:+"${ATTACH}"} ${TO:+"${TO}"}
         ;;
-
+        
     mutt)
-
+    
         while [ "$1" != "" ]; do
             case $1 in
                 --from)
@@ -189,7 +189,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             esac
             shift;
         done
-
+        
         x-terminal-emulator -e ${MAILER} \
             ${FROM:+-e} ${FROM:+"set from=\"${FROM}\""} \
             ${CC:+-c} ${CC:+"${CC}"} \
@@ -200,9 +200,9 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             ${TO:+"${TO}"} &
         rm -f $BODY
         ;;
-
+        
     evolution)
-
+    
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
@@ -238,13 +238,13 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             esac
             shift;
         done
-
+        
         MAILTO="mailto:${TO}?${MAILTO}"
         ${MAILER} "${MAILTO}" &
         ;;
-
+ 
     groupwise)
-
+    
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
@@ -280,13 +280,13 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             esac
             shift;
         done
-
+        
         MAILTO="mailto:${TO}?${MAILTO}"
         ${MAILER} "${MAILTO}" &
         ;;
 
     dtmail)
-
+     
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
@@ -302,12 +302,12 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             esac
             shift;
         done
-
+         
         ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"}
         ;;
 
     sylpheed | claws)
-
+     
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
@@ -323,7 +323,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             esac
             shift;
         done
-
+         
          ${MAILER} ${TO:+--compose} "${TO:-}" ${ATTACH:+--attach} "${ATTACH:-}"
         ;;
 
@@ -345,7 +345,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ;;
 
     "")
-
+    
         # DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
         if [ -n "$DESKTOP_LAUNCH" ]; then
             while [ "$1" != "" ]; do
@@ -383,7 +383,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                 esac
                 shift;
             done
-
+        
             MAILTO="mailto:${TO}?${MAILTO}"
             ${DESKTOP_LAUNCH} "${MAILTO}" &
         else
@@ -391,11 +391,11 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             exit 2
         fi
         ;;
-
+        
     *)
         echo "Unsupported mail client: `basename $MAILER | sed 's/-.*^//'`"
         exit 2
         ;;
-esac
-
+esac  
+  
 exit 0

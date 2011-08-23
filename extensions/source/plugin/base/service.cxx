@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,17 +61,17 @@ extern "C" {
             try
             {
                 Reference< ::com::sun::star::registry::XRegistryKey > xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pXUnoKey ) );
-
+                
                 ::rtl::OUString aImplName = ::rtl::OUString::createFromAscii( "/" );
                 aImplName += XPluginManager_Impl::getImplementationName_Static();
                 aImplName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES/com.sun.star.plugin.PluginManager" );
                 xKey->createKey( aImplName );
-
+                
                 aImplName = ::rtl::OUString::createFromAscii( "/" );
                 aImplName += PluginModel::getImplementationName_Static();
                 aImplName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES/com.sun.star.plugin.PluginModel" );
                 xKey->createKey( aImplName );
-
+                
                 return sal_True;
             }
             catch( ::com::sun::star::registry::InvalidRegistryException& )

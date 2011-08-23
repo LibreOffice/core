@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,19 +48,19 @@ namespace drawinglayer
             it decomposes to it's Child content, and thus the visualisation would
             contaiun no clips.
 
-            The geometrc range of this primitive is completely defined by the Mask
+            The geometrc range of this primitive is completely defined by the Mask 
             PolyPolygon since by definition nothing outside of the mask is visible.
          */
         class MaskPrimitive2D : public GroupPrimitive2D
         {
         private:
             /// the mask PolyPolygon
-            basegfx::B2DPolyPolygon                 maMask;
+            basegfx::B2DPolyPolygon					maMask;
 
         public:
             /// constructor
             MaskPrimitive2D(
-                const basegfx::B2DPolyPolygon& rMask,
+                const basegfx::B2DPolyPolygon& rMask, 
                 const Primitive2DSequence& rChildren);
 
             /// data read access

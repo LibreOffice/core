@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "uno/Enterable.h"
 #include "rtl/ustring.hxx"
 
-namespace cppu
+namespace cppu 
 {
 /** C++ wrapper for binary C Enterable
     (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Stack)
@@ -73,15 +73,15 @@ private:
 
 extern "C" inline void Enterable_call_enter (void * context) { ((Enterable *)context)->v_enter(); };
 extern "C" inline void Enterable_call_leave (void * context) { ((Enterable *)context)->v_leave(); };
-extern "C" inline void Enterable_call_callInto_v(void * context, uno_EnvCallee * pCallee, va_list * pParam)
+extern "C" inline void Enterable_call_callInto_v(void * context, uno_EnvCallee * pCallee, va_list * pParam) 
     { ((Enterable *)context)->v_callInto_v(pCallee, pParam); };
-extern "C" inline void Enterable_call_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam)
+extern "C" inline void Enterable_call_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam) 
     { ((Enterable *)context)->v_callOut_v(pCallee, pParam); };
 extern "C" inline int  Enterable_call_isValid   (void * context, rtl_uString ** pReason)
     {return ((Enterable *)context)->v_isValid((rtl::OUString *)pReason);}
 
 
-Enterable::Enterable(void)
+Enterable::Enterable(void) 
 {
     m_enter      = Enterable_call_enter;
     m_leave      = Enterable_call_leave;

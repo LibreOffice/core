@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,10 +167,10 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
     if(PTR_CAST(SwWebDocShell, pDocSh))
     {
-        aParaTemplLbl   .Hide();
-        aParaTemplBox   .Hide();
-        aPageTemplLbl   .Hide();
-        aPageTemplBox   .Hide();
+        aParaTemplLbl	.Hide();
+        aParaTemplBox	.Hide();
+        aPageTemplLbl	.Hide();
+        aPageTemplBox	.Hide();
         aFtnCharTextTemplLbl.Hide();
         aFtnCharTextTemplBox.Hide();
         aFtnCharAnchorTemplLbl.Hide();
@@ -250,7 +250,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
     SwTxtFmtColl* pColl = pInf->GetFtnTxtColl();
     if( !pColl )
-        aParaTemplBox.SelectEntry( sStr );      // Default
+        aParaTemplBox.SelectEntry( sStr );		// Default
     else
     {
         ASSERT(!pColl->IsDefault(), "Defaultvorlage fuer Fussnoten ist falsch.");
@@ -290,7 +290,7 @@ SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Unterschiedliche Arten der Numerierung; da die Listbox
+ Beschreibung:	Unterschiedliche Arten der Numerierung; da die Listbox
                 unterschiedlich viele Eintraege hat, hier Funktionen
                 fuer das Setzen und Erfragen der gemeinten Art
                 der Numerierung.
@@ -343,7 +343,7 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter dem Button fuer Sammeln der Fussnote
+ Beschreibung:	Handler hinter dem Button fuer Sammeln der Fussnote
                 auf der Seite.
                 In diesem Fall koennen alle Numerierungsarten verwendet
                 werden.
@@ -385,7 +385,7 @@ IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter dem Button fuer Sammeln der Fussnote
+ Beschreibung:	Handler hinter dem Button fuer Sammeln der Fussnote
                 am Kapitel oder Dokumentende.
                 In diesem Fall kann keine seitenweise Numerierung verwendet
                 werden.

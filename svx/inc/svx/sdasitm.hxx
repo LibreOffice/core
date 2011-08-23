@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ private:
     typedef std::hash_map < PropertyPair, sal_Int32, PropertyPairHash, PropertyPairEq > PropertyPairHashMap;
     typedef std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash, PropertyEq > PropertyHashMap;
 
-    PropertyHashMap     aPropHashMap;
+    PropertyHashMap		aPropHashMap;
     PropertyPairHashMap aPropPairHashMap;
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPropSeq;
@@ -88,19 +88,19 @@ private:
             SdrCustomShapeGeometryItem( SvStream& rIn, sal_uInt16 nVersion );
             ~SdrCustomShapeGeometryItem();
 
-            virtual int                 operator==( const SfxPoolItem& ) const;
+            virtual int					operator==( const SfxPoolItem& ) const;
             virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
                                             SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
                                                 String &rText, const IntlWrapper * = 0) const;
 
-            virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const;
-            virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const;
+            virtual SfxPoolItem*		Create( SvStream&, sal_uInt16 nItem ) const;
+            virtual SvStream&			Store( SvStream&, sal_uInt16 nVersion ) const;
 
-            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const;
-            virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
+            virtual SfxPoolItem*		Clone( SfxItemPool* pPool = NULL ) const;
+            virtual	sal_uInt16			GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-            virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-            virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+            virtual	sal_Bool			QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+            virtual	sal_Bool			PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const;
 
@@ -129,8 +129,8 @@ class SdrCustomShapeReplacementURLItem : public SfxStringItem
 //---------------------------
 class SdrTextWordWrapItem : public SdrOnOffItem {
 public:
-    SdrTextWordWrapItem( BOOL bAuto = FALSE ):  SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
-    SdrTextWordWrapItem( SvStream& rIn )  :     SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, rIn )   {}
+    SdrTextWordWrapItem( BOOL bAuto = FALSE ):	SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
+    SdrTextWordWrapItem( SvStream& rIn )  :		SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, rIn )   {}
 };
 
 //-------------------------------
@@ -138,8 +138,8 @@ public:
 //-------------------------------
 class SdrTextAutoGrowSizeItem : public SdrOnOffItem {
 public:
-    SdrTextAutoGrowSizeItem( BOOL bAuto = FALSE ):      SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}
-    SdrTextAutoGrowSizeItem( SvStream& rIn )   :        SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, rIn )   {}
+    SdrTextAutoGrowSizeItem( BOOL bAuto = FALSE ):		SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}
+    SdrTextAutoGrowSizeItem( SvStream& rIn )   :		SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, rIn )   {}
 };
 
 #endif

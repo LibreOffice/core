@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,14 +79,14 @@ public:
         { return m_nFolder; }
 
 protected:
-    ITEMIDLIST  *m_pidl;
-    int         m_nFolder;
+    ITEMIDLIST	*m_pidl;
+    int			m_nFolder;
 };
 
 
 inline CItemIDList CItemIDList::operator + ( const CItemIDList & rIDList ) const
 {
-    CItemIDList aCopy( *this );
+    CItemIDList	aCopy( *this );
     aCopy += rIDList;
     return aCopy;
 }
@@ -108,81 +108,81 @@ enum NotificationEvent
 
 typedef struct _WIN32_VOLUME_DATA
 {
-    TCHAR   cDeviceName[MAX_PATH];
-    TCHAR   cVolumeName[MAX_PATH];
-    TCHAR   cFileSystemName[MAX_PATH];
-    DWORD   dwSerialNumber;
-    DWORD   dwFileSystemFlags;
-    DWORD   nMaxComponentLength;
+    TCHAR	cDeviceName[MAX_PATH];
+    TCHAR	cVolumeName[MAX_PATH];
+    TCHAR	cFileSystemName[MAX_PATH];
+    DWORD	dwSerialNumber;
+    DWORD	dwFileSystemFlags;
+    DWORD	nMaxComponentLength;
 } WIN32_VOLUME_DATA;
 
 // Bekannte Class-IDs fuer wichtige Ordner
 
-// {871C5380-42A0-1069-A2EA-08002B30309D}   Internet Explorer 4.0
-static const GUID CLSID_IE4 =
+// {871C5380-42A0-1069-A2EA-08002B30309D}	Internet Explorer 4.0
+static const GUID CLSID_IE4 = 
 { 0x871C5380, 0x42A0, 0x1069, { 0xA2, 0xEA, 0x08, 0x00, 0x2B, 0x30, 0x30, 0x9D } };
 
-// {208D2C60-3AEA-1069-A2D7-08002B30309D}   Netzwerkumgebung
-static const GUID CLSID_Network =
+// {208D2C60-3AEA-1069-A2D7-08002B30309D}	Netzwerkumgebung
+static const GUID CLSID_Network = 
 { 0x208D2C60, 0x3AEA, 0x1069, { 0xA2, 0xD7, 0x08, 0x00, 0x2B, 0x30, 0x30, 0x9D } };
 
-// {645FF040-5081-101B-9F08-00AA002F954E}   Papierkorb
-static const GUID CLSID_RecycleBin =
+// {645FF040-5081-101B-9F08-00AA002F954E}	Papierkorb
+static const GUID CLSID_RecycleBin = 
 { 0x645FF040, 0x5081, 0x101B, { 0x9F, 0x08, 0x00, 0xAA, 0x00, 0x2F, 0x95, 0x4E } };
 
-// {20D04FE0-3AEA-1069-A2D8-08002B30309D}   Arbeitsplatz
-static const GUID CLSID_MyComputer =
+// {20D04FE0-3AEA-1069-A2D8-08002B30309D}	Arbeitsplatz
+static const GUID CLSID_MyComputer = 
 { 0x20D04FE0, 0x3AEA, 0x1069, { 0xA2, 0xD8, 0x08, 0x00, 0x2B, 0x30, 0x30, 0x9D } };
 
-// {D6277990-4C6A-11CF-8D87-00AA0060F5BF}   Geplante Vorgänge
-static const GUID CLSID_Tasks =
+// {D6277990-4C6A-11CF-8D87-00AA0060F5BF}	Geplante Vorgänge
+static const GUID CLSID_Tasks = 
 { 0xD6277990, 0x4C6A, 0x11CF, { 0x8D, 0x87, 0x00, 0xAA, 0x00, 0x60, 0xF5, 0xBF } };
 
 // Fehlt im Header
 
-#define SHGDN_INCLUDE_NONFILESYS    0x2000
+#define SHGDN_INCLUDE_NONFILESYS	0x2000
 
-#define CSIDL_UNKNOWN   -1
-#define CSIDL_ROOT      -2
-#define CSIDL_SYSTEM    -3
+#define CSIDL_UNKNOWN	-1
+#define CSIDL_ROOT		-2
+#define CSIDL_SYSTEM	-3
 
 // Suchmaske fuer IEnumIDList
 
-#define SHCONTF_ALL (SHCONTF_FOLDERS | SHCONTF_NONFOLDERS | SHCONTF_INCLUDEHIDDEN)
+#define SHCONTF_ALL	(SHCONTF_FOLDERS | SHCONTF_NONFOLDERS | SHCONTF_INCLUDEHIDDEN)
 
 // SHITEM Prefix Kinds
 
-#define SHGII_CONTAINER_MASK        0x70
+#define SHGII_CONTAINER_MASK		0x70
 
-#define SHGII_COMPUTER              0x20
+#define SHGII_COMPUTER				0x20
 
-#define SHGII_COMPUTER_REMOVABLE    0x22
-#define SHGII_COMPUTER_FIXED        0x23
-#define SHGII_COMPUTER_REMOTE       0x24
-#define SHGII_COMPUTER_CDROM        0x25
-#define SHGII_COMPUTER_RAMDISK      0x26
-#define SHGII_COMPUTER_FLOPPY525    0x28
-#define SHGII_COMPUTER_FLOPPY35     0x29
-#define SHGII_COMPUTER_NETWORK      0x2A
-#define SHGII_COMPUTER_REGITEM      0x2E
+#define SHGII_COMPUTER_REMOVABLE	0x22
+#define SHGII_COMPUTER_FIXED		0x23
+#define SHGII_COMPUTER_REMOTE		0x24
+#define SHGII_COMPUTER_CDROM		0x25
+#define SHGII_COMPUTER_RAMDISK		0x26
+#define SHGII_COMPUTER_FLOPPY525	0x28
+#define SHGII_COMPUTER_FLOPPY35		0x29
+#define SHGII_COMPUTER_NETWORK		0x2A
+#define SHGII_COMPUTER_REGITEM		0x2E
 
-#define SHGII_ROOT                  0x10
-#define SHGII_ROOT_REGITEM          0x1F
+#define SHGII_ROOT					0x10
+#define SHGII_ROOT_REGITEM			0x1F
 
-#define SHGII_NETWORK               0x40
-#define SHGII_NETWORK_TREE          0x47
-#define SHGII_NETWORK_SERVER        0x42
-#define SHGII_NETWORK_DIRECTORY     0x43
-#define SHGII_NETWORK_PRINTER       0x41
+#define SHGII_NETWORK				0x40
+#define SHGII_NETWORK_TREE			0x47
+#define SHGII_NETWORK_SERVER		0x42
+#define SHGII_NETWORK_DIRECTORY		0x43
+#define SHGII_NETWORK_PRINTER		0x41
 
-#define SHGII_FILESYSTEM            0x30
-#define SHGII_FILESYSTEM_FILE       0x31
-#define SHGII_FILESYSTEM_DIRECTORY  0x32
+#define SHGII_FILESYSTEM			0x30
+#define SHGII_FILESYSTEM_FILE		0x31
+#define SHGII_FILESYSTEM_DIRECTORY	0x32
 
-#define SHGII_ANCESTOR              0x80
+#define SHGII_ANCESTOR				0x80
 
-#define SHITEMCONTAINER( pidl )     ((pidl)->mkid.abID[0] & SHGII_CONTAINER_MASK)
-#define SHITEMKIND( pidl )          ((pidl)->mkid.abID[0] & 0x7F)
+#define SHITEMCONTAINER( pidl )		((pidl)->mkid.abID[0] & SHGII_CONTAINER_MASK)
+#define SHITEMKIND( pidl )			((pidl)->mkid.abID[0] & 0x7F)
 
 //----------------------------------------------------------------------------
 // CShellFolderData
@@ -194,12 +194,12 @@ protected:
     CShellFolderData();
     virtual ~CShellFolderData();
 
-    IShellFolder    *m_pShellFolder;
-    IEnumIDList     *m_pEnumIDList;
-    IShellIcon      *m_pShellIcon;
-    BOOL            m_bIsOpen;
-    HANDLE          m_hCancelEvent;
-    DWORD           m_dwContentFlags;
+    IShellFolder	*m_pShellFolder;
+    IEnumIDList		*m_pEnumIDList;
+    IShellIcon		*m_pShellIcon;
+    BOOL			m_bIsOpen;
+    HANDLE			m_hCancelEvent;
+    DWORD			m_dwContentFlags;
 };
 
 //----------------------------------------------------------------------------
@@ -233,7 +233,7 @@ public:
     virtual BOOL GetVolumeInfo( const CItemIDList & rIDList, WIN32_VOLUME_DATA * );
 
     // Modifying the folder contents
-
+    
     virtual BOOL SetNameOf( const CItemIDList &, const String &, CItemIDList & );
     virtual BOOL DeleteItem( const CItemIDList & );
 
@@ -276,7 +276,7 @@ protected:
 
     void Initialize( LPCTSTR pszPath );
 
-    TCHAR   m_szPath[MAX_PATH];
+    TCHAR	m_szPath[MAX_PATH];
 };
 
 //----------------------------------------------------------------------------
@@ -295,7 +295,7 @@ protected:
 
     void Initialize( int nFolder );
 
-    int m_nFolder;
+    int	m_nFolder;
 };
 
 //----------------------------------------------------------------------------

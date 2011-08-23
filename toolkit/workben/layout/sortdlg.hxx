@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,25 +46,25 @@
 class ScSortDlg : public SfxTabDialog
 {
 public:
-                ScSortDlg( Window*           pParent,
+                ScSortDlg( Window*			 pParent,
                            const SfxItemSet* pArgSet );
                 ~ScSortDlg();
 
-    void    SetHeaders( BOOL bHeaders );
-    void    SetByRows ( BOOL bByRows );
-    BOOL    GetHeaders() const;
-    BOOL    GetByRows () const;
+    void	SetHeaders( BOOL bHeaders );
+    void	SetByRows ( BOOL bByRows );
+    BOOL	GetHeaders() const;
+    BOOL	GetByRows () const;
 
 
 private:
-    BOOL    bIsHeaders;
-    BOOL    bIsByRows;
+    BOOL	bIsHeaders;
+    BOOL	bIsByRows;
 };
 
-inline void ScSortDlg::SetHeaders( BOOL bHeaders )  { bIsHeaders = bHeaders; }
-inline void ScSortDlg::SetByRows ( BOOL bByRows  )  { bIsByRows = bByRows; }
-inline BOOL ScSortDlg::GetHeaders() const           { return bIsHeaders; }
-inline BOOL ScSortDlg::GetByRows () const           { return bIsByRows; }
+inline void ScSortDlg::SetHeaders( BOOL bHeaders )	{ bIsHeaders = bHeaders; }
+inline void ScSortDlg::SetByRows ( BOOL bByRows  )	{ bIsByRows = bByRows; }
+inline BOOL ScSortDlg::GetHeaders() const 			{ return bIsHeaders; }
+inline BOOL ScSortDlg::GetByRows () const 			{ return bIsByRows; }
 
 #if !LAYOUT_SFX_TABDIALOG_BROKEN
 #include <layout/layout-post.hxx>

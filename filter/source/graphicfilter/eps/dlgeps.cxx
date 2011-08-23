@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,45 +44,45 @@
 \************************************************************************/
 
 DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPS, *rPara.pResMgr ) ),
-                rFltCallPara        ( rPara ),
-                aGrpPreview         ( this, ResId( GRP_PREVIEW, *rPara.pResMgr ) ),
-                aCBPreviewTiff      ( this, ResId( CB_PREVIEW_TIFF, *rPara.pResMgr ) ),
-                aCBPreviewEPSI      ( this, ResId( CB_PREVIEW_EPSI, *rPara.pResMgr ) ),
-                aGrpVersion         ( this, ResId( GRP_VERSION, *rPara.pResMgr ) ),
-                aRBLevel1           ( this, ResId( RB_LEVEL1, *rPara.pResMgr ) ),
-                aRBLevel2           ( this, ResId( RB_LEVEL2, *rPara.pResMgr ) ),
-                aGrpColor           ( this, ResId( GRP_COLOR, *rPara.pResMgr ) ),
-                aRBColor            ( this, ResId( RB_COLOR, *rPara.pResMgr ) ),
-                aRBGrayscale        ( this, ResId( RB_GRAYSCALE, *rPara.pResMgr ) ),
-                aGrpCompression     ( this, ResId( GRP_COMPRESSION, *rPara.pResMgr ) ),
-                aRBCompressionLZW   ( this, ResId( RB_COMPRESSION_LZW, *rPara.pResMgr ) ),
-                aRBCompressionNone  ( this, ResId( RB_COMPRESSION_NONE, *rPara.pResMgr ) ),
-                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
-                pMgr                ( rPara.pResMgr )
+                ModalDialog			( rPara.pWindow, ResId( DLG_EXPORT_EPS, *rPara.pResMgr ) ),
+                rFltCallPara		( rPara ),
+                aGrpPreview			( this, ResId( GRP_PREVIEW, *rPara.pResMgr ) ),
+                aCBPreviewTiff		( this, ResId( CB_PREVIEW_TIFF, *rPara.pResMgr ) ),
+                aCBPreviewEPSI		( this, ResId( CB_PREVIEW_EPSI, *rPara.pResMgr ) ),
+                aGrpVersion			( this, ResId( GRP_VERSION, *rPara.pResMgr ) ),
+                aRBLevel1			( this, ResId( RB_LEVEL1, *rPara.pResMgr ) ),
+                aRBLevel2			( this, ResId( RB_LEVEL2, *rPara.pResMgr ) ),
+                aGrpColor			( this, ResId( GRP_COLOR, *rPara.pResMgr ) ),
+                aRBColor			( this, ResId( RB_COLOR, *rPara.pResMgr ) ),
+                aRBGrayscale		( this, ResId( RB_GRAYSCALE, *rPara.pResMgr ) ),
+                aGrpCompression		( this, ResId( GRP_COMPRESSION, *rPara.pResMgr ) ),
+                aRBCompressionLZW	( this, ResId( RB_COMPRESSION_LZW, *rPara.pResMgr ) ),
+                aRBCompressionNone	( this, ResId( RB_COMPRESSION_NONE, *rPara.pResMgr ) ),
+                aBtnOK				( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel			( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp			( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
+                pMgr				( rPara.pResMgr )
 {
     FreeResource();
 
-    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/EPS" ) );
+    String	aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/EPS" ) );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     // Config-Parameter lesen
     String sPreview( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) );
     String sVersion( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
-    String sColorFormat( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
+    String sColorFormat( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );   
     String sCompressionMode( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
     String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
 
-    sal_Int32   nPreview = pConfigItem->ReadInt32( sPreview, 0 );
-    sal_Int32   nVersion = pConfigItem->ReadInt32( sVersion, 2 );
-    sal_Int32   nColor = pConfigItem->ReadInt32( sColorFormat, 0 );
-    sal_Int32   nCompr = pConfigItem->ReadInt32( sCompressionMode, 2 );
+    sal_Int32	nPreview = pConfigItem->ReadInt32( sPreview, 0 );
+    sal_Int32	nVersion = pConfigItem->ReadInt32( sVersion, 2 );
+    sal_Int32	nColor = pConfigItem->ReadInt32( sColorFormat, 0 );
+    sal_Int32	nCompr = pConfigItem->ReadInt32( sCompressionMode, 2 );
 
-    /* SJ: The following line is not superfluous, reading the item will also    #106652#
+    /* SJ: The following line is not superfluous, reading the item will also	#106652#
        create the corresponding FilterData Property. Since all filter
-       are no longer accessing the configuration itself, we have fill the
+       are no longer accessing the configuration itself, we have fill the 
        FilterData sequence with all available configuration items */
     pConfigItem->ReadInt32( sTextMode, 0 );
 
@@ -113,7 +113,7 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
         bCheck ^= TRUE;
     aRBCompressionLZW.Check( bCheck );
     bCheck ^= TRUE;
-    aRBCompressionNone.Check( bCheck );
+    aRBCompressionNone.Check( bCheck );	
 
     if ( aRBLevel1.IsChecked() )
     {
@@ -162,7 +162,7 @@ IMPL_LINK( DlgExportEPS, OK, void *, EMPTYARG )
     nCheck = 1;
     if ( aRBGrayscale.IsChecked() )
         nCheck++;
-    String sColorFormat( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
+    String sColorFormat( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );   
     pConfigItem->WriteInt32( sColorFormat, nCheck );
 
     nCheck = 1;

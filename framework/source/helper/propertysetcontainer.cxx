@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 #include <vcl/svapp.hxx>
 
-#define WRONG_TYPE_EXCEPTION    "Only XPropertSet allowed!"
+#define WRONG_TYPE_EXCEPTION	"Only XPropertSet allowed!"
 
 using namespace rtl;
 using namespace vos;
@@ -47,7 +47,7 @@ namespace framework
 
 PropertySetContainer::PropertySetContainer( const Reference< XMultiServiceFactory >& )
         :   ThreadHelpBase( &Application::GetSolarMutex() )
-        ,   OWeakObject()
+        ,	OWeakObject()
 
 {
 }
@@ -60,7 +60,7 @@ PropertySetContainer::~PropertySetContainer()
 
 // XInterface
 void SAL_CALL PropertySetContainer::acquire() throw ()
-{
+{ 
     OWeakObject::acquire();
 }
 
@@ -69,26 +69,26 @@ void SAL_CALL PropertySetContainer::release() throw ()
     OWeakObject::release();
 }
 
-Any SAL_CALL PropertySetContainer::queryInterface( const Type& rType )
+Any SAL_CALL PropertySetContainer::queryInterface( const Type& rType ) 
 throw ( RuntimeException )
 {
-    Any a = ::cppu::queryInterface(
+    Any a = ::cppu::queryInterface( 
                 rType ,
                 SAL_STATIC_CAST( XIndexContainer*, this ),
                 SAL_STATIC_CAST( XIndexReplace*, this ),
                 SAL_STATIC_CAST( XIndexAccess*, this ),
                 SAL_STATIC_CAST( XElementAccess*, this ) );
-
+    
     if( a.hasValue() )
     {
         return a;
     }
-
+        
     return OWeakObject::queryInterface( rType );
 }
 
 // XIndexContainer
-void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
+void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) 
     throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -98,7 +98,7 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com:
     if ( nSize >= Index )
     {
         Reference< XPropertySet > aPropertySetElement;
-
+        
         if ( Element >>= aPropertySetElement )
         {
             if ( nSize == Index )
@@ -112,7 +112,7 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com:
         }
         else
         {
-            throw IllegalArgumentException(
+            throw IllegalArgumentException( 
                 OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
                 (OWeakObject *)this, 2 );
         }
@@ -121,7 +121,7 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com:
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
-void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 Index )
+void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 Index ) 
     throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -137,20 +137,20 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 Index )
 }
 
 // XIndexReplace
-void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
+void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) 
     throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     if ( (sal_Int32)m_aPropertySetVector.size() > Index )
     {
         Reference< XPropertySet > aPropertySetElement;
-
+        
         if ( Element >>= aPropertySetElement )
         {
             m_aPropertySetVector[ Index ] = aPropertySetElement;
         }
         else
         {
-            throw IllegalArgumentException(
+            throw IllegalArgumentException( 
                 OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
                 (OWeakObject *)this, 2 );
         }
@@ -160,15 +160,15 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL PropertySetContainer::getCount()
+sal_Int32 SAL_CALL PropertySetContainer::getCount() 
     throw ( RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
-
+    
     return m_aPropertySetVector.size();
 }
 
-Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
+Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index ) 
     throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -185,11 +185,11 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-sal_Bool SAL_CALL PropertySetContainer::hasElements()
+sal_Bool SAL_CALL PropertySetContainer::hasElements() 
     throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
-
+    
     return !( m_aPropertySetVector.empty() );
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,36 +54,36 @@
 
 void ValueSet::ImplInit()
 {
-    // Size aWinSize        = GetSizePixel();
+    // Size aWinSize		= GetSizePixel();
     mpImpl              = new ValueSet_Impl;
-    mpNoneItem          = NULL;
-    mpScrBar            = NULL;
-    mnTextOffset        = 0;
-    mnVisLines          = 0;
-    mnLines             = 0;
-    mnUserItemWidth     = 0;
-    mnUserItemHeight    = 0;
-    mnFirstLine         = 0;
-    mnOldItemId         = 0;
-    mnSelItemId         = 0;
-    mnHighItemId        = 0;
-    mnDropPos           = VALUESET_ITEM_NOTFOUND;
-    mnCols              = 0;
-    mnCurCol            = 0;
-    mnUserCols          = 0;
-    mnUserVisLines      = 0;
-    mnSpacing           = 0;
-    mnFrameStyle        = 0;
-    mbFormat            = TRUE;
-    mbHighlight         = FALSE ;
-    mbSelection         = FALSE;
-    mbNoSelection       = TRUE;
-    mbDrawSelection     = TRUE;
-    mbBlackSel          = FALSE;
-    mbDoubleSel         = FALSE;
-    mbScroll            = FALSE;
-    mbDropPos           = FALSE;
-    mbFullMode          = TRUE;
+    mpNoneItem			= NULL;
+    mpScrBar			= NULL;
+    mnTextOffset		= 0;
+    mnVisLines			= 0;
+    mnLines 			= 0;
+    mnUserItemWidth 	= 0;
+    mnUserItemHeight	= 0;
+    mnFirstLine 		= 0;
+    mnOldItemId 		= 0;
+    mnSelItemId 		= 0;
+    mnHighItemId		= 0;
+    mnDropPos			= VALUESET_ITEM_NOTFOUND;
+    mnCols				= 0;
+    mnCurCol			= 0;
+    mnUserCols			= 0;
+    mnUserVisLines		= 0;
+    mnSpacing			= 0;
+    mnFrameStyle		= 0;
+    mbFormat			= TRUE;
+    mbHighlight 		= FALSE ;
+    mbSelection 		= FALSE;
+    mbNoSelection		= TRUE;
+    mbDrawSelection 	= TRUE;
+    mbBlackSel			= FALSE;
+    mbDoubleSel 		= FALSE;
+    mbScroll			= FALSE;
+    mbDropPos			= FALSE;
+    mbFullMode			= TRUE;
 
     // #106446#, #106601# force mirroring of virtual device
     maVirDev.EnableRTL( GetParent()->IsRTLEnabled() );
@@ -235,10 +235,10 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
         {
             if ( nStyle  & WB_DOUBLEBORDER )
             {
-                aRect.Left()    += 2;
-                aRect.Top()     += 2;
-                aRect.Right()   -= 2;
-                aRect.Bottom()  -= 2;
+                aRect.Left()	+= 2;
+                aRect.Top() 	+= 2;
+                aRect.Right()	-= 2;
+                aRect.Bottom()	-= 2;
             }
             else
             {
@@ -268,8 +268,8 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
             maVirDev.SetTextFillColor();
             maVirDev.SetFillColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor() );
             maVirDev.DrawRect( aRect );
-            Point   aTxtPos( aRect.Left()+2, aRect.Top() );
-            long    nTxtWidth = GetTextWidth( pItem->maText );
+            Point	aTxtPos( aRect.Left()+2, aRect.Top() );
+            long	nTxtWidth = GetTextWidth( pItem->maText );
             if ( nStyle & WB_RADIOSEL )
             {
                 aTxtPos.X() += 4;
@@ -309,9 +309,9 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
             }
             else
             {
-                Size    aImageSize = pItem->maImage.GetSizePixel();
-                Size    aRectSize = aRect.GetSize();
-                Point   aPos( aRect.Left(), aRect.Top() );
+                Size	aImageSize = pItem->maImage.GetSizePixel();
+                Size	aRectSize = aRect.GetSize();
+                Point	aPos( aRect.Left(), aRect.Top() );
                 aPos.X() += (aRectSize.Width()-aImageSize.Width())/2;
                 aPos.Y() += (aRectSize.Height()-aImageSize.Height())/2;
 
@@ -344,15 +344,15 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
 
 void ValueSet::Format()
 {
-    Size        aWinSize = GetOutputSizePixel();
+    Size		aWinSize = GetOutputSizePixel();
     ULONG       nItemCount = mpImpl->mpItemList->Count();
-    WinBits     nStyle = GetStyle();
-    long        nTxtHeight = GetTextHeight();
-    long        nOff;
-    long        nSpace;
-    long        nNoneHeight;
-    long        nNoneSpace;
-    ScrollBar*  pDelScrBar = NULL;
+    WinBits 	nStyle = GetStyle();
+    long		nTxtHeight = GetTextHeight();
+    long		nOff;
+    long		nSpace;
+    long		nNoneHeight;
+    long		nNoneSpace;
+    ScrollBar*	pDelScrBar = NULL;
 
     // Scrolling beruecksichtigen
     if ( nStyle & WB_VSCROLL )
@@ -465,7 +465,7 @@ void ValueSet::Format()
     }
 
     // Itemgroessen berechnen
-    long nColSpace  = (mnCols-1)*nSpace;
+    long nColSpace	= (mnCols-1)*nSpace;
     long nLineSpace = ((mnVisLines-1)*nSpace)+nNoneSpace;
     long nItemWidth;
     long nItemHeight;
@@ -574,11 +574,11 @@ void ValueSet::Format()
             if ( !mpNoneItem )
                 mpNoneItem = new ValueSetItem( *this );
 
-            mpNoneItem->mnId            = 0;
-            mpNoneItem->meType          = VALUESETITEM_NONE;
-            mpNoneItem->maRect.Left()   = x;
-            mpNoneItem->maRect.Top()    = y;
-            mpNoneItem->maRect.Right()  = mpNoneItem->maRect.Left()+aWinSize.Width()-x-1;
+            mpNoneItem->mnId			= 0;
+            mpNoneItem->meType			= VALUESETITEM_NONE;
+            mpNoneItem->maRect.Left()	= x;
+            mpNoneItem->maRect.Top()	= y;
+            mpNoneItem->maRect.Right()	= mpNoneItem->maRect.Left()+aWinSize.Width()-x-1;
             mpNoneItem->maRect.Bottom() = y+nNoneHeight-1;
 
             ImplFormatItem( mpNoneItem );
@@ -606,10 +606,10 @@ void ValueSet::Format()
             {
                 const BOOL bWasEmpty = pItem->maRect.IsEmpty();
 
-                pItem->maRect.Left()    = x;
-                pItem->maRect.Top()     = y;
-                pItem->maRect.Right()   = pItem->maRect.Left()+nItemWidth-1;
-                pItem->maRect.Bottom()  = pItem->maRect.Top()+nItemHeight-1;
+                pItem->maRect.Left()	= x;
+                pItem->maRect.Top() 	= y;
+                pItem->maRect.Right()	= pItem->maRect.Left()+nItemWidth-1;
+                pItem->maRect.Bottom()	= pItem->maRect.Top()+nItemHeight-1;
 
                 if( bWasEmpty && ImplHasAccessibleListeners() )
                 {
@@ -646,8 +646,8 @@ void ValueSet::Format()
         // ScrollBar anordnen, Werte setzen und anzeigen
         if ( mpScrBar )
         {
-            Point   aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, 0 );
-            Size    aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() );
+            Point	aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, 0 );
+            Size	aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() );
             // If a none field is visible, then we center the scrollbar
             if ( nStyle & WB_NONEFIELD )
             {
@@ -681,9 +681,9 @@ void ValueSet::ImplDrawItemText( const XubString& rText )
     if ( !(GetStyle() & WB_NAMEFIELD) )
         return;
 
-    Size    aWinSize = GetOutputSizePixel();
-    long    nTxtWidth = GetTextWidth( rText );
-    long    nTxtOffset = mnTextOffset;
+    Size	aWinSize = GetOutputSizePixel();
+    long	nTxtWidth = GetTextWidth( rText );
+    long	nTxtOffset = mnTextOffset;
 
     // Rechteck loeschen und Text ausgeben
     if ( GetStyle() & WB_FLATVALUESET )
@@ -756,8 +756,8 @@ void ValueSet::ImplDrawSelect()
             continue;
 
         // Selection malen
-        const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-        Rectangle               aRect = pItem->maRect;
+        const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
+        Rectangle				aRect = pItem->maRect;
         Control::SetFillColor();
 
         Color aDoubleColor( rStyleSettings.GetHighlightColor() );
@@ -802,10 +802,10 @@ void ValueSet::ImplDrawSelect()
         }
         else if ( nStyle & WB_RADIOSEL )
         {
-            aRect.Left()    += 3;
-            aRect.Top()     += 3;
-            aRect.Right()   -= 3;
-            aRect.Bottom()  -= 3;
+            aRect.Left()	+= 3;
+            aRect.Top() 	+= 3;
+            aRect.Right()	-= 3;
+            aRect.Bottom()	-= 3;
             if ( nStyle & WB_DOUBLEBORDER )
             {
                 aRect.Left()++;
@@ -914,7 +914,7 @@ void ValueSet::ImplHideSelect( USHORT nItemId )
     if ( !aRect.IsEmpty() )
     {
         HideFocus();
-        Point aPos  = aRect.TopLeft();
+        Point aPos	= aRect.TopLeft();
         Size  aSize = aRect.GetSize();
         DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
     }
@@ -947,10 +947,10 @@ void ValueSet::ImplDrawDropPos( BOOL bShow )
 {
     if ( (mnDropPos != VALUESET_ITEM_NOTFOUND) && mpImpl->mpItemList->Count() )
     {
-        USHORT  nItemPos = mnDropPos;
-        USHORT  nItemId1;
-        USHORT  nItemId2 = 0;
-        BOOL    bRight;
+        USHORT	nItemPos = mnDropPos;
+        USHORT	nItemId1;
+        USHORT	nItemId2 = 0;
+        BOOL	bRight;
         if ( nItemPos >= mpImpl->mpItemList->Count() )
         {
             nItemPos = (USHORT)(mpImpl->mpItemList->Count()-1);
@@ -988,8 +988,8 @@ void ValueSet::ImplDrawDropPos( BOOL bShow )
             if ( bShow )
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-                long    nX;
-                long    nY;
+                long	nX;
+                long	nY;
                 SetLineColor( rStyleSettings.GetButtonTextColor() );
                 if ( !aRect1.IsEmpty() )
                 {
@@ -1012,13 +1012,13 @@ void ValueSet::ImplDrawDropPos( BOOL bShow )
             {
                 if ( !aRect1.IsEmpty() )
                 {
-                    Point aPos  = aRect1.TopLeft();
+                    Point aPos	= aRect1.TopLeft();
                     Size  aSize = aRect1.GetSize();
                     DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
                 }
                 if ( !aRect2.IsEmpty() )
                 {
-                    Point aPos  = aRect2.TopLeft();
+                    Point aPos	= aRect2.TopLeft();
                     Size  aSize = aRect2.GetSize();
                     DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
                 }
@@ -1039,23 +1039,23 @@ void ValueSet::ImplDraw()
 
     HideFocus();
 
-    Point   aDefPos;
-    Size    aSize = maVirDev.GetOutputSizePixel();
+    Point	aDefPos;
+    Size	aSize = maVirDev.GetOutputSizePixel();
 
     if ( mpScrBar && mpScrBar->IsVisible() )
     {
-        Point   aScrPos = mpScrBar->GetPosPixel();
-        Size    aScrSize = mpScrBar->GetSizePixel();
-        Point   aTempPos( 0, aScrPos.Y() );
-        Size    aTempSize( aSize.Width(), aScrPos.Y() );
+        Point	aScrPos = mpScrBar->GetPosPixel();
+        Size	aScrSize = mpScrBar->GetSizePixel();
+        Point	aTempPos( 0, aScrPos.Y() );
+        Size	aTempSize( aSize.Width(), aScrPos.Y() );
 
         DrawOutDev( aDefPos, aTempSize, aDefPos, aTempSize, maVirDev );
-        aTempSize.Width()   = aScrPos.X()-1;
-        aTempSize.Height()  = aScrSize.Height();
+        aTempSize.Width()	= aScrPos.X()-1;
+        aTempSize.Height()	= aScrSize.Height();
         DrawOutDev( aTempPos, aTempSize, aTempPos, aTempSize, maVirDev );
-        aTempPos.Y()        = aScrPos.Y()+aScrSize.Height();
-        aTempSize.Width()   = aSize.Width();
-        aTempSize.Height()  = aSize.Height()-aTempPos.Y();
+        aTempPos.Y()		= aScrPos.Y()+aScrSize.Height();
+        aTempSize.Width()	= aSize.Width();
+        aTempSize.Height()	= aSize.Height()-aTempPos.Y();
         DrawOutDev( aTempPos, aTempSize, aTempPos, aTempSize, maVirDev );
     }
     else
@@ -1102,8 +1102,8 @@ BOOL ValueSet::ImplScroll( const Point& rPos )
     if ( !mbScroll || (rPos.X() < 0) || (rPos.X() > aOutSize.Width()-nScrBarWidth) )
         return FALSE;
 
-    long             nScrollOffset;
-    USHORT           nOldLine = mnFirstLine;
+    long			 nScrollOffset;
+    USHORT			 nOldLine = mnFirstLine;
     const Rectangle& rTopRect = mpImpl->mpItemList->GetObject( mnFirstLine*mnCols )->maRect;
     if ( rTopRect.GetHeight() <= 16 )
         nScrollOffset = VALUESET_SCROLL_OFFSET/2;
@@ -1143,7 +1143,7 @@ USHORT ValueSet::ImplGetItem( const Point& rPos, BOOL bMove ) const
             return VALUESET_ITEM_NONEITEM;
     }
 
-    Point     aDefPos;
+    Point	  aDefPos;
     Rectangle aWinRect( aDefPos, maVirDev.GetOutputSizePixel() );
 
     ULONG nItemCount = mpImpl->mpItemList->Count();
@@ -1824,9 +1824,9 @@ void ValueSet::InsertItem( USHORT nItemId, const Image& rImage, USHORT nPos )
                 "ValueSet::InsertItem(): ItemId already exists" );
 
     ValueSetItem* pItem = new ValueSetItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_IMAGE;
-    pItem->maImage  = rImage;
+    pItem->mnId 	= nItemId;
+    pItem->meType	= VALUESETITEM_IMAGE;
+    pItem->maImage	= rImage;
     mpImpl->mpItemList->Insert( pItem, (ULONG)nPos );
 
     mbFormat = TRUE;
@@ -1843,9 +1843,9 @@ void ValueSet::InsertItem( USHORT nItemId, const Color& rColor, USHORT nPos )
                 "ValueSet::InsertItem(): ItemId already exists" );
 
     ValueSetItem* pItem = new ValueSetItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_COLOR;
-    pItem->maColor  = rColor;
+    pItem->mnId 	= nItemId;
+    pItem->meType	= VALUESETITEM_COLOR;
+    pItem->maColor	= rColor;
     mpImpl->mpItemList->Insert( pItem, (ULONG)nPos );
 
     mbFormat = TRUE;
@@ -1863,10 +1863,10 @@ void ValueSet::InsertItem( USHORT nItemId, const Image& rImage,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
     ValueSetItem* pItem = new ValueSetItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_IMAGE;
-    pItem->maImage  = rImage;
-    pItem->maText   = rText;
+    pItem->mnId 	= nItemId;
+    pItem->meType	= VALUESETITEM_IMAGE;
+    pItem->maImage	= rImage;
+    pItem->maText	= rText;
     mpImpl->mpItemList->Insert( pItem, (ULONG)nPos );
 
     mbFormat = TRUE;
@@ -1884,10 +1884,10 @@ void ValueSet::InsertItem( USHORT nItemId, const Color& rColor,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
     ValueSetItem* pItem = new ValueSetItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_COLOR;
-    pItem->maColor  = rColor;
-    pItem->maText   = rText;
+    pItem->mnId 	= nItemId;
+    pItem->meType	= VALUESETITEM_COLOR;
+    pItem->maColor	= rColor;
+    pItem->maText	= rText;
     mpImpl->mpItemList->Insert( pItem, (ULONG)nPos );
 
     mbFormat = TRUE;
@@ -1904,8 +1904,8 @@ void ValueSet::InsertItem( USHORT nItemId, USHORT nPos )
                 "ValueSet::InsertItem(): ItemId already exists" );
 
     ValueSetItem* pItem = new ValueSetItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_USERDRAW;
+    pItem->mnId 	= nItemId;
+    pItem->meType	= VALUESETITEM_USERDRAW;
     mpImpl->mpItemList->Insert( pItem, (ULONG)nPos );
 
     mbFormat = TRUE;
@@ -1922,8 +1922,8 @@ void ValueSet::InsertSpace( USHORT nItemId, USHORT nPos )
                 "ValueSet::InsertSpace(): ItemId already exists" );
 
     ValueSetItem* pItem = new ValueSetItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_SPACE;
+    pItem->mnId 	= nItemId;
+    pItem->meType	= VALUESETITEM_SPACE;
     mpImpl->mpItemList->Insert( pItem, (ULONG)nPos );
 
     mbFormat = TRUE;
@@ -1945,11 +1945,11 @@ void ValueSet::RemoveItem( USHORT nItemId )
     // Variablen zuruecksetzen
     if ( (mnHighItemId == nItemId) || (mnSelItemId == nItemId) )
     {
-        mnCurCol        = 0;
-        mnOldItemId     = 0;
-        mnHighItemId    = 0;
-        mnSelItemId     = 0;
-        mbNoSelection   = TRUE;
+        mnCurCol		= 0;
+        mnOldItemId 	= 0;
+        mnHighItemId	= 0;
+        mnSelItemId 	= 0;
+        mbNoSelection	= TRUE;
     }
 
     mbFormat = TRUE;
@@ -1983,12 +1983,12 @@ void ValueSet::CopyItems( const ValueSet& rValueSet )
     }
 
     // Variablen zuruecksetzen
-    mnFirstLine     = 0;
-    mnCurCol        = 0;
-    mnOldItemId     = 0;
-    mnHighItemId    = 0;
-    mnSelItemId     = 0;
-    mbNoSelection   = TRUE;
+    mnFirstLine 	= 0;
+    mnCurCol		= 0;
+    mnOldItemId 	= 0;
+    mnHighItemId	= 0;
+    mnSelItemId 	= 0;
+    mbNoSelection	= TRUE;
 
     mbFormat = TRUE;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -2002,12 +2002,12 @@ void ValueSet::Clear()
     ImplDeleteItems();
 
     // Variablen zuruecksetzen
-    mnFirstLine     = 0;
-    mnCurCol        = 0;
-    mnOldItemId     = 0;
-    mnHighItemId    = 0;
-    mnSelItemId     = 0;
-    mbNoSelection   = TRUE;
+    mnFirstLine 	= 0;
+    mnCurCol		= 0;
+    mnOldItemId 	= 0;
+    mnHighItemId	= 0;
+    mnSelItemId 	= 0;
+    mbNoSelection	= TRUE;
 
     mbFormat = TRUE;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -2276,9 +2276,9 @@ void ValueSet::SelectItem( USHORT nItemId )
 
 void ValueSet::SetNoSelection()
 {
-    mbNoSelection   = TRUE;
-    mbHighlight     = FALSE;
-    mbSelection     = FALSE;
+    mbNoSelection	= TRUE;
+    mbHighlight 	= FALSE;
+    mbSelection 	= FALSE;
 
     if ( IsReallyVisible() && IsUpdateMode() )
         ImplDraw();
@@ -2469,8 +2469,8 @@ XubString ValueSet::GetItemText( USHORT nItemId ) const
 
 void ValueSet::SetColor( const Color& rColor )
 {
-    maColor     = rColor;
-    mbFormat    = TRUE;
+    maColor 	= rColor;
+    mbFormat	= TRUE;
     if ( IsReallyVisible() && IsUpdateMode() )
         ImplDraw();
 }
@@ -2493,10 +2493,10 @@ void ValueSet::SetExtraSpacing( USHORT nNewSpacing )
 
 void ValueSet::StartSelection()
 {
-    mnOldItemId     = mnSelItemId;
-    mbHighlight     = TRUE;
-    mbSelection     = TRUE;
-    mnHighItemId    = mnSelItemId;
+    mnOldItemId 	= mnSelItemId;
+    mbHighlight 	= TRUE;
+    mbSelection 	= TRUE;
+    mnHighItemId	= mnSelItemId;
 }
 
 // -----------------------------------------------------------------------
@@ -2590,11 +2590,11 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, USHORT nDesireCols,
         }
     }
 
-    Size        aSize( rItemSize.Width()*nCalcCols, rItemSize.Height()*nCalcLines );
-    WinBits     nStyle = GetStyle();
-    long        nTxtHeight = GetTextHeight();
-    long        nSpace;
-    long        n;
+    Size		aSize( rItemSize.Width()*nCalcCols, rItemSize.Height()*nCalcLines );
+    WinBits 	nStyle = GetStyle();
+    long		nTxtHeight = GetTextHeight();
+    long		nSpace;
+    long		n;
 
     if ( nStyle & WB_ITEMBORDER )
     {

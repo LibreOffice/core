@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ void X11Clipboard::clearContents()
     // clear members
     m_aOwner.clear();
     m_aContents.clear();
-
+    
     // release the mutex
     aGuard.clear();
 
@@ -285,7 +285,7 @@ void SAL_CALL X11Clipboard::initialize( const Sequence< Any >& ) throw( ::com::s
 
 // ------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(    )
+Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(	 )
     throw(RuntimeException)
 {
     return X11Clipboard_getSupportedServiceNames();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ bool AstOperation::isVariadic() const {
 
 sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 {
-    sal_uInt16      nParam = getNodeCount(NT_parameter);
-    sal_uInt16      nExcep = nExceptions();
-    RTMethodMode    methodMode = RT_MODE_TWOWAY;
+    sal_uInt16		nParam = getNodeCount(NT_parameter);
+    sal_uInt16		nExcep = nExceptions();
+    RTMethodMode 	methodMode = RT_MODE_TWOWAY;
 
     if ( isOneway() )
         methodMode = RT_MODE_ONEWAY;
@@ -75,7 +75,7 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
         returnTypeName, nParam, nExcep);
 
     if ( nParam )
-    {
+    {	
         DeclList::const_iterator iter = getIteratorBegin();
         DeclList::const_iterator end = getIteratorEnd();
         AstDeclaration* pDecl = NULL;
@@ -83,7 +83,7 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
         sal_uInt16 paramIndex = 0;
         while ( iter != end )
         {
-            pDecl = *iter;
+            pDecl = *iter;		
             if ( pDecl->getNodeType() == NT_parameter )
             {
                 AstParameter* pParam = (AstParameter*)pDecl;
@@ -101,12 +101,12 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
                     default:
                         paramMode = RT_PARAM_INVALID;
                         break;
-                }
+                }			
                 if (pParam->isRest()) {
                     paramMode = static_cast< RTParamMode >(
                         paramMode | RT_PARAM_REST);
                 }
-
+                
                 rBlob.setMethodParameterData(
                     index, paramIndex++, paramMode,
                     OStringToOUString(
@@ -116,7 +116,7 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
                         RTL_TEXTENCODING_UTF8));
             }
             ++iter;
-        }
+        }		
     }
 
     if ( nExcep )
@@ -131,23 +131,23 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
                 OStringToOUString(
                     (*iter)->getRelativName(), RTL_TEXTENCODING_UTF8));
             ++iter;
-        }
+        }		
     }
 
     return sal_True;
-}
+}	
 
 AstDeclaration* AstOperation::addDeclaration(AstDeclaration* pDecl)
 {
     if ( pDecl->getNodeType() == NT_parameter )
     {
         AstParameter* pParam = (AstParameter*)pDecl;
-        if ( isOneway() &&
+        if ( isOneway() && 
              (pParam->getDirection() == DIR_OUT || pParam->getDirection() == DIR_INOUT) )
         {
             idlc()->error()->error2(EIDL_ONEWAY_CONFLICT, pDecl, this);
-            return NULL;
+            return NULL;			
         }
     }
     return AstScope::addDeclaration(pDecl);
-}
+}	

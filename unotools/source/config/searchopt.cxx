@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,39 +43,39 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-#define MAX_FLAGS_OFFSET    25
+#define MAX_FLAGS_OFFSET	25
 
 //////////////////////////////////////////////////////////////////////
 
 
 class SvtSearchOptions_Impl : public ConfigItem
 {
-    INT32   nFlags;
-    BOOL    bModified;
+    INT32	nFlags;
+    BOOL	bModified;
 
     // disallow copy-constructor and assignment-operator for now
     SvtSearchOptions_Impl( const SvtSearchOptions_Impl & );
     SvtSearchOptions_Impl & operator = ( const SvtSearchOptions_Impl & );
 
 protected:
-    BOOL            IsModified() const { return bModified; }
+    BOOL			IsModified() const { return bModified; }
     using ConfigItem::SetModified;
-    void            SetModified( BOOL bVal );
-    BOOL            Load();
-    BOOL            Save();
+    void			SetModified( BOOL bVal );
+    BOOL			Load();
+    BOOL			Save();
 
-    Sequence< OUString >    GetPropertyNames() const;
+    Sequence< OUString >	GetPropertyNames() const;
 
 public:
     SvtSearchOptions_Impl();
     virtual ~SvtSearchOptions_Impl();
 
     // ConfigItem
-    virtual void    Commit();
+    virtual void	Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
-    BOOL            GetFlag( USHORT nOffset ) const;
-    void            SetFlag( USHORT nOffset, BOOL bVal );
+    BOOL			GetFlag( USHORT nOffset ) const;
+    void			SetFlag( USHORT nOffset, BOOL bVal );
 };
 
 
@@ -84,7 +84,7 @@ SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     ConfigItem( OUString::createFromAscii( "Office.Common/SearchOptions" ) )
 {
     RTL_LOGFILE_CONTEXT(aLog, "unotools SvtSearchOptions_Impl::SvtSearchOptions_Impl()");
-    nFlags = 0x0003FFFF;    // set all options values to 'true'
+    nFlags = 0x0003FFFF;	// set all options values to 'true'
     Load();
     SetModified( FALSE );
 }
@@ -142,33 +142,33 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
 {
     static const char* aPropNames[ MAX_FLAGS_OFFSET + 1 ] =
     {
-        "IsWholeWordsOnly",                     //  0
-        "IsBackwards",                          //  1
-        "IsUseRegularExpression",               //  2
-        //"IsCurrentSelectionOnly",             // interactively set or not...
-        "IsSearchForStyles",                    //  3
-        "IsSimilaritySearch",                   //  4
-        "IsUseAsianOptions",                    //  5
-        "IsMatchCase",                          //  6
-        "Japanese/IsMatchFullHalfWidthForms",   //  7
-        "Japanese/IsMatchHiraganaKatakana",     //  8
-        "Japanese/IsMatchContractions",         //  9
-        "Japanese/IsMatchMinusDashCho-on",      // 10
-        "Japanese/IsMatchRepeatCharMarks",      // 11
-        "Japanese/IsMatchVariantFormKanji",     // 12
-        "Japanese/IsMatchOldKanaForms",         // 13
-        "Japanese/IsMatch_DiZi_DuZu",           // 14
-        "Japanese/IsMatch_BaVa_HaFa",           // 15
-        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 16
-        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 17
-        "Japanese/IsMatch_SeShe_ZeJe",          // 18
-        "Japanese/IsMatch_IaIya",               // 19
-        "Japanese/IsMatch_KiKu",                // 20
-        "Japanese/IsIgnorePunctuation",         // 21
-        "Japanese/IsIgnoreWhitespace",          // 22
-        "Japanese/IsIgnoreProlongedSoundMark",      // 23
-        "Japanese/IsIgnoreMiddleDot",           // 24
-        "IsNotes"                   // 25
+        "IsWholeWordsOnly",						//  0
+        "IsBackwards",							//  1
+        "IsUseRegularExpression",				//  2
+        //"IsCurrentSelectionOnly",				// interactively set or not...
+        "IsSearchForStyles",					//  3
+        "IsSimilaritySearch",					//  4
+        "IsUseAsianOptions",					//  5
+        "IsMatchCase",							//  6
+        "Japanese/IsMatchFullHalfWidthForms",	//  7
+        "Japanese/IsMatchHiraganaKatakana",		//  8
+        "Japanese/IsMatchContractions",			//  9
+        "Japanese/IsMatchMinusDashCho-on",		// 10
+        "Japanese/IsMatchRepeatCharMarks",		// 11
+        "Japanese/IsMatchVariantFormKanji",		// 12
+        "Japanese/IsMatchOldKanaForms",			// 13
+        "Japanese/IsMatch_DiZi_DuZu",			// 14
+        "Japanese/IsMatch_BaVa_HaFa",			// 15
+        "Japanese/IsMatch_TsiThiChi_DhiZi",		// 16
+        "Japanese/IsMatch_HyuIyu_ByuVyu",		// 17
+        "Japanese/IsMatch_SeShe_ZeJe",			// 18
+        "Japanese/IsMatch_IaIya",				// 19
+        "Japanese/IsMatch_KiKu",				// 20
+        "Japanese/IsIgnorePunctuation",			// 21
+        "Japanese/IsIgnoreWhitespace",			// 22
+        "Japanese/IsIgnoreProlongedSoundMark",		// 23
+        "Japanese/IsIgnoreMiddleDot",			// 24
+        "IsNotes"					// 25
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ namespace svt
     //====================================================================
     //= OFilePickerInteractionHandler
     //====================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionHandler
-                                    >   OFilePickerInteractionHandler_Base;
+    typedef ::cppu::WeakImplHelper1	<	::com::sun::star::task::XInteractionHandler
+                                    >	OFilePickerInteractionHandler_Base;
 
     /** a InteractionHandler implementation which extends another handler with some customizability
     */
@@ -85,7 +85,7 @@ namespace svt
     };
 
 //........................................................................
-}   // namespace svt
+}	// namespace svt
 //........................................................................
 
 #endif // SVTOOLS_FILEPICKER_INTERACTION_HXX

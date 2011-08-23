@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <memory>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -49,7 +49,7 @@
 #include <uiconfiguration/imagetype.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -64,7 +64,7 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -80,7 +80,7 @@ namespace framework
 {
     class ImageManagerImpl;
 
-    class ModuleImageManager :    private ThreadHelpBase                                          , // Struct for right initalization of mutex member! Must be first of baseclasses.
+    class ModuleImageManager :    private ThreadHelpBase						                  ,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                                   public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XImageManager>
     {
         public:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ void SAL_CALL ImplXMLSignatureListener::signatureVerified( sal_Int32 securityId,
 }
 
 // ---------------------------------------------------------------------------------
-// XDocumentHandler
+// XDocumentHandler 
 // ---------------------------------------------------------------------------------
 void SAL_CALL ImplXMLSignatureListener::startDocument(  )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
@@ -83,7 +83,7 @@ void SAL_CALL ImplXMLSignatureListener::startDocument(  )
         m_xNextHandler->startDocument();
     }
 }
-
+    
 void SAL_CALL ImplXMLSignatureListener::endDocument(  )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
@@ -106,8 +106,8 @@ void SAL_CALL ImplXMLSignatureListener::startElement( const rtl::OUString& aName
         m_xNextHandler->startElement( aName, xAttribs );
     }
 }
-
-void SAL_CALL ImplXMLSignatureListener::endElement( const rtl::OUString& aName )
+    
+void SAL_CALL ImplXMLSignatureListener::endElement( const rtl::OUString& aName ) 
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
     if (m_xNextHandler.is())
@@ -115,7 +115,7 @@ void SAL_CALL ImplXMLSignatureListener::endElement( const rtl::OUString& aName )
         m_xNextHandler->endElement( aName );
     }
 }
-
+    
 void SAL_CALL ImplXMLSignatureListener::characters( const rtl::OUString& aChars )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
@@ -124,7 +124,7 @@ void SAL_CALL ImplXMLSignatureListener::characters( const rtl::OUString& aChars 
         m_xNextHandler->characters( aChars );
     }
 }
-
+    
 void SAL_CALL ImplXMLSignatureListener::ignorableWhitespace( const rtl::OUString& aWhitespaces )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
@@ -133,7 +133,7 @@ void SAL_CALL ImplXMLSignatureListener::ignorableWhitespace( const rtl::OUString
         m_xNextHandler->ignorableWhitespace( aWhitespaces );
     }
 }
-
+    
 void SAL_CALL ImplXMLSignatureListener::processingInstruction( const rtl::OUString& aTarget, const rtl::OUString& aData )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
@@ -142,7 +142,7 @@ void SAL_CALL ImplXMLSignatureListener::processingInstruction( const rtl::OUStri
         m_xNextHandler->processingInstruction( aTarget, aData );
     }
 }
-
+    
 void SAL_CALL ImplXMLSignatureListener::setDocumentLocator( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XLocator >& xLocator )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
@@ -153,7 +153,7 @@ void SAL_CALL ImplXMLSignatureListener::setDocumentLocator( const com::sun::star
 }
 
 // ---------------------------------------------------------------------------------
-// XUriBinding
+// XUriBinding 
 // ---------------------------------------------------------------------------------
 
 UriBindingHelper::UriBindingHelper()
@@ -166,11 +166,11 @@ UriBindingHelper::UriBindingHelper( const com::sun::star::uno::Reference < com::
 }
 
 
-void SAL_CALL UriBindingHelper::setUriBinding( const rtl::OUString& /*uri*/, const uno::Reference< io::XInputStream >&)
+void SAL_CALL UriBindingHelper::setUriBinding( const rtl::OUString& /*uri*/, const uno::Reference< io::XInputStream >&) 
     throw (uno::Exception, uno::RuntimeException)
 {
 }
-
+    
 uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( const rtl::OUString& uri )
     throw (uno::Exception, uno::RuntimeException)
 {

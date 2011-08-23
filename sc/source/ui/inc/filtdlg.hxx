@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,37 +56,37 @@ class TypedScStrCollection;
 // Gemeinsame Resource-Objekte:
 
 #define _COMMON_FILTER_RSCOBJS \
-    CheckBox        aBtnCase; \
-    CheckBox        aBtnRegExp; \
-    CheckBox        aBtnHeader; \
-    CheckBox        aBtnUnique; \
-    CheckBox        aBtnCopyResult; \
-    ListBox         aLbCopyArea; \
-    formula::RefEdit        aEdCopyArea; \
-    formula::RefButton      aRbCopyArea; \
-    CheckBox        aBtnDestPers; \
-    FixedText       aFtDbAreaLabel; \
-    FixedInfo       aFtDbArea; \
-    const String    aStrUndefined; \
-    const String    aStrNoName; \
-    const String    aStrNone;
+    CheckBox		aBtnCase; \
+    CheckBox		aBtnRegExp; \
+    CheckBox		aBtnHeader; \
+    CheckBox		aBtnUnique; \
+    CheckBox		aBtnCopyResult; \
+    ListBox			aLbCopyArea; \
+    formula::RefEdit		aEdCopyArea; \
+    formula::RefButton		aRbCopyArea; \
+    CheckBox		aBtnDestPers; \
+    FixedText		aFtDbAreaLabel; \
+    FixedInfo		aFtDbArea; \
+    const String	aStrUndefined; \
+    const String	aStrNoName; \
+    const String	aStrNone;
 
 
 #define _INIT_COMMON_FILTER_RSCOBJS \
-    aBtnCase        ( this, ScResId( BTN_CASE ) ), \
-    aBtnRegExp      ( this, ScResId( BTN_REGEXP ) ), \
-    aBtnHeader      ( this, ScResId( BTN_HEADER ) ), \
-    aBtnUnique      ( this, ScResId( BTN_UNIQUE ) ), \
-    aBtnCopyResult  ( this, ScResId( BTN_COPY_RESULT ) ), \
-    aLbCopyArea     ( this, ScResId( LB_COPY_AREA ) ), \
+    aBtnCase		( this, ScResId( BTN_CASE ) ), \
+    aBtnRegExp		( this, ScResId( BTN_REGEXP ) ), \
+    aBtnHeader		( this, ScResId( BTN_HEADER ) ), \
+    aBtnUnique		( this, ScResId( BTN_UNIQUE ) ), \
+    aBtnCopyResult	( this, ScResId( BTN_COPY_RESULT ) ), \
+    aLbCopyArea		( this, ScResId( LB_COPY_AREA ) ), \
     aEdCopyArea     ( this, this, ScResId( ED_COPY_AREA ) ), \
-    aRbCopyArea     ( this, ScResId( RB_COPY_AREA ), &aEdCopyArea, this ), \
-    aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ), \
-    aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ), \
-    aFtDbArea       ( this, ScResId( FT_DBAREA ) ), \
-    aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ), \
-    aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ), \
-    aStrNone        ( ScResId( SCSTR_NONE ) ),
+    aRbCopyArea		( this, ScResId( RB_COPY_AREA ), &aEdCopyArea, this ), \
+    aBtnDestPers	( this, ScResId( BTN_DEST_PERS ) ), \
+    aFtDbAreaLabel	( this, ScResId( FT_DBAREA_LABEL ) ), \
+    aFtDbArea		( this, ScResId( FT_DBAREA ) ), \
+    aStrUndefined	( ScResId( SCSTR_UNDEFINED ) ), \
+    aStrNoName		( ScGlobal::GetRscString(STR_DB_NONAME) ), \
+    aStrNone		( ScResId( SCSTR_NONE ) ),
 
 
 //============================================================================
@@ -94,46 +94,46 @@ class ScFilterDlg : public ScAnyRefDlg
 {
 public:
                     ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                 const SfxItemSet&  rArgSet );
+                                 const SfxItemSet&	rArgSet );
                     ~ScFilterDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const;
-    virtual void    SetActive();
+    virtual BOOL	IsRefInputMode() const;
+    virtual void	SetActive();
 
-    virtual BOOL    Close();
-    void            SliderMoved();
-    USHORT          GetSliderPos();
-    void            RefreshEditRow( USHORT nOffset );
+    virtual BOOL	Close();
+    void			SliderMoved();
+    USHORT			GetSliderPos();
+    void			RefreshEditRow( USHORT nOffset );
 
 private:
     FixedLine       aFlCriteria;
     //----------------------------
-    ListBox         aLbConnect1;
-    ListBox         aLbField1;
-    ListBox         aLbCond1;
-    ComboBox        aEdVal1;
+    ListBox			aLbConnect1;
+    ListBox			aLbField1;
+    ListBox			aLbCond1;
+    ComboBox		aEdVal1;
     //----------------------------
-    ListBox         aLbConnect2;
-    ListBox         aLbField2;
-    ListBox         aLbCond2;
-    ComboBox        aEdVal2;
+    ListBox			aLbConnect2;
+    ListBox			aLbField2;
+    ListBox			aLbCond2;
+    ComboBox		aEdVal2;
     //----------------------------
-    ListBox         aLbConnect3;
-    ListBox         aLbField3;
-    ListBox         aLbCond3;
-    ComboBox        aEdVal3;
+    ListBox			aLbConnect3;
+    ListBox			aLbField3;
+    ListBox			aLbCond3;
+    ComboBox		aEdVal3;
     //----------------------------
-    ListBox         aLbConnect4;
-    ListBox         aLbField4;
-    ListBox         aLbCond4;
-    ComboBox        aEdVal4;
+    ListBox			aLbConnect4;
+    ListBox			aLbField4;
+    ListBox			aLbCond4;
+    ComboBox		aEdVal4;
     //----------------------------
-    FixedText       aFtConnect;
-    FixedText       aFtField;
-    FixedText       aFtCond;
-    FixedText       aFtVal;
+    FixedText		aFtConnect;
+    FixedText		aFtField;
+    FixedText		aFtCond;
+    FixedText		aFtVal;
     FixedLine       aFlSeparator;
 
     ScrollBar       aScrollBar;
@@ -146,56 +146,56 @@ private:
 
     _COMMON_FILTER_RSCOBJS
 
-    const String    aStrEmpty;
-    const String    aStrNotEmpty;
-    const String    aStrRow;
-    const String    aStrColumn;
+    const String	aStrEmpty;
+    const String	aStrNotEmpty;
+    const String	aStrRow;
+    const String	aStrColumn;
 
-    ScFilterOptionsMgr* pOptionsMgr;
+    ScFilterOptionsMgr*	pOptionsMgr;
 
-    const USHORT        nWhichQuery;
-    const ScQueryParam  theQueryData;
-    ScQueryItem*        pOutItem;
-    ScViewData*         pViewData;
-    ScDocument*         pDoc;
-    SCTAB               nSrcTab;
+    const USHORT		nWhichQuery;
+    const ScQueryParam	theQueryData;
+    ScQueryItem*		pOutItem;
+    ScViewData*			pViewData;
+    ScDocument*			pDoc;
+    SCTAB				nSrcTab;
 
-    ComboBox*           aValueEdArr[4];
-    ListBox*            aFieldLbArr[4];
-    ListBox*            aCondLbArr[4];
-    ListBox*            aConnLbArr[4];
+    ComboBox*			aValueEdArr[4];
+    ListBox*			aFieldLbArr[4];
+    ListBox*			aCondLbArr[4];
+    ListBox*			aConnLbArr[4];
     bool                mbHasDates[MAXQUERY];
     BOOL                bRefreshExceptQuery[MAXQUERY];
-    USHORT              nFieldCount;
-    BOOL                bRefInputMode;
+    USHORT				nFieldCount;
+    BOOL				bRefInputMode;
 
-    TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
-    USHORT              nHeaderPos[MAXCOLCOUNT];
+    TypedScStrCollection*	pEntryLists[MAXCOLCOUNT];
+    USHORT				nHeaderPos[MAXCOLCOUNT];
 
     // Hack: RefInput-Kontrolle
-    Timer*  pTimer;
+    Timer*	pTimer;
 
 #ifdef _FILTDLG_CXX
 private:
-    void            Init            ( const SfxItemSet& rArgSet );
-    void            FillFieldLists  ();
-    void            FillAreaList    ();
-    void            UpdateValueList ( USHORT nList );
-    void            UpdateHdrInValueList( USHORT nList );
-    void            ClearValueList  ( USHORT nList );
-    USHORT          GetFieldSelPos  ( SCCOL nField );
-    ScQueryItem*    GetOutputItem   ();
+    void			Init			( const SfxItemSet&	rArgSet );
+    void			FillFieldLists	();
+    void			FillAreaList	();
+    void			UpdateValueList	( USHORT nList );
+    void			UpdateHdrInValueList( USHORT nList );
+    void			ClearValueList	( USHORT nList );
+    USHORT			GetFieldSelPos	( SCCOL nField );
+    ScQueryItem*	GetOutputItem	();
 
     // Handler:
-    DECL_LINK( LbSelectHdl,  ListBox* );
+    DECL_LINK( LbSelectHdl,	 ListBox* );
     DECL_LINK( ValModifyHdl, ComboBox* );
-    DECL_LINK( CheckBoxHdl,  CheckBox* );
-    DECL_LINK( EndDlgHdl,    Button* );
+    DECL_LINK( CheckBoxHdl,	 CheckBox* );
+    DECL_LINK( EndDlgHdl,	 Button* );
     DECL_LINK( MoreClickHdl, MoreButton* );
     DECL_LINK( ScrollHdl, ScrollBar* );
 
     // Hack: RefInput-Kontrolle
-    DECL_LINK( TimeOutHdl,   Timer* );
+    DECL_LINK( TimeOutHdl,	 Timer* );
 #endif
 };
 
@@ -205,21 +205,21 @@ class ScSpecialFilterDlg : public ScAnyRefDlg
 {
 public:
                     ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                        const SfxItemSet&   rArgSet );
+                                        const SfxItemSet&	rArgSet );
                     ~ScSpecialFilterDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const;
-    virtual void    SetActive();
+    virtual BOOL	IsRefInputMode() const;
+    virtual void	SetActive();
 
-    virtual BOOL    Close();
+    virtual BOOL	Close();
 
 private:
-    ListBox     aLbFilterArea;
-    FixedText   aFtFilterArea;
-    formula::RefEdit    aEdFilterArea;
-    formula::RefButton  aRbFilterArea;
+    ListBox		aLbFilterArea;
+    FixedText	aFtFilterArea;
+    formula::RefEdit	aEdFilterArea;
+    formula::RefButton	aRbFilterArea;
 
     FixedLine       aFlOptions;
 
@@ -230,34 +230,34 @@ private:
     HelpButton      aBtnHelp;
     MoreButton      aBtnMore;
 
-    ScFilterOptionsMgr* pOptionsMgr;
+    ScFilterOptionsMgr*	pOptionsMgr;
 
-    const USHORT        nWhichQuery;
-    const ScQueryParam  theQueryData;
-    ScQueryItem*        pOutItem;
-    ScViewData*         pViewData;
-    ScDocument*         pDoc;
+    const USHORT		nWhichQuery;
+    const ScQueryParam	theQueryData;
+    ScQueryItem*		pOutItem;
+    ScViewData*			pViewData;
+    ScDocument*			pDoc;
 
-    formula::RefEdit*           pRefInputEdit;
-    BOOL                bRefInputMode;
+    formula::RefEdit*			pRefInputEdit;
+    BOOL				bRefInputMode;
 
     // Hack: RefInput-Kontrolle
-    Timer*  pTimer;
+    Timer*	pTimer;
 
 #ifdef _SFILTDLG_CXX
 private:
-    void            Init( const SfxItemSet& rArgSet );
-    ScQueryItem*    GetOutputItem( const ScQueryParam& rParam,
+    void			Init( const SfxItemSet& rArgSet );
+    ScQueryItem*	GetOutputItem( const ScQueryParam& rParam,
                                     const ScRange& rSource );
 
     // Handler
     DECL_LINK( FilterAreaSelHdl, ListBox* );
     DECL_LINK( FilterAreaModHdl, formula::RefEdit* );
-    DECL_LINK( EndDlgHdl,        Button* );
+    DECL_LINK( EndDlgHdl,		 Button* );
     DECL_LINK( ScrollHdl, ScrollBar* );
 
     // Hack: RefInput-Kontrolle
-    DECL_LINK( TimeOutHdl,       Timer* );
+    DECL_LINK( TimeOutHdl,		 Timer* );
 #endif
 };
 

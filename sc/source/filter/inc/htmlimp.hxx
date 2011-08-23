@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,17 +35,17 @@ class ScHTMLParser;
 class ScHTMLImport : public ScEEImport
 {
 private:
-    static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
+    static void			InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
 
 public:
     ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
     virtual ~ScHTMLImport();
     const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
 
-    virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0,
+    virtual void		WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0, 
                                          SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
-    static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
+    static String		GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
 };
 
 

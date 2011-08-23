@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -694,7 +694,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrms( *this );
-//  aFndBox.SaveChartData( *this );
+// 	aFndBox.SaveChartData( *this );
 
     SwTableNode* pTblNd = GetTableNode();
     std::vector<SwTableBoxFmt*> aInsFormat( nCnt, 0 );
@@ -775,7 +775,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     aFndBox.MakeFrms( *this );
-//  aFndBox.RestoreChartData( *this );
+// 	aFndBox.RestoreChartData( *this );
 #ifdef DBG_UTIL
     {
         const SwTableBoxes &rTabBoxes = aLines[0]->GetTabBoxes();

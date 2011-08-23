@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 namespace desktop
 {
-
+  
 //=============================================================================
 /** @short  provide helper functions to handle a abnormal exit
             and contain a list of all "well known" exit codes.
@@ -40,10 +40,10 @@ class ExitHelper
     //-------------------------------------------------------------------------
     // const
     public:
-
+    
         //---------------------------------------------------------------------
         /** @short  list of all well known exit codes.
-
+        
             @descr  Its not allowed to use exit codes hard coded
                     inside office. All places must use these list to
                     be synchron.
@@ -62,7 +62,7 @@ class ExitHelper
             E_NORMAL_RESTART = 81
         };
 };
-
+    
 } // namespace desktop
 
-#endif // #ifndef _DESKTOP_EXITHELPER_HXX_
+#endif // #ifndef _DESKTOP_EXITHELPER_HXX_ 

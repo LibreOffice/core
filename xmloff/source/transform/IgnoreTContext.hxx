@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "TransformerContext.hxx"
 
 
-class XMLIgnoreTransformerContext : public XMLTransformerContext
+class XMLIgnoreTransformerContext : public XMLTransformerContext 
 {
     sal_Bool m_bIgnoreCharacters;
     sal_Bool m_bIgnoreElements;
@@ -45,15 +45,15 @@ public:
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    XMLIgnoreTransformerContext( XMLTransformerBase& rTransformer,
+    XMLIgnoreTransformerContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName,
                               sal_Bool bIgnoreCharacters,
-                              sal_Bool bIgnoreElements  );
+                              sal_Bool bIgnoreElements	);
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    XMLIgnoreTransformerContext( XMLTransformerBase& rTransformer,
+    XMLIgnoreTransformerContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName,
                               sal_Bool bAllowCharactersRecursive );
 
@@ -85,5 +85,5 @@ public:
     virtual void Characters( const ::rtl::OUString& rChars );
 };
 
-#endif  //  _XMLOFF_IGNORETCONTEXT_HXX
+#endif	//  _XMLOFF_IGNORETCONTEXT_HXX
 

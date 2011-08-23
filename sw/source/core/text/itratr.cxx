@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
-#include <viewsh.hxx>   // ViewShell
+#include <viewsh.hxx>	// ViewShell
 #include <rootfrm.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <dcontact.hxx>
 #include <fldbas.hxx>      // SwField
-#include <pam.hxx>         // SwPosition        (lcl_MinMaxNode)
+#include <pam.hxx>         // SwPosition		(lcl_MinMaxNode)
 #include <itratr.hxx>
 #include <htmltbl.hxx>
 #include <swtable.hxx>
@@ -67,7 +67,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
 /*************************************************************************
- *                      SwAttrIter::Chg()
+ *						SwAttrIter::Chg()
  *************************************************************************/
 
 void SwAttrIter::Chg( SwTxtAttr *pHt )
@@ -81,7 +81,7 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
 }
 
 /*************************************************************************
- *                      SwAttrIter::Rst()
+ *						SwAttrIter::Rst()
  *************************************************************************/
 
 void SwAttrIter::Rst( SwTxtAttr *pHt )
@@ -96,7 +96,7 @@ void SwAttrIter::Rst( SwTxtAttr *pHt )
 }
 
 /*************************************************************************
- *              virtual SwAttrIter::~SwAttrIter()
+ *				virtual SwAttrIter::~SwAttrIter()
  *************************************************************************/
 
 SwAttrIter::~SwAttrIter()
@@ -106,7 +106,7 @@ SwAttrIter::~SwAttrIter()
 }
 
 /*************************************************************************
- *                      SwAttrIter::GetAttr()
+ *						SwAttrIter::GetAttr()
  *
  * Liefert fuer eine Position das Attribut, wenn das Attribut genau auf
  * der Position nPos liegt und kein EndIndex besitzt.
@@ -126,7 +126,7 @@ SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
 }
 
 /*************************************************************************
- *                        SwAttrIter::SeekAndChg()
+ *						  SwAttrIter::SeekAndChg()
  *************************************************************************/
 
 sal_Bool SwAttrIter::SeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice* pOut )
@@ -160,7 +160,7 @@ sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
 }
 
 /*************************************************************************
- *                        SwAttrIter::SeekStartAndChg()
+ *						  SwAttrIter::SeekStartAndChg()
  *************************************************************************/
 
 sal_Bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont )
@@ -218,7 +218,7 @@ sal_Bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool
 }
 
 /*************************************************************************
- *                       SwAttrIter::SeekFwd()
+ *						 SwAttrIter::SeekFwd()
  *************************************************************************/
 
 // AMA: Neuer AttrIter Nov 94
@@ -238,7 +238,7 @@ void SwAttrIter::SeekFwd( const xub_StrLen nNewPos )
         {
             // schliesse die TextAttribute, deren StartPos vor
             // oder an der alten nPos lag, die z.Z. geoeffnet sind.
-            if (*pTxtAttr->GetStart() <= nPos)  Rst( pTxtAttr );
+            if (*pTxtAttr->GetStart() <= nPos)	Rst( pTxtAttr );
             nEndIndex++;
         }
     }
@@ -263,7 +263,7 @@ void SwAttrIter::SeekFwd( const xub_StrLen nNewPos )
 }
 
 /*************************************************************************
- *                       SwAttrIter::Seek()
+ *						 SwAttrIter::Seek()
  *************************************************************************/
 
 sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
@@ -312,7 +312,7 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
 }
 
 /*************************************************************************
- *                      SwAttrIter::GetNextAttr()
+ *						SwAttrIter::GetNextAttr()
  *************************************************************************/
 
 xub_StrLen SwAttrIter::GetNextAttr( ) const
@@ -338,7 +338,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
         nNext=p;
         else
         nNext=p+1;
-    }
+    }	
     if( pRedln )
         return pRedln->GetNextRedln( nNext );
     return nNext;
@@ -346,7 +346,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
 
 #if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
- *                      SwAttrIter::Dump()
+ *						SwAttrIter::Dump()
  *************************************************************************/
 
 void SwAttrIter::Dump( SvStream &/*rOS*/ ) const
@@ -444,12 +444,12 @@ class SwMinMaxNodeArgs
 {
 public:
     ULONG nMaxWidth;    // Summe aller Rahmenbreite
-    long nMinWidth;     // Breitester Rahmen
+    long nMinWidth;		// Breitester Rahmen
     long nLeftRest;     // noch nicht von Rahmen ueberdeckter Platz im l. Rand
     long nRightRest;    // noch nicht von Rahmen ueberdeckter Platz im r. Rand
-    long nLeftDiff;     // Min/Max-Differenz des Rahmens im linken Rand
+    long nLeftDiff;		// Min/Max-Differenz des Rahmens im linken Rand
     long nRightDiff;    // Min/Max-Differenz des Rahmens im rechten Rand
-    ULONG nIndx;        // Indexnummer des Nodes
+    ULONG nIndx;		// Indexnummer des Nodes
     void Minimum( long nNew ) { if( nNew > nMinWidth ) nMinWidth = nNew; }
 };
 
@@ -771,7 +771,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                     case RES_TXTATR_FTN :
                     {
                         const XubString aTxt = pHint->GetFtn().GetNumStr();
-                        if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
+                        if( lcl_MinMaxString( aArg, aIter.GetFnt(),	aTxt, 0,
                             aTxt.Len() ) )
                             nAdd = 20;
                         break;
@@ -780,7 +780,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                     {
                         SwField *pFld = (SwField*)pHint->GetFld().GetFld();
                         const String aTxt = pFld->GetCntnt( FALSE );
-                        if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
+                        if( lcl_MinMaxString( aArg, aIter.GetFnt(),	aTxt, 0,
                             aTxt.Len() ) )
                             nAdd = 20;
                         break;
@@ -816,7 +816,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
 }
 
 /*************************************************************************
- *                      SwTxtNode::GetScalingOfSelectedText()
+ *						SwTxtNode::GetScalingOfSelectedText()
  *
  * Calculates the width of the text part specified by nStt and nEnd,
  * the height of the line containing nStt is devided by this width,
@@ -827,7 +827,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
  * changing this method very likely requires changing of "GetMinMaxSize"
  *************************************************************************/
 
-USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
+USHORT SwTxtNode::GetScalingOfSelectedText(	xub_StrLen nStt, xub_StrLen nEnd )
     const
 {
     ViewShell* pSh = NULL;
@@ -1003,7 +1003,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
             SwTxtFrm* pTmpFrm = ( SwTxtFrm* )pLastFrm;
             if ( pTmpFrm->GetOfst() <= nStt &&
                 ( !pTmpFrm->GetFollow() ||
-                   pTmpFrm->GetFollow()->GetOfst() > nStt ) )
+                   pTmpFrm->GetFollow()->GetOfst() > nStt )	)
             {
                 pFrm = pTmpFrm;
                 break;

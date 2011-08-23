@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,19 @@
 class SvxHyperlinkNewDocTp : public SvxHyperlinkTabPageBase
 {
 private:
-    FixedLine           maGrpNewDoc;
-    RadioButton         maRbtEditNow;
-    RadioButton         maRbtEditLater;
-    FixedText           maFtPath;
-    SvxHyperURLBox      maCbbPath;
-    ImageButton         maBtCreate;
-    FixedText           maFtDocTypes;
-    ListBox             maLbDocTypes;
+    FixedLine			maGrpNewDoc;
+    RadioButton			maRbtEditNow;
+    RadioButton			maRbtEditLater;
+    FixedText			maFtPath;
+    SvxHyperURLBox		maCbbPath;
+    ImageButton			maBtCreate;
+    FixedText			maFtDocTypes;
+    ListBox				maLbDocTypes;
 
     sal_Bool            ImplGetURLObject( const String& rPath, const String& rBase, INetURLObject& aURLObject ) const;
-    void                FillDocumentList ();
+    void				FillDocumentList ();
 
-    DECL_LINK (ClickNewHdl_Impl          , void * );        // Button : New
+    DECL_LINK (ClickNewHdl_Impl			 , void * );		// Button : New
 
     Image GetImage( USHORT nId );
     void ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder);//, String* pFrame, String* pOpenAs, String* pDefTempl, String* pDefURL );
@@ -58,8 +58,8 @@ private:
 
 protected:
     void FillDlgFields     ( String& aStrURL );
-    void GetCurentItemData ( String& aStrURL, String& aStrName,
-                             String& aStrIntName, String& aStrFrame,
+    void GetCurentItemData ( String& aStrURL, String& aStrName, 
+                             String& aStrIntName, String& aStrFrame, 
                              SvxLinkInsertMode& eMode );
 
 public:
@@ -68,10 +68,10 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual BOOL        AskApply ();
-    virtual void        DoApply ();
+    virtual BOOL		AskApply ();
+    virtual void		DoApply ();
 
-    virtual void        SetInitFocus();
+    virtual void		SetInitFocus();
 };
 
 

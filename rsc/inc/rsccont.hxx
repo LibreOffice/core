@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ protected:
                                   RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         ContWriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                                  RscTypCont * pTC, sal_uInt32, BOOL bExtra );
-    void            ContWriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    void			ContWriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                         const char *, BOOL nWriteSize );
 public:
                     RscBaseCont( Atom nId, sal_uInt32 nTypId,
@@ -90,8 +90,8 @@ public:
     SUBINFO_STRUCT  GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos );
     ERRTYPE         SetString( const RSCINST &, const char * pStr );
     ERRTYPE         SetNumber( const RSCINST &, INT32 lValue );
-    ERRTYPE         SetBool( const RSCINST & rInst, BOOL bValue );
-    ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
+    ERRTYPE 		SetBool( const RSCINST & rInst, BOOL bValue );
+    ERRTYPE 		SetConst( const RSCINST & rInst, Atom nValueId,
                               INT32 nValue );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
 
@@ -99,7 +99,7 @@ public:
     sal_uInt32          Size(){ return( nSize ); };
 
     BOOL            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
-    void            SetToDefault( const RSCINST & rInst );
+    void			SetToDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst );
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
@@ -136,7 +136,7 @@ public:
                              BOOL bNoId = TRUE );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, BOOL bExtra );
-    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    void			WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
 

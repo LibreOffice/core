@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,16 +60,16 @@ using namespace com::sun::star;
 // **************************************************************************
 struct SfxVersionInfo
 {
-    String                  aName;
-    String                  aComment;
-    String                  aAuthor;
-    DateTime                aCreationDate;
+    String					aName;
+    String					aComment;
+    String					aAuthor;
+    DateTime				aCreationDate;
 
                             SfxVersionInfo();
                             SfxVersionInfo( const SfxVersionInfo& rInfo )
                             { *this = rInfo; }
 
-    SfxVersionInfo&         operator=( const SfxVersionInfo &rInfo )
+    SfxVersionInfo& 		operator=( const SfxVersionInfo &rInfo )
                             {
                                 aName = rInfo.aName;
                                 aComment = rInfo.aComment;
@@ -95,11 +95,11 @@ public:
                             ~SfxVersionTableDtor()
                             { DelDtor(); }
 
-    SfxVersionTableDtor&    operator=( const SfxVersionTableDtor &rCpy );
-    void                    DelDtor();
-    SvStream&               Read( SvStream & );
-    SvStream&               Write( SvStream & ) const;
-    SvStringsDtor*          GetVersions() const;
+    SfxVersionTableDtor& 	operator=( const SfxVersionTableDtor &rCpy );
+    void 					DelDtor();
+    SvStream&				Read( SvStream & );
+    SvStream&				Write( SvStream & ) const;
+    SvStringsDtor*			GetVersions() const;
 };
 
 SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo )
@@ -242,7 +242,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, BOOL bIsSaveVersion
     aVersionBox.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN );
     aVersionBox.SetSelectionMode( SINGLE_SELECTION );
     aVersionBox.SetTabs( &nTabs_Impl[0], MAP_APPFONT );
-    aVersionBox.Resize();   // OS: Hack fuer richtige Selektion
+    aVersionBox.Resize();	// OS: Hack fuer richtige Selektion
     RecalcDateColumn();
 
     // set dialog title (filename or docinfo title)

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _CMDMAILSUPPL_HXX_
 
 //----------------------------------------------------------
-//  includes of other projects
+//	includes of other projects
 //----------------------------------------------------------
 
 #include <cppuhelper/implbase3.hxx>
@@ -46,11 +46,11 @@
 #endif
 
 //----------------------------------------------------------
-// class declaration
+// class declaration		
 //----------------------------------------------------------
 
-class CmdMailSuppl :
-    public  cppu::WeakImplHelper3<
+class CmdMailSuppl : 
+    public  cppu::WeakImplHelper3< 
         com::sun::star::system::XSimpleMailClientSupplier,
         com::sun::star::system::XSimpleMailClient,
         com::sun::star::lang::XServiceInfo >
@@ -63,33 +63,33 @@ public:
 
     //------------------------------------------------
     // XSimpleMailClientSupplier
-    //------------------------------------------------
+    //------------------------------------------------ 
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XSimpleMailClient
-    //------------------------------------------------
+    //------------------------------------------------ 
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL sendSimpleMailMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag )
+    virtual void SAL_CALL sendSimpleMailMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag ) 
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------
+    //------------------------------------------------ 
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
-};
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+        throw(::com::sun::star::uno::RuntimeException);    
+}; 
 
-#endif
+#endif 

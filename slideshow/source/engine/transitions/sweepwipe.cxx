@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,27 +47,27 @@ namespace internal {
         t /= 2.0;
     if (!m_single && !m_oppositeVertical)
         t /= 2.0;
-
+    
     ::basegfx::B2DPolygon poly( ClockWipe::calcCenteredClock( 0.25 + t ) );
     ::basegfx::B2DHomMatrix aTransform;
-
-    if (m_center)
+    
+    if (m_center) 
     {
         aTransform = basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.0);
         poly.transform( aTransform );
     }
     ::basegfx::B2DPolyPolygon res(poly);
-
-    if (! m_single)
+    
+    if (! m_single) 
     {
-        if (m_oppositeVertical)
+        if (m_oppositeVertical) 
         {
             aTransform = basegfx::tools::createScaleB2DHomMatrix(1.0, -1.0);
             aTransform.translate( 0.0, 1.0 );
             poly.transform( aTransform );
             poly.flip();
         }
-        else
+        else 
         {
             aTransform = basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5);
             aTransform.rotate( M_PI );
@@ -76,7 +76,7 @@ namespace internal {
         }
         res.append(poly);
     }
-
+    
     return m_flipOnYAxis ? flipOnYAxis(res) : res;
 }
 

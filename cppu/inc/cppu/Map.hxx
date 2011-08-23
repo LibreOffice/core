@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace cppu
     template<class T> inline T * mapOut(T * pT, cssu::Environment const & outerEnv)
     {
         cssu::Mapping curr2outer(cssu::Environment::getCurrent(), outerEnv);
-
+        
         return reinterpret_cast<T *>(curr2outer.mapInterface(pT, getCppuType((cssu::Reference<T> *)NULL)));
     }
 
@@ -64,7 +64,7 @@ namespace cppu
     template<class T> inline T * mapIn(T * pT, cssu::Environment const & outerEnv)
     {
         cssu::Mapping outer2curr(outerEnv, cssu::Environment::getCurrent());
-
+        
         return reinterpret_cast<T *>(outer2curr.mapInterface(pT, getCppuType((cssu::Reference<T> *)NULL)));
     }
 
@@ -80,7 +80,7 @@ namespace cppu
     inline void mapOutAny(cssu::Any const & any, cssu::Any * res, cssu::Environment const & outerEnv)
     {
         cssu::Mapping curr2outer(cssu::Environment::getCurrent(), outerEnv);
-
+        
         uno_any_destruct(res, (uno_ReleaseFunc)cssu::cpp_release);
         uno_type_any_constructAndConvert(
             res,
@@ -100,7 +100,7 @@ namespace cppu
     inline void mapInAny(cssu::Any const & any, cssu::Any * res, cssu::Environment const & outerEnv)
     {
         cssu::Mapping outer2curr(outerEnv, cssu::Environment::getCurrent());
-
+        
         uno_any_destruct(res, (uno_ReleaseFunc)cssu::cpp_release);
         uno_type_any_constructAndConvert(
             res,

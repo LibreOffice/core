@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace dbaui
     //= DatabaseObjectView
     //======================================================================
     DatabaseObjectView::DatabaseObjectView( const Reference< XMultiServiceFactory >& _rxORB,
-            const Reference< XDatabaseDocumentUI >& _rxApplication,
+            const Reference< XDatabaseDocumentUI >& _rxApplication, 
             const Reference< XFrame >& _rxParentFrame,
             const ::rtl::OUString& _rComponentURL )
         :m_xORB             ( _rxORB            )
@@ -142,7 +142,7 @@ namespace dbaui
                     aProp.Name    = ::rtl::OUString::createFromAscii("TopWindow");
                     aProp.Value <<= sal_True;
                     lArgs[nArg++] <<= aProp;
-
+                
                     m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
 
                     // everything we load can be considered a "top level document", so set the respective bit at the window.
@@ -329,7 +329,7 @@ namespace dbaui
             i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_UPDATE_TABLENAME, sTable );
         }
     }
-
+    
     //======================================================================
     //= RelationDesigner
     //======================================================================
@@ -339,6 +339,6 @@ namespace dbaui
     {
     }
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................
 

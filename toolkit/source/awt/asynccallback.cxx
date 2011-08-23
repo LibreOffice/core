@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,13 +79,13 @@ private:
     {
         CallbackData( const css::uno::Reference< css::awt::XCallback >& rCallback, const css::uno::Any& rAny ) :
             xCallback( rCallback ), aData( rAny ) {}
-
+        
         css::uno::Reference< css::awt::XCallback > xCallback;
         css::uno::Any                              aData;
     };
-
+  
     DECL_STATIC_LINK( AsyncCallback, Notify_Impl, CallbackData* );
-
+    
     AsyncCallback(AsyncCallback &); // not defined
     void operator =(AsyncCallback &); // not defined
 
@@ -143,7 +143,7 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncCallback, Notify_Impl, CallbackData*, pCallbac
     catch ( css::uno::Exception& )
     {
     }
-
+    
     delete pCallbackData;
     return 0;
 }

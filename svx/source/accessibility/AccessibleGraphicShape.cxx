@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 using namespace ::accessibility;
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -69,7 +69,7 @@ AccessibleGraphicShape::~AccessibleGraphicShape (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight (void)
+sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight (void) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     return AccessibleShape::getSize().Height;
@@ -78,7 +78,7 @@ sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight (void)
 
 
 
-sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth (void)
+sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth (void) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     return AccessibleShape::getSize().Width;
@@ -103,7 +103,7 @@ com::sun::star::uno::Any SAL_CALL
 
 
 void SAL_CALL
-    AccessibleGraphicShape::acquire (void)
+    AccessibleGraphicShape::acquire (void) 
     throw ()
 {
     AccessibleShape::acquire ();
@@ -117,13 +117,13 @@ void SAL_CALL
 {
     AccessibleShape::release ();
 }
+        
+        
 
-
-
-
+    
 //=====  XServiceInfo  ========================================================
-
-::rtl::OUString SAL_CALL
+    
+::rtl::OUString SAL_CALL 
     AccessibleGraphicShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -140,7 +140,7 @@ void SAL_CALL
 {
     ThrowIfDisposed ();
     // Get list of supported service names from base class...
-    uno::Sequence<OUString> aServiceNames =
+    uno::Sequence<OUString> aServiceNames = 
         AccessibleShape::getSupportedServiceNames();
     sal_Int32 nCount (aServiceNames.getLength());
 
@@ -157,7 +157,7 @@ void SAL_CALL
 
 
 //=====  XTypeProvider  ===================================================
-
+    
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleGraphicShape::getTypes (void)
     throw (uno::RuntimeException)
@@ -167,7 +167,7 @@ uno::Sequence<uno::Type> SAL_CALL
     // ...and add the additional type for the component.
     long nTypeCount = aTypeList.getLength();
     aTypeList.realloc (nTypeCount + 1);
-    const uno::Type aImageType =
+    const uno::Type aImageType = 
         ::getCppuType((const uno::Reference<XAccessibleImage>*)0);
     aTypeList[nTypeCount] = aImageType;
 
@@ -177,7 +177,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 
-/// Create the base name of this object, i.e. the name without appended number.
+///	Create the base name of this object, i.e. the name without appended number.
 ::rtl::OUString
     AccessibleGraphicShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)

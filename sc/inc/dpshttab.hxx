@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@ class ScDPItemData;
 // End Comments
 // --------------------------------------------------------------------
 //
-//  implementation of ScDPTableData with sheet data
+//	implementation of ScDPTableData with sheet data
 //
 
 struct ScSheetSourceDesc
 {
-    ScRange         aSourceRange;
-    ScQueryParam    aQueryParam;
+    ScRange			aSourceRange;
+    ScQueryParam	aQueryParam;
 
-    BOOL operator== ( const ScSheetSourceDesc& rOther ) const
+    BOOL operator==	( const ScSheetSourceDesc& rOther ) const
         { return aSourceRange == rOther.aSourceRange &&
                  aQueryParam  == rOther.aQueryParam; }
 // Wang Xu Ming - DataPilot migration
@@ -64,34 +64,34 @@ struct ScSheetSourceDesc
     ULONG CheckValidate( ScDocument* pDoc  ) const;
     ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
     ScDPTableDataCache*  GetExistDPObjectCache ( ScDocument* pDoc  ) const;
-    long    GetCacheId( ScDocument* pDoc, long nID ) const;
-
+    long	GetCacheId( ScDocument* pDoc, long nID ) const;
+    
 // End Comments
 };
 
 class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
-    ScQueryParam    aQuery;
-    BOOL*                pSpecial;
-    BOOL            bIgnoreEmptyRows;
-    BOOL            bRepeatIfEmpty;
+    ScQueryParam	aQuery;
+    BOOL*          		 pSpecial;          						
+    BOOL			bIgnoreEmptyRows;
+    BOOL			bRepeatIfEmpty;
 
-       ScDPCacheTable  aCacheTable;
+       ScDPCacheTable  aCacheTable;	
 
 public:
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
     ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc, long nCacheId = -1 );
-    virtual         ~ScSheetDPData();
+    virtual			~ScSheetDPData();
     // End Comments
-    virtual long                    GetColumnCount();
-    virtual String                  getDimensionName(long nColumn);
-    virtual BOOL                    getIsDataLayoutDimension(long nColumn);
-    virtual BOOL                    IsDateDimension(long nDim);
-    virtual ULONG                   GetNumberFormat(long nDim);
-    virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
+    virtual long					GetColumnCount();
+    virtual String					getDimensionName(long nColumn);
+    virtual BOOL					getIsDataLayoutDimension(long nColumn);
+    virtual BOOL					IsDateDimension(long nDim);
+    virtual ULONG					GetNumberFormat(long nDim);
+    virtual void					DisposeData();
+    virtual void					SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
     virtual bool                    IsRepeatIfEmpty();
 

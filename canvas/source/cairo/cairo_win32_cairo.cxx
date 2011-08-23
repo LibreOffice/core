@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#define _WIN32_WINNT 0x0500
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
 
@@ -34,7 +36,7 @@
  ************************************************************************/
 
 #include <tools/prewin.h>
-#include <windows.h>
+#include <windows.h> 
 #include <tools/postwin.h>
 
 #include <osl/diagnose.h>
@@ -78,7 +80,7 @@ namespace cairo
      * @param x horizontal location of the new surface
      * @param y vertical location of the new surface
      *
-     * pSysData contains the platform native Window reference.
+     * pSysData contains the platform native Window reference. 
      * pSysData is used to create a surface on the Window
      *
      * Set the mpSurface to the new surface or NULL
@@ -103,7 +105,7 @@ namespace cairo
         mpSurface()
     {
         OSL_ASSERT(rBmpData.pDIB == NULL);
-
+        
         if(rBmpData.pDIB != NULL) {
             // So just leave mpSurface to NULL, little else we can do at
             // this stage. Hopefully the Win32 patch to
@@ -111,8 +113,8 @@ namespace cairo
             // const Size&) will catch the cases where this
             // constructor would be called with a DIB bitmap, and we
             // will never get here. At least it worked for Ballmer.ppt.
-        }
-        else
+        } 
+        else 
         {
             HDC hDC = CreateCompatibleDC(NULL);
             void* hOrigBitmap;
@@ -138,7 +140,7 @@ namespace cairo
     }
 
     /**
-     * Surface::getSimilar:  Create new similar Canvas surface
+     * Surface::getSimilar:  Create new similar Canvas surface 
      * @param aContent format of the new surface (cairo_content_t from cairo/src/cairo.h)
      * @param width width of the new surface
      * @param height height of the new surface
@@ -149,11 +151,11 @@ namespace cairo
      * Cairo surface from aContent (cairo_content_t)
      *
      * @return new surface or NULL
-     **/
+     **/     
     SurfaceSharedPtr Win32Surface::getSimilar( Content aContent, int width, int height ) const
     {
         return SurfaceSharedPtr(
-            new Win32Surface(
+            new Win32Surface( 
                 CairoSurfaceSharedPtr(
                     cairo_surface_create_similar( mpSurface.get(), aContent, width, height ),
                     &cairo_surface_destroy )));
@@ -181,7 +183,7 @@ namespace cairo
     /**
      * Surface::getDepth:  Get the color depth of the Canvas surface.
      *
-     * @return color depth
+     * @return color depth 
      **/
     int Win32Surface::getDepth() const
     {
@@ -272,9 +274,9 @@ namespace cairo
                                           const BitmapSystemData& rData,
                                           const Size&             rSize )
     {
-        OSL_TRACE( "requested size: %d x %d available size: %d x %d",
+        OSL_TRACE( "requested size: %d x %d available size: %d x %d", 
                    rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
-
+        
         if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
             return SurfaceSharedPtr(new Win32Surface( rData ));
         else
@@ -295,24 +297,24 @@ namespace cairo
         WORD glyph_index;
         HDC hdc = NULL;
         int i = 0;
-
+        
         hdc = CreateCompatibleDC (NULL);
-
+        
         if (!hdc) return 0;
         if (!SetGraphicsMode (hdc, GM_ADVANCED)) {
             DeleteDC (hdc);
             return 0;
         }
-
+        
         SelectObject (hdc, hfont);
         SetMapMode (hdc, MM_TEXT);
-
+        
         unicode[0] = ucs4;
         unicode[1] = 0;
         if (GetGlyphIndicesW (hdc, unicode, 1, &glyph_index, 0) == GDI_ERROR) {
             glyph_index = 0;
         }
-
+        
         DeleteDC (hdc);
         return glyph_index;
     }

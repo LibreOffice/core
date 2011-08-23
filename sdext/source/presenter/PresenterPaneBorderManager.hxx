@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,11 +93,11 @@ public:
 
 
     // XInitialization
-
+    
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-
+    
     // XMouseListener
 
     virtual void SAL_CALL mousePressed (const css::awt::MouseEvent& rEvent)
@@ -105,28 +105,28 @@ public:
 
     virtual void SAL_CALL mouseReleased (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
 
     // XMouseMotionListener
-
+    
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
+    
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
+    
 private:
     enum BorderElement { Top, TopLeft, TopRight, Left, Right, BottomLeft, BottomRight, Bottom,
                          Content, Outside };

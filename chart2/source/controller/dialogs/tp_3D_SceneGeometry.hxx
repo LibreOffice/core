@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,19 +80,19 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > m_xSceneProperties;
 
-    CheckBox        m_aCbxRightAngledAxes;
+    CheckBox		m_aCbxRightAngledAxes;
 
-    FixedText       m_aFtXRotation;
-    MetricField     m_aMFXRotation;
+    FixedText		m_aFtXRotation;
+    MetricField		m_aMFXRotation;
+    
+    FixedText		m_aFtYRotation;
+    MetricField		m_aMFYRotation;
+    
+    FixedText		m_aFtZRotation;
+    MetricField		m_aMFZRotation;
 
-    FixedText       m_aFtYRotation;
-    MetricField     m_aMFYRotation;
-
-    FixedText       m_aFtZRotation;
-    MetricField     m_aMFZRotation;
-
-    CheckBox        m_aCbxPerspective;
-    MetricField     m_aMFPerspective;
+    CheckBox		m_aCbxPerspective;
+    MetricField		m_aMFPerspective;
 
     //to keep old values when switching to right angled axes
     sal_Int64       m_nXRotation;

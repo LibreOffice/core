@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class XMLFilterTabPageXSLT;
 class XMLFilterTabDialog: public TabDialog
 {
 public:
-    XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF, const filter_info_impl* pInfo );
+    XMLFilterTabDialog(	Window *pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF, const filter_info_impl* pInfo );
     virtual ~XMLFilterTabDialog();
 
     ResMgr& getResMgr() { return mrResMgr; }
@@ -57,17 +57,17 @@ private:
     DECL_LINK( OkHdl, Button * );
     DECL_LINK( CancelHdl, Button * );
 
-    ResMgr& mrResMgr;
+    ResMgr&	mrResMgr;
 
     const filter_info_impl* mpOldInfo;
     filter_info_impl* mpNewInfo;
 
-    TabControl      maTabCtrl;
-    OKButton        maOKBtn;
-    CancelButton    maCancelBtn;
-    HelpButton      maHelpBtn;
+    TabControl		maTabCtrl;
+    OKButton		maOKBtn;
+    CancelButton	maCancelBtn;
+    HelpButton		maHelpBtn;
 
-    XMLFilterTabPageBasic*  mpBasicPage;
+    XMLFilterTabPageBasic*	mpBasicPage;
     XMLFilterTabPageXSLT* mpXSLTPage;
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,48 +34,48 @@
 
 /** */ //for docpp
 namespace utl
-{
+{     
 
 //--------------------------------------------------------------------------------------------------------
 /**
  * Inspect interfaces types whether they are related by inheritance.
  *<BR>
- * @return      true if rType is derived from rBaseType
- * @param       rBaseType   a <type>Type</type> of an interface.
- * @param       rType       a <type>Type</type> of an interface.
+ * @return		true if rType is derived from rBaseType
+ * @param		rBaseType	a <type>Type</type> of an interface.
+ * @param		rType		a <type>Type</type> of an interface.
  */
 sal_Bool isDerivedFrom(
-    const ::com::sun::star::uno::Type & rBaseType,
+    const ::com::sun::star::uno::Type & rBaseType, 
     const ::com::sun::star::uno::Type & rType );
 
 //--------------------------------------------------------------------------------------------------------
 /**
  * Inspect interface types whether they are related by inheritance.
  *<BR>
- * @return      true if p is of a type derived from rBaseType
- * @param       rBaseType   a <type>Type</type> of an interface.
- * @param       p           a pointer to an interface.
+ * @return		true if p is of a type derived from rBaseType
+ * @param		rBaseType	a <type>Type</type> of an interface.
+ * @param		p			a pointer to an interface.
  */
 template <class Interface>
 inline sal_Bool isDerivedFrom(
-    const ::com::sun::star::uno::Type& rBaseType,
+    const ::com::sun::star::uno::Type& rBaseType, 
     Interface* /*p*/)
 {
-    return isDerivedFrom(
-                rBaseType,
+    return isDerivedFrom( 
+                rBaseType, 
                 ::getCppuType(static_cast<const ::com::sun::star::uno::Reference<Interface> *>(0)));
 }
 
 //--------------------------------------------------------------------------------------------------------
 // possible optimization ?
-//  Any aRet(::cppu::queryInterface(rType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
-//  if (aRet.hasValue())
-//      return aRet;
+//	Any aRet(::cppu::queryInterface(rType, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
+//	if (aRet.hasValue())
+//		return aRet;
 
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
  */
 template< class Interface1 >
 inline ::com::sun::star::uno::Any queryDeepInterface(
@@ -91,8 +91,8 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
  */
 template< class Interface1, class Interface2 >
 inline ::com::sun::star::uno::Any queryDeepInterface(
@@ -110,9 +110,9 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3 >
 inline ::com::sun::star::uno::Any queryDeepInterface(
@@ -132,10 +132,10 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4 >
 inline ::com::sun::star::uno::Any queryDeepInterface(
@@ -157,11 +157,11 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
+ * @param		p5		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5 >
 inline ::com::sun::star::uno::Any queryDeepInterface(
@@ -185,12 +185,12 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
+ * @param		p5		a pointer to an interface.
+ * @param		p6		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6 >
@@ -218,13 +218,13 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
+ * @param		p5		a pointer to an interface.
+ * @param		p6		a pointer to an interface.
+ * @param		p7		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7 >
@@ -254,14 +254,14 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
+ * @param		p5		a pointer to an interface.
+ * @param		p6		a pointer to an interface.
+ * @param		p7		a pointer to an interface.
+ * @param		p8		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8 >
@@ -293,15 +293,15 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
- * @param       p9      a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
+ * @param		p5		a pointer to an interface.
+ * @param		p6		a pointer to an interface.
+ * @param		p7		a pointer to an interface.
+ * @param		p8		a pointer to an interface.
+ * @param		p9		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9 >
@@ -335,16 +335,16 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
- * @param       p9      a pointer to an interface.
- * @param       p10     a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
+ * @param		p5		a pointer to an interface.
+ * @param		p6		a pointer to an interface.
+ * @param		p7		a pointer to an interface.
+ * @param		p8		a pointer to an interface.
+ * @param		p9		a pointer to an interface.
+ * @param		p10		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10 >
@@ -380,17 +380,17 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
- * @param       p9      a pointer to an interface.
- * @param       p10     a pointer to an interface.
- * @param       p11     a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
+ * @param		p5		a pointer to an interface.
+ * @param		p6		a pointer to an interface.
+ * @param		p7		a pointer to an interface.
+ * @param		p8		a pointer to an interface.
+ * @param		p9		a pointer to an interface.
+ * @param		p10		a pointer to an interface.
+ * @param		p11		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
@@ -430,18 +430,18 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
 /**
  * Inspect types and choose return proper interface.
  *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
- * @param       p9      a pointer to an interface.
- * @param       p10     a pointer to an interface.
- * @param       p11     a pointer to an interface.
- * @param       p12     a pointer to an interface.
+ * @param		p1		a pointer to an interface.
+ * @param		p2		a pointer to an interface.
+ * @param		p3		a pointer to an interface.
+ * @param		p4		a pointer to an interface.
+ * @param		p5		a pointer to an interface.
+ * @param		p6		a pointer to an interface.
+ * @param		p7		a pointer to an interface.
+ * @param		p8		a pointer to an interface.
+ * @param		p9		a pointer to an interface.
+ * @param		p10		a pointer to an interface.
+ * @param		p11		a pointer to an interface.
+ * @param		p12		a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,

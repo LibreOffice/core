@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,12 +33,12 @@
 #include <editsh.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>		// fuer die UndoIds
 #include <section.hxx>
 #include <edimp.hxx>
-#include <sectfrm.hxx>      // SwSectionFrm
-#include <cntfrm.hxx>       // SwCntntFrm
-#include <tabfrm.hxx>       // SwTabFrm
+#include <sectfrm.hxx>		// SwSectionFrm
+#include <cntfrm.hxx>		// SwCntntFrm
+#include <tabfrm.hxx>		// SwTabFrm
 #include <rootfrm.hxx>      // SwRootFrm
 
 
@@ -287,9 +287,9 @@ USHORT SwEditShell::GetFullSelectedSectionCount() const
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!
 // what about table at start or end ?
-//      There is no selection possible!
+//		There is no selection possible!
 // What about only a table inside the section ?
-//      There is only a table selection possible!
+//		There is only a table selection possible!
 
         SwNodeIndex aSIdx( pStt->nNode, -1 ), aEIdx( pEnd->nNode, +1 );
         if( !aSIdx.GetNode().IsSectionNode() ||

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ using namespace ::comphelper;
 //= AccessibleEventNotifier
 //=====================================================================
 //---------------------------------------------------------------------
-namespace
+namespace 
 {
-    struct lclMutex
+    struct lclMutex 
         : public rtl::Static< ::osl::Mutex, lclMutex > {};
-    struct Clients
-        : public rtl::Static< AccessibleEventNotifier::ClientMap, Clients > {};
+    struct Clients 
+        : public rtl::Static< AccessibleEventNotifier::ClientMap, Clients > {}; 
 }
 
 //.........................................................................
@@ -65,7 +65,7 @@ namespace comphelper
         // Note that the following relies on the fact the elements in the map are traveled with
         // ascending keys (aka client ids)
         AccessibleEventNotifier::ClientMap &rClients = Clients::get();
-        for (   ClientMap::const_iterator aLookup = rClients.begin();
+        for	(	ClientMap::const_iterator aLookup = rClients.begin();
                 aLookup != rClients.end();
                 ++aLookup
             )
@@ -74,7 +74,7 @@ namespace comphelper
             OSL_ENSURE( nCurrent > nBiggestUsedId, "AccessibleEventNotifier::generateId: map is expected to be sorted ascending!" );
 
             if ( nCurrent - nBiggestUsedId > 1 )
-            {   // found a "gap"
+            {	// found a "gap"
                 nFreeId = nBiggestUsedId + 1;
                 break;
             }
@@ -254,6 +254,6 @@ namespace comphelper
     }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 

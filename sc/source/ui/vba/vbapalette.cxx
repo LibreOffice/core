@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #include "vbapalette.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -100,12 +100,12 @@ ScVbaPalette::getPalette() const
 {
     uno::Reference< container::XIndexAccess > xIndex;
     uno::Reference< beans::XPropertySet > xProps;
-    if ( m_pShell )
+    if ( m_pShell )	
         xProps.set( m_pShell->GetModel(), uno::UNO_QUERY_THROW );
     else
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't extract palette, no doc shell" ) ), uno::Reference< uno::XInterface >() );
     xIndex.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ColorPalette") ) ), uno::UNO_QUERY );
     if ( !xIndex.is() )
         return new DefaultPalette();
-    return xIndex;
+    return xIndex;	
 }

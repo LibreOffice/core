@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ public class StateSetView
         ObjectView aView = null;
         if (xContext != null)
             aView = new StateSetView (aContainer);
-
+            
         return aView;
     }
 
@@ -112,7 +112,7 @@ public class StateSetView
         Color aTextColor = g.getColor();
 
         g.setRenderingHint (
-            RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.KEY_ANTIALIASING, 
             RenderingHints.VALUE_ANTIALIAS_ON);
 
         XAccessibleStateSet xStateSet = ( mxContext != null ) ? mxContext.getAccessibleStateSet() : null;

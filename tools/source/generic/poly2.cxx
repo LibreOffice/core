@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,21 +55,21 @@ DBG_NAME( PolyPolygon )
 
 ImplPolyPolygon::ImplPolyPolygon( USHORT nInitSize )
 {
-    mnRefCount  = 1;
-    mnCount     = nInitSize;
-    mnSize      = nInitSize;
-    mnResize    = 16;
-    mpPolyAry   = new SVPPOLYGON[ nInitSize ];
+    mnRefCount	= 1;
+    mnCount 	= nInitSize;
+    mnSize		= nInitSize;
+    mnResize	= 16;
+    mpPolyAry	= new SVPPOLYGON[ nInitSize ];
 }
 
 // -----------------------------------------------------------------------
 
 ImplPolyPolygon::ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly )
 {
-    mnRefCount  = 1;
-    mnCount     = rImplPolyPoly.mnCount;
-    mnSize      = rImplPolyPoly.mnSize;
-    mnResize    = rImplPolyPoly.mnResize;
+    mnRefCount	= 1;
+    mnCount 	= rImplPolyPoly.mnCount;
+    mnSize		= rImplPolyPoly.mnSize;
+    mnResize	= rImplPolyPoly.mnResize;
 
     if ( rImplPolyPoly.mpPolyAry )
     {
@@ -190,8 +190,8 @@ void PolyPolygon::Insert( const Polygon& rPoly, USHORT nPos )
         mpImplPolyPolygon->mpPolyAry = new SVPPOLYGON[mpImplPolyPolygon->mnSize];
     else if ( mpImplPolyPolygon->mnCount == mpImplPolyPolygon->mnSize )
     {
-        USHORT      nOldSize = mpImplPolyPolygon->mnSize;
-        USHORT      nNewSize = nOldSize + mpImplPolyPolygon->mnResize;
+        USHORT		nOldSize = mpImplPolyPolygon->mnSize;
+        USHORT		nNewSize = nOldSize + mpImplPolyPolygon->mnResize;
         SVPPOLYGON* pNewAry;
 
         if ( nNewSize >= MAX_POLYGONS )
@@ -292,8 +292,8 @@ void PolyPolygon::Clear()
                 delete mpImplPolyPolygon->mpPolyAry[i];
             delete[] mpImplPolyPolygon->mpPolyAry;
             mpImplPolyPolygon->mpPolyAry = NULL;
-            mpImplPolyPolygon->mnCount   = 0;
-            mpImplPolyPolygon->mnSize    = mpImplPolyPolygon->mnResize;
+            mpImplPolyPolygon->mnCount	 = 0;
+            mpImplPolyPolygon->mnSize	 = mpImplPolyPolygon->mnResize;
         }
     }
 }
@@ -306,9 +306,9 @@ void PolyPolygon::Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData 
 
     if( nOptimizeFlags )
     {
-        double      fArea;
-        const BOOL  bEdges = ( nOptimizeFlags & POLY_OPTIMIZE_EDGES ) == POLY_OPTIMIZE_EDGES;
-        USHORT      nPercent = 0;
+        double		fArea;
+        const BOOL	bEdges = ( nOptimizeFlags & POLY_OPTIMIZE_EDGES ) == POLY_OPTIMIZE_EDGES;
+        USHORT		nPercent = 0;
 
         if( bEdges )
         {
@@ -361,7 +361,7 @@ void PolyPolygon::AdaptiveSubdivide( PolyPolygon& rResult, const double d ) cons
 // -----------------------------------------------------------------------
 
 void PolyPolygon::GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
-{
+{	
     ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_INT );
 }
 
@@ -389,7 +389,7 @@ void PolyPolygon::GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) c
 // -----------------------------------------------------------------------
 
 void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const
-{
+{ 
     // Convert to B2DPolyPolygon, temporarily. It might be
     // advantageous in the future, to have a PolyPolygon adaptor that
     // just simulates a B2DPolyPolygon here...
@@ -397,7 +397,7 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
     basegfx::B2DPolyPolygon aMergePolyPolygonB( rPolyPoly.getB2DPolyPolygon() );
 
     // normalize the two polypolygons before. Force properly oriented
-    // polygons.
+    // polygons. 
     aMergePolyPolygonA = basegfx::tools::prepareForPolygonOperation( aMergePolyPolygonA );
     aMergePolyPolygonB = basegfx::tools::prepareForPolygonOperation( aMergePolyPolygonB );
 
@@ -628,15 +628,15 @@ Rectangle PolyPolygon::GetBoundRect() const
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
 
-    long    nXMin=0, nXMax=0, nYMin=0, nYMax=0;
-    BOOL    bFirst = TRUE;
-    USHORT  nPolyCount = mpImplPolyPolygon->mnCount;
+    long	nXMin=0, nXMax=0, nYMin=0, nYMax=0;
+    BOOL	bFirst = TRUE;
+    USHORT	nPolyCount = mpImplPolyPolygon->mnCount;
 
     for ( USHORT n = 0; n < nPolyCount; n++ )
     {
-        const Polygon*  pPoly = mpImplPolyPolygon->mpPolyAry[n];
-        const Point*    pAry = pPoly->GetConstPointAry();
-        USHORT          nPointCount = pPoly->GetSize();
+        const Polygon*	pPoly = mpImplPolyPolygon->mpPolyAry[n];
+        const Point*	pAry = pPoly->GetConstPointAry();
+        USHORT			nPointCount = pPoly->GetSize();
 
         for ( USHORT i = 0; i < nPointCount; i++ )
         {
@@ -746,7 +746,7 @@ SvStream& operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
     Polygon* pPoly;
-    USHORT   nPolyCount;
+    USHORT	 nPolyCount;
 
     // Anzahl der Polygone einlesen
     rIStream >> nPolyCount;
@@ -803,7 +803,7 @@ void PolyPolygon::Read( SvStream& rIStream )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
     Polygon* pPoly;
-    USHORT   nPolyCount;
+    USHORT	 nPolyCount;
 
     // Anzahl der Polygone einlesen
     rIStream >> nPolyCount;
@@ -869,7 +869,7 @@ PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     DBG_CTOR( PolyPolygon, NULL );
     const sal_uInt16 nCount(sal_uInt16(rPolyPolygon.count()));
-    DBG_ASSERT(sal_uInt32(nCount) == rPolyPolygon.count(),
+    DBG_ASSERT(sal_uInt32(nCount) == rPolyPolygon.count(), 
         "PolyPolygon::PolyPolygon: Too many sub-polygons in given basegfx::B2DPolyPolygon (!)");
 
     if ( nCount )

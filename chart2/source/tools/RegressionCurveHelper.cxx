@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -516,7 +516,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
 {
     if( !xRegCnt.is())
         return NULL;
-
+    
     try
     {
         uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
@@ -715,7 +715,7 @@ sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
 
 bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCurve > & xCurve )
 {
-    bool bHasEquation = false;
+    bool bHasEquation = false; 
     if( xCurve.is())
     {
         uno::Reference< beans::XPropertySet > xEquationProp( xCurve->getEquationProperties());

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,8 +128,8 @@ __EXPORT ScTableLink::~ScTableLink()
 
 void __EXPORT ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
 {
-    //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
-    //  ein Optionen-Dialog kommt...
+    //	DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
+    //	ein Optionen-Dialog kommt...
 
     pImpl->m_aEndEditLink = rEndEditHdl;
     pImpl->m_pOldParent = Application::GetDefDialogParent();
@@ -150,12 +150,12 @@ void __EXPORT ScTableLink::DataChanged( const String&,
         String aFilter;
         pLinkManager->GetDisplayNames( this,0,&aFile,NULL,&aFilter);
 
-        //  the file dialog returns the filter name with the application prefix
-        //  -> remove prefix
+        //	the file dialog returns the filter name with the application prefix
+        //	-> remove prefix
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         if (!bInCreate)
-            Refresh( aFile, aFilter, NULL, GetRefreshDelay() ); // don't load twice
+            Refresh( aFile, aFilter, NULL, GetRefreshDelay() );	// don't load twice
     }
 }
 
@@ -170,7 +170,7 @@ void __EXPORT ScTableLink::Closed()
         pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoRemoveLink( pImpl->m_pDocSh, aFileName ) );
 
-        bAddUndo = FALSE;   // nur einmal
+        bAddUndo = FALSE;	// nur einmal
     }
 
     // Verbindung wird im dtor aufgehoben
@@ -186,7 +186,7 @@ BOOL ScTableLink::IsUsed() const
 BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                             const String* pNewOptions, ULONG nNewRefresh )
 {
-    //  Dokument laden
+    //	Dokument laden
 
     if (!rNewFile.Len() || !rNewFilter.Len())
         return FALSE;
@@ -203,21 +203,21 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
     BOOL bUndo(pDoc->IsUndoEnabled());
 
-    //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
+    //	wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if ( rNewFilter != aFilterName )
         aOptions.Erase();
-    if ( pNewOptions )                  // Optionen hart angegeben?
+    if ( pNewOptions )					// Optionen hart angegeben?
         aOptions = *pNewOptions;
 
-    //  ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
+    //	ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
     SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     if ( aOptions.Len() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
     SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, FALSE, pFilter, pSet);
 
-    if ( bInEdit )                              // only if using the edit dialog,
-        pMed->UseInteractionHandler( TRUE );    // enable the filter options dialog
+    if ( bInEdit )								// only if using the edit dialog,
+        pMed->UseInteractionHandler( TRUE );	// enable the filter options dialog
 
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
     SfxObjectShellRef aRef = pSrcShell;
@@ -228,22 +228,22 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     if (!aNewOpt.Len())
         aNewOpt = aOptions;
 
-    //  Undo...
+    //	Undo...
 
     ScDocument* pUndoDoc = NULL;
     BOOL bFirst = TRUE;
     if (bAddUndo && bUndo)
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
 
-    //  Tabellen kopieren
+    //	Tabellen kopieren
 
     ScDocShellModificator aModificator( *pImpl->m_pDocSh );
 
     BOOL bNotFound = FALSE;
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
 
-    //  #74835# from text filters that don't set the table name,
-    //  use the one table regardless of link table name
+    //	#74835# from text filters that don't set the table name,
+    //	use the one table regardless of link table name
     BOOL bAutoTab = (pSrcDoc->GetTableCount() == 1) &&
                     ScDocShell::HasAutomaticTableName( rNewFilter );
 
@@ -255,7 +255,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
         {
             String aTabName = pDoc->GetLinkTab(nTab);
 
-            //  Undo
+            //	Undo
 
             if (bAddUndo && bUndo)
             {
@@ -271,7 +271,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                     aOptions, aTabName, GetRefreshDelay() );
             }
 
-            //  Tabellenname einer ExtDocRef anpassen
+            //	Tabellenname einer ExtDocRef anpassen
 
             if ( bNewUrlName && nMode == SC_LINK_VALUE )
             {
@@ -282,11 +282,11 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                 {
                     pDoc->RenameTab( nTab,
                         ScGlobal::GetDocTabName( aNewUrl, aTabName ),
-                        FALSE, TRUE );  // kein RefUpdate, kein ValidTabName
+                        FALSE, TRUE );	// kein RefUpdate, kein ValidTabName
                 }
             }
 
-            //  kopieren
+            //	kopieren
 
             SCTAB nSrcTab = 0;
             bool bFound = false;
@@ -303,8 +303,8 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
             }
 
             if (bFound)
-                pDoc->TransferTab( pSrcDoc, nSrcTab, nTab, FALSE,       // nicht neu einfuegen
-                                        (nMode == SC_LINK_VALUE) );     // nur Werte?
+                pDoc->TransferTab( pSrcDoc, nSrcTab, nTab, FALSE,		// nicht neu einfuegen
+                                        (nMode == SC_LINK_VALUE) );		// nur Werte?
             else
             {
                 pDoc->DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, IDF_ALL );
@@ -317,7 +317,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
                     ScRangeList aErrorCells;        // cells on the linked sheets that need error values
 
-                    ScCellIterator aCellIter( pDoc, 0,0,0, MAXCOL,MAXROW,MAXTAB );          // all sheets
+                    ScCellIterator aCellIter( pDoc, 0,0,0, MAXCOL,MAXROW,MAXTAB );			// all sheets
                     ScBaseCell* pCell = aCellIter.GetFirst();
                     while (pCell)
                     {
@@ -392,7 +392,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
         }
     }
 
-    //  neue Einstellungen merken
+    //	neue Einstellungen merken
 
     if ( bNewUrlName )
         aFileName = aNewUrl;
@@ -401,18 +401,18 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     if ( aNewOpt != aOptions )
         aOptions = aNewOpt;
 
-    //  aufraeumen
+    //	aufraeumen
 
-//  pSrcShell->DoClose();
+//	pSrcShell->DoClose();
     aRef->DoClose();
 
-    //  Undo
+    //	Undo
 
     if (bAddUndo && bUndo)
         pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoRefreshLink( pImpl->m_pDocSh, pUndoDoc ) );
 
-    //  Paint (koennen mehrere Tabellen sein)
+    //	Paint (koennen mehrere Tabellen sein)
 
     if (bDoPaint)
     {
@@ -423,13 +423,13 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
     if (bNotFound)
     {
-        //! Fehler ausgeben ?
+        //!	Fehler ausgeben ?
     }
 
     pDoc->SetInLinkUpdate( FALSE );
 
-    //  notify Uno objects (for XRefreshListener)
-    //! also notify Uno objects if file name was changed!
+    //	notify Uno objects (for XRefreshListener)
+    //!	also notify Uno objects if file name was changed!
     ScLinkRefreshedHint aHint;
     aHint.SetSheetLink( aFileName );
     pDoc->BroadcastUno( aHint );
@@ -454,7 +454,7 @@ IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink*, pLink )
 
 // === ScDocumentLoader ==================================================
 
-String ScDocumentLoader::GetOptions( SfxMedium& rMedium )       // static
+String ScDocumentLoader::GetOptions( SfxMedium& rMedium )		// static
 {
     SfxItemSet* pSet = rMedium.GetItemSet();
     const SfxPoolItem* pItem;
@@ -490,7 +490,7 @@ BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
     if ( eProt == INET_PROT_NOT_VALID )         // invalid URL?
         return FALSE;                           // abort without creating a medium
 
-    //  Filter-Detection
+    //	Filter-Detection
 
     const SfxFilter* pSfxFilter = NULL;
     SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE );
@@ -512,7 +512,7 @@ BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
         if ( pSfxFilter )
             rFilter = pSfxFilter->GetFilterName();
         else
-            rFilter = ScDocShell::GetOwnFilterName();       //  sonst Calc-Datei
+            rFilter = ScDocShell::GetOwnFilterName();		//	sonst Calc-Datei
         bOK = (rFilter.Len()>0);
     }
 
@@ -520,7 +520,7 @@ BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
     return bOK;
 }
 
-void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )       // static
+void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )		// static
 {
     String aAppPrefix = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));
     aAppPrefix.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
@@ -540,7 +540,7 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
 
     const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
 
-    //  ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
+    //	ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
     SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     if ( rOptions.Len() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
@@ -550,7 +550,7 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
         return ;
 
     if ( bWithInteraction )
-        pMedium->UseInteractionHandler( TRUE ); // to enable the filter options dialog
+        pMedium->UseInteractionHandler( TRUE );	// to enable the filter options dialog
 
     pDocShell = new ScDocShell( SFX_CREATE_MODE_INTERNAL );
     aRef = pDocShell;
@@ -558,7 +558,7 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
     ScDocument* pDoc = pDocShell->GetDocument();
     if( pDoc )
     {
-        ScExtDocOptions*    pExtDocOpt = pDoc->GetExtDocOptions();
+        ScExtDocOptions*	pExtDocOpt = pDoc->GetExtDocOptions();
         if( !pExtDocOpt )
         {
             pExtDocOpt = new ScExtDocOptions;
@@ -569,7 +569,7 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
 
     pDocShell->DoLoad( pMedium );
 
-    String aNew = GetOptions(*pMedium);         // Optionen werden beim Laden per Dialog gesetzt
+    String aNew = GetOptions(*pMedium);			// Optionen werden beim Laden per Dialog gesetzt
     if (aNew.Len() && aNew != rOptions)
         rOptions = aNew;
 }
@@ -589,8 +589,8 @@ void ScDocumentLoader::ReleaseDocRef()
 {
     if ( aRef.Is() )
     {
-        //  release reference without calling DoClose - caller must
-        //  have another reference to the doc and call DoClose later
+        //	release reference without calling DoClose - caller must
+        //	have another reference to the doc and call DoClose later
 
         pDocShell = NULL;
         pMedium = NULL;

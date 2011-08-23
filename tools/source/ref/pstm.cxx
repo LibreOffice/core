@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 /***********************************************************************/
 /************************************************************************
-|*    SvClassManager::Register()
+|*	  SvClassManager::Register()
 *************************************************************************/
 void SvClassManager::Register( USHORT nClassId, SvCreateInstancePersist pFunc )
 {
@@ -48,7 +48,7 @@ void SvClassManager::Register( USHORT nClassId, SvCreateInstancePersist pFunc )
 }
 
 /************************************************************************
-|*    SvClassManager::Get()
+|*	  SvClassManager::Get()
 *************************************************************************/
 SvCreateInstancePersist SvClassManager::Get( USHORT nClassId )
 {
@@ -66,11 +66,11 @@ SvPersistBaseMemberList::SvPersistBaseMemberList(
     USHORT nInitSz, USHORT nResize )
     : SuperSvPersistBaseMemberList( nInitSz, nResize ){}
 
-#define PERSIST_LIST_VER        (BYTE)0
-#define PERSIST_LIST_DBGUTIL    (BYTE)0x80
+#define PERSIST_LIST_VER		(BYTE)0
+#define PERSIST_LIST_DBGUTIL	(BYTE)0x80
 
 /************************************************************************
-|*    SvPersistBaseMemberList::WriteOnlyStreamedObjects()
+|*	  SvPersistBaseMemberList::WriteOnlyStreamedObjects()
 *************************************************************************/
 void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
                                             BOOL bOnlyStreamed ) const
@@ -111,7 +111,7 @@ void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
 }
 
 /************************************************************************
-|*    operator << ()
+|*	  operator << ()
 *************************************************************************/
 SvPersistStream& operator << ( SvPersistStream & rStm,
                                const SvPersistBaseMemberList & rLst )
@@ -121,7 +121,7 @@ SvPersistStream& operator << ( SvPersistStream & rStm,
 }
 
 /************************************************************************
-|*    operator >> ()
+|*	  operator >> ()
 *************************************************************************/
 SvPersistStream& operator >> ( SvPersistStream & rStm,
                                SvPersistBaseMemberList & rLst )
@@ -164,11 +164,11 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
 //=========================================================================
 SvPersistStream::SvPersistStream
 (
-    SvClassManager & rMgr,  /* Alle Factorys, deren Objekt geladen und
+    SvClassManager & rMgr,	/* Alle Factorys, deren Objekt geladen und
                                gespeichert werdn k"onnen */
-    SvStream * pStream,     /* Dieser Stream wird als Medium genommen, auf
+    SvStream * pStream,		/* Dieser Stream wird als Medium genommen, auf
                                dem der PersistStream arbeitet */
-    UINT32 nStartIdxP       /* Ab diesem Index werden die Id's f"ur
+    UINT32 nStartIdxP		/* Ab diesem Index werden die Id's f"ur
                                die Objekte vergeben, er muss gr"osser
                                als Null sein. */
 )
@@ -178,7 +178,7 @@ SvPersistStream::SvPersistStream
     , nStartIdx( nStartIdxP )
     , pRefStm( NULL )
     , nFlags( 0 )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Der Konstruktor der Klasse SvPersistStream. Die Objekte rMgr und
     pStream d"urfen nicht ver"andert werden, solange sie in einem
@@ -199,9 +199,9 @@ SvPersistStream::SvPersistStream
 //=========================================================================
 SvPersistStream::SvPersistStream
 (
-    SvClassManager & rMgr,  /* Alle Factorys, deren Objekt geladen und
+    SvClassManager & rMgr,	/* Alle Factorys, deren Objekt geladen und
                                gespeichert werdn k"onnen */
-    SvStream * pStream,     /* Dieser Stream wird als Medium genommen, auf
+    SvStream * pStream,		/* Dieser Stream wird als Medium genommen, auf
                                dem der PersistStream arbeitet */
     const SvPersistStream & rPersStm
                             /* Wenn PersistStream's verschachtelt werden,
@@ -214,7 +214,7 @@ SvPersistStream::SvPersistStream
     , nStartIdx( rPersStm.GetCurMaxIndex() +1 )
     , pRefStm( &rPersStm )
     , nFlags( 0 )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Der Konstruktor der Klasse SvPersistStream. Die Objekte rMgr und
     pStream d"urfen nicht ver"andert werden, solange sie in einem
@@ -236,7 +236,7 @@ SvPersistStream::SvPersistStream
 
 //=========================================================================
 SvPersistStream::~SvPersistStream()
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Der Detruktor ruft die Methode <SvPersistStream::SetStream>
     mit NULL.
@@ -248,10 +248,10 @@ SvPersistStream::~SvPersistStream()
 //=========================================================================
 void SvPersistStream::SetStream
 (
-    SvStream * pStream  /* auf diesem Stream arbeitet der PersistStream */
+    SvStream * pStream	/* auf diesem Stream arbeitet der PersistStream */
 
 )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Es wird ein Medium (pStream) eingesetzt, auf dem PersistStream arbeitet.
     Dieses darf nicht von aussen modifiziert werden, solange es
@@ -280,13 +280,13 @@ void SvPersistStream::SetStream
 
 //=========================================================================
 USHORT SvPersistStream::IsA() const
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Gibt den Identifier dieses Streamklasse zur"uck.
 
     [R"uckgabewert]
 
-    USHORT      ID_PERSISTSTREAM wird zur"uckgegeben.
+    USHORT		ID_PERSISTSTREAM wird zur"uckgegeben.
 
 
     [Querverweise]
@@ -299,7 +299,7 @@ USHORT SvPersistStream::IsA() const
 
 
 /*************************************************************************
-|*    SvPersistStream::ResetError()
+|*	  SvPersistStream::ResetError()
 *************************************************************************/
 void SvPersistStream::ResetError()
 {
@@ -309,7 +309,7 @@ void SvPersistStream::ResetError()
 }
 
 /*************************************************************************
-|*    SvPersistStream::GetData()
+|*	  SvPersistStream::GetData()
 *************************************************************************/
 ULONG SvPersistStream::GetData( void* pData, ULONG nSize )
 {
@@ -320,7 +320,7 @@ ULONG SvPersistStream::GetData( void* pData, ULONG nSize )
 }
 
 /*************************************************************************
-|*    SvPersistStream::PutData()
+|*	  SvPersistStream::PutData()
 *************************************************************************/
 ULONG SvPersistStream::PutData( const void* pData, ULONG nSize )
 {
@@ -331,7 +331,7 @@ ULONG SvPersistStream::PutData( const void* pData, ULONG nSize )
 }
 
 /*************************************************************************
-|*    SvPersistStream::Seek()
+|*	  SvPersistStream::Seek()
 *************************************************************************/
 ULONG SvPersistStream::SeekPos( ULONG nPos )
 {
@@ -342,14 +342,14 @@ ULONG SvPersistStream::SeekPos( ULONG nPos )
 }
 
 /*************************************************************************
-|*    SvPersistStream::FlushData()
+|*	  SvPersistStream::FlushData()
 *************************************************************************/
 void SvPersistStream::FlushData()
 {
 }
 
 /*************************************************************************
-|*    SvPersistStream::GetCurMaxIndex()
+|*	  SvPersistStream::GetCurMaxIndex()
 *************************************************************************/
 ULONG SvPersistStream::GetCurMaxIndex( const SvPersistUIdx & rIdx ) const
 {
@@ -366,7 +366,7 @@ ULONG SvPersistStream::GetCurMaxIndex( const SvPersistUIdx & rIdx ) const
 }
 
 /*************************************************************************
-|*    SvPersistStream::GetIndex()
+|*	  SvPersistStream::GetIndex()
 *************************************************************************/
 ULONG SvPersistStream::GetIndex( SvPersistBase * pObj ) const
 {
@@ -377,7 +377,7 @@ ULONG SvPersistStream::GetIndex( SvPersistBase * pObj ) const
 }
 
 /*************************************************************************
-|*    SvPersistStream::GetObject)
+|*	  SvPersistStream::GetObject)
 *************************************************************************/
 SvPersistBase * SvPersistStream::GetObject( ULONG nIdx ) const
 {
@@ -389,30 +389,30 @@ SvPersistBase * SvPersistStream::GetObject( ULONG nIdx ) const
 }
 
 //=========================================================================
-#define LEN_1           0x80
-#define LEN_2           0x40
-#define LEN_4           0x20
-#define LEN_5           0x10
+#define LEN_1			0x80
+#define LEN_2			0x40
+#define LEN_4			0x20
+#define LEN_5			0x10
 UINT32 SvPersistStream::ReadCompressed
 (
-    SvStream & rStm /* Aus diesem Stream werden die komprimierten Daten
+    SvStream & rStm	/* Aus diesem Stream werden die komprimierten Daten
                        gelesen */
 )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Ein im Stream komprimiert abgelegtes Wort wird gelesen. In welchem
     Format komprimiert wird, siehe <SvPersistStream::WriteCompressed>.
 
     [R"uckgabewert]
 
-    UINT32      Das nicht komprimierte Wort wird zur"uckgegeben.
+    UINT32		Das nicht komprimierte Wort wird zur"uckgegeben.
 
     [Querverweise]
 
 */
 {
     UINT32 nRet(0);
-    BYTE    nMask;
+    BYTE	nMask;
     rStm >> nMask;
     if( nMask & LEN_1 )
         nRet = ~LEN_1 & nMask;
@@ -456,16 +456,16 @@ void SvPersistStream::WriteCompressed
 (
     SvStream & rStm,/* Aus diesem Stream werden die komprimierten Daten
                        gelesen */
-    UINT32 nVal     /* Dieser Wert wird komprimiert geschrieben */
+    UINT32 nVal		/* Dieser Wert wird komprimiert geschrieben */
 )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Das "ubergebene Wort wird komprimiert und in den Stream
      geschrieben. Folgendermassen wir komprimiert.
-    nVal < 0x80         =>  0x80        + nVal ist 1 Byte gross.
-    nVal < 0x4000       =>  0x4000      + nVal ist 2 Byte gross.
-    nVal < 0x20000000   =>  0x20000000  + nVal ist 4 Byte gross.
-    nVal > 0x1FFFFFFF   =>  0x1000000000+ nVal ist 5 Byte gross.
+    nVal < 0x80			=>	0x80 		+ nVal ist 1 Byte gross.
+    nVal < 0x4000		=>	0x4000 		+ nVal ist 2 Byte gross.
+    nVal < 0x20000000   =>	0x20000000	+ nVal ist 4 Byte gross.
+    nVal > 0x1FFFFFFF   =>	0x1000000000+ nVal ist 5 Byte gross.
 
     [Querverweise]
 
@@ -498,14 +498,14 @@ void SvPersistStream::WriteCompressed
 
 //=========================================================================
 UINT32 SvPersistStream::WriteDummyLen()
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Methode schreibt 4 Byte in den Stream und gibt die Streamposition
     zur"uck.
 
     [R"uckgabewert]
 
-    UINT32      Die Position hinter der L"angenangabe wird zur"uckgegeben.
+    UINT32		Die Position hinter der L"angenangabe wird zur"uckgegeben.
 
     [Beispiel]
 
@@ -536,10 +536,10 @@ UINT32 SvPersistStream::WriteDummyLen()
 //=========================================================================
 void SvPersistStream::WriteLen
 (
-    UINT32 nObjPos  /* die Position + 4, an der die L"ange geschrieben
+    UINT32 nObjPos	/* die Position + 4, an der die L"ange geschrieben
                        wird. */
 )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Methode schreibt die Differenz zwischen der aktuellen und
      nObjPos als UINT32 an die Position nObjPos -4 im Stream. Danach
@@ -573,11 +573,11 @@ void SvPersistStream::WriteLen
 //=========================================================================
 UINT32 SvPersistStream::ReadLen
 (
-    UINT32 * pTestPos   /* Die Position des Streams, nach dem Lesen der
+    UINT32 * pTestPos	/* Die Position des Streams, nach dem Lesen der
                            L"ange, wird zur"uckgegeben. Es darf auch NULL
                            "ubergeben werden. */
 )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Liest die L"ange die vorher mit <SvPersistStream::WriteDummyLen>
     und <SvPersistStream::WriteLen> geschrieben wurde.
@@ -593,19 +593,19 @@ UINT32 SvPersistStream::ReadLen
 //=========================================================================
 // Dateirormat abw"arts kompatibel
 #ifdef STOR_NO_OPTIMIZE
-#define P_VER       (BYTE)0x00
+#define P_VER		(BYTE)0x00
 #else
-#define P_VER       (BYTE)0x01
+#define P_VER		(BYTE)0x01
 #endif
-#define P_VER_MASK  (BYTE)0x0F
-#define P_ID_0      (BYTE)0x80
-#define P_OBJ       (BYTE)0x40
-#define P_DBGUTIL   (BYTE)0x20
-#define P_ID        (BYTE)0x10
+#define P_VER_MASK	(BYTE)0x0F
+#define P_ID_0		(BYTE)0x80
+#define P_OBJ		(BYTE)0x40
+#define P_DBGUTIL	(BYTE)0x20
+#define P_ID		(BYTE)0x10
 #ifdef STOR_NO_OPTIMIZE
-#define P_STD   P_DBGUTIL
+#define P_STD	P_DBGUTIL
 #else
-#define P_STD   0
+#define P_STD	0
 #endif
 
 static void WriteId
@@ -725,15 +725,15 @@ SvPersistStream& SvPersistStream::WritePointer
 //=========================================================================
 UINT32 SvPersistStream::ReadObj
 (
-    SvPersistBase * &   rpObj,
-    BOOL                bRegister
+    SvPersistBase * &	rpObj,
+    BOOL				bRegister
 )
 {
-    BYTE    nHdr;
-    UINT32  nId = 0;
-    USHORT  nClassId;
+    BYTE	nHdr;
+    UINT32	nId = 0;
+    USHORT	nClassId;
 
-    rpObj = NULL;   // Spezifikation: Im Fehlerfall 0.
+    rpObj = NULL;	// Spezifikation: Im Fehlerfall 0.
     ReadId( *this, nHdr, nId, nClassId );
 
     // reine Versionsnummer durch maskieren

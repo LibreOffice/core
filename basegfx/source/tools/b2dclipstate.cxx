@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ namespace tools
         bool isCleared() const
         {
             return !maClipPoly.count()
-                && !maPendingPolygons.count()
+                && !maPendingPolygons.count() 
                 && !maPendingRanges.count();
         }
 
@@ -102,7 +102,7 @@ namespace tools
 
         bool isNull() const
         {
-            return !maPendingPolygons.count()
+            return !maPendingPolygons.count() 
                 && !maPendingRanges.count()
                 && isNullClipPoly();
         }
@@ -118,9 +118,9 @@ namespace tools
 
         bool operator==(const ImplB2DClipState& rRHS) const
         {
-            return maPendingPolygons == rRHS.maPendingPolygons
+            return maPendingPolygons == rRHS.maPendingPolygons 
                 && maPendingRanges == rRHS.maPendingRanges
-                && maClipPoly == rRHS.maClipPoly
+                && maClipPoly == rRHS.maClipPoly 
                 && mePendingOps == rRHS.mePendingOps;
         }
 
@@ -207,10 +207,10 @@ namespace tools
         {
             if( isCleared() )
                 return;
-
+            
             addClipState(rOther, UNION);
         }
-
+        
         void intersectRange(const B2DRange& rRange)
         {
             if( isNull() )
@@ -239,10 +239,10 @@ namespace tools
         {
             if( isNull() )
                 return;
-
+            
             addClipState(rOther, INTERSECT);
         }
-
+        
         void subtractRange(const B2DRange& rRange )
         {
             if( isNull() )
@@ -266,7 +266,7 @@ namespace tools
 
             addPolyPolygon(rPolyPoly,SUBTRACT);
         }
-
+        
         void subtractClipState(const ImplB2DClipState& rOther)
         {
             if( isNull() )
@@ -274,7 +274,7 @@ namespace tools
 
             addClipState(rOther, SUBTRACT);
         }
-
+        
         void xorRange(const B2DRange& rRange)
         {
             addRange(rRange,XOR);
@@ -294,7 +294,7 @@ namespace tools
         {
             addClipState(rOther, XOR);
         }
-
+        
         B2DPolyPolygon getClipPoly() const
         {
             commitPendingRanges();
@@ -368,7 +368,7 @@ namespace tools
                     maPendingPolygons = solveCrossovers(maPendingPolygons);
                     maPendingPolygons = stripNeutralPolygons(maPendingPolygons);
                     maPendingPolygons = stripDispensablePolygons(maPendingPolygons, false);
-
+                        
                     if( bIsCleared )
                     {
                         // not representable, strictly speaking,
@@ -402,7 +402,7 @@ namespace tools
                 return;
 
             // use the specialized range clipper for the win
-            B2DPolyPolygon aCollectedRanges;
+            B2DPolyPolygon aCollectedRanges; 
             const bool bIsEmpty=isNullClipPoly();
             const bool bIsCleared=!maClipPoly.count();
             switch(mePendingOps)
@@ -470,7 +470,7 @@ namespace tools
                     aCollectedRanges = maPendingRanges.solveCrossovers();
                     aCollectedRanges = stripNeutralPolygons(aCollectedRanges);
                     aCollectedRanges = stripDispensablePolygons(aCollectedRanges, false);
-
+                        
                     if( bIsCleared )
                     {
                         // not representable, strictly speaking,
@@ -497,7 +497,7 @@ namespace tools
             maPendingRanges.clear();
             mePendingOps = UNION;
         }
-
+        
         mutable B2DPolyPolygon maPendingPolygons;
         mutable B2DPolyRange   maPendingRanges;
         mutable B2DPolyPolygon maClipPoly;
@@ -537,7 +537,7 @@ namespace tools
     {
         mpImpl.make_unique();
     }
-
+    
     void B2DClipState::makeNull()
     {
         mpImpl->makeNull();
@@ -630,7 +630,7 @@ namespace tools
     {
         mpImpl->subtractClipState(*rState.mpImpl);
     }
-
+    
     void B2DClipState::xorRange(const B2DRange& rRange)
     {
         mpImpl->xorRange(rRange);

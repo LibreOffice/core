@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ class ScMyEmptyDatabaseRangesContainer;
 
 class ScXMLExportDatabaseRanges
 {
-    ScXMLExport&    rExport;
-    ScDocument*     pDoc;
+    ScXMLExport&	rExport;
+    ScDocument*		pDoc;
 
     void WriteImportDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aImportDescriptor);
     rtl::OUString getOperatorXML(const long aFilterOperator, const sal_Bool bUseRegularExpressions) const;

@@ -157,13 +157,13 @@ PopupWindowController::~PopupWindowController()
 }
 
 // XInterface
-Any SAL_CALL PopupWindowController::queryInterface( const Type& aType )
+Any SAL_CALL PopupWindowController::queryInterface( const Type& aType ) 
 throw (RuntimeException)
 {
     Any a( ToolboxController::queryInterface( aType ) );
     if ( a.hasValue() )
         return a;
-
+    
     return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
 }
 
@@ -242,13 +242,13 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
         {
                pWin->EnableDocking(true);
             mpImpl->SetPopupWindow(pWin,pToolBox);
-            ::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin, FLOATWIN_POPUPMODE_NOFOCUSCLOSE|FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
+            ::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin, FLOATWIN_POPUPMODE_NOFOCUSCLOSE|FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );	        
         }
     }
     return Reference< awt::XWindow >();
 }
 
-Reference< awt::XWindow > SAL_CALL PopupWindowController::createItemWindow( const Reference< awt::XWindow >& /*Parent*/ )
+Reference< awt::XWindow > SAL_CALL PopupWindowController::createItemWindow( const Reference< awt::XWindow >& /*Parent*/ ) 
     throw (RuntimeException)
 {
     return Reference< awt::XWindow >();

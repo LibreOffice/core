@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -301,7 +301,7 @@ void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEve
 
     // does the disposing come from the aggregate ?
     if (xAggAsIface != InterfaceRef(_rEvent.Source, UNO_QUERY))
-    {   // no -> forward it
+    {	// no -> forward it
                 Reference<com::sun::star::lang::XEventListener> xListener;
         if (query_aggregation(m_xAggregate, xListener))
             xListener->disposing(_rEvent);
@@ -421,7 +421,7 @@ OBoundControl::~OBoundControl()
     DBG_DTOR(frm_OBoundControl, NULL);
 }
 // -----------------------------------------------------------------------------
-Sequence< Type> OBoundControl::_getTypes()
+Sequence< Type>	OBoundControl::_getTypes()
 {
     return TypeBag( OControl::_getTypes(), OBoundControl_BASE::getTypes() ).getTypes();
 }
@@ -611,7 +611,7 @@ OControlModel::OControlModel(
 {
     // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::OControlModel" );
     DBG_CTOR(OControlModel, NULL);
-    if (_rUnoControlModelTypeName.getLength())  // the is a model we have to aggregate
+    if (_rUnoControlModelTypeName.getLength())	// the is a model we have to aggregate
     {
         increment(m_refCount);
 
@@ -1844,7 +1844,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
             if (!_rValue.hasValue())
-            {   // property set to void
+            {	// property set to void
                 _rConvertedValue = Any();
                 getFastPropertyValue(_rOldValue, _nHandle);
                 bModified = m_xLabelControl.is();
@@ -1904,7 +1904,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             DBG_ASSERT(!rValue.hasValue() || (rValue.getValueType().getTypeClass() == TypeClass_INTERFACE),
                 "OBoundControlModel::setFastPropertyValue_NoBroadcast : invalid argument !");
             if (!rValue.hasValue())
-            {   // set property to "void"
+            {	// set property to "void"
                 Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
                 if (xComp.is())
                     xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
@@ -1986,7 +1986,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
     {
         OSL_ENSURE( evt.Source == m_xExternalBinding, "OBoundControlModel::propertyChange: where did this come from?" );
 
-        // our binding has properties which can control properties of ourself
+        // our binding has properties which can control properties of ourself 
         ::rtl::OUString sBindingControlledProperty;
         bool bForwardToLabelControl = false;
         if ( evt.PropertyName.equals( PROPERTY_READONLY ) )
@@ -2519,9 +2519,9 @@ void OBoundControlModel::reset() throw (RuntimeException)
     // @author fs@openoffice.org
 
     sal_Bool bSimpleReset =
-                        (   !m_xColumn.is()                     // no connection to a database column
-                        ||  (   m_xCursor.is()                  // OR   we have an improperly positioned cursor
-                            &&  bInvalidCursorPosition
+                        (   !m_xColumn.is()						// no connection to a database column
+                        ||	(	m_xCursor.is()					// OR	we have an improperly positioned cursor
+                            &&	bInvalidCursorPosition
                             )
                         ||  hasExternalValueBinding()           // OR we have an external value binding
                         );

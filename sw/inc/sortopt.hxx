@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 #include <tools/string.hxx>
 #include "swdllapi.h"
 
-enum SwSortOrder        { SRT_ASCENDING, SRT_DESCENDING };
-enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
+enum SwSortOrder  		{ SRT_ASCENDING, SRT_DESCENDING	};
+enum SwSortDirection	{ SRT_COLUMNS, SRT_ROWS			};
 
 /*--------------------------------------------------------------------
     Beschreibung: SortierSchluessel
@@ -44,10 +44,10 @@ struct SW_DLLPUBLIC SwSortKey
     SwSortKey( USHORT nId, const String& rSrtType, SwSortOrder eOrder );
     SwSortKey( const SwSortKey& rOld );
 
-    String          sSortType;
-    SwSortOrder     eSortOrder;
-    USHORT          nColumnId;
-    BOOL            bIsNumeric;
+    String			sSortType;
+    SwSortOrder		eSortOrder;
+    USHORT 			nColumnId;
+    BOOL			bIsNumeric;
 };
 
 SV_DECL_PTRARR(SwSortKeys, SwSortKey*, 3, 1)
@@ -58,12 +58,12 @@ struct SW_DLLPUBLIC SwSortOptions
     ~SwSortOptions();
     SwSortOptions(const SwSortOptions& rOpt);
 
-    SwSortKeys      aKeys;
-    SwSortDirection eDirection;
-    sal_Unicode     cDeli;
-    USHORT          nLanguage;
-    BOOL            bTable;
-    BOOL            bIgnoreCase;
+    SwSortKeys		aKeys;
+    SwSortDirection	eDirection;
+    sal_Unicode		cDeli;
+    USHORT			nLanguage;
+    BOOL			bTable;
+    BOOL 			bIgnoreCase;
 };
 
-#endif  // _SORTOPT_HXX
+#endif	// _SORTOPT_HXX

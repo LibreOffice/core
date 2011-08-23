@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@ const char ComponentDescriptionImpl::C_sTagDescription[]
 const char ComponentDescriptionImpl::C_sStatus[]
                                         =   "Status";
 const char * ComponentDescriptionImpl::C_sSubTags[ComponentDescription::tag_MAX]
-                                        = { "None",
+                                        = {	"None",
                                             "Name",
                                             "Description",
                                             "ModuleName",
@@ -47,7 +47,7 @@ const char * ComponentDescriptionImpl::C_sSubTags[ComponentDescription::tag_MAX]
                                           };
 
 ComponentDescriptionImpl::ComponentDescriptionImpl()
-//  :   aTags
+//	:	aTags
 {
     const int i_max = tag_MAX;
     aTags.reserve(i_max);
@@ -86,7 +86,7 @@ GetStatusValue( ByteString & o_sValue, const ByteString & i_sStatusTag )
 }
 
 ComponentDescriptionImpl::ValueList *
-ComponentDescriptionImpl::GetBeginTag( ByteString &  o_sValue,
+ComponentDescriptionImpl::GetBeginTag( ByteString &	 o_sValue,
                                        const char *& io_pStartOfTag ) const
 {
     o_sValue = "";
@@ -113,7 +113,7 @@ ComponentDescriptionImpl::GetBeginTag( ByteString &  o_sValue,
     {
         if ( 0 == stricmp(sTag.GetBuffer(), C_sSubTags[i]) )
             return aTags[i];
-    }   // end for
+    }	// end for
 
     return 0;
 }
@@ -153,7 +153,7 @@ ComponentDescriptionImpl::ParseUntilStartOfDescription( const char * & io_pBuffe
             io_pBufferPosition = pSearch + strlen(C_sTagDescription) + 2;
             return;
         }
-    }   // end for
+    }	// end for
 
     io_pBufferPosition = 0;
 }

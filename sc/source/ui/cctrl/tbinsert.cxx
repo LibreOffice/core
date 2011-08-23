@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ SFX_IMPL_TOOLBOX_CONTROL( ScTbxInsertCtrl, SfxUInt16Item);
 
 //------------------------------------------------------------------
 //
-//  ToolBox - Controller
+//	ToolBox - Controller
 //
 //------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eSt
             USHORT nImageId = nLastSlotId ? nLastSlotId : GetSlotId();
             rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
             aSlotURL += rtl::OUString::valueOf( sal_Int32( nImageId ));
-            Image aImage = GetImage( m_xFrame,
+            Image aImage = GetImage( m_xFrame, 
                                      aSlotURL,
                                      hasBigImages(),
                                      GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
@@ -106,21 +106,21 @@ SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
         rtl::OUString aInsertBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertbar" ));
         createAndPositionSubToolBar( aInsertBarResStr );
 //      nWinResId = RID_TBXCTL_INSERT;
-//      nTbxResId = RID_TOOLBOX_INSERT;
+//		nTbxResId = RID_TOOLBOX_INSERT;
     }
     else if (nSlotId == SID_TBXCTL_INSCELLS)
     {
         rtl::OUString aInsertCellsBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcellsbar" ));
         createAndPositionSubToolBar( aInsertCellsBarResStr );
-//      nWinResId = RID_TBXCTL_INSCELLS;
-//      nTbxResId = RID_TOOLBOX_INSCELLS;
+//		nWinResId = RID_TBXCTL_INSCELLS;
+//		nTbxResId = RID_TOOLBOX_INSCELLS;
     }
     else /* SID_TBXCTL_INSOBJ */
     {
         rtl::OUString aInsertObjectBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertobjectbar" ));
         createAndPositionSubToolBar( aInsertObjectBarResStr );
-//      nWinResId = RID_TBXCTL_INSOBJ;
-//      nTbxResId = RID_TOOLBOX_INSOBJ;
+//		nWinResId = RID_TBXCTL_INSOBJ;
+//		nTbxResId = RID_TOOLBOX_INSOBJ;
     }
 /*
     WindowAlign eNewAlign = ( GetToolBox().IsHorizontal() ) ? WINDOWALIGN_LEFT : WINDOWALIGN_TOP;
@@ -150,22 +150,22 @@ void __EXPORT ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
         if ( pViewFrame )
             pDispatch = pViewFrame->GetDispatcher();
     }
-
+    
     if ( pDispatch )
         pDispatch->Execute(nLastSlotId);
 }
 /*
 //------------------------------------------------------------------
 //
-//  Popup - Window
+//	Popup - Window
 //
 //------------------------------------------------------------------
 
 ScTbxInsertPopup::ScTbxInsertPopup( USHORT nId, WindowAlign eNewAlign,
                         const ResId& rRIdWin, const ResId& rRIdTbx,
                         SfxBindings& rBindings ) :
-                SfxPopupWindow  ( nId, rRIdWin, rBindings),
-                aTbx            ( this, GetBindings(), rRIdTbx ),
+                SfxPopupWindow	( nId, rRIdWin, rBindings),
+                aTbx			( this, GetBindings(), rRIdTbx ),
                 aRIdWinTemp(rRIdWin),
                 aRIdTbxTemp(rRIdTbx)
 {
@@ -179,9 +179,9 @@ ScTbxInsertPopup::ScTbxInsertPopup( USHORT nId, WindowAlign eNewAlign,
     Size aSize = aTbx.CalcWindowSizePixel();
     aTbx.SetPosSizePixel( Point(), aSize );
     SetOutputSizePixel( aSize );
-    aTbx.GetToolBox().SetSelectHdl( LINK(this, ScTbxInsertPopup, TbxSelectHdl));
+    aTbx.GetToolBox().SetSelectHdl(	LINK(this, ScTbxInsertPopup, TbxSelectHdl));
     aTbxClickHdl = aTbx.GetToolBox().GetClickHdl();
-    aTbx.GetToolBox().SetClickHdl(  LINK(this, ScTbxInsertPopup, TbxClickHdl));
+    aTbx.GetToolBox().SetClickHdl(	LINK(this, ScTbxInsertPopup, TbxClickHdl));
 }
 
 ScTbxInsertPopup::~ScTbxInsertPopup()

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -219,7 +219,7 @@
 //#define _VCSBX_HXX
 //#define _VCBRW_HXX
 
-//#define _SVDATTR_HXX      <--- der wars
+//#define _SVDATTR_HXX		<--- der wars
 #define _SVDXOUT_HXX
 #define _SVDEC_HXX
 //#define _SVDIO_HXX
@@ -263,17 +263,17 @@
 void ActivateOlk( ScViewData* /* pViewData */ )
 {
     // Browser fuer Virtual Controls fuellen
-    //  VC's und den Browser dazu gibts nicht mehr...
+    //	VC's und den Browser dazu gibts nicht mehr...
 
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
+    //	GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
 
 void DeActivateOlk( ScViewData* /* pViewData */ )
 {
     // Browser fuer Virtual Controls fuellen
-    //  VC's und den Browser dazu gibts nicht mehr...
+    //	VC's und den Browser dazu gibts nicht mehr...
 
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
+    //	GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
 
 

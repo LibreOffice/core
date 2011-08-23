@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,14 +84,14 @@ OPageNumberDialog::OPageNumberDialog( Window* _pParent
     ,m_aAlignment(this, ModuleRes(FL_ALIGNMENT) )
     ,m_aAlignmentLst(this, ModuleRes(LST_ALIGNMENT) )
     ,m_aShowNumberOnFirstPage(this, ModuleRes(CB_SHOWNUMBERONFIRSTPAGE) )
-    ,m_aFl1(this,       ModuleRes(FL_SEPARATOR1))
-    ,m_aPB_OK(this,     ModuleRes(PB_OK))
-    ,m_aPB_CANCEL(this, ModuleRes(PB_CANCEL))
-    ,m_aPB_Help(this,   ModuleRes(PB_HELP))
+    ,m_aFl1(this,		ModuleRes(FL_SEPARATOR1))
+    ,m_aPB_OK(this,		ModuleRes(PB_OK))
+    ,m_aPB_CANCEL(this,	ModuleRes(PB_CANCEL))
+    ,m_aPB_Help(this,	ModuleRes(PB_HELP))
     ,m_pController(_pController)
     ,m_xHoldAlive(_xHoldAlive)
 {
-    DBG_CTOR( rpt_OPageNumberDialog,NULL);
+    DBG_CTOR( rpt_OPageNumberDialog,NULL);	
 
     m_aShowNumberOnFirstPage.Hide();
 
@@ -101,7 +101,7 @@ OPageNumberDialog::OPageNumberDialog( Window* _pParent
 //------------------------------------------------------------------------
 OPageNumberDialog::~OPageNumberDialog()
 {
-    DBG_DTOR( rpt_OPageNumberDialog,NULL);
+    DBG_DTOR( rpt_OPageNumberDialog,NULL);	
 }
 // -----------------------------------------------------------------------------
 short OPageNumberDialog::Execute()

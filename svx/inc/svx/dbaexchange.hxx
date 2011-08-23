@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ namespace svx
 //........................................................................
 
 // column transfer formats
-#define CTF_FIELD_DESCRIPTOR        0x0001      // the field descriptor format
-#define CTF_CONTROL_EXCHANGE        0x0002      // the control exchange format
-#define CTF_COLUMN_DESCRIPTOR       0x0004      // data access descriptor for a column
+#define CTF_FIELD_DESCRIPTOR		0x0001		// the field descriptor format
+#define CTF_CONTROL_EXCHANGE		0x0002		// the control exchange format
+#define CTF_COLUMN_DESCRIPTOR		0x0004		// data access descriptor for a column
 
     //====================================================================
     //= OColumnTransferable
@@ -52,20 +52,20 @@ namespace svx
     class SVX_DLLPUBLIC OColumnTransferable : public TransferableHelper
     {
     protected:
-        ODataAccessDescriptor   m_aDescriptor;
-        ::rtl::OUString         m_sCompatibleFormat;
-        sal_Int32               m_nFormatFlags;
+        ODataAccessDescriptor	m_aDescriptor;
+        ::rtl::OUString			m_sCompatibleFormat;
+        sal_Int32				m_nFormatFlags;
 
     public:
         /** construct the transferable
         */
         OColumnTransferable(
-             const ::rtl::OUString& _rDatasource
+             const ::rtl::OUString&	_rDatasource
             ,const ::rtl::OUString& _rConnectionResource
-            ,const sal_Int32        _nCommandType
-            ,const ::rtl::OUString& _rCommand
-            ,const ::rtl::OUString& _rFieldName
-            ,sal_Int32  _nFormats
+            ,const sal_Int32		_nCommandType
+            ,const ::rtl::OUString&	_rCommand
+            ,const ::rtl::OUString&	_rFieldName
+            ,sal_Int32	_nFormats
         );
 
         /** construct the transferable from a data access descriptor
@@ -113,7 +113,7 @@ namespace svx
             const ::rtl::OUString& _rFieldName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            sal_Int32   _nFormats
+            sal_Int32	_nFormats
         );
 
         /** checks whether or not a column descriptor can be extracted from the data flavor vector given
@@ -127,13 +127,13 @@ namespace svx
         /** extracts a column descriptor from the transferable given
         */
         static sal_Bool extractColumnDescriptor(
-             const TransferableDataHelper&  _rData
-            ,::rtl::OUString&               _rDatasource
-            ,::rtl::OUString&               _rDatabaseLocation
-            ,::rtl::OUString&               _rConnectionResource
-            ,sal_Int32&                     _nCommandType
-            ,::rtl::OUString&               _rCommand
-            ,::rtl::OUString&               _rFieldName
+             const TransferableDataHelper&	_rData
+            ,::rtl::OUString&				_rDatasource
+            ,::rtl::OUString&				_rDatabaseLocation
+            ,::rtl::OUString&				_rConnectionResource
+            ,sal_Int32&						_nCommandType
+            ,::rtl::OUString&				_rCommand
+            ,::rtl::OUString&				_rFieldName
         );
 
         /** extracts a column descriptor from the transferable given
@@ -155,18 +155,18 @@ namespace svx
 
     protected:
         // TransferableHelper overridables
-        virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void		AddSupportedFormats();
+        virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
-        static sal_uInt32   getDescriptorFormatId();
+        static sal_uInt32	getDescriptorFormatId();
 
     private:
         SVX_DLLPRIVATE void implConstruct(
-            const ::rtl::OUString&  _rDatasource
+            const ::rtl::OUString&	_rDatasource
             ,const ::rtl::OUString& _rConnectionResource
-            ,const sal_Int32        _nCommandType
-            ,const ::rtl::OUString& _rCommand
-            ,const ::rtl::OUString& _rFieldName
+            ,const sal_Int32		_nCommandType
+            ,const ::rtl::OUString&	_rCommand
+            ,const ::rtl::OUString&	_rFieldName
         );
     };
 
@@ -177,40 +177,40 @@ namespace svx
     */
     class SVX_DLLPUBLIC ODataAccessObjectTransferable : public TransferableHelper
     {
-        ODataAccessDescriptor   m_aDescriptor;
-        ::rtl::OUString         m_sCompatibleObjectDescription;
+        ODataAccessDescriptor	m_aDescriptor;
+        ::rtl::OUString			m_sCompatibleObjectDescription;
             // needed to provide a SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
 
     public:
         /** should be used copying and the connection is needed.
-            @param  _rDatasource
+            @param	_rDatasource
                 The data source name.
-            @param  _nCommandType
+            @param	_nCommandType
                 The kind of command. @see com.sun.star.sdbc.CommandType
-            @param  _rCommand
+            @param	_rCommand
                 The command, either a name of a table or query or a SQL statement.
         */
         ODataAccessObjectTransferable(
-            const ::rtl::OUString&  _rDatasourceOrLocation
+            const ::rtl::OUString&	_rDatasourceOrLocation
             ,const ::rtl::OUString& _rConnectionResource
-            ,const sal_Int32            _nCommandType
-            ,const ::rtl::OUString& _rCommand
+            ,const sal_Int32			_nCommandType
+            ,const ::rtl::OUString&	_rCommand
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
         );
 
         /** should be used when copying a query object and no connection is available.
-            @param  _rDatasource
+            @param	_rDatasource
                 The data source name.
-            @param  _nCommandType
+            @param	_nCommandType
                 The kind of command. @see com.sun.star.sdbc.CommandType
-            @param  _rCommand
+            @param	_rCommand
                 The command, either a name of a table or query or a SQL statement.
         */
         ODataAccessObjectTransferable(
-            const ::rtl::OUString&  _rDatasourceOrLocation
+            const ::rtl::OUString&	_rDatasourceOrLocation
             ,const ::rtl::OUString& _rConnectionResource
-            ,const sal_Int32        _nCommandType
-            ,const ::rtl::OUString& _rCommand
+            ,const sal_Int32		_nCommandType
+            ,const ::rtl::OUString&	_rCommand
         );
 
         /** with this ctor, only the object descriptor format will be provided
@@ -233,15 +233,15 @@ namespace svx
                         extractObjectDescriptor(const TransferableDataHelper& _rData);
 
     protected:
-        virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void        ObjectReleased();
+        virtual void		AddSupportedFormats();
+        virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void		ObjectReleased();
 
     protected:
-        const   ODataAccessDescriptor&  getDescriptor() const   { return m_aDescriptor; }
-                ODataAccessDescriptor&  getDescriptor()         { return m_aDescriptor; }
+        const	ODataAccessDescriptor&	getDescriptor() const	{ return m_aDescriptor; }
+                ODataAccessDescriptor&	getDescriptor()			{ return m_aDescriptor; }
     protected:
-        void    addCompatibleSelectionDescription(
+        void	addCompatibleSelectionDescription(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rSelRows
         );
             // normally, a derived class could simply access getDescriptor[daSelection] and place the sequence therein
@@ -249,10 +249,10 @@ namespace svx
             // derived classes (our class is the only one which should be contaminated with this)
 
     private:
-        SVX_DLLPRIVATE void construct(  const ::rtl::OUString&  _rDatasourceOrLocation
+        SVX_DLLPRIVATE void construct(	const ::rtl::OUString&	_rDatasourceOrLocation
                         ,const ::rtl::OUString& _rConnectionResource
-                        ,const sal_Int32        _nCommandType
-                        ,const ::rtl::OUString& _rCommand
+                        ,const sal_Int32		_nCommandType
+                        ,const ::rtl::OUString&	_rCommand
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                         ,sal_Bool _bAddCommand
                         ,const ::rtl::OUString& _sActiveCommand);
@@ -265,7 +265,7 @@ namespace svx
     */
     class SVX_DLLPUBLIC OMultiColumnTransferable : public TransferableHelper
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aDescriptors;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >	m_aDescriptors;
 
     public:
         OMultiColumnTransferable(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aDescriptors);
@@ -285,14 +285,14 @@ namespace svx
         static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
 
     protected:
-        virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void		AddSupportedFormats();
+        virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
         virtual void        ObjectReleased();
-        static sal_uInt32   getDescriptorFormatId();
+        static sal_uInt32	getDescriptorFormatId();
     };
 
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 #endif // _SVX_DBAEXCHANGE_HXX_

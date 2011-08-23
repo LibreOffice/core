@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 #include <unotools/datetime.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 
-#define TYPE_DATE       1
-#define TYPE_TIME       2
-#define TYPE_DATETIME   3
+#define TYPE_DATE		1
+#define TYPE_TIME		2
+#define TYPE_DATETIME	3
 
 namespace rptxml
 {
@@ -66,7 +66,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     OSL_ENSURE(m_xControl.is(),"Control is NULL!");
-
+    
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetControlPropertyElemTokenMap();
 
@@ -90,15 +90,15 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                     static MapString2Type s_aTypeNameMap;
                     if (!s_aTypeNameMap.size())
                     {
-                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
-                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::getCppuType( static_cast< double* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::getCppuType( static_cast< sal_Int32* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::getCppuType( static_cast< sal_Int16* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_DATE)]      = ::getCppuType( static_cast< com::sun::star::util::Date* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_TIME)]      = ::getCppuType( static_cast< com::sun::star::util::Time* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]	= ::getBooleanCppuType();
+                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]		= ::getCppuType( static_cast< double* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]	= ::getCppuType( static_cast< double* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_STRING)]	= ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_INT)]		= ::getCppuType( static_cast< sal_Int32* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_SHORT)]		= ::getCppuType( static_cast< sal_Int16* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_DATE)]		= ::getCppuType( static_cast< com::sun::star::util::Date* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_TIME)]		= ::getCppuType( static_cast< com::sun::star::util::Time* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_VOID)]		= ::getVoidCppuType();
                     }
 
                     const ConstMapString2TypeIterator aTypePos = s_aTypeNameMap.find(sValue);
@@ -114,7 +114,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                 break;
         }
     }
-
+    
 }
 // -----------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ SvXMLImportContext* OXMLControlProperty::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetControlPropertyElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= rImport.GetControlPropertyElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
@@ -183,7 +183,7 @@ void OXMLControlProperty::addValue(const ::rtl::OUString& _sValue)
 
     if ( !m_bIsList )
         m_aSetting.Value = aValue;
-    else
+    else 
     {
         sal_Int32 nPos = m_aSequence.getLength();
         m_aSequence.realloc(nPos+1);
@@ -202,7 +202,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
     {
-        case TypeClass_BOOLEAN:     // sal_Bool
+        case TypeClass_BOOLEAN:		// sal_Bool
         {
             sal_Bool bValue;
         #if OSL_DEBUG_LEVEL > 0
@@ -211,14 +211,14 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
             rImporter.GetMM100UnitConverter().convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OString("OXMLControlProperty::convertString: could not convert \"")
-                +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\" into a boolean!"));
+                +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                +=	::rtl::OString("\" into a boolean!"));
             aReturn <<= bValue;
         }
         break;
-        case TypeClass_SHORT:       // sal_Int16
-        case TypeClass_LONG:        // sal_Int32
-            {   // it's a real int32/16 property
+        case TypeClass_SHORT:		// sal_Int16
+        case TypeClass_LONG:		// sal_Int32
+            {	// it's a real int32/16 property
                 sal_Int32 nValue(0);
         #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
@@ -226,8 +226,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                 rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         ::rtl::OString("OXMLControlProperty::convertString: could not convert \"")
-                    +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("\" into an integer!"));
+                    +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=	::rtl::OString("\" into an integer!"));
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nValue;
                 else
@@ -248,8 +248,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
             rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OString("OXMLControlProperty::convertString: could not convert \"")
-                +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\" into a double!"));
+                +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                +=	::rtl::OString("\" into a double!"));
             aReturn <<= (double)nValue;
         }
         break;
@@ -259,11 +259,11 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_STRUCT:
             {
                 // recognized structs:
-                static ::com::sun::star::uno::Type s_aDateType      = ::getCppuType(static_cast< ::com::sun::star::util::Date* >(NULL));
-                static ::com::sun::star::uno::Type s_aTimeType      = ::getCppuType(static_cast< ::com::sun::star::util::Time* >(NULL));
-                static ::com::sun::star::uno::Type s_aDateTimeType  = ::getCppuType(static_cast< ::com::sun::star::util::DateTime* >(NULL));
+                static ::com::sun::star::uno::Type s_aDateType		= ::getCppuType(static_cast< ::com::sun::star::util::Date* >(NULL));
+                static ::com::sun::star::uno::Type s_aTimeType		= ::getCppuType(static_cast< ::com::sun::star::util::Time* >(NULL));
+                static ::com::sun::star::uno::Type s_aDateTimeType	= ::getCppuType(static_cast< ::com::sun::star::util::DateTime* >(NULL));
                 sal_Int32 nType = 0;
-                if  ( _rExpectedType.equals(s_aDateType) )
+                if	( _rExpectedType.equals(s_aDateType) ) 
                     nType = TYPE_DATE;
                 else if ( _rExpectedType.equals(s_aTimeType) )
                     nType = TYPE_TIME;
@@ -279,8 +279,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                     rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
                     OSL_ENSURE(bSuccess,
                             ::rtl::OString("OPropertyImport::convertString: could not convert \"")
-                        +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=  ::rtl::OString("\" into a double!"));
+                        +=	::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                        +=	::rtl::OString("\" into a double!"));
 
                     // then convert it into the target type
                     switch (nType)

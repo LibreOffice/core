@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace oox { namespace ppt {
                 else if ( msEmbedded.getLength() != 0 )
                 {
                     RelationsRef xRel = getHandler()->getRelations();
-                    url =   xRel->getRelationById( msEmbedded )->msTarget;
+                    url =	xRel->getRelationById( msEmbedded )->msTarget;
                 }
                 else if ( msLink.getLength() != 0 )
                 {
@@ -91,10 +91,10 @@ namespace oox { namespace ppt {
                     maSlideProperties[ PROP_SoundOn ] <<= sal_True;
                 }
             }
-//          else if( mbStopSound )
-//          {
-//              maSlideProperties[ CREATE_OUSTRING( "" ) ] = Any( sal_True );
-//          }
+//			else if( mbStopSound )
+//			{
+//				maSlideProperties[ CREATE_OUSTRING( "" ) ] = Any( sal_True );
+//			}
         }
     }
 

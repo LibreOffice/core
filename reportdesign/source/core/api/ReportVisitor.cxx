@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ void OReportVisitor::start(const uno::Reference< report::XReportDefinition>& _xR
         m_pTraverseReport->traversePageHeader(_xReportDefinition->getPageHeader());
     if ( _xReportDefinition->getReportHeaderOn() )
         m_pTraverseReport->traverseReportHeader(_xReportDefinition->getReportHeader());
-
+    
     uno::Reference< report::XGroups > xGroups = _xReportDefinition->getGroups();
     m_pTraverseReport->traverseGroups(xGroups);
     const sal_Int32 nCount = xGroups->getCount();

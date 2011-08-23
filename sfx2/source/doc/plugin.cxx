@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,9 +98,9 @@ void SAL_CALL PluginObject::initialize( const uno::Sequence< uno::Any >& aArgume
         aArguments[0] >>= mxObj;
 }
 
-sal_Bool SAL_CALL PluginObject::load(
+sal_Bool SAL_CALL PluginObject::load( 
     const uno::Sequence < com::sun::star::beans::PropertyValue >& /*lDescriptor*/,
-    const uno::Reference < frame::XFrame >& xFrame )
+    const uno::Reference < frame::XFrame >& xFrame ) 
 throw( uno::RuntimeException )
 {
     uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager") ), uno::UNO_QUERY );

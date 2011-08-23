@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class TitleImpl : public InheritedHelperInterfaceImpl< Ifc1 >
 {
 typedef InheritedHelperInterfaceImpl< Ifc1 > BaseClass;
 
-protected:
+protected: 
     css::uno::Reference< css::drawing::XShape > xTitleShape;
     css::uno::Reference< css::beans::XPropertySet > xShapePropertySet;
     std::auto_ptr<ov::ShapeHelper> oShapeHelper;
@@ -100,7 +100,7 @@ public:
         // #FIXME #TODO the helperapi Characters implementation doesn't
         // seem to do very much, need to know how the existing Characters
         // impl ( that we use for Range ) can be reused
-        return  css::uno::Reference< ov::excel::XCharacters > ();
+        return 	css::uno::Reference< ov::excel::XCharacters > ();
     }
 
     void SAL_CALL setTop( double Top ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
@@ -140,9 +140,9 @@ public:
         catch (css::uno::Exception& )
         {
             throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
-        }
+        }		
         return static_cast< sal_Int32 >(nSOOrientation / 100) ;
-    }
+    } 
 // XHelperInterface
     rtl::OUString& getServiceImplName()
     {

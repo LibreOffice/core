@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <tools/gen.hxx>
 
 // predefines
-namespace basegfx { class B3DRange; } // end of namespace basegfx
+namespace basegfx {	class B3DRange; } // end of namespace basegfx
 
 /*************************************************************************
 |*
@@ -43,8 +43,8 @@ namespace basegfx { class B3DRange; } // end of namespace basegfx
 |*
 \************************************************************************/
 
-enum ProjectionType { PR_PARALLEL, PR_PERSPECTIVE };
-enum AspectMapType  { AS_NO_MAPPING, AS_HOLD_SIZE, AS_HOLD_X, AS_HOLD_Y };
+enum ProjectionType	{ PR_PARALLEL, PR_PERSPECTIVE };
+enum AspectMapType	{ AS_NO_MAPPING, AS_HOLD_SIZE, AS_HOLD_X, AS_HOLD_Y };
 
 
 /*************************************************************************
@@ -56,31 +56,31 @@ enum AspectMapType  { AS_NO_MAPPING, AS_HOLD_SIZE, AS_HOLD_X, AS_HOLD_Y };
 class SVX_DLLPUBLIC Viewport3D
 {
  protected:
-    basegfx::B3DHomMatrix       aViewTf;        // die eigentliche Transformationsmatrix
-    basegfx::B3DPoint           aVRP;           // View Reference Point
-    basegfx::B3DVector          aVPN;           // View Plane Normal
-    basegfx::B3DVector          aVUV;           // View Up Vector
-    basegfx::B3DPoint           aPRP;           // Projection Reference Point(View-Koordinaten)
+    basegfx::B3DHomMatrix		aViewTf;		// die eigentliche Transformationsmatrix
+    basegfx::B3DPoint			aVRP;			// View Reference Point
+    basegfx::B3DVector			aVPN;			// View Plane Normal
+    basegfx::B3DVector			aVUV;			// View Up Vector
+    basegfx::B3DPoint			aPRP;			// Projection Reference Point(View-Koordinaten)
                                     // bisher wird nur die Z-Koordinate beachtet
-    double          fVPD;           // View Plane Distance
-    double          fNearClipDist;  // Abstand der vorderen Clippingebene
-    double          fFarClipDist;   // Abstand der hinteren Clippingebene
+    double			fVPD;		 	// View Plane Distance
+    double			fNearClipDist;	// Abstand der vorderen Clippingebene
+    double			fFarClipDist;	// Abstand der hinteren Clippingebene
 
-    ProjectionType  eProjection;    // Art der Projektion
-    AspectMapType   eAspectMapping; // Flag fuer Seitenverhaeltnis-Anpassung
+    ProjectionType	eProjection;	// Art der Projektion
+    AspectMapType	eAspectMapping;	// Flag fuer Seitenverhaeltnis-Anpassung
                                     // bei Ausgabe auf das Geraet
-    Rectangle aDeviceRect;          // Position und Groesse des Ausgabebereichs
+    Rectangle aDeviceRect;			// Position und Groesse des Ausgabebereichs
 
     struct
     {
-        double X, Y, W, H;          // Position und Groesse des View-Windows
-    } aViewWin;                     // in View-Koordinaten
+        double X, Y, W, H;			// Position und Groesse des View-Windows
+    } aViewWin;						// in View-Koordinaten
 
-    basegfx::B3DPoint       aViewPoint;     // Beobachterstandpunkt in Weltkoordinaten;
+    basegfx::B3DPoint		aViewPoint;		// Beobachterstandpunkt in Weltkoordinaten;
                                     // wird mit der Transformation berechnet
-    BOOL            bTfValid;       // Flag, ob Transformation gueltig ist
+    BOOL			bTfValid;	 	// Flag, ob Transformation gueltig ist
 
-    double fWRatio;                 // Device/View-Seitenverhaeltnisse
+    double fWRatio;					// Device/View-Seitenverhaeltnisse
     double fHRatio;
 
     void MakeTransform(void);
@@ -96,13 +96,13 @@ class SVX_DLLPUBLIC Viewport3D
     void SetNearClipDist(double fNewNCD);
     void SetFarClipDist(double fNewFCD);
 
-    const basegfx::B3DPoint&    GetVRP() const  { return aVRP; }
-    const basegfx::B3DVector&   GetVPN() const  { return aVPN; }
-    const basegfx::B3DVector&   GetVUV() const  { return aVUV; }
-    const basegfx::B3DPoint&    GetPRP() const  { return aPRP; }
-    double  GetVPD() const          { return fVPD; }
-    double  GetNearClipDist() const { return fNearClipDist; }
-    double  GetFarClipDist() const  { return fFarClipDist; }
+    const basegfx::B3DPoint&	GetVRP() const	{ return aVRP; }
+    const basegfx::B3DVector&	GetVPN() const	{ return aVPN; }
+    const basegfx::B3DVector&	GetVUV() const	{ return aVUV; }
+    const basegfx::B3DPoint&	GetPRP() const	{ return aPRP; }
+    double	GetVPD() const			{ return fVPD; }
+    double	GetNearClipDist() const	{ return fNearClipDist; }
+    double	GetFarClipDist() const	{ return fFarClipDist; }
 
     void SetProjection(ProjectionType ePrj)
         { eProjection = ePrj; bTfValid = FALSE; }
@@ -119,14 +119,14 @@ class SVX_DLLPUBLIC Viewport3D
     const Rectangle& GetDeviceWindow() const { return aDeviceRect; }
 
     // Beobachterstandpunkt in Weltkoordinaten zurueckgeben
-    const basegfx::B3DPoint&    GetViewPoint();
+    const basegfx::B3DPoint&	GetViewPoint();
 
     // View-Transformationen
-    const basegfx::B3DHomMatrix&    GetViewTransform();
+    const basegfx::B3DHomMatrix&	GetViewTransform();
 
     // Projektion und Mapping
     basegfx::B3DPoint DoProjection(const basegfx::B3DPoint& rVec) const;
-    basegfx::B3DPoint   MapToDevice(const basegfx::B3DPoint& rVec) const;
+    basegfx::B3DPoint	MapToDevice(const basegfx::B3DPoint& rVec) const;
 };
 
-#endif      // _VIEWPT3D_HXX
+#endif		// _VIEWPT3D_HXX

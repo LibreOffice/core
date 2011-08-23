@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -323,7 +323,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
         break;
 
         case XATTR_GRADIENTSTEPCOUNT:
-            if( lcl_supportsFillProperties( m_eGraphicObjectType ))
+            if( lcl_supportsFillProperties( m_eGraphicObjectType )) 
             {
                 ::rtl::OUString aPropName =
                     (m_eGraphicObjectType == FILLED_DATA_POINT)

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ public final class Driver {
             while (dfEnum.hasMoreElements()) {
                 processFile = (String)dfEnum.nextElement();
                 File f = new File(processFile);
-
+                
                 // Make sure the input file actually exists before using it
                 if (!f.exists()) {
                     System.out.println(processFile + " does not exist!");
@@ -158,7 +158,7 @@ public final class Driver {
             }
         } catch (Exception addExcept) {
             System.out.println("\nFile <" + processFile + "> is not in <" +
-                fromMime + "> format");
+                fromMime + "> format"); 
             throw new IllegalArgumentException();
         }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
     MutexGuard aGuard(m_aMutex);
 
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
-
+    
 
     Reference< XOutParameters >(m_xAggregateAsSet, UNO_QUERY)->registerOutParameter( parameterIndex, sqlType, typeName );
 }

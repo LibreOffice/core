@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <uielement/statusbarmanager.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -46,7 +46,7 @@
 #include <helper/mischelper.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -59,7 +59,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
@@ -115,12 +115,12 @@ static USHORT impl_convertItemStyleToItemBits( sal_Int16 nStyle )
         nItemBits |= SIB_AUTOSIZE;
     if ( nStyle & css_ui::ItemStyle::OWNER_DRAW )
         nItemBits |= SIB_USERDRAW;
-
+    
     return nItemBits;
 }
-
+    
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_5                     (   StatusBarManager                                                        ,
                                             ::cppu::OWeakObject                                                     ,
@@ -132,16 +132,16 @@ DEFINE_XINTERFACE_5                     (   StatusBarManager                    
                                         )
 
 DEFINE_XTYPEPROVIDER_5                  (   StatusBarManager                    ,
-                                            lang::XTypeProvider                 ,
+                                            lang::XTypeProvider		            ,
                                             lang::XComponent                    ,
                                             css::ui::XUIConfigurationListener  ,
                                             frame::XFrameActionListener         ,
                                             lang::XEventListener
                                         )
 
-StatusBarManager::StatusBarManager(
-    const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
-    const uno::Reference< frame::XFrame >& rFrame,
+StatusBarManager::StatusBarManager( 
+    const uno::Reference< lang::XMultiServiceFactory >& rServiceManager, 
+    const uno::Reference< frame::XFrame >& rFrame, 
     const rtl::OUString& rResourceName,
     StatusBar* pStatusBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
@@ -159,8 +159,8 @@ StatusBarManager::StatusBarManager(
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::StatusBarManager" );
 
     if ( m_xServiceManager.is() )
-        m_xStatusbarControllerRegistration = uno::Reference< css::frame::XUIControllerRegistration >(
-                                                    m_xServiceManager->createInstance( SERVICENAME_STATUSBARCONTROLLERFACTORY ),
+        m_xStatusbarControllerRegistration = uno::Reference< css::frame::XUIControllerRegistration >( 
+                                                    m_xServiceManager->createInstance( SERVICENAME_STATUSBARCONTROLLERFACTORY ), 
                                                     uno::UNO_QUERY );
 
     m_pStatusBar->SetClickHdl( LINK( this, StatusBarManager, Click ) );
@@ -177,7 +177,7 @@ StatusBar* StatusBarManager::GetStatusBar() const
     ResetableGuard aGuard( m_aLock );
     return m_pStatusBar;
 }
-
+        
 void StatusBarManager::frameAction( const frame::FrameActionEvent& Action )
 throw ( uno::RuntimeException )
 {
@@ -202,7 +202,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) thr
         ResetableGuard aGuard( m_aLock );
         if ( Source.Source == uno::Reference< uno::XInterface >( m_xFrame, uno::UNO_QUERY ))
             m_xFrame.clear();
-
+        
         m_xServiceManager.clear();
     }
 }
@@ -211,18 +211,18 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) thr
 void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::dispose" );
-    uno::Reference< lang::XComponent > xThis(
+    uno::Reference< lang::XComponent > xThis( 
         static_cast< OWeakObject* >(this), uno::UNO_QUERY );
 
     lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
-
+    
     {
         ResetableGuard aGuard( m_aLock );
         if ( !m_bDisposed )
         {
             RemoveControllers();
-
+            
             delete m_pStatusBar;
             m_pStatusBar = 0;
 
@@ -230,8 +230,8 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException )
             {
                 try
                 {
-                    m_xFrame->removeFrameActionListener( uno::Reference< frame::XFrameActionListener >(
-                                                            static_cast< ::cppu::OWeakObject *>( this ),
+                    m_xFrame->removeFrameActionListener( uno::Reference< frame::XFrameActionListener >( 
+                                                            static_cast< ::cppu::OWeakObject *>( this ), 
                                                             uno::UNO_QUERY ));
                 }
                 catch ( uno::Exception& )
@@ -255,15 +255,15 @@ void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XE
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
         throw lang::DisposedException();
-
-    m_aListenerContainer.addInterface( ::getCppuType(
+        
+    m_aListenerContainer.addInterface( ::getCppuType( 
         ( const uno::Reference< lang::XEventListener >* ) NULL ), xListener );
 }
 
 void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw( uno::RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::removeEventListener" );
-    m_aListenerContainer.removeInterface( ::getCppuType(
+    m_aListenerContainer.removeInterface( ::getCppuType( 
         ( const uno::Reference< lang::XEventListener >* ) NULL ), xListener );
 }
 
@@ -272,7 +272,7 @@ void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEve
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::elementInserted" );
     ResetableGuard aGuard( m_aLock );
-
+    
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
         return;
@@ -282,17 +282,17 @@ void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEven
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::elementRemoved" );
     ResetableGuard aGuard( m_aLock );
-
+    
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
         return;
 }
-
+    
 void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::elementReplaced" );
     ResetableGuard aGuard( m_aLock );
-
+    
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
         return;
@@ -334,7 +334,7 @@ void StatusBarManager::RemoveControllers()
     {
         try
         {
-            uno::Reference< lang::XComponent > xComponent(
+            uno::Reference< lang::XComponent > xComponent( 
                 m_aControllerVector[n], uno::UNO_QUERY );
             if ( xComponent.is() )
                 xComponent->dispose();
@@ -342,7 +342,7 @@ void StatusBarManager::RemoveControllers()
         catch ( uno::Exception& )
         {
         }
-
+        
         m_aControllerVector[n].clear();
     }
 }
@@ -359,30 +359,30 @@ void StatusBarManager::CreateControllers()
     uno::Reference< uno::XComponentContext > xComponentContext;
     uno::Reference< beans::XPropertySet > xProps( m_xServiceManager, uno::UNO_QUERY );
     uno::Reference< awt::XWindow > xStatusbarWindow = VCLUnoHelper::GetInterface( m_pStatusBar );
-
+    
     if ( xProps.is() )
         xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
-
+    
     for ( USHORT i = 0; i < m_pStatusBar->GetItemCount(); i++ )
     {
         USHORT nId = m_pStatusBar->GetItemId( i );
         if ( nId == 0 )
             continue;
-
+        
         rtl::OUString                            aCommandURL( m_pStatusBar->GetItemCommand( nId ));
         sal_Bool                                 bInit( sal_True );
         uno::Reference< frame::XStatusListener > xController;
-
+        
         svt::StatusbarController* pController( 0 );
-
-        if ( m_xStatusbarControllerRegistration.is() &&
+   
+        if ( m_xStatusbarControllerRegistration.is() && 
              m_xStatusbarControllerRegistration->hasController( aCommandURL, m_aModuleIdentifier ))
         {
             if ( xStatusbarControllerFactory.is() )
             {
-                uno::Sequence< uno::Any > aSeq( 5 );
+                uno::Sequence< uno::Any > aSeq( 5 );    
                 beans::PropertyValue aPropValue;
-
+                    
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
                 aPropValue.Value    = uno::makeAny( m_aModuleIdentifier );
                 aSeq[0] = uno::makeAny( aPropValue );
@@ -399,29 +399,29 @@ void StatusBarManager::CreateControllers()
                 aPropValue.Value    = uno::makeAny( nId );
                 aSeq[4] = uno::makeAny( aPropValue );
 
-                xController = uno::Reference< frame::XStatusListener >(
-                                xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                    aCommandURL, aSeq, xComponentContext ),
+                xController = uno::Reference< frame::XStatusListener >( 
+                                xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(	
+                                    aCommandURL, aSeq, xComponentContext ), 
                                 uno::UNO_QUERY );
                 bInit = sal_False; // Initialization is done through the factory service
             }
         }
-
+  
         if ( !xController.is() )
         {
             pController = CreateStatusBarController( m_xFrame, m_pStatusBar, nId, aCommandURL );
             if ( !pController )
                 pController = new svt::StatusbarController( m_xServiceManager, m_xFrame, aCommandURL, nId );
-
+        
             if ( pController )
-                xController = uno::Reference< frame::XStatusListener >(
-                                static_cast< ::cppu::OWeakObject *>( pController ),
+                xController = uno::Reference< frame::XStatusListener >( 
+                                static_cast< ::cppu::OWeakObject *>( pController ), 
                                 uno::UNO_QUERY );
         }
-
+    
         m_aControllerVector.push_back( xController );
         uno::Reference< lang::XInitialization > xInit( xController, uno::UNO_QUERY );
-
+    
         if ( xInit.is() )
         {
             if ( bInit )
@@ -450,22 +450,22 @@ void StatusBarManager::CreateControllers()
 
     AddFrameActionListener();
 }
-
+    
 void StatusBarManager::AddFrameActionListener()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::AddFrameActionListener" );
     if ( !m_bFrameActionRegistered && m_xFrame.is() )
     {
         m_bFrameActionRegistered = sal_True;
-        m_xFrame->addFrameActionListener( uno::Reference< frame::XFrameActionListener >(
+        m_xFrame->addFrameActionListener( uno::Reference< frame::XFrameActionListener >( 
             static_cast< ::cppu::OWeakObject *>( this ), uno::UNO_QUERY ));
     }
 }
 
 void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAccess >& rItemContainer )
-{
+{    
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::StatusBarManager::FillStatusbar" );
-
+    
     ResetableGuard aGuard( m_aLock );
 
     if ( m_bDisposed || !m_pStatusBar )
@@ -476,7 +476,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
     RemoveControllers();
 
-    // reset and fill command map
+    // reset and fill command map 
     m_pStatusBar->Clear();
     m_aControllerVector.clear();
 
@@ -527,12 +527,12 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                 {
                     rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
                     USHORT        nItemBits( impl_convertItemStyleToItemBits( nStyle ));
-
+                    
                     m_pStatusBar->InsertItem( nId, nWidth, nItemBits, nOffset );
                     m_pStatusBar->SetItemCommand( nId, aCommandURL );
                     m_pStatusBar->SetAccessibleName( nId, aString );
 //                    m_pStatusBar->SetHelpText( nId, aString );
-
+                    
                     if ( aHelpURL.indexOf( aHelpIdPrefix ) == 0 )
                     {
                         rtl::OUString aId( aHelpURL.copy( HELPID_PREFIX_LENGTH ));
@@ -540,7 +540,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                         if ( nHelpId > 0 )
                             m_pStatusBar->SetHelpId( nId, nHelpId );
                     }
-
+                    
                     ++nId;
                 }
             }
@@ -567,12 +567,12 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::DataChanged" );
     ResetableGuard aGuard( m_aLock );
-
-    if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS         ) ||
+    
+    if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS	        ) ||
          ( rDCEvt.GetType() == DATACHANGED_FONTS            ) ||
          ( rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION ) ||
-         ( rDCEvt.GetType() == DATACHANGED_DISPLAY          ))  &&
-         ( rDCEvt.GetFlags() & SETTINGS_STYLE               ))
+         ( rDCEvt.GetType() == DATACHANGED_DISPLAY	        ))	&&
+         ( rDCEvt.GetFlags() & SETTINGS_STYLE		        ))
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xFrame, css::uno::UNO_QUERY );
@@ -590,23 +590,23 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::UserDraw" );
     ResetableGuard aGuard( m_aLock );
-
+    
     if ( m_bDisposed )
         return;
-
+    
     USHORT nId( rUDEvt.GetItemId() );
     if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
-        uno::Reference< frame::XStatusbarController > xController(
+        uno::Reference< frame::XStatusbarController > xController( 
             m_aControllerVector[nId-1], uno::UNO_QUERY );
         if ( xController.is() && rUDEvt.GetDevice() )
         {
-            uno::Reference< awt::XGraphics > xGraphics =
+            uno::Reference< awt::XGraphics > xGraphics = 
                 rUDEvt.GetDevice()->CreateUnoGraphics();
 
-            awt::Rectangle aRect( rUDEvt.GetRect().Left(),
+            awt::Rectangle aRect( rUDEvt.GetRect().Left(), 
                                   rUDEvt.GetRect().Top(),
-                                  rUDEvt.GetRect().GetWidth(),
+                                  rUDEvt.GetRect().GetWidth(), 
                                   rUDEvt.GetRect().GetHeight() );
             aGuard.unlock();
             xController->paint( xGraphics, aRect, rUDEvt.GetItemId(), rUDEvt.GetStyle() );
@@ -618,10 +618,10 @@ void StatusBarManager::Command( const CommandEvent& rEvt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::Command" );
     ResetableGuard aGuard( m_aLock );
-
+    
     if ( m_bDisposed )
         return;
-
+    
     if ( rEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         USHORT nId = m_pStatusBar->GetItemId( rEvt.GetMousePosPixel() );
@@ -649,13 +649,13 @@ void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::MouseButton" );
     ResetableGuard aGuard( m_aLock );
-
+    
     if ( !m_bDisposed )
     {
         USHORT nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
         if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
         {
-            uno::Reference< frame::XStatusbarController > xController(
+            uno::Reference< frame::XStatusbarController > xController( 
                 m_aControllerVector[nId-1], uno::UNO_QUERY );
             if ( xController.is() )
             {
@@ -684,29 +684,29 @@ void StatusBarManager::MouseButtonUp( const MouseEvent& rMEvt )
 IMPL_LINK( StatusBarManager, Click, StatusBar*, EMPTYARG )
 {
     ResetableGuard aGuard( m_aLock );
-
+    
     if ( m_bDisposed )
         return 1;
-
+    
     USHORT nId = m_pStatusBar->GetCurItemId();
     if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
-        uno::Reference< frame::XStatusbarController > xController(
+        uno::Reference< frame::XStatusbarController > xController( 
             m_aControllerVector[nId-1], uno::UNO_QUERY );
         if ( xController.is() )
             xController->click();
     }
-
+    
     return 1;
 }
 
 IMPL_LINK( StatusBarManager, DoubleClick, StatusBar*, EMPTYARG )
 {
     ResetableGuard aGuard( m_aLock );
-
+    
     if ( m_bDisposed )
         return 1;
-
+    
     USHORT nId = m_pStatusBar->GetCurItemId();
     if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
@@ -715,7 +715,7 @@ IMPL_LINK( StatusBarManager, DoubleClick, StatusBar*, EMPTYARG )
         if ( xController.is() )
             xController->doubleClick();
     }
-
+    
     return 1;
 }
 

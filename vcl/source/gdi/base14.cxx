@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ OString PDFWriterImpl::BuiltinFont::getNameObject() const
     OStringBuffer aBuf( 16 );
     aBuf.append( '/' );
     const char* pRun = m_pPSName;
-
+    
     unsigned int nCopied = 0;
     while( *pRun )
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace dbaccess
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XSingleServiceFactory
                             >   OCommandContainer_BASE;
 
-class OCommandContainer : public ODefinitionContainer
+class OCommandContainer	: public ODefinitionContainer
                          ,public OCommandContainer_BASE
 {
     sal_Bool m_bTables;
@@ -61,7 +61,7 @@ public:
     */
     OCommandContainer(
          const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
-        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
+        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&	_xParentContainer
         ,const TContentPtr& _pImpl
         ,sal_Bool _bTables
         );
@@ -85,7 +85,7 @@ protected:
 };
 
 //........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //........................................................................
 
 #endif // _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_

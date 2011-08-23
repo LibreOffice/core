@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@ namespace rptui
     class OReportWindow;
     class OReportRuler : public Window
     {
-        OReportSection*     m_pSection;
-        OReportWindow*      m_pParent;
-        sal_Bool            m_bShow;
+        OReportSection* 	m_pSection;
+        OReportWindow*		m_pParent;
+        sal_Bool			m_bShow;
         OReportRuler(OReportRuler&);
         void operator =(OReportRuler&);
     public:
@@ -48,8 +48,8 @@ namespace rptui
         // windows overloads
         virtual void Resize();
 
-        inline OReportSection*      getSection()        const { return m_pSection; }
-        inline OReportWindow*       getView()           const { return m_pParent; }
+        inline OReportSection*		getSection()		const { return m_pSection; }
+        inline OReportWindow*		getView()			const { return m_pParent; }
 
         /** makes the grid visible
         *

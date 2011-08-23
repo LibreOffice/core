@@ -34,8 +34,8 @@
 class WordPerfectCollector : public DocumentCollector
 {
 public:
-    WordPerfectCollector(WPXInputStream *pInput, DocumentHandler *pHandler);
+    WordPerfectCollector(WPSInputStream *pInput, DocumentHandler *pHandler);
     virtual ~WordPerfectCollector();
-    bool parseSourceDocument(WPXInputStream &pInput);
+    bool parseSourceDocument(WPSInputStream &pInput);
 };
 #endif

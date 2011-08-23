@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -450,6 +450,37 @@ sal_Bool OStorageHelper::IsValidZipEntryFileName(
         }
     }
     return sal_True;
+}
+
+// ----------------------------------------------------------------------
+sal_Bool OStorageHelper::PathHasSegment( const ::rtl::OUString& aPath, const ::rtl::OUString& aSegment )
+{
+    sal_Bool bResult = sal_False;
+    const sal_Int32 nPathLen = aPath.getLength();
+    const sal_Int32 nSegLen = aSegment.getLength();
+
+    if ( nSegLen && nPathLen >= nSegLen )
+    {
+        ::rtl::OUString aEndSegment( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        aEndSegment += aSegment;
+
+        ::rtl::OUString aInternalSegment( aEndSegment );
+        aInternalSegment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+
+        if ( aPath.indexOf( aInternalSegment ) >= 0 )
+            bResult = sal_True;
+
+        if ( !bResult && !aPath.compareTo( aSegment, nSegLen ) )
+        {
+            if ( nPathLen == nSegLen || aPath.getStr()[nSegLen] == (sal_Unicode)'/' )
+                bResult = sal_True;
+        }
+
+        if ( !bResult && nPathLen > nSegLen && aPath.copy( nPathLen - nSegLen - 1, nSegLen + 1 ).equals( aEndSegment ) )
+            bResult = sal_True;
+    }
+
+    return bResult;
 }
 
 }

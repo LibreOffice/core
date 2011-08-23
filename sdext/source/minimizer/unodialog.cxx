@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ UnoDialog::UnoDialog( const Reference< XComponentContext > &rxMSF, Reference< XF
     Reference< XFrame > xFrame( mxController->getFrame() );
     Reference< XWindow > xContainerWindow( xFrame->getContainerWindow() );
     mxWindowPeer = Reference< XWindowPeer >( xContainerWindow, UNO_QUERY_THROW );
-    createWindowPeer( mxWindowPeer );
+    createWindowPeer( mxWindowPeer );		
 }
 
 // -----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > x
         xParentPeer = xToolkit->getDesktopWindow();
     mxReschedule = Reference< XReschedule >( xToolkit, UNO_QUERY );
     mxControl->createPeer( xToolkit, xParentPeer );
-//  xWindowPeer = xControl.getPeer();
+//	xWindowPeer = xControl.getPeer();
     return mxControl->getPeer();
 }
 
@@ -365,7 +365,7 @@ void UnoDialog::showMessageBox( const OUString& rTitle, const OUString& rMessage
 
 /*
 public void showErrorMessageBox(XWindowPeer _xParentWindowPeer, String _sTitle, String _sMessage){
-XComponent xComponent = null;
+XComponent xComponent = null;    
 try {
     Object oToolkit = m_xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", m_xContext);
     XMessageBoxFactory xMessageBoxFactory = (XMessageBoxFactory) UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);

@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ namespace logging
     {
     public:
         virtual ::rtl::OUString SAL_CALL formatMultiColumn(const Sequence< ::rtl::OUString>& column_data) throw (RuntimeException);
-
+        
         // XServiceInfo - static version
         static ::rtl::OUString SAL_CALL getImplementationName_static();
         static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
@@ -152,7 +152,7 @@ namespace
             // special treatment for the last character
             if(quote_char==str[str_length-1])
                 buf.append(quote_char);
-            // iterating backwards because the index at which we insert wont be shifted
+            // iterating backwards because the index at which we insert wont be shifted 
             // when moving that way.
             for(sal_Int32 i = str_length; i>=0; )
             {
@@ -164,8 +164,8 @@ namespace
         }
         else
             buf.append(str);
-    };
-
+    }; 
+    
     ::com::sun::star::uno::Sequence< ::rtl::OUString> initialColumns()
     {
         com::sun::star::uno::Sequence< ::rtl::OUString> result = ::com::sun::star::uno::Sequence< ::rtl::OUString>(1);
@@ -178,11 +178,11 @@ namespace
 namespace logging
 {
     CsvFormatter::CsvFormatter( const Reference< XComponentContext >& context )
-        :m_aContext( context ),
-        m_LogEventNo(true),
-        m_LogThread(true),
-        m_LogTimestamp(true),
-        m_LogSource(false),
+        :m_aContext( context ), 
+        m_LogEventNo(true), 
+        m_LogThread(true), 
+        m_LogTimestamp(true), 
+        m_LogSource(false), 
         m_MultiColumn(false),
         m_Columnnames(initialColumns())
     { }
@@ -232,7 +232,7 @@ namespace logging
 
     void CsvFormatter::setLogSource(::sal_Bool log_source) throw (RuntimeException)
     {
-        m_LogSource = log_source;
+        m_LogSource = log_source; 
     }
 
     void CsvFormatter::setColumnnames(const Sequence< ::rtl::OUString >& columnnames) throw (RuntimeException)
@@ -255,7 +255,7 @@ namespace logging
         sal_Int32 columns = m_Columnnames.getLength();
         for(sal_Int32 i=0; i<columns; i++)
         {
-            buf.append(m_Columnnames[i]);
+            buf.append(m_Columnnames[i]); 
             buf.append(comma_char);
         }
         buf.setLength(buf.getLength()-1);
@@ -295,7 +295,7 @@ namespace logging
             aLogEntry.appendAscii( buffer );
             aLogEntry.append(comma_char);
         }
-
+        
         if(m_LogSource)
         {
             appendEncodedString(aLogEntry, record.SourceClassName);
@@ -317,7 +317,7 @@ namespace logging
         aLogEntry.append( dos_newline );
         return aLogEntry.makeStringAndClear();
     }
-
+    
     ::rtl::OUString SAL_CALL CsvFormatter::getTail(  ) throw (RuntimeException)
     {
         return ::rtl::OUString();
@@ -347,22 +347,22 @@ namespace logging
                 return sal_True;
         return sal_False;
     }
-
+    
     ::rtl::OUString SAL_CALL CsvFormatter::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
-
+    
     Sequence< ::rtl::OUString > SAL_CALL CsvFormatter::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
-
+    
     ::rtl::OUString SAL_CALL CsvFormatter::getImplementationName_static()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.CsvFormatter" ) );
     }
-
+    
     Sequence< ::rtl::OUString > SAL_CALL CsvFormatter::getSupportedServiceNames_static()
     {
         Sequence< ::rtl::OUString > aServiceNames(1);

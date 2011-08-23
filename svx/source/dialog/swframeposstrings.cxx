@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class SvxSwFramePosString_Impl : public Resource
     String aStrings[SvxSwFramePosString::STR_MAX];
 public:
     SvxSwFramePosString_Impl();
-};
+};      
 SvxSwFramePosString_Impl::SvxSwFramePosString_Impl() :
     Resource(SVX_RES(RID_SVXSW_FRAMEPOSITIONS))
 {
@@ -47,23 +47,23 @@ SvxSwFramePosString_Impl::SvxSwFramePosString_Impl() :
     {
         //string ids have to start at 1
         aStrings[i] = String(SVX_RES(i + 1));
-    }
+    }        
     FreeResource();
-}
+}        
 /*-- 04.03.2004 13:14:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SvxSwFramePosString::SvxSwFramePosString() :
     pImpl(new SvxSwFramePosString_Impl)
 {
-}
+}    
 /*-- 04.03.2004 13:14:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SvxSwFramePosString::~SvxSwFramePosString()
 {
     delete pImpl;
-}
+}    
 /*-- 04.03.2004 13:14:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/

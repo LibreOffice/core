@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -820,7 +820,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
     Sollte nicht mehr benutzt werden.
  */
 
-:   SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
+:	SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
 
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
@@ -1039,7 +1039,7 @@ extern "C" int BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
 
 /*
     Bildet das Set "uber die Ranges der Page. Die Page muss die statische
-    Methode f"ur das Erfragen ihrer Ranges bei SetTabPage angegeben haben,
+    Methode f"ur das Erfragen ihrer	Ranges bei SetTabPage angegeben haben,
     liefert also ihr Set onDemand.
  */
 const sal_uInt16* SfxSingleTabDialog::GetInputRanges( const SfxItemPool& rPool )

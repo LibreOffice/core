@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@ class DlgEdFunc /* : public LinkHdl */
 {
 protected:
     DlgEditor* pParent;
-    Timer        aScrollTimer;
+    Timer		 aScrollTimer;
 
     DECL_LINK( ScrollTimeout, Timer * );
-    void    ForceScroll( const Point& rPos );
+    void	ForceScroll( const Point& rPos );
 
 public:
     DlgEdFunc( DlgEditor* pParent );
@@ -80,7 +80,7 @@ public:
 class DlgEdFuncSelect : public DlgEdFunc
 {
 protected:
-    BOOL    bMarkAction;
+    BOOL	bMarkAction;
 
 public:
     DlgEdFuncSelect( DlgEditor* pParent );

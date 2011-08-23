@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,15 +61,15 @@ namespace dxcanvas
                                               ::com::sun::star::lang::XMultiServiceFactory,
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
-                                              ::com::sun::star::lang::XServiceName >    GraphicDeviceBase1_Base;
+                                              ::com::sun::star::lang::XServiceName >	GraphicDeviceBase1_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase1_Base >,
                                            DeviceHelper,
                                            ::osl::MutexGuard,
-                                           ::cppu::OWeakObject >    CanvasBase1_Base;
+                                           ::cppu::OWeakObject > 	CanvasBase1_Base;
     typedef ::canvas::CanvasBase< CanvasBase1_Base,
                                   CanvasHelper,
                                   ::osl::MutexGuard,
-                                  ::cppu::OWeakObject >     CanvasBaseT;
+                                  ::cppu::OWeakObject >		CanvasBaseT;
 
     /** Product of this component's factory.
 
@@ -118,15 +118,15 @@ namespace dxcanvas
                                               ::com::sun::star::lang::XMultiServiceFactory,
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
-                                              ::com::sun::star::lang::XServiceName >    GraphicDeviceBase2_Base;
+                                              ::com::sun::star::lang::XServiceName >	GraphicDeviceBase2_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase2_Base >,
                                            DeviceHelper,
                                            ::osl::MutexGuard,
-                                           ::cppu::OWeakObject >    CanvasBase2_Base;
+                                           ::cppu::OWeakObject > 	CanvasBase2_Base;
     typedef ::canvas::IntegerBitmapBase< CanvasBase2_Base,
                                          BitmapCanvasHelper,
                                          ::osl::MutexGuard,
-                                         ::cppu::OWeakObject >      BitmapCanvasBaseT;
+                                         ::cppu::OWeakObject >		BitmapCanvasBaseT;
 
     /** Product of this component's factory.
 

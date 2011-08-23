@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,8 +94,8 @@ public:
 
 class SmLocalizedSymbolData : public Resource
 {
-    ResStringArray      aUiSymbolNamesAry;
-    ResStringArray      aExportSymbolNamesAry;
+    ResStringArray		aUiSymbolNamesAry;
+    ResStringArray		aExportSymbolNamesAry;
     ResStringArray      aUiSymbolSetNamesAry;
     ResStringArray      aExportSymbolSetNamesAry;
     SmNamesArray       *p50NamesAry;
@@ -170,9 +170,9 @@ public:
     }
 
     //virtuelle Methoden fuer den Optionendialog
-    virtual SfxItemSet*  CreateItemSet( USHORT nId );
-    virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
-    virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
+    virtual SfxItemSet*	 CreateItemSet( USHORT nId );
+    virtual void		 ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
+    virtual	SfxTabPage*	 CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
 };
 
 #define SM_MOD() ( *(SmModule**) GetAppData(SHL_SM) )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 #include "KDESalDisplay.hxx"
 
-VCLKDEApplication::VCLKDEApplication() :
+VCLKDEApplication::VCLKDEApplication() : 
     KApplication()
 {
     disp = 0;
@@ -47,6 +47,6 @@ bool VCLKDEApplication::x11EventFilter(XEvent* event)
     {
         return true;
     }
-
+    
     return false;
 }

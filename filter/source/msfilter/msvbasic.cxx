@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#include <string.h>     // memset(), ...
+#include <string.h> 	// memset(), ...
 #ifndef UNX
-#include <io.h>         // access()
+#include <io.h> 		// access()
 #endif
 #include <osl/endian.h>
 #include <rtl/tencinfo.h>   //rtl_getTextEncodingFromWindowsCodePage
@@ -516,7 +516,7 @@ const StringArray &VBA_Impl::Decompress(sal_uInt16 nIndex, int *pOverflow)
         DecompressVBA( nIndex, xVBAStream );
         /*
          * if len was too big for a single string set that variable ?
-         *  if ((len > XX) && (pOverflow))
+         *	if ((len > XX) && (pOverflow))
                 *pOverflow=1;
          */
         if (bCommented)

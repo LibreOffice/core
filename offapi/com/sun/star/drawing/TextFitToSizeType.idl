@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_TextFitToSizeType_idl__
-#define __com_sun_star_drawing_TextFitToSizeType_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_TextFitToSizeType_idl__ 
+#define __com_sun_star_drawing_TextFitToSizeType_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: enum com::sun::star::drawing::TextFitToSizeType
-/** This enumeration specifies how the text within a shape relates to the
+/** This enumeration specifies how the text within a shape relates to the 
     size of the shape.
  */
 published enum TextFitToSizeType
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** the text size is only defined by the font properties
     */
-    NONE,
-
-    //-------------------------------------------------------------------------
+    NONE, 
+ 
+    //------------------------------------------------------------------------- 
 
     /** if the shape is scaled, the text character size is scaled proportional
     */
-    PROPORTIONAL,
+    PROPORTIONAL, 
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** like <code>PROPORTIONAL</code>, but the width of each text row is
         also scaled proportional.
     */
-    ALLLINES,
-
-    //-------------------------------------------------------------------------
+    ALLLINES, 
+ 
+    //------------------------------------------------------------------------- 
 
     /** if the shape is scaled, the font attributes are scaled and hard set
         on the text */
-    RESIZEATTR
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    RESIZEATTR 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

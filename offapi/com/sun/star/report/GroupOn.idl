@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_report_GroupOn_idl__
-#define __com_sun_star_report_GroupOn_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module report {
-
-//=============================================================================
-
+#ifndef __com_sun_star_report_GroupOn_idl__ 
+#define __com_sun_star_report_GroupOn_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module report { 
+ 
+//============================================================================= 
+ 
 /** Specifies how to group data.
     @see XGroup
  */
 constants GroupOn
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** The same value in the column value or expression.
      */
     const short DEFAULT = 0;
@@ -49,7 +49,7 @@ constants GroupOn
      */
     const short PREFIX_CHARACTERS = 1;
 
-    /** Dates in the same calendar year.
+    /** Dates in the same calendar year. 
     */
     const short YEAR= 2;
 
@@ -72,7 +72,7 @@ constants GroupOn
     /** Times in the same hour.
     */
     const short HOUR = 7;
-
+    
     /** Times in the same minute.
     */
     const short MINUTE = 8;
@@ -80,13 +80,13 @@ constants GroupOn
     /** Values within an interval you specify.
     */
     const short INTERVAL = 9;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

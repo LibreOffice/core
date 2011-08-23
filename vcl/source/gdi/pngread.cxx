@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,24 +45,24 @@
 // - Defines -
 // -----------
 
-#define PNGCHUNK_IHDR       0x49484452
-#define PNGCHUNK_PLTE       0x504c5445
-#define PNGCHUNK_IDAT       0x49444154
-#define PNGCHUNK_IEND       0x49454e44
-#define PNGCHUNK_bKGD       0x624b4744
-#define PNGCHUNK_cHRM       0x6348524d
-#define PNGCHUNK_gAMA       0x67414d41
-#define PNGCHUNK_hIST       0x68495354
-#define PNGCHUNK_pHYs       0x70485973
-#define PNGCHUNK_sBIT       0x73425420
-#define PNGCHUNK_tIME       0x74494d45
-#define PNGCHUNK_tEXt       0x74455874
-#define PNGCHUNK_tRNS       0x74524e53
-#define PNGCHUNK_zTXt       0x7a545874
-#define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
+#define PNGCHUNK_IHDR 		0x49484452
+#define PNGCHUNK_PLTE 		0x504c5445
+#define PNGCHUNK_IDAT 		0x49444154
+#define PNGCHUNK_IEND 		0x49454e44
+#define PNGCHUNK_bKGD 		0x624b4744
+#define PNGCHUNK_cHRM		0x6348524d
+#define PNGCHUNK_gAMA 		0x67414d41
+#define PNGCHUNK_hIST 		0x68495354
+#define PNGCHUNK_pHYs 		0x70485973
+#define PNGCHUNK_sBIT 		0x73425420
+#define PNGCHUNK_tIME		0x74494d45
+#define PNGCHUNK_tEXt		0x74455874
+#define PNGCHUNK_tRNS 		0x74524e53
+#define PNGCHUNK_zTXt 		0x7a545874
+#define PMGCHUNG_msOG		0x6d734f47		// Microsoft Office Animated GIF
 
-#define VIEWING_GAMMA       2.35
-#define DISPLAY_GAMMA       1.0
+#define VIEWING_GAMMA		2.35
+#define DISPLAY_GAMMA		1.0
 
 namespace vcl
 {
@@ -73,7 +73,7 @@ namespace vcl
 // ------------------------------------------------------------------------------
 
 static const BYTE mpDefaultColorTable[ 256 ] =
-{   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+{	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
     0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f,
     0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f,
@@ -105,17 +105,17 @@ private:
     std::vector< vcl::PNGReader::ChunkData >::iterator maChunkIter;
     std::vector< sal_uInt8 >::iterator          maDataIter;
 
-    Bitmap*             mpBmp;
-    BitmapWriteAccess*  mpAcc;
-    Bitmap*             mpMaskBmp;
-    AlphaMask*          mpAlphaMask;
-    BitmapWriteAccess*  mpMaskAcc;
-    ZCodec*             mpZCodec;
-    BYTE*               mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
-    BYTE*               mpScanPrior;    // pointer to the latest scanline
-    BYTE*               mpTransTab;     // for transparency in images with palette colortype
-    BYTE*               mpScanCurrent;  // pointer into the current scanline
-    BYTE*               mpColorTable;   //
+    Bitmap*				mpBmp;
+    BitmapWriteAccess*	mpAcc;
+    Bitmap*				mpMaskBmp;
+    AlphaMask*			mpAlphaMask;
+    BitmapWriteAccess*	mpMaskAcc;
+    ZCodec* 			mpZCodec;
+    BYTE*				mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
+    BYTE*				mpScanPrior;    // pointer to the latest scanline
+    BYTE*				mpTransTab;		// for transparency in images with palette colortype
+    BYTE*				mpScanCurrent;  // pointer into the current scanline
+    BYTE*				mpColorTable;	//
     sal_Size            mnStreamSize;   // estimate of PNG file size
     sal_uInt32          mnChunkType;    // Type of current PNG chunk
     sal_Int32           mnChunkLen;     // Length of current PNG chunk
@@ -131,29 +131,29 @@ private:
     sal_uInt32          mnYAdd;         // the increment for input images Y coords for the current pass
     int                 mnPreviewShift; // shift to convert orig image coords into preview image coords
     int                 mnPreviewMask;  // == ((1 << mnPreviewShift) - 1)
-    USHORT              mnIStmOldMode;
-    USHORT              mnTargetDepth;      // pixel depth of target bitmap
-    BYTE                mnTransRed;
-    BYTE                mnTransGreen;
-    BYTE                mnTransBlue;
-    BYTE                mnPngDepth;     // pixel depth of PNG data
-    BYTE                mnColorType;
-    BYTE                mnCompressionType;
-    BYTE                mnFilterType;
-    BYTE                mnInterlaceType;
-    BitmapColor         mcTranspColor;  // transparency mask's transparency "color"
-    BitmapColor         mcOpaqueColor;  // transparency mask's opaque "color"
-    BOOL                mbTransparent;  // graphic includes an tRNS Chunk or an alpha Channel
-    BOOL                mbAlphaChannel; // is true for ColorType 4 and 6
-    BOOL                mbRGBTriple;
-    BOOL                mbPalette;      // FALSE if we need a Palette
-    BOOL                mbGrayScale;
-    BOOL                mbzCodecInUse;
-    BOOL                mbStatus;
-    BOOL                mbIDAT;         // TRUE if finished with enough IDAT chunks
-    BOOL                mbGamma;        // TRUE if Gamma Correction available
-    BOOL                mbpHYs;         // TRUE if pysical size of pixel available
-    sal_Bool            mbIgnoreGammaChunk;
+    USHORT				mnIStmOldMode;
+    USHORT				mnTargetDepth;		// pixel depth of target bitmap
+    BYTE				mnTransRed;
+    BYTE				mnTransGreen;
+    BYTE				mnTransBlue;
+    BYTE				mnPngDepth;		// pixel depth of PNG data
+    BYTE				mnColorType;
+    BYTE				mnCompressionType;
+    BYTE				mnFilterType;
+    BYTE				mnInterlaceType;
+    BitmapColor			mcTranspColor;  // transparency mask's transparency "color"
+    BitmapColor			mcOpaqueColor;  // transparency mask's opaque "color"
+    BOOL				mbTransparent;	// graphic includes an tRNS Chunk or an alpha Channel
+    BOOL				mbAlphaChannel;	// is true for ColorType 4 and 6
+    BOOL				mbRGBTriple;
+    BOOL				mbPalette;		// FALSE if we need a Palette
+    BOOL				mbGrayScale;
+    BOOL				mbzCodecInUse;
+    BOOL				mbStatus;
+    BOOL				mbIDAT;			// TRUE if finished with enough IDAT chunks
+    BOOL				mbGamma;		// TRUE if Gamma Correction available
+    BOOL				mbpHYs;			// TRUE if pysical size of pixel available
+    sal_Bool			mbIgnoreGammaChunk;
 
     bool                ReadNextChunk();
     void                ReadRemainingChunks();
@@ -163,19 +163,19 @@ private:
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex );
     void                ImplSetTranspPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor &, BOOL bTrans );
     void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex, BYTE nAlpha );
-    void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor&, BYTE nAlpha );
-    void                ImplReadIDAT();
+    void				ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor&, BYTE nAlpha );
+    void				ImplReadIDAT();
     bool                ImplPreparePass();
     void                ImplApplyFilter();
     void                ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd );
-    BOOL                ImplReadTransparent();
-    void                ImplGetGamma();
-    void                ImplGetBackground();
-    BYTE                ImplScaleColor();
-    BOOL                ImplReadHeader( const Size& rPreviewSizeHint );
-    BOOL                ImplReadPalette();
-    void                ImplGetGrayPalette( sal_uInt16 );
-    sal_uInt32          ImplReadsal_uInt32();
+    BOOL				ImplReadTransparent();
+    void				ImplGetGamma();
+    void				ImplGetBackground();
+    BYTE				ImplScaleColor();
+    BOOL				ImplReadHeader( const Size& rPreviewSizeHint );
+    BOOL				ImplReadPalette();
+    void				ImplGetGrayPalette( sal_uInt16 );
+    sal_uInt32			ImplReadsal_uInt32();
 
 public:
 
@@ -184,29 +184,29 @@ public:
 
     BitmapEx            GetBitmapEx( const Size& rPreviewSizeHint );
     const std::vector< PNGReader::ChunkData >& GetAllChunks();
-    void                SetIgnoreGammaChunk( sal_Bool bIgnore ){ mbIgnoreGammaChunk = bIgnore; };
+    void				SetIgnoreGammaChunk( sal_Bool bIgnore ){ mbIgnoreGammaChunk = bIgnore; };
 };
 
 // ------------------------------------------------------------------------------
 
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
 :   mrPNGStream( rPNGStream ),
-    mpBmp           ( NULL ),
-    mpAcc           ( NULL ),
-    mpMaskBmp       ( NULL ),
-    mpAlphaMask     ( NULL ),
-    mpMaskAcc       ( NULL ),
-    mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
-    mpInflateInBuf  ( NULL ),
-    mpScanPrior     ( NULL ),
-    mpTransTab      ( NULL ),
-    mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
-    mbzCodecInUse   ( sal_False ),
+    mpBmp			( NULL ),
+    mpAcc			( NULL ),
+    mpMaskBmp		( NULL ),
+    mpAlphaMask		( NULL ),
+    mpMaskAcc		( NULL ),
+    mpZCodec		( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
+    mpInflateInBuf	( NULL ),
+    mpScanPrior 	( NULL ),
+    mpTransTab		( NULL ),
+    mpColorTable	( (sal_uInt8*) mpDefaultColorTable ),
+    mbzCodecInUse	( sal_False ),
     mbStatus( TRUE),
     mbIDAT( FALSE ),
-    mbGamma             ( sal_False ),
-    mbpHYs              ( sal_False ),
-    mbIgnoreGammaChunk  ( sal_False )
+    mbGamma				( sal_False ),
+    mbpHYs				( sal_False ),
+    mbIgnoreGammaChunk	( sal_False )
 {
     // prepare the PNG data stream
     mnOrigStreamMode = mrPNGStream.GetNumberFormatInt();
@@ -216,7 +216,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     maChunkSeq.reserve( 16 );
     maChunkIter = maChunkSeq.begin();
 
-    // estimate PNG file size (to allow sanity checks)
+    // estimate PNG file size (to allow sanity checks) 
     const sal_Size nStreamPos = mrPNGStream.Tell();
     mrPNGStream.Seek( STREAM_SEEK_TO_END );
     mnStreamSize = mrPNGStream.Tell();
@@ -381,8 +381,8 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             }
             break;
 
-            case PNGCHUNK_gAMA :                                // the gamma chunk must precede
-            {                                                   // the 'IDAT' and also the 'PLTE'(if available )
+            case PNGCHUNK_gAMA :								// the gamma chunk must precede
+            {													// the 'IDAT' and also the 'PLTE'(if available )
                 if ( !mbIgnoreGammaChunk && ( mbIDAT == FALSE ) )
                     ImplGetGamma();
             }
@@ -397,21 +397,21 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
             case PNGCHUNK_tRNS :
             {
-                if ( !mbIDAT )                                  // the tRNS chunk must precede the IDAT
+                if ( !mbIDAT )									// the tRNS chunk must precede the IDAT
                     mbStatus = ImplReadTransparent();
             }
             break;
 
-            case PNGCHUNK_bKGD :                                // the background chunk must appear
+            case PNGCHUNK_bKGD :								// the background chunk must appear
             {
-                if ( ( mbIDAT == FALSE ) && mbPalette )         // before the 'IDAT' and after the
-                    ImplGetBackground();                        // PLTE(if available ) chunk.
+                if ( ( mbIDAT == FALSE ) && mbPalette ) 		// before the 'IDAT' and after the
+                    ImplGetBackground();						// PLTE(if available ) chunk.
             }
             break;
 
             case PNGCHUNK_IDAT :
             {
-                if ( !mbIDAT )      // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
+                if ( !mbIDAT )		// the gfx is finished, but there may be left a zlibCRC of about 4Bytes
                     ImplReadIDAT();
             }
             break;
@@ -532,16 +532,16 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     // valid color types are 0,2,3,4 & 6
     switch ( mnColorType )
     {
-        case 0 :    // each pixel is a grayscale
+        case 0 :	// each pixel is a grayscale
         {
             switch ( mnPngDepth )
             {
                 case 2 : // 2bit target not available -> use four bits
-                    mnTargetDepth = 4;  // we have to expand the bitmap
+                    mnTargetDepth = 4;	// we have to expand the bitmap
                     mbGrayScale = TRUE;
                     break;
                 case 16 :
-                    mnTargetDepth = 8;  // we have to reduce the bitmap
+                    mnTargetDepth = 8;	// we have to reduce the bitmap
                     // fall through
                 case 1 :
                 case 4 :
@@ -554,13 +554,13 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         }
         break;
 
-        case 2 :    // each pixel is an RGB triple
+        case 2 :	// each pixel is an RGB triple
         {
             mbRGBTriple = TRUE;
             mnScansize *= 3;
             switch ( mnPngDepth )
             {
-                case 16 :           // we have to reduce the bitmap
+                case 16 :			// we have to reduce the bitmap
                 case 8 :
                     mnTargetDepth = 24;
                     break;
@@ -570,12 +570,12 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         }
         break;
 
-        case 3 :    // each pixel is a palette index
+        case 3 :	// each pixel is a palette index
         {
             switch ( mnPngDepth )
             {
                 case 2 :
-                    mnTargetDepth = 4;  // we have to expand the bitmap
+                    mnTargetDepth = 4;	// we have to expand the bitmap
                     // fall through
                 case 1 :
                 case 4 :
@@ -588,14 +588,14 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         }
         break;
 
-        case 4 :    // each pixel is a grayscale sample followed by an alpha sample
+        case 4 :	// each pixel is a grayscale sample followed by an alpha sample
         {
             mnScansize *= 2;
             mbAlphaChannel = TRUE;
             switch ( mnPngDepth )
             {
                 case 16 :
-                    mnTargetDepth = 8;  // we have to reduce the bitmap
+                    mnTargetDepth = 8;	// we have to reduce the bitmap
                 case 8 :
                     mbGrayScale = TRUE;
                     break;
@@ -605,14 +605,14 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         }
         break;
 
-        case 6 :    // each pixel is an RGB triple followed by an alpha sample
+        case 6 :	// each pixel is an RGB triple followed by an alpha sample
         {
             mbRGBTriple = TRUE;
             mnScansize *= 4;
             mbAlphaChannel = TRUE;
             switch (mnPngDepth )
             {
-                case 16 :           // we have to reduce the bitmap
+                case 16 :			// we have to reduce the bitmap
                 case 8 :
                     mnTargetDepth = 24;
                     break;
@@ -826,17 +826,17 @@ void PNGReaderImpl::ImplGetGamma()
     if( mnChunkLen < 4 )
         return;
 
-    sal_uInt32  nGammaValue = ImplReadsal_uInt32();
-    double      fGamma = ( ( VIEWING_GAMMA / DISPLAY_GAMMA ) * ( (double)nGammaValue / 100000 ) );
-    double      fInvGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
+    sal_uInt32	nGammaValue = ImplReadsal_uInt32();
+    double		fGamma = ( ( VIEWING_GAMMA / DISPLAY_GAMMA ) * ( (double)nGammaValue / 100000 ) );
+    double 		fInvGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
 
     if ( fInvGamma != 1.0 )
     {
         mbGamma = TRUE;
-
+        
         if ( mpColorTable == mpDefaultColorTable )
             mpColorTable = new sal_uInt8[ 256 ];
-
+        
         for ( sal_Int32 i = 0; i < 256; i++ )
             mpColorTable[ i ] = (sal_uInt8)(pow((double)i/255.0, fInvGamma) * 255.0 + 0.5);
 
@@ -877,7 +877,7 @@ void PNGReaderImpl::ImplGetBackground()
             }
         }
         break;
-
+    
         case 2 :
         case 6 :
         {
@@ -901,12 +901,12 @@ sal_uInt8 PNGReaderImpl::ImplScaleColor()
 {
     sal_uInt32 nMask = ( ( 1 << mnPngDepth ) - 1 );
     sal_uInt16 nCol = ( *maDataIter++ << 8 );
-
+    
     nCol += *maDataIter++ & (sal_uInt16)nMask;
-
-    if ( mnPngDepth > 8 )   // convert 16bit graphics to 8
+    
+    if ( mnPngDepth > 8 )	// convert 16bit graphics to 8
         nCol >>= 8;
-
+    
     return (sal_uInt8) nCol;
 }
 
@@ -1199,7 +1199,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             {
                 if ( mbTransparent )
                 {
-                    if ( mnPngDepth == 4 )  // check if source has a two bit pixel format
+                    if ( mnPngDepth == 4 )	// check if source has a two bit pixel format
                     {
                         for ( sal_Int32 nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, ++nXIndex )
                         {
@@ -1248,7 +1248,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 }
                 else
                 {
-                    if ( mnPngDepth == 4 )  // maybe the source is a two bitmap graphic
+                    if ( mnPngDepth == 4 )	// maybe the source is a two bitmap graphic
                     {   // BMP_FORMAT_4BIT_LSN_PAL
                         for ( sal_Int32 nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
                         {
@@ -1290,7 +1290,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             {
                 if ( mbAlphaChannel )
                 {
-                    if ( mnPngDepth == 8 )  // maybe the source is a 16 bit grayscale
+                    if ( mnPngDepth == 8 )	// maybe the source is a 16 bit grayscale
                     {
                         for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 2 )
                             ImplSetAlphaPixel( nY, nX, pTmp[ 0 ], pTmp[ 1 ] );
@@ -1303,7 +1303,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 }
                 else if ( mbTransparent )
                 {
-                    if ( mnPngDepth == 8 )  // maybe the source is a 16 bit grayscale
+                    if ( mnPngDepth == 8 )	// maybe the source is a 16 bit grayscale
                     {
                         for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp++ )
                             ImplSetAlphaPixel( nY, nX, *pTmp, mpTransTab[ *pTmp ] );
@@ -1316,7 +1316,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 }
                 else // neither alpha nor transparency
                 {
-                    if ( mnPngDepth == 8 )  // maybe the source is a 16 bit grayscale
+                    if ( mnPngDepth == 8 )	// maybe the source is a 16 bit grayscale
                     {
                         if( nXAdd == 1 && mnPreviewShift == 0 )  // copy raw line data if possible
                         {

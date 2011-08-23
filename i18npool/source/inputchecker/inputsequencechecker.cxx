@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
         lookupTable.clear();
 }
 
-sal_Bool SAL_CALL
+sal_Bool SAL_CALL 
 InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(RuntimeException)
 {
@@ -74,7 +74,7 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
             return sal_True; // not a checkable languages.
 }
 
-sal_Int32 SAL_CALL
+sal_Int32 SAL_CALL 
 InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(RuntimeException)
 {
@@ -102,7 +102,7 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
 {
     sal_Int16 type = unicode::getUnicodeScriptType( cChar, typeList, UnicodeScript_kScriptCount );
 
-    if (type != UnicodeScript_kScriptCount &&
+    if (type != UnicodeScript_kScriptCount && 
             type == unicode::getUnicodeScriptType( nChar, typeList, UnicodeScript_kScriptCount )) {
         switch(type) {
             case UnicodeScript_kThai:           return (sal_Char*)"th";
@@ -128,7 +128,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
             }
 
             Reference < uno::XInterface > xI = xMSF->createInstance(
-                        OUString::createFromAscii("com.sun.star.i18n.InputSequenceChecker_") +
+                        OUString::createFromAscii("com.sun.star.i18n.InputSequenceChecker_") + 
                         OUString::createFromAscii(rLanguage));
 
             if ( xI.is() ) {

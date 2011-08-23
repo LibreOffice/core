@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ class XMLIndexTemplateContext;
  */
 class XMLIndexTabStopEntryContext : public XMLIndexSimpleEntryContext
 {
-    ::rtl::OUString sLeaderChar;    /// fill ("leader") character
-    sal_Int32 nTabPosition;         /// tab position
-    sal_Bool bTabPositionOK;        /// is tab right aligned?
-    sal_Bool bTabRightAligned;      /// is nTabPosition valid?
-    sal_Bool bLeaderCharOK;         /// is sLeaderChar valid?
+    ::rtl::OUString sLeaderChar;	/// fill ("leader") character
+    sal_Int32 nTabPosition;			/// tab position
+    sal_Bool bTabPositionOK;		/// is tab right aligned?
+    sal_Bool bTabRightAligned;		/// is nTabPosition valid?
+    sal_Bool bLeaderCharOK;			/// is sLeaderChar valid?
     sal_Bool bWithTab;              /// is tab char present? #i21237#
 
 public:
@@ -57,7 +57,7 @@ public:
     TYPEINFO();
 
     XMLIndexTabStopEntryContext(
-        SvXMLImport& rImport,
+        SvXMLImport& rImport, 
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
@@ -67,7 +67,7 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     /** fill property values for this template entry */

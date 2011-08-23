@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,20 +66,20 @@ private:
 private:
     FixedLine   m_aFL_Direction;
 
-    RadioButton m_aRB_To_Simplified;
-    RadioButton m_aRB_To_Traditional;
+    RadioButton	m_aRB_To_Simplified;
+    RadioButton	m_aRB_To_Traditional;
     CheckBox    m_aCB_Use_Variants;
 
     FixedLine   m_aFL_Commonterms;
 
     CheckBox    m_aCB_Translate_Commonterms;
-    PushButton  m_aPB_Editterms;
+    PushButton	m_aPB_Editterms;
 
     FixedLine   m_aFL_Bottomline;
 
-    OKButton        m_aBP_OK;
+    OKButton	    m_aBP_OK;
     CancelButton    m_aBP_Cancel;
-    HelpButton      m_aBP_Help;
+    HelpButton		m_aBP_Help;
 
     ChineseDictionaryDialog* m_pDictionaryDialog;
 };

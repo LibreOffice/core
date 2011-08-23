@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ namespace sd {
 
 class DrawViewShell;
 
-class TabControl
-    : public TabBar,
-      public DragSourceHelper,
-      public DropTargetHelper
+class TabControl 
+    : public TabBar, 
+      public DragSourceHelper, 
+      public DropTargetHelper 
 {
 public:
     TabControl (DrawViewShell* pDrViewSh, ::Window* pParent);
@@ -63,29 +63,29 @@ public:
     void SendDeactivatePageEvent (void);
 
 protected:
-    DrawViewShell*  pDrViewSh;
-    BOOL                bInternalMove;
+    DrawViewShell*	pDrViewSh;
+    BOOL				bInternalMove;
 
     // TabBar
-    virtual void        Select();
-    virtual void        DoubleClick();
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void		Select();
+    virtual void		DoubleClick();
+    virtual void		MouseButtonDown(const MouseEvent& rMEvt);
+                        
+    virtual void		Command(const CommandEvent& rCEvt);
 
-    virtual void        Command(const CommandEvent& rCEvt);
-
-    virtual long        StartRenaming();
-    virtual long        AllowRenaming();
-    virtual void        EndRenaming();
-
-    virtual void        ActivatePage();
-    virtual long        DeactivatePage();
+    virtual long		StartRenaming();
+    virtual long		AllowRenaming();
+    virtual void		EndRenaming();
+                        
+    virtual void		ActivatePage();
+    virtual long		DeactivatePage();
 
     // DragSourceHelper
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void		StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
 
                         DECL_LINK(DeactivatePageHdl, void*);
 
@@ -98,19 +98,19 @@ private:
             mrParent( rParent ) {}
     private:
 
-        TabControl&     mrParent;
+        TabControl&		mrParent;
 
-        virtual             ~TabControlTransferable();
-
-        virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void        DragFinished( sal_Int8 nDropAction );
-
+        virtual				~TabControlTransferable();
+        
+        virtual void		AddSupportedFormats();
+        virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void		DragFinished( sal_Int8 nDropAction );
+        
     };
 
     friend class TabControl::TabControlTransferable;
 
-    void                DragFinished( sal_Int8 nDropAction );
+    void				DragFinished( sal_Int8 nDropAction );
 
 };
 

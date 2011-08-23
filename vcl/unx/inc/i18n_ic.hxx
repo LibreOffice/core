@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@ class SalI18N_InputContext
 
 private:
 
-    Bool    mbUseable; // system supports current locale ?
-    Bool    mbMultiLingual; // system supports iiimp ?
-    XIC     maContext;
+    Bool    mbUseable; // system supports current locale ?  
+    Bool    mbMultiLingual; // system supports iiimp ?  
+    XIC		maContext;
 
     XIMStyle mnSupportedStatusStyle;
     XIMStyle mnSupportedPreeditStyle;
@@ -57,17 +57,17 @@ private:
     XVaNestedList mpAttributes;
     XVaNestedList mpStatusAttributes;
     XVaNestedList mpPreeditAttributes;
-
-    Bool         SupportInputMethodStyle( XIMStyles *pIMStyles );
+        
+    Bool 		 SupportInputMethodStyle( XIMStyles *pIMStyles );
     unsigned int GetWeightingOfIMStyle(   XIMStyle n_style ) const ;
-    Bool         IsSupportedIMStyle(      XIMStyle n_style ) const ;
+    Bool 		 IsSupportedIMStyle(      XIMStyle n_style ) const ;
 
 public:
 
-    Bool UseContext()       { return mbUseable; }
-    Bool IsMultiLingual()   { return mbMultiLingual; }
-    Bool IsPreeditMode()    { return maClientData.eState == ePreeditStatusActive; }
-    XIC  GetContext()       { return maContext; }
+    Bool UseContext() 		{ return mbUseable; }
+    Bool IsMultiLingual() 	{ return mbMultiLingual; }
+    Bool IsPreeditMode()	{ return maClientData.eState == ePreeditStatusActive; }
+    XIC  GetContext() 		{ return maContext; }
 
     void ExtendEventMask(  XLIB_Window aFocusWindow );
     void SetICFocus( SalFrame* pFocusFrame );
@@ -75,7 +75,7 @@ public:
     void HandleDestroyIM();
 
     int  HandleKeyEvent( XKeyEvent *pEvent, SalFrame *pFrame ); // unused
-    void EndExtTextInput( USHORT nFlags );                      // unused
+    void EndExtTextInput( USHORT nFlags );						// unused
     int  CommitStringCallback( sal_Unicode* pText, sal_Size nLength );
     int  CommitKeyEvent( sal_Unicode* pText, sal_Size nLength );
     int  UpdateSpotLocation();

@@ -7,7 +7,7 @@ class VbaPalette
         css::uno::Reference< css::container::XIndexAccess > mxPalette;
 public:
         VbaPalette();
-        // if no palette available e.g. because the document doesn't have a
+        // if no palette available e.g. because the document doesn't have a 
         // palette defined then a default palette will be returned.
         css::uno::Reference< css::container::XIndexAccess > getPalette() const;
 };

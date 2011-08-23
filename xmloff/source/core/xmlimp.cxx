@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,11 +134,11 @@ class SvXMLImportEventListener : public cppu::WeakImplHelper1<
                             com::sun::star::lang::XEventListener >
 {
 private:
-    SvXMLImport*    pImport;
+    SvXMLImport*	pImport;
 
 public:
                             SvXMLImportEventListener(SvXMLImport* pImport);
-    virtual                 ~SvXMLImportEventListener();
+    virtual					~SvXMLImportEventListener();
 
                             // XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException);
@@ -221,7 +221,7 @@ public:
             DestroyFontToSubsFontConverter( hMathFontConv );
     }
 
-    ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
+    ::comphelper::UnoInterfaceToUniqueIdentifierMapper	maInterfaceToIdentifierMapper;
 };
 
 typedef SvXMLImportContext *SvXMLImportContextPtr;
@@ -336,7 +336,7 @@ void SvXMLImport::_InitCtor()
         mxModel->addEventListener(mxEventListener);
     }
 
-    ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
+    ::comphelper::UnoInterfaceToUniqueIdentifierMapper	maInterfaceToIdentifierMapper;
 
 }
 
@@ -344,7 +344,7 @@ void SvXMLImport::_InitCtor()
 SvXMLImport::SvXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     sal_uInt16 nImportFlags ) throw ()
-:   mpImpl( new SvXMLImport_Impl() ),
+:	mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
     // #110680#
@@ -373,7 +373,7 @@ SvXMLImport::SvXMLImport(
 SvXMLImport::SvXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XModel > & rModel ) throw ()
-:   mxModel( rModel ),
+:	mxModel( rModel ),
     mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
@@ -403,7 +403,7 @@ SvXMLImport::SvXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XModel > & rModel,
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rGraphicObjects ) throw ()
-:   mxModel( rModel ),
+:	mxModel( rModel ),
     mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     mxGraphicResolver( rGraphicObjects ),
     mpImpl( new SvXMLImport_Impl() ),
@@ -447,13 +447,13 @@ SvXMLImport::~SvXMLImport() throw ()
         delete mpContexts;
     }
 
-    //  delete pImageMapImportHelper;
+    //	delete pImageMapImportHelper;
 
-    //  #i9518# the import component might not be deleted until after the document has been closed,
-    //  so the stuff that accesses the document has been moved to endDocument.
+    //	#i9518# the import component might not be deleted until after the document has been closed,
+    //	so the stuff that accesses the document has been moved to endDocument.
 
-    //  pNumImport is allocated in the ctor, so it must also be deleted here in case the component
-    //  is created and deleted without actually importing.
+    //	pNumImport is allocated in the ctor, so it must also be deleted here in case the component
+    //	is created and deleted without actually importing.
     delete mpNumImport;
     delete mpProgressBarHelper;
 
@@ -516,7 +516,7 @@ void SAL_CALL SvXMLImport::startDocument( void )
 
     if( !mxGraphicResolver.is() || !mxEmbeddedResolver.is() )
     {
-        Reference< lang::XMultiServiceFactory > xFactory( mxModel,  UNO_QUERY );
+        Reference< lang::XMultiServiceFactory > xFactory( mxModel,	UNO_QUERY );
         if( xFactory.is() )
         {
             try
@@ -553,8 +553,8 @@ void SAL_CALL SvXMLImport::endDocument( void )
 {
     RTL_LOGFILE_TRACE_AUTHOR( "xmloff", LOGFILE_AUTHOR, "} SvXMLImport::startDocument" );
 
-    //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,
-    //  because the SvXMLImport dtor might not be called until after the document has been closed.
+    //	#i9518# All the stuff that accesses the document has to be done here, not in the dtor,
+    //	because the SvXMLImport dtor might not be called until after the document has been closed.
 
     if (mpImpl->mpRDFaHelper.get())
     {
@@ -620,8 +620,8 @@ void SAL_CALL SvXMLImport::endDocument( void )
     if ( mxFormImport.is() )
         mxFormImport->documentDone();
 
-    //  The shape import helper does the z-order sorting in the dtor,
-    //  so it must be deleted here, too.
+    //	The shape import helper does the z-order sorting in the dtor,
+    //	so it must be deleted here, too.
     mxShapeImport = NULL;
 
     if( mpImpl->mbOwnGraphicResolver )
@@ -671,7 +671,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
                         ::rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM( "Inconsistent ODF versions in content.xml and manifest.xml!" ) ),
                         uno::Reference< uno::XInterface >(),
-                        uno::makeAny(
+                        uno::makeAny( 
                             packages::zip::ZipIOException(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                     "Inconsistent ODF versions in content.xml and manifest.xml!" ) ),
@@ -1267,7 +1267,7 @@ sal_Bool SvXMLImport::IsPackageURL( const ::rtl::OUString& rURL ) const
     {
         if( !bLoadOnDemand && mxGraphicResolver.is() )
         {
-            ::rtl::OUString     aTmp( msPackageProtocol );
+            ::rtl::OUString		aTmp( msPackageProtocol );
             aTmp += rURL;
             sRet = mxGraphicResolver->resolveGraphicObjectURL( aTmp );
         }
@@ -1425,7 +1425,7 @@ void SvXMLImport::SetDocumentSpecificSettings(const ::rtl::OUString& _rSettingsG
     (void)_rSettings;
 }
 
-ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
+ProgressBarHelper*	SvXMLImport::GetProgressBarHelper()
 {
     if (!mpProgressBarHelper)
     {
@@ -1649,7 +1649,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
                 sal_Bool bRepairPackage = sal_False;
                 try
                 {
-                    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) ) )
+                    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) ) ) 
                         >>= bRepairPackage;
                 } catch ( uno::Exception& )
                 {}
@@ -1670,13 +1670,13 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
                     else
                         xStorProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ),
                                                       uno::makeAny( aODFVersion ) );
-
+                    
                     if ( bResult )
                     {
                         sal_Bool bInconsistent = sal_False;
                         xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsInconsistent" ) ) )
                             >>= bInconsistent;
-                        bResult = !bInconsistent;
+                        bResult = !bInconsistent; 
                     }
                 }
             }

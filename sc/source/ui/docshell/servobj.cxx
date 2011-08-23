@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "impex.hxx"
 #include "brdcst.hxx"
 #include "rangenam.hxx"
-#include "sc.hrc"               // SC_HINT_AREAS_CHANGED
+#include "sc.hrc"				// SC_HINT_AREAS_CHANGED
 
 // -----------------------------------------------------------------------
 
@@ -84,15 +84,15 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     pDocSh( pShell ),
     bRefreshListener( FALSE )
 {
-    //  parse item string
+    //	parse item string
 
     if ( lcl_FillRangeFromName( aRange, pDocSh, rItem ) )
     {
-        aItemStr = rItem;               // must be parsed again on ref update
+        aItemStr = rItem;				// must be parsed again on ref update
     }
     else
     {
-        //  parse ref
+        //	parse ref
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = pDocSh->GetCurTab();
         aRange.aStart.SetTab( nTab );
@@ -115,8 +115,8 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     pDocSh->GetDocument()->GetLinkManager()->InsertServer( this );
     pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
 
-    StartListening(*pDocSh);        // um mitzubekommen, wenn die DocShell geloescht wird
-    StartListening(*SFX_APP());     // for SC_HINT_AREAS_CHANGED
+    StartListening(*pDocSh);		// um mitzubekommen, wenn die DocShell geloescht wird
+    StartListening(*SFX_APP());		// for SC_HINT_AREAS_CHANGED
 }
 
 __EXPORT ScServerObject::~ScServerObject()
@@ -164,7 +164,7 @@ BOOL __EXPORT ScServerObject::GetData(
 
     if ( bRefreshListener )
     {
-        //  refresh the listeners now (this is called from a timer)
+        //	refresh the listeners now (this is called from a timer)
 
         EndListeningAll();
         pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
@@ -212,15 +212,15 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 {
     BOOL bDataChanged = FALSE;
 
-    //  DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
+    //	DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
     if ( &rBC == pDocSh )
     {
-        //  from DocShell, only SFX_HINT_DYING is interesting
+        //	from DocShell, only SFX_HINT_DYING is interesting
         if ( rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
         {
             pDocSh = NULL;
             EndListening(*SFX_APP());
-            //  don't access DocShell anymore for EndListening etc.
+            //	don't access DocShell anymore for EndListening etc.
         }
     }
     else if (rBC.ISA(SfxApplication))
@@ -228,7 +228,7 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         if ( aItemStr.Len() && rHint.ISA(SfxSimpleHint) &&
                 ((const SfxSimpleHint&)rHint).GetId() == SC_HINT_AREAS_CHANGED )
         {
-            //  check if named range was modified
+            //	check if named range was modified
             ScRange aNew;
             if ( lcl_FillRangeFromName( aNew, pDocSh, aItemStr ) && aNew != aRange )
                 bDataChanged = TRUE;
@@ -236,12 +236,12 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     }
     else
     {
-        //  must be from Area broadcasters
+        //	must be from Area broadcasters
 
         const ScHint* pScHint = PTR_CAST( ScHint, &rHint );
         if( pScHint && (pScHint->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)) )
             bDataChanged = TRUE;
-        else if (rHint.ISA(ScAreaChangedHint))      // position of broadcaster changed
+        else if (rHint.ISA(ScAreaChangedHint))		// position of broadcaster changed
         {
             ScRange aNewRange = ((const ScAreaChangedHint&)rHint).GetRange();
             if ( aRange != aNewRange )
@@ -255,8 +255,8 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
             if (nId == SFX_HINT_DYING)
             {
-                //  If the range is being deleted, listening must be restarted
-                //  after the deletion is complete (done in GetData)
+                //	If the range is being deleted, listening must be restarted
+                //	after the deletion is complete (done in GetData)
                 bRefreshListener = TRUE;
                 bDataChanged = TRUE;
             }

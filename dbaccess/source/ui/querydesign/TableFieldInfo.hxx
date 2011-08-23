@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,17 @@ namespace dbaui
     class OTableFieldInfo
     {
     private:
-        ETableFieldType m_eFieldType;
-        sal_Int32       m_eDataType;
+        ETableFieldType	m_eFieldType;
+        sal_Int32		m_eDataType;
 
     public:
         OTableFieldInfo();
         ~OTableFieldInfo();
 
-        inline ETableFieldType  GetKeyType() const { return m_eFieldType; }
-        inline void             SetKey(ETableFieldType bKey=TAB_NORMAL_FIELD) { m_eFieldType = bKey; }
-        inline sal_Int32        GetDataType() const { return m_eDataType; }
-        inline void             SetDataType(sal_Int32 eTyp) { m_eDataType = eTyp; }
+        inline ETableFieldType	GetKeyType() const { return m_eFieldType; }
+        inline void				SetKey(ETableFieldType bKey=TAB_NORMAL_FIELD) { m_eFieldType = bKey; }
+        inline sal_Int32		GetDataType() const { return m_eDataType; }
+        inline void				SetDataType(sal_Int32 eTyp) { m_eDataType = eTyp; }
     };
 }
 #endif // DBAUI_TABLEFIELDINFO_HXX

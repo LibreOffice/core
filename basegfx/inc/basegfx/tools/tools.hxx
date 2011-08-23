@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace basegfx
             This function clips a line given by two points against the
             given rectangle. The resulting line is returned in the
             given points.
-
+            
             @param io_rStart
             Start point of the line. On return, contains the clipped
             start point.
@@ -57,9 +57,9 @@ namespace basegfx
             @return true, when at least part of the line is visible
             after the clip, false otherwise
          */
-        bool liangBarskyClip2D( ::basegfx::B2DPoint&        io_rStart,
-                                ::basegfx::B2DPoint&        io_rEnd,
-                                const ::basegfx::B2DRange&  rClipRect );
+        bool liangBarskyClip2D( ::basegfx::B2DPoint& 		io_rStart, 
+                                ::basegfx::B2DPoint& 		io_rEnd,
+                                const ::basegfx::B2DRange&	rClipRect );
 
         /** Expand given parallelogram, such that it extends beyond
             bound rect in a given direction.
@@ -119,11 +119,11 @@ namespace basegfx
             @param rFitTarget
             The rectangle to fit the parallelogram into.
          */
-        void infiniteLineFromParallelogram( ::basegfx::B2DPoint&        io_rLeftTop,
-                                            ::basegfx::B2DPoint&        io_rLeftBottom,
-                                            ::basegfx::B2DPoint&        io_rRightTop,
-                                            ::basegfx::B2DPoint&        io_rRightBottom,
-                                            const ::basegfx::B2DRange&  rFitTarget  );
+        void infiniteLineFromParallelogram( ::basegfx::B2DPoint& 		io_rLeftTop,
+                                            ::basegfx::B2DPoint& 		io_rLeftBottom,
+                                            ::basegfx::B2DPoint& 		io_rRightTop,
+                                            ::basegfx::B2DPoint& 		io_rRightBottom,
+                                            const ::basegfx::B2DRange&	rFitTarget	);
 
     }
 }

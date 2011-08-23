@@ -17,7 +17,7 @@
 
 
 
-class CLibxml2XFormsExtension : public cppu::WeakImplHelper2<
+class CLibxml2XFormsExtension : public cppu::WeakImplHelper2< 
     com::sun::star::xml::xpath::XXPathExtension, com::sun::star::lang::XInitialization>
 {
 private:

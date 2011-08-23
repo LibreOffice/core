@@ -96,7 +96,7 @@ void PageBordersHandler::sprm( Sprm& rSprm )
                     break;
                     default:;
                 }
-
+                
                 _PgBorder aPgBorder;
                 aPgBorder.m_rLine = pBorderHandler->getBorderLine( );
                 aPgBorder.m_nDistance = pBorderHandler->getLineDistance( );

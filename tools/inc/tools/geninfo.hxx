@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,18 +43,18 @@ class GenericInformationList;
 Purpose: holds generic informations and subinformations in a simple format
 ******************************************************************************/
 
-class TOOLS_DLLPUBLIC GenericInformation : public ByteString    // the key is stored in base class
+class TOOLS_DLLPUBLIC GenericInformation : public ByteString	// the key is stored in base class
 {
-friend class GenericInformationList;    // can be child or/and parent
+friend class GenericInformationList;	// can be child or/and parent
 private:
-    ByteString sValue;                  // holds value of data
+    ByteString sValue;					// holds value of data
     ByteString sComment;
 
-    GenericInformationList *pInfoList;  // holds subinformations
-    GenericInformationList *pParent;    // holds a pointer to parent list
+    GenericInformationList *pInfoList;	// holds subinformations
+    GenericInformationList *pParent;	// holds a pointer to parent list
 
     // methods
-    void ListDeleted() { pParent = NULL; }  // allowed to be accessed
+    void ListDeleted() { pParent = NULL; }	// allowed to be accessed
                                                 // from friend class
                                                 // GenericInformationList
 
@@ -193,7 +193,7 @@ DECLARE_LIST( GenericInformationList_Impl, GenericInformation * )
 class TOOLS_DLLPUBLIC GenericInformationList : public GenericInformationList_Impl
 {
 private:
-    GenericInformation *pOwner;         // holds parent of this list
+    GenericInformation *pOwner;			// holds parent of this list
 
 protected:
     // methods

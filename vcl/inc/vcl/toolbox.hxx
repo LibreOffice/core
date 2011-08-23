@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,8 +169,8 @@ class VCL_DLLPUBLIC ToolBox : public DockingWindow
     friend class ImplTBDragMgr;
 
 private:
-    ImplToolBoxPrivateData*     mpData;
-    VirtualDevice*              mpBtnDev; // TODO: remove unused member
+    ImplToolBoxPrivateData*		mpData;
+    VirtualDevice*      		mpBtnDev; // TODO: remove unused member
     ImplToolSizeArray*  mpFloatSizeAry;
     XubString           maCvtStr;
     XubString           maNextToolBoxStr;
@@ -198,7 +198,7 @@ private:
     long                mnLastResizeDY;
     long                mnActivateCount;
     USHORT              mnLastFocusItemId;
-    USHORT              mnFocusPos;
+    USHORT				mnFocusPos;
     USHORT              mnOutStyle;
     USHORT              mnHighItemId;
     USHORT              mnCurItemId;
@@ -271,8 +271,8 @@ private:
     SAL_DLLPRIVATE const XubString& ImplConvertMenuString( const XubString& rStr );
     SAL_DLLPRIVATE BOOL            ImplHandleMouseMove( const MouseEvent& rMEvt, BOOL bRepeat = FALSE );
     SAL_DLLPRIVATE BOOL            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, BOOL bCancel = FALSE );
-    SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus = FALSE );
-    SAL_DLLPRIVATE BOOL            ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle = FALSE );
+    SAL_DLLPRIVATE void			   ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus = FALSE );
+    SAL_DLLPRIVATE BOOL			   ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle = FALSE );
     SAL_DLLPRIVATE USHORT          ImplGetItemLine( ImplToolItem* pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( USHORT nLine );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetLastValidItem( USHORT nLine );
@@ -280,8 +280,8 @@ private:
     SAL_DLLPRIVATE BOOL            ImplActivateItem( KeyCode aKeyCode );
     SAL_DLLPRIVATE void            ImplShowFocus();
     SAL_DLLPRIVATE void            ImplHideFocus();
-    SAL_DLLPRIVATE void            ImplUpdateInputEnable();
-    SAL_DLLPRIVATE void            ImplFillLayoutData() const;
+    SAL_DLLPRIVATE void			   ImplUpdateInputEnable();
+    SAL_DLLPRIVATE void			   ImplFillLayoutData() const;
     SAL_DLLPRIVATE void            ImplUpdateCustomMenu();
     SAL_DLLPRIVATE BOOL            ImplHasClippedItems();
     SAL_DLLPRIVATE Point           ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const;
@@ -413,7 +413,7 @@ public:
     void                RecalcItems();
 
     const ImageList&    GetImageList() const { return maImageList; }
-    void                SetImageList( const ImageList& rImageList );
+    void				SetImageList( const ImageList& rImageList );
 
     void                SetButtonType( ButtonType eNewType = BUTTON_SYMBOL );
     ButtonType          GetButtonType() const { return meButtonType; }
@@ -458,7 +458,7 @@ public:
     USHORT              GetDownItemId() const { return mnDownItemId; }
     USHORT              GetClicks() const { return mnMouseClicks; }
     USHORT              GetModifier() const { return mnMouseModifier; }
-    USHORT              GetKeyModifier() const { return mnKeyModifier; }
+    USHORT				GetKeyModifier() const { return mnKeyModifier; }
 
     void                SetItemBits( USHORT nItemId, ToolBoxItemBits nBits );
     ToolBoxItemBits     GetItemBits( USHORT nItemId ) const;
@@ -467,10 +467,10 @@ public:
     void*               GetItemData( USHORT nItemId ) const;
     void                SetItemImage( USHORT nItemId, const Image& rImage );
     Image               GetItemImage( USHORT nItemId ) const;
-    void                SetItemImageAngle( USHORT nItemId, long nAngle10 );
-    long                GetItemImageAngle( USHORT nItemId ) const;
-    void                SetItemImageMirrorMode( USHORT nItemId, BOOL bMirror );
-    BOOL                GetItemImageMirrorMode( USHORT ) const;
+    void				SetItemImageAngle( USHORT nItemId, long nAngle10 );
+    long				GetItemImageAngle( USHORT nItemId ) const;
+    void				SetItemImageMirrorMode( USHORT nItemId, BOOL bMirror );
+    BOOL				GetItemImageMirrorMode( USHORT ) const;
     void                SetItemHighImage( USHORT nItemId, const Image& rImage );
     Image               GetItemHighImage( USHORT nItemId ) const;
     void                SetItemText( USHORT nItemId, const XubString& rText );

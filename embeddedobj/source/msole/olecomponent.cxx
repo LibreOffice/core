@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 #define     MAX_ENUM_ELE     20
-#define     FORMATS_NUM      3
+#define		FORMATS_NUM		 3
 
 // ============ class ComSmart =====================
 namespace {
@@ -565,7 +565,7 @@ void OleComponent::CreateNewIStorage_Impl()
 
     // write the stream to the temporary file
     ::rtl::OUString aTempURL;
-
+    
     OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
     if ( m_pUnoOleObject )
         aTempURL = m_pUnoOleObject->CreateTempURLEmpty_Impl();
@@ -774,7 +774,7 @@ void OleComponent::CreateObjectFromClipboard()
             hr = OleCreateFromData( pDO,
                                     IID_IUnknown,
                                     OLERENDER_DRAW, // OLERENDER_FORMAT
-                                    NULL,           // &aFormat,
+                                    NULL, 			// &aFormat,
                                     NULL,
                                     m_pNativeImpl->m_pIStorage,
                                     (void**)&m_pNativeImpl->m_pObj );
@@ -813,7 +813,7 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
     HRESULT hr = OleCreate( aClsID,
                             IID_IUnknown,
                             OLERENDER_DRAW, // OLERENDER_FORMAT
-                            NULL,           // &aFormat,
+                            NULL, 			// &aFormat,
                             NULL,
                             m_pNativeImpl->m_pIStorage,
                             (void**)&m_pNativeImpl->m_pObj );
@@ -832,8 +832,8 @@ void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTr
 // Static objects are not supported, they should be inserted as graphics
 {
     // TODO: May be this call is useless since there are no static objects
-    //       and nonstatic objects will be created based on OLEstorage ( stream ).
-    //       ???
+    //		 and nonstatic objects will be created based on OLEstorage ( stream ).
+    //		 ???
 
     // OleQueryCreateFromData...
 }
@@ -1060,7 +1060,7 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
         {
             OLEVERB     szEle[ MAX_ENUM_ELE ];
             ULONG       nNum = 0;
-            sal_Int32   nSeqSize = 0;
+            sal_Int32	nSeqSize = 0;
 
             do
             {
@@ -1196,7 +1196,7 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
                             // do nothing
                             break;
                     }
-
+                    
                     sal_Int64 nX = ( (sal_Int64)abs( pMF->xExt ) ) * nMult / nDiv;
                     sal_Int64 nY = ( (sal_Int64)abs( pMF->yExt ) ) * nMult / nDiv;
                     if (  nX < SAL_MAX_INT32 && nY < SAL_MAX_INT32 )
@@ -1234,9 +1234,9 @@ awt::Size OleComponent::GetCachedExtent( sal_Int64 nAspect )
         // TODO/LATER: is it correct?
         // if there is no appropriate cache for the aspect, OLE_E_BLANK error code is returned
         // if ( hr == OLE_E_BLANK )
-        //  throw lang::IllegalArgumentException();
+        //	throw lang::IllegalArgumentException();
         //else
-        //  throw io::IOException(); // TODO
+        //	throw io::IOException(); // TODO
 
         throw lang::IllegalArgumentException();
     }
@@ -1417,7 +1417,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 
     if ( xLockObject.is() )
     {
-        uno::Reference < awt::XRequestCallback > xRequestCallback(
+        uno::Reference < awt::XRequestCallback > xRequestCallback( 
             m_xFactory->createInstance(
              ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ),
              uno::UNO_QUERY );
@@ -1438,7 +1438,7 @@ void OleComponent::OnClose_Impl()
 
     if ( xLockObject.is() )
     {
-        uno::Reference < awt::XRequestCallback > xRequestCallback(
+        uno::Reference < awt::XRequestCallback > xRequestCallback( 
             m_xFactory->createInstance(
              ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ),
              uno::UNO_QUERY );
@@ -1564,10 +1564,10 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         // FORMATETC* pFormatEtc = m_pNativeImpl->GetSupportedFormatForAspect( nRequestedAspect );
         // if ( pFormatEtc )
         // {
-        //  STGMEDIUM aMedium;
-        //  hr = pDataObject->GetData( pFormatEtc, &aMedium );
-        //  if ( SUCCEEDED( hr ) )
-        //      bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );
+        // 	STGMEDIUM aMedium;
+        // 	hr = pDataObject->GetData( pFormatEtc, &aMedium );
+        // 	if ( SUCCEEDED( hr ) )
+        // 		bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );
         // }
         // else
         {
@@ -1591,12 +1591,12 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
                 }
             }
         }
-
+        
         // If the replacement could not be retrieved, the cached representaion should be used
         // currently it is not necessary to retrieve it here, so it is implemented in the object itself
     }
     // TODO: Investigate if there is already the format name
-    //       and whether this format is really required
+    // 		 and whether this format is really required
     else if ( aFlavor.DataType == getCppuType( ( const uno::Reference< io::XInputStream >* ) 0 )
             && aFlavor.MimeType.equalsAscii( "application/x-openoffice-contentstream" ) )
     {

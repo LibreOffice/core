@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@
 #include <connectivity/dbexception.hxx>
 #endif
 
-#define FILEDIALOG_DEF_IMAGEBORDER  10
+#define FILEDIALOG_DEF_IMAGEBORDER	10
 //.........................................................................
 namespace dbaui
 {
@@ -134,17 +134,17 @@ OCollectionView::OCollectionView( Window * pParent
                                  ,const ::rtl::OUString& _sDefaultName
                                  ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
     : ModalDialog( pParent, ModuleRes(DLG_COLLECTION_VIEW))
-    , m_aFTCurrentPath( this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
-    , m_aNewFolder(     this, ModuleRes( BTN_EXPLORERFILE_NEWFOLDER ) )
-    , m_aUp(            this, ModuleRes( BTN_EXPLORERFILE_UP ) )
-    , m_aView(          this, ModuleRes( CTRL_VIEW ) ,FILEVIEW_SHOW_TITLE )
-    , m_aFTName(        this, ModuleRes( FT_EXPLORERFILE_FILENAME ) )
-    , m_aName(          this, ModuleRes( ED_EXPLORERFILE_FILENAME ) )
-    , m_aFL(            this, ModuleRes( FL_1 ) )
-    , m_aPB_OK(         this, ModuleRes( BTN_EXPLORERFILE_SAVE ) )
-    , m_aPB_CANCEL(     this, ModuleRes( PB_CANCEL ) )
-    , m_aPB_HELP(       this, ModuleRes( PB_HELP ) )
-    , m_sPath(          ModuleRes( STR_PATHNAME ) )
+    , m_aFTCurrentPath(	this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
+    , m_aNewFolder(		this, ModuleRes( BTN_EXPLORERFILE_NEWFOLDER ) )
+    , m_aUp(			this, ModuleRes( BTN_EXPLORERFILE_UP ) )
+    , m_aView(			this, ModuleRes( CTRL_VIEW ) ,FILEVIEW_SHOW_TITLE )
+    , m_aFTName(		this, ModuleRes( FT_EXPLORERFILE_FILENAME ) )
+    , m_aName(			this, ModuleRes( ED_EXPLORERFILE_FILENAME ) )
+    , m_aFL(			this, ModuleRes( FL_1 ) )
+    , m_aPB_OK(			this, ModuleRes( BTN_EXPLORERFILE_SAVE ) )
+    , m_aPB_CANCEL(		this, ModuleRes( PB_CANCEL ) )
+    , m_aPB_HELP(		this, ModuleRes( PB_HELP ) )
+    , m_sPath(			ModuleRes( STR_PATHNAME ) )
     , m_xContent(_xContent)
     , m_xORB(_xORB)
     , m_bCreateForm(sal_True)
@@ -391,7 +391,7 @@ void OCollectionView::initCurrentPath()
 }
 // -----------------------------------------------------------------------------
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 

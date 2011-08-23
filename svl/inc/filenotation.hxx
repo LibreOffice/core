@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ namespace svt
     class SVL_DLLPUBLIC OFileNotation
     {
     protected:
-        ::rtl::OUString     m_sSystem;
-        ::rtl::OUString     m_sFileURL;
+        ::rtl::OUString		m_sSystem;
+        ::rtl::OUString		m_sFileURL;
 
     public:
         enum NOTATION
@@ -58,13 +58,13 @@ namespace svt
         ::rtl::OUString get(NOTATION _eOutputNotation);
 
     private:
-        SVL_DLLPRIVATE void construct( const ::rtl::OUString& _rUrlOrPath );
+        SVL_DLLPRIVATE void	construct( const ::rtl::OUString& _rUrlOrPath );
         SVL_DLLPRIVATE bool    implInitWithSystemNotation( const ::rtl::OUString& _rSystemPath );
         SVL_DLLPRIVATE bool    implInitWithURLNotation( const ::rtl::OUString& _rURL );
     };
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 #endif // SVTOOLS_FILENOTATION_HXX

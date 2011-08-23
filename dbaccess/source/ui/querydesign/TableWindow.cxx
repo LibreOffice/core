@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,12 +86,12 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-#define TABWIN_SIZING_AREA      4
-#define LISTBOX_SCROLLING_AREA  6
-#define SCROLLING_TIMESPAN      500
+#define TABWIN_SIZING_AREA		4
+#define LISTBOX_SCROLLING_AREA	6
+#define SCROLLING_TIMESPAN		500
 
-#define TABWIN_WIDTH_MIN    90
-#define TABWIN_HEIGHT_MIN   80
+#define TABWIN_WIDTH_MIN	90
+#define TABWIN_HEIGHT_MIN	80
 
 //========================================================================
 // class OTableWindow
@@ -143,7 +143,7 @@ OTableWindow::~OTableWindow()
     } // if (m_pListBox)
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
-
+    
     m_pAccessible = NULL;
 }
 // -----------------------------------------------------------------------------
@@ -418,7 +418,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
 // -----------------------------------------------------------------------------
 void OTableWindow::setSizingFlag(const Point& _rPos)
 {
-    Size    aOutSize = GetOutputSizePixel();
+    Size	aOutSize = GetOutputSizePixel();
     //////////////////////////////////////////////////////////////////////
     // Flags anpassen, wenn Mauszeiger in sizingArea
     m_nSizingFlags = SIZING_NONE;
@@ -444,9 +444,9 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
     if (pCont->getDesignView()->getController().isReadOnly())
         return;
 
-    Point   aPos = rEvt.GetPosPixel();
+    Point	aPos = rEvt.GetPosPixel();
     setSizingFlag(aPos);
-    Pointer aPointer;
+    Pointer	aPointer;
 
 
     //////////////////////////////////////////////////////////////////////
@@ -496,7 +496,7 @@ void OTableWindow::Resize()
 {
     //////////////////////////////////////////////////////////////////////
     // Das Fenster darf nicht verschwinden, deshalb min. Groesse setzen
-    Size    aOutSize = GetOutputSizePixel();
+    Size	aOutSize = GetOutputSizePixel();
     aOutSize = Size(CalcZoom(aOutSize.Width()),CalcZoom(aOutSize.Height()));
 
     long nTitleHeight = CalcZoom( GetTextHeight() )+ CalcZoom( 4 );
@@ -676,7 +676,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
             if ( getDesignView()->getController().isReadOnly() )
                 break;
 
-            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyEvent* pKeyEvent =	rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
             if ( rCode.IsMod1() )
             {
@@ -756,40 +756,40 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                             }
                             else
                             {
-                                m_nMoveCount        = 0; // reset our movement count
-                                m_nMoveIncrement    = 1;
+                                m_nMoveCount		= 0; // reset our movement count
+                                m_nMoveIncrement	= 1;
                             }
                         }
                         else
                         {
-                            m_nMoveCount        = 0; // reset our movement count
-                            m_nMoveIncrement    = 1;
+                            m_nMoveCount		= 0; // reset our movement count
+                            m_nMoveIncrement	= 1;
                         }
                     }
                     resetSizingFlag();
                 }
                 else
                 {
-                    m_nMoveCount        = 0; // reset our movement count
-                    m_nMoveIncrement    = 1;
+                    m_nMoveCount		= 0; // reset our movement count
+                    m_nMoveIncrement	= 1;
                 }
             }
             else
             {
-                m_nMoveCount        = 0; // reset our movement count
-                m_nMoveIncrement    = 1;
+                m_nMoveCount		= 0; // reset our movement count
+                m_nMoveIncrement	= 1;
             }
         }
             break;
         case EVENT_KEYUP:
         {
-            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyEvent* pKeyEvent =	rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
             USHORT nKeyCode = rCode.GetCode();
             if ( rCode.IsMod2() && nKeyCode != KEY_UP && nKeyCode != KEY_DOWN && nKeyCode != KEY_LEFT && nKeyCode != KEY_RIGHT )
             {
-                m_nMoveCount        = 0; // reset our movement count
-                m_nMoveIncrement    = 1;
+                m_nMoveCount		= 0; // reset our movement count
+                m_nMoveIncrement	= 1;
             }
         }
             break;

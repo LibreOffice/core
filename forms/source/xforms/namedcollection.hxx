@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ protected:
 public:
 
     // XElementAccess
-    virtual typename Collection<T>::Type_t SAL_CALL getElementType()
+    virtual typename Collection<T>::Type_t SAL_CALL getElementType() 
         throw( typename Collection<T>::RuntimeException_t )
     {
         return Collection<T>::getElementType();
@@ -115,14 +115,14 @@ public:
     virtual typename Collection<T>::Any_t SAL_CALL getByName(
         const rtl::OUString& aName )
         throw( typename Collection<T>::NoSuchElementException_t,
-               typename Collection<T>::WrappedTargetException_t,
+               typename Collection<T>::WrappedTargetException_t, 
                typename Collection<T>::RuntimeException_t )
     {
         if( hasItem( aName ) )
             return com::sun::star::uno::makeAny( getItem( aName ) );
         else
             throw typename Collection<T>::NoSuchElementException_t();
-
+                
     }
 
     virtual Names_t SAL_CALL getElementNames()

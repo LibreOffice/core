@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ class TestListener : public WeakImplHelper1< XVetoableChangeListener >
         {
 
         }
-
-    virtual void SAL_CALL vetoableChange( const ::com::sun::star::beans::PropertyChangeEvent& /*aEvent*/ )
+    
+    virtual void SAL_CALL vetoableChange( const ::com::sun::star::beans::PropertyChangeEvent& /*aEvent*/ ) 
        throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException)
         {
 
@@ -67,7 +67,7 @@ void test_interfacecontainer()
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
         Reference< XVetoableChangeListener > r3 = new TestListener();
-
+        
         helper.addInterface( r1 );
         helper.addInterface( r2 );
         helper.addInterface( r3 );
@@ -81,7 +81,7 @@ void test_interfacecontainer()
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
         Reference< XVetoableChangeListener > r3 = new TestListener();
-
+        
         helper.addInterface( r1 );
         helper.addInterface( r2 );
         helper.addInterface( r3 );
@@ -90,7 +90,7 @@ void test_interfacecontainer()
 
         while( iterator.hasMoreElements() )
             ((XVetoableChangeListener*)iterator.next())->vetoableChange( PropertyChangeEvent() );
-
+        
         helper.disposeAndClear( EventObject() );
     }
 
@@ -100,7 +100,7 @@ void test_interfacecontainer()
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
         Reference< XVetoableChangeListener > r3 = new TestListener();
-
+        
         helper.addInterface( r1 );
         helper.addInterface( r2 );
         helper.addInterface( r3 );
@@ -124,7 +124,7 @@ void test_interfacecontainer()
         Reference< XVetoableChangeListener > r1 = new TestListener();
         Reference< XVetoableChangeListener > r2 = new TestListener();
         Reference< XVetoableChangeListener > r3 = new TestListener();
-
+        
         helper.addInterface( r1 );
         helper.addInterface( r2 );
         helper.addInterface( r3 );
@@ -147,7 +147,7 @@ void test_interfacecontainer()
                 OSL_ASSERT( r != r1 && ( r == r2 || r == r3 ) );
             }
         }
-
+        
         helper.disposeAndClear( EventObject() );
     }
 }

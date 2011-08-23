@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace cairocanvas
         SpriteDeviceHelper();
 
         void init( Window&                   rOutputWindow,
-                   SpriteCanvas&             rSpriteCanvas,
+                   SpriteCanvas&			 rSpriteCanvas,
                    const ::basegfx::B2ISize& rSize,
                    bool                      bFullscreen );
 
@@ -62,7 +62,7 @@ namespace cairocanvas
 
         // XWindowGraphicDevice
         ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
+        void 		destroyBuffers(  );
         ::sal_Bool  showBuffer( bool, ::sal_Bool );
         ::sal_Bool  switchBuffer( bool, ::sal_Bool bUpdateAll );
 
@@ -71,7 +71,7 @@ namespace cairocanvas
         ::com::sun::star::uno::Any getSurfaceHandle() const;
 
         void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
-        void setSize( const ::basegfx::B2ISize& rSize );
+        void setSize( const ::basegfx::B2ISize&	rSize );
 
         ::cairo::SurfaceSharedPtr getSurface();
         ::cairo::SurfaceSharedPtr getBufferSurface();
@@ -83,7 +83,7 @@ namespace cairocanvas
 
     private:
         /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
-        SpriteCanvas*             mpSpriteCanvas;
+        SpriteCanvas*		      mpSpriteCanvas;
 
         ::cairo::SurfaceSharedPtr mpBufferSurface;
 

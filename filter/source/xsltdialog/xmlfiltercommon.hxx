@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,24 +55,24 @@ bool createDirectory( ::rtl::OUString& rURL );
 class filter_info_impl
 {
 public:
-    rtl::OUString   maFilterName;
-    rtl::OUString   maType;
-    rtl::OUString   maDocumentService;
-    rtl::OUString   maFilterService;
-    rtl::OUString   maInterfaceName;
-    rtl::OUString   maComment;
-    rtl::OUString   maExtension;
-    rtl::OUString   maDTD;
-    rtl::OUString   maExportXSLT;
-    rtl::OUString   maImportXSLT;
-    rtl::OUString   maImportTemplate;
-    rtl::OUString   maDocType;
-    rtl::OUString   maImportService;
-    rtl::OUString   maExportService;
+    rtl::OUString	maFilterName;
+    rtl::OUString	maType;
+    rtl::OUString	maDocumentService;
+    rtl::OUString	maFilterService;
+    rtl::OUString	maInterfaceName;
+    rtl::OUString	maComment;
+    rtl::OUString	maExtension;
+    rtl::OUString	maDTD;
+    rtl::OUString	maExportXSLT;
+    rtl::OUString	maImportXSLT;
+    rtl::OUString	maImportTemplate;
+    rtl::OUString	maDocType;
+    rtl::OUString	maImportService;
+    rtl::OUString	maExportService;
 
-    sal_Int32       maFlags;
-    sal_Int32       maFileFormatVersion;
-    sal_Int32       mnDocumentIconID;
+    sal_Int32		maFlags;
+    sal_Int32		maFileFormatVersion;
+    sal_Int32		mnDocumentIconID;
 
     sal_Bool        mbReadonly;
     filter_info_impl();
@@ -86,10 +86,10 @@ public:
 
 struct application_info_impl
 {
-    rtl::OUString   maDocumentService;
-    rtl::OUString   maDocumentUIName;
-    rtl::OUString   maXMLImporter;
-    rtl::OUString   maXMLExporter;
+    rtl::OUString	maDocumentService;
+    rtl::OUString	maDocumentUIName;
+    rtl::OUString	maXMLImporter;
+    rtl::OUString	maXMLExporter;
 
     application_info_impl( const sal_Char * pDocumentService, ResId& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter );
 };

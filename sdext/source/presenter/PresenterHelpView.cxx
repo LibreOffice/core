@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,7 +160,7 @@ PresenterHelpView::PresenterHelpView (
 
         mxWindow = mxPane->getWindow();
         ProvideCanvas();
-
+        
         mxWindow->addWindowListener(this);
         mxWindow->addPaintListener(this);
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY);
@@ -250,7 +250,7 @@ void SAL_CALL PresenterHelpView::disposing (const lang::EventObject& rEventObjec
 
 
 //----- XWindowListener -------------------------------------------------------
-
+    
 void SAL_CALL PresenterHelpView::windowResized (const awt::WindowEvent& rEvent)
     throw (uno::RuntimeException)
 {
@@ -331,7 +331,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
-
+    
     mxCanvas->drawLine(
         geometry::RealPoint2D(aWindowBox.Width/2, gnVerticalBorder),
         geometry::RealPoint2D(aWindowBox.Width/2, mnSeparatorY - gnVerticalBorder),
@@ -426,7 +426,7 @@ void PresenterHelpView::CheckFontSize (void)
 {
     if (mpFont.get() == NULL)
         return;
-
+    
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     if (aWindowBox.Width<=0 || aWindowBox.Height<=0)
         return;
@@ -453,7 +453,7 @@ void PresenterHelpView::CheckFontSize (void)
             // too much space below the help text.
             return;
         }
-
+        
         // Font is too large.  Make it smaller.
 
         // Use a simple linear transformation to calculate initial guess of
@@ -468,7 +468,7 @@ void PresenterHelpView::CheckFontSize (void)
         mpFont->mnSize = nFontSizeGuess;
         mpFont->mxFont = NULL;
         mpFont->PrepareFont(mxCanvas);
-
+            
         // Reformat blocks.
         for (iBlock=mpTextContainer->begin(); iBlock!=iBlockEnd; ++iBlock)
             (*iBlock)->Update(mpFont->mxFont, mnMaximalWidth);
@@ -479,7 +479,7 @@ void PresenterHelpView::CheckFontSize (void)
         mpFont->mnSize = nBestSize;
         mpFont->mxFont = NULL;
         mpFont->PrepareFont(mxCanvas);
-
+            
         // Reformat blocks.
         for (TextContainer::iterator
                  iBlock (mpTextContainer->begin()),
@@ -555,7 +555,7 @@ void PresenterHelpView::Resize (void)
         CheckFontSize();
     }
 }
-
+    
 
 
 
@@ -652,7 +652,7 @@ double LineDescriptorList::Paint(
 {
     if ( ! rxCanvas.is())
         return 0;
-
+   
     double nY (rBBox.Y1);
     vector<LineDescriptor>::const_iterator iLine (mpLineDescriptors->begin());
     vector<LineDescriptor>::const_iterator iEnd (mpLineDescriptors->end());

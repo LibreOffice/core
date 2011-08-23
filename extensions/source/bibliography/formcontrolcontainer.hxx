@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,23 +47,23 @@ namespace bib
             ,public ::bib::OLoadListener
     {
     private:
-        OLoadListenerAdapter*   m_pFormAdapter;
+        OLoadListenerAdapter*	m_pFormAdapter;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >
                                 m_xForm;
     private:
-        void    implSetDesignMode( sal_Bool _bDesign );
+        void	implSetDesignMode( sal_Bool _bDesign );
 
     protected:
         FormControlContainer( );
         ~FormControlContainer( );
 
-        sal_Bool    isFormConnected() const { return NULL != m_pFormAdapter; }
-        void        connectForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxForm );
-        void        disconnectForm();
+        sal_Bool	isFormConnected() const { return NULL != m_pFormAdapter; }
+        void		connectForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxForm );
+        void		disconnectForm();
 
-        void        ensureDesignMode();
+        void		ensureDesignMode();
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+        virtual	::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                     getControlContainer() = 0;
 
     protected:
@@ -77,7 +77,7 @@ namespace bib
     };
 
 //.........................................................................
-}   // namespace bib
+}	// namespace bib
 //.........................................................................
 
 #endif // EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX

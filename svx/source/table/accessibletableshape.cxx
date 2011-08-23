@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,20 +49,20 @@ using ::rtl::OUString;
 
 using namespace ::accessibility;
 using namespace ::sdr::table;
-using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::table;
-using namespace ::com::sun::star::container;
+using namespace	::com::sun::star::accessibility;
+using namespace	::com::sun::star::uno;
+using namespace	::com::sun::star::beans;
+using namespace	::com::sun::star::util;
+using namespace	::com::sun::star::lang;
+using namespace	::com::sun::star::drawing;
+using namespace	::com::sun::star::table;
+using namespace	::com::sun::star::container;
 
 #define C2U(x) OUString(RTL_CONSTASCII_USTRINGPARAM(x))
 
 namespace accessibility
 {
-
+    
 struct hash
 {
     std::size_t operator()( const Reference< XCell >& xCell ) const
@@ -152,7 +152,7 @@ Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild( sal_Int32
     else
     {
         CellRef xCellRef( dynamic_cast< Cell* >( xCell.get() ) );
-
+        
         rtl::Reference< AccessibleCell > xAccessibleCell( new AccessibleCell( mxAccessible, xCellRef, nChildIndex, mrShapeTreeInfo ) );
 
         maChildMap[xCell] = xAccessibleCell;
@@ -227,7 +227,7 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
 
         // all accessible cell instances still left in aTempChildMap must be disposed
         // as they are no longer part of the table
-
+        
         for( AccessibleCellMap::iterator iter( aTempChildMap.begin() ); iter != aTempChildMap.end(); iter++ )
         {
             (*iter).second->dispose();
@@ -509,7 +509,7 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCellAt( sal
 
 //--------------------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCaption(  ) throw (RuntimeException)
+Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCaption(  ) throw (RuntimeException) 
 {
     Reference< XAccessible > xRet;
     return xRet;
@@ -695,7 +695,7 @@ void SAL_CALL AccessibleTableShape::deselectAccessibleChild( sal_Int32 nChildInd
     {
         CellPos aFirstPos, aLastPos;
         pController->getSelectedCells( aFirstPos, aLastPos );
-
+    
         // create a selection where aPos is not part of anymore
         aFirstPos.mnRow = std::min( aFirstPos.mnRow, aPos.mnRow+1 );
         aFirstPos.mnCol = std::min( aFirstPos.mnCol, aPos.mnCol+1 );

@@ -1,7 +1,7 @@
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
 
-#include "scitems.hxx"      // fuer tbxctrls etc.
+#include "scitems.hxx"		// fuer tbxctrls etc.
 #include "scmod.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "cfgids.hxx"
 
-//! die Registrierung wird wegen CLOOKs in ein eigenes File wandern muessen...
+//!	die Registrierung wird wegen CLOOKs in ein eigenes File wandern muessen...
 
 // Interface-Registrierung
 #include "docsh.hxx"
@@ -122,7 +122,7 @@
 #include <svx/imapdlg.hxx>
 
 #include "editutil.hxx"
-#include <svx/svdfield.hxx>     //  SdrRegisterFieldClasses
+#include <svx/svdfield.hxx>		//	SdrRegisterFieldClasses
 #include <rtl/logfile.hxx>
 
 #include "dwfunctr.hxx"
@@ -130,21 +130,21 @@
 
 //------------------------------------------------------------------
 
-//UNUSED2008-05  // filter detection can't use ScFilterOptions (in sc-dll),
-//UNUSED2008-05  // so access to wk3 flag must be implemented here again
-//UNUSED2008-05
+//UNUSED2008-05  //	filter detection can't use ScFilterOptions (in sc-dll),
+//UNUSED2008-05  //	so access to wk3 flag must be implemented here again
+//UNUSED2008-05  
 //UNUSED2008-05  class ScLibOptions : public utl::ConfigItem
 //UNUSED2008-05  {
 //UNUSED2008-05      BOOL        bWK3Flag;
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  public:
 //UNUSED2008-05                  ScLibOptions();
 //UNUSED2008-05      BOOL        GetWK3Flag() const          { return bWK3Flag; }
 //UNUSED2008-05  };
-//UNUSED2008-05
-//UNUSED2008-05  #define CFGPATH_LIBFILTER      "Office.Calc/Filter/Import/Lotus123"
-//UNUSED2008-05  #define ENTRYSTR_WK3           "WK3"
-//UNUSED2008-05
+//UNUSED2008-05  
+//UNUSED2008-05  #define CFGPATH_LIBFILTER		"Office.Calc/Filter/Import/Lotus123"
+//UNUSED2008-05  #define ENTRYSTR_WK3			"WK3"
+//UNUSED2008-05  
 //UNUSED2008-05  ScLibOptions::ScLibOptions() :
 //UNUSED2008-05      ConfigItem( rtl::OUString::createFromAscii( CFGPATH_LIBFILTER ) ),
 //UNUSED2008-05      bWK3Flag( FALSE )
@@ -173,86 +173,86 @@ void ScDLL::Init()
     if ( *ppShlPtr )
         return;
 
-    ScDocumentPool::InitVersionMaps();  // wird im ScModule ctor gebraucht
+    ScDocumentPool::InitVersionMaps();	// wird im ScModule ctor gebraucht
 
     ScModule* pMod = new ScModule( &ScDocShell::Factory() );
     (*ppShlPtr) = pMod;
 
-//REMOVE        ScDocShell::RegisterFactory( SDT_SC_DOCFACTPRIO );
+//REMOVE		ScDocShell::RegisterFactory( SDT_SC_DOCFACTPRIO );
 
     ScDocShell::Factory().SetDocumentServiceName( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
 
-    ScGlobal::Init();       // erst wenn der ResManager initialisiert ist
-                            //  erst nach ScGlobal::Init duerfen die App-Optionen
-                            //  initialisiert werden
+    ScGlobal::Init();		// erst wenn der ResManager initialisiert ist
+                            //	erst nach ScGlobal::Init duerfen die App-Optionen
+                            //	initialisiert werden
 
     // register your view-factories here
 
-    ScTabViewShell      ::RegisterFactory(1);
-    ScPreviewShell      ::RegisterFactory(2);
+    ScTabViewShell		::RegisterFactory(1);
+    ScPreviewShell		::RegisterFactory(2);
 
     // register your shell-interfaces here
 
-    ScModule            ::RegisterInterface(pMod);
-    ScDocShell          ::RegisterInterface(pMod);
-    ScTabViewShell      ::RegisterInterface(pMod);
-    ScPreviewShell      ::RegisterInterface(pMod);
-    ScDrawShell         ::RegisterInterface(pMod);
-    ScDrawFormShell     ::RegisterInterface(pMod);
-    ScDrawTextObjectBar ::RegisterInterface(pMod);
-    ScEditShell         ::RegisterInterface(pMod);
-    ScPivotShell        ::RegisterInterface(pMod);
-    ScAuditingShell     ::RegisterInterface(pMod);
-    ScFormatShell       ::RegisterInterface(pMod);
-    ScCellShell         ::RegisterInterface(pMod);
-    ScOleObjectShell    ::RegisterInterface(pMod);
-    ScChartShell        ::RegisterInterface(pMod);
-    ScGraphicShell      ::RegisterInterface(pMod);
-    ScMediaShell        ::RegisterInterface(pMod);
-    ScPageBreakShell    ::RegisterInterface(pMod);
+    ScModule			::RegisterInterface(pMod);
+    ScDocShell			::RegisterInterface(pMod);
+    ScTabViewShell		::RegisterInterface(pMod);
+    ScPreviewShell		::RegisterInterface(pMod);
+    ScDrawShell			::RegisterInterface(pMod);
+    ScDrawFormShell		::RegisterInterface(pMod);
+    ScDrawTextObjectBar	::RegisterInterface(pMod);
+    ScEditShell			::RegisterInterface(pMod);
+    ScPivotShell		::RegisterInterface(pMod);
+    ScAuditingShell		::RegisterInterface(pMod);
+    ScFormatShell		::RegisterInterface(pMod);
+    ScCellShell			::RegisterInterface(pMod);
+    ScOleObjectShell	::RegisterInterface(pMod);
+    ScChartShell		::RegisterInterface(pMod);
+    ScGraphicShell		::RegisterInterface(pMod);
+    ScMediaShell		::RegisterInterface(pMod);
+    ScPageBreakShell	::RegisterInterface(pMod);
 
-    //  eigene Controller
-    ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
-    ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSCELLS, pMod);
-    ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSOBJ, pMod);
+    //	eigene Controller
+    ScTbxInsertCtrl		::RegisterControl(SID_TBXCTL_INSERT, pMod);
+    ScTbxInsertCtrl		::RegisterControl(SID_TBXCTL_INSCELLS, pMod);
+    ScTbxInsertCtrl		::RegisterControl(SID_TBXCTL_INSOBJ, pMod);
     ScZoomSliderControl ::RegisterControl(SID_PREVIEW_SCALINGFACTOR, pMod);
 
-    //  Svx-Toolbox-Controller
+    //	Svx-Toolbox-Controller
     SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW,          pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_BASIC,     pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_SYMBOL,    pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_ARROW,     pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_FLOWCHART, pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_CALLOUT,   pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_STAR,      pMod);
-    SvxTbxCtlAlign                  ::RegisterControl(SID_OBJECT_ALIGN,         pMod);
-    SvxFillToolBoxControl           ::RegisterControl(0, pMod);
-    SvxLineStyleToolBoxControl      ::RegisterControl(0, pMod);
-    SvxLineWidthToolBoxControl      ::RegisterControl(0, pMod);
-    SvxLineColorToolBoxControl      ::RegisterControl(0, pMod);
-    SvxLineEndToolBoxControl        ::RegisterControl(SID_ATTR_LINEEND_STYLE,   pMod);
-    SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
-    SvxFontNameToolBoxControl       ::RegisterControl(SID_ATTR_CHAR_FONT,       pMod);
-//  SvxFontHeightToolBoxControl     ::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod);
-    SvxFontColorToolBoxControl      ::RegisterControl(SID_ATTR_CHAR_COLOR,      pMod);
-    SvxColorToolBoxControl          ::RegisterControl(SID_BACKGROUND_COLOR,     pMod);
-    SvxFrameToolBoxControl          ::RegisterControl(SID_ATTR_BORDER,          pMod);
-    SvxFrameLineStyleToolBoxControl ::RegisterControl(SID_FRAME_LINESTYLE,      pMod);
-    SvxFrameLineColorToolBoxControl ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
-    SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
-    SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );
-    SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
+    SvxTbxCtlCustomShapes			::RegisterControl(SID_DRAWTBX_CS_BASIC,		pMod);
+    SvxTbxCtlCustomShapes			::RegisterControl(SID_DRAWTBX_CS_SYMBOL,	pMod);
+    SvxTbxCtlCustomShapes			::RegisterControl(SID_DRAWTBX_CS_ARROW,		pMod);
+    SvxTbxCtlCustomShapes			::RegisterControl(SID_DRAWTBX_CS_FLOWCHART, pMod);
+    SvxTbxCtlCustomShapes			::RegisterControl(SID_DRAWTBX_CS_CALLOUT,	pMod);
+    SvxTbxCtlCustomShapes			::RegisterControl(SID_DRAWTBX_CS_STAR,		pMod);
+    SvxTbxCtlAlign					::RegisterControl(SID_OBJECT_ALIGN,			pMod);
+    SvxFillToolBoxControl			::RegisterControl(0, pMod);
+    SvxLineStyleToolBoxControl		::RegisterControl(0, pMod);
+    SvxLineWidthToolBoxControl		::RegisterControl(0, pMod);
+    SvxLineColorToolBoxControl		::RegisterControl(0, pMod);
+    SvxLineEndToolBoxControl		::RegisterControl(SID_ATTR_LINEEND_STYLE,	pMod);
+    SvxStyleToolBoxControl			::RegisterControl(SID_STYLE_APPLY,			pMod);
+    SvxFontNameToolBoxControl		::RegisterControl(SID_ATTR_CHAR_FONT,		pMod);
+//	SvxFontHeightToolBoxControl		::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT,	pMod);
+    SvxFontColorToolBoxControl		::RegisterControl(SID_ATTR_CHAR_COLOR,		pMod);
+    SvxColorToolBoxControl			::RegisterControl(SID_BACKGROUND_COLOR,		pMod);
+    SvxFrameToolBoxControl			::RegisterControl(SID_ATTR_BORDER,			pMod);
+    SvxFrameLineStyleToolBoxControl	::RegisterControl(SID_FRAME_LINESTYLE,		pMod);
+    SvxFrameLineColorToolBoxControl	::RegisterControl(SID_FRAME_LINECOLOR,		pMod);
+    SvxClipBoardControl				::RegisterControl(SID_PASTE,				pMod );
+    SvxUndoRedoControl				::RegisterControl(SID_UNDO,					pMod );
+    SvxUndoRedoControl				::RegisterControl(SID_REDO,					pMod );
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH,  pMod );
 
-    SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
-    SvxGrafRedToolBoxControl        ::RegisterControl(SID_ATTR_GRAF_RED,        pMod);
-    SvxGrafGreenToolBoxControl      ::RegisterControl(SID_ATTR_GRAF_GREEN,      pMod);
-    SvxGrafBlueToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_BLUE,       pMod);
-    SvxGrafLuminanceToolBoxControl  ::RegisterControl(SID_ATTR_GRAF_LUMINANCE,  pMod);
-    SvxGrafContrastToolBoxControl   ::RegisterControl(SID_ATTR_GRAF_CONTRAST,   pMod);
-    SvxGrafGammaToolBoxControl      ::RegisterControl(SID_ATTR_GRAF_GAMMA,      pMod);
+    SvxGrafModeToolBoxControl		::RegisterControl(SID_ATTR_GRAF_MODE,		pMod);
+    SvxGrafRedToolBoxControl		::RegisterControl(SID_ATTR_GRAF_RED,		pMod);
+    SvxGrafGreenToolBoxControl		::RegisterControl(SID_ATTR_GRAF_GREEN,		pMod);
+    SvxGrafBlueToolBoxControl		::RegisterControl(SID_ATTR_GRAF_BLUE,		pMod);
+    SvxGrafLuminanceToolBoxControl	::RegisterControl(SID_ATTR_GRAF_LUMINANCE,	pMod);
+    SvxGrafContrastToolBoxControl	::RegisterControl(SID_ATTR_GRAF_CONTRAST,	pMod);
+    SvxGrafGammaToolBoxControl		::RegisterControl(SID_ATTR_GRAF_GAMMA,		pMod);
     SvxGrafTransparenceToolBoxControl::RegisterControl(SID_ATTR_GRAF_TRANSPARENCE, pMod);
-    SvxGrafFilterToolBoxControl     ::RegisterControl(SID_GRFFILTER,            pMod);
+    SvxGrafFilterToolBoxControl		::RegisterControl(SID_GRFFILTER,			pMod);
 
     SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_CAPTION_VERTICAL,          pMod);
     SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_TEXT_VERTICAL,             pMod);
@@ -268,77 +268,77 @@ void ScDLL::Init()
     ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pMod );
 
     // Svx-StatusBar-Controller
-    SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
-    SvxSelectionModeControl         ::RegisterControl(SID_STATUS_SELMODE,   pMod);
-    SvxZoomStatusBarControl         ::RegisterControl(SID_ATTR_ZOOM,        pMod);
+    SvxInsertStatusBarControl		::RegisterControl(SID_ATTR_INSERT,		pMod);
+    SvxSelectionModeControl			::RegisterControl(SID_STATUS_SELMODE,	pMod);
+    SvxZoomStatusBarControl			::RegisterControl(SID_ATTR_ZOOM,		pMod);
     SvxZoomSliderControl            ::RegisterControl(SID_ATTR_ZOOMSLIDER,  pMod);
-    SvxModifyControl                ::RegisterControl(SID_DOC_MODIFIED,     pMod);
+    SvxModifyControl 				::RegisterControl(SID_DOC_MODIFIED,		pMod);
     XmlSecStatusBarControl          ::RegisterControl( SID_SIGNATURE,       pMod );
 
-    SvxPosSizeStatusBarControl      ::RegisterControl(SID_ATTR_SIZE,        pMod);
+    SvxPosSizeStatusBarControl		::RegisterControl(SID_ATTR_SIZE,		pMod);
 
     // Svx-Menue-Controller
-    SvxFontMenuControl              ::RegisterControl(SID_ATTR_CHAR_FONT,       pMod);
-    SvxFontSizeMenuControl          ::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod);
+    SvxFontMenuControl				::RegisterControl(SID_ATTR_CHAR_FONT,		pMod);
+    SvxFontSizeMenuControl			::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT,	pMod);
 
     // CustomShape extrusion controller
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
 
-    //  Child-Windows
+    //	Child-Windows
 
     // Hack: Eingabezeile mit 42 registrieren, damit sie im PlugIn immer sichtbar ist
-    ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
+    ScInputWindowWrapper		::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(
             sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
-    ScSolverDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
+    ScSolverDlgWrapper			::RegisterChildWindow(FALSE, pMod);
     ScOptSolverDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
-    ScNameDlgWrapper            ::RegisterChildWindow(FALSE, pMod);
-    ScPivotLayoutWrapper        ::RegisterChildWindow(FALSE, pMod);
-    ScTabOpDlgWrapper           ::RegisterChildWindow(FALSE, pMod);
-    ScFilterDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
-    ScSpecialFilterDlgWrapper   ::RegisterChildWindow(FALSE, pMod);
-    ScDbNameDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
-    ScConsolidateDlgWrapper     ::RegisterChildWindow(FALSE, pMod);
-    ScPrintAreasDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
-    ScCondFormatDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
+    ScNameDlgWrapper			::RegisterChildWindow(FALSE, pMod);
+    ScPivotLayoutWrapper		::RegisterChildWindow(FALSE, pMod);
+    ScTabOpDlgWrapper			::RegisterChildWindow(FALSE, pMod);
+    ScFilterDlgWrapper			::RegisterChildWindow(FALSE, pMod);
+    ScSpecialFilterDlgWrapper	::RegisterChildWindow(FALSE, pMod);
+    ScDbNameDlgWrapper			::RegisterChildWindow(FALSE, pMod);
+    ScConsolidateDlgWrapper		::RegisterChildWindow(FALSE, pMod);
+    ScPrintAreasDlgWrapper		::RegisterChildWindow(FALSE, pMod);
+    ScCondFormatDlgWrapper		::RegisterChildWindow(FALSE, pMod);
     ScColRowNameRangesDlgWrapper::RegisterChildWindow(FALSE, pMod);
-    ScFormulaDlgWrapper         ::RegisterChildWindow(FALSE, pMod);
+    ScFormulaDlgWrapper			::RegisterChildWindow(FALSE, pMod);
 
     // First docking Window for Calc
-    ScFunctionChildWindow       ::RegisterChildWindow(FALSE, pMod);
+    ScFunctionChildWindow		::RegisterChildWindow(FALSE, pMod);
 
     // Redlining- Window
-    ScAcceptChgDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
+    ScAcceptChgDlgWrapper		::RegisterChildWindow(FALSE, pMod);
     ScSimpleRefDlgWrapper       ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE|SFX_CHILDWIN_NEVERHIDE );
-    ScHighlightChgDlgWrapper    ::RegisterChildWindow(FALSE, pMod);
+    ScHighlightChgDlgWrapper	::RegisterChildWindow(FALSE, pMod);
 
     SvxSearchDialogWrapper      ::RegisterChildWindow(FALSE, pMod);
     SvxHlinkDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
-    SvxFontWorkChildWindow      ::RegisterChildWindow(FALSE, pMod);
-    SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_FORCEDOCK);
-    SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
-    GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
+    SvxFontWorkChildWindow		::RegisterChildWindow(FALSE, pMod);
+    SvxHyperlinkDlgWrapper		::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_FORCEDOCK);
+    SvxIMapDlgChildWindow		::RegisterChildWindow(FALSE, pMod);
+    GalleryChildWindow			::RegisterChildWindow(FALSE, pMod);
     ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
-    ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
+    ::avmedia::MediaPlayer		::RegisterChildWindow(FALSE, pMod);
 
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     ScValidityRefChildWin::RegisterChildWindow(FALSE, pMod);
     //-->Added by PengYunQuan for Validity Cell Range Picker
-
-    //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
+        
+    //	Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
-//  rClassManager.SV_CLASS_REGISTER( SvxURLField );
-//  rClassManager.SV_CLASS_REGISTER( SvxDateField );
-//  rClassManager.SV_CLASS_REGISTER( SvxPageField );
+//	rClassManager.SV_CLASS_REGISTER( SvxURLField );
+//	rClassManager.SV_CLASS_REGISTER( SvxDateField );
+//	rClassManager.SV_CLASS_REGISTER( SvxPageField );
     rClassManager.SV_CLASS_REGISTER( SvxPagesField );
-//  rClassManager.SV_CLASS_REGISTER( SvxTimeField );
+//	rClassManager.SV_CLASS_REGISTER( SvxTimeField );
     rClassManager.SV_CLASS_REGISTER( SvxFileField );
-//  rClassManager.SV_CLASS_REGISTER( SvxExtFileField );
+//	rClassManager.SV_CLASS_REGISTER( SvxExtFileField );
     rClassManager.SV_CLASS_REGISTER( SvxTableField );
 
-    SdrRegisterFieldClasses();      // SvDraw-Felder registrieren
+    SdrRegisterFieldClasses();		// SvDraw-Felder registrieren
 
     // 3D-Objekt-Factory eintragen
     E3dObjFactory();
@@ -348,7 +348,7 @@ void ScDLL::Init()
 
     pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, sal::static_int_cast<UINT16>(pMod->GetAppOptions().GetAppMetric()) ) );
 
-    //  StarOne Services are now handled in the registry
+    //	StarOne Services are now handled in the registry
 }
 
 void ScDLL::Exit()
@@ -358,14 +358,14 @@ void ScDLL::Exit()
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;
 
-    //  ScGlobal::Clear ist schon im Module-dtor
+    //	ScGlobal::Clear ist schon im Module-dtor
 }
 
 //------------------------------------------------------------------
-//  Statusbar
+//	Statusbar
 //------------------------------------------------------------------
 
-#define TEXT_WIDTH(s)   rStatusBar.GetTextWidth((s))
+#define TEXT_WIDTH(s)	rStatusBar.GetTextWidth((s))
 
 //UNUSED2008-05  void ScDLL::FillStatusBar(StatusBar &rStatusBar)
 //UNUSED2008-05  {
@@ -373,40 +373,40 @@ void ScDLL::Exit()
 //UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_DOCPOS,
 //UNUSED2008-05                              TEXT_WIDTH( String().Fill( 10, 'X' ) ),
 //UNUSED2008-05                              SIB_LEFT|SIB_AUTOSIZE );
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05      // Seitenvorlage
 //UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_PAGESTYLE,
 //UNUSED2008-05                              TEXT_WIDTH( String().Fill( 15, 'X' ) ),
 //UNUSED2008-05                              SIB_LEFT|SIB_AUTOSIZE );
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05      // Ma"sstab
 //UNUSED2008-05      rStatusBar.InsertItem(  SID_ATTR_ZOOM,
 //UNUSED2008-05                              SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
 //UNUSED2008-05                              SIB_CENTER );
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05      // Einfuege-/Ueberschreibmodus
 //UNUSED2008-05      rStatusBar.InsertItem( SID_ATTR_INSERT,
 //UNUSED2008-05                              SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar),
 //UNUSED2008-05                              SIB_CENTER );
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05      // Selektionsmodus
 //UNUSED2008-05      rStatusBar.InsertItem( SID_STATUS_SELMODE,
 //UNUSED2008-05                              SvxSelectionModeControl::GetDefItemWidth(rStatusBar),
 //UNUSED2008-05                              SIB_CENTER );
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05      // Dokument geaendert
 //UNUSED2008-05      rStatusBar.InsertItem( SID_DOC_MODIFIED,
 //UNUSED2008-05                              SvxModifyControl::GetDefItemWidth(rStatusBar));
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05      // signatures
 //UNUSED2008-05      rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
 //UNUSED2008-05      rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05      // Mail
 //UNUSED2008-05      rStatusBar.InsertItem( SID_MAIL_NOTIFY,
 //UNUSED2008-05                              TEXT_WIDTH( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Mail")) ),
 //UNUSED2008-05                              SIB_CENTER );
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05      // den aktuellen Kontext anzeigen Uhrzeit / FramePos / TabellenInfo / Errors
 //UNUSED2008-05      rStatusBar.InsertItem( SID_ATTR_SIZE,
 //UNUSED2008-05                              SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar),

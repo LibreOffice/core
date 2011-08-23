@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ public class SdfData
     private String          filename;
     private OrderedHashMap  ohm;
     private LinkedHashSet   languagesFound;
-
+    
     public SdfData()
     {
         languagesFound  = new LinkedHashSet();
@@ -43,7 +43,7 @@ public class SdfData
     }
     public SdfData( String filename )
     {
-        this();
+        this(); 
         this.filename = filename;
     }
 
@@ -65,7 +65,7 @@ public class SdfData
 
     public void read()
     {
-        BufferedReader in;
+        BufferedReader in; 
         try
         {
             in = new BufferedReader( new FileReader( filename ) );

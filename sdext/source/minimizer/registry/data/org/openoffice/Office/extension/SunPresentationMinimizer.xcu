@@ -53,7 +53,7 @@
         </prop>
         <prop oor:name="STR_LOSSLESS_COMPRESSION">
             <value xml:lang="en-US">~Lossless compression</value>
-        </prop>
+        </prop>	
         <prop oor:name="STR_JPEG_COMPRESSION">
             <value xml:lang="en-US">~JPEG compression</value>
         </prop>
@@ -80,7 +80,7 @@
         </prop>
         <prop oor:name="STR_EMBED_LINKED_GRAPHICS">
             <value xml:lang="en-US">~Break links to external graphics</value>
-        </prop>
+        </prop>	
         <prop oor:name="STR_OLE_OBJECTS">
             <value xml:lang="en-US">OLE Objects</value>
         </prop>
@@ -105,7 +105,7 @@ The current presentation contains OLE objects.</value>
             <value xml:lang="en-US">Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
 
 The current presentation contains no OLE objects.</value>
-        </prop>
+        </prop>	
         <prop oor:name="STR_SLIDES">
             <value xml:lang="en-US">Slides</value>
         </prop>
@@ -180,13 +180,13 @@ The current presentation contains no OLE objects.</value>
         </prop>
         <prop oor:name="STR_YES">
             <value xml:lang="en-US">~Yes</value>
-        </prop>
+        </prop>			
         <prop oor:name="STR_ABOUT2">
             <value xml:lang="en-US">Oracle Presentation Minimizer</value>
         </prop>
         <prop oor:name="STR_ABOUT_VERSION2">
             <value xml:lang="en-US">About Oracle Presentation Minimizer 1.0.2</value>
-        </prop>
+        </prop>		
         <prop oor:name="STR_ABOUT_PRN">
             <value xml:lang="en-US">Copyright © 2000, 2010 Oracle and/or its affiliates. All rights reserved.
 
@@ -195,10 +195,10 @@ This product has been created with contributions from the OpenOffice.org communi
         </prop>
         <prop oor:name="STR_OK">
             <value xml:lang="en-US">OK</value>
-        </prop>
+        </prop>		
         <prop oor:name="STR_INFO_1">
             <value xml:lang="en-US">The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.</value>
-        </prop>
+        </prop>		
         <prop oor:name="STR_INFO_2">
             <value xml:lang="en-US">The %EXTENSIONNAME has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to approximated %NEWFILESIZE MB.</value>
         </prop>
@@ -242,7 +242,7 @@ This product has been created with contributions from the OpenOffice.org communi
         </prop>
         <prop oor:name="EmbedLinkedGraphics">
             <value>true</value>
-        </prop>
+        </prop>			
         <prop oor:name="OLEOptimization">
             <value>true</value>
         </prop>
@@ -263,11 +263,11 @@ This product has been created with contributions from the OpenOffice.org communi
         </prop>
         <prop oor:name="OpenNewDocument">
             <value>true</value>
-        </prop>
+        </prop>	
     </node>
     <node oor:name="Settings">
         <node oor:name="Templates">
-            <node oor:name="template1" oor:op="replace">
+            <node oor:name="template1" oor:op="replace">		
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Screen optimized (smallest file size)</value>
                 </prop>
@@ -306,7 +306,7 @@ This product has been created with contributions from the OpenOffice.org communi
                 </prop>
                 <prop oor:name="OpenNewDocument">
                     <value>true</value>
-                </prop>
+                </prop>	
             </node>
             <node oor:name="template2" oor:op="replace">
                 <prop oor:name="Name">
@@ -326,7 +326,7 @@ This product has been created with contributions from the OpenOffice.org communi
                 </prop>
                 <prop oor:name="EmbedLinkedGraphics">
                     <value>true</value>
-                </prop>
+                </prop>			
                 <prop oor:name="OLEOptimization">
                     <value>true</value>
                 </prop>
@@ -347,7 +347,7 @@ This product has been created with contributions from the OpenOffice.org communi
                 </prop>
                 <prop oor:name="OpenNewDocument">
                     <value>true</value>
-                </prop>
+                </prop>	
             </node>
             <node oor:name="template3" oor:op="replace">
                 <prop oor:name="Name">
@@ -367,7 +367,7 @@ This product has been created with contributions from the OpenOffice.org communi
                 </prop>
                 <prop oor:name="EmbedLinkedGraphics">
                     <value>true</value>
-                </prop>
+                </prop>			
                 <prop oor:name="OLEOptimization">
                     <value>true</value>
                 </prop>
@@ -388,8 +388,8 @@ This product has been created with contributions from the OpenOffice.org communi
                 </prop>
                 <prop oor:name="OpenNewDocument">
                     <value>true</value>
-                </prop>
-            </node>
+                </prop>	
+            </node>			
         </node>
     </node>
 </oor:component-data>

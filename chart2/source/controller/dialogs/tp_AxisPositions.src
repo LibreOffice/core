@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ TabPage TP_AXIS_POSITIONS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Axis line" ;
     };
-
+    
     FixedText FT_CROSSES_OTHER_AXIS_AT
     {
         Pos = MAP_APPFONT ( X2 , Y1  ) ;
@@ -87,7 +87,7 @@ TabPage TP_AXIS_POSITIONS
         Group = TRUE ;
         DropDown=TRUE;
         DDExtraWidth = TRUE ;
-
+        
         StringList [ en-US ] =
         {
             "Start" ;
@@ -113,7 +113,7 @@ TabPage TP_AXIS_POSITIONS
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
-
+    
     CheckBox CB_AXIS_BETWEEN_CATEGORIES
     {
         Hide = TRUE;
@@ -122,7 +122,7 @@ TabPage TP_AXIS_POSITIONS
         TabStop = TRUE ;
         Text [ en-US ] = "Axis ~between categories" ;
     };
-
+    
     FixedLine FL_LABELS
     {
         Pos = MAP_APPFONT ( X1 , Y3  ) ;
@@ -145,7 +145,7 @@ TabPage TP_AXIS_POSITIONS
         Group = TRUE ;
         DropDown=TRUE;
         DDExtraWidth = TRUE ;
-
+        
         StringList [ en-US ] =
         {
             "Near axis" ;
@@ -154,7 +154,7 @@ TabPage TP_AXIS_POSITIONS
             "Outside end" ;
         };
     };
-
+    
     FixedText FT_AXIS_LABEL_DISTANCE
     {
         Hide = TRUE;
@@ -171,7 +171,7 @@ TabPage TP_AXIS_POSITIONS
         Size = MAP_APPFONT ( 89 , 12 ) ;
         TabStop = TRUE ;
     };
-
+    
     FixedLine FL_TICKS
     {
         Pos = MAP_APPFONT ( X1 , Y6  ) ;
@@ -196,7 +196,7 @@ TabPage TP_AXIS_POSITIONS
         Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
         Text [ en-US ] = "~Outer";
     };
-
+    
     FixedText FT_MINOR
     {
         Pos = MAP_APPFONT ( XTICK_1 , Y8  ) ;
@@ -215,7 +215,7 @@ TabPage TP_AXIS_POSITIONS
         Size = MAP_APPFONT ( TICKWIDTH , 10 ) ;
         Text [ en-US ] = "O~uter";
     };
-
+    
     FixedLine FL_VERTICAL
     {
         Hide = TRUE ;
@@ -223,7 +223,7 @@ TabPage TP_AXIS_POSITIONS
         Size = MAP_APPFONT ( 6 , 25 ) ;
         Vert = TRUE ;
     };
-
+    
     FixedText FT_PLACE_TICKS
     {
         Pos = MAP_APPFONT ( X2 , Y9  );
@@ -240,7 +240,7 @@ TabPage TP_AXIS_POSITIONS
         Group = TRUE ;
         DropDown=TRUE;
         DDExtraWidth = TRUE ;
-
+        
         StringList [ en-US ] =
         {
             "At labels" ;
@@ -248,8 +248,8 @@ TabPage TP_AXIS_POSITIONS
             "At axis and labels" ;
         };
     };
-
-
+    
+    
     FixedLine FL_GRIDS
     {
         Hide = TRUE ;

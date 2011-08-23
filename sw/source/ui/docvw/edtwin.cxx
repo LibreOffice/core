@@ -2312,7 +2312,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )
-        /*  {
+        /*	{
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgFractionSymbol | ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |

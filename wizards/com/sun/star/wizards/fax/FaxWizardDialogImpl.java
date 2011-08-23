@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -300,7 +300,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     {
         try
         {
-            //xComponent.dispose();
+            //xComponent.dispose();                       
             XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myFaxDoc.xFrame);
             xCloseable.close(false);
         }
@@ -686,7 +686,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         TextFieldHandler myFieldHandler = new TextFieldHandler(myFaxDoc.xMSF, xTextDocument);
         myFieldHandler.changeUserFieldContent("Fax", txtSenderFax.getText());
     }
-    //switch Elements on/off -------------------------------------------------------
+    //switch Elements on/off -------------------------------------------------------    
     public void setElements()
     {
         //UI relevant:
@@ -767,7 +767,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
                 myFaxDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             }
 
-            //enable/disable roadmap item for footer page
+            //enable/disable roadmap item for footer page       
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
             Helper.setUnoPropertyValue(BPaperItem, "Enabled", new Boolean(bFooterPossible));
 
@@ -870,4 +870,4 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
 
 
-
+    

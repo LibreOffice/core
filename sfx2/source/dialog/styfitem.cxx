@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _
         aImageListId.SetRT( RSC_IMAGELIST );
 
         if ( aLocalRes.IsAvailableRes( aImageListId ) )
-        {   // there is such a list
+        {	// there is such a list
             ImageList aImages( aImageListId );
 
             // number of styles items/images

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
     m_xFrame( rFrame )
 {
     FillBox();
-    bIgnoreSelect = TRUE;   // Select von 0 noch nicht weiterleiten
+    bIgnoreSelect = TRUE;	// Select von 0 noch nicht weiterleiten
     bFillBox = TRUE;
     SelectEntryPos( 0 );
     aCurText = GetEntry( 0 );
@@ -185,7 +185,7 @@ __EXPORT BasicLibBox::~BasicLibBox()
 void __EXPORT BasicLibBox::Update( const SfxStringItem* pItem )
 {
     // Immer auf dem laufenden sein...
-//  if ( !pItem  || !pItem->GetValue().Len() )
+//	if ( !pItem  || !pItem->GetValue().Len() )
         FillBox();
 
     if ( pItem )
@@ -207,7 +207,7 @@ void __EXPORT BasicLibBox::ReleaseFocus()
     if ( pCurSh )
     {
         Window* pShellWin = pCurSh->GetWindow();
-        if ( !pShellWin )       // sonst werde ich ihn nicht los
+        if ( !pShellWin )		// sonst werde ich ihn nicht los
             pShellWin = Application::GetDefDialogParent();
 
         pShellWin->GrabFocus();
@@ -244,7 +244,7 @@ void BasicLibBox::FillBox()
     SelectEntry( aCurText );
     if ( !GetSelectEntryCount() )
     {
-        SelectEntryPos( GetEntryCount() );  // gibst es nicht => leer?
+        SelectEntryPos( GetEntryCount() );	// gibst es nicht => leer?
         aCurText = GetSelectEntry();
     }
     bIgnoreSelect = FALSE;
@@ -322,7 +322,7 @@ void __EXPORT BasicLibBox::Select()
         if ( !bIgnoreSelect )
             NotifyIDE();
         else
-            SelectEntry( aCurText );    // Seit 306... (Select nach Escape)
+            SelectEntry( aCurText );	// Seit 306... (Select nach Escape)
     }
 }
 
@@ -496,7 +496,7 @@ void BasicLanguageBox::Select()
     if ( !m_bIgnoreSelect )
         SetLanguage();
     else
-        SelectEntry( m_sCurrentText );  // Select after Escape
+        SelectEntry( m_sCurrentText );	// Select after Escape
 }
 
 long BasicLanguageBox::PreNotify( NotifyEvent& rNEvt )

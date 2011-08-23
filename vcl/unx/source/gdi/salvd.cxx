@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
 
     SalDisplay *pDisplay  = pDevice->GetDisplay();
     m_nScreen = pDevice->GetScreenNumber();
-
+    
     int nVisualDepth = pDisplay->GetColormap( m_nScreen ).GetVisual().GetDepth();
     int nDeviceDepth = pDevice->GetDepth();
 
@@ -111,18 +111,18 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     else
     if( nDeviceDepth == nVisualDepth )
         m_pColormap = &pDisplay->GetColormap( m_nScreen );
-    else
+    else 
     if( nDeviceDepth == 1 )
         m_pColormap = m_pDeleteColormap = new SalColormap();
-
+             
     if (m_pDeleteColormap != pOrigDeleteColormap)
         delete pOrigDeleteColormap;
 
     const Drawable aVdevDrawable = pDevice->GetDrawable();
     SetDrawable( aVdevDrawable, m_nScreen );
 
-    m_pVDev      = pDevice;
-    m_pFrame     = NULL;
+    m_pVDev		 = pDevice;
+    m_pFrame	 = NULL;
 
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = TRUE;
@@ -141,7 +141,7 @@ BOOL X11SalVirtualDevice::Init( SalDisplay *pDisplay,
     bool bDeleteColormap = false;
 
     pDisplay_               = pDisplay;
-    pGraphics_              = new X11SalGraphics();
+    pGraphics_				= new X11SalGraphics();
     m_nScreen               = nScreen;
     if( pRenderFormatVoid ) {
         XRenderPictFormat *pRenderFormat = ( XRenderPictFormat* )pRenderFormatVoid;
@@ -220,7 +220,7 @@ BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( bExternPixmap_ )
         return FALSE;
-
+    
     // #144688#
     // the X protocol request CreatePixmap puts an upper bound
     // of 16 bit to the size. Beyond that there may be implementation
@@ -260,7 +260,7 @@ BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
 
     if( pGraphics_ )
         InitGraphics( this );
-
+    
     return TRUE;
 }
 

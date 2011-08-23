@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,30 +50,30 @@ public:
 
         // This method is shared.
         sal_Bool SAL_CALL
-        equals( const rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+        equals( const rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1, 
             const rtl::OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
         throw(com::sun::star::uno::RuntimeException);
 
         // This method is implemented in sub class if needed. Otherwise, the method implemented in this class will be used.
-        com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
-        transliterateRange( const rtl::OUString& str1, const rtl::OUString& str2 )
+        com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL 
+        transliterateRange( const rtl::OUString& str1, const rtl::OUString& str2 ) 
         throw(com::sun::star::uno::RuntimeException);
 
 
         // Methods which are shared.
         sal_Int16 SAL_CALL getType(  ) throw(com::sun::star::uno::RuntimeException);
-
-        rtl::OUString SAL_CALL
-        transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  )
+    
+        rtl::OUString SAL_CALL 
+        transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) 
         throw(com::sun::star::uno::RuntimeException);
 
-        virtual sal_Unicode SAL_CALL
-        transliterateChar2Char( sal_Unicode inChar)
+        virtual sal_Unicode SAL_CALL 
+        transliterateChar2Char( sal_Unicode inChar) 
         throw(com::sun::star::uno::RuntimeException,
             com::sun::star::i18n::MultipleCharsOutputException);
 
-        com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
-        transliterateRange( const rtl::OUString& str1, const rtl::OUString& str2, XTransliteration& t1, XTransliteration& t2 )
+        com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL 
+        transliterateRange( const rtl::OUString& str1, const rtl::OUString& str2, XTransliteration& t1, XTransliteration& t2 ) 
         throw(com::sun::star::uno::RuntimeException);
 
 protected:

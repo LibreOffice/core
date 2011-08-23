@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 #include "cbutton.hxx"
 
 //========================================================================
-//  class ScDDComboBoxButton
+//	class ScDDComboBoxButton
 //========================================================================
 
 ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
-    :   pOut( pOutputDevice )
+    :	pOut( pOutputDevice )
 {
     SetOptSizePixel();
 }
@@ -68,31 +68,31 @@ void ScDDComboBoxButton::SetOptSizePixel()
 
 // -------------------------------------------------------------------------
 
-void ScDDComboBoxButton::Draw( const Point& rAt,
-                               const Size&  rSize,
+void ScDDComboBoxButton::Draw( const Point&	rAt,
+                               const Size&	rSize,
                                BOOL         bState,
-                               BOOL         bBtnIn  /* = FALSE */ )
+                               BOOL			bBtnIn  /* = FALSE */ )
 {
     if ( rSize.Width() == 0 || rSize.Height() == 0 )
         return;     // #i43092# rectangle with size 0 would have RECT_EMPTY as end position
 
     // save old state
-    BOOL        bHadFill   = pOut->IsFillColor();
-    Color       aOldFill   = pOut->GetFillColor();
-    BOOL        bHadLine   = pOut->IsLineColor();
-    Color       aOldLine   = pOut->GetLineColor();
-    BOOL        bOldEnable = pOut->IsMapModeEnabled();
+    BOOL		bHadFill   = pOut->IsFillColor();
+    Color		aOldFill   = pOut->GetFillColor();
+    BOOL		bHadLine   = pOut->IsLineColor();
+    Color		aOldLine   = pOut->GetLineColor();
+    BOOL		bOldEnable = pOut->IsMapModeEnabled();
 
-    Size        aLogPix( 1, 1 );
-    Rectangle   aBtnRect( rAt, rSize );
-    Rectangle   aInnerRect = aBtnRect;
+    Size		aLogPix( 1, 1 );
+    Rectangle	aBtnRect( rAt, rSize );
+    Rectangle	aInnerRect = aBtnRect;
 
     pOut->EnableMapMode( FALSE );
 
     DecorationView aDecoView( pOut);
 
     USHORT nButtonStyle = BUTTON_DRAW_DEFAULT;
-    if( bBtnIn )    // gedrueckt?
+    if( bBtnIn )	// gedrueckt?
     {
         nButtonStyle = BUTTON_DRAW_PRESSED;
     }
@@ -133,9 +133,9 @@ void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
 {
     // no need to save old line and fill color here (is restored after the call)
 
-    Rectangle   aPixRect = rRect;
-    Point       aCenter  = aPixRect.Center();
-    Size        aSize    = aPixRect.GetSize();
+    Rectangle	aPixRect = rRect;
+    Point		aCenter  = aPixRect.Center();
+    Size      	aSize    = aPixRect.GetSize();
 
     Size aSize3;
     aSize3.Width() = aSize.Width() >> 1;

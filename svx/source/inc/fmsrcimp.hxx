@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,8 +63,8 @@ SV_DECL_OBJARR(SvInt32Array, sal_Int32, 16, 16)
 class FmSearchEngine;
 class FmSearchThread : public ::vos::OThread
 {
-    FmSearchEngine*     m_pEngine;
-    Link                m_aTerminationHdl;
+    FmSearchEngine*		m_pEngine;
+    Link				m_aTerminationHdl;
 
     virtual void SAL_CALL run();
     virtual void SAL_CALL onTerminated();
@@ -84,29 +84,29 @@ struct FmSearchProgress
     enum STATE { STATE_PROGRESS, STATE_PROGRESS_COUNTING, STATE_CANCELED, STATE_SUCCESSFULL, STATE_NOTHINGFOUND, STATE_ERROR };
         // (Bewegung auf neuen Datensatz; Fortschritt beim Zaehlen von Datensaetzen; abgebrochen; Datensatz gefunden;
         // nichts gefunden, irgendein nicht zu handelnder Fehler)
-    STATE   aSearchState;
+    STATE	aSearchState;
 
     // aktueller Datensatz - immer gueltig (ist zum Beispiel bei Abbrechen auch fuer das Weitersuchen interesant)
-    sal_uInt32  nCurrentRecord;
+    sal_uInt32	nCurrentRecord;
     // Ueberlauf - nur gueltig bei STATE_PROGRESS
-    sal_Bool    bOverflow;
+    sal_Bool	bOverflow;
 
     // die Position des Such-Cursors - bei STATE_SUCCESSFULL, STATE_CANCELED und STATE_NOTHING_FOUND gueltig
-    ::com::sun::star::uno::Any  aBookmark;
+    ::com::sun::star::uno::Any	aBookmark;
     // das Feld, in dem der Text gefunden wurde - bei STATE_SUCCESSFULL gueltig
-    sal_Int32   nFieldIndex;
+    sal_Int32	nFieldIndex;
 };
 
 // ===================================================================================================
 // = class FmRecordCountListener - Hilfsklasse fuer FmSearchEngine, lauscht an einem Cursor und teilt
-// =                                Aenderungem im RecordCount mit
+// =								Aenderungem im RecordCount mit
 // ===================================================================================================
 
 class FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
 {
 // Atribute
-    Link            m_lnkWhoWantsToKnow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xListening;
+    Link			m_lnkWhoWantsToKnow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > 	m_xListening;
 
 // Attribut-Zugriff
 public:
@@ -118,8 +118,8 @@ public:
         // the set has to support the sdb::ResultSet service
     virtual ~FmRecordCountListener();
 
-    //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject);
-    //  virtual sal_Bool queryInterface(::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut);
+    //	DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject);
+    //	virtual sal_Bool queryInterface(::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut);
 
 // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
@@ -144,7 +144,7 @@ namespace svxform {
     class ControlTextWrapper
     {
         // attributes
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xControl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > 	m_xControl;
         // attribute access
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  getControl() const{ return m_xControl; }
@@ -189,123 +189,123 @@ class SVX_DLLPUBLIC FmSearchEngine
     enum SEARCHFOR_TYPE { SEARCHFOR_STRING, SEARCHFOR_NULL, SEARCHFOR_NOTNULL };
 
     // zugrundeliegende Daten
-    CursorWrapper           m_xSearchCursor;
-    SvInt32Array            m_arrFieldMapping;
+    CursorWrapper			m_xSearchCursor;
+    SvInt32Array			m_arrFieldMapping;
         // da der Iterator durchaus mehr Spalten haben kann, als ich eigentlich verwalte (in meiner Feld-Listbox),
         // muss ich mir hier ein Mapping dieser ::com::sun::star::form-Schluessel auf die Indizies der entsprechenden Spalten im Iterator halten
 
     // der Formatter
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xFormatSupplier;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > 	m_xFormatSupplier;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 		m_xFormatter;
 
-    CharClass               m_aCharacterClassficator;
-    CollatorWrapper         m_aStringCompare;
+    CharClass				m_aCharacterClassficator;
+    CollatorWrapper			m_aStringCompare;
 
     // die Sammlung aller interesanten Felder (bzw. ihre ::com::sun::star::data::XDatabaseVariant-Interfaces und ihre FormatKeys)
     struct FieldInfo
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >          xContents;
-        sal_uInt32              nFormatKey;
-        sal_Bool                bDoubleHandling;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn > 			xContents;
+        sal_uInt32				nFormatKey;
+        sal_Bool				bDoubleHandling;
     };
 
     DECLARE_STL_VECTOR(FieldInfo, FieldCollection);
-    FieldCollection             m_arrUsedFields;
-    sal_Int32                   m_nCurrentFieldIndex;   // der letzte Parameter von RebuildUsedFields, ermoeglicht mir Checks in FormatField
+    FieldCollection				m_arrUsedFields;
+    sal_Int32					m_nCurrentFieldIndex;	// der letzte Parameter von RebuildUsedFields, ermoeglicht mir Checks in FormatField
 
     DECLARE_STL_VECTOR(svxform::ControlTextWrapper*, ControlTextSuppliers);
-    ControlTextSuppliers    m_aControlTexts;
+    ControlTextSuppliers	m_aControlTexts;
 
-    sal_Bool                m_bUsingTextComponents;
-    CursorWrapper           m_xOriginalIterator;
-    CursorWrapper           m_xClonedIterator;
+    sal_Bool				m_bUsingTextComponents;
+    CursorWrapper			m_xOriginalIterator;
+    CursorWrapper			m_xClonedIterator;
 
     // Daten fuer Entscheidung, in welchem Feld ich ein "Found" akzeptiere
-    ::com::sun::star::uno::Any  m_aPreviousLocBookmark;             // Position, an der ich zuletzt fuendig war
-    FieldCollectionIterator     m_iterPreviousLocField;             // dito Feld
+    ::com::sun::star::uno::Any	m_aPreviousLocBookmark;				// Position, an der ich zuletzt fuendig war
+    FieldCollectionIterator		m_iterPreviousLocField;				// dito Feld
 
     // Kommunikation mit dem Thread, der die eigentliche Suche durchfuehrt
-    ::rtl::OUString             m_strSearchExpression;              // Hinrichtung
-    SEARCHFOR_TYPE      m_eSearchForType;                   // dito
-    SEARCH_RESULT       m_srResult;                         // Rueckrichtung
+    ::rtl::OUString				m_strSearchExpression;				// Hinrichtung
+    SEARCHFOR_TYPE		m_eSearchForType;					// dito
+    SEARCH_RESULT		m_srResult;							// Rueckrichtung
 
     // der Link, dem ich Fortschritte und Ergebnisse mitteile
-    Link                m_aProgressHandler;
-    sal_Bool            m_bSearchingCurrently : 1;      // laeuft gerade eine (asynchrone) Suche ?
-    sal_Bool            m_bCancelAsynchRequest : 1;     // soll abgebrochen werden ?
-    ::osl::Mutex        m_aCancelAsynchAccess;          // Zugriff auf m_bCancelAsynchRequest (eigentlich nur bei
+    Link				m_aProgressHandler;
+    sal_Bool			m_bSearchingCurrently : 1;      // laeuft gerade eine (asynchrone) Suche ?
+    sal_Bool			m_bCancelAsynchRequest : 1;		// soll abgebrochen werden ?
+    ::osl::Mutex		m_aCancelAsynchAccess;			// Zugriff auf m_bCancelAsynchRequest (eigentlich nur bei
                                                         // m_eMode == SM_USETHREAD interesant)
-    FMSEARCH_MODE   m_eMode;        //CHINA001  FmSearchDialog::SEARCH_MODE m_eMode;                // der aktuelle Modus
+    FMSEARCH_MODE	m_eMode;		//CHINA001 	FmSearchDialog::SEARCH_MODE	m_eMode;				// der aktuelle Modus
     // der aktuelle Modus
 
     // Parameter fuer die Suche
-    sal_Bool    m_bFormatter : 1;       // Feldformatierung benutzen
-    sal_Bool    m_bForward : 1;         // Richtung
-    sal_Bool    m_bWildcard : 1;        // Platzhalter-Suche ?
-    sal_Bool    m_bRegular : 1;         // regulaerer Ausdruck
-    sal_Bool    m_bLevenshtein : 1;     // Levenshtein-Suche
-    sal_Bool    m_bTransliteration : 1; // Levenshtein-Suche
+    sal_Bool	m_bFormatter : 1;		// Feldformatierung benutzen
+    sal_Bool	m_bForward : 1;			// Richtung
+    sal_Bool	m_bWildcard : 1;		// Platzhalter-Suche ?
+    sal_Bool	m_bRegular : 1;			// regulaerer Ausdruck
+    sal_Bool	m_bLevenshtein : 1;		// Levenshtein-Suche
+    sal_Bool	m_bTransliteration : 1;	// Levenshtein-Suche
 
-    sal_Bool    m_bLevRelaxed : 1;      // Parameter fuer Levenshtein-Suche
-    sal_uInt16  m_nLevOther;
-    sal_uInt16  m_nLevShorter;
-    sal_uInt16  m_nLevLonger;
+    sal_Bool	m_bLevRelaxed : 1;		// Parameter fuer Levenshtein-Suche
+    sal_uInt16	m_nLevOther;
+    sal_uInt16	m_nLevShorter;
+    sal_uInt16	m_nLevLonger;
 
-    sal_uInt16  m_nPosition;            // wenn nicht regulaer oder lev, dann einer der MATCHING_...-Werte
+    sal_uInt16	m_nPosition;			// wenn nicht regulaer oder lev, dann einer der MATCHING_...-Werte
 
-    sal_Int32   m_nTransliterationFlags;
+    sal_Int32	m_nTransliterationFlags;
 
 // -------------
 // Memberzugriff
 private:
-    SVX_DLLPRIVATE sal_Bool CancelRequested();      // liefert eine durch m_aCancelAsynchAccess gesicherte Auswertung von m_bCancelAsynchRequest
+    SVX_DLLPRIVATE sal_Bool	CancelRequested();		// liefert eine durch m_aCancelAsynchAccess gesicherte Auswertung von m_bCancelAsynchRequest
 
 public:
-    void        SetCaseSensitive(sal_Bool bSet);
-    sal_Bool    GetCaseSensitive() const;
+    void		SetCaseSensitive(sal_Bool bSet);
+    sal_Bool	GetCaseSensitive() const;
 
-    void        SetFormatterUsing(sal_Bool bSet);   // das ist etwas umfangreicher, deshalb kein hier inline ....
-    sal_Bool    GetFormatterUsing() const           { return m_bFormatter; }
+    void		SetFormatterUsing(sal_Bool bSet);	// das ist etwas umfangreicher, deshalb kein hier inline ....
+    sal_Bool	GetFormatterUsing() const			{ return m_bFormatter; }
 
-    void        SetDirection(sal_Bool bForward)     { m_bForward = bForward; }
-    sal_Bool    GetDirection() const                { return m_bForward; }
+    void		SetDirection(sal_Bool bForward)		{ m_bForward = bForward; }
+    sal_Bool	GetDirection() const				{ return m_bForward; }
 
-    void        SetWildcard(sal_Bool bSet)          { m_bWildcard = bSet; }
-    sal_Bool    GetWildcard() const                 { return m_bWildcard; }
+    void		SetWildcard(sal_Bool bSet)			{ m_bWildcard = bSet; }
+    sal_Bool	GetWildcard() const					{ return m_bWildcard; }
 
-    void        SetRegular(sal_Bool bSet)           { m_bRegular = bSet; }
-    sal_Bool    GetRegular() const                  { return m_bRegular; }
+    void		SetRegular(sal_Bool bSet)			{ m_bRegular = bSet; }
+    sal_Bool	GetRegular() const					{ return m_bRegular; }
 
-    void        SetLevenshtein(sal_Bool bSet)       { m_bLevenshtein = bSet; }
-    sal_Bool    GetLevenshtein() const              { return m_bLevenshtein; }
+    void		SetLevenshtein(sal_Bool bSet)		{ m_bLevenshtein = bSet; }
+    sal_Bool	GetLevenshtein() const				{ return m_bLevenshtein; }
 
-    void        SetIgnoreWidthCJK(sal_Bool bSet);
-    sal_Bool    GetIgnoreWidthCJK() const;
+    void		SetIgnoreWidthCJK(sal_Bool bSet);
+    sal_Bool	GetIgnoreWidthCJK() const;
 
-    void        SetTransliteration(sal_Bool bSet)   { m_bTransliteration = bSet; }
-    sal_Bool    GetTransliteration() const          { return m_bTransliteration; }
+    void		SetTransliteration(sal_Bool bSet)	{ m_bTransliteration = bSet; }
+    sal_Bool	GetTransliteration() const			{ return m_bTransliteration; }
 
-    void        SetLevRelaxed(sal_Bool bSet)        { m_bLevRelaxed = bSet; }
-    sal_Bool    GetLevRelaxed() const               { return m_bLevRelaxed; }
-    void        SetLevOther(sal_uInt16 nHowMuch)    { m_nLevOther = nHowMuch; }
-    sal_uInt16  GetLevOther() const                 { return m_nLevOther; }
-    void        SetLevShorter(sal_uInt16 nHowMuch)  { m_nLevShorter = nHowMuch; }
-    sal_uInt16  GetLevShorter() const               { return m_nLevShorter; }
-    void        SetLevLonger(sal_uInt16 nHowMuch)   { m_nLevLonger = nHowMuch; }
-    sal_uInt16  GetLevLonger() const                { return m_nLevLonger; }
+    void		SetLevRelaxed(sal_Bool bSet)		{ m_bLevRelaxed = bSet; }
+    sal_Bool	GetLevRelaxed() const				{ return m_bLevRelaxed; }
+    void		SetLevOther(sal_uInt16 nHowMuch)	{ m_nLevOther = nHowMuch; }
+    sal_uInt16	GetLevOther() const					{ return m_nLevOther; }
+    void		SetLevShorter(sal_uInt16 nHowMuch)	{ m_nLevShorter = nHowMuch; }
+    sal_uInt16	GetLevShorter() const				{ return m_nLevShorter; }
+    void		SetLevLonger(sal_uInt16 nHowMuch)	{ m_nLevLonger = nHowMuch; }
+    sal_uInt16	GetLevLonger() const				{ return m_nLevLonger; }
         // die ganzen Lev-Werte werden nur bei  m_bLevenshtein==sal_True beachtet
 
-    void        SetTransliterationFlags(sal_Int32 _nFlags)  { m_nTransliterationFlags = _nFlags; }
-    sal_Int32   GetTransliterationFlags() const             { return m_nTransliterationFlags; }
+    void		SetTransliterationFlags(sal_Int32 _nFlags)	{ m_nTransliterationFlags = _nFlags; }
+    sal_Int32	GetTransliterationFlags() const				{ return m_nTransliterationFlags; }
 
-    void    SetPosition(sal_uInt16 nValue)      { m_nPosition = nValue; }
-    sal_uInt16  GetPosition() const             { return m_nPosition; }
+    void	SetPosition(sal_uInt16 nValue)		{ m_nPosition = nValue; }
+    sal_uInt16	GetPosition() const				{ return m_nPosition; }
         // Position wird bei m_bWildCard==sal_True nicht beachtet
 
     FMSEARCH_MODE GetSearchMode() const { return m_eMode; }
 
 public:
-    /** zwei Constructoren, beide analog zu denen des FmSearchDialog, Erklaerung siehe also dort ....
+    /**	zwei Constructoren, beide analog zu denen des FmSearchDialog, Erklaerung siehe also dort ....
         xCursor muss jeweils den ::com::sun::star::data::DatabaseCursor-Service implementieren.
         wenn eMode == SM_USETHREAD, sollte ein ProgressHandler gesetzt sein, da dann die Ergebnisuebermittlung ueber diesen
         Handler erfolgt.
@@ -328,24 +328,24 @@ public:
 
     virtual ~FmSearchEngine();
 
-    /** der Link wird fuer jeden Datensatz und nach Beendigung der Suche aufgerufen, Parameter ist ein Zeiger auf
+    /**	der Link wird fuer jeden Datensatz und nach Beendigung der Suche aufgerufen, Parameter ist ein Zeiger auf
         eine FmSearchProgress-Struktur
         der Handler sollte auf jeden Fall Thread-sicher sein
     */
     void SetProgressHandler(Link aHdl) { m_aProgressHandler = aHdl; }
 
-    /// das naechste Vorkommen suchen (Werte fuer nDirection siehe DIRECTION_*-defines)
+    ///	das naechste Vorkommen suchen (Werte fuer nDirection siehe DIRECTION_*-defines)
     void SearchNext(const ::rtl::OUString& strExpression);
     /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
     void SearchNextSpecial(sal_Bool _bSearchForNull);
-    /// das naechste Vorkommen suchen, abhaengig von nDirection wird dabei am Anfang oder am Ende neu begonnen
+    ///	das naechste Vorkommen suchen, abhaengig von nDirection wird dabei am Anfang oder am Ende neu begonnen
     void StartOver(const ::rtl::OUString& strExpression);
     /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
     void StartOverSpecial(sal_Bool _bSearchForNull);
     /// die Angaben ueber letzte Fundstelle invalidieren
     void InvalidatePreviousLoc();
 
-    /** baut m_arrUsedFields neu auf (nFieldIndex==-1 bedeutet alle Felder, ansonsten gibt es den Feldindex an)
+    /**	baut m_arrUsedFields neu auf (nFieldIndex==-1 bedeutet alle Felder, ansonsten gibt es den Feldindex an)
         wenn bForce nicht gesetzt ist, passiert bei nFieldIndex == m_nCurrentFieldIndex nichts
         (ruft InvalidatePreviousLoc auf)
     */
@@ -355,7 +355,7 @@ public:
     /// kehrt sofort zurueck; nachdem wirklich abgebrochen wurde, wird der ProgressHandler mit STATE_CANCELED aufgerufen
     void CancelSearch();
 
-    /** nur gueltig, wenn nicht gerade eine (asynchrone) Suche laeuft, die naechste Suche wird dann auf dem neuen Iterator
+    /**	nur gueltig, wenn nicht gerade eine (asynchrone) Suche laeuft, die naechste Suche wird dann auf dem neuen Iterator
         mit den neuen Parametern durchgefuehrt
     */
     sal_Bool SwitchToContext(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const ::rtl::OUString& strVisibleFields, const InterfaceArray& arrFields,

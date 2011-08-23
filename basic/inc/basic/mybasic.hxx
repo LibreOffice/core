@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ public:
 
 DECLARE_LIST( ErrorList, BasicError* )
 
-#define SBXID_MYBASIC   0x594D      // MyBasic: MY
-#define SBXCR_TEST      0x54534554  // TEST
+#define SBXID_MYBASIC	0x594D		// MyBasic: MY
+#define	SBXCR_TEST		0x54534554	// TEST
 
 class MyBasic : public StarBASIC
 {
@@ -79,7 +79,7 @@ public:
 
     virtual void LoadIniFile();
 
-    // Determines the extended symbol type for syntax highlighting
+    // Determines the extended symbol type for syntax highlighting	
     virtual SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );
     virtual const String GetSpechialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );

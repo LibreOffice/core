@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,21 +58,21 @@ struct InsertAxisOrGridDialogData
 class SchAxisDlg : public ModalDialog
 {
 protected:
-    FixedLine           aFlPrimary;
-    FixedLine           aFlPrimaryGrid;
-    CheckBox            aCbPrimaryX;
-    CheckBox            aCbPrimaryY;
-    CheckBox            aCbPrimaryZ;
+    FixedLine			aFlPrimary;
+    FixedLine			aFlPrimaryGrid;
+    CheckBox			aCbPrimaryX;
+    CheckBox			aCbPrimaryY;
+    CheckBox			aCbPrimaryZ;
 
-    FixedLine           aFlSecondary;
-    FixedLine           aFlSecondaryGrid;
-    CheckBox            aCbSecondaryX;
-    CheckBox            aCbSecondaryY;
-    CheckBox            aCbSecondaryZ;
+    FixedLine			aFlSecondary;
+    FixedLine			aFlSecondaryGrid;
+    CheckBox			aCbSecondaryX;
+    CheckBox			aCbSecondaryY;
+    CheckBox			aCbSecondaryZ;
 
-    OKButton            aPbOK;
-    CancelButton        aPbCancel;
-    HelpButton          aPbHelp;
+    OKButton			aPbOK;
+    CancelButton		aPbCancel;
+    HelpButton	 		aPbHelp;
 
 public:
     SchAxisDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput, BOOL bAxisDlg=true );

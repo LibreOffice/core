@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ const sal_Char * const MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
 const sal_Char * MYSCHEME = "vnd.sun.star.script";
 const sal_Int32 MYSCHEME_LEN = 20;
 
-void SAL_CALL ScriptProtocolHandler::initialize(
+void SAL_CALL ScriptProtocolHandler::initialize( 
     const css::uno::Sequence < css::uno::Any >& aArguments )
     throw ( css::uno::Exception )
 {
@@ -112,8 +112,8 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     Reference< XDispatch > xDispatcher;
     // get scheme of url
 
-    Reference< uri::XUriReferenceFactory > xFac (
-         m_xFactory->createInstance( rtl::OUString::createFromAscii(
+    Reference< uri::XUriReferenceFactory > xFac ( 
+         m_xFactory->createInstance( rtl::OUString::createFromAscii( 
             "com.sun.star.uri.UriReferenceFactory") ) , UNO_QUERY );
     if ( xFac.is() )
     {
@@ -177,7 +177,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                     return;
             }
 
-            // Creates a ScriptProvider ( if one is not created allready )
+            // Creates a ScriptProvider ( if one is not created allready ) 
             createScriptProvider();
 
             Reference< provider::XScript > xFunc =
@@ -185,7 +185,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             validateXRef( xFunc,
                 "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XScript interface" );
 
-
+           
             Sequence< Any > inArgs( 0 );
             Sequence< Any > outArgs( 0 );
             Sequence< sal_Int16 > outIndex;
@@ -201,7 +201,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    if ( lArgs[ index ].Name.compareToAscii("Referer") != 0  ||
                         lArgs[ index ].Name.getLength() == 0 )
                    {
-                       inArgs.realloc( ++argCount );
+                       inArgs.realloc( ++argCount ); 
                        inArgs[ argCount - 1 ] = lArgs[ index ].Value;
                    }
                }
@@ -307,7 +307,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         }
         catch(RuntimeException & e)
         {
-            OSL_TRACE(
+            OSL_TRACE( 
             "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
             "while dispatchFinished %s",
             ::rtl::OUStringToOString( e.Message,
@@ -359,11 +359,11 @@ ScriptProtocolHandler::getScriptInvocation()
 }
 
 void
-ScriptProtocolHandler::createScriptProvider()
+ScriptProtocolHandler::createScriptProvider() 
 {
     if ( m_xScriptProvider.is() )
     {
-        return;
+        return;	
     }
     try
     {
@@ -412,7 +412,7 @@ ScriptProtocolHandler::createScriptProvider()
 
             Reference< provider::XScriptProviderFactory > xFac(
                 xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
-
+                                                                                
             Any aContext;
             if ( getScriptInvocation() )
                 aContext = makeAny( m_xScriptInvocation );
@@ -438,7 +438,7 @@ ScriptProtocolHandler::createScriptProvider()
             Reference< XInterface > () );
     }
 #endif
-
+        
 }
 
 ScriptProtocolHandler::ScriptProtocolHandler(
@@ -528,8 +528,8 @@ extern "C"
 
 #undef css
 #define css ::com::sun::star
-
-    void SAL_CALL component_getImplementationEnvironment(
+    
+    void SAL_CALL component_getImplementationEnvironment( 
         const sal_Char** ppEnvironmentTypeName, uno_Environment** ppEnvironment )
     {
         (void)ppEnvironment;
@@ -542,7 +542,7 @@ extern "C"
     {
         (void)pServiceManager;
 
-        Reference< css::registry::XRegistryKey > xKey(
+        Reference< css::registry::XRegistryKey > xKey( 
             reinterpret_cast< css::registry::XRegistryKey* >( pRegistryKey ) ) ;
 
         ::rtl::OUString aStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
@@ -551,7 +551,7 @@ extern "C"
 
         aStr += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ) );
         Reference< css::registry::XRegistryKey > xNewKey = xKey->createKey( aStr );
-        xNewKey->createKey(
+        xNewKey->createKey( 
             ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME )
             );
 
@@ -575,7 +575,7 @@ extern "C"
             // Define variables which are used in following macros.
             ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XSingleServiceFactory > xFactory ;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > 
             xServiceManager( reinterpret_cast<
             ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 

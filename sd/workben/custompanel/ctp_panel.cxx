@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,7 +188,7 @@ namespace sd { namespace colortoolpanel
             throw DisposedException( ::rtl::OUString(), *this );
         return m_xResourceId;
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
     {

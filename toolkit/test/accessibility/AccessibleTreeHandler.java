@@ -6,9 +6,9 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 
 /**
  * Map the tree of accessibility objects into their
- * AccessibilityTreeModel counterparts.
+ * AccessibilityTreeModel counterparts. 
  */
-class AccessibleTreeHandler
+class AccessibleTreeHandler 
     extends NodeHandler
 {
     protected XAccessibleContext mxContext;
@@ -59,7 +59,7 @@ class AccessibleTreeHandler
                         xChild, aParent);
                 }
                 catch( IndexOutOfBoundsException e )
-                {
+                { 
                     aChild = new StringNode ("ERROR: no child with index " + nIndex, aParent);
                 }
             }
@@ -98,7 +98,7 @@ class AccessibleTreeHandler
 
 
     /** Update only the child count node.  Trust on other ways to update the
-        accessible children.
+        accessible children. 
     */
     public void update (AccessibleTreeNode aNode)
     {

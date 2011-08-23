@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,12 +59,12 @@ namespace o3tl
     {
         typedef oslInterlockedCount ref_count_t;
         static void incrementCount( ref_count_t& rCount ) { osl_incrementInterlockedCount(&rCount); }
-        static bool decrementCount( ref_count_t& rCount )
-        {
+        static bool decrementCount( ref_count_t& rCount ) 
+        { 
             if( rCount == 1 ) // caller is already the only/last reference
                 return false;
             else
-                return osl_decrementInterlockedCount(&rCount) != 0;
+                return osl_decrementInterlockedCount(&rCount) != 0; 
         }
     };
 
@@ -177,13 +177,13 @@ void cow_wrapper_client::queryUnmodified() const
          */
         struct impl_t : private boost::noncopyable
         {
-            impl_t() :
+            impl_t() : 
                 m_value(),
                 m_ref_count(1)
             {
             }
 
-            explicit impl_t( const T& v ) :
+            explicit impl_t( const T& v ) : 
                 m_value(v),
                 m_ref_count(1)
             {
@@ -207,14 +207,14 @@ void cow_wrapper_client::queryUnmodified() const
 
         /** Default-construct wrapped type instance
          */
-        cow_wrapper() :
+        cow_wrapper() : 
             m_pimpl( new impl_t() )
         {
         }
 
         /** Copy-construct wrapped type instance from given object
          */
-        explicit cow_wrapper( const value_type& r ) :
+        explicit cow_wrapper( const value_type& r ) : 
             m_pimpl( new impl_t(r) )
         {
         }
@@ -240,7 +240,7 @@ void cow_wrapper_client::queryUnmodified() const
 
             release();
             m_pimpl = rSrc.m_pimpl;
-
+            
             return *this;
         }
 
@@ -253,7 +253,7 @@ void cow_wrapper_client::queryUnmodified() const
                 release();
                 m_pimpl = pimpl;
             }
-
+            
             return m_pimpl->m_value;
         }
 
@@ -273,14 +273,14 @@ void cow_wrapper_client::queryUnmodified() const
         {
             std::swap(m_pimpl, r.m_pimpl);
         }
-
-        pointer           operator->()       { return &make_unique(); }
+        
+        pointer		      operator->()       { return &make_unique(); }
         value_type&       operator*()        { return make_unique(); }
         const_pointer     operator->() const { return &m_pimpl->m_value; }
         const value_type& operator*()  const { return m_pimpl->m_value; }
 
         pointer           get()       { return &make_unique(); }
-        const_pointer     get() const { return &m_pimpl->m_value; }
+        const_pointer	  get() const { return &m_pimpl->m_value; }
 
         /// true, if both cow_wrapper internally share the same object
         bool              same_object( const cow_wrapper& rOther ) const
@@ -293,25 +293,25 @@ void cow_wrapper_client::queryUnmodified() const
     };
 
 
-    template<class T, class P> inline bool operator==( const cow_wrapper<T,P>& a,
+    template<class T, class P> inline bool operator==( const cow_wrapper<T,P>& a, 
                                                        const cow_wrapper<T,P>& b )
     {
         return a.same_object(b) ? true : *a == *b;
     }
 
-    template<class T, class P> inline bool operator!=( const cow_wrapper<T,P>& a,
+    template<class T, class P> inline bool operator!=( const cow_wrapper<T,P>& a, 
                                                        const cow_wrapper<T,P>& b )
     {
         return a.same_object(b) ? false : *a != *b;
     }
 
-    template<class A, class B, class P> inline bool operator<( const cow_wrapper<A,P>& a,
+    template<class A, class B, class P> inline bool operator<( const cow_wrapper<A,P>& a, 
                                                                const cow_wrapper<B,P>& b )
     {
         return *a < *b;
     }
 
-    template<class T, class P> inline void swap( cow_wrapper<T,P>& a,
+    template<class T, class P> inline void swap( cow_wrapper<T,P>& a, 
                                                  cow_wrapper<T,P>& b )
     {
         a.swap(b);

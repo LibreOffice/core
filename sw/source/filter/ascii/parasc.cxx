@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,9 +113,9 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     pArr = new sal_Char [ ASC_BUFFLEN + 2 ];
 
     pItemSet = new SfxItemSet( pDoc->GetAttrPool(),
-                RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
-                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_LANGUAGE,
-                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE,
+                RES_CHRATR_FONT,		RES_CHRATR_LANGUAGE,
+                RES_CHRATR_CJK_FONT,	RES_CHRATR_CJK_LANGUAGE,
+                RES_CHRATR_CTL_FONT,	RES_CHRATR_CTL_LANGUAGE,
                 0 );
 
     // set defaults from the options
@@ -336,7 +336,7 @@ ULONG SwASCIIParser::ReadChars()
             if( SVSTREAM_OK != rInput.GetError() || 0 == (lGCount =
                         rInput.Read( pArr + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
-                break;      // aus der WHILE-Schleife heraus
+                break;		// aus der WHILE-Schleife heraus
 
             /*
             #98380#
@@ -409,13 +409,13 @@ ULONG SwASCIIParser::ReadChars()
         switch( *pStt )
         {
 //JP 12.11.2001: task 94636 - don't ignore all behind the zero character,
-//                            change it to the default "control character"
-//      case 0:
-//                  pEnd = pStt;
-//                  bIns = false ;
-//                  break;
+//							  change it to the default "control character"
+//		case 0:
+//					pEnd = pStt;
+//					bIns = false ;
+//					break;
 
-        case 0x0a:  if( LINEEND_LF == pUseMe->GetParaFlags() )
+        case 0x0a:	if( LINEEND_LF == pUseMe->GetParaFlags() )
                     {
                         bIns = false;
                         *pStt = 0;
@@ -427,7 +427,7 @@ ULONG SwASCIIParser::ReadChars()
                     }
                     break;
 
-        case 0x0d:  if( LINEEND_LF != pUseMe->GetParaFlags() )
+        case 0x0d:	if( LINEEND_LF != pUseMe->GetParaFlags() )
                     {
                         bIns = false;
                         *pStt = 0;
@@ -479,7 +479,7 @@ ULONG SwASCIIParser::ReadChars()
                         *pStt = '#';        // Ersatzdarstellung
                     break;
 
-        case '\t':  break;
+        case '\t':	break;
 
         default:
             if( ' ' > *pStt )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,18 +24,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
  #ifndef _OSL_UUNXAPI_HXX_
  #define _OSL_UUNXAPI_HXX_
-
+  
  #ifndef _OSL_UUNXAPI_H_
  #include "uunxapi.h"
  #endif
-
+ 
  #ifndef _RTL_USTRING_HXX_
  #include <rtl/ustring.hxx>
  #endif
-
+ 
  //###########################
  inline rtl::OString OUStringToOString(const rtl_uString* s)
  {
@@ -43,53 +43,53 @@
         rtl::OUString(const_cast<rtl_uString*>(s)),
         osl_getThreadTextEncoding());
  }
-
+ 
  namespace osl
  {
-
+ 
      /***********************************
-      osl::access
-
+      osl::access 
+  
       @see access
       **********************************/
-
+  
      inline int access(const rtl::OUString& ustrPath, int mode)
       {
          return access_u(ustrPath.pData, mode);
        }
-
+ 
      /***********************************
       osl::realpath
-
+  
       @descr
       The return value differs from the
       realpath function
-
+  
       @returns sal_True on success else
       sal_False
-
+  
       @see realpath
       **********************************/
-
+  
      inline sal_Bool realpath(
-         const rtl::OUString& ustrFileName,
+         const rtl::OUString& ustrFileName, 
         rtl::OUString& ustrResolvedName)
      {
          return realpath_u(ustrFileName.pData, &ustrResolvedName.pData);
       }
-
-
+ 
+     
      /***********************************
       osl::lstat
-
+  
       @see lstat
       **********************************/
-
+     
       inline int lstat(const rtl::OUString& ustrPath, struct stat& buf)
       {
            return lstat_u(ustrPath.pData, &buf);
       }
-
+    
     /***********************************
           osl::mkdir
           @see mkdir
@@ -98,9 +98,9 @@
     {
         return mkdir_u(aPath.pData, aMode);
     }
-
+    
  } // end namespace osl
-
-
+ 
+ 
  #endif /* _OSL_UUNXAPI_HXX_ */
-
+ 

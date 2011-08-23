@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +38,14 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 
 public class SVersionRCFile {
-
-    public static final String DEFAULT_NAME =
+    
+    public static final String DEFAULT_NAME = 
         System.getProperty("os.name").startsWith("Windows") == true ?
             System.getProperty("user.home") + File.separator +
             "Application Data" + File.separator + "sversion.ini" :
             System.getProperty("user.home") + File.separator +
             ".sversionrc";
-
+    
     public static final String FILE_URL_PREFIX =
         System.getProperty("os.name").startsWith("Windows") == true ?
             "file:///" : "file://";
@@ -133,7 +133,7 @@ public class SVersionRCFile {
 
     private void load(BufferedReader br) throws IOException {
         String s;
-
+        
         while ((s = br.readLine()) != null &&
               (s.equals(VERSIONS_LINE)) != true);
 
@@ -157,7 +157,7 @@ public class SVersionRCFile {
 
     public static String toFileURL(String path) {
         File f = new File(path);
-
+        
         if (!f.exists())
             return null;
 
@@ -209,7 +209,7 @@ public class SVersionRCFile {
         }
         return null;
     }
-
+    
     public static void main(String[] args) {
         SVersionRCFile ov;
 

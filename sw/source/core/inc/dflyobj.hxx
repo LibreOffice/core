@@ -25,19 +25,19 @@
  *
  ************************************************************************/
 #ifndef _DFLYOBJ_HXX
-#define _DFLYOBJ_HXX
+#define	_DFLYOBJ_HXX
 #include <svx/svdovirt.hxx>
 
 class SwFlyFrm;
 class SwFrmFmt;
 class SdrObjMacroHitRec;
 
-const UINT32 SWGInventor =  UINT32('S')*0x00000001+
+const UINT32 SWGInventor =	UINT32('S')*0x00000001+
                             UINT32('W')*0x00000100+
                             UINT32('G')*0x00010000;
 
 const UINT16 SwFlyDrawObjIdentifier = 0x0001;
-const UINT16 SwDrawFirst            = 0x0001;
+const UINT16 SwDrawFirst			= 0x0001;
 
 //---------------------------------------
 //SwFlyDrawObj, Die DrawObjekte fuer Flys.
@@ -60,9 +60,9 @@ public:
 
     //Damit eine Instanz dieser Klasse beim laden erzeugt werden kann
     //(per Factory).
-    virtual UINT32 GetObjInventor()     const;
-    virtual UINT16 GetObjIdentifier()   const;
-    virtual UINT16 GetObjVersion()      const;
+    virtual UINT32 GetObjInventor()		const;
+    virtual UINT16 GetObjIdentifier()	const;
+    virtual UINT16 GetObjVersion()		const;
 };
 
 //---------------------------------------
@@ -96,33 +96,33 @@ public:
     ~SwVirtFlyDrawObj();
 
     //Ueberladene Methoden der Basisklasse SdrVirtObj
-    virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
+    virtual void  	 TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
 
     //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.
     virtual const Rectangle& GetCurrentBoundRect() const;
     virtual const Rectangle& GetLastBoundRect() const;
-    virtual       void       RecalcBoundRect();
-    virtual       void       RecalcSnapRect();
-    virtual const Rectangle& GetSnapRect()  const;
-    virtual       void       SetSnapRect(const Rectangle& rRect);
-    virtual       void       NbcSetSnapRect(const Rectangle& rRect);
+    virtual		  void		 RecalcBoundRect();
+    virtual		  void		 RecalcSnapRect();
+    virtual const Rectangle& GetSnapRect()	const;
+    virtual		  void		 SetSnapRect(const Rectangle& rRect);
+    virtual		  void		 NbcSetSnapRect(const Rectangle& rRect);
     virtual const Rectangle& GetLogicRect() const;
-    virtual       void       SetLogicRect(const Rectangle& rRect);
-    virtual       void       NbcSetLogicRect(const Rectangle& rRect);
+    virtual		  void		 SetLogicRect(const Rectangle& rRect);
+    virtual		  void		 NbcSetLogicRect(const Rectangle& rRect);
     virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual       void       NbcMove  (const Size& rSiz);
-    virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
+    virtual		  void		 NbcMove  (const Size& rSiz);
+    virtual		  void		 NbcResize(const Point& rRef, const Fraction& xFact,
                                        const Fraction& yFact);
-    virtual       void       Move  (const Size& rSiz);
-    virtual       void       Resize(const Point& rRef, const Fraction& xFact,
+    virtual		  void		 Move  (const Size& rSiz);
+    virtual		  void		 Resize(const Point& rRef, const Fraction& xFact,
                                     const Fraction& yFact);
 
     const SwFrmFmt *GetFmt() const;
           SwFrmFmt *GetFmt();
 
     // Get Methoden fuer die Fly Verpointerung
-          SwFlyFrm* GetFlyFrm()         { return pFlyFrm; }
-    const SwFlyFrm* GetFlyFrm() const   { return pFlyFrm; }
+          SwFlyFrm* GetFlyFrm()			{ return pFlyFrm; }
+    const SwFlyFrm* GetFlyFrm() const	{ return pFlyFrm; }
 
     void SetRect() const;
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,10 +25,10 @@
  *
  ************************************************************************/
 
-#ifndef _GOODIES_GRAPHICTRANSFORMER_HXX
-#define _GOODIES_GRAPHICTRANSFORMER_HXX
+#ifndef _GOODIES_GRAPHICTRANSFORMER_HXX 
+#define _GOODIES_GRAPHICTRANSFORMER_HXX 
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase1.hxx> 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 
@@ -49,15 +49,15 @@ class GraphicTransformer : public GraphicTransformer_UnoImplHelper1
 
     GraphicTransformer();
     ~GraphicTransformer();
-
+        
     // XGraphicTransformer
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL colorChange(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL colorChange( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rGraphic,
             sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
+    
 };
 
 }
 
-#endif
+#endif 

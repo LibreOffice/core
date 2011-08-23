@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -2536,7 +2536,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpUnused( 2 );
             dumpRange( "visible-range", false );
         break;
-
+        
         case BIFF_ID_PAGELAYOUTVIEW:
             dumpFrHeader( true, true );
             dumpDec< sal_uInt16 >( "scaling", "CONV-PERCENT" );

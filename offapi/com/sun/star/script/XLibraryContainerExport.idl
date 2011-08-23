@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,57 +24,57 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_XLibraryContainerExport_idl__
-#define __com_sun_star_script_XLibraryContainerExport_idl__
-
+#ifndef __com_sun_star_script_XLibraryContainerExport_idl__ 
+#define __com_sun_star_script_XLibraryContainerExport_idl__ 
+ 
 #ifndef __com_sun_star_task_XInteractionHandler_idl__
 #include <com/sun/star/task/XInteractionHandler.idl>
 #endif
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
+#include <com/sun/star/container/NoSuchElementException.idl> 
+#endif 
+ 
 
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module script {
-
-//=============================================================================
-
-/**
-    Extension of XLibraryContainer to provide functionality to
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
+ 
+/** 
+    Extension of XLibraryContainer to provide functionality to 
     store a library to a location represented by a URL.
  */
 interface XLibraryContainerExport : com::sun::star::uno::XInterface
-{
-    /**
-        Exports a library specified by Name to the location
+{ 
+    /** 
+        Exports a library specified by Name to the location 
         specified by the passed URL string.
 
         An interaction handler can be passed to be used for internal
-        ucb operations. Exceptions not processed by this handler will
-        be passed as com::sun::star::uno::Exception. If this parameter
+        ucb operations. Exceptions not processed by this handler will 
+        be passed as com::sun::star::uno::Exception. If this parameter 
         is null this applies to all exceptions thrown by ucb.
 
         @see com::sun::star::task::InteractionHandler
-
-        If a library with the this name doesn't exist a
+ 
+        If a library with the this name doesn't exist a 
         com::sun::star::container::NoSuchElementException is thrown.
      */
     void exportLibrary( [in] string Name, [in] string URL,
         [in] com::sun::star::task::XInteractionHandler Handler )
-            raises( com::sun::star::uno::Exception,
+            raises( com::sun::star::uno::Exception, 
                     com::sun::star::container::NoSuchElementException );
 };
 
-//=============================================================================
-
-
-}; }; }; };
-
-#endif
+//============================================================================= 
+ 
+ 
+}; }; }; };  
+ 
+#endif 

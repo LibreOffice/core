@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,9 +80,9 @@ DBG_NAME(ODBTable)
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
         ,const Reference< XConnection >& _rxConn
         ,const ::rtl::OUString& _rCatalog
-        ,const ::rtl::OUString& _rSchema
+        ,const ::rtl::OUString& _rSchema 
         ,const ::rtl::OUString& _rName
-        ,const ::rtl::OUString& _rType
+        ,const ::rtl::OUString& _rType 
         ,const ::rtl::OUString& _rDesc
         ,const Reference< XNameAccess >& _xColumnDefinitions) throw(SQLException)
     :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
@@ -101,7 +101,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
 // -----------------------------------------------------------------------------
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
                    ,const Reference< XConnection >& _rxConn)
-                throw(SQLException)
+                throw(SQLException) 
     :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_nPrivileges(-1)
 {
@@ -190,7 +190,7 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getFastPropertyValue" );
     if ((PROPERTY_ID_PRIVILEGES == _nHandle) && (-1 == m_nPrivileges))
-    {   // somebody is asking for the privileges an we do not know them, yet
+    {	// somebody is asking for the privileges an we do not know them, yet
         const_cast<ODBTable*>(this)->m_nPrivileges = ::dbtools::getTablePrivileges(getMetaData(),m_CatalogName,m_SchemaName, m_Name);
     }
 
@@ -201,7 +201,7 @@ void ODBTable::construct()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::construct" );
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    
     // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
     // (see getFastPropertyValue)
     m_nPrivileges = -1;
@@ -228,32 +228,32 @@ void ODBTable::construct()
 
     registerProperty(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, PropertyAttribute::BOUND | PropertyAttribute::READONLY,
                     &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
-
+    
     registerMayBeVoidProperty(PROPERTY_TEXTLINECOLOR, PROPERTY_ID_TEXTLINECOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
                     &m_aTextLineColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
-
+    
     registerProperty(PROPERTY_TEXTEMPHASIS, PROPERTY_ID_TEXTEMPHASIS, PropertyAttribute::BOUND,
                     &m_nFontEmphasis, ::getCppuType(&m_nFontEmphasis));
 
     registerProperty(PROPERTY_TEXTRELIEF, PROPERTY_ID_TEXTRELIEF, PropertyAttribute::BOUND,
                     &m_nFontRelief, ::getCppuType(&m_nFontRelief));
 
-    registerProperty(PROPERTY_FONTNAME,         PROPERTY_ID_FONTNAME,        PropertyAttribute::BOUND,&m_aFont.Name,            ::getCppuType(&m_aFont.Name));
-    registerProperty(PROPERTY_FONTHEIGHT,       PROPERTY_ID_FONTHEIGHT,      PropertyAttribute::BOUND,&m_aFont.Height,          ::getCppuType(&m_aFont.Height));
-    registerProperty(PROPERTY_FONTWIDTH,        PROPERTY_ID_FONTWIDTH,       PropertyAttribute::BOUND,&m_aFont.Width,           ::getCppuType(&m_aFont.Width));
-    registerProperty(PROPERTY_FONTSTYLENAME,    PROPERTY_ID_FONTSTYLENAME,   PropertyAttribute::BOUND,&m_aFont.StyleName,       ::getCppuType(&m_aFont.StyleName));
-    registerProperty(PROPERTY_FONTFAMILY,       PROPERTY_ID_FONTFAMILY,      PropertyAttribute::BOUND,&m_aFont.Family,          ::getCppuType(&m_aFont.Family));
-    registerProperty(PROPERTY_FONTCHARSET,      PROPERTY_ID_FONTCHARSET,     PropertyAttribute::BOUND,&m_aFont.CharSet,         ::getCppuType(&m_aFont.CharSet));
-    registerProperty(PROPERTY_FONTPITCH,        PROPERTY_ID_FONTPITCH,       PropertyAttribute::BOUND,&m_aFont.Pitch,           ::getCppuType(&m_aFont.Pitch));
-    registerProperty(PROPERTY_FONTCHARWIDTH,    PROPERTY_ID_FONTCHARWIDTH,   PropertyAttribute::BOUND,&m_aFont.CharacterWidth,  ::getCppuType(&m_aFont.CharacterWidth));
-    registerProperty(PROPERTY_FONTWEIGHT,       PROPERTY_ID_FONTWEIGHT,      PropertyAttribute::BOUND,&m_aFont.Weight,          ::getCppuType(&m_aFont.Weight));
-    registerProperty(PROPERTY_FONTSLANT,        PROPERTY_ID_FONTSLANT,       PropertyAttribute::BOUND,&m_aFont.Slant,           ::getCppuType(&m_aFont.Slant));
-    registerProperty(PROPERTY_FONTUNDERLINE,    PROPERTY_ID_FONTUNDERLINE,   PropertyAttribute::BOUND,&m_aFont.Underline,       ::getCppuType(&m_aFont.Underline));
-    registerProperty(PROPERTY_FONTSTRIKEOUT,    PROPERTY_ID_FONTSTRIKEOUT,   PropertyAttribute::BOUND,&m_aFont.Strikeout,       ::getCppuType(&m_aFont.Strikeout));
-    registerProperty(PROPERTY_FONTORIENTATION,  PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&m_aFont.Orientation,     ::getCppuType(&m_aFont.Orientation));
-    registerProperty(PROPERTY_FONTKERNING,      PROPERTY_ID_FONTKERNING,     PropertyAttribute::BOUND,&m_aFont.Kerning,         ::getCppuType(&m_aFont.Kerning));
-    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&m_aFont.WordLineMode,    ::getCppuType(&m_aFont.WordLineMode));
-    registerProperty(PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,        PropertyAttribute::BOUND,&m_aFont.Type,            ::getCppuType(&m_aFont.Type));
+    registerProperty(PROPERTY_FONTNAME,			PROPERTY_ID_FONTNAME,		 PropertyAttribute::BOUND,&m_aFont.Name,			::getCppuType(&m_aFont.Name));
+    registerProperty(PROPERTY_FONTHEIGHT,		PROPERTY_ID_FONTHEIGHT,		 PropertyAttribute::BOUND,&m_aFont.Height,			::getCppuType(&m_aFont.Height));
+    registerProperty(PROPERTY_FONTWIDTH,		PROPERTY_ID_FONTWIDTH,		 PropertyAttribute::BOUND,&m_aFont.Width,			::getCppuType(&m_aFont.Width));
+    registerProperty(PROPERTY_FONTSTYLENAME,	PROPERTY_ID_FONTSTYLENAME,	 PropertyAttribute::BOUND,&m_aFont.StyleName,		::getCppuType(&m_aFont.StyleName));
+    registerProperty(PROPERTY_FONTFAMILY,		PROPERTY_ID_FONTFAMILY,		 PropertyAttribute::BOUND,&m_aFont.Family,			::getCppuType(&m_aFont.Family));
+    registerProperty(PROPERTY_FONTCHARSET,		PROPERTY_ID_FONTCHARSET,	 PropertyAttribute::BOUND,&m_aFont.CharSet,			::getCppuType(&m_aFont.CharSet));
+    registerProperty(PROPERTY_FONTPITCH,		PROPERTY_ID_FONTPITCH,		 PropertyAttribute::BOUND,&m_aFont.Pitch,			::getCppuType(&m_aFont.Pitch));
+    registerProperty(PROPERTY_FONTCHARWIDTH,	PROPERTY_ID_FONTCHARWIDTH,	 PropertyAttribute::BOUND,&m_aFont.CharacterWidth,	::getCppuType(&m_aFont.CharacterWidth));
+    registerProperty(PROPERTY_FONTWEIGHT,		PROPERTY_ID_FONTWEIGHT,		 PropertyAttribute::BOUND,&m_aFont.Weight,			::getCppuType(&m_aFont.Weight));
+    registerProperty(PROPERTY_FONTSLANT,		PROPERTY_ID_FONTSLANT,		 PropertyAttribute::BOUND,&m_aFont.Slant,			::getCppuType(&m_aFont.Slant));
+    registerProperty(PROPERTY_FONTUNDERLINE,	PROPERTY_ID_FONTUNDERLINE,	 PropertyAttribute::BOUND,&m_aFont.Underline,		::getCppuType(&m_aFont.Underline));
+    registerProperty(PROPERTY_FONTSTRIKEOUT,	PROPERTY_ID_FONTSTRIKEOUT,	 PropertyAttribute::BOUND,&m_aFont.Strikeout,		::getCppuType(&m_aFont.Strikeout));
+    registerProperty(PROPERTY_FONTORIENTATION,	PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&m_aFont.Orientation,		::getCppuType(&m_aFont.Orientation));
+    registerProperty(PROPERTY_FONTKERNING,		PROPERTY_ID_FONTKERNING,	 PropertyAttribute::BOUND,&m_aFont.Kerning,			::getCppuType(&m_aFont.Kerning));
+    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&m_aFont.WordLineMode,	::getCppuType(&m_aFont.WordLineMode));
+    registerProperty(PROPERTY_FONTTYPE,			PROPERTY_ID_FONTTYPE,		 PropertyAttribute::BOUND,&m_aFont.Type,			::getCppuType(&m_aFont.Type));
 
     refreshColumns();
 }
@@ -265,8 +265,8 @@ void ODBTable::construct()
     describeProperties(aProps);
     if(!_nId)
     {
-        Property* pIter = aProps.getArray();
-        Property* pEnd  = pIter + aProps.getLength();
+        Property* pIter	= aProps.getArray();
+        Property* pEnd	= pIter + aProps.getLength();
         for(;pIter != pEnd;++pIter)
         {
             if (0 == pIter->Name.compareToAscii(PROPERTY_CATALOGNAME))
@@ -279,12 +279,12 @@ void ODBTable::construct()
                 pIter->Attributes = PropertyAttribute::READONLY;
         }
     }
-
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    
+    return new ::cppu::OPropertyArrayHelper(aProps);			
 }
-// -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & SAL_CALL ODBTable::getInfoHelper()
-{
+// -----------------------------------------------------------------------------																
+::cppu::IPropertyArrayHelper & SAL_CALL ODBTable::getInfoHelper() 
+{																
     return *ODBTable_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 // -------------------------------------------------------------------------
@@ -309,7 +309,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 
     Sequence< Type > aTypes(OTable_Base::getTypes());
     ::std::vector<Type> aOwnTypes;
-    aOwnTypes.reserve(aTypes.getLength());
+    aOwnTypes.reserve(aTypes.getLength());	
 
     const Type* pIter = aTypes.getConstArray();
     const Type* pEnd = pIter + aTypes.getLength();
@@ -318,7 +318,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
         if( (*pIter != aRenameType || getRenameService().is()) && (*pIter != aAlterType || getAlterService().is()))
             aOwnTypes.push_back(*pIter);
     }
-
+    
     Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
     return Sequence< Type >(pTypes, aOwnTypes.size());
 }

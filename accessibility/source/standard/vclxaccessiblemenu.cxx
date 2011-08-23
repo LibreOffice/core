@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ sal_Int32 VCLXAccessibleMenu::getAccessibleChildCount(  ) throw (RuntimeExceptio
 {
     OExternalLockGuard aGuard( this );
 
-    return GetChildCount();
+    return GetChildCount(); 
 }
 
 // -----------------------------------------------------------------------------
@@ -175,13 +175,13 @@ void VCLXAccessibleMenu::selectAccessibleChild( sal_Int32 nChildIndex ) throw (I
 // -----------------------------------------------------------------------------
 
 sal_Bool VCLXAccessibleMenu::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
-{
+{	
     OExternalLockGuard aGuard( this );
 
     if ( nChildIndex < 0 || nChildIndex >= GetChildCount() )
         throw IndexOutOfBoundsException();
 
-    return IsChildSelected( nChildIndex );
+    return IsChildSelected( nChildIndex );	
 }
 
 // -----------------------------------------------------------------------------
@@ -209,7 +209,7 @@ sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  ) throw (Runtime
     sal_Int32 nRet = 0;
 
     for ( sal_Int32 i = 0, nCount = GetChildCount(); i < nCount; i++ )
-    {
+    {		
         if ( IsChildSelected( i ) )
             ++nRet;
     }
@@ -229,7 +229,7 @@ Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int
     Reference< XAccessible > xChild;
 
     for ( sal_Int32 i = 0, j = 0, nCount = GetChildCount(); i < nCount; i++ )
-    {
+    {		
         if ( IsChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
             xChild = GetChild( i );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,20 +117,20 @@ public:
     virtual void SAL_CALL testInvariant(
         const OUString& TestName,
         const Reference < XInterface >& TestObject)
-        throw  (    IllegalArgumentException,
+        throw  (	IllegalArgumentException,
                     RuntimeException);
 
     virtual sal_Int32 SAL_CALL test(
         const OUString& TestName,
         const Reference < XInterface >& TestObject,
         sal_Int32 hTestHandle)
-        throw  (    IllegalArgumentException,RuntimeException);
+        throw  (	IllegalArgumentException,RuntimeException);
 
     virtual sal_Bool SAL_CALL testPassed(void)
-        throw  (    RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors(void)               throw  (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)       throw  (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void)             throw  (RuntimeException);
+        throw  (	RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getErrors(void) 				throw  (RuntimeException);
+    virtual Sequence< Any > SAL_CALL getErrorExceptions(void) 		throw  (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getWarnings(void) 			throw  (RuntimeException);
 
 private:
     void testSimple( const Reference< XExtendedDocumentHandler > &r );
@@ -140,9 +140,9 @@ private:
     void writeParagraph( const Reference< XExtendedDocumentHandler > &r , const OUString & s);
 
 private:
-    Sequence<Any>       m_seqExceptions;
-    Sequence<OUString>      m_seqErrors;
-    Sequence<OUString>      m_seqWarnings;
+    Sequence<Any>  		m_seqExceptions;
+    Sequence<OUString> 		m_seqErrors;
+    Sequence<OUString> 		m_seqWarnings;
     Reference < XMultiServiceFactory > m_rFactory;
 
 };
@@ -151,7 +151,7 @@ private:
 
 /*----------------------------------------
 *
-*   Attributlist implementation
+* 	Attributlist implementation
 *
 *----------------------------------------*/
 struct AttributeListImpl_impl;
@@ -188,9 +188,9 @@ struct TagAttribute
                   const OUString &sType ,
                   const OUString &sValue )
     {
-        this->sName     = sName;
-        this->sType     = sType;
-        this->sValue    = sValue;
+        this->sName 	= sName;
+        this->sType 	= sType;
+        this->sValue 	= sValue;
     }
 
     OUString sName;
@@ -287,7 +287,7 @@ AttributeListImpl::~AttributeListImpl()
 }
 
 
-void AttributeListImpl::addAttribute(   const OUString &sName ,
+void AttributeListImpl::addAttribute( 	const OUString &sName ,
                                         const OUString &sType ,
                                         const OUString &sValue )
 {
@@ -327,7 +327,7 @@ OUString     OSaxWriterTest_getServiceName( ) throw  ()
     return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.xml.sax.Writer"));
 }
 
-OUString    OSaxWriterTest_getImplementationName( ) throw  ()
+OUString 	OSaxWriterTest_getImplementationName( ) throw  ()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM("test.extensions.xml.sax.Writer"));
 }
@@ -345,7 +345,7 @@ Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw  ()
 
 void OSaxWriterTest::testInvariant( const OUString& TestName,
                                     const Reference < XInterface >& TestObject )
-    throw  (    IllegalArgumentException, RuntimeException)
+    throw  (	IllegalArgumentException, RuntimeException)
 {
     if( OUString::createFromAscii("com.sun.star.xml.sax.Writer") == TestName ) {
         Reference< XDocumentHandler > doc( TestObject , UNO_QUERY );
@@ -366,7 +366,7 @@ sal_Int32 OSaxWriterTest::test(
     const OUString& TestName,
     const Reference < XInterface >& TestObject,
     sal_Int32 hTestHandle)
-    throw  (    IllegalArgumentException,RuntimeException)
+    throw  (	IllegalArgumentException,RuntimeException)
 {
     if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) == TestName )
     {
@@ -418,7 +418,7 @@ sal_Int32 OSaxWriterTest::test(
 
 
 
-sal_Bool OSaxWriterTest::testPassed(void)                   throw  (RuntimeException)
+sal_Bool OSaxWriterTest::testPassed(void)					throw  (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
@@ -430,13 +430,13 @@ Sequence< OUString > OSaxWriterTest::getErrors(void) throw  (RuntimeException)
 }
 
 
-Sequence< Any > OSaxWriterTest::getErrorExceptions(void)                    throw  (RuntimeException)
+Sequence< Any > OSaxWriterTest::getErrorExceptions(void) 					throw  (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > OSaxWriterTest::getWarnings(void)                      throw  (RuntimeException)
+Sequence< OUString > OSaxWriterTest::getWarnings(void) 						throw  (RuntimeException)
 {
     return m_seqWarnings;
 }
@@ -488,7 +488,7 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
 
     pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg1" )),
                          OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("bla\n   u")) );
+                         OUString( RTL_CONSTASCII_USTRINGPARAM("bla\n	u")) );
     pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg2")) ,
                          OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
                          OUString( RTL_CONSTASCII_USTRINGPARAM("blub")) );

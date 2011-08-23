@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace vcl
 {
 namespace unotools
 {
-    class VCL_DLLPUBLIC VclCanvasBitmap :
+    class VCL_DLLPUBLIC VclCanvasBitmap : 
         public cppu::WeakImplHelper3< com::sun::star::rendering::XIntegerReadOnlyBitmap,
                                       com::sun::star::rendering::XBitmapPalette,
                                       com::sun::star::rendering::XIntegerBitmapColorSpace >
@@ -119,7 +119,7 @@ namespace unotools
             are not reflected in this object (copy on write).
          */
         explicit VclCanvasBitmap( const BitmapEx& rBitmap );
-
+        
         /// Retrieve contained bitmap. Call me with locked Solar mutex!
         BitmapEx getBitmapEx() const;
    };

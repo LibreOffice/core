@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,11 +131,11 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
     // to ensure that it is called from the same thread that created the Window
     // otherwise meesages sent during DND won't reach the windows message queue.
     // Calling AttachThreadInput first would resolve this problem but would block
-    // the message queue of the calling thread. So if the current thread
+    // the message queue of the calling thread. So if the current thread 
     // (even if it's an STA thread) and the thread that created the window are not
     // identical we need to create a new thread as we do when the calling thread is
     // an MTA thread.
-
+    
     if( aArguments.getLength() > 0)
     {
         // Get the window handle from aArgument. It is needed for RegisterDragDrop.

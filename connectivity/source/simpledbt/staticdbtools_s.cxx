@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ namespace connectivity
 
     // ------------------------------------------------
     Reference< XConnection> ODataAccessStaticTools::getRowSetConnection(
-                const Reference< XRowSet>& _rxRowSet)
+                const Reference< XRowSet>& _rxRowSet) 
                 const SAL_THROW ( (RuntimeException) )
     {
         return ::dbtools::getConnection(_rxRowSet);
@@ -207,6 +207,6 @@ namespace connectivity
     }
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 

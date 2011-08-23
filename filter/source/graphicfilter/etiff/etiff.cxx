@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,22 +36,22 @@
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
 
-#define NewSubfileType              254
-#define ImageWidth                  256
-#define ImageLength                 257
-#define BitsPerSample               258
-#define Compression                 259
-#define PhotometricInterpretation   262
-#define StripOffsets                273
-#define SamplesPerPixel             277
-#define RowsPerStrip                278
-#define StripByteCounts             279
-#define XResolution                 282
-#define YResolution                 283
-#define PlanarConfiguration         284
-#define ResolutionUnit              296
-#define ColorMap                    320
-#define ReferenceBlackWhite         532
+#define NewSubfileType				254
+#define ImageWidth					256
+#define ImageLength					257
+#define BitsPerSample				258
+#define Compression					259
+#define PhotometricInterpretation	262
+#define StripOffsets				273
+#define SamplesPerPixel				277
+#define RowsPerStrip				278
+#define StripByteCounts				279
+#define XResolution					282
+#define YResolution					283
+#define PlanarConfiguration			284
+#define ResolutionUnit				296
+#define ColorMap					320
+#define ReferenceBlackWhite			532
 
 // -------------
 // - TIFFWriter -
@@ -60,82 +60,82 @@
 struct TIFFLZWCTreeNode
 {
 
-    TIFFLZWCTreeNode*   pBrother;       // naechster Knoten, der den selben Vater hat
-    TIFFLZWCTreeNode*   pFirstChild;    // erster Sohn
-    USHORT              nCode;          // Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
-    USHORT              nValue;         // Der Pixelwert
+    TIFFLZWCTreeNode*	pBrother;		// naechster Knoten, der den selben Vater hat
+    TIFFLZWCTreeNode*	pFirstChild;	// erster Sohn
+    USHORT				nCode;			// Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
+    USHORT				nValue; 		// Der Pixelwert
 };
 
 class TIFFWriter
 {
 private:
 
-    SvStream*           mpOStm;
-    UINT32              mnStreamOfs;
+    SvStream*			mpOStm;
+    UINT32				mnStreamOfs;
 
-    BOOL                mbStatus;
-    BitmapReadAccess*   mpAcc;
+    BOOL				mbStatus;
+    BitmapReadAccess*	mpAcc;
 
-    UINT32              mnWidth, mnHeight, mnColors;
-    UINT32              mnCurAllPictHeight;
-    UINT32              mnSumOfAllPictHeight;
-    UINT32              mnBitsPerPixel;
-    UINT32              mnLastPercent;
+    UINT32				mnWidth, mnHeight, mnColors;
+    UINT32				mnCurAllPictHeight;
+    UINT32				mnSumOfAllPictHeight;
+    UINT32				mnBitsPerPixel;
+    UINT32				mnLastPercent;
 
-    UINT32              mnLatestIfdPos;
-    UINT16              mnTagCount;                 // number of tags already written
-    UINT32              mnCurrentTagCountPos;       // offset to the position where the current
+    UINT32				mnLatestIfdPos;
+    UINT16				mnTagCount;					// number of tags already written
+    UINT32				mnCurrentTagCountPos;		// offset to the position where the current
                                                     // tag count is to insert
 
-    UINT32              mnXResPos;                  // if != 0 this DWORDs stores the
-    UINT32              mnYResPos;                  // actual streamposition of the
-    UINT32              mnPalPos;                   // Tag Entry
-    UINT32              mnBitmapPos;
-    UINT32              mnStripByteCountPos;
+    UINT32				mnXResPos;					// if != 0 this DWORDs stores the
+    UINT32				mnYResPos;					// actual streamposition of the
+    UINT32				mnPalPos;					// Tag Entry
+    UINT32				mnBitmapPos;
+    UINT32				mnStripByteCountPos;
 
-    TIFFLZWCTreeNode*   pTable;
-    TIFFLZWCTreeNode*   pPrefix;
-    USHORT              nDataSize;
-    USHORT              nClearCode;
-    USHORT              nEOICode;
-    USHORT              nTableSize;
-    USHORT              nCodeSize;
-    ULONG               nOffset;
-    ULONG               dwShift;
+    TIFFLZWCTreeNode*	pTable;
+    TIFFLZWCTreeNode*	pPrefix;
+    USHORT				nDataSize;
+    USHORT				nClearCode;
+    USHORT				nEOICode;
+    USHORT				nTableSize;
+    USHORT				nCodeSize;
+    ULONG				nOffset;
+    ULONG				dwShift;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
-    void                ImplCallback( UINT32 nPercent );
-    BOOL                ImplWriteHeader( BOOL bMultiPage );
-    void                ImplWritePalette();
-    BOOL                ImplWriteBody();
-    void                ImplWriteTag( UINT16 TagID, UINT16 DataType, UINT32 NumberOfItems, UINT32 Value);
-    void                ImplWriteResolution( ULONG nStreamPos, sal_uInt32 nResolutionUnit );
-    void                StartCompression();
-    void                Compress( BYTE nSrc );
-    void                EndCompression();
-    inline void         WriteBits( USHORT nCode, USHORT nCodeLen );
+    void				ImplCallback( UINT32 nPercent );
+    BOOL				ImplWriteHeader( BOOL bMultiPage );
+    void				ImplWritePalette();
+    BOOL				ImplWriteBody();
+    void				ImplWriteTag( UINT16 TagID, UINT16 DataType, UINT32 NumberOfItems, UINT32 Value);
+    void				ImplWriteResolution( ULONG nStreamPos, sal_uInt32 nResolutionUnit );
+    void				StartCompression();
+    void				Compress( BYTE nSrc );
+    void				EndCompression();
+    inline void			WriteBits( USHORT nCode, USHORT nCodeLen );
 
 public:
 
                         TIFFWriter();
                         ~TIFFWriter();
 
-    BOOL                WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConfigItem* pFilterConfigItem );
+    BOOL				WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConfigItem* pFilterConfigItem );
 };
 
 // ------------------------------------------------------------------------
 
 TIFFWriter::TIFFWriter() :
-        mbStatus            ( TRUE ),
-        mpAcc               ( NULL ),
-        mnCurAllPictHeight  ( 0 ),
+        mbStatus			( TRUE ),
+        mpAcc				( NULL ),
+        mnCurAllPictHeight	( 0 ),
         mnSumOfAllPictHeight( 0 ),
-        mnLastPercent       ( 0 ),
-        mnXResPos           ( 0 ),
-        mnYResPos           ( 0 ),
-        mnBitmapPos         ( 0 ),
-        mnStripByteCountPos ( 0 )
+        mnLastPercent		( 0 ),
+        mnXResPos			( 0 ),
+        mnYResPos			( 0 ),
+        mnBitmapPos			( 0 ),
+        mnStripByteCountPos	( 0 )
 {
 }
 
@@ -149,7 +149,7 @@ TIFFWriter::~TIFFWriter()
 
 BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConfigItem* pFilterConfigItem)
 {
-    ULONG*  pDummy = new ULONG; delete pDummy; // damit unter OS/2
+    ULONG*	pDummy = new ULONG; delete pDummy; // damit unter OS/2
                                                // das richtige (Tools-)new
                                                // verwendet wird, da es sonst
                                                // in dieser DLL nur Vector-news
@@ -168,18 +168,18 @@ BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConf
     // #i69169# copy stream
     mpOStm = &rTIFF;
 
-    const UINT16    nOldFormat = mpOStm->GetNumberFormatInt();
+    const UINT16	nOldFormat = mpOStm->GetNumberFormatInt();
     mnStreamOfs = mpOStm->Tell();
 
     // we will use the BIG Endian Mode
     // TIFF header
     mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    *mpOStm << (UINT32)0x4d4d002a;      // TIFF identifier
+    *mpOStm << (UINT32)0x4d4d002a;		// TIFF identifier
     mnLatestIfdPos = mpOStm->Tell();
     *mpOStm << (UINT32)0;
 
-    Animation   aAnimation;
-    Bitmap      aBmp;
+    Animation 	aAnimation;
+    Bitmap		aBmp;
 
     if( mbStatus )
     {
@@ -206,7 +206,7 @@ BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConf
                 mnBitsPerPixel = aBmp.GetBitCount();
 
                 // export code below only handles four discrete cases
-                mnBitsPerPixel =
+                mnBitsPerPixel = 
                     mnBitsPerPixel <= 1 ? 1 : mnBitsPerPixel <= 4 ? 4 : mnBitsPerPixel <= 8 ? 8 : 24;
 
                 if ( ImplWriteHeader( ( aAnimation.Count() > 0 ) ) )
@@ -220,7 +220,7 @@ BOOL TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConf
                     }
                     ImplWriteResolution( mnXResPos, aDestMapSize.Width() );
                     ImplWriteResolution( mnYResPos, aDestMapSize.Height() );
-                    if  ( mnPalPos )
+                    if	( mnPalPos )
                         ImplWritePalette();
                     ImplWriteBody();
                 }
@@ -271,12 +271,12 @@ BOOL TIFFWriter::ImplWriteHeader( BOOL bMultiPage )
     {
         UINT32 nCurrentPos = mpOStm->Tell();
         mpOStm->Seek( mnLatestIfdPos );
-        *mpOStm << (UINT32)( nCurrentPos - mnStreamOfs );   // offset to the IFD
+        *mpOStm << (UINT32)( nCurrentPos - mnStreamOfs );	// offset to the IFD
         mpOStm->Seek( nCurrentPos );
 
         // (OFS8) TIFF image file directory (IFD)
         mnCurrentTagCountPos = mpOStm->Tell();
-        *mpOStm << (UINT16)0;               // the number of tagentrys is to insert later
+        *mpOStm << (UINT16)0;				// the number of tagentrys is to insert later
 
         UINT32 nSubFileFlags = 0;
         if ( bMultiPage )
@@ -300,14 +300,14 @@ BOOL TIFFWriter::ImplWriteHeader( BOOL bMultiPage )
                 nTemp = 2;
                 break;
             default:
-                nTemp = 0;  // -Wall set a default...
+                nTemp = 0;	// -Wall set a default...
                 break;
         }
         ImplWriteTag( PhotometricInterpretation, 3, 1, nTemp );
         mnBitmapPos = mpOStm->Tell();
         ImplWriteTag( StripOffsets, 4, 1, 0 );
         ImplWriteTag( SamplesPerPixel, 3, 1, ( mnBitsPerPixel == 24 ) ? 3 : 1 );
-        ImplWriteTag( RowsPerStrip, 4, 1, mnHeight );   //0xffffffff );
+        ImplWriteTag( RowsPerStrip, 4, 1, mnHeight );	//0xffffffff );
         mnStripByteCountPos = mpOStm->Tell();
         ImplWriteTag( StripByteCounts, 4, 1, ( ( mnWidth * mnBitsPerPixel * mnHeight ) + 7 ) >> 3 );
         mnXResPos = mpOStm->Tell();
@@ -315,8 +315,8 @@ BOOL TIFFWriter::ImplWriteHeader( BOOL bMultiPage )
         mnYResPos = mpOStm->Tell();
         ImplWriteTag( YResolution, 5, 1, 0 );
         if ( mnBitsPerPixel != 1 )
-            ImplWriteTag( PlanarConfiguration, 3, 1, 1 );   //  ( RGB ORDER )
-        ImplWriteTag( ResolutionUnit, 3, 1, 2);             // Resolution Unit is Inch
+            ImplWriteTag( PlanarConfiguration, 3, 1, 1 );	//  ( RGB ORDER )
+        ImplWriteTag( ResolutionUnit, 3, 1, 2);				// Resolution Unit is Inch
         if ( ( mnBitsPerPixel == 4 ) || ( mnBitsPerPixel == 8 ) )
         {
             mnColors = mpAcc->GetPaletteEntryCount();
@@ -326,7 +326,7 @@ BOOL TIFFWriter::ImplWriteHeader( BOOL bMultiPage )
 
         // and last we write zero to close the num dir entries list
         mnLatestIfdPos = mpOStm->Tell();
-        *mpOStm << (UINT32)0;               // there are no more IFD
+        *mpOStm << (UINT32)0;				// there are no more IFD
     }
     else
         mbStatus = FALSE;
@@ -340,8 +340,8 @@ void TIFFWriter::ImplWritePalette()
 {
     USHORT i;
     ULONG nCurrentPos = mpOStm->Tell();
-    mpOStm->Seek( mnPalPos + 8 );           // the palette tag entry needs the offset
-    *mpOStm << static_cast<sal_uInt32>(nCurrentPos - mnStreamOfs);  // to the palette colors
+    mpOStm->Seek( mnPalPos + 8 );			// the palette tag entry needs the offset
+    *mpOStm << static_cast<sal_uInt32>(nCurrentPos - mnStreamOfs);	// to the palette colors
     mpOStm->Seek( nCurrentPos );
 
     for ( i = 0; i < mnColors; i++ )
@@ -365,13 +365,13 @@ void TIFFWriter::ImplWritePalette()
 
 BOOL TIFFWriter::ImplWriteBody()
 {
-    BYTE    nTemp = 0;
+    BYTE	nTemp = 0;
     BYTE    nShift;
-    ULONG   j, x, y;
+    ULONG	j, x, y;
 
     ULONG nGfxBegin = mpOStm->Tell();
-    mpOStm->Seek( mnBitmapPos + 8 );        // the strip offset tag entry needs the offset
-    *mpOStm << static_cast<sal_uInt32>(nGfxBegin - mnStreamOfs);        // to the bitmap data
+    mpOStm->Seek( mnBitmapPos + 8 );		// the strip offset tag entry needs the offset
+    *mpOStm << static_cast<sal_uInt32>(nGfxBegin - mnStreamOfs);		// to the bitmap data
     mpOStm->Seek( nGfxBegin );
 
     StartCompression();
@@ -463,7 +463,7 @@ BOOL TIFFWriter::ImplWriteBody()
     {
         ULONG nGfxEnd = mpOStm->Tell();
         mpOStm->Seek( mnStripByteCountPos + 8 );
-        *mpOStm << static_cast<sal_uInt32>( nGfxEnd - nGfxBegin );      // mnStripByteCountPos needs the size of the compression data
+        *mpOStm << static_cast<sal_uInt32>( nGfxEnd - nGfxBegin );		// mnStripByteCountPos needs the size of the compression data
         mpOStm->Seek( nGfxEnd );
     }
     return mbStatus;
@@ -491,7 +491,7 @@ void TIFFWriter::ImplWriteTag( UINT16 nTagID, UINT16 nDataType, UINT32 nNumberOf
         *mpOStm << nDataType;
         *mpOStm << nNumberOfItems;
         if ( nDataType == 3 )
-            nValue <<=16;           // in Big Endian Mode WORDS needed to be shifted to a DWORD
+            nValue <<=16;			// in Big Endian Mode WORDS needed to be shifted to a DWORD
         *mpOStm << nValue;
 }
 
@@ -525,7 +525,7 @@ void TIFFWriter::StartCompression()
     nTableSize = nEOICode + 1;
     nCodeSize = nDataSize + 1;
 
-    nOffset = 32;                       // anzahl freier bits in dwShift
+    nOffset = 32;						// anzahl freier bits in dwShift
     dwShift = 0;
 
     pTable = new TIFFLZWCTreeNode[ 4096 ];
@@ -544,9 +544,9 @@ void TIFFWriter::StartCompression()
 
 void TIFFWriter::Compress( BYTE nCompThis )
 {
-    TIFFLZWCTreeNode*    p;
-    USHORT              i;
-    BYTE                nV;
+    TIFFLZWCTreeNode*	 p;
+    USHORT				i;
+    BYTE				nV;
 
     if( !pPrefix )
     {

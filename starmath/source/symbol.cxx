@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
     m_aFace.SetAlign(ALIGN_BASELINE);
 
     m_cChar   = cChar;
-//! according to HDU this should not be used anymore now
+//! according to HDU this should not be used anymore now 
 //! since this was necessary in the early days but should
 //! not be done now since this is handled now at a more
 //! bottom layer by HDU.
@@ -128,7 +128,7 @@ bool SmSym::IsEqualInUI( const SmSym& rSymbol ) const
     return  m_aName == rSymbol.m_aName &&
             m_aFace == rSymbol.m_aFace &&
             m_cChar == rSymbol.m_cChar;
-}
+}    
 
 /**************************************************************************/
 
@@ -203,13 +203,13 @@ const SymbolPtrVec_t SmSymbolManager::GetSymbols() const
 bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChange )
 {
     bool bAdded = false;
-
+    
     const String aSymbolName( rSymbol.GetName() );
     if (aSymbolName.Len() > 0 && rSymbol.GetSymbolSetName().Len() > 0)
     {
         const SmSym *pFound = GetSymbolByName( aSymbolName );
         const bool bSymbolConflict = pFound && !pFound->IsEqualInUI( rSymbol );
-
+        
         // avoid having the same symbol name twice but with different symbols in use
         if (!pFound || bForceChange)
         {
@@ -218,11 +218,11 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         }
         else if (pFound && !bForceChange && bSymbolConflict)
         {
-                // TODO: but what ...
+                // TODO: but what ... 
                 DBG_ASSERT( 0, "symbol conflict, different symbol with same name found!" );
-        }
+        }    
     }
-
+    
     DBG_ASSERT( bAdded, "failed to add symbol" );
     if (bAdded)
         m_bModified = true;
@@ -241,7 +241,7 @@ void SmSymbolManager::RemoveSymbol( const String & rSymbolName )
     }
 }
 
-
+    
 std::set< String > SmSymbolManager::GetSymbolSetNames() const
 {
     std::set< String >  aRes;
@@ -251,7 +251,7 @@ std::set< String > SmSymbolManager::GetSymbolSetNames() const
     return aRes;
 }
 
-
+    
 const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const String& rSymbolSetName )
 {
     SymbolPtrVec_t aRes;
@@ -266,7 +266,7 @@ const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const String& rSymbolSetName
     }
     return aRes;
 }
-
+    
 
 void SmSymbolManager::Load()
 {
@@ -335,7 +335,7 @@ void SmSymbolManager::Save()
             }
         }
         DBG_ASSERT(pSym - pSymbols == nSaveSymbolCnt, "wrong number of symbols" );
-#endif
+#endif        
 
         // prepare to skip symbols from iGreek on saving
         SmLocalizedSymbolData   aLocalizedData;
@@ -352,7 +352,7 @@ void SmSymbolManager::Save()
                 aSymbols.push_back( *aTmp[i] );
         }
         rCfg.SetSymbols( aSymbols );
-#if 0
+#if 0        
         delete [] pSymbols;
 #endif
 

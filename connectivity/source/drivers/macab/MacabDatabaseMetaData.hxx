@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace connectivity
 
         class MacabDatabaseMetaData : public MacabDatabaseMetaData_BASE
         {
-            ::com::sun::star::uno::Reference< MacabConnection > m_xConnection;
-            sal_Bool                                            m_bUseCatalog;
+            ::com::sun::star::uno::Reference< MacabConnection >	m_xConnection;
+            sal_Bool											m_bUseCatalog;
 
         public:
 

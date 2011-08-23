@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ module com { module sun { module star { module i18n {
 published constants CalendarDisplayIndex
 {
     /// name of an AM/PM value
-    const short AM_PM   = 0;
+    const short AM_PM	= 0;
     /// name of a day of week
-    const short DAY     = 1;
+    const short DAY		= 1;
     /// name of a month
-    const short MONTH   = 2;
+    const short MONTH	= 2;
     /// name of a year (if used for a specific calendar)
-    const short YEAR    = 3;
+    const short YEAR	= 3;
     /// name of an era, like BC/AD
-    const short ERA     = 4;
+    const short ERA		= 4;
 };
 
 //=============================================================================

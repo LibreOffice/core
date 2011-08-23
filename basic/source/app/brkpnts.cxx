@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ struct Breakpoint
 {
     USHORT nLine;
 
-    Breakpoint( USHORT nL ) { nLine = nL; }
+    Breakpoint( USHORT nL )	{ nLine = nL; }
 };
 
 
@@ -166,7 +166,7 @@ void BreakpointWindow::InsertBreakpoint( USHORT nLine )
 }
 
 
-Breakpoint* BreakpointWindow::FindBreakpoint( ULONG nLine )
+Breakpoint*	BreakpointWindow::FindBreakpoint( ULONG nLine )
 {
     Breakpoint* pBrk = First();
     while ( pBrk )
@@ -289,7 +289,7 @@ void BreakpointWindow::Paint( const Rectangle& )
 }
 
 
-Breakpoint* BreakpointWindow::FindBreakpoint( const Point& rMousePos )
+Breakpoint*	BreakpointWindow::FindBreakpoint( const Point& rMousePos )
 {
     long nLineHeight = GetTextHeight();
     long nYPos = rMousePos.Y() + nCurYOffset;

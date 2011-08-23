@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,42 +41,42 @@
 #include "sc.hrc"
 #include "tabvwsh.hxx"
 #include "hdrcont.hxx"
-#include "scmod.hxx"        // Optionen
-#include "inputopt.hxx"     // Optionen
+#include "scmod.hxx"		// Optionen
+#include "inputopt.hxx"		// Optionen
 #include "gridmerg.hxx"
 #include "document.hxx"
 
 // -----------------------------------------------------------------------
 
-#define SC_DRAG_MIN     2
+#define SC_DRAG_MIN		2
 
-//  passes in paint
-//  (selection left/right must be first because the continuous lines
-//  are partly overwritten later)
+//	passes in paint
+//	(selection left/right must be first because the continuous lines
+//	are partly overwritten later)
 
-#define SC_HDRPAINT_SEL_RIGHT   0
-#define SC_HDRPAINT_SEL_LEFT    1
-#define SC_HDRPAINT_TOP         2
-#define SC_HDRPAINT_SEL_TOP     3
-#define SC_HDRPAINT_SEL_BOTTOM  4
-#define SC_HDRPAINT_BOTTOM      5
-#define SC_HDRPAINT_TEXT        6
-#define SC_HDRPAINT_COUNT       7
+#define SC_HDRPAINT_SEL_RIGHT	0
+#define SC_HDRPAINT_SEL_LEFT	1
+#define SC_HDRPAINT_TOP			2
+#define SC_HDRPAINT_SEL_TOP		3
+#define SC_HDRPAINT_SEL_BOTTOM	4
+#define SC_HDRPAINT_BOTTOM		5
+#define SC_HDRPAINT_TEXT		6
+#define SC_HDRPAINT_COUNT		7
 
 //==================================================================
 
 ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
                                     SCCOLROW nNewSize, USHORT nNewFlags ) :
-            Window      ( pParent ),
-            pSelEngine  ( pSelectionEngine ),
-            nFlags      ( nNewFlags ),
-            bVertical   ( (nNewFlags & HDR_VERTICAL) != 0 ),
-            nSize       ( nNewSize ),
-            nMarkStart  ( 0 ),
-            nMarkEnd    ( 0 ),
-            bMarkRange  ( FALSE ),
-            bDragging   ( FALSE ),
-            bIgnoreMove ( FALSE )
+            Window		( pParent ),
+            pSelEngine	( pSelectionEngine ),
+            nFlags		( nNewFlags ),
+            bVertical	( (nNewFlags & HDR_VERTICAL) != 0 ),
+            nSize		( nNewSize ),
+            nMarkStart	( 0 ),
+            nMarkEnd	( 0 ),
+            bMarkRange	( FALSE ),
+            bDragging	( FALSE ),
+            bIgnoreMove	( FALSE )
 {
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
     // is also not mirrored
@@ -86,7 +86,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
     EnableRTL( FALSE );
 
     aNormFont = GetFont();
-    aNormFont.SetTransparent( TRUE );       //! WEIGHT_NORMAL hart setzen ???
+    aNormFont.SetTransparent( TRUE );		//! WEIGHT_NORMAL hart setzen ???
     aBoldFont = aNormFont;
     aBoldFont.SetWeight( WEIGHT_BOLD );
 
@@ -96,7 +96,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
     Size aSize = LogicToPixel( Size(
         GetTextWidth( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("8888")) ),
         GetTextHeight() ) );
-    aSize.Width()  += 4;    // Platz fuer hervorgehobene Umrandung
+    aSize.Width()  += 4;	// Platz fuer hervorgehobene Umrandung
     aSize.Height() += 3;
     SetSizePixel( aSize );
 
@@ -104,7 +104,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
     nBigWidth = LogicToPixel( Size( GetTextWidth(
         String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("8888888")) ), 0 ) ).Width() + 5;
 
-    SetBackground();    // sonst Probleme auf OS/2 !?!?!
+    SetBackground();	// sonst Probleme auf OS/2 !?!?!
 }
 
 void ScHeaderControl::SetWidth( long nNew )
@@ -112,12 +112,12 @@ void ScHeaderControl::SetWidth( long nNew )
     DBG_ASSERT( bVertical, "SetDigits nur fuer Zeilenkoepfe erlaubt" );
     if ( nNew != nWidth )
     {
-        Size aSize( nNew, GetSizePixel().Height() );    // Hoehe nicht aendern
+        Size aSize( nNew, GetSizePixel().Height() );	// Hoehe nicht aendern
         SetSizePixel( aSize );
 
         nWidth = nNew;
 
-        Invalidate();       // neu zentrieren
+        Invalidate();		// neu zentrieren
     }
 }
 
@@ -146,21 +146,21 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
 
 void ScHeaderControl::SetMark( BOOL bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd )
 {
-    BOOL bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();    //! cachen?
+    BOOL bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();	//! cachen?
     if (!bEnabled)
         bNewSet = FALSE;
 
-    //  Variablen setzen
+    //	Variablen setzen
 
-    BOOL bOldSet     = bMarkRange;
+    BOOL bOldSet	 = bMarkRange;
     SCCOLROW nOldStart = nMarkStart;
-    SCCOLROW nOldEnd     = nMarkEnd;
+    SCCOLROW nOldEnd	 = nMarkEnd;
     PutInOrder( nNewStart, nNewEnd );
     bMarkRange = bNewSet;
     nMarkStart = nNewStart;
     nMarkEnd   = nNewEnd;
 
-    //  Paint
+    //	Paint
 
     if ( bNewSet )
     {
@@ -176,20 +176,20 @@ void ScHeaderControl::SetMark( BOOL bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEn
                 DoPaint( Min( nNewStart, nOldStart ), Max( nNewStart, nOldStart ) - 1 );
             else if ( nNewStart > nOldEnd || nNewEnd < nOldStart )
             {
-                //  zwei Bereiche...
+                //	zwei Bereiche...
                 DoPaint( nOldStart, nOldEnd );
                 DoPaint( nNewStart, nNewEnd );
             }
-            else                //  irgendwie ueberlappend... (kommt eh nicht oft vor)
+            else				//	irgendwie ueberlappend... (kommt eh nicht oft vor)
                 DoPaint( Min( nNewStart, nOldStart ), Max( nNewEnd, nOldEnd ) );
         }
         else
-            DoPaint( nNewStart, nNewEnd );      //  komplett neu
+            DoPaint( nNewStart, nNewEnd );		//	komplett neu
     }
     else if ( bOldSet )
-        DoPaint( nOldStart, nOldEnd );          //  komplett aufheben
+        DoPaint( nOldStart, nOldEnd );			//	komplett aufheben
 
-    //  sonst war nix, is nix
+    //	sonst war nix, is nix
 }
 
 long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo )
@@ -260,13 +260,13 @@ void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBase
 }
 
 //
-//      Paint
+//		Paint
 //
 
 void ScHeaderControl::Paint( const Rectangle& rRect )
 {
-    //  fuer VCL ist es wichtig, wenig Aufrufe zu haben, darum werden die aeusseren
-    //  Linien zusammengefasst
+    //	fuer VCL ist es wichtig, wenig Aufrufe zu haben, darum werden die aeusseren
+    //	Linien zusammengefasst
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     BOOL bHighContrast = rStyleSettings.GetHighContrastMode();
@@ -290,19 +290,19 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     BOOL bMirrored = IsMirrored();
 
-//  const FunctionSet*  pFuncSet = pSelEngine->GetFunctionSet();
-    String              aString;
-    USHORT              nBarSize;
-    Point               aScrPos;
-    Size                aTextSize;
-//  Size                aSize = GetOutputSizePixel();
+//	const FunctionSet*	pFuncSet = pSelEngine->GetFunctionSet();
+    String				aString;
+    USHORT				nBarSize;
+    Point				aScrPos;
+    Size				aTextSize;
+//	Size				aSize = GetOutputSizePixel();
 
     if (bVertical)
         nBarSize = (USHORT) GetSizePixel().Width();
     else
         nBarSize = (USHORT) GetSizePixel().Height();
 
-    SCCOLROW    nPos = GetPos();
+    SCCOLROW	nPos = GetPos();
 
     long nPStart = bVertical ? rRect.Top() : rRect.Left();
     long nPEnd = bVertical ? rRect.Bottom() : rRect.Right();
@@ -313,22 +313,22 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     long nInitScrPos = 0;
     if ( bLayoutRTL )
     {
-        long nTemp = nPStart;       // swap nPStart / nPEnd
+        long nTemp = nPStart;		// swap nPStart / nPEnd
         nPStart = nPEnd;
         nPEnd = nTemp;
-        nTemp = nTransStart;        // swap nTransStart / nTransEnd
+        nTemp = nTransStart;		// swap nTransStart / nTransEnd
         nTransStart = nTransEnd;
         nTransEnd = nTemp;
-        if ( bVertical )            // start loops from the end
+        if ( bVertical )			// start loops from the end
             nInitScrPos = GetSizePixel().Height() - 1;
         else
             nInitScrPos = GetSizePixel().Width() - 1;
     }
 
-    //  aeussere Linien komplett durchzeichnen
-    //  Zuerst Ende der letzten Zelle finden
+    //	aeussere Linien komplett durchzeichnen
+    //	Zuerst Ende der letzten Zelle finden
 
-//  long nLineEnd = -1;
+//	long nLineEnd = -1;
     long nLineEnd = nInitScrPos - nLayoutSign;
 
     for (SCCOLROW i=nPos; i<nSize; i++)
@@ -361,7 +361,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
         }
     }
 
-    //  background is different for entry area and behind the entries
+    //	background is different for entry area and behind the entries
 
     Rectangle aFillRect;
     SetLineColor();
@@ -403,7 +403,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
             {
                 if ( bDark )
                 {
-                    //  solid grey background for dark face color is drawn before lines
+                    //	solid grey background for dark face color is drawn before lines
 
                     SetLineColor();
                     SetFillColor( COL_LIGHTGRAY );
@@ -454,19 +454,19 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     }
 
     //
-    //  loop through entries several times to avoid changing the line color too often
-    //  and to allow merging of lines
+    //	loop through entries several times to avoid changing the line color too often
+    //	and to allow merging of lines
     //
 
     ScGridMerger aGrid( this, 1, 1 );
 
-    //  start at SC_HDRPAINT_BOTTOM instead of 0 - selection doesn't get different
-    //  borders, light border at top isn't used anymore
+    //	start at SC_HDRPAINT_BOTTOM instead of 0 - selection doesn't get different
+    //	borders, light border at top isn't used anymore
     //  use SC_HDRPAINT_SEL_BOTTOM for different color
 
     for (USHORT nPass = SC_HDRPAINT_SEL_BOTTOM; nPass < SC_HDRPAINT_COUNT; nPass++)
     {
-        //  set line color etc. before entry loop
+        //	set line color etc. before entry loop
         switch ( nPass )
         {
             case SC_HDRPAINT_SEL_BOTTOM:
@@ -480,13 +480,13 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                 // DrawSelectionBackground is used only for high contrast on light background
                 if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && bHighContrast && !bDark )
                 {
-                    //  Transparent selection background is drawn after lines, before text.
-                    //  #109814# Use DrawSelectionBackground to make sure there is a visible
-                    //  difference. The case of a dark face color, where DrawSelectionBackground
-                    //  would just paint over the lines, is handled separately (bDark).
-                    //  Otherwise, GetHighlightColor is used with 80% transparency.
-                    //  The window's background color (SetBackground) has to be the background
-                    //  of the cell area, for the contrast comparison in DrawSelectionBackground.
+                    //	Transparent selection background is drawn after lines, before text.
+                    //	#109814# Use DrawSelectionBackground to make sure there is a visible
+                    //	difference. The case of a dark face color, where DrawSelectionBackground
+                    //	would just paint over the lines, is handled separately (bDark).
+                    //	Otherwise, GetHighlightColor is used with 80% transparency.
+                    //	The window's background color (SetBackground) has to be the background
+                    //	of the cell area, for the contrast comparison in DrawSelectionBackground.
 
                     Rectangle aTransRect;
                     if (bVertical)
@@ -500,8 +500,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                 break;
         }
 
-        SCCOLROW    nCount=0;
-        long    nScrPos=nInitScrPos;
+        SCCOLROW	nCount=0;
+        long	nScrPos=nInitScrPos;
         do
         {
             if (bVertical)
@@ -509,9 +509,9 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
             else
                 aScrPos = Point( nScrPos, 0 );
 
-            SCCOLROW    nEntryNo = nCount + nPos;
-            if ( nEntryNo >= nSize )                // MAXCOL/MAXROW
-                nScrPos = nPEnd + nLayoutSign;      //  beyond nPEnd -> stop
+            SCCOLROW	nEntryNo = nCount + nPos;
+            if ( nEntryNo >= nSize )				// MAXCOL/MAXROW
+                nScrPos = nPEnd + nLayoutSign;		//	beyond nPEnd -> stop
             else
             {
                 USHORT nSizePix = GetEntrySize( nEntryNo );
@@ -560,7 +560,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                             break;
 
                         case SC_HDRPAINT_TEXT:
-                            if ( nSizePix > 1 )     // minimal check for small columns/rows
+                            if ( nSizePix > 1 )		// minimal check for small columns/rows
                             {
                                 if ( bMark != bBoldSet )
                                 {
@@ -580,7 +580,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                                     aTxtPos.X() += (nBarSize-aTextSize.Width())/2;
                                     aTxtPos.Y() += (nSizePix*nLayoutSign-aTextSize.Height())/2;
                                     if ( bMirrored )
-                                        aTxtPos.X() += 1;   // dark border is left instead of right
+                                        aTxtPos.X() += 1;	// dark border is left instead of right
                                 }
                                 else
                                 {
@@ -592,10 +592,10 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                             break;
                     }
 
-                    //  bei Selektion der ganzen Zeile/Spalte:
-                    //  InvertRect( Rectangle( aScrPos, aEndPos ) );
+                    //	bei Selektion der ganzen Zeile/Spalte:
+                    //	InvertRect( Rectangle( aScrPos, aEndPos ) );
                 }
-                nScrPos += nSizePix * nLayoutSign;      // also if before the visible area
+                nScrPos += nSizePix * nLayoutSign;		// also if before the visible area
             }
             ++nCount;
         }
@@ -606,20 +606,20 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
 }
 
 //
-//      Maus - Handling
+//		Maus - Handling
 //
 
 SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
 {
-    BOOL    bFound=FALSE;
-    SCCOLROW    nCount = 1;
-    SCCOLROW    nPos = GetPos();
-    SCCOLROW    nHitNo = nPos;
-    long    nScrPos;
-    long    nMousePos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
-    long    nDif;
-    Size    aSize = GetOutputSizePixel();
-    long    nWinSize = bVertical ? aSize.Height() : aSize.Width();
+    BOOL	bFound=FALSE;
+    SCCOLROW	nCount = 1;
+    SCCOLROW	nPos = GetPos();
+    SCCOLROW	nHitNo = nPos;
+    long	nScrPos;
+    long	nMousePos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
+    long	nDif;
+    Size	aSize = GetOutputSizePixel();
+    long	nWinSize = bVertical ? aSize.Height() : aSize.Width();
 
     BOOL bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -630,12 +630,12 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
     {
         SCCOLROW nEntryNo = nCount + nPos;
 
-//      nScrPos = GetScrPos( nEntryNo ) - 1;
+//		nScrPos = GetScrPos( nEntryNo ) - 1;
 
         if (nEntryNo > nSize)
             nScrPos = nEndPos + nLayoutSign;
         else
-            nScrPos += GetEntrySize( nEntryNo - 1 ) * nLayoutSign;      //! GetHiddenCount() ??
+            nScrPos += GetEntrySize( nEntryNo - 1 ) * nLayoutSign;		//! GetHiddenCount() ??
 
         nDif = nMousePos - nScrPos;
         if (nDif >= -2 && nDif <= 2 && nCount > 0)
@@ -669,13 +669,13 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
         // This sheet is protected.  Check if a context menu is allowed on this cell.
         bool bCellsProtected = false;
         if (bVertical)
-        {
+        {    
             // row header
             SCROW nRPos = static_cast<SCROW>(nPos);
             bCellsProtected = pDoc->HasAttrib(0, nRPos, nTab, MAXCOL, nRPos, nTab, HASATTR_PROTECTED);
         }
         else
-        {
+        {    
             // column header
             SCCOL nCPos = static_cast<SCCOL>(nPos);
             bCellsProtected = pDoc->HasAttrib(nCPos, 0, nTab, nCPos, MAXROW, nTab, HASATTR_PROTECTED);
@@ -741,18 +741,18 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             aVis.Top() = LONG_MIN, aVis.Bottom() = LONG_MAX;
         pSelEngine->SetVisibleArea( aVis );
 
-        SetMarking( TRUE );     //  muss vor SelMouseButtonDown sein
+        SetMarking( TRUE );		//	muss vor SelMouseButtonDown sein
         pSelEngine->SelMouseButtonDown( rMEvt );
 
-        //  #74215# In column/row headers a simple click already is a selection.
-        //  -> Call SelMouseMove to ensure CreateAnchor is called (and DestroyAnchor
-        //  if the next click is somewhere else with Control key).
+        //	#74215# In column/row headers a simple click already is a selection.
+        //	-> Call SelMouseMove to ensure CreateAnchor is called (and DestroyAnchor
+        //	if the next click is somewhere else with Control key).
         pSelEngine->SelMouseMove( rMEvt );
 
         if (IsMouseCaptured())
         {
-            //  Tracking statt CaptureMouse, damit sauber abgebrochen werden kann
-            //! Irgendwann sollte die SelectionEngine selber StartTracking rufen!?!
+            //	Tracking statt CaptureMouse, damit sauber abgebrochen werden kann
+            //!	Irgendwann sollte die SelectionEngine selber StartTracking rufen!?!
             ReleaseMouse();
             StartTracking();
         }
@@ -773,10 +773,10 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     {
         DrawInvert( nDragPos );
         ReleaseMouse();
-        bDragging   = FALSE;
+        bDragging	= FALSE;
 
-        long nScrPos    = GetScrPos( nDragNo );
-        long nMousePos  = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
+        long nScrPos	= GetScrPos( nDragNo );
+        long nMousePos 	= bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
         BOOL bLayoutRTL = IsLayoutRTL();
         long nNewWidth  = bLayoutRTL ? ( nScrPos - nMousePos + 1 )
                                      : ( nMousePos + 2 - nScrPos );
@@ -791,7 +791,7 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
                 if (nDragNo>0)
                 {
                     --nDragNo;
-                    nNewWidth += GetEntrySize( nDragNo );   //! GetHiddenCount() ???
+                    nNewWidth += GetEntrySize( nDragNo );	//! GetHiddenCount() ???
                 }
                 else
                     nNewWidth = 0;
@@ -851,8 +851,8 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
 
 void ScHeaderControl::Tracking( const TrackingEvent& rTEvt )
 {
-    //  Weil die SelectionEngine kein Tracking kennt, die Events nur auf
-    //  die verschiedenen MouseHandler verteilen...
+    //	Weil die SelectionEngine kein Tracking kennt, die Events nur auf
+    //	die verschiedenen MouseHandler verteilen...
 
     if ( rTEvt.IsTrackingCanceled() )
         StopMarking();
@@ -867,9 +867,9 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
     USHORT nCmd = rCEvt.GetCommand();
     if ( nCmd == COMMAND_CONTEXTMENU )
     {
-        StopMarking();      // Selektion / Dragging beenden
+        StopMarking();		// Selektion / Dragging beenden
 
-        //  Popup ausfuehren
+        //	Popup ausfuehren
 
         ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell,
                                             SfxViewShell::Current() );
@@ -935,8 +935,8 @@ void ScHeaderControl::StopMarking()
     SetMarking( FALSE );
     bIgnoreMove = TRUE;
 
-    //  #86260# don't call pSelEngine->Reset, so selection across the parts of
-    //  a split/frozen view is possible
+    //	#86260# don't call pSelEngine->Reset, so selection across the parts of
+    //	a split/frozen view is possible
 
     ReleaseMouse();
 }
@@ -945,7 +945,7 @@ void ScHeaderControl::ShowDragHelp()
 {
     if (Help::IsQuickHelpEnabled())
     {
-        long nScrPos    = GetScrPos( nDragNo );
+        long nScrPos	= GetScrPos( nDragNo );
         BOOL bLayoutRTL = IsLayoutRTL();
         long nVal = bLayoutRTL ? ( nScrPos - nDragPos + 1 )
                                : ( nDragPos + 2 - nScrPos );
@@ -960,21 +960,21 @@ void ScHeaderControl::ShowDragHelp()
         USHORT nAlign;
         if (!bVertical)
         {
-            //  oberhalb
+            //	oberhalb
             aRect.Left() = aMousePos.X();
-            aRect.Top()  = aPos.Y() - 4;
-            nAlign       = QUICKHELP_BOTTOM|QUICKHELP_CENTER;
+            aRect.Top()	 = aPos.Y() - 4;
+            nAlign		 = QUICKHELP_BOTTOM|QUICKHELP_CENTER;
         }
         else
         {
-            //  rechts oben
+            //	rechts oben
             aRect.Left() = aPos.X() + aSize.Width() + 8;
-            aRect.Top()  = aMousePos.Y() - 2;
-            nAlign       = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
+            aRect.Top()	 = aMousePos.Y() - 2;
+            nAlign		 = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
         }
 
-        aRect.Right()   = aRect.Left();
-        aRect.Bottom()  = aRect.Top();
+        aRect.Right() 	= aRect.Left();
+        aRect.Bottom()	= aRect.Top();
 
         Help::ShowQuickHelp(this, aRect, aHelpStr, nAlign);
     }
@@ -982,8 +982,8 @@ void ScHeaderControl::ShowDragHelp()
 
 void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
 {
-    //  Wenn eigene QuickHelp angezeigt wird, nicht durch RequestHelp
-    //  wieder wegnehmen lassen
+    //	Wenn eigene QuickHelp angezeigt wird, nicht durch RequestHelp
+    //	wieder wegnehmen lassen
 
     BOOL bOwn = bDragging && Help::IsQuickHelpEnabled();
     if (!bOwn)
@@ -991,7 +991,7 @@ void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
 }
 
 // -----------------------------------------------------------------------
-//                  Dummys fuer virtuelle Methoden
+//					Dummys fuer virtuelle Methoden
 // -----------------------------------------------------------------------
 
 SCCOLROW ScHeaderControl::GetHiddenCount( SCCOLROW nEntryNo )

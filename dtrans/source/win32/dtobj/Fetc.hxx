@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
  stl container elements must fulfill the following requirements:
  1. they need a copy ctor and assignement operator(?)
  2. they must be compareable
- because the FORMATETC structure has a pointer to a TARGETDEVICE
+ because the FORMATETC structure has a pointer to a TARGETDEVICE 
  structure we need a simple wrapper class to fulfill these needs
 ***********************************************************************/
 

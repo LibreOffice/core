@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ using namespace ::cppu;
 
 //-----------------------------------------------------------------------------
 
-USHORT  SvxOpenGrfErr2ResId(    short   err     )
+USHORT	SvxOpenGrfErr2ResId(	short	err		)
 {
     switch( err )
     {
@@ -89,10 +89,10 @@ USHORT  SvxOpenGrfErr2ResId(    short   err     )
 
 struct SvxOpenGrf_Impl
 {
-    SvxOpenGrf_Impl         ();
+    SvxOpenGrf_Impl			();
 
-    sfx2::FileDialogHelper                  aFileDlg;
-    uno::Reference < XFilePickerControlAccess > xCtrlAcc;
+    sfx2::FileDialogHelper					aFileDlg;
+    uno::Reference < XFilePickerControlAccess >	xCtrlAcc;
 };
 
 
@@ -118,22 +118,22 @@ SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 
 short SvxOpenGraphicDialog::Execute()
 {
-    USHORT  nImpRet;
-    BOOL    bQuitLoop(FALSE);
+    USHORT 	nImpRet;
+    BOOL	bQuitLoop(FALSE);
 
     while( bQuitLoop == FALSE &&
            mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
     {
         if( GetPath().Len() )
         {
-            GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+            GraphicFilter*	pFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject aObj( GetPath() );
 
             // check whether we can load the graphic
-            String  aCurFilter( GetCurrentFilter() );
-            USHORT  nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
-            USHORT  nRetFormat = 0;
-            USHORT  nFound = USHRT_MAX;
+            String	aCurFilter( GetCurrentFilter() );
+            USHORT 	nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
+            USHORT 	nRetFormat = 0;
+            USHORT	nFound = USHRT_MAX;
 
             // non-local?
             if ( INET_PROT_FILE != aObj.GetProtocol() )
@@ -176,7 +176,7 @@ short SvxOpenGraphicDialog::Execute()
                 // setup appropriate filter (so next time, it will work)
                 if( pFilter->GetImportFormatCount() )
                 {
-                    String  aFormatName(pFilter->GetImportFormatName(nFound));
+                    String	aFormatName(pFilter->GetImportFormatName(nFound));
                     SetCurrentFilter(aFormatName);
                 }
 
@@ -202,7 +202,7 @@ void SvxOpenGraphicDialog::SetPath( const String& rPath, sal_Bool bLinkState )
 }
 
 
-void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
+void SvxOpenGraphicDialog::EnableLink( sal_Bool	 state	)
 {
     if( mpImpl->xCtrlAcc.is() )
     {
@@ -220,13 +220,13 @@ void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
 }
 
 
-void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
+void SvxOpenGraphicDialog::AsLink(sal_Bool	bState)
 {
     if( mpImpl->xCtrlAcc.is() )
     {
         try
         {
-            Any aAny; aAny <<= bState;
+            Any	aAny; aAny <<= bState;
             mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
         }
         catch(IllegalArgumentException)
@@ -279,7 +279,7 @@ String SvxOpenGraphicDialog::GetCurrentFilter() const
 }
 
 
-void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
+void SvxOpenGraphicDialog::SetCurrentFilter(const String&	rStr)
 {
     mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }

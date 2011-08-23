@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public:
         ShellId nId,
         ::Window* pParentWindow,
         FrameView* pFrameView = NULL);
-
+    
     virtual void ReleaseShell (SfxShell* pShell);
 
     /** Add a sub shell to the set of sub shells managed by the
@@ -86,7 +86,7 @@ public:
         NULL when this shell is requested.
     */
     void RemoveSubShell (const SfxShell* pShell);
-    /** removes the shell given by its ID from the set of sub shells managed by the
+    /** removes the shell given by its ID from the set of sub shells managed by the 
         TaskPaneShellManager. Subsequent calls to CreateShell() will return
         NULL when this shell is requested.
     */

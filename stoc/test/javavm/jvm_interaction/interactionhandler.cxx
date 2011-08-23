@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >
         if(retry.is())
             break;
     }
-
+    
 //     if( abort.is())
 //         abort->select();
 
@@ -137,14 +137,14 @@ void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >
 sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
 {
     sal_Bool retVal= sal_True;
-    setCurrentContext( Reference<XCurrentContext>( static_cast<XWeak*>(new Context()), UNO_QUERY));
+    setCurrentContext( Reference<XCurrentContext>( static_cast<XWeak*>(new Context()), UNO_QUERY)); 
 
       OUString sVMService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"));
     Reference<XInterface> xXInt= xMgr->createInstance(sVMService);
     if( ! xXInt.is())
         return sal_False;
     Reference<XJavaVM> xVM( xXInt, UNO_QUERY);
-    if( ! xVM.is())
+    if( ! xVM.is()) 
         return sal_False;
 
 
@@ -158,27 +158,27 @@ sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
     }
     catch (JavaNotConfiguredException& e)
     {
-        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding()); 
         printf("JavaNotConfiguredException: %s\n", msg.getStr());
     }
     catch (JavaVMCreationFailureException& e)
     {
-        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding()); 
         printf("JavaVMCreationFailureException: %s\n", msg.getStr());
     }
     catch (MissingJavaRuntimeException& e)
     {
-        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding()); 
         printf("MissingJavaRuntimeException: %s\n", msg.getStr());
     }
     catch (JavaDisabledException& e)
     {
-        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding()); 
         printf("JavaDisabledException: %s\n", msg.getStr());
     }
     catch (RuntimeException & e)
     {
-        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
+        OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding()); 
         printf("###RuntimeException: %s\n", msg.getStr());
         retVal= sal_False;
     }
@@ -194,7 +194,7 @@ SAL_IMPLEMENT_MAIN()
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
     Reference<XMultiServiceFactory> xMgr( fac, UNO_QUERY);
-
+    
     sal_Bool bSucc = sal_False;
     bSucc= test1(xMgr);
     Reference< XComponent > xCompContext( context, UNO_QUERY );

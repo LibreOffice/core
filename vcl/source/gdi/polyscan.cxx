@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@
 // ----------------
 
 PolyScanline::PolyScanline() :
-        mpFirst ( NULL ),
-        mpLast  ( NULL ),
-        mpAct   ( NULL ),
-        mnLeft  ( 0L ),
-        mnRight ( 0L )
+        mpFirst	( NULL ),
+        mpLast	( NULL ),
+        mpAct	( NULL ),
+        mnLeft	( 0L ),
+        mnRight	( 0L )
 {
 }
 
@@ -89,7 +89,7 @@ void PolyScanline::Insert( long nX )
         {
             ScanlinePoint* pLast = mpFirst;
             ScanlinePoint* pAct = mpFirst->mpNext;
-
+            
             while( pAct )
             {
                 // insert in the midlle of the scanline?
@@ -98,10 +98,10 @@ void PolyScanline::Insert( long nX )
                     pLast->mpNext = new ScanlinePoint( nX, pAct );
                     break;
                 }
-
+                 
                 pLast = pAct;
                 pAct = pAct->mpNext;
-            }
+            }	
         }
     }
 }
@@ -151,8 +151,8 @@ PolyScanner::PolyScanner( const Rectangle& rRect )
 {
     if( !rRect.IsEmpty() )
     {
-        Rectangle   aRect( rRect );
-        ULONG       nHeight;
+        Rectangle	aRect( rRect );
+        ULONG		nHeight;
 
         aRect.Justify();
         mnLeft = aRect.Left();
@@ -179,9 +179,9 @@ PolyScanner::PolyScanner( const Polygon& rPoly )
 
     if( nCount )
     {
-        long    nLast = nCount - 1;
-        Point   aFirst( rPoly[ 0 ] );
-        Point   aLast( rPoly[ (USHORT) nLast ] );
+        long	nLast = nCount - 1;
+        Point	aFirst( rPoly[ 0 ] );
+        Point	aLast( rPoly[ (USHORT) nLast ] );
 
         while( nLast && ( aLast == aFirst ) )
             aLast = rPoly[ (USHORT) --nLast ];
@@ -197,10 +197,10 @@ PolyScanner::PolyScanner( const Polygon& rPoly )
         else
         {
             const Rectangle aRect( rPoly.GetBoundRect() );
-            ULONG           nHeight;
+            ULONG			nHeight;
 
             mnLeft = aRect.Left();
-            mnTop = aRect.Top();
+            mnTop = aRect.Top(); 
             mnRight = aRect.Right();
             mnBottom = aRect.Bottom();
             aLast = aFirst;
@@ -267,21 +267,21 @@ void PolyScanner::InsertLine( const Point& rStart, const Point& rEnd )
                 mpArray[ nY++ - mnTop ].Insert( nX );
         else
             while( nY > nEndY )
-                mpArray[ nY-- - mnTop ].Insert( nX );
+                mpArray[ nY-- - mnTop ].Insert( nX ); 
     }
     else
     {
         const long  nDX = labs( rEnd.X() - rStart.X() );
         const long  nDY = labs( rEnd.Y() - rStart.Y() );
-        const long  nStartX = rStart.X();
-        const long  nStartY = rStart.Y();
-        const long  nEndX = rEnd.X();
-        const long  nEndY = rEnd.Y();
-        const long  nXInc = ( nStartX < nEndX ) ? 1L : -1L;
-        const long  nYInc = ( nStartY < nEndY ) ? 1L : -1L;
-        long        nLastX = nStartX;
-        long        nLastY = nStartY;
-        BOOL        bLast = FALSE;
+        const long	nStartX = rStart.X();
+        const long	nStartY = rStart.Y();
+        const long	nEndX = rEnd.X();
+        const long	nEndY = rEnd.Y();	
+        const long	nXInc = ( nStartX < nEndX ) ? 1L : -1L;
+        const long	nYInc = ( nStartY < nEndY ) ? 1L : -1L;
+        long		nLastX = nStartX;
+        long		nLastY = nStartY;
+        BOOL		bLast = FALSE;
 
         mpArray[ nStartY - mnTop ].Insert( nStartX );
 
@@ -306,7 +306,7 @@ void PolyScanner::InsertLine( const Point& rStart, const Point& rEnd )
 
                 nLastX = nX;
                 nLastY = nY;
-
+                
                 if( nD < 0L )
                     nD += nDY2;
                 else

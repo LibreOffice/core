@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,13 +78,13 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
         if ( pMark )
         {
-            SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
+            SdrObject*	pSdrObj = pMark->GetMarkedSdrObj();
             SvxIMapDlg* pDlg = ViewShell::Implementation::GetImageMapDialog();
 
             if ( pDlg->GetEditingObject() == (void*) pSdrObj )
             {
                 const ImageMap& rImageMap = pDlg->GetImageMap();
-                SdIMapInfo*     pIMapInfo = GetDoc()->GetIMapInfo( pSdrObj );
+                SdIMapInfo* 	pIMapInfo = GetDoc()->GetIMapInfo( pSdrObj );
 
                 if ( !pIMapInfo )
                     pSdrObj->InsertUserData( new SdIMapInfo( rImageMap ) );
@@ -110,9 +110,9 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
-        const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-        const SdrObject*    pObj = NULL;
-        ULONG               nMarkCount = rMarkList.GetMarkCount();
+        const SdrMarkList&	rMarkList = mpDrawView->GetMarkedObjectList();
+        const SdrObject*	pObj = NULL;
+        ULONG				nMarkCount = rMarkList.GetMarkCount();
 
         if ( nMarkCount == 1 )
         {
@@ -133,7 +133,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
 /*************************************************************************
 |*
-|*  Execute-Methode der Optionsleiste
+|*	Execute-Methode der Optionsleiste
 |*
 \************************************************************************/
 
@@ -266,7 +266,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
 /*************************************************************************
 |*
-|*  State-Methode der Optionsleiste
+|*	State-Methode der Optionsleiste
 |*
 \************************************************************************/
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public:
        Return string representation of bintable.
      */
     virtual string toString() const = 0;
-};
+};    
 }}
 
 #endif // INCLUDED_WW8_BIN_TABLE_HXX

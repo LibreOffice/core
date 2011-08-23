@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,10 +97,10 @@ public:
 
        @param pProps      the properties to add
      */
-    void insertProperties(PropertiesPointer pProps)
-    {
+    void insertProperties(PropertiesPointer pProps) 
+    { 
         if( mpProps.get() )
-            mpProps->insert(pProps);
+            mpProps->insert(pProps); 
         else
             mpProps = pProps;
     }
@@ -206,7 +206,7 @@ public:
     {
         mCells[i]->insertProperties(pProps);
     }
-
+    
     /**
         Add properties to the last cell of the row.
      */
@@ -341,7 +341,7 @@ public:
 
     /**
         End the current cell of the current row.
-
+     
         @parm end    end handle of the cell
      */
     void endCell(const T & end)
@@ -356,10 +356,10 @@ public:
     {
         return mpRow->isCellOpen();
     }
-
+    
     /**
         Insert properties to the current cell of the current row.
-
+     
         @param pProps   the properties to add
      */
     void insertCellProperties(PropertiesPointer pProps)
@@ -389,7 +389,7 @@ public:
     /**
       Return the table properties.
      */
-    PropertiesPointer getTableProperties( )
+    PropertiesPointer getTableProperties( ) 
     {
         return mpTableProps;
     }

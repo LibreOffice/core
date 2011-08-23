@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -49,8 +49,8 @@ namespace agg
     //--------------------------------------------------------stroke_calc_arc
     template<class VertexConsumer>
     void stroke_calc_arc(VertexConsumer& out_vertices,
-                         double x,   double y,
-                         double dx1, double dy1,
+                         double x,   double y, 
+                         double dx1, double dy1, 
                          double dx2, double dy2,
                          double width,
                          double approximation_scale)
@@ -76,7 +76,7 @@ namespace agg
 
         if(fabs(da) < stroke_theta)
         {
-            out_vertices.add(coord_type((x + x + dx1 + dx2) * 0.5,
+            out_vertices.add(coord_type((x + x + dx1 + dx2) * 0.5, 
                                         (y + y + dy1 + dy2) * 0.5));
             return;
         }
@@ -111,10 +111,10 @@ namespace agg
     //-------------------------------------------------------stroke_calc_miter
     template<class VertexConsumer>
     void stroke_calc_miter(VertexConsumer& out_vertices,
-                           const vertex_dist& v0,
-                           const vertex_dist& v1,
+                           const vertex_dist& v0, 
+                           const vertex_dist& v1, 
                            const vertex_dist& v2,
-                           double dx1, double dy1,
+                           double dx1, double dy1, 
                            double dx2, double dy2,
                            double width,
                            bool revert_flag,
@@ -136,14 +136,14 @@ namespace agg
             //----------------
             if(calc_distance(dx1, -dy1, dx2, -dy2) < width * 0.025)
             {
-                // This case means that the next segment continues
+                // This case means that the next segment continues 
                 // the previous one (straight line)
                 //-----------------
                 out_vertices.add(coord_type(v1.x + dx1, v1.y - dy1));
             }
             else
             {
-                // This case means that the next segment goes back
+                // This case means that the next segment goes back  
                 //-----------------
                 if(revert_flag)
                 {
@@ -153,9 +153,9 @@ namespace agg
                 else
                 {
                     // If no miter-revert, calcuate new dx1, dy1, dx2, dy2
-                    out_vertices.add(coord_type(v1.x + dx1 + dy1 * miter_limit,
+                    out_vertices.add(coord_type(v1.x + dx1 + dy1 * miter_limit, 
                                                 v1.y - dy1 + dx1 * miter_limit));
-                    out_vertices.add(coord_type(v1.x + dx2 - dy2 * miter_limit,
+                    out_vertices.add(coord_type(v1.x + dx2 - dy2 * miter_limit, 
                                                 v1.y - dy2 - dx2 * miter_limit));
                 }
             }
@@ -170,7 +170,7 @@ namespace agg
                 //------------------------
                 if(revert_flag)
                 {
-                    // For the compatibility with SVG, PDF, etc,
+                    // For the compatibility with SVG, PDF, etc, 
                     // we use a simple bevel join instead of
                     // "smart" bevel
                     //-------------------
@@ -212,8 +212,8 @@ namespace agg
     //--------------------------------------------------------stroke_calc_cap
     template<class VertexConsumer>
     void stroke_calc_cap(VertexConsumer& out_vertices,
-                         const vertex_dist& v0,
-                         const vertex_dist& v1,
+                         const vertex_dist& v0, 
+                         const vertex_dist& v1, 
                          double len,
                          line_cap_e line_cap,
                          double width,
@@ -241,7 +241,7 @@ namespace agg
             double da = fabs(1.0 / (width * approximation_scale));
             while(a1 < a2)
             {
-                out_vertices.add(coord_type(v0.x + cos(a1) * width,
+                out_vertices.add(coord_type(v0.x + cos(a1) * width, 
                                             v0.y + sin(a1) * width));
                 a1 += da;
             }
@@ -259,12 +259,12 @@ namespace agg
     //-------------------------------------------------------stroke_calc_join
     template<class VertexConsumer>
     void stroke_calc_join(VertexConsumer& out_vertices,
-                          const vertex_dist& v0,
-                          const vertex_dist& v1,
+                          const vertex_dist& v0, 
+                          const vertex_dist& v1, 
                           const vertex_dist& v2,
-                          double len1,
+                          double len1, 
                           double len2,
-                          double width,
+                          double width, 
                           line_join_e line_join,
                           line_join_e inner_line_join,
                           double miter_limit,
@@ -288,9 +288,9 @@ namespace agg
             // Inner join
             //---------------
             stroke_calc_miter(out_vertices,
-                              v0, v1, v2, dx1, dy1, dx2, dy2,
-                              width,
-                              inner_line_join == miter_join_revert,
+                              v0, v1, v2, dx1, dy1, dx2, dy2, 
+                              width,                                   
+                              inner_line_join == miter_join_revert, 
                               inner_miter_limit);
         }
         else
@@ -300,24 +300,24 @@ namespace agg
             switch(line_join)
             {
             case miter_join:
-                stroke_calc_miter(out_vertices,
-                                  v0, v1, v2, dx1, dy1, dx2, dy2,
-                                  width,
-                                  false,
+                stroke_calc_miter(out_vertices, 
+                                  v0, v1, v2, dx1, dy1, dx2, dy2, 
+                                  width,                                   
+                                  false, 
                                   miter_limit);
                 break;
 
             case miter_join_revert:
-                stroke_calc_miter(out_vertices,
-                                  v0, v1, v2, dx1, dy1, dx2, dy2,
-                                  width,
-                                  true,
+                stroke_calc_miter(out_vertices, 
+                                  v0, v1, v2, dx1, dy1, dx2, dy2, 
+                                  width,                                   
+                                  true, 
                                   miter_limit);
                 break;
 
             case round_join:
-                stroke_calc_arc(out_vertices,
-                                v1.x, v1.y, dx1, -dy1, dx2, -dy2,
+                stroke_calc_arc(out_vertices, 
+                                v1.x, v1.y, dx1, -dy1, dx2, -dy2, 
                                 width, approximation_scale);
                 break;
 

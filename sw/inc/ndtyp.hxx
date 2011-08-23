@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,15 +32,15 @@
 
 // Ids fuer die verschiedenden Nodes; in der Basisklasse steht der Member,
 // der angibt, um was fuer einen es sich handelt
-const BYTE ND_ENDNODE       = 0x01;
-const BYTE ND_STARTNODE     = 0x02;
-const BYTE ND_TABLENODE     = 0x06;
-const BYTE ND_TEXTNODE      = 0x08;
-const BYTE ND_GRFNODE       = 0x10;
-const BYTE ND_OLENODE       = 0x20;
+const BYTE ND_ENDNODE		= 0x01;
+const BYTE ND_STARTNODE		= 0x02;
+const BYTE ND_TABLENODE		= 0x06;
+const BYTE ND_TEXTNODE 		= 0x08;
+const BYTE ND_GRFNODE 		= 0x10;
+const BYTE ND_OLENODE 		= 0x20;
 
-const BYTE ND_CONTENTNODE   = 0x38; // ContentNode (eines von den 3 Bits)
-const BYTE ND_NOTXTNODE     = 0x30; // NoTxtNode (eines von den 2 Bits)
+const BYTE ND_CONTENTNODE	= 0x38;	// ContentNode (eines von den 3 Bits)
+const BYTE ND_NOTXTNODE		= 0x30;	// NoTxtNode (eines von den 2 Bits)
 
 const BYTE ND_SECTIONNODE   = 0x42;
 // nur fuer internen Gebrauch!!

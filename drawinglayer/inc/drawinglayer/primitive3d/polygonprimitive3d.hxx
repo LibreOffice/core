@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,15 +52,15 @@ namespace drawinglayer
         {
         private:
             /// the hairline geometry
-            basegfx::B3DPolygon                     maPolygon;
-
+            basegfx::B3DPolygon						maPolygon;
+            
             /// the hairline color
-            basegfx::BColor                         maBColor;
+            basegfx::BColor							maBColor;
 
         public:
             /// constructor
             PolygonHairlinePrimitive3D(
-                const basegfx::B3DPolygon& rPolygon,
+                const basegfx::B3DPolygon& rPolygon, 
                 const basegfx::BColor& rBColor);
 
             /// data read access
@@ -88,20 +88,20 @@ namespace drawinglayer
         /** PolygonStrokePrimitive3D class
 
             This primitive defines a 3D line with line width, line join, line color
-            and stroke attributes. It will be decomposed dependent on the definition
+            and stroke attributes. It will be decomposed dependent on the definition 
             to the needed primitives, e.g. filled Tubes for fat lines.
          */
         class PolygonStrokePrimitive3D : public BufferedDecompositionPrimitive3D
         {
         private:
             /// the line geometry
-            basegfx::B3DPolygon                     maPolygon;
-
+            basegfx::B3DPolygon						maPolygon;
+            
             /// the line attributes like width, join and color
-            attribute::LineAttribute                maLineAttribute;
-
+            attribute::LineAttribute				maLineAttribute;
+            
             /// the line stroking (if used)
-            attribute::StrokeAttribute              maStrokeAttribute;
+            attribute::StrokeAttribute				maStrokeAttribute;
 
         protected:
             /// local decomposition.
@@ -110,13 +110,13 @@ namespace drawinglayer
         public:
             /// constructor
             PolygonStrokePrimitive3D(
-                const basegfx::B3DPolygon& rPolygon,
+                const basegfx::B3DPolygon& rPolygon, 
                 const attribute::LineAttribute& rLineAttribute,
                 const attribute::StrokeAttribute& rStrokeAttribute);
 
             /// constructor without stroking
             PolygonStrokePrimitive3D(
-                const basegfx::B3DPolygon& rPolygon,
+                const basegfx::B3DPolygon& rPolygon, 
                 const attribute::LineAttribute& rLineAttribute);
 
             /// data read access

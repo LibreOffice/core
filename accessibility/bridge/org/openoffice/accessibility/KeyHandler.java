@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import javax.accessibility.*;
 
 public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEventDispatcher {
     EventQueue eventQueue;
-
+    
     public class VCLKeyEvent extends KeyEvent implements Runnable {
         boolean consumed = true;
 
@@ -59,13 +59,13 @@ public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEv
             return consumed;
         }
     }
-
+    
     public KeyHandler() {
         eventQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
         java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
     }
-
-    /** This method is called by the current KeyboardFocusManager requesting that this KeyEventDispatcher
+    
+    /** This method is called by the current KeyboardFocusManager requesting that this KeyEventDispatcher 
     * dispatch the specified event on its behalf
     */
     public boolean dispatchKeyEvent(java.awt.event.KeyEvent e) {
@@ -73,34 +73,34 @@ public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEv
             VCLKeyEvent event = (VCLKeyEvent) e;
             event.setConsumed(false);
             return true;
-        }
+        } 
         return false;
     }
-
+        
     /** Handler for KeyPressed events */
     public boolean keyPressed(com.sun.star.awt.KeyEvent event) {
 //      try {
-            VCLKeyEvent vke = new VCLKeyEvent(this, KeyEvent.KEY_PRESSED,
-                AccessibleKeyBinding.convertModifiers(event.Modifiers),
+            VCLKeyEvent vke = new VCLKeyEvent(this, KeyEvent.KEY_PRESSED, 
+                AccessibleKeyBinding.convertModifiers(event.Modifiers), 
                 AccessibleKeyBinding.convertKeyCode(event.KeyCode),
                 event.KeyChar != 0 ? event.KeyChar : KeyEvent.CHAR_UNDEFINED);
-
+            
             eventQueue.postEvent(vke);
-
-            // VCL events for TABs have empty KeyChar
+            
+            // VCL events for TABs have empty KeyChar 
             if (event.KeyCode == com.sun.star.awt.Key.TAB ) {
                 event.KeyChar = '\t';
             }
 
             // Synthesize KEY_TYPED event to emulate Java behavior
             if (event.KeyChar != 0) {
-                eventQueue.postEvent(new VCLKeyEvent(this,
-                    KeyEvent.KEY_TYPED,
-                    AccessibleKeyBinding.convertModifiers(event.Modifiers),
-                    KeyEvent.VK_UNDEFINED,
+                eventQueue.postEvent(new VCLKeyEvent(this, 
+                    KeyEvent.KEY_TYPED, 
+                    AccessibleKeyBinding.convertModifiers(event.Modifiers), 
+                    KeyEvent.VK_UNDEFINED, 
                     event.KeyChar));
             }
-
+            
             // Wait until the key event is processed
             return false;
 //          eventQueue.invokeAndWait(vke);
@@ -111,16 +111,16 @@ public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEv
 //          return false;
 //      }
     }
-
+    
     /** Handler for KeyReleased events */
     public boolean keyReleased(com.sun.star.awt.KeyEvent event) {
 //      try {
-            VCLKeyEvent vke = new VCLKeyEvent(this, KeyEvent.KEY_RELEASED,
+            VCLKeyEvent vke = new VCLKeyEvent(this, KeyEvent.KEY_RELEASED, 
                 AccessibleKeyBinding.convertModifiers(event.Modifiers),
-                AccessibleKeyBinding.convertKeyCode(event.KeyCode),
+                AccessibleKeyBinding.convertKeyCode(event.KeyCode), 
                 event.KeyChar != 0 ? event.KeyChar : KeyEvent.CHAR_UNDEFINED);
             eventQueue.postEvent(vke);
-
+            
             // Wait until the key event is processed
             return false;
 //          eventQueue.invokeAndWait(vke);
@@ -131,7 +131,7 @@ public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEv
 //          return false;
 //      }
     }
-
+    
     public void disposing(com.sun.star.lang.EventObject event) {
         java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(this);
     }

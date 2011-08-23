@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@
 
 #include <unomid.h>
 
-#define HYPHHERE    '-'
-#define PSH         (&pView->GetWrtShell())
+#define HYPHHERE 	'-'
+#define PSH 		(&pView->GetWrtShell())
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -158,7 +158,7 @@ sal_Bool SwHyphWrapper::SpellMore()
 void SwHyphWrapper::InsertHyphen( const sal_uInt16 nPos )
 {
     if( nPos)
-        PSH->InsertSoftHyph( nPos + 1); // does nPos == 1 really mean
+        PSH->InsertSoftHyph( nPos + 1);	// does nPos == 1 really mean
                                         // insert hyphen after first char?
                                         // (instead of nPos == 0)
     else

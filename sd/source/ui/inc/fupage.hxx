@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ class SdPage;
 namespace sd {
 class DrawViewShell;
 
-class FuPage
+class FuPage 
     : public FuPoor
 {
  public:
@@ -46,8 +46,8 @@ class FuPage
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
     const SfxItemSet* ExecuteDialog( Window* pParent );
 
@@ -56,23 +56,23 @@ protected:
 
 private:
     FuPage (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
+        ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq );
 
     void ApplyItemSet( const SfxItemSet* pArgs );
 
-    SfxRequest&                 mrReq;
-    const SfxItemSet*           mpArgs;
-    SdBackgroundObjUndoAction*  mpBackgroundObjUndoAction;
-    Size                        maSize;
-    bool                        mbPageBckgrdDeleted;
-    bool                        mbMasterPage;
-    bool                        mbDisplayBackgroundTabPage;
-    SdPage*                     mpPage;
-    DrawViewShell*              mpDrawViewShell;
+    SfxRequest&					mrReq;
+    const SfxItemSet*			mpArgs;
+    SdBackgroundObjUndoAction*	mpBackgroundObjUndoAction;
+    Size						maSize;
+    bool						mbPageBckgrdDeleted;
+    bool						mbMasterPage;
+    bool						mbDisplayBackgroundTabPage;
+    SdPage*						mpPage;
+    DrawViewShell*				mpDrawViewShell;
 };
 
 } // end of namespace sd

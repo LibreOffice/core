@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,28 +49,28 @@ namespace dbaui
     // =============================================================================================
     class OColumnControlWindow : public OFieldDescControl
     {
-        ::com::sun::star::lang::Locale      m_aLocale;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        ::com::sun::star::lang::Locale		m_aLocale;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>	m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>			m_xConnection;
+        mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 	m_xFormatter;	// a number formatter working with the connection's NumberFormatsSupplier
 
-        OTypeInfoMap                m_aDestTypeInfo;
+        OTypeInfoMap				m_aDestTypeInfo;
         ::std::vector<OTypeInfoMap::iterator> m_aDestTypeInfoIndex;
 
-        mutable TOTypeInfoSP        m_pTypeInfo; // default type
-        String                      m_sTypeNames;       // these type names are the ones out of the resource file
-        ::rtl::OUString             m_sAutoIncrementValue;
-        sal_Bool                    m_bAutoIncrementEnabled;
+        mutable TOTypeInfoSP		m_pTypeInfo; // default type
+        String						m_sTypeNames;		// these type names are the ones out of the resource file
+        ::rtl::OUString				m_sAutoIncrementValue;
+        sal_Bool					m_bAutoIncrementEnabled;
     protected:
-        virtual void        ActivateAggregate( EControlType eType );
-        virtual void        DeactivateAggregate( EControlType eType );
+        virtual void		ActivateAggregate( EControlType eType );
+        virtual void		DeactivateAggregate( EControlType eType );
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const;
+        virtual ::com::sun::star::lang::Locale	GetLocale() const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const;
-        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos);
-        virtual sal_Bool            isAutoIncrementValueEnabled() const;
-        virtual ::rtl::OUString     getAutoIncrementValue() const;
-        virtual void                CellModified(long nRow, USHORT nColId );
+        virtual TOTypeInfoSP		getTypeInfo(sal_Int32 _nPos);
+        virtual sal_Bool			isAutoIncrementValueEnabled() const;
+        virtual ::rtl::OUString		getAutoIncrementValue() const;
+        virtual void				CellModified(long nRow, USHORT nColId );
 
     public:
         OColumnControlWindow(Window* pParent
@@ -81,10 +81,10 @@ namespace dbaui
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData();
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection();
-        virtual const OTypeInfoMap* getTypeInfo() const;
+        virtual const OTypeInfoMap*	getTypeInfo() const;
         TOTypeInfoSP getDefaultTyp() const;
     };
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 #endif // DBAUI_COLUMNCONTROLWINDOW_HXX

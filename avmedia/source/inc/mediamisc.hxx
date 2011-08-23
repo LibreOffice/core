@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@ class ResMgr;
 
 #define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
 
-#ifdef WNT
+#ifdef WNT 
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
 #else
 #ifdef QUARTZ
@@ -38,7 +38,7 @@ class ResMgr;
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
 #endif
 #endif
-
+ 
 namespace avmedia
 {
     ResMgr* GetResMgr();

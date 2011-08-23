@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OneToOneMappingTable_t ignoreSeparatorTable[] = {
+OneToOneMappingTable_t ignoreSeparatorTable[] = {       
     MAKE_PAIR( 0x0021, 0xFFFF ),  // EXCLAMATION MARK
     MAKE_PAIR( 0x0023, 0xFFFF ),  // NUMBER SIGN
     MAKE_PAIR( 0x0024, 0xFFFF ),  // DOLLAR SIGN
@@ -84,7 +84,7 @@ OneToOneMappingTable_t ignoreSeparatorTable[] = {
     MAKE_PAIR( 0x301D, 0xFFFF ),  // REVERSED DOUBLE PRIME
     MAKE_PAIR( 0x301E, 0xFFFF ),  // DOUBLE PRIME QUOTATION MARK
     MAKE_PAIR( 0x301F, 0xFFFF ),  // LOW DOUBLE PRIME QUOTATION MARK
-    MAKE_PAIR( 0x3030, 0xFFFF ),  // WAVY DASH
+    MAKE_PAIR( 0x3030, 0xFFFF ),  // WAVY DASH 
     MAKE_PAIR( 0x30FB, 0xFFFF ),  // KATAKANA MIDDLE DOT
     MAKE_PAIR( 0x30FC, 0xFFFF ),  // KATAKANA-HIRAHANA PROLONGED SOUND MARK
     MAKE_PAIR( 0xFF01, 0xFFFF ),  // FULLWIDTH EXCLAMATION MARK

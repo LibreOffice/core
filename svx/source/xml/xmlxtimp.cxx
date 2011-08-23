@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ enum SvxXMLTableImportContextEnum { stice_unknown, stice_color, stice_marker, st
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
+    SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, 
         sal_Bool bOOoFormat );
     virtual ~SvxXMLTableImportContext();
 
@@ -142,8 +142,8 @@ SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( USHORT nPrefix
             {
                 const OUString& rAttrName = xAttrList->getNameByIndex( i );
                 OUString aLocalName;
-                sal_uInt16 nPrefix_ =
-                    GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                sal_uInt16 nPrefix_ = 
+                    GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
                                                                 &aLocalName );
                 if( XML_NAMESPACE_XLINK == nPrefix_ &&
                     stice_bitmap == meContext &&
@@ -335,11 +335,11 @@ void SvxXMLTableImportContext::importBitmap( USHORT nPrfx, const OUString& rLoca
 ///////////////////////////////////////////////////////////////////////
 
 // #110680#
-SvxXMLXTableImport::SvxXMLXTableImport(
+SvxXMLXTableImport::SvxXMLXTableImport( 
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-    const uno::Reference< XNameContainer > & rTable,
+    const uno::Reference< XNameContainer > & rTable, 
     uno::Reference< XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLImport(xServiceFactory, 0),
+:	SvXMLImport(xServiceFactory, 0),
     mrTable( rTable )
 {
     SetGraphicResolver( xGrfResolver );
@@ -366,8 +366,8 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
 {
     sal_Bool bRet = sal_True;
 
-    uno::Reference< XGraphicObjectResolver >    xGrfResolver;
-    SvXMLGraphicHelper* pGraphicHelper = 0;
+    uno::Reference< XGraphicObjectResolver >	xGrfResolver;
+    SvXMLGraphicHelper*	pGraphicHelper = 0;
 
     try
     {
@@ -432,11 +432,11 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
     }
     catch( uno::Exception& )
     {
-//      CL: I disabled this assertion since its an error, but it happens
-//          each time you load a document with property tables that are not
-//          on the current machine. Maybe a better fix would be to place
-//          a file exists check before importing...
-//      DBG_ERROR("svx::SvxXMLXTableImport::load(), exception caught!");
+//		CL: I disabled this assertion since its an error, but it happens
+//		    each time you load a document with property tables that are not
+//			on the current machine. Maybe a better fix would be to place
+//		    a file exists check before importing...
+//		DBG_ERROR("svx::SvxXMLXTableImport::load(), exception caught!");
         bRet = sal_False;
     }
 

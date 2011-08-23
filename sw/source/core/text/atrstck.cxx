@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@
  * Also adjust NUM_ATTRIBUTE_STACKS in atrhndl.hxx.
  *************************************************************************/
 
-const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
+const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) - 
                      static_cast<USHORT>(RES_CHRATR_BEGIN) + 1 ] =
 {
      0, //                                       //  0
@@ -746,12 +746,12 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
         {
             const USHORT nStackPos = StackPos[ RES_CHRATR_HIDDEN ];
             const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
-
-            const SfxPoolItem* pTmpItem = pTopAt ?
+            
+            const SfxPoolItem* pTmpItem = pTopAt ? 
                                           CharFmt::GetItem( *pTopAt, RES_CHRATR_HIDDEN ) :
                                           pDefaultArray[ nStackPos ];
-
-            if( (mpShell && !mpShell->GetWin()) ||
+                
+            if( (mpShell && !mpShell->GetWin()) || 
                 (pTmpItem && !static_cast<const SvxCharHiddenItem*>(pTmpItem)->GetValue()) )
             {
                 rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetLineStyle() );

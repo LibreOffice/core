@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,14 @@ import com.sun.star.accessibility.XAccessibleAction;
  *  to the corresponding methods of the UNO XAccessibleAction interface.
  */
 public class AccessibleActionImpl implements javax.accessibility.AccessibleAction {
-
+    
     protected XAccessibleAction unoObject;
-
+    
     /** Creates new AccessibleActionWrapper */
     public AccessibleActionImpl(XAccessibleAction xAccessibleAction) {
         unoObject = xAccessibleAction;
     }
-
+    
     public boolean doAccessibleAction(int param) {
         try {
             return unoObject.doAccessibleAction(param);
@@ -50,7 +50,7 @@ public class AccessibleActionImpl implements javax.accessibility.AccessibleActio
             return false;
         }
     }
-
+    
     public java.lang.String getAccessibleActionDescription(int param) {
         try {
             return unoObject.getAccessibleActionDescription(param);
@@ -60,7 +60,7 @@ public class AccessibleActionImpl implements javax.accessibility.AccessibleActio
             return null;
         }
     }
-
+    
     public int getAccessibleActionCount() {
         try {
             return unoObject.getAccessibleActionCount();

@@ -38,9 +38,9 @@ public class PostNewsgroup extends JFrame
     private String statusLine = "";
 
     // Tool tip text
-    private final String newsgroupText = "Newsgroup name";
+    private final String newsgroupText = "Newsgroup name"; 
     private final String hostText = "Newsgroup host/server name";
-    private final String replyText = "Email address to reply to";
+    private final String replyText = "Email address to reply to"; 
     private final String subjectText = "Subject title for the mail";
     private final String commentText = "Additional comment on mail";
     private final String officeHtmlText = "Post as both Office and HTML attachments";
@@ -48,7 +48,7 @@ public class PostNewsgroup extends JFrame
     private final String htmlText = "Post as HTML attachment only";
     private final String postText = "Post to newsgroup";
     private final String cancelText = "Cancel post to newsgroup";
-
+    
 
     public void post( XScriptContext xsc )
     {
@@ -61,17 +61,17 @@ public class PostNewsgroup extends JFrame
         this.setTitle( "Post Document To Newsgroup" );
         this.setLocation( FRAMEX, FRAMEY );
 
-        this.addFocusListener( new FocusAdapter()
+        this.addFocusListener( new FocusAdapter() 
         {
             public void focusGained( FocusEvent event )
             {
-                System.out.println( "Focus gained" );
+                System.out.println( "Focus gained" );	
                 window.update( window.getGraphics() );
-            }
+            }	
 
-            public void focusLost( FocusEvent event )
+            public void focusLost( FocusEvent event )     
                         {
-                System.out.println( "Focus lost" );
+                System.out.println( "Focus lost" );	
                         }
         });
 
@@ -91,28 +91,28 @@ public class PostNewsgroup extends JFrame
         constraints.gridheight = 3;
         constraints.insets = new Insets( 15, 15, 5, 5 );
         container.add( labelPanel, constraints );
-
+    
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridwidth = 4;
         constraints.gridheight = 3;
         constraints.insets = new Insets( 15, 5, 5, 15 );
         container.add( textPanel, constraints );
-
+    
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 5;
         constraints.gridheight = 1;
         constraints.insets = new Insets( 5, 15, 5, 15 );
         container.add( optionPanel, constraints );
-
+    
         constraints.gridx = 0;
         constraints.gridy = 4;
         constraints.gridwidth = 5;
         constraints.gridheight = 1;
         constraints.insets = new Insets( 5, 5, 5, 5 );
         container.add( buttonPanel, constraints );
-
+    
         this.pack();
         this.setResizable( false );
         this.setVisible( true );
@@ -131,7 +131,7 @@ public class PostNewsgroup extends JFrame
         hostLabel.setToolTipText( hostText );
         replyLabel.setToolTipText( replyText );
         subjectLabel.setToolTipText( subjectText );
-        commentLabel.setToolTipText( commentText );
+        commentLabel.setToolTipText( commentText ); 
 
         JPanel newsgroupPanel = new JPanel();
         newsgroupPanel.setLayout( new BorderLayout() );
@@ -156,50 +156,50 @@ public class PostNewsgroup extends JFrame
         replyPanel.setPreferredSize( new Dimension( labelWidth, TEXTBOXHEIGHT ) );
         subjectPanel.setPreferredSize( new Dimension( labelWidth, TEXTBOXHEIGHT ) );
         commentPanel.setPreferredSize( new Dimension( labelWidth, TEXTBOXHEIGHT ) );
-
-        JPanel panel = new JPanel();
+            
+        JPanel panel = new JPanel();		
         panel.setLayout( new GridBagLayout() );
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.insets = new Insets( 5, 5, 5, 5 );
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
+        constraints.gridx = 0; 
+        constraints.gridy = 0; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
         constraints.weightx = constraints.weighty = 0.0;
-        panel.add( newsgroupPanel, constraints );
+        panel.add( newsgroupPanel, constraints );	
 
         constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
+        constraints.gridy = 1; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
+        panel.add( hostPanel, constraints );	
+
+        constraints.gridx = 0; 
+        constraints.gridy = 2; 
+        constraints.gridwidth = 1; 
         constraints.gridheight = 1;
-        panel.add( hostPanel, constraints );
+        panel.add( replyPanel, constraints );	
 
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        panel.add( replyPanel, constraints );
+        constraints.gridx = 0; 
+        constraints.gridy = 3; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
+        panel.add( subjectPanel, constraints );	
 
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        panel.add( subjectPanel, constraints );
-
-        constraints.gridx = 0;
+        constraints.gridx = 0; 
         constraints.gridy = 4;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        panel.add( commentPanel, constraints );
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
+        panel.add( commentPanel, constraints );	
 
-        constraints.gridx = 0;
+        constraints.gridx = 0; 
         constraints.gridy = 5;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
         constraints.weightx = constraints.weighty = 1.0;
-        panel.add( emptyPanel, constraints );
+        panel.add( emptyPanel, constraints );	
 
         return panel;
     }
@@ -224,47 +224,47 @@ public class PostNewsgroup extends JFrame
         subjectTextField.setPreferredSize( new Dimension( TEXTBOXWIDTH, TEXTBOXHEIGHT ) );
         subjectTextField.setToolTipText( subjectText );
         subjectTextField.setBorder( new EtchedBorder() );
-
+        
         commentTextArea = new JTextArea();
         commentTextArea.setPreferredSize( new Dimension( TEXTBOXWIDTH, TEXTAREAHEIGHT ) );
         commentTextArea.setToolTipText( commentText );
         commentTextArea.setBorder( new EtchedBorder() );
 
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel();		
         panel.setLayout( new GridBagLayout() );
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.insets = new Insets( 5, 5, 5, 5 );
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        panel.add( newsgroupComboBox, constraints );
+        constraints.gridx = 0; 
+        constraints.gridy = 0; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
+        panel.add( newsgroupComboBox, constraints );	
 
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        panel.add( hostTextField, constraints );
+        constraints.gridx = 0; 
+        constraints.gridy = 1; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
+        panel.add( hostTextField, constraints );	
 
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        panel.add( replyTextField, constraints );
+        constraints.gridx = 0; 
+        constraints.gridy = 2; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
+        panel.add( replyTextField, constraints );	
 
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        panel.add( subjectTextField, constraints );
+        constraints.gridx = 0; 
+        constraints.gridy = 3; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
+        panel.add( subjectTextField, constraints );	
 
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 2;
-        panel.add( commentTextArea, constraints );
+        constraints.gridx = 0; 
+        constraints.gridy = 4; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 2; 
+        panel.add( commentTextArea, constraints );	
 
         return panel;
     }
@@ -277,8 +277,8 @@ public class PostNewsgroup extends JFrame
 
            newsgroupComboBox.addActionListener(new ActionListener()
            {
-                public void actionPerformed(ActionEvent e)
-                {
+                public void actionPerformed(ActionEvent e)               
+                {                                                        
                 // when newsgroup is selected
                 if( subscribedNewsgroups != null )
                 {
@@ -290,7 +290,7 @@ public class PostNewsgroup extends JFrame
                     }
                 }
             }
-        });
+        });  
 
         NewsGroup groupToSend = null;
         SubscribedNewsgroups newsgroups = new SubscribedNewsgroups();
@@ -302,7 +302,7 @@ public class PostNewsgroup extends JFrame
         if( subscribedNewsgroups == null )
         {
             //System.out.println( "Couldn't find any subscibed newsgroups in .mozilla" );
-            JOptionPane.showMessageDialog( window, "No subscribed newsgroups found in mozilla/netscape profile \nPlease enter newsgroup and host name",
+            JOptionPane.showMessageDialog( window, "No subscribed newsgroups found in mozilla/netscape profile \nPlease enter newsgroup and host name", 
                             "Newsgroups Information", JOptionPane.INFORMATION_MESSAGE );
         }
         else
@@ -327,7 +327,7 @@ public class PostNewsgroup extends JFrame
                         vector.set( i, subscribedNewsgroups[i].getNewsgroupName() + "  (" + subscribedNewsgroups[i].getHostName() + ")" );
                     }
                 }
-            }
+            } 
             // Copy converted newsgroups from vector to combo box
             for(int i=0; i < subscribedNewsgroups.length; i++ )
             {
@@ -393,7 +393,7 @@ public class PostNewsgroup extends JFrame
     }
 
 
-
+    
     public boolean sendingActions()
     {
             // posting actions
@@ -408,20 +408,20 @@ public class PostNewsgroup extends JFrame
                 statusLine = "Ready to send...";
                 statusWindow.setStatus( 0, statusLine );
 
-                // Get the boolean values for HTML/Office document
+                // Get the boolean values for HTML/Office document 
                 // params: ( XScriptContext, StatusWindow, html document, office document )
-
+            
                 boolean html = false;
                 boolean office = false;
                 if( officeHtmlButton.isSelected() ) { html = true; office = true; }
                 if( officeButton.isSelected() ) { office = true; html = false; }
                 if( htmlButton.isSelected() ) { html = true; office = false; }
-
+                
                 OfficeAttachment officeAttach = new OfficeAttachment( xscriptcontext, statusWindow, html, office );
-
+                
                 statusLine = "Getting user input";
                 statusWindow.setStatus( 2, statusLine );
-                // Get replyto, subject, comment from textboxes
+                // Get replyto, subject, comment from textboxes 
                 String replyto = replyTextField.getText();
                 String subject = subjectTextField.getText();
                 String comment = commentTextArea.getText();
@@ -452,7 +452,7 @@ public class PostNewsgroup extends JFrame
                     officeAttach.cleanUpOnError();
                     return false;
                 }
-
+                
                 statusLine = "Send is complete";
                 statusWindow.setStatus( 14, statusLine );
             }
@@ -463,8 +463,8 @@ public class PostNewsgroup extends JFrame
             }
             return true;
     }
-
-
+    
+    
     private JPanel constructButtonPanel()
     {
         Action postAction = new AbstractAction() {
@@ -525,18 +525,18 @@ public class PostNewsgroup extends JFrame
                 constraints.gridheight = 1;
                 buttonPanel.add( emptyPanel2, constraints );
 
-        constraints.gridx = 2;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        buttonPanel.add( postButton, constraints );
+        constraints.gridx = 2; 
+        constraints.gridy = 1; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
+        buttonPanel.add( postButton, constraints );	
 
-        constraints.gridx = 3;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
+        constraints.gridx = 3; 
+        constraints.gridy = 1; 
+        constraints.gridwidth = 1; 
+        constraints.gridheight = 1; 
         constraints.insets = new Insets( 5, 5, 5, 0 );
-        buttonPanel.add( cancelButton, constraints );
+        buttonPanel.add( cancelButton, constraints );	
 
                 return buttonPanel;
     }
@@ -556,7 +556,7 @@ public class PostNewsgroup extends JFrame
         }
     }
 
-
+    
     private boolean isValidData()
     {
         // newsgroupComboBox must not be blank (format? dots and whitespace)
@@ -583,7 +583,7 @@ public class PostNewsgroup extends JFrame
         // hostTextField must not be blank (format?)
         String  hostString = hostTextField.getText();
                 if( hostString.length() == 0 )
-                {
+                {       
             //System.out.println( "Please enter a hostname" );
             hostTextField.requestFocus();
             JOptionPane.showMessageDialog( window, "Please enter a hostname", "Input Error", JOptionPane.ERROR_MESSAGE );

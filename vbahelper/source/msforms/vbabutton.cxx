@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ ScVbaButton::ScVbaButton( const uno::Reference< XHelperInterface >& xParent, con
 }
 
 // Attributes
-rtl::OUString SAL_CALL
+rtl::OUString SAL_CALL 
 ScVbaButton::getCaption() throw (css::uno::RuntimeException)
 {
     rtl::OUString Label;
@@ -45,20 +45,20 @@ ScVbaButton::getCaption() throw (css::uno::RuntimeException)
     return Label;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaButton::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaButton") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaButton::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

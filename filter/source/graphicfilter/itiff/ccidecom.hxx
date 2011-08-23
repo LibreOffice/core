@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,12 @@
 #include <tools/stream.hxx>
 
 
-#define CCI_OPTION_2D               1       // 2D-Komprimierung (statt 1D)
-#define CCI_OPTION_EOL              2       // EOL-Codes am Ende jeder Zeile vorhanden
-#define CCI_OPTION_BYTEALIGNEOL     4       // Fuellbits vor jedem EOL-Code, so dass
+#define CCI_OPTION_2D				1		// 2D-Komprimierung (statt 1D)
+#define CCI_OPTION_EOL				2		// EOL-Codes am Ende jeder Zeile vorhanden
+#define CCI_OPTION_BYTEALIGNEOL		4		// Fuellbits vor jedem EOL-Code, so dass
                                             // Ende von EOL auf Bytes aligend
-#define CCI_OPTION_BYTEALIGNROW     8       // Rows beginnen immer auf Byte-Grenze
-#define CCI_OPTION_INVERSEBITORDER  16
+#define CCI_OPTION_BYTEALIGNROW		8		// Rows beginnen immer auf Byte-Grenze
+#define CCI_OPTION_INVERSEBITORDER	16
 
 // Eintrag in eine Huffman-Tabelle:
 struct CCIHuffmanTableEntry {

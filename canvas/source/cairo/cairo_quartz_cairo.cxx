@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ namespace cairo
             mpView(NULL),
             mpSurface( pSurface )
     {
-        // Necessary, context is lost otherwise
+        // Necessary, context is lost otherwise   
         CGContextRetain( getCGContext() ); //  == NULL for non-native surfaces
     }
 
@@ -79,7 +79,7 @@ namespace cairo
      * @param width width of the new surface
      * @param height height of the new surface
      *
-     * pSysData contains the platform native Window reference.
+     * pSysData contains the platform native Window reference. 
      * pSysData is used to create a surface on the Window
      *
      * Set the mpSurface to the new surface or NULL
@@ -92,19 +92,19 @@ namespace cairo
 
         // on Mac OS X / Quartz we are not drawing directly to the screen, but via regular CGContextRef.
         // The actual drawing to NSView (i.e. screen) is done in QuartzSurface::flush()
-
-        // HACK: currently initial size for windowsurface is 0x0, which is not possible for us.
-        if (width == 0 || height == 0) {
+        
+        // HACK: currently initial size for windowsurface is 0x0, which is not possible for us.    
+        if (width == 0 || height == 0) {	   
             width = [mpView bounds].size.width;
             height = [mpView bounds].size.height;
             OSL_TRACE("Canvas::cairo::Surface(): BUG!! size is ZERO! fixing to %d x %d...", width, height);
         }
-
+        
         // create a generic surface, NSView/Window is ARGB32.
         mpSurface.reset(
             cairo_quartz_surface_create(CAIRO_FORMAT_ARGB32, width, height),
             &cairo_surface_destroy);
-
+        
         cairo_surface_set_device_offset( mpSurface.get(), x, y );
     }
 
@@ -124,14 +124,14 @@ namespace cairo
     {
         OSL_TRACE("Canvas::cairo::Surface(CGContext:%p, x:%d, y:%d, w:%d, h:%d): New Surface.", rContext, x, y, width, height);
         // create surface based on CGContext
-
+        
         // ensure kCGBitmapByteOrder32Host flag, otherwise Cairo breaks (we are practically always using CGBitmapContext)
         OSL_ASSERT ((CGBitmapContextGetBitsPerPixel(rContext) != 32) ||
                     (CGBitmapContextGetBitmapInfo(rContext) & kCGBitmapByteOrderMask) == kCGBitmapByteOrder32Host);
-
+        
         mpSurface.reset(cairo_quartz_surface_create_for_cg_context(rContext, width, height),
                         &cairo_surface_destroy);
-
+        
         cairo_surface_set_device_offset( mpSurface.get(), x, y );
 
         // Necessary, context is lost otherwise
@@ -155,7 +155,7 @@ namespace cairo
     }
 
     /**
-     * QuartzSurface::getSimilar:  Create new similar Canvas surface
+     * QuartzSurface::getSimilar:  Create new similar Canvas surface 
      * @param aContent format of the new surface (cairo_content_t from cairo/src/cairo.h)
      * @param width width of the new surface
      * @param height height of the new surface
@@ -166,11 +166,11 @@ namespace cairo
      * Cairo surface from aContent (cairo_content_t)
      *
      * @return new surface or NULL
-     **/
+     **/     
     SurfaceSharedPtr QuartzSurface::getSimilar( Content aContent, int width, int height ) const
     {
         return SurfaceSharedPtr(
-            new QuartzSurface(
+            new QuartzSurface( 
                 CairoSurfaceSharedPtr(
                     cairo_surface_create_similar( mpSurface.get(), aContent, width, height ),
                     &cairo_surface_destroy )));
@@ -198,35 +198,35 @@ namespace cairo
     {
         // can only flush surfaces with NSView
         if( !mpView ) return;
-
+        
         OSL_TRACE("Canvas::cairo::QuartzSurface::flush(): flush to NSView");
-
+        
         CGContextRef mrContext = getCGContext();
-
+        
         if (!mrContext) return;
-
+        
         [mpView lockFocus];
-
+        
         /**
-         * This code is using same screen update code as in VCL (esp. AquaSalGraphics::UpdateWindow() )
+         * This code is using same screen update code as in VCL (esp. AquaSalGraphics::UpdateWindow() ) 
          */
         CGContextRef rViewContext = reinterpret_cast<CGContextRef>([[NSGraphicsContext currentContext] graphicsPort]);
         CGImageRef xImage = CGBitmapContextCreateImage(mrContext);
-        CGContextDrawImage(rViewContext,
-                           CGRectMake( 0, 0,
-                                       CGImageGetWidth(xImage),
+        CGContextDrawImage(rViewContext, 
+                           CGRectMake( 0, 0, 
+                                       CGImageGetWidth(xImage), 
                                        CGImageGetHeight(xImage)),
                            xImage);
         CGImageRelease( xImage );
         CGContextFlush( rViewContext );
-
+        
         [mpView unlockFocus];
     }
 
     /**
      * QuartzSurface::getDepth:  Get the color depth of the Canvas surface.
      *
-     * @return color depth
+     * @return color depth 
      **/
     int QuartzSurface::getDepth() const
     {
@@ -238,7 +238,7 @@ namespace cairo
             }
         }
         OSL_TRACE("Canvas::cairo::QuartzSurface::getDepth(): ERROR - depth unspecified!");
-
+        
         return -1;
     }
 
@@ -295,18 +295,18 @@ namespace cairo
                                     int x, int y, int width, int height )
     {
         SurfaceSharedPtr surf;
-
-        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+        
+        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW ) 
         {
             const Window &rWindow = (const Window &) rRefDevice;
             const SystemEnvData* pSysData = GetSysData(&rWindow);
             if (pSysData)
                 surf = SurfaceSharedPtr(new QuartzSurface(pSysData->pView, x, y, width, height));
-        }
+        }                                       
         else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
         {
             SystemGraphicsData aSysData = ((const VirtualDevice&) rRefDevice).GetSystemGfxData();
-
+            
             if (aSysData.rCGContext)
                 surf =  SurfaceSharedPtr(new QuartzSurface(aSysData.rCGContext, x, y, width, height));
         }
@@ -323,18 +323,18 @@ namespace cairo
      *
      * @return new surface or empty surface
      **/
-    SurfaceSharedPtr createBitmapSurface( const OutputDevice&     /* rRefDevice */,
-                                          const BitmapSystemData& rData,
+    SurfaceSharedPtr createBitmapSurface( const OutputDevice&     /* rRefDevice */, 
+                                          const BitmapSystemData& rData, 
                                           const Size&             rSize )
     {
-        OSL_TRACE( "requested size: %d x %d available size: %d x %d",
+        OSL_TRACE( "requested size: %d x %d available size: %d x %d", 
                    rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
-
+        
         if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
         {
             CGContextRef rContext = (CGContextRef)rData.rImageContext;
             OSL_TRACE("Canvas::cairo::createBitmapSurface(): New native image surface, context = %p.", rData.rImageContext);
-
+                        
             return SurfaceSharedPtr(new QuartzSurface(rContext, 0, 0, rData.mnWidth, rData.mnHeight));
         }
         return SurfaceSharedPtr();

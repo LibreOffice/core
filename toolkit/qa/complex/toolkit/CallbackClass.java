@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public class CallbackClass implements XCallback{
 
 
     public CallbackClass(LogWriter log, XMultiServiceFactory xMSF ) {
-
+        
         this.xMSF = xMSF;
         this.log = log;
     }
@@ -58,7 +58,7 @@ public class CallbackClass implements XCallback{
 
     /**
      * Callback method which will be called by the asynchronous
-     * service where we have added our request before.
+     * service where we have added our request before.     
      */
     public void notify( Object aData ) {
 

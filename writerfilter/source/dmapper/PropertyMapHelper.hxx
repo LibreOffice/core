@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ namespace dmapper
 
 XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(const uno::Any & rTableColumnSeparators);
 XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues);
-
-typedef uno::Sequence<beans::PropertyValues> PropertyValueSeq_t;
+    
+typedef uno::Sequence<beans::PropertyValues> PropertyValueSeq_t;    
 XMLTag::Pointer_t lcl_PropertyValueSeqToTag(PropertyValueSeq_t & rPropValSeq);
-
+    
 typedef uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
 XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t & rPropValSeqSeq);
 }

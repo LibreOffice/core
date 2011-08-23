@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ namespace vos
 #define THROW_AGAIN                     throw;
 #define THROW( Constructor )            throw Constructor;
 
-/*
- * declaration of the exceptions that may be thrown by a function
- * (e.g.) void myfunction(sal_Int32 a) throw ( std::bad_alloc );
+/* 
+ * declaration of the exceptions that may be thrown by a function 
+ * (e.g.) void myfunction(sal_Int32 a) throw ( std::bad_alloc ); 
  * is not fully supported by all compilers
  */
 
-#define THROWS( ARG ) throw ARG
+#define THROWS( ARG ) throw ARG 
 
 /*
  * just a base class for further exceptions
@@ -69,7 +69,7 @@ public:
     OException() {}
     OException( const OException & ) : OObject() {}
 
-    OException& SAL_CALL operator=(const OException&)
+    OException& SAL_CALL operator=(const OException&) 
         { return *this; }
 };
 

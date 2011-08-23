@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,12 @@
 
 
 #ifndef _WINDOWS_
-#   define WIN32_LEAN_AND_MEAN
+#	define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#   include <windows.h>
-#   include <shellapi.h>
+#	include <windows.h>
+#	include <shellapi.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -56,7 +56,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 {
     // Retreive startup info
 
-    STARTUPINFO aStartupInfo;
+    STARTUPINFO	aStartupInfo;
 
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
     aStartupInfo.cb = sizeof( aStartupInfo );
@@ -64,10 +64,10 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     // Retrieve command line
 
-    LPTSTR  lpCommandLine = GetCommandLine();
+    LPTSTR	lpCommandLine = GetCommandLine();
 
-    LPTSTR  *ppArguments = NULL;
-    int     nArguments = 0;
+    LPTSTR	*ppArguments = NULL;
+    int		nArguments = 0;
 
     ppArguments = GetArgv( &nArguments );
 
@@ -83,19 +83,19 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     // Calculate application name
 
-    TCHAR   szApplicationName[MAX_PATH];
-    TCHAR   szDrive[MAX_PATH];
-    TCHAR   szDir[MAX_PATH];
-    TCHAR   szFileName[MAX_PATH];
-    TCHAR   szExt[MAX_PATH];
+    TCHAR	szApplicationName[MAX_PATH];
+    TCHAR	szDrive[MAX_PATH];
+    TCHAR	szDir[MAX_PATH];
+    TCHAR	szFileName[MAX_PATH];
+    TCHAR	szExt[MAX_PATH];
 
     GetModuleFileName( NULL, szApplicationName, MAX_PATH );
     _tsplitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     _tmakepath( szApplicationName, szDrive, szDir, OFFICE_IMAGE_NAME, _T(".exe") );
 
-    PROCESS_INFORMATION aProcessInfo;
+    PROCESS_INFORMATION	aProcessInfo;
 
-    BOOL    fSuccess = CreateProcess(
+    BOOL	fSuccess = CreateProcess(
         szApplicationName,
         lpCommandLine,
         NULL,
@@ -120,7 +120,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         return 0;
     }
 
-    DWORD   dwError = GetLastError();
+    DWORD	dwError = GetLastError();
 
     LPVOID lpMsgBuf;
 

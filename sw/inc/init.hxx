@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 
 class ViewShell;
 
-void _InitCore();   // bastyp/init.cxx
+void _InitCore();	// bastyp/init.cxx
 void _FinitCore();
 
-void _InitFilter(); // basflt/fltini.cxx
+void _InitFilter();	// basflt/fltini.cxx
 void _FinitFilter();
 
 // layout/newfrm.cxx

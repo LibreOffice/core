@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,14 @@
 #include <doc.hxx>
 #include <frmfmt.hxx>
 #include <txtfrm.hxx>
+#include <tabfrm.hxx>
+#include <rowfrm.hxx>
+#include <fmtfsize.hxx>
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
 #include <breakit.hxx>
+
+#include<vcl/window.hxx>
 
 
 SwCallLink::SwCallLink( SwCrsrShell & rSh, ULONG nAktNode, xub_StrLen nAktCntnt,
@@ -87,7 +92,7 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
 
 SwCallLink::~SwCallLink()
 {
-    if( !nNdTyp || !rShell.bCallChgLnk )        // siehe ctor
+    if( !nNdTyp || !rShell.bCallChgLnk )		// siehe ctor
         return ;
 
     // wird ueber Nodes getravellt, Formate ueberpruefen und im neuen
@@ -96,6 +101,51 @@ SwCallLink::~SwCallLink()
     SwCntntNode * pCNd = pCurCrsr->GetCntntNode();
     if( !pCNd )
         return;
+
+    bool bUpdatedTable = false;
+    SwFrm *myFrm=pCNd->GetFrm();
+    if (myFrm!=NULL)
+    {
+        // We need to emulated a change of the row height in order
+        // to have the complete row redrawn
+        SwRowFrm* pRow = myFrm->FindRowFrm( );
+        if ( pRow )
+        {
+            const SwTableLine* pLine = pRow->GetTabLine( );
+            SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
+            pRow->Modify( NULL, &pSize );
+
+            bUpdatedTable = true;
+        }
+    }
+
+    const SwDoc *pDoc=rShell.GetDoc();
+    const SwCntntNode *pNode = NULL;
+    if ( ( pDoc != NULL && nNode < pDoc->GetNodes( ).Count( ) ) )
+    {
+        pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
+    }
+    if ( pNode != NULL )
+    {
+        SwFrm *myFrm2=pNode->GetFrm();
+        if (myFrm2!=NULL)
+        {
+            // We need to emulated a change of the row height in order
+            // to have the complete row redrawn
+            SwRowFrm* pRow = myFrm2->FindRowFrm();
+            if ( pRow )
+            {
+                const SwTableLine* pLine = pRow->GetTabLine( );
+                SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
+                pRow->Modify( NULL, &pSize );
+
+                bUpdatedTable = true;
+            }
+        }
+    }
+
+    if ( bUpdatedTable )
+        rShell.GetWin( )->Invalidate( 0 );
 
     xub_StrLen nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
     USHORT nNdWhich = pCNd->GetNodeType();
@@ -126,8 +176,8 @@ SwCallLink::~SwCallLink()
         // und sich nicht der Frame geaendert hat (Spalten!)
         if( nLeftFrmPos == SwCallLink::GetFrm( (SwTxtNode&)*pCNd, nAktCntnt,
                                                     !rShell.ActionPend() ) &&
-            (( nCmp = nCntnt ) + 1 == nAktCntnt ||          // Right
-            nCntnt -1 == ( nCmp = nAktCntnt )) )            // Left
+            (( nCmp = nCntnt ) + 1 == nAktCntnt ||			// Right
+            nCntnt -1 == ( nCmp = nAktCntnt )) )			// Left
         {
             if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & Sele
                 ++nCmp;

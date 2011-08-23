@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";
 // <INPUT TYPE=xxx>
 static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMAP_OBJ_RECTANGLE  },
-    { OOO_STRING_SVTOOLS_HTML_SH_rectangle, IMAP_OBJ_RECTANGLE  },
-    { OOO_STRING_SVTOOLS_HTML_SH_circ,      IMAP_OBJ_CIRCLE     },
-    { OOO_STRING_SVTOOLS_HTML_SH_circle,    IMAP_OBJ_CIRCLE     },
-    { OOO_STRING_SVTOOLS_HTML_SH_poly,          IMAP_OBJ_POLYGON    },
-    { OOO_STRING_SVTOOLS_HTML_SH_polygon,       IMAP_OBJ_POLYGON    },
-    { 0,                    0                   }
+    { OOO_STRING_SVTOOLS_HTML_SH_rect,		IMAP_OBJ_RECTANGLE	},
+    { OOO_STRING_SVTOOLS_HTML_SH_rectangle,	IMAP_OBJ_RECTANGLE	},
+    { OOO_STRING_SVTOOLS_HTML_SH_circ,		IMAP_OBJ_CIRCLE		},
+    { OOO_STRING_SVTOOLS_HTML_SH_circle,   	IMAP_OBJ_CIRCLE		},
+    { OOO_STRING_SVTOOLS_HTML_SH_poly,   		IMAP_OBJ_POLYGON	},
+    { OOO_STRING_SVTOOLS_HTML_SH_polygon,		IMAP_OBJ_POLYGON	},
+    { 0,					0					}
 };
 
 SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bIsNewDoc,
@@ -260,7 +260,7 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
         // "geladen" werden koennen.
         //const SfxMedium *pShMedium = pSh->GetMedium();
         //if( pShMedium )
-        //  pDLMedium->SetLoadTargetFrame( pShMedium->GetLoadTargetFrame() );
+        //	pDLMedium->SetLoadTargetFrame( pShMedium->GetLoadTargetFrame() );
     }
 
     // Download anstossen (Achtung: Kann auch synchron sein).
@@ -304,7 +304,7 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
         DBG_ASSERT( pStream, "Kein In-Stream vom Medium erhalten" );
 
         SvMemoryStream aStream;
-        if( pStream )   // HACK wegen #65563#
+        if( pStream )	// HACK wegen #65563#
             aStream << *pStream;
 
         aStream.Seek( STREAM_SEEK_TO_END );

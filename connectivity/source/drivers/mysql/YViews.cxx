@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,8 +63,8 @@ sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
     ::rtl::OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,
                                         _rName,
-                                        sCatalog,
-                                        sSchema,
+                                        sCatalog, 
+                                        sSchema, 
                                         sTable,
                                         ::dbtools::eInDataManipulation);
     return new ::connectivity::sdbcx::OView(isCaseSensitive(),
@@ -113,10 +113,10 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
     if (!bIsNew)
     {
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW");
-
+        
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::eInTableDefinitions, false, false, true );
-
+        
         Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = xConnection->createStatement(  );
         xStmt->execute(aSql);
@@ -135,8 +135,8 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
 
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
-    ::rtl::OUString aQuote  = xConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("CREATE VIEW ");
+    ::rtl::OUString aQuote	= xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sSchema,sCommand;
 
     aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );

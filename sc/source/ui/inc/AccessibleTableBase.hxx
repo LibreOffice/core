@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 class ScTabViewShell;
 
-/** @descr
+/**	@descr
         This base class provides an implementation of the
         <code>AccessibleTable</code> service.
 */
@@ -191,13 +191,13 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    /// Return the number of currently visible children.
+    ///	Return the number of currently visible children.
     // is overloaded to calculate this on demand
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void)
                     throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the specified child or NULL if index is invalid.
+    ///	Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
@@ -205,24 +205,24 @@ public:
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
 protected:
-    /// Return this object's description.
+    ///	Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current name.
+    ///	Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
-    /// Return NULL to indicate that an empty relation set.
+    ///	Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the set of current states.
+    ///	Return the set of current states.
     // perhaps sometimes to be implemented
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
@@ -266,7 +266,7 @@ public:
 
     ///=====  XServiceInfo  ===================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName(void)
@@ -279,7 +279,7 @@ public:
         getTypes()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns a implementation id.
+    /**	Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
@@ -289,7 +289,7 @@ protected:
     /// contains the range of the table, because it could be a subrange of the complete table
     ScRange maRange;
 
-    ScDocument* mpDoc;
+    ScDocument*	mpDoc;
 
     void CommitTableModelChange(sal_Int32 nStartRow, sal_Int32 nStartCol, sal_Int32 nEndRow, sal_Int32 nEndCol, sal_uInt16 nId);
 };

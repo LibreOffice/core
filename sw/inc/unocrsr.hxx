@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ protected:
 
 public:
 
-//  virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
+//	virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
@@ -66,8 +66,8 @@ public:
 
     virtual bool IsReadOnlyAvailable() const;
 
-    BOOL IsRemainInSection() const          { return bRemainInSection; }
-    void SetRemainInSection( BOOL bFlag )   { bRemainInSection = bFlag; }
+    BOOL IsRemainInSection() const 			{ return bRemainInSection; }
+    void SetRemainInSection( BOOL bFlag )	{ bRemainInSection = bFlag; }
 
     virtual BOOL IsSkipOverProtectSections() const
                                     { return bSkipOverProtectSections; }
@@ -100,7 +100,7 @@ public:
     SwUnoTableCrsr( const SwPosition& rPos );
     virtual ~SwUnoTableCrsr();
 
-//  virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
+//	virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
@@ -113,8 +113,8 @@ public:
 
     void MakeBoxSels();
 
-          SwCursor& GetSelRing()            { return aTblSel; }
-    const SwCursor& GetSelRing() const      { return aTblSel; }
+          SwCursor& GetSelRing() 			{ return aTblSel; }
+    const SwCursor& GetSelRing() const 		{ return aTblSel; }
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -249,7 +249,7 @@ void WizardDialog::ImplPosCtrls()
 
 
 long WizardDialog::LogicalCoordinateToPixel(int iCoordinate){
-    Size aLocSize = LogicToPixel(Size( iCoordinate, 0 ), MAP_APPFONT );
+    Size aLocSize = LogicToPixel(Size( iCoordinate, 0 ), MAP_APPFONT ); 
     int iPixelCoordinate =  aLocSize.Width();
     return iPixelCoordinate;
 }

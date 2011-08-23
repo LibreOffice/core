@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ class ScStyleDlg;
 class ScHFPage : public SvxHFPage
 {
 public:
-    virtual         ~ScHFPage();
+    virtual			~ScHFPage();
 
-    virtual void    Reset( const SfxItemSet& rSet );
-    virtual BOOL    FillItemSet( SfxItemSet& rOutSet );
+    virtual void	Reset( const SfxItemSet& rSet );
+    virtual BOOL 	FillItemSet( SfxItemSet& rOutSet );
 
-    void            SetPageStyle( const String& rName )    { aStrPageStyle = rName; }
-    void            SetStyleDlg ( const ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
+    void			SetPageStyle( const String& rName )    { aStrPageStyle = rName; }
+    void			SetStyleDlg ( const ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
 
 protected:
                     ScHFPage( Window* pParent,
@@ -56,15 +56,15 @@ protected:
 //    using SvxHFPage::DeactivatePage;
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
-    virtual void    ActivatePage( const SfxItemSet& rSet );
-    virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void	ActivatePage( const SfxItemSet& rSet );
+    virtual int		DeactivatePage( SfxItemSet* pSet = 0 );
 
 private:
-    PushButton          aBtnEdit;
-    SfxItemSet          aDataSet;
-    String              aStrPageStyle;
-    USHORT              nPageUsage;
-    const ScStyleDlg*   pStyleDlg;
+    PushButton			aBtnEdit;
+    SfxItemSet			aDataSet;
+    String				aStrPageStyle;
+    USHORT				nPageUsage;
+    const ScStyleDlg*	pStyleDlg;
 
 #ifdef _TPHF_CXX
 private:
@@ -79,8 +79,8 @@ private:
 class ScHeaderPage : public ScHFPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static SfxTabPage* 	Create(	Window* pParent, const SfxItemSet& rSet );
+    static USHORT*		GetRanges();
 
 private:
     ScHeaderPage( Window* pParent, const SfxItemSet& rSet );
@@ -91,8 +91,8 @@ private:
 class ScFooterPage : public ScHFPage
 {
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static SfxTabPage* 	Create(	Window* pParent, const SfxItemSet& rSet );
+    static USHORT*		GetRanges();
 
 private:
     ScFooterPage( Window* pParent, const SfxItemSet& rSet );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
             break;
         case CELLTYPE_FORMULA:
             {
-                ScFormulaCell*  pFCell = (ScFormulaCell*)pCell;
+                ScFormulaCell*	pFCell = (ScFormulaCell*)pCell;
                 if ( bFormula )
                     pFCell->GetFormula( rString );
                 else

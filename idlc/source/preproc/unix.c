@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 extern char rcsid[];
 
 int Pflag = 0;                          /* print no line information */
-int Iflag = 0;                          /* print includes */
+int Iflag = 0;							/* print includes */
 int Mflag = 0;                          /* print macor expansion */
 int Aflag = 0;                          /* translate character sets */
 int Xflag = 0;                          /* print pragma for include/import */

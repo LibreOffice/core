@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,25 +124,25 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Type and title";
     };
-    FixedText       FT_TITLE
+    FixedText		FT_TITLE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 30 ,10 ) ;
         Text [ en-US ] = "~Title";
     };
-    Edit            ED_TITLE
+    Edit			ED_TITLE
     {
         Pos = MAP_APPFONT ( 45 , 14 ) ;
         Size = MAP_APPFONT ( 203 , 12 ) ;
         Border = TRUE;
     };
-    FixedText       FT_TYPE
+    FixedText		FT_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT (  30, 10 ) ;
         Text [ en-US ] = "Type";
     };
-    ListBox         LB_TYPE
+    ListBox			LB_TYPE
     {
         Pos = MAP_APPFONT ( 45 , 30 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
@@ -150,16 +150,16 @@ TabPage TP_TOX_SELECT
         DropDown = TRUE ;
     StringList [ en-US ] =
     {
-            < "Table of Contents" ;     TO_CONTENT      ;> ;
-        < "Alphabetical Index" ;    TO_INDEX        ;> ;
+            < "Table of Contents" ; 	TO_CONTENT 		;> ;
+        < "Alphabetical Index" ; 	TO_INDEX		;> ;
         < "Illustration Index" ; TO_ILLUSTRATION ;> ;
-        < "Index of Tables" ;   TO_TABLE        ;> ;
-        < "User-Defined" ;  TO_USER         ;> ;
-        < "Table of Objects" ;  TO_OBJECT       ;> ;
-        < "Bibliography" ;  TO_AUTHORITIES  ;> ;
+        < "Index of Tables" ; 	TO_TABLE 		;> ;
+        < "User-Defined" ; 	TO_USER 		;> ;
+        < "Table of Objects" ; 	TO_OBJECT 		;> ;
+        < "Bibliography" ;	TO_AUTHORITIES  ;> ;
     };
     };
-    CheckBox        CB_READONLY
+    CheckBox		CB_READONLY
     {
         Pos = MAP_APPFONT ( 51 , 46 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
@@ -186,8 +186,8 @@ TabPage TP_TOX_SELECT
         DropDown = TRUE ;
     StringList [ en-US ] =
     {
-            < "Entire document" ;   AREA_DOCUMENT       ;> ;
-        < "Chapter" ;               AREA_CHAPTER        ;> ;
+            < "Entire document" ; 	AREA_DOCUMENT 		;> ;
+        < "Chapter" ; 				AREA_CHAPTER	  	;> ;
     };
     };
     FixedText       FT_LEVEL
@@ -216,7 +216,7 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Create from";
     };
-    CheckBox        CB_FROMHEADINGS
+    CheckBox		CB_FROMHEADINGS
     {
         Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 95 , 10 ) ;
@@ -224,14 +224,14 @@ TabPage TP_TOX_SELECT
         Text [ en-US ] = "Outline";
     };
 //  #outline level,removed by zhaojianwei
-/*  PushButton  PB_CHAPTERDLG
+/*	PushButton	PB_CHAPTERDLG
     {
         Pos = MAP_APPFONT ( 115 , 98 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "~..." ;
         TabStop = TRUE ;
     };
-*/
+*/	
     CheckBox CB_ADDSTYLES
     {
         Pos = MAP_APPFONT ( 12 , 115 ) ;
@@ -242,21 +242,21 @@ TabPage TP_TOX_SELECT
     {
         Text [ en-US ] = "Styl~es";
     };
-    PushButton      PB_ADDSTYLES
+    PushButton		PB_ADDSTYLES
     {
         Pos = MAP_APPFONT ( 115 , 114 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
         TabStop = TRUE ;
     };
-    CheckBox        CB_TOXMARKS
+    CheckBox		CB_TOXMARKS
     {
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "Inde~x marks";
     };
 
-    RadioButton     RB_FROMCAPTIONS
+    RadioButton		RB_FROMCAPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
@@ -300,13 +300,13 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "Object names";
     };
-    CheckBox        CB_COLLECTSAME
+    CheckBox		CB_COLLECTSAME
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 121 , 10 ) ;
         Text [ en-US ] = "Combine identical entries";
     };
-    CheckBox        CB_USEFF
+    CheckBox		CB_USEFF
     {
         Pos = MAP_APPFONT ( 18 ,  111 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
@@ -318,31 +318,31 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text [ en-US ] = "Combine with -";
     };
-    CheckBox        CB_CASESENSITIVE
+    CheckBox		CB_CASESENSITIVE
     {
         Pos = MAP_APPFONT ( 18 , 137 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text [ en-US ] = "Case sensitive";
     };
-    CheckBox        CB_INITIALCAPS
+    CheckBox		CB_INITIALCAPS
     {
         Pos = MAP_APPFONT ( 136 , 98 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text [ en-US ] = "AutoCapitalize entries";
     };
-    CheckBox        CB_KEYASENTRY
+    CheckBox		CB_KEYASENTRY
     {
         Pos = MAP_APPFONT ( 136, 111 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text [ en-US ] = "Keys as separate entries";
     };
-    CheckBox    CB_FROMFILE
+    CheckBox	CB_FROMFILE
     {
         Pos = MAP_APPFONT ( 136 , 124 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text [ en-US ] = "~Concordance file";
     };
-    MenuButton  MB_AUTOMARK
+    MenuButton 	MB_AUTOMARK
     {
         Pos = MAP_APPFONT ( 136 , 137 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -370,31 +370,31 @@ TabPage TP_TOX_SELECT
         };
         Text [ en-US ] = "~File";
     };
-    CheckBox    CB_FROMTABLES
+    CheckBox	CB_FROMTABLES
     {
         Pos = MAP_APPFONT ( 112 , 99 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text [ en-US ] = "Tables";
     };
-    CheckBox    CB_FROMFRAMES
+    CheckBox	CB_FROMFRAMES
     {
         Pos = MAP_APPFONT ( 182 , 99 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text [ en-US ] = "Te~xt frames";
     };
-    CheckBox    CB_FROMGRAPHICS
+    CheckBox	CB_FROMGRAPHICS
     {
         Pos = MAP_APPFONT ( 112 , 113 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text [ en-US ] = "Graphics";
     };
-    CheckBox        CB_FROMOLE
+    CheckBox		CB_FROMOLE
     {
         Pos = MAP_APPFONT ( 182 , 113 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         Text [ en-US ] = "OLE objects";
     };
-    CheckBox        CB_LEVELFROMCHAPTER
+    CheckBox		CB_LEVELFROMCHAPTER
     {
         Pos = MAP_APPFONT ( 118 ,  127 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
@@ -417,21 +417,21 @@ TabPage TP_TOX_SELECT
     {
         StringArray 1
         {
-/*  ids from tox.hxx
-    TOO_MATH        = 0x01,
-    TOO_CHART       = 0x02,
-    TOO_IMAGE       = 0x04,
-    TOO_CALC        = 0x08,
+/*	ids from tox.hxx
+    TOO_MATH		= 0x01,
+    TOO_CHART		= 0x02,
+    TOO_IMAGE		= 0x04,
+    TOO_CALC		= 0x08,
     TOO_DRAW_IMPRESS= 0x10,
-    TOO_OTHER       = 0x80*/
+    TOO_OTHER		= 0x80*/
 
         ItemList [ en-US ] =
         {
-            < "%PRODUCTNAME Math" ;                 1;> ;
-            < "%PRODUCTNAME Chart" ;            2;> ;
-            < "%PRODUCTNAME Calc" ;                 8;> ;
-            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
-            < "Other OLE Objects";  128;> ;
+            < "%PRODUCTNAME Math" ; 				1;> ;
+            < "%PRODUCTNAME Chart" ; 			2;> ;
+            < "%PRODUCTNAME Calc" ; 				8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ; 	16;> ;
+            < "Other OLE Objects"; 	128;> ;
             };
     };
     };
@@ -1187,7 +1187,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    String  ST_HB_FIRST
+    String	ST_HB_FIRST
     {
         Text [ en-US ] = "Not applied";
     };

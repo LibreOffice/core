@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 // necessary for properly registering of the shell extensions
 
 /** A FileExtensionEntry consists of the extension as ansi and as
-    unicode string and of the currently used registry forward key
+    unicode string and of the currently used registry forward key 
     for this extension
 */
 struct FileExtensionEntry
 {
-    char*    ExtensionAnsi;         // e.g. ".sxw"
-    wchar_t* ExtensionUnicode;      // e.g. L".sxw"
-    char*    RegistryForwardKey;    // e.g. "soffice.StarWriterDocument.6"
+    char*    ExtensionAnsi;			// e.g. ".sxw"
+    wchar_t* ExtensionUnicode;		// e.g. L".sxw"
+    char*    RegistryForwardKey;	// e.g. "soffice.StarWriterDocument.6"
 };
 
 extern FileExtensionEntry OOFileExtensionTable[];

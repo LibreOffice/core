@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,6 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
@@ -130,7 +129,7 @@ public:
     queryContentProviders()
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider > SAL_CALL
+        com::sun::star::ucb::XContentProvider >	SAL_CALL
     queryContentProvider( const rtl::OUString& Identifier )
         throw( com::sun::star::uno::RuntimeException );
 
@@ -197,22 +196,17 @@ private:
     bool configureUcb()
         throw ( com::sun::star::uno::RuntimeException);
 
-    bool getContentProviderData(
-            const rtl::OUString & rKey1,
+    bool getContentProviderData( 
+            const rtl::OUString & rKey1, 
             const rtl::OUString & rKey2,
             ucbhelper::ContentProviderDataList & rListToFill);
 
     void prepareAndRegister( const ucbhelper::ContentProviderDataList& rData);
 
-    void createContentProviderData(
-    const rtl::OUString& rProvider,
-    const com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >& rxHierNameAccess,
-    ucbhelper::ContentProviderData& rInfo);
-
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
 
-    com::sun::star::uno::Reference<
+    com::sun::star::uno::Reference< 
         com::sun::star::util::XChangesNotifier > m_xNotifier;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_aArguments;

@@ -18,6 +18,7 @@ T4_WRITER = \
     writer_Rich_Text_Format \
     writer_StarOffice_XML_Writer \
     writer_WordPerfect_Document \
+    writer_MS_Works_Document \
     writer_T602_Document \
     writer_Text \
     writer_Text_encoded \
@@ -48,6 +49,7 @@ F4_WRITER = \
     Rich_Text_Format \
     StarOffice_XML__Writer_ \
     WordPerfect \
+    MS_Works \
     T602Document \
     Text \
     Text__encoded_ \

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,26 +51,26 @@ struct BasicIDE_Impl;
 
 namespace BasicIDE
 {
-    void            Organize( INT16 tabId );
+    void			Organize( INT16 tabId );
 
 
     // Hilfsmethoden fuer den allg. Gebrauch:
-    SbMethod*   CreateMacro( SbModule* pModule, const String& rMacroName );
-    void            RunMethod( SbMethod* pMethod );
+    SbMethod*	CreateMacro( SbModule* pModule, const String& rMacroName );
+    void			RunMethod( SbMethod* pMethod );
 
-    StarBASIC*  FindBasic( const SbxVariable* pVar );
-    void            StopBasic();
+    StarBASIC*	FindBasic( const SbxVariable* pVar );
+    void			StopBasic();
     long         HandleBasicError( StarBASIC* pBasic );
-    void            BasicStopped( BOOL* pbAppWindowDisabled = 0, BOOL* pbDispatcherLocked = 0, USHORT* pnWaitCount = 0,
+    void			BasicStopped( BOOL* pbAppWindowDisabled = 0, BOOL* pbDispatcherLocked = 0, USHORT* pnWaitCount = 0,
                             SfxUInt16Item** ppSWActionCount = 0, SfxUInt16Item** ppSWLockViewCount = 0 );
 
-    BOOL            IsValidSbxName( const String& rName );
+    BOOL			IsValidSbxName( const String& rName );
 
-    BasicManager*       FindBasicManager( StarBASIC* pLib );
+    BasicManager* 		FindBasicManager( StarBASIC* pLib );
 
-    SfxBindings*        GetBindingsPtr();
+    SfxBindings* 		GetBindingsPtr();
 
-    void            InvalidateDebuggerSlots();
+    void			InvalidateDebuggerSlots();
 
     // libraries
 
@@ -80,7 +80,7 @@ namespace BasicIDE
 
     // new methods for modules
 
-    ::rtl::OUString     GetModule(
+    ::rtl::OUString		GetModule(
         const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
@@ -94,14 +94,14 @@ namespace BasicIDE
 
     // new methods for macros
 
-    ::rtl::OUString     ChooseMacro( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
+    ::rtl::OUString		ChooseMacro( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
         BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc );
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMethodNames(
         const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
-    BOOL                    HasMethod(
+    BOOL					HasMethod(
         const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName );
 
     // new methods for dialogs
@@ -114,14 +114,14 @@ namespace BasicIDE
 
         Will show an error message when renaming fails because the new name is already used.
     */
-    bool                 RenameDialog(
+    bool                 RenameDialog( 
         Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
         throw( ::com::sun::star::container::ElementExistException, ::com::sun::star::container::NoSuchElementException );
 
-    bool                 RemoveDialog(
+    bool                 RemoveDialog( 
         const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
-    void                MarkDocumentModified( const ScriptDocument& rDocument );
+    void 				MarkDocumentModified( const ScriptDocument& rDocument );
 }
 
-#endif  // _BASOBJ_HXX
+#endif	// _BASOBJ_HXX

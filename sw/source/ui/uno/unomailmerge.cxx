@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,9 +114,9 @@ osl::Mutex &    GetMailMergeMutex()
 
 enum CloseResult
 {
-    eSuccess,       // successfully closed
-    eVetoed,        // vetoed, ownership transfered to the vetoing instance
-    eFailed         // failed for some unknown reason
+    eSuccess,		// successfully closed
+    eVetoed,		// vetoed, ownership transfered to the vetoing instance
+    eFailed			// failed for some unknown reason
 };
 static CloseResult CloseModelAndDocSh(
        Reference< frame::XModel > &rxModel,
@@ -214,11 +214,11 @@ namespace
     class DelayedFileDeletion : public ::cppu::WeakImplHelper1< util::XCloseListener >
     {
     protected:
-        ::osl::Mutex                    m_aMutex;
-        Reference< util::XCloseable >   m_xDocument;
-        Timer                           m_aDeleteTimer;
-        String                          m_sTemporaryFile;
-        sal_Int32                       m_nPendingDeleteAttempts;
+        ::osl::Mutex					m_aMutex;
+        Reference< util::XCloseable >	m_xDocument;
+        Timer							m_aDeleteTimer;
+        String							m_sTemporaryFile;
+        sal_Int32						m_nPendingDeleteAttempts;
 
     public:
         DelayedFileDeletion( const Reference< XModel >& _rxModel,
@@ -239,8 +239,8 @@ namespace
         DECL_LINK( OnTryDeleteFile, void* );
 
     private:
-        DelayedFileDeletion( const DelayedFileDeletion& );                  // never implemented
-        DelayedFileDeletion& operator=( const DelayedFileDeletion& );       // never implemented
+        DelayedFileDeletion( const DelayedFileDeletion& );					// never implemented
+        DelayedFileDeletion& operator=( const DelayedFileDeletion& );		// never implemented
     };
 
     DBG_NAME( DelayedFileDeletion )
@@ -297,7 +297,7 @@ namespace
                 m_aDeleteTimer.Start();
             }
             else
-                bSuccess = sal_True;    // can't do anything here ...
+                bSuccess = sal_True;	// can't do anything here ...
         }
         catch( const Exception& )
         {
@@ -310,7 +310,7 @@ namespace
         {
             SWUnoHelper::UCB_DeleteFile( m_sTemporaryFile );
             aGuard.clear();
-            release();  // this should be our last reference, we should be dead after this
+            release();	// this should be our last reference, we should be dead after this
         }
         return 0L;
     }
@@ -328,9 +328,9 @@ namespace
             DBG_ERROR( "DelayedFileDeletion::implTakeOwnership: could not revoke the listener!" );
         }
 
-        m_aDeleteTimer.SetTimeout( 3000 );  // 3 seconds
+        m_aDeleteTimer.SetTimeout( 3000 );	// 3 seconds
         m_aDeleteTimer.SetTimeoutHdl( LINK( this, DelayedFileDeletion, OnTryDeleteFile ) );
-        m_nPendingDeleteAttempts = 3;   // try 3 times at most
+        m_nPendingDeleteAttempts = 3;	// try 3 times at most
         m_aDeleteTimer.Start( );
     }
 
@@ -404,7 +404,7 @@ static BOOL DeleteTmpFile_Impl(
             }
         }
         else
-            bRes = TRUE;    // file will be deleted delayed
+            bRes = TRUE;	// file will be deleted delayed
     }
     return bRes;
 }
@@ -445,7 +445,7 @@ SwXMailMerge::~SwXMailMerge()
 {
     if (aTmpFileName.Len())
         DeleteTmpFile_Impl( xModel, xDocSh, aTmpFileName );
-    else    // there was no temporary file in use
+    else	// there was no temporary file in use
     {
         //! we still need to close the model and doc shell manually
         //! because there is no automatism that will do that later.
@@ -743,7 +743,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 aCurOutputURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
             }
         }
-        else    // default empty document without URL
+        else	// default empty document without URL
         {
             if (!aCurOutputURL.getLength())
                 throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OutputURL is not set and can not be obtained." ) ), static_cast < cppu::OWeakObject * > ( this ) );
@@ -835,7 +835,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 
     if ( xCurModel.get() != xModel.get() )
-    {   // in case it was a temporary model -> close it, and delete the file
+    {	// in case it was a temporary model -> close it, and delete the file
         DeleteTmpFile_Impl( xCurModel, xCurDocSh, aTmpFileName );
         aTmpFileName.Erase();
     }

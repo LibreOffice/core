@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@ namespace package_ucp {
 
 //=========================================================================
 
-#define PACKAGE_URL_SCHEME          "vnd.sun.star.pkg"
-#define PACKAGE_ZIP_URL_SCHEME      "vnd.sun.star.zip"
-#define PACKAGE_URL_SCHEME_LENGTH   16
+#define PACKAGE_URL_SCHEME 			"vnd.sun.star.pkg"
+#define PACKAGE_ZIP_URL_SCHEME		"vnd.sun.star.zip"
+#define PACKAGE_URL_SCHEME_LENGTH	16
 
 //=========================================================================
 

@@ -359,7 +359,7 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
                 const Size aSize = GetSizePixel();
                 aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
             }
-
+            
             //!! call different Execute function to get rid of the new thesaurus sub menu
             //!! pointer created in the call to Popup.
             //!! Otherwise we would have a memory leak (see also #i107205#)

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,17 +42,17 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
-    SwDepend    aPageDescDep;
-    SwDepend    aCharFmtDep, aAnchorCharFmtDep;
-    String      sPrefix;
-    String      sSuffix;
+    SwDepend  	aPageDescDep;
+    SwDepend 	aCharFmtDep, aAnchorCharFmtDep;
+    String 		sPrefix;
+    String 		sSuffix;
 protected:
     bool        m_bEndNote;
 public:
     SvxNumberType aFmt;
-    USHORT    nFtnOffset;
+    USHORT 	  nFtnOffset;
 
-    void        ChgPageDesc( SwPageDesc *pDesc );
+    void 		ChgPageDesc( SwPageDesc *pDesc );
     SwPageDesc *GetPageDesc( SwDoc &rDoc ) const;
     SwClient   *GetPageDescDep() const { return (SwClient*)&aPageDescDep; }
 
@@ -75,11 +75,11 @@ public:
     SwEndNoteInfo( SwTxtFmtColl *pTxtColl = 0);
     SwEndNoteInfo(const SwEndNoteInfo&);
 
-    const String& GetPrefix() const         { return sPrefix; }
-    const String& GetSuffix() const         { return sSuffix; }
+    const String& GetPrefix() const 		{ return sPrefix; }
+    const String& GetSuffix() const 		{ return sSuffix; }
 
-    void SetPrefix(const String& rSet)      { sPrefix = rSet; }
-    void SetSuffix(const String& rSet)      { sSuffix = rSet; }
+    void SetPrefix(const String& rSet)		{ sPrefix = rSet; }
+    void SetSuffix(const String& rSet)		{ sSuffix = rSet; }
 };
 
 enum SwFtnPos
@@ -100,7 +100,7 @@ class SW_DLLPUBLIC SwFtnInfo: public SwEndNoteInfo
 
 public:
     String    aQuoVadis;
-    String    aErgoSum;
+    String	  aErgoSum;
     SwFtnPos  ePos;
     SwFtnNum  eNum;
 

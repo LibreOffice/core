@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ rtl::OUString pdfi::unitMMString( double fMM )
     rtl::OUStringBuffer aBuf( 32 );
     aBuf.append( rtl_math_round( fMM, 2, rtl_math_RoundingMode_Floor ) );
     aBuf.appendAscii( "mm" );
-
+    
     return aBuf.makeStringAndClear();
 }
 
@@ -73,7 +73,7 @@ rtl::OUString pdfi::convertPixelToUnitString( double fPix )
     rtl::OUStringBuffer aBuf( 32 );
     aBuf.append( rtl_math_round( convPx2mm( fPix ), 2, rtl_math_RoundingMode_Floor ) );
     aBuf.appendAscii( "mm" );
-
+    
     return aBuf.makeStringAndClear();
 }
 

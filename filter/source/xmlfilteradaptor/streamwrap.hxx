@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ namespace osl
 
 namespace foo
 {
-    namespace stario    = ::com::sun::star::io;
-    namespace staruno   = ::com::sun::star::uno;
+    namespace stario	= ::com::sun::star::io;
+    namespace staruno	= ::com::sun::star::uno;
 
 //==================================================================
 //= OOutputStreamWrapper
@@ -57,7 +57,7 @@ typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
     // needed for some compilers
 class OOutputStreamWrapper : public OutputStreamWrapper_Base
 {
-    ::osl::File&        rStream;
+    ::osl::File&		rStream;
 
 public:
     OOutputStreamWrapper(::osl::File& _rStream) :rStream(_rStream) { }
@@ -71,7 +71,7 @@ public:
     virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
 };
 
-}   // namespace utl
+}	// namespace utl
 
 
 #endif // _UTL_STREAM_WRAPPER_HXX_

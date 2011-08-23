@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ void SwEnvPreview::Paint(const Rectangle &)
 
     Color aBack = rSettings.GetWindowColor( );
     Color aFront = SwViewOption::GetFontColor();
-    Color aMedium = Color(  ( aBack.GetRed() + aFront.GetRed() ) / 2,
+    Color aMedium = Color(	( aBack.GetRed() + aFront.GetRed() ) / 2,
                             ( aBack.GetGreen() + aFront.GetGreen() ) / 2,
                             ( aBack.GetBlue() + aFront.GetBlue() ) / 2
                         );
@@ -174,7 +174,7 @@ SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEWDOC)));
     GetOKButton().SetHelpId(HID_ENVELOP_PRINT);
-    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);	// Damit generierter Hilfetext verwendet wird
     if (GetUserButton())
     {
         GetUserButton()->SetText(bInsert ? sInsert : sChange);
@@ -258,10 +258,10 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
     pSh = GetParent()->pSh;
 
     // Handler installieren
-    aDatabaseLB    .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
-    aTableLB       .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
-    aInsertBT      .SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
-    aSenderBox     .SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
+    aDatabaseLB    .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl	   ));
+    aTableLB       .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl	   ));
+    aInsertBT      .SetClickHdl	(LINK(this, SwEnvPage, FieldHdl		   ));
+    aSenderBox	   .SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
     aPreview.SetBorderStyle( WINDOW_BORDER_MONO );
 
     SwDBData aData = pSh->GetDBData();
@@ -309,7 +309,7 @@ IMPL_LINK( SwEnvPage, FieldHdl, Button *, EMPTYARG )
     String aStr ( '<' );
     aStr += aDatabaseLB.GetSelectEntry();
     aStr += '.';
-//  aStr += DB_DELIM;
+//	aStr += DB_DELIM;
     aStr += aTableLB.GetSelectEntry();
     aStr += '.';
     aStr += aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1';

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,11 +61,11 @@ TYPEINIT1( FuSlideShowDlg, FuPoor );
 \************************************************************************/
 
 FuSlideShowDlg::FuSlideShowDlg (
-    ViewShell* pViewSh,
+    ViewShell* pViewSh, 
     ::sd::Window* pWin,
-    ::sd::View* pView,
-    SdDrawDocument* pDoc,
-    SfxRequest& rReq)
+    ::sd::View*	pView, 
+    SdDrawDocument* pDoc, 
+    SfxRequest& rReq) 
     : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
 {
 }
@@ -81,13 +81,13 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 {
     PresentationSettings& rPresentationSettings = mpDoc->getPresentationSettings();
 
-    SfxItemSet      aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
-    List            aPageNameList;
-    const String&   rPresPage = rPresentationSettings.maPresPage;
-    String          aFirstPage;
-    String          aStandardName( SdResId( STR_PAGE ) );
-    SdPage*         pPage = NULL;
-    long            nPage;
+    SfxItemSet		aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
+    List			aPageNameList;
+    const String&	rPresPage = rPresentationSettings.maPresPage;
+    String			aFirstPage;
+    String			aStandardName( SdResId( STR_PAGE ) );
+    SdPage*			pPage = NULL;
+    long			nPage;
 
     for( nPage = mpDoc->GetSdPageCount( PK_STANDARD ) - 1L; nPage >= 0L; nPage-- )
     {
@@ -146,9 +146,9 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     if( pDlg && (pDlg->Execute() == RET_OK) )
     {
         rtl::OUString aPage;
-        long    nValue32;
+        long	nValue32;
         sal_Bool bValue;
-        bool    bValuesChanged = FALSE;
+        bool	bValuesChanged = FALSE;
 
         pDlg->GetAttr( aDlgSet );
 

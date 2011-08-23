@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,20 +47,20 @@ namespace /* private */
     {
         aCustomControl->Align();
     };
-
+        
     class CSetFontHelper
     {
     public:
-        CSetFontHelper(HFONT hFont) :
+        CSetFontHelper(HFONT hFont) : 
             m_hFont(hFont)
         {
         }
-
+        
         void SAL_CALL operator()(CCustomControl* aCustomControl)
         {
             aCustomControl->SetFont(m_hFont);
         }
-
+        
     private:
         HFONT m_hFont;
     };
@@ -94,7 +94,7 @@ void SAL_CALL CCustomControlContainer::Align()
 void SAL_CALL CCustomControlContainer::SetFont(HFONT hFont)
 {
     CSetFontHelper aSetFontHelper(hFont);
-
+    
     std::for_each(
         m_ControlContainer.begin(),
         m_ControlContainer.end(),
@@ -104,7 +104,7 @@ void SAL_CALL CCustomControlContainer::SetFont(HFONT hFont)
 //-----------------------------------
 //
 //-----------------------------------
-
+    
 void SAL_CALL CCustomControlContainer::AddControl(CCustomControl* aCustomControl)
 {
     m_ControlContainer.push_back(aCustomControl);
@@ -115,12 +115,12 @@ void SAL_CALL CCustomControlContainer::AddControl(CCustomControl* aCustomControl
 //-----------------------------------
 
 void SAL_CALL CCustomControlContainer::RemoveControl(CCustomControl* aCustomControl)
-{
+{	
     ControlContainer_t::iterator iter_end = m_ControlContainer.end();
 
-    ControlContainer_t::iterator iter =
+    ControlContainer_t::iterator iter = 
         std::find(m_ControlContainer.begin(),iter_end,aCustomControl);
-
+    
     if (iter != iter_end)
     {
         delete *iter;

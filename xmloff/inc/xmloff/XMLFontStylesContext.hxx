@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,14 +47,14 @@ class XMLFontEncodingPropHdl;
 
 class XMLOFF_DLLPUBLIC XMLFontStylesContext : public SvXMLStylesContext
 {
-    XMLFontFamilyNamePropHdl    *pFamilyNameHdl;
-    XMLFontFamilyPropHdl        *pFamilyHdl;
-    XMLFontPitchPropHdl         *pPitchHdl;
-    XMLFontEncodingPropHdl      *pEncHdl;
+    XMLFontFamilyNamePropHdl 	*pFamilyNameHdl;
+    XMLFontFamilyPropHdl 		*pFamilyHdl;
+    XMLFontPitchPropHdl 		*pPitchHdl;
+    XMLFontEncodingPropHdl 		*pEncHdl;
 
-    SvXMLTokenMap           *pFontStyleAttrTokenMap;
+    SvXMLTokenMap			*pFontStyleAttrTokenMap;
 
-    rtl_TextEncoding        eDfltEncoding;
+    rtl_TextEncoding		eDfltEncoding;
 
 protected:
 

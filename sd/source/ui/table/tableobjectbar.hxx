@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ public:
     TableObjectBar( ::sd::ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~TableObjectBar (void);
 
-    void            GetState( SfxItemSet& rSet );
-    void            GetAttrState( SfxItemSet& rSet );
-    void            Execute( SfxRequest& rReq );
+    void			GetState( SfxItemSet& rSet );
+    void			GetAttrState( SfxItemSet& rSet );
+    void			Execute( SfxRequest& rReq );
 
 protected:
     ::sd::View* mpView;

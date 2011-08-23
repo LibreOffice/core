@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 module com {  module sun {  module star {  module ui {
 
 /** Determins the type of an item.
-
+    
     @since OOo 2.0.0
  */
 constants ItemType
@@ -38,7 +38,7 @@ constants ItemType
     //-------------------------------------------------------------------------
     /** a normal item
      */
-    const short DEFAULT = 0;
+    const short DEFAULT = 0;    
     //-------------------------------------------------------------------------
     /** a separarator is inserted as a line.
      */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::lang;
 
-ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(::connectivity::file::OConnection* _pCon)    :ODatabaseMetaData(_pCon)
+ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(::connectivity::file::OConnection* _pCon) 	:ODatabaseMetaData(_pCon)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::ODbaseDatabaseMetaData" );
 }
@@ -76,7 +76,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xRef = pResult;
-
+    
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
     {
@@ -190,8 +190,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
     aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
-    const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
-    const ::rtl::OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
+    const ::rtl::OUString* pTabBegin	= aTabNames.getConstArray();
+    const ::rtl::OUString* pTabEnd		= pTabBegin + aTabNames.getLength();
     for(;pTabBegin != pTabEnd;++pTabBegin)
     {
         if(match(tableNamePattern,*pTabBegin,'\0'))
@@ -278,8 +278,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow aRow(14);
 
-    aRow[5]     = new ORowSetValueDecorator(::rtl::OUString());
-    aRow[10]    = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("A"));
+    aRow[5]		= new ORowSetValueDecorator(::rtl::OUString());
+    aRow[10]	= new ORowSetValueDecorator(::rtl::OUString::createFromAscii("A"));
 
     Reference< XIndexesSupplier> xTable;
     ::cppu::extractInterface(xTable,xNames->getByName(table));
@@ -325,7 +325,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         Reference< XPropertySet> xColumn;
         for(sal_Int32 j=1;pColBegin != pColEnd;++pColBegin,++j)
         {
-            //  xColumns->getByName(*pColBegin) >>= xColumn;
+            //	xColumns->getByName(*pColBegin) >>= xColumn;
             aRow[8] = new ORowSetValueDecorator(j);
             aRow[9] = new ORowSetValueDecorator(*pColBegin);
             aRows.push_back(aRow);
@@ -400,7 +400,7 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
     return bReadOnly;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
+sal_Bool ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  ) 
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw" );
     return sal_True;

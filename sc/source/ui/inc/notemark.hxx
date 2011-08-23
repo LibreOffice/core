@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,23 +41,23 @@ class SdrObject;
 class ScNoteMarker
 {
 private:
-    Window*     pWindow;
-    Window*     pRightWin;
-    Window*     pBottomWin;
-    Window*     pDiagWin;
-    ScDocument* pDoc;
-    ScAddress   aDocPos;
-    String      aUserText;
+    Window*		pWindow;
+    Window*		pRightWin;
+    Window*		pBottomWin;
+    Window*		pDiagWin;
+    ScDocument*	pDoc;
+    ScAddress	aDocPos;
+    String		aUserText;
     Rectangle   aVisRect;
-    Timer       aTimer;
-    MapMode     aMapMode;
-    BOOL        bLeft;
-    BOOL        bByKeyboard;
+    Timer		aTimer;
+    MapMode		aMapMode;
+    BOOL		bLeft;
+    BOOL		bByKeyboard;
 
-    Rectangle       aRect;
-    SdrModel*       pModel;
-    SdrObject*      pObject;
-    BOOL            bVisible;
+    Rectangle		aRect;
+    SdrModel*		pModel;
+    SdrObject*		pObject;
+    BOOL			bVisible;
 
     DECL_LINK( TimeHdl, Timer* );
 
@@ -67,11 +67,11 @@ public:
                                 const MapMode& rMap, BOOL bLeftEdge, BOOL bForce, BOOL bKeyboard );
                 ~ScNoteMarker();
 
-    void        Draw();
-    void        InvalidateWin();
+    void		Draw();
+    void		InvalidateWin();
 
-    ScAddress   GetDocPos() const       { return aDocPos; }
-    BOOL        IsByKeyboard() const    { return bByKeyboard; }
+    ScAddress	GetDocPos() const		{ return aDocPos; }
+    BOOL		IsByKeyboard() const	{ return bByKeyboard; }
 };
 
 

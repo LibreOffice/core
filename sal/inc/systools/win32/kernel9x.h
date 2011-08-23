@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ extern "C" {
 
 //------------------------------------------------------------------------
 // undefine the macros defined in the winbase.h file in order to avoid
-// warnings because of multiple defines
+// warnings because of multiple defines 
 //------------------------------------------------------------------------
 
 #ifdef LoadLibraryW
@@ -164,106 +164,106 @@ KERNEL9X_API HMODULE (WINAPI *lpfnLoadLibraryExW ) (
 KERNEL9X_API DWORD (WINAPI *lpfnGetModuleFileNameW ) (
     HMODULE hModule,    // handle to module
     LPWSTR lpFilename,  // file name of module
-    DWORD nSize         // size of buffer
+    DWORD nSize         // size of buffer 
 );
 
 KERNEL9X_API DWORD (WINAPI *lpfnGetLogicalDriveStringsW ) (
-    DWORD nBufferLength,    // size of buffer
-    LPWSTR lpBuffer         // drive strings buffer
+    DWORD nBufferLength,	// size of buffer
+    LPWSTR lpBuffer			// drive strings buffer
 );
 
 KERNEL9X_API HANDLE ( WINAPI *lpfnCreateFileW )(
-    LPCWSTR lpFileName,
-    DWORD   dwDesiredAccess,
-    DWORD   dwShareMode,
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes,
-    DWORD   dwCreationDisposition,
-    DWORD   dwFlagsAndAttributes,
-    HANDLE  hTemplateFile
+    LPCWSTR	lpFileName,
+    DWORD	dwDesiredAccess,
+    DWORD	dwShareMode,
+    LPSECURITY_ATTRIBUTES	lpSecurityAttributes,
+    DWORD	dwCreationDisposition,
+    DWORD	dwFlagsAndAttributes,
+    HANDLE	hTemplateFile
 );
 
 KERNEL9X_API DWORD WINAPI GetCanonicalPathNameA(
-    LPCSTR lpszPath,            // file name
-    LPSTR lpszCanonicalPath,    // path buffer
-    DWORD cchBuffer             // size of path buffer
+    LPCSTR lpszPath,			// file name
+    LPSTR lpszCanonicalPath,	// path buffer
+    DWORD cchBuffer				// size of path buffer
 );
 
 KERNEL9X_API DWORD WINAPI GetCanonicalPathNameW(
-    LPCWSTR lpszPath,           // file name
-    LPWSTR lpszCanonicalPath,   // path buffer
-    DWORD cchBuffer             // size of path buffer
+    LPCWSTR lpszPath,			// file name
+    LPWSTR lpszCanonicalPath,	// path buffer
+    DWORD cchBuffer				// size of path buffer
 );
 
 KERNEL9X_API HANDLE ( WINAPI * lpfnCreateFileW ) (
-    LPCWSTR lpFileName,
-    DWORD   dwDesiredAccess,
-    DWORD   dwShareMode,
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes,
-    DWORD   dwCreationDisposition,
-    DWORD   dwFlagsAndAttributes,
-    HANDLE  hTemplateFile );
+    LPCWSTR	lpFileName,
+    DWORD	dwDesiredAccess,
+    DWORD	dwShareMode,
+    LPSECURITY_ATTRIBUTES	lpSecurityAttributes,
+    DWORD	dwCreationDisposition,
+    DWORD	dwFlagsAndAttributes,
+    HANDLE	hTemplateFile );
 
 KERNEL9X_API BOOL (WINAPI *lpfnDeleteFileW ) (
-    LPCWSTR lpFileName          // file name
+    LPCWSTR	lpFileName			// file name
 );
 
 KERNEL9X_API BOOL (WINAPI *lpfnCopyFileW ) (
-    LPCWSTR lpExistingFileName, // file name
-    LPCWSTR lpNewFileName,      // new file name
-    BOOL    bFailIfExist        // operation if file exists
+    LPCWSTR lpExistingFileName,	// file name
+    LPCWSTR lpNewFileName,		// new file name
+    BOOL	bFailIfExist		// operation if file exists
 );
 
 KERNEL9X_API BOOL (WINAPI *lpfnMoveFileW ) (
-    LPCWSTR lpExistingFileName, // file name
-    LPCWSTR lpNewFileName       // new file name
+    LPCWSTR lpExistingFileName,	// file name
+    LPCWSTR lpNewFileName		// new file name
 );
 
 KERNEL9X_API BOOL (WINAPI *lpfnMoveFileExW ) (
-  LPCWSTR lpExistingFileName,   // file name
-  LPCWSTR lpNewFileName,        // new file name
-  DWORD dwFlags                 // move options
+  LPCWSTR lpExistingFileName,	// file name
+  LPCWSTR lpNewFileName,		// new file name
+  DWORD dwFlags					// move options
 );
 
 KERNEL9X_API BOOL (WINAPI *lpfnRemoveDirectoryW ) (
-    LPCWSTR lpPathName          // directory name
+    LPCWSTR	lpPathName			// directory name
 );
 
 KERNEL9X_API BOOL ( WINAPI * lpfnCreateDirectoryW ) (
-    LPCWSTR lpNewDirectory, LPSECURITY_ATTRIBUTES lpSecurityAttributes );
+    LPCWSTR	lpNewDirectory, LPSECURITY_ATTRIBUTES lpSecurityAttributes );
 
 KERNEL9X_API BOOL ( WINAPI * lpfnCreateDirectoryExW ) (
-    LPCWSTR lpTemplateDirectory,
-    LPCWSTR lpNewDirectory,
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes );
+    LPCWSTR	lpTemplateDirectory,
+    LPCWSTR	lpNewDirectory,
+    LPSECURITY_ATTRIBUTES	lpSecurityAttributes );
 
 KERNEL9X_API DWORD ( WINAPI * lpfnGetLongPathNameW ) (
   LPCWSTR lpszShortPath, // file name
   LPWSTR lpszLongPath,   // path buffer
-  DWORD cchBuffer        // size of path buffer
+  DWORD cchBuffer        // size of path buffer 
 );
 
 // GetCanonicalPath is a tool function with no exact counterpart
-// in the win32 api; we use nevertheless a function pointer
+// in the win32 api; we use nevertheless a function pointer 
 // because every variable etc. must root in the Kernel9x.lib else
 // we loose our AutoSystoolInit object during linking
 KERNEL9X_API DWORD ( WINAPI * lpfnGetCanonicalPathW ) (
-    LPCWSTR lpszPath,           // file name
-    LPWSTR lpszCanonicalPath,   // path buffer
-    DWORD cchBuffer             // size of path buffer
+    LPCWSTR lpszPath,			// file name
+    LPWSTR lpszCanonicalPath,	// path buffer
+    DWORD cchBuffer				// size of path buffer 
 );
 
 KERNEL9X_API int ( WINAPI* lpfnGetLocaleInfoW ) (
     LCID Locale,        // locale identifier
-    LCTYPE LCType,      // information type
+    LCTYPE LCType,      // information type 
     LPWSTR lpLCData,    // information buffer
     int cchData         // size of buffer
 );
 
 KERNEL9X_API DWORD ( WINAPI * lpfnGetFullPathNameW )(
-    LPCWSTR lpFileName,     // file name
-    DWORD   nBufferLength,  // size of path buffer
-    LPWSTR  lpBuffer,       // path buffer
-    LPWSTR  *lpFilePart     // address of file name in path
+    LPCWSTR	lpFileName,		// file name
+    DWORD	nBufferLength,	// size of path buffer
+    LPWSTR	lpBuffer,		// path buffer
+    LPWSTR	*lpFilePart		// address of file name in path
 );
 
 KERNEL9X_API BOOL ( WINAPI * lpfnCreateProcessW )(
@@ -301,7 +301,7 @@ KERNEL9X_API DWORD ( WINAPI * lpfnGetEnvironmentVariableW )(
 
 
 KERNEL9X_API UINT ( WINAPI * lpfnGetDriveTypeW )(
-    LPCWSTR lpRootPathName  // root directory
+    LPCWSTR lpRootPathName	// root directory
 );
 
 KERNEL9X_API DWORD ( WINAPI * lpfnGetCurrentDirectoryW )(
@@ -315,14 +315,14 @@ KERNEL9X_API BOOL ( WINAPI * lpfnSetCurrentDirectoryW )(
 
 // GetVolumeInformation
 KERNEL9X_API BOOL ( WINAPI* lpfnGetVolumeInformationW )(
-    LPCWSTR lpRootPathName,             // root directory
-    LPWSTR  lpVolumeNameBuffer,         // volume name buffer
-    DWORD   nVolumeNameSize,            // length of name buffer
-    LPDWORD lpVolumeSerialNumber,       // volume serial number
-    LPDWORD lpMaximumComponentLength,   // maximum file name length
-    LPDWORD lpFileSystemFlags,          // file system options
-    LPWSTR  lpFileSystemName,           // file system name buffer
-    DWORD   nFileSystemNameSize         // length of file system name buffer
+    LPCWSTR	lpRootPathName,				// root directory
+    LPWSTR	lpVolumeNameBuffer,			// volume name buffer
+    DWORD	nVolumeNameSize,			// length of name buffer
+    LPDWORD	lpVolumeSerialNumber,		// volume serial number
+    LPDWORD	lpMaximumComponentLength,	// maximum file name length
+    LPDWORD	lpFileSystemFlags,			// file system options
+    LPWSTR	lpFileSystemName,			// file system name buffer
+    DWORD	nFileSystemNameSize			// length of file system name buffer
 );
 
 // GetDiskFreeSpaceExA
@@ -346,35 +346,35 @@ KERNEL9X_API BOOL (WINAPI *lpfnGetDiskFreeSpaceExW)(
 // all occurrences of this macros with our function pointer
 //------------------------------------------------------------------------
 
-#define LoadLibraryExW              lpfnLoadLibraryExW
-#define LoadLibraryW(c)             LoadLibraryExW(c, NULL, 0)
-#define GetModuleFileNameW          lpfnGetModuleFileNameW
-#define GetLogicalDriveStringsW     lpfnGetLogicalDriveStringsW
-#define CreateFileW                 lpfnCreateFileW
-#define DeleteFileW                 lpfnDeleteFileW
-#define CopyFileW                   lpfnCopyFileW
-#define MoveFileW                   lpfnMoveFileW
-#define MoveFileExW                 lpfnMoveFileExW
-#define RemoveDirectoryW            lpfnRemoveDirectoryW
-#define CreateDirectoryW            lpfnCreateDirectoryW
-#define CreateDirectoryExW          lpfnCreateDirectoryExW
-#define GetLongPathNameW            lpfnGetLongPathNameW
-#define GetFullPathNameW            lpfnGetFullPathNameW
+#define LoadLibraryExW				lpfnLoadLibraryExW
+#define LoadLibraryW(c)				LoadLibraryExW(c, NULL, 0)
+#define GetModuleFileNameW			lpfnGetModuleFileNameW
+#define GetLogicalDriveStringsW		lpfnGetLogicalDriveStringsW
+#define CreateFileW					lpfnCreateFileW
+#define DeleteFileW					lpfnDeleteFileW
+#define CopyFileW					lpfnCopyFileW
+#define MoveFileW					lpfnMoveFileW
+#define MoveFileExW					lpfnMoveFileExW
+#define RemoveDirectoryW			lpfnRemoveDirectoryW
+#define CreateDirectoryW			lpfnCreateDirectoryW
+#define CreateDirectoryExW			lpfnCreateDirectoryExW
+#define GetLongPathNameW			lpfnGetLongPathNameW
+#define GetFullPathNameW			lpfnGetFullPathNameW
 
-#define GetCanonicalPath            lpfnGetCanonicalPathW
-#define GetLocaleInfoW              lpfnGetLocaleInfoW
+#define GetCanonicalPath			lpfnGetCanonicalPathW
+#define GetLocaleInfoW              lpfnGetLocaleInfoW      
 
 #define CreateProcessW              lpfnCreateProcessW
 #define CreateProcessAsUserW        lpfnCreateProcessAsUserW
 #define GetEnvironmentVariableW     lpfnGetEnvironmentVariableW
-#define GetDriveTypeW               lpfnGetDriveTypeW
+#define GetDriveTypeW				lpfnGetDriveTypeW
 
 #define GetCurrentDirectoryW        lpfnGetCurrentDirectoryW
 #define SetCurrentDirectoryW        lpfnSetCurrentDirectoryW
 
-#define GetVolumeInformationW       lpfnGetVolumeInformationW
-#define GetDiskFreeSpaceExA         lpfnGetDiskFreeSpaceExA
-#define GetDiskFreeSpaceExW         lpfnGetDiskFreeSpaceExW
+#define GetVolumeInformationW		lpfnGetVolumeInformationW
+#define GetDiskFreeSpaceExA			lpfnGetDiskFreeSpaceExA
+#define GetDiskFreeSpaceExW			lpfnGetDiskFreeSpaceExW
 
 #ifdef __cplusplus
 }

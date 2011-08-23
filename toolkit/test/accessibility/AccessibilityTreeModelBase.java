@@ -71,7 +71,7 @@ public class AccessibilityTreeModelBase
             {
                 AccessibleTreeNode aParentNode = (AccessibleTreeNode) aParent;
                 AccessibleTreeNode aChildNode = (AccessibleTreeNode) aChild;
-
+                
                 int nChildCount = aParentNode.getChildCount();
                 for( int i = 0; i < nChildCount; i++ )
                 {
@@ -105,7 +105,7 @@ public class AccessibilityTreeModelBase
         return maRoot;
     }
 
-    public void valueForPathChanged(TreePath path, Object newValue)
+    public void valueForPathChanged(TreePath path, Object newValue) 
     { }
 
     protected synchronized void setRoot (AccessibleTreeNode aRoot)

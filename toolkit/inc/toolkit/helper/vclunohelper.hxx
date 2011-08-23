@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,57 +73,57 @@ class OutputDevice;
 class MouseEvent;
 class KeyEvent;
 
-//  ----------------------------------------------------
-//  class VclUnoHelper
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VclUnoHelper
+//	----------------------------------------------------
 class TOOLKIT_DLLPUBLIC VCLUnoHelper
 {
 public:
     // Toolkit
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>   CreateToolkit();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>	CreateToolkit();
 
     // Bitmap
-    static BitmapEx                                                         GetBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>& rxBitmap );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>    CreateBitmap( const BitmapEx& rBitmap );
+    static BitmapEx															GetBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>& rxBitmap );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>	CreateBitmap( const BitmapEx& rBitmap );
 
     // Window
-    static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow );
-    static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow2 );
-    static Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindowPeer );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>    GetInterface( Window* pWindow );
+    static Window* 															GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow );
+    static Window* 															GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow2 );
+    static Window* 															GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindowPeer );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>	GetInterface( Window* pWindow );
 
     // OutputDevice
-    static OutputDevice*                            GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>& rxDevice );
-    static OutputDevice*                            GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics>& rxGraphics );
+    static OutputDevice* 							GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>& rxDevice );
+    static OutputDevice* 							GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics>& rxGraphics );
 
     // Region
-    static Region                                   GetRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion );
+    static Region									GetRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion );
 
 
     // Pointer
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer> CreatePointer();
 
     // Polygon
-    static Polygon                                  CreatePolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX, const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY );
+    static Polygon									CreatePolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX, const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY );
 
     // Font
-    static ::com::sun::star::awt::FontDescriptor    CreateFontDescriptor( const Font& rFont );
-    static Font                                     CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const Font& rInitFont );
-    static Font                                     CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont );
-    static ::com::sun::star::awt::SimpleFontMetric  CreateFontMetric( const FontMetric& rFontMetric );
-    static float                                    ConvertFontWidth( FontWidth eWidth );
-    static FontWidth                                ConvertFontWidth( float f );
-    static float                                    ConvertFontWeight( FontWeight eWeight );
-    static FontWeight                               ConvertFontWeight( float f );
-
+    static ::com::sun::star::awt::FontDescriptor	CreateFontDescriptor( const Font& rFont );
+    static Font										CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const Font& rInitFont );
+    static Font										CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont );
+    static ::com::sun::star::awt::SimpleFontMetric	CreateFontMetric( const FontMetric& rFontMetric );
+    static float 									ConvertFontWidth( FontWidth eWidth );
+    static FontWidth 								ConvertFontWidth( float f );
+    static float 									ConvertFontWeight( FontWeight eWeight );
+    static FontWeight 								ConvertFontWeight( float f );
+    
     // Rectangle
-    static sal_Bool                                 IsZero( ::com::sun::star::awt::Rectangle rRect );
+    static sal_Bool									IsZero( ::com::sun::star::awt::Rectangle rRect );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>  CreateControlContainer( Window* pWindow );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>	CreateControlContainer( Window* pWindow );
 
     // MapUnits
-    static MapUnit                                  UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit );
-    static sal_Int32                                VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit );
+    static MapUnit									UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit );
+    static sal_Int32								VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit );
 
     //========================================================================
     //= MeasurementUnitConversion
@@ -160,4 +160,4 @@ public:
 };
 
 
-#endif  // _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#endif	// _TOOLKIT_HELPER_VCLUNOHELPER_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <vcl/font.hxx>
 #include <editeng/swafopt.hxx>
 #include "swdllapi.h"
-#include <crsrsh.hxx>   // fuer Basisklasse
+#include <crsrsh.hxx>	// fuer Basisklasse
 #include <itabenum.hxx>
 #include <swdbdata.hxx>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
@@ -58,7 +58,7 @@ class SfxPoolItem;
 class SfxItemSet;
 class SvxAutoCorrect;
 
-class SwField;          // fuer Felder
+class SwField;			// fuer Felder
 class SwFieldType;
 class SwDDEFieldType;
 class SwNewDBMgr;
@@ -71,22 +71,22 @@ class SwAutoCompleteWord;
 class SwFmtRefMark;
 
 class SwNumRule;        // Numerierung
-//class SwNodeNum;      // Numerierung
+//class SwNodeNum;		// Numerierung
 
-class SwUndoIds;        // fuer Undo
+class SwUndoIds;		// fuer Undo
 class SwTxtFmtColl;
 class SwGrfNode;
 class SwFlyFrmFmt;
 
-class SwFrmFmt;         // fuer GetTxtNodeFmts()
+class SwFrmFmt;			// fuer GetTxtNodeFmts()
 class SwCharFmt;
 class SwExtTextInput;
 class SwRootFrm;        // fuer CTOR
-class Graphic;          // fuer GetGraphic
-class GraphicObject;    // fuer GetGraphicObj
-class SwFmtINetFmt;     // InsertURL
+class Graphic;			// fuer GetGraphic
+class GraphicObject;	// fuer GetGraphicObj
+class SwFmtINetFmt; 	// InsertURL
 class SwTable;
-class SwTextBlocks;     // fuer GlossaryRW
+class SwTextBlocks; 	// fuer GlossaryRW
 class SwFmtFtn;
 class SwSection;
 class SwSectionData;
@@ -124,11 +124,11 @@ class LinkManager;
 }
 
 #define GETSELTXT_PARABRK_TO_BLANK      0
-#define GETSELTXT_PARABRK_KEEP          1
-#define GETSELTXT_PARABRK_TO_ONLYCR     2
+#define GETSELTXT_PARABRK_KEEP			1
+#define GETSELTXT_PARABRK_TO_ONLYCR 	2
 
 /****************************************************************
- *  zum Abfragen der INet-Attribute fuer den Navigator
+ *	zum Abfragen der INet-Attribute fuer den Navigator
  ****************************************************************/
 struct SwGetINetAttr
 {
@@ -142,15 +142,15 @@ struct SwGetINetAttr
 SV_DECL_PTRARR_DEL( SwGetINetAttrs, SwGetINetAttr*, 0, 5 )
 
 /****************************************************************
- *  Typen der Inhaltsformen
+ *	Typen der Inhaltsformen
  ****************************************************************/
-#define CNT_TXT 0x0001
-#define CNT_GRF 0x0002
-#define CNT_OLE 0x0010
+#define CNT_TXT	0x0001
+#define CNT_GRF	0x0002
+#define CNT_OLE	0x0010
 /* Teste einen USHORT auf eine bestimmte Inhaltsform */
-#define CNT_HasTxt(USH) ((USH)&CNT_TXT)
-#define CNT_HasGrf(USH) ((USH)&CNT_GRF)
-#define CNT_HasOLE(USH) ((USH)&CNT_OLE)
+#define CNT_HasTxt(USH)	((USH)&CNT_TXT)
+#define CNT_HasGrf(USH)	((USH)&CNT_GRF)
+#define CNT_HasOLE(USH)	((USH)&CNT_OLE)
 
 class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
 {
@@ -187,9 +187,9 @@ public:
     // Ersetz einen selektierten Bereich in einem TextNode mit dem
     // String. Ist fuers Suchen&Ersetzen gedacht.
     // bRegExpRplc - ersetze Tabs (\\t) und setze den gefundenen String
-    //               ein ( nicht \& )
-    //              z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
-    //                      --> "xx\t<Tab>..zzz..&"
+    //				 ein ( nicht \& )
+    // 				z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
+    //						--> "xx\t<Tab>..zzz..&"
     BOOL Replace( const String& rNewStr, BOOL bRegExpRplc = FALSE );
 
     // loescht den Inhalt aller Bereiche;
@@ -224,9 +224,9 @@ public:
     long Copy( SwEditShell* pDestShell = 0 );
 
     // fuers Kopieren uebers ClipBoard:
-    //  wird Tabelle in Tabelle kopiert, verschiebe aus dieser dann
-    //  alle Cursor. Copy und Paste muss aufgrund der FlyFrames in
-    //  der FEShell stehen!
+    // 	wird Tabelle in Tabelle kopiert, verschiebe aus dieser dann
+    //	alle Cursor. Copy und Paste muss aufgrund der FlyFrames in
+    // 	der FEShell stehen!
     // kopiere alle Selectionen und das Doc
     //JP 21.10.96: und fuer die SVX-Autokorrektur
     BOOL _CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pNdInsPos = 0 );
@@ -292,12 +292,12 @@ public:
 
     /* Formatcollections, neu */
     /* GetXXXCount() liefert die Anzahl der im Dokument vorhandenen XXX
-     * GetXXX(i)     liefert das i-te XXX (ERR_RAISE bei Ueberindizierung!)
-     * DelXXX(i)     loescht das i-te XXX (ERR_RAISE bei Ueberindizierung!)
-     * GetCurXXX()   liefert das am Cursor oder in den Bereichen
-     *               geltende XXX (0, wenn nicht eindeutig!)
-     * SetXXX()      setzt am Cursor oder in den Bereichen das XXX
-     * MakeXXX()     macht ein XXX, abgeleitet vom pDerivedFrom
+     * GetXXX(i)	 liefert das i-te XXX (ERR_RAISE bei Ueberindizierung!)
+     * DelXXX(i)	 loescht das i-te XXX (ERR_RAISE bei Ueberindizierung!)
+     * GetCurXXX()	 liefert das am Cursor oder in den Bereichen
+     *				 geltende XXX (0, wenn nicht eindeutig!)
+     * SetXXX() 	 setzt am Cursor oder in den Bereichen das XXX
+     * MakeXXX()	 macht ein XXX, abgeleitet vom pDerivedFrom
      */
 
     // TXT
@@ -336,7 +336,7 @@ public:
     void Insert2(SwField&, const bool bForceExpandHints = false);
     SwField* GetCurFld() const;
 
-    void UpdateFlds( SwField & );       // ein einzelnes Feld
+    void UpdateFlds( SwField & );		// ein einzelnes Feld
 
     USHORT GetFldTypeCount(USHORT nResId = USHRT_MAX, BOOL bUsed = FALSE) const;
     SwFieldType* GetFldType(USHORT nId, USHORT nResId = USHRT_MAX, BOOL bUsed = FALSE) const;
@@ -385,44 +385,44 @@ public:
     void UpdateDocStat( SwDocStat& rStat );
 
     // Verzeichnismarke einfuegen loeschen
-    void    Insert(const SwTOXMark& rMark);
-    void    DeleteTOXMark(SwTOXMark* pMark);
+    void 	Insert(const SwTOXMark& rMark);
+    void	DeleteTOXMark(SwTOXMark* pMark);
 
     // Alle Markierungen am aktuellen SPoint ermitteln
-    USHORT  GetCurTOXMarks(SwTOXMarks& rMarks) const ;
+    USHORT	GetCurTOXMarks(SwTOXMarks& rMarks) const ;
 
     // Verzeichnis einfuegen, und bei Bedarf erneuern
-    void                InsertTableOf(const SwTOXBase& rTOX,
+    void				InsertTableOf(const SwTOXBase& rTOX,
                                         const SfxItemSet* pSet = 0);
-    BOOL                UpdateTableOf(const SwTOXBase& rTOX,
+    BOOL				UpdateTableOf(const SwTOXBase& rTOX,
                                         const SfxItemSet* pSet = 0);
-    const SwTOXBase*    GetCurTOX() const;
-    const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate = FALSE );
-    void                SetDefaultTOXBase(const SwTOXBase& rBase);
+    const SwTOXBase* 	GetCurTOX() const;
+    const SwTOXBase* 	GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate = FALSE );
+    void				SetDefaultTOXBase(const SwTOXBase& rBase);
 
-    BOOL                IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const;
-    void                SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly);
+    BOOL 				IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const;
+    void 				SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly);
 
-    USHORT              GetTOXCount() const;
-    const SwTOXBase*    GetTOX( USHORT nPos ) const;
-    BOOL                DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes = FALSE );
+    USHORT				GetTOXCount() const;
+    const SwTOXBase*	GetTOX(	USHORT nPos ) const;
+    BOOL 				DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes = FALSE );
 
     // nach einlesen einer Datei alle Verzeichnisse updaten
     void SetUpdateTOX( BOOL bFlag = TRUE );
     BOOL IsUpdateTOX() const;
 
     // Verzeichnis-Typen verwalten
-    USHORT              GetTOXTypeCount(TOXTypes eTyp) const;
-    const SwTOXType*    GetTOXType(TOXTypes eTyp, USHORT nId) const;
-    void                InsertTOXType(const SwTOXType& rTyp);
+    USHORT				GetTOXTypeCount(TOXTypes eTyp) const;
+    const SwTOXType* 	GetTOXType(TOXTypes eTyp, USHORT nId) const;
+    void			 	InsertTOXType(const SwTOXType& rTyp);
 
     // new field stuff
-    BOOL                UpdateField(sw::mark::IFieldmark &fieldBM);
+    BOOL	            UpdateField(sw::mark::IFieldmark &fieldBM);
 
     //AutoMark file
-    const String&   GetTOIAutoMarkURL() const;
-    void            SetTOIAutoMarkURL(const String& rSet);
-    void            ApplyAutoMark();
+    const String&	GetTOIAutoMarkURL() const;
+    void			SetTOIAutoMarkURL(const String& rSet);
+    void 			ApplyAutoMark();
 
     // Schluessel fuer die Indexverwaltung
     USHORT GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const;
@@ -653,7 +653,7 @@ public:
     //Updaten der Inhalte aller Charts zu der Tabelle mit dem angegeben Namen
     void UpdateCharts( const String &rName );
 
-    //  aktuelles Wort erfragen
+    //	aktuelles Wort erfragen
     String GetCurWord();
 
     // Textbaustein aus dem Textbausteindokument in
@@ -775,8 +775,8 @@ public:
     // returne zum Namen die im Doc gesetzte Referenz
     const SwFmtRefMark* GetRefMark( const String& rName ) const;
     // returne die Namen aller im Doc gesetzten Referenzen
-    //  Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine RefMark
-    //  gesetzt ist
+    // 	Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine RefMark
+    //	gesetzt ist
     USHORT GetRefMarks( SvStringsDtor* = 0 ) const;
 
     // rufe die Autokorrektur auf
@@ -812,7 +812,7 @@ public:
     BOOL GetCurFtn( SwFmtFtn* pToFillFtn = 0 );
     bool SetCurFtn( const SwFmtFtn& rFillFtn );
     bool HasFtns( bool bEndNotes = false ) const;
-//z.Zt nicht benoetigt  USHORT GetFtnCnt( BOOL bEndNotes = FALSE ) const;
+//z.Zt nicht benoetigt	USHORT GetFtnCnt( BOOL bEndNotes = FALSE ) const;
         // gebe Liste aller Fussnoten und deren Anfangstexte
     USHORT GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes = false );
 
@@ -870,7 +870,7 @@ public:
     // Numberformatter vom Doc erfragen
           SvNumberFormatter* GetNumberFormatter();
     const SvNumberFormatter* GetNumberFormatter() const
-    {   return ((SwEditShell*)this)->GetNumberFormatter();  }
+    {	return ((SwEditShell*)this)->GetNumberFormatter(); 	}
 
     // Schnitstellen fuers GlobalDokument
     BOOL IsGlobalDoc() const;
@@ -931,7 +931,7 @@ public:
     // von japanischen/chinesischen Zeichen)
     SwExtTextInput* CreateExtTextInput(LanguageType eInputLanguage);
     String DeleteExtTextInput( SwExtTextInput* pDel = 0, BOOL bInsText = TRUE);
-//  SwExtTextInput* GetExtTextInput() const;
+//	SwExtTextInput* GetExtTextInput() const;
     void SetExtTextInputData( const CommandExtTextInputData& );
 
     // Schnistelle fuer den Zugriff auf die AutoComplete-Liste
@@ -962,7 +962,7 @@ inline void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
 }
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
-{   return ((SwEditShell*)this)->GetLinkManager();  }
+{	return ((SwEditShell*)this)->GetLinkManager();	}
 
 /*
  * Klasse fuer den automatisierten Aufruf von Start- und
@@ -975,7 +975,7 @@ public:
     ~SwActKontext();
 };
 
-#define ACT_KONTEXT(x)  SwActKontext _aActKontext_(x)
+#define ACT_KONTEXT(x)	SwActKontext _aActKontext_(x)
 
 /*
  * Klasse fuer den automatisierten Aufruf von Start- und
@@ -988,7 +988,7 @@ public:
     ~SwMvKontext();
 };
 
-#define MV_KONTEXT(x)   SwMvKontext _aMvKontext_(x)
+#define MV_KONTEXT(x)	SwMvKontext _aMvKontext_(x)
 
 
 

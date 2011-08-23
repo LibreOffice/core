@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@
 #include <label.hxx>
 #include <labimg.hxx>
 
-#define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
+#define GETFLDVAL(rField)		  (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
 
 class SwNewDBMgr;
@@ -96,17 +96,17 @@ public:
     void SetFromItem( const SwLabItem& rItem );
     void FillItem( SwLabItem& rItem ) const;
 
-    String          aMake;
-    String          aType;
-    long            lHDist;
-    long            lVDist;
-    long            lWidth;
-    long            lHeight;
-    long            lLeft;
-    long            lUpper;
-    sal_Int32       nCols;
-    sal_Int32       nRows;
-    sal_Bool        bCont;
+    String 			aMake;
+    String 			aType;
+    long   			lHDist;
+    long   			lVDist;
+    long   			lWidth;
+    long   			lHeight;
+    long   			lLeft;
+    long   			lUpper;
+    sal_Int32 		nCols;
+    sal_Int32 		nRows;
+    sal_Bool   		bCont;
 };
 
 /* --------------------------------------------------

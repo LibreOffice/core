@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,87 +30,87 @@
 #if 0
 ***********************************************************************
 *
-*   Hier folgt die Beschreibung fuer die exportierten Makros:
+*	Hier folgt die Beschreibung fuer die exportierten Makros:
 *
-*       DECLARE_CONTAINER_SORT( ClassName, Type )
-*       IMPL_CONTAINER_SORT( ClassName, Type, SortFunc )
+*		DECLARE_CONTAINER_SORT( ClassName, Type )
+*		IMPL_CONTAINER_SORT( ClassName, Type, SortFunc )
 *
-*       Definiert eine von Container abgeleitete Klasse "ClassName",
-*       in der die Elemente des Typs "Type" sortiert enthalten sind.
-*       Dazu muss einer Funktion "SortFunc" definiert sein, die als
-*       Paramter zwei "const Type&" erwartet und 0 zurueckgibt, wenn
-*       beide gleich sind, -1 wenn der erste Paramter kleiner ist als
-*       der zweite und +1 wenn der erste Paramter groesser ist als
-*       der zweite.
+*		Definiert eine von Container abgeleitete Klasse "ClassName",
+*		in der die Elemente des Typs "Type" sortiert enthalten sind.
+*		Dazu muss einer Funktion "SortFunc" definiert sein, die als
+*		Paramter zwei "const Type&" erwartet und 0 zurueckgibt, wenn
+*		beide gleich sind, -1 wenn der erste Paramter kleiner ist als
+* 		der zweite und +1 wenn der erste Paramter groesser ist als
+*		der zweite.
 *
-*       Die Zugriffs-Methoden entsprechen in etwa denen der Container-
-*       Klasse, mit Ausnahme von Insert, DeleteAndDestroy und Seek_Entry,
-*       der den SV-Pointer-Arrays entsprechen.
+*		Die Zugriffs-Methoden entsprechen in etwa denen der Container-
+*		Klasse, mit Ausnahme von Insert, DeleteAndDestroy und Seek_Entry,
+*		der den SV-Pointer-Arrays entsprechen.
 *
-*       DECLARE_CONTAINER_SORT_DEL( ClassName, Type )
-*       IMPL_CONTAINER_SORT( ClassName, Type, SortFunc )
+*		DECLARE_CONTAINER_SORT_DEL( ClassName, Type )
+*		IMPL_CONTAINER_SORT( ClassName, Type, SortFunc )
 *
-*       Wie DECLARE_CONTAINER_SORT, nur dass beim Aufruf des Destruktors
-*       alle im Conatiner vorhandenen Objekte geloescht werden.
+*		Wie DECLARE_CONTAINER_SORT, nur dass beim Aufruf des Destruktors
+*		alle im Conatiner vorhandenen Objekte geloescht werden.
 *
 #endif
 
 #include <tools/contnr.hxx>
 
-#define DECLARE_CONTAINER_SORT_COMMON( ClassName, Type )                        \
-    ClassName( const ClassName& );                                          \
-    ClassName& operator =( const ClassName& );                              \
-public:                                                                     \
-    using Container::Count;                                                 \
+#define DECLARE_CONTAINER_SORT_COMMON( ClassName, Type )						\
+    ClassName( const ClassName& );											\
+    ClassName& operator =( const ClassName& );								\
+public:                                       								\
+    using Container::Count;                    								\
                                                                             \
-    ClassName( USHORT  InitSize, USHORT  ReSize ) :                         \
-        Container( CONTAINER_MAXBLOCKSIZE, InitSize, ReSize )   {}          \
+    ClassName( USHORT  InitSize, USHORT  ReSize ) :							\
+        Container( CONTAINER_MAXBLOCKSIZE, InitSize, ReSize )	{}			\
                                                                             \
-    BOOL Insert( Type* pObj );                                              \
+    BOOL Insert( Type* pObj );												\
                                                                                \
-    Type *Remove( ULONG nPos )                                              \
-        { return (Type *)Container::Remove( nPos ); }                       \
+    Type *Remove( ULONG nPos ) 												\
+        { return (Type *)Container::Remove( nPos ); }						\
                                                                             \
-    Type *Remove( Type* pObj );                                             \
+    Type *Remove( Type* pObj );												\
                                                                                \
-    void DeleteAndDestroy( ULONG nPos )                                     \
-    {                                                                       \
-        Type *pObj = Remove( nPos );                                        \
-        if( pObj )                                                          \
-            delete pObj;                                                    \
-    }                                                                       \
+    void DeleteAndDestroy( ULONG nPos )										\
+    {                                  										\
+        Type *pObj = Remove( nPos );   										\
+        if( pObj )                     										\
+            delete pObj;               										\
+    }                                  										\
                                                                                \
-    void DeleteAndDestroy()                                                 \
-        { while( Count() ) DeleteAndDestroy( 0 ); }                         \
+    void DeleteAndDestroy()													\
+        { while( Count() ) DeleteAndDestroy( 0 ); }							\
                                                                             \
-    Type* GetObject( ULONG nPos ) const                                     \
-        { return (Type *)Container::GetObject( nPos ); }                    \
+    Type* GetObject( ULONG nPos ) const										\
+        { return (Type *)Container::GetObject( nPos ); }					\
                                                                             \
-    Type* operator[]( ULONG nPos ) const                                    \
-        { return GetObject(nPos); }                                         \
+    Type* operator[]( ULONG nPos ) const 									\
+        { return GetObject(nPos); }											\
                                                                             \
-    BOOL Seek_Entry( const Type *pObj, ULONG* pPos ) const;                 \
+    BOOL Seek_Entry( const Type *pObj, ULONG* pPos ) const;					\
                                                                             \
-    ULONG GetPos( const Type* pObj ) const;                                 \
+    ULONG GetPos( const Type* pObj ) const;									\
 
 
-#define DECLARE_CONTAINER_SORT( ClassName, Type )                           \
-class ClassName : private Container                                         \
-{                                                                           \
-    DECLARE_CONTAINER_SORT_COMMON( ClassName, Type )                        \
-    ~ClassName() {}                                                         \
-};                                                                          \
+#define DECLARE_CONTAINER_SORT( ClassName, Type )							\
+class ClassName : private Container											\
+{																			\
+    DECLARE_CONTAINER_SORT_COMMON( ClassName, Type )						\
+    ~ClassName() {} 														\
+};																			\
 
 
-#define DECLARE_CONTAINER_SORT_DEL( ClassName, Type )                           \
-class ClassName : private Container                                         \
-{                                                                           \
-    DECLARE_CONTAINER_SORT_COMMON( ClassName, Type )                            \
-    ~ClassName() { DeleteAndDestroy(); }                                    \
-};                                                                          \
+#define DECLARE_CONTAINER_SORT_DEL( ClassName, Type )							\
+class ClassName : private Container											\
+{																			\
+    DECLARE_CONTAINER_SORT_COMMON( ClassName, Type )							\
+    ~ClassName() { DeleteAndDestroy(); }									\
+};																			\
 
 
-#define IMPL_CONTAINER_SORT( ClassName, Type, SortFunc )                    \
+#define IMPL_CONTAINER_SORT( ClassName, Type, SortFunc )					\
 BOOL ClassName::Insert( Type *pObj )                                        \
 {                                                                           \
     ULONG nPos;                                                             \
@@ -149,14 +149,14 @@ BOOL ClassName::Seek_Entry( const Type* pObj, ULONG* pPos ) const           \
         while( nU <= nO )                                                   \
         {                                                                   \
             nM = nU + ( nO - nU ) / 2;                                      \
-            int nCmp = SortFunc( *GetObject(nM), *pObj );                   \
+            int nCmp = SortFunc( *GetObject(nM), *pObj );				    \
                                                                             \
-            if( 0 == nCmp )                                                 \
+            if( 0 == nCmp )                              					\
             {                                                               \
                 if( pPos ) *pPos = nM;                                      \
                 return TRUE;                                                \
             }                                                               \
-            else if( nCmp < 0 )                                             \
+            else if( nCmp < 0 )                       						\
                 nU = nM + 1;                                                \
             else if( nM == 0 )                                              \
             {                                                               \

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@
 #include <docstat.hxx>
 #include <outline.hxx>
 #include <tablemgr.hxx>
-#include <swundo.hxx>       // fuer Undo-IDs
+#include <swundo.hxx>		// fuer Undo-IDs
 #include <reffld.hxx>
 #include <docsh.hxx>
 #include <mdiexp.hxx>
@@ -508,8 +508,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1,
                 RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END-1,
                 RES_PARATR_BEGIN, RES_PARATR_END-1,
-                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                 RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
                 RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -668,7 +666,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_AUTOFORMAT_AUTO:
         {
-            SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
+            SvxAutoCorrCfg*	pACfg = SvxAutoCorrCfg::Get();
             BOOL bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !pACfg->IsAutoFmtByInput();
             if( bSet != pACfg->IsAutoFmtByInput() )
             {
@@ -848,10 +846,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
-            rWrtSh.Push();          //save current cursor
+            rWrtSh.Push();			//save current cursor
             SwLangHelper::SelectCurrentPara( rWrtSh );
             lcl_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
-            rWrtSh.Pop( FALSE );    //restore old cursor
+            rWrtSh.Pop( FALSE );	//restore old cursor
         }
         break;
         case SID_ATTR_LRSPACE :
@@ -877,6 +875,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
+
+            BOOL bApplyCharUnit = ::HasCharUnit(0 != PTR_CAST(SwWebView, &GetView()));
+            SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
+
             SfxItemSet aCoreSet( GetPool(),
                             RES_PARATR_BEGIN,           RES_PARATR_END - 1,
                             // --> OD 2008-02-25 #refactorlists#
@@ -1124,7 +1126,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 rReq.Done();
-/*              OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
+/*		 		OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
                 SwEditWin& rEdtWin = GetView().GetEditWin();
 
                 SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
@@ -1165,7 +1167,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             rReq.Done();
 
-/*          OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
+/*			OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
             if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
                 Brush aBrush(pItem ? BRUSH_SOLID : BRUSH_NULL);
@@ -1429,7 +1431,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.DisableItem( SID_THES );
         }
         break;
-
+                
         case FN_NUMBER_NEWSTART :
             if(!rSh.GetCurNumRule())
                     rSet.DisableItem(nWhich);
@@ -1592,7 +1594,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 GetViewFrame()->GetChildWindow( nWhich ) ));
                 break;
             case FN_EDIT_HYPERLINK:
-            case FN_REMOVE_HYPERLINK:
             case FN_COPY_HYPERLINK_LOCATION:
             {
                 SfxItemSet aSet(GetPool(),
@@ -1600,6 +1601,20 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, TRUE ) || rSh.HasReadonlySel())
+                {
+                    rSet.DisableItem(nWhich);
+                }
+            }
+            break;
+            case FN_REMOVE_HYPERLINK:
+            {
+                SfxItemSet aSet(GetPool(),
+                                RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT);
+                rSh.GetCurAttr(aSet);
+
+        // If a hyperlink is selected, either alone or along with other text...
+                if( ((SFX_ITEM_DONTCARE & aSet.GetItemState( RES_TXTATR_INETFMT, TRUE )) == 0) || rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(nWhich);
                 }

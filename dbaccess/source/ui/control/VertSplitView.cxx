@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <tools/debug.hxx>
 #endif
 
-#define SPLITTER_WIDTH  80
+#define SPLITTER_WIDTH	80
 
 using namespace ::dbaui;
 
@@ -49,8 +49,8 @@ OSplitterView::OSplitterView(Window* _pParent,sal_Bool _bVertical) : Window(_pPa
     ,m_pRight(NULL)
     ,m_bVertical(_bVertical)
 {
-    DBG_CTOR(OSplitterView,NULL);
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    DBG_CTOR(OSplitterView,NULL);	
+    ImplInitSettings( sal_True, sal_True, sal_True );	
 }
 // -----------------------------------------------------------------------------
 OSplitterView::~OSplitterView()
@@ -62,7 +62,7 @@ OSplitterView::~OSplitterView()
 IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )
 {
     OSL_ENSURE(m_pSplitter, "Splitter is NULL!");
-    if ( m_bVertical )
+    if ( m_bVertical ) 
     {
         long nPosY = m_pSplitter->GetPosPixel().Y();
         m_pSplitter->SetPosPixel( Point( m_pSplitter->GetSplitPosPixel(), nPosY ) );
@@ -84,7 +84,7 @@ void OSplitterView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetPointFont( aFont );
-//      Set/*Zoomed*/PointFont( aFont );
+//		Set/*Zoomed*/PointFont( aFont );
     }
 
     if ( bFont || bForeground )
@@ -133,18 +133,18 @@ void OSplitterView::Resize()
     Window::Resize();
     OSL_ENSURE( m_pRight, "No init called!");
 
-    Point   aSplitPos;
-    Size    aSplitSize;
-    Point   aPlaygroundPos( 0,0 );
-    Size    aPlaygroundSize( GetOutputSizePixel() );
+    Point	aSplitPos;
+    Size	aSplitSize;
+    Point	aPlaygroundPos( 0,0 );
+    Size	aPlaygroundSize( GetOutputSizePixel() );
 
     if ( m_pLeft && m_pLeft->IsVisible() && m_pSplitter )
     {
-        aSplitPos   = m_pSplitter->GetPosPixel();
-        aSplitSize  = m_pSplitter->GetOutputSizePixel();
-        if ( m_bVertical )
+        aSplitPos	= m_pSplitter->GetPosPixel();
+        aSplitSize	= m_pSplitter->GetOutputSizePixel();
+        if ( m_bVertical ) 
         {
-            // calculate the splitter pos and size
+            // calculate the splitter pos and size			
             aSplitPos.Y() = aPlaygroundPos.Y();
             aSplitSize.Height() = aPlaygroundSize.Height();
 
@@ -155,8 +155,8 @@ void OSplitterView::Resize()
                 aSplitPos.X() = aPlaygroundPos.X() + sal_Int32(aPlaygroundSize.Width() * 0.3);
 
             // the tree pos and size
-            Point   aTreeViewPos( aPlaygroundPos );
-            Size    aTreeViewSize( aSplitPos.X(), aPlaygroundSize.Height() );
+            Point	aTreeViewPos( aPlaygroundPos );
+            Size	aTreeViewSize( aSplitPos.X(), aPlaygroundSize.Height() );
 
             // set the size of treelistbox
             m_pLeft->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
@@ -177,8 +177,8 @@ void OSplitterView::Resize()
                 aSplitPos.Y() = aPlaygroundPos.Y() + sal_Int32(aPlaygroundSize.Height() * 0.3);
 
             // the tree pos and size
-            Point   aTreeViewPos( aPlaygroundPos );
-            Size    aTreeViewSize( aPlaygroundSize.Width() ,aSplitPos.Y());
+            Point	aTreeViewPos( aPlaygroundPos );
+            Size	aTreeViewSize( aPlaygroundSize.Width() ,aSplitPos.Y());
 
             // set the size of treelistbox
             m_pLeft->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
@@ -191,7 +191,7 @@ void OSplitterView::Resize()
 
     if ( m_pRight )
     {
-        if ( m_bVertical )
+        if ( m_bVertical ) 
             m_pRight->SetPosSizePixel( aSplitPos.X() + aSplitSize.Width(), aPlaygroundPos.Y(),
                                    aPlaygroundSize.Width() - aSplitSize.Width() - aSplitPos.X(), aPlaygroundSize.Height());
         else

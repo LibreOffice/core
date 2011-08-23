@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ public:
 
     void OpenPopup( bool bEdit );
     void ClosePopup();
-
+    
 protected:
     virtual void addCustomHandles( SdrHdlList& rHandlerList );
     virtual bool getContext( SdrViewContext& rContext );
@@ -87,14 +87,14 @@ protected:
 
     DECL_LINK( WindowEventHandler, VclWindowEvent* );
     DECL_LINK( ClosePopupHdl, void* );
-
+    
 private:
     AnnotationManagerImpl& mrManager;
     css::uno::Reference< css::office::XAnnotation > mxAnnotation;
     std::auto_ptr<AnnotationWindow>                 mpAnnotationWindow;
-    Color                                           maColor;
-    int                                             mnIndex;
-    const Font&                                     mrFont;
+    Color											maColor;
+    int												mnIndex;
+    const Font&										mrFont;
     Size                                            maSize;
     ULONG                                           mnClosePopupEvent;
     ::Window*                                       mpListenWindow;
@@ -103,5 +103,5 @@ private:
 
 } // end of namespace sd
 
-#endif      // _SD_ANNOTATIONTAG_HXX_
+#endif		// _SD_ANNOTATIONTAG_HXX_
 

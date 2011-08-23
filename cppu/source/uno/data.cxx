@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -431,23 +431,23 @@ struct E
 
 struct M
 {
-    sal_Int32   n;
-    sal_Int16   o;
+    sal_Int32	n;
+    sal_Int16	o;
 };
 
 struct N : public M
 {
-    sal_Int16   p CPPU_GCC3_ALIGN( M );
+    sal_Int16	p CPPU_GCC3_ALIGN( M );
 };
 struct N2
 {
     M m;
-    sal_Int16   p;
+    sal_Int16	p;
 };
 
 struct O : public M
 {
-    double  p;
+    double	p;
     sal_Int16 q;
 };
 struct O2 : public O
@@ -457,7 +457,7 @@ struct O2 : public O
 
 struct P : public N
 {
-    double  p2;
+    double	p2;
 };
 
 struct empty
@@ -470,8 +470,8 @@ struct second : public empty
 
 struct AlignSize_Impl
 {
-    sal_Int16   nInt16;
-    double      dDouble;
+    sal_Int16	nInt16;
+    double		dDouble;
 };
 
 struct Char1
@@ -605,9 +605,9 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
 }
 
 #ifdef SAL_W32
-#   pragma pack(pop)
+#	pragma pack(pop)
 #elif defined(SAL_OS2)
-#   pragma pack()
+#	pragma pack()
 #endif
 
 static BinaryCompatible_Impl aTest;

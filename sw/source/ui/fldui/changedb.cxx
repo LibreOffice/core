@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,18 +87,18 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
 
     aDBListFL   (this, SW_RES(FL_DBLIST     )),
-    aUsedDBFT   (this, SW_RES(FT_USEDDB     )),
-    aAvailDBFT  (this, SW_RES(FT_AVAILDB    )),
-    aUsedDBTLB  (this, SW_RES(TLB_USEDDB    )),
+    aUsedDBFT	(this, SW_RES(FT_USEDDB  	)),
+    aAvailDBFT	(this, SW_RES(FT_AVAILDB 	)),
+    aUsedDBTLB	(this, SW_RES(TLB_USEDDB  	)),
     aAvailDBTLB (this, SW_RES(TLB_AVAILDB   ), 0),
     aAddDBPB    (this, SW_RES(PB_ADDDB)),
     aDescFT     (this, SW_RES(FT_DESC       )),
-    aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT  )),
-    aDocDBNameFT(this, SW_RES(FT_DOCDBNAME  )),
-    aOKBT       (this, SW_RES(BT_OK         )),
-    aCancelBT   (this, SW_RES(BT_CANCEL     )),
-    aHelpBT     (this, SW_RES(BT_HELP       )),
-//  aChangeBT   (this, SW_RES(BT_CHANGEDB    )),
+    aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT	)),
+    aDocDBNameFT(this, SW_RES(FT_DOCDBNAME	)),
+    aOKBT		(this, SW_RES(BT_OK      	)),
+    aCancelBT	(this, SW_RES(BT_CANCEL  	)),
+    aHelpBT		(this, SW_RES(BT_HELP    	)),
+//	aChangeBT	(this, SW_RES(BT_CHANGEDB    )),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
     aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
 
@@ -248,7 +248,7 @@ __EXPORT SwChangeDBDlg::~SwChangeDBDlg()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Schliessen
+     Beschreibung:	Schliessen
  --------------------------------------------------------------------*/
 void __EXPORT SwChangeDBDlg::Apply()
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ typedef SvMetaObject * (*CreateMetaObjectType)();
 #define IDL_WRITE_CALLING   0x2000
 #define IDL_WRITE_MASK      0xE000
 
-#define C_PREF  "C_"
+#define C_PREF	"C_"
 
 enum WriteType
 {
@@ -53,8 +53,8 @@ enum WriteType
 
 enum
 {
-    WA_METHOD = 0x1,    WA_VARIABLE = 0x2,  WA_ARGUMENT = 0x4,
-    WA_STRUCT = 0x8,    WA_READONLY = 0x10
+    WA_METHOD = 0x1,	WA_VARIABLE = 0x2,	WA_ARGUMENT = 0x4,
+    WA_STRUCT = 0x8,	WA_READONLY = 0x10
 };
 typedef int WriteAttribute;
 
@@ -104,10 +104,10 @@ public:
             SvMetaObject();
 
 #ifdef IDL_COMPILER
-    static void         WriteTab( SvStream & rOutStm, USHORT nTab );
-    static BOOL         TestAndSeekSpaceOnly( SvStream &, ULONG nBegPos );
-    static void         Back2Delemitter( SvStream & );
-    static void         WriteStars( SvStream & );
+    static void			WriteTab( SvStream & rOutStm, USHORT nTab );
+    static BOOL			TestAndSeekSpaceOnly( SvStream &, ULONG nBegPos );
+    static void			Back2Delemitter( SvStream & );
+    static void 		WriteStars( SvStream & );
 
     virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
@@ -181,22 +181,22 @@ public:
             SV_DECL_META_FACTORY1( SvMetaName, SvMetaObject, 15 )
             SvMetaName();
 
-    virtual BOOL                SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
-    void                        SetDescription( const ByteString& rText )
+    virtual BOOL        		SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
+    void        				SetDescription( const ByteString& rText )
                                 { aDescription = rText; }
-    const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
+    const SvHelpContext& 		GetHelpContext() const { return aHelpContext; }
     virtual const SvString &    GetName() const { return aName; }
     virtual const SvString &    GetHelpText() const { return aHelpText; }
-    virtual const SvString &    GetConfigName() const{ return aConfigName; }
+    virtual const SvString &	GetConfigName() const{ return aConfigName; }
     virtual const SvString&     GetDescription() const{ return aDescription; }
 
 #ifdef IDL_COMPILER
-    virtual BOOL        Test( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual BOOL 		Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
                                        WriteType, WriteAttribute = 0);
-    void                WriteDescription( SvStream& rOutStm );
+    void				WriteDescription( SvStream& rOutStm );
 #endif
 };
 SV_DECL_IMPL_REF(SvMetaName)
@@ -260,8 +260,8 @@ class SvMetaExtern : public SvMetaReference
 
     SvUUId                  aUUId;
     SvVersion               aVersion;
-    BOOL                    bReadUUId;
-    BOOL                    bReadVersion;
+    BOOL					bReadUUId;
+    BOOL					bReadVersion;
 public:
                         SV_DECL_META_FACTORY1( SvMetaExtern, SvMetaName, 16 )
                         SvMetaExtern();
@@ -271,7 +271,7 @@ public:
     const SvGlobalName &GetUUId() const;
     const SvVersion &   GetVersion() const { return aVersion; }
 #ifdef IDL_COMPILER
-    void                SetModule( SvIdlDataBase & rBase );
+    void				SetModule( SvIdlDataBase & rBase );
     virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
 

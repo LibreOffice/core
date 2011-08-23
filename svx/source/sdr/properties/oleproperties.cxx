@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ namespace sdr
     namespace properties
     {
         OleProperties::OleProperties(SdrObject& rObj)
-        :   RectangleProperties(rObj)
+        :	RectangleProperties(rObj)
         {
         }
 
         OleProperties::OleProperties(const OleProperties& rProps, SdrObject& rObj)
-        :   RectangleProperties(rProps, rObj)
+        :	RectangleProperties(rProps, rObj)
         {
         }
 

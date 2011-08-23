@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@ class SvxXMLListLevelStyleContext_Impl;
 
 class SvxXMLListLevelStyleAttrContext_Impl : public SvXMLImportContext
 {
-    SvxXMLListLevelStyleContext_Impl&   rListLevel;
+    SvxXMLListLevelStyleContext_Impl&	rListLevel;
 
 public:
 
@@ -128,7 +128,7 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
              const OUString& rLName,
               const Reference< xml::sax::XAttributeList >& xAttrList,
-            SvxXMLListLevelStyleContext_Impl& rLLevel   );
+            SvxXMLListLevelStyleContext_Impl& rLLevel	);
     virtual ~SvxXMLListLevelStyleAttrContext_Impl();
 
     // --> OD 2008-01-16 #newlistlevelattrs#
@@ -204,39 +204,39 @@ const SvXMLTokenMapEntry* lcl_getLevelAttrTokenMap()
 class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
 {
     friend class SvxXMLListLevelStyleAttrContext_Impl;
-    const OUString      sStarBats;
-    const OUString      sStarMath;
+    const OUString 		sStarBats;
+    const OUString 		sStarMath;
 
-    OUString            sPrefix;
-    OUString            sSuffix;
-    OUString            sTextStyleName;
-    OUString            sNumFormat;
-    OUString            sNumLetterSync;
-    OUString            sBulletFontName;
-    OUString            sBulletFontStyleName;
-    OUString            sImageURL;
+    OUString 			sPrefix;
+    OUString			sSuffix;
+    OUString			sTextStyleName;
+    OUString			sNumFormat;
+    OUString			sNumLetterSync;
+    OUString			sBulletFontName;
+    OUString			sBulletFontStyleName;
+    OUString			sImageURL;
 
     Reference < XOutputStream > xBase64Stream;
 
-    sal_Int32           nLevel;
-    sal_Int32           nSpaceBefore;
-    sal_Int32           nMinLabelWidth;
-    sal_Int32           nMinLabelDist;
-    sal_Int32           nImageWidth;
-    sal_Int32           nImageHeight;
-    sal_Int16           nNumStartValue;
-    sal_Int16           nNumDisplayLevels;
+    sal_Int32			nLevel;
+    sal_Int32			nSpaceBefore;
+    sal_Int32			nMinLabelWidth;
+    sal_Int32			nMinLabelDist;
+    sal_Int32			nImageWidth;
+    sal_Int32			nImageHeight;
+    sal_Int16			nNumStartValue;
+    sal_Int16			nNumDisplayLevels;
 
-    sal_Int16           eAdjust;
-    sal_Int16           eBulletFontFamily;
-    sal_Int16           eBulletFontPitch;
-    rtl_TextEncoding    eBulletFontEncoding;
-    sal_Int16           eImageVertOrient;
+    sal_Int16 			eAdjust;
+    sal_Int16			eBulletFontFamily;
+    sal_Int16			eBulletFontPitch;
+    rtl_TextEncoding	eBulletFontEncoding;
+    sal_Int16			eImageVertOrient;
 
-    sal_Unicode         cBullet;
+    sal_Unicode			cBullet;
 
-    sal_Int16           nRelSize;
-    Color               aColor;
+    sal_Int16			nRelSize;
+    Color				aColor;
 
     // --> OD 2008-01-16 #newlistlevelattrs#
     sal_Int16           ePosAndSpaceMode;
@@ -246,10 +246,10 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     sal_Int32           nIndentAt;
     // <--
 
-    sal_Bool            bBullet : 1;
-    sal_Bool            bImage : 1;
-    sal_Bool            bNum : 1;
-    sal_Bool            bHasColor : 1;
+    sal_Bool			bBullet : 1;
+    sal_Bool			bImage : 1;
+    sal_Bool			bNum : 1;
+    sal_Bool			bHasColor : 1;
 
     void SetRelSize( sal_Int16 nRel ) { nRelSize = nRel; }
     void SetColor( sal_Int32 _aColor ) { aColor = _aColor; bHasColor = sal_True; }
@@ -316,26 +316,26 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 
-:   SvXMLImportContext( rImport, nPrfx, rLName )
-,   sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) )
-,   sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) )
-,   sNumFormat( OUString::createFromAscii( "1" ) )
-,   nLevel( -1L )
-,   nSpaceBefore( 0L )
-,   nMinLabelWidth( 0L )
-,   nMinLabelDist( 0L )
-,   nImageWidth( 0L )
-,   nImageHeight( 0L )
-,   nNumStartValue( 1 )
-,   nNumDisplayLevels( 1 )
-,   eAdjust( HoriOrientation::LEFT )
-,   eBulletFontFamily( FAMILY_DONTKNOW )
-,   eBulletFontPitch( PITCH_DONTKNOW )
-,   eBulletFontEncoding( RTL_TEXTENCODING_DONTKNOW )
-,   eImageVertOrient(0)
-,   cBullet( 0 )
-,   nRelSize(0)
-,   aColor( 0 )
+:	SvXMLImportContext( rImport, nPrfx, rLName )
+,	sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) )
+,	sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) )
+,	sNumFormat( OUString::createFromAscii( "1" ) )
+,	nLevel( -1L )
+,	nSpaceBefore( 0L )
+,	nMinLabelWidth( 0L )
+,	nMinLabelDist( 0L )
+,	nImageWidth( 0L )
+,	nImageHeight( 0L )
+,	nNumStartValue( 1 )
+,	nNumDisplayLevels( 1 )
+,	eAdjust( HoriOrientation::LEFT )
+,	eBulletFontFamily( FAMILY_DONTKNOW )
+,	eBulletFontPitch( PITCH_DONTKNOW )
+,	eBulletFontEncoding( RTL_TEXTENCODING_DONTKNOW )
+,	eImageVertOrient(0)
+,	cBullet( 0 )
+,	nRelSize(0)
+,	aColor( 0 )
 // --> OD 2008-01-16 #newlistelevelattrs#
 ,   ePosAndSpaceMode( PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
 ,   eLabelFollowedBy( LabelFollow::LISTTAB )
@@ -343,10 +343,10 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 ,   nFirstLineIndent( 0 )
 ,   nIndentAt( 0 )
 // <--
-,   bBullet( sal_False )
-,   bImage( sal_False )
-,   bNum( sal_False )
-,   bHasColor( sal_False )
+,	bBullet( sal_False )
+,	bImage( sal_False )
+,	bNum( sal_False )
+,	bHasColor( sal_False )
 {
     if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_NUMBER ) ||
         IsXMLToken( rLName, XML_OUTLINE_LEVEL_STYLE )        )
@@ -553,7 +553,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         // <--
 
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
-                                XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName  );
+                                XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName	);
         OUString sStyleName = sDisplayTextStyleName;
         if( sStyleName.getLength() && pI18NMap )
             sStyleName = pI18NMap->Get( SFX_STYLE_FAMILY_CHAR, sStyleName );
@@ -615,7 +615,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             else if( xBase64Stream.is() )
             {
                 sStr = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
-//              xBase64Stream = 0;
+//				xBase64Stream = 0;
             }
 
             if( sStr.getLength() )
@@ -1121,15 +1121,15 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Bool bOutl )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
-,   sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
-,   sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
-,   sName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
-,   sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) )
-,   pLevelStyles( 0 )
-,   nLevels( 0 )
-,   bConsecutive( sal_False )
-,   bOutline( bOutl )
+:	SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
+,	sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
+,	sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
+,	sName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
+,	sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) )
+,	pLevelStyles( 0 )
+,	nLevels( 0 )
+,	bConsecutive( sal_False )
+,	bOutline( bOutl )
 {
 }
 

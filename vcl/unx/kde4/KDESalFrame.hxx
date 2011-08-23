@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@ class KDESalFrame : public X11SalFrame
         {
             X11SalGraphics* pGraphics;
             bool bInUse;
-
+            
             GraphicsHolder() : pGraphics(0),bInUse( false ) {}
             ~GraphicsHolder();
         };
-
+        
         GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
     public:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,21 +38,21 @@ using namespace rtl;
 TypeManager::TypeManager()
 {
     m_pImpl = new TypeManagerImpl();
-    acquire();
-}
+    acquire();	
+}	
 
 TypeManager::~TypeManager()
 {
     release();
-}
+}	
 
 sal_Int32 TypeManager::acquire()
-{
+{ 
     return osl_incrementInterlockedCount(&m_pImpl->m_refCount);
 }
 
 sal_Int32 TypeManager::release()
-{
+{ 
     sal_Int32 refCount = 0;
     if (0 == (refCount = osl_decrementInterlockedCount(&m_pImpl->m_refCount)) )
     {
@@ -95,30 +95,30 @@ sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
         return sal_True;
 
     return sal_False;
-}
+}	
 
 RegistryTypeManager::RegistryTypeManager()
 {
     m_pImpl = new RegistryTypeManagerImpl();
-    acquire();
-}
+    acquire();	
+}	
 
 RegistryTypeManager::~RegistryTypeManager()
 {
     release();
-}
+}	
 
 void RegistryTypeManager::acquire()
-{
+{ 
     TypeManager::acquire();
 }
 
 void RegistryTypeManager::release()
-{
+{ 
     if (0 == TypeManager::release())
     {
         freeRegistries();
-
+        
         delete m_pImpl;
     }
 }
@@ -156,9 +156,9 @@ sal_Bool RegistryTypeManager::init(
         }
         ++iter;
     }
-
+    
     return sal_True;
-}
+}	
 
 ::rtl::OString RegistryTypeManager::getTypeName(RegistryKey& rTypeKey) const
 {
@@ -177,126 +177,126 @@ typereg::Reader RegistryTypeManager::getTypeReader(
 {
     typereg::Reader reader;
     RegistryKey key(searchTypeKey(name, pIsExtraType));
-
+    
     if (key.isValid())
     {
-        RegValueType    valueType;
-        sal_uInt32      valueSize;
+        RegValueType 	valueType;
+        sal_uInt32		valueSize;
 
         if (!key.getValueInfo(OUString(), &valueType, &valueSize))
         {
-            sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
+            sal_uInt8*	pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);	
             if (!key.getValue(OUString(), pBuffer))
             {
                 reader = typereg::Reader(
                     pBuffer, valueSize, true, TYPEREG_VERSION_1);
-            }
+            }		
             rtl_freeMemory(pBuffer);
         }
     }
     return reader;
-}
+}	
 
 typereg::Reader RegistryTypeManager::getTypeReader(RegistryKey& rTypeKey) const
 {
     typereg::Reader reader;
-
+    
     if (rTypeKey.isValid())
     {
-        RegValueType    valueType;
-        sal_uInt32      valueSize;
+        RegValueType 	valueType;
+        sal_uInt32		valueSize;
 
         if (!rTypeKey.getValueInfo(OUString(), &valueType, &valueSize))
         {
-            sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
+            sal_uInt8*	pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);	
             if (!rTypeKey.getValue(OUString(), pBuffer))
             {
                 reader = typereg::Reader(
                     pBuffer, valueSize, true, TYPEREG_VERSION_1);
-            }
+            }		
             rtl_freeMemory(pBuffer);
         }
     }
     return reader;
-}
+}	
 
 
 RTTypeClass RegistryTypeManager::getTypeClass(const OString& name) const
 {
     if (m_pImpl->m_t2TypeClass.count(name) > 0)
     {
-        return m_pImpl->m_t2TypeClass[name];
+        return m_pImpl->m_t2TypeClass[name];		
     } else
     {
         RegistryKey key(searchTypeKey(name));
-
+        
         if (key.isValid())
         {
-            RegValueType    valueType;
-            sal_uInt32      valueSize;
+            RegValueType 	valueType;
+            sal_uInt32		valueSize;
 
             if (!key.getValueInfo(OUString(), &valueType, &valueSize))
             {
-                sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
+                sal_uInt8*	pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);	
                 if (!key.getValue(OUString(), pBuffer))
                 {
                     typereg::Reader reader(
                         pBuffer, valueSize, false, TYPEREG_VERSION_1);
 
                     RTTypeClass ret = reader.getTypeClass();
-
+                    
                     rtl_freeMemory(pBuffer);
-
-                    m_pImpl->m_t2TypeClass[name] = ret;
+                    
+                    m_pImpl->m_t2TypeClass[name] = ret;				
                     return ret;
-                }
+                }		
                 rtl_freeMemory(pBuffer);
             }
         }
-    }
+    }	
 
-    return RT_TYPE_INVALID;
-}
+    return RT_TYPE_INVALID;	
+}	
 
 RTTypeClass RegistryTypeManager::getTypeClass(RegistryKey& rTypeKey) const
 {
     OString name = getTypeName(rTypeKey);
-
+    
     if (m_pImpl->m_t2TypeClass.count(name) > 0)
     {
-        return m_pImpl->m_t2TypeClass[name];
+        return m_pImpl->m_t2TypeClass[name];		
     } else
     {
         if (rTypeKey.isValid())
         {
-            RegValueType    valueType;
-            sal_uInt32      valueSize;
+            RegValueType 	valueType;
+            sal_uInt32		valueSize;
 
             if (!rTypeKey.getValueInfo(OUString(), &valueType, &valueSize))
             {
-                sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
+                sal_uInt8*	pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);	
                 if (!rTypeKey.getValue(OUString(), pBuffer))
                 {
                     typereg::Reader reader(
                         pBuffer, valueSize, false, TYPEREG_VERSION_1);
 
                     RTTypeClass ret = reader.getTypeClass();
-
+                    
                     rtl_freeMemory(pBuffer);
-
-                    m_pImpl->m_t2TypeClass[name] = ret;
+                    
+                    m_pImpl->m_t2TypeClass[name] = ret;				
                     return ret;
-                }
+                }		
                 rtl_freeMemory(pBuffer);
             }
         }
-    }
+    }	
 
-    return RT_TYPE_INVALID;
-}
+    return RT_TYPE_INVALID;	
+}	
 
 void RegistryTypeManager::setBase(const OString& base)
-{
+{ 
 
     if (base.lastIndexOf('/') == (base.getLength() - 1))
         m_pImpl->m_base += base.copy(0, base.lastIndexOf('/') - 1);
@@ -318,14 +318,14 @@ void RegistryTypeManager::freeRegistries()
         delete *iter;
         ++iter;
     }
-}
+}	
 
-RegistryKey RegistryTypeManager::searchTypeKey(const OString& name_, sal_Bool * pIsExtraType )
+RegistryKey	RegistryTypeManager::searchTypeKey(const OString& name_, sal_Bool * pIsExtraType )
     const
 {
     OUString name( OStringToOUString(m_pImpl->m_base + "/" + name_, RTL_TEXTENCODING_UTF8) );
     RegistryKey key, rootKey;
-
+    
     RegistryList::const_iterator iter = m_pImpl->m_registries.begin();
     while (iter != m_pImpl->m_registries.end())
     {
@@ -353,12 +353,12 @@ RegistryKey RegistryTypeManager::searchTypeKey(const OString& name_, sal_Bool * 
             }
         }
         ++iter;
-    }
-
+    }	
+    
     return key;
-}
-
-RegistryKeyList RegistryTypeManager::getTypeKeys(const ::rtl::OString& name_) const
+}	
+    
+RegistryKeyList	RegistryTypeManager::getTypeKeys(const ::rtl::OString& name_) const
 {
     RegistryKeyList keyList= RegistryKeyList();
     OString tmpName;
@@ -370,10 +370,10 @@ RegistryKeyList RegistryTypeManager::getTypeKeys(const ::rtl::OString& name_) co
         else
             tmpName = m_pImpl->m_base + "/" + name_;
     }
-
+    
     OUString name( OStringToOUString(tmpName, RTL_TEXTENCODING_UTF8) );
     RegistryKey key, rootKey;
-
+    
     RegistryList::const_iterator iter = m_pImpl->m_registries.begin();
     while (iter != m_pImpl->m_registries.end())
     {
@@ -397,7 +397,7 @@ RegistryKeyList RegistryTypeManager::getTypeKeys(const ::rtl::OString& name_) co
             }
         }
         ++iter;
-    }
-
+    }	
+    
     return keyList;
 }

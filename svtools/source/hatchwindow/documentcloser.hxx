@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ class ODocumentCloser : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
-
+    
     sal_Bool m_bDisposed;
     sal_Bool m_bInitialized;
 
@@ -67,7 +67,7 @@ public:
     static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        impl_staticCreateSelfInstance(
+        impl_staticCreateSelfInstance( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
 
 // XComponent

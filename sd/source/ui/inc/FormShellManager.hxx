@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class ViewShellBase;
 
     The form shell is moved above the view shell when the form shell is
     activated, i.e. the FormControlActivated handler is called.
-
+    
     It is moved below the view shell when the main window of the
     main view shell is focused.
 

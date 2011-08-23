@@ -111,16 +111,20 @@ BUILD_ACTION=$(ENV_BUILD) make && make install
 #.ENDIF #"$(WINDOWS_VISTA_PSDK)"!=""
 #.ENDIF
 
+.IF "$(CCNUMVER)" >= "001500000000"
 BUILD_DIR=PCbuild
+.ELIF "$(CCNUMVER)" >= "001400000000"
+BUILD_DIR=PC/VS8.0
+.ELIF "$(CCNUMVER)" >= "001310000000"
+BUILD_DIR=PC/VS7.1
+.ELSE
+BUILD_DIR=PC/VC6
+.ENDIF
 
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
-.IF "$(SYSBASE)" != ""
-BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe -useenv pcbuild.sln "Release|Win32"
-.ELSE
 BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "Release|Win32"
-.ENDIF # "$(SYSBASE)" != ""
 .ENDIF
 .ENDIF
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,8 +62,8 @@ using namespace ::xmloff::token;
 
 class XMLMyList
 {
-    std::list<beans::PropertyValue> aProps;
-    sal_uInt32                      nCount;
+    std::list<beans::PropertyValue>	aProps;
+    sal_uInt32						nCount;
 
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
@@ -81,7 +81,7 @@ public:
 
 // #110680#
 XMLMyList::XMLMyList(const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory)
-:   nCount(0),
+:	nCount(0),
     mxServiceFactory(xServiceFactory)
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
@@ -167,10 +167,10 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 class XMLConfigBaseContext : public SvXMLImportContext
 {
 protected:
-    XMLMyList                   maProps;
-    beans::PropertyValue        maProp;
-    com::sun::star::uno::Any&   mrAny;
-    XMLConfigBaseContext*       mpBaseContext;
+    XMLMyList					maProps;
+    beans::PropertyValue		maProp;
+    com::sun::star::uno::Any&	mrAny;
+    XMLConfigBaseContext*		mpBaseContext;
 public:
     XMLConfigBaseContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     com::sun::star::uno::Any& rAny,
@@ -184,12 +184,12 @@ public:
 
 class XMLConfigItemContext : public SvXMLImportContext
 {
-    rtl::OUString               msType;
-    rtl::OUString               msValue;
-    uno::Sequence<sal_Int8>     maDecoded;
-    com::sun::star::uno::Any&   mrAny;
+    rtl::OUString				msType;
+    rtl::OUString				msValue;
+    uno::Sequence<sal_Int8>		maDecoded;
+    com::sun::star::uno::Any&	mrAny;
     const rtl::OUString         mrItemName;
-    XMLConfigBaseContext*       mpBaseContext;
+    XMLConfigBaseContext*		mpBaseContext;
 
 public:
     XMLConfigItemContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
@@ -345,8 +345,8 @@ namespace
 
 struct XMLDocumentSettingsContext_Data
 {
-    com::sun::star::uno::Any        aViewProps;
-    com::sun::star::uno::Any        aConfigProps;
+    com::sun::star::uno::Any	    aViewProps;
+    com::sun::star::uno::Any	    aConfigProps;
     ::std::list< SettingsGroup >    aDocSpecificSettings;
 };
 

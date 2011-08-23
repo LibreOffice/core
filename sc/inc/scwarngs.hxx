@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __SCWARNGS_HXX_
 
 #define ERRCODE_SC_EXPORT_WRN_ASCII       (ERRCODE_WARNING_MASK | ERRCODE_AREA_SC | ERRCODE_CLASS_WRITE | 1)
-#define ERRCODE_SC_IMPORT_WRN_RNGOVRFLW   (ERRCODE_WARNING_MASK | ERRCODE_AREA_SC | ERRCODE_CLASS_READ  | 1)
+#define ERRCODE_SC_IMPORT_WRN_RNGOVRFLW	  (ERRCODE_WARNING_MASK | ERRCODE_AREA_SC | ERRCODE_CLASS_READ  | 1)
 
 
 #endif

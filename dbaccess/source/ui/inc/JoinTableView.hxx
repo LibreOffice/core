@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,10 +70,10 @@ namespace dbaui
     class OJoinTableView;
     class OScrollWindowHelper : public Window
     {
-        ScrollBar           m_aHScrollBar;
-        ScrollBar           m_aVScrollBar;
-        Window*             m_pCornerWindow;
-        OJoinTableView*     m_pTableView;
+        ScrollBar			m_aHScrollBar;
+        ScrollBar			m_aVScrollBar;
+        Window*				m_pCornerWindow;
+        OJoinTableView*		m_pTableView;
 
     protected:
         virtual void Resize();
@@ -91,7 +91,7 @@ namespace dbaui
     };
 
 
-    class OJoinTableView :  public Window
+    class OJoinTableView :	public Window
                             ,public IDragTransferableListener
                             ,public DropTargetHelper
     {
@@ -99,31 +99,31 @@ namespace dbaui
     public:
         DECLARE_STL_USTRINGACCESS_MAP(OTableWindow*,OTableWindowMap);
     private:
-        OTableWindowMap     m_aTableMap;
-        ::std::vector<OTableConnection*>    m_vTableConnection;
+        OTableWindowMap		m_aTableMap;
+        ::std::vector<OTableConnection*>	m_vTableConnection;
+        
+        Timer				m_aDragScrollTimer;
+        Rectangle			m_aDragRect;
+        Rectangle			m_aSizingRect;
+        Point				m_aDragOffset;
+        Point				m_aScrollOffset;
+        Point				m_ptPrevDraggingPos;
+        Size				m_aOutputSize;
 
-        Timer               m_aDragScrollTimer;
-        Rectangle           m_aDragRect;
-        Rectangle           m_aSizingRect;
-        Point               m_aDragOffset;
-        Point               m_aScrollOffset;
-        Point               m_ptPrevDraggingPos;
-        Size                m_aOutputSize;
+        
+        OTableWindow*			m_pDragWin;
+        OTableWindow*			m_pSizingWin;
+        OTableConnection*		m_pSelectedConn;
+        
 
-
-        OTableWindow*           m_pDragWin;
-        OTableWindow*           m_pSizingWin;
-        OTableConnection*       m_pSelectedConn;
-
-
-        BOOL                    m_bTrackingInitiallyMoved;
+        BOOL					m_bTrackingInitiallyMoved;
 
         DECL_LINK(OnDragScrollTimer, void*);
-
+        
     protected:
-        OTableWindow*               m_pLastFocusTabWin;
-        OJoinDesignView*            m_pView;
-        OJoinDesignViewAccess*      m_pAccessible;
+        OTableWindow*				m_pLastFocusTabWin;
+        OJoinDesignView*			m_pView;
+        OJoinDesignViewAccess*		m_pAccessible;
 
     public:
         OJoinTableView( Window* pParent, OJoinDesignView* pView );
@@ -154,15 +154,15 @@ namespace dbaui
         virtual void RemoveTabWin( OTableWindow* pTabWin );
 
         // alle TabWins verstecken (NICHT loeschen, sie werden in eine Undo-Action gepackt)
-        virtual void    HideTabWins();
+        virtual void	HideTabWins();
 
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) = 0;
 
         /** RemoveConnection allows to remove connections from join table view, it implies that the same as addConnection
 
-            @param  _pConnection
+            @param	_pConnection
                     the connection which should be removed
-            @param  _bDelete
+            @param	_bDelete
                     when truie then the connection will be deleted
 
             @return an iterator to next valid connection, so it can be used in any loop
@@ -171,45 +171,45 @@ namespace dbaui
 
         /** allows to add new connections to join table view, it implies an invalidation of the features
             ID_BROWSER_ADDTABLE and SID_RELATION_ADD_RELATION also the modified flag will be set to true
-            @param  _pConnection
+            @param	_pConnection
                     the connection which should be added
-            @param  _bAddData
-                    <TRUE/> when the data should also be appended
+            @param	_bAddData
+                    <TRUE/> when the data should also be appended 
         */
         void addConnection(OTableConnection* _pConnection,sal_Bool _bAddData = sal_True);
 
-        BOOL            ScrollPane( long nDelta, BOOL bHoriz, BOOL bPaintScrollBars );
-        ULONG           GetTabWinCount();
-        Point           GetScrollOffset() const { return m_aScrollOffset; }
+        BOOL			ScrollPane( long nDelta, BOOL bHoriz, BOOL bPaintScrollBars );
+        ULONG			GetTabWinCount();
+        Point			GetScrollOffset() const { return m_aScrollOffset; }
 
-        OJoinDesignView*            getDesignView() const { return m_pView; }
-        OTableWindow*               GetTabWindow( const String& rName );
+        OJoinDesignView*			getDesignView() const { return m_pView; }
+        OTableWindow*				GetTabWindow( const String& rName );
 
-        OTableConnection*           GetSelectedConn() { return m_pSelectedConn; }
-        void                        DeselectConn(OTableConnection* pConn);  // NULL ist ausdruecklich zugelassen, dann passiert nichts
-        void                        SelectConn(OTableConnection* pConn);
+        OTableConnection*			GetSelectedConn() { return m_pSelectedConn; }
+        void						DeselectConn(OTableConnection* pConn);	// NULL ist ausdruecklich zugelassen, dann passiert nichts
+        void						SelectConn(OTableConnection* pConn);
 
-        OTableWindowMap*            GetTabWinMap() { return &m_aTableMap; }
-        const OTableWindowMap*      GetTabWinMap() const { return &m_aTableMap; }
+        OTableWindowMap*			GetTabWinMap() { return &m_aTableMap; }
+        const OTableWindowMap*		GetTabWinMap() const { return &m_aTableMap; }
 
         /** gives a read only access to the connection vector
         */
-        const ::std::vector<OTableConnection*>* getTableConnections() const { return &m_vTableConnection; }
+        const ::std::vector<OTableConnection*>*	getTableConnections() const { return &m_vTableConnection; }
 
-
-        BOOL                        ExistsAConn(const OTableWindow* pFromWin) const;
+        
+        BOOL						ExistsAConn(const OTableWindow* pFromWin) const;
 
         /** getTableConnections searchs for all connections of a table
-            @param  _pFromWin   the table for which connections should be found
-
+            @param	_pFromWin	the table for which connections should be found
+            
             @return an iterator which can be used to travel all connections of the table
         */
         ::std::vector<OTableConnection*>::const_iterator getTableConnections(const OTableWindow* _pFromWin) const;
 
         /** getConnectionCount returns how many connection belongs to single table
-            @param  _pFromWin   the table for which connections should be found
+            @param	_pFromWin	the table for which connections should be found
 
-            @return the count of connections wich belongs to this table
+            @return	the count of connections wich belongs to this table
         */
         sal_Int32 getConnectionCount(const OTableWindow* _pFromWin) const;
 
@@ -233,9 +233,9 @@ namespace dbaui
         virtual long PreNotify(NotifyEvent& rNEvt);
 
         // DnD stuff
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+        virtual void		StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
 
         /**
             can be used in derevied classes to make some special ui handling
@@ -255,9 +255,9 @@ namespace dbaui
         void modified();
 
         /** returns if teh given window is visible.
-            @param  _rPoint
+            @param	_rPoint
                 The Point to check
-            @param  _rSize
+            @param	_rSize
                 The Size to be check as well
             @return
                 <TRUE/> if the area is visible otherwise <FALSE/>
@@ -296,7 +296,7 @@ namespace dbaui
                                             ,const ::rtl::OUString& _rWinName);
 
         /** factory method to create table windows
-            @param  _pData
+            @param	_pData
                 The data corresponding to the window.
             @return
                 The new TableWindow
@@ -315,18 +315,18 @@ namespace dbaui
         virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const;
 
     private:
-        void    InitColors();
-        BOOL    ScrollWhileDragging();
+        void	InitColors();
+        BOOL	ScrollWhileDragging();
 
         /** executePopup opens the context menu to delate a connection
-            @param  _aPos               the position where the popup menu should appear
-            @param  _pSelConnection     the connection which should be deleted
+            @param	_aPos				the position where the popup menu should appear
+            @param	_pSelConnection		the connection which should be deleted
         */
         void executePopup(const Point& _aPos,OTableConnection* _pSelConnection);
 
-        /** invalidateAndModify invalidates this window without children and
+        /** invalidateAndModify invalidates this window without children and 
             set the controller modified
-            @param  _pAction a possible undo action to add at the controller
+            @param	_pAction a possible undo action to add at the controller
         */
         void invalidateAndModify(SfxUndoAction *_pAction=NULL);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
@@ -61,7 +61,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
@@ -101,7 +101,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
@@ -137,18 +137,18 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 
 static const ::sal_Int32 INVALID_ICON_ID = -1;
 static const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
@@ -193,21 +193,21 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
                 DECLARE_ASCII("Empty argument list!"),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-
+                
     lArguments[0] >>= xFrame;
     if (!xFrame.is())
         throw css::lang::IllegalArgumentException(
                 DECLARE_ASCII("No valid frame specified!"),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-
+                
     // SYNCHRONIZED ->
     WriteGuard aWriteLock(m_aLock);
     // hold the frame as weak reference(!) so it can die everytimes :-)
     m_xFrame = xFrame;
     aWriteLock.unlock();
     // <- SYNCHRONIZED
-
+    
     // start listening
     xFrame->addFrameActionListener(this);
 
@@ -258,23 +258,23 @@ void SAL_CALL TitleBarUpdate::disposing(const css::lang::EventObject&)
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SYNCHRONIZED
-
+    
     try
     {
         css::uno::Reference< css::frame::XModuleManager > xModuleManager(
             xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
             css::uno::UNO_QUERY_THROW);
-
+    
         css::uno::Reference< css::container::XNameAccess > xConfig(
             xModuleManager,
             css::uno::UNO_QUERY_THROW);
-
+    
                                         rInfo.sID = xModuleManager->identify(xFrame);
         ::comphelper::SequenceAsHashMap lProps    = xConfig->getByName (rInfo.sID);
-
+        
         rInfo.sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, ::rtl::OUString());
         rInfo.nIcon   = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_ICON  , INVALID_ICON_ID  );
-
+    
         // Note: If we could retrieve a module id ... everything is OK.
         // UIName and Icon ID are optional values !
         ::sal_Bool bSuccess = (rInfo.sID.getLength () > 0);
@@ -282,7 +282,7 @@ void SAL_CALL TitleBarUpdate::disposing(const css::lang::EventObject&)
     }
     catch(const css::uno::Exception&)
         {}
-
+    
     return sal_False;
 }
 
@@ -299,7 +299,7 @@ void TitleBarUpdate::impl_forceUpdate()
     // frame already gone ? We hold it weak only ...
     if ( ! xFrame.is())
         return;
-
+    
     // no window -> no chance to set/update title and icon
     css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
     if ( ! xWindow.is())
@@ -320,7 +320,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
         ( ! xWindow.is()     )
        )
         return;
-
+    
     // a) set default value to an invalid one. So we can start further searches for right icon id, if
     //    first steps failed!
     sal_Int32 nIcon = INVALID_ICON_ID;
@@ -355,10 +355,10 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     // e) set icon on container window now
     //    Don't forget SolarMutex! We use vcl directly :-(
     //    Check window pointer for right WorkWindow class too!!!
-
+    
     // VCL SYNCHRONIZED ->
     ::vos::OClearableGuard aSolarLock( Application::GetSolarMutex() );
-
+    
     Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
@@ -367,7 +367,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     {
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
         pWorkWindow->SetIcon( (sal_uInt16)nIcon );
-
+        
         css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
         rtl::OUString aURL;
         if( xModel.is() )
@@ -386,7 +386,7 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
     css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow ();
     if ( ! xWindow.is() )
         return;
-
+    
     css::uno::Reference< css::frame::XTitle > xTitle(xFrame, css::uno::UNO_QUERY);
     if ( ! xTitle.is() )
         return;
@@ -395,7 +395,7 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
 
     // VCL SYNCHRONIZED ->
     ::vos::OClearableGuard aSolarLock( Application::GetSolarMutex() );
-
+    
     Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&

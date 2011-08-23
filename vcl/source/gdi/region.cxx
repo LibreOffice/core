@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ bool ImplIsPolygonRectilinear (const PolyPolygon& rPolyPoly)
     const USHORT nPolyCount = rPolyPoly.Count();
     for (USHORT nPoly = 0; nPoly < nPolyCount; ++nPoly)
     {
-        const Polygon&  aPoly = rPolyPoly.GetObject(nPoly);
+        const Polygon&	aPoly = rPolyPoly.GetObject(nPoly);
 
         // Iterate over all edges of the current polygon.
         const USHORT nSize = aPoly.GetSize();
@@ -191,7 +191,7 @@ ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
     const USHORT nPolyCount = rPolyPoly.Count();
     for (USHORT nPoly = 0; nPoly < nPolyCount; ++nPoly)
     {
-        const Polygon&  aPoly = rPolyPoly.GetObject(nPoly);
+        const Polygon&	aPoly = rPolyPoly.GetObject(nPoly);
 
         // Iterate over all edges of the current polygon.
         const USHORT nSize = aPoly.GetSize();
@@ -221,7 +221,7 @@ ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
             const long nTop (::std::min(aStart.Y(), aEnd.Y()));
             const long nBottom (::std::max(aStart.Y(), aEnd.Y()));
             const LineType eLineType (aStart.Y() > aEnd.Y() ? LINE_DESCENDING : LINE_ASCENDING);
-
+        
             // Make sure that the current line is covered by bands.
             ImplAddMissingBands(pImplRegion, nTop,nBottom);
 
@@ -289,14 +289,14 @@ ImplRegion* ImplGeneralPolygonToBands (
     // initialisation and creation of Bands
     ImplRegion* pImplRegion = new ImplRegion();
     pImplRegion->CreateBandRange( rPolygonBoundingBox.Top(), rPolygonBoundingBox.Bottom() );
-
+            
     // insert polygons
     const USHORT nPolyCount = rPolyPoly.Count();
     for ( USHORT nPoly = 0; nPoly < nPolyCount; nPoly++ )
     {
         // get reference to current polygon
-        const Polygon&  aPoly = rPolyPoly.GetObject( nPoly );
-        const USHORT    nSize = aPoly.GetSize();
+        const Polygon&	aPoly = rPolyPoly.GetObject( nPoly );
+        const USHORT	nSize = aPoly.GetSize();
 
         // not enough points ( <= 2 )? -> nothing to do!
         if ( nSize <= 2 )
@@ -325,7 +325,7 @@ ImplRegion* ImplGeneralPolygonToBands (
 #ifdef DBG_UTIL
 const char* ImplDbgTestRegion( const void* pObj )
 {
-    Region*       pRegion = (Region*)pObj;
+    Region* 	  pRegion = (Region*)pObj;
     ImplRegion*   pImplRegion = pRegion->ImplGetImplRegion();
 
     if ( aImplNullRegion.mnRefCount )
@@ -343,8 +343,8 @@ const char* ImplDbgTestRegion( const void* pObj )
 
     if ( (pImplRegion != &aImplEmptyRegion) && (pImplRegion != &aImplNullRegion) )
     {
-        ULONG                   nCount = 0;
-        const ImplRegionBand*   pBand = pImplRegion->ImplGetFirstRegionBand();
+        ULONG					nCount = 0;
+        const ImplRegionBand*	pBand = pImplRegion->ImplGetFirstRegionBand();
         while ( pBand )
         {
             if ( pBand->mnYBottom < pBand->mnYTop )
@@ -425,27 +425,27 @@ inline void Region::ImplPolyPolyRegionToBandRegion()
 // =======================================================================
 
 ImplRegionBase::ImplRegionBase( int nRefCount )
-:   mnRefCount( nRefCount )
-,   mnRectCount( 0 )
-,   mpPolyPoly( NULL )
-,   mpB2DPolyPoly( NULL )
+:	mnRefCount( nRefCount )
+,	mnRectCount( 0 )
+,	mpPolyPoly( NULL )
+,	mpB2DPolyPoly( NULL )
 {}
 
 // ------------------------------------------------------------------------
 
 ImplRegion::ImplRegion()
 {
-    mpFirstBand         = NULL;
-    mpLastCheckedBand   = NULL;
+    mpFirstBand 		= NULL;
+    mpLastCheckedBand	= NULL;
 }
 
 // ------------------------------------------------------------------------
 
 ImplRegion::ImplRegion( const PolyPolygon& rPolyPoly )
 {
-    mpFirstBand         = NULL;
-    mpLastCheckedBand   = NULL;
-    mpPolyPoly          = new PolyPolygon( rPolyPoly );
+    mpFirstBand 		= NULL;
+    mpLastCheckedBand	= NULL;
+    mpPolyPoly			= new PolyPolygon( rPolyPoly );
 }
 
 // ------------------------------------------------------------------------
@@ -460,7 +460,7 @@ ImplRegion::ImplRegion( const basegfx::B2DPolyPolygon& rPolyPoly )
 // -----------------------------------------------------------------------
 
 ImplRegion::ImplRegion( const ImplRegion& rImplRegion )
-:   ImplRegionBase()
+:	ImplRegionBase()
 {
     mpFirstBand = NULL;
     mpLastCheckedBand = NULL;
@@ -582,20 +582,20 @@ BOOL ImplRegion::InsertLine( const Point& rStartPt, const Point& rEndPt,
     }
     else if ( rStartPt.Y() != rEndPt.Y() )
     {
-        const long  nDX = labs( rEndPt.X() - rStartPt.X() );
-        const long  nDY = labs( rEndPt.Y() - rStartPt.Y() );
-        const long  nStartX = rStartPt.X();
-        const long  nStartY = rStartPt.Y();
-        const long  nEndX = rEndPt.X();
-        const long  nEndY = rEndPt.Y();
-        const long  nXInc = ( nStartX < nEndX ) ? 1L : -1L;
-        const long  nYInc = ( nStartY < nEndY ) ? 1L : -1L;
+        const long	nDX = labs( rEndPt.X() - rStartPt.X() );
+        const long	nDY = labs( rEndPt.Y() - rStartPt.Y() );
+        const long	nStartX = rStartPt.X();
+        const long	nStartY = rStartPt.Y();
+        const long	nEndX = rEndPt.X();
+        const long	nEndY = rEndPt.Y();
+        const long	nXInc = ( nStartX < nEndX ) ? 1L : -1L;
+        const long	nYInc = ( nStartY < nEndY ) ? 1L : -1L;
 
         if ( nDX >= nDY )
         {
-            const long  nDYX = ( nDY - nDX ) << 1;
-            const long  nDY2 = nDY << 1;
-            long        nD = nDY2 - nDX;
+            const long	nDYX = ( nDY - nDX ) << 1;
+            const long	nDY2 = nDY << 1;
+            long		nD = nDY2 - nDX;
 
             for ( nX = nStartX, nY = nStartY; nX != nEndX; nX += nXInc )
             {
@@ -609,9 +609,9 @@ BOOL ImplRegion::InsertLine( const Point& rStartPt, const Point& rEndPt,
         }
         else
         {
-            const long  nDYX = ( nDX - nDY ) << 1;
-            const long  nDY2 = nDX << 1;
-            long        nD = nDY2 - nDY;
+            const long	nDYX = ( nDX - nDY ) << 1;
+            const long	nDY2 = nDX << 1;
+            long		nD = nDY2 - nDY;
 
             for ( nX = nStartX, nY = nStartY; nY != nEndY; nY += nYInc )
             {
@@ -1183,10 +1183,10 @@ void Region::ImplCreateRectRegion( const Rectangle& rRect )
     else
     {
         // get justified rectangle
-        long nTop       = Min( rRect.Top(), rRect.Bottom() );
-        long nBottom    = Max( rRect.Top(), rRect.Bottom() );
-        long nLeft      = Min( rRect.Left(), rRect.Right() );
-        long nRight     = Max( rRect.Left(), rRect.Right() );
+        long nTop		= Min( rRect.Top(), rRect.Bottom() );
+        long nBottom	= Max( rRect.Top(), rRect.Bottom() );
+        long nLeft		= Min( rRect.Left(), rRect.Right() );
+        long nRight 	= Max( rRect.Left(), rRect.Right() );
 
         // create instance of implementation class
         mpImplRegion = new ImplRegion();
@@ -1387,10 +1387,10 @@ BOOL Region::Union( const Rectangle& rRect )
         ImplCopyData();
 
     // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
+    long nLeft		= Min( rRect.Left(), rRect.Right() );
+    long nTop		= Min( rRect.Top(), rRect.Bottom() );
+    long nRight 	= Max( rRect.Left(), rRect.Right() );
+    long nBottom	= Max( rRect.Top(), rRect.Bottom() );
 
     // insert bands if the boundaries are not allready in the list
     mpImplRegion->InsertBands( nTop, nBottom );
@@ -1454,10 +1454,10 @@ BOOL Region::Intersect( const Rectangle& rRect )
         return TRUE;
 
     // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
+    long nLeft		= Min( rRect.Left(), rRect.Right() );
+    long nTop		= Min( rRect.Top(), rRect.Bottom() );
+    long nRight 	= Max( rRect.Left(), rRect.Right() );
+    long nBottom	= Max( rRect.Top(), rRect.Bottom() );
 
     // is own region NULL-region? -> copy data!
     if ( mpImplRegion == &aImplNullRegion )
@@ -1540,10 +1540,10 @@ BOOL Region::Exclude( const Rectangle& rRect )
         ImplCopyData();
 
     // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
+    long nLeft		= Min( rRect.Left(), rRect.Right() );
+    long nTop		= Min( rRect.Top(), rRect.Bottom() );
+    long nRight 	= Max( rRect.Left(), rRect.Right() );
+    long nBottom	= Max( rRect.Top(), rRect.Bottom() );
 
     // insert bands if the boundaries are not allready in the list
     mpImplRegion->InsertBands( nTop, nBottom );
@@ -1582,10 +1582,10 @@ BOOL Region::XOr( const Rectangle& rRect )
         ImplCopyData();
 
     // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
+    long nLeft		= Min( rRect.Left(), rRect.Right() );
+    long nTop		= Min( rRect.Top(), rRect.Bottom() );
+    long nRight 	= Max( rRect.Left(), rRect.Right() );
+    long nBottom	= Max( rRect.Top(), rRect.Bottom() );
 
     // insert bands if the boundaries are not allready in the list
     mpImplRegion->InsertBands( nTop, nBottom );
@@ -1662,7 +1662,7 @@ BOOL Region::Intersect( const Region& rRegion )
     // same instance data? -> nothing to do!
     if ( mpImplRegion == rRegion.mpImplRegion )
         return TRUE;
-
+    
     ImplPolyPolyRegionToBandRegion();
     ((Region*)&rRegion)->ImplPolyPolyRegionToBandRegion();
 
@@ -1926,7 +1926,7 @@ Rectangle Region::GetBoundRect() const
         return aRect;
 
     // get the boundaries of the first band
-    long nYTop    = mpImplRegion->mpFirstBand->mnYTop;
+    long nYTop	  = mpImplRegion->mpFirstBand->mnYTop;
     long nYBottom = mpImplRegion->mpFirstBand->mnYBottom;
     long nXLeft   = mpImplRegion->mpFirstBand->GetXLeftBoundary();
     long nXRight  = mpImplRegion->mpFirstBand->GetXRightBoundary();
@@ -1935,9 +1935,9 @@ Rectangle Region::GetBoundRect() const
     ImplRegionBand* pBand = mpImplRegion->mpFirstBand->mpNextBand;
     while ( pBand )
     {
-        nYBottom    = pBand->mnYBottom;
-        nXLeft      = Min( nXLeft, pBand->GetXLeftBoundary() );
-        nXRight     = Max( nXRight, pBand->GetXRightBoundary() );
+        nYBottom	= pBand->mnYBottom;
+        nXLeft		= Min( nXLeft, pBand->GetXLeftBoundary() );
+        nXRight 	= Max( nXRight, pBand->GetXRightBoundary() );
 
         pBand = pBand->mpNextBand;
     }
@@ -1999,7 +1999,7 @@ const basegfx::B2DPolyPolygon Region::GetB2DPolyPolygon() const
         // TODO: cache the converted polygon?
         // mpImplRegion->mpB2DPolyPoly = aRet;
     }
-
+  
     return aRet;
 }
 
@@ -2025,7 +2025,7 @@ basegfx::B2DPolyPolygon Region::ConvertToB2DPolyPolygon()
         }
         EndEnumRects( aHdl );
     }
-
+  
     return aRet;
 }
 
@@ -2048,17 +2048,17 @@ BOOL Region::ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
         return FALSE;
 
     // initialise pointer for first access
-    ImplRegionBand*     pCurrRectBand = mpImplRegion->mpFirstBand;
-    ImplRegionBandSep*  pCurrRectBandSep = pCurrRectBand->mpFirstSep;
+    ImplRegionBand* 	pCurrRectBand = mpImplRegion->mpFirstBand;
+    ImplRegionBandSep*	pCurrRectBandSep = pCurrRectBand->mpFirstSep;
 
     DBG_ASSERT( pCurrRectBandSep != NULL, "Erstes Band wurde nicht optimiert." );
     if ( !pCurrRectBandSep )
         return FALSE;
 
     // get boundaries of current rectangle
-    rX      = pCurrRectBandSep->mnXLeft;
-    rY      = pCurrRectBand->mnYTop;
-    rWidth  = pCurrRectBandSep->mnXRight - pCurrRectBandSep->mnXLeft + 1;
+    rX		= pCurrRectBandSep->mnXLeft;
+    rY		= pCurrRectBand->mnYTop;
+    rWidth	= pCurrRectBandSep->mnXRight - pCurrRectBandSep->mnXLeft + 1;
     rHeight = pCurrRectBand->mnYBottom - pCurrRectBand->mnYTop + 1;
 
     // save pointers
@@ -2081,8 +2081,8 @@ BOOL Region::ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
         return FALSE;
 
     // get last pointers
-    ImplRegionBand*     pCurrRectBand = (ImplRegionBand*)rImplRegionInfo.mpVoidCurrRectBand;
-    ImplRegionBandSep*  pCurrRectBandSep = (ImplRegionBandSep*)rImplRegionInfo.mpVoidCurrRectBandSep;
+    ImplRegionBand* 	pCurrRectBand = (ImplRegionBand*)rImplRegionInfo.mpVoidCurrRectBand;
+    ImplRegionBandSep*	pCurrRectBandSep = (ImplRegionBandSep*)rImplRegionInfo.mpVoidCurrRectBandSep;
 
     // get next separation from current band
     pCurrRectBandSep = pCurrRectBandSep->mpNextSep;
@@ -2102,9 +2102,9 @@ BOOL Region::ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
     }
 
     // get boundaries of current rectangle
-    rX      = pCurrRectBandSep->mnXLeft;
-    rY      = pCurrRectBand->mnYTop;
-    rWidth  = pCurrRectBandSep->mnXRight - pCurrRectBandSep->mnXLeft + 1;
+    rX		= pCurrRectBandSep->mnXLeft;
+    rY		= pCurrRectBand->mnYTop;
+    rWidth	= pCurrRectBandSep->mnXRight - pCurrRectBandSep->mnXLeft + 1;
     rHeight = pCurrRectBand->mnYBottom - pCurrRectBand->mnYTop + 1;
 
     // save new pointers
@@ -2326,10 +2326,10 @@ BOOL Region::operator==( const Region& rRegion ) const
     }
 
     // initialise pointers
-    ImplRegionBand*      pOwnRectBand = mpImplRegion->mpFirstBand;
-    ImplRegionBandSep*   pOwnRectBandSep = pOwnRectBand->mpFirstSep;
-    ImplRegionBand*      pSecondRectBand = rRegion.mpImplRegion->mpFirstBand;
-    ImplRegionBandSep*   pSecondRectBandSep = pSecondRectBand->mpFirstSep;
+    ImplRegionBand* 	 pOwnRectBand = mpImplRegion->mpFirstBand;
+    ImplRegionBandSep*	 pOwnRectBandSep = pOwnRectBand->mpFirstSep;
+    ImplRegionBand* 	 pSecondRectBand = rRegion.mpImplRegion->mpFirstBand;
+    ImplRegionBandSep*	 pSecondRectBandSep = pSecondRectBand->mpFirstSep;
     while ( pOwnRectBandSep && pSecondRectBandSep )
     {
         // get boundaries of current rectangle
@@ -2399,9 +2399,9 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
 {
     DBG_CHKOBJ( &rRegion, Region, ImplDbgTestRegion );
 
-    VersionCompat   aCompat( rIStrm, STREAM_READ );
-    UINT16          nVersion;
-    UINT16          nTmp16;
+    VersionCompat	aCompat( rIStrm, STREAM_READ );
+    UINT16			nVersion;
+    UINT16			nTmp16;
 
     // statische Object haben RefCount von 0
     if ( rRegion.mpImplRegion->mnRefCount )
@@ -2479,7 +2479,7 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
                         rRegion.mpImplRegion->mnRectCount++;
                     }
                 }
-
+                
                 if( rIStrm.IsEof() )
                 {
                     DBG_ERROR( "premature end of region stream" );
@@ -2560,7 +2560,7 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
 
         // put endmarker
         rOStrm << (UINT16) STREAMENTRY_END;
-
+        
         // write polypolygon if available
         const BOOL bHasPolyPolygon = rRegion.HasPolyPolygon();
         rOStrm << bHasPolyPolygon;
@@ -2570,7 +2570,7 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
             // #i105373#
             PolyPolygon aNoCurvePolyPolygon;
             rRegion.GetPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
-
+            
             rOStrm << aNoCurvePolyPolygon;
         }
     }
@@ -2786,7 +2786,7 @@ RegionHandle Region::BeginEnumRects()
 
     ImplRegionHandle* pData = new ImplRegionHandle;
     pData->mpRegion = new Region( *this );
-    pData->mbFirst  = TRUE;
+    pData->mbFirst	= TRUE;
 
     // save pointers
     pData->mpCurrRectBand = pData->mpRegion->mpImplRegion->mpFirstBand;
@@ -2828,10 +2828,10 @@ BOOL Region::GetEnumRects( RegionHandle pVoidData, Rectangle& rRect )
     }
 
     // get boundaries of current rectangle
-    rRect.Top()     = pData->mpCurrRectBand->mnYTop;
-    rRect.Bottom()  = pData->mpCurrRectBand->mnYBottom;
-    rRect.Left()    = pData->mpCurrRectBandSep->mnXLeft;
-    rRect.Right()   = pData->mpCurrRectBandSep->mnXRight;
+    rRect.Top() 	= pData->mpCurrRectBand->mnYTop;
+    rRect.Bottom()	= pData->mpCurrRectBand->mnYBottom;
+    rRect.Left()	= pData->mpCurrRectBandSep->mnXLeft;
+    rRect.Right()	= pData->mpCurrRectBandSep->mnXRight;
     return TRUE;
 }
 
@@ -2900,13 +2900,13 @@ static inline bool ImplPolygonRectTest( const Polygon& rPoly, Rectangle* pRectOu
 Region Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
 {
     //return Region( rPolyPoly );
-
+    
     // check if it's worth extracting the XOr'ing the Rectangles
     // empiricism shows that break even between XOr'ing rectangles separately
     // and ImplPolyPolyRegionToBandRegion is at half rectangles/half polygons
     int nPolygonRects = 0, nPolygonPolygons = 0;
     int nPolygons = rPolyPoly.Count();
-
+    
     for( USHORT i = 0; i < nPolygons; i++ )
     {
         const Polygon& rPoly = rPolyPoly[i];
@@ -2917,7 +2917,7 @@ Region Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
     }
     if( nPolygonPolygons > nPolygonRects )
         return Region( rPolyPoly );
-
+    
     Region aResult;
     Rectangle aRect;
     for( USHORT i = 0; i < nPolygons; i++ )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ StreamDataContainer::StreamDataContainer( const Reference< XInputStream >& rxInS
     {
         const OString aCDataOpen = CREATE_OSTRING( "<![CDATA[" );
         const OString aCDataClose = CREATE_OSTRING( "]]>" );
-
+        
         OStringBuffer aBuffer;
         aBuffer.ensureCapacity( maDataSeq.getLength() + 256 );
         const sal_Char* pcCurr = reinterpret_cast< const sal_Char* >( maDataSeq.getConstArray() );
@@ -178,7 +178,7 @@ StreamDataContainer::StreamDataContainer( const Reference< XInputStream >& rxInS
             const sal_Char* pcOpen = lclFindCharacter( pcCurr, pcEnd, '<' );
             // copy all characters from current position to opening bracket
             lclAppendToBuffer( aBuffer, pcCurr, pcOpen );
-
+            
             // nothing to do if no opening bracket has been found
             if( pcOpen < pcEnd )
             {

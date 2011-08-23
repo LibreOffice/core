@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ SvxDistributeDialog::SvxDistributeDialog(
     const SfxItemSet& rInAttrs,
     SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-:   SfxSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE ),
+:	SfxSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE ),
     mpPage(0L)
 {
     mpPage = new SvxDistributePage(this, rInAttrs, eHor, eVer);
@@ -84,27 +84,27 @@ SvxDistributePage::SvxDistributePage(
     const SfxItemSet& rInAttrs,
     SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-:   SvxTabPage(pWindow, CUI_RES(RID_SVXPAGE_DISTRIBUTE), rInAttrs),
+:	SvxTabPage(pWindow, CUI_RES(RID_SVXPAGE_DISTRIBUTE), rInAttrs),
     meDistributeHor(eHor),
     meDistributeVer(eVer),
-    maFlHorizontal      (this, CUI_RES(FL_HORIZONTAL        )),
-    maBtnHorNone        (this, CUI_RES(BTN_HOR_NONE     )),
-    maBtnHorLeft        (this, CUI_RES(BTN_HOR_LEFT     )),
-    maBtnHorCenter      (this, CUI_RES(BTN_HOR_CENTER       )),
-    maBtnHorDistance    (this, CUI_RES(BTN_HOR_DISTANCE )),
-    maBtnHorRight       (this, CUI_RES(BTN_HOR_RIGHT        )),
-    maHorLow            (this, CUI_RES(IMG_HOR_LOW      )),
-    maHorCenter         (this, CUI_RES(IMG_HOR_CENTER       )),
-    maHorDistance       (this, CUI_RES(IMG_HOR_DISTANCE )),
-    maHorHigh           (this, CUI_RES(IMG_HOR_HIGH     )),
-    maFlVertical        (this, CUI_RES(FL_VERTICAL      )),
-    maBtnVerNone        (this, CUI_RES(BTN_VER_NONE     )),
-    maBtnVerTop         (this, CUI_RES(BTN_VER_TOP      )),
-    maBtnVerCenter      (this, CUI_RES(BTN_VER_CENTER       )),
-    maBtnVerDistance    (this, CUI_RES(BTN_VER_DISTANCE )),
-    maBtnVerBottom      (this, CUI_RES(BTN_VER_BOTTOM       )),
+    maFlHorizontal		(this, CUI_RES(FL_HORIZONTAL		)),
+    maBtnHorNone		(this, CUI_RES(BTN_HOR_NONE		)),
+    maBtnHorLeft		(this, CUI_RES(BTN_HOR_LEFT		)),
+    maBtnHorCenter		(this, CUI_RES(BTN_HOR_CENTER		)),
+    maBtnHorDistance	(this, CUI_RES(BTN_HOR_DISTANCE	)),
+    maBtnHorRight		(this, CUI_RES(BTN_HOR_RIGHT		)),
+    maHorLow			(this, CUI_RES(IMG_HOR_LOW		)),
+    maHorCenter			(this, CUI_RES(IMG_HOR_CENTER		)),
+    maHorDistance		(this, CUI_RES(IMG_HOR_DISTANCE	)),
+    maHorHigh			(this, CUI_RES(IMG_HOR_HIGH		)),
+    maFlVertical		(this, CUI_RES(FL_VERTICAL		)),
+    maBtnVerNone		(this, CUI_RES(BTN_VER_NONE		)),
+    maBtnVerTop			(this, CUI_RES(BTN_VER_TOP		)),
+    maBtnVerCenter		(this, CUI_RES(BTN_VER_CENTER		)),
+    maBtnVerDistance	(this, CUI_RES(BTN_VER_DISTANCE	)),
+    maBtnVerBottom		(this, CUI_RES(BTN_VER_BOTTOM		)),
     maVerLow            (this, CUI_RES(IMG_VER_LOW        )),
-    maVerCenter         (this, CUI_RES(IMG_VER_CENTER       )),
+    maVerCenter			(this, CUI_RES(IMG_VER_CENTER		)),
     maVerDistance       (this, CUI_RES(IMG_VER_DISTANCE   )),
     maVerHigh           (this, CUI_RES(IMG_VER_HIGH       ))
 {
@@ -148,7 +148,7 @@ SfxTabPage* SvxDistributePage::Create(Window* pWindow, const SfxItemSet& rAttrs,
 |*
 \************************************************************************/
 
-UINT16* SvxDistributePage::GetRanges()
+UINT16*	SvxDistributePage::GetRanges()
 {
     return(pRanges);
 }

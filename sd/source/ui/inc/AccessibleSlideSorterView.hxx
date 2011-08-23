@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace accessibility {
 
 class AccessibleSlideSorterObject;
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper6< 
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -76,7 +76,7 @@ public:
         ::sd::slidesorter::SlideSorter& rSlideSorter,
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> & rxParent,
         ::Window* pParentWindow);
-
+    
     virtual ~AccessibleSlideSorterView (void);
 
     /** This method acts like a dispose call.  It sends a disposing to all
@@ -96,7 +96,7 @@ public:
             Index of the child for which to return the implementation object.
     */
     AccessibleSlideSorterObject* GetAccessibleChildImplementation (sal_Int32 nIndex);
-
+    
     //===== XAccessible =======================================================
 
     virtual ::com::sun::star::uno::Reference<
@@ -104,14 +104,14 @@ public:
         getAccessibleContext (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
     //===== XAccessibleEventBroadcaster =======================================
     virtual void SAL_CALL
         addEventListener(
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener)
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual void SAL_CALL
         removeEventListener(
             const ::com::sun::star::uno::Reference<
@@ -120,56 +120,56 @@ public:
 
     using cppu::WeakComponentImplHelperBase::addEventListener;
     using cppu::WeakComponentImplHelperBase::removeEventListener;
-
+    
     //=====  XAccessibleContext  ==============================================
 
-    /// Return the number of currently visible children.
+    ///	Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount (void) throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the specified child or throw exception.
+    ///	Return the specified child or throw exception.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-    /// Return a reference to the parent.
+    ///	Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this objects index among the parents children.
-    virtual sal_Int32 SAL_CALL
+    ///	Return this objects index among the parents children.
+    virtual	sal_Int32 SAL_CALL
         getAccessibleIndexInParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this object's role.
+    ///	Return this object's role.
     virtual sal_Int16 SAL_CALL
         getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this object's description.
+    ///	Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current name.
+    ///	Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return NULL to indicate that an empty relation set.
+    ///	Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the set of current states.
+    ///	Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return the parents locale or throw exception if this object has no
+    /**	Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
     virtual ::com::sun::star::lang::Locale SAL_CALL
@@ -184,15 +184,15 @@ public:
         inside this object.
     */
     virtual sal_Bool SAL_CALL containsPoint (
-        const ::com::sun::star::awt::Point& aPoint)
+        const ::com::sun::star::awt::Point& aPoint) 
         throw (::com::sun::star::uno::RuntimeException);
 
     /** The default implementation returns an empty reference.
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< 
+        ::com::sun::star::accessibility::XAccessible > SAL_CALL 
         getAccessibleAtPoint (
-            const ::com::sun::star::awt::Point& aPoint)
+            const ::com::sun::star::awt::Point& aPoint) 
         throw (::com::sun::star::uno::RuntimeException);
 
     /** The default implementation returns an empty rectangle.
@@ -203,82 +203,82 @@ public:
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the location.
     */
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
     /** The default implementation returns an empty position, i.e. the
     * result of the default constructor of <type>com::sun::star::awt::Point</type>.
     */
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the size.
     */
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
     /** The default implementation does nothing.
     */
-    virtual void SAL_CALL grabFocus (void)
+    virtual void SAL_CALL grabFocus (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns black as the default foreground color.
     */
-    virtual sal_Int32 SAL_CALL getForeground (void)
+    virtual sal_Int32 SAL_CALL getForeground (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns white as the default background color.
     */
-    virtual sal_Int32 SAL_CALL getBackground (void)
+    virtual sal_Int32 SAL_CALL getBackground (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
     //===== XAccessibleSelection ==============================================
 
     virtual void SAL_CALL
         selectAccessibleChild (sal_Int32 nChildIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
-
+    
     virtual sal_Bool SAL_CALL
         isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
-
+    
     virtual void SAL_CALL
         clearAccessibleSelection(  )
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual void SAL_CALL
         selectAllAccessibleChildren(  )
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual sal_Int32 SAL_CALL
         getSelectedAccessibleChildCount(  )
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
-
+    
     virtual void SAL_CALL
         deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
 
-
+    
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
+    /**	Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)
@@ -290,7 +290,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
 private:
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
@@ -313,7 +313,7 @@ private:
         throw (::com::sun::star::lang::DisposedException);
 
     /** Check whether or not the object has been disposed (or is in the
-        state of beeing disposed).
+        state of beeing disposed). 
 
         @return sal_True, if the object is disposed or in the course
         of being disposed. Otherwise, sal_False is returned.

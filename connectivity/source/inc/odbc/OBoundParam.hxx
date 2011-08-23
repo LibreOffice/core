@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace connectivity
             OBoundParam()
             {
                 paramLength = NULL;
-                binaryData  = NULL;
+                binaryData	= NULL;
                 pA1=0;
                 pA2=0;
                 pB1=0;
@@ -184,10 +184,10 @@ namespace connectivity
             // Data attributes
             //====================================================================
 
-            sal_Int8* binaryData;       // Storage area to be used
+            sal_Int8* binaryData;		// Storage area to be used
                                         // when binding the parameter
 
-            sal_Int8* paramLength;      // Storage area to be used
+            sal_Int8* paramLength;		// Storage area to be used
                                         // for the bound length of the
                                         // parameter.  Note that this
                                         // data is in native format.
@@ -199,12 +199,12 @@ namespace connectivity
                                         // input stream is saved
                                         // until needed.
 
-            sal_Int32 paramInputStreamLen;                // Length of input stream
+            sal_Int32 paramInputStreamLen;	              // Length of input stream
 
             sal_Int32 sqlType;                          // Java SQL type used to
                                                             // register an OUT parameter
 
-            sal_Bool outputParameter;   // true for OUTPUT parameters
+            sal_Bool outputParameter;	// true for OUTPUT parameters
 
 
             sal_Int32 pA1;              //pointers

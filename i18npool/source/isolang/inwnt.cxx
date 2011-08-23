@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,8 @@
 // no include "precompiled_i18npool.hxx" because this file is included in insys.cxx
 
 #include <sal/config.h>
+
+#define WINVER 0x0500
 
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers

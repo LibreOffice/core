@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 // Interface implementation
 // --------------------------------------------------------------------
 
-#define IMPL    ((AttrContainerImpl*)mpData)
+#define IMPL	((AttrContainerImpl*)mpData)
 
 uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
 {
@@ -129,7 +129,7 @@ SvUnoAttributeContainer* SvUnoAttributeContainer::getImplementation( uno::Refere
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY );
     if( xUT.is() )
     {
-        return
+        return 
             reinterpret_cast<SvUnoAttributeContainer*>(
                 sal::static_int_cast<sal_IntPtr>(
                     xUT->getSomething( SvUnoAttributeContainer::getUnoTunnelId())));

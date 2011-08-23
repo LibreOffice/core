@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,12 +119,12 @@ OButtonModel::~OButtonModel()
 void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 6, OClickableImageBaseModel )
-        DECL_PROP1( BUTTONTYPE,             FormButtonType,             BOUND );
+        DECL_PROP1( BUTTONTYPE,		        FormButtonType,				BOUND );
         DECL_PROP1( DEFAULT_STATE,          sal_Int16,                  BOUND );
-        DECL_PROP1( DISPATCHURLINTERNAL,    sal_Bool,                   BOUND );
-        DECL_PROP1( TARGET_URL,             ::rtl::OUString,            BOUND );
-        DECL_PROP1( TARGET_FRAME,           ::rtl::OUString,            BOUND );
-        DECL_PROP1( TABINDEX,               sal_Int16,                  BOUND );
+        DECL_PROP1( DISPATCHURLINTERNAL,	sal_Bool,				    BOUND );
+        DECL_PROP1( TARGET_URL,		        ::rtl::OUString,			BOUND );
+        DECL_PROP1( TARGET_FRAME,	        ::rtl::OUString,			BOUND );
+        DECL_PROP1( TABINDEX,		        sal_Int16,					BOUND );
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -133,7 +133,7 @@ IMPLEMENT_DEFAULT_CLONING( OButtonModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence  OButtonModel::getSupportedServiceNames() throw()
+StringSequence	OButtonModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc( aSupported.getLength() + 1 );
@@ -147,7 +147,7 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 ::rtl::OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_COMMANDBUTTON; // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_COMMANDBUTTON;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -155,7 +155,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
 {
     OClickableImageBaseModel::write(_rxOutStream);
 
-    _rxOutStream->writeShort(0x0003);   // Version
+    _rxOutStream->writeShort(0x0003); 	// Version
 
     {
         OStreamSection aSection( _rxOutStream.get() );
@@ -176,7 +176,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
 {
     OClickableImageBaseModel::read(_rxInStream);
 
-    sal_uInt16 nVersion = _rxInStream->readShort();     // Version
+    sal_uInt16 nVersion = _rxInStream->readShort(); 	// Version
     switch (nVersion)
     {
         case 0x0001:
@@ -363,7 +363,7 @@ Sequence<Type> OButtonControl::_getTypes()
 }
 
 //------------------------------------------------------------------------------
-StringSequence  OButtonControl::getSupportedServiceNames() throw()
+StringSequence	OButtonControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -775,6 +775,6 @@ void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Referenc
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 

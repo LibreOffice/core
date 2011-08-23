@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@
 #include <editsh.hxx>
 #include <edimp.hxx>
 #include <frmfmt.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>		// fuer die UndoIds
 #include <ndtxt.hxx>
-#include <swtable.hxx>      // fuers kopieren von Tabellen
-#include <shellio.hxx>      // SwTextBlocks
+#include <swtable.hxx> 		// fuers kopieren von Tabellen
+#include <shellio.hxx> 		// SwTextBlocks
 #include <acorrect.hxx>
-#include <swerror.h>        // SwTextBlocks
+#include <swerror.h> 		// SwTextBlocks
 
 /******************************************************************************
- *              jetzt mit einem verkappten Reader/Writer/Dokument
+ *				jetzt mit einem verkappten Reader/Writer/Dokument
  ******************************************************************************/
 
 void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
@@ -59,8 +59,8 @@ void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
 
 
 /******************************************************************************
- *              aktuelle Selektion zum Textbaustein machen und ins
- *          Textbausteindokument einfuegen, einschliesslich Vorlagen
+ *				aktuelle Selektion zum Textbaustein machen und ins
+ *			Textbausteindokument einfuegen, einschliesslich Vorlagen
  ******************************************************************************/
 
 
@@ -175,7 +175,7 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 }
 
 /******************************************************************************
- *                  kopiere alle Selectionen und das Doc
+ *					kopiere alle Selectionen und das Doc
  ******************************************************************************/
 
 
@@ -242,7 +242,7 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
             if( !PCURCRSR->HasMark() )
             {
-                if( 0 != (pNd = PCURCRSR->GetCntntNode()) &&
+                if( 0 != (pNd = PCURCRSR->GetCntntNode()) && 
                     ( bColSel || !pNd->GetTxtNode() ) )
                 {
                     PCURCRSR->SetMark();
@@ -275,15 +275,15 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Text innerhalb der Selektion erfragen
- Returnwert:    liefert FALSE, wenn der selektierte Bereich
+ Beschreibung:	Text innerhalb der Selektion erfragen
+ Returnwert:	liefert FALSE, wenn der selektierte Bereich
                 zu gross ist, um in den Stringpuffer kopiert zu werden.
 ------------------------------------------------------------------------*/
 
 BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 {
     BOOL bRet = FALSE;
-    GetCrsr();  // ggfs. alle Cursor erzeugen lassen
+    GetCrsr();	// ggfs. alle Cursor erzeugen lassen
     if( IsSelOnePara() )
     {
         rBuf = GetSelTxt();

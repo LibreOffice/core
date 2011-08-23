@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,27 +34,27 @@ class ScDocShell;
 
 class ScUndoDraw: public SfxUndoAction
 {
-    SfxUndoAction*  pDrawUndo;
-    ScDocShell*     pDocShell;
+    SfxUndoAction*	pDrawUndo;
+    ScDocShell*		pDocShell;
 
 public:
                             TYPEINFO();
                             ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh );
-    virtual                 ~ScUndoDraw();
+    virtual 				~ScUndoDraw();
 
-    SfxUndoAction*          GetDrawUndo()       { return pDrawUndo; }
-    void                    ForgetDrawUndo();
+    SfxUndoAction*			GetDrawUndo()		{ return pDrawUndo; }
+    void					ForgetDrawUndo();
 
-    virtual BOOL            IsLinked();
-    virtual void            SetLinked( BOOL bIsLinked );
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL            CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual BOOL			IsLinked();
+    virtual void			SetLinked( BOOL bIsLinked );
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual void			Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL			CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual BOOL			Merge( SfxUndoAction *pNextAction );
     virtual String          GetComment() const;
-    virtual String          GetRepeatComment(SfxRepeatTarget&) const;
-    virtual USHORT          GetId() const;
+    virtual String			GetRepeatComment(SfxRepeatTarget&) const;
+    virtual USHORT			GetId() const;
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ namespace drawinglayer
     namespace primitive3d
     {
         ShadowPrimitive3D::ShadowPrimitive3D(
-            const basegfx::B2DHomMatrix& rShadowTransform,
-            const basegfx::BColor& rShadowColor,
-            double fShadowTransparence,
-            bool bShadow3D,
+            const basegfx::B2DHomMatrix& rShadowTransform, 
+            const basegfx::BColor& rShadowColor, 
+            double fShadowTransparence, 
+            bool bShadow3D, 
             const Primitive3DSequence& rChildren)
-        :   GroupPrimitive3D(rChildren),
+        :	GroupPrimitive3D(rChildren),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor),
             mfShadowTransparence(fShadowTransparence),

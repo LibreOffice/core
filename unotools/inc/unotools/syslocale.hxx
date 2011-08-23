@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,11 +72,11 @@ public:
      */
             const LocaleDataWrapper*    GetLocaleDataPtr() const;
             const CharClass*            GetCharClassPtr() const;
-            SvtSysLocaleOptions&        GetOptions() const;
+            SvtSysLocaleOptions&		GetOptions() const;
             com::sun::star::lang::Locale GetLocale() const;
-            LanguageType                GetLanguage() const;
+            LanguageType				GetLanguage() const;
             com::sun::star::lang::Locale GetUILocale() const;
-            LanguageType                GetUILanguage() const;
+            LanguageType				GetUILanguage() const;
 
     /** Get the best MIME encoding matching the system locale, or if that isn't
         determinable one that matches the UI locale, or UTF8 if everything else

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ void LegendPositionResources::impl_setRadioButtonToggleHdl()
     m_aRbtLeft.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
     m_aRbtTop.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
     m_aRbtRight.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
-    m_aRbtBottom.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
+    m_aRbtBottom.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );    
 }
 
 LegendPositionResources::~LegendPositionResources()
@@ -156,7 +156,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
             if( m_aRbtLeft.IsChecked() )
                 eNewPos = chart2::LegendPosition_LINE_START;
             else if( m_aRbtRight.IsChecked() )
-            {
+            {            
                 eNewPos = chart2::LegendPosition_LINE_END;
             }
             else if( m_aRbtTop.IsChecked() )

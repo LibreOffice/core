@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ float getFloat(const Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString getString(const Any& _rAny)
+::rtl::OUString	getString(const Any& _rAny)
 {
     ::rtl::OUString nReturn;
     OSL_VERIFY( _rAny >>= nReturn );
@@ -141,7 +141,7 @@ sal_Int32 getEnumAsINT32(const Any& _rAny) throw(IllegalArgumentException)
 }
 
 //------------------------------------------------------------------------------
-FontDescriptor  getDefaultFont()
+FontDescriptor	getDefaultFont()
 {
     FontDescriptor aReturn;
     aReturn.Slant = FontSlant_DONTKNOW;
@@ -202,8 +202,8 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                 reinterpret_cast<const Any*>(pData)->getValue(),
                 _rValue);
     }
-    else if (   (_rType.getTypeClass() == TypeClass_VOID)
-            ||  (_rValue.getValueType().getTypeClass() == TypeClass_VOID)
+    else if	(	(_rType.getTypeClass() == TypeClass_VOID)
+            ||	(_rValue.getValueType().getTypeClass() == TypeClass_VOID)
             )
     {
         bRes = _rType.getTypeClass() == _rValue.getValueType().getTypeClass();
@@ -430,7 +430,7 @@ sal_Bool compare(const Any& rLeft, const Any& rRight)
 }
 
 //-------------------------------------------------------------------------
-sal_Bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRight)
+sal_Bool	operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRight)
 {
     return ( _rLeft.Name.equals( _rRight.Name ) ) &&
     ( _rLeft.Height == _rRight.Height ) &&
@@ -453,14 +453,14 @@ sal_Bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRi
 //-------------------------------------------------------------------------
 Type getSequenceElementType(const Type& _rSequenceType)
 {
-    OSL_ENSURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE,
+    OSL_ENSURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE, 
                 "getSequenceElementType: must be called with a  sequence type!");
 
     if (!(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE))
         return Type();
 
     TypeDescription aTD(_rSequenceType);
-    typelib_IndirectTypeDescription* pSequenceTD =
+    typelib_IndirectTypeDescription* pSequenceTD = 
         reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
 
     OSL_ASSERT(pSequenceTD);
@@ -472,6 +472,6 @@ Type getSequenceElementType(const Type& _rSequenceType)
     return Type();
 }
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 

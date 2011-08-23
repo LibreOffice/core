@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ protected:
             the command group of the feature. This is important for configuring the controller UI
             by the user, see also <type scope="com::sun::star::frame">CommandGroup</type>.
     */
-    void implDescribeSupportedFeature( const sal_Char* pAsciiCommandURL, sal_uInt16 nId,
+    void implDescribeSupportedFeature( const sal_Char* pAsciiCommandURL, sal_uInt16 nId, 
         sal_Int16 nGroup = ::com::sun::star::frame::CommandGroup::INTERNAL );
 
     mutable SupportedFeatures m_aSupportedFeatures;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ class SvXMLNumFmtHelper;
 
 class SdXMLPageMasterStyleContext: public SvXMLStyleContext
 {
-    sal_Int32                   mnBorderBottom;
-    sal_Int32                   mnBorderLeft;
-    sal_Int32                   mnBorderRight;
-    sal_Int32                   mnBorderTop;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
+    sal_Int32					mnBorderBottom;
+    sal_Int32					mnBorderLeft;
+    sal_Int32					mnBorderRight;
+    sal_Int32					mnBorderTop;
+    sal_Int32					mnWidth;
+    sal_Int32					mnHeight;
     com::sun::star::view::PaperOrientation meOrientation;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
@@ -56,10 +56,10 @@ class SdXMLPageMasterStyleContext: public SvXMLStyleContext
 public:
     TYPEINFO();
 
-    SdXMLPageMasterStyleContext(
-        SdXMLImport& rImport,
+    SdXMLPageMasterStyleContext( 
+        SdXMLImport& rImport, 
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const rtl::OUString& rLName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterStyleContext();
 
@@ -77,7 +77,7 @@ public:
 
 class SdXMLPageMasterContext: public SvXMLStyleContext
 {
-    rtl::OUString               msName;
+    rtl::OUString				msName;
     SdXMLPageMasterStyleContext*mpPageMasterStyle;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
@@ -86,14 +86,14 @@ class SdXMLPageMasterContext: public SvXMLStyleContext
 public:
     TYPEINFO();
 
-    SdXMLPageMasterContext(
-        SdXMLImport& rImport,
+    SdXMLPageMasterContext( 
+        SdXMLImport& rImport, 
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const rtl::OUString& rLName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterContext();
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext *CreateChildContext( 
         sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -106,23 +106,23 @@ public:
 
 class SdXMLMasterPageContext: public SdXMLGenericPageContext
 {
-    rtl::OUString               msPageMasterName;
-    rtl::OUString               msName;
-    rtl::OUString               msDisplayName;
-    rtl::OUString               msStyleName;
+    rtl::OUString				msPageMasterName;
+    rtl::OUString				msName;
+    rtl::OUString				msDisplayName;
+    rtl::OUString				msStyleName;
 
 public:
     TYPEINFO();
 
-    SdXMLMasterPageContext(
-        SdXMLImport& rImport,
+    SdXMLMasterPageContext( 
+        SdXMLImport& rImport, 
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const rtl::OUString& rLName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLMasterPageContext();
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext *CreateChildContext( 
         sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -140,20 +140,20 @@ DECLARE_LIST(ImpMasterPageList, SdXMLMasterPageContext*)
 
 class SdXMLPresentationPlaceholderContext: public SvXMLImportContext
 {
-    rtl::OUString               msName;
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
+    rtl::OUString				msName;
+    sal_Int32					mnX;
+    sal_Int32					mnY;
+    sal_Int32					mnWidth;
+    sal_Int32					mnHeight;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
-    SdXMLPresentationPlaceholderContext(
-        SdXMLImport& rImport,
+    SdXMLPresentationPlaceholderContext( 
+        SdXMLImport& rImport, 
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const rtl::OUString& rLName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPresentationPlaceholderContext();
 
@@ -170,9 +170,9 @@ DECLARE_LIST(ImpPlaceholderList, SdXMLPresentationPlaceholderContext*)
 
 class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
 {
-    rtl::OUString               msName;
-    ImpPlaceholderList          maList;
-    sal_uInt16                  mnTypeId;
+    rtl::OUString				msName;
+    ImpPlaceholderList			maList;
+    sal_uInt16					mnTypeId;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
@@ -181,13 +181,13 @@ public:
     TYPEINFO();
 
     SdXMLPresentationPageLayoutContext(
-        SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        SdXMLImport& rImport, 
+        sal_uInt16 nPrfx, 
+        const rtl::OUString& rLName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPresentationPageLayoutContext();
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext *CreateChildContext( 
         sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -201,27 +201,27 @@ public:
 class SdXMLStylesContext : public SvXMLStylesContext
 {
     UniReference< SvXMLImportPropertyMapper > xPresImpPropMapper;
-    sal_Bool                    mbIsAutoStyle;
-    SvXMLNumFmtHelper*          mpNumFmtHelper;
-    SvNumberFormatter*          mpNumFormatter;
+    sal_Bool					mbIsAutoStyle;
+    SvXMLNumFmtHelper*			mpNumFmtHelper;
+    SvNumberFormatter*			mpNumFormatter;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
-    void ImpSetGraphicStyles( com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xPageStyles,
+    void ImpSetGraphicStyles( com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xPageStyles, 
         sal_uInt16 nFamily, const UniString& rPrefix) const;
 
 protected:
-    virtual SvXMLStyleContext* CreateStyleChildContext(
-        sal_uInt16 nPrefix,
+    virtual SvXMLStyleContext* CreateStyleChildContext( 
+        sal_uInt16 nPrefix, 
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
 
-    virtual SvXMLStyleContext *CreateStyleStyleChildContext(
+    virtual SvXMLStyleContext *CreateStyleStyleChildContext( 
         sal_uInt16 nFamily,
-        sal_uInt16 nPrefix,
+        sal_uInt16 nPrefix, 
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
 
@@ -234,8 +234,8 @@ public:
     TYPEINFO();
 
     SdXMLStylesContext(
-        SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
+        SdXMLImport& rImport, 
+        sal_uInt16 nPrfx, 
         const rtl::OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         sal_Bool bIsAutoStyle);
@@ -255,23 +255,23 @@ public:
 //
 class SdXMLMasterStylesContext : public SvXMLImportContext
 {
-    ImpMasterPageList           maMasterPageList;
+    ImpMasterPageList			maMasterPageList;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
-
+    
 public:
     TYPEINFO();
 
-    SdXMLMasterStylesContext(
-        SdXMLImport& rImport,
+    SdXMLMasterStylesContext( 
+        SdXMLImport& rImport, 
         sal_uInt16 nPrfx,
         const rtl::OUString& rLName);
     virtual ~SdXMLMasterStylesContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+    virtual SvXMLImportContext* CreateChildContext( 
+        sal_uInt16 nPrefix, 
+        const rtl::OUString& rLocalName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     const ImpMasterPageList& GetMasterPageList() const { return maMasterPageList; }
@@ -285,18 +285,18 @@ class SdXMLHeaderFooterDeclContext : public SvXMLStyleContext
 public:
     SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+        const ::com::sun::star::uno::Reference<	::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual BOOL IsTransient() const;
     virtual void EndElement();
     virtual void Characters( const ::rtl::OUString& rChars );
 
 private:
-    ::rtl::OUString maStrName;
+    ::rtl::OUString	maStrName;
     ::rtl::OUString maStrText;
     ::rtl::OUString maStrDateTimeFormat;
-    sal_Bool        mbFixed;
+    sal_Bool		mbFixed;
 };
 
 
-#endif  //  _XIMPSTYLE_HXX
+#endif	//  _XIMPSTYLE_HXX

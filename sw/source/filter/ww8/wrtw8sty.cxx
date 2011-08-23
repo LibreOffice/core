@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -267,7 +267,7 @@ void MSWordStyles::BuildStylesTable()
         pFmt = (SwFmt*)rArr[n];
         pFmtA[ BuildGetSlot( *pFmt ) ] = pFmt;
     }
-
+    
     const SvPtrarr& rArr2 = *m_rExport.pDoc->GetTxtFmtColls();   // dann TxtFmtColls
     // das Default-TextStyle ( 0 ) wird nicht mit ausgegeben !
     for( n = 1; n < rArr2.Count(); n++ )
@@ -521,12 +521,12 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, USHORT nPos )
     {
         bool bFmtColl;
         USHORT nBase, nWwNext;
-
+        
         GetStyleData( pFmt, bFmtColl, nBase, nWwNext );
 
         m_rExport.AttrOutput().StartStyle( pFmt->GetName(), bFmtColl,
                 nBase, nWwNext, GetWWId( *pFmt ), nPos );
-
+        
         if ( bFmtColl )
             WriteProperties( pFmt, true, nPos, nBase==0xfff );           // UPX.papx
 
@@ -1116,7 +1116,7 @@ void MSWordSections::SetFooterFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
 }
 
 void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
-                     const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags,
+                     const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags, 
                      BYTE nFlag,  BYTE nBreakCode)
 {
     if ( nFlag & nHFFlags )
@@ -1445,10 +1445,10 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         pPd = &const_cast<const SwDoc *>( pDoc )->GetPageDesc( 0 );
 
     pAktPageDesc = pPd;
-
+    
     if ( !pPd )
         return;
-
+    
     bool bOldPg = bOutPageDescs;
     bOutPageDescs = true;
 
@@ -1802,7 +1802,7 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader )
         ASSERT( rFt.GetFooterFmt(), "Footer text is not here" );
         pCntnt = &rFt.GetFooterFmt()->GetCntnt();
     }
-
+    
     const SwNodeIndex* pSttIdx = pCntnt->GetCntntIdx();
 
     if ( pSttIdx )

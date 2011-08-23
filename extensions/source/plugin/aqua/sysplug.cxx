@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -207,7 +207,7 @@ MacPluginComm::MacPluginComm( const rtl::OUString& i_rMimetype, const rtl::OUStr
 {
     // initialize plugin function table
     memset( &m_aNPPfuncs, 0, sizeof( m_aNPPfuncs ) );
-
+    
     // load the bundle
     CFURLRef xURL = createURL( i_rBundle );
     m_xBundle = CFBundleCreate( NULL, xURL );
@@ -246,7 +246,7 @@ MacPluginComm::MacPluginComm( const rtl::OUString& i_rMimetype, const rtl::OUStr
     m_aNPPfuncs.size = sizeof( m_aNPPfuncs );
     m_aNPPfuncs.version = 0;
 
-
+    
     m_eCall = eNP_Initialize;
     execute();
 }
@@ -276,7 +276,7 @@ BOOL MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) con
         return FALSE;
 
     *o_ppFunc = (void*)osl_getAsciiFunctionSymbol( m_hPlugLib, i_pName );
-
+  
     if( ! *o_ppFunc && m_xBundle )
     {
         rtl::OUString aName( OUString::createFromAscii( *i_pName == '_' ? i_pName+1 : i_pName ) );
@@ -294,7 +294,7 @@ BOOL MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) con
 IMPL_LINK( MacPluginComm, NullTimerHdl, void*, EMPTYARG )
 {
     // note: this is a Timer handler, we are already protected by the SolarMutex
-
+    
     FakeEventRecord aRec;
     aRec.what = nullEvent;
     aRec.where.h = aRec.where.v = 20000;
@@ -306,7 +306,7 @@ IMPL_LINK( MacPluginComm, NullTimerHdl, void*, EMPTYARG )
         if( rPlugData.m_pPlugView ) // for safety do not dispatch null events before first NPP_SetWindow
             (*m_aNPPfuncs.event)( (*it)->getNPPInstance(), &aRec );
     }
-
+    
     return 0;
 }
 
@@ -329,8 +329,8 @@ long MacPluginComm::doIt()
             NPError (*pEntry)( NPPluginFuncs* );
             retrieveFunction( "NP_GetEntryPoints", (void**)&pEntry );
             nErr = (*pEntry)( &m_aNPPfuncs );
-
-            DBG_ASSERT( nErr == NPERR_NO_ERROR, "NP_GetEntryPoints() failed!" );
+        
+            DBG_ASSERT( nErr == NPERR_NO_ERROR, "NP_GetEntryPoints() failed!" );            
         }
         else
         {
@@ -342,7 +342,7 @@ long MacPluginComm::doIt()
     case eNPP_Destroy:
         if( m_aNullEventClients.empty() )
             delete m_pNullTimer, m_pNullTimer = NULL;
-
+        
         TRACE( "eNPP_Destroy" );
         nRet = (m_aNPPfuncs.destroy
                 ? (*m_aNPPfuncs.destroy)(
@@ -407,7 +407,7 @@ long MacPluginComm::doIt()
                     (NPP)m_aArgs[0],
                     (NPWindow*)m_aArgs[1] )
                 : NPERR_GENERIC_ERROR);
-
+        
         break;
     }
     case eNPP_HandleEvent:
@@ -418,7 +418,7 @@ long MacPluginComm::doIt()
                     (NPP)m_aArgs[0],
                     m_aArgs[1] )
                 : NPERR_GENERIC_ERROR);
-
+        
         break;
     }
     case eNPP_StreamAsFile:
@@ -500,9 +500,9 @@ NPError MacPluginComm::NPP_Destroy( XPlugin_Impl* i_pImpl, NPSavedData** save )
 {
     // remove from NullEvent timer
     m_aNullEventClients.remove( i_pImpl );
-
+    
     NPError nErr = NPP_Destroy( i_pImpl->getNPPInstance(), save );
-
+    
     // release plugin view
     SysPlugData& rPlugData( i_pImpl->getSysPlugData() );
     if( rPlugData.m_pPlugView )
@@ -511,7 +511,7 @@ NPError MacPluginComm::NPP_Destroy( XPlugin_Impl* i_pImpl, NPSavedData** save )
         [rPlugData.m_pPlugView release];
         rPlugData.m_pPlugView = nil;
     }
-
+    
     return nErr;
 }
 
@@ -545,7 +545,7 @@ NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
 
     if( pImpl ) // sanity check
         m_aNullEventClients.push_back( pImpl );
-
+    
     DBG_ASSERT( m_aNPPfuncs.newp, "### NPP_New(): null pointer in NPP functions table!" );
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "NPP_New( %s. %p, %d, %d",
@@ -562,7 +562,7 @@ NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
     m_aArgs[4] = (void*)argn;
     m_aArgs[5] = (void*)argv;
     m_aArgs[6] = (void*)saved;
-
+    
     return (NPError)execute();
 }
 
@@ -702,7 +702,7 @@ void MacPluginComm::NPP_Shutdown()
 NPError MacPluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
 {
     // update window NPWindow from view
-    SysPlugData& rPlugData( i_pImpl->getSysPlugData() );
+    SysPlugData& rPlugData( i_pImpl->getSysPlugData() );        
 
     // update plug view
     NSRect aPlugRect = [rPlugData.m_pParentView frame];
@@ -720,31 +720,31 @@ NPError MacPluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
     NSRect aWinRect = [pWin frame];
     NSRect aBounds = [rPlugData.m_pPlugView frame];
     NSRect aVisibleBounds = [rPlugData.m_pPlugView visibleRect];
-
+    
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "visible bounds = %d+%d+%dx%d\n",
              (int)aVisibleBounds.origin.x, (int)aVisibleBounds.origin.y,
              (int)aVisibleBounds.size.width, (int)aVisibleBounds.size.height );
     #endif
-
+    
     NSPoint aViewOrigin = [rPlugData.m_pPlugView convertPoint: NSZeroPoint toView: nil];
     // save view origin so we can notice movement of the view in drawView
     // in case of a moved view we need to reset the port/context
     rPlugData.m_aLastPlugViewOrigin = aViewOrigin;
-
+    
     // convert view origin to topdown coordinates
     aViewOrigin.y = aWinRect.size.height - aViewOrigin.y;
-
+    
     // same for clipping
     NSPoint aClipOrigin = [rPlugData.m_pPlugView convertPoint: aVisibleBounds.origin toView: nil];
     aClipOrigin.y = aWinRect.size.height - aClipOrigin.y;
-
+    
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "view origin: %d+%d, clip origin = %d+%d\n",
              (int)aViewOrigin.x, (int)aViewOrigin.y,
              (int)aClipOrigin.x, (int)aClipOrigin.y );
     #endif
-
+    
     pNPWin->x                = aViewOrigin.x;
     pNPWin->y                = aViewOrigin.y;
     pNPWin->width            = aBounds.size.width;
@@ -755,7 +755,7 @@ NPError MacPluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
     pNPWin->clipRect.bottom  = aClipOrigin.y + aVisibleBounds.size.height;
 
     if( rPlugData.m_nDrawingModel == 1 )
-    {
+    {        
         rPlugData.m_aCGContext.window = reinterpret_cast<WindowRef>([pWin windowRef]);
         pNPWin->window = &rPlugData.m_aCGContext;
         rPlugData.m_aCGContext.context = reinterpret_cast<CGContextRef>([[pWin graphicsContext] graphicsPort]);
@@ -775,12 +775,12 @@ NPError MacPluginComm::NPP_SetWindow( XPlugin_Impl* i_pImpl )
                  rPlugData.m_aNPPort.port, (int)rPlugData.m_aNPPort.portx, (int)rPlugData.m_aNPPort.porty );
         #endif
     }
-
+    
     if( pNPWin->width == 0 || pNPWin->height == 0 || [rPlugData.m_pPlugView isHiddenOrHasHiddenAncestor] )
         rPlugData.m_bSetWindowOnDraw = true;
 
     NPError nErr = NPP_SetWindow( i_pImpl->getNPPInstance(), i_pImpl->getNPWindow() );
-
+    
     return nErr;
 }
 

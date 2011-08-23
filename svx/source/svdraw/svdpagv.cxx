@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,7 +177,7 @@ SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 //////////////////////////////////////////////////////////////////////////////
 
 SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
-:   mrView(rNewView),
+:	mrView(rNewView),
     // #103911# col_auto color lets the view takes the default SvxColorConfig entry
     maDocumentColor( COL_AUTO ),
     maBackgroundColor(COL_AUTO ), // #i48367# also react on autocolor
@@ -350,7 +350,7 @@ void SdrPageView::PrePaint()
     for(sal_uInt32 a(0); a < nCount; a++)
     {
         SdrPageWindow* pCandidate = GetPageWindow(a);
-
+        
         if(pCandidate)
         {
             pCandidate->PrePaint();
@@ -415,7 +415,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::con
 
                 if(pPreparedTarget)
                 {
-                    // if we have a prepared target, do not use a new SdrPageWindow since this
+                    // if we have a prepared target, do not use a new SdrPageWindow since this 
                     // works but is expensive. Just use a temporary PaintWindow
                     SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
 
@@ -615,7 +615,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
                 long nY1Pix=a1PixSiz.Height();
                 if (x1<rRect.Left()  -nX1Pix) x1=rRect.Left()  -nX1Pix;
                 if (x2>rRect.Right() +nX1Pix) x2=rRect.Right() +nX1Pix;
-                if (y1<rRect.Top()   -nY1Pix) y1=rRect.Top()   -nY1Pix;
+                if (y1<rRect.Top()	 -nY1Pix) y1=rRect.Top()   -nY1Pix;
                 if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
             }
             Point aPnt;

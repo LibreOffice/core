@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ namespace connectivity
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
         public:
-            OHSQLColumns(   ::cppu::OWeakObject& _rParent
+            OHSQLColumns(	::cppu::OWeakObject& _rParent
                             ,sal_Bool _bCase
                             ,::osl::Mutex& _rMutex
                             ,const TStringVector &_rVector
@@ -50,7 +50,7 @@ namespace connectivity
         typedef sdbcx::OColumn OHSQLColumn_BASE;
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OHSQLColumn> OHSQLColumn_PROP;
 
-        class OHSQLColumn : public OHSQLColumn_BASE,
+        class OHSQLColumn :	public OHSQLColumn_BASE,
                                 public OHSQLColumn_PROP
         {
             ::rtl::OUString m_sAutoIncrement;

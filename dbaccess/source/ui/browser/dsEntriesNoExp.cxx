@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace dbaui
 {
 // .........................................................................
 // -----------------------------------------------------------------------------
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry ) const
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry ) const 
 {
     DBG_ASSERT(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
     switch (getEntryType(_pEntry))
@@ -92,10 +92,10 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
     if (!_pEntry)
         return etUnknown;
 
-    SvLBoxEntry* pRootEntry     = m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
-    SvLBoxEntry* pEntryParent   = m_pTreeView->getListBox().GetParent(_pEntry);
-    SvLBoxEntry* pTables        = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_TABLES);
-    SvLBoxEntry* pQueries       = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
+    SvLBoxEntry* pRootEntry 	= m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
+    SvLBoxEntry* pEntryParent	= m_pTreeView->getListBox().GetParent(_pEntry);
+    SvLBoxEntry* pTables		= m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_TABLES);
+    SvLBoxEntry* pQueries		= m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
 
 #ifdef DBG_UTIL
     String sTest;
@@ -286,6 +286,6 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 }
 // -----------------------------------------------------------------------------
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................
 

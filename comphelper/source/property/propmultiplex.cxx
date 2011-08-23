@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSourc
         if (!locked())
             m_pListener->_disposing(_rSource);
         // disconnect the listener
-        if (m_pListener)    // may have been reset whilest calling into _disposing
+        if (m_pListener)	// may have been reset whilest calling into _disposing
             m_pListener->setAdapter(NULL);
     }
 

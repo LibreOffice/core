@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
 
 //-----------------------------------
-// A FilePicker event without
+// A FilePicker event without 
 // parameter
 //-----------------------------------
 
-CFilePickerEventNotification::CFilePickerEventNotification(EventListenerMethod_t EventListenerMethod) :
+CFilePickerEventNotification::CFilePickerEventNotification(EventListenerMethod_t EventListenerMethod) : 
     m_EventListenerMethod(EventListenerMethod)
 {
 }

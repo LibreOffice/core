@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -322,7 +322,7 @@ void Dir::Reset()
     else
         pLst = new DirEntryList();
 
-    //  Alte File-Stat's Loeschen
+    //	Alte File-Stat's Loeschen
     if ( pStatLst )
     {
         //Erstmal die alten Loeschen
@@ -601,7 +601,7 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
     } while ( !bLast );
 
     va_end( pArgs );
-    delete pSort;           // JP:6.3.00 - delete the initial pointer
+    delete pSort;			// JP:6.3.00 - delete the initial pointer
 
     //Enfernen der alten Sort-Elemente
     if ( pSortLst )

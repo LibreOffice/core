@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -242,7 +242,7 @@ void GtkSalDisplay::initScreen( int nScreen ) const
     ScreenData& rSD = const_cast<ScreenData&>(m_aScreens[nScreen]);
     if( rSD.m_bInit )
         return;
-
+    
     // choose visual for screen
     SalDisplay::initScreen( nScreen );
     // now set a gdk default colormap matching the chosen visual to the screen
@@ -486,7 +486,7 @@ class GtkXLib : public SalXLib
     GtkSalDisplay       *m_pGtkSalDisplay;
     std::list<GSource *> m_aSources;
     GSource             *m_pTimeout;
-    GSource             *m_pUserEvent;
+    GSource				*m_pUserEvent;
     oslMutex             m_aDispatchMutex;
     oslCondition         m_aDispatchCondition;
 
@@ -500,9 +500,9 @@ public:
     virtual void    Init();
     virtual void    Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual void    Insert( int fd, void* data,
-                            YieldFunc   pending,
-                            YieldFunc   queued,
-                            YieldFunc   handle );
+                            YieldFunc	pending,
+                            YieldFunc	queued,
+                            YieldFunc	handle );
     virtual void    Remove( int fd );
 
     virtual void    StartTimer( ULONG nMS );
@@ -592,7 +592,7 @@ void GtkXLib::Init()
         rtl::OString aPrgName = rtl::OUStringToOString(aAppName, aEnc);
         g_set_prgname(aPrgName);
     }
-
+    
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
 
@@ -650,7 +650,7 @@ void GtkXLib::Init()
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
 
     g_signal_connect( G_OBJECT(gdk_keymap_get_default()), "keys_changed", G_CALLBACK(signalKeysChanged), m_pGtkSalDisplay );
-
+    
     // add signal handler to notify screen size changes
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
     for( int n = 0; n < nScreens; n++ )
@@ -714,7 +714,7 @@ void GtkXLib::StartTimer( ULONG nMS )
     g_source_set_callback (m_pTimeout, call_timeoutFn,
                            (gpointer) this, NULL);
     g_source_attach (m_pTimeout, g_main_context_default ());
-
+    
     SalXLib::StartTimer( nMS );
 }
 
@@ -795,7 +795,7 @@ void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
      * another thread in in there. Having only one yieldin thread actually dispatch
      * fits the vcl event model (see e.g. the generic plugin).
      */
-
+    
     bool bDispatchThread = false;
     gboolean wasEvent = FALSE;
     {
@@ -806,7 +806,7 @@ void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         else if( ! bWait )
             return; // someone else is waiting already, return
 
-
+        
         if( bDispatchThread )
         {
             int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;

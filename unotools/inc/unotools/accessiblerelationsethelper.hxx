@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@ namespace utl
 {
 //.........................................................................
 
-/** @descr
+/**	@descr
         This base class provides an implementation of the
         <code>AccessibleRelationSet</code> service.
 */
 class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper
-    :   public cppu::WeakImplHelper1<
+    :	public cppu::WeakImplHelper1<
         ::com::sun::star::accessibility::XAccessibleRelationSet
         >
 {
@@ -67,7 +67,7 @@ public:
     AccessibleRelationSetHelper ();
     AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper);
 protected:
-    virtual ~AccessibleRelationSetHelper    (void);
+    virtual ~AccessibleRelationSetHelper	(void);
 public:
 
     //=====  XAccessibleRelationSet  ==========================================
@@ -134,25 +134,25 @@ public:
 
     //=====  XTypeProvider  ===================================================
 
-    /** Returns a sequence of all supported interfaces.
+    /**	Returns a sequence of all supported interfaces.
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns a implementation id.
+    /**	Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId (void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    /// Mutex guarding this object.
+    ///	Mutex guarding this object.
     ::vos::OMutex maMutex;
 
 private:
-    /// The implementation of this helper interface.
-    AccessibleRelationSetHelperImpl*    mpHelperImpl;
+    ///	The implementation of this helper interface.
+    AccessibleRelationSetHelperImpl*	mpHelperImpl;
 };
 
 //.........................................................................

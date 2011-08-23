@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace
         static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Timeout");
         return s_sNodeName;
     }
-
+    
 }
 //==========================================================================
 //= OConnectionPool
@@ -97,7 +97,7 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
 
     OPoolCollection::getNodeValue(getTimeoutNodeName(),m_xDriverNode) >>= m_nALiveCount;
     calculateTimeOuts();
-
+    
     m_xInvalidator = new OPoolTimer(this,::vos::TTimeValue(m_nTimeOut,0));
     m_xInvalidator->start();
 }
@@ -113,7 +113,7 @@ struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::v
     OConnectionPool* m_pConnectionPool;
     sal_Bool m_bDispose;
 
-    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool,sal_Bool _bDispose = sal_False)
+    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool,sal_Bool _bDispose = sal_False) 
         : m_pConnectionPool(_pConnectionPool)
         ,m_bDispose(_bDispose)
     {
@@ -147,7 +147,7 @@ struct TConnectionPoolFunctor : ::std::unary_function<TConnectionMap::value_type
 {
     OConnectionPool* m_pConnectionPool;
 
-    TConnectionPoolFunctor(OConnectionPool* _pConnectionPool)
+    TConnectionPoolFunctor(OConnectionPool* _pConnectionPool) 
         : m_pConnectionPool(_pConnectionPool)
     {
         OSL_ENSURE(m_pConnectionPool,"No connection pool!");
@@ -199,7 +199,7 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
 
     if ( !xConnection.is() )
         xConnection = createNewConnection(_rURL,_rInfo);
-
+    
     return xConnection;
 }
 //--------------------------------------------------------------------------
@@ -242,12 +242,12 @@ Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUStri
         TConnectionMap::key_type nId;
         OConnectionWrapper::createUniqueId(_rURL,aInfo,nId.m_pBuffer);
         TConnectionPool aPack;
-
+        
         // insert the new connection and struct into the active connection map
-        aPack.nALiveCount               = m_nALiveCount;
+        aPack.nALiveCount				= m_nALiveCount;
         TActiveConnectionInfo aActiveInfo;
-        aActiveInfo.aPos                = m_aPool.insert(TConnectionMap::value_type(nId,aPack)).first;
-        aActiveInfo.xPooledConnection   = xPooledConnection;
+        aActiveInfo.aPos				= m_aPool.insert(TConnectionMap::value_type(nId,aPack)).first;
+        aActiveInfo.xPooledConnection	= xPooledConnection;
         m_aActiveConnections.insert(TActiveConnectionMap::value_type(xConnection,aActiveInfo));
 
         if(m_xInvalidator->isExpired())
@@ -263,7 +263,7 @@ void OConnectionPool::invalidatePooledConnections()
     TConnectionMap::iterator aIter = m_aPool.begin();
     for (; aIter != m_aPool.end(); )
     {
-        if(!(--(aIter->second.nALiveCount))) // connections are invalid
+        if(!(--(aIter->second.nALiveCount))) // connections are invalid 
         {
             ::std::for_each(aIter->second.aConnections.begin(),aIter->second.aConnections.end(),TRemoveEventListenerFunctor(this,sal_True));
 
@@ -306,7 +306,7 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
         Reference< XComponent >  xComponent(xConnection, UNO_QUERY);
         if (xComponent.is())
             xComponent->addEventListener(this);
-
+        
         TActiveConnectionInfo aActiveInfo;
         aActiveInfo.aPos = _rIter;
         aActiveInfo.xPooledConnection = xPooledConnection;
@@ -330,7 +330,7 @@ void OConnectionPool::calculateTimeOuts()
     if(m_nALiveCount < 100)
         nTimeOutCorrection = 20;
 
-    m_nTimeOut      = m_nALiveCount / nTimeOutCorrection;
-    m_nALiveCount   = m_nALiveCount / m_nTimeOut;
+    m_nTimeOut		= m_nALiveCount / nTimeOutCorrection;
+    m_nALiveCount	= m_nALiveCount / m_nTimeOut;
 }
 // -----------------------------------------------------------------------------

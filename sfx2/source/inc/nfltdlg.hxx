@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,16 +40,16 @@ class SfxMedium;
 class SfxFilterDialog : public ModalDialog
 {
 private:
-    FixedLine               aMimeTypeFL;
-    FixedText               aMIMEType;
-    FixedText               aExtension;
-    FixedLine               aFilterFL;
-    ListBox                 aListbox;
-    OKButton                aOkBtn;
-    CancelButton            aCancelBtn;
-    HelpButton              aHelpBtn;
+    FixedLine				aMimeTypeFL;
+    FixedText				aMIMEType;
+    FixedText				aExtension;
+    FixedLine				aFilterFL;
+    ListBox					aListbox;
+    OKButton				aOkBtn;
+    CancelButton			aCancelBtn;
+    HelpButton				aHelpBtn;
 
-    const SfxFilterMatcher& rMatcher;
+    const SfxFilterMatcher&	rMatcher;
 
     DECL_LINK( OkHdl, Control * );
 

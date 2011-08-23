@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,8 +68,8 @@ IMPL_LINK( PopupWindowTbx, SelectHdl, void*, EMPTYARG )
 PopupWindowTbx::PopupWindowTbx( USHORT nId, WindowAlign eAlign,
                                 ResId aRIdWin, ResId aRIdTbx,
                                 SfxBindings& rBind ) :
-                SfxPopupWindow  ( nId, aRIdWin, rBind ),
-                aTbx            ( this, GetBindings(), aRIdTbx )
+                SfxPopupWindow	( nId, aRIdWin, rBind ),
+                aTbx			( this, GetBindings(), aRIdTbx )
 {
     FreeResource();
     aTbx.Initialize();
@@ -180,7 +180,7 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
             {
                 rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nTemp ));
-                Image aImage = GetImage( m_xFrame,
+                Image aImage = GetImage( m_xFrame, 
                                          aSlotURL,
                                          hasBigImages(),
                                          GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
@@ -213,7 +213,7 @@ void TbxControls::Select( USHORT nModifier )
 |* rItemRect sind die Screen-Koordinaten
 |*
 \************************************************************************/
-SfxPopupWindow* TbxControls::CreatePopupWindow()
+SfxPopupWindow*	TbxControls::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_CHOOSE_CONTROLS )
         createAndPositionSubToolBar( aSubToolBarResName );

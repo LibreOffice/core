@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,17 +51,17 @@ SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unk
 
 //------------------------------------------------------------------------
 
-//  static
+//	static
 uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::Any& rAny )
 {
     if ( rAny.getValueTypeClass() == uno::TypeClass_INTERFACE )
     {
         return uno::Reference<uno::XInterface>(rAny, uno::UNO_QUERY);
     }
-    return uno::Reference<uno::XInterface>();   //! Exception?
+    return uno::Reference<uno::XInterface>();	//! Exception?
 }
 
-//  static
+//	static
 sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, sal_Bool bDefault )
 {
@@ -71,11 +71,11 @@ sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPrope
         try
         {
             uno::Any aAny(xProp->getPropertyValue( rName ));
-            //! type conversion???
-            //  operator >>= shouldn't be used for bool (?)
+            //!	type conversion???
+            //	operator >>= shouldn't be used for bool (?)
             if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
             {
-                //! safe way to get bool value from any???
+                //!	safe way to get bool value from any???
                 bRet = *(sal_Bool*)aAny.getValue();
             }
         }
@@ -87,7 +87,7 @@ sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPrope
     return bRet;
 }
 
-//  static
+//	static
 sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, long nDefault )
 {
@@ -96,7 +96,7 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
     {
         try
         {
-            //! type conversion???
+            //!	type conversion???
             xProp->getPropertyValue( rName ) >>= nRet;
         }
         catch(uno::Exception&)
@@ -107,7 +107,7 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
     return nRet;
 }
 
-//  static
+//	static
 sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, long nDefault )
 {
@@ -120,12 +120,12 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
 
             if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
             {
-                //! get enum value from any???
+                //!	get enum value from any???
                 nRet = *(sal_Int32*)aAny.getValue();
             }
             else
             {
-                //! type conversion???
+                //!	type conversion???
                 aAny >>= nRet;
             }
         }
@@ -157,7 +157,7 @@ OUString ScUnoHelpFunctions::GetStringProperty(
     return aRet;
 }
 
-//  static
+//	static
 sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
@@ -165,7 +165,7 @@ sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
     return FALSE;
 }
 
-//  static
+//	static
 sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
 {
     sal_Int16 nRet = 0;
@@ -174,7 +174,7 @@ sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
     return 0;
 }
 
-//  static
+//	static
 sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
@@ -183,7 +183,7 @@ sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
     return 0;
 }
 
-//  static
+//	static
 sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
@@ -194,14 +194,14 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
     return nRet;
 }
 
-//  static
+//	static
 void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
 }
 
 //  static
-void ScUnoHelpFunctions::SetOptionalPropertyValue(
+void ScUnoHelpFunctions::SetOptionalPropertyValue( 
     Reference<beans::XPropertySet>& rPropSet, const sal_Char* pPropName, const Any& rVal )
 {
     try
@@ -279,26 +279,26 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& Se
 //UNUSED2008-05  ScEmptyEnumerationAccess::ScEmptyEnumerationAccess()
 //UNUSED2008-05  {
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  ScEmptyEnumerationAccess::~ScEmptyEnumerationAccess()
 //UNUSED2008-05  {
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  // XEnumerationAccess
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  uno::Reference<container::XEnumeration> SAL_CALL ScEmptyEnumerationAccess::createEnumeration()
 //UNUSED2008-05                                                      throw(uno::RuntimeException)
 //UNUSED2008-05  {
 //UNUSED2008-05      ScUnoGuard aGuard;
 //UNUSED2008-05      return new ScEmptyEnumeration;
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  uno::Type SAL_CALL ScEmptyEnumerationAccess::getElementType() throw(uno::RuntimeException)
 //UNUSED2008-05  {
 //UNUSED2008-05      ScUnoGuard aGuard;
 //UNUSED2008-05      return getCppuType((uno::Reference<uno::XInterface>*)0);    // or what?
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  sal_Bool SAL_CALL ScEmptyEnumerationAccess::hasElements() throw(uno::RuntimeException)
 //UNUSED2008-05  {
 //UNUSED2008-05      return FALSE;
@@ -309,19 +309,19 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& Se
 //UNUSED2008-05  ScEmptyEnumeration::ScEmptyEnumeration()
 //UNUSED2008-05  {
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  ScEmptyEnumeration::~ScEmptyEnumeration()
 //UNUSED2008-05  {
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  // XEnumeration
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  sal_Bool SAL_CALL ScEmptyEnumeration::hasMoreElements() throw(uno::RuntimeException)
 //UNUSED2008-05  {
 //UNUSED2008-05      ScUnoGuard aGuard;
 //UNUSED2008-05      return FALSE;
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  uno::Any SAL_CALL ScEmptyEnumeration::nextElement() throw(container::NoSuchElementException,
 //UNUSED2008-05                                          lang::WrappedTargetException, uno::RuntimeException)
 //UNUSED2008-05  {
@@ -335,7 +335,7 @@ ScNameToIndexAccess::ScNameToIndexAccess( const com::sun::star::uno::Reference<
                                             com::sun::star::container::XNameAccess>& rNameObj ) :
     xNameAccess( rNameObj )
 {
-    //! test for XIndexAccess interface at rNameObj, use that instead!
+    //!	test for XIndexAccess interface at rNameObj, use that instead!
 
     if ( xNameAccess.is() )
         aNames = xNameAccess->getElementNames();
@@ -385,19 +385,19 @@ sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(::com::sun::star::u
 //UNUSED2008-05  ScPrintSettingsObj::ScPrintSettingsObj()
 //UNUSED2008-05  {
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  ScPrintSettingsObj::~ScPrintSettingsObj()
 //UNUSED2008-05  {
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  // XPropertySet
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  uno::Reference<beans::XPropertySetInfo> SAL_CALL ScPrintSettingsObj::getPropertySetInfo()
 //UNUSED2008-05                                                          throw(uno::RuntimeException)
 //UNUSED2008-05  {
 //UNUSED2008-05      return NULL;
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  void SAL_CALL ScPrintSettingsObj::setPropertyValue(
 //UNUSED2008-05                          const rtl::OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
 //UNUSED2008-05                  throw(beans::UnknownPropertyException, beans::PropertyVetoException,
@@ -406,7 +406,7 @@ sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(::com::sun::star::u
 //UNUSED2008-05  {
 //UNUSED2008-05      //! later...
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  uno::Any SAL_CALL ScPrintSettingsObj::getPropertyValue( const rtl::OUString& /* aPropertyName */ )
 //UNUSED2008-05                  throw(beans::UnknownPropertyException, lang::WrappedTargetException,
 //UNUSED2008-05                          uno::RuntimeException)
@@ -414,7 +414,7 @@ sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(::com::sun::star::u
 //UNUSED2008-05      //! later...
 //UNUSED2008-05      return uno::Any();
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  SC_IMPL_DUMMY_PROPERTY_LISTENER( ScPrintSettingsObj )
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 #include "helpmerge.hxx"
 
 // defines to parse command line
-#define STATE_NON               0x0001
-#define STATE_INPUT             0x0002
-#define STATE_OUTPUT            0x0003
-#define STATE_PRJ               0x0004
-#define STATE_ROOT              0x0005
-#define STATE_SDFFILE           0x0006
-#define STATE_ERRORLOG          0x0007
-#define STATE_BREAKHELP         0x0008
-#define STATE_UNMERGE           0x0009
-#define STATE_UTF8              0x000A
-#define STATE_LANGUAGES         0x000B
-#define STATE_FORCE_LANGUAGES   0x000C
+#define STATE_NON  		        0x0001
+#define STATE_INPUT		        0x0002
+#define STATE_OUTPUT	        0x0003
+#define STATE_PRJ		        0x0004
+#define STATE_ROOT		        0x0005
+#define STATE_SDFFILE	        0x0006
+#define STATE_ERRORLOG	        0x0007
+#define STATE_BREAKHELP	        0x0008
+#define STATE_UNMERGE	        0x0009
+#define STATE_UTF8		        0x000A
+#define STATE_LANGUAGES	        0x000B
+#define STATE_FORCE_LANGUAGES   0x000C 
 #define STATE_OUTPUTX           0xfe
 #define STATE_OUTPUTY           0xff
 
@@ -61,7 +61,6 @@ ByteString sOutputFile;
 ByteString sOutputFileX;
 ByteString sOutputFileY;
 ByteString sSDFFile;
-bool bQuiet;
 
 /*****************************************************************************/
 BOOL ParseCommandLine( int argc, char* argv[])
@@ -73,7 +72,6 @@ BOOL ParseCommandLine( int argc, char* argv[])
     bUTF8 = TRUE;
     sPrj = "";
     sPrjRoot = "";
-    bQuiet = false;
     Export::sLanguages = "";
     Export::sForcedLanguages = "";
 
@@ -98,9 +96,9 @@ BOOL ParseCommandLine( int argc, char* argv[])
             nState = STATE_PRJ; // next token specifies the cur. project
         }
          else if ( ByteString( argv[ i ]).ToUpperAscii() == "-LF" ) {
-            nState = STATE_FORCE_LANGUAGES;
+            nState = STATE_FORCE_LANGUAGES; 
         }
-
+       
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-R" ) {
             nState = STATE_ROOT; // next token specifies path to project root
         }
@@ -110,9 +108,6 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = FALSE;
-        }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-QQ" ) {
-            bQuiet = true;
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
@@ -128,7 +123,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else {
             switch ( nState ) {
                 case STATE_NON: {
-                    return FALSE;   // no valid command line
+                    return FALSE;	// no valid command line
                 }
                 //break;
                 case STATE_INPUT: {
@@ -150,7 +145,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = argv[ i ];
-//                  sPrj.ToLowerAscii(); // the project
+//					sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -188,13 +183,12 @@ BOOL ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    fprintf( stdout, "Syntax: HELPEX[-p Prj][-r PrjRoot]-i FileIn ( -o FileOut | -x path -y relfile )[-m DataBase][-e][-b][-u][-L l1,l2,...][-QQ] -LF l1,l2 \n" );
+    fprintf( stdout, "Syntax: HELPEX[-p Prj][-r PrjRoot]-i FileIn ( -o FileOut | -x path -y relfile )[-m DataBase][-e][-b][-u][-L l1,l2,...] -LF l1,l2 \n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
     fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
     fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-    fprintf( stdout, " -QQ: quiet output\n" );
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (en-US,fr,de...)\n" );
     fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
     fprintf( stdout, "     f1, f2,... are also elements of (en-US,fr,de...)\n" );
@@ -222,19 +216,19 @@ int _cdecl main( int argc, char *argv[] )
     //sal_uInt32 startfull = Export::startMessure();
 
     bool hasInputList = sInputFile.GetBuffer()[0]=='@';
-//    printf("x = %s , y = %s , o = %s\n", sOutputFileX.GetBuffer(),  sOutputFileY.GetBuffer() , sOutputFile.GetBuffer() );
+//    printf("x = %s , y = %s , o = %s\n", sOutputFileX.GetBuffer(),  sOutputFileY.GetBuffer() , sOutputFile.GetBuffer() ); 
     bool hasNoError = true;
-
+    
     if ( sOutputFile.Len() ){                                               // Merge single file ?
         //printf("DBG: Inputfile = %s\n",sInputFile.GetBuffer());
         HelpParser aParser( sInputFile, bUTF8 , false );
-
+        
         if ( bMergeMode )
         {
-
+            
             //sal_uInt64 startreadloc = Export::startMessure();
-            MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252 );
-            //MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252, false );
+            MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252 ); 
+            //MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252, false ); 
             //Export::stopMessure( ByteString("read localize.sdf") , startreadloc );
 
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
@@ -243,14 +237,14 @@ int _cdecl main( int argc, char *argv[] )
             hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot, sInputFile, new XMLFile( '0' ), "help" );
     }else if ( sOutputFileX.Len() && sOutputFileY.Len() && hasInputList ) {  // Merge multiple files ?
         if ( bMergeMode ){
-
+            
             ifstream aFStream( sInputFile.Copy( 1 , sInputFile.Len() ).GetBuffer() , ios::in );
-
+                                                                                                                  
             if( !aFStream ){
                 cerr << "ERROR: - helpex - Can't open the file " << sInputFile.Copy( 1 , sInputFile.Len() ).GetBuffer() << "\n";
                 exit(-1);
             }
-
+        
             vector<ByteString> filelist;
             rtl::OStringBuffer filename;
             sal_Char aChar;
@@ -261,24 +255,24 @@ int _cdecl main( int argc, char *argv[] )
                 else
                     filename.append( aChar );
             }
-            if( filename.getLength() > 0 )
+            if( filename.getLength() > 0 ) 
                 filelist.push_back( ByteString ( filename.makeStringAndClear().getStr() ) );
-
+            
             aFStream.close();
             ByteString sHelpFile(""); // dummy
             //MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , FALSE, RTL_TEXTENCODING_MS_1252, false );
-            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , FALSE, RTL_TEXTENCODING_MS_1252 );
+            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , FALSE, RTL_TEXTENCODING_MS_1252 ); 
 
             //aMergeDataFile.Dump();
             std::vector<ByteString> aLanguages;
             HelpParser::parse_languages( aLanguages , aMergeDataFile );
-
+            
             bool bCreateDir = true;
             for( vector<ByteString>::iterator pos = filelist.begin() ; pos != filelist.end() ; ++pos )
             {
-                sHelpFile = *pos;
+                sHelpFile = *pos;   
                 cout << ".";cout.flush();
-
+                
                 HelpParser aParser( sHelpFile , bUTF8 , true );
                 hasNoError = aParser.Merge( sSDFFile , sOutputFileX , sOutputFileY , true , aLanguages , aMergeDataFile , bCreateDir );
                 bCreateDir = false;
@@ -286,11 +280,11 @@ int _cdecl main( int argc, char *argv[] )
         }
     } else
         cerr << "helpex ERROR: Wrong input parameters!\n";
-
+    
     //Export::stopMessure( ByteString("full cycle") , startfull );
     if( hasNoError )
         return 0;
-    else
+    else 
         return 1;
 }
 #endif

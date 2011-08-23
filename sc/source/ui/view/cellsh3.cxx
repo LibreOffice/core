@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@
 #include "autoform.hxx"
 #include "autofmt.hxx"
 #include "cellsh.hxx"
-#include "attrdlg.hrc"      // TP_ALIGNMENT
+#include "attrdlg.hrc"		// TP_ALIGNMENT
 #include "inputhdl.hxx"
 #include "editable.hxx"
 
@@ -62,34 +62,34 @@
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
-inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
-inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
-inline long TwipsToEvenHMM(long nTwips) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
+inline long TwipsToHMM(long nTwips)	{ return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)	{ return (nHMM * 72 + 63) / 127; }
+inline long TwipsToEvenHMM(long nTwips)	{ return ( (nTwips * 127 + 72) / 144 ) * 2; }
 
 //------------------------------------------------------------------
 
 void ScCellShell::Execute( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    SfxBindings&        rBindings   = pTabViewShell->GetViewFrame()->GetBindings();
-    ScModule*           pScMod      = SC_MOD();
-    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    USHORT              nSlot       = rReq.GetSlot();
+    ScTabViewShell*	pTabViewShell  	= GetViewData()->GetViewShell();
+    SfxBindings&		rBindings	= pTabViewShell->GetViewFrame()->GetBindings();
+    ScModule*			pScMod		= SC_MOD();
+    const SfxItemSet*	pReqArgs	= rReq.GetArgs();
+    USHORT				nSlot		= rReq.GetSlot();
 
-    if (nSlot != SID_CURRENTCELL)       // der kommt beim MouseButtonUp
-        pTabViewShell->HideListBox();   // Autofilter-DropDown-Listbox
+    if (nSlot != SID_CURRENTCELL)		// der kommt beim MouseButtonUp
+        pTabViewShell->HideListBox();	// Autofilter-DropDown-Listbox
 
     if ( IS_EDITMODE() )
     {
         switch ( nSlot )
         {
-            //  beim Oeffnen eines Referenz-Dialogs darf die SubShell nicht umgeschaltet werden
-            //  (beim Schliessen des Dialogs wird StopEditShell gerufen)
+            //	beim Oeffnen eines Referenz-Dialogs darf die SubShell nicht umgeschaltet werden
+            //	(beim Schliessen des Dialogs wird StopEditShell gerufen)
             case SID_OPENDLG_FUNCTION:
-                    //  #53318# inplace macht die EditShell Aerger...
-                    //! kann nicht immer umgeschaltet werden ????
+                    //	#53318# inplace macht die EditShell Aerger...
+                    //!	kann nicht immer umgeschaltet werden ????
                     if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
-                        pTabViewShell->SetDontSwitch(TRUE);         // EditShell nicht abschalten
+                        pTabViewShell->SetDontSwitch(TRUE);			// EditShell nicht abschalten
                     // kein break
 
             case FID_CELL_FORMAT:
@@ -122,16 +122,16 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_STATUS_SELMODE:
             if ( pReqArgs )
             {
-                /* 0: STD   Click hebt Sel auf
-                 * 1: ER    Click erweitert Selektion
-                 * 2: ERG   Click definiert weitere Selektion
+                /* 0: STD	Click hebt Sel auf
+                 * 1: ER	Click erweitert Selektion
+                 * 2: ERG	Click definiert weitere Selektion
                  */
                 UINT16 nMode = ((const SfxUInt16Item&)pReqArgs->Get( nSlot )).GetValue();
 
                 switch ( nMode )
                 {
-                    case 1: nMode = KEY_SHIFT;  break;
-                    case 2: nMode = KEY_MOD1;   break; // Control-Taste
+                    case 1: nMode = KEY_SHIFT;	break;
+                    case 2: nMode = KEY_MOD1;	break; // Control-Taste
                     case 0:
                     default:
                         nMode = 0;
@@ -141,15 +141,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             else
             {
-                //  no arguments (also executed by double click on the status bar controller):
-                //  advance to next selection mode
+                //	no arguments (also executed by double click on the status bar controller):
+                //	advance to next selection mode
 
                 USHORT nModifiers = pTabViewShell->GetLockedModifiers();
                 switch ( nModifiers )
                 {
-                    case KEY_SHIFT: nModifiers = KEY_MOD1;  break;      // EXT -> ADD
-                    case KEY_MOD1:  nModifiers = 0;         break;      // ADD -> STD
-                    default:        nModifiers = KEY_SHIFT; break;      // STD -> EXT
+                    case KEY_SHIFT:	nModifiers = KEY_MOD1;	break;		// EXT -> ADD
+                    case KEY_MOD1:	nModifiers = 0;			break;		// ADD -> STD
+                    default:		nModifiers = KEY_SHIFT;	break;		// STD -> EXT
                 }
                 pTabViewShell->LockModifiers( nModifiers );
             }
@@ -158,14 +158,14 @@ void ScCellShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
-        //  SID_STATUS_SELMODE_NORM wird nicht benutzt ???
+        //	SID_STATUS_SELMODE_NORM wird nicht benutzt ???
 
         case SID_STATUS_SELMODE_NORM:
             pTabViewShell->LockModifiers( 0 );
             rBindings.Invalidate( SID_STATUS_SELMODE );
             break;
 
-        //  SID_STATUS_SELMODE_ERG / SID_STATUS_SELMODE_ERW als Toggles:
+        //	SID_STATUS_SELMODE_ERG / SID_STATUS_SELMODE_ERW als Toggles:
 
         case SID_STATUS_SELMODE_ERG:
             if ( pTabViewShell->GetLockedModifiers() & KEY_MOD1 )
@@ -198,18 +198,18 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
                     if ( !pHdl || !pHdl->IsInEnterHandler() )
                     {
-                        //  #101061# UpdateInputHandler is needed after the cell content
-                        //  has changed, but if called from EnterHandler, UpdateInputHandler
-                        //  will be called later when moving the cursor.
+                        //	#101061# UpdateInputHandler is needed after the cell content
+                        //	has changed, but if called from EnterHandler, UpdateInputHandler
+                        //	will be called later when moving the cursor.
 
                         pTabViewShell->UpdateInputHandler();
                     }
 
                     rReq.Done();
 
-                    //  hier kein GrabFocus, weil sonst auf dem Mac die Tabelle vor die
-                    //  Seitenansicht springt, wenn die Eingabe nicht abgeschlossen war
-                    //  (GrabFocus passiert in KillEditView)
+                    //	hier kein GrabFocus, weil sonst auf dem Mac die Tabelle vor die
+                    //	Seitenansicht springt, wenn die Eingabe nicht abgeschlossen war
+                    //	(GrabFocus passiert in KillEditView)
                 }
             }
             break;
@@ -265,7 +265,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             aCursorPos.Tab() == GetViewData()->GetTabNo()
                             )
                         {
-                            SfxStringItem   aItem( SID_ENTER_STRING, aString );
+                            SfxStringItem	aItem( SID_ENTER_STRING, aString );
 
                             // SfxBindings& rBindings = pTabViewShell->GetViewFrame()->GetBindings();
                             const SfxPoolItem* aArgs[2];
@@ -295,9 +295,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                 }
 
-                //  hier kein GrabFocus, weil sonst auf dem Mac die Tabelle vor die
-                //  Seitenansicht springt, wenn die Eingabe nicht abgeschlossen war
-                //  (GrabFocus passiert in KillEditView)
+                //	hier kein GrabFocus, weil sonst auf dem Mac die Tabelle vor die
+                //	Seitenansicht springt, wenn die Eingabe nicht abgeschlossen war
+                //	(GrabFocus passiert in KillEditView)
             }
             break;
 
@@ -314,7 +314,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_OPENDLG_CONSOLIDATE:
             {
-                USHORT          nId  = ScConsolidateDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScConsolidateDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
@@ -329,18 +329,18 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     //----------------------------------
                     // Zellattribute ohne Dialog setzen:
                     //----------------------------------
-                    SfxItemSet*     pEmptySet =
+                    SfxItemSet* 	pEmptySet =
                                         new SfxItemSet( *pReqArgs->GetPool(),
                                                         ATTR_PATTERN_START,
                                                         ATTR_PATTERN_END );
 
-                    SfxItemSet*     pNewSet =
+                    SfxItemSet* 	pNewSet =
                                         new SfxItemSet( *pReqArgs->GetPool(),
                                                         ATTR_PATTERN_START,
                                                         ATTR_PATTERN_END );
 
-                    const SfxPoolItem*  pAttr = NULL;
-                    USHORT              nWhich = 0;
+                    const SfxPoolItem*	pAttr = NULL;
+                    USHORT				nWhich = 0;
 
                     for ( nWhich=ATTR_PATTERN_START; nWhich<=ATTR_PATTERN_END; nWhich++ )
                         if ( pReqArgs->GetItemState( nWhich, TRUE, &pAttr ) == SFX_ITEM_SET )
@@ -366,7 +366,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_OPENDLG_SOLVE:
             {
-                USHORT          nId  = ScSolverDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScSolverDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
@@ -386,7 +386,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_OPENDLG_TABOP:
             {
-                USHORT          nId  = ScTabOpDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScTabOpDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
@@ -439,8 +439,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aBaseName += ScGlobal::GetRscString(STR_SCENARIO);
                         aBaseName += '_';
 
-                        //  vorneweg testen, ob der Prefix als gueltig erkannt wird
-                        //  wenn nicht, nur doppelte vermeiden
+                        //	vorneweg testen, ob der Prefix als gueltig erkannt wird
+                        //	wenn nicht, nur doppelte vermeiden
                         BOOL bPrefix = pDoc->ValidTabName( aBaseName );
                         DBG_ASSERT(bPrefix, "ungueltiger Tabellenname");
 
@@ -471,8 +471,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             if ( pReqArgs->GetItemState( SID_NEW_TABLENAME, TRUE, &pItem ) == SFX_ITEM_SET )
                                 aArgComment = ((const SfxStringItem*)pItem)->GetValue();
 
-                            aColor = Color( COL_LIGHTGRAY );        // Default
-                            nFlags = 0;                             // nicht-TwoWay
+                            aColor = Color( COL_LIGHTGRAY );		// Default
+                            nFlags = 0;								// nicht-TwoWay
 
                             pTabViewShell->MakeScenario( aArgName, aArgComment, aColor, nFlags );
                             if( ! rReq.IsAPI() )
@@ -482,7 +482,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         {
                             BOOL bSheetProtected = pDoc->IsTabProtected(nTab);
                             //CHINA001 ScNewScenarioDlg* pNewDlg =
-                            //CHINA001  new ScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, FALSE, bSheetProtected );
+                            //CHINA001 	new ScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, FALSE, bSheetProtected );
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
@@ -533,17 +533,17 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 else
                 {
                     ScViewData* pData      = GetViewData();
-                    FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
-                    USHORT      nCurHeight = pData->GetDocument()->
+                    FieldUnit	eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
+                    USHORT		nCurHeight = pData->GetDocument()->
                                                 GetRowHeight( pData->GetCurY(),
                                                               pData->GetTabNo() );
-//CHINA001                  ScMetricInputDlg* pDlg =
-//CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
-//CHINA001                  nCurHeight,
-//CHINA001                  ScGlobal::nStdRowHeight,
-//CHINA001                  eMetric,
-//CHINA001                  2,
-//CHINA001                  MAX_COL_HEIGHT );
+//CHINA001					ScMetricInputDlg* pDlg =
+//CHINA001					new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
+//CHINA001					nCurHeight,
+//CHINA001					ScGlobal::nStdRowHeight,
+//CHINA001					eMetric,
+//CHINA001					2,
+//CHINA001					MAX_COL_HEIGHT );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
@@ -589,13 +589,13 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
-//CHINA001                  ScMetricInputDlg* pDlg =
-//CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_OPT,
-//CHINA001                  ScGlobal::nLastRowHeightExtra,
-//CHINA001                  0,
-//CHINA001                  eMetric,
-//CHINA001                  1,
-//CHINA001                  MAX_EXTRA_HEIGHT );
+//CHINA001					ScMetricInputDlg* pDlg =
+//CHINA001					new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_OPT,
+//CHINA001					ScGlobal::nLastRowHeightExtra,
+//CHINA001					0,
+//CHINA001					eMetric,
+//CHINA001					1,
+//CHINA001					MAX_EXTRA_HEIGHT );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
@@ -638,18 +638,18 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
+                    FieldUnit   eMetric	   = SC_MOD()->GetAppOptions().GetAppMetric();
                     ScViewData* pData      = GetViewData();
-                    USHORT      nCurHeight = pData->GetDocument()->
+                    USHORT		nCurHeight = pData->GetDocument()->
                                                 GetColWidth( pData->GetCurX(),
                                                              pData->GetTabNo() );
-//CHINA001                  ScMetricInputDlg* pDlg =
-//CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
-//CHINA001                  nCurHeight,
-//CHINA001                  STD_COL_WIDTH,
-//CHINA001                  eMetric,
-//CHINA001                  2,
-//CHINA001                  MAX_COL_WIDTH );
+//CHINA001					ScMetricInputDlg* pDlg =
+//CHINA001					new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
+//CHINA001					nCurHeight,
+//CHINA001					STD_COL_WIDTH,
+//CHINA001					eMetric,
+//CHINA001					2,
+//CHINA001					MAX_COL_WIDTH );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
@@ -695,13 +695,13 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
-//CHINA001                  ScMetricInputDlg* pDlg =
-//CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_OPT,
-//CHINA001                  ScGlobal::nLastColWidthExtra,
-//CHINA001                  STD_EXTRA_WIDTH,
-//CHINA001                  eMetric,
-//CHINA001                  1,
-//CHINA001                  MAX_EXTRA_WIDTH );
+//CHINA001					ScMetricInputDlg* pDlg =
+//CHINA001					new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_OPT,
+//CHINA001					ScGlobal::nLastColWidthExtra,
+//CHINA001					STD_EXTRA_WIDTH,
+//CHINA001					eMetric,
+//CHINA001					1,
+//CHINA001					MAX_EXTRA_WIDTH );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
@@ -856,11 +856,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     {
                         ScGlobal::ClearAutoFormat();
                         ScAutoFormatData* pNewEntry = pTabViewShell->CreateAutoFormatData();
-//CHINA001                      ScAutoFormatDlg*  pDlg      = new ScAutoFormatDlg(
-//CHINA001                      pDlgParent,
-//CHINA001                      ScGlobal::GetAutoFormat(),
-//CHINA001                      pNewEntry,
-//CHINA001                      GetViewData()->GetDocument() );
+//CHINA001						ScAutoFormatDlg*  pDlg		= new ScAutoFormatDlg(
+//CHINA001						pDlgParent,
+//CHINA001						ScGlobal::GetAutoFormat(),
+//CHINA001						pNewEntry,
+//CHINA001						GetViewData()->GetDocument() );
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
@@ -899,7 +899,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 else if (pTabViewShell->HasPaintBrush())
                     pTabViewShell->ResetBrushDocument();            // abort format paint brush
                 else if (pTabViewShell->HasHintWindow())
-                    pTabViewShell->RemoveHintWindow();              // Eingabemeldung abschalten
+                    pTabViewShell->RemoveHintWindow();				// Eingabemeldung abschalten
                 else if( ScViewUtil::IsFullScreen( *pTabViewShell ) )
                     ScViewUtil::SetFullScreen( *pTabViewShell, false );
                 else
@@ -915,7 +915,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     //}
                 }
 
-//              SetSumAssignMode(); //ScInputWindow
+//				SetSumAssignMode(); //ScInputWindow
             }
             break;
 
@@ -933,7 +933,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_OPENDLG_CONDFRMT:
             {
-                USHORT          nId  = ScCondFormatDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScCondFormatDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
@@ -941,7 +941,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        //  ----------------------------------------------------------------
+        //	----------------------------------------------------------------
 
         case FID_INPUTLINE_STATUS:
             DBG_ERROR("Execute von InputLine-Status");
@@ -949,7 +949,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_STATUS_DOCPOS:
             // Launch navigator.
-            GetViewData()->GetDispatcher().Execute(
+            GetViewData()->GetDispatcher().Execute( 
                 SID_NAVIGATOR, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
             break;
 

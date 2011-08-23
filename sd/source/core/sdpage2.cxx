@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,9 +72,9 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString&
 |* Vorlagen fuer Praesentationsobjekte
 |*
 |* Vorraussetzungen: - Die Seite muss bereits das richtige Model kennen!
-|*                   - Die entsprechende Masterpage muss bereits im Model sein.
-|*                   - Die entsprechenden StyleSheets muessen bereits im
-|*                     im StyleSheetPool sein.
+|*					 - Die entsprechende Masterpage muss bereits im Model sein.
+|*					 - Die entsprechenden StyleSheets muessen bereits im
+|*					   im StyleSheetPool sein.
 |*
 |*  bReplaceStyleSheets = TRUE : Benannte StyleSheets werden ausgetauscht
 |*                        FALSE: Alle StyleSheets werden neu zugewiesen
@@ -94,7 +94,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     /*********************************************************************
     |* Layoutname der Seite
     \********************************************************************/
-    String aOldLayoutName(maLayoutName);    // merken
+    String aOldLayoutName(maLayoutName); 	// merken
     maLayoutName = rLayoutName;
     maLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
     maLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
@@ -382,9 +382,9 @@ void SdPage::DisconnectLink()
 \************************************************************************/
 
 SdPage::SdPage(const SdPage& rSrcPage)
-:   FmFormPage(rSrcPage)
-,   SdrObjUserCall()
-,   mpItems(NULL)
+:	FmFormPage(rSrcPage)
+,	SdrObjUserCall()
+,	mpItems(NULL)
 {
     mePageKind           = rSrcPage.mePageKind;
     meAutoLayout         = rSrcPage.meAutoLayout;
@@ -394,20 +394,20 @@ SdPage::SdPage(const SdPage& rSrcPage)
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
 
     mbSelected           = FALSE;
-    mnTransitionType    = rSrcPage.mnTransitionType;
+    mnTransitionType	= rSrcPage.mnTransitionType;
     mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
     mbTransitionDirection = rSrcPage.mbTransitionDirection;
     mnTransitionFadeColor = rSrcPage.mnTransitionFadeColor;
     mfTransitionDuration = rSrcPage.mfTransitionDuration;
-    mePresChange            = rSrcPage.mePresChange;
+    mePresChange			= rSrcPage.mePresChange;
     mnTime               = rSrcPage.mnTime;
     mbSoundOn            = rSrcPage.mbSoundOn;
     mbExcluded           = rSrcPage.mbExcluded;
 
     maLayoutName         = rSrcPage.maLayoutName;
     maSoundFile          = rSrcPage.maSoundFile;
-    mbLoopSound          = rSrcPage.mbLoopSound;
-    mbStopSound          = rSrcPage.mbStopSound;
+    mbLoopSound			 = rSrcPage.mbLoopSound;
+    mbStopSound			 = rSrcPage.mbStopSound;
     maCreatedPageName    = String();
     maFileName           = rSrcPage.maFileName;
     maBookmarkName       = rSrcPage.maBookmarkName;
@@ -519,7 +519,7 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
 
 void SdPage::RemoveEmptyPresentationObjects()
 {
-    SdrObjListIter  aShapeIter( *this, IM_DEEPWITHGROUPS );
+    SdrObjListIter	aShapeIter( *this, IM_DEEPWITHGROUPS );
 
     SdrObject* pShape;
     for( pShape = aShapeIter.Next(); pShape; pShape = aShapeIter.Next() )
@@ -533,58 +533,58 @@ void SdPage::RemoveEmptyPresentationObjects()
     }
 }
 
-sal_Int16 SdPage::getTransitionType (void) const
+sal_Int16 SdPage::getTransitionType (void) const 
 {
-    return mnTransitionType;
+    return mnTransitionType; 
 }
 
 void SdPage::setTransitionType( sal_Int16 nTransitionType )
 {
-    mnTransitionType = nTransitionType;
+    mnTransitionType = nTransitionType; 
     ActionChanged();
 }
 
 sal_Int16 SdPage::getTransitionSubtype (void) const
 {
-    return mnTransitionSubtype;
+    return mnTransitionSubtype; 
 }
 
 void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
 {
-    mnTransitionSubtype = nTransitionSubtype;
+    mnTransitionSubtype = nTransitionSubtype; 
     ActionChanged();
 }
 
 sal_Bool SdPage::getTransitionDirection (void) const
 {
-    return mbTransitionDirection;
+    return mbTransitionDirection; 
 }
 
 void SdPage::setTransitionDirection ( sal_Bool bTransitionbDirection )
 {
-    mbTransitionDirection = bTransitionbDirection;
+    mbTransitionDirection = bTransitionbDirection; 
     ActionChanged();
 }
 
 sal_Int32 SdPage::getTransitionFadeColor (void) const
 {
-    return mnTransitionFadeColor;
+    return mnTransitionFadeColor; 
 }
 
-void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
+void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor ) 
 {
-    mnTransitionFadeColor = nTransitionFadeColor;
+    mnTransitionFadeColor = nTransitionFadeColor; 
     ActionChanged();
 }
 
 double SdPage::getTransitionDuration (void) const
 {
-    return mfTransitionDuration;
+    return mfTransitionDuration; 
 }
 
 void SdPage::setTransitionDuration ( double fTranstionDuration )
 {
-    mfTransitionDuration = fTranstionDuration;
+    mfTransitionDuration = fTranstionDuration; 
     ActionChanged();
 }
 
@@ -608,7 +608,7 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
     {
         maAnnotations.insert( maAnnotations.begin() + nIndex, xAnnotation );
     }
-
+    
     if( pModel && pModel->IsUndoEnabled() )
     {
         SdrUndoAction* pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, true );
@@ -617,7 +617,7 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
     }
 
     SetChanged();
-
+    
     if( pModel )
     {
         pModel->SetChanged();

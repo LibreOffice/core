@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ public:
 
 
 /** This interface has to be implemented by windows that want to be
-    layouted by a SubToolPanel or ScrollablePanel object.
+    layouted by a SubToolPanel or ScrollablePanel object. 
 */
 class ILayoutableWindow
 {
@@ -79,10 +79,10 @@ public:
     /** Return wether the window is generally resizable.  When used by
         a VerticalLayouter then the width will always be resized and
         the return value of this method determines whether the height
-        may be modified as well.
+        may be modified as well. 
     */
     virtual bool IsResizable (void) = 0;
-
+    
     /** Return the window so that its size and position can be set.
         @return
             Returns the window which is layouted or NULL to indicate
@@ -92,7 +92,7 @@ public:
 
     /** Return the minimal width of the window.
     */
-    virtual sal_Int32 GetMinimumWidth (void) = 0;
+    virtual sal_Int32 GetMinimumWidth (void) = 0; 
 };
 
 

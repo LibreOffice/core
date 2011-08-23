@@ -1,6 +1,6 @@
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_ 
 #include <cppuhelper/interfacecontainer.h>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#ifndef _CPPUHELPER_PROPSHLP_HXX
+#ifndef _CPPUHELPER_PROPSHLP_HXX 
 #include <cppuhelper/propshlp.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
@@ -85,7 +85,7 @@ namespace connectivity
         protected:
             // the parent must support the tunnel implementation
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
-            SELF*   m_pDerivedImplementation;
+            SELF*	m_pDerivedImplementation;
 
         public:
             OSubComponent(
@@ -118,14 +118,14 @@ namespace connectivity
         class OPropertyArrayUsageHelper
         {
         protected:
-            static sal_Int32                        s_nRefCount;
-            static ::cppu::IPropertyArrayHelper*    s_pProps;
-            static ::osl::Mutex                     s_aMutex;
+            static sal_Int32						s_nRefCount;
+            static ::cppu::IPropertyArrayHelper*	s_pProps;
+            static ::osl::Mutex						s_aMutex;
 
         public:
             OPropertyArrayUsageHelper();
             virtual ~OPropertyArrayUsageHelper()
-            {   // ARGHHHHHHH ..... would like to implement this in proparrhlp_impl.hxx (as we do with all other methods)
+            {	// ARGHHHHHHH ..... would like to implement this in proparrhlp_impl.hxx (as we do with all other methods)
                 // but SUNPRO 5 compiler (linker) doesn't like this
                 ::osl::MutexGuard aGuard(s_aMutex);
                 OSL_ENSURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
@@ -139,7 +139,7 @@ namespace connectivity
             /** call this in the getInfoHelper method of your derived class. The method returns the array helper of the
                 class, which is created if neccessary.
             */
-            ::cppu::IPropertyArrayHelper*   getArrayHelper();
+            ::cppu::IPropertyArrayHelper*	getArrayHelper();
 
         protected:
             /** used to implement the creation of the array helper which is shared amongst all instances of the class.
@@ -149,19 +149,19 @@ namespace connectivity
                 <BR>
                 as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
                 assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
-                @return                         an pointer to the newly created array helper. Must not be NULL.
+                @return							an pointer to the newly created array helper. Must not be NULL.
             */
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const = 0;
         };
 
-        template<class TYPE>
-        sal_Int32                       OPropertyArrayUsageHelper< TYPE >::s_nRefCount  = 0;
+        template<class TYPE> 
+        sal_Int32						OPropertyArrayUsageHelper< TYPE >::s_nRefCount	= 0;
 
-        template<class TYPE>
-        ::cppu::IPropertyArrayHelper*   OPropertyArrayUsageHelper< TYPE >::s_pProps = NULL;
+        template<class TYPE> 
+        ::cppu::IPropertyArrayHelper*	OPropertyArrayUsageHelper< TYPE >::s_pProps	= NULL;
 
-        template<class TYPE>
-        ::osl::Mutex                    OPropertyArrayUsageHelper< TYPE >::s_aMutex;
+        template<class TYPE> 
+        ::osl::Mutex					OPropertyArrayUsageHelper< TYPE >::s_aMutex;
 
         //------------------------------------------------------------------
         template <class TYPE>
@@ -222,31 +222,31 @@ namespace connectivity
         }
 
 
-#define DECLARE_SERVICE_INFO()  \
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);   \
-    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);   \
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
+#define DECLARE_SERVICE_INFO()	\
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);	\
+    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);	\
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)	\
 
-#define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)  \
-    ::rtl::OUString SAL_CALL classname::getImplementationName() throw (::com::sun::star::uno::RuntimeException) \
-    {   \
-        return ::rtl::OUString::createFromAscii(implasciiname); \
-    }   \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)    \
-    {   \
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);   \
-        aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname); \
-        return aSupported;  \
-    }   \
-    sal_Bool SAL_CALL classname::supportsService(const ::rtl::OUString& _rServiceName) throw(::com::sun::star::uno::RuntimeException)   \
-    {   \
-        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());             \
-        const ::rtl::OUString* pSupported = aSupported.getConstArray();                 \
-        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();              \
-        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)   \
-            ;                                                                           \
-        return pSupported != pEnd;                                                      \
-    }   \
+#define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)	\
+    ::rtl::OUString SAL_CALL classname::getImplementationName() throw (::com::sun::star::uno::RuntimeException)	\
+    {	\
+        return ::rtl::OUString::createFromAscii(implasciiname);	\
+    }	\
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)	\
+    {	\
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);	\
+        aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname);	\
+        return aSupported;	\
+    }	\
+    sal_Bool SAL_CALL classname::supportsService(const ::rtl::OUString& _rServiceName) throw(::com::sun::star::uno::RuntimeException)	\
+    {	\
+        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());				\
+        const ::rtl::OUString* pSupported = aSupported.getConstArray();					\
+        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();				\
+        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)	\
+            ;																			\
+        return pSupported != pEnd;														\
+    }	\
 
 
     }

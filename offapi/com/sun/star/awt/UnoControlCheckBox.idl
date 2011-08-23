@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,42 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_UnoCheckBoxControl_idl__
-#define __com_sun_star_awt_UnoCheckBoxControl_idl__
-
-#ifndef __com_sun_star_awt_UnoControl_idl__
-#include <com/sun/star/awt/UnoControl.idl>
+#ifndef __com_sun_star_awt_UnoCheckBoxControl_idl__ 
+#define __com_sun_star_awt_UnoCheckBoxControl_idl__ 
+ 
+#ifndef __com_sun_star_awt_UnoControl_idl__ 
+#include <com/sun/star/awt/UnoControl.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XCheckBox_idl__ 
+#include <com/sun/star/awt/XCheckBox.idl> 
 #endif
 
-#ifndef __com_sun_star_awt_XCheckBox_idl__
-#include <com/sun/star/awt/XCheckBox.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XLayoutConstrains_idl__
-#include <com/sun/star/awt/XLayoutConstrains.idl>
+#ifndef __com_sun_star_awt_XLayoutConstrains_idl__ 
+#include <com/sun/star/awt/XLayoutConstrains.idl> 
 #endif
 
 
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** specifies a check box control.
  */
 published service UnoControlCheckBox
-{
-    service com::sun::star::awt::UnoControl;
-
+{ 
+    service com::sun::star::awt::UnoControl; 
+    
     interface com::sun::star::awt::XCheckBox;
-
+    
     interface com::sun::star::awt::XLayoutConstrains;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

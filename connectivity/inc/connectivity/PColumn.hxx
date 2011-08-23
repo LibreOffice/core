@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS OParseColumn :
             public OParseColumn_BASE, public OParseColumn_PROP
         {
-            ::rtl::OUString m_aRealName;
+            ::rtl::OUString	m_aRealName;
             ::rtl::OUString m_aTableName;
             ::rtl::OUString m_sLabel;
-            sal_Bool        m_bFunction;
-            sal_Bool        m_bDbasePrecisionChanged;
-            sal_Bool        m_bAggregateFunction;
+            sal_Bool		m_bFunction;
+            sal_Bool		m_bDbasePrecisionChanged;
+            sal_Bool		m_bAggregateFunction;
             sal_Bool        m_bIsSearchable;
 
         protected:
@@ -67,29 +67,29 @@ namespace connectivity
                     const ::rtl::OUString& _TypeName,
                     const ::rtl::OUString& _DefaultValue,
                     const ::rtl::OUString& _Description,
-                    sal_Int32       _IsNullable,
-                    sal_Int32       _Precision,
-                    sal_Int32       _Scale,
-                    sal_Int32       _Type,
-                    sal_Bool        _IsAutoIncrement,
-                    sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase);
+                    sal_Int32		_IsNullable,
+                    sal_Int32		_Precision,
+                    sal_Int32		_Scale,
+                    sal_Int32		_Type,
+                    sal_Bool		_IsAutoIncrement,
+                    sal_Bool		_IsCurrency,
+                    sal_Bool		_bCase);
 
             virtual void construct();
 
             void setRealName(const ::rtl::OUString& _rName)  { m_aRealName  = _rName; }
             void setLabel(const ::rtl::OUString& i_sLabel)   { m_sLabel  = i_sLabel; }
             void setTableName(const ::rtl::OUString& _rName) { m_aTableName = _rName; }
-            void setFunction(sal_Bool _bFunction)            { m_bFunction  = _bFunction; }
-            void setAggregateFunction(sal_Bool _bFunction)   { m_bAggregateFunction = _bFunction; }
+            void setFunction(sal_Bool _bFunction)			 { m_bFunction	= _bFunction; }
+            void setAggregateFunction(sal_Bool _bFunction)	 { m_bAggregateFunction	= _bFunction; }
             void setIsSearchable( sal_Bool _bIsSearchable )  { m_bIsSearchable = _bIsSearchable; }
-            void setDbasePrecisionChanged(sal_Bool _bDbasePrecisionChanged) { m_bDbasePrecisionChanged = _bDbasePrecisionChanged; }
+            void setDbasePrecisionChanged(sal_Bool _bDbasePrecisionChanged)	{ m_bDbasePrecisionChanged = _bDbasePrecisionChanged; }
 
             ::rtl::OUString getRealName()   const { return  m_aRealName; }
             ::rtl::OUString getLabel()      const { return  m_sLabel; }
             ::rtl::OUString getTableName()  const { return  m_aTableName; }
-            sal_Bool        getFunction()   const { return  m_bFunction; }
-            sal_Bool        getDbasePrecisionChanged()  const { return  m_bDbasePrecisionChanged; }
+            sal_Bool		getFunction()   const { return  m_bFunction; }
+            sal_Bool		getDbasePrecisionChanged()	const { return  m_bDbasePrecisionChanged; }
 
         public:
             /** creates a collection of OParseColumn, as described by a result set meta data instance.
@@ -125,8 +125,8 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS OOrderColumn :
             public OOrderColumn_BASE, public OOrderColumn_PROP
         {
-            sal_Bool        m_bAscending;
-            sal_Bool        m_bOrder;
+            sal_Bool		m_bAscending;
+            sal_Bool		m_bOrder;
         protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();

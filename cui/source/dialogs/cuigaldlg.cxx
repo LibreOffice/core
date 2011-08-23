@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,8 +83,8 @@ using namespace ::com::sun::star::uno;
 SearchThread::SearchThread( SearchProgress* pProgess,
                             TPGalleryThemeProperties* pBrowser,
                             const INetURLObject& rStartURL ) :
-        mpProgress  ( pProgess ),
-        mpBrowser   ( pBrowser ),
+        mpProgress	( pProgess ),
+        mpBrowser	( pBrowser ),
         maStartURL  ( rStartURL )
 {
 }
@@ -144,8 +144,8 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 
     try
     {
-        ::com::sun::star::uno::Reference< XCommandEnvironment > xEnv;
-        Content aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+        ::com::sun::star::uno::Reference< XCommandEnvironment >	xEnv;
+        Content	aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
         Sequence< OUString > aProps( 2 );
 
         aProps.getArray()[ 0 ] = OUString::createFromAscii( "IsFolder" );
@@ -227,7 +227,7 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
     aFtSearchType   ( this, CUI_RES( FT_SEARCH_TYPE ) ),
     aFLSearchType  ( this, CUI_RES( FL_SEARCH_TYPE ) ),
     aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    maSearchThread  ( this, (TPGalleryThemeProperties*) pParent, rStartURL )
+    maSearchThread	( this, (TPGalleryThemeProperties*) pParent, rStartURL )
 {
     FreeResource();
     aBtnCancel.SetClickHdl( LINK( this, SearchProgress, ClickCancelBtn ) );
@@ -280,8 +280,8 @@ void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
 // --------------
 
 TakeThread::TakeThread( TakeProgress* pProgess, TPGalleryThemeProperties* pBrowser, List& rTakenList ) :
-        mpProgress  ( pProgess ),
-        mpBrowser   ( pBrowser ),
+        mpProgress	( pProgess ),
+        mpBrowser	( pBrowser ),
         mrTakenList ( rTakenList )
 {
 }
@@ -296,12 +296,12 @@ TakeThread::~TakeThread()
 
 void SAL_CALL TakeThread::run()
 {
-    String              aName;
-    INetURLObject       aURL;
-    USHORT              nEntries;
-    GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
-    USHORT              nPos;
-    GalleryProgress*    pStatusProgress;
+    String				aName;
+    INetURLObject		aURL;
+    USHORT				nEntries;
+    GalleryTheme* 		pThm = mpBrowser->GetXChgData()->pTheme;
+    USHORT				nPos;
+    GalleryProgress*	pStatusProgress;
 
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -382,7 +382,7 @@ IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
 
 IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
 {
-    TPGalleryThemeProperties*   mpBrowser = (TPGalleryThemeProperties*) GetParent();
+    TPGalleryThemeProperties*	mpBrowser = (TPGalleryThemeProperties*) GetParent();
     ::std::bit_vector           aRemoveEntries( mpBrowser->aFoundList.Count(), false );
     ::std::vector< String >     aRemainingVector;
     sal_uInt32                  i, nCount;
@@ -456,11 +456,11 @@ void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 // ---------------------
 
 ActualizeProgress::ActualizeProgress( Window* pWindow, GalleryTheme* pThm ) :
-    ModalDialog             ( pWindow, CUI_RES( RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS ) ),
-    aFtActualizeFile        ( this, CUI_RES( FT_ACTUALIZE_FILE ) ),
+    ModalDialog				( pWindow, CUI_RES( RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS ) ),
+    aFtActualizeFile		( this, CUI_RES( FT_ACTUALIZE_FILE ) ),
     aFLActualizeProgress   ( this, CUI_RES( FL_ACTUALIZE_PROGRESS ) ),
-    aBtnCancel              ( this, CUI_RES( BTN_CANCEL ) ),
-    pTheme                  ( pThm )
+    aBtnCancel				( this, CUI_RES( BTN_CANCEL ) ),
+    pTheme					( pThm )
 {
     FreeResource();
     aBtnCancel.SetClickHdl( LINK( this, ActualizeProgress, ClickCancelBtn ) );
@@ -537,12 +537,12 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
 // ---------------
 
 TitleDialog::TitleDialog( Window* pParent, const String& rOldTitle ) :
-    ModalDialog ( pParent, CUI_RES( RID_SVXDLG_GALLERY_TITLE ) ),
-    maOk        ( this, CUI_RES( BTN_OK ) ),
-    maCancel    ( this, CUI_RES( BTN_CANCEL ) ),
-    maHelp      ( this, CUI_RES( BTN_HELP ) ),
+    ModalDialog	( pParent, CUI_RES( RID_SVXDLG_GALLERY_TITLE ) ),
+    maOk		( this, CUI_RES( BTN_OK ) ),
+    maCancel	( this, CUI_RES( BTN_CANCEL ) ),
+    maHelp		( this, CUI_RES( BTN_HELP ) ),
     maFL       ( this, CUI_RES( FL_TITLE ) ),
-    maEdit      ( this, CUI_RES( EDT_TITLE ) )
+    maEdit		( this, CUI_RES( EDT_TITLE ) )
 {
     FreeResource();
     maEdit.SetText( rOldTitle );
@@ -554,12 +554,12 @@ TitleDialog::TitleDialog( Window* pParent, const String& rOldTitle ) :
 // -------------------
 
 GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
-            ModalDialog ( pParent, CUI_RES( RID_SVXDLG_GALLERY_THEMEID ) ),
-            aBtnOk      ( this, CUI_RES( BTN_OK ) ),
-            aBtnCancel  ( this, CUI_RES( BTN_CANCEL ) ),
+            ModalDialog	( pParent, CUI_RES( RID_SVXDLG_GALLERY_THEMEID ) ),
+            aBtnOk		( this, CUI_RES( BTN_OK ) ),
+            aBtnCancel	( this, CUI_RES( BTN_CANCEL ) ),
             aFLId      ( this, CUI_RES( FL_ID ) ),
-            aLbResName  ( this, CUI_RES( LB_RESNAME ) ),
-            pThm        ( _pThm )
+            aLbResName	( this, CUI_RES( LB_RESNAME ) ),
+            pThm		( _pThm )
 {
     FreeResource();
 
@@ -577,9 +577,9 @@ GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
 
 IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
 {
-    Gallery*    pGal = pThm->GetParent();
-    const ULONG nId = GetId();
-    BOOL        bDifferentThemeExists = FALSE;
+    Gallery*	pGal = pThm->GetParent();
+    const ULONG	nId = GetId();
+    BOOL		bDifferentThemeExists = FALSE;
 
     for( ULONG i = 0, nCount = pGal->GetThemeCount(); i < nCount && !bDifferentThemeExists; i++ )
     {
@@ -613,7 +613,7 @@ IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
 
 GalleryThemeProperties::GalleryThemeProperties( Window* pParent, ExchangeData* _pData, SfxItemSet* pItemSet  ) :
             SfxTabDialog    ( pParent, CUI_RES( RID_SVXTABDLG_GALLERYTHEME ), pItemSet ),
-            pData           ( _pData )
+            pData			( _pData )
 {
     FreeResource();
 
@@ -671,12 +671,12 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 {
     pData = _pData;
 
-    GalleryTheme*       pThm = pData->pTheme;
+    GalleryTheme*		pThm = pData->pTheme;
     String              aOutStr( String::CreateFromInt32( pThm->GetObjectCount() ) );
     String              aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     String              aAccess;
-    String              aType( CUI_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
-    BOOL                bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
+    String				aType( CUI_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
+    BOOL				bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
 
     aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
     aEdtMSName.SetText( pThm->GetName() );
@@ -748,7 +748,7 @@ SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rS
 // ----------------------------
 
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet ) :
-        SfxTabPage          ( pWindow, CUI_RES( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
+        SfxTabPage			( pWindow, CUI_RES( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
         aBtnSearch          ( this, CUI_RES(BTN_SEARCH ) ),
         aBtnTake            ( this, CUI_RES(BTN_TAKE ) ),
         aBtnTakeAll         ( this, CUI_RES(BTN_TAKEALL ) ),
@@ -853,13 +853,13 @@ SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet&
 
 void TPGalleryThemeProperties::FillFilterList()
 {
-    GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
-    String              aExt;
-    String              aName;
-    FilterEntry*        pFilterEntry;
-    FilterEntry*        pTestEntry;
-    sal_uInt16          i, nKeyCount;
-    BOOL                bInList;
+    GraphicFilter*		pFilter = GraphicFilter::GetGraphicFilter();
+    String				aExt;
+    String				aName;
+    FilterEntry*		pFilterEntry;
+    FilterEntry*		pTestEntry;
+    sal_uInt16 			i, nKeyCount;
+    BOOL				bInList;
 
     // graphic filters
     for( i = 0, nKeyCount = pFilter->GetImportFormatCount(); i < nKeyCount; i++ )
@@ -904,10 +904,10 @@ void TPGalleryThemeProperties::FillFilterList()
     }
 
     // media filters
-       static const ::rtl::OUString aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
-    ::avmedia::FilterNameVector     aFilters;
-    const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    ::rtl::OUString                 aAllTypes;
+       static const ::rtl::OUString	aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+    ::avmedia::FilterNameVector		aFilters;
+    const ::rtl::OUString			aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+    ::rtl::OUString					aAllTypes;
 
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
 
@@ -993,7 +993,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFileTypeHdl, void *, EMPTYARG )
 
 void TPGalleryThemeProperties::SearchFiles()
 {
-    SearchProgress* pProgress = new SearchProgress( this, aURL );
+    SearchProgress*	pProgress = new SearchProgress( this, aURL );
 
     for( String* pStr = aFoundList.First(); pStr; pStr = aFoundList.Next() )
         delete pStr;
@@ -1036,7 +1036,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
                 if ( xFolderPicker.is() )
                 {
 //                  svt::SetDialogHelpId( xFolderPicker, HID_GALLERY_NEWTHEME_FINDFILES );
-                    String  aDlgPathName( SvtPathOptions().GetGraphicPath() );
+                    String	aDlgPathName( SvtPathOptions().GetGraphicPath() );
                     xFolderPicker->setDisplayDirectory(aDlgPathName);
 
                     aPreviewTimer.Stop();
@@ -1146,7 +1146,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
         if( !aLbxFound.GetSelectEntryCount() || !bEntriesFound )
         {
             SvxOpenGraphicDialog aDlg(String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) ) );
-//          aDlg.SetDialogHelpId( HID_GALLERY_NEWTHEME_ADDFILES );
+//			aDlg.SetDialogHelpId( HID_GALLERY_NEWTHEME_ADDFILES );
             aDlg.EnableLink(sal_False);
             aDlg.AsLink(sal_False);
 

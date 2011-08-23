@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace abp
     class ODataSourceContext
     {
     private:
-        ODataSourceContextImpl*     m_pImpl;
+        ODataSourceContextImpl*		m_pImpl;
 
     public:
         ODataSourceContext(
@@ -66,7 +66,7 @@ namespace abp
         );
 
         /// retrieves the names of all data sources
-        void    getDataSourceNames( StringBag& _rNames ) const SAL_THROW (( ));
+        void	getDataSourceNames( StringBag& _rNames ) const SAL_THROW (( ));
 
         /// disambiguates the given name by appending auccessive numbers
         ::rtl::OUString& disambiguate(::rtl::OUString& _rDataSourceName);
@@ -93,16 +93,16 @@ namespace abp
         ODataSource createNewMacab( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new LDAP data source
-        ODataSource createNewLDAP( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource	createNewLDAP( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Outlook data source
-        ODataSource createNewOutlook( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource	createNewOutlook( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Outlook express data source
-        ODataSource createNewOE( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource	createNewOE( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new dBase data source
-        ODataSource createNewDBase( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource	createNewDBase( const ::rtl::OUString& _rName ) SAL_THROW (( ));
     };
 
     //=====================================================================
@@ -119,7 +119,7 @@ namespace abp
     class ODataSource
     {
     private:
-        ODataSourceImpl*    m_pImpl;
+        ODataSourceImpl*	m_pImpl;
 
     public:
         // ----------------------------------------------------------------
@@ -141,11 +141,11 @@ namespace abp
 
         // ----------------------------------------------------------------
         /// checks whether or not the object represents a valid data source
-        sal_Bool    isValid() const SAL_THROW (( ));
+        sal_Bool	isValid() const SAL_THROW (( ));
 
         // ----------------------------------------------------------------
         /// removes the data source represented by the object from the data source context
-        void        remove() SAL_THROW (( ));
+        void		remove() SAL_THROW (( ));
             // TODO: put this into the context class
 
         /// returns the name of the data source
@@ -153,7 +153,7 @@ namespace abp
                     getName() const SAL_THROW (( ));
 
         /// renames the data source
-        sal_Bool    rename( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        sal_Bool	rename( const ::rtl::OUString& _rName ) SAL_THROW (( ));
             // TODO: put this into the context class
 
         // ----------------------------------------------------------------
@@ -165,25 +165,25 @@ namespace abp
                 at all.
             @see isConnected
         */
-        sal_Bool    connect( Window* _pMessageParent ) SAL_THROW (( ));
+        sal_Bool	connect( Window* _pMessageParent ) SAL_THROW (( ));
 
         /// returns <TRUE/> if the object has a valid connection, obtained from it's data source
-        sal_Bool    isConnected( ) const SAL_THROW (( ));
+        sal_Bool	isConnected( ) const SAL_THROW (( ));
 
         /// disconnects from the data source (i.e. disposes the UNO connection hold internally)
-        void        disconnect( ) SAL_THROW (( ));
+        void		disconnect( ) SAL_THROW (( ));
 
         /// stores the database file
-        void        store() SAL_THROW (( ));
+        void		store() SAL_THROW (( ));
 
         /// register the data source under the given name in the configuration
-        void        registerDataSource( const ::rtl::OUString& _sRegisteredDataSourceName )  SAL_THROW (( ));
+        void		registerDataSource( const ::rtl::OUString& _sRegisteredDataSourceName )  SAL_THROW (( ));
 
         // ----------------------------------------------------------------
         /** retrieves the tables names from the connection
             <p>to be called when <method>isConnection</method> returns <TRUE/> only</p>
         */
-        const StringBag&    getTableNames() const SAL_THROW (( ));
+        const StringBag&	getTableNames() const SAL_THROW (( ));
 
         /** determines whether a given table exists
         */
@@ -197,7 +197,7 @@ namespace abp
         /** set a new data source.
             <p>Available to selected clients only</p>
         */
-        void        setDataSource(
+        void		setDataSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDS
             ,const ::rtl::OUString& _sName
             ,PackageAccessControl
@@ -208,7 +208,7 @@ namespace abp
     };
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_DATASOURCEHANDLING_HXX

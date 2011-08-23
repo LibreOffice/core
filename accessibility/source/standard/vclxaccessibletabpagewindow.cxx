@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleTabPageWindow
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleTabPageWindow
+//	----------------------------------------------------
 
 VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
@@ -73,12 +73,12 @@ VCLXAccessibleTabPageWindow::~VCLXAccessibleTabPageWindow()
 }
 
 // -----------------------------------------------------------------------------
-// OCommonAccessibleComponent
+// OCommonAccessibleComponent 
 // -----------------------------------------------------------------------------
 
 awt::Rectangle VCLXAccessibleTabPageWindow::implGetBounds() throw (RuntimeException)
 {
-    awt::Rectangle aBounds( 0, 0, 0, 0 );
+    awt::Rectangle aBounds( 0, 0, 0, 0 );	
 
     if ( m_pTabControl )
     {

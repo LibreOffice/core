@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 using namespace ::com::sun::star::uno ;
 using ::rtl::OUString ;
 
-Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
+Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral ) 
 {
-    if( numeral.getStr() != NULL )
+    if( numeral.getStr() != NULL ) 
     {
         xmlChar* chNumeral ;
         const xmlSecByte* bnInteger ;
@@ -93,7 +93,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
     return Sequence< sal_Int8 >();
 }
 
-OUString bigIntegerToNumericString ( Sequence< sal_Int8 > integer )
+OUString bigIntegerToNumericString ( Sequence< sal_Int8 > integer ) 
 {
     OUString aRet ;
 

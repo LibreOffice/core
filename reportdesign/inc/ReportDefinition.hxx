@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,23 +81,23 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class REPORTDESIGN_DLLPUBLIC OReportDefinition :    public ::cppu::BaseMutex,
+    class REPORTDESIGN_DLLPUBLIC OReportDefinition :	public ::cppu::BaseMutex,
                                 public ReportDefinitionBase,
                                 public ReportDefinitionPropertySet,
                                 public ::comphelper::IEmbeddedHelper
     {
-        ::boost::shared_ptr<OReportComponentProperties>                             m_aProps;
+        ::boost::shared_ptr<OReportComponentProperties>								m_aProps;
         ::boost::shared_ptr<OReportDefinitionImpl>                                  m_pImpl;
     private:
         OReportDefinition(const OReportDefinition&);
         OReportDefinition& operator=(const OReportDefinition&);
 
-        void setSection(     const ::rtl::OUString& _sProperty
+        void setSection(	 const ::rtl::OUString& _sProperty
                             ,const sal_Bool& _bOn
                             ,const ::rtl::OUString& _sName
                             ,::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _member);
 
-        template <typename T> void set(  const ::rtl::OUString& _sProperty
+        template <typename T> void set(	 const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
         {
@@ -115,8 +115,8 @@ namespace reportdesign
             /// the component we export
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XComponent> & xComponent,
-            const sal_Char* pStreamName,        /// the stream name
-            const sal_Char* pServiceName,       /// service name of the component
+            const sal_Char* pStreamName,		/// the stream name
+            const sal_Char* pServiceName,		/// service name of the component
             /// the argument (XInitialization)
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Any> & rArguments,
@@ -124,7 +124,7 @@ namespace reportdesign
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue> & rMediaDesc,
             sal_Bool bPlainStream
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);          /// neither compress nor encrypt
+            , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);			/// neither compress nor encrypt
 
         /// write a single output stream
         /// (to be called either directly or by WriteThroughComponent(...))
@@ -177,7 +177,7 @@ namespace reportdesign
 
         /** return the SdrModel of the real model
         *
-        * \return
+        * \return 
         */
         ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
 
@@ -256,12 +256,12 @@ namespace reportdesign
 
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
+        { 
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        { 
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 
@@ -327,7 +327,7 @@ namespace reportdesign
         // document::XEventBroadcaster
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
+        
         // document::XEventListener
         virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,19 +42,19 @@ namespace svt
     class SVT_DLLPUBLIC OFileURLControl : public SvtURLBox
     {
     protected:
-        String      m_sPreservedText;
+        String		m_sPreservedText;
 
     public:
         OFileURLControl(Window* _pParent);
         OFileURLControl(Window* _pParent, const ResId& _rId);
 
     protected:
-        virtual long        PreNotify( NotifyEvent& rNEvt );
-        virtual long        Notify( NotifyEvent& rNEvt );
+        virtual long		PreNotify( NotifyEvent& rNEvt );
+        virtual long		Notify( NotifyEvent& rNEvt );
     };
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 #endif // SVTOOLS_URLCONTROL_HXX

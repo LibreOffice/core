@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 #include <svtools/taskbar.hxx>
 #include <vcl/status.hxx>
 
-#define ST_MESSAGE          1
-#define ST_LINE             2
-#define ST_PROF             3
+#define ST_MESSAGE			1
+#define ST_LINE				2
+#define ST_PROF				3
 
 class BasicFrame;
 

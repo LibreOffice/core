@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,52 +94,52 @@ static ScEditWindow* pActiveEdWnd = NULL;
 // class ScHFEditPage
 //
 
-ScHFEditPage::ScHFEditPage( Window*             pParent,
-                            USHORT              nResId,
-                            const SfxItemSet&   rCoreAttrs,
-                            USHORT              nWhichId,
+ScHFEditPage::ScHFEditPage( Window* 			pParent,
+                            USHORT				nResId,
+                            const SfxItemSet&	rCoreAttrs,
+                            USHORT				nWhichId,
                             bool bHeader  )
 
-    :   SfxTabPage      ( pParent, ScResId( nResId ), rCoreAttrs ),
+    :	SfxTabPage		( pParent, ScResId( nResId ), rCoreAttrs ),
 
-        aFtLeft         ( this, ScResId( FT_LEFT ) ),
-        aWndLeft        ( this, ScResId( WND_LEFT ), Left ),
-        aFtCenter       ( this, ScResId( FT_CENTER ) ),
-        aWndCenter      ( this, ScResId( WND_CENTER ), Center ),
-        aFtRight        ( this, ScResId( FT_RIGHT ) ),
-        aWndRight       ( this, ScResId( WND_RIGHT ), Right ),
-        maFtDefinedHF       ( this, ScResId( FT_HF_DEFINED ) ),
-        maLbDefined     ( this, ScResId( LB_DEFINED ) ),
-        maFtCustomHF        ( this, ScResId( FT_HF_CUSTOM ) ),
-        aBtnText        ( this, ScResId( BTN_TEXT ) ),
-        aBtnFile        ( this, ScResId( BTN_FILE ) ),
-        aBtnTable       ( this, ScResId( BTN_TABLE ) ),
-        aBtnPage        ( this, ScResId( BTN_PAGE ) ),
-        aBtnLastPage    ( this, ScResId( BTN_PAGES ) ),
-        aBtnDate        ( this, ScResId( BTN_DATE ) ),
-        aBtnTime        ( this, ScResId( BTN_TIME ) ),
-        aFlInfo         ( this, ScResId( FL_INFO ) ),
-        aFtInfo         ( this, ScResId( FT_INFO ) ),
-        aPopUpFile      ( ScResId( RID_POPUP_FCOMMAND) ),
-        nWhich          ( nWhichId )
+        aFtLeft 		( this, ScResId( FT_LEFT ) ),
+        aWndLeft		( this, ScResId( WND_LEFT ), Left ),
+        aFtCenter		( this, ScResId( FT_CENTER ) ),
+        aWndCenter		( this, ScResId( WND_CENTER ), Center ),
+        aFtRight		( this, ScResId( FT_RIGHT ) ),
+        aWndRight		( this, ScResId( WND_RIGHT ), Right ),
+        maFtDefinedHF		( this, ScResId( FT_HF_DEFINED ) ),
+        maLbDefined		( this, ScResId( LB_DEFINED ) ),
+        maFtCustomHF		( this, ScResId( FT_HF_CUSTOM ) ),
+        aBtnText		( this, ScResId( BTN_TEXT ) ),
+        aBtnFile		( this, ScResId( BTN_FILE ) ),
+        aBtnTable		( this, ScResId( BTN_TABLE ) ),
+        aBtnPage		( this, ScResId( BTN_PAGE ) ),
+        aBtnLastPage	( this, ScResId( BTN_PAGES ) ),
+        aBtnDate		( this, ScResId( BTN_DATE ) ),
+        aBtnTime		( this, ScResId( BTN_TIME ) ),
+        aFlInfo 		( this, ScResId( FL_INFO ) ),
+        aFtInfo 		( this, ScResId( FT_INFO ) ),
+        aPopUpFile		( ScResId( RID_POPUP_FCOMMAND) ),
+        nWhich			( nWhichId )
 {
-    //! use default style from current document?
-    //! if font color is used, header/footer background color must be set
+    //!	use default style from current document?
+    //!	if font color is used, header/footer background color must be set
 
-    ScPatternAttr   aPatAttr( rCoreAttrs.GetPool() );
+    ScPatternAttr	aPatAttr( rCoreAttrs.GetPool() );
 
 
     aBtnFile.SetPopupMenu(&aPopUpFile);
 
     maLbDefined.SetSelectHdl( LINK( this, ScHFEditPage, ListHdl_Impl ) );
     aBtnFile.SetMenuHdl( LINK( this, ScHFEditPage, MenuHdl ) );
-    aBtnText    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnPage    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnText	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnPage	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     aBtnLastPage.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnDate    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnTime    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnFile    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnTable   .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnDate	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnTime	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnFile	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnTable	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
 
     aBtnText    .SetModeImage( Image( ScResId( IMG_TEXT_H  ) ), BMP_COLOR_HIGHCONTRAST );
     aBtnFile    .SetModeImage( Image( ScResId( IMG_FILE_H  ) ), BMP_COLOR_HIGHCONTRAST );
@@ -166,9 +166,9 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
         aFtLeft.SetPosPixel(pt2);
         aFtRight.SetPosPixel(pt1);
     }
-    aWndLeft.   SetFont( aPatAttr );
+    aWndLeft.	SetFont( aPatAttr );
     aWndCenter. SetFont( aPatAttr );
-    aWndRight.  SetFont( aPatAttr );
+    aWndRight.	SetFont( aPatAttr );
 
     FillCmdArr();
 
@@ -219,10 +219,10 @@ void __EXPORT ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
 
 BOOL __EXPORT ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 {
-    ScPageHFItem    aItem( nWhich );
-    EditTextObject* pLeft   = aWndLeft  .CreateTextObject();
+    ScPageHFItem	aItem( nWhich );
+    EditTextObject* pLeft	= aWndLeft	.CreateTextObject();
     EditTextObject* pCenter = aWndCenter.CreateTextObject();
-    EditTextObject* pRight  = aWndRight .CreateTextObject();
+    EditTextObject* pRight	= aWndRight .CreateTextObject();
 
     aItem.SetLeftArea  ( *pLeft );
     aItem.SetCenterArea( *pCenter );
@@ -239,9 +239,9 @@ BOOL __EXPORT ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 // -----------------------------------------------------------------------
 
 #define SET_CMD(i,id) \
-    aCmd  = aDel;                           \
-    aCmd += ScGlobal::GetRscString( id );   \
-    aCmd += aDel;                           \
+    aCmd  = aDel;							\
+    aCmd += ScGlobal::GetRscString( id );	\
+    aCmd += aDel;							\
     aCmdArr[i] = aCmd;
 
 // -----------------------------------------------------------------------

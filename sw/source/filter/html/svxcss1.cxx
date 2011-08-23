@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,161 +79,161 @@ SV_IMPL_PTRARR( CSS1Selectors, CSS1Selector* )
 
 static CSS1PropertyEnum __READONLY_DATA aFontSizeTable[] =
 {
-    { sCSS1_PV_xx_small,    0                   },
-    { sCSS1_PV_x_small,     1                   },
-    { sCSS1_PV_small,       2                   },
-    { sCSS1_PV_medium,      3                   },
-    { sCSS1_PV_large,       4                   },
-    { sCSS1_PV_x_large,     5                   },
-    { sCSS1_PV_xx_large,    6                   },
-    { 0,                    0                   }
+    { sCSS1_PV_xx_small,   	0					},
+    { sCSS1_PV_x_small,   	1					},
+    { sCSS1_PV_small,   	2					},
+    { sCSS1_PV_medium,   	3					},
+    { sCSS1_PV_large,   	4					},
+    { sCSS1_PV_x_large,   	5					},
+    { sCSS1_PV_xx_large,   	6					},
+    { 0,					0					}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aFontFamilyTable[] =
 {
-    { sCSS1_PV_serif,       FAMILY_ROMAN        },
-    { sCSS1_PV_sans_serif,  FAMILY_SWISS        },
-    { sCSS1_PV_cursive,     FAMILY_SCRIPT       },
-    { sCSS1_PV_fantasy,     FAMILY_DECORATIVE   },
-    { sCSS1_PV_monospace,   FAMILY_MODERN       },
-    { 0,                    0                   }
+    { sCSS1_PV_serif,   	FAMILY_ROMAN		},
+    { sCSS1_PV_sans_serif, 	FAMILY_SWISS		},
+    { sCSS1_PV_cursive,   	FAMILY_SCRIPT		},
+    { sCSS1_PV_fantasy,   	FAMILY_DECORATIVE	},
+    { sCSS1_PV_monospace,  	FAMILY_MODERN		},
+    { 0,					0					}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aFontWeightTable[] =
 {
-    { sCSS1_PV_extra_light, WEIGHT_NORMAL       }, // WEIGHT_ULTRALIGHT (OBS)
-    { sCSS1_PV_light,       WEIGHT_NORMAL       }, // WEIGHT_LIGHT (OBSOLETE)
-    { sCSS1_PV_demi_light,  WEIGHT_NORMAL       }, // WEIGHT_SEMILIGHT (OBS)
-    { sCSS1_PV_medium,      WEIGHT_NORMAL       }, // WEIGHT_MEDIUM (OBS)
-    { sCSS1_PV_normal,      WEIGHT_NORMAL       }, // WEIGHT_MEDIUM
-    { sCSS1_PV_demi_bold,   WEIGHT_NORMAL       }, // WEIGHT_SEMIBOLD (OBS)
-    { sCSS1_PV_bold,        WEIGHT_BOLD         }, // WEIGHT_BOLD (OBSOLETE)
-    { sCSS1_PV_extra_bold,  WEIGHT_BOLD         }, // WEIGHT_ULTRABOLD (OBS)
-    { sCSS1_PV_bolder,      WEIGHT_BOLD         },
-    { sCSS1_PV_lighter,     WEIGHT_NORMAL       },
-    { 0,                    0                   }
+    { sCSS1_PV_extra_light,	WEIGHT_NORMAL		}, // WEIGHT_ULTRALIGHT (OBS)
+    { sCSS1_PV_light, 		WEIGHT_NORMAL		}, // WEIGHT_LIGHT (OBSOLETE)
+    { sCSS1_PV_demi_light, 	WEIGHT_NORMAL		}, // WEIGHT_SEMILIGHT (OBS)
+    { sCSS1_PV_medium, 		WEIGHT_NORMAL		}, // WEIGHT_MEDIUM (OBS)
+    { sCSS1_PV_normal, 		WEIGHT_NORMAL		}, // WEIGHT_MEDIUM
+    { sCSS1_PV_demi_bold,	WEIGHT_NORMAL 		}, // WEIGHT_SEMIBOLD (OBS)
+    { sCSS1_PV_bold, 		WEIGHT_BOLD			}, // WEIGHT_BOLD (OBSOLETE)
+    { sCSS1_PV_extra_bold, 	WEIGHT_BOLD			}, // WEIGHT_ULTRABOLD (OBS)
+    { sCSS1_PV_bolder, 		WEIGHT_BOLD			},
+    { sCSS1_PV_lighter, 	WEIGHT_NORMAL		},
+    { 0,					0					}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aFontStyleTable[] =
 {
-    { sCSS1_PV_normal,      ITALIC_NONE         },
-    { sCSS1_PV_italic,      ITALIC_NORMAL       },
-    { sCSS1_PV_oblique,     ITALIC_NORMAL       },
-    { 0,                    0                   }
+    { sCSS1_PV_normal,		ITALIC_NONE			},
+    { sCSS1_PV_italic, 		ITALIC_NORMAL		},
+    { sCSS1_PV_oblique, 	ITALIC_NORMAL		},
+    { 0,					0					}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aFontVariantTable[] =
 {
-    { sCSS1_PV_normal,      SVX_CASEMAP_NOT_MAPPED      },
-    { sCSS1_PV_small_caps,  SVX_CASEMAP_KAPITAELCHEN    },
-    { 0,                    0                   }
+    { sCSS1_PV_normal,		SVX_CASEMAP_NOT_MAPPED		},
+    { sCSS1_PV_small_caps, 	SVX_CASEMAP_KAPITAELCHEN	},
+    { 0,					0					}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aDirectionTable[] =
 {
-    { sCSS1_PV_ltr,         FRMDIR_HORI_LEFT_TOP        },
-    { sCSS1_PV_rtl,         FRMDIR_HORI_RIGHT_TOP       },
-    { sCSS1_PV_inherit,     FRMDIR_ENVIRONMENT          },
-    { 0,                    0                   }
+    { sCSS1_PV_ltr,			FRMDIR_HORI_LEFT_TOP		},
+    { sCSS1_PV_rtl, 		FRMDIR_HORI_RIGHT_TOP		},
+    { sCSS1_PV_inherit, 	FRMDIR_ENVIRONMENT			},
+    { 0,					0					}
 };
 
 /*  */
 
 static CSS1PropertyEnum __READONLY_DATA aBGRepeatTable[] =
 {
-    { sCSS1_PV_repeat,      GPOS_TILED                  },
-    { sCSS1_PV_repeat_x,    GPOS_TILED                  },
-    { sCSS1_PV_repeat_y,    GPOS_TILED                  },
-    { sCSS1_PV_no_repeat,   GPOS_NONE                   },
-    { 0,                    0                           }
+    { sCSS1_PV_repeat,   	GPOS_TILED					},
+    { sCSS1_PV_repeat_x,   	GPOS_TILED					},
+    { sCSS1_PV_repeat_y,   	GPOS_TILED					},
+    { sCSS1_PV_no_repeat,   GPOS_NONE  					},
+    { 0,					0							}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aBGHoriPosTable[] =
 {
-    { sCSS1_PV_left,        GPOS_LT                 },
-    { sCSS1_PV_center,      GPOS_MT                 },
-    { sCSS1_PV_right,       GPOS_RT                 },
-    { 0,                    0                       }
+    { sCSS1_PV_left,   		GPOS_LT					},
+    { sCSS1_PV_center,   	GPOS_MT					},
+    { sCSS1_PV_right,   	GPOS_RT					},
+    { 0,					0				   		}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aBGVertPosTable[] =
 {
-    { sCSS1_PV_top,         GPOS_LT                 },
-    { sCSS1_PV_middle,      GPOS_LM                 },
-    { sCSS1_PV_bottom,      GPOS_LB                 },
-    { 0,                    0                       }
+    { sCSS1_PV_top,   		GPOS_LT					},
+    { sCSS1_PV_middle,   	GPOS_LM					},
+    { sCSS1_PV_bottom,   	GPOS_LB					},
+    { 0,					0				   		}
 };
 
 /*  */
 
 static CSS1PropertyEnum __READONLY_DATA aTextAlignTable[] =
 {
-    { sCSS1_PV_left,        SVX_ADJUST_LEFT     },
-    { sCSS1_PV_center,      SVX_ADJUST_CENTER   },
-    { sCSS1_PV_right,       SVX_ADJUST_RIGHT    },
-    { sCSS1_PV_justify,     SVX_ADJUST_BLOCK    },
-    { 0,                    0                   }
+    { sCSS1_PV_left,		SVX_ADJUST_LEFT		},
+    { sCSS1_PV_center, 		SVX_ADJUST_CENTER	},
+    { sCSS1_PV_right, 		SVX_ADJUST_RIGHT	},
+    { sCSS1_PV_justify, 	SVX_ADJUST_BLOCK	},
+    { 0,					0					}
 };
 
 /*  */
 
 static CSS1PropertyEnum __READONLY_DATA aBorderWidthTable[] =
 {
-    { sCSS1_PV_thin,        0   },  // DEF_LINE_WIDTH_0 / DEF_DOUBLE_LINE0
-    { sCSS1_PV_medium,      1   },  // DEF_LINE_WIDTH_1 / DEF_DOUBLE_LINE1
-    { sCSS1_PV_thick,       2   },  // DEF_LINE_WIDTH_2 / DEF_DOUBLE_LINE2
-    { 0,                    0   }
+    { sCSS1_PV_thin,		0	},	// DEF_LINE_WIDTH_0 / DEF_DOUBLE_LINE0
+    { sCSS1_PV_medium, 		1	},	// DEF_LINE_WIDTH_1 / DEF_DOUBLE_LINE1
+    { sCSS1_PV_thick, 		2	},	// DEF_LINE_WIDTH_2 / DEF_DOUBLE_LINE2
+    { 0,					0	}
 };
 
 enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE };
 
 static CSS1PropertyEnum __READONLY_DATA aBorderStyleTable[] =
 {
-    { sCSS1_PV_none,        CSS1_BS_NONE        },
-    { sCSS1_PV_dotted,      CSS1_BS_SINGLE      },
-    { sCSS1_PV_dashed,      CSS1_BS_SINGLE      },
-    { sCSS1_PV_solid,       CSS1_BS_SINGLE      },
-    { sCSS1_PV_double,      CSS1_BS_DOUBLE      },
-    { sCSS1_PV_groove,      CSS1_BS_SINGLE      },
-    { sCSS1_PV_ridge,       CSS1_BS_SINGLE      },
-    { sCSS1_PV_inset,       CSS1_BS_SINGLE      },
-    { sCSS1_PV_outset,      CSS1_BS_SINGLE      },
-    { 0,                    0                   }
+    { sCSS1_PV_none,		CSS1_BS_NONE		},
+    { sCSS1_PV_dotted, 		CSS1_BS_SINGLE		},
+    { sCSS1_PV_dashed, 		CSS1_BS_SINGLE		},
+    { sCSS1_PV_solid, 		CSS1_BS_SINGLE		},
+    { sCSS1_PV_double, 		CSS1_BS_DOUBLE		},
+    { sCSS1_PV_groove, 		CSS1_BS_SINGLE		},
+    { sCSS1_PV_ridge, 		CSS1_BS_SINGLE		},
+    { sCSS1_PV_inset, 		CSS1_BS_SINGLE		},
+    { sCSS1_PV_outset, 		CSS1_BS_SINGLE		},
+    { 0,					0					}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aFloatTable[] =
 {
-    { sCSS1_PV_left,    SVX_ADJUST_LEFT         },
-    { sCSS1_PV_right,   SVX_ADJUST_RIGHT        },
-    { sCSS1_PV_none,    SVX_ADJUST_END          },
-    { 0,                0                       }
+    { sCSS1_PV_left,	SVX_ADJUST_LEFT			},
+    { sCSS1_PV_right,   SVX_ADJUST_RIGHT		},
+    { sCSS1_PV_none,   	SVX_ADJUST_END			},
+    { 0,				0		  				}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aPositionTable[] =
 {
-    { sCSS1_PV_absolute,    SVX_CSS1_POS_ABSOLUTE   },
-    { sCSS1_PV_relative,    SVX_CSS1_POS_RELATIVE   },
-    { sCSS1_PV_static,      SVX_CSS1_POS_STATIC     },
-    { 0,                    0                       }
+    { sCSS1_PV_absolute,	SVX_CSS1_POS_ABSOLUTE	},
+    { sCSS1_PV_relative,	SVX_CSS1_POS_RELATIVE	},
+    { sCSS1_PV_static,		SVX_CSS1_POS_STATIC		},
+    { 0,					0		  				}
 };
 
 // Feature: PrintExt
 static CSS1PropertyEnum __READONLY_DATA aSizeTable[] =
 {
-    { sCSS1_PV_auto,        SVX_CSS1_STYPE_AUTO         },
-    { sCSS1_PV_landscape,   SVX_CSS1_STYPE_LANDSCAPE    },
-    { sCSS1_PV_portrait,    SVX_CSS1_STYPE_PORTRAIT     },
-    { 0,                    0                           }
+    { sCSS1_PV_auto,		SVX_CSS1_STYPE_AUTO			},
+    { sCSS1_PV_landscape,	SVX_CSS1_STYPE_LANDSCAPE	},
+    { sCSS1_PV_portrait,	SVX_CSS1_STYPE_PORTRAIT		},
+    { 0,					0		  					}
 };
 
 static CSS1PropertyEnum __READONLY_DATA aPageBreakTable[] =
 {
-    { sCSS1_PV_auto,        SVX_CSS1_PBREAK_AUTO        },
-    { sCSS1_PV_always,      SVX_CSS1_PBREAK_ALWAYS      },
-    { sCSS1_PV_avoid,       SVX_CSS1_PBREAK_AVOID       },
-    { sCSS1_PV_left,        SVX_CSS1_PBREAK_LEFT        },
-    { sCSS1_PV_right,       SVX_CSS1_PBREAK_RIGHT       },
-    { 0,                    0                           }
+    { sCSS1_PV_auto,		SVX_CSS1_PBREAK_AUTO		},
+    { sCSS1_PV_always,		SVX_CSS1_PBREAK_ALWAYS		},
+    { sCSS1_PV_avoid,		SVX_CSS1_PBREAK_AVOID		},
+    { sCSS1_PV_left,		SVX_CSS1_PBREAK_LEFT		},
+    { sCSS1_PV_right,		SVX_CSS1_PBREAK_RIGHT		},
+    { 0,					0		  					}
 };
 
 // /Feature: PrintExt
@@ -561,10 +561,10 @@ SvxCSS1BorderInfo *SvxCSS1PropertyInfo::GetBorderInfo( USHORT nLine, BOOL bCreat
     USHORT nPos = 0;
     switch( nLine )
     {
-    case BOX_LINE_TOP:      nPos = 0;   break;
-    case BOX_LINE_BOTTOM:   nPos = 1;   break;
-    case BOX_LINE_LEFT:     nPos = 2;   break;
-    case BOX_LINE_RIGHT:    nPos = 3;   break;
+    case BOX_LINE_TOP:		nPos = 0;	break;
+    case BOX_LINE_BOTTOM:	nPos = 1;	break;
+    case BOX_LINE_LEFT:		nPos = 2;	break;
+    case BOX_LINE_RIGHT:	nPos = 3;	break;
     }
 
     if( !aBorderInfos[nPos] && bCreate )
@@ -713,7 +713,7 @@ BOOL operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
     return  rE1.aKey==rE2.aKey;
 }
 
-BOOL operator<( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
+BOOL operator<( const SvxCSS1MapEntry& rE1,	const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey<rE2.aKey;
 }
@@ -740,7 +740,7 @@ BOOL SvxCSS1Parser::SelectorParsed( const CSS1Selector *pSelector,
 
         // Dieses ist der erste Selektor einer Rule, also muessen
         // die bisher geparsten Items auf die Styles verteilt werden
-//      pSheetPropInfo->CreateBoxItem( *pSheetItemSet, GetDfltBorderDist() );
+//		pSheetPropInfo->CreateBoxItem( *pSheetItemSet, GetDfltBorderDist() );
         for( USHORT i=0; i<aSelectors.Count(); i++ )
         {
             StyleParsed( aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
@@ -769,7 +769,7 @@ BOOL SvxCSS1Parser::DeclarationParsed( const String& rProperty,
 
     ParseProperty( rProperty, pExpr );
 
-    return TRUE;    // die Deklaration brauchen wir nicht mehr. Loeschen!
+    return TRUE;	// die Deklaration brauchen wir nicht mehr. Loeschen!
 }
 
 /*  */
@@ -852,7 +852,7 @@ BOOL SvxCSS1Parser::ParseStyleSheet( const String& rIn )
     BOOL bSuccess = CSS1Parser::ParseStyleSheet( rIn );
 
     // die bisher geparsten Items auf die Styles verteilt werden
-//  pSheetPropInfo->CreateBoxItem( *pSheetItemSet, GetDfltBorderDist() );
+//	pSheetPropInfo->CreateBoxItem( *pSheetItemSet, GetDfltBorderDist() );
     for( USHORT i=0; i<aSelectors.Count(); i++ )
     {
         StyleParsed( aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
@@ -879,7 +879,7 @@ BOOL SvxCSS1Parser::ParseStyleOption( const String& rIn,
 
     BOOL bSuccess = CSS1Parser::ParseStyleOption( rIn );
     rItemSet.ClearItem( aItemIds.nDirection );
-//  pPropInfo->CreateBoxItem( *pItemSet, GetDfltBorderDist() );
+//	pPropInfo->CreateBoxItem( *pItemSet, GetDfltBorderDist() );
 
     pItemSet = 0;
     pPropInfo = 0;
@@ -944,7 +944,7 @@ void SvxCSS1Parser::SetBorderWidth( SvxBorderLine& aBorderLine, USHORT nWidth,
 
     USHORT i = (nSize / sizeof(USHORT)) - 4;
     while( i>0 &&
-           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)  )
+           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)	)
     {
         DBG_ASSERT( aWidths[i] > aWidths[i-4],
                 "Linienbreiten sind nicht sortiert!" );
@@ -962,14 +962,14 @@ sal_uInt32 SvxCSS1Parser::GetFontHeight( USHORT nSize ) const
 
     switch( nSize )
     {
-    case 0:     nHeight =  8*20;    break;
-    case 1:     nHeight = 10*20;    break;
-    case 2:     nHeight = 11*20;    break;
-    case 3:     nHeight = 12*20;    break;
-    case 4:     nHeight = 17*20;    break;
-    case 5:     nHeight = 20*20;    break;
+    case 0:		nHeight =  8*20;	break;
+    case 1:		nHeight = 10*20;	break;
+    case 2:		nHeight = 11*20;	break;
+    case 3:		nHeight = 12*20;	break;
+    case 4:		nHeight = 17*20;	break;
+    case 5:		nHeight = 20*20;	break;
     case 6:
-    default:    nHeight = 32*20;    break;
+    default:	nHeight = 32*20;	break;
     }
 
     return nHeight;
@@ -1239,7 +1239,7 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
     switch( pExpr->GetType() )
     {
     case CSS1_IDENT:
-    case CSS1_STRING:   // MS-IE, was sonst
+    case CSS1_STRING:	// MS-IE, was sonst
         {
             USHORT nWeight;
             if( SvxCSS1Parser::GetEnum( aFontWeightTable, pExpr->GetString(),
@@ -1399,7 +1399,7 @@ static void ParseCSS1_color( const CSS1Expression *pExpr,
     case CSS1_IDENT:
     case CSS1_RGB:
     case CSS1_HEXCOLOR:
-    case CSS1_STRING:       // Wegen MS-IE
+    case CSS1_STRING:		// Wegen MS-IE
         {
             Color aColor;
             if( pExpr->GetColor( aColor ) )
@@ -1570,7 +1570,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
 
         case CSS1_IDENT:
         case CSS1_HEXCOLOR:
-        case CSS1_STRING:       // Wegen MS-IE
+        case CSS1_STRING:		// Wegen MS-IE
             {
                 USHORT nEnum;
                 const String &rValue = pExpr->GetString();
@@ -1656,7 +1656,7 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
         break;
     case CSS1_IDENT:
     case CSS1_HEXCOLOR:
-    case CSS1_STRING:       // Wegen MS-IE
+    case CSS1_STRING:		// Wegen MS-IE
         if( pExpr->GetString().EqualsIgnoreCaseAscii( sCSS1_PV_transparent ) )
         {
             bTransparent = TRUE;
@@ -1727,7 +1727,7 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
 
     if( nHeight )
     {
-        if( nHeight < rParser.GetMinFixLineSpace() )
+        if(	nHeight < rParser.GetMinFixLineSpace() )
             nHeight = rParser.GetMinFixLineSpace();
         SvxLineSpacingItem aLSItem( nHeight, aItemIds.nLineSpacing );
         aLSItem.SetLineHeight( nHeight );
@@ -2379,15 +2379,15 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
                 bSetMargins[2] = bSetMargins[3] = TRUE;
                 break;
             case 1:
-                nMargins[1] = nMargins[3] = nMargin;    // right + left
+                nMargins[1] = nMargins[3] = nMargin;	// right + left
                 bSetMargins[1] = bSetMargins[3] = TRUE;
                 break;
             case 2:
-                nMargins[2] = nMargin;  // bottom
+                nMargins[2] = nMargin;	// bottom
                 bSetMargins[2] = TRUE;
                 break;
             case 3:
-                nMargins[3] = nMargin;  // left
+                nMargins[3] = nMargin;	// left
                 bSetMargins[3] = TRUE;
                 break;
             }
@@ -2517,10 +2517,10 @@ static BOOL ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
     {
         switch( nWhichLine )
         {
-        case BOX_LINE_TOP:      rPropInfo.nTopBorderDistance = nDist;   break;
-        case BOX_LINE_BOTTOM:   rPropInfo.nBottomBorderDistance = nDist;break;
-        case BOX_LINE_LEFT:     rPropInfo.nLeftBorderDistance = nDist;  break;
-        case BOX_LINE_RIGHT:    rPropInfo.nRightBorderDistance = nDist; break;
+        case BOX_LINE_TOP:		rPropInfo.nTopBorderDistance = nDist;	break;
+        case BOX_LINE_BOTTOM:	rPropInfo.nBottomBorderDistance = nDist;break;
+        case BOX_LINE_LEFT:		rPropInfo.nLeftBorderDistance = nDist;	break;
+        case BOX_LINE_RIGHT:	rPropInfo.nRightBorderDistance = nDist;	break;
         }
     }
 
@@ -2599,8 +2599,8 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
-    USHORT nWidth = USHRT_MAX;      // die Linien-Dicke
-    USHORT nNWidth = 1;             // benannte Linien-Dicke (und default)
+    USHORT nWidth = USHRT_MAX;		// die Linien-Dicke
+    USHORT nNWidth = 1;    			// benannte Linien-Dicke (und default)
     CSS1BorderStyle eStyle = CSS1_BS_NONE; // Linien-Style
     Color aColor;
     BOOL bColor = FALSE;
@@ -2694,8 +2694,8 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
-    USHORT nWidth = USHRT_MAX;      // die Linien-Dicke
-    USHORT nNWidth = 1;             // benannte Linien-Dicke (und default)
+    USHORT nWidth = USHRT_MAX;		// die Linien-Dicke
+    USHORT nNWidth = 1;    			// benannte Linien-Dicke (und default)
 
     switch( pExpr->GetType() )
     {
@@ -2935,7 +2935,7 @@ static void ParseCSS1_length( const CSS1Expression *pExpr,
         break;
 
     case CSS1_PIXLENGTH:
-    case CSS1_NUMBER:       // wegen Netscape und IE
+    case CSS1_NUMBER:		// wegen Netscape und IE
         {
             long nWidthL = (long)pExpr->GetNumber();
             long nPWidth = bHori ? 0 : nWidthL;
@@ -3143,7 +3143,7 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
                                const SvxCSS1Parser& rParser )
 {
     if( CSS1_IDENT == pExpr->GetType() ||
-        CSS1_STRING == pExpr->GetType() )
+        CSS1_STRING == pExpr->GetType()	)
     {
         LanguageType eLang = MsLangId::convertIsoStringToLanguage( pExpr->GetString() );
         if( LANGUAGE_DONTKNOW != eLang )
@@ -3172,14 +3172,14 @@ struct CSS1PropEntry
 {
     union
     {
-        const sal_Char  *sName;
-        String          *pName;
+        const sal_Char	*sName;
+        String			*pName;
     };
     FnParseCSS1Prop pFunc;
 };
 
 #define CSS1_PROP_ENTRY(p) \
-    {   { sCSS1_P_##p }, ParseCSS1_##p }
+    {	{ sCSS1_P_##p }, ParseCSS1_##p }
 
 
 // die Tabelle mit den Zuordnungen

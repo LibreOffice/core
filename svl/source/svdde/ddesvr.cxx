@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1014,7 +1014,7 @@ String DdeService::Formats()
     String      s;
     long        f;
     TCHAR       buf[128];
-    LPCTSTR     p;
+    LPCTSTR		p;
     short       n = 0;
 
     for ( f = aFormats.First(); f; f = aFormats.Next(), n++ )

@@ -40,13 +40,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	$(SLO)$/splash.obj \
-            $(SLO)$/firststart.obj \
             $(SLO)$/services_spl.obj
 
 SHL1DEPN=   makefile.mk
 SHL1OBJS=   $(SLOFILES) \
-            $(SLO)$/pages.obj \
-            $(SLO)$/wizard.obj \
             $(SLO)$/migration.obj \
             $(SLO)$/cfgfilter.obj
 
@@ -65,7 +62,7 @@ SHL1STDLIBS= \
     $(COMPHELPERLIB)    \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
-        $(UCBHELPERLIB)        \
+    $(UCBHELPERLIB)     \
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(VOSLIB)           \

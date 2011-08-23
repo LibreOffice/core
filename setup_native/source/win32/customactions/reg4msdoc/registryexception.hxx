@@ -16,23 +16,23 @@ class RegistryException : public std::exception
 public:
 
     RegistryException(long ErrorCode);
-
+    
     virtual ~RegistryException() throw();
-
+        
     /**
-        @descr  Returns a string that describes the error if
+        @descr	Returns a string that describes the error if
                 available, else NULL will be returned. The
                 returned string is only temporary so the caller
                 has to copy it if he needs the string further.
     */
     virtual const char* what() const throw();
-
+    
     /**
-        @descr  Returns the error code.
+        @descr	Returns the error code.
     */
-
+    
     long GetErrorCode() const;
-
+    
 private:
     long    m_ErrorCode;
     void*  m_ErrorMsg;
@@ -50,7 +50,7 @@ public:
 };
 
 //#######################################
-// Thrown when trying to write to a readonly registry key
+// Thrown when trying to write to a readonly registry key 
 //#######################################
 
 class RegistryNoWriteAccessException : public RegistryException
@@ -60,7 +60,7 @@ public:
 };
 
 //#######################################
-// Thrown when trying to access an registry key, with improper
+// Thrown when trying to access an registry key, with improper 
 // access rights
 //#######################################
 
@@ -101,4 +101,4 @@ public:
     RegistryInvalidOperationException(long ErrorCode);
 };
 
-#endif
+#endif 

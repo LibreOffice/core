@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -563,7 +563,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    Reference< xml::input::XElement > BasicImport::startRootElement( sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+    Reference< xml::input::XElement > BasicImport::startRootElement( sal_Int32 nUid, const ::rtl::OUString& rLocalName, 
             Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -751,7 +751,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     // XDocumentHandler
     // -----------------------------------------------------------------------------
 
-    void XMLBasicImporterBase::startDocument()
+    void XMLBasicImporterBase::startDocument() 
         throw (xml::sax::SAXException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -762,7 +762,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    void XMLBasicImporterBase::endDocument()
+    void XMLBasicImporterBase::endDocument() 
         throw (xml::sax::SAXException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -818,7 +818,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // -----------------------------------------------------------------------------
 
-    void XMLBasicImporterBase::processingInstruction( const ::rtl::OUString& aTarget,
+    void XMLBasicImporterBase::processingInstruction( const ::rtl::OUString& aTarget, 
             const ::rtl::OUString& aData )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -927,5 +927,5 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace xmlscript
+}	// namespace xmlscript
 //.........................................................................

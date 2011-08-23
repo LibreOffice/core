@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@ private:
     void   StgEnum( short& );
     static StgAvlNode* Rem( StgAvlNode**, StgAvlNode*, BOOL );
 protected:
-    short nId;                          // iterator ID
-    short nBalance;                     // indicates tree balance
-    StgAvlNode* pLeft, *pRight;         // leaves
+    short nId;						  	// iterator ID
+    short nBalance;						// indicates tree balance
+    StgAvlNode* pLeft, *pRight; 		// leaves
     StgAvlNode();
 public:
     virtual ~StgAvlNode();
@@ -64,9 +64,9 @@ public:
 // The iterator class provides single stepping through an AVL tree.
 
 class StgAvlIterator {
-    StgAvlNode* pRoot;                  // root entry (parent)
-    short       nCount;                 // tree size
-    short       nCur;                   // current element
+    StgAvlNode* pRoot;					// root entry (parent)
+    short 	    nCount;					// tree size
+    short		nCur;					// current element
     StgAvlNode* Find( short );
 public:
     StgAvlIterator( StgAvlNode* );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 _ScRangeList::~_ScRangeList()
 {
-    ScRange*    p = ( ScRange* ) First();
+    ScRange*	p = ( ScRange* ) First();
 
     while( p )
     {
@@ -118,31 +118,31 @@ void _ScRangeListTabs::Append( ScComplexRefData a, const BOOL b )
         if( a.Ref1.nTab != a.Ref2.nTab )
             return;
 
-        SCsTAB& rTab = a.Ref1.nTab;
+        SCsTAB&	rTab = a.Ref1.nTab;
         if( rTab > MAXTAB )
             rTab = MAXTAB;
         else if( rTab < 0 )
             rTab = 0;
 
-        SCsCOL& rCol1 = a.Ref1.nCol;
+        SCsCOL&	rCol1 = a.Ref1.nCol;
         if( rCol1 > MAXCOL )
             rCol1 = MAXCOL;
         else if( rCol1 < 0 )
             rCol1 = 0;
 
-        SCsROW& rRow1 = a.Ref1.nRow;
+        SCsROW&	rRow1 = a.Ref1.nRow;
         if( rRow1 > MAXROW )
             rRow1 = MAXROW;
         else if( rRow1 < 0 )
             rRow1 = 0;
 
-        SCsCOL& rCol2 = a.Ref2.nCol;
+        SCsCOL&	rCol2 = a.Ref2.nCol;
         if( rCol2 > MAXCOL )
             rCol2 = MAXCOL;
         else if( rCol2 < 0 )
             rCol2 = 0;
 
-        SCsROW& rRow2 = a.Ref2.nRow;
+        SCsROW&	rRow2 = a.Ref2.nRow;
         if( rRow2 > MAXROW )
             rRow2 = MAXROW;
         else if( rRow2 < 0 )
@@ -265,7 +265,7 @@ LotusConverterBase::~LotusConverterBase()
 //UNUSED2008-05      nBytesLeft = nLen;
 //UNUSED2008-05      aEingPos = rEingPos;
 //UNUSED2008-05  }
-//UNUSED2008-05
+//UNUSED2008-05  
 //UNUSED2008-05  void LotusConverterBase::Reset( INT32 nLen )
 //UNUSED2008-05  {
 //UNUSED2008-05      ConverterBase::Reset();

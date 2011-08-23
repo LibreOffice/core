@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -351,18 +351,18 @@ void SlideSorter::SetupListeners (void)
             pParentWindow->AddEventListener(
                 LINK(
                     mpSlideSorterController.get(),
-                    controller::SlideSorterController,
+                    controller::SlideSorterController, 
                     WindowEventHandler));
         pWindow->AddEventListener(
             LINK(
                 mpSlideSorterController.get(),
-                controller::SlideSorterController,
+                controller::SlideSorterController, 
                 WindowEventHandler));
     }
     Application::AddEventListener(
         LINK(
             mpSlideSorterController.get(),
-            controller::SlideSorterController,
+            controller::SlideSorterController, 
             WindowEventHandler));
 
     mpSlideSorterController->GetScrollBarManager().Connect();
@@ -381,19 +381,19 @@ void SlideSorter::ReleaseListeners (void)
 
         pWindow->RemoveEventListener(
             LINK(mpSlideSorterController.get(),
-                controller::SlideSorterController,
+                controller::SlideSorterController, 
                 WindowEventHandler));
 
         ::Window* pParentWindow = pWindow->GetParent();
         if (pParentWindow != NULL)
             pParentWindow->RemoveEventListener(
                 LINK(mpSlideSorterController.get(),
-                    controller::SlideSorterController,
+                    controller::SlideSorterController, 
                     WindowEventHandler));
     }
     Application::RemoveEventListener(
         LINK(mpSlideSorterController.get(),
-            controller::SlideSorterController,
+            controller::SlideSorterController, 
             WindowEventHandler));
 }
 
@@ -408,7 +408,7 @@ void SlideSorter::CreateModelViewController (void)
 
     mpSlideSorterView.reset(CreateView());
     DBG_ASSERT (mpSlideSorterView.get()!=NULL,
-        "Can not create view for slide browser");
+        "Can not create view for slide browser"); 
 
     mpSlideSorterController.reset(CreateController());
     DBG_ASSERT (mpSlideSorterController.get()!=NULL,
@@ -510,7 +510,7 @@ bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
 
     if (mpViewShell != NULL)
         mpViewShell->ViewShell::RelocateToParentWindow(pParentWindow);
-
+    
     SetupControls(mpViewShell->GetParentWindow());
     SetupListeners();
 

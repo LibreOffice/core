@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);
 SvxZoomItem::SvxZoomItem
 (
     SvxZoomType eZoomType,
-    sal_uInt16      nVal,
+    sal_uInt16		nVal,
     sal_uInt16      _nWhich
 )
 :   SfxUInt16Item( _nWhich, nVal ),
@@ -62,7 +62,7 @@ SvxZoomItem::SvxZoomItem
 // -----------------------------------------------------------------------
 
 SvxZoomItem::SvxZoomItem( const SvxZoomItem& rOrig )
-:   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
+:	SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
     nValueSet( rOrig.GetValueSet() ),
     eType( rOrig.GetType() )
 {
@@ -112,9 +112,9 @@ int SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 
     SvxZoomItem& rItem = (SvxZoomItem&)rAttr;
 
-    return ( GetValue() == rItem.GetValue()     &&
-             nValueSet  == rItem.GetValueSet()  &&
-             eType      == rItem.GetType()          );
+    return ( GetValue() == rItem.GetValue() 	&&
+             nValueSet 	== rItem.GetValueSet() 	&&
+             eType 		== rItem.GetType() 			);
 }
 
 sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const

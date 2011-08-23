@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -169,8 +169,8 @@ namespace agg
                 {
                     double dash_rest = m_dashes[m_curr_dash] - m_curr_dash_start;
 
-                    unsigned _cmd = (m_curr_dash & 1) ?
-                                   path_cmd_move_to :
+                    unsigned _cmd = (m_curr_dash & 1) ? 
+                                   path_cmd_move_to : 
                                    path_cmd_line_to;
 
                     if(m_curr_rest > dash_rest)
@@ -200,7 +200,7 @@ namespace agg
                             {
                                 m_v2 = &m_src_vertices
                                 [
-                                    (m_src_vertex >= m_src_vertices.size()) ? 0 :
+                                    (m_src_vertex >= m_src_vertices.size()) ? 0 : 
                                     m_src_vertex
                                 ];
                             }
@@ -219,7 +219,7 @@ namespace agg
                     }
                     return _cmd;
                 }
-
+                
                 // statement unreachable
                 //break;
 

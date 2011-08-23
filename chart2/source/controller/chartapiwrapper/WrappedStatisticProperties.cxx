@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -884,7 +884,7 @@ WrappedRegressionCurvesProperty::~WrappedRegressionCurvesProperty()
     uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropertySet, uno::UNO_QUERY );
     if( xRegCnt.is() )
     {
-        aRet = lcl_getRegressionCurveType(
+        aRet = lcl_getRegressionCurveType( 
             RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine( xRegCnt ) );
     }
     return aRet;

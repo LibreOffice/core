@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ void MacabResultSetMetaData::setMacabFields(const ::vos::ORef<connectivity::OSQL
     static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));
     MacabRecords *aRecords;
     MacabHeader *aHeader;
-
+ 
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
     // In case, somehow, we don't have anything with the name m_sTableName
@@ -77,7 +77,7 @@ void MacabResultSetMetaData::setMacabFields(const ::vos::ORef<connectivity::OSQL
         nFieldNumber = aHeader->getColumnNumber(aFieldName);
         m_aMacabFields.push_back(nFieldNumber);
     }
-
+    
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnDisplaySize(sal_Int32 column) throw(SQLException, RuntimeException)
@@ -91,7 +91,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
     MacabRecords *aRecords;
     MacabHeader *aHeader;
     macabfield *aField;
-
+ 
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
     // In case, somehow, we don't have anything with the name m_sTableName
@@ -132,7 +132,7 @@ sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLEx
     sal_uInt32 nFieldNumber = m_aMacabFields[column - 1];
     MacabRecords *aRecords;
     MacabHeader *aHeader;
-
+ 
     aRecords = m_pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 
     // In case, somehow, we don't have anything with the name m_sTableName

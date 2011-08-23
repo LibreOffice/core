@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -454,7 +454,7 @@ namespace toolkitform
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_FONT ) >>= aUNOFont );
                 _rpDescriptor->TextFont = VCLUnoHelper::CreateFont( aUNOFont, Font() );
             }
-
+            
             // tab order
             rtl::OUString aTabIndexString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) );
             if ( xPSI->hasPropertyByName( aTabIndexString ) )
@@ -592,7 +592,7 @@ namespace toolkitform
                 // since we explicitly list the entries in the order in which they appear, they should not be
                 // resorted by the PDF viewer
                 pListWidget->Sort = false;
-
+                
                 // get selected items
                 Sequence< sal_Int16 > aSelectIndices;
                 OSL_VERIFY( xModelProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectedItems" ) ) ) >>= aSelectIndices );

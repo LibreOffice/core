@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,24 +32,24 @@
 /**
     ORef<T>
 
-    template type to implement handle/body behaviour
+    template type to implement handle/body behaviour 
     with reference-counting.
 
     Note that the template-type T MUST implement IReferenceCounter.
 
 */
 
-#   include <vos/refernce.hxx>
+#	include <vos/refernce.hxx>
 #ifndef _VOS_DIAGNOSE_HXX_
-#   include <vos/diagnose.hxx>
+#	include <vos/diagnose.hxx>
 #endif
 
 namespace vos
-{
+{     
 
 
 template <class T>
-class ORef
+class ORef 
 {
 public:
 
@@ -123,7 +123,7 @@ public:
     */
     T* SAL_CALL operator->() const;
 
-    /** Gives access to the handles body.
+    /** Gives access to the handles body. 
     */
     T& SAL_CALL getBody() const;
 
@@ -137,7 +137,7 @@ public:
         does not point to a valid body).
     */
     sal_Bool SAL_CALL isEmpty() const;
-
+    
     /** Returns True is the body is "full" (the handle
         does point to a valid body).
     */
@@ -177,7 +177,7 @@ protected:
 // include template implementation
 #include <vos/ref.inl>
 
-}
+}     
 
 
 #endif // _VOS_REF_HXX_

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -24,12 +24,12 @@ namespace agg
 {
 
     //---------------------------------------------------------conv_bspline
-    template<class VertexSource>
+    template<class VertexSource> 
     struct conv_bspline : public conv_adaptor_vcgen<VertexSource, vcgen_bspline>
     {
         typedef conv_adaptor_vcgen<VertexSource, vcgen_bspline> base_type;
 
-        conv_bspline(VertexSource& vs) :
+        conv_bspline(VertexSource& vs) : 
             conv_adaptor_vcgen<VertexSource, vcgen_bspline>(vs) {}
 
         void   interpolation_step(double v) { base_type::generator().interpolation_step(v); }
@@ -37,7 +37,7 @@ namespace agg
 
     private:
         conv_bspline(const conv_bspline<VertexSource>&);
-        const conv_bspline<VertexSource>&
+        const conv_bspline<VertexSource>& 
             operator = (const conv_bspline<VertexSource>&);
     };
 

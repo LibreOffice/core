@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public:
     void            SetText( const ByteString & rT ) { aText = rT; }
     BOOL            IsError() const { return nLine != 0; }
     void            Clear() { nLine = nColumn = 0; }
-    SvIdlError &    operator = ( const SvIdlError & rRef )
+    SvIdlError &	operator = ( const SvIdlError & rRef )
     { aText   = rRef.aText;
       nLine   = rRef.nLine;
       nColumn = rRef.nColumn;
@@ -66,9 +66,9 @@ public:
 /******************** class SvIdlDataBase ********************************/
 class SvIdlDataBase
 {
-    BOOL                        bExport;
+    BOOL  						bExport;
     String                      aExportFile;
-    sal_uInt32                  nUniqueId;
+    sal_uInt32					nUniqueId;
     sal_uInt32                  nVerbosity;
     String                      aDataBaseFile;
     SvFileStream *              pStm;
@@ -80,16 +80,16 @@ class SvIdlDataBase
     SvMetaTypeMemberList        aTypeList;
     SvMetaClassMemberList       aClassList;
     SvMetaModuleMemberList      aModuleList;
-    SvMetaAttributeMemberList   aAttrList;
+    SvMetaAttributeMemberList	aAttrList;
     SvMetaTypeMemberList        aTmpTypeList; // nicht Persistent
 
 protected:
 #ifdef IDL_COMPILER
-    ByteString                      aModulePrefix;
+    ByteString						aModulePrefix;
     SvMetaObjectMemberStack     aContextStack;
     String                      aPath;
     SvIdlError                  aError;
-    void                        WriteReset()
+    void						WriteReset()
                                 {
                                     aUsedTypes.Clear();
                                     aIFaceName.Erase();
@@ -111,25 +111,25 @@ public:
     SvMetaModule *            GetModule( const ByteString & rName );
 
     // Liste der benutzten Typen beim Schreiben
-    SvMetaTypeMemberList    aUsedTypes;
-    ByteString                  aIFaceName;
-    SvNumberIdentifier      aStructSlotId;
+    SvMetaTypeMemberList	aUsedTypes;
+    ByteString					aIFaceName;
+    SvNumberIdentifier		aStructSlotId;
 
 #ifdef IDL_COMPILER
     void                    StartNewFile( const String& rName );
     void                    SetExportFile( const String& rName )
                             { aExportFile = rName; }
-    void                    AppendAttr( SvMetaAttribute *pSlot );
-    const ByteString&           GetActModulePrefix() const { return aModulePrefix; }
-    const SvIdlError &      GetError() const { return aError; }
-    void                    SetError( const SvIdlError & r )
+    void					AppendAttr( SvMetaAttribute *pSlot );
+    const ByteString&			GetActModulePrefix() const { return aModulePrefix; }
+    const SvIdlError &		GetError() const { return aError; }
+    void					SetError( const SvIdlError & r )
                             { aError = r; }
 
     const String &            GetPath() const { return aPath; }
     SvMetaObjectMemberStack & GetStack()      { return aContextStack; }
 
-    void                    Write( const ByteString & rText );
-    void                    WriteError( const ByteString & rErrWrn,
+    void					Write( const ByteString & rText );
+    void 					WriteError( const ByteString & rErrWrn,
                                     const ByteString & rFileName,
                                     const ByteString & rErrorText,
                                     ULONG nRow = 0, ULONG nColumn = 0 ) const;
@@ -145,13 +145,13 @@ public:
                                     rInStm.Seek( nTokPos );
                                 return bOk;
                             }
-    sal_uInt32              GetUniqueId() { return ++nUniqueId; }
+    sal_uInt32				GetUniqueId() { return ++nUniqueId; }
     BOOL                    FindId( const ByteString & rIdName, ULONG * pVal );
     BOOL                    InsertId( const ByteString & rIdName, ULONG nVal );
     BOOL                    ReadIdFile( const String & rFileName );
 
-    SvMetaType *            FindType( const ByteString & rName );
-    static SvMetaType *     FindType( const SvMetaType *, SvMetaTypeMemberList & );
+    SvMetaType *			FindType( const ByteString & rName );
+    static SvMetaType *		FindType( const SvMetaType *, SvMetaTypeMemberList & );
 
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );
     SvMetaAttribute *       ReadKnownAttr( SvTokenStream & rInStm,
@@ -171,10 +171,10 @@ public:
     BOOL        WriteSvIdl( SvStream & );
 
     BOOL        WriteSfx( SvStream & );
-    BOOL        WriteHelpIds( SvStream & );
+    BOOL		WriteHelpIds( SvStream & );
     BOOL        WriteSfxItem( SvStream & );
-    BOOL        WriteCSV( SvStream& );
-    BOOL        WriteDocumentation( SvStream& );
+    BOOL 		WriteCSV( SvStream& );
+    BOOL		WriteDocumentation( SvStream& );
 };
 #endif
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/strarray.hxx>
-#include <sfx2/request.hxx> //add CHINA001
-#include "svx/ofaitem.hxx" //add CHINA001
+#include <sfx2/request.hxx> //add CHINA001 
+#include "svx/ofaitem.hxx" //add CHINA001 
 
 static USHORT pRanges[] =
 {
@@ -95,25 +95,25 @@ SvxMeasureDialog::~SvxMeasureDialog()
 \************************************************************************/
 
 SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_MEASURE ),
+                SvxTabPage		( pWindow, CUI_RES( RID_SVXPAGE_MEASURE ),
                                   rInAttrs ),
 
         aFlLine                 ( this, CUI_RES( FL_LINE ) ),
-        aFtLineDist             ( this, CUI_RES( FT_LINE_DIST ) ),
-        aMtrFldLineDist         ( this, CUI_RES( MTR_LINE_DIST ) ),
-        aFtHelplineOverhang     ( this, CUI_RES( FT_HELPLINE_OVERHANG ) ),
-        aMtrFldHelplineOverhang ( this, CUI_RES( MTR_FLD_HELPLINE_OVERHANG ) ),
-        aFtHelplineDist         ( this, CUI_RES( FT_HELPLINE_DIST ) ),
-        aMtrFldHelplineDist     ( this, CUI_RES( MTR_FLD_HELPLINE_DIST ) ),
-        aFtHelpline1Len         ( this, CUI_RES( FT_HELPLINE1_LEN ) ),
-        aMtrFldHelpline1Len     ( this, CUI_RES( MTR_FLD_HELPLINE1_LEN ) ),
-        aFtHelpline2Len         ( this, CUI_RES( FT_HELPLINE2_LEN ) ),
-        aMtrFldHelpline2Len     ( this, CUI_RES( MTR_FLD_HELPLINE2_LEN ) ),
-        aTsbBelowRefEdge        ( this, CUI_RES( TSB_BELOW_REF_EDGE ) ),
-        aFtDecimalPlaces        ( this, CUI_RES( FT_DECIMALPLACES ) ),
-        aMtrFldDecimalPlaces    ( this, CUI_RES( MTR_FLD_DECIMALPLACES ) ),
+        aFtLineDist				( this, CUI_RES( FT_LINE_DIST ) ),
+        aMtrFldLineDist			( this, CUI_RES( MTR_LINE_DIST ) ),
+        aFtHelplineOverhang		( this, CUI_RES( FT_HELPLINE_OVERHANG ) ),
+        aMtrFldHelplineOverhang	( this, CUI_RES( MTR_FLD_HELPLINE_OVERHANG ) ),
+        aFtHelplineDist			( this, CUI_RES( FT_HELPLINE_DIST ) ),
+        aMtrFldHelplineDist		( this, CUI_RES( MTR_FLD_HELPLINE_DIST ) ),
+        aFtHelpline1Len			( this, CUI_RES( FT_HELPLINE1_LEN ) ),
+        aMtrFldHelpline1Len		( this, CUI_RES( MTR_FLD_HELPLINE1_LEN ) ),
+        aFtHelpline2Len			( this, CUI_RES( FT_HELPLINE2_LEN ) ),
+        aMtrFldHelpline2Len		( this, CUI_RES( MTR_FLD_HELPLINE2_LEN ) ),
+        aTsbBelowRefEdge		( this, CUI_RES( TSB_BELOW_REF_EDGE ) ),
+        aFtDecimalPlaces		( this, CUI_RES( FT_DECIMALPLACES ) ),
+        aMtrFldDecimalPlaces	( this, CUI_RES( MTR_FLD_DECIMALPLACES ) ),
 
-        aFlLabel                ( this, CUI_RES( FL_LABEL ) ),
+        aFlLabel    			( this, CUI_RES( FL_LABEL ) ),
         aFtPosition             ( this, CUI_RES( FT_POSITION ) ),
         aCtlPosition            ( this, CUI_RES( CTL_POSITION ) ),
         aTsbAutoPosV            ( this, CUI_RES( TSB_AUTOPOSV ) ),
@@ -122,12 +122,12 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
         aLbUnit                 ( this, CUI_RES( LB_UNIT ) ),
         aTsbParallel            ( this, CUI_RES( TSB_PARALLEL ) ),
         aCtlPreview             ( this, CUI_RES( CTL_PREVIEW ), rInAttrs ),
-
+        
         aFlVert                 ( this, CUI_RES( FL_VERT ) ),
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() ),
         pView( 0 ),
-
+        
         bPositionModified       ( FALSE )
 {
     FillUnitLB();
@@ -363,37 +363,37 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
                 case SDRMEASURE_ABOVE:
                     switch( eHPos )
                     {
-                    case SDRMEASURE_TEXTLEFTOUTSIDE:    eRP = RP_LT; break;
-                    case SDRMEASURE_TEXTINSIDE:         eRP = RP_MT; break;
-                    case SDRMEASURE_TEXTRIGHTOUTSIDE:   eRP = RP_RT; break;
-                    case SDRMEASURE_TEXTHAUTO:          eRP = RP_MT; break;
+                    case SDRMEASURE_TEXTLEFTOUTSIDE:	eRP = RP_LT; break;
+                    case SDRMEASURE_TEXTINSIDE:			eRP = RP_MT; break;
+                    case SDRMEASURE_TEXTRIGHTOUTSIDE:	eRP = RP_RT; break;
+                    case SDRMEASURE_TEXTHAUTO:			eRP = RP_MT; break;
                     }
                     break;
                 case SDRMEASURETEXT_VERTICALCENTERED:
                     switch( eHPos )
                     {
-                    case SDRMEASURE_TEXTLEFTOUTSIDE:    eRP = RP_LM; break;
-                    case SDRMEASURE_TEXTINSIDE:         eRP = RP_MM; break;
-                    case SDRMEASURE_TEXTRIGHTOUTSIDE:   eRP = RP_RM; break;
-                    case SDRMEASURE_TEXTHAUTO:          eRP = RP_MM; break;
+                    case SDRMEASURE_TEXTLEFTOUTSIDE:	eRP = RP_LM; break;
+                    case SDRMEASURE_TEXTINSIDE:			eRP = RP_MM; break;
+                    case SDRMEASURE_TEXTRIGHTOUTSIDE:	eRP = RP_RM; break;
+                    case SDRMEASURE_TEXTHAUTO:			eRP = RP_MM; break;
                     }
                     break;
                 case SDRMEASURE_BELOW:
                     switch( eHPos )
                     {
-                    case SDRMEASURE_TEXTLEFTOUTSIDE:    eRP = RP_LB; break;
-                    case SDRMEASURE_TEXTINSIDE:         eRP = RP_MB; break;
-                    case SDRMEASURE_TEXTRIGHTOUTSIDE:   eRP = RP_RB; break;
-                    case SDRMEASURE_TEXTHAUTO:          eRP = RP_MB; break;
+                    case SDRMEASURE_TEXTLEFTOUTSIDE:	eRP = RP_LB; break;
+                    case SDRMEASURE_TEXTINSIDE:			eRP = RP_MB; break;
+                    case SDRMEASURE_TEXTRIGHTOUTSIDE:	eRP = RP_RB; break;
+                    case SDRMEASURE_TEXTHAUTO:			eRP = RP_MB; break;
                     }
                     break;
                 case SDRMEASURE_TEXTVAUTO:
                     switch( eHPos )
                     {
-                    case SDRMEASURE_TEXTLEFTOUTSIDE:    eRP = RP_LM; break;
-                    case SDRMEASURE_TEXTINSIDE:         eRP = RP_MM; break;
-                    case SDRMEASURE_TEXTRIGHTOUTSIDE:   eRP = RP_RM; break;
-                    case SDRMEASURE_TEXTHAUTO:          eRP = RP_MM; break;
+                    case SDRMEASURE_TEXTLEFTOUTSIDE:	eRP = RP_LM; break;
+                    case SDRMEASURE_TEXTINSIDE:			eRP = RP_MM; break;
+                    case SDRMEASURE_TEXTRIGHTOUTSIDE:	eRP = RP_RM; break;
+                    case SDRMEASURE_TEXTHAUTO:			eRP = RP_MM; break;
                     }
                     break;
                  default: ;//prevent warning
@@ -442,8 +442,8 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
 BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
 {
-    BOOL     bModified = FALSE;
-    INT32    nValue;
+    BOOL	 bModified = FALSE;
+    INT32	 nValue;
     TriState eState;
 
     if( aMtrFldLineDist.GetText() != aMtrFldLineDist.GetSavedValue() )
@@ -630,7 +630,7 @@ SfxTabPage* SvxMeasurePage::Create( Window* pWindow,
 |*
 \************************************************************************/
 
-USHORT* SvxMeasurePage::GetRanges()
+USHORT*	SvxMeasurePage::GetRanges()
 {
     return( pRanges );
 }
@@ -862,13 +862,13 @@ void SvxMeasurePage::FillUnitLB()
         aLbUnit.SetEntryData( nPos, (void*)nUnit );
     }
 }
-void SvxMeasurePage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxMeasurePage::PageCreated (SfxAllItemSet aSet) //add CHINA001 
 {
     SFX_ITEMSET_ARG (&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
-
+    
     if (pOfaPtrItem)
         SetView( static_cast<SdrView *>(pOfaPtrItem->GetValue()));
-
+    
     Construct();
 }
 

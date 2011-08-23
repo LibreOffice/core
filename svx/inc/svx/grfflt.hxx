@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@
 // - Error codes -
 // ---------------
 
-#define SVX_GRAPHICFILTER_ERRCODE_NONE              0x00000000
-#define SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE   0x00000001
-#define SVX_GRAPHICFILTER_UNSUPPORTED_SLOT          0x00000002
+#define SVX_GRAPHICFILTER_ERRCODE_NONE				0x00000000
+#define SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE	0x00000001
+#define SVX_GRAPHICFILTER_UNSUPPORTED_SLOT			0x00000002
 
 // --------------------
 // - SvxGraphicFilter -
@@ -62,8 +62,8 @@ class SVX_DLLPUBLIC SvxGraphicFilter
 {
 public:
 
-    static ULONG    ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject );
-    static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
+    static ULONG	ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject );
+    static void		DisableGraphicFilterSlots( SfxItemSet& rSet );
 };
 
 #endif

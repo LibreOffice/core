@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,17 +102,17 @@ DBG_NAME(OCopyTable)
 //------------------------------------------------------------------------
 OCopyTable::OCopyTable( Window * pParent )
     :OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) )
-    ,m_ftTableName(         this, ModuleRes( FT_TABLENAME       ) )
-    ,m_edTableName(         this, ModuleRes( ET_TABLENAME       ) )
+    ,m_ftTableName(			this, ModuleRes( FT_TABLENAME		) )
+    ,m_edTableName(			this, ModuleRes( ET_TABLENAME		) )
     ,m_aFL_Options(         this, ModuleRes( FL_OPTIONS         ) )
-    ,m_aRB_DefData(         this, ModuleRes( RB_DEFDATA         ) )
-    ,m_aRB_Def(             this, ModuleRes( RB_DEF             ) )
-    ,m_aRB_View(            this, ModuleRes( RB_VIEW            ) )
-    ,m_aRB_AppendData(      this, ModuleRes( RB_APPENDDATA      ) )
-    ,m_aCB_UseHeaderLine(   this, ModuleRes( CB_USEHEADERLINE   ) )
-    ,m_aCB_PrimaryColumn(   this, ModuleRes( CB_PRIMARY_COLUMN  ) )
-    ,m_aFT_KeyName(         this, ModuleRes( FT_KEYNAME         ) )
-    ,m_edKeyName(           this, ModuleRes( ET_KEYNAME         ) )
+    ,m_aRB_DefData(			this, ModuleRes( RB_DEFDATA			) )
+    ,m_aRB_Def(				this, ModuleRes( RB_DEF				) )
+    ,m_aRB_View(			this, ModuleRes( RB_VIEW			) )
+    ,m_aRB_AppendData(	    this, ModuleRes( RB_APPENDDATA	    ) )
+    ,m_aCB_UseHeaderLine(	this, ModuleRes( CB_USEHEADERLINE	) )
+    ,m_aCB_PrimaryColumn(	this, ModuleRes( CB_PRIMARY_COLUMN	) )
+    ,m_aFT_KeyName(			this, ModuleRes( FT_KEYNAME			) )
+    ,m_edKeyName(			this, ModuleRes( ET_KEYNAME			) )
     ,m_pPage2(NULL)
     ,m_pPage3(NULL)
     ,m_bUseHeaderAllowed(TRUE)
@@ -131,11 +131,11 @@ OCopyTable::OCopyTable( Window * pParent )
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
 
-        m_aRB_AppendData.SetClickHdl(   LINK( this, OCopyTable, AppendDataClickHdl  ) );
+        m_aRB_AppendData.SetClickHdl(	LINK( this, OCopyTable, AppendDataClickHdl	) );
 
-        m_aRB_DefData.SetClickHdl(      LINK( this, OCopyTable, RadioChangeHdl      ) );
-        m_aRB_Def.SetClickHdl(          LINK( this, OCopyTable, RadioChangeHdl      ) );
-        m_aRB_View.SetClickHdl(         LINK( this, OCopyTable, RadioChangeHdl      ) );
+        m_aRB_DefData.SetClickHdl(		LINK( this, OCopyTable, RadioChangeHdl		) );
+        m_aRB_Def.SetClickHdl(			LINK( this, OCopyTable, RadioChangeHdl		) );
+        m_aRB_View.SetClickHdl(			LINK( this, OCopyTable, RadioChangeHdl		) );
 
         m_aCB_PrimaryColumn.SetClickHdl(LINK( this, OCopyTable, KeyClickHdl         ) );
 
@@ -211,12 +211,12 @@ IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
 sal_Bool OCopyTable::LeavePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
-    m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
-    m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : String();
+    m_pParent->m_bCreatePrimaryKeyColumn	= (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
+    m_pParent->m_aKeyName				    = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : String();
     m_pParent->setUseHeaderLine( m_aCB_UseHeaderLine.IsChecked() );
 
     // first check if the table already exists in the database
-    if( m_pParent->getOperation() != CopyTableOperation::AppendData )
+    if(	m_pParent->getOperation() != CopyTableOperation::AppendData )
     {
         m_pParent->clearDestColumns();
         DynamicTableOrQueryNameCheck aNameCheck( m_pParent->m_xDestConnection, CommandType::TABLE );
@@ -225,7 +225,7 @@ sal_Bool OCopyTable::LeavePage()
         {
             aErrorInfo.append( SQLExceptionInfo::SQL_CONTEXT, String( ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) ) );
             m_pParent->showError(aErrorInfo.get());
-
+            
             return sal_False;
         }
 
@@ -234,7 +234,7 @@ sal_Bool OCopyTable::LeavePage()
         ::rtl::OUString sCatalog;
         ::rtl::OUString sSchema;
         ::rtl::OUString sTable;
-        ::dbtools::qualifiedNameComponents( xMeta,
+        ::dbtools::qualifiedNameComponents(	xMeta,
                                             m_edTableName.GetText(),
                                             sCatalog,
                                             sSchema,
@@ -247,10 +247,10 @@ sal_Bool OCopyTable::LeavePage()
             m_pParent->showError(sError);
             return sal_False;
         }
-
+        
         // now we have to check if the name of the primary key already exists
-        if (    m_pParent->m_bCreatePrimaryKeyColumn
-            &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
+        if (	m_pParent->m_bCreatePrimaryKeyColumn 
+            &&	m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
             String aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
             aInfoString += String(' ');
@@ -303,10 +303,10 @@ void OCopyTable::ActivatePage()
     m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());
 }
 //------------------------------------------------------------------------
-String OCopyTable::GetTitle() const
-{
+String OCopyTable::GetTitle() const 
+{ 
     DBG_CHKTHIS(OCopyTable,NULL);
-    return String(ModuleRes(STR_WIZ_TABLE_COPY));
+    return String(ModuleRes(STR_WIZ_TABLE_COPY)); 
 }
 //------------------------------------------------------------------------
 void OCopyTable::Reset()
@@ -339,9 +339,9 @@ sal_Bool OCopyTable::checkAppendData()
         ObjectCopySource aTableCopySource( m_pParent->m_xDestConnection, xTable );
         m_pParent->loadData( aTableCopySource, m_pParent->m_vDestColumns, m_pParent->m_aDestVec );
         // #90027#
-        const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
-        ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
-        ODatabaseExport::TColumnVector::const_iterator aDestEnd     = pDestColumns->end();
+        const ODatabaseExport::TColumnVector* pDestColumns			= m_pParent->getDestVector();
+        ODatabaseExport::TColumnVector::const_iterator aDestIter	= pDestColumns->begin();
+        ODatabaseExport::TColumnVector::const_iterator aDestEnd	    = pDestColumns->end();
         const sal_uInt32 nDestSize = pDestColumns->size();
         sal_Bool bNotConvert;
         sal_uInt32 i = 0;
@@ -355,13 +355,13 @@ sal_Bool OCopyTable::checkAppendData()
                 m_pParent->showColumnTypeNotSupported((*aDestIter)->first);
                 return sal_False;
             }
-
+            
             if ( pTypeInfo.get() )
                 m_pParent->m_vColumnTypes[i] = pTypeInfo->nType;
             else
                 m_pParent->m_vColumnTypes[i] = DataType::VARCHAR;
         }
-
+        
     }
 
     if ( !xTable.is() )

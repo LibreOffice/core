@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #define LOCKFILE_LOCALHOST_ID     2
 #define LOCKFILE_EDITTIME_ID      3
 #define LOCKFILE_USERURL_ID       4
-#define LOCKFILE_ENTRYSIZE        5
+#define LOCKFILE_ENTRYSIZE        5 
 
 namespace svt {
 

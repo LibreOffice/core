@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -632,10 +632,10 @@ ModalDialog MD_ICONSELECTOR
         Scroll = TRUE ;
         LineSpacing = TRUE ;
         Customize = FALSE ;
-    };
+    };       
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 60 , 130 ) ;
+        Pos = MAP_APPFONT ( 60 , 130 ) ; 
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -669,14 +669,14 @@ ModalDialog MD_ICONSELECTOR
     };
     FixedText FT_NOTE
     {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Pos = MAP_APPFONT ( 12 , 95 ) ; 
         Size = MAP_APPFONT ( 200 , 24 ) ;
         Text [ de ] = "Hinweis:\nBitte beachten Sie das für einen erfolgreichen Import die Symbole eine Größe  von 16x16 Pixel haben müssen." ;
         Text [ en-US ] = "Note:\nThe size of an icon should be 16x16 pixel to achieve best quality. Different sized icons will be scaled automatically." ;
         Left = TRUE ;
         WordBreak = TRUE;
     };
-    FixedLine FL_SEPARATOR
+    FixedLine FL_SEPARATOR 
     {
         Pos = MAP_APPFONT ( 0, 120 );
         Size = MAP_APPFONT ( 240, 8 );
@@ -702,7 +702,7 @@ ModalDialog MD_ICONCHANGE
         Size = MAP_APPFONT ( 24 , 24 ) ;
         Fixed = Image
         {
-
+        
         };
     };
     FixedText FTCHGE_DESCRIPTION
@@ -711,7 +711,7 @@ ModalDialog MD_ICONCHANGE
         Size = MAP_APPFONT ( 200 , 50 ) ;
         Text [ en-US ] = "The files listed below could not be imported.\nThe file format could not be interpreted." ;
     };
-
+    
     MultiLineEdit EDT_ADDR
     {
         Pos = MAP_APPFONT ( 30 , 38) ;
@@ -723,7 +723,7 @@ ModalDialog MD_ICONCHANGE
     };
     OKButton MD_BTN_OK
     {
-        Pos = MAP_APPFONT ( 68 , 131 ) ;
+        Pos = MAP_APPFONT ( 68 , 131 ) ; 
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;

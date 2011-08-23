@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,36 +62,36 @@ SmConfig::~SmConfig()
 
 void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
 {
-    const SfxPoolItem *pItem     = NULL;
+    const SfxPoolItem *pItem	 = NULL;
 
     UINT16 nU16;
     BOOL bVal;
     if (rSet.GetItemState(SID_PRINTSIZE, TRUE, &pItem) == SFX_ITEM_SET)
-    {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
+    {	nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
         SetPrintSize( (SmPrintSize) nU16 );
     }
     if (rSet.GetItemState(SID_PRINTZOOM, TRUE, &pItem) == SFX_ITEM_SET)
-    {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
+    {	nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
         SetPrintZoomFactor( nU16 );
     }
     if (rSet.GetItemState(SID_PRINTTITLE, TRUE, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintTitle( bVal );
     }
     if (rSet.GetItemState(SID_PRINTTEXT, TRUE, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintFormulaText( bVal );
     }
     if (rSet.GetItemState(SID_PRINTFRAME, TRUE, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintFrame( bVal );
     }
     if (rSet.GetItemState(SID_AUTOREDRAW, TRUE, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetAutoRedraw( bVal );
     }
     if (rSet.GetItemState(SID_NO_RIGHT_SPACES, TRUE, &pItem) == SFX_ITEM_SET)
-    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+    {	bVal = ((const SfxBoolItem *) pItem)->GetValue();
         if (IsIgnoreSpacesRight() != bVal)
         {
             SetIgnoreSpacesRight( bVal );

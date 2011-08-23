@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -318,7 +318,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     //this method is called, if the try to close was successfull
     osl::ResettableGuard< osl::Mutex > aGuard( m_aAccessMutex );
 
-    m_bInTryClose       = sal_False;
+    m_bInTryClose		= sal_False;
     m_aEndTryClosingCondition.set();
 
     //Mutex needs to be acquired exactly ones
@@ -330,8 +330,8 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     void CloseableLifeTimeManager
 ::impl_setOwnership( sal_Bool bDeliverOwnership, sal_Bool bMyVeto )
 {
-    m_bOwnership            = bDeliverOwnership && bMyVeto;
-    m_bOwnershipIsWellKnown = sal_True;
+    m_bOwnership			= bDeliverOwnership && bMyVeto;
+    m_bOwnershipIsWellKnown	= sal_True;
 }
     sal_Bool CloseableLifeTimeManager
 ::impl_shouldCloseAtNextChance()
@@ -406,7 +406,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
 }
 
     sal_Bool CloseableLifeTimeManager
-::g_addCloseListener( const uno::Reference< util::XCloseListener > & xListener )
+::g_addCloseListener( const uno::Reference<	util::XCloseListener > & xListener )
     throw(uno::RuntimeException)
 {
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,35 +46,35 @@ private:
     Menu*           pSVMenu;
     SfxVirtualMenu* pParent;
     SfxMenuCtrlArr_Impl* pAppCtrl;
-    SfxMenuControl* pItems;
+    SfxMenuControl*	pItems;
     SfxMenuImageControl_Impl* pImageControl;
-    SfxBindings*    pBindings;
-    ResMgr*         pResMgr;
+    SfxBindings*	pBindings;
+    ResMgr*			pResMgr;
     PopupMenu*      pWindowMenu;
     PopupMenu*      pPickMenu;
-    PopupMenu*      pAddonsMenu;
-    Timer*          pAutoDeactivate; // Hack fuer QAP-Bug
+    PopupMenu*		pAddonsMenu;
+    Timer*			pAutoDeactivate; // Hack fuer QAP-Bug
     USHORT          nVisibleItems;
     USHORT          nId;
     USHORT          nCount;
-    USHORT          nLocks;
+    USHORT			nLocks;
     BOOL            bResCtor : 1; // SV Menu created from resource
-    BOOL            bOLE : 1;     // InPlaceMenu
-    BOOL            bHelpInitialized : 1;
-    BOOL            bIsActive : 1;
-    BOOL            bControllersUnBound : 1;
-    BOOL            bWasHighContrast : 1;
-    BOOL            bIsAddonPopupMenu : 1;
+    BOOL			bOLE : 1;	  // InPlaceMenu
+    BOOL			bHelpInitialized : 1;
+    BOOL			bIsActive : 1;
+    BOOL			bControllersUnBound : 1;
+    BOOL			bWasHighContrast : 1;
+    BOOL			bIsAddonPopupMenu : 1;
 
 private:
-    void            Construct_Impl();
+    void			Construct_Impl();
     FASTBOOL        Bind_Impl( Menu *pMenu );
     inline SfxMenuCtrlArr_Impl& GetAppCtrl_Impl()
     {
         return pAppCtrl? *pAppCtrl: *(pAppCtrl = new SfxMenuCtrlArr_Impl) ;
     }
-    void            UnbindControllers();
-    void            BindControllers();
+    void 			UnbindControllers();
+    void			BindControllers();
 
 protected:
     SfxVirtualMenu( USHORT nOwnId, SfxVirtualMenu* pParent, Menu& rMenu, BOOL bWithHelp,
@@ -87,9 +87,9 @@ protected:
     DECL_LINK( SettingsChanged, void* );
 
     // Used for runtime popup menus
-    void            UpdateImages( Menu* pMenu );
-    void            RemoveMenuImages( Menu* pMenu );
-    void            InsertAddOnsMenuItem( Menu* pMenu );
+    void			UpdateImages( Menu* pMenu );
+    void			RemoveMenuImages( Menu* pMenu );
+    void			InsertAddOnsMenuItem( Menu* pMenu );
 
 public:
                     ~SfxVirtualMenu();
@@ -113,19 +113,19 @@ public:
     //void            InvalidateKeyCodes();
 
     SfxVirtualMenu* GetParentMenu() const { return pParent; }
-    void            SetParentMenu( SfxVirtualMenu* pNewParent )
+    void			SetParentMenu( SfxVirtualMenu* pNewParent )
                     { pParent = pNewParent; }
 
-    void            SetPopupMenu( USHORT nId, PopupMenu *pMenu );
-    BOOL            IsFromResource() const
+    void			SetPopupMenu( USHORT nId, PopupMenu *pMenu );
+    BOOL			IsFromResource() const
                     { return bResCtor; }
-    void            InitPopup(USHORT nPos, BOOL bOLE = TRUE);
-    void            InitializeHelp();
-    void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
-    ResMgr*         GetResMgr() { return pResMgr; }
-    void            SetHelpIds( ResMgr* );
-    BOOL            IsHiContrastMode() const;
-    void            UpdateImages();
+    void			InitPopup(USHORT nPos, BOOL bOLE = TRUE);
+    void 			InitializeHelp();
+    void			SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
+    ResMgr*			GetResMgr() { return pResMgr; }
+    void			SetHelpIds( ResMgr* );
+    BOOL			IsHiContrastMode() const;
+    void			UpdateImages();
 
     DECL_LINK( Select, Menu * );
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 
 namespace ftp {
-
+    
     class FTPStreamContainer
     {
     public:
@@ -49,15 +49,15 @@ namespace ftp {
 
 
 extern "C" {
-
+    
     /** callback for curl_easy_perform(),
      *  forwarding the written content to the stream.
      *  stream has to be of type 'FTPStreamContainer'.
      */
-
-
+    
+        
     int file_write(void *buffer,size_t size,size_t nmemb,void *stream);
-
+    
 }
 
 #endif

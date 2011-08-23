@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -391,7 +391,7 @@ inline bool hasFloatingChild(Window *pWindow)
             {
                 xContext = new FloatingWindowAccessible( _pXWindow );
             }
-            else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
+            else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) ) 
             {
                 PopupMenuFloatingWindow* pChild = dynamic_cast<PopupMenuFloatingWindow*>(
                     pWindow->GetAccessibleChildWindow(0));
@@ -404,7 +404,7 @@ inline bool hasFloatingChild(Window *pWindow)
                 }
                 else
                     xContext = new FloatingWindowAccessible( _pXWindow );
-            }
+            }            
             else if ( ( nType == WINDOW_HELPTEXTWINDOW ) || ( nType == WINDOW_FIXEDLINE ) )
             {
                xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( _pXWindow );

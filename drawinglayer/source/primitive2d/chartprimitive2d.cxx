@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace drawinglayer
             const uno::Reference< frame::XModel >& rxChartModel,
             const basegfx::B2DHomMatrix& rTransformation,
             const Primitive2DSequence& rChildren)
-        :   GroupPrimitive2D(rChildren),
+        :	GroupPrimitive2D(rChildren),
             mxChartModel(rxChartModel),
             maTransformation(rTransformation)
         {

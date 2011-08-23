@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ class SvxIMapDlg;
 
 class SvxIMapDlgItem : public SfxControllerItem
 {
-    SvxIMapDlg& rIMap;
+    SvxIMapDlg&	rIMap;
 
 
 protected:
@@ -126,25 +126,25 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     friend class IMapWindow;
     using Window::Update;
 
-    ToolBox             aTbxIMapDlg1;
-    FixedText           aFtURL;
-    SvtURLBox           maURLBox;
-    FixedText           aFtText;
-    Edit                aEdtText;
-    FixedText           maFtTarget;
-    ComboBox            maCbbTarget;
-    StatusBar           aStbStatus;
-    ImageList           maImageList;
-    ImageList           maImageListH;
+    ToolBox				aTbxIMapDlg1;
+    FixedText			aFtURL;
+    SvtURLBox			maURLBox;
+    FixedText			aFtText;
+    Edit				aEdtText;
+    FixedText			maFtTarget;
+    ComboBox			maCbbTarget;
+    StatusBar			aStbStatus;
+    ImageList			maImageList;
+    ImageList			maImageListH;
 
-    Size                aLastSize;
-    IMapWindow*         pIMapWnd;
-    IMapOwnData*        pOwnData;
-    void*               pCheckObj;
-    SvxIMapDlgItem      aIMapItem;
+    Size				aLastSize;
+    IMapWindow*			pIMapWnd;
+    IMapOwnData*		pOwnData;
+    void*				pCheckObj;
+    SvxIMapDlgItem		aIMapItem;
 
-    virtual void        Resize();
-    virtual BOOL        Close();
+    virtual	void		Resize();
+    virtual BOOL 		Close();
 
 #ifdef _IMAPDLG_PRIVATE
 
@@ -159,8 +159,8 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
                         DECL_LINK( StateHdl, IMapWindow* );
                         DECL_LINK( MiscHdl, void* );
 
-    void                DoOpen();
-    BOOL                DoSave();
+    void				DoOpen();
+    BOOL				DoSave();
 
 #endif
 
@@ -171,23 +171,23 @@ public:
                                     Window* pParent, const ResId& rResId );
                         ~SvxIMapDlg();
 
-    void                SetExecState( BOOL bEnable );
+    void				SetExecState( BOOL bEnable );
 
-    void                SetGraphic( const Graphic& rGraphic );
+    void				SetGraphic( const Graphic& rGraphic );
 
-    void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
-    const void*         GetEditingObject() const { return pCheckObj; }
+    void				SetEditingObject( void* pObj ) { pCheckObj = pObj; }
+    const void*			GetEditingObject() const { return pCheckObj; }
 
-    void                SetImageMap( const ImageMap& rImageMap );
-    const ImageMap&     GetImageMap() const;
+    void				SetImageMap( const ImageMap& rImageMap );
+    const ImageMap&		GetImageMap() const;
 
-    void                SetTargetList( const TargetList& rTargetList );
-    const TargetList&   GetTargetList() const;
+    void				SetTargetList( const TargetList& rTargetList );
+    const TargetList&	GetTargetList() const;
 
-    void                Update( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
+    void				Update( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
                                 const TargetList* pTargetList = NULL, void* pEditingObj = NULL );
 
-    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void		KeyInput( const KeyEvent& rKEvt );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
     void ApplyImageList();
@@ -200,8 +200,8 @@ public:
 |*
 \************************************************************************/
 
-#define SVXIMAPDLG() ( (SvxIMapDlg*) ( SfxViewFrame::Current()->GetChildWindow(         \
-                        SvxIMapDlgChildWindow::GetChildWindowId() )->   \
+#define SVXIMAPDLG() ( (SvxIMapDlg*) ( SfxViewFrame::Current()->GetChildWindow( 		\
+                        SvxIMapDlgChildWindow::GetChildWindowId() )-> 	\
                         GetWindow() ) )
 
 

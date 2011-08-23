@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -210,7 +210,7 @@ namespace
 void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _rProp)
 {
 #ifdef DBG_UTIL
-    for (   PropertiesIterator checkConflicts = m_aProperties.begin();
+    for	(	PropertiesIterator checkConflicts = m_aProperties.begin();
             checkConflicts != m_aProperties.end();
             ++checkConflicts
         )
@@ -277,10 +277,10 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
             // (#102329# - 2002-08-14 - fs@openoffice.org)
             // (#i29490# - 2004-06-16 - fs@openoffice.org)
             if ( !aNewRequestedValue.getValueType().equals( aPos->aProperty.Type ) )
-            {   // the actually given value is not of the same type as the one required
+            {	// the actually given value is not of the same type as the one required
                 Any aProperlyTyped( NULL, aPos->aProperty.Type.getTypeLibType() );
 
-                if (    uno_type_assignData(
+                if (	uno_type_assignData(
                             const_cast< void* >( aProperlyTyped.getValue() ), aProperlyTyped.getValueType().getTypeLibType(),
                             const_cast< void* >( aNewRequestedValue.getValue() ), aNewRequestedValue.getValueType().getTypeLibType(),
                             reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
@@ -296,8 +296,8 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
             }
 
             // argument check
-            if  (   !   (   (bMayBeVoid && !aNewRequestedValue.hasValue())                      // void is allowed if the attribute says so
-                        ||  (aNewRequestedValue.getValueType().equals(aPos->aProperty.Type))    // else the types have to be equal
+            if	(	!	(	(bMayBeVoid && !aNewRequestedValue.hasValue())			            // void is allowed if the attribute says so
+                        ||	(aNewRequestedValue.getValueType().equals(aPos->aProperty.Type))	// else the types have to be equal
                         )
                 )
             {
@@ -353,7 +353,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
                 aProperlyTyped = Any( NULL, aPos->aProperty.Type.getTypeLibType() );
                     // (need this as we do not want to overwrite the derived class member here)
 
-                if (    uno_type_assignData(
+                if (	uno_type_assignData(
                             const_cast<void*>(aProperlyTyped.getValue()), aProperlyTyped.getValueType().getTypeLibType(),
                             const_cast<void*>(_rValue.getValue()), _rValue.getValueType().getTypeLibType(),
                             reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
@@ -421,8 +421,8 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
 #endif
             // copy the data from the to-be-set value
             uno_type_assignData(
-                aPos->aLocation.pDerivedClassMember,        aPos->aProperty.Type.getTypeLibType(),
-                const_cast< void* >( _rValue.getValue() ),  _rValue.getValueType().getTypeLibType(),
+                aPos->aLocation.pDerivedClassMember,		aPos->aProperty.Type.getTypeLibType(),
+                const_cast< void* >( _rValue.getValue() ),	_rValue.getValueType().getTypeLibType(),
                 reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
                 reinterpret_cast< uno_AcquireFunc >( cpp_acquire ),
                 reinterpret_cast< uno_ReleaseFunc >( cpp_release ) );
@@ -516,7 +516,7 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     Sequence< Property > aOwnProps(m_aProperties.size());
     Property* pOwnProps = aOwnProps.getArray();
 
-    for (   ConstPropertiesIterator aLoop = m_aProperties.begin();
+    for	(	ConstPropertiesIterator aLoop = m_aProperties.begin();
             aLoop != m_aProperties.end();
             ++aLoop, ++pOwnProps
         )
@@ -535,10 +535,10 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     Sequence< Property > aOutput;
     aOutput.realloc(_rProps.getLength() + aOwnProps.getLength());
     // do the merge
-    ::std::merge(   _rProps.getConstArray(), _rProps.getConstArray() + _rProps.getLength(),         // input 1
-                    aOwnProps.getConstArray(), aOwnProps.getConstArray() + aOwnProps.getLength(),   // input 2
-                    aOutput.getArray(),                                                             // output
-                    PropertyCompareByName()                                                         // compare operator
+    ::std::merge(	_rProps.getConstArray(), _rProps.getConstArray() + _rProps.getLength(),			// input 1
+                    aOwnProps.getConstArray(), aOwnProps.getConstArray() + aOwnProps.getLength(),	// input 2
+                    aOutput.getArray(),																// output
+                    PropertyCompareByName()															// compare operator
                 );
 
     // copy the output
@@ -546,7 +546,7 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
 }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,17 +41,17 @@ namespace svtools {
 
 struct VolumeInfo
 {
-    sal_Bool    m_bIsVolume;
-    sal_Bool    m_bIsRemote;
-    sal_Bool    m_bIsRemoveable;
-    sal_Bool    m_bIsFloppy;
-    sal_Bool    m_bIsCompactDisc;
+    sal_Bool	m_bIsVolume;
+    sal_Bool	m_bIsRemote;
+    sal_Bool	m_bIsRemoveable;
+    sal_Bool	m_bIsFloppy;
+    sal_Bool	m_bIsCompactDisc;
 
     VolumeInfo() :
-        m_bIsVolume     ( sal_False ),
-        m_bIsRemote     ( sal_False ),
-        m_bIsRemoveable ( sal_False ),
-        m_bIsFloppy     ( sal_False ),
+        m_bIsVolume		( sal_False ),
+        m_bIsRemote		( sal_False ),
+        m_bIsRemoveable	( sal_False ),
+        m_bIsFloppy		( sal_False ),
         m_bIsCompactDisc( sal_False ) {}
 
     VolumeInfo( sal_Bool _bIsVolume,
@@ -59,10 +59,10 @@ struct VolumeInfo
                 sal_Bool _bIsRemoveable,
                 sal_Bool _bIsFloppy,
                 sal_Bool _bIsCompactDisc ) :
-        m_bIsVolume     ( _bIsVolume ),
-        m_bIsRemote     ( _bIsRemote ),
-        m_bIsRemoveable ( _bIsRemoveable ),
-        m_bIsFloppy     ( _bIsFloppy ),
+        m_bIsVolume		( _bIsVolume ),
+        m_bIsRemote		( _bIsRemote ),
+        m_bIsRemoveable	( _bIsRemoveable ),
+        m_bIsFloppy		( _bIsFloppy ),
         m_bIsCompactDisc( _bIsCompactDisc ) {}
 };
 
@@ -71,24 +71,24 @@ struct VolumeInfo
 class SvFileInformationManager
 {
 private:
-    SVT_DLLPRIVATE static String    GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
+    SVT_DLLPRIVATE static String	GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
 
 public:
     // depricated, because no high contrast mode
-    SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
-    static Image    GetFileImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
-    static Image    GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig = sal_False );
-    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig = sal_False );
+    SVT_DLLPUBLIC static Image	GetImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
+    static Image	GetFileImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
+    static Image	GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig = sal_False );
+    SVT_DLLPUBLIC static Image	GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig = sal_False );
 
     // now with high contrast mode
-    SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
-    SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
-    SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
-    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig, sal_Bool bHighContrast );
+    SVT_DLLPUBLIC static Image	GetImage( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
+    SVT_DLLPUBLIC static Image	GetFileImage( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
+    SVT_DLLPUBLIC static Image	GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
+    SVT_DLLPUBLIC static Image	GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig, sal_Bool bHighContrast );
 
-    SVT_DLLPUBLIC static String GetDescription( const INetURLObject& rObject );
-    SVT_DLLPUBLIC static String GetFileDescription( const INetURLObject& rObject );
-    SVT_DLLPUBLIC static String GetFolderDescription( const svtools::VolumeInfo& rInfo );
+    SVT_DLLPUBLIC static String	GetDescription( const INetURLObject& rObject );
+    SVT_DLLPUBLIC static String	GetFileDescription( const INetURLObject& rObject );
+    SVT_DLLPUBLIC static String	GetFolderDescription( const svtools::VolumeInfo& rInfo );
 };
 
 #endif

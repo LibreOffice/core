@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ public:
     Stream ( GnomeVFSHandle         *handle,
          const GnomeVFSFileInfo *aInfo );
     virtual ~Stream();
-
+    
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & type )
         throw( ::com::sun::star::uno::RuntimeException );
@@ -85,7 +85,7 @@ public:
     // XStream
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL getInputStream(  )
         throw( com::sun::star::uno::RuntimeException );
-
+    
     virtual com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > SAL_CALL getOutputStream(  )
         throw( com::sun::star::uno::RuntimeException );
 
@@ -123,7 +123,7 @@ public:
                           ::com::sun::star::uno::RuntimeException );
 
     // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location )
+    virtual void SAL_CALL seek(	sal_Int64 location )
         throw( ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException );
@@ -142,14 +142,14 @@ public:
                com::sun::star::io::BufferSizeExceededException,
                com::sun::star::io::IOException,
                com::sun::star::uno::RuntimeException);
-
+        
     virtual void SAL_CALL flush( void )
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::BufferSizeExceededException,
                com::sun::star::io::IOException,
                com::sun::star::uno::RuntimeException);
-
-
+        
+        
         virtual void SAL_CALL closeOutput( void )
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::IOException,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,20 +36,20 @@ CSimpleMapi::CSimpleMapi() :
     m_lpfnMapiLogon(NULL),
     m_lpfnMapiLogoff(NULL),
     m_lpfnMapiSendMail(NULL)
-{
+{    
     m_hMapiDll = LoadLibrary("mapi32.dll");
     if ((m_hMapiDll == INVALID_HANDLE_VALUE) || (m_hMapiDll == NULL))
         throw std::runtime_error("Couldn't load MAPI library");
-
+                   
     m_lpfnMapiLogon = reinterpret_cast<LPMAPILOGON>(GetProcAddress(m_hMapiDll, "MAPILogon"));
     if (!m_lpfnMapiLogon)
         throw std::runtime_error("Couldn't find method MAPILogon");
-
+        
     m_lpfnMapiLogoff = reinterpret_cast<LPMAPILOGOFF>(GetProcAddress(m_hMapiDll, "MAPILogoff"));
     if (!m_lpfnMapiLogoff)
         throw std::runtime_error("Couldn't find method MAPILogoff");
-
-    m_lpfnMapiSendMail = reinterpret_cast<LPMAPISENDMAIL>(GetProcAddress(m_hMapiDll, "MAPISendMail"));
+        
+    m_lpfnMapiSendMail = reinterpret_cast<LPMAPISENDMAIL>(GetProcAddress(m_hMapiDll, "MAPISendMail"));            
     if (!m_lpfnMapiSendMail)
         throw std::runtime_error("Couldn't find method MAPISendMail");
 }
@@ -59,24 +59,24 @@ CSimpleMapi::~CSimpleMapi()
     FreeLibrary(m_hMapiDll);
 }
 
-ULONG CSimpleMapi::MAPILogon(
-    ULONG ulUIParam,
-    LPTSTR lpszProfileName,
-    LPTSTR lpszPassword,
-    FLAGS flFlags,
-    ULONG ulReserved,
+ULONG CSimpleMapi::MAPILogon( 
+    ULONG ulUIParam, 
+    LPTSTR lpszProfileName, 
+    LPTSTR lpszPassword, 
+    FLAGS flFlags, 
+    ULONG ulReserved, 
     LPLHANDLE lplhSession )
-{
-    return m_lpfnMapiLogon(
-        ulUIParam,
-        lpszProfileName,
-        lpszPassword,
-        flFlags,
-        ulReserved,
+{    
+    return m_lpfnMapiLogon( 
+        ulUIParam, 
+        lpszProfileName, 
+        lpszPassword, 
+        flFlags, 
+        ulReserved, 
         lplhSession );
 }
 
-ULONG CSimpleMapi::MAPILogoff(
+ULONG CSimpleMapi::MAPILogoff( 
     LHANDLE lhSession,
     ULONG ulUIParam,
     FLAGS flFlags,
@@ -85,11 +85,11 @@ ULONG CSimpleMapi::MAPILogoff(
     return m_lpfnMapiLogoff(lhSession, ulUIParam, flFlags, ulReserved);
 }
 
-ULONG CSimpleMapi::MAPISendMail(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    lpMapiMessage lpMessage,
-    FLAGS flFlags,
+ULONG CSimpleMapi::MAPISendMail( 
+    LHANDLE lhSession,         
+    ULONG ulUIParam,           
+    lpMapiMessage lpMessage,   
+    FLAGS flFlags,             
     ULONG ulReserved )
 {
     return m_lpfnMapiSendMail(lhSession, ulUIParam, lpMessage, flFlags, ulReserved);

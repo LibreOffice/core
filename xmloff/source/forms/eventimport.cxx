@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace xmloff
         const PropertyValue* pEventDescription;
         const PropertyValue* pEventDescriptionEnd;
         sal_Int32 nSeparatorPos = -1;
-        for (   EventsVector::const_iterator aEvent = aCollectEvents.begin();
+        for	(	EventsVector::const_iterator aEvent = aCollectEvents.begin();
                 aEvent != aCollectEvents.end();
                 ++aEvent, ++pTranslated
             )
@@ -77,8 +77,8 @@ namespace xmloff
             ::rtl::OUString sLibrary;
 
             // the local macro name and the event type are specified as properties
-            pEventDescription       =                       aEvent->second.getConstArray();
-            pEventDescriptionEnd    =   pEventDescription + aEvent->second.getLength();
+            pEventDescription		=						aEvent->second.getConstArray();
+            pEventDescriptionEnd	=	pEventDescription + aEvent->second.getLength();
             for (;pEventDescription != pEventDescriptionEnd; ++pEventDescription)
             {
                 if ((0 == pEventDescription->Name.compareToAscii(EVENT_LOCALMACRONAME)) ||
@@ -157,7 +157,7 @@ namespace xmloff
     }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 

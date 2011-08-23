@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef INFOTIPS_HXX_INCLUDED
 #define INFOTIPS_HXX_INCLUDED
 
@@ -36,10 +36,10 @@
 #include <shlobj.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 #include <string>
 
-class CInfoTip : public IQueryInfo, public IPersistFile
+class CInfoTip : public IQueryInfo, public IPersistFile  
 {
 public:
     CInfoTip(long RefCnt = 1);
@@ -49,14 +49,14 @@ public:
     // IUnknown methods
     //-----------------------------
 
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
-
+    
     virtual ULONG STDMETHODCALLTYPE AddRef( void);
-
+        
     virtual ULONG STDMETHODCALLTYPE Release( void);
-
+        
     //----------------------------
     // IQueryInfo methods
     //----------------------------
@@ -76,24 +76,24 @@ public:
     //----------------------------
 
     virtual HRESULT STDMETHODCALLTYPE IsDirty(void);
-
-    virtual HRESULT STDMETHODCALLTYPE Load(
+        
+    virtual HRESULT STDMETHODCALLTYPE Load( 
             /* [in] */ LPCOLESTR pszFileName,
             /* [in] */ DWORD dwMode);
-
-    virtual HRESULT STDMETHODCALLTYPE Save(
+        
+    virtual HRESULT STDMETHODCALLTYPE Save( 
             /* [unique][in] */ LPCOLESTR pszFileName,
             /* [in] */ BOOL fRemember);
-
-    virtual HRESULT STDMETHODCALLTYPE SaveCompleted(
+        
+    virtual HRESULT STDMETHODCALLTYPE SaveCompleted( 
             /* [unique][in] */ LPCOLESTR pszFileName);
-
-    virtual HRESULT STDMETHODCALLTYPE GetCurFile(
+        
+    virtual HRESULT STDMETHODCALLTYPE GetCurFile( 
             /* [out] */ LPOLESTR __RPC_FAR *ppszFileName);
 
 private:
-    long         m_RefCnt;
-    char         m_szFileName[MAX_PATH];
+    long		 m_RefCnt;
+    char		 m_szFileName[MAX_PATH];
     std::wstring m_FileNameOnly;
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ class LangGuess_Impl :
 public:
     explicit LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
-    // XServiceInfo implementation
+    // XServiceInfo	implementation
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);

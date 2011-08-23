@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ protected:
     //TabPage
     virtual void DeactivatePage();
 
-    virtual void        initializePage();
+    virtual void		initializePage();
 
     DECL_LINK( SeriesSelectionChangedHdl, void* );
     DECL_LINK( RoleSelectionChangedHdl, void* );

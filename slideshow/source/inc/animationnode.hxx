@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 namespace slideshow {
 namespace internal {
 
-/** This interface is used to mirror every XAnimateNode object
+/** This interface is used to mirror every XAnimateNode object 
     in the presentation core.
 */
 class AnimationNode : public Disposable
@@ -58,27 +58,27 @@ public:
         /// and any effect is removed from the document
         ENDED       =16
     };
-
+    
     /** Query the corresponding XAnimationNode.
      */
-    virtual ::com::sun::star::uno::Reference<
+    virtual ::com::sun::star::uno::Reference< 
         ::com::sun::star::animations::XAnimationNode >
     getXAnimationNode() const = 0;
-
+    
     /** Init this node
-
+        
         If this node is not in state INVALID, init() sets up the
         node state and schedules necessary events.
         If this node has children, they have their init() called, too.
         You will call this method whenever a slide is going to be
         shown.
-
+        
         @return true, if init was successful; state has changed to UNRESOLVED
     */
     virtual bool init() = 0;
-
+    
     /** Resolve node start time
-
+        
         Nodes can have unresolved start times, i.e. indefinite
         start time for container nodes, or child nodes whose
         parent has not yet started. Calling this method fixes
@@ -86,32 +86,32 @@ public:
         node immediately starts its animations, that is only
         the case for begin=0.0. The node will change its state
         to RESOLVED.
-
+        
         @return true, if a start event was successfully scheduled.
     */
     virtual bool resolve() = 0;
-
+    
     /** Immediately start this node
-
+        
         This method starts the animation on this node, without
         begin timeout. The node will change its state to ACTIVE.
-
+        
         @return true, if start was successful. This method
         might return false, if e.g. a restart is not permitted
         on this node.
     */
     virtual bool activate() = 0;
-
+    
     /** Immediately stop this node
-
+        
         This method stops the animation on this node. The node
         will change its state to either ENDED or FROZEN,
         depending on XAnimationNode attributes.
     */
     virtual void deactivate() = 0;
-
+    
     /** End the animation on this node
-
+        
         This method force-ends animation on this node. Parents
         may call this for their children, if their active
         duration ends. An ended animation will no longer have
@@ -119,34 +119,34 @@ public:
         change its state to ENDED.
     */
     virtual void end() = 0;
-
+    
     /** Query node state
-
+        
         @return the current state of this animation node.
     */
     virtual NodeState getState() const = 0;
-
+    
     /** Register a deactivating listener
-
+        
         This method registers another AnimationNode as an
         deactivating listener, which gets notified via a
         notifyDeactivating() call. The node calls all
         registered listener, when it leaves the ACTIVE state.
-
+        
         @param rNotifee AnimationNode to notify
     */
     virtual bool registerDeactivatingListener(
         const ::boost::shared_ptr< AnimationNode >& rNotifee ) = 0;
-
+    
     /** Called to notify another AnimationNode's deactivation
-
+        
         @param rNotifier The instance who calls this method.
     */
     virtual void notifyDeactivating(
         const ::boost::shared_ptr< AnimationNode >& rNotifier ) = 0;
-
+    
     /** Query node whether it has an animation pending.
-
+        
         @return true, if this node (or at least one of its children)
         has an animation pending. Used to determine if the main
         sequence is actually empty, or contains effects

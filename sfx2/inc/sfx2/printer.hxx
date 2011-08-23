@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,27 +40,27 @@ class SfxItemSet;
 
 struct SfxPrinter_Impl;
 
-#define SFX_RANGE_NOTSET    ((USHORT)0xFFFF)
+#define SFX_RANGE_NOTSET	((USHORT)0xFFFF)
 
 // class SfxFontSizeInfo -------------------------------------------------
 
 class SfxFontSizeInfo
 {
 private:
-    static USHORT           pStaticSizes[];
-    Size*                   pSizes;
-    USHORT                  nSizes;
-    BOOL                    bScalable;
+    static USHORT			pStaticSizes[];
+    Size*					pSizes;
+    USHORT					nSizes;
+    BOOL					bScalable;
 
 public:
     SfxFontSizeInfo( const SfxFont& rFont, const OutputDevice& rDevice );
     ~SfxFontSizeInfo();
 
-    BOOL                    HasSize(const Size &rSize) const;
-    BOOL                    IsScalable() const { return bScalable; }
+    BOOL					HasSize(const Size &rSize) const;
+    BOOL					IsScalable() const { return bScalable; }
 
-    USHORT                  SizeCount() const { return nSizes; }
-    const Size&             GetSize( USHORT nNo ) const
+    USHORT					SizeCount() const { return nSizes; }
+    const Size& 			GetSize( USHORT nNo ) const
                             { return pSizes[nNo]; }
 };
 
@@ -69,12 +69,12 @@ public:
 class SFX2_DLLPUBLIC SfxFont
 {
 private:
-    String                  aName;
-    FontFamily              eFamily;
-    FontPitch               ePitch;
-    CharSet                 eCharSet;
+    String					aName;
+    FontFamily				eFamily;
+    FontPitch				ePitch;
+    CharSet 				eCharSet;
 
-    SfxFont&                operator=(const SfxFont& rFont); // not implemented
+    SfxFont&				operator=(const SfxFont& rFont); // not implemented
 
 public:
     SfxFont( const FontFamily eFam,
@@ -82,10 +82,10 @@ public:
              const FontPitch eFontPitch = PITCH_DONTKNOW,
              const CharSet eFontCharSet = RTL_TEXTENCODING_DONTKNOW );
     // ZugriffsMethoden:
-    inline const String&    GetName() const { return aName; }
-    inline FontFamily       GetFamily() const { return eFamily; }
-    inline FontPitch        GetPitch() const { return ePitch; }
-    inline CharSet          GetCharSet() const { return eCharSet; }
+    inline const String&	GetName() const { return aName; }
+    inline FontFamily		GetFamily() const { return eFamily; }
+    inline FontPitch		GetPitch() const { return ePitch; }
+    inline CharSet			GetCharSet() const { return eCharSet; }
 };
 
 // class SfxPrinter ------------------------------------------------------
@@ -93,10 +93,10 @@ public:
 class SFX2_DLLPUBLIC SfxPrinter : public Printer
 {
 private:
-    JobSetup                aOrigJobSetup;
-    SfxItemSet*             pOptions;
-    SfxPrinter_Impl*        pImpl;
-    BOOL                    bKnown;
+    JobSetup				aOrigJobSetup;
+    SfxItemSet*				pOptions;
+    SfxPrinter_Impl*		pImpl;
+    BOOL					bKnown;
 
     SAL_DLLPRIVATE void operator =(SfxPrinter &); // not defined
 
@@ -114,27 +114,27 @@ public:
                             SfxPrinter( const SfxPrinter &rPrinter );
                             ~SfxPrinter();
 
-    SfxPrinter*             Clone() const;
+    SfxPrinter*				Clone() const;
 
-    static SfxPrinter*      Create( SvStream &rStream, SfxItemSet *pOptions );
-    SvStream&               Store( SvStream &rStream ) const;
+    static SfxPrinter*		Create( SvStream &rStream, SfxItemSet *pOptions );
+    SvStream&				Store( SvStream &rStream ) const;
 
-    const JobSetup&         GetOrigJobSetup() const { return aOrigJobSetup; }
-    void                    SetOrigJobSetup( const JobSetup &rNewJobSetup );
+    const JobSetup& 		GetOrigJobSetup() const	{ return aOrigJobSetup; }
+    void					SetOrigJobSetup( const JobSetup &rNewJobSetup );
 
-    const SfxItemSet&       GetOptions() const { return *pOptions; }
-    void                    SetOptions( const SfxItemSet &rNewOptions );
+    const SfxItemSet&		GetOptions() const { return *pOptions; }
+    void					SetOptions( const SfxItemSet &rNewOptions );
 
-    void                    EnableRange( USHORT nRange );
-    void                    DisableRange( USHORT nRange );
-    BOOL                    IsRangeEnabled( USHORT nRange ) const;
+    void					EnableRange( USHORT nRange );
+    void					DisableRange( USHORT nRange );
+    BOOL					IsRangeEnabled( USHORT nRange ) const;
 
-    BOOL                    IsKnown() const { return bKnown; }
-    BOOL                    IsOriginal() const { return bKnown; }
+    BOOL					IsKnown() const { return bKnown; }
+    BOOL					IsOriginal() const { return bKnown; }
 
         using OutputDevice::GetFont;
-    USHORT                  GetFontCount();
-    const SfxFont*          GetFont( USHORT nNo ) const;
+    USHORT					GetFontCount();
+    const SfxFont*			GetFont( USHORT nNo ) const;
     const SfxFont*          GetFontByName( const String &rFontName );
 
     BOOL                    InitJob( Window* pUIParent, BOOL bAskAboutTransparentObjects );

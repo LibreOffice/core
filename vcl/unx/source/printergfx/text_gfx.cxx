@@ -1,7 +1,7 @@
 /*************************************************************************
   *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace psp {
  1st font is the font substitute e.g. helvetica substitutes arial on the printer
  2nd is the font itself
  3rd is a fallback font, usually a font with unicode glyph repertoir (e.g. andale)
- symbol fonts (adobe-fontspecific) may need special glyphmapping
+ symbol fonts (adobe-fontspecific) may need special glyphmapping 
  (symbol page vc. latin page)
 */
 class Font3
@@ -59,13 +59,13 @@ class Font3
         #define Font3Size 3
 
         fontID  mpFont [Font3Size];
-        bool    mbSymbol;
+        bool	mbSymbol;	
 
     public:
 
-        fontID  GetFont (int nIdx) const
+        fontID	GetFont (int nIdx) const
                     { return nIdx < Font3Size ? mpFont[nIdx] : -1 ; }
-        bool    IsSymbolFont () const
+        bool	IsSymbolFont () const
                     { return mbSymbol; }
 
         Font3 (const PrinterGfx &rGfx);
@@ -75,13 +75,13 @@ class Font3
 Font3::Font3(const PrinterGfx &rGfx)
 {
     mpFont[0] = rGfx.getFontSubstitute();
-    mpFont[1] = rGfx.GetFontID();
+    mpFont[1] = rGfx.GetFontID(); 
     mpFont[2] = rGfx.getFallbackID();
     // mpFont[2] = rGfx.GetFontID();
 
-       PrintFontManager &rMgr = PrintFontManager::get();
-    mbSymbol = mpFont[1] != -1 ?
-                rMgr.getFontEncoding(mpFont[1]) == RTL_TEXTENCODING_SYMBOL : false;
+       PrintFontManager &rMgr = PrintFontManager::get(); 
+    mbSymbol = mpFont[1] != -1 ? 
+                rMgr.getFontEncoding(mpFont[1]) == RTL_TEXTENCODING_SYMBOL : false; 
 }
 
 } // namespace psp
@@ -98,7 +98,7 @@ static int getVerticalDeltaAngle( sal_Unicode nChar )
         /* #i52932# remember:
          nChar == 0x2010 || nChar == 0x2015
          nChar == 0x2016 || nChar == 0x2026
-
+         
          are nAngle = 0 also, but already handled in the first if
         */
         if( ( nChar >= 0x3008 && nChar < 0x3019 && nChar != 0x3012 ) ||
@@ -133,7 +133,7 @@ PrinterGfx::PSUploadPS1Font (sal_Int32 nFontID)
  * implement text handling printer routines,
  */
 
-sal_uInt16
+sal_uInt16  
 PrinterGfx::SetFont(
                     sal_Int32 nFontID,
                     sal_Int32 nHeight,
@@ -151,15 +151,15 @@ PrinterGfx::SetFont(
     maVirtualStatus.maEncoding        = RTL_TEXTENCODING_DONTKNOW;
     maVirtualStatus.mnTextHeight      = nHeight;
     maVirtualStatus.mnTextWidth       = nWidth;
-    maVirtualStatus.mbArtItalic       = bArtItalic;
-    maVirtualStatus.mbArtBold         = bArtBold;
+    maVirtualStatus.mbArtItalic		  = bArtItalic;
+    maVirtualStatus.mbArtBold		  = bArtBold;
     mnTextAngle                       = nAngle;
     mbTextVertical                    = bVertical;
 
     return 0;
 }
 
-sal_uInt16
+sal_uInt16      
 PrinterGfx::SetFallbackFont ( sal_Int32 nFontID )
 {
     mnFallbackID = nFontID;
@@ -175,18 +175,18 @@ void PrinterGfx::drawGlyphs(
                             )
 {
 
-    // draw the string
+    // draw the string  
     // search for a glyph set matching the set font
     std::list< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
-        if ( ((*aIter).GetFontID()  == mnFontID)
+        if ( ((*aIter).GetFontID()  == mnFontID) 
              && ((*aIter).IsVertical() == mbTextVertical))
         {
             (*aIter).DrawGlyphs (*this, rPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
             break;
         }
-
-    // not found ? create a new one
+    
+    // not found ? create a new one 
     if (aIter == maPS3Font.end())
     {
         maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
@@ -256,10 +256,10 @@ void PrinterGfx::DrawGlyphs(
             const sal_GlyphId nRot = pGlyphIds[i] & GF_ROTMASK;
             if( nRot == GF_NONE )
             {
-                pTempUnicodes[nTempLen] = pUnicodes[i];
+                pTempUnicodes[nTempLen]	= pUnicodes[i];
                 pTempGlyphIds[nTempLen] = pGlyphIds[i];
                 if( nTempLen > 0 )
-                    pTempDelta[nTempLen-1]  = pDeltaArray[i-1]-nTempFirstDelta;
+                    pTempDelta[nTempLen-1]	= pDeltaArray[i-1]-nTempFirstDelta;
                 else
                 {
                     // the first element in pDeltaArray shows
@@ -292,9 +292,9 @@ void PrinterGfx::DrawGlyphs(
                         aRotPoint = Point( -nDescend*nTextWidth/nTextHeight, nOffset + nAscend*nTextWidth/nTextHeight );
                         break;
                 }
-                sal_GlyphId nRotGlyphId     = pGlyphIds[i];
-                sal_Unicode nRotUnicode     = pUnicodes[i];
-                sal_Int32 nRotDelta         = 0;
+                sal_GlyphId nRotGlyphId		= pGlyphIds[i];
+                sal_Unicode nRotUnicode		= pUnicodes[i];
+                sal_Int32 nRotDelta			= 0;
 
                 // transform matrix to new individual direction
                 PSGSave ();
@@ -339,13 +339,13 @@ void
 PrinterGfx::DrawText (
                       const Point& rPoint,
                       const sal_Unicode* pStr,
-                      sal_Int16 nLen,
+                      sal_Int16 nLen, 
                       const sal_Int32* pDeltaArray
                       )
 {
     fontID nRestoreFont = mnFontID;
 
-    // setup font[substitutes] and map the string into the symbol area in case of
+    // setup font[substitutes] and map the string into the symbol area in case of 
     // symbol font
     Font3 aFont(*this);
     sal_Unicode *pEffectiveStr;
@@ -357,7 +357,7 @@ PrinterGfx::DrawText (
     }
     else
     {
-        pEffectiveStr = const_cast<sal_Unicode*>(pStr);
+        pEffectiveStr = const_cast<sal_Unicode*>(pStr); 
     }
 
     fontID    *pFontMap   = (fontID*)    alloca(nLen * sizeof(fontID));
@@ -398,7 +398,7 @@ PrinterGfx::DrawText (
         PSTranslate (rPoint);
         PSRotate (nCurrentTextAngle);
         mnTextAngle = 0;
-
+        
         nCurrentPointX = 0;
         nCurrentPointY = 0;
     }
@@ -408,7 +408,7 @@ PrinterGfx::DrawText (
         nCurrentPointY = rPoint.Y();
     }
 
-    // draw the string
+    // draw the string  
     sal_Int32 nDelta = 0;
     for (int nTo = 0; nTo < nLen; )
     {
@@ -422,25 +422,25 @@ PrinterGfx::DrawText (
         }
 
         SetFont( nFont,
-                 maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
+                 maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, 
                  mnTextAngle,
                  mbTextVertical,
                  maVirtualStatus.mbArtItalic,
                  maVirtualStatus.mbArtBold
                  );
-
+        
         if (mbTextVertical)
         {
-            drawVerticalizedText(
-                    Point(nCurrentPointX + nDelta, nCurrentPointY),
-                    pEffectiveStr + nFrom, nTo - nFrom,
+            drawVerticalizedText( 
+                    Point(nCurrentPointX + nDelta, nCurrentPointY), 
+                    pEffectiveStr + nFrom, nTo - nFrom, 
                     pNewDeltaArray + nFrom );
         }
         else
         {
-            drawText(
-                    Point(nCurrentPointX + nDelta, nCurrentPointY),
-                    pEffectiveStr + nFrom, nTo - nFrom,
+            drawText( 
+                    Point(nCurrentPointX + nDelta, nCurrentPointY), 
+                    pEffectiveStr + nFrom, nTo - nFrom, 
                     pDeltaArray == NULL ? NULL : pNewDeltaArray + nFrom );
         }
         nDelta += pNewDeltaArray[ nTo - 1 ];
@@ -455,7 +455,7 @@ PrinterGfx::DrawText (
 
     // restore the original font settings
     SetFont( nRestoreFont,
-             maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
+             maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, 
              mnTextAngle, mbTextVertical,
              maVirtualStatus.mbArtItalic,
              maVirtualStatus.mbArtBold
@@ -465,7 +465,7 @@ PrinterGfx::DrawText (
 void PrinterGfx::drawVerticalizedText(
                                       const Point& rPoint,
                                       const sal_Unicode* pStr,
-                                      sal_Int16 nLen,
+                                      sal_Int16 nLen, 
                                       const sal_Int32* pDeltaArray
                                       )
 {
@@ -494,32 +494,32 @@ void PrinterGfx::drawVerticalizedText(
         {
             for( int n = nLastPos; n < i; n++ )
                 pDelta[n] = pDeltaArray[n] - (aPoint.X() - rPoint.X() );
-
+            
             SetFont( mnFontID,
                      maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
                      nNormalAngle, mbTextVertical,
                      maVirtualStatus.mbArtItalic,
                      maVirtualStatus.mbArtBold );
             drawText( aPoint, pStr + nLastPos, i - nLastPos, pDelta + nLastPos );
-
+            
             aPoint.X() = (sal_Int32)(rPoint.X() + ((double)pDeltaArray[i-1] * fCos));
             aPoint.Y() = (sal_Int32)(rPoint.Y() + ((double)pDeltaArray[i-1] * fSin));
         }
         if( i < nLen )
         {
-            int nOldWidth   = maVirtualStatus.mnTextWidth;
-            int nOldHeight  = maVirtualStatus.mnTextHeight;
+            int nOldWidth	= maVirtualStatus.mnTextWidth;
+            int nOldHeight	= maVirtualStatus.mnTextHeight;
             SetFont( mnFontID,
                      nTextScale,
                      maVirtualStatus.mnTextHeight,
-                     nNormalAngle + nDeltaAngle,
+                     nNormalAngle + nDeltaAngle, 
                      mbTextVertical,
                      maVirtualStatus.mbArtItalic,
                      maVirtualStatus.mbArtBold );
 
             double nA = nTextScale * aInfo.m_nAscend / 1000.0;
             double nD = nTextScale * aInfo.m_nDescend / 1000.0;
-            double fStretch = (double)maVirtualStatus.mnTextWidth / maVirtualStatus.mnTextHeight;
+            double fStretch = (double)maVirtualStatus.mnTextWidth / maVirtualStatus.mnTextHeight; 
             if( !pGsubFlags[i] )
                 nD *= fStretch;
 
@@ -546,7 +546,7 @@ void PrinterGfx::drawVerticalizedText(
             SetFont( mnFontID,
                      nOldHeight,
                      nOldWidth,
-                     nNormalAngle,
+                     nNormalAngle, 
                      mbTextVertical,
                      maVirtualStatus.mbArtItalic,
                      maVirtualStatus.mbArtBold );
@@ -557,25 +557,25 @@ void PrinterGfx::drawVerticalizedText(
     mnTextAngle = nNormalAngle;
 }
 
-void
+void        
 PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
                            sal_Int16 nLen, const sal_Int32* pDeltaArray)
 {
-    // treat it like a builtin font in case a user has that font also in the
-    // printer. This is not so unlikely as it may seem; no print embedding
+    // treat it like a builtin font in case a user has that font also in the 
+    // printer. This is not so unlikely as it may seem; no print embedding 
     // licensed fonts are often used (or so they say) in companies:
-    // they are installed on displays and printers, but get not embedded in
-    // they are installed on displays and printers, but get not embedded in
-    // print files or documents because they are not licensed for use outside
+    // they are installed on displays and printers, but get not embedded in 
+    // they are installed on displays and printers, but get not embedded in 
+    // print files or documents because they are not licensed for use outside 
     // the company.
     rtl::OString aMessage( "The font " );
-    aMessage += rtl::OUStringToOString( mrFontMgr.getPSName(mnFontID),
+    aMessage += rtl::OUStringToOString( mrFontMgr.getPSName(mnFontID), 
             RTL_TEXTENCODING_ASCII_US );
     aMessage += " could not be downloaded\nbecause its license does not allow for that";
     PSComment( aMessage.getStr() );
 
-    rtl::OString aFontName = rtl::OUStringToOString(
-            mrFontMgr.getPSName(mnFontID),
+    rtl::OString aFontName = rtl::OUStringToOString( 
+            mrFontMgr.getPSName(mnFontID), 
             RTL_TEXTENCODING_ASCII_US);
     PSSetFont (aFontName, RTL_TEXTENCODING_ISO_8859_1);
 
@@ -589,11 +589,11 @@ PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
     PSShowText (pBuffer, nLen, nSize, pDeltaArray);
 }
 
-void
+void        
 PrinterGfx::drawText(
                      const Point& rPoint,
                      const sal_Unicode* pStr,
-                     sal_Int16 nLen,
+                     sal_Int16 nLen, 
                      const sal_Int32* pDeltaArray
                      )
 {
@@ -605,7 +605,7 @@ PrinterGfx::drawText(
     if (eType == fonttype::Type1)
         PSUploadPS1Font (mnFontID);
 
-    if (   eType == fonttype::TrueType
+    if (   eType == fonttype::TrueType 
         && !mrFontMgr.isFontDownloadingAllowed(mnFontID))
     {
         LicenseWarning(rPoint, pStr, nLen, pDeltaArray);
@@ -622,14 +622,14 @@ PrinterGfx::drawText(
     // search for a glyph set matching the set font
     std::list< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
-        if (   ((*aIter).GetFontID()  == mnFontID)
+        if (   ((*aIter).GetFontID()  == mnFontID) 
             && ((*aIter).IsVertical() == mbTextVertical))
         {
             (*aIter).DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
             break;
         }
 
-    // not found ? create a new one
+    // not found ? create a new one 
     if (aIter == maPS3Font.end())
     {
         maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
@@ -642,11 +642,11 @@ PrinterGfx::getCharWidth (sal_Bool b_vert, sal_Unicode n_char, CharacterMetric *
 {
     b_vert = b_vert && (getVerticalDeltaAngle(n_char) != 0);
     int w = b_vert ? p_bbox->height : p_bbox->width;
-    w *= maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
+    w *= maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight; 
     return w;
 }
 
-fontID
+fontID 
 PrinterGfx::getCharMetric (const Font3 &rFont, sal_Unicode n_char, CharacterMetric *p_bbox)
 {
     p_bbox->width  = -1;
@@ -702,7 +702,7 @@ PrinterGfx::getFontSubstitute () const
 {
     if( mpFontSubstitutes )
     {
-        ::std::hash_map< fontID, fontID >::const_iterator it =
+        ::std::hash_map< fontID, fontID >::const_iterator it = 
               mpFontSubstitutes->find( mnFontID );
         if( it != mpFontSubstitutes->end() )
             return it->second;
@@ -714,12 +714,12 @@ PrinterGfx::getFontSubstitute () const
 sal_Int32
 PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
 {
-    Font3 aFont(*this);
+    Font3 aFont(*this); 
     if (aFont.IsSymbolFont() && (nFrom < 256) && (nTo < 256))
     {
         nFrom += 0xF000;
         nTo   += 0xF000;
-    }
+    }	
 
     for( int n = 0; n < (nTo - nFrom + 1); n++ )
     {
@@ -758,21 +758,21 @@ const ::std::list< KernPair >& PrinterGfx::getKernPairs( bool bVertical ) const
  * advanced glyph handling
  */
 
-sal_Bool
+sal_Bool    
 PrinterGfx::GetGlyphBoundRect (sal_Unicode /*c*/, Rectangle& /*rOutRect*/)
 {
     return 0;
 }
 
-sal_uInt32
-PrinterGfx::GetGlyphOutline (sal_Unicode /*c*/,
+sal_uInt32  
+PrinterGfx::GetGlyphOutline (sal_Unicode /*c*/, 
                              sal_uInt16 **/*ppPolySizes*/, Point **/*ppPoints*/, sal_uInt8 **/*ppFlags*/)
 {
     return 0;
 }
 
 /*
- * spool the converted truetype fonts to the page header after the page body is
+ * spool the converted truetype fonts to the page header after the page body is 
  * complete
  * for Type1 fonts spool additional reencoding vectors that are necessary to access the
  * whole font
@@ -809,7 +809,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppli
                                      RTL_TEXTENCODING_ASCII_US );
 
         WritePS (pFile, "%%BeginResource: font ");
-        WritePS (pFile, aPostScriptName.getStr());
+        WritePS (pFile, aPostScriptName.getStr()); 
         WritePS (pFile, "\n");
 
         osl::File::RC nError = aFontFile.open (OpenFlag_Read);
@@ -838,7 +838,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppli
             aIter->PSUploadFont (*pFile, *this, mbUploadPS42Fonts ? true : false, rSuppliedFonts );
         }
         else
-        // (   aIter->GetFontType() == fonttype::Type1
+        // (   aIter->GetFontType() == fonttype::Type1 
         //  || aIter->GetFontType() == fonttype::Builtin )
         {
             aIter->PSUploadEncoding (pFile, *this);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ interface XConfigurationChangeRequest;
 
 /** The request queue of the configuration controller handles requests for
     changes to the current configuration.
-
+    
     <p>This interface allows callers to add requests to the back of the
     queue and to determine wheter the queue is empty.  Using this interace
     should normally not be necessary for anyone else than the

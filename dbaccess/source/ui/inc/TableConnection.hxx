@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 //#include "ConnectionLine.hxx"
 //#endif
 #include <vector>
-#ifndef _TOOLS_DEBUG_HXX
+#ifndef _TOOLS_DEBUG_HXX 
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_WINDOW_HXX
@@ -43,7 +43,7 @@
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_ 
 #include <com/sun/star/uno/Reference.h>
 #endif
 #include "TableConnectionData.hxx"
@@ -61,12 +61,12 @@ namespace dbaui
     DBG_NAMEEX(OTableConnection)
     class OTableConnection : public Window
     {
-        ::std::vector<OConnectionLine*> m_vConnLine;
-        TTableConnectionData::value_type
+        ::std::vector<OConnectionLine*>	m_vConnLine;
+        TTableConnectionData::value_type			
                                         m_pData;
-        OJoinTableView*                 m_pParent;
+        OJoinTableView*					m_pParent;
 
-        BOOL                            m_bSelected;
+        BOOL							m_bSelected;
 
         void Init();
         /** clearLineData loops through the vector and deletes all lines
@@ -86,35 +86,35 @@ namespace dbaui
         virtual ~OTableConnection();
 
         OTableConnection& operator=( const OTableConnection& rConn );
+        
 
-
-        void        Select();
-        void        Deselect();
-        BOOL        IsSelected() const { return m_bSelected; }
-        BOOL        CheckHit( const Point& rMousePos ) const;
-        bool        InvalidateConnection();
-        void        UpdateLineList();
+        void		Select();
+        void		Deselect();
+        BOOL		IsSelected() const { return m_bSelected; }
+        BOOL		CheckHit( const Point& rMousePos ) const;
+        bool		InvalidateConnection();
+        void		UpdateLineList();
 
         OTableWindow* GetSourceWin() const;
         OTableWindow* GetDestWin() const;
 
         bool RecalcLines();
         /** isTableConnection
-            @param  _pTable the table where we should check if we belongs to it
+            @param	_pTable	the table where we should check if we belongs to it
 
-            @return true when the source or the destination window are equal
+            @return	true when the source or the destination window are equal
         */
         bool isTableConnection(const OTableWindow* _pTable)
         {
             return (_pTable == GetSourceWin() || _pTable == GetDestWin());
         }
 
-        Rectangle   GetBoundingRect() const;
+        Rectangle	GetBoundingRect() const;
 
-        inline TTableConnectionData::value_type GetData() const { return m_pData; }
+        inline TTableConnectionData::value_type	GetData() const { return m_pData; }
         const ::std::vector<OConnectionLine*>*  GetConnLineList() const { return &m_vConnLine; }
-        inline OJoinTableView*                  GetParent() const { return m_pParent; }
-        virtual void                    Draw( const Rectangle& rRect );
+        inline OJoinTableView*					GetParent() const { return m_pParent; }
+        virtual void					Draw( const Rectangle& rRect );
         using Window::Draw;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     };

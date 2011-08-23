@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class SbxObjectImpl;
 
 class SbxObject : public SbxVariable, public SfxListener
 {
-    SbxObjectImpl* mpSbxObjectImpl; // Impl data
+    SbxObjectImpl* mpSbxObjectImpl;	// Impl data
 
     SbxArray* FindVar( SbxVariable*, USHORT& );
     // AB 23.3.1997, special method for VCPtrRemove (see below)
@@ -69,7 +69,7 @@ public:
 
     virtual BOOL  IsClass( const String& ) const;
     const String& GetClassName() const { return aClassName; }
-    void          SetClassName( const String &rNew ) { aClassName = rNew; }
+    void		  SetClassName( const String &rNew ) { aClassName = rNew; }
     // Default-Property
     SbxProperty* GetDfltProperty();
     void SetDfltProperty( const String& r );
@@ -87,7 +87,7 @@ public:
     SbxVariable* Make( const String&, SbxClassType, SbxDataType );
     virtual SbxObject* MakeObject( const String&, const String& );
     virtual void Insert( SbxVariable* );
-    // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and
+    // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and 
     // without Broadcasts, only used in SO2/auto.cxx
     void QuickInsert( SbxVariable* );
     // AB 23.3.1997, Special-Method, allow corresponding controls
@@ -101,10 +101,10 @@ public:
     // Macro-Recording
     virtual String GenerateSource( const String &rLinePrefix,
                                    const SbxObject *pRelativeTo );
-    // Direct access on arrays
-    SbxArray* GetMethods()      { return pMethods;  }
-    SbxArray* GetProperties()   { return pProps;    }
-    SbxArray* GetObjects()      { return pObjs;     }
+    // Direct access on arrays 
+    SbxArray* GetMethods()		{ return pMethods;	}
+    SbxArray* GetProperties()	{ return pProps; 	}
+    SbxArray* GetObjects()		{ return pObjs; 	}
     // Hooks
     virtual SvDispatch* GetSvDispatch();
     // Debugging

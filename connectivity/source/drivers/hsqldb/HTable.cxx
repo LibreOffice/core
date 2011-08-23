@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,24 +63,24 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
-                           const Reference< XConnection >& _xConnection)
+OHSQLTable::OHSQLTable(	sdbcx::OCollection* _pTables,
+                           const Reference<	XConnection >& _xConnection)
     :OTableHelper(_pTables,_xConnection,sal_True)
 {
     // we create a new table here, so we should have all the rights or ;-)
-    m_nPrivileges = Privilege::DROP         |
-                    Privilege::REFERENCE    |
-                    Privilege::ALTER        |
-                    Privilege::CREATE       |
-                    Privilege::READ         |
-                    Privilege::DELETE       |
-                    Privilege::UPDATE       |
-                    Privilege::INSERT       |
+    m_nPrivileges = Privilege::DROP			|
+                    Privilege::REFERENCE	|
+                    Privilege::ALTER		|
+                    Privilege::CREATE		|
+                    Privilege::READ			|
+                    Privilege::DELETE		|
+                    Privilege::UPDATE		|
+                    Privilege::INSERT		|
                     Privilege::SELECT;
     construct();
 }
 // -------------------------------------------------------------------------
-OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
+OHSQLTable::OHSQLTable(	sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
@@ -88,7 +88,7 @@ OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName,
                     sal_Int32 _nPrivileges
-                ) : OTableHelper(   _pTables,
+                ) : OTableHelper(	_pTables,
                                     _xConnection,
                                     sal_True,
                                     _Name,
@@ -105,7 +105,7 @@ void OHSQLTable::construct()
 {
     OTableHelper::construct();
     if ( !isNew() )
-        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
+        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),	PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,	::getCppuType(&m_nPrivileges));
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OHSQLTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
@@ -187,26 +187,26 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
         ::dbtools::OPropertyMap& rProp = OMetaConnection::getPropMap();
 
         // type/typename
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME))     >>= sOldTypeName;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))			>>= nOldType;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))	>>= nNewType;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME))		>>= sOldTypeName;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME))>>= sNewTypeName;
 
         // and precsions and scale
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))	>>= nOldPrec;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))		>>= nOldScale;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))	>>= nNewScale;
 
         // second: check the "is nullable" value
         sal_Int32 nOldNullable = 0,nNewNullable = 0;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))		>>= nOldNullable;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))	>>= nNewNullable;
 
         // check also the auto_increment
         sal_Bool bOldAutoIncrement = sal_False,bAutoIncrement = sal_False;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))		>>= bOldAutoIncrement;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))	>>= bAutoIncrement;
 
         // now we should look if the name of the column changed
         ::rtl::OUString sNewColumnName;
@@ -227,10 +227,10 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
 
         if  (   nOldType != nNewType
             ||  sOldTypeName != sNewTypeName
-            ||  nOldPrec != nNewPrec
-            ||  nOldScale != nNewScale
-            ||  nNewNullable != nOldNullable
-            ||  bOldAutoIncrement != bAutoIncrement )
+            ||	nOldPrec != nNewPrec
+            ||	nOldScale != nNewScale
+            ||	nNewNullable != nOldNullable
+            ||	bOldAutoIncrement != bAutoIncrement )
         {
             // special handling because they change the type names to distinguish
             // if a column should be an auto_incmrement one
@@ -243,7 +243,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
 
         // third: check the default values
         ::rtl::OUString sNewDefault,sOldDefault;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))		>>= sOldDefault;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
         if(sOldDefault.getLength())

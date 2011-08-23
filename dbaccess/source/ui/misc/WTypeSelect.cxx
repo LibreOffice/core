@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@
 #ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
 #endif
-#ifndef _STREAM_HXX
+#ifndef _STREAM_HXX 
 #include <tools/stream.hxx>
 #endif
-#ifndef _SVPARSER_HXX
+#ifndef _SVPARSER_HXX 
 #include <svtools/svparser.hxx>
-#endif
+#endif								
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -76,7 +76,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdbcx;
+//	using namespace ::com::sun::star::sdbcx;
 
 //========================================================================
 // OWizTypeSelectControl
@@ -134,7 +134,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
     sal_uInt16 nPos = aListBox.GetEntryPos( String( pCurFieldDescr->GetName() ) );
     pCurFieldDescr = static_cast< OFieldDescription* >( aListBox.GetEntryData( nPos ) );
-    OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" );
+    OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" ); 
     if ( !pCurFieldDescr )
         return;
     setCurrentFieldDescData( pCurFieldDescr );
@@ -144,7 +144,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     const OPropColumnEditCtrl* pColumnName = getColumnCtrl();
     if ( pColumnName )
         sNewName = pColumnName->GetText();
-
+    
     switch(nColId)
     {
         case FIELD_PRPOERTY_COLUMNNAME:
@@ -166,10 +166,10 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(pWiz->getPrimaryKeyName());
 
                 }
-                else
+                else 
                     bDoubleName =  ((aListBox.GetEntryPos(String(sNewName)) != LISTBOX_ENTRY_NOTFOUND)
-                                    || ( pWiz->shouldCreatePrimaryKey()
-                                        &&  pWiz->getPrimaryKeyName() == sNewName) );
+                                    || ( pWiz->shouldCreatePrimaryKey() 
+                                        &&	pWiz->getPrimaryKeyName() == sNewName) );
 
                 if ( bDoubleName )
                 {
@@ -203,7 +203,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 aListBox.RemoveEntry(nPos);
                 aListBox.InsertEntry(pCurFieldDescr->GetName(),nPos);
                 aListBox.SetEntryData(nPos,pCurFieldDescr);
-
+                
                 pWiz->replaceColumn(nPos,pCurFieldDescr,sOldName);
             }
             break;
@@ -211,7 +211,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     saveCurrentFieldDescData();
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::lang::Locale  OWizTypeSelectControl::GetLocale() const
+::com::sun::star::lang::Locale	OWizTypeSelectControl::GetLocale() const
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetLocale();
 }
@@ -221,12 +221,12 @@ Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter() const
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetFormatter();
 }
 // -----------------------------------------------------------------------------
-TOTypeInfoSP    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
+TOTypeInfoSP	OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo(_nPos);
 }
 // -----------------------------------------------------------------------------
-const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
+const OTypeInfoMap*	OWizTypeSelectControl::getTypeInfo() const
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo();
 }

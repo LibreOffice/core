@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,15 @@
 
 #ifndef INCLUDED_UNOTOOLSDLLAPI_H
 #define INCLUDED_UNOTOOLSDLLAPI_H
-
+                                                                                                                             
 #include "sal/types.h"
-
+                                                                                                                             
 #if defined(UNOTOOLS_DLLIMPLEMENTATION)
 #define UNOTOOLS_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
 #else
 #define UNOTOOLS_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define UNOTOOLS_DLLPRIVATE SAL_DLLPRIVATE
-
+                                                                                                                             
 #endif /* INCLUDED_UNOTOOLSDLLAPI_H */
 

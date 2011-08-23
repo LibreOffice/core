@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ class PaneChildWindow
 public:
     PaneChildWindow (
         ::Window* pParentWindow,
-        USHORT nId,
-        SfxBindings* pBindings,
+        USHORT nId, 
+        SfxBindings* pBindings, 
         SfxChildWinInfo* pInfo,
         const USHORT nDockWinTitleResId,
         const USHORT nTitleBarResId,
@@ -84,8 +84,8 @@ class ToolPanelChildWindow  :public PaneChildWindow
 public:
     ToolPanelChildWindow(
         ::Window* i_pParentWindow,
-        USHORT i_nId,
-        SfxBindings* i_pBindings,
+        USHORT i_nId, 
+        SfxBindings* i_pBindings, 
         SfxChildWinInfo* i_pChildWindowInfo );
 
     SFX_DECL_CHILDWINDOW( ToolPanelChildWindow );

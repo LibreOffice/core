@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
         if ( pClrMapPtr )
             bColorMapped = pClrMapPtr->getColorMap( nToken );
 
-        if ( !bColorMapped )    // try masterpage mapping
+        if ( !bColorMapped )	// try masterpage mapping
         {
             SlidePersistPtr pMasterPersist = mpActualSlidePersist->getMasterPersist();
             if ( pMasterPersist )

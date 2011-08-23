@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,9 +88,9 @@ Resource RES_FRMEX_MENU
     {
     ItemList [ en-US ] =
     {
-            < "~Zoom" ;         ST_MENU_ZOOM; > ;
-        < "~Upwards" ;  ST_MENU_UP;     > ;
-        < "Do~wnwards" ;    ST_MENU_DOWN; > ;
+            < "~Zoom" ; 		ST_MENU_ZOOM; > ;
+        < "~Upwards" ; 	ST_MENU_UP; 	> ;
+        < "Do~wnwards" ; 	ST_MENU_DOWN; > ;
     };
     };
 };

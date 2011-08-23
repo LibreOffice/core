@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 #undef NULL
 #define NULL            0
 
-typedef unsigned char       BOOL;
-typedef unsigned char       BYTE;
-typedef unsigned short      USHORT;
-typedef unsigned long       ULONG;
+typedef unsigned char		BOOL;
+typedef unsigned char		BYTE;
+typedef unsigned short		USHORT;
+typedef unsigned long		ULONG;
 
 #endif
 
@@ -53,7 +53,7 @@ typedef unsigned long       ULONG;
 #endif
 
 /* all character string returns are limited to 255+1 chars */
-#define SO_CHARSTRING_MAX       256
+#define SO_CHARSTRING_MAX		256
 #define SO_StringCopy( dst, src ) \
     (strncpy( dst, src, SO_CHARSTRING_MAX ), dst[SO_CHARSTRING_MAX-1] = '\0')
 
@@ -69,14 +69,14 @@ typedef enum
 
 #ifndef WIN
 #ifdef WNT
-#define CALLTYPE        __cdecl
+#define CALLTYPE		__cdecl
 #else
 #define CALLTYPE
 #endif
 #else
-#define PASCAL          _pascal
-#define FAR             _far
-#define CALLTYPE        FAR PASCAL
+#define PASCAL			_pascal
+#define FAR				_far
+#define CALLTYPE		FAR PASCAL
 #endif
 
 

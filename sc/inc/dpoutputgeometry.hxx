@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ public:
     ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter, ImportType eImportType);
     ~ScDPOutputGeometry();
 
-    /**
-     * @param nCount number of row fields, <b>excluding the data layout
+    /** 
+     * @param nCount number of row fields, <b>excluding the data layout 
      *               field if exists</b>.
      */
     void setRowFieldCount(sal_uInt32 nCount);

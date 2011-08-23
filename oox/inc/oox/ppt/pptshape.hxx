@@ -35,8 +35,8 @@ namespace oox { namespace ppt {
 
 class PPTShape : public oox::drawingml::Shape
 {
-    ShapeLocation               meShapeLocation;        // placeholdershapes (mnSubType != 0) on Master are never displayed
-    sal_Bool                    mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
+    ShapeLocation				meShapeLocation;		// placeholdershapes (mnSubType != 0) on Master are never displayed
+    sal_Bool					mbReferenced;			// placeholdershapes on Layout are displayed only, if they are not referenced
                                                         // placeholdershapes on Slide are displayed always
 
 public:

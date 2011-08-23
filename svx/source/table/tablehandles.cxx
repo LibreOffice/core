@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ class OverlayTableEdge : public sdr::overlay::OverlayObject
 {
 protected:
     basegfx::B2DPolyPolygon maPolyPolygon;
-    bool                    mbVisible;
+    bool					mbVisible;
 
     // geometry creation for OverlayObject
     virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
@@ -191,7 +191,7 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 rPageWindow.GetOverlayManager()->add(*pOverlayObject);
                                 maOverlayGroup.append(*pOverlayObject);
                             }
-
+                            
                             if(aInvisible.count())
                             {
                                 // also create overlay object vor invisible parts to allow
@@ -212,9 +212,9 @@ void TableEdgeHdl::CreateB2dIAObject()
 //////////////////////////////////////////////////////////////////////////////
 
 OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible )
-:   OverlayObject(Color(COL_GRAY))
-,   maPolyPolygon( rPolyPolygon )
-,   mbVisible(bVisible)
+:	OverlayObject(Color(COL_GRAY))
+,	maPolyPolygon( rPolyPolygon )
+,	mbVisible(bVisible)
 {
 }
 

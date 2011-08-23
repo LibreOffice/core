@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
 {
-    String    sTargetFrameName; // in diesen Frame soll die URL
-    String    sURL;             //Einfache URL
-    String    sName;            // Name des Anchors
-    ImageMap *pMap;             //ClientSide Images
+    String	  sTargetFrameName;	// in diesen Frame soll die URL
+    String	  sURL;				//Einfache URL
+    String	  sName;			// Name des Anchors
+    ImageMap *pMap;				//ClientSide Images
 
-    BOOL      bIsServerMap;     //mit der URL eine ServerSideImageMap
+    BOOL      bIsServerMap;		//mit der URL eine ServerSideImageMap
 
     SwFmtURL& operator=( const SwFmtURL& );
 
@@ -58,27 +58,27 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	BOOL        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	BOOL			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     void SetTargetFrameName( const String& rStr ) { sTargetFrameName = rStr; }
     void SetURL( const String &rURL, BOOL bServerMap );
-    void SetMap( const ImageMap *pM );  //Pointer wird kopiert!
+    void SetMap( const ImageMap *pM );	//Pointer wird kopiert!
 
     const String   &GetTargetFrameName()const { return sTargetFrameName; }
-    const String   &GetURL()            const { return sURL; }
-          BOOL      IsServerMap()       const { return bIsServerMap; }
-    const ImageMap *GetMap()            const { return pMap; }
-          ImageMap *GetMap()                  { return pMap; }
+    const String   &GetURL()			const { return sURL; }
+          BOOL      IsServerMap()		const { return bIsServerMap; }
+    const ImageMap *GetMap() 		    const { return pMap; }
+          ImageMap *GetMap()				  { return pMap; }
 
-    const String& GetName() const           { return sName; }
-    void SetName( const String& rNm )       { sName = rNm; }
+    const String& GetName() const 			{ return sName; }
+    void SetName( const String& rNm )		{ sName = rNm; }
 };
 
 

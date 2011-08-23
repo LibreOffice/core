@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,27 +52,27 @@ enum DtType {
 class DtIntegrator
 {
 protected:
-    DtType              meType;
-    Display*            mpDisplay;
-    SalDisplay*         mpSalDisplay;
-    int                 mnSystemLookCommandProcess;
+    DtType				meType;
+    Display*			mpDisplay;
+    SalDisplay*			mpSalDisplay;
+    int					mnSystemLookCommandProcess;
 
 
     DtIntegrator();
 
-    static String           aHomeDir;
+    static String			aHomeDir;
 
 public:
     static DtIntegrator* CreateDtIntegrator();
-
+    
     virtual ~DtIntegrator();
 
     // SystemLook
     virtual void GetSystemLook( AllSettings& rSettings );
-
-    DtType          GetDtType() { return meType; }
-    SalDisplay*     GetSalDisplay() { return mpSalDisplay; }
-    Display*        GetDisplay() { return mpDisplay; }
+    
+    DtType			GetDtType() { return meType; }
+    SalDisplay*		GetSalDisplay() { return mpSalDisplay; }
+    Display*		GetDisplay() { return mpDisplay; }
 };
 
 #endif

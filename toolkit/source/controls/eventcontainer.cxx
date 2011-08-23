@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ using namespace std;
 
 namespace toolkit
 {
-
+    
 // Methods XElementAccess
 Type NameContainer_Impl::getElementType()
     throw(RuntimeException)
@@ -62,7 +62,7 @@ Type NameContainer_Impl::getElementType()
     return mType;
 }
 
-sal_Bool NameContainer_Impl::hasElements()
+sal_Bool NameContainer_Impl::hasElements() 
     throw(RuntimeException)
 {
     sal_Bool bRet = (mnElementCount > 0);
@@ -70,7 +70,7 @@ sal_Bool NameContainer_Impl::hasElements()
 }
 
 // Methods XNameAccess
-Any NameContainer_Impl::getByName( const OUString& aName )
+Any NameContainer_Impl::getByName( const OUString& aName ) 
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
@@ -89,7 +89,7 @@ Sequence< OUString > NameContainer_Impl::getElementNames()
     return mNames;
 }
 
-sal_Bool NameContainer_Impl::hasByName( const OUString& aName )
+sal_Bool NameContainer_Impl::hasByName( const OUString& aName ) 
     throw(RuntimeException)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
@@ -99,7 +99,7 @@ sal_Bool NameContainer_Impl::hasByName( const OUString& aName )
 
 
 // Methods XNameReplace
-void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aElement )
+void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aElement ) 
     throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     Type aAnyType = aElement.getValueType();
@@ -116,7 +116,7 @@ void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aEleme
     mValues.getArray()[ iHashResult ] = aElement;
 
     // Fire event
-    ContainerEvent aEvent;
+    ContainerEvent aEvent;		
     aEvent.Source = *this;
     aEvent.Element <<= aElement;
     aEvent.ReplacedElement = aOldElement;
@@ -126,7 +126,7 @@ void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aEleme
 
 
 // Methods XNameContainer
-void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElement )
+void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElement ) 
     throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     Type aAnyType = aElement.getValueType();
@@ -147,14 +147,14 @@ void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElemen
     mHashMap[ aName ] = nCount;
 
     // Fire event
-    ContainerEvent aEvent;
+    ContainerEvent aEvent;		
     aEvent.Source = *this;
     aEvent.Element <<= aElement;
     aEvent.Accessor <<= aName;
     maContainerListeners.elementInserted( aEvent );
 }
 
-void NameContainer_Impl::removeByName( const OUString& Name )
+void NameContainer_Impl::removeByName( const OUString& Name ) 
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( Name );
@@ -167,7 +167,7 @@ void NameContainer_Impl::removeByName( const OUString& Name )
     Any aOldElement = mValues.getConstArray()[ iHashResult ];
 
     // Fire event
-    ContainerEvent aEvent;
+    ContainerEvent aEvent;		
     aEvent.Source = *this;
     aEvent.Element = aOldElement;
     aEvent.Accessor <<= Name;

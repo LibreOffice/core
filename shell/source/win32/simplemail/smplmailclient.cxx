@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <mapi.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 
 #include <process.h>
 #include <vector>
@@ -73,9 +73,9 @@ const rtl::OUString FLAG_MAPI_DIALOG = rtl::OUString::createFromAscii("--mapi-di
 const rtl::OUString FLAG_MAPI_LOGON_UI = rtl::OUString::createFromAscii("--mapi-logon-ui");
 
 namespace /* private */
-{
-    /** @internal
-        look if an alternative program is configured
+{        
+    /** @internal 
+        look if an alternative program is configured 
         which should be used as senddoc executable */
     rtl::OUString getAlternativeSenddocUrl()
     {
@@ -86,19 +86,19 @@ namespace /* private */
         {
             wchar_t buff[MAX_PATH];
             LONG sz = sizeof(buff);
-            lret = RegQueryValueW(hkey, NULL, buff, &sz);
+            lret = RegQueryValueW(hkey, NULL, buff, &sz);            
             if (lret == ERROR_SUCCESS)
-            {
+            {                
                 osl::FileBase::getFileURLFromSystemPath(reinterpret_cast<const sal_Unicode*>(buff), altSenddocUrl);
-            }
+            }            
             RegCloseKey(hkey);
         }
         return altSenddocUrl;
     }
-
+    
     /**
         Returns the absolute file Url of the senddoc executable.
-
+        
         @returns
         the absolute file Url of the senddoc executable. In case
         of an error an empty string will be returned.
@@ -106,41 +106,41 @@ namespace /* private */
     rtl::OUString getSenddocUrl()
     {
         rtl::OUString senddocUrl = getAlternativeSenddocUrl();
-
+        
         if (senddocUrl.getLength() == 0)
         {
             senddocUrl = rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "$OOO_BASE_DIR/program/senddoc.exe"));
             rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
-        }
-        return senddocUrl;
+        }                    
+        return senddocUrl;    
     }
-
+    
     /**
         Execute Senddoc.exe which a MAPI wrapper.
-
+        
         @param rCommandArgs
         [in] the arguments to be passed to Senddoc.exe
-
+        
         @returns
         <TRUE/> on success.
     */
     bool executeSenddoc(const StringList_t& rCommandArgs)
-    {
+    {    
         rtl::OUString senddocUrl = getSenddocUrl();
         if (senddocUrl.getLength() == 0)
             return false;
 
-        oslProcess proc;
+        oslProcess proc;    
         oslProcessError err = osl_Process_E_Unknown;
-
-        /* for efficiency reasons we are using a 'bad' cast here
+                        
+        /* for efficiency reasons we are using a 'bad' cast here 
         as a vector or rtl::OUStrings is nothing else than
         an array of pointers to rtl_uString's */
         err = osl_executeProcess(
             senddocUrl.pData,
-            (rtl_uString**)&rCommandArgs[0],
+            (rtl_uString**)&rCommandArgs[0], 
             rCommandArgs.size(),
             osl_Process_WAIT | osl_Process_DETACHED,
             NULL,
@@ -148,19 +148,19 @@ namespace /* private */
             NULL,
             0,
             &proc);
-
+            
         if (err != osl_Process_E_None)
             return false;
-
+                
         oslProcessInfo procInfo;
-        procInfo.Size = sizeof(oslProcessInfo);
+        procInfo.Size = sizeof(oslProcessInfo);    
         osl_getProcessInfo(proc, osl_Process_EXITCODE, &procInfo);
-        osl_freeProcessHandle(proc);
-        return (procInfo.Code == SUCCESS_SUCCESS);
+        osl_freeProcessHandle(proc);   
+        return (procInfo.Code == SUCCESS_SUCCESS);            
     }
-} // namespace private
+} // namespace private 
 
-Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage()
+Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage() 
     throw (RuntimeException)
 {
     return Reference<XSimpleMailMessage>(new CSmplMailMsg());
@@ -169,62 +169,62 @@ Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage(
 /**
     Assemble a command line for SendDoc.exe out of the members
     of the supplied SimpleMailMessage.
-
+    
     @param xSimpleMailMessage
     [in] the mail message.
-
+    
     @param aFlags
     [in] different flags to be used with the simple mail service.
-
+    
     @param rCommandArgs
     [in|out] a buffer for the command line arguments. The buffer
-    is assumed to be empty.
-
+    is assumed to be empty.    
+    
     @throws com::sun::star::lang::IllegalArgumentException
     if an invalid file URL has been detected in the attachment list.
 */
 void CSmplMailClient::assembleCommandLine(
-    const Reference<XSimpleMailMessage>& xSimpleMailMessage,
+    const Reference<XSimpleMailMessage>& xSimpleMailMessage, 
     sal_Int32 aFlag, StringList_t& rCommandArgs)
 {
     OSL_ENSURE(rCommandArgs.size() == 0, "Provided command argument buffer not empty");
-
+    
     rtl::OUString to = xSimpleMailMessage->getRecipient();
     if (to.getLength() > 0)
     {
         rCommandArgs.push_back(TO);
         rCommandArgs.push_back(to);
     }
-
+    
     Sequence<rtl::OUString> ccRecipients = xSimpleMailMessage->getCcRecipient();
     for (int i = 0; i < ccRecipients.getLength(); i++)
     {
         rCommandArgs.push_back(CC);
         rCommandArgs.push_back(ccRecipients[i]);
     }
-
+    
     Sequence<rtl::OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
     for (int i = 0; i < bccRecipients.getLength(); i++)
     {
         rCommandArgs.push_back(BCC);
         rCommandArgs.push_back(bccRecipients[i]);
     }
-
+    
     rtl::OUString from = xSimpleMailMessage->getOriginator();
     if (from.getLength() > 0)
     {
         rCommandArgs.push_back(FROM);
         rCommandArgs.push_back(from);
     }
-
+    
     rtl::OUString subject = xSimpleMailMessage->getSubject();
     if (subject.getLength() > 0)
     {
         rCommandArgs.push_back(SUBJECT);
         rCommandArgs.push_back(subject);
     }
-
-    Sequence<rtl::OUString> attachments = xSimpleMailMessage->getAttachement();
+    
+    Sequence<rtl::OUString> attachments = xSimpleMailMessage->getAttachement();    
     for (int i = 0; i < attachments.getLength(); i++)
     {
         rtl::OUString sysPath;
@@ -232,47 +232,47 @@ void CSmplMailClient::assembleCommandLine(
         if (err != osl::FileBase::E_None)
             throw IllegalArgumentException(
                 rtl::OUString::createFromAscii("Invalid attachment file URL"),
-                static_cast<XSimpleMailClient*>(this),
+                static_cast<XSimpleMailClient*>(this), 
                 1);
-
+                
         rCommandArgs.push_back(ATTACH);
-        rCommandArgs.push_back(sysPath);
+        rCommandArgs.push_back(sysPath);        
     }
-
+            
     if (!(aFlag & NO_USER_INTERFACE))
-        rCommandArgs.push_back(FLAG_MAPI_DIALOG);
+        rCommandArgs.push_back(FLAG_MAPI_DIALOG);        
 
     if (!(aFlag & NO_LOGON_DIALOG))
-        rCommandArgs.push_back(FLAG_MAPI_LOGON_UI);
+        rCommandArgs.push_back(FLAG_MAPI_LOGON_UI);                
 }
 
 void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
-    const Reference<XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag)
+    const Reference<XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag) 
     throw (IllegalArgumentException, Exception, RuntimeException)
-{
-    validateParameter(xSimpleMailMessage, aFlag);
+{    
+    validateParameter(xSimpleMailMessage, aFlag);    
 
-    StringList_t senddocParams;
+    StringList_t senddocParams;    
     assembleCommandLine(xSimpleMailMessage, aFlag, senddocParams);
-
+    
     if (!executeSenddoc(senddocParams))
         throw Exception(
-            rtl::OUString::createFromAscii("Send email failed"),
-            static_cast<XSimpleMailClient*>(this));
+            rtl::OUString::createFromAscii("Send email failed"), 
+            static_cast<XSimpleMailClient*>(this));                                                
 }
 
-void CSmplMailClient::validateParameter(
-    const Reference<XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag )
+void CSmplMailClient::validateParameter( 
+    const Reference<XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag ) 
 {
     if (!xSimpleMailMessage.is())
         throw IllegalArgumentException(
             rtl::OUString::createFromAscii("Empty mail message reference"),
             static_cast<XSimpleMailClient*>(this),
             1);
-
-    // #93077#
+ 
+    // #93077# 
     OSL_ENSURE(!(aFlag & NO_LOGON_DIALOG), "Flag NO_LOGON_DIALOG has currently no effect");
-
+               
     // check the flags, the allowed range is 0 - (2^n - 1)
     if (aFlag < 0 || aFlag > 3)
         throw IllegalArgumentException(

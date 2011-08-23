@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #ifndef DBAUI_GENERALUNDO_HXX
 #define DBAUI_GENERALUNDO_HXX
 
-#ifndef _UNDO_HXX
+#ifndef _UNDO_HXX 
 #include <svl/undo.hxx>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
@@ -45,14 +45,14 @@ namespace dbaui
         OModuleClient    m_aModuleClient;
 
     protected:
-        String                  m_strComment; // undo, redo comment
+        String	                m_strComment; // undo, redo comment
 
     public:
         TYPEINFO();
         OCommentUndoAction(USHORT nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
 
-        virtual UniString   GetComment() const { return m_strComment; }
-    };
+        virtual UniString	GetComment() const { return m_strComment; }
+    };															   
 }
 #endif // DBAUI_GENERALUNDO_HXX
 

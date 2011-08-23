@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ namespace drawinglayer
         class LineGeometryExtractor2D : public BaseProcessor2D
         {
         private:
-            std::vector< basegfx::B2DPolygon >      maExtractedHairlines;
-            std::vector< basegfx::B2DPolyPolygon >  maExtractedLineFills;
+            std::vector< basegfx::B2DPolygon >		maExtractedHairlines;
+            std::vector< basegfx::B2DPolyPolygon >	maExtractedLineFills;
 
             /// bitfield
             unsigned                                mbInLineGeometry : 1;
@@ -57,7 +57,7 @@ namespace drawinglayer
         public:
             LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation);
             virtual ~LineGeometryExtractor2D();
-
+            
             const std::vector< basegfx::B2DPolygon >& getExtractedHairlines() const { return maExtractedHairlines; }
             const std::vector< basegfx::B2DPolyPolygon >& getExtractedLineFills() const { return maExtractedLineFills; }
         };

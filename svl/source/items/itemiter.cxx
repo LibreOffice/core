@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
         for ( _nStt = 0; !*(ppFnd + _nStt ); ++_nStt )
             ; // empty loop
         if ( 1 < _rSet.Count() )
-            for( _nEnd = _rSet.TotalCount(); !*( ppFnd + --_nEnd);  )
+            for( _nEnd = _rSet.TotalCount(); !*( ppFnd + --_nEnd);	)
                 ; // empty loop
         else
             _nEnd = _nStt;

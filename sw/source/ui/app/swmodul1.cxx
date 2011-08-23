@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>	// helper for implementations
 #include <svx/dataaccessdescriptor.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -47,6 +47,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/brshitem.hxx>
 #include <vcl/msgbox.hxx>
+#include <svl/cjkoptions.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <usrpref.hxx>
@@ -58,7 +59,7 @@
 #include <docsh.hxx>
 #include <dbmgr.hxx>
 #include <uinums.hxx>
-#include <prtopt.hxx>       // fuer PrintOptions
+#include <prtopt.hxx>		// fuer PrintOptions
 #include <navicfg.hxx>
 #include <doc.hxx>
 #include <cmdid.h>
@@ -121,11 +122,11 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Aktuelle SwWrtShell
+    Beschreibung:	Aktuelle SwWrtShell
  --------------------------------------------------------------------*/
 
 
-SwWrtShell* GetActiveWrtShell()
+SwWrtShell*	GetActiveWrtShell()
 {
     SwView *pActive = ::GetActiveView();
     if( pActive )
@@ -134,7 +135,7 @@ SwWrtShell* GetActiveWrtShell()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Pointer auf die aktuelle Sicht
+    Beschreibung: 	Pointer auf die aktuelle Sicht
  --------------------------------------------------------------------*/
 
 
@@ -144,7 +145,7 @@ SwView* GetActiveView()
     return PTR_CAST( SwView, pView );
 }
 /*--------------------------------------------------------------------
-    Beschreibung:   Ueber Views iterieren - static
+    Beschreibung:	Ueber Views iterieren - static
  --------------------------------------------------------------------*/
 
 SwView* SwModule::GetFirstView()
@@ -165,7 +166,7 @@ SwView* SwModule::GetNextView(SwView* pView)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Neuer Master fuer die Einstellungen wird gesetzt;
+ Beschreibung:	Neuer Master fuer die Einstellungen wird gesetzt;
                 dieser wirkt sich auf die aktuelle Sicht und alle
                 folgenden aus.
 ------------------------------------------------------------------------*/
@@ -308,6 +309,70 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb 
         pTmpView = SwModule::GetNextView(pTmpView);
     }
 }
+
+/*-------------------------------------------------
+set the usrpref 's char unit attribute and set ruler
+'s unit as char if the "apply char unit" is checked
+--------------------------------------------------*/
+void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
+{
+    SwMasterUsrPref* pPref;
+    if(bWeb)
+    {
+        if(!pWebUsrPref)
+        GetUsrPref(sal_True);
+        pPref = pWebUsrPref;
+    }
+    else
+    {
+        if(!pUsrPref)
+        GetUsrPref(sal_False);
+        pPref = pUsrPref;
+    }
+    BOOL  bOldApplyCharUnit = pPref->IsApplyCharUnit();
+    BOOL    bHasChanged = FALSE;
+    if(bOldApplyCharUnit != bApplyChar)
+    {
+        pPref->SetApplyCharUnit(bApplyChar);
+        bHasChanged = TRUE;
+    }
+
+    if( !bHasChanged )
+        return;
+
+    FieldUnit eHScrollMetric = pPref->IsHScrollMetric() ? pPref->GetHScrollMetric() : pPref->GetMetric();
+    FieldUnit eVScrollMetric = pPref->IsVScrollMetric() ? pPref->GetVScrollMetric() : pPref->GetMetric();
+    if(bApplyChar)
+    {
+        eHScrollMetric = FUNIT_CHAR;
+        eVScrollMetric = FUNIT_LINE;
+    }
+    else
+    {
+        SvtCJKOptions aCJKOptions;
+        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eHScrollMetric == FUNIT_CHAR ))
+            eHScrollMetric = FUNIT_INCH;
+        else if ( eHScrollMetric == FUNIT_CHAR )
+            eHScrollMetric = FUNIT_CM;
+        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eVScrollMetric == FUNIT_LINE ))
+            eVScrollMetric = FUNIT_INCH;
+        else if ( eVScrollMetric == FUNIT_LINE )
+            eVScrollMetric = FUNIT_CM;
+    }
+    SwView* pTmpView = SwModule::GetFirstView();
+    // fuer alle MDI-Fenster das Lineal umschalten
+    while(pTmpView)
+    {
+        if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
+        {
+            pTmpView->ChangeVLinealMetric(eVScrollMetric);
+            pTmpView->ChangeTabMetric(eHScrollMetric);
+        }
+
+        pTmpView = SwModule::GetNextView(pTmpView);
+    }
+}
+
 /*-----------------13.11.96 11.57-------------------
 
 --------------------------------------------------*/
@@ -325,7 +390,7 @@ SwNavigationConfig*  SwModule::GetNavigationConfig()
 
 --------------------------------------------------*/
 
-SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
+SwPrintOptions* 	SwModule::GetPrtOptions(sal_Bool bWeb)
 {
     if(bWeb && !pWebPrtOpt)
     {
@@ -342,7 +407,7 @@ SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
 /*-----------------26.06.97 07.52-------------------
 
 --------------------------------------------------*/
-SwChapterNumRules*  SwModule::GetChapterNumRules()
+SwChapterNumRules*	SwModule::GetChapterNumRules()
 {
     if(!pChapterNumRules)
         pChapterNumRules = new SwChapterNumRules;
@@ -439,9 +504,9 @@ void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
     if( COL_TRANSPARENT == rAttr.nColor )
     {
         static const ColorData aColArr[] = {
-         COL_AUTHOR1_DARK,      COL_AUTHOR2_DARK,   COL_AUTHOR3_DARK,
-         COL_AUTHOR4_DARK,      COL_AUTHOR5_DARK,   COL_AUTHOR6_DARK,
-         COL_AUTHOR7_DARK,      COL_AUTHOR8_DARK,   COL_AUTHOR9_DARK };
+         COL_AUTHOR1_DARK,		COL_AUTHOR2_DARK,	COL_AUTHOR3_DARK,
+         COL_AUTHOR4_DARK,		COL_AUTHOR5_DARK,	COL_AUTHOR6_DARK,
+         COL_AUTHOR7_DARK,		COL_AUTHOR8_DARK,	COL_AUTHOR9_DARK };
 
         aCol.SetColor( aColArr[ nAuthor % (sizeof( aColArr ) /
                                            sizeof( aColArr[0] )) ] );
@@ -569,7 +634,7 @@ const Color &SwModule::GetRedlineMarkColor()
 /*-----------------03.03.98 16:47-------------------
 
 --------------------------------------------------*/
-const SwViewOption* SwModule::GetViewOption(sal_Bool bWeb)
+const SwViewOption*	SwModule::GetViewOption(sal_Bool bWeb)
 {
     return GetUsrPref( bWeb );
 }
@@ -662,8 +727,8 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
                     pViewShell->GetWin()->Invalidate();
             }
         }
-//      pSpell->SetSpellWrongAgain( sal_False );
-//      pSpell->SetSpellAllAgain( sal_False );
+//		pSpell->SetSpellWrongAgain( sal_False );
+//		pSpell->SetSpellAllAgain( sal_False );
     }
 }
 

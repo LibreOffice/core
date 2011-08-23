@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,20 +39,20 @@ class ScGroupDlg : public ModalDialog
 {
 public:
             ScGroupDlg( Window* pParent,
-                        USHORT  nResId,
-                        BOOL    bUnGroup = FALSE,
-                        BOOL    bRows    = TRUE  );
+                        USHORT	nResId,
+                        BOOL	bUnGroup = FALSE,
+                        BOOL	bRows    = TRUE  );
             ~ScGroupDlg();
 
     BOOL GetColsChecked() const;
 
 private:
     FixedLine       aFlFrame;
-    RadioButton     aBtnRows;
-    RadioButton     aBtnCols;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton		aBtnRows;
+    RadioButton		aBtnCols;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 };
 
 

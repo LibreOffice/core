@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -193,8 +193,8 @@ namespace connectivity
 //-------------------------------------------------------------------------
 extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
 {
-    static sal_Bool         bReadConfig = sal_False;
-    static ::rtl::OUString  sUserProfile;
+    static sal_Bool			bReadConfig = sal_False;
+    static ::rtl::OUString	sUserProfile;
     if ( !bReadConfig )
     {
         sUserProfile = ::connectivity::mozab::getPreferredProfileName( );
@@ -206,9 +206,9 @@ extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
 //------------------------------------------------------------------------
 extern "C" const sal_Char* SAL_CALL getPabDescription( void )
 {
-    static sal_Bool         bReadConfig = sal_False;
-    static ::rtl::OUString  usPabDescription;
-    static ::rtl::OString   sPabDescription;
+    static sal_Bool			bReadConfig = sal_False;
+    static ::rtl::OUString	usPabDescription;
+    static ::rtl::OString	sPabDescription;
 
     if ( !bReadConfig )
     {
@@ -226,9 +226,9 @@ extern "C" const sal_Char* SAL_CALL getPabDescription( void )
 //-------------------------------------------------------------------------
 extern "C" const sal_Char* SAL_CALL getHisDescription( void )
 {
-    static sal_Bool         bReadConfig = sal_False;
-    static ::rtl::OUString  usHisDescription;
-    static ::rtl::OString   sHisDescription;
+    static sal_Bool			bReadConfig = sal_False;
+    static ::rtl::OUString	usHisDescription;
+    static ::rtl::OString	sHisDescription;
 
     if ( !bReadConfig )
     {

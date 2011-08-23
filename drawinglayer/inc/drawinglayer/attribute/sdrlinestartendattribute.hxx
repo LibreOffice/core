@@ -63,13 +63,13 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             SdrLineStartEndAttribute(
-                const basegfx::B2DPolyPolygon& rStartPolyPolygon,
+                const basegfx::B2DPolyPolygon& rStartPolyPolygon, 
                 const basegfx::B2DPolyPolygon& rEndPolyPolygon,
-                double fStartWidth,
-                double fEndWidth,
-                bool bStartActive,
-                bool bEndActive,
-                bool bStartCentered,
+                double fStartWidth, 
+                double fEndWidth, 
+                bool bStartActive, 
+                bool bEndActive, 
+                bool bStartCentered, 
                 bool bEndCentered);
             SdrLineStartEndAttribute();
             SdrLineStartEndAttribute(const SdrLineStartEndAttribute& rCandidate);

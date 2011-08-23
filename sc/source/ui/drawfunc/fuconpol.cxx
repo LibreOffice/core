@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
-//  Pixelabstand zum Schliessen von Freihand-Zeichnungen
+//	Pixelabstand zum Schliessen von Freihand-Zeichnungen
 #ifndef CLOSE_PIXDIST
 #define CLOSE_PIXDIST 5
 #endif
@@ -134,7 +134,7 @@ BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
     if (aVEvt.eEvent == SDREVENT_ENDCREATE)
     {
         bReturn = TRUE;
-        bSimple = TRUE;         // Doppelklick nicht weiterreichen
+        bSimple = TRUE;			// Doppelklick nicht weiterreichen
     }
 
     BOOL bParent;
@@ -272,9 +272,9 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                 case SID_DRAW_BEZIER_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
-
+                    
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-
+                    
                     const basegfx::B2DPoint aCenterBottom(rRectangle.Center().X(), rRectangle.Bottom());
                     aInnerPoly.appendBezierSegment(
                         aCenterBottom,
@@ -300,12 +300,12 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                         basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()),
                         basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()),
                         basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
-
+                    
                     aInnerPoly.appendBezierSegment(
                         basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()),
                         basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()),
                         basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
-
+                    
                     aPoly.append(aInnerPoly);
                     break;
                 }
@@ -315,7 +315,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                     basegfx::B2DPolygon aInnerPoly;
                     const sal_Int32 nWdt(rRectangle.GetWidth());
                     const sal_Int32 nHgt(rRectangle.GetHeight());
-
+                    
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 30) / 100, rRectangle.Top() + (nHgt * 70) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top() + (nHgt * 15) / 100));
@@ -324,7 +324,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 50) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 75) / 100));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Bottom(), rRectangle.Right()));
-
+                    
                     if(SID_DRAW_POLYGON_NOFILL == nID)
                     {
                         aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));

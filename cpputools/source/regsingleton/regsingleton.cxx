@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         insert_entry = false;
         ++nPos;
     }
-
+    
     OUString sys_path( OUString::createFromAscii( argv[ nPos ] ) );
     OUString file_url;
     oslFileError rc = osl_getFileURLFromSystemPath( sys_path.pData, &file_url.pData );
@@ -86,7 +86,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 1;
     }
     ++nPos;
-
+    
     try
     {
         Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
@@ -113,7 +113,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             Reference< registry::XRegistryKey > xKey( xRoot->openKey( OUSTR("SINGLETONS") ) );
             if (! xKey.is())
                 xKey = xRoot->createKey( OUSTR("SINGLETONS") );
-
+            
             for ( ; nPos < argc; ++nPos )
             {
                 OUString singleton( OUString::createFromAscii( argv[ nPos ] ) );
@@ -124,7 +124,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     service = singleton.copy( eq +1 );
                     singleton = singleton.copy( 0, eq );
                 }
-
+                
                 if (insert_entry)
                 {
                     if (service.getLength())
@@ -161,7 +161,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 }
             }
         }
-
+        
         return 0;
     }
     catch (Exception & rExc)

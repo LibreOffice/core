@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,13 +119,13 @@ using namespace ::com::sun::star::task;
 
 class SfxSaveAsContext_Impl
 {
-    String&     _rNewNameVar;
-    String      _aNewName;
+    String&		_rNewNameVar;
+    String 		_aNewName;
 
 public:
                 SfxSaveAsContext_Impl( String &rNewNameVar,
                                        const String &rNewName )
-                :   _rNewNameVar( rNewNameVar ),
+                :	_rNewNameVar( rNewNameVar ),
                     _aNewName( rNewName )
                 { rNewNameVar = rNewName; }
                 ~SfxSaveAsContext_Impl()
@@ -292,7 +292,7 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 sal_Bool SfxObjectShell::APISaveAs_Impl
 (
     const String& aFileName,
-    SfxItemSet*   aParams
+    SfxItemSet*	  aParams
 )
 {
     BOOL bOk = sal_False;
@@ -937,7 +937,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
                     if ( !pFrame || !pDoc->HasName() ||
                         !IsOwnStorageFormat_Impl( *pDoc->GetMedium() ) )
-//REMOVE                            || pDoc->GetMedium()->GetStorage()->GetVersion() < SOFFICE_FILEFORMAT_50 )
+//REMOVE							|| pDoc->GetMedium()->GetStorage()->GetVersion() < SOFFICE_FILEFORMAT_50 )
                         rSet.DisableItem( nWhich );
                     break;
                 }
@@ -1344,8 +1344,13 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
 void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
 {
     // Check if it is stored in OASIS format...
-    if ( GetMedium() && GetMedium()->GetFilter()
-      && ( !GetMedium()->GetFilter()->IsOwnFormat() || !GetMedium()->HasStorage_Impl() ) )
+    if  (   GetMedium()
+        &&  GetMedium()->GetFilter()
+        &&  GetMedium()->GetName().Len()
+        &&  (   !GetMedium()->GetFilter()->IsOwnFormat()
+            ||  !GetMedium()->HasStorage_Impl()
+            )
+        )
     {
         // Only OASIS and OOo6.x formats will be handled further
         InfoBox( NULL, SfxResId( RID_XMLSEC_INFO_WRONGDOCFORMAT ) ).Execute();

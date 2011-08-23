@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ class SvXMLImport;
 class XMLOFF_DLLPUBLIC XMLShapeStyleContext: public XMLPropStyleContext
 {
 protected:
-    ::rtl::OUString     m_sControlDataStyleName;
-    ::rtl::OUString     m_sListStyleName;
-    sal_Bool            m_bIsNumRuleAlreadyConverted;
+    ::rtl::OUString		m_sControlDataStyleName;
+    ::rtl::OUString		m_sListStyleName;
+    sal_Bool			m_bIsNumRuleAlreadyConverted;
 
 protected:
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
@@ -53,9 +53,9 @@ public:
     TYPEINFO();
 
     XMLShapeStyleContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        SvXMLImport& rImport, 
+        sal_uInt16 nPrfx, 
+        const rtl::OUString& rLName, 
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID);
@@ -73,4 +73,4 @@ public:
                 ::com::sun::star::beans::XPropertySet > & rPropSet );
 };
 
-#endif  //  _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
+#endif	//  _XMLOFF_XMLSHAPESTYLECONTEXT_HXX

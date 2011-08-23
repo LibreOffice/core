@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class QLayout;
 
 class ResMgr;
 
-class KDE4FilePicker :
+class KDE4FilePicker : 
     public cppu::WeakComponentImplHelper8<
         ::com::sun::star::ui::dialogs::XFilterManager,
         ::com::sun::star::ui::dialogs::XFilterGroupManager,
@@ -62,32 +62,32 @@ class KDE4FilePicker :
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::util::XCancellable,
         ::com::sun::star::lang::XEventListener,
-        ::com::sun::star::lang::XServiceInfo >
+        ::com::sun::star::lang::XServiceInfo >		
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services		
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener > m_xListener;
-
+    
     ResMgr *_resMgr;
-
+    
     //the dialog to display
     KFileDialog* _dialog;
-
+    
     osl::Mutex _helperMutex;
-
+    
     //running filter string to add to dialog
     QString _filter;
-
+    
     //filter for reverse lookup of filter text
     QHash<QString, QString> _filters;
-
+    
     //mapping of SAL control ID's to created custom controls
     QHash<sal_Int16, QWidget*> _customWidgets;
-
+    
     //widget to contain extra custom controls
     QWidget* _extraControls;
-
+    
     //layout for extra custom controls
     QLayout* _layout;
 
@@ -162,10 +162,10 @@ public:
 
 private:
     // prevent copy and assignment
-    KDE4FilePicker( const KDE4FilePicker& );
+    KDE4FilePicker( const KDE4FilePicker& );           
     KDE4FilePicker& operator=( const KDE4FilePicker& );
-
+    
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);
-
-};
+    
+}; 

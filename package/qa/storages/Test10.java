@@ -67,7 +67,7 @@ public class Test10 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-
+            
             byte pBytes2[] = { 2, 2, 2, 2, 2 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -119,7 +119,7 @@ public class Test10 implements StorageTest {
                 m_aTestHelper.Error( "The new substorage still was not commited so it must be empty!" );
                 return false;
             }
-
+            
             if ( !m_aTestHelper.disposeStorage( xClonedSubStorage ) )
                 return false;
 
@@ -184,7 +184,7 @@ public class Test10 implements StorageTest {
                 m_aTestHelper.Error( "The root storage still was not commited so it's clone must be empty!" );
                 return false;
             }
-
+            
             if ( !m_aTestHelper.disposeStorage( xCloneOfRoot ) )
                 return false;
 
@@ -227,6 +227,6 @@ public class Test10 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    }
+    } 
 }
 

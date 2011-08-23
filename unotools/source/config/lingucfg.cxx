@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ static BOOL lcl_SetLocale( INT16 &rLanguage, const uno::Any &rVal )
     BOOL bSucc = FALSE;
 
     lang::Locale aNew;
-    if (rVal >>= aNew)  // conversion successful?
+    if (rVal >>= aNew)	// conversion successful?
     {
         INT16 nNew = MsLangId::convertLocaleToLanguage( aNew );
         if (nNew != rLanguage)
@@ -113,16 +113,16 @@ SvtLinguOptions::SvtLinguOptions()
     nDefaultLanguage_CTL = LANGUAGE_NONE;
 
     // general options
-    bIsUseDictionaryList    =
-    bIsIgnoreControlCharacters  = TRUE;
+    bIsUseDictionaryList	=
+    bIsIgnoreControlCharacters	= TRUE;
 
     // spelling options
-    bIsSpellCapitalization  =
-    bIsSpellSpecial         = TRUE;
-    bIsSpellAuto            =
-    bIsSpellReverse         =
-    bIsSpellWithDigits      =
-    bIsSpellUpperCase       = FALSE;
+    bIsSpellCapitalization	=
+    bIsSpellSpecial			= TRUE;
+    bIsSpellAuto			=
+    bIsSpellReverse			=
+    bIsSpellWithDigits		=
+    bIsSpellUpperCase		= FALSE;
 
     // text conversion options
     bIsIgnorePostPositionalWord     = TRUE;
@@ -140,11 +140,11 @@ SvtLinguOptions::SvtLinguOptions()
     bROIsReverseMapping             = FALSE;
 
     // hyphenation options
-    bIsHyphSpecial          = TRUE;
-    bIsHyphAuto             = FALSE;
-    nHyphMinLeading         =
-    nHyphMinTrailing        = 2;
-    nHyphMinWordLength      = 0;
+    bIsHyphSpecial			= TRUE;
+    bIsHyphAuto				= FALSE;
+    nHyphMinLeading			=
+    nHyphMinTrailing		= 2;
+    nHyphMinWordLength		= 0;
 
     nDataFilesChangedCheckValue = 0;
 
@@ -279,7 +279,7 @@ static struct NamesToHdl
 {/* 31 */    "GrammarChecking/IsInteractiveCheck",            UPN_IS_GRAMMAR_INTERACTIVE,               UPH_IS_GRAMMAR_INTERACTIVE},
 
             /* similar to entry 0 (thus no own configuration entry) but with different property name and type */
-{            NULL,                                           UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
+{            NULL,											 UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
 
 {            NULL,                                            NULL,                                      -1}
 };
@@ -1128,8 +1128,8 @@ BOOL SvtLinguConfig::GetDictionaryEntry(
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
 
         // read group data...
-        uno::Sequence< rtl::OUString >  aLocations;
-        rtl::OUString                   aFormatName;
+        uno::Sequence< rtl::OUString >	aLocations;
+        rtl::OUString					aFormatName;
         uno::Sequence< rtl::OUString >  aLocaleNames;
         bSuccess =  (xNA->getByName( aG_Locations ) >>= aLocations)  &&
                     (xNA->getByName( aG_Format )    >>= aFormatName) &&
@@ -1406,8 +1406,8 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
 }
 
 
-::rtl::OUString SvtLinguConfig::GetThesaurusDialogImage(
-    const ::rtl::OUString &rServiceImplName,
+::rtl::OUString SvtLinguConfig::GetThesaurusDialogImage( 
+    const ::rtl::OUString &rServiceImplName, 
     bool bHighContrast ) const
 {
     rtl::OUString   aRes;
@@ -1420,9 +1420,9 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     return aRes;
 }
 
-
-::rtl::OUString SvtLinguConfig::GetSynonymsContextImage(
-    const ::rtl::OUString &rServiceImplName,
+    
+::rtl::OUString SvtLinguConfig::GetSynonymsContextImage( 
+    const ::rtl::OUString &rServiceImplName, 
     bool bHighContrast ) const
 {
     rtl::OUString   aRes;
@@ -1434,7 +1434,7 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     }
     return aRes;
 }
-
+    
 
 bool SvtLinguConfig::HasVendorImages( const char *pImageName ) const
 {
@@ -1464,9 +1464,9 @@ bool SvtLinguConfig::HasVendorImages( const char *pImageName ) const
                     {
                         bRes = true;
                         break;
-                    }
-                }
-            }
+                    }    
+                }    
+            }    
         }
         catch (uno::Exception &)
         {
@@ -1475,7 +1475,7 @@ bool SvtLinguConfig::HasVendorImages( const char *pImageName ) const
     }
     return bRes;
 }
-
+    
 
 bool SvtLinguConfig::HasGrammarChecker() const
 {

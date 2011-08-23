@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -493,7 +493,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
     m_aCT_DictionaryToSimplified.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED );
     m_aCT_DictionaryToTraditional.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL );
 
-    SvtLinguConfig  aLngCfg;
+    SvtLinguConfig	aLngCfg;
     sal_Bool bValue = sal_Bool();
     Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ) ) );
     if( aAny >>= bValue )
@@ -850,7 +850,7 @@ short ChineseDictionaryDialog::Execute()
     if( nRet == RET_OK )
     {
         //save settings to configuration
-        SvtLinguConfig  aLngCfg;
+        SvtLinguConfig	aLngCfg;
         Any aAny;
         aAny <<= sal_Bool( !!m_aCB_Reverse.IsChecked() );
         aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ), aAny );

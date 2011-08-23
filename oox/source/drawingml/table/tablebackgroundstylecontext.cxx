@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,14 +60,14 @@ TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, 
     switch( aElementToken )
     {
         // EG_ThemeableFillStyle (choice)
-        case NMSP_DRAWINGML|XML_fill:       // CT_FillProperties
+        case NMSP_DRAWINGML|XML_fill:		// CT_FillProperties
             {
                 boost::shared_ptr< FillProperties >& rxFillProperties = mrTableStyle.getBackgroundFillProperties();
                 rxFillProperties.reset( new FillProperties );
                 xRet.set( new FillPropertiesContext( *this, *rxFillProperties ) );
             }
             break;
-        case NMSP_DRAWINGML|XML_fillRef:    // CT_StyleMatrixReference
+        case NMSP_DRAWINGML|XML_fillRef:	// CT_StyleMatrixReference
             {
                 ShapeStyleRef& rStyleRef = mrTableStyle.getBackgroundFillStyleRef();
                 rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
@@ -76,9 +76,9 @@ TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, 
             break;
 
         // EG_ThemeableEffectStyle (choice)
-        case NMSP_DRAWINGML|XML_effect:     // CT_EffectProperties
+        case NMSP_DRAWINGML|XML_effect:		// CT_EffectProperties
             break;
-        case NMSP_DRAWINGML|XML_effectRef:  // CT_StyleMatrixReference
+        case NMSP_DRAWINGML|XML_effectRef:	// CT_StyleMatrixReference
             break;
     }
     if( !xRet.is() )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,12 +52,12 @@ string Cp::toString() const
     char sBuffer[256];
 
     snprintf(sBuffer, 255, "%" SAL_PRIxUINT32 "", get());
-
+    
     return string(sBuffer);
 }
 
 ostream & operator << (ostream & o, const Cp & rCp)
-{
+{   
     return o << rCp.toString();
 }
 
@@ -74,10 +74,10 @@ bool operator == (const Fc & rA, const Fc & rB)
 string Fc::toString() const
 {
     char sBuffer[256];
-
-    snprintf(sBuffer, 255, "(%" SAL_PRIxUINT32 ", %s)", static_cast<sal_uInt32>(get()),
+    
+    snprintf(sBuffer, 255, "(%" SAL_PRIxUINT32 ", %s)", static_cast<sal_uInt32>(get()), 
              isComplex() ? "true" : "false");
-
+    
     return string(sBuffer);
 }
 
@@ -95,7 +95,7 @@ bool operator < (const CpAndFc & rA, const CpAndFc & rB)
         bResult = true;
     else if (rA.mCp == rB.mCp && rA.mType < rB.mType)
         bResult = true;
-
+        
     return bResult;
 }
 
@@ -106,19 +106,19 @@ bool operator == (const CpAndFc & rA, const CpAndFc & rB)
 
 ostream & operator << (ostream & o, const CpAndFc & rCpAndFc)
 {
-    return o << rCpAndFc.toString();
+    return o << rCpAndFc.toString(); 
 }
 
 ostream & operator << (ostream & o, const CpAndFcs & rCpAndFcs)
 {
-    copy(rCpAndFcs.begin(), rCpAndFcs.end(),
+    copy(rCpAndFcs.begin(), rCpAndFcs.end(), 
          ostream_iterator<CpAndFc>(o, ", "));
 
     char sBuffer[256];
 
     snprintf(sBuffer, 255, "%" SAL_PRI_SIZET "u", rCpAndFcs.size());
     o << sBuffer;
-
+        
     return o;
 }
 

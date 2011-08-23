@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,11 +30,11 @@
 
 /* file format versions *************************************************/
 
-#define SOFFICE_FILEFORMAT_31   3450
-#define SOFFICE_FILEFORMAT_40   3580
-#define SOFFICE_FILEFORMAT_50   5050
-#define SOFFICE_FILEFORMAT_60   6200
-#define SOFFICE_FILEFORMAT_8    6800
+#define SOFFICE_FILEFORMAT_31	3450
+#define SOFFICE_FILEFORMAT_40	3580
+#define SOFFICE_FILEFORMAT_50	5050
+#define SOFFICE_FILEFORMAT_60	6200
+#define SOFFICE_FILEFORMAT_8	6800
 #define SOFFICE_FILEFORMAT_CURRENT SOFFICE_FILEFORMAT_8
 
 #endif

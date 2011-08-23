@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfSdrRectObj::ViewContactOfSdrRectObj(SdrRectObj& rRectObj)
-        :   ViewContactOfTextObj(rRectObj)
+        :	ViewContactOfTextObj(rRectObj)
         {
         }
 
@@ -57,20 +57,20 @@ namespace sdr
             const SfxItemSet& rItemSet = GetRectObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet,
+                    rItemSet, 
                     GetRectObj().getText(0)));
 
             // take unrotated snap rect (direct model data) for position and size
             const Rectangle& rRectangle = GetRectObj().GetGeoRect();
             const ::basegfx::B2DRange aObjectRange(
-                rRectangle.Left(), rRectangle.Top(),
+                rRectangle.Left(), rRectangle.Top(), 
                 rRectangle.Right(), rRectangle.Bottom());
             const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
-
+            
             // fill object matrix
             basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                 aObjectRange.getWidth(), aObjectRange.getHeight(),
-                rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
+                rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0, 
                 rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
                 aObjectRange.getMinX(), aObjectRange.getMinY()));
 
@@ -84,17 +84,17 @@ namespace sdr
             const bool bPickThroughTransparentTextFrames(
                 GetRectObj().GetModel() && GetRectObj().GetModel()->IsPickThroughTransparentTextFrames());
 
-            // create primitive. Always create primitives to allow the decomposition of
+            // create primitive. Always create primitives to allow the decomposition of 
             // SdrRectanglePrimitive2D to create needed invisible elements for HitTest and/or BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
-                    aObjectMatrix,
-                    aAttribute,
-                    fCornerRadiusX,
+                    aObjectMatrix, 
+                    aAttribute, 
+                    fCornerRadiusX, 
                     fCornerRadiusY,
                     // #i105856# use fill for HitTest when TextFrame and not PickThrough
                     GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
-
+            
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
     } // end of namespace contact

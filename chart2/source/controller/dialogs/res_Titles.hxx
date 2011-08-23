@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,18 +50,18 @@ public:
     void ClearModifyFlag();
 
 private:
-    FixedText           m_aFT_Main;
-    Edit                m_aEd_Main;
-    FixedText           m_aFT_Sub;
-    Edit                m_aEd_Sub;
+    FixedText 			m_aFT_Main;
+    Edit     			m_aEd_Main;
+    FixedText 			m_aFT_Sub;
+    Edit     			m_aEd_Sub;
 
     FixedLine           m_aFL_Axes;
-    FixedText           m_aFT_XAxis;
-    Edit                m_aEd_XAxis;
-    FixedText           m_aFT_YAxis;
-    Edit                m_aEd_YAxis;
-    FixedText           m_aFT_ZAxis;
-    Edit                m_aEd_ZAxis;
+    FixedText 			m_aFT_XAxis;
+    Edit     			m_aEd_XAxis;
+    FixedText 			m_aFT_YAxis;
+    Edit     			m_aEd_YAxis;
+    FixedText 			m_aFT_ZAxis;
+    Edit     			m_aEd_ZAxis;
 
     FixedLine           m_aFL_SecondaryAxes;
     FixedText           m_aFT_SecondaryXAxis;

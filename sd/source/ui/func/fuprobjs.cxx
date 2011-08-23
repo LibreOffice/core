@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ TYPEINIT1( FuPresentationObjects, FuPoor );
 
 FuPresentationObjects::FuPresentationObjects (
     ViewShell* pViewSh,
-    ::sd::Window* pWin,
+    ::sd::Window* pWin, 
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
@@ -97,8 +97,8 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
     DBG_ASSERT(aLayoutName.Len(), "Layout unbestimmt");
 
-    BOOL    bUnique = FALSE;
-    sal_Int16   nDepth, nTmp;
+    BOOL	bUnique = FALSE;
+    sal_Int16	nDepth, nTmp;
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) mpWindow );
     ::Outliner* pOutl = pOutlinerView->GetOutliner();
@@ -132,7 +132,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         String aStyleName = aLayoutName;
         aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ) );
         USHORT nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
-        PresentationObjects ePO;
+        PresentationObjects	ePO;
 
         if( bPage )
         {

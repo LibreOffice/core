@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,8 +163,8 @@ void ImplTranslateAttribute( rtl::OUString& rString, const TranslateMode eTransl
 
 sal_uInt32 ImplTranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const rtl::OUString& rPresetSubType )
 {
-    sal_uInt32  nPresetSubType = 0;
-    sal_Bool    bTranslated = sal_False;
+    sal_uInt32	nPresetSubType = 0;
+    sal_Bool	bTranslated = sal_False;
 
     if ( ( nPresetClass == (sal_uInt32)EffectPresetClass::ENTRANCE ) || ( nPresetClass == (sal_uInt32)EffectPresetClass::EXIT ) )
     {
@@ -244,7 +244,7 @@ sal_uInt32 ImplTranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_
 const sal_Char* transition::find( const sal_Int16 nType, const sal_Int16 nSubType, const sal_Bool bDirection )
 {
     const sal_Char* pRet = NULL;
-    int             nFit = 0;
+    int				nFit = 0;
 
     const transition* p = gTransitions;
     while( p->mpName )
@@ -261,7 +261,7 @@ const sal_Char* transition::find( const sal_Int16 nType, const sal_Int16 nSubTyp
             pRet = p->mpName;
             nFit = nF;
         }
-        if ( nFit == 7 )    // maximum
+        if ( nFit == 7 )	// maximum
             break;
         p++;
     }
@@ -283,7 +283,7 @@ SvStream& operator<<(SvStream& rOut, AnimationNode& rNode )
 }
 
 AnimationExporter::AnimationExporter( const EscherSolverContainer& rSolverContainer, ppt::ExSoundCollection& rExSoundCollection ) :
-    mrSolverContainer   ( rSolverContainer ),
+    mrSolverContainer	( rSolverContainer ), 
     mrExSoundCollection ( rExSoundCollection ),
     mnCurrentGroup(0)
 {
@@ -508,7 +508,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
     sal_Int16 nFillDefault = GetFillMode( xNode, nFDef );
 
     bool bSkipChildren = false;
-
+    
     Reference< XAnimationNode > xAudioNode;
     static sal_uInt32 nAudioGroup;
 
@@ -676,7 +676,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
             }
             break;
 
-            case AnimationNodeType::AUDIO :     // #i58428#
+            case AnimationNodeType::AUDIO :		// #i58428#
             {
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
@@ -791,8 +791,8 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
 void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnimationNode >& xNode,
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >*, const sal_Int32, const sal_Int16 nFillDefault )
 {
-    EscherExAtom    aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
-    AnimationNode   aAnim;
+    EscherExAtom	aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
+    AnimationNode	aAnim;
     rtl_zeroMemory( &aAnim, sizeof( aAnim ) );
 
     // attribute Restart
@@ -806,7 +806,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
     }
 
     // attribute Fill
-//  aAnim.mnFill = GetFillMode( xNode, pParent );
+//	aAnim.mnFill = GetFillMode( xNode, pParent );
     switch( nFillDefault )
     {
         default:
@@ -836,7 +836,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
     aAnim.mnGroupType = mso_Anim_GroupType_SEQ;
     switch( xNode->getType() )
     {
-        case AnimationNodeType::PAR :       // PASSTROUGH!!! (as it was intended)
+        case AnimationNodeType::PAR :		// PASSTROUGH!!! (as it was intended)
             aAnim.mnGroupType = mso_Anim_GroupType_PAR;
         case AnimationNodeType::SEQ :
         {
@@ -847,7 +847,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
                 const NamedValue* p = aUserData.getConstArray();
                 sal_Int32 nLength = aUserData.getLength();
                 while( nLength-- )
-                {
+                {	
                     if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
                     {
                         sal_Int16 nType = 0;
@@ -924,7 +924,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
         const NamedValue* p = aUserData.getConstArray();
         sal_Int32 nLength = aUserData.getLength();
         while( nLength-- )
-        {
+        {	
             if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
             {
                 pAny[ DFF_ANIM_NODE_TYPE ] = &(p->Value);
@@ -978,7 +978,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
             sal_uInt32 nPPTNodeType = DFF_ANIM_NODE_TYPE_ON_CLICK;
             switch( nNodeType )
             {
-                case ::com::sun::star::presentation::EffectNodeType::ON_CLICK : nPPTNodeType = DFF_ANIM_NODE_TYPE_ON_CLICK; break;
+                case ::com::sun::star::presentation::EffectNodeType::ON_CLICK : nPPTNodeType = DFF_ANIM_NODE_TYPE_ON_CLICK;	break;
                 case ::com::sun::star::presentation::EffectNodeType::WITH_PREVIOUS : nPPTNodeType = DFF_ANIM_NODE_TYPE_WITH_PREVIOUS; break;
                 case ::com::sun::star::presentation::EffectNodeType::AFTER_PREVIOUS : nPPTNodeType = DFF_ANIM_NODE_TYPE_AFTER_PREVIOUS; break;
                 case ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE : nPPTNodeType = DFF_ANIM_NODE_TYPE_MAIN_SEQUENCE; break;
@@ -1089,9 +1089,9 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
         Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
         if( xColor.is() )
         {
-//          sal_uInt32 nColorSpace = xColor->getColorSpace() == AnimationColorSpace::RGB ? 0 : 1;
-//          exportAnimPropertyuInt32( rStrm, DFF_ANIM_COLORSPACE, nColorSpace, TRANSLATE_NONE );
-
+//			sal_uInt32 nColorSpace = xColor->getColorSpace() == AnimationColorSpace::RGB ? 0 : 1;
+//			exportAnimPropertyuInt32( rStrm, DFF_ANIM_COLORSPACE, nColorSpace, TRANSLATE_NONE );
+            
             sal_Bool bDirection = !xColor->getDirection();
             exportAnimPropertyuInt32( rStrm, DFF_ANIM_DIRECTION, bDirection, TRANSLATE_NONE );
         }
@@ -1127,11 +1127,11 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     }
     if ( pAny[ DFF_ANIM_EVENT_FILTER ] )
     {
-        // TODO DFF_ANIM_EVENT_FILTER
+        // TODO DFF_ANIM_EVENT_FILTER 
     }
     if ( pAny[ DFF_ANIM_VOLUME ] )
     {
-        // TODO DFF_ANIM_VOLUME
+        // TODO DFF_ANIM_VOLUME 
     }
     return nNodeType;
 }
@@ -1289,7 +1289,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
 
         switch( i )
         {
-            case 0 :
+            case 0 : 
             case 1 :
             {
                 Any aAny;
@@ -1304,7 +1304,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                         Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
                         if ( xE.is() && xE->hasMoreElements() )
                         {
-//                          while( xE->hasMoreElements() )
+//							while( xE->hasMoreElements() )
                             {
                                 Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
                                 aAny = xClickNode->getBegin();
@@ -1318,7 +1318,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                     else
                     {
                         aAny = xNode->getBegin();
-                        if ( nFlags & 0x10 )    // replace ON_NEXT with IDEFINITE
+                        if ( nFlags & 0x10 )	// replace ON_NEXT with IDEFINITE
                         {
                             if ( ( aAny >>= aEvent ) && ( aEvent.Trigger == EventTrigger::ON_NEXT ) )
                             {
@@ -1429,7 +1429,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
             aDest += aStr;
         }
     }
-    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Rotate" ) )         // "r" or "style.rotation" ?
+    else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Rotate" ) )			// "r" or "style.rotation" ?
             || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SkewX" ) )
             || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Opacity" ) )
             || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharHeight" ) )
@@ -1440,7 +1440,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
             aDest += rtl::OUString::valueOf( fNumber );
     }
     else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Color" ) )
-            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillColor" ) )     // "Fillcolor" or "FillColor" ?
+            || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillColor" ) )		// "Fillcolor" or "FillColor" ?
             || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LineColor" ) )
             || rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharColor" ) )
         )
@@ -1475,7 +1475,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
         if ( rSourceValue >>= eFillStyle )
         {
             if ( eFillStyle == ::com::sun::star::drawing::FillStyle_NONE )
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "none" ) );    // ?
+                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "none" ) );	// ?
             else
                 aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "solid" ) );
         }
@@ -1521,7 +1521,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
             if ( eFontSlant == com::sun::star::awt::FontSlant_ITALIC )
                 aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "italic" ) );
             else
-                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "normal" ) );  // ?
+                aDest += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "normal" ) );	// ?
         }
     }
     else if ( rAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Visibility" ) ) )
@@ -1551,8 +1551,8 @@ void AnimationExporter::exportAnimateSet( SvStream& rStrm, const Reference< XAni
         EscherExContainer aAnimateSet( rStrm, DFF_msofbtAnimateSet, 0 );
         {
             EscherExAtom aAnimateSetData( rStrm, DFF_msofbtAnimateSetData );
-            sal_uInt32 nId1 = 1;            // ??
-            sal_uInt32 nId2 = 1;            // ??
+            sal_uInt32 nId1 = 1;			// ??
+            sal_uInt32 nId2 = 1;			// ??
             rStrm << nId1 << nId2;
         }
         Any aConvertedValue( convertAnimateValue( xSet->getTo(), xSet->getAttributeName() ) );
@@ -1575,7 +1575,7 @@ sal_uInt32 GetValueTypeForAttributeName( const rtl::OUString& rAttributeName )
     struct Entry
     {
         const sal_Char* pName;
-        sal_uInt8       nType;
+        sal_uInt8		nType;
     };
     static const Entry lcl_attributeMap[] =
     {
@@ -1630,7 +1630,7 @@ void AnimationExporter::exportAnimate( SvStream& rStrm, const Reference< XAnimat
 
         EscherExContainer aContainer( rStrm, DFF_msofbtAnimate, 0 );
         {
-            EscherExAtom    aAnimateData( rStrm, DFF_msofbtAnimateData );
+            EscherExAtom	aAnimateData( rStrm, DFF_msofbtAnimateData );
             sal_uInt32 nBits = 0x38;
             sal_Int16 nTmp = xAnimate->getCalcMode();
             sal_uInt32 nCalcMode = /* (nTmp == AnimationCalcMode::FORMULA) ? 2 : */ (nTmp == AnimationCalcMode::LINEAR) ? 1 : 0;
@@ -1679,7 +1679,7 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
             if ( xAnimate.is() )
             {
                 if ( xAnimate->getAttributeName().getLength() )
-                    nBits |= 4;     // what is attributeName ?, maybe this is set if a DFF_msofbtAnimateAttributeNames is written
+                    nBits |= 4;		// what is attributeName ?, maybe this is set if a DFF_msofbtAnimateAttributeNames is written
                 sal_Int16 nAdditiveMode = xAnimate->getAdditive();
                 if ( nAdditiveMode != AnimationAdditiveMode::BASE )
                 {
@@ -1741,7 +1741,7 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any a
 {
     Reference< XShape > xShape;
     aAny >>= xShape;
-    sal_uInt32 nRefMode = 0;    // nRefMode == 2 -> Paragraph
+    sal_uInt32 nRefMode = 0;	// nRefMode == 2 -> Paragraph
     sal_Int32 begin = -1;
     sal_Int32 end = -1;
 
@@ -1792,7 +1792,7 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any a
         {
             EscherExAtom aAnimReference( rStrm, DFF_msofbtAnimReference );
 
-            sal_uInt32 nRefType = 1;    // TODO: nRefType == 2 -> Sound;
+            sal_uInt32 nRefType = 1;	// TODO: nRefType == 2 -> Sound;
             sal_uInt32 nRefId = ((EscherSolverContainer&)mrSolverContainer).GetShapeId( xShape );
 
             rStrm << nRefMode
@@ -1804,7 +1804,7 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any a
         if ( bCreate2b01Atom )
         {
             EscherExAtom a2b01Atom( rStrm, 0x2b01 );
-            rStrm << (sal_uInt32)1;     // ?
+            rStrm << (sal_uInt32)1;		// ?
         }
     }
 }
@@ -1912,7 +1912,7 @@ void AnimationExporter::exportTransitionFilter( SvStream& rStrm, const Reference
         EscherExContainer aAnimateFilter( rStrm, DFF_msofbtAnimateFilter );
         {
             EscherExAtom aAnimateFilterData( rStrm, DFF_msofbtAnimateFilterData );
-            sal_uInt32 nBits = 3;       // bit 0 -> use AnimAttributeValue
+            sal_uInt32 nBits = 3;		// bit 0 -> use AnimAttributeValue
                                         // bit 1 -> use nTransition
 
             sal_uInt32 nTransition = xFilter->getMode() ? 0 : 1;
@@ -1936,11 +1936,11 @@ void AnimationExporter::exportAnimateMotion( SvStream& rStrm, const Reference< X
     {
         EscherExContainer aAnimateMotion( rStrm, DFF_msofbtAnimateMotion );
         {
-            {   //SJ: Ignored from import filter
-                EscherExAtom aAnimateMotionData( rStrm, DFF_msofbtAnimateMotionData );
+            {	//SJ: Ignored from import filter
+                EscherExAtom aAnimateMotionData( rStrm, DFF_msofbtAnimateMotionData ); 
                 sal_uInt32 nBits = 0x98;
                 sal_uInt32 nOrigin = 0x2;
-                float fByX = 100.0; // nBits&1
+                float fByX = 100.0;	// nBits&1
                 float fByY = 100.0; // nBits&1
                 float fFromX = 0.0; // nBits&2
                 float fFromY = 0.0; // nBits&2
@@ -1948,7 +1948,7 @@ void AnimationExporter::exportAnimateMotion( SvStream& rStrm, const Reference< X
                 float fToY = 100.0; // nBits&4
                 rStrm << nBits << fByX << fByY << fFromX << fFromY << fToX << fToY << nOrigin;
             }
-/*          ?
+/*			?
             {
                 EscherExAtom aF137( rStrm, 0xf137 );
             }
@@ -2015,7 +2015,7 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
 
                 // TODO: ZoomContents:
                 //if( nBits & 8 )
-                //( fprintf( mpFile, " zoomContents=\"%s\"", nZoomContents ? "true" : "false" );
+                //(	fprintf( mpFile, " zoomContents=\"%s\"", nZoomContents ? "true" : "false" );
 
                 rStrm << nBits << fByX << fByY << fFromX << fFromY << fToX << fToY << nZoomContents;
             }
@@ -2065,13 +2065,13 @@ sal_Bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColor
 
     sal_Int32 nColor = 0;
     Sequence< double > aHSL( 3 );
-    if ( rAny >>= nColor )      // RGB color
+    if ( rAny >>= nColor )		// RGB color
     {
         rA = (sal_uInt8)( nColor >> 24 );
         rB = (sal_uInt8)( nColor >> 8 );
         rC = (sal_uInt8)( nColor );
     }
-    else if ( rAny >>= aHSL )   // HSL
+    else if ( rAny >>= aHSL )	// HSL
     {
         rA = (sal_Int32) ( aHSL[ 0 ] * 255.0 / 360.0 );
         rB = (sal_Int32) ( aHSL[ 1 ] * 255.0 );
@@ -2137,11 +2137,11 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
     {
         EscherExAtom aAnimIteration( rStrm, DFF_msofbtAnimIteration );
 
-        float       fInterval = 10.0;
-        sal_Int32   nTextUnitEffect = 0;
-        sal_Int32   nU1 = 1;
-        sal_Int32   nU2 = 1;
-        sal_Int32   nU3 = 0xe;
+        float		fInterval = 10.0;
+        sal_Int32	nTextUnitEffect = 0;
+        sal_Int32	nU1 = 1;
+        sal_Int32	nU2 = 1;
+        sal_Int32	nU3 = 0xe;
 
         sal_Int16 nIterateType = xIterate->getIterateType();
         switch( nIterateType )

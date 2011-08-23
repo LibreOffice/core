@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,20 +67,20 @@ namespace rptui
     //====================================================================
     //= FormatNormalizer
     //====================================================================
-    DBG_NAME(rpt_FormatNormalizer)
+    DBG_NAME(rpt_FormatNormalizer)    
     //--------------------------------------------------------------------
     FormatNormalizer::FormatNormalizer( const OReportModel& _rModel )
         :m_rModel( _rModel )
         ,m_xReportDefinition( )
         ,m_bFieldListDirty( true )
     {
-        DBG_CTOR(rpt_FormatNormalizer,NULL);
+        DBG_CTOR(rpt_FormatNormalizer,NULL);        
     }
 
     //--------------------------------------------------------------------
     FormatNormalizer::~FormatNormalizer()
     {
-        DBG_DTOR(rpt_FormatNormalizer,NULL);
+        DBG_DTOR(rpt_FormatNormalizer,NULL);        
     }
 
     //--------------------------------------------------------------------

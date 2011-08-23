@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::Named
     uno::Reference< task::XJob > xJob;
     uno::Sequence< beans::NamedValue > aValues;
     sal_Int32 nValuesSize = 0;
-
+    
     for ( sal_Int32 nInd = 0; nInd < aArguments.getLength(); nInd++ )
         if ( aArguments[nInd].Name.equalsAscii( "JobToExecute" ) )
             aArguments[nInd].Value >>= xJob;

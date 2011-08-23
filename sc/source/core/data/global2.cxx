@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,16 +80,16 @@ ScImportParam::ScImportParam() :
 }
 
 ScImportParam::ScImportParam( const ScImportParam& r ) :
-    nCol1       (r.nCol1),
-    nRow1       (r.nRow1),
-    nCol2       (r.nCol2),
-    nRow2       (r.nRow2),
-    bImport     (r.bImport),
-    aDBName     (r.aDBName),
-    aStatement  (r.aStatement),
-    bNative     (r.bNative),
-    bSql        (r.bSql),
-    nType       (r.nType)
+    nCol1		(r.nCol1),
+    nRow1		(r.nRow1),
+    nCol2		(r.nCol2),
+    nRow2		(r.nRow2),
+    bImport		(r.bImport),
+    aDBName		(r.aDBName),
+    aStatement	(r.aStatement),
+    bNative		(r.bNative),
+    bSql		(r.bSql),
+    nType		(r.nType)
 {
 }
 
@@ -111,34 +111,34 @@ ScImportParam::~ScImportParam()
 
 ScImportParam& ScImportParam::operator=( const ScImportParam& r )
 {
-    nCol1           = r.nCol1;
-    nRow1           = r.nRow1;
-    nCol2           = r.nCol2;
-    nRow2           = r.nRow2;
-    bImport         = r.bImport;
-    aDBName         = r.aDBName;
-    aStatement      = r.aStatement;
-    bNative         = r.bNative;
-    bSql            = r.bSql;
-    nType           = r.nType;
+    nCol1			= r.nCol1;
+    nRow1			= r.nRow1;
+    nCol2			= r.nCol2;
+    nRow2			= r.nRow2;
+    bImport			= r.bImport;
+    aDBName			= r.aDBName;
+    aStatement		= r.aStatement;
+    bNative			= r.bNative;
+    bSql			= r.bSql;
+    nType			= r.nType;
 
     return *this;
 }
 
 BOOL ScImportParam::operator==( const ScImportParam& rOther ) const
 {
-    return( nCol1       == rOther.nCol1 &&
-            nRow1       == rOther.nRow1 &&
-            nCol2       == rOther.nCol2 &&
-            nRow2       == rOther.nRow2 &&
-            bImport     == rOther.bImport &&
-            aDBName     == rOther.aDBName &&
-            aStatement  == rOther.aStatement &&
-            bNative     == rOther.bNative &&
-            bSql        == rOther.bSql &&
-            nType       == rOther.nType );
+    return(	nCol1		== rOther.nCol1 &&
+            nRow1		== rOther.nRow1 &&
+            nCol2		== rOther.nCol2 &&
+            nRow2		== rOther.nRow2 &&
+            bImport		== rOther.bImport &&
+            aDBName		== rOther.aDBName &&
+            aStatement	== rOther.aStatement &&
+            bNative		== rOther.bNative &&
+            bSql		== rOther.bSql &&
+            nType		== rOther.nType );
 
-    //! nQuerySh und pConnection sind gleich ?
+    //!	nQuerySh und pConnection sind gleich ?
 }
 
 
@@ -185,54 +185,54 @@ ScQueryEntry::~ScQueryEntry()
 
 ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
 {
-    bDoQuery        = r.bDoQuery;
-    bQueryByString  = r.bQueryByString;
+    bDoQuery		= r.bDoQuery;
+    bQueryByString	= r.bQueryByString;
     bQueryByDate    = r.bQueryByDate;
-    eOp             = r.eOp;
-    eConnect        = r.eConnect;
-    nField          = r.nField;
-    nVal            = r.nVal;
-    *pStr           = *r.pStr;
+    eOp				= r.eOp;
+    eConnect		= r.eConnect;
+    nField			= r.nField;
+    nVal			= r.nVal;
+    *pStr			= *r.pStr;
     if ( pSearchParam )
     {
         delete pSearchParam;
         delete pSearchText;
     }
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
+    pSearchParam	= NULL;
+    pSearchText		= NULL;
 
     return *this;
 }
 
 void ScQueryEntry::Clear()
 {
-    bDoQuery        = FALSE;
-    bQueryByString  = FALSE;
+    bDoQuery		= FALSE;
+    bQueryByString	= FALSE;
     bQueryByDate    = false;
-    eOp             = SC_EQUAL;
-    eConnect        = SC_AND;
-    nField          = 0;
-    nVal            = 0.0;
+    eOp				= SC_EQUAL;
+    eConnect		= SC_AND;
+    nField			= 0;
+    nVal			= 0.0;
     pStr->Erase();
     if ( pSearchParam )
     {
         delete pSearchParam;
         delete pSearchText;
     }
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
+    pSearchParam	= NULL;
+    pSearchText		= NULL;
 }
 
 BOOL ScQueryEntry::operator==( const ScQueryEntry& r ) const
 {
-    return bDoQuery         == r.bDoQuery
-        && bQueryByString   == r.bQueryByString
+    return bDoQuery			== r.bDoQuery
+        && bQueryByString	== r.bQueryByString
         && bQueryByDate     == r.bQueryByDate
-        && eOp              == r.eOp
-        && eConnect         == r.eConnect
-        && nField           == r.nField
-        && nVal             == r.nVal
-        && *pStr            == *r.pStr;
+        && eOp				== r.eOp
+        && eConnect			== r.eConnect
+        && nField			== r.nField
+        && nVal				== r.nVal
+        && *pStr			== *r.pStr;
     //! pSearchParam und pSearchText nicht vergleichen
 }
 
@@ -272,14 +272,14 @@ ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
 {
     for (USHORT i=0; i<MAXSUBTOTAL; i++)
     {
-        bGroupActive[i] = r.bGroupActive[i];
-        nField[i]       = r.nField[i];
+        bGroupActive[i]	= r.bGroupActive[i];
+        nField[i]		= r.nField[i];
 
         if ( (r.nSubTotals[i] > 0) && r.pSubTotals[i] && r.pFunctions[i] )
         {
             nSubTotals[i] = r.nSubTotals[i];
-            pSubTotals[i] = new SCCOL   [r.nSubTotals[i]];
-            pFunctions[i] = new ScSubTotalFunc  [r.nSubTotals[i]];
+            pSubTotals[i] = new SCCOL	[r.nSubTotals[i]];
+            pFunctions[i] = new ScSubTotalFunc	[r.nSubTotals[i]];
 
             for (SCCOL j=0; j<r.nSubTotals[i]; j++)
             {
@@ -308,8 +308,8 @@ void ScSubTotalParam::Clear()
 
     for (USHORT i=0; i<MAXSUBTOTAL; i++)
     {
-        bGroupActive[i] = FALSE;
-        nField[i]       = 0;
+        bGroupActive[i]	= FALSE;
+        nField[i]		= 0;
 
         if ( (nSubTotals[i] > 0) && pSubTotals[i] && pFunctions[i] )
         {
@@ -325,33 +325,33 @@ void ScSubTotalParam::Clear()
 
 ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
 {
-    nCol1           = r.nCol1;
-    nRow1           = r.nRow1;
-    nCol2           = r.nCol2;
-    nRow2           = r.nRow2;
-    bRemoveOnly     = r.bRemoveOnly;
-    bReplace        = r.bReplace;
-    bPagebreak      = r.bPagebreak;
-    bCaseSens       = r.bCaseSens;
-    bDoSort         = r.bDoSort;
-    bAscending      = r.bAscending;
-    bUserDef        = r.bUserDef;
-    nUserIndex      = r.nUserIndex;
-    bIncludePattern = r.bIncludePattern;
+    nCol1			= r.nCol1;
+    nRow1			= r.nRow1;
+    nCol2			= r.nCol2;
+    nRow2			= r.nRow2;
+    bRemoveOnly		= r.bRemoveOnly;
+    bReplace		= r.bReplace;
+    bPagebreak		= r.bPagebreak;
+    bCaseSens		= r.bCaseSens;
+    bDoSort			= r.bDoSort;
+    bAscending		= r.bAscending;
+    bUserDef		= r.bUserDef;
+    nUserIndex		= r.nUserIndex;
+    bIncludePattern	= r.bIncludePattern;
 
     for (USHORT i=0; i<MAXSUBTOTAL; i++)
     {
-        bGroupActive[i] = r.bGroupActive[i];
-        nField[i]       = r.nField[i];
-        nSubTotals[i]   = r.nSubTotals[i];
+        bGroupActive[i]	= r.bGroupActive[i];
+        nField[i]		= r.nField[i];
+        nSubTotals[i]	= r.nSubTotals[i];
 
         if ( pSubTotals[i] ) delete [] pSubTotals[i];
         if ( pFunctions[i] ) delete [] pFunctions[i];
 
         if ( r.nSubTotals[i] > 0 )
         {
-            pSubTotals[i] = new SCCOL   [r.nSubTotals[i]];
-            pFunctions[i] = new ScSubTotalFunc  [r.nSubTotals[i]];
+            pSubTotals[i] = new SCCOL	[r.nSubTotals[i]];
+            pFunctions[i] = new ScSubTotalFunc	[r.nSubTotals[i]];
 
             for (SCCOL j=0; j<r.nSubTotals[i]; j++)
             {
@@ -374,18 +374,18 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
 
 BOOL ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 {
-    BOOL bEqual =   (nCol1          == rOther.nCol1)
-                 && (nRow1          == rOther.nRow1)
-                 && (nCol2          == rOther.nCol2)
-                 && (nRow2          == rOther.nRow2)
-                 && (bRemoveOnly    == rOther.bRemoveOnly)
-                 && (bReplace       == rOther.bReplace)
-                 && (bPagebreak     == rOther.bPagebreak)
-                 && (bDoSort        == rOther.bDoSort)
-                 && (bCaseSens      == rOther.bCaseSens)
-                 && (bAscending     == rOther.bAscending)
-                 && (bUserDef       == rOther.bUserDef)
-                 && (nUserIndex     == rOther.nUserIndex)
+    BOOL bEqual =   (nCol1			== rOther.nCol1)
+                 && (nRow1			== rOther.nRow1)
+                 && (nCol2			== rOther.nCol2)
+                 && (nRow2			== rOther.nRow2)
+                 && (bRemoveOnly	== rOther.bRemoveOnly)
+                 && (bReplace		== rOther.bReplace)
+                 && (bPagebreak		== rOther.bPagebreak)
+                 && (bDoSort		== rOther.bDoSort)
+                 && (bCaseSens		== rOther.bCaseSens)
+                 && (bAscending		== rOther.bAscending)
+                 && (bUserDef		== rOther.bUserDef)
+                 && (nUserIndex		== rOther.nUserIndex)
                  && (bIncludePattern== rOther.bIncludePattern);
 
     if ( bEqual )
@@ -393,9 +393,9 @@ BOOL ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
         bEqual = TRUE;
         for ( USHORT i=0; i<MAXSUBTOTAL && bEqual; i++ )
         {
-            bEqual =   (bGroupActive[i] == rOther.bGroupActive[i])
-                    && (nField[i]       == rOther.nField[i])
-                    && (nSubTotals[i]   == rOther.nSubTotals[i]);
+            bEqual =   (bGroupActive[i]	== rOther.bGroupActive[i])
+                    && (nField[i]		== rOther.nField[i])
+                    && (nSubTotals[i]	== rOther.nSubTotals[i]);
 
             if ( bEqual && (nSubTotals[i] > 0) )
             {
@@ -416,10 +416,10 @@ BOOL ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 
 //------------------------------------------------------------------------
 
-void ScSubTotalParam::SetSubTotals( USHORT                  nGroup,
-                                    const SCCOL*            ptrSubTotals,
-                                    const ScSubTotalFunc*   ptrFunctions,
-                                    USHORT                  nCount )
+void ScSubTotalParam::SetSubTotals( USHORT					nGroup,
+                                    const SCCOL*			ptrSubTotals,
+                                    const ScSubTotalFunc*	ptrFunctions,
+                                    USHORT					nCount )
 {
     DBG_ASSERT( (nGroup <= MAXSUBTOTAL),
                 "ScSubTotalParam::SetSubTotals(): nGroup > MAXSUBTOTAL!" );
@@ -439,8 +439,8 @@ void ScSubTotalParam::SetSubTotals( USHORT                  nGroup,
         delete [] pSubTotals[nGroup];
         delete [] pFunctions[nGroup];
 
-        pSubTotals[nGroup] = new SCCOL      [nCount];
-        pFunctions[nGroup] = new ScSubTotalFunc [nCount];
+        pSubTotals[nGroup] = new SCCOL		[nCount];
+        pFunctions[nGroup] = new ScSubTotalFunc	[nCount];
         nSubTotals[nGroup] = static_cast<SCCOL>(nCount);
 
         for ( USHORT i=0; i<nCount; i++ )
@@ -507,21 +507,21 @@ void __EXPORT ScConsolidateParam::Clear()
     nCol = 0;
     nRow = 0;
     nTab = 0;
-    bByCol = bByRow = bReferenceData    = FALSE;
-    eFunction                           = SUBTOTAL_FUNC_SUM;
+    bByCol = bByRow = bReferenceData	= FALSE;
+    eFunction							= SUBTOTAL_FUNC_SUM;
 }
 
 //------------------------------------------------------------------------
 
 ScConsolidateParam& __EXPORT ScConsolidateParam::operator=( const ScConsolidateParam& r )
 {
-    nCol            = r.nCol;
-    nRow            = r.nRow;
-    nTab            = r.nTab;
-    bByCol          = r.bByCol;
-    bByRow          = r.bByRow;
-    bReferenceData  = r.bReferenceData;
-    eFunction       = r.eFunction;
+    nCol			= r.nCol;
+    nRow			= r.nRow;
+    nTab			= r.nTab;
+    bByCol			= r.bByCol;
+    bByRow			= r.bByRow;
+    bReferenceData	= r.bReferenceData;
+    eFunction		= r.eFunction;
     SetAreas( r.ppDataAreas, r.nDataAreaCount );
 
     return *this;
@@ -531,14 +531,14 @@ ScConsolidateParam& __EXPORT ScConsolidateParam::operator=( const ScConsolidateP
 
 BOOL __EXPORT ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
 {
-    BOOL bEqual =   (nCol           == r.nCol)
-                 && (nRow           == r.nRow)
-                 && (nTab           == r.nTab)
-                 && (bByCol         == r.bByCol)
-                 && (bByRow         == r.bByRow)
-                 && (bReferenceData == r.bReferenceData)
-                 && (nDataAreaCount == r.nDataAreaCount)
-                 && (eFunction      == r.eFunction);
+    BOOL bEqual = 	(nCol			== r.nCol)
+                 &&	(nRow			== r.nRow)
+                 && (nTab			== r.nTab)
+                 && (bByCol			== r.bByCol)
+                 && (bByRow			== r.bByRow)
+                 && (bReferenceData	== r.bReferenceData)
+                 && (nDataAreaCount	== r.nDataAreaCount)
+                 && (eFunction		== r.eFunction);
 
     if ( nDataAreaCount == 0 )
         bEqual = bEqual && (ppDataAreas == NULL) && (r.ppDataAreas == NULL);
@@ -590,7 +590,7 @@ bool PivotField::operator==( const PivotField& r ) const
 // struct ScPivotParam:
 
 ScPivotParam::ScPivotParam()
-    :   nCol(0), nRow(0), nTab(0),
+    :	nCol(0), nRow(0), nTab(0),
         nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0),
         bIgnoreEmptyRows(FALSE), bDetectCategories(FALSE),
         bMakeTotalCol(TRUE), bMakeTotalRow(TRUE)
@@ -600,7 +600,7 @@ ScPivotParam::ScPivotParam()
 //------------------------------------------------------------------------
 
 ScPivotParam::ScPivotParam( const ScPivotParam& r )
-    :   nCol( r.nCol ), nRow( r.nRow ), nTab( r.nTab ),
+    :	nCol( r.nCol ), nRow( r.nRow ), nTab( r.nTab ),
         nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0),
         bIgnoreEmptyRows(r.bIgnoreEmptyRows),
         bDetectCategories(r.bDetectCategories),
@@ -661,25 +661,25 @@ void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
 
 void __EXPORT ScPivotParam::SetPivotArrays  ( const PivotField* pPageArr,
                                               const PivotField* pColArr,
-                                              const PivotField* pRowArr,
-                                              const PivotField* pDataArr,
+                                              const PivotField*	pRowArr,
+                                              const PivotField*	pDataArr,
                                               SCSIZE            nPageCnt,
-                                              SCSIZE            nColCnt,
-                                              SCSIZE            nRowCnt,
-                                              SCSIZE            nDataCnt )
+                                              SCSIZE			nColCnt,
+                                              SCSIZE			nRowCnt,
+                                              SCSIZE			nDataCnt )
 {
     ClearPivotArrays();
 
     if ( pPageArr && pColArr && pRowArr && pDataArr  )
     {
         nPageCount  = (nPageCnt>PIVOT_MAXPAGEFIELD) ? PIVOT_MAXPAGEFIELD : nPageCnt;
-        nColCount   = (nColCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nColCnt;
-        nRowCount   = (nRowCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nRowCnt;
-        nDataCount  = (nDataCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nDataCnt;
+        nColCount	= (nColCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nColCnt;
+        nRowCount	= (nRowCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nRowCnt;
+        nDataCount	= (nDataCnt>PIVOT_MAXFIELD) ? PIVOT_MAXFIELD : nDataCnt;
 
         memcpy( aPageArr, pPageArr, nPageCount * sizeof(PivotField) );
-        memcpy( aColArr,  pColArr,  nColCount  * sizeof(PivotField) );
-        memcpy( aRowArr,  pRowArr,  nRowCount  * sizeof(PivotField) );
+        memcpy( aColArr,  pColArr,	nColCount  * sizeof(PivotField) );
+        memcpy( aRowArr,  pRowArr,	nRowCount  * sizeof(PivotField) );
         memcpy( aDataArr, pDataArr, nDataCount * sizeof(PivotField) );
     }
 }
@@ -688,13 +688,13 @@ void __EXPORT ScPivotParam::SetPivotArrays  ( const PivotField* pPageArr,
 
 ScPivotParam& __EXPORT ScPivotParam::operator=( const ScPivotParam& r )
 {
-    nCol              = r.nCol;
-    nRow              = r.nRow;
-    nTab              = r.nTab;
+    nCol			  = r.nCol;
+    nRow			  = r.nRow;
+    nTab			  = r.nTab;
     bIgnoreEmptyRows  = r.bIgnoreEmptyRows;
     bDetectCategories = r.bDetectCategories;
-    bMakeTotalCol     = r.bMakeTotalCol;
-    bMakeTotalRow     = r.bMakeTotalRow;
+    bMakeTotalCol	  = r.bMakeTotalCol;
+    bMakeTotalRow	  = r.bMakeTotalRow;
 
     SetPivotArrays  ( r.aPageArr, r.aColArr, r.aRowArr, r.aDataArr,
                       r.nPageCount, r.nColCount, r.nRowCount, r.nDataCount );
@@ -706,18 +706,18 @@ ScPivotParam& __EXPORT ScPivotParam::operator=( const ScPivotParam& r )
 
 BOOL __EXPORT ScPivotParam::operator==( const ScPivotParam& r ) const
 {
-    BOOL bEqual =   (nCol       == r.nCol)
-                 && (nRow       == r.nRow)
-                 && (nTab       == r.nTab)
+    BOOL bEqual = 	(nCol		== r.nCol)
+                 &&	(nRow		== r.nRow)
+                 && (nTab		== r.nTab)
                  && (bIgnoreEmptyRows  == r.bIgnoreEmptyRows)
                  && (bDetectCategories == r.bDetectCategories)
                  && (bMakeTotalCol == r.bMakeTotalCol)
                  && (bMakeTotalRow == r.bMakeTotalRow)
                  && (maLabelArray.size() == r.maLabelArray.size())
                  && (nPageCount == r.nPageCount)
-                 && (nColCount  == r.nColCount)
-                 && (nRowCount  == r.nRowCount)
-                 && (nDataCount == r.nDataCount);
+                 && (nColCount	== r.nColCount)
+                 && (nRowCount	== r.nRowCount)
+                 && (nDataCount	== r.nDataCount);
 
     if ( bEqual )
     {
@@ -743,16 +743,16 @@ BOOL __EXPORT ScPivotParam::operator==( const ScPivotParam& r ) const
 // struct ScSolveParam
 
 ScSolveParam::ScSolveParam()
-    :   pStrTargetVal( NULL )
+    :	pStrTargetVal( NULL )
 {
 }
 
 //------------------------------------------------------------------------
 
 ScSolveParam::ScSolveParam( const ScSolveParam& r )
-    :   aRefFormulaCell ( r.aRefFormulaCell ),
+    :	aRefFormulaCell	( r.aRefFormulaCell ),
         aRefVariableCell( r.aRefVariableCell ),
-        pStrTargetVal   ( r.pStrTargetVal
+        pStrTargetVal	( r.pStrTargetVal
                             ? new String(*r.pStrTargetVal)
                             : NULL )
 {
@@ -762,10 +762,10 @@ ScSolveParam::ScSolveParam( const ScSolveParam& r )
 
 ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
                             const ScAddress& rVariableCell,
-                            const String&   rTargetValStr )
-    :   aRefFormulaCell ( rFormulaCell ),
+                            const String& 	rTargetValStr )
+    :	aRefFormulaCell	( rFormulaCell ),
         aRefVariableCell( rVariableCell ),
-        pStrTargetVal   ( new String(rTargetValStr) )
+        pStrTargetVal	( new String(rTargetValStr) )
 {
 }
 
@@ -794,8 +794,8 @@ ScSolveParam& __EXPORT ScSolveParam::operator=( const ScSolveParam& r )
 
 BOOL ScSolveParam::operator==( const ScSolveParam& r ) const
 {
-    BOOL bEqual =   (aRefFormulaCell  == r.aRefFormulaCell)
-                 && (aRefVariableCell == r.aRefVariableCell);
+    BOOL bEqual = 	(aRefFormulaCell  == r.aRefFormulaCell)
+                 &&	(aRefVariableCell == r.aRefVariableCell);
 
     if ( bEqual )
     {
@@ -815,11 +815,11 @@ BOOL ScSolveParam::operator==( const ScSolveParam& r ) const
 // struct ScTabOpParam
 
 ScTabOpParam::ScTabOpParam( const ScTabOpParam& r )
-    :   aRefFormulaCell ( r.aRefFormulaCell ),
-        aRefFormulaEnd  ( r.aRefFormulaEnd ),
-        aRefRowCell     ( r.aRefRowCell ),
-        aRefColCell     ( r.aRefColCell ),
-        nMode           ( r.nMode )
+    :	aRefFormulaCell	( r.aRefFormulaCell ),
+        aRefFormulaEnd	( r.aRefFormulaEnd ),
+        aRefRowCell		( r.aRefRowCell ),
+        aRefColCell		( r.aRefColCell ),
+        nMode			( r.nMode )
 {
 }
 
@@ -829,12 +829,12 @@ ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
                             const ScRefAddress& rFormulaEnd,
                             const ScRefAddress& rRowCell,
                             const ScRefAddress& rColCell,
-                                  BYTE       nMd)
-    :   aRefFormulaCell ( rFormulaCell ),
-        aRefFormulaEnd  ( rFormulaEnd ),
-        aRefRowCell     ( rRowCell ),
-        aRefColCell     ( rColCell ),
-        nMode           ( nMd )
+                                  BYTE		 nMd)
+    :	aRefFormulaCell	( rFormulaCell ),
+        aRefFormulaEnd	( rFormulaEnd ),
+        aRefRowCell		( rRowCell ),
+        aRefColCell		( rColCell ),
+        nMode			( nMd )
 {
 }
 
@@ -844,9 +844,9 @@ ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
 {
     aRefFormulaCell  = r.aRefFormulaCell;
     aRefFormulaEnd   = r.aRefFormulaEnd;
-    aRefRowCell      = r.aRefRowCell;
-    aRefColCell      = r.aRefColCell;
-    nMode            = r.nMode;
+    aRefRowCell 	 = r.aRefRowCell;
+    aRefColCell 	 = r.aRefColCell;
+    nMode		     = r.nMode;
     return *this;
 }
 
@@ -854,11 +854,11 @@ ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
 
 BOOL __EXPORT ScTabOpParam::operator==( const ScTabOpParam& r ) const
 {
-    return (        (aRefFormulaCell == r.aRefFormulaCell)
-                 && (aRefFormulaEnd  == r.aRefFormulaEnd)
-                 && (aRefRowCell     == r.aRefRowCell)
-                 && (aRefColCell     == r.aRefColCell)
-                 && (nMode           == r.nMode) );
+    return (		(aRefFormulaCell == r.aRefFormulaCell)
+                 &&	(aRefFormulaEnd	 == r.aRefFormulaEnd)
+                 &&	(aRefRowCell	 == r.aRefRowCell)
+                 &&	(aRefColCell	 == r.aRefColCell)
+                 && (nMode 			 == r.nMode) );
 }
 
 String ScGlobal::GetAbsDocName( const String& rFileName,
@@ -866,14 +866,14 @@ String ScGlobal::GetAbsDocName( const String& rFileName,
 {
     String aAbsName;
     if ( !pShell->HasName() )
-    {   // maybe relative to document path working directory
+    {	// maybe relative to document path working directory
         INetURLObject aObj;
         SvtPathOptions aPathOpt;
         aObj.SetSmartURL( aPathOpt.GetWorkPath() );
-        aObj.setFinalSlash();       // it IS a path
+        aObj.setFinalSlash();		// it IS a path
         bool bWasAbs = true;
         aAbsName = aObj.smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
-        //  returned string must be encoded because it's used directly to create SfxMedium
+        //	returned string must be encoded because it's used directly to create SfxMedium
     }
     else
     {
@@ -884,7 +884,7 @@ String ScGlobal::GetAbsDocName( const String& rFileName,
             aAbsName = pMedium->GetURLObject().smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
         }
         else
-        {   // This can't happen, but ...
+        {	// This can't happen, but ...
             // just to be sure to have the same encoding
             INetURLObject aObj;
             aObj.SetSmartURL( aAbsName );
@@ -903,13 +903,13 @@ String ScGlobal::GetDocTabName( const String& rFileName,
     xub_StrLen nPos = 1;
     while( (nPos = aDocTab.Search( '\'', nPos ))
             != STRING_NOTFOUND )
-    {   // escape Quotes
+    {	// escape Quotes
         aDocTab.Insert( '\\', nPos );
         nPos += 2;
     }
     aDocTab += '\'';
     aDocTab += SC_COMPILER_FILE_TAB_SEP;
-    aDocTab += rTabName;    // "'Doc'#Tab"
+    aDocTab += rTabName;  	// "'Doc'#Tab"
     return aDocTab;
 }
 

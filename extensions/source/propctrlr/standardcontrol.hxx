@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -272,7 +272,7 @@ namespace pcr
         virtual void SAL_CALL setDisplayUnit( ::sal_Int16 _displayunit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int16 SAL_CALL getValueUnit() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setValueUnit( ::sal_Int16 _valueunit ) throw (::com::sun::star::uno::RuntimeException);
-
+    
     private:
         /** converts an API value (<code>double</code>, as passed into <code>set[Max|Min|]Value) into
             a <code>long</code> value which can be passed to our NumericField.

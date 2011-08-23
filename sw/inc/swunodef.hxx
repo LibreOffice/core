@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,10 +27,10 @@
 #ifndef _SWUNODEF_HXX
 #define _SWUNODEF_HXX
 
-#define STAR_NMSPC              ::com::sun::star
-#define UNO_NMSPC               STAR_NMSPC::uno
-#define CLIP_NMSPC              STAR_NMSPC::datatransfer::clipboard
+#define STAR_NMSPC				::com::sun::star
+#define UNO_NMSPC				STAR_NMSPC::uno
+#define CLIP_NMSPC				STAR_NMSPC::datatransfer::clipboard
 
-#define STAR_REFERENCE(aType)   UNO_NMSPC::Reference< STAR_NMSPC::aType >
+#define STAR_REFERENCE(aType) 	UNO_NMSPC::Reference< STAR_NMSPC::aType >
 
 #endif

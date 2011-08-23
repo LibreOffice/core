@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <tools/color.hxx>
 #include <tools/string.hxx>
 #include "swdllapi.h"
-#include <swtypes.hxx>  //fuer SwTwips
+#include <swtypes.hxx>	//fuer SwTwips
 #include <frmfmt.hxx>
 //#ifndef _NUMRULE_HXX
 //#include <numrule.hxx>
@@ -53,30 +53,30 @@ enum SwFtnAdj
 //footnote information
 class SW_DLLPUBLIC SwPageFtnInfo
 {
-    SwTwips     nMaxHeight;     //maximum height of the footnote area.
-    ULONG       nLineWidth;     //width of separator line
-    Color       aLineColor;     //color of the separator line
-    Fraction    aWidth;         //percentage width of the separator line.
-    SwFtnAdj    eAdj;           //line adjustment.
-    SwTwips     nTopDist;       //distance between body and separator.
-    SwTwips     nBottomDist;    //distance between separator and first footnote
+    SwTwips 	nMaxHeight;		//maximum height of the footnote area.
+    ULONG		nLineWidth;		//width of separator line
+    Color		aLineColor;		//color of the separator line
+    Fraction    aWidth;			//percentage width of the separator line.
+    SwFtnAdj	eAdj;			//line adjustment.
+    SwTwips		nTopDist;		//distance between body and separator.
+    SwTwips		nBottomDist;	//distance between separator and first footnote
 
 public:
-    SwTwips     GetHeight() const       { return nMaxHeight; }
-    ULONG           GetLineWidth() const { return nLineWidth; }
-    const Color&    GetLineColor() const { return aLineColor;}
-    const Fraction& GetWidth() const    { return aWidth; }
-    SwFtnAdj    GetAdj()    const       { return eAdj; }
-    SwTwips     GetTopDist()const       { return nTopDist; }
-    SwTwips     GetBottomDist() const   { return nBottomDist; }
+    SwTwips   	GetHeight() const 		{ return nMaxHeight; }
+    ULONG 			GetLineWidth() const { return nLineWidth; }
+    const Color& 	GetLineColor() const { return aLineColor;}
+    const Fraction&	GetWidth() const 	{ return aWidth; }
+    SwFtnAdj	GetAdj()	const 		{ return eAdj; }
+    SwTwips		GetTopDist()const 		{ return nTopDist; }
+    SwTwips		GetBottomDist() const 	{ return nBottomDist; }
 
-    void SetHeight( SwTwips  nNew )     { nMaxHeight = nNew; }
-    void SetLineWidth(ULONG nSet  )     { nLineWidth = nSet; }
+    void SetHeight( SwTwips  nNew ) 	{ nMaxHeight = nNew; }
+    void SetLineWidth(ULONG nSet  ) 	{ nLineWidth = nSet; }
     void SetLineColor(const Color& rCol )  { aLineColor = rCol;}
     void SetWidth( const Fraction &rNew){ aWidth = rNew; }
-    void SetAdj   ( SwFtnAdj eNew )     { eAdj = eNew; }
-    void SetTopDist   ( SwTwips nNew )  { nTopDist = nNew; }
-    void SetBottomDist( SwTwips nNew )  { nBottomDist = nNew; }
+    void SetAdj   ( SwFtnAdj eNew ) 	{ eAdj = eNew; }
+    void SetTopDist   ( SwTwips nNew ) 	{ nTopDist = nNew; }
+    void SetBottomDist( SwTwips nNew ) 	{ nBottomDist = nNew; }
 
     SwPageFtnInfo();
     SwPageFtnInfo( const SwPageFtnInfo& );
@@ -88,13 +88,13 @@ public:
 /*
  * Verwendung des UseOnPage (eUse) und der FrmFmt'e
  *
- *  RIGHT   - aMaster nur fuer rechte Seiten, linke  Seiten immer leer.
- *  LEFT    - aLeft fuer linke  Seiten, rechte Seiten immer leer.
- *            aLeft ist eine Kopie des Master.
- *  ALL     - aMaster fuer rechte Seiten, aLeft fuer Linke Seiten.
- *            aLeft ist eine Kopie des Master.
- *  MIRROR  - aMaster fuer rechte Seiten, aLeft fuer linke Seiten.
- *            aLeft ist eine Kopie des Master, Raender sind gespiegelt.
+ *	RIGHT	- aMaster nur fuer rechte Seiten, linke  Seiten immer leer.
+ *	LEFT	- aLeft fuer linke  Seiten, rechte Seiten immer leer.
+ *			  aLeft ist eine Kopie des Master.
+ *  ALL		- aMaster fuer rechte Seiten, aLeft fuer Linke Seiten.
+ *			  aLeft ist eine Kopie des Master.
+ *	MIRROR	- aMaster fuer rechte Seiten, aLeft fuer linke Seiten.
+ *			  aLeft ist eine Kopie des Master, Raender sind gespiegelt.
  *
  * UI dreht auschliesslich am Master! aLeft wird beim Chg am Dokument
  * enstprechend dem eUse eingestellt.
@@ -138,16 +138,16 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     friend class SwDoc;
     friend class SwUndoPageDescExt;
 
-    String      aDescName;
-    SvxNumberType   aNumType;
-    SwFrmFmt    aMaster;
-    SwFrmFmt    aLeft;
-    SwDepend    aDepend;    // wg. Registerhaltigkeit
+    String		aDescName;
+    SvxNumberType	aNumType;
+    SwFrmFmt	aMaster;
+    SwFrmFmt	aLeft;
+    SwDepend	aDepend;	// wg. Registerhaltigkeit
     SwPageDesc *pFollow;
-    USHORT      nRegHeight; // Zeilenabstand und Fontascent der Vorlage
-    USHORT      nRegAscent; // fuer die Registerhaltigkeit
-    UseOnPage   eUse;
-    BOOL        bLandscape;
+    USHORT		nRegHeight;	// Zeilenabstand und Fontascent der Vorlage
+    USHORT		nRegAscent; // fuer die Registerhaltigkeit
+    UseOnPage	eUse;
+    BOOL		bLandscape;
 
     //Fussnoteninformationen
     SwPageFtnInfo aFtnInfo;
@@ -162,16 +162,16 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
 
 public:
     const String &GetName() const { return aDescName; }
-          void    SetName( const String& rNewName ) { aDescName = rNewName; }
+          void 	  SetName( const String& rNewName ) { aDescName = rNewName; }
 
     BOOL GetLandscape() const { return bLandscape; }
     void SetLandscape( BOOL bNew ) { bLandscape = bNew; }
 
     const SvxNumberType &GetNumType() const { return aNumType; }
-          void          SetNumType( const SvxNumberType& rNew ) { aNumType = rNew; }
+          void		 	SetNumType( const SvxNumberType& rNew ) { aNumType = rNew; }
 
     const SwPageFtnInfo &GetFtnInfo() const { return aFtnInfo; }
-          SwPageFtnInfo &GetFtnInfo()       { return aFtnInfo; }
+          SwPageFtnInfo &GetFtnInfo()		{ return aFtnInfo; }
     void  SetFtnInfo( const SwPageFtnInfo &rNew ) { aFtnInfo = rNew; }
 
     inline BOOL IsHeaderShared() const;
@@ -179,10 +179,10 @@ public:
     inline void ChgHeaderShare( BOOL bNew );
     inline void ChgFooterShare( BOOL bNew );
 
-    inline void      SetUseOn( UseOnPage eNew );
+    inline void		 SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;
 
-    void      WriteUseOn( UseOnPage eNew ) { eUse = eNew; }
+    void	  WriteUseOn( UseOnPage eNew ) { eUse = eNew; }
     UseOnPage ReadUseOn () const { return eUse; }
 
           SwFrmFmt &GetMaster() { return aMaster; }
@@ -217,12 +217,12 @@ public:
     void RegisterChange();
 
     // erfragen und setzen der PoolFormat-Id
-    USHORT GetPoolFmtId() const         { return aMaster.GetPoolFmtId(); }
-    void SetPoolFmtId( USHORT nId )     { aMaster.SetPoolFmtId( nId ); }
-    USHORT GetPoolHelpId() const        { return aMaster.GetPoolHelpId(); }
-    void SetPoolHelpId( USHORT nId )    { aMaster.SetPoolHelpId( nId ); }
-    BYTE GetPoolHlpFileId() const       { return aMaster.GetPoolHlpFileId(); }
-    void SetPoolHlpFileId( BYTE nId )   { aMaster.SetPoolHlpFileId( nId ); }
+    USHORT GetPoolFmtId() const 		{ return aMaster.GetPoolFmtId(); }
+    void SetPoolFmtId( USHORT nId ) 	{ aMaster.SetPoolFmtId( nId ); }
+    USHORT GetPoolHelpId() const 		{ return aMaster.GetPoolHelpId(); }
+    void SetPoolHelpId( USHORT nId ) 	{ aMaster.SetPoolHelpId( nId ); }
+    BYTE GetPoolHlpFileId() const 		{ return aMaster.GetPoolHlpFileId(); }
+    void SetPoolHlpFileId( BYTE nId )	{ aMaster.SetPoolHlpFileId( nId ); }
 
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
@@ -271,7 +271,7 @@ inline void SwPageDesc::ChgFooterShare( BOOL bNew )
         eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFOOTERSHARE);
         // (USHORT&)eUse &= (USHORT)nsUseOnPage::PD_NOFOOTERSHARE;
 }
-inline void SwPageDesc::SetUseOn( UseOnPage eNew )
+inline void	SwPageDesc::SetUseOn( UseOnPage eNew )
 {
     UseOnPage eTmp = nsUseOnPage::PD_NONE;
     if ( eUse & nsUseOnPage::PD_HEADERSHARE )
@@ -344,4 +344,4 @@ public:
 
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
 
-#endif  //_PAGEDESC_HXX
+#endif	//_PAGEDESC_HXX

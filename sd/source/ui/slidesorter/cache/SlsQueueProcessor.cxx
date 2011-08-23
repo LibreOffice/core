@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ QueueProcessor::QueueProcessor (
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeBetweenHighPriorityRequests")));
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenHighPriorityRequests;
-
+    
     aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeBetweenLowPriorityRequests")));
     if (aTimeBetweenReqeusts.has<sal_Int32>())

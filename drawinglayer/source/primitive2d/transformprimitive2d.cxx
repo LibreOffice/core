@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ namespace drawinglayer
     namespace primitive2d
     {
         TransformPrimitive2D::TransformPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransformation,
+            const basegfx::B2DHomMatrix& rTransformation, 
             const Primitive2DSequence& rChildren)
-        :   GroupPrimitive2D(rChildren),
+        :	GroupPrimitive2D(rChildren),
             maTransformation(rTransformation)
         {
         }

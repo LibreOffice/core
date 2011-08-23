@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,12 +100,12 @@ namespace svt
         */
         ::svt::OFilePickerInteractionHandler* getOwnInteractionHandler() const;
 
-        /** describes different types of interaction handlers
+        /** describes different types of interaction handlers 
          */
         enum InteractionHandlerType
         {
             IHT_NONE,
-            IHT_OWN,
+            IHT_OWN, 
             IHT_DEFAULT
         };
 

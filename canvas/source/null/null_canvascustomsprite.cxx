@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 
 namespace nullcanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& 	rSpriteSize,
                                             const SpriteCanvasRef&                          rRefDevice ) :
         mpSpriteCanvas( rRefDevice )
     {
@@ -64,7 +64,7 @@ namespace nullcanvas
         maSpriteHelper.init( rSpriteSize,
                              rRefDevice );
     }
-
+    
     void SAL_CALL CanvasCustomSprite::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -99,7 +99,7 @@ namespace nullcanvas
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
+        
         return aRet;
     }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@ class VCL_DLLPUBLIC JobSetup
     friend class Printer;
 
 private:
-    ImplJobSetup*       mpData;
+    ImplJobSetup*		mpData;
 
 //#if 0 // _SOLAR__PRIVATE
 public:
-    SAL_DLLPRIVATE ImplJobSetup*        ImplGetData();
-    SAL_DLLPRIVATE ImplJobSetup*        ImplGetConstData();
+    SAL_DLLPRIVATE ImplJobSetup*		ImplGetData();
+    SAL_DLLPRIVATE ImplJobSetup*		ImplGetConstData();
     SAL_DLLPRIVATE const ImplJobSetup*  ImplGetConstData() const;
 //#endif
 
@@ -59,25 +59,25 @@ public:
                         JobSetup( const JobSetup& rJob );
                         ~JobSetup();
 
-    String              GetPrinterName() const;
-    String              GetDriverName() const;
+    String				GetPrinterName() const;
+    String				GetDriverName() const;
 
-    /*  Get/SetValue are used to read/store additional
-     *  Parameters in the job setup that may be used
-     *  by the printer driver. One possible use are phone
-     *  numbers for faxes (which disguise as printers)
+    /*	Get/SetValue are used to read/store additional
+     *	Parameters in the job setup that may be used
+     *	by the printer driver. One possible use are phone
+     *	numbers for faxes (which disguise as printers)
      */
-    String              GetValue( const String& rKey ) const;
-    void                SetValue( const String& rKey, const String& rValue );
+    String				GetValue( const String& rKey ) const;
+    void				SetValue( const String& rKey, const String& rValue );
 
-    JobSetup&           operator=( const JobSetup& rJob );
+    JobSetup&			operator=( const JobSetup& rJob );
 
-    BOOL                operator==( const JobSetup& rJobSetup ) const;
-    BOOL                operator!=( const JobSetup& rJobSetup ) const
+    BOOL				operator==( const JobSetup& rJobSetup ) const;
+    BOOL				operator!=( const JobSetup& rJobSetup ) const
                             { return !(JobSetup::operator==( rJobSetup )); }
 
-    friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStream, JobSetup& rJobSetup );
-    friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStream, const JobSetup& rJobSetup );
+    friend VCL_DLLPUBLIC SvStream&	operator>>( SvStream& rIStream, JobSetup& rJobSetup );
+    friend VCL_DLLPUBLIC SvStream&	operator<<( SvStream& rOStream, const JobSetup& rJobSetup );
 };
 
-#endif  // _SV_JOBSET_HXX
+#endif	// _SV_JOBSET_HXX

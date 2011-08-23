@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,17 +36,17 @@ class GraphicObject;
 
 class BitmapCache
 {
-    ULONG                   nMaxSize;
-    ULONG                   nCurSize;
-    List                    aEntries;
-
-public:
+    ULONG		            nMaxSize;
+    ULONG		            nCurSize;
+    List		            aEntries;
+                            
+public:                     
                             BitmapCache(ULONG nMaxSizeKB)
                               : nMaxSize(nMaxSizeKB), nCurSize(0) {}
-    virtual                 ~BitmapCache();
+    virtual 	            ~BitmapCache();
 
     void                    Remove(const SdPage* pPage);
 };
 
-#endif  // _SD_BMCACHE_HXX
+#endif	// _SD_BMCACHE_HXX
 

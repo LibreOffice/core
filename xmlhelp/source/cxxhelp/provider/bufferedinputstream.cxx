@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,17 +43,17 @@ Reference<XInputStream> chelp::turnToSeekable(const Reference<XInputStream>& xIn
 {
     if( ! xInputStream.is() )
         return xInputStream;
-
+    
     Reference<XSeekable> xSeekable(xInputStream,UNO_QUERY);
-
+    
     if( xSeekable.is() )
         return xInputStream;
-
+    
     return new BufferedInputStream(xInputStream);
 }
 
 
-
+    
 BufferedInputStream::BufferedInputStream(const Reference<XInputStream>& xInputStream)
     : m_nBufferLocation(0),
       m_nBufferSize(0),
@@ -85,7 +85,7 @@ BufferedInputStream::BufferedInputStream(const Reference<XInputStream>& xInputSt
     {
     }
     catch( const BufferSizeExceededException&)
-    {
+    {		
     }
     catch( const IOException&)
     {
@@ -108,7 +108,7 @@ Any SAL_CALL BufferedInputStream::queryInterface( const Type& rType ) throw( Run
     Any aRet = ::cppu::queryInterface( rType,
                                        SAL_STATIC_CAST( XInputStream*,this ),
                                        SAL_STATIC_CAST( XSeekable*,this ) );
-
+    
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -133,16 +133,16 @@ sal_Int32 SAL_CALL BufferedInputStream::readBytes( Sequence< sal_Int8 >& aData,s
            RuntimeException)
 {
     osl::MutexGuard aGuard( m_aMutex );
-
+    
     if( 0 > nBytesToRead )
         throw BufferSizeExceededException();
-
+    
     if( m_nBufferLocation + nBytesToRead > m_nBufferSize )
         nBytesToRead = m_nBufferSize - m_nBufferLocation;
-
+    
     if( aData.getLength() < nBytesToRead )
         aData.realloc(nBytesToRead);
-
+    
     rtl_copyMemory((void*)(aData.getArray()),
                    (void*)(m_pBuffer+m_nBufferLocation),
                    nBytesToRead);

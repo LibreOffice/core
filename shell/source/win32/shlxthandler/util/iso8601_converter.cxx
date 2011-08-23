@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
 
         if ( DateSize )
             ws8601DateTime.assign(DateBuffer);
-        else
+        else 
             ws8601DateTime = StringToWString( asDateTime );
 
         //get Time info from structure
@@ -88,7 +88,7 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
             ws8601DateTime.append(L" ");
             ws8601DateTime.append(TimeBuffer);
         }
-        else
+        else 
             ws8601DateTime = StringToWString( asDateTime );
     }
 
@@ -99,24 +99,24 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
 /* Converts ISO 8601 conform duration
    representation to the representation
    conforming to the current locale
-
+   
    Expect format PTnHnMnS according to
    ISO 8601 where n is abitrary number
    of digits
 */
 
 std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601duration)
-{
-    std::wstring days;
+{    
+    std::wstring days;                
     std::wstring hours;
     std::wstring minutes;
     std::wstring seconds;
-
+    
     std::wstring::const_iterator iter     = iso8601duration.begin();
     std::wstring::const_iterator iter_end = iso8601duration.end();
-
-    std::wstring num;
-
+    
+    std::wstring num;    
+    
     for (/**/; iter != iter_end; ++iter)
     {
         if (isdigit(*iter))
@@ -126,30 +126,30 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
         else
         {
             if (*iter == L'D' || *iter == L'd')
-                days = num;
-            else if (*iter == L'H' || *iter == L'h')
-                hours = num;
-            else if (*iter == L'M' || *iter == L'm')
-                minutes = num;
-            else if (*iter == L'S' || *iter == L's')
+                days = num;                            
+            else if (*iter == L'H' || *iter == L'h')            
+                hours = num;            
+            else if (*iter == L'M' || *iter == L'm')            
+                minutes = num;            
+            else if (*iter == L'S' || *iter == L's')            
                 seconds = num;
-
+            
             num.clear();
         }
     }
-
+    
     if (days.length() > 0)
-    {
-        int h = ((_wtoi(days.c_str()) * 24) + _wtoi(hours.c_str()));
+    {                 
+        int h = ((_wtoi(days.c_str()) * 24) + _wtoi(hours.c_str()));        
         wchar_t buff[10];
         _itow(h, buff, 10);
         hours = buff;
     }
-
-#if defined(_MSC_VER) //&& defined(_M_X64)
+       
+#if defined(_MSC_VER) //&& defined(_M_X64)        
     std::wostringstream oss;
     oss << std::setw(2) << std::setfill(wchar_t('0')) << hours   << L":" <<
-           std::setw(2) << std::setfill(wchar_t('0')) << minutes << L":" <<
+           std::setw(2) << std::setfill(wchar_t('0')) << minutes << L":" << 
            std::setw(2) << std::setfill(wchar_t('0')) << seconds;
     return oss.str();
 #elif defined( __MINGW32__ )
@@ -173,10 +173,10 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
 #else
     std::wostringstream oss;
     oss << std::setw(2) << std::setfill('0') << hours   << L":" <<
-           std::setw(2) << std::setfill('0') << minutes << L":" <<
+           std::setw(2) << std::setfill('0') << minutes << L":" << 
            std::setw(2) << std::setfill('0') << seconds;
     return oss.str();
 */
-#endif
+#endif    
 }
 

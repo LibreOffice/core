@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -465,23 +465,23 @@ Reference< ::test::XInterfaceTest > SAL_CALL OTestFactory::createInterfaceTest( 
 
 
 //  class OInstanceProvider :
-//      public ::cppu::OWeakObject,
-//      public XInstanceProvider
+//  	public ::cppu::OWeakObject,
+//  	public XInstanceProvider
 //  {
 //  public:
-//      OInstanceProvider( ){}
-//      ~OInstanceProvider(){ printf( "instance provider dies\n" );}
+//  	OInstanceProvider( ){}
+//  	~OInstanceProvider(){ printf( "instance provider dies\n" );}
 //  public:
-//      // XInterface
-//      Any         SAL_CALL queryInterface( const Type & aType);
-//      void        SAL_CALL acquire()                       { OWeakObject::acquire(); }
-//      void        SAL_CALL release()                       { OWeakObject::release(); }
+//  	// XInterface
+//  	Any	        SAL_CALL queryInterface( const Type & aType);
+//  	void 		SAL_CALL acquire() 						 { OWeakObject::acquire(); }
+//  	void 		SAL_CALL release() 						 { OWeakObject::release(); }
 
 //  public:
 //      virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-//             getInstance( const ::rtl::OUString& sObjectName )
-//                   throw( ::com::sun::star::container::NoSuchElementException,
-//                          ::com::sun::star::uno::RuntimeException);
+//  	       getInstance( const ::rtl::OUString& sObjectName )
+//  		         throw( ::com::sun::star::container::NoSuchElementException,
+//  			            ::com::sun::star::uno::RuntimeException);
 //  };
 
 
@@ -516,7 +516,7 @@ double getCallsPerSecOneway( const Reference < XCallMe > &rCall ,
     osl_getSystemTime( &aStartTime );
     for( sal_Int32 i = 0; i < nLoops; i ++ )
     {
-//          rCall->callOneway( OUString( RTL_CONSTASCII_USTRINGPARAM("Performance test string" )), 0 );
+//  		rCall->callOneway( OUString( RTL_CONSTASCII_USTRINGPARAM("Performance test string" )), 0 );
           rCall->drawLine( 0 , 0 , 500 , 123 );
     }
     osl_getSystemTime( &aEndTime );
@@ -778,7 +778,7 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
 
         OSL_ASSERT( rReg.is() );
         OUString aDllName = sDllName;
-
+        
         try
         {
             rReg->registerImplementation(

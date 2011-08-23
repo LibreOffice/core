@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@
 #include "graphic.hxx"
 #include "renderer.hxx"
 
-#define UNOGRAPHIC_DEVICE           1
-#define UNOGRAPHIC_DESTINATIONRECT  2
-#define UNOGRAPHIC_RENDERDATA       3
+#define UNOGRAPHIC_DEVICE 			1
+#define UNOGRAPHIC_DESTINATIONRECT	2
+#define UNOGRAPHIC_RENDERDATA		3
 
 using namespace ::com::sun::star;
 
@@ -58,7 +58,7 @@ uno::Reference< uno::XInterface > SAL_CALL GraphicRendererVCL_CreateInstance( co
     return SAL_STATIC_CAST( ::cppu::OWeakObject*, new GraphicRendererVCL );
 }
 
-
+    
 GraphicRendererVCL::GraphicRendererVCL() :
     ::comphelper::PropertySetHelper( createPropertySetInfo() ),
     mpOutDev( NULL )
@@ -74,7 +74,7 @@ GraphicRendererVCL::~GraphicRendererVCL()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString GraphicRendererVCL::getImplementationName_Static()
+::rtl::OUString GraphicRendererVCL::getImplementationName_Static() 
     throw()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.graphic.GraphicRendererVCL" ) );
@@ -82,19 +82,19 @@ GraphicRendererVCL::~GraphicRendererVCL()
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > GraphicRendererVCL::getSupportedServiceNames_Static()
-    throw(  )
+uno::Sequence< ::rtl::OUString > GraphicRendererVCL::getSupportedServiceNames_Static() 
+    throw(	)
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
-
+    
     aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicRendererVCL" ) );
-
+    
     return aSeq;
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType )
+uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType ) 
     throw( uno::RuntimeException )
 {
     uno::Any aAny;
@@ -119,7 +119,7 @@ uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType 
 
 // ------------------------------------------------------------------------------
 
-uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
+uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType ) 
     throw( uno::RuntimeException )
 {
     return OWeakAggObject::queryInterface( rType );
@@ -127,7 +127,7 @@ uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL GraphicRendererVCL::acquire()
+void SAL_CALL GraphicRendererVCL::acquire() 
     throw()
 {
     OWeakAggObject::acquire();
@@ -143,7 +143,7 @@ void SAL_CALL GraphicRendererVCL::release()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL GraphicRendererVCL::getImplementationName()
+::rtl::OUString SAL_CALL GraphicRendererVCL::getImplementationName() 
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -154,8 +154,8 @@ void SAL_CALL GraphicRendererVCL::release()
 sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const rtl::OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString*              pArray = aSNL.getConstArray();
+    uno::Sequence< ::rtl::OUString >	aSNL( getSupportedServiceNames() );
+    const ::rtl::OUString*				pArray = aSNL.getConstArray();
 
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -177,8 +177,8 @@ uno::Sequence< rtl::OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceN
 uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
     throw( uno::RuntimeException )
 {
-    uno::Sequence< uno::Type >  aTypes( 7 );
-    uno::Type*                  pTypes = aTypes.getArray();
+    uno::Sequence< uno::Type >	aTypes( 7 );
+    uno::Type* 					pTypes = aTypes.getArray();
 
     *pTypes++ = ::getCppuType((const uno::Reference< uno::XAggregation>*)0);
     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo>*)0);
@@ -190,21 +190,21 @@ uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
 
     return aTypes;
 }
-
+   
 // ------------------------------------------------------------------------------
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
     throw( uno::RuntimeException )
 {
-    vos::OGuard                         aGuard( Application::GetSolarMutex() );
-    static uno::Sequence< sal_Int8 >    aId;
-
+    vos::OGuard 						aGuard( Application::GetSolarMutex() );
+    static uno::Sequence< sal_Int8 >	aId;
+    
     if( aId.getLength() == 0 )
     {
         aId.realloc( 16 );
         rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
     }
-
+    
     return aId;
 }
 
@@ -212,15 +212,15 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
 
 ::comphelper::PropertySetInfo* GraphicRendererVCL::createPropertySetInfo()
 {
-    vos::OGuard                     aGuard( Application::GetSolarMutex() );
-    ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
+    vos::OGuard 					aGuard( Application::GetSolarMutex() );
+    ::comphelper::PropertySetInfo*	pRet = new ::comphelper::PropertySetInfo();
 
     static ::comphelper::PropertyMapEntry aEntries[] =
     {
         { MAP_CHAR_LEN( "Device" ), UNOGRAPHIC_DEVICE, &::getCppuType( (const uno::Any*)(0)), 0, 0 },
         { MAP_CHAR_LEN( "DestinationRect" ), UNOGRAPHIC_DESTINATIONRECT, &::getCppuType( (const awt::Rectangle*)(0)), 0, 0 },
-        { MAP_CHAR_LEN( "RenderData" ), UNOGRAPHIC_RENDERDATA,  &::getCppuType( (const uno::Any*)(0)), 0, 0 },
-
+        { MAP_CHAR_LEN( "RenderData" ), UNOGRAPHIC_RENDERDATA,	&::getCppuType( (const uno::Any*)(0)), 0, 0 },
+        
         { 0,0,0,0,0,0 }
     };
 
@@ -233,8 +233,8 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
 // ------------------------------------------------------------------------------
 
 void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const uno::Any* pValues )
-    throw( beans::UnknownPropertyException,
-           beans::PropertyVetoException,
+    throw( beans::UnknownPropertyException, 
+           beans::PropertyVetoException, 
            lang::IllegalArgumentException,
               lang::WrappedTargetException )
 {
@@ -246,8 +246,8 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
         {
             case( UNOGRAPHIC_DEVICE ):
             {
-                uno::Reference< awt::XDevice > xDevice;
-
+                uno::Reference< awt::XDevice > xDevice; 
+            
                 if( ( *pValues >>= xDevice ) && xDevice.is() )
                 {
                     mxDevice = xDevice;
@@ -264,27 +264,27 @@ void GraphicRendererVCL::_setPropertyValues( const comphelper::PropertyMapEntry*
             case( UNOGRAPHIC_DESTINATIONRECT ):
             {
                 awt::Rectangle aAWTRect;
-
+            
                 if( *pValues >>= aAWTRect )
                 {
-                    maDestRect = Rectangle( Point( aAWTRect.X, aAWTRect.Y ),
+                    maDestRect = Rectangle( Point( aAWTRect.X, aAWTRect.Y ), 
                                             Size( aAWTRect.Width, aAWTRect.Height ) );
                 }
             }
             break;
-
+            
             case( UNOGRAPHIC_RENDERDATA ):
             {
                 *pValues >>= maRenderData;
             }
             break;
         }
-
+        
         ++ppEntries;
         ++pValues;
     }
 }
-
+    
 // ------------------------------------------------------------------------------
 
 void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
@@ -305,35 +305,35 @@ void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry*
 
             case( UNOGRAPHIC_DESTINATIONRECT ):
             {
-                const awt::Rectangle aAWTRect( maDestRect.Left(), maDestRect.Top(),
+                const awt::Rectangle aAWTRect( maDestRect.Left(), maDestRect.Top(), 
                                                maDestRect.GetWidth(), maDestRect.GetHeight() );
-
+                
                 *pValues <<= aAWTRect;
             }
             break;
-
+            
             case( UNOGRAPHIC_RENDERDATA ):
             {
                 *pValues <<= maRenderData;
             }
             break;
         }
-
+        
         ++ppEntries;
         ++pValues;
     }
 }
 
 // ------------------------------------------------------------------------------
-
+    
 void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphic >& rxGraphic )
     throw (uno::RuntimeException)
 {
     if( mpOutDev && mxDevice.is() && rxGraphic.is() )
     {
-        const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
-        const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
-
+        const uno::Reference< XInterface > 	xIFace( rxGraphic, uno::UNO_QUERY );
+        const ::Graphic* 					pGraphic = ::unographic::Graphic::getImplementation( xIFace );
+        
         if( pGraphic )
         {
             GraphicObject aGraphicObject( *pGraphic );

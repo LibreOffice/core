@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ using ::com::sun::star::awt::XWindow;
 SFX_IMPL_FLOATINGWINDOW(FmPropBrwMgr, SID_FM_SHOW_PROPERTIES)
 
 //-----------------------------------------------------------------------
-FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
+FmPropBrwMgr::FmPropBrwMgr(	Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
@@ -135,7 +135,7 @@ using namespace ::svxform;
             aUnoObj >>= xIFace;
             nClassNameResourceId = RID_STR_PROPTITLE_EDIT;
             if (xIFace.is())
-            {   // we have a chance to check if it's a formatted field model
+            {	// we have a chance to check if it's a formatted field model
                 Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                 if (xInfo.is() && (xInfo->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD)))
                     nClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
@@ -495,7 +495,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
             aConstrainedSize.setHeight( aMinSize.Height );
             aConstrainedSize.setWidth( aMinSize.Width );
             SetMinOutputSizePixel( aConstrainedSize );
-            aConstrainedSize = GetOutputSizePixel();
+            aConstrainedSize = GetOutputSizePixel(); 
             sal_Bool bResize = sal_False;
             if( aConstrainedSize.Width() < aMinSize.Width )
             {
@@ -557,11 +557,11 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     if ( _pFormShell && _pFormShell->GetFormView() )
     {
         SdrPageView* pPageView = _pFormShell->GetFormView()->GetSdrPageView();
-
+        
         if(pPageView)
         {
             SdrPageWindow* pPageWindow = pPageView->GetPageWindow(0L);
-
+            
             if(pPageWindow)
             {
                 xControlContext = pPageWindow->GetControlContainer();

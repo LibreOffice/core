@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,41 +60,41 @@ using namespace rtl;
 //if you change this macro please pay attention to
 //function ::getObject, where this is similar implemented
 
-#define XROW_GETXXX( getXXX, Type )                     \
-impl_EnsureNotDisposed();                               \
-ReacquireableGuard aGuard( m_aMutex );                  \
-sal_Int32 nRow = m_nRow;                                \
-sal_Int32 nFetchSize = m_nFetchSize;                    \
-sal_Int32 nFetchDirection = m_nFetchDirection;          \
-if( !m_aCache.hasRow( nRow ) )                          \
-{                                                       \
-    if( !m_aCache.hasCausedException( nRow ) )          \
-{                                                       \
-        if( !m_xFetchProvider.is() )                    \
-        {                                               \
-            OSL_ENSURE( sal_False, "broadcaster was disposed already" );    \
-            throw SQLException();                       \
-        }                                               \
-        aGuard.clear();                                 \
-        if( impl_isForwardOnly() )                      \
-            applyPositionToOrigin( nRow );              \
+#define XROW_GETXXX( getXXX, Type )						\
+impl_EnsureNotDisposed();								\
+ReacquireableGuard aGuard( m_aMutex );					\
+sal_Int32 nRow = m_nRow;								\
+sal_Int32 nFetchSize = m_nFetchSize;					\
+sal_Int32 nFetchDirection = m_nFetchDirection;			\
+if( !m_aCache.hasRow( nRow ) )							\
+{														\
+    if( !m_aCache.hasCausedException( nRow ) )			\
+{														\
+        if( !m_xFetchProvider.is() )					\
+        {												\
+            OSL_ENSURE( sal_False, "broadcaster was disposed already" );	\
+            throw SQLException();						\
+        }												\
+        aGuard.clear();									\
+        if( impl_isForwardOnly() )						\
+            applyPositionToOrigin( nRow );				\
                                                         \
         impl_fetchData( nRow, nFetchSize, nFetchDirection ); \
-    }                                                   \
-    aGuard.reacquire();                                 \
-    if( !m_aCache.hasRow( nRow ) )                      \
-    {                                                   \
-        m_bLastReadWasFromCache = sal_False;            \
-        aGuard.clear();                                 \
-        applyPositionToOrigin( nRow );                  \
-        impl_init_xRowOrigin();                         \
-        return m_xRowOrigin->getXXX( columnIndex );     \
-    }                                                   \
-}                                                       \
+    }													\
+    aGuard.reacquire();									\
+    if( !m_aCache.hasRow( nRow ) )						\
+    {													\
+        m_bLastReadWasFromCache = sal_False;			\
+        aGuard.clear();									\
+        applyPositionToOrigin( nRow );					\
+        impl_init_xRowOrigin();							\
+        return m_xRowOrigin->getXXX( columnIndex );		\
+    }													\
+}														\
 const Any& rValue = m_aCache.getAny( nRow, columnIndex );\
 Type aRet = Type();                                     \
-m_bLastReadWasFromCache = sal_True;                     \
-m_bLastCachedReadWasNull = !( rValue >>= aRet );        \
+m_bLastReadWasFromCache = sal_True;						\
+m_bLastCachedReadWasNull = !( rValue >>= aRet );		\
 /* Last chance. Try type converter service... */        \
 if ( m_bLastCachedReadWasNull && rValue.hasValue() )    \
 {                                                       \
@@ -395,13 +395,13 @@ class CCRS_PropertySetInfo :
                             m_pProperties;
 
     //some helping variables ( names for my special properties )
-    static rtl::OUString    m_aPropertyNameForCount;
-    static rtl::OUString    m_aPropertyNameForFinalCount;
-    static rtl::OUString    m_aPropertyNameForFetchSize;
-    static rtl::OUString    m_aPropertyNameForFetchDirection;
+    static rtl::OUString	m_aPropertyNameForCount;
+    static rtl::OUString	m_aPropertyNameForFinalCount;
+    static rtl::OUString	m_aPropertyNameForFetchSize;
+    static rtl::OUString	m_aPropertyNameForFetchDirection;
 
-    long                    m_nFetchSizePropertyHandle;
-    long                    m_nFetchDirectionPropertyHandle;
+    long					m_nFetchSizePropertyHandle;
+    long					m_nFetchDirectionPropertyHandle;
 
 private:
     sal_Int32 SAL_CALL
@@ -418,7 +418,7 @@ private:
     impl_isMyPropertyName( const rtl::OUString& rName );
 
 public:
-    CCRS_PropertySetInfo(   Reference<
+    CCRS_PropertySetInfo(	Reference<
             XPropertySetInfo > xPropertySetInfoOrigin );
 
     virtual ~CCRS_PropertySetInfo();
@@ -443,10 +443,10 @@ public:
         throw( RuntimeException );
 };
 
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( OUString::createFromAscii( "RowCount" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( OUString::createFromAscii( "IsRowCountFinal" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( OUString::createFromAscii( "FetchSize" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( OUString::createFromAscii( "FetchDirection" ) );
+OUString	CCRS_PropertySetInfo::m_aPropertyNameForCount( OUString::createFromAscii( "RowCount" ) );
+OUString	CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( OUString::createFromAscii( "IsRowCountFinal" ) );
+OUString	CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( OUString::createFromAscii( "FetchSize" ) );
+OUString	CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( OUString::createFromAscii( "FetchDirection" ) );
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > xInfo )
@@ -728,7 +728,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         return sal_False;
     }
-//  OSL_ENSURE( nRow <= m_nKnownCount, "don't step into regions you don't know with this method" );
+//	OSL_ENSURE( nRow <= m_nKnownCount, "don't step into regions you don't know with this method" );
 
     sal_Int32 nLastAppliedPos = m_nLastAppliedPos;
     sal_Bool bAfterLastApplied = m_bAfterLastApplied;
@@ -821,21 +821,21 @@ sal_Bool SAL_CALL CachedContentResultSet
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 
-#define FETCH_XXX( aCache, fetchInterface, fetchMethod )            \
-sal_Bool bDirection = !!(                                           \
-    nFetchDirection != FetchDirection::REVERSE );                   \
-FetchResult aResult =                                               \
-    fetchInterface->fetchMethod( nRow, nFetchSize, bDirection );    \
-osl::ClearableGuard< osl::Mutex > aGuard2( m_aMutex );              \
-aCache.loadData( aResult );                                         \
-sal_Int32 nMax = aCache.getMaxRow();                                \
-sal_Int32 nCurCount = m_nKnownCount;                                \
-sal_Bool bIsFinalCount = aCache.hasKnownLast();                     \
-sal_Bool bCurIsFinalCount = m_bFinalCount;                          \
-aGuard2.clear();                                                    \
-if( nMax > nCurCount )                                              \
-    impl_changeRowCount( nCurCount, nMax );                         \
-if( bIsFinalCount && !bCurIsFinalCount )                            \
+#define FETCH_XXX( aCache, fetchInterface, fetchMethod )			\
+sal_Bool bDirection = !!(											\
+    nFetchDirection != FetchDirection::REVERSE );					\
+FetchResult aResult =												\
+    fetchInterface->fetchMethod( nRow, nFetchSize, bDirection );	\
+osl::ClearableGuard< osl::Mutex > aGuard2( m_aMutex );				\
+aCache.loadData( aResult );											\
+sal_Int32 nMax = aCache.getMaxRow();								\
+sal_Int32 nCurCount = m_nKnownCount;								\
+sal_Bool bIsFinalCount = aCache.hasKnownLast();						\
+sal_Bool bCurIsFinalCount = m_bFinalCount;							\
+aGuard2.clear();													\
+if( nMax > nCurCount )												\
+    impl_changeRowCount( nCurCount, nMax );							\
+if( bIsFinalCount && !bCurIsFinalCount )							\
     impl_changeIsRowCountFinal( bCurIsFinalCount, bIsFinalCount );
 
 void SAL_CALL CachedContentResultSet
@@ -1020,7 +1020,7 @@ void SAL_CALL CachedContentResultSet
         {
             nNew = COMSUNSTARUCBCCRS_DEFAULT_FETCH_DIRECTION;
         }
-        else if( !( nNew == FetchDirection::FORWARD
+        else if( !(	nNew == FetchDirection::FORWARD
                 || nNew == FetchDirection::REVERSE ) )
         {
             throw IllegalArgumentException();
@@ -1225,7 +1225,7 @@ void SAL_CALL CachedContentResultSet
     }
 
     //-----------
-    impl_notifyPropertyChangeListeners( aEvt );
+    impl_notifyPropertyChangeListeners(	aEvt );
 }
 
 
@@ -1256,38 +1256,38 @@ void SAL_CALL CachedContentResultSet
 // XContentAccess methods. ( inherited ) ( -- position dependent )
 //--------------------------------------------------------------------------
 
-#define XCONTENTACCESS_queryXXX( queryXXX, XXX, TYPE )              \
-impl_EnsureNotDisposed();                                   \
-ReacquireableGuard aGuard( m_aMutex );                      \
-sal_Int32 nRow = m_nRow;                                    \
-sal_Int32 nFetchSize = m_nFetchSize;                        \
-sal_Int32 nFetchDirection = m_nFetchDirection;              \
-if( !m_aCache##XXX.hasRow( nRow ) )                         \
-{                                                           \
-    if( !m_aCache##XXX.hasCausedException( nRow ) )         \
-{                                                           \
-        if( !m_xFetchProviderForContentAccess.is() )        \
-        {                                                   \
+#define XCONTENTACCESS_queryXXX( queryXXX, XXX, TYPE )				\
+impl_EnsureNotDisposed();									\
+ReacquireableGuard aGuard( m_aMutex );						\
+sal_Int32 nRow = m_nRow;									\
+sal_Int32 nFetchSize = m_nFetchSize;						\
+sal_Int32 nFetchDirection = m_nFetchDirection;				\
+if( !m_aCache##XXX.hasRow( nRow ) )							\
+{															\
+    if( !m_aCache##XXX.hasCausedException( nRow ) )			\
+{															\
+        if( !m_xFetchProviderForContentAccess.is() )		\
+        {													\
             OSL_ENSURE( sal_False, "broadcaster was disposed already" );\
-            throw RuntimeException();                       \
-        }                                                   \
-        aGuard.clear();                                     \
-        if( impl_isForwardOnly() )                          \
-            applyPositionToOrigin( nRow );                  \
+            throw RuntimeException();						\
+        }													\
+        aGuard.clear();										\
+        if( impl_isForwardOnly() )							\
+            applyPositionToOrigin( nRow );					\
                                                             \
         FETCH_XXX( m_aCache##XXX, m_xFetchProviderForContentAccess, fetch##XXX##s ); \
-    }                                                       \
-    aGuard.reacquire();                                     \
-    if( !m_aCache##XXX.hasRow( nRow ) )                     \
-    {                                                       \
-        aGuard.clear();                                     \
-        applyPositionToOrigin( nRow );                      \
-        TYPE aRet = ContentResultSetWrapper::queryXXX();    \
-        if( m_xContentIdentifierMapping.is() )              \
+    }														\
+    aGuard.reacquire();										\
+    if( !m_aCache##XXX.hasRow( nRow ) )						\
+    {														\
+        aGuard.clear();										\
+        applyPositionToOrigin( nRow );						\
+        TYPE aRet = ContentResultSetWrapper::queryXXX();	\
+        if( m_xContentIdentifierMapping.is() )				\
             return m_xContentIdentifierMapping->map##XXX( aRet );\
-        return aRet;                                        \
-    }                                                       \
-}                                                           \
+        return aRet;										\
+    }														\
+}															\
 return m_aCache##XXX.get##XXX( nRow );
 
 //--------------------------------------------------------------------------

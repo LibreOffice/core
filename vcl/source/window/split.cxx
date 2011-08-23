@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@
 #include <rtl/instance.hxx>
 #include <vcl/window.h>
 
-namespace
-{
+namespace 
+{ 
     struct ImplBlackWall
         : public rtl::StaticWithInit<Wallpaper, ImplBlackWall> {
         Wallpaper operator () () {
@@ -55,7 +55,7 @@ namespace
         Wallpaper operator () () {
             return Wallpaper(COL_LIGHTGRAY);
         }
-    };
+    }; 
 }
 
 // =======================================================================
@@ -63,11 +63,11 @@ namespace
 void Splitter::ImplInitSplitterData()
 {
     ImplGetWindowImpl()->mbSplitter        = TRUE;
-    mpRefWin          = NULL;
-    mnSplitPos        = 0;
-    mnLastSplitPos    = 0;
+    mpRefWin		  = NULL;
+    mnSplitPos		  = 0;
+    mnLastSplitPos	  = 0;
     mnStartSplitPos   = 0;
-    mbDragFull        = FALSE;
+    mbDragFull		  = FALSE;
     mbKbdSplitting    = FALSE;
     mbInKeyEvent      = 0;
     mnKeyboardStepSize = SPLITTER_DEFAULTSTEPSIZE;
@@ -104,11 +104,11 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
 
     if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
         SetBackground( ImplWhiteWall::get() );
-    else
+    else 
         SetBackground( ImplBlackWall::get() );
 
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
-    pTList->AddWindow( this );
+    pTList->AddWindow( this ); 
 }
 
 // -----------------------------------------------------------------------
@@ -139,13 +139,13 @@ void Splitter::ImplDrawSplitter()
 
     if ( mbHorzSplit )
     {
-        aInvRect.Left()     = maDragPos.X() - 1;
-        aInvRect.Right()    = maDragPos.X() + 1;
+        aInvRect.Left() 	= maDragPos.X() - 1;
+        aInvRect.Right()	= maDragPos.X() + 1;
     }
     else
     {
-        aInvRect.Top()      = maDragPos.Y() - 1;
-        aInvRect.Bottom()   = maDragPos.Y() + 1;
+        aInvRect.Top()		= maDragPos.Y() - 1;
+        aInvRect.Bottom()	= maDragPos.Y() + 1;
     }
 
     mpRefWin->InvertTracking( mpRefWin->PixelToLogic(aInvRect), SHOWTRACK_SPLIT );
@@ -180,7 +180,7 @@ Splitter::Splitter( Window* pParent, const ResId& rResId ) :
 Splitter::~Splitter()
 {
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
-    pTList->RemoveWindow( this );
+    pTList->RemoveWindow( this ); 
 }
 
 // -----------------------------------------------------------------------
@@ -196,7 +196,7 @@ long Splitter::GetKeyboardStepSize() const
 {
     return mnKeyboardStepSize;
 }
-
+ 
 // -----------------------------------------------------------------------
 
 Splitter* Splitter::ImplFindSibling()
@@ -218,7 +218,7 @@ Splitter* Splitter::ImplFindSibling()
 }
 
 // -----------------------------------------------------------------------
-
+    
 BOOL Splitter::ImplSplitterActive()
 {
     // is splitter in document or at scrollbar handle ?
@@ -402,7 +402,7 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
         int maxiter = 500;  // avoid endless loop
         int delta=0;
         int delta_step = mbHorzSplit  ? aSize.Width()/10 : aSize.Height()/10;
-
+        
         // use the specified step size if it was set
         if( mnKeyboardStepSize != SPLITTER_DEFAULTSTEPSIZE )
             delta_step = mnKeyboardStepSize;
@@ -418,16 +418,16 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
 
             switch( nCode )
             {
-            case KEY_LEFT:
+            case KEY_LEFT:  
                 aNewPos.X()-=delta;
                 break;
-            case KEY_RIGHT:
+            case KEY_RIGHT:  
                 aNewPos.X()+=delta;
                 break;
-            case KEY_UP:
+            case KEY_UP:  
                 aNewPos.Y()-=delta;
                 break;
-            case KEY_DOWN:
+            case KEY_DOWN:  
                 aNewPos.Y()+=delta;
                 break;
             default:
@@ -448,7 +448,7 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
                 if ( aNewPos.Y() == maDragPos.Y() )
                     continue;
             }
-
+        
             maDragPos = aNewPos;
             long nNewPos;
             if ( mbHorzSplit )
@@ -558,7 +558,7 @@ void Splitter::ImplStartKbdSplitting()
 
     StartSplit();
 
-    // determine start position
+    // determine start position 
     // because we have no mouse position we take either the position
     // of the splitter window or the last split position
     // the other coordinate is just the center of the reference window
@@ -729,7 +729,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
             GrabFocusToDocument();
             break;
     }
-    mbInKeyEvent = 0;
+    mbInKeyEvent = 0;    
 }
 
 // -----------------------------------------------------------------------
@@ -752,7 +752,7 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
         {
             if( newFaceColor.IsDark() )
                 SetBackground( ImplWhiteWall::get() );
-            else
+            else 
                 SetBackground( ImplBlackWall::get() );
         }
     }
@@ -763,7 +763,7 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
 void Splitter::Paint( const Rectangle& rPaintRect )
 {
     if( HasFocus() || mbKbdSplitting )
-    {
+    {   
         Color oldFillCol = GetFillColor();
         Color oldLineCol = GetLineColor();
 

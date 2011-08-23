@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,19 +111,19 @@ inline sal_Bool WeakReference< reference_type >::operator==(const WeakReference<
 }
 
 template< class reference_type >
-inline sal_Bool WeakReference< reference_type >::operator!=(const WeakReference<reference_type> & handle) const
+inline sal_Bool	WeakReference< reference_type >::operator!=(const WeakReference<reference_type> & handle) const
 {
     return mpWeakConnection != handle.mpWeakConnection;
 }
 
 template< class reference_type >
-inline sal_Bool WeakReference< reference_type >::operator<(const WeakReference<reference_type> & handle) const
+inline sal_Bool	WeakReference< reference_type >::operator<(const WeakReference<reference_type> & handle) const
 {
     return mpWeakConnection->mpReference < handle.mpWeakConnection->mpReference;
 }
 
 template< class reference_type >
-inline sal_Bool WeakReference< reference_type >::operator>(const WeakReference<reference_type> & handle) const
+inline sal_Bool	WeakReference< reference_type >::operator>(const WeakReference<reference_type> & handle) const
 {
     return mpWeakConnection->mpReference > handle.mpWeakConnection->mpReference;
 }

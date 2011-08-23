@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ sal_Int32 SAL_CALL InputStream::available()
     return 0;
 }
 
-void SAL_CALL InputStream::closeInput()
+void SAL_CALL InputStream::closeInput() 
     throw( io::NotConnectedException, io::IOException, uno::RuntimeException )
 {
     if (mpStream)
@@ -63,7 +63,7 @@ void SAL_CALL InputStream::closeInput()
 }
 
 void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
-    throw( io::NotConnectedException, io::BufferSizeExceededException,
+    throw( io::NotConnectedException, io::BufferSizeExceededException, 
       io::IOException, uno::RuntimeException )
 {
     if (!mpStream)
@@ -89,7 +89,7 @@ sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal
     {
         aData.realloc( nBytesToRead );
     }
-    catch ( const uno::Exception &e )
+    catch ( const uno::Exception &e ) 
     {
         throw io::BufferSizeExceededException();
     }

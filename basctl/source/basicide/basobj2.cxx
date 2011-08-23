@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ BOOL IsValidSbxName( const String& rName )
 {
     for ( USHORT nChar = 0; nChar < rName.Len(); nChar++ )
     {
-        BOOL bValid = ( ( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
+        BOOL bValid = (	( rName.GetChar(nChar) >= 'A' && rName.GetChar(nChar) <= 'Z' ) ||
                         ( rName.GetChar(nChar) >= 'a' && rName.GetChar(nChar) <= 'z' ) ||
                         ( rName.GetChar(nChar) >= '0' && rName.GetChar(nChar) <= '9' && nChar ) ||
                         ( rName.GetChar(nChar) == '_' ) );
@@ -206,7 +206,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
             DBG_ASSERT( nId, "No entry in Tabbar!" );
             if ( nId )
             {
-                BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
+                BasicIDETabBar*	pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
                 pTabBar->SetPageText( nId, rNewName );
                 pTabBar->Sort();
                 pTabBar->MakeVisible( pTabBar->GetCurPageId() );
@@ -336,7 +336,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
             if ( pMethod && !rxLimitToDocument.is() )
             {
-                pMethod->AddRef();  // festhalten, bis Event abgearbeitet.
+                pMethod->AddRef();	// festhalten, bis Event abgearbeitet.
                 Application::PostUserEvent( LINK( IDE_DLL()->GetExtraData(), BasicIDEData, ExecuteMacroEvent ), pMethod );
             }
         }
@@ -364,13 +364,23 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
         SbModuleRef xModule = new SbModule( rModName );
         xModule->SetSource32( aOUSource );
         USHORT nCount = xModule->GetMethods()->Count();
-        aSeqMethods.realloc( nCount );
-
+        USHORT nRealCount = nCount;
         for ( USHORT i = 0; i < nCount; i++ )
         {
             SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
+            if( pMethod->IsHidden() )
+                --nRealCount;
+        }
+        aSeqMethods.realloc( nRealCount );
+
+        USHORT iTarget = 0;
+        for ( USHORT i = 0 ; i < nCount; ++i )
+        {
+            SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
+            if( pMethod->IsHidden() )
+                continue;
             DBG_ASSERT( pMethod, "Method not found! (NULL)" );
-            aSeqMethods.getArray()[ i ] = pMethod->GetName();
+            aSeqMethods.getArray()[ iTarget++ ] = pMethod->GetName();
         }
     }
 
@@ -392,7 +402,7 @@ BOOL HasMethod( const ScriptDocument& rDocument, const String& rLibName, const S
         if ( pMethods )
         {
             SbMethod* pMethod = (SbMethod*)pMethods->Find( rMethName, SbxCLASS_METHOD );
-            if ( pMethod )
+            if ( pMethod && !pMethod->IsHidden() )
                 bHasMethod = TRUE;
         }
     }

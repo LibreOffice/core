@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,13 +60,13 @@ String STR_PAGE_COUNT_MACRO
  // folder in default_images. This list is now only used for special toolboxes that are
  // used in floating windows.
 
-#define IMAGELIST_AND_COUNT             \
-    IdList = {                          \
-        FN_FORMULA_CALC                 ;\
-        FN_FORMULA_CANCEL               ;\
-         FN_FORMULA_APPLY               ;\
-        };                              \
-    IdCount = {                         \
+#define IMAGELIST_AND_COUNT 			\
+    IdList = { 							\
+        FN_FORMULA_CALC 				;\
+        FN_FORMULA_CANCEL 				;\
+         FN_FORMULA_APPLY  				;\
+        };								\
+    IdCount = { 						\
         3;                              \
     };
 
@@ -174,12 +174,12 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
     };
 
-    ImageList 1 // == BMP_COLOR_NORMAL + 1
+    ImageList 1	// == BMP_COLOR_NORMAL + 1
     {
         Prefix = "sf";
         STYLE_IMAGE_LISTEF
     };
-    ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
+    ImageList 2	// == BMP_COLOR_HIGHCONTRAST + 1
     {
         Prefix = "sfh";
         STYLE_IMAGE_LISTEF
@@ -470,8 +470,8 @@ String STR_FDLG_TEMPLATE_BUTTON
 
 String STR_FDLG_TEMPLATE_NAME
 {
-    //Text [ en-US ] = "Styles: " ;         //#outline level,removed by zhaojianwei
-    Text [ en-US ] = "separated by: " ; //<-end,add by zhaojianwei
+    //Text [ en-US ] = "Styles: " ;			//#outline level,removed by zhaojianwei
+    Text [ en-US ] = "separated by: " ;	//<-end,add by zhaojianwei
 };
 //#outline level,add by zhaojianwei
 String STR_FDLG_OUTLINE_LEVEL
@@ -481,7 +481,7 @@ String STR_FDLG_OUTLINE_LEVEL
 
 String STR_FDLG_STYLE
 {
-    Text [ en-US ] = "Style: ";
+    Text [ en-US ] = "Style: "; 
 };
 //<-end
 

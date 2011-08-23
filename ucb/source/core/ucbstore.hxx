@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@
 
 //=========================================================================
 
-#define STORE_SERVICE_NAME          "com.sun.star.ucb.Store"
-#define PROPSET_REG_SERVICE_NAME    "com.sun.star.ucb.PropertySetRegistry"
-#define PERS_PROPSET_SERVICE_NAME   "com.sun.star.ucb.PersistentPropertySet"
+#define STORE_SERVICE_NAME 			"com.sun.star.ucb.Store"
+#define PROPSET_REG_SERVICE_NAME	"com.sun.star.ucb.PropertySetRegistry"
+#define PERS_PROPSET_SERVICE_NAME	"com.sun.star.ucb.PersistentPropertySet"
 
 //=========================================================================
 

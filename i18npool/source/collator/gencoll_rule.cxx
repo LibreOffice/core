@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,8 +85,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (argc < 4) exit(-1);
 
-    fp = fopen(argv[1], "rb");  // open the source file for read;
-    if (fp == NULL)
+    fp = fopen(argv[1], "rb");	// open the source file for read;
+    if (fp == NULL) 
         printf("Open the rule source file failed.");
 
 
@@ -112,10 +112,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     UErrorCode status = U_ZERO_ERROR;
     //UParseError parseError;
-    //UCollator *coll = ucol_openRules(Obuf.getStr(), Obuf.getLength(), UCOL_OFF,
+    //UCollator *coll = ucol_openRules(Obuf.getStr(), Obuf.getLength(), UCOL_OFF, 
     //        UCOL_DEFAULT_STRENGTH, &parseError, &status);
 
-    RuleBasedCollator *coll = new RuleBasedCollator(reinterpret_cast<const UChar *>(Obuf.getStr()), status);    // UChar != sal_Unicode in MinGW
+    RuleBasedCollator *coll = new RuleBasedCollator(reinterpret_cast<const UChar *>(Obuf.getStr()), status);	// UChar != sal_Unicode in MinGW
 
     if (U_SUCCESS(status)) {
 
@@ -137,4 +137,4 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         delete coll;
 
     return U_SUCCESS(status) ? 0 : 1;
-}   // End of main
+}	// End of main

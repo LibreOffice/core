@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ public:
 
     /** try to fit the table into the given rectangle.
         If the rectangle is to small, it will be grown to fit the table.
-
+    
         if bFitWidth or bFitHeight is set, the layouter tries to scale
         the rows and/or columns to the given area. The result my be bigger
         to fullfill constrains.
@@ -84,7 +84,7 @@ public:
 
     /** after a call to LayoutTable, this method can be used to set the new
         column and row sizes back to the model. */
-//  void SetLayoutToModel();
+//	void SetLayoutToModel();
 
     void UpdateBorderLayout();
 
@@ -155,7 +155,7 @@ private:
         sal_Int32 mnMinSize;
 
         Layout() : mnPos( 0 ), mnSize( 0 ), mnMinSize( 0 ) {}
-        void clear() { mnPos = 0; mnSize = 0; mnMinSize = 0; }
+        void clear() { mnPos = 0; mnSize = 0; mnMinSize = 0; } 
     };
     typedef std::vector< Layout > LayoutVector;
 
@@ -168,7 +168,7 @@ private:
     BorderLineMap maHorizontalBorders;
     BorderLineMap maVerticalBorders;
 
-    com::sun::star::text::WritingMode   meWritingMode;
+    com::sun::star::text::WritingMode	meWritingMode;
 
     const rtl::OUString msSize;
 };
