@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,35 +24,35 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_component_DatabasePatternField_idl__
-#define __com_sun_star_form_component_DatabasePatternField_idl__
-
-#ifndef __com_sun_star_form_component_PatternField_idl__
-#include <com/sun/star/form/component/PatternField.idl>
-#endif
-
-#ifndef __com_sun_star_form_DataAwareControlModel_idl__
-#include <com/sun/star/form/DataAwareControlModel.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module form {  module component {
-
-//=============================================================================
-
+#ifndef __com_sun_star_form_component_DatabasePatternField_idl__ 
+#define __com_sun_star_form_component_DatabasePatternField_idl__ 
+ 
+#ifndef __com_sun_star_form_component_PatternField_idl__ 
+#include <com/sun/star/form/component/PatternField.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_DataAwareControlModel_idl__ 
+#include <com/sun/star/form/DataAwareControlModel.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  module component {  
+ 
+//============================================================================= 
+ 
 /** This service specifies a data-aware control model for entering text which matches a specific
     pattern.
  */
 published service DatabasePatternField
-{
-    service com::sun::star::form::component::PatternField;
-
-    service com::sun::star::form::DataAwareControlModel;
-
-    //-------------------------------------------------------------------------
-
+{ 
+    service com::sun::star::form::component::PatternField; 
+    
+    service com::sun::star::form::DataAwareControlModel; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** determines if an empty text should be treated as a <NULL/> value.
 
         <p>When the user enters text into a pattern field, and after this, the control
@@ -63,12 +63,12 @@ published service DatabasePatternField
         <p>If the property is set to <TRUE/>, and an empty text is to be commited, this is
         converted into <NULL/>, else it is written as empty string.</p>
      */
-    [property] boolean ConvertEmptyToNull;
-
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+    [property] boolean ConvertEmptyToNull; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; };  
+ 
+#endif 

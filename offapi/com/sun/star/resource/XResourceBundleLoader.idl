@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,63 +24,63 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_resource_XResourceBundleLoader_idl__
-#define __com_sun_star_resource_XResourceBundleLoader_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_resource_XResourceBundle_idl__
-#include <com/sun/star/resource/XResourceBundle.idl>
-#endif
-
-#ifndef __com_sun_star_resource_MissingResourceException_idl__
-#include <com/sun/star/resource/MissingResourceException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
-#include <com/sun/star/lang/Locale.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module resource {
-
-//=============================================================================
-
+#ifndef __com_sun_star_resource_XResourceBundleLoader_idl__ 
+#define __com_sun_star_resource_XResourceBundleLoader_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_resource_XResourceBundle_idl__ 
+#include <com/sun/star/resource/XResourceBundle.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_resource_MissingResourceException_idl__ 
+#include <com/sun/star/resource/MissingResourceException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_Locale_idl__ 
+#include <com/sun/star/lang/Locale.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module resource {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to load resource bundles.
-
-    <p>The search algorithm is specified in the documentation of
-    <type>XResourceBundle</type>. The implementations must follow
+    
+    <p>The search algorithm is specified in the documentation of 
+    <type>XResourceBundle</type>. The implementations must follow 
     the name scheme, but it is allowed to search in several locations.
-
-    @see MissingResourceException
-    @see XResourceBundle
+    
+    @see MissingResourceException 
+    @see XResourceBundle 
     @see Locale
  */
 published interface XResourceBundleLoader: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** loads the appropriate resource bundle.
      */
-    com::sun::star::resource::XResourceBundle loadBundle_Default( [in] string aBaseName )
-            raises( com::sun::star::resource::MissingResourceException );
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::resource::XResourceBundle loadBundle_Default( [in] string aBaseName ) 
+            raises( com::sun::star::resource::MissingResourceException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** loads the appropriate resource bundle subclass.
      */
-    com::sun::star::resource::XResourceBundle loadBundle( [in] string abaseName,
-             [in] com::sun::star::lang::Locale aLocale )
-            raises( com::sun::star::resource::MissingResourceException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    com::sun::star::resource::XResourceBundle loadBundle( [in] string abaseName, 
+             [in] com::sun::star::lang::Locale aLocale ) 
+            raises( com::sun::star::resource::MissingResourceException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

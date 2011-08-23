@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module configuration {
+module com { module sun { module star { module configuration { 
 
 //=============================================================================
 /** provides information about an element within a hierarchy.
@@ -58,7 +58,7 @@ module com { module sun { module star { module configuration {
  Attributes detailing the role of the element can be queried.
  The state of the element (regarding defaults) can be accessed.
  </p>
-
+    
  <p>Implementations of this service usually also implement
  service <type>HierarchyAccess</type>, which concerns the complementary role
  of providing access to subelements of the hierarchy.
@@ -71,7 +71,7 @@ published service HierarchyElement
 */
     interface com::sun::star::container::XHierarchicalName;
 
-/** provides the local name of this element within its parent.
+/** provides the local name of this element within its parent. 
 
  <p><em>Renaming an element is generally not supported.</em></p>
 */
@@ -84,7 +84,7 @@ published service HierarchyElement
  values.
  </p>
 
- <p>If the parent of this object implements
+ <p>If the parent of this object implements 
  <type scope="com::sun::star::beans">XPropertySetInfo</type>, then this returns
  the same <type scope="com::sun::star::beans">Property</type> as the
  <type scope="com::sun::star::beans">XPropertySetInfo</type> of the parent.
@@ -98,7 +98,7 @@ published service HierarchyElement
  a default state and values only for simple values or not at all.
  </p>
 
- <p>If the parent of this object implements
+ <p>If the parent of this object implements 
  <type scope="com::sun::star::beans">XPropertyState</type>, then members
  of this interface have the same effect as corresponding members of the parent.
  </p>
@@ -109,9 +109,9 @@ published service HierarchyElement
 */
     [optional] interface com::sun::star::beans::XPropertyWithState;
 
-/** provides access to the parent of this element [optional].
+/** provides access to the parent of this element [optional]. 
 
- <p>This interface may be missing if this object is not obtained
+ <p>This interface may be missing if this object is not obtained 
  as a child or descendant of another tree node, for example, directly from a factory or provider.
  </p>
 
@@ -127,6 +127,6 @@ published service HierarchyElement
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

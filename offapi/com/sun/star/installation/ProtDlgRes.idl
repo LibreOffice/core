@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,49 +24,49 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_installation_ProtDlgRes_idl__
-#define __com_sun_star_installation_ProtDlgRes_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module installation {
-
-//=============================================================================
-
+#ifndef __com_sun_star_installation_ProtDlgRes_idl__ 
+#define __com_sun_star_installation_ProtDlgRes_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module installation {  
+ 
+//============================================================================= 
+ 
 /** contains the status of a dialog with an 'always display Checkbox'.
 
-    @deprecated
+    @deprecated 
  */
 published enum ProtDlgRes
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::installation::ProtDlgRes::NOCHANGE
     /** dialog quit without the use of the YES/NO buttons.
      */
-    NOCHANGE,
-
-    //-------------------------------------------------------------------------
-
+    NOCHANGE, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::installation::ProtDlgRes::CHECK
     /** when the dialog quit the checkbox, "Always display this message" was
         checked.
      */
-    CHECK,
-
-    //-------------------------------------------------------------------------
-
+    CHECK, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::installation::ProtDlgRes::UNCHECK
     /** when the dialog quit the checkbox, "Always display this message"
         was not checked.
      */
-    UNCHECK
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    UNCHECK 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

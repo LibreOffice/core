@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,92 +24,92 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_UnoControlGroupBoxModel_idl__
-#define __com_sun_star_awt_UnoControlGroupBoxModel_idl__
+#ifndef __com_sun_star_awt_UnoControlGroupBoxModel_idl__ 
+#define __com_sun_star_awt_UnoControlGroupBoxModel_idl__ 
 
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
-#include <com/sun/star/awt/FontDescriptor.idl>
-#endif
+#ifndef __com_sun_star_awt_FontDescriptor_idl__ 
+#include <com/sun/star/awt/FontDescriptor.idl> 
+#endif 
 
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
-#include <com/sun/star/awt/UnoControlModel.idl>
-#endif
-
+#ifndef __com_sun_star_awt_UnoControlModel_idl__ 
+#include <com/sun/star/awt/UnoControlModel.idl> 
+#endif 
+ 
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
 #endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** specifies the standard model of an <type>UnoControlGroupBox</type>.
  */
 published service UnoControlGroupBoxModel
-{
-    service com::sun::star::awt::UnoControlModel;
-
-    //-------------------------------------------------------------------------
-
+{ 
+    service com::sun::star::awt::UnoControlModel; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** determines whether the control is enabled or disabled.
      */
-    [property] boolean Enabled;
-
-    //-------------------------------------------------------------------------
-
+    [property] boolean Enabled; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the font attributes of the text in the control.
      */
-    [property] com::sun::star::awt::FontDescriptor FontDescriptor;
-
-    //-------------------------------------------------------------------------
+    [property] com::sun::star::awt::FontDescriptor FontDescriptor; 
+ 
+    //------------------------------------------------------------------------- 
 
     /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
         value of the text in the control.
      */
     [property] short FontEmphasisMark;
-
+ 
     //-------------------------------------------------------------------------
-
+    
     /** specifies the <type scope="com::sun::star::text">FontRelief</type>
         value of the text in the control.
      */
     [property] short FontRelief;
-
+ 
     //-------------------------------------------------------------------------
-
+    
     /** specifies the help text of the control.
      */
     [property] string HelpText;
-
-    //-------------------------------------------------------------------------
-
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
-
+ 
     //-------------------------------------------------------------------------
-
+    
     /** specifies the label of the control.
      */
-    [property] string Label;
-
-    //-------------------------------------------------------------------------
-
+    [property] string Label; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies that the control will be printed with the document.
      */
-    [property] boolean Printable;
-
-    //-------------------------------------------------------------------------
-
+    [property] boolean Printable; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies the text color (RGB) of the control.
      */
-    [property] com::sun::star::util::Color TextColor;
-
+    [property] com::sun::star::util::Color TextColor; 
+ 
     //-------------------------------------------------------------------------
-
+    
     /** specifies the text line color (RGB) of the control.
      */
     [property] com::sun::star::util::Color TextLineColor;
@@ -123,10 +123,10 @@ published service UnoControlGroupBoxModel
         @since OOo 3.1
     */
     [optional, property] short WritingMode;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

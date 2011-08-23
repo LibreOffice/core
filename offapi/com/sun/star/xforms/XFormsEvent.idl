@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,12 @@
 
 #include <com/sun/star/xml/dom/events/XEvent.idl>
 
-module com {  module sun {  module star {  module xforms {
+module com {  module sun {  module star {  module xforms {  
 
 interface XFormsEvent : com::sun::star::xml::dom::events::XEvent {
 
-    void initXFormsEvent([in] string typeArg,
-                         [in] boolean canBubbleArg,
+    void initXFormsEvent([in] string typeArg, 
+                         [in] boolean canBubbleArg, 
                          [in] boolean cancelableArg);
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,20 +48,20 @@
 extern "C" {
 #endif
 
-#define PATHTYPE_ERROR                      0
-#define PATHTYPE_RELATIVE                   1
-#define PATHTYPE_ABSOLUTE_UNC               2
-#define PATHTYPE_ABSOLUTE_LOCAL             3
-#define PATHTYPE_MASK_TYPE                  0xFF
-#define PATHTYPE_IS_VOLUME                  0x0100
-#define PATHTYPE_IS_SERVER                  0x0200
-#define PATHTYPE_IS_LONGPATH                0x0400
+#define PATHTYPE_ERROR						0
+#define PATHTYPE_RELATIVE					1
+#define PATHTYPE_ABSOLUTE_UNC				2
+#define PATHTYPE_ABSOLUTE_LOCAL				3
+#define PATHTYPE_MASK_TYPE					0xFF
+#define PATHTYPE_IS_VOLUME					0x0100
+#define PATHTYPE_IS_SERVER					0x0200
+#define PATHTYPE_IS_LONGPATH				0x0400
 
-#define VALIDATEPATH_NORMAL                 0x0000
-#define VALIDATEPATH_ALLOW_WILDCARDS        0x0001
-#define VALIDATEPATH_ALLOW_ELLIPSE          0x0002
-#define VALIDATEPATH_ALLOW_RELATIVE         0x0004
-#define VALIDATEPATH_ALLOW_UNC              0x0008
+#define VALIDATEPATH_NORMAL					0x0000
+#define VALIDATEPATH_ALLOW_WILDCARDS		0x0001
+#define VALIDATEPATH_ALLOW_ELLIPSE			0x0002
+#define VALIDATEPATH_ALLOW_RELATIVE			0x0004
+#define VALIDATEPATH_ALLOW_UNC				0x0008
 #define VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD 0x0010
 
 #define MAX_LONG_PATH 32767
@@ -74,9 +74,9 @@ DWORD IsValidFilePath (
 );
 
 DWORD GetCaseCorrectPathName (
-    LPCTSTR lpszShortPath,  // file name
-    LPTSTR  lpszLongPath,   // path buffer
-    DWORD   cchBuffer,      // size of path buffer
+    LPCTSTR	lpszShortPath,	// file name
+    LPTSTR	lpszLongPath,	// path buffer
+    DWORD	cchBuffer,		// size of path buffer 
     BOOL bCheckExistence
 );
 

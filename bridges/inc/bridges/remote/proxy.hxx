@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ AcquireRemote2UnoProxy acquireRemote2UnoProxy;
 extern "C" typedef void SAL_CALL ReleaseRemote2UnoProxy(uno_Interface *);
 ReleaseRemote2UnoProxy releaseRemote2UnoProxy;
 
-// private:
+// private:	
 extern "C" typedef void SAL_CALL DispatchRemote2UnoProxy(
     uno_Interface *, typelib_TypeDescription const *, void *, void **,
     uno_Any **);
@@ -66,9 +66,9 @@ public:
         uno_Environment *pEnvUno,
         uno_Environment *pEnvRemote
         );
-
+    
     ~Remote2UnoProxy();
-
+    
 private:
     ::rtl::OUString m_sOid;
     typelib_InterfaceTypeDescription *m_pType;
@@ -77,8 +77,8 @@ private:
     uno_Environment *m_pEnvRemote;
     ::com::sun::star::uno::Mapping m_mapRemote2Uno;
     ::com::sun::star::uno::Mapping m_mapUno2Remote;
-
-    oslInterlockedCount m_nRef;
+    
+    oslInterlockedCount	m_nRef;
 
     friend void SAL_CALL acquireRemote2UnoProxy(uno_Interface *);
 

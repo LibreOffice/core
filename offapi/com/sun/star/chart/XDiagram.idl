@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,45 +24,45 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_XDiagram_idl__
-#define __com_sun_star_chart_XDiagram_idl__
-
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module chart {
-
-//=============================================================================
-
+#ifndef __com_sun_star_chart_XDiagram_idl__ 
+#define __com_sun_star_chart_XDiagram_idl__ 
+ 
+#ifndef __com_sun_star_drawing_XShape_idl__ 
+#include <com/sun/star/drawing/XShape.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__ 
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module chart {  
+ 
+//============================================================================= 
+ 
 /** manages the diagram of the chart document.
 
     @see XChartDocument
  */
 published interface XDiagram: com::sun::star::drawing::XShape
-{
-    //-------------------------------------------------------------------------
-
-    /** @returns
+{ 
+    //------------------------------------------------------------------------- 
+     
+    /** @returns 
             a string representing the diagram type. This string
             contains the fully qualified name of the corresponding
             service.
      */
-    string getDiagramType();
-
-    //-------------------------------------------------------------------------
-
-    /** @returns
+    string getDiagramType(); 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** @returns 
             the properties of the specified data row (series).
 
         @param nRow
@@ -70,29 +70,29 @@ published interface XDiagram: com::sun::star::drawing::XShape
 
         @see ChartDataRowProperties
      */
-    com::sun::star::beans::XPropertySet getDataRowProperties( [in] long nRow )
-        raises( com::sun::star::lang::IndexOutOfBoundsException );
-
-    //-------------------------------------------------------------------------
-
-    /** @returns
-            the properties of the specified data point.
+    com::sun::star::beans::XPropertySet getDataRowProperties( [in] long nRow ) 
+        raises( com::sun::star::lang::IndexOutOfBoundsException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** @returns 
+            the properties of the specified data point. 
 
         @param nCol
             the index of the data point of a series (0-based).
         @param nRow
             the index of a series (0-based).
-
+            
         @see ChartDataPointProperties
      */
-    com::sun::star::beans::XPropertySet getDataPointProperties( [in] long nCol,
-                                                                [in] long nRow )
-        raises( com::sun::star::lang::IndexOutOfBoundsException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    com::sun::star::beans::XPropertySet getDataPointProperties( [in] long nCol, 
+                                                                [in] long nRow ) 
+        raises( com::sun::star::lang::IndexOutOfBoundsException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

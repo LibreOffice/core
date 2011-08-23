@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,22 +25,22 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_form_component_InteractionGridControl_idl__
-#define __com_sun_star_form_component_InteractionGridControl_idl__
+#ifndef __com_sun_star_form_component_InteractionGridControl_idl__ 
+#define __com_sun_star_form_component_InteractionGridControl_idl__ 
 
-#ifndef __com_sun_star_form_control_GridControl_idl__
-#include <com/sun/star/form/control/GridControl.idl>
-#endif
-#ifndef __com_sun_star_frame_XDispatch_idl__
-#include <com/sun/star/frame/XDispatch.idl>
-#endif
+#ifndef __com_sun_star_form_control_GridControl_idl__ 
+#include <com/sun/star/form/control/GridControl.idl> 
+#endif 
+#ifndef __com_sun_star_frame_XDispatch_idl__ 
+#include <com/sun/star/frame/XDispatch.idl> 
+#endif 
 
-//=============================================================================
-
- module com {  module sun {  module star {  module form {  module control {
-
-//=============================================================================
-
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  module control { 
+ 
+//============================================================================= 
+ 
 /** is an extended grid control, which allows the user to customize some of it's user interface's aspects.
 */
 published service InteractionGridControl
@@ -72,14 +72,14 @@ published service InteractionGridControl
     interface com::sun::star::frame::XDispatch;
 };
 
-//=============================================================================
+//============================================================================= 
+ 
+}; }; }; }; }; 
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
 
-}; }; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-
-#endif
+#endif 
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 #include <rtl/ustring.hxx>
 
 #ifndef _OSL_SECURITY_DECL_HXX
-#   include <osl/security_decl.hxx>
+#	include <osl/security_decl.hxx>
 #endif
 
 namespace osl
-{
+{     
 
 inline Security::Security()
 {
@@ -52,10 +52,10 @@ inline sal_Bool Security::logonUser(const rtl::OUString& strName,
                                     const rtl::OUString& strPasswd)
 {
     osl_freeSecurityHandle(m_handle);
-
+    
     m_handle = 0;
-
-    return (osl_loginUser( strName.pData, strPasswd.pData, &m_handle)
+    
+    return (osl_loginUser( strName.pData, strPasswd.pData, &m_handle) 
             == osl_Security_E_None);
 }
 
@@ -64,10 +64,10 @@ inline sal_Bool Security::logonUser( const rtl::OUString& strName,
                                       const rtl::OUString& strFileServer )
 {
     osl_freeSecurityHandle(m_handle);
-
+    
     m_handle = NULL;
-
-    return (osl_loginUserOnFileServer(strName.pData, strPasswd.pData, strFileServer.pData, &m_handle)
+    
+    return (osl_loginUserOnFileServer(strName.pData, strPasswd.pData, strFileServer.pData, &m_handle) 
             == osl_Security_E_None);
 }
 
@@ -107,6 +107,6 @@ inline oslSecurity Security::getHandle() const
 
 }
 
-#endif  // _OSL_SECURITY_HXX_
+#endif	// _OSL_SECURITY_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,22 +35,22 @@ using namespace rtl;
 
 Options::Options()
 {
-}
+}	
 
 Options::~Options()
 {
-
+    
 }
 
 const OString& Options::getProgramName() const
 {
     return m_program;
-}
+}	
 
 sal_Bool Options::isValid(const OString& option)
 {
-    return (m_options.count(option) > 0);
-}
+    return (m_options.count(option) > 0);	
+}	
 
 const OString Options::getOption(const OString& option)
     throw( IllegalArgument )
@@ -66,36 +66,36 @@ const OString Options::getOption(const OString& option)
 
 const OptionMap& Options::getOptions()
 {
-    return m_options;
-}
+    return m_options;	
+}	
 
 const OString Options::getInputFile(sal_uInt16 index)
     throw( IllegalArgument )
 {
     if (index < m_inputFiles.size())
     {
-        return m_inputFiles[index];
+        return m_inputFiles[index];		
     } else
     {
         throw IllegalArgument("index is out of bound.");
     }
-}
+}	
 
 const StringVector& Options::getInputFiles()
 {
-    return m_inputFiles;
-}
-
+    return m_inputFiles;	
+}	
+    
 OString Options::getExtraInputFile(sal_uInt16 index) const
     throw( IllegalArgument )
 {
     if (index < m_extra_input_files.size())
     {
-        return m_extra_input_files[index];
+        return m_extra_input_files[index];		
     } else
     {
         throw IllegalArgument("index is out of bound.");
     }
-}
+}	
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

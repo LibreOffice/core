@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,40 +24,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_ChartDataRow_idl__
-#define __com_sun_star_chart_ChartDataRow_idl__
-
-#ifndef __com_sun_star_chart_ChartDataValue_idl__
-#include <com/sun/star/chart/ChartDataValue.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module chart {
-
-//=============================================================================
-
+#ifndef __com_sun_star_chart_ChartDataRow_idl__ 
+#define __com_sun_star_chart_ChartDataRow_idl__ 
+ 
+#ifndef __com_sun_star_chart_ChartDataValue_idl__ 
+#include <com/sun/star/chart/ChartDataValue.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module chart {  
+ 
+//============================================================================= 
+ 
 /** describes a single data row, specified by its name and
     a sequence of data points.
 
     <p>This struct is currently used nowhere.</p>
-
+        
     @deprecated
  */
 published struct ChartDataRow
 {
     /** The name of the data row.
      */
-    string Name;
-
-    //-------------------------------------------------------------------------
+    string Name; 
+ 
+    //------------------------------------------------------------------------- 
     /** The points contained in this data row.
      */
     sequence< sequence<ChartDataValue> > Points;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

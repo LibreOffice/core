@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ static typelib_TypeClass cpp2uno_call(
     fprintf(stderr, "as far as cpp2uno_call\n");
 #endif
 
-    int ng = 0; //number of gpr registers used
+    int ng = 0; //number of gpr registers used 
     int nf = 0; //number of fpr regsiters used
-
+       
     // gpreg:  [ret *], this, [gpr params]
     // fpreg:  [fpr params]
     // ovrflw: [gpr or fpr params (properly aligned)]
@@ -72,10 +72,10 @@ static typelib_TypeClass cpp2uno_call(
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-
+    
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
-
+    
     if (pReturnTypeDescr)
     {
         if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
@@ -87,14 +87,14 @@ static typelib_TypeClass cpp2uno_call(
             pCppReturn = *(void **)gpreg;
             gpreg++;
             ng++;
-
+            
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                           ? alloca( pReturnTypeDescr->nSize )
                           : pCppReturn); // direct way
         }
     }
     // pop this
-    gpreg++;
+    gpreg++; 
     ng++;
 
     // stack space
@@ -106,7 +106,7 @@ static typelib_TypeClass cpp2uno_call(
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-
+    
     sal_Int32 nTempIndizes = 0;
     bool bOverFlowUsed = false;
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -119,7 +119,7 @@ static typelib_TypeClass cpp2uno_call(
         fprintf(stderr, "arg %d of %d\n", nPos, nParams);
 #endif
 
-        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
+        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) 
         {
 #ifdef CMC_DEBUG
             fprintf(stderr, "simple\n");
@@ -194,7 +194,7 @@ static typelib_TypeClass cpp2uno_call(
                     if (bOverFlowUsed) ovrflw++;
                     break;
                 default:
-                    if (ng < ppc64::MAX_GPR_REGS)
+                    if (ng < ppc64::MAX_GPR_REGS) 
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = gpreg++;
                         ng++;
@@ -219,7 +219,7 @@ static typelib_TypeClass cpp2uno_call(
             void *pCppStack; //temporary stack pointer
 
             if (ng < ppc64::MAX_GPR_REGS)
-            {
+            { 
                 pCppArgs[nPos] = pCppStack = *gpreg++;
                 ng++;
             }
@@ -260,14 +260,14 @@ static typelib_TypeClass cpp2uno_call(
 #ifdef CMC_DEBUG
     fprintf(stderr, "end of params\n");
 #endif
-
+    
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
     uno_Any * pUnoExc = &aUnoExc;
 
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)( pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
-
+    
     // in case an exception occured...
     if (pUnoExc)
     {
@@ -275,15 +275,15 @@ static typelib_TypeClass cpp2uno_call(
         for ( ; nTempIndizes--; )
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-
+            
             if (pParams[nIndex].bIn) // is in/inout => was constructed
                 uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-
-        CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, pThis->getBridge()->getUno2Cpp() );
+        
+        CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, pThis->getBridge()->getUno2Cpp() ); 
                 // has to destruct the any
         // is here for dummy
         return typelib_TypeClass_VOID;
@@ -295,7 +295,7 @@ static typelib_TypeClass cpp2uno_call(
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-
+            
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
@@ -305,7 +305,7 @@ static typelib_TypeClass cpp2uno_call(
             }
             // destroy temp uno param
             uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
-
+            
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return
@@ -346,7 +346,7 @@ static typelib_TypeClass cpp_mediate(
 
     long sf = *(long*)sp;
     void ** ovrflw = (void**)(sf + 112);
-
+    
     // gpreg:  [ret *], this, [other gpr params]
     // fpreg:  [fpr params]
     // ovrflw: [gpr or fpr params (properly aligned)]
@@ -371,7 +371,7 @@ static typelib_TypeClass cpp_mediate(
 #ifdef CMC_DEBUG
     fprintf(stderr, "pThis is %lx\n", pThis);
 #endif
-
+    
     pThis = static_cast< char * >(pThis) - nVtableOffset;
 
 #ifdef CMC_DEBUG
@@ -387,7 +387,7 @@ static typelib_TypeClass cpp_mediate(
 #ifdef CMC_DEBUG
     fprintf(stderr, "indexes are %d %d\n", nFunctionIndex, pTypeDescr->nMapFunctionIndexToMemberIndex);
 #endif
-
+    
     OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
@@ -395,7 +395,7 @@ static typelib_TypeClass cpp_mediate(
             rtl::OUString::createFromAscii("illegal vtable index!"),
             (XInterface *)pThis );
     }
-
+    
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
     OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
@@ -405,7 +405,7 @@ static typelib_TypeClass cpp_mediate(
 #endif
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
-
+    
     typelib_TypeClass eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
@@ -426,9 +426,9 @@ static typelib_TypeClass cpp_mediate(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
-
+            aParam.bIn		= sal_True;
+            aParam.bOut		= sal_False;
+            
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
                 0, // indicates void return
@@ -459,9 +459,9 @@ static typelib_TypeClass cpp_mediate(
                 XInterface * pInterface = 0;
                 (*pCppI->getBridge()->getCppEnv()->getRegisteredInterface)(
                     pCppI->getBridge()->getCppEnv(),
-                    (void **)&pInterface, pCppI->getOid().pData,
+                    (void **)&pInterface, pCppI->getOid().pData, 
                     (typelib_InterfaceTypeDescription *)pTD );
-
+            
                 if (pInterface)
                 {
                     ::uno_any_construct(
@@ -540,7 +540,7 @@ extern "C" void privateSnippetExecutor( ... )
         "stfd 11, 80(%1)\t\n"
         "stfd 12, 88(%1)\t\n"
         "stfd 13, 96(%1)\t\n"
-    : : "r" (gpreg), "r" (fpreg)
+    : : "r" (gpreg), "r" (fpreg) 
         : "r0", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10",
           "fr1", "fr2", "fr3", "fr4", "fr5", "fr6", "fr7", "fr8", "fr9",
           "fr10", "fr11", "fr12", "fr13"
@@ -564,7 +564,7 @@ extern "C" void privateSnippetExecutor( ... )
         break;
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
-            __asm__( "lbz 3,%0\n\t"
+            __asm__( "lbz 3,%0\n\t" 
                 : : "m" (nRegReturn[0]) );
             break;
         case typelib_TypeClass_CHAR:
@@ -586,15 +586,15 @@ extern "C" void privateSnippetExecutor( ... )
                 : : "m"(nRegReturn[0]) );
             break;
         case typelib_TypeClass_FLOAT:
-            __asm__( "lfs 1,%0\n\t"
+            __asm__( "lfs 1,%0\n\t" 
                 : : "m" (*((float*)nRegReturn)) );
             break;
         case typelib_TypeClass_DOUBLE:
-            __asm__( "lfd 1,%0\n\t"
+            __asm__( "lfd 1,%0\n\t" 
                 : : "m" (*((double*)nRegReturn)) );
             break;
         default:
-            __asm__( "ld 3,%0\n\t"
+            __asm__( "ld 3,%0\n\t" 
                 : : "m" (nRegReturn[0]) );
             break;
     }
@@ -602,7 +602,7 @@ extern "C" void privateSnippetExecutor( ... )
 
 const int codeSnippetSize = 24;
 
-unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
+unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, 
                               bool simpleRetType)
 {
 #ifdef CMC_DEBUG
@@ -619,7 +619,7 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sa
     memcpy(raw, (char*) privateSnippetExecutor, 16);
     raw[2] = (void*) nOffsetAndIndex;
 #ifdef CMC_DEBUG
-    fprintf(stderr, "in: offset/index is %x %x %d, %lx\n",
+    fprintf(stderr, "in: offset/index is %x %x %d, %lx\n", 
     nFunctionIndex, nVtableOffset, !simpleRetType, raw[2]);
 #endif
     return (code + codeSnippetSize);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ module com { module sun { module star { module xml { module input {
 interface XElement : com::sun::star::uno::XInterface
 {
     /** Gets the parent context.
-
+        
         @return
                 parent context
     */
     XElement getParent();
-
+    
     /** Gets the localname of this element.
-
+        
         @return
                 localname of this element
     */
@@ -61,14 +61,14 @@ interface XElement : com::sun::star::uno::XInterface
     long getUid();
 
     /** Gets the attributes of this element.
-
+        
         @return
                 attributes of this element
     */
     XAttributes getAttributes();
-
+    
     /** Called upon each occuring child element.
-
+        
         @param uid
                namespace uid of element
         @param localName
@@ -81,15 +81,15 @@ interface XElement : com::sun::star::uno::XInterface
     XElement startChildElement(
         [in] long uid, [in] string localName, [in] XAttributes xAttributes )
         raises (com::sun::star::xml::sax::SAXException);
-
+    
     /** Called upon retrieval of characters.
-
+        
         @param chars
                characters
     */
     void characters( [in] string chars )
         raises (com::sun::star::xml::sax::SAXException);
-
+    
     /** Receives notification of white space that can be ignored.
 
         @param whitespace
@@ -108,7 +108,7 @@ interface XElement : com::sun::star::uno::XInterface
     void processingInstruction(
         [in] string target, [in] string data )
         raises (com::sun::star::xml::sax::SAXException);
-
+    
     /** Receives notification of element closing.
      */
     void endElement()

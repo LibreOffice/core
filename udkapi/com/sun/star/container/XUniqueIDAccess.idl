@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,42 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_container_XUniqueIDAccess_idl__
-#define __com_sun_star_container_XUniqueIDAccess_idl__
-
-#ifndef __com_sun_star_container_XElementAccess_idl__
-#include <com/sun/star/container/XElementAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-//=============================================================================
-
-module com {  module sun {  module star {  module container {
-
+#ifndef __com_sun_star_container_XUniqueIDAccess_idl__ 
+#define __com_sun_star_container_XUniqueIDAccess_idl__ 
+ 
+#ifndef __com_sun_star_container_XElementAccess_idl__ 
+#include <com/sun/star/container/XElementAccess.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
+#include <com/sun/star/container/NoSuchElementException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
+#include <com/sun/star/lang/WrappedTargetException.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module container {  
+ 
 /** makes it possible to access contents via a unique ID.
  */
 published interface XUniqueIDAccess: com::sun::star::uno::XInterface
-{
-    /** @returns
+{  
+    /** @returns 
         the element with the specified unique ID.
      */
-    any getByUniqueID( [in] string ID ) raises( com::sun::star::container::NoSuchElementException );
-
+    any getByUniqueID( [in] string ID ) raises( com::sun::star::container::NoSuchElementException ); 
+    
     /** removes the element with the specified unique ID from this
         container.
      */
-    void removeByUniqueID( [in] string ID ) raises( com::sun::star::container::NoSuchElementException );
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void removeByUniqueID( [in] string ID ) raises( com::sun::star::container::NoSuchElementException ); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

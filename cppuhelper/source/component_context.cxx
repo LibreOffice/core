@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
         TYPELIB_DANGER_GET( &pElementTypeDescr, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
 
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
-        sal_Int32 nElements    = pSequence->nElements;
+        sal_Int32 nElements	   = pSequence->nElements;
 
         if (nElements)
         {
@@ -385,7 +385,7 @@ public:
         throw (RuntimeException);
     virtual Reference<lang::XMultiComponentFactory> SAL_CALL getServiceManager()
         throw (RuntimeException);
-
+    
     // XNameContainer
     virtual void SAL_CALL insertByName(
         OUString const & name, Any const & element )
@@ -545,20 +545,20 @@ Any ComponentContext::lookupMap( OUString const & rName )
         return Any();
     }
 #endif
-
+    
     ResettableMutexGuard guard( m_mutex );
     t_map::const_iterator iFind( m_map.find( rName ) );
     if (iFind == m_map.end())
         return Any();
-
+    
     t_map::mapped_type pEntry = iFind->second;
     if (! pEntry->lateInit)
         return pEntry->value;
-
+    
     // late init singleton entry
     Reference< XInterface > xInstance;
     guard.clear();
-
+    
     try
     {
         Any usesService( getValueByName( rName + OUSTR("/service") ) );
@@ -569,7 +569,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
             args.realloc( 1 );
             args[ 0 ] = args_;
         }
-
+        
         Reference< lang::XSingleComponentFactory > xFac;
         if (usesService >>= xFac) // try via factory
         {
@@ -623,14 +623,14 @@ Any ComponentContext::lookupMap( OUString const & rName )
         throw lang::WrappedTargetRuntimeException(
             buf.makeStringAndClear(), static_cast<OWeakObject *>(this),caught );
     }
-
+    
     if (! xInstance.is())
     {
         throw RuntimeException(
             OUSTR("no service object raising singleton ") + rName,
             static_cast<OWeakObject *>(this) );
     }
-
+    
     Any ret;
     guard.reset();
     iFind = m_map.find( rName );
@@ -645,7 +645,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
         }
         else
             ret = pEntry->value;
-    }
+    }    
     guard.clear();
     try_dispose( xInstance );
     return ret;
@@ -663,7 +663,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
         else
             return makeAny( Reference<XComponentContext>(this) );
     }
-
+    
     Any ret( lookupMap( rName ) );
     if (!ret.hasValue() && m_xDelegate.is())
     {
@@ -883,7 +883,7 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
     {
         mapped_entries[nPos].bLateInitService = pEntries[nPos].bLateInitService;
         mapped_entries[nPos].name             = pEntries[nPos].name;
-
+        
         uno_type_any_constructAndConvert(&mapped_entries[nPos].value,
                                          const_cast<void *>(pEntries[nPos].value.getValue()),
                                          pEntries[nPos].value.getValueTypeRef(),

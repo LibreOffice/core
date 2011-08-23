@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module configuration {
+module com { module sun { module star { module configuration { 
 
 //=============================================================================
 /** provides access to and information about properties and subproperties
@@ -66,7 +66,7 @@ module com { module sun { module star { module configuration {
 */
 published service PropertyHierarchy
 {
-/** provides access to and information about the immediate properties of an implementation.
+/** provides access to and information about the immediate properties of an implementation. 
 */
     interface com::sun::star::beans::XPropertySet;
 
@@ -81,12 +81,12 @@ published service PropertyHierarchy
     interface com::sun::star::beans::XMultiPropertySet;
 
 /** provides access to and information about the whole hierarchy
- of properties and subproperties of an implementation.
+ of properties and subproperties of an implementation. 
 */
     interface com::sun::star::beans::XHierarchicalPropertySet;
 
 /** provides access to and information about the whole hierarchy
- of properties and subproperties of an implementation.
+ of properties and subproperties of an implementation. 
 
  <p>This interface allows retrieving or setting multiple properties at once.
  Accesses are guaranteed to occur as single atomic operations even if
@@ -99,6 +99,6 @@ published service PropertyHierarchy
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

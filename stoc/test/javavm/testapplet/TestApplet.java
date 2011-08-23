@@ -14,7 +14,7 @@ import java.net.MalformedURLException;
 /**
  *
  * @author  jl97489
- * @version
+ * @version 
  */
 public class TestApplet extends java.applet.Applet {
 
@@ -24,13 +24,13 @@ public class TestApplet extends java.applet.Applet {
     public void init () {
         setBackground( Color.green);
         resize( 300, 300);
-
+        
         // Security tests.
         File f= new File("d:\\temp\\javasecurity.txt");
         SecurityManager mgr= System.getSecurityManager();
         try {
             f.createNewFile();
-
+        
         // local connection
         URL url= new URL("http://localhost:8080/index.html");
         InputStream is= url.openStream();

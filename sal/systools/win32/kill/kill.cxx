@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,16 +49,16 @@
 #include <sal/macros.h>
 
 #ifndef SIGNULL
-#define SIGNULL 0
+#define SIGNULL	0
 #endif
 
 #ifndef SIGKILL
-#define SIGKILL 9
+#define SIGKILL	9
 #endif
 
 #include <signal.h>
 
-#define MAX_MODULES 1024
+#define MAX_MODULES	1024
 
 /////////////////////////////////////////////////////////////////////////////
 // Determines if a returned handle value is valid
@@ -78,29 +78,29 @@ static inline bool IsValidHandle( HANDLE handle )
 #else
 FARPROC WINAPI GetProcAddressEx( HANDLE hProcess, HMODULE hModule, LPCSTR lpProcName )
 {
-    FARPROC lpfnProcAddress = GetProcAddress( hModule, lpProcName );
+    FARPROC	lpfnProcAddress = GetProcAddress( hModule, lpProcName );
 
     if ( lpfnProcAddress )
     {
-        DWORD   dwProcessId = GetProcessId( hProcess );
+        DWORD	dwProcessId = GetProcessId( hProcess );
 
         if ( GetCurrentProcessId() != dwProcessId )
         {
-            FARPROC lpfnRemoteProcAddress = NULL;
-            TCHAR   szBaseName[MAX_PATH];
+            FARPROC	lpfnRemoteProcAddress = NULL;
+            TCHAR	szBaseName[MAX_PATH];
 
             if ( GetModuleBaseName( GetCurrentProcess(), hModule, szBaseName, SAL_N_ELEMENTS(szBaseName) ) )
             {
-                HMODULE ahModules[MAX_MODULES];
-                DWORD   cbNeeded = 0;
+                HMODULE	ahModules[MAX_MODULES];
+                DWORD	cbNeeded = 0;
 
                 if ( EnumProcessModules( hProcess, ahModules, sizeof(ahModules), &cbNeeded ) )
                 {
-                    ULONG   nModules = cbNeeded / sizeof(ahModules[0]);
+                    ULONG	nModules = cbNeeded / sizeof(ahModules[0]);
 
                     for ( ULONG n = 0; n < nModules; n++ )
                     {
-                        TCHAR   szRemoteBaseName[MAX_PATH];
+                        TCHAR	szRemoteBaseName[MAX_PATH];
 
                         if ( GetModuleBaseName(
                             hProcess, ahModules[n], szRemoteBaseName, SAL_N_ELEMENTS(szRemoteBaseName) ) &&
@@ -150,15 +150,15 @@ static DWORD SignalToExceptionCode( int signal )
 
 static BOOL RaiseSignalEx( HANDLE hProcess, int sig )
 {
-    DWORD   dwProcessId = GetProcessId( hProcess );
+    DWORD	dwProcessId = GetProcessId( hProcess );
 
-    HANDLE  hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, 0 );
-    HANDLE  hThread = 0;
+    HANDLE	hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, 0 );
+    HANDLE	hThread = 0;
     BOOL fSuccess = FALSE;
 
     if ( IsValidHandle(hSnapshot) )
     {
-        THREADENTRY32   te;
+        THREADENTRY32	te;
 
         te.dwSize = sizeof(te);
         fSuccess = Thread32First( hSnapshot, &te );
@@ -166,7 +166,7 @@ static BOOL RaiseSignalEx( HANDLE hProcess, int sig )
         {
             if ( te.th32OwnerProcessID == dwProcessId )
             {
-                hThread = OpenThread(
+                hThread = OpenThread( 
                     THREAD_SUSPEND_RESUME | THREAD_QUERY_INFORMATION |
                     THREAD_GET_CONTEXT | THREAD_SET_CONTEXT,
                     FALSE, te.th32ThreadID );
@@ -182,20 +182,20 @@ static BOOL RaiseSignalEx( HANDLE hProcess, int sig )
 
     if ( fSuccess )
     {
-        CONTEXT aContext;
+        CONTEXT	aContext;
 
         if ( SuspendThread( hThread ) != (DWORD)-1 )
         {
             ZeroMemory( &aContext, sizeof(aContext) );
             aContext.ContextFlags = CONTEXT_FULL;
-
+            
             fSuccess = GetThreadContext( hThread, &aContext );
 
             if ( fSuccess )
             {
                 if ( sig )
                 {
-                    DWORD   dwStackBuffer[] =
+                    DWORD	dwStackBuffer[] =
                     {
                         aContext.Eip,
                         SignalToExceptionCode( sig ),
@@ -218,7 +218,7 @@ static BOOL RaiseSignalEx( HANDLE hProcess, int sig )
 
             fSuccess = ResumeThread( hThread ) && fSuccess;
 
-            DWORD   dwLastError = GetLastError();
+            DWORD	dwLastError = GetLastError();
             CloseHandle( hThread );
             SetLastError( dwLastError );
 
@@ -257,9 +257,9 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
 
     const int NumSupportedSignals = SAL_N_ELEMENTS(SupportedSignals);
 
-    DWORD   dwMaxProcesses = *lpdwNumProcesses;
-    int     argc = __argc;
-    TCHAR   **argv = __targv;
+    DWORD	dwMaxProcesses = *lpdwNumProcesses;
+    int		argc = __argc;
+    TCHAR	**argv = __targv;
 
     *lpdwNumProcesses = 0;
 
@@ -282,7 +282,7 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
                   0 == lstrcmpi( argv[argn], TEXT("/h") ) ||
                   0 == lstrcmpi( argv[argn], TEXT("--help") ) )
         {
-            _tprintf(
+            _tprintf(  
                 _T("Terminates a process by sending a signal.\n\n")
                 _T("Usage: kill [ -l ] [ -signal ] pid ...\n\n")
                 _T("-l        Lists supported signals\n")
@@ -297,14 +297,14 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
         }
         else if ( argv[argn] && ( *argv[argn] == '-' || *argv[argn] == '/' ) )
         {
-            LPCTSTR argsig = CharNext( argv[argn] );
+            LPCTSTR	argsig = CharNext( argv[argn] );
 
-            int n;
+            int	n;
             for ( n = 0; n < NumSupportedSignals; n++ )
             {
                 _TCHAR *endptr = NULL;
 
-                if ( 0 == lstrcmpi( SupportedSignals[n].lpSignalName, argsig ) ||
+                if ( 0 == lstrcmpi( SupportedSignals[n].lpSignalName, argsig ) || 
                      _tcstoul( argsig, &endptr, 0 ) == static_cast< unsigned >(SupportedSignals[n].iSignalValue) && (!endptr || !*endptr) )
                 {
                     *pSig = SupportedSignals[n].iSignalValue;
@@ -314,10 +314,10 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
 
             if ( n >= NumSupportedSignals )
             {
-                _ftprintf( stderr,
+                _ftprintf( stderr,  
                     _T("kill: Illegal argument %s\n")
-                    _T("Type 'kill --help' to show allowed syntax.\n")
-                    _T("Type 'kill -l' to show supported signals.\n"),
+                    _T("Type 'kill --help' to show allowed syntax.\n") 
+                    _T("Type 'kill -l' to show supported signals.\n"), 
                     argv[argn] );
                 ExitProcess( 0 );
             }
@@ -325,11 +325,11 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
         else
         {
             unsigned long value = 0;
-            _TCHAR  *endptr = NULL;
-
+            _TCHAR	*endptr = NULL;
+            
             value = _tcstoul( argv[argn], &endptr, 0 );
 
-            if ( !endptr || !*endptr )
+            if ( !endptr || !*endptr ) 
             {
                 if ( *lpdwNumProcesses < dwMaxProcesses )
                 {
@@ -339,11 +339,11 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
             }
             else
             {
-                HANDLE  hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+                HANDLE	hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
 
                 if ( IsValidHandle( hSnapshot ) )
                 {
-                    PROCESSENTRY32  pe;
+                    PROCESSENTRY32	pe;
 
                     pe.dwSize = sizeof(pe);
                     BOOL fSuccess = Process32First( hSnapshot, &pe );
@@ -369,9 +369,9 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
 
     if ( !*lpdwNumProcesses )
     {
-        _ftprintf( stderr,
+        _ftprintf( stderr, 
             _T("kill: No process specified.\n")
-            _T("Use kill --help to show allowed syntax.\n")
+            _T("Use kill --help to show allowed syntax.\n") 
             );
         ExitProcess( 0 );
     }
@@ -399,16 +399,16 @@ void OutputSystemMessage( DWORD dwErrorCode )
 
 int _tmain()
 {
-    DWORD   dwProcessIds[1024];
-    DWORD   nProcesses = SAL_N_ELEMENTS(dwProcessIds);
-    int     sig = SIGTERM;
+    DWORD	dwProcessIds[1024];
+    DWORD	nProcesses = SAL_N_ELEMENTS(dwProcessIds);
+    int		sig = SIGTERM;
 
 
     ParseCommandArgs( dwProcessIds, &nProcesses, &sig );
 
     for ( ULONG n = 0; n < nProcesses; n++ )
     {
-        HANDLE  hProcess;
+        HANDLE	hProcess;
 
         _tprintf( _T("Sending signal to process id %d..."), dwProcessIds[n] );
         hProcess = OpenProcess( PROCESS_TERMINATE | PROCESS_CREATE_THREAD | SYNCHRONIZE |

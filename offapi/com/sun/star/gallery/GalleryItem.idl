@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@ service GalleryItem
     interface ::com::sun::star::beans::XPropertySet;
 
     /** The type of the Gallery item
-
+    
         @see GalleryItemType
     */
     [readonly, property] byte GalleryItemType;
-
+    
     /** the URL of the Gallery item
-
+    
         <p>The interpretation of the URL depends on the type
         of the Gallery item. In case of graphic and media items,
         the URL is a 'real' URL, in case of drawings it is a private
@@ -73,21 +73,21 @@ service GalleryItem
     /** the title of the Gallery item
      */
     [property] string Title;
-
+    
     /** the thumbnail of the Gallery item
-
+    
         <p>The thumbnail may be either a pixel or a vector graphic</p>
      */
     [readonly, property] com::sun::star::graphic::XGraphic Thumbnail;
-
+    
     /** the graphic content of the Gallery item
-
+    
         <p>This is an optional property and may not available for every item</p>
      */
     [optional, readonly, property ] ::com::sun::star::graphic::XGraphic Graphic;
-
+    
     /** the drawing content of the Gallery item
-
+    
         <p>This is an optional property and may not available for every item</p>
      */
     [optional, readonly, property ] ::com::sun::star::lang::XComponent Drawing;

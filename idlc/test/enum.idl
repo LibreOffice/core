@@ -16,7 +16,7 @@ enum Warning
     NO,
     USER = 2,
     WRONGPASSWORD = 4,
-    IDFAILURE
+    IDFAILURE	
 };
 
 

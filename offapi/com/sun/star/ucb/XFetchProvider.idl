@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ published interface XFetchProvider: com::sun::star::uno::XInterface
 
         @param bDirection
         <TRUE/>, if you want the rows to be read in the same order, as they
-        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
+        are contained in the result set	( <TRUE/> &lt;-&gt; forward step;
         <FALSE/> &lt;-&gt; backward step )
     */
     com::sun::star::ucb::FetchResult fetch( [in] long nRowStartPosition

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@ sub checkName($);
 sub incrementNewVersion($);
 sub incrementOldVersion($);
 sub incrementPolicyVersion($);
-my $usage =
-"The tool increments the minor version of assemblies and the major version of ".
+my $usage = 
+"The tool increments the minor version of assemblies and the major version of ". 
 "the respective policy files. This is only done if new uno types have been added since".
 "the last product upate. This information is obtained from the file which is passed as ".
 "argument changedTypes. The names in the version file must have a particular form. ".
@@ -45,7 +45,7 @@ my $usage =
 "If no new published types habe been added then no output, argument  newVersions, is written".
 "Usage is: \n increment_version.pl oldVersions  incVersions newVersions changedTypes\n\n".
 "oldVersion: Contains name value pairs, which are used for forming the config files of ".
-"the policy assemblies, for building the assemblies. \n\n".
+"the policy assemblies, for building the assemblies. \n\n". 
 "incVersions: File containing the names of which the versions are to be incremented. ".
 "Every line may only contain one name. The names must exactly match those from the ".
 "oldVersion file.\n\n".
@@ -58,7 +58,7 @@ my $sNameForm =
 "The names must end on one of these names: NEW_VERSION, OLD_VERSION, POLICY_VERSION\n".
 "For example, valid names are: \n".
 "CLI_URETYPES_NEW_VERSION\nCLI_URETYPES_OLD_VERSION\nCLI_URETYPES_POLICY_VERSION\n";
-
+              
 if (scalar @ARGV < 4) {
    print $usage;
    exit -1;
@@ -115,7 +115,7 @@ my @incVersions = readIncVersions($ARGV[1]);
 #read in oldVersions line by line and apply the increment operation
 open OLDVERSION, "$ARGV[0]" or die "Cannot open to $ARGV[0] $!";
 
-#open file we want to write to
+#open file we want to write to 
 open NEWVERSION, "> $ARGV[2]" or die "Cannot write to $ARGV[2] $!";
 
 print NEWVERSION processLine($_, @incVersions) while(<OLDVERSION>);
@@ -152,9 +152,9 @@ sub processLine($$)
     my $value = substr($line, $i + 1);
     $value = trim($value);
 
-    #Check if the entry shall be incremented, this information is in the second
+    #Check if the entry shall be incremented, this information is in the second 
     #argument
-    my $found;
+    my $found;		     
     for(@incVersions) {
     if ($_ eq $name) {
         $found = 1;
@@ -164,7 +164,7 @@ sub processLine($$)
     if ( ! defined($found)) {
      return $line;
     }
-
+ 
     #Check if the name represents a version we need to change
     if ($name =~ /NEW_VERSION$/)
     {
@@ -239,7 +239,7 @@ sub readIncVersions($)
     my $arg = $_[0];
     my @names;
 
-    while(<INC>)
+    while(<INC>) 
     {
     chomp;
     #Skip empty lines

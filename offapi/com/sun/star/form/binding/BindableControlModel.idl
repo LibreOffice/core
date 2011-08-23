@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #ifndef __com_sun_star_form_binding_XBindableValue_idl__
 #include <com/sun/star/form/binding/XBindableValue.idl>
 #endif
-#ifndef __com_sun_star_form_FormControlModel_idl__
+#ifndef __com_sun_star_form_FormControlModel_idl__ 
 #include <com/sun/star/form/FormControlModel.idl>
 #endif
 
@@ -53,7 +53,7 @@ service BindableControlModel
         binding is also established at the clone. Effectively, this means that
         both control model instances share the same binding instance.</p>
     */
-    service com::sun::star::form::FormControlModel;
+    service com::sun::star::form::FormControlModel; 
 
     /** specifies support for being bound to an external value
 

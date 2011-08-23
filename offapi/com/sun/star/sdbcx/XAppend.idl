@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,32 +24,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_XAppend_idl__
-#define __com_sun_star_sdbcx_XAppend_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
-#include <com/sun/star/container/ElementExistException.idl>
-#endif
-
- module com {  module sun {  module star {  module beans {
- published interface XPropertySet;
-};};};};
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbcx {
-
+#ifndef __com_sun_star_sdbcx_XAppend_idl__ 
+#define __com_sun_star_sdbcx_XAppend_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_ElementExistException_idl__ 
+#include <com/sun/star/container/ElementExistException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module beans { 
+ published interface XPropertySet; 
+};};};}; 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
 /** is used for creating and appending new objects to a specific container.
  */
 published interface XAppend: com::sun::star::uno::XInterface
-{
-
+{ 
+     
     /** creates a new object using the given descriptor and appends it
         to the related container.
         <b>
@@ -58,18 +58,18 @@ published interface XAppend: com::sun::star::uno::XInterface
         The descriptor will not be changed and can be used again to append another object.
         @param descriptor
             the descriptor which should be serve to append a new object
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    void appendByDescriptor([in]com::sun::star::beans::XPropertySet descriptor)
-        raises (com::sun::star::sdbc::SQLException,
-                com::sun::star::container::ElementExistException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    void appendByDescriptor([in]com::sun::star::beans::XPropertySet descriptor) 
+        raises (com::sun::star::sdbc::SQLException, 
+                com::sun::star::container::ElementExistException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

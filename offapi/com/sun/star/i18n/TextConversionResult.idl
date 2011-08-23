@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,15 +49,15 @@ published struct TextConversionResult
 {
     /** The boundary of the first convertible word in the given text.
 
-        <p>If there is no convertible word found in the text, <var>startPos</var>
-        and <var>endPos</var> for Boundary equal 0.
+        <p>If there is no convertible word found in the text, <var>startPos</var> 
+        and <var>endPos</var> for Boundary equal 0. 
     */
     ::com::sun::star::i18n::Boundary Boundary;
 
     /** A list of replacement candidates for the first convertible word
         found in the given text.
     */
-    sequence < string >     Candidates;
+    sequence < string >		Candidates;
 };
 
 //=============================================================================

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace bridges_urp
         MutexGuard guard;
         FILE *f;
     };
-
+    
     void urp_logCall( urp_BridgeImpl *pBridgeImpl, sal_Int32 nSize, sal_Int32 nUseData, sal_Bool bSynchron ,
                       const ::rtl::OUString &sMethodName )
     {

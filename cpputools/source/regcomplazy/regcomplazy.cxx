@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@
 #include <registry/registry.hxx>
 
 
-#define OSToOUS(x) ::rtl::OStringToOUString(x, osl_getThreadTextEncoding())
-#define OUSToOS(x) ::rtl::OUStringToOString(x, osl_getThreadTextEncoding())
+#define OSToOUS(x) ::rtl::OStringToOUString(x, osl_getThreadTextEncoding()) 
+#define OUSToOS(x) ::rtl::OUStringToOString(x, osl_getThreadTextEncoding()) 
 using namespace ::rtl;
 
 typedef ::std::vector< ::rtl::OString > OSVector;
 
-struct CompDescriptor {
+struct CompDescriptor {    
     OString sImplementationName;
     OString sComponentName;
     OString sLoaderName;
@@ -111,8 +111,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         size_t totalSize = 0;
         size_t readSize  = 0;
         char   pBuffer[513];
-
-        while ( !feof(fDescr) )
+        
+        while ( !feof(fDescr) )            
         {
             if ( (readSize = fread(pBuffer, 1, 512, fDescr)) > 0
                  && !ferror(fDescr) ) {
@@ -121,19 +121,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     sBuffer.ensureCapacity(totalSize * 2);
 
                 sBuffer.append(pBuffer, readSize);
-            }
+            }            
         }
     fclose(fDescr);
     fDescr = 0; // just to be sure noone tries to use the file ever after
     }
-
+    
     OString sDescr = sBuffer.makeStringAndClear();
     sal_Int32 nTokenIndex = 0;
 
     CDescrVector vDescr;
     CompDescriptor descr;
     bool bFirst = true;
-
+    
     do {
         OString sTmp = sDescr.getToken(0, '\x0A', nTokenIndex);
         OString sToken(sTmp);
@@ -160,15 +160,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                   (sToken.getLength() > 0) &&
                   (sToken.pData->buffer[0] != '[') ) {
             descr.vSupportedServices.push_back(sToken);
-        }
+        }      
     } while (nTokenIndex >= 0 );
     // insert the last descriptor
     vDescr.push_back(descr);
 
     Registry *pReg = new Registry;
-
+    
     RegistryKey rootKey, key, subKey, serviceKey;
-
+    
     if (pReg->open(reg_url, REG_READWRITE))
     {
         if (pReg->create(reg_url))
@@ -185,7 +185,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
 
     CDescrVector::const_iterator comp_iter = vDescr.begin();
-    do {
+    do {  
         OString sImplName = (*comp_iter).sImplementationName;
         OUStringBuffer sbImpl;
         sbImpl.appendAscii("/IMPLEMENTATIONS/");
@@ -204,31 +204,31 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 return 1;
             }
         }
-
+        
         OString sLoaderName = (*comp_iter).sLoaderName;
         OUString usKeyName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO/ACTIVATOR")));
         key.createKey(usKeyName, subKey);
         subKey.setValue(OUString(), RG_VALUETYPE_STRING,
                         (sal_Char*)sLoaderName.getStr(), sLoaderName.getLength()+1);
-
+        
         OString sCompName = (*comp_iter).sComponentName;
         usKeyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO/LOCATION"));
         key.createKey(usKeyName, subKey);
         subKey.setValue(OUString(), RG_VALUETYPE_STRING,
                         (sal_Char*)sCompName.getStr(), sCompName.getLength()+1);
-
+        
         usKeyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO/SERVICES"));
         key.createKey(usKeyName, subKey);
-
+        
         rootKey.createKey(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/SERVICES")), serviceKey);
-
+        
         OSVector::const_iterator serv_iter = ((*comp_iter).vSupportedServices).begin();
         OUString usServiceKeyName;
-        do {
+        do {            
             usServiceKeyName = OSToOUS(*serv_iter);
             // write service key in impl section
             subKey.createKey(usServiceKeyName, key);
-
+            
             if (serviceKey.openKey(usServiceKeyName, key) == REG_NO_ERROR) {
                 RegistryValueList<sal_Char*> valueList;
                 serviceKey.getStringListValue(usServiceKeyName, valueList);
@@ -252,33 +252,33 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 // free memory
                 rtl_freeMemory(pImplList[0]);
                 rtl_freeMemory(pImplList);
-
+                
             } else {
                 serviceKey.createKey(usServiceKeyName, key);
-
+                
                 sal_Char* pImplList[1];
                 pImplList[0] = (sal_Char*)rtl_allocateZeroMemory(
                     sImplName.getLength()+1 * sizeof(sal_Char));
                 rtl_copyMemory(pImplList[0], (sal_Char*)sImplName.getStr(),
                                sImplName.getLength()+1);
                 key.setStringListValue(OUString(), pImplList, 1);
-
+                
                 // free memory
                 rtl_freeMemory(pImplList[0]);
-            }
+            }          
             serv_iter++;
         } while (serv_iter != (*comp_iter).vSupportedServices.end());
-
+        
         comp_iter++;
     } while (comp_iter != vDescr.end());
-
+        
     key.closeKey();
     subKey.closeKey();
     serviceKey.closeKey();
     rootKey.closeKey();
     pReg->close();
     delete pReg;
-
+    
     return 0;
 }
 

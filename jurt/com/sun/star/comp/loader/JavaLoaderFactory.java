@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,51 +40,51 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
     };
 
     private static final boolean DEBUG = false;
-
+    
     private static final void DEBUG(String dbg) {
         if (DEBUG)
             System.err.println(" >>> JavaLoaderFactory - " + dbg);
     }
-
+        
     protected XMultiServiceFactory multiServiceFactory = null;
-
+    
     /** default constructor
      */
-//      public JavaLoaderFactory() {}
-
+//  	public JavaLoaderFactory() {}
+    
     public JavaLoaderFactory(XMultiServiceFactory factory) {
         multiServiceFactory = factory;
     }
-
-    public java.lang.Object createInstance()
-            throws com.sun.star.uno.Exception,
+    
+    public java.lang.Object createInstance() 
+            throws com.sun.star.uno.Exception, 
                    com.sun.star.uno.RuntimeException
     {
         return new JavaLoader(multiServiceFactory);
     }
 
-    public java.lang.Object createInstanceWithArguments( java.lang.Object[] args )
-            throws com.sun.star.uno.Exception,
+    public java.lang.Object createInstanceWithArguments( java.lang.Object[] args ) 
+            throws com.sun.star.uno.Exception, 
                    com.sun.star.uno.RuntimeException
     {
         JavaLoader loader = new JavaLoader();
         loader.initialize(args);
-
+        
         return loader;
     }
-
+    
     /** implements the XServiceInfo interface
      */
-    public String getImplementationName()
-            throws com.sun.star.uno.RuntimeException
+    public String getImplementationName() 
+            throws com.sun.star.uno.RuntimeException 
     {
         return JavaLoader.class.getName();
     }
-
+    
     /** implements the XServiceInfo interface
      */
-    public boolean supportsService(String serviceName)
-            throws com.sun.star.uno.RuntimeException
+    public boolean supportsService(String serviceName) 
+            throws com.sun.star.uno.RuntimeException 
     {
         for ( int i = 0; i < supportedServices.length; i++ ) {
             if ( supportedServices[i].equals(serviceName) )
@@ -92,11 +92,11 @@ public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
         }
         return false;
     }
-
+    
     /** implements the XServiceInfo interface
      */
-    public String[] getSupportedServiceNames()
-            throws com.sun.star.uno.RuntimeException
+    public String[] getSupportedServiceNames() 
+            throws com.sun.star.uno.RuntimeException 
     {
         return supportedServices;
     }

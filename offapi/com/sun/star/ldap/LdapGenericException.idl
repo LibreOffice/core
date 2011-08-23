@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,16 +34,16 @@
 
 module com { module sun { module star { module ldap {
 
-/**
+/** 
   Generic exception occurring during access to an LDAP server.
-  The actual LDAP error code is provided for more refined
+  The actual LDAP error code is provided for more refined 
   error management.
 
      @since OOo 1.1.2
   */
-published exception LdapGenericException : ::com::sun::star::uno::Exception
+published exception LdapGenericException : ::com::sun::star::uno::Exception 
 {
-    /**
+    /** 
       LDAP error code, see LDAP SDK documentation for complete
       list of possible values and their meaning.
      */
@@ -52,4 +52,4 @@ published exception LdapGenericException : ::com::sun::star::uno::Exception
 
 } ; } ; } ; } ;
 
-#endif
+#endif 

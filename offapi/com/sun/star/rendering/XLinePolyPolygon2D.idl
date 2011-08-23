@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_rendering_XLinePolyPolygon2D_idl__
 #define __com_sun_star_rendering_XLinePolyPolygon2D_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
 #endif
@@ -51,7 +51,7 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
     /** Query subset of this poly-polygon, starting at the given
         polygon and the given point within that polygon, and
         containing the specified number of polygons and points in the
-        last polygon.
+        last polygon. 
 
         @param nPolygonIndex
         The index number of the polygon to start with extracting
@@ -74,7 +74,7 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
         from the last polygon.
      */
     sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > getPoints( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
+        raises (com::sun::star::lang::IndexOutOfBoundsException); 
 
     //-------------------------------------------------------------------------
 
@@ -97,17 +97,17 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
         specified point data.
 
         @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
-        if one of the given values exceed the permissible range.
+        if one of the given values exceed the permissible range.        
      */
     void setPoints( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points, [in] long nPolygonIndex )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
+        raises (com::sun::star::lang::IndexOutOfBoundsException); 
 
     //-------------------------------------------------------------------------
 
     /** Get a single point from the poly-polygon
      */
-    ::com::sun::star::geometry::RealPoint2D getPoint( [in] long nPolygonIndex, [in] long nPointIndex )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
+    ::com::sun::star::geometry::RealPoint2D	getPoint( [in] long nPolygonIndex, [in] long nPointIndex )
+        raises (com::sun::star::lang::IndexOutOfBoundsException); 
 
     //-------------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
         the poly-polygon will not be changed by this method.
      */
     void setPoint( [in] ::com::sun::star::geometry::RealPoint2D point, [in] long nPolygonIndex, [in] long nPointIndex )
-        raises (com::sun::star::lang::IndexOutOfBoundsException);
+        raises (com::sun::star::lang::IndexOutOfBoundsException); 
 };
 
 }; }; }; };

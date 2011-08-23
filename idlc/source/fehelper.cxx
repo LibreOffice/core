@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ FeDeclarator::FeDeclarator(const OString& name, DeclaratorType declType, AstDecl
     , m_name(name)
     , m_declType(declType)
 {
-}
+}	
 
 FeDeclarator::~FeDeclarator()
 {
-}
+}	
 
 sal_Bool FeDeclarator::checkType(AstDeclaration const * type)
 {
@@ -57,27 +57,27 @@ sal_Bool FeDeclarator::checkType(AstDeclaration const * type)
         return sal_False;
     else
         return sal_True;
-}
+}	
 
 AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
 {
-    AstArray*   pArray;
-    AstType*    pType;
+    AstArray*	pArray;
+    AstType*	pType;
 
     if ( pDecl == 0 )
     {
         return NULL;
     }
-    if ( !pDecl->isType() )
+    if ( !pDecl->isType() ) 
     {
         idlc()->error()->noTypeError(pDecl);
         return NULL;
     }
     pType = (AstType*)pDecl;
-    if (m_declType == FD_simple || m_pComplexPart == NULL)
+    if (m_declType == FD_simple || m_pComplexPart == NULL) 
         return pType;
 
-    if (m_pComplexPart->getNodeType() == NT_array)
+    if (m_pComplexPart->getNodeType() == NT_array) 
     {
         pArray = (AstArray*)m_pComplexPart;
         pArray->setType(pType);
@@ -90,14 +90,14 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
             if ( (AstDeclaration*)pArray != pDecl2 )
             {
                 delete m_pComplexPart;
-                m_pComplexPart = pDecl2;
+                m_pComplexPart = pDecl2;	
             }
         }
         return pArray;
     }
 
     return NULL; // return through this statement should not happen
-}
+}	
 
 FeInheritanceHeader::FeInheritanceHeader(
     NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits,

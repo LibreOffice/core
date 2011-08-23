@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,59 +24,59 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XWindow_idl__
-#define __com_sun_star_awt_XWindow_idl__
-
-#ifndef __com_sun_star_lang_XComponent_idl__
-#include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
-#include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindowListener_idl__
-#include <com/sun/star/awt/XWindowListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XFocusListener_idl__
-#include <com/sun/star/awt/XFocusListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XKeyListener_idl__
-#include <com/sun/star/awt/XKeyListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XMouseListener_idl__
-#include <com/sun/star/awt/XMouseListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XMouseMotionListener_idl__
-#include <com/sun/star/awt/XMouseMotionListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XPaintListener_idl__
-#include <com/sun/star/awt/XPaintListener.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_XWindow_idl__ 
+#define __com_sun_star_awt_XWindow_idl__ 
+ 
+#ifndef __com_sun_star_lang_XComponent_idl__ 
+#include <com/sun/star/lang/XComponent.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_Rectangle_idl__ 
+#include <com/sun/star/awt/Rectangle.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XWindowListener_idl__ 
+#include <com/sun/star/awt/XWindowListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XFocusListener_idl__ 
+#include <com/sun/star/awt/XFocusListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XKeyListener_idl__ 
+#include <com/sun/star/awt/XKeyListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XMouseListener_idl__ 
+#include <com/sun/star/awt/XMouseListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XMouseMotionListener_idl__ 
+#include <com/sun/star/awt/XMouseMotionListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XPaintListener_idl__ 
+#include <com/sun/star/awt/XPaintListener.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** specifies the basic operations for a window component.
-
-    <p>A window is a rectangular region on an output device with
+        
+    <p>A window is a rectangular region on an output device with 
     its own position, size, and internal coordinate system.
     A window is used for displaying data. In addition, the window
     receives events from the user.</p>
  */
 published interface XWindow: com::sun::star::lang::XComponent
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** sets the outer bounds of the window.
 
         @param X
@@ -93,118 +93,118 @@ published interface XWindow: com::sun::star::lang::XComponent
 
         @param Flags
         Flags are of type <type>PosSize</type> and specify, which parameters
-        are taken into account when setting the outer bounds of the window.
+        are taken into account when setting the outer bounds of the window.    
     */
-    [oneway] void setPosSize( [in] long X,
-             [in] long Y,
-             [in] long Width,
-             [in] long Height,
-             [in] short Flags );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void setPosSize( [in] long X, 
+             [in] long Y, 
+             [in] long Width, 
+             [in] long Height, 
+             [in] short Flags ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** returns the outer bounds of the window.
      */
-    com::sun::star::awt::Rectangle getPosSize();
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::awt::Rectangle getPosSize(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** shows or hides the window depending on the parameter.
      */
-    [oneway] void setVisible( [in] boolean Visible );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void setVisible( [in] boolean Visible ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** enables or disables the window depending on the parameter.
      */
-    [oneway] void setEnable( [in] boolean Enable );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void setEnable( [in] boolean Enable ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** sets the focus to the window.
      */
-    [oneway] void setFocus();
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void setFocus(); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** adds a window listener to the object.
 
         @param xListener
             the listener to add. If this listener also supports the <type>XWindowListener2</type> interface,
             it will receive the additional events declared in XWindowListener2.
      */
-    [oneway] void addWindowListener( [in] com::sun::star::awt::XWindowListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void addWindowListener( [in] com::sun::star::awt::XWindowListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes the specified window listener from the listener list.
      */
-    [oneway] void removeWindowListener( [in] com::sun::star::awt::XWindowListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void removeWindowListener( [in] com::sun::star::awt::XWindowListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** adds a focus listener to the object.
      */
-    [oneway] void addFocusListener( [in] com::sun::star::awt::XFocusListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void addFocusListener( [in] com::sun::star::awt::XFocusListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes the specified focus listener from the listener list.
      */
-    [oneway] void removeFocusListener( [in] com::sun::star::awt::XFocusListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void removeFocusListener( [in] com::sun::star::awt::XFocusListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** adds a key listener to the object.
      */
-    [oneway] void addKeyListener( [in] com::sun::star::awt::XKeyListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void addKeyListener( [in] com::sun::star::awt::XKeyListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes the specified key listener from the listener list.
      */
-    [oneway] void removeKeyListener( [in] com::sun::star::awt::XKeyListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void removeKeyListener( [in] com::sun::star::awt::XKeyListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** adds a mouse listener to the object.
      */
-    [oneway] void addMouseListener( [in] com::sun::star::awt::XMouseListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void addMouseListener( [in] com::sun::star::awt::XMouseListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes the specified mouse listener from the listener list.
      */
-    [oneway] void removeMouseListener( [in] com::sun::star::awt::XMouseListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void removeMouseListener( [in] com::sun::star::awt::XMouseListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** adds a mouse motion listener to the object.
      */
-    [oneway] void addMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void addMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes the specified mouse motion listener from the listener list.
      */
-    [oneway] void removeMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void removeMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** adds a paint listener to the object.
      */
-    [oneway] void addPaintListener( [in] com::sun::star::awt::XPaintListener xListener );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void addPaintListener( [in] com::sun::star::awt::XPaintListener xListener ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** removes the specified paint listener from the listener list.
      */
-    [oneway] void removePaintListener( [in] com::sun::star::awt::XPaintListener xListener );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [oneway] void removePaintListener( [in] com::sun::star::awt::XPaintListener xListener ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

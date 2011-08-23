@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,48 +25,48 @@
  *
  ************************************************************************/
 #ifndef __com_sun_star_packages_zip_ZipFileAccess_idl__
-#define __com_sun_star_packages_zip_ZipFileAccess_idl__
+#define __com_sun_star_packages_zip_ZipFileAccess_idl__ 
+ 
+#ifndef __com_sun_star_packages_zip_XZipFileAccess_idl__ 
+#include <com/sun/star/packages/zip/XZipFileAccess.idl> 
+#endif 
 
-#ifndef __com_sun_star_packages_zip_XZipFileAccess_idl__
-#include <com/sun/star/packages/zip/XZipFileAccess.idl>
-#endif
+#ifndef __com_sun_star_lang_XInitialization_idl__ 
+#include <com/sun/star/lang/XInitialization.idl> 
+#endif 
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
-#include <com/sun/star/lang/XInitialization.idl>
-#endif
+#ifndef __com_sun_star_lang_XComponent_idl__ 
+#include <com/sun/star/lang/XComponent.idl> 
+#endif 
 
-#ifndef __com_sun_star_lang_XComponent_idl__
-#include <com/sun/star/lang/XComponent.idl>
-#endif
+#ifndef __com_sun_star_container_XNameAccess_idl__ 
+#include <com/sun/star/container/XNameAccess.idl> 
+#endif 
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
-#include <com/sun/star/container/XNameAccess.idl>
-#endif
-
-#ifndef __com_sun_star_io_IOException_idl__
-#include <com/sun/star/io/IOException.idl>
-#endif
-
-
-//=============================================================================
-
+#ifndef __com_sun_star_io_IOException_idl__ 
+#include <com/sun/star/io/IOException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
 module com {  module sun {  module star {   module packages {  module zip {
-
-//=============================================================================
-
+ 
+//============================================================================= 
+ 
 /** allows to get reading access to nonencrypted entries inside zip file.
  */
 service ZipFileAccess
-{
+{ 
     interface XZipFileAccess;
     interface ::com::sun::star::container::XNameAccess;
     interface ::com::sun::star::lang::XInitialization;
     interface ::com::sun::star::lang::XComponent;
-};
-
-//=============================================================================
-
+}; 
+ 
+//============================================================================= 
+ 
 }; }; }; }; };
-
-#endif
+ 
+#endif 
 

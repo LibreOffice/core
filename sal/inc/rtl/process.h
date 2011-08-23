@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,12 +33,12 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif	
 
 
 /**
     gets a 16-byte fixed size identifier which is guaranteed not to change
-    during the current process.
+    during the current process. 
 
     The current implementation creates a 16-byte uuid without using
     the ethernet address of system. Thus the
@@ -55,17 +55,17 @@ void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
     This functions differs from osl_getCommandArg() in filtering any bootstrap values
     given by command args, that means that all arguments starting with "-env:" will be
     ignored by this function.
-
+    
     @param nArg [in] The number of the argument to return.
     @param strCommandArg [out] The string receives the nArg-th command-line argument.
-    @return osl_Process_E_None or does not return.
+    @return osl_Process_E_None or does not return. 	
     @see osl_getCommandArg()
     @see rtl_getCommandArgCount()
 */
 oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
 
 /** Returns the number of command line arguments at process start.
-
+    
     This functions differs from osl_getCommandArg() in filtering any bootstrap values
     given by command args, that means that all arguments starting with "-env:" will be
     ignored by this function.

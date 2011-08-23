@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,40 +24,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_configuration_backend_XLayerHandler_idl__
+#ifndef __com_sun_star_configuration_backend_XLayerHandler_idl__ 
 #define __com_sun_star_configuration_backend_XLayerHandler_idl__
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_configuration_backend_TemplateIdentifier_idl__ 
+#include <com/sun/star/configuration/backend/TemplateIdentifier.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__ 
+#include <com/sun/star/configuration/backend/MalformedDataException.idl> 
+#endif 
 
-#ifndef __com_sun_star_configuration_backend_TemplateIdentifier_idl__
-#include <com/sun/star/configuration/backend/TemplateIdentifier.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
-#include <com/sun/star/configuration/backend/MalformedDataException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
+#include <com/sun/star/lang/WrappedTargetException.idl> 
+#endif 
 
 //=============================================================================
-
+ 
 module com { module sun { module star { module configuration { module backend {
-
-//=============================================================================
-
-/** receives a description of a configuration layer
+ 
+//============================================================================= 
+ 
+/** receives a description of a configuration layer 
     as a sequence of events.
 
     @since OOo 1.1.2
  */
 published interface XLayerHandler: ::com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a layer description is started
         for a component.
 
@@ -72,11 +72,11 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void startLayer(  )
+    void startLayer(  ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a layer description is complete.
 
         <p> Must match a previous call to <member>XLayerHandler::startLayer()</member>.
@@ -86,7 +86,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if invalid data is detected in the layer</li>
             <li>if there is a unfinished subnode in progress</li>
-            <li>if no layer is started at all</li>
+            <li>if no layer is started at all</li>	
             <li>if the layer tries to override read-only or final data</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -94,15 +94,15 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void endLayer(  )
+    void endLayer(  ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a description of a node override is started.
 
-        <p> Subsequent calls describe overrides to properties and members
-            or items of the node until a matching call to
+        <p> Subsequent calls describe overrides to properties and members 
+            or items of the node until a matching call to 
             <member>XLayerHandler::endNode()</member>is encountered.
         </p>
 
@@ -112,15 +112,15 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies attribute values to be applied to the node.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.
             </p>
-            <p> The attributes are combined cumulatively with those
+            <p>	The attributes are combined cumulatively with those 
                 set on lower layers.
             </p>
 
         @param bClear
-            if <TRUE/>, specifies that the node should be cleared to an empty
+            if <TRUE/>, specifies that the node should be cleared to an empty 
             state by removing all non-mandatory children from lower layers prior
             to applying the overrides.
 
@@ -141,23 +141,23 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @see com::sun::star::configuration::backend::NodeAttribute
      */
     void overrideNode( [in] string aName,
-                       [in] short  aAttributes,
-                       [in] boolean bClear )
+                       [in] short  aAttributes, 
+                       [in] boolean bClear ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a new item is started.
 
-        <p> The current node must be a set and
+        <p> The current node must be a set and 
             a preexisting item (if any) must be removeable.
         </p>
         <p> The new item will be created from the default template
             of the set.
         </p>
         <p> Subsequent calls describe the difference from the template
-            of properties and members or items of the node until
-            a matching call to <member>XLayerHandler::endNode()</member>
+            of properties and members or items of the node until 
+            a matching call to <member>XLayerHandler::endNode()</member> 
             is encountered.
         </p>
 
@@ -167,7 +167,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies attribute values to be applied to the new node.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.  Note that
                 <member>NodeAttribute::FUSE</member> has an impact on the
                 semantics of this method.
@@ -179,7 +179,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <li>if there already was a change to a node of that name</li>
             <li>if the template for the new node is not found</li>
             <li>if an item of that name on a lower layer is not removeable</li>
-            <li>if the name is not a valid item name</li>
+            <li>if the name is not a valid item name</li> 
             <li>if the attributes are not valid for the node</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -189,21 +189,21 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void addOrReplaceNode(  [in] string aName,
-                            [in] short  aAttributes )
+    void addOrReplaceNode(	[in] string aName,
+                            [in] short  aAttributes ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
-    /** receives notification that a new item based on a particular template
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that a new item based on a particular template 
         is started.
 
-        <p> The current node must be a set and
+        <p> The current node must be a set and 
             a preexisting item (if any) must be removeable.
         </p>
         <p> Subsequent calls describe the difference from the template
-            of properties and members or items of the node until
-            a matching call to <member>XLayerHandler::endNode()</member>
+            of properties and members or items of the node until 
+            a matching call to <member>XLayerHandler::endNode()</member> 
             is encountered.
         </p>
 
@@ -216,7 +216,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies attribute values to be applied to the new node.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.  Note that
                 <member>NodeAttribute::FUSE</member> has an impact on the
                 semantics of this method.
@@ -239,17 +239,17 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void addOrReplaceNodeFromTemplate(  [in] string aName,
+    void addOrReplaceNodeFromTemplate(	[in] string aName,
                                         [in] TemplateIdentifier aTemplate,
-                                        [in] short  aAttributes )
+                                        [in] short  aAttributes ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a node description is complete.
 
-        <p> Must match the last open call to
-            <member>XLayerHandler::overrideNode()</member>,
+        <p> Must match the last open call to 
+            <member>XLayerHandler::overrideNode()</member>, 
             <member>XLayerHandler::addOrReplaceNode()</member> or
             <member>XLayerHandler::addOrReplaceNodeFromTemplate()</member>.
         </p>
@@ -257,21 +257,21 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
             <li>if invalid data is detected in the node</li>
-            <li>if no node is started at all</li>
+            <li>if no node is started at all</li>	
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
 
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void endNode(  )
+    void endNode(  ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that a node is dropped from a set. 
 
-    /** receives notification that a node is dropped from a set.
-
-        <p> The current node must be a set and
+        <p> The current node must be a set and 
             the item must be removeable.
         </p>
 
@@ -291,15 +291,15 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void dropNode( [in] string aName )
+    void dropNode( [in] string aName ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that an existing property is modified.
 
-        <p> Subsequent calls describe new value(s) for the property until a
-            matching call to <member>XLayerHandler::endProperty()</member>
+        <p> Subsequent calls describe new value(s) for the property until a 
+            matching call to <member>XLayerHandler::endProperty()</member> 
             is encountered.
         </p>
 
@@ -309,38 +309,38 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies the new attributes of the property.
 
-            <p> The value is a combination of
+            <p> The value is a combination of 
                 <type>NodeAttribute</type> flags.
             </p>
-            <p> The attributes are combined cumulatively with those
+            <p>	The attributes are combined cumulatively with those 
                 set on lower layers.
             </p>
 
         @param aType
             specifies the type of the property.
 
-            <p> This must be the same type as is already defined in the schema
+            <p> This must be the same type as is already defined in the schema 
                 or lower layers, unless the previous type was unspecified
-                (as indicated by
+                (as indicated by 
                 <const scope="com::sun::star::uno">TypeClass::ANY</const>.)
             </p>
-            <p> A <void/> type indicates that the type is unspecified
-                in this layer.
-                In this case any subsequent value may be of a generic type
-                (e.g. <atom>string</atom> or - for list values -
-                <atom dim="[]">string</atom>.) Such values may be
-                converted to the type defined in the schema by
+            <p> A <void/> type indicates that the type is unspecified 
+                in this layer. 
+                In this case any subsequent value may be of a generic type 
+                (e.g. <atom>string</atom> or - for list values - 
+                <atom dim="[]">string</atom>.) Such values may be 
+                converted to the type defined in the schema by 
                 the implementation.
             </p>
 
         @param bClear
-            if <TRUE/>, specifies that the property should be cleared to an empty
+            if <TRUE/>, specifies that the property should be cleared to an empty 
             state by discarding all values from lower layers prior
-            to applying the overrides.
+            to applying the overrides. 
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
-            <li>if there isn't a group or extensible node in progress currently</li>
+            <li>if there isn't a group or extensible node in progress currently</li> 
             <li>if there already was a change to a property of that name</li>
             <li>if there is no property with that name</li>
             <li>if the property is read-only</li>
@@ -356,27 +356,27 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void overrideProperty(  [in] string aName,
-                             [in] short aAttributes,
-                            [in] type aType,
-                            [in] boolean bClear )
+    void overrideProperty(  [in] string aName, 
+                             [in] short aAttributes, 
+                            [in] type aType, 
+                            [in] boolean bClear ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-
-    //-------------------------------------------------------------------------
-
-    /** receives notification that the value of the current property
+                    com::sun::star::lang::WrappedTargetException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that the value of the current property 
         is overridden. .
 
         @param aValue
             specifies the new value of the property.
 
-            <p> The value must match the type of the current property.
-                If the property does not have the
+            <p> The value must match the type of the current property. 
+                If the property does not have the 
                 <const>SchemaAttribute::REQUIRED</const> flag set,
                 the value can be <void/>.
             </p>
-            <p> If the current property is localized, this value applies
+            <p> If the current property is localized, this value applies 
                 to the default locale.
             </p>
 
@@ -384,7 +384,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a property in progress currently</li>
             <li>if there already was a change to the value of that property</li>
-            <li>if the value does not have the proper type</li>
+            <li>if the value does not have the proper type</li> 
             <li>if the value is not valid for the property</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -394,20 +394,20 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void setPropertyValue(  [in] any aValue )
+    void setPropertyValue(	[in] any aValue ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-
-    //-------------------------------------------------------------------------
-
-    /** receives notification that the value of the current localized property
+                    com::sun::star::lang::WrappedTargetException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that the value of the current localized property 
         is overridden for a specific locale .
 
         @param aValue
             specifies the new value of the property.
 
-            <p> The value must match the type of the current property.
-                If the property does not have the
+            <p> The value must match the type of the current property. 
+                If the property does not have the 
                 <const>SchemaAttribute::REQUIRED</const> flag set,
                 the value can be <void/>.
             </p>
@@ -431,36 +431,36 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::NodeAttribute
      */
-    void setPropertyValueForLocale([in] any aValue,
-                                         [in] string aLocale )
+    void setPropertyValueForLocale([in] any aValue, 
+                                         [in] string aLocale ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-
-    //-------------------------------------------------------------------------
-
+                    com::sun::star::lang::WrappedTargetException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** receives notification that a property description is complete.
 
-        <p> Must match an open call to
-            <member>XLayerHandler::overrideProperty()</member>,
+        <p> Must match an open call to 
+            <member>XLayerHandler::overrideProperty()</member>, 
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             <ul>
             <li>if invalid data is detected in the property</li>
-            <li>if no property is started at all</li>
+            <li>if no property is started at all</li>	
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
 
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs processing the event.
      */
-    void endProperty(  )
+    void endProperty(  ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-    //-------------------------------------------------------------------------
-
-    /** receives notification that a property having a <void/> value is added
-        to the current node.
+                    com::sun::star::lang::WrappedTargetException ); 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that a property having a <void/> value is added 
+        to the current node. 
 
         <p> The current node must be extensible.
         </p>
@@ -471,12 +471,12 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies the attributes of the new property.
 
-            <p> The value is a combination of
-                <type>NodeAttribute</type> flags and may also contain the
+            <p> The value is a combination of 
+                <type>NodeAttribute</type> flags and may also contain the 
                 <const>SchemaAttribute::REQUIRED</const> flag.
             </p>
-            <p> <const>NodeAttribute::MANDATORY</const> need not be set,
-                as dynamically added properties always are mandatory
+            <p>	<const>NodeAttribute::MANDATORY</const> need not be set, 
+                as dynamically added properties always are mandatory 
                 in subsequent layers.
             </p>
 
@@ -498,16 +498,16 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::SchemaAttribute
      */
-    void addProperty(   [in] string aName,
-                         [in] short aAttributes,
-                        [in] type aType )
+    void addProperty(   [in] string aName, 
+                         [in] short aAttributes, 
+                        [in] type aType ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
-
-    //-------------------------------------------------------------------------
-
-    /** receives notification that a property having a non-<void/> value
-        is added to the current node.
+                    com::sun::star::lang::WrappedTargetException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** receives notification that a property having a non-<void/> value 
+        is added to the current node. 
 
         <p> The current node must be extensible.
         </p>
@@ -518,20 +518,20 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         @param aAttributes
             specifies the attributes of the new property.
 
-            <p> The value is a combination of
-                <type>NodeAttribute</type> flags and may also contain the
+            <p> The value is a combination of 
+                <type>NodeAttribute</type> flags and may also contain the 
                 <const>SchemaAttribute::REQUIRED</const> flag.
             </p>
             </p>
-            <p> <const>NodeAttribute::MANDATORY</const> need not be set,
-                as dynamic properties always are mandatory
+            <p>	<const>NodeAttribute::MANDATORY</const> need not be set, 
+                as dynamic properties always are mandatory 
                 in subsequent layers.
             </p>
 
         @param aValue
             specifies the value of the new property.
 
-            <p> The value also determines the type.
+            <p> The value also determines the type. 
                 Therefore the value must not be <void/>.
             </p>
 
@@ -552,19 +552,19 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
         @see com::sun::star::configuration::backend::SchemaAttribute
      */
-    void addPropertyWithValue(  [in] string aName,
-                                 [in] short aAttributes,
-                                [in] any aValue )
+    void addPropertyWithValue(  [in] string aName, 
+                                 [in] short aAttributes, 
+                                [in] any aValue ) 
             raises( MalformedDataException,
-                    com::sun::star::lang::WrappedTargetException );
+                    com::sun::star::lang::WrappedTargetException ); 
+ 
+    //------------------------------------------------------------------------- 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; }; 
 
-    //-------------------------------------------------------------------------
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-//=============================================================================
-
-#endif
+//============================================================================= 
+ 
+#endif 

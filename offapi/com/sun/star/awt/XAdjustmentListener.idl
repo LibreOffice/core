@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,38 +24,38 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XAdjustmentListener_idl__
-#define __com_sun_star_awt_XAdjustmentListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_AdjustmentEvent_idl__
-#include <com/sun/star/awt/AdjustmentEvent.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_XAdjustmentListener_idl__ 
+#define __com_sun_star_awt_XAdjustmentListener_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_AdjustmentEvent_idl__ 
+#include <com/sun/star/awt/AdjustmentEvent.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to receive adjustment events.
  */
 published interface XAdjustmentListener: com::sun::star::lang::XEventListener
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** is invoked when the adjustment has changed.
      */
-    [oneway] void adjustmentValueChanged( [in] com::sun::star::awt::AdjustmentEvent rEvent );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [oneway] void adjustmentValueChanged( [in] com::sun::star::awt::AdjustmentEvent rEvent ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

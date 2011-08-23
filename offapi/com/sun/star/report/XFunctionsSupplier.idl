@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,19 +33,19 @@
 #ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
 #endif
-//=============================================================================
- module com {  module sun {  module star {  module report {
-//=============================================================================
+//=============================================================================  
+ module com {  module sun {  module star {  module report {   
+//============================================================================= 
      interface XFunctions;
 /** specifies the functions supplier which are located in a report defintion or a group.
-*/
+*/ 
 interface XFunctionsSupplier
-{
+{ 
     /** access to the functions
     */
     [attribute,readonly] com::sun::star::report::XFunctions Functions;
-};
-//=============================================================================
-
-}; }; }; };
-#endif
+}; 
+//============================================================================= 
+ 
+}; }; }; };  
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ typedef struct _oslMutexImpl * oslMutex;
 */
 oslMutex SAL_CALL osl_createMutex(void);
 
-/** Release the OS-structures and free mutex data-structure.
-    @param Mutex the mutex-handle
+/** Release the OS-structures and free mutex data-structure. 
+    @param Mutex the mutex-handle 
 */
 void SAL_CALL osl_destroyMutex(oslMutex Mutex);
 
@@ -75,6 +75,6 @@ oslMutex * SAL_CALL osl_getGlobalMutex(void);
 }
 #endif
 
-#endif  /* _OSL_MUTEX_H_ */
+#endif	/* _OSL_MUTEX_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

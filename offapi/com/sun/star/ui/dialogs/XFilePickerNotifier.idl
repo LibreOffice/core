@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ published interface XFilePickerNotifier: com::sun::star::uno::XInterface
         @param xListener
         The <type>XFilePickerListener</type> interface of the listener that
         wants to receive events of type <type>FilePickerEvent</type>.
-        <p>Invalid interfaces or NULL values will be ignored.</p>
+        <p>Invalid interfaces or NULL values will be ignored.</p>		
     */
     [oneway] void addFilePickerListener( [in] XFilePickerListener xListener );
 

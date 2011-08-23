@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ typedef enum
         a vendor string. That is, the string it is not empty.
     @param sMinVersion
         [in] represents the minimum version of a JRE. The string can be empty but
-        a null pointer is not allowed.
+        a null pointer is not allowed. 
     @param sMaxVersion
         [in] represents the maximum version of a JRE. The string can be empty but
         a null pointer is not allowed.
@@ -115,7 +115,7 @@ typedef enum
     @param nSizeJavaInfo
        [out] the number of <code>JavaInfo</code> pointers contained in
        <code>parJavaInfo</code>.
-
+    
     @return
     JFW_PLUGIN_E_NONE the function ran successfully.</br>
     JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
@@ -149,9 +149,9 @@ javaPluginError jfw_plugin_getAllJavaInfos(
       [in] a name of a vendor. This parameter always contains
         a vendor string. That is, the string it is not empty.
    @param sMinVersion
-       [in] represents the minimum version of a JRE.
+       [in] represents the minimum version of a JRE. 
    @param sMaxVersion
-       [in] represents the maximum version of a JRE.
+       [in] represents the maximum version of a JRE. 
    @param arExcludeList
        [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
         versions must not be returned by this function. It can be NULL.
@@ -206,7 +206,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     Therefore the functions which create the <code>JavaInfo</code> can store all
     necessary information which are needed for starting the VM into that
     structure. </p>
-
+    
     @param pInfo
         [in] the JavaInfo object with information about the JRE.
     @param arOptions
@@ -231,7 +231,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     by the JRE.
  */
 javaPluginError jfw_plugin_startJavaVirtualMachine(
-    const JavaInfo *pInfo,
+    const JavaInfo *pInfo, 
     const JavaVMOption *arOptions,
     sal_Int32 nSizeOptions,
     JavaVM ** ppVM,
@@ -250,7 +250,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     @param pp_exist
         [out] the parameter is set to either sal_True or sal_False. The value is
         only valid if the function returns JFW_E_NONE.
-
+    
    @return
     JFW_PLUGIN_E_NONE the function ran successfully.</br>
     JFW_PLUGIN_E_ERROR an error occurred during execution.</br>

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,89 +24,89 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_DataSource_idl__
-#define __com_sun_star_sdb_DataSource_idl__
+#ifndef __com_sun_star_sdb_DataSource_idl__ 
+#define __com_sun_star_sdb_DataSource_idl__ 
+ 
+#ifndef __com_sun_star_io_XPersistObject_idl__ 
+#include <com/sun/star/io/XPersistObject.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_PropertyValue_idl__ 
+#include <com/sun/star/beans/PropertyValue.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_XFlushable_idl__ 
+#include <com/sun/star/util/XFlushable.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__ 
+#include <com/sun/star/util/XNumberFormatsSupplier.idl> 
+#endif 
+ 
 
-#ifndef __com_sun_star_io_XPersistObject_idl__
-#include <com/sun/star/io/XPersistObject.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
-#include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_util_XFlushable_idl__
-#include <com/sun/star/util/XFlushable.idl>
-#endif
-
-#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
-#include <com/sun/star/util/XNumberFormatsSupplier.idl>
-#endif
-
-
- module com {  module sun {  module star {  module sdbc {
-     published interface XIsolatedConnection;
-     published interface XDataSource;
+ module com {  module sun {  module star {  module sdbc { 
+     published interface XIsolatedConnection; 
+     published interface XDataSource; 
  };};};};
 
 
- module com {  module sun {  module star {  module sdb {
-
- published interface XCompletedConnection;
- published interface XQueryDefinitionsSupplier;
+ module com {  module sun {  module star {  module sdb { 
+ 
+ published interface XCompletedConnection; 
+ published interface XQueryDefinitionsSupplier; 
  published interface XBookmarksSupplier;
 
-
+ 
 /** is a factory to establish database connections. It should be registered at
     a <type scope="com::sun::star::uno">NamingService</type>.
     @see com::sun::star::sdb::DatabaseContext
  */
 published service DataSource
-{
-    interface com::sun::star::beans::XPropertySet;
-
-
-    /** useful for establishing connections with the completion of connection parameters
+{ 
+    interface com::sun::star::beans::XPropertySet; 
+ 
+     
+    /** useful for establishing connections with the completion of connection parameters 
                 provided during user interaction.
      */
-    interface XCompletedConnection;
+    interface XCompletedConnection; 
 
-    /** useful for establishing isolated connections which are not shared among others
+    /** useful for establishing isolated connections which are not shared among others 
         as it is the case when using <type>XCompletedConnection</type> or <type scope="com::sun::star::sdbc">XDataSource</type>.
         @see XCompletedConnection
         @see com::sun::star::sdbc::XDataSource
         @since OOo 1.1.2
      */
-    interface com::sun::star::sdbc::XIsolatedConnection;
-
-
+    interface com::sun::star::sdbc::XIsolatedConnection; 
+ 
+     
     /** is provided to flush a DataSource within to a Database Context.
      */
-    interface com::sun::star::util::XFlushable;
-
-
+    interface com::sun::star::util::XFlushable; 
+ 
+     
     /** provides the access to DataSource related queries.
         <p>
-        The object returned by the
+        The object returned by the 
         <method scope="com::sun::star::sdb">XQueryDefinitionsSupplier::getQueryDefinitions()</method>
         supports the
         <type scope="com::sun::star::sdb">DefinitionContainer</type>
         service.
         </p>
      */
-    interface XQueryDefinitionsSupplier;
+    interface XQueryDefinitionsSupplier; 
 
     /* useful for establishing connections and to get and set the login timeout.
     */
-    interface com::sun::star::sdbc::XDataSource;
-
+    interface com::sun::star::sdbc::XDataSource; 
+ 
     /** provides access to bookmarks to documents associated with the data source
         <p>
-        The object returned by the
+        The object returned by the 
         <method scope="com::sun::star::sdb">XBookmarksSupplier::getBookmarks()</method>
         supports the
         <type scope="com::sun::star::sdb">DefinitionContainer</type>
@@ -124,17 +124,17 @@ published service DataSource
         <p>If the same data source is registered under different names, the value of the <code>Name</code>
         property is not defined.</p>
      */
-    [readonly, property] string Name;
-
-
+    [readonly, property] string Name; 
+ 
+     
     /** indicates a database url of the form <br>
         <code> jdbc:<em>subprotocol</em>:<em>subname</em></code>
         or
         <code>sdbc:<em>subprotocol</em>:<em>subname</em></code>
      */
-    [property] string URL;
-
-
+    [property] string URL; 
+ 
+     
     /** is a list of arbitrary string tag/value pairs as connection arguments
 
         <p>The <type>DataSource</type> itself does not attempt to interpret any of those values.</p>
@@ -152,7 +152,7 @@ published service DataSource
                 working with the data source.</li>
         </ul>
     */
-    [property] sequence<com::sun::star::beans::PropertyValue> Info;
+    [property] sequence<com::sun::star::beans::PropertyValue> Info; 
 
     /** is a convenience wrapper around the <member>Info</member> property.
 
@@ -201,55 +201,55 @@ published service DataSource
         in state default are stripped, and <em>not</em> returned in the <code>Info</code> sequence.</p>
     */
     [property, readonly, optional] com::sun::star::beans::XPropertySet Settings;
-
+     
     /** determines a users login name.
      */
-    [property] string User;
-
-
+    [property] string User; 
+ 
+     
     /** determines a users password. The password is not persistent.
      */
-    [property] string Password;
-
-
+    [property] string Password; 
+ 
+     
     /** indicates that a password is always necessary.
      */
-    [property] boolean IsPasswordRequired;
-
-
-    /** indicates that components displaying data obtained from this
+    [property] boolean IsPasswordRequired; 
+ 
+     
+    /** indicates that components displaying data obtained from this 
         data source should suppress columns used for versioning.
      */
-    [property] boolean SuppressVersionColumns;
-
-
+    [property] boolean SuppressVersionColumns; 
+ 
+     
     /** determines whether modifications on the data source are allowed or not.
      */
-    [readonly, property] boolean IsReadOnly;
-
-
+    [readonly, property] boolean IsReadOnly; 
+ 
+     
     /** provides an object for formatting numbers.
      */
-    [readonly, property] com::sun::star::util::XNumberFormatsSupplier
-                        NumberFormatsSupplier;
-
-
-    /** defines a list of tables, on which the DataSource should have it's focus.
+    [readonly, property] com::sun::star::util::XNumberFormatsSupplier 
+                        NumberFormatsSupplier; 
+ 
+     
+    /** defines a list of tables, on which the DataSource should have it's focus. 
         If empty, all tables are rejected.
-
+     
     */
-    [property] sequence<string> TableFilter;
-
-
-    /** defines a list of table types, on which the DataSource should have it's focus.
+    [property] sequence<string> TableFilter; 
+ 
+     
+    /** defines a list of table types, on which the DataSource should have it's focus. 
              If empty, all table types are rejected.
 
     */
-    [property] sequence<string> TableTypeFilter;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [property] sequence<string> TableTypeFilter; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 

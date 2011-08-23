@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 #include <string.h>
 
 #include "registry/registry.hxx"
-#include    <rtl/ustring.hxx>
-#include    <rtl/alloc.h>
+#include	<rtl/ustring.hxx>
+#include	<rtl/alloc.h>
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -95,7 +95,7 @@ char* realargv[2048];
 static void dumpHelp()
 {
     fprintf(stderr, "using: regmerge [-v|--verbose] mergefile mergeKeyName regfile_1 ... regfile_n\n");
-    fprintf(stderr, "       regmerge @regcmds\nOptions:\n");
+    fprintf(stderr, "       regmerge @regcmds\nOptions:\n");    
     fprintf(stderr, "  -v, --verbose : verbose output on stdout.\n");
     fprintf(stderr, "  mergefile     : specifies the merged registry file. If this file doesn't exists,\n");
     fprintf(stderr, "                  it is created.\n");
@@ -106,10 +106,10 @@ static void dumpHelp()
 
 static bool checkCommandFile(char* cmdfile)
 {
-    FILE    *commandfile;
-    char    option[256];
+    FILE	*commandfile;
+    char 	option[256];
     bool    bVerbose = false;
-
+    
     commandfile = fopen(cmdfile+1, "r");
     if( commandfile == NULL )
     {
@@ -134,7 +134,7 @@ static bool checkCommandFile(char* cmdfile)
                         fprintf(stderr, "ERROR: unknown option \"%s\"\n", option);
                         dumpHelp();
                         exit(-1);
-                    }
+                    }    
                 }else
                 {
                     realargv[realargc]= strdup(option);
@@ -151,15 +151,15 @@ static bool checkCommandFile(char* cmdfile)
     }
 
     return bVerbose;
-}
+}	
 
 static bool checkCommandArgs(int argc, char **argv)
 {
     bool bVerbose = false;
-
+    
     realargc = 0;
 
-    for (int i=0; i<argc; i++)
+    for (int i=0; i<argc; i++)        
     {
         if (argv[i][0]== '@')
         {
@@ -187,7 +187,7 @@ static bool checkCommandArgs(int argc, char **argv)
     }
 
     return bVerbose;
-}
+}	
 
 static void cleanCommandArgs()
 {
@@ -195,7 +195,7 @@ static void cleanCommandArgs()
     {
         free(realargv[i]);
     }
-}
+}	
 
 
 

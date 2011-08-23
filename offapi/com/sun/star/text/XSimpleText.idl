@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,73 +24,73 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XSimpleText_idl__
-#define __com_sun_star_text_XSimplText_idl__
-
-#ifndef __com_sun_star_text_XTextRange_idl__
-#include <com/sun/star/text/XTextRange.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextCursor_idl__
-#include <com/sun/star/text/XTextCursor.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextContent_idl__
-#include <com/sun/star/text/XTextContent.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+#ifndef __com_sun_star_text_XSimpleText_idl__ 
+#define __com_sun_star_text_XSimplText_idl__ 
+ 
+#ifndef __com_sun_star_text_XTextRange_idl__ 
+#include <com/sun/star/text/XTextRange.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_text_XTextCursor_idl__ 
+#include <com/sun/star/text/XTextCursor.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_text_XTextContent_idl__ 
+#include <com/sun/star/text/XTextContent.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
+#include <com/sun/star/container/NoSuchElementException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text {  
+ 
+//============================================================================= 
+ 
 /** is the main interface for a distinct text unit, i.e. the main text of
-    a document, the text for headers and footers or for single cells of a
+    a document, the text for headers and footers or for single cells of a 
     table.@see XText
  */
 published interface XSimpleText: com::sun::star::text::XTextRange
-{
-    //-------------------------------------------------------------------------
-
-    /** @returns
-                a new instance of a <type>TextCursor</type> service which can
-                be used to travel in the given text context.
-
+{ 
+    //------------------------------------------------------------------------- 
+     
+    /** @returns 
+                a new instance of a <type>TextCursor</type> service which can 
+                be used to travel in the given text context. 
+                 
                 @see com::sun::star::text::TextCursor
      */
-    com::sun::star::text::XTextCursor createTextCursor();
-
-    //-------------------------------------------------------------------------
-
-    /** @returns
-                a new instance of a <type>TextCursor</type> which is located
-                at the specified <type>TextRange</type> to travel in the
-                given text context.
-
-                <p>The initial position is set to <var>aTextPosition</var>.
-
-                @param aTextPosition
-                specifies the start position for the new
-                <type>TextCursor</type>.
-
+    com::sun::star::text::XTextCursor createTextCursor(); 
+ 
+    //------------------------------------------------------------------------- 
+     
+    /** @returns 
+                a new instance of a <type>TextCursor</type> which is located  
+                at the specified <type>TextRange</type> to travel in the 
+                given text context. 
+                 
+                <p>The initial position is set to <var>aTextPosition</var>. 
+                 
+                @param aTextPosition 
+                specifies the start position for the new 
+                <type>TextCursor</type>. 
+                 
                 @see com::sun::star::text::TextCursor
      */
-    com::sun::star::text::XTextCursor createTextCursorByRange( [in] com::sun::star::text::XTextRange aTextPosition );
-
-    //-------------------------------------------------------------------------
-
+    com::sun::star::text::XTextCursor createTextCursorByRange( [in] com::sun::star::text::XTextRange aTextPosition ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** inserts a string of characters into the text.
-
+        
         <p>The string may contain the following white spaces:
         </p>
         <ul>
@@ -117,35 +117,35 @@ published interface XSimpleText: com::sun::star::text::XTextRange
             replaced. If <TRUE/> then the content of <var>xRange</var> will
             be replaced by <var>aString</var>, otherwise <var>aString</var>
             will be inserted at the beginning of <var>xRange</var>.
-
-        @example
+        
+        @example 
             <listing>
             xText.insertString( xTextCursor, "Hello " + aName$ + ",", false )
-
+        
             xText.insertControlCharacter( xTextCursor,
             ControlCharacter_PARAGRAPH_BREAK, false );
-
+        
             xText.insertString( xTextCursor, "more text ...", false )
             </listing>
      */
-    [oneway] void insertString( [in] com::sun::star::text::XTextRange xRange,
-             [in] string aString,
-             [in] boolean bAbsorb );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void insertString( [in] com::sun::star::text::XTextRange xRange, 
+             [in] string aString, 
+             [in] boolean bAbsorb ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** inserts a control character (like a paragraph break or a hard
         space) into the text.@see com::sun::star::text::ControlCharacter
      */
-    void insertControlCharacter( [in] com::sun::star::text::XTextRange xRange,
-             [in] short nControlCharacter,
-             [in] boolean bAbsorb )
-            raises( com::sun::star::lang::IllegalArgumentException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void insertControlCharacter( [in] com::sun::star::text::XTextRange xRange, 
+             [in] short nControlCharacter, 
+             [in] boolean bAbsorb ) 
+            raises( com::sun::star::lang::IllegalArgumentException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

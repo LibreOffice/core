@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ rtl::OString typeToPrefix(TypeManager const & manager, rtl::OString const & type
     if (typeclass == RT_TYPE_INVALID ||
         typeclass == RT_TYPE_PUBLISHED)
         return rtl::OString("_");
-
+    
     static char const * const typeclassPrefix[RT_TYPE_UNION + 1] = {
         "invalid",    /* RT_TYPE_INVALID, is here only as placeholder */
         "interface",  /* RT_TYPE_INTERFACE */
@@ -103,9 +103,9 @@ rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
         else
             return s;
     }
-
+    
     return tmpBuf.makeStringAndClear();
-}
+}	
 
 
 rtl::OString translateUnoToCppType(

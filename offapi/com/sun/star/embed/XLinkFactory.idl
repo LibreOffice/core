@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ published interface XLinkFactory: com::sun::star::uno::XInterface
         This method can be used to have a full control over persistence
         initialization of a link.
         </p>
-
+        
         @param aClassID
             the class id of the new object
 

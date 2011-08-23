@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ using namespace rtl;
 
 OUString getExePath()
 {
-    OUString        exe;
+    OUString 		exe;
 
     OSL_VERIFY(osl_getExecutableFile( &exe.pData) == osl_Process_E_None);
 
@@ -94,7 +94,7 @@ SAL_IMPLEMENT_MAIN()
     typelib_TypeDescription* pTypeDesc = NULL;
     OUString sType = OUString::createFromAscii("com.sun.star.text.XTextDocument");
     typelib_typedescription_getByName( &pTypeDesc, sType.pData);
-//  typelib_InterfaceTypeDescription* pInterDesc = (typelib_InterfaceTypeDescription*)pTypeDesc;
+//	typelib_InterfaceTypeDescription* pInterDesc = (typelib_InterfaceTypeDescription*)pTypeDesc;
 
     Reference< XInterface > xIFace = xSMgr->createInstance(OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration"));
     Reference< XImplementationRegistration > xImpReg( xIFace, UNO_QUERY);

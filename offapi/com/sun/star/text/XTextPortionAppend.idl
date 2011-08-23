@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,63 +24,63 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XTextPortionAppend_idl__
-#define __com_sun_star_text_XTextPortionAppend_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_text_XTextPortionAppend_idl__ 
+#define __com_sun_star_text_XTextPortionAppend_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
 #ifndef __com_sun_star_beans_PropertyValues_idl__
 #include <com/sun/star/beans/PropertyValues.idl>
 #endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_UnknownPropertyException_idl__ 
+#include <com/sun/star/beans/UnknownPropertyException.idl> 
+#endif 
 
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
-#include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
+#ifndef __com_sun_star_text_XTextRange_idl__ 
+#include <com/sun/star/text/XTextRange.idl> 
+#endif 
 
-#ifndef __com_sun_star_text_XTextRange_idl__
-#include <com/sun/star/text/XTextRange.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text {  
+ 
+//============================================================================= 
+ 
 /** .
  */
 interface XTextPortionAppend : com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
         /** appends a new text portion to the paragraph at the end of the text.
-
+        
                 <p> The sequence can contain all the properties defined by the service <type scope="com::sun::star::text">TextPortion.
         </p>
 
-        @param
+        @param 
             Text contains the text to be appended.
 
-        @param
-            CharacterAndParagraphProperties can contain all the properties defined by the service
+        @param 
+            CharacterAndParagraphProperties can contain all the properties defined by the service 
                       <type scope="com::sun::star::text">Paragraph.
      */
-         com::sun::star::text::XTextRange  appendTextPortion(
+         com::sun::star::text::XTextRange  appendTextPortion(  
                                 [in] string Text,
-                                [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties )
+                                [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties ) 
                         raises( com::sun::star::lang::IllegalArgumentException,
-                                        com::sun::star::beans::UnknownPropertyException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+                                        com::sun::star::beans::UnknownPropertyException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

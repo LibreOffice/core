@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <osl/time.h>
 
 #ifndef _RTL_TEXTENC_H_
-#   include <rtl/textenc.h>
+#	include <rtl/textenc.h>
 #endif
 
 #ifdef __cplusplus
@@ -61,7 +61,7 @@ typedef enum
     osl_Thread_PriorityNormal,
     osl_Thread_PriorityBelowNormal,
     osl_Thread_PriorityLowest,
-    osl_Thread_PriorityUnknown,         /* don't use to set */
+    osl_Thread_PriorityUnknown,			/* don't use to set */
     osl_Thread_Priority_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslThreadPriority;
 
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData);
 /** Get the current thread local text encoding. */
 rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void);
 
-/** Set the thread local text encoding.
+/** Set the thread local text encoding. 
     @return the old text encoding.
 */
 rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncoding Encoding);
@@ -188,6 +188,6 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncoding Encoding);
 }
 #endif
 
-#endif  /* _OSL_THREAD_H_ */
+#endif	/* _OSL_THREAD_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

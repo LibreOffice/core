@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,50 +24,50 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_IndexDescriptor_idl__
-#define __com_sun_star_sdbcx_IndexDescriptor_idl__
-
-#ifndef __com_sun_star_sdbcx_Descriptor_idl__
-#include <com/sun/star/sdbcx/Descriptor.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbcx {
-
- published interface XColumnsSupplier;
-
-
+#ifndef __com_sun_star_sdbcx_IndexDescriptor_idl__ 
+#define __com_sun_star_sdbcx_IndexDescriptor_idl__ 
+ 
+#ifndef __com_sun_star_sdbcx_Descriptor_idl__ 
+#include <com/sun/star/sdbcx/Descriptor.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
+ published interface XColumnsSupplier; 
+ 
+ 
 /** is used to define a new index for a database table.
-    @see com::sun::star::sdbcx::Index
+    @see com::sun::star::sdbcx::Index				
  */
 published service IndexDescriptor
-{
-    service Descriptor;
-
-
+{ 
+    service Descriptor; 
+     
+     
     /** access to the contained index columns.
      */
-    interface XColumnsSupplier;
-
-
+    interface XColumnsSupplier;	 
+     
+     
     /** is the name of the index catalog, may be empty.
      */
-    [property] string Catalog;
-
-
+    [property] string Catalog; 
+ 
+     
     /** indicates that the index allow only unique values.
      */
-    [property] boolean IsUnique;
-
-
+    [property] boolean IsUnique; 
+ 
+     
     /** indicates that the index is clustered.
      */
-    [property] boolean IsClustered;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    [property] boolean IsClustered; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

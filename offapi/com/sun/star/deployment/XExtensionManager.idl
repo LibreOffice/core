@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ module com { module sun { module star { module deployment {
 
 /** The <type>XExtensionManager</type> interface is used to manage extensions
     in the user, shared and bundled repository.
-
+    
     @see ExtensionManager
     @since OOo 3.3.0
 */
@@ -52,32 +52,32 @@ interface XExtensionManager
     /** interface to notify disposing
      */
     interface com::sun::star::lang::XComponent;
-
+    
     /** interface to notify changes of the set of deployed packages of
         this manager
     */
     interface com::sun::star::util::XModifyBroadcaster;
-
-
+    
+    
     /** gets the supported <type>XPackageTypeInfo</type>s.
-
+        
         @return
                 supported <type>XPackageTypeInfo</type>s.
     */
     sequence<XPackageTypeInfo> getSupportedPackageTypes();
-
+    
     /** creates a command channel to be used to asynchronously abort a command.
-
+        
         @return
                 abort channel
     */
     com::sun::star::task::XAbortChannel createAbortChannel();
-
+    
     /** adds an extension.
 
         The properties argument is currently only used to suppress the license information
         for shared extensions.
-
+        
         @param url
                package URL, must be UCB conform
         @param properties
@@ -91,7 +91,7 @@ interface XExtensionManager
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               object representing the extension.
+               object representing the extension.                
     */
     XPackage addExtension( [in] string url,
                            [in] sequence<com::sun::star::beans::NamedValue> properties,
@@ -102,9 +102,9 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
     /** removes an extension.
-
+        
         @param identifier
                package identifier
         @param fileName
@@ -127,15 +127,15 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
 
     /** enable an extension.
 
         If the extension is not from the user repository then an
         IllegalArgumentException is thrown.
-
+        
         @param extension
-               the extension which is to be enabled.
+               the extension which is to be enabled. 
         @param xAbortChannel
                abort channel to asynchronously abort the removing process,
                or null
@@ -155,7 +155,7 @@ interface XExtensionManager
 
         If the extension is not from the user repository then an
         IllegalArgumentException is thrown.
-
+        
         @param extension
                the extension which is to be disabled
         @param xAbortChannel
@@ -175,7 +175,7 @@ interface XExtensionManager
 
     /** gets all currently installed extensions, including disabled
         user extensions.
-
+        
         @param repository
                the repository from which the extensions are returned
         @param xAbortChannel
@@ -233,7 +233,7 @@ interface XExtensionManager
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
-
+    
 
     /** returns a sequence containing all installed extensions.
 
@@ -281,7 +281,7 @@ interface XExtensionManager
 
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
-
+       
        @return
               If true - then at least one extension was removed or added. Otherwise
               nothing was chaned.

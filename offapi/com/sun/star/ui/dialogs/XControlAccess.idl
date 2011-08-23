@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/** Generic control access interface.
+/** Generic control access interface. 
 
     <p>Use this interface to access user interface controls supported
-        by the implementing service. The supported controls, control
-        properties and the appropriate values are documented in the
+        by the implementing service. The supported controls, control 
+        properties and the appropriate values are documented in the 
         decription of the implementing service.</p>
-
+    
     @see com::sun::star::ui::dialogs::FilePicker
     @see com::sun::star::ui::dialogs::FilePicker
 
@@ -57,18 +57,18 @@ published interface XControlAccess: com::sun::star::uno::XInterface
 {
 //-------------------------------------------------------------------------
 /** Change a control property.
-
+    
     @param aControlName
         The name of the control. Common control names are for
         instance 'OkButton' or 'CancelButton'.
-
+    
     @param aControlProperty
         The control property to manipulate. Common control properties
         are for instance 'Label' or 'State'.
-
+    
     @param aValue
         A value appropriated for the property.
-
+    
     @throws com::sun::star::lang::IllegalArgumentException
         when the control is not supported, the control property is invalid or
         the value fits not the control action.
@@ -82,14 +82,14 @@ void setControlProperty( [in] string aControlName, [in] string aControlProperty,
     @param aControlName
        The name of the control. Common control names are for
         instance 'OkButton' or 'CancelButton'.
-
+       
     @param aControlProperty
         The requested control property. Common control properties
         are for instance 'Label' or 'State'.
-
-    @returns
+        
+    @returns 
         the requested value.
-
+        
     @throws com::sun::star::lang::IllegalArgumentException
         when the control is not supported or the control property is invalid.
 */

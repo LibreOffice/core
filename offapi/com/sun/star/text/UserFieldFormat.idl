@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,47 +24,47 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_UserFieldFormat_idl__
-#define __com_sun_star_text_UserFieldFormat_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+#ifndef __com_sun_star_text_UserFieldFormat_idl__ 
+#define __com_sun_star_text_UserFieldFormat_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text {  
+ 
+//============================================================================= 
+ 
 // DocMerge from idl: constants com::sun::star::text::UserFieldFormat
-/** These constants describe how the content of a user text field is
+/** These constants describe how the content of a user text field is 
         formatted.
  */
 published constants UserFieldFormat
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from idl: value com::sun::star::text::UserFieldFormat::SYSTEM
     /** The number format of the operating system is used.
      */
-    const short SYSTEM = 0;
-
-    //-------------------------------------------------------------------------
-
+    const short SYSTEM = 0; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from idl: value com::sun::star::text::UserFieldFormat::TEXT
     /** The content is formatted as text.
      */
-    const short TEXT = 1;
-
-    //-------------------------------------------------------------------------
-
+    const short TEXT = 1; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from idl: value com::sun::star::text::UserFieldFormat::NUM
     /** The number format of the property "NumberFormat" is used.
      */
-    const short NUM = 2;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    const short NUM = 2; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

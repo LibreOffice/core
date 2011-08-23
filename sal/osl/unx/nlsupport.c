@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <rtl/memory.h>
 
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
-    defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
+	defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
 #include <pthread.h>
 #ifndef MACOSX
  #include <locale.h>
@@ -40,8 +40,8 @@
 #else
 #include <osl/module.h>
 #include <osl/thread.h>
-#endif  /* !MACOSX */
-#endif  /* LINUX || SOLARIS || NETBSD || MACOSX */
+#endif	/* !MACOSX */
+#endif	/* LINUX || SOLARIS || NETBSD || MACOSX */
 
 #include <string.h>
 
@@ -57,7 +57,7 @@ typedef struct {
 
 
 /*****************************************************************************
- compare function for binary search
+ compare function for binary search   
  *****************************************************************************/
 
 static int
@@ -111,65 +111,65 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
             (pLocale->Language->length == 2 || pLocale->Language->length == 3) )
     {
         size_t offset = 0;
-
+        
         /* convert language code to ascii */
         {
             rtl_String *pLanguage = NULL;
-
-            rtl_uString2String( &pLanguage,
+            
+            rtl_uString2String( &pLanguage, 
                 pLocale->Language->buffer, pLocale->Language->length,
                 RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
+            
             if( SAL_INT_CAST(sal_uInt32, pLanguage->length) < n )
-            {
+            {    
                 strcpy( buffer, pLanguage->buffer );
                 offset = pLanguage->length;
             }
-
+            
             rtl_string_release( pLanguage );
         }
-
+        
         /* convert country code to ascii */
         if( pLocale->Country && (pLocale->Country->length == 2) )
         {
             rtl_String *pCountry = NULL;
-
-            rtl_uString2String( &pCountry,
+            
+            rtl_uString2String( &pCountry, 
                 pLocale->Country->buffer, pLocale->Country->length,
                 RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
+             
             if( offset + pCountry->length + 1 < n )
-            {
-                strcpy( buffer + offset++, "_" );
+            {    
+                strcpy( buffer + offset++, "_" );   
                 strcpy( buffer + offset, pCountry->buffer );
                 offset += pCountry->length;
             }
-
+            
             rtl_string_release( pCountry );
         }
-
+        
         /* convert variant to ascii - check if there is enough space for the variant string */
         if( pLocale->Variant && pLocale->Variant->length &&
             ( SAL_INT_CAST(sal_uInt32, pLocale->Variant->length) < n - 6 ) )
         {
             rtl_String *pVariant = NULL;
-
+            
             rtl_uString2String( &pVariant,
                 pLocale->Variant->buffer, pLocale->Variant->length,
                 RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-
+             
             if( offset + pVariant->length + 1 < n )
-            {
+            {    
                 strcpy( buffer + offset, pVariant->buffer );
                 offset += pVariant->length;
             }
 
             rtl_string_release( pVariant );
         }
-
+        
         return buffer;
     }
-
+    
     return NULL;
 }
 
@@ -180,7 +180,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 static rtl_Locale * _parse_locale( const char * locale )
 {
     static sal_Unicode c_locale[2] = { (sal_Unicode) 'C', 0 };
-
+    
     /* check if locale contains a valid string */
     if( locale )
     {
@@ -191,7 +191,7 @@ static rtl_Locale * _parse_locale( const char * locale )
             rtl_uString * pLanguage = NULL;
             rtl_uString * pCountry  = NULL;
             rtl_uString * pVariant  = NULL;
-
+    
             size_t offset = 2;
 
             rtl_Locale * ret;
@@ -227,14 +227,14 @@ static rtl_Locale * _parse_locale( const char * locale )
             return ret;
         }
         else
-            return rtl_locale_register( c_locale, c_locale + 1, c_locale + 1 );
+            return rtl_locale_register( c_locale, c_locale + 1, c_locale + 1 ); 
     }
-
+    
     return NULL;
 }
-
+        
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
-    defined(FREEBSD) || defined(OPENBSD)
+	defined(FREEBSD) || defined(OPENBSD)
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -281,7 +281,7 @@ const _pair _nl_language_list[] = {
     { "GB2312",         RTL_TEXTENCODING_GB_2312        }, /* zh_CN */
     { "GBK",            RTL_TEXTENCODING_GBK            }, /* zh_CN.GBK */
     { "ISO8859-1",      RTL_TEXTENCODING_ISO_8859_1     },
-    { "ISO8859-10",     RTL_TEXTENCODING_ISO_8859_10    },
+    { "ISO8859-10",     RTL_TEXTENCODING_ISO_8859_10    }, 
     { "ISO8859-13",     RTL_TEXTENCODING_ISO_8859_13    }, /* lt_LT lv_LV */
     { "ISO8859-14",     RTL_TEXTENCODING_ISO_8859_14    },
     { "ISO8859-15",     RTL_TEXTENCODING_ISO_8859_15    },
@@ -580,7 +580,7 @@ static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
     const _pair *language=0;
-
+    
     char  locale_buf[64] = "";
     char  codeset_buf[64];
 
@@ -593,22 +593,22 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
     /* convert rtl_Locale to locale string */
     _compose_locale( pLocale, locale_buf, 64 );
-
+        
     /* basic thread safeness */
     pthread_mutex_lock( &aLocalMutex );
 
     /* remember the charset as indicated by the LC_CTYPE locale */
     ctype_locale = setlocale( LC_CTYPE, NULL );
-
+    
     /* set the desired LC_CTYPE locale */
     if( NULL == setlocale( LC_CTYPE, locale_buf ) )
     {
         pthread_mutex_unlock(&aLocalMutex);
         return RTL_TEXTENCODING_DONTKNOW;
     }
-
+        
     /* get the charset as indicated by the LC_CTYPE locale */
-#if defined(NETBSD) && !defined(CODESET)
+#if defined(NETBSD) && !defined(CODESET) 
     codeset = NULL;
 #else
     codeset = nl_langinfo( CODESET );
@@ -618,7 +618,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     {
         /* get codeset into mt save memory */
         strncpy( codeset_buf, codeset, sizeof(codeset_buf) );
-        codeset_buf[sizeof(codeset_buf) - 1] = 0;
+        codeset_buf[sizeof(codeset_buf) - 1] = 0; 
         codeset = codeset_buf;
     }
 
@@ -627,7 +627,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         setlocale( LC_CTYPE, ctype_locale );
 
     pthread_mutex_unlock( &aLocalMutex );
-
+   
     /* search the codeset in our language list */
     if ( codeset != NULL )
     {
@@ -641,7 +641,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
      * rtl-codeset */
     if ( language != NULL )
         return language->value;
-
+   
     return RTL_TEXTENCODING_DONTKNOW;
 }
 
@@ -652,13 +652,13 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
     char * locale;
-
+    
     /* basic thread safeness */
     pthread_mutex_lock( &aLocalMutex );
 
     /* set the locale defined by the env vars */
     locale = setlocale( LC_CTYPE, "" );
-
+    
     /* fallback to the current locale */
     if( NULL == locale )
         locale = setlocale( LC_CTYPE, NULL );
@@ -680,7 +680,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
 
     /* convert rtl_Locale to locale string */
     _compose_locale( pLocale, locale_buf, 64 );
-
+    
     /* basic thread safeness */
     pthread_mutex_lock( &aLocalMutex );
 
@@ -695,7 +695,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
 #else /* ifdef LINUX || SOLARIS || MACOSX || NETBSD */
 
 /*
- * This implementation of osl_getTextEncodingFromLocale maps
+ * This implementation of osl_getTextEncodingFromLocale maps 
  * from the ISO language codes.
  */
 
@@ -706,15 +706,15 @@ const _pair _full_locale_list[] = {
     { "zh_CN.EUC",    RTL_TEXTENCODING_EUC_CN      },
     { "zh_TW.EUC",    RTL_TEXTENCODING_EUC_TW      }
 };
-
+ 
 const _pair _locale_extension_list[] = {
     { "big5",         RTL_TEXTENCODING_BIG5        },
     { "big5hk",       RTL_TEXTENCODING_BIG5_HKSCS  },
     { "gb18030",      RTL_TEXTENCODING_GB_18030    },
     { "euc",          RTL_TEXTENCODING_EUC_JP      },
     { "iso8859-1",    RTL_TEXTENCODING_ISO_8859_1  },
-    { "iso8859-10",   RTL_TEXTENCODING_ISO_8859_10 },
-    { "iso8859-13",   RTL_TEXTENCODING_ISO_8859_13 },
+    { "iso8859-10",   RTL_TEXTENCODING_ISO_8859_10 }, 
+    { "iso8859-13",   RTL_TEXTENCODING_ISO_8859_13 }, 
     { "iso8859-14",   RTL_TEXTENCODING_ISO_8859_14 },
     { "iso8859-15",   RTL_TEXTENCODING_ISO_8859_15 },
     { "iso8859-2",    RTL_TEXTENCODING_ISO_8859_2  },
@@ -737,63 +737,63 @@ const _pair _locale_extension_list[] = {
 };
 
 const _pair _iso_language_list[] = {
-    { "af",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "ar",  RTL_TEXTENCODING_ISO_8859_6 },
-    { "az",  RTL_TEXTENCODING_ISO_8859_9 },
-    { "be",  RTL_TEXTENCODING_ISO_8859_5 },
-    { "bg",  RTL_TEXTENCODING_ISO_8859_5 },
-    { "ca",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "cs",  RTL_TEXTENCODING_ISO_8859_2 },
-    { "da",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "de",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "el",  RTL_TEXTENCODING_ISO_8859_7 },
-    { "en",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "es",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "et",  RTL_TEXTENCODING_ISO_8859_4 },
-    { "eu",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "fa",  RTL_TEXTENCODING_ISO_8859_6 },
-    { "fi",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "fo",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "fr",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "gr",  RTL_TEXTENCODING_ISO_8859_7 },
+    { "af",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "ar",  RTL_TEXTENCODING_ISO_8859_6 }, 
+    { "az",  RTL_TEXTENCODING_ISO_8859_9 }, 
+    { "be",  RTL_TEXTENCODING_ISO_8859_5 }, 
+    { "bg",  RTL_TEXTENCODING_ISO_8859_5 }, 
+    { "ca",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "cs",  RTL_TEXTENCODING_ISO_8859_2 }, 
+    { "da",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "de",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "el",  RTL_TEXTENCODING_ISO_8859_7 }, 
+    { "en",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "es",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "et",  RTL_TEXTENCODING_ISO_8859_4 }, 
+    { "eu",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "fa",  RTL_TEXTENCODING_ISO_8859_6 }, 
+    { "fi",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "fo",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "fr",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "gr",  RTL_TEXTENCODING_ISO_8859_7 }, 
     { "he",  RTL_TEXTENCODING_ISO_8859_8 },
-    { "hi",  RTL_TEXTENCODING_DONTKNOW },
-    { "hr",  RTL_TEXTENCODING_ISO_8859_2 },
-    { "hu",  RTL_TEXTENCODING_ISO_8859_2 },
-    { "hy",  RTL_TEXTENCODING_DONTKNOW },
-    { "id",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "is",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "it",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "iw",  RTL_TEXTENCODING_ISO_8859_8 },
-    { "ja",  RTL_TEXTENCODING_EUC_JP },
-    { "ka",  RTL_TEXTENCODING_DONTKNOW },
-    { "kk",  RTL_TEXTENCODING_ISO_8859_5 },
-    { "ko",  RTL_TEXTENCODING_EUC_KR },
-    { "lt",  RTL_TEXTENCODING_ISO_8859_4 },
-    { "lv",  RTL_TEXTENCODING_ISO_8859_4 },
-    { "mk",  RTL_TEXTENCODING_ISO_8859_5 },
-    { "mr",  RTL_TEXTENCODING_DONTKNOW },
-    { "ms",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "nl",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "no",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "pl",  RTL_TEXTENCODING_ISO_8859_2 },
-    { "pt",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "ro",  RTL_TEXTENCODING_ISO_8859_2 },
-    { "ru",  RTL_TEXTENCODING_ISO_8859_5 },
-    { "sa",  RTL_TEXTENCODING_DONTKNOW },
-    { "sk",  RTL_TEXTENCODING_ISO_8859_2 },
-    { "sl",  RTL_TEXTENCODING_ISO_8859_2 },
-    { "sq",  RTL_TEXTENCODING_ISO_8859_2 },
-    { "sv",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "sw",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "ta",  RTL_TEXTENCODING_DONTKNOW },
-    { "th",  RTL_TEXTENCODING_DONTKNOW },
-    { "tr",  RTL_TEXTENCODING_ISO_8859_9 },
-    { "tt",  RTL_TEXTENCODING_ISO_8859_5 },
-    { "uk",  RTL_TEXTENCODING_ISO_8859_5 },
-    { "ur",  RTL_TEXTENCODING_ISO_8859_6 },
-    { "uz",  RTL_TEXTENCODING_ISO_8859_9 },
-    { "vi",  RTL_TEXTENCODING_DONTKNOW },
+    { "hi",  RTL_TEXTENCODING_DONTKNOW }, 
+    { "hr",  RTL_TEXTENCODING_ISO_8859_2 }, 
+    { "hu",  RTL_TEXTENCODING_ISO_8859_2 }, 
+    { "hy",  RTL_TEXTENCODING_DONTKNOW }, 
+    { "id",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "is",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "it",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "iw",  RTL_TEXTENCODING_ISO_8859_8 }, 
+    { "ja",  RTL_TEXTENCODING_EUC_JP }, 
+    { "ka",  RTL_TEXTENCODING_DONTKNOW }, 
+    { "kk",  RTL_TEXTENCODING_ISO_8859_5 }, 
+    { "ko",  RTL_TEXTENCODING_EUC_KR }, 
+    { "lt",  RTL_TEXTENCODING_ISO_8859_4 }, 
+    { "lv",  RTL_TEXTENCODING_ISO_8859_4 }, 
+    { "mk",  RTL_TEXTENCODING_ISO_8859_5 }, 
+    { "mr",  RTL_TEXTENCODING_DONTKNOW }, 
+    { "ms",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "nl",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "no",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "pl",  RTL_TEXTENCODING_ISO_8859_2 }, 
+    { "pt",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "ro",  RTL_TEXTENCODING_ISO_8859_2 }, 
+    { "ru",  RTL_TEXTENCODING_ISO_8859_5 }, 
+    { "sa",  RTL_TEXTENCODING_DONTKNOW }, 
+    { "sk",  RTL_TEXTENCODING_ISO_8859_2 }, 
+    { "sl",  RTL_TEXTENCODING_ISO_8859_2 }, 
+    { "sq",  RTL_TEXTENCODING_ISO_8859_2 }, 
+    { "sv",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "sw",  RTL_TEXTENCODING_ISO_8859_1 }, 
+    { "ta",  RTL_TEXTENCODING_DONTKNOW }, 
+    { "th",  RTL_TEXTENCODING_DONTKNOW }, 
+    { "tr",  RTL_TEXTENCODING_ISO_8859_9 }, 
+    { "tt",  RTL_TEXTENCODING_ISO_8859_5 }, 
+    { "uk",  RTL_TEXTENCODING_ISO_8859_5 }, 
+    { "ur",  RTL_TEXTENCODING_ISO_8859_6 }, 
+    { "uz",  RTL_TEXTENCODING_ISO_8859_9 }, 
+    { "vi",  RTL_TEXTENCODING_DONTKNOW }, 
     { "zh",  RTL_TEXTENCODING_BIG5 }
 };
 
@@ -850,7 +850,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
      * rtl-codeset */
     if ( language != NULL )
         return language->value;
-
+   
     return RTL_TEXTENCODING_DONTKNOW;
 }
 
@@ -924,7 +924,7 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
     /* simulate behavior off setlocale */
     char * locale = getenv( "LC_ALL" );
-
+    
     if( NULL == locale )
         locale = getenv( "LC_CTYPE" );
 
@@ -945,14 +945,14 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
     char locale_buf[64];
-
+    
     /* convert rtl_Locale to locale string */
     if( NULL != _compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) ) {
 #if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD )
+	defined( AIX ) || defined( OPENBSD )
             setenv( "LC_ALL", locale_buf, 1);
 #else
             setenv( "LC_ALL", locale_buf );
@@ -961,7 +961,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
 
         if( getenv( "LC_CTYPE" ) ) {
 #if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD )
+	defined( AIX ) || defined( OPENBSD )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LC_CTYPE", locale_buf );
@@ -970,7 +970,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
 
         if( getenv( "LANG" ) ) {
 #if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD)
+	defined( AIX ) || defined( OPENBSD)
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LANG", locale_buf );

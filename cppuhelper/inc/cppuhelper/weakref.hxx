@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 
 
 namespace com
-{
+{    
 namespace sun
-{
+{    
 namespace star
-{
+{    
 namespace uno
-{
+{    
 
 /** @internal */
 class OWeakRefListener;
@@ -53,8 +53,8 @@ public:
     */
     inline WeakReferenceHelper() SAL_THROW( () )
         : m_pImpl( 0 )
-        {}
-
+        {}	
+    
     /** Copy ctor.  Initialize this reference with the same interface as in rWeakRef.
 
         @param rWeakRef another weak ref
@@ -62,7 +62,7 @@ public:
     WeakReferenceHelper( const WeakReferenceHelper & rWeakRef ) SAL_THROW( () );
     /** Initialize this reference with the hard interface reference xInt. If the implementation
         behind xInt does not support XWeak or XInt is null then this reference will be null.
-
+        
         @param xInt another hard interface reference
     */
     WeakReferenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xInt )
@@ -70,9 +70,9 @@ public:
     /** Releases this reference.
     */
     ~WeakReferenceHelper() SAL_THROW( () );
-
+    
     /** Releases this reference and takes over rWeakRef.
-
+        
         @param rWeakRef another weak ref
     */
     WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef ) SAL_THROW( () );
@@ -94,14 +94,14 @@ public:
     */
     inline sal_Bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const SAL_THROW( () )
         { return (get() == rObj.get()); }
-
+    
     /**  Gets a hard reference to the object.
-
+         
          @return hard reference or null, if the weakly referenced interface has gone
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL get() const SAL_THROW( () );
     /**  Gets a hard reference to the object.
-
+         
          @return hard reference or null, if the weakly referenced interface has gone
     */
     inline SAL_CALL operator Reference< XInterface > () const SAL_THROW( () )
@@ -125,16 +125,16 @@ protected:
 */
 template< class interface_type >
 class WeakReference : public WeakReferenceHelper
-{
+{	
 public:
     /** Default ctor.  Creates an empty weak reference.
     */
     inline WeakReference() SAL_THROW( () )
         : WeakReferenceHelper()
         {}
-
+    
     /** Copy ctor.  Initialize this reference with a hard reference.
-
+        
         @param rRef another hard ref
     */
     inline WeakReference( const Reference< interface_type > & rRef ) SAL_THROW( () )
@@ -155,7 +155,7 @@ public:
         { WeakReferenceHelper::operator=(xInt); return *this; }
 
     /**  Gets a hard reference to the object.
-
+         
          @return hard reference or null, if the weakly referenced interface has gone
     */
     inline SAL_CALL operator Reference< interface_type > () const SAL_THROW( () )

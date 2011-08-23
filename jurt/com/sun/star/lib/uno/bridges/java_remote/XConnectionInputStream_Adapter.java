@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class XConnectionInputStream_Adapter extends InputStream {
     protected byte        _bytes[][] = new byte[1][];
 
     XConnectionInputStream_Adapter(XConnection xConnection) {
-        if(xConnection == null) throw new NullPointerException("the XConnection must not be null");
+        if(xConnection == null)	throw new NullPointerException("the XConnection must not be null");
 
         if(DEBUG) System.err.println("#### " + getClass().getName()  + " - instantiated ");
 
@@ -65,7 +65,7 @@ class XConnectionInputStream_Adapter extends InputStream {
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-//      byte bytes[][] = new byte[1][];
+// 		byte bytes[][] = new byte[1][];
 
         try {
             len = _xConnection.read(_bytes, len - off);

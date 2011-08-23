@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ AstEnum::AstEnum(const ::rtl::OString& name, AstScope* pScope)
     : AstType(NT_enum, name, pScope)
     , AstScope(NT_enum)
     , m_enumValueCount(0)
-{
-}
+{	
+}	
 
-AstEnum::~AstEnum()
+AstEnum::~AstEnum() 
 {
 }
 
@@ -50,15 +50,15 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
 {
     DeclList::const_iterator iter = getIteratorBegin();
     DeclList::const_iterator end = getIteratorEnd();
-    AstConstant*        pConst = NULL;
-    AstDeclaration*     pDecl = NULL;
+    AstConstant*		pConst = NULL;
+    AstDeclaration* 	pDecl = NULL;
 
-    while ( iter != end)
+    while ( iter != end) 
     {
         pDecl = *iter;
         pConst = (AstConstant*)pDecl;
 
-        if (pConst->getConstValue()->compare(pExpr))
+        if (pConst->getConstValue()->compare(pExpr)) 
             return pConst;
 
         ++iter;
@@ -68,14 +68,14 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
         m_enumValueCount = pExpr->getExprValue()->u.lval + 1;
 
     return NULL;
-}
+}	
 
 sal_Bool AstEnum::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
     {
-        fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
+        fprintf(stderr, "%s: warning, could	not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
@@ -106,23 +106,23 @@ sal_Bool AstEnum::dump(RegistryKey& rKey)
 
         sal_uInt32 aBlobSize;
         void const * pBlob = aBlob.getBlob(&aBlobSize);
-
-        if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY,
+        
+        if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY, 
                                 (RegValue)pBlob, aBlobSize))
         {
-            fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
+            fprintf(stderr, "%s: warning, could	not set value of key \"%s\" in %s\n",
                     idlc()->getOptions()->getProgramName().getStr(),
                     getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
             return sal_False;
-        }
+        }				
     }
 
     return sal_True;
-}
+}	
 
 AstDeclaration* AstEnum::addDeclaration(AstDeclaration* pDecl)
 {
     return AstScope::addDeclaration(pDecl);
-}
+}	
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

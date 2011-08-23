@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,42 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_view_XPrintSettingsSupplier_idl__
-#define __com_sun_star_view_XPrintSettingsSupplier_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module view {
-
-//=============================================================================
-
+#ifndef __com_sun_star_view_XPrintSettingsSupplier_idl__ 
+#define __com_sun_star_view_XPrintSettingsSupplier_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module view {  
+ 
+//============================================================================= 
+ 
 /** offers printing related settings, which affect document rendering,
     but are not related to the printer itself.
  */
 published interface XPrintSettingsSupplier: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
-    /** @returns
-            a set of properties which are related to printing.
-
+{ 
+    //------------------------------------------------------------------------- 
+         
+    /** @returns 
+            a set of properties which are related to printing. 
+         
         @see PrintSettings
      */
-    com::sun::star::beans::XPropertySet getPrintSettings();
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    com::sun::star::beans::XPropertySet getPrintSettings(); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

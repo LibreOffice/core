@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,21 +42,21 @@ public:
     AstType* getType()
         { return m_pType; }
     void setType(AstType* pType)
-        {
+        { 
             m_pType = pType;
             setName(makeName());
         }
     ExprList* getDimExpressions()
-        {   return &m_dimExpressions; }
+        {	return &m_dimExpressions; }
     sal_uInt32 getDimension()
-        {   return m_dimension; }
-
+        {	return m_dimension; }
+    
 private:
     ::rtl::OString makeName();
 
-    AstType*    m_pType;
-    sal_uInt32  m_dimension;
-    ExprList    m_dimExpressions;
+    AstType* 	m_pType;
+    sal_uInt32 	m_dimension;
+    ExprList   	m_dimExpressions;
 };
 
 #endif // _IDLC_ASTARRAY_HXX_

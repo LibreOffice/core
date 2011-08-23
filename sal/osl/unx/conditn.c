@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 
 typedef struct _oslConditionImpl
 {
-    pthread_cond_t  m_Condition;
-    pthread_mutex_t m_Lock;
-    sal_Bool            m_State;
+    pthread_cond_t	m_Condition;
+    pthread_mutex_t	m_Lock;
+    sal_Bool			m_State;
 } oslConditionImpl;
 
 
@@ -50,7 +50,7 @@ oslCondition SAL_CALL osl_createCondition()
 {
       oslConditionImpl* pCond;
     int nRet=0;
-
+    
     pCond = (oslConditionImpl*) malloc(sizeof(oslConditionImpl));
 
     OSL_ASSERT(pCond);
@@ -59,7 +59,7 @@ oslCondition SAL_CALL osl_createCondition()
     {
         return 0;
     }
-
+    
     pCond->m_State = sal_False;
 
     /* init condition variable with default attr. (PTHREAD_PROCESS_PRIVAT) */
@@ -78,7 +78,7 @@ oslCondition SAL_CALL osl_createCondition()
     {
         OSL_TRACE("osl_createCondition : mutex init failed. Errno: %d; %s\n",
                   nRet, strerror(nRet));
-
+        
         nRet = pthread_cond_destroy(&pCond->m_Condition);
         if ( nRet != 0 )
         {
@@ -100,7 +100,7 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
     int nRet = 0;
-
+    
     if ( Condition )
     {
         pCond = (oslConditionImpl*)Condition;
@@ -115,12 +115,12 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
         if ( nRet != 0 )
         {
             OSL_TRACE("osl_destroyCondition : destroy mutex failed. Errno: %d; '%s'\n",
-                      nRet, strerror(nRet));
+                      nRet, strerror(nRet));            
         }
 
         free(Condition);
     }
-
+    
     return;
 }
 
@@ -131,7 +131,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
    oslConditionImpl* pCond;
    int nRet=0;
-
+   
    OSL_ASSERT(Condition);
    pCond = (oslConditionImpl*)Condition;
 
@@ -164,7 +164,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
                   nRet, strerror(nRet));
        return sal_False;
    }
-
+   
    return sal_True;
 
 }
@@ -176,7 +176,7 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
     int nRet=0;
-
+    
     OSL_ASSERT(Condition);
 
     pCond = (oslConditionImpl*)Condition;
@@ -203,7 +203,7 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
                   nRet, strerror(nRet));
         return sal_False;
     }
-
+    
     return sal_True;
 }
 
@@ -221,7 +221,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
 
     if ( pCond == 0 )
     {
-        return osl_cond_result_error;
+        return osl_cond_result_error; 
     }
 
     nRet = pthread_mutex_lock(&pCond->m_Lock);
@@ -236,10 +236,10 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     {
         if ( ! pCond->m_State )
         {
-            int                 ret;
+            int					ret;
             struct timeval      tp;
-            struct timespec     to;
-
+            struct timespec		to;
+            
             gettimeofday(&tp, NULL);
 
             SET_TIMESPEC( to, tp.tv_sec + pTimeout->Seconds,
@@ -254,20 +254,20 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
                     if ( ret == ETIME || ret == ETIMEDOUT )
                     {
                         Result = osl_cond_result_timeout;
-                        nRet = pthread_mutex_unlock(&pCond->m_Lock);
-                        if (nRet != 0)
+                        nRet = pthread_mutex_unlock(&pCond->m_Lock);                        
+                        if (nRet != 0)    
                         {
                             OSL_TRACE("osl_waitCondition : mutex unlock failed. Errno: %d; %s\n",
                                       nRet, strerror(nRet));
                         }
-
+                        
                         return Result;
                     }
                     else if ( ret != EINTR )
                     {
                         Result = osl_cond_result_error;
-                        nRet = pthread_mutex_unlock(&pCond->m_Lock);
-                        if ( nRet != 0 )
+                        nRet = pthread_mutex_unlock(&pCond->m_Lock);                        
+                        if ( nRet != 0 )    
                         {
                             OSL_TRACE("osl_waitCondition : mutex unlock failed. Errno: %d; %s\n",
                                       nRet, strerror(nRet));
@@ -296,7 +296,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
                     OSL_TRACE("osl_waitCondition : mutex unlock failed. Errno: %d; %s\n",
                               nRet, strerror(nRet));
                 }
-
+                
                 return Result;
             }
         }
@@ -320,7 +320,7 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
     sal_Bool State;
     oslConditionImpl* pCond;
     int nRet=0;
-
+    
     OSL_ASSERT(Condition);
     pCond = (oslConditionImpl*)Condition;
 
@@ -328,14 +328,14 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
     {
         return sal_False;
     }
-
+    
     nRet = pthread_mutex_lock(&pCond->m_Lock);
     if ( nRet != 0 )
     {
         OSL_TRACE("osl_checkCondition : mutex unlock failed. Errno: %d; %s\n",
-                  nRet, strerror(nRet));
+                  nRet, strerror(nRet));        
     }
-
+    
     State = pCond->m_State;
 
     nRet = pthread_mutex_unlock(&pCond->m_Lock);

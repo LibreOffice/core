@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <dlfcn.h>
-#include <cxxabi.h>
 #include <hash_map>
+
+#include <cxxabi.h>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -46,7 +47,6 @@
 #include <uno/any2.h>
 
 #include "share.hxx"
-
 
 using namespace ::std;
 using namespace ::osl;

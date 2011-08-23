@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_XTruncate_idl__
-#define __com_sun_star_io_XTruncate_idl__
+#ifndef __com_sun_star_io_XTruncate_idl__ 
+#define __com_sun_star_io_XTruncate_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_io_IOException_idl__
+#ifndef __com_sun_star_io_IOException_idl__ 
 #include <com/sun/star/io/IOException.idl>
 #endif
-
-//=============================================================================
-
-module com {  module sun {  module star {  module io {
-
-
-//=============================================================================
-
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module io {  
+    
+ 
+//============================================================================= 
+ 
 /** makes it possible to set the size of the underlying data of a stream
     to zero.
  */
 published interface XTruncate: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+    
     /** sets the size of the underlying data of the stream to zero.
     */
     void truncate()
         raises( IOException );
 
 
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 
