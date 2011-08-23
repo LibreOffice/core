@@ -48,7 +48,8 @@ all:
 TARFILE_NAME=graphite2-1.0.2
 TARFILE_MD5=3115c721f5cb7c464f01c2dddccfaba6
 PATCH_FILES= graphite2.patch \
-        graphite_make.patch
+        graphite_make.patch \
+        graphite2.placementnew.patch
 
 ADDITIONAL_FILES= \
     src/makefile.mk
