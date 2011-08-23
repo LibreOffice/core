@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ public:
     sal_Bool        Export();
 
     // these methods are necassary for the export to PowerPoint
-    void                    PreSaveBasic();         // restaures the original basic storage
+    void					PreSaveBasic();			// restaures the original basic storage
 
 private:
-    SvMemoryStream*         pBas;
+    SvMemoryStream*			pBas;
 };
 
 #endif // _SD_PPTWRP_HXX

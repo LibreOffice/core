@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,13 +114,13 @@ namespace slideshow
 
             enum UpdateFlags
             {
-                NONE=           0,
-                TRANSFORMATION= 1,
-                CLIP=           2,
-                ALPHA=          4,
-                POSITION=       8,
-                CONTENT=        16,
-                FORCE=          32
+                NONE=			0,
+                TRANSFORMATION=	1,
+                CLIP=			2,
+                ALPHA=			4,
+                POSITION=		8,
+                CONTENT=	    16,
+                FORCE=			32
             };
 
             struct RenderArgs
@@ -132,7 +132,7 @@ namespace slideshow
 
                     @param rUpdateBounds
                     The area covered by the shape
-
+                    
                     @param rBounds
                     The current shape bounds
 
@@ -149,12 +149,12 @@ namespace slideshow
                     @param nPrio
                     Shape priority
                 */
-                RenderArgs( const ::basegfx::B2DRectangle&      rOrigBounds,
-                            const ::basegfx::B2DRectangle&      rUpdateBounds,
-                            const ::basegfx::B2DRectangle&      rBounds,
-                            const ::basegfx::B2DRectangle&      rUnitBounds,
-                            const ShapeAttributeLayerSharedPtr& rAttr,
-                            const VectorOfDocTreeNodes&         rSubsets,
+                RenderArgs( const ::basegfx::B2DRectangle&		rOrigBounds,
+                            const ::basegfx::B2DRectangle&		rUpdateBounds,
+                            const ::basegfx::B2DRectangle&		rBounds,
+                            const ::basegfx::B2DRectangle&		rUnitBounds,
+                            const ShapeAttributeLayerSharedPtr&	rAttr,
+                            const VectorOfDocTreeNodes&			rSubsets,
                             double                              nPrio ) :
                     maOrigBounds( rOrigBounds ),
                     maUpdateBounds( rUpdateBounds ),
@@ -166,12 +166,12 @@ namespace slideshow
                 {
                 }
 
-                const ::basegfx::B2DRectangle       maOrigBounds;
-                const ::basegfx::B2DRectangle       maUpdateBounds;
-                const ::basegfx::B2DRectangle       maBounds;
-                const ::basegfx::B2DRectangle       maUnitBounds;
-                const ShapeAttributeLayerSharedPtr& mrAttr;
-                const VectorOfDocTreeNodes&         mrSubsets;
+                const ::basegfx::B2DRectangle		maOrigBounds;
+                const ::basegfx::B2DRectangle		maUpdateBounds;
+                const ::basegfx::B2DRectangle		maBounds;
+                const ::basegfx::B2DRectangle		maUnitBounds;
+                const ShapeAttributeLayerSharedPtr&	mrAttr;
+                const VectorOfDocTreeNodes&			mrSubsets;
                 const double                        mnShapePriority;
             };
 
@@ -181,7 +181,7 @@ namespace slideshow
                 view. If the shape is currently animated, the render
                 target is the sprite, otherwise the view's
                 canvas. This method does not render anything, if the
-                update flags are 0.
+                update flags are 0. 
 
                 @param rMtf
                 The metafile representation of the shape
@@ -198,10 +198,10 @@ namespace slideshow
 
                 @return whether the rendering finished successfully.
             */
-            bool update( const GDIMetaFileSharedPtr&    rMtf,
-                         const RenderArgs&              rArgs,
-                         int                            nUpdateFlags,
-                         bool                           bIsVisible ) const;
+            bool update( const GDIMetaFileSharedPtr&	rMtf,
+                         const RenderArgs&				rArgs,
+                         int							nUpdateFlags,
+                         bool							bIsVisible ) const;
 
             /** Retrieve renderer for given canvas and metafile.
 
@@ -211,9 +211,9 @@ namespace slideshow
                 @return a renderer that renders to the given
                 destination canvas
              */
-            ::cppcanvas::RendererSharedPtr getRenderer( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
-                                                        const GDIMetaFileSharedPtr&         rMtf,
-                                                        const ShapeAttributeLayerSharedPtr& rAttr ) const;
+            ::cppcanvas::RendererSharedPtr getRenderer( const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
+                                                        const GDIMetaFileSharedPtr&			rMtf,
+                                                        const ShapeAttributeLayerSharedPtr&	rAttr ) const;
 
 
         private:
@@ -233,58 +233,58 @@ namespace slideshow
                     return mpDestinationCanvas;
                 }
 
-                ::cppcanvas::CanvasSharedPtr        mpDestinationCanvas;
-                ::cppcanvas::RendererSharedPtr      mpRenderer;
-                GDIMetaFileSharedPtr                mpMtf;
-                ::cppcanvas::BitmapSharedPtr        mpLastBitmap;
-                ::cppcanvas::BitmapCanvasSharedPtr  mpLastBitmapCanvas;
+                ::cppcanvas::CanvasSharedPtr		mpDestinationCanvas;
+                ::cppcanvas::RendererSharedPtr		mpRenderer;
+                GDIMetaFileSharedPtr				mpMtf;
+                ::cppcanvas::BitmapSharedPtr		mpLastBitmap;
+                ::cppcanvas::BitmapCanvasSharedPtr	mpLastBitmapCanvas;
             };
 
-            typedef ::std::vector< RendererCacheEntry > RendererCacheVector;
+            typedef ::std::vector< RendererCacheEntry >	RendererCacheVector;
 
 
             /** Prefetch Renderer for given canvas
              */
-            bool prefetch( RendererCacheEntry&                  io_rCacheEntry,
-                           const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                           const GDIMetaFileSharedPtr&          rMtf,
-                           const ShapeAttributeLayerSharedPtr&  rAttr ) const;
-
+            bool prefetch( RendererCacheEntry&					io_rCacheEntry,
+                           const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
+                           const GDIMetaFileSharedPtr&			rMtf,
+                           const ShapeAttributeLayerSharedPtr&	rAttr ) const;
+            
             /** Draw with prefetched Renderer to stored canvas
 
                 This method draws prefetched Renderer to its
                 associated canvas (which happens to be mpLastCanvas).
              */
-            bool draw( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                       const GDIMetaFileSharedPtr&          rMtf,
-                       const ShapeAttributeLayerSharedPtr&  rAttr,
-                       const ::basegfx::B2DHomMatrix&       rTransform,
-                       const ::basegfx::B2DPolyPolygon*     pClip,
-                       const VectorOfDocTreeNodes&          rSubsets ) const;
+            bool draw( const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
+                       const GDIMetaFileSharedPtr&			rMtf,
+                       const ShapeAttributeLayerSharedPtr&	rAttr,
+                       const ::basegfx::B2DHomMatrix&		rTransform,
+                       const ::basegfx::B2DPolyPolygon*		pClip,
+                       const VectorOfDocTreeNodes&			rSubsets ) const;
 
             /** Render shape to an active sprite
              */
             bool renderSprite( const ViewLayerSharedPtr&            rViewLayer,
-                               const GDIMetaFileSharedPtr&          rMtf,
-                               const ::basegfx::B2DRectangle&       rOrigBounds,
-                               const ::basegfx::B2DRectangle&       rBounds,
-                               const ::basegfx::B2DRectangle&       rUnitBounds,
-                               int                                  nUpdateFlags,
-                               const ShapeAttributeLayerSharedPtr&  pAttr,
-                               const VectorOfDocTreeNodes&          rSubsets,
+                               const GDIMetaFileSharedPtr&			rMtf,
+                               const ::basegfx::B2DRectangle&		rOrigBounds,
+                               const ::basegfx::B2DRectangle&		rBounds,
+                               const ::basegfx::B2DRectangle&		rUnitBounds,
+                               int									nUpdateFlags,
+                               const ShapeAttributeLayerSharedPtr&	pAttr,
+                               const VectorOfDocTreeNodes&			rSubsets,
                                double                               nPrio,
-                               bool                                 bIsVisible ) const;
+                               bool 								bIsVisible ) const;
 
             /** Render shape to given canvas
              */
-            bool render( const ::cppcanvas::CanvasSharedPtr&    rDestinationCanvas,
-                         const GDIMetaFileSharedPtr&            rMtf,
-                         const ::basegfx::B2DRectangle&         rBounds,
-                         const ::basegfx::B2DRectangle&         rUpdateBounds,
-                         int                                    nUpdateFlags,
-                         const ShapeAttributeLayerSharedPtr&    pAttr,
-                         const VectorOfDocTreeNodes&            rSubsets,
-                         bool                                   bIsVisible ) const;
+            bool render( const ::cppcanvas::CanvasSharedPtr&	rDestinationCanvas,
+                         const GDIMetaFileSharedPtr&			rMtf,
+                         const ::basegfx::B2DRectangle&			rBounds,
+                         const ::basegfx::B2DRectangle&			rUpdateBounds,
+                         int									nUpdateFlags,
+                         const ShapeAttributeLayerSharedPtr&	pAttr,
+                         const VectorOfDocTreeNodes&			rSubsets,
+                         bool 									bIsVisible ) const;
 
             /** Calc sprite size in pixel
 
@@ -295,7 +295,7 @@ namespace slideshow
                 Size of the sprite in user coordinate system (doc coordinates)
              */
             ::basegfx::B2DSize calcSpriteSizePixel( const ::basegfx::B2DSize& rUserSize ) const;
-
+            
             enum{ MAX_RENDER_CACHE_ENTRIES=2 };
 
             /** Retrieve a valid iterator to renderer cache entry
@@ -311,26 +311,26 @@ namespace slideshow
                 default-constructed (if newly added)
              */
             RendererCacheVector::iterator getCacheEntry( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas ) const;
-
+        
             void invalidateRenderer() const;
 
-            /** The view layer this object is part of.
+            /** The view layer this object is part of. 
 
                 Needed for sprite creation
             */
-            ViewLayerSharedPtr                          mpViewLayer;
+            ViewLayerSharedPtr							mpViewLayer;
 
             /// A set of cached mtf/canvas combinations
-            mutable RendererCacheVector                 maRenderers;
+            mutable RendererCacheVector					maRenderers;
 
             /// The sprite object
-            mutable AnimatedSpriteSharedPtr             mpSprite;
+            mutable AnimatedSpriteSharedPtr				mpSprite;
 
             /// If true, render() calls go to the sprite
-            mutable bool                                mbAnimationMode;
+            mutable bool								mbAnimationMode;
 
             /// If true, shape needs full repaint (and the sprite a setup, if any)
-            mutable bool                                mbForceUpdate;
+            mutable bool								mbForceUpdate;
         };
 
         typedef ::boost::shared_ptr< ViewShape > ViewShapeSharedPtr;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "menuids2.src"
 #endif
 
-#define DEFINE_SLOTID_FOR_NUMBER_BULLETS    SID_OUTLINE_BULLET
+#define DEFINE_SLOTID_FOR_NUMBER_BULLETS	SID_OUTLINE_BULLET
 
 Menu SD_MENU_PORTAL
 {
@@ -297,13 +297,13 @@ Menu SD_MENU_PORTAL
                     MNSUB_POSITION
                     MNSUB_OBJECT_ALIGN
                     MN_DISTRIBUTE
-
+            
                     //-#i68101#----------------------
                     SEPARATOR
                     MN_OBJECT_TITLE_DESCRIPTION
                     MN_NAME_GROUP
                     //-#i68101#----------------------
-
+                    
                     SEPARATOR
                     MN_GROUP
                     MN_UNGROUP
@@ -341,7 +341,7 @@ Menu SD_MENU_PORTAL
                     MN_HIDE_SLIDE
                     SEPARATOR
                     MN_ANIMATION_OBJECTS
-//                  MN_EFFECT_WIN
+//					MN_EFFECT_WIN
                     MN_ANIMATION_EFFECTS
                 };
             };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class SlideSorter;
 namespace accessibility {
 
 
-typedef ::cppu::WeakComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper5< 
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -87,7 +87,7 @@ public:
     /** The page number as given to the constructor.
     */
     sal_uInt16 GetPageNumber (void) const;
-
+    
     void FireAccessibleEvent (
         short nEventId,
         const ::com::sun::star::uno::Any& rOldValue,
@@ -104,14 +104,14 @@ public:
         getAccessibleContext (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
     //===== XAccessibleEventBroadcaster =======================================
     virtual void SAL_CALL
         addEventListener(
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener)
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     virtual void SAL_CALL
         removeEventListener(
             const ::com::sun::star::uno::Reference<
@@ -120,7 +120,7 @@ public:
 
     using cppu::WeakComponentImplHelperBase::addEventListener;
     using cppu::WeakComponentImplHelperBase::removeEventListener;
-
+    
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL
@@ -134,7 +134,7 @@ public:
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL
+    virtual	sal_Int32 SAL_CALL
         getAccessibleIndexInParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -167,46 +167,46 @@ public:
     //=====  XAccessibleComponent  ================================================
 
     virtual sal_Bool SAL_CALL containsPoint (
-        const ::com::sun::star::awt::Point& aPoint)
+        const ::com::sun::star::awt::Point& aPoint) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL 
         getAccessibleAtPoint (
-            const ::com::sun::star::awt::Point& aPoint)
+            const ::com::sun::star::awt::Point& aPoint) 
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL grabFocus (void)
+    virtual void SAL_CALL grabFocus (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getForeground (void)
+    virtual sal_Int32 SAL_CALL getForeground (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getBackground (void)
+    virtual sal_Int32 SAL_CALL getBackground (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
+    /**	Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)
@@ -235,7 +235,7 @@ private:
         throw (::com::sun::star::lang::DisposedException);
 
     /** Check whether or not the object has been disposed (or is in the
-        state of beeing disposed).
+        state of beeing disposed). 
 
         @return sal_True, if the object is disposed or in the course
         of being disposed. Otherwise, sal_False is returned.

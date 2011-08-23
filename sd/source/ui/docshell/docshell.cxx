@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,8 +97,8 @@ SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
 
 namespace sd {
 
-#define POOL_BUFFER_SIZE                (USHORT)32768
-#define BASIC_BUFFER_SIZE               (USHORT)8192
+#define POOL_BUFFER_SIZE				(USHORT)32768
+#define BASIC_BUFFER_SIZE				(USHORT)8192
 #define DOCUMENT_BUFFER_SIZE            (USHORT)32768
 
 
@@ -246,8 +246,8 @@ DrawDocShell::~DrawDocShell()
         delete mpDoc;
 
     // damit der Navigator das Verschwinden des Dokuments mitbekommt
-    SfxBoolItem     aItem(SID_NAVIGATOR_INIT, TRUE);
-    SfxViewFrame*   pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
+    SfxBoolItem		aItem(SID_NAVIGATOR_INIT, TRUE);
+    SfxViewFrame*	pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
 
     if( !pFrame )
         pFrame = SfxViewFrame::GetFirst( this );
@@ -299,11 +299,11 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_SEARCH_OPTIONS:
             {
-                UINT16 nOpt = SEARCH_OPTIONS_SEARCH      |
+                UINT16 nOpt = SEARCH_OPTIONS_SEARCH 	 |
                               SEARCH_OPTIONS_WHOLE_WORDS |
-                              SEARCH_OPTIONS_BACKWARDS   |
-                              SEARCH_OPTIONS_REG_EXP     |
-                              SEARCH_OPTIONS_EXACT       |
+                              SEARCH_OPTIONS_BACKWARDS	 |
+                              SEARCH_OPTIONS_REG_EXP	 |
+                              SEARCH_OPTIONS_EXACT		 |
                               SEARCH_OPTIONS_SIMILARITY  |
                               SEARCH_OPTIONS_SELECTION;
 
@@ -590,7 +590,7 @@ void DrawDocShell::ClearUndoBuffer()
         }
         pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
     }
-
+    
     SfxUndoManager* pUndoManager = GetUndoManager();
     if(pUndoManager && pUndoManager->GetUndoActionCount())
         pUndoManager->Clear();

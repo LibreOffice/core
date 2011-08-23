@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 #include <sfx2/sfx.hrc>
 
-#define DLG_START_PRESENTATION  RID_APP_START+3
+#define DLG_START_PRESENTATION	RID_APP_START+3
 #define BTN_OK 1
 #define BTN_CANCEL 1
 #define BTN_HELP 1
@@ -39,9 +39,9 @@
 #define LB_CUSTOMSHOW 2
 
 #define GRP_KIND 2
-#define RBT_STANDARD 4
-#define RBT_WINDOW 5
-#define RBT_AUTO 6
+#define	RBT_STANDARD 4
+#define	RBT_WINDOW 5
+#define	RBT_AUTO 6
 #define FT_PAUSE 1
 #define TMF_PAUSE 1
 #define CBX_AUTOLOGO 1

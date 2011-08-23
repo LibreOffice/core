@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
                        boost::bind( &ShapeManagerImpl::listenerAdded,
                                     this,
                                     boost::cref(xDummyListener),
-                                    boost::bind(
+                                    boost::bind( 
                                         std::select1st<ShapeEventListenerMap::value_type>(),
                                         _1 )));
 
@@ -91,10 +91,10 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
                        mrGlobalCursorMap.end(),
                        boost::bind( &ShapeManagerImpl::cursorChanged,
                                     this,
-                                    boost::bind(
+                                    boost::bind( 
                                         std::select1st<ShapeCursorMap::value_type>(),
                                         _1 ),
-                                    boost::bind(
+                                    boost::bind( 
                                         std::select2nd<ShapeCursorMap::value_type>(),
                                         _1 )));
 
@@ -124,7 +124,7 @@ void ShapeManagerImpl::deactivate()
 void ShapeManagerImpl::dispose()
 {
     // remove listeners (EventMultiplexer holds shared_ptr on us)
-    deactivate();
+    deactivate(); 
 
     maHyperlinkShapes.clear();
     maShapeCursorMap.clear();
@@ -142,7 +142,7 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
 {
     if( !mbEnabled || e.Buttons != awt::MouseButton::LEFT)
         return false;
-
+    
     basegfx::B2DPoint const aPosition( e.X, e.Y );
 
     // first check for hyperlinks, because these have
@@ -153,7 +153,7 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
         mrMultiplexer.notifyHyperlinkClicked(hyperlink);
         return true; // event consumed
     }
-
+    
     // find matching shape (scan reversely, to coarsely match
     // paint order)
     ShapeToListenersMap::reverse_iterator aCurrBroadcaster(
@@ -170,25 +170,25 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
         {
             // shape hit, and shape is visible. Raise
             // event.
-
+            
             boost::shared_ptr<cppu::OInterfaceContainerHelper> const pCont(
                 aCurrBroadcaster->second );
             uno::Reference<drawing::XShape> const xShape(
                 aCurrBroadcaster->first->getXShape() );
-
+            
             // DON'T do anything with /this/ after this point!
             pCont->forEach<presentation::XShapeEventListener>(
                 boost::bind( &presentation::XShapeEventListener::click,
-                             _1,
-                             boost::cref(xShape),
+                             _1, 
+                             boost::cref(xShape), 
                              boost::cref(e) ));
-
+            
             return true; // handled this event
         }
-
+        
         ++aCurrBroadcaster;
     }
-
+    
     return false; // did not handle this event
 }
 
@@ -218,7 +218,7 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
     // find hit shape in map
     const ::basegfx::B2DPoint aPosition( e.X, e.Y );
     sal_Int16                 nNewCursor(-1);
-
+    
     if( checkForHyperlink(aPosition).getLength() > 0 )
     {
         nNewCursor = awt::SystemPointer::REFHAND;
@@ -244,11 +244,11 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
                 nNewCursor = aCurrCursor->second;
                 break;
             }
-
+        
             ++aCurrCursor;
         }
     }
-
+    
     if( nNewCursor == -1 )
         mrCursorManager.resetCursor();
     else
@@ -317,7 +317,7 @@ void ShapeManagerImpl::removeHyperlinkArea( const HyperlinkAreaSharedPtr& rArea 
 }
 
 AttributableShapeSharedPtr ShapeManagerImpl::getSubsetShape( const AttributableShapeSharedPtr& rOrigShape,
-                                                             const DocTreeNode&                rTreeNode )
+                                                             const DocTreeNode&				   rTreeNode )
 {
     if( mpLayerManager )
         return mpLayerManager->getSubsetShape(rOrigShape,rTreeNode);
@@ -332,7 +332,7 @@ void ShapeManagerImpl::revokeSubset( const AttributableShapeSharedPtr& rOrigShap
         mpLayerManager->revokeSubset(rOrigShape,rSubsetShape);
 }
 
-bool ShapeManagerImpl::listenerAdded(
+bool ShapeManagerImpl::listenerAdded( 
     const uno::Reference<presentation::XShapeEventListener>& /*xListener*/,
     const uno::Reference<drawing::XShape>&                   xShape )
 {
@@ -340,7 +340,7 @@ bool ShapeManagerImpl::listenerAdded(
     if( (aIter = mrGlobalListenersMap.find( xShape )) ==
         mrGlobalListenersMap.end() )
     {
-        ENSURE_OR_RETURN_FALSE(false,
+        ENSURE_OR_RETURN_FALSE(false, 
                           "ShapeManagerImpl::listenerAdded(): global "
                           "shape listener map inconsistency!");
     }
@@ -349,16 +349,16 @@ bool ShapeManagerImpl::listenerAdded(
     ShapeSharedPtr pShape( lookupShape(xShape) );
     if( pShape )
     {
-        maShapeListenerMap.insert(
+        maShapeListenerMap.insert( 
             ShapeToListenersMap::value_type(
-                pShape,
+                pShape, 
                 aIter->second));
     }
 
     return true;
 }
 
-bool ShapeManagerImpl::listenerRemoved(
+bool ShapeManagerImpl::listenerRemoved( 
     const uno::Reference<presentation::XShapeEventListener>& /*xListener*/,
     const uno::Reference<drawing::XShape>&                   xShape )
 {
@@ -366,7 +366,7 @@ bool ShapeManagerImpl::listenerRemoved(
     // for the same shape pending...
     if( mrGlobalListenersMap.find(xShape) == mrGlobalListenersMap.end() )
     {
-        // is this one of our shapes? other shapes are ignored.
+        // is this one of our shapes? other shapes are ignored. 
         ShapeSharedPtr pShape( lookupShape(xShape) );
         if( pShape )
             maShapeListenerMap.erase(pShape);
@@ -380,7 +380,7 @@ bool ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   x
 {
     ShapeSharedPtr pShape( lookupShape(xShape) );
 
-    // is this one of our shapes? other shapes are ignored.
+    // is this one of our shapes? other shapes are ignored. 
     if( !pShape )
         return false;
 
@@ -393,12 +393,12 @@ bool ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   x
     {
         // included in global map - update local one
         ShapeToCursorMap::iterator aIter;
-        if( (aIter = maShapeCursorMap.find(pShape))
+        if( (aIter = maShapeCursorMap.find(pShape)) 
             == maShapeCursorMap.end() )
         {
             maShapeCursorMap.insert(
-                ShapeToCursorMap::value_type(
-                    pShape,
+                ShapeToCursorMap::value_type( 
+                    pShape, 
                     nCursor ));
         }
         else
@@ -416,14 +416,14 @@ rtl::OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitP
     // paint order): set is ordered by priority
     AreaSet::const_reverse_iterator iPos( maHyperlinkShapes.rbegin() );
     AreaSet::const_reverse_iterator const iEnd( maHyperlinkShapes.rend() );
-    for( ; iPos != iEnd; ++iPos )
+    for( ; iPos != iEnd; ++iPos ) 
     {
         HyperlinkAreaSharedPtr const& pArea = *iPos;
 
         HyperlinkArea::HyperlinkRegions const linkRegions(
             pArea->getHyperlinkRegions() );
 
-        for( std::size_t i = linkRegions.size(); i--; )
+        for( std::size_t i = linkRegions.size(); i--; ) 
         {
             basegfx::B2DRange const& region = linkRegions[i].first;
             if( region.isInside(hitPos) )

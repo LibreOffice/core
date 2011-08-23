@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, Window* pParent)
+LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, Window* pParent) 
     : TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE ) ),
     DropTargetHelper( this ),
     pDrViewSh(pViewSh)
@@ -77,9 +77,9 @@ LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, Window* pParent)
 
 
 LayerTabBar::LayerTabBar (
-    DrawViewShell* pViewSh,
-    Window* pParent,
-    const ResId& rResId)
+    DrawViewShell* pViewSh, 
+    Window* pParent, 
+    const ResId& rResId) 
     : TabBar (pParent, rResId.GetWinBits()),
     DropTargetHelper( this ),
     pDrViewSh(pViewSh)
@@ -168,14 +168,14 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    if( rEvt.mbLeaving )
+    if( rEvt.mbLeaving )		
         EndSwitchPage();
 
     if( !pDrViewSh->GetDocSh()->IsReadOnly() )
     {
-        USHORT          nPageId = SDRPAGE_NOTFOUND;
-        Point           aPos( PixelToLogic( rEvt.maPosPixel ) );
-        USHORT          nLayerId = pDrViewSh->GetView()->GetDoc()->GetLayerAdmin().GetLayerID( GetPageText( GetPageId( aPos ) ), FALSE );
+        USHORT			nPageId = SDRPAGE_NOTFOUND;
+        Point			aPos( PixelToLogic( rEvt.maPosPixel ) );
+        USHORT			nLayerId = pDrViewSh->GetView()->GetDoc()->GetLayerAdmin().GetLayerID( GetPageText( GetPageId( aPos ) ), FALSE );
 
         nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, nLayerId );
 
@@ -193,9 +193,9 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    USHORT          nPageId = SDRPAGE_NOTFOUND;
-    USHORT          nLayerId = pDrViewSh->GetView()->GetDoc()->GetLayerAdmin().GetLayerID( GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), FALSE );
-    sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, nLayerId );
+    USHORT			nPageId = SDRPAGE_NOTFOUND;
+    USHORT			nLayerId = pDrViewSh->GetView()->GetDoc()->GetLayerAdmin().GetLayerID( GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), FALSE );
+    sal_Int8		nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, nLayerId );
 
     EndSwitchPage();
 
@@ -357,7 +357,7 @@ void LayerTabBar::ActivatePage()
 {
     if ( /*IsInSwitching*/ 1 && pDrViewSh!=NULL)
     {
-
+        
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
         pDispatcher->Execute(SID_SWITCHLAYER, SFX_CALLMODE_ASYNCHRON);
     }

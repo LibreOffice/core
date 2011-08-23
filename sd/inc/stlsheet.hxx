@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 class ModifyListenerForewarder;
 
-typedef cppu::ImplInheritanceHelper5< SfxUnoStyleSheet,
+typedef cppu::ImplInheritanceHelper5< SfxUnoStyleSheet, 
                                     ::com::sun::star::beans::XPropertySet,
                                     ::com::sun::star::lang::XServiceInfo,
                                     ::com::sun::star::beans::XPropertyState,
@@ -63,14 +63,14 @@ public:
     SdStyleSheet( const rtl::OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, USHORT nMask );
     SdStyleSheet( const SdStyleSheet& );
 
-    virtual BOOL        SetParent (const String& rParentName);
+    virtual BOOL		SetParent (const String& rParentName);
     virtual SfxItemSet& GetItemSet();
-    virtual BOOL        IsUsed() const;
-    virtual BOOL        HasFollowSupport() const;
-    virtual BOOL        HasParentSupport() const;
-    virtual BOOL        HasClearParentSupport() const;
-    virtual BOOL        SetName( const UniString& );
-    virtual void        SetHelpId( const String& r, ULONG nId );
+    virtual BOOL		IsUsed() const;
+    virtual BOOL		HasFollowSupport() const;
+    virtual BOOL		HasParentSupport() const;
+    virtual BOOL		HasClearParentSupport() const;
+    virtual BOOL		SetName( const UniString& );
+    virtual void		SetHelpId( const String& r, ULONG nId );
 
     void        AdjustToFontHeight(SfxItemSet& rSet, BOOL bOnlyMissingItems = TRUE);
 
@@ -135,13 +135,13 @@ protected:
     virtual void Store(SvStream& rOut);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
-    virtual             ~SdStyleSheet();
+    virtual 			~SdStyleSheet();
 
     void throwIfDisposed() throw (::com::sun::star::uno::RuntimeException);
 
     virtual void disposing();
 
-    rtl::OUString   msApiName;
+    rtl::OUString	msApiName;
     rtl::Reference< SfxStyleSheetBasePool > mxPool;
 
     /** boradcast helper for events */
@@ -150,13 +150,13 @@ protected:
     boost::scoped_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
 
 private:
-    SdStyleSheet& operator=( const SdStyleSheet& ); // not implemented
+    SdStyleSheet& operator=( const SdStyleSheet& );	// not implemented
 };
 
 typedef rtl::Reference< SdStyleSheet > SdStyleSheetRef;
 typedef std::vector< SdStyleSheetRef > SdStyleSheetVector;
 
-#endif     // _SD_STLSHEET_HXX
+#endif	   // _SD_STLSHEET_HXX
 
 
 

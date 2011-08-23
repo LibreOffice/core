@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,12 +59,12 @@ namespace slideshow
                 If this method returns a time lag greater than 0.0,
                 the ActivitiesQueue will adjust the global slideshow
                 time, by subtracting the given amount of lag.
-
+                
                 @return time lag or 0.0. Value must be greater or
                 equal than zero.
             */
             virtual double calcTimeLag() const = 0;
-
+            
             /** Query whether this activity is still continuing
 
                 @return true, if this activity still
@@ -86,7 +86,7 @@ namespace slideshow
                 shape.
              */
             virtual void dequeued() = 0;
-
+            
             /** Forces this activity deactivate and get to its end state
                 (if possible), but does _not_ dispose.
             */

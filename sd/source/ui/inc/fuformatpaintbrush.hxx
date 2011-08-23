@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,12 +61,12 @@ private:
     FuFormatPaintBrush ( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
 
     void DoExecute( SfxRequest& rReq );
-
+    
     bool HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
     void Paste( bool, bool );
-
+    
     void implcancel();
-
+    
     ::boost::shared_ptr<SfxItemSet> mpItemSet;
     bool   mbPermanent;
     bool   mbOldIsQuickTextEditMode;

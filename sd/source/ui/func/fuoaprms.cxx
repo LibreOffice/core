@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 #include "View.hxx"
 #include "sdabstdlg.hxx"
 #include "sdresid.hxx"
-#include <vcl/salbtype.hxx>     // FRound
+#include <vcl/salbtype.hxx>		// FRound
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace ::com::sun::star;
@@ -75,11 +75,11 @@ TYPEINIT1( FuObjectAnimationParameters, FuPoor );
 \************************************************************************/
 
 FuObjectAnimationParameters::FuObjectAnimationParameters (
-    ViewShell*   pViewSh,
-    ::sd::Window*        pWin,
-    ::sd::View*      pView,
+    ViewShell*	 pViewSh,
+    ::sd::Window*		 pWin,
+    ::sd::View*		 pView,
     SdDrawDocument* pDoc,
-    SfxRequest&  rReq)
+    SfxRequest&	 rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -96,8 +96,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     SfxUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
 
     const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
-    ULONG        nCount     = rMarkList.GetMarkCount();
-    ULONG        nObject    = 0;
+    ULONG		 nCount 	= rMarkList.GetMarkCount();
+    ULONG		 nObject	= 0;
 
     short nAnimationSet     = ATTR_MISSING;
     short nEffectSet        = ATTR_MISSING;
@@ -727,10 +727,10 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSoundOn(pInfo->mbSoundOn, pInfo->mbSoundOn);
                 pAction->SetSound(pInfo->maSoundFile, pInfo->maSoundFile);
                 pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
-//              pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
+//				pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                 pAction->SetClickAction(pInfo->meClickAction, pInfo->meClickAction);
                 pAction->SetBookmark(pInfo->GetBookmark(), pInfo->GetBookmark());
-//              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
+//				pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, pInfo->meSecondSpeed);
@@ -738,7 +738,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSecondPlayFull(pInfo->mbSecondPlayFull, pInfo->mbSecondPlayFull);
                 pUndoGroup->AddAction(pAction);
 
-//              pInfo->mbInvisibleInPresentation = TRUE;
+//				pInfo->mbInvisibleInPresentation = TRUE;
             }
             else
             {
@@ -759,8 +759,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetPathObj(pInfo->mpPathObj, pPath);
                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
-//              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation,
-//                                          pInfo->mbInvisibleInPresentation);
+//				pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation,
+//											pInfo->mbInvisibleInPresentation);
                 pAction->SetVerb(pInfo->mnVerb, (USHORT)pInfo->GetBookmark().ToInt32() );
                 pAction->SetSecondEffect(pInfo->meSecondEffect, eSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, eSecondSpeed);
@@ -818,8 +818,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                     pInfo->mbSecondPlayFull = bSecondPlayFull;
 
                 // noch ein paar Spezialitaeten
-//              if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
-//                  pInfo->mSetPath(pPath);
+//				if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
+//					pInfo->mSetPath(pPath);
 
                 if (eClickAction == presentation::ClickAction_VERB)
                     pInfo->mnVerb = (USHORT)aBookmark.ToInt32();

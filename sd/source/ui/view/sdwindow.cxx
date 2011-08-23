@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ namespace sd {
 #define SCROLL_PAGE_FACT   0.5      // Faktor fuer Seitenscrolling
 #define SCROLL_SENSITIVE   20       // Sensitiver Bereich (Pixel)
 #define ZOOM_MULTIPLICATOR 10000    // Multiplikator um Rundungsfehler zu vermeiden
-#define MIN_ZOOM           5        // Minimaler Zoomfaktor
-#define MAX_ZOOM           3000     // Maximaler Zoomfaktor
+#define MIN_ZOOM	       5        // Minimaler Zoomfaktor
+#define MAX_ZOOM	       3000	    // Maximaler Zoomfaktor
 
 
 /*************************************************************************
@@ -70,9 +70,9 @@ Window::Window(::Window* pParent)
     : ::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
       DropTargetHelper( this ),
       mpShareWin(NULL),
-      maWinPos(0, 0),           // vorsichtshalber; die Werte sollten aber
-      maViewOrigin(0, 0),       // vom Besitzer des Fensters neu gesetzt
-      maViewSize(1000, 1000),   // werden
+      maWinPos(0, 0),			// vorsichtshalber; die Werte sollten aber
+      maViewOrigin(0, 0),		// vom Besitzer des Fensters neu gesetzt
+      maViewSize(1000, 1000),	// werden
       maPrevSize(-1,-1),
       mnMinZoom(MIN_ZOOM),
       mnMaxZoom(MAX_ZOOM),
@@ -554,7 +554,7 @@ long Window::GetZoomForRect( const Rectangle& rZoomRect )
             nRetZoom = GetZoom();
         }
         else
-        {
+        {    
             // Clip the zoom factor to the valid range marked by nMinZoom as
             // previously calculated by <member>CalcMinZoom()</member> and the
             // MAX_ZOOM constant.
@@ -640,8 +640,8 @@ long Window::SetZoomRect (const Rectangle& rZoomRect)
             aWinSize.Height() = (long) ((double) aWinSize.Height() * (double) ZOOM_MULTIPLICATOR / (double) nFact);
             maWinPos.Y() += (rZoomRect.GetHeight() - aWinSize.Height()) / 2;
 
-            if ( maWinPos.X() < 0 ) maWinPos.X() = 0;
-            if ( maWinPos.Y() < 0 ) maWinPos.Y() = 0;
+            if ( maWinPos.X() < 0 )	maWinPos.X() = 0;
+            if ( maWinPos.Y() < 0 )	maWinPos.Y() = 0;
 
             // Adapt the window's map mode to the new zoom factor.
             nNewZoom = SetZoomFactor(nZoom);
@@ -672,7 +672,7 @@ void Window::SetMinZoomAutoCalc (bool bAuto)
 
 void Window::UpdateMapOrigin(BOOL bInvalidate)
 {
-    BOOL       bChanged = FALSE;
+    BOOL	   bChanged = FALSE;
     const Size aWinSize = PixelToLogic(GetOutputSizePixel());
 
     if ( mbCenterAllowed )
@@ -735,7 +735,7 @@ void Window::UpdateMapMode (void)
     {
         Size aViewSizePixel = LogicToPixel(maViewSize);
         Size aWinSizePixel = LogicToPixel(aWinSize);
-
+        
         // Seite soll nicht am Fensterrand "kleben"
         if (aPix.Width() == 0)
         {
@@ -752,13 +752,13 @@ void Window::UpdateMapMode (void)
             aPix.Height() -= 8;
         }
     }
-
+    
     aPix = PixelToLogic(aPix);
     maWinPos.X() = aPix.Width();
     maWinPos.Y() = aPix.Height();
     Point aNewOrigin (-maWinPos.X(), -maWinPos.Y());
     maWinPos += maViewOrigin;
-
+    
     MapMode aMap(GetMapMode());
     aMap.SetOrigin(aNewOrigin);
     SetMapMode(aMap);
@@ -809,8 +809,8 @@ void Window::SetVisibleXY(double fX, double fY)
     if ( fY >= 0 )
         maWinPos.Y() = (long) (fY * maViewSize.Height());
     UpdateMapOrigin(FALSE);
-    //  Size sz(nOldX - aWinPos.X(), nOldY - aWinPos.Y());
-    //  sz = LogicToPixel(sz);
+    //	Size sz(nOldX - aWinPos.X(), nOldY - aWinPos.Y());
+    //	sz = LogicToPixel(sz);
     Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), SCROLL_CHILDREN);
     Update();
 }
@@ -913,7 +913,7 @@ void Window::LoseFocus()
 
 void Window::GrabFocus()
 {
-    mnTicks      = 0;
+    mnTicks		 = 0;
     ::Window::GrabFocus ();
 }
 
@@ -984,7 +984,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                     SetDrawMode( nOutputMode );
                     mpViewShell->GetFrameView()->SetDrawMode( nOutputMode );
 // #110094#-7
-//                  mpViewShell->GetView()->ReleaseMasterPagePaintCache();
+//			        mpViewShell->GetView()->ReleaseMasterPagePaintCache();
                     Invalidate();
                 }
 
@@ -1166,9 +1166,9 @@ void Window::DropScroll(const Point& rMousePos)
 
     if ( (nDx || nDy) && (rMousePos.X()!=0 || rMousePos.Y()!=0 ) )
     {
-        if (mnTicks > 20)
+        if (mnTicks > 20) 
             mpViewShell->ScrollLines(nDx, nDy);
-        else
+        else 
             mnTicks ++;
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ public:
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw(css::uno::Exception,css::uno::RuntimeException);
-
+    
 
     // XPresenterHelper
 
@@ -76,7 +76,7 @@ public:
         sal_Bool bEnableChildTransparentMode,
         sal_Bool bEnableParentClip)
         throw (css::uno::RuntimeException);
-
+    
     virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL createSharedCanvas (
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxUpdateCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxUpdateWindow,
@@ -110,7 +110,7 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxChildWindow,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow)
         throw (css::uno::RuntimeException);
-
+    
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     ::boost::scoped_ptr<GraphicFilter> mpGraphicFilter;

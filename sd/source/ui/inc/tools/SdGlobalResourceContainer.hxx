@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public:
     /** Add a resource to the container.  The ownership of the resource is
         transferred to the container.  The resource is destroyed when the
         container is destroyed, i.e. when the sd module is destroyed.
-
+        
         When in doubt, use the shared_ptr variant of this method.
     */
     void AddResource (::std::auto_ptr<SdGlobalResource> pResource);

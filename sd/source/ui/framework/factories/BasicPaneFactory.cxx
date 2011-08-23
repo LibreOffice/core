@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ BasicPaneFactory::BasicPaneFactory (
 BasicPaneFactory::~BasicPaneFactory (void)
 {
 }
-
+    
 
 
 
@@ -441,7 +441,7 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
 
 
 
-
+                
 //===== lang::XEventListener ==================================================
 
 void SAL_CALL BasicPaneFactory::disposing (
@@ -478,7 +478,7 @@ Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
     const Reference<XResourceId>& rxPaneId)
 {
     Reference<XResource> xPane;
-
+    
     if (mpViewShellBase != NULL)
     {
         xPane = new FrameWindowPane(rxPaneId, mpViewShellBase->GetViewWindow());
@@ -523,12 +523,12 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
                 pShell.reset(new LeftImpressPaneShell());
                 nChildWindowId = ::sd::LeftPaneImpressChildWindow::GetChildWindowId();
                 break;
-
+                
             case LeftDrawPaneId:
                 pShell.reset(new LeftDrawPaneShell());
                 nChildWindowId = ::sd::LeftPaneDrawChildWindow::GetChildWindowId();
                 break;
-
+            
             case RightPaneId:
                 pShell.reset(new ToolPanelPaneShell());
                 nChildWindowId = ::sd::ToolPanelChildWindow::GetChildWindowId();

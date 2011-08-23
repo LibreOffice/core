@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ class ViewTabPage : public TabPage
 {
 public:
     ViewTabPage (Window* pParent) : TabPage(pParent) {}
-    virtual void Resize (void)
+    virtual void Resize (void) 
     { SetPosSizePixel(Point(0,0),GetParent()->GetOutputSizePixel()); }
 };
 
@@ -153,7 +153,7 @@ ViewTabBar::ViewTabBar (
     }
 
     mpTabControl->Show();
-
+    
     if (mpViewShellBase != NULL
         && rxViewTabBarId->isBoundToURL(
             FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
@@ -204,7 +204,7 @@ void ViewTabBar::disposing (void)
         mpTabPage.reset();
         mpTabControl.reset();
     }
-
+    
     mxController = NULL;
 }
 
@@ -225,7 +225,7 @@ void ViewTabBar::disposing (void)
 {
     ::Window* pWindow = NULL;
     ViewShellBase* pBase = NULL;
-
+    
     // Tunnel through the controller and use the ViewShellBase to obtain the
     // view frame.
     try
@@ -274,7 +274,7 @@ void ViewTabBar::disposing (void)
         catch (RuntimeException&)
         {}
     }
-
+    
     return pWindow;
 }
 
@@ -410,7 +410,7 @@ const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId (void)
 
 sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
     throw (RuntimeException)
-{
+{    
     sal_Int64 nResult = 0;
 
     if (rId.getLength() == 16
@@ -448,7 +448,7 @@ bool ViewTabBar::ActivatePage (void)
         catch (DeploymentException)
         {
         }
-
+        
         Client* pIPClient = NULL;
         if (mpViewShellBase != NULL)
             pIPClient = dynamic_cast<Client*>(mpViewShellBase->GetIPClient());
@@ -476,7 +476,7 @@ bool ViewTabBar::ActivatePage (void)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
+    
     return false;
 }
 
@@ -530,7 +530,7 @@ void ViewTabBar::AddTabBarButton (
             }
         }
     }
-
+    
     AddTabBarButton(rButton,nIndex);
 }
 
@@ -554,7 +554,7 @@ void ViewTabBar::AddTabBarButton (
         && nPosition<=mpTabControl->GetPageCount())
     {
         USHORT nIndex ((USHORT)nPosition);
-
+        
         // Insert the button into our local array.
         maTabBarButtons.insert(maTabBarButtons.begin()+nIndex, rButton);
         UpdateTabBarButtons();
@@ -588,7 +588,7 @@ bool ViewTabBar::HasTabBarButton (
     const ::com::sun::star::drawing::framework::TabBarButton& rButton)
 {
     bool bResult (false);
-
+    
     for (sal_uInt32 nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
     {
         if (IsEqual(maTabBarButtons[nIndex], rButton))
@@ -708,7 +708,7 @@ void TabBarControl::Paint (const Rectangle& rRect)
 void TabBarControl::ActivatePage (void)
 {
     if (mpViewTabBar->ActivatePage())
-    {
+    {        
         // Call the parent so that the correct tab is highlighted.
         this->::TabControl::ActivatePage();
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -300,7 +300,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
             if( pPage && !pPage->IsMasterPage() )
             {
-                rSet.Put( SfxUInt32Item( SID_ASSIGN_LAYOUT, static_cast< sal_uInt32 >(pPage->GetAutoLayout()) ) );
+                rSet.Put( SfxUInt32Item( SID_ASSIGN_LAYOUT, static_cast< sal_uInt32 >(pPage->GetAutoLayout()) ) ); 
                 bDisable = false;
             }
         }
@@ -444,7 +444,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             // Vertikale Ausrichtung
             USHORT nVert = mpDrawView->GetMarkedGluePointsAlign( TRUE );
             rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_CENTER, nVert == SDRVERTALIGN_CENTER ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_TOP,    nVert == SDRVERTALIGN_TOP ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_TOP,	  nVert == SDRVERTALIGN_TOP ) );
             rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_BOTTOM, nVert == SDRVERTALIGN_BOTTOM ) );
         }
 
@@ -869,9 +869,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         || SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_MASTER_PAGE ) )
     {
         if (maTabControl.GetPageCount() == 1 ||
-            meEditMode == EM_MASTERPAGE     ||
-            mePageKind == PK_NOTES          ||
-            mePageKind == PK_HANDOUT        ||
+            meEditMode == EM_MASTERPAGE		||
+            mePageKind == PK_NOTES			||
+            mePageKind == PK_HANDOUT 		||
             (GetShellType()!=ST_DRAW&&IsLayerModeActive()))
         {
             if (rSet.GetItemState(SID_DELETE_PAGE) == SFX_ITEM_AVAILABLE)
@@ -884,8 +884,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // darf der aktuelle Layer geloescht werden?
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_LAYER ) )
     {
-        USHORT        nCurrentLayer = GetLayerTabControl()->GetCurPageId();
-        const String& rName         = GetLayerTabControl()->GetPageText(nCurrentLayer);
+        USHORT		  nCurrentLayer = GetLayerTabControl()->GetCurPageId();
+        const String& rName 		= GetLayerTabControl()->GetPageText(nCurrentLayer);
 
         BOOL bDisableIt = !IsLayerModeActive();
         bDisableIt |= (rName == String(SdResId(STR_LAYER_LAYOUT)));
@@ -967,7 +967,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_SIZE_ALL );
         rSet.DisableItem( SID_SIZE_PAGE_WIDTH );
         rSet.DisableItem( SID_SIZE_PAGE );
-//      rSet.DisableItem( SID_INSERTPAGE );
+//		rSet.DisableItem( SID_INSERTPAGE );
         rSet.DisableItem( SID_DUPLICATE_PAGE );
         rSet.DisableItem( SID_ZOOM_TOOLBOX );
     }
@@ -1378,7 +1378,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         BOOL bFoundAny            = FALSE;
         bool bFoundTable = false;
 
-//      const int nMarkCount = (int) aMarkList.GetMarkCount();
+//		const int nMarkCount = (int) aMarkList.GetMarkCount();
         for (ULONG i=0; i < nMarkCount && !bFoundAny; i++)
         {
             SdrObject* pObj=  aMarkList.GetMark(i)->GetMarkedSdrObj();
@@ -1448,11 +1448,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             if( bFoundObjNoLine )
                 rSet.DisableItem( SID_ATTRIBUTES_LINE );
 
-            if( bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj )    // only Bitmaps marked
+            if( bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj )	// only Bitmaps marked
                 rSet.DisableItem( SID_CONVERT_TO_BITMAP );
-            else if( !bFoundBitmap && bFoundMetafile && !bFoundNoGraphicObj )   // only Metafiles marked
+            else if( !bFoundBitmap && bFoundMetafile && !bFoundNoGraphicObj )	// only Metafiles marked
                 rSet.DisableItem( SID_CONVERT_TO_METAFILE );
-            else if( !bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj )  // nothing to do
+            else if( !bFoundBitmap && !bFoundMetafile && !bFoundNoGraphicObj )	// nothing to do
             {
                 rSet.DisableItem( SID_CONVERT_TO_BITMAP );
                 rSet.DisableItem( SID_CONVERT_TO_METAFILE );

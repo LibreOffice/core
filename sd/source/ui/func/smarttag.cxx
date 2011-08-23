@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -285,8 +285,8 @@ bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
             return true;
         }
     }
-
-
+    
+    
     return false;
 }
 
@@ -336,7 +336,7 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
     {
         if( mxSelectedTag.is() )
             return mxSelectedTag->Command( rCEvt );
-
+    
     }
 
     return false;
@@ -405,7 +405,7 @@ ULONG SmartTagSet::GetMarkedPointCount() const
 BOOL SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 {
     const SmartHdl* pSmartHdl = dynamic_cast< const SmartHdl* >( &rHdl );
-
+    
     return pSmartHdl && pSmartHdl->isMarkable();
 }
 
@@ -451,7 +451,7 @@ SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind
 : SdrHdl( rPnt, eNewKind )
 , mxTag( xTag )
 {
-}
+} 
 
 // --------------------------------------------------------------------
 

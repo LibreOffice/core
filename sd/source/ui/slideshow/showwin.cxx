@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
 
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
-//  SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+//	SetBackground( Wallpaper( Color( COL_BLACK ) ) );
     SetBackground(); // avoids that VCL paints any background!
     GetParent()->Show();
     AddEventListener( LINK( this, ShowWindow, EventHdl ) );
@@ -291,7 +291,7 @@ void ShowWindow::Paint(const Rectangle& rRect)
     {
 /*
         Region aOldClipRegion( GetClipRegion() );
-
+            
         Region aClipRegion( rRect );
         aClipRegion.Exclude( maPresArea );
         SetClipRegion( aClipRegion );
@@ -398,8 +398,8 @@ BOOL ShowWindow::SetEndMode()
     {
         DeleteWindowFromPaintView();
         meShowWindowMode = SHOWWINDOWMODE_END;
-//      maShowBackground = GetBackground();
-//      SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+//		maShowBackground = GetBackground();
+//		SetBackground( Wallpaper( Color( COL_BLACK ) ) );
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 
         // hide navigator if it is visible
@@ -434,8 +434,8 @@ BOOL ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
         mnPauseTimeout = nTimeout;
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_PAUSE;
-//      maShowBackground = GetBackground();
-//      SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+//		maShowBackground = GetBackground();
+//		SetBackground( Wallpaper( Color( COL_BLACK ) ) );
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 
         // hide navigator if it is visible
@@ -466,8 +466,8 @@ BOOL ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
         DeleteWindowFromPaintView();
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_BLANK;
-//      maShowBackground = GetBackground();
-//      SetBackground( Wallpaper( rBlankColor ) );
+//		maShowBackground = GetBackground();
+//		SetBackground( Wallpaper( rBlankColor ) );
         maShowBackground = Wallpaper( rBlankColor );
 
         // hide navigator if it is visible
@@ -498,7 +498,7 @@ void ShowWindow::TerminateShow()
     maPauseTimer.Stop();
     maMouseTimer.Stop();
     Erase();
-//  SetBackground( maShowBackground );
+//	SetBackground( maShowBackground );
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
@@ -536,7 +536,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     maLogo.Clear();
     maPauseTimer.Stop();
     Erase();
-//  SetBackground( maShowBackground );
+//	SetBackground( maShowBackground );
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
@@ -544,11 +544,11 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     if( mpViewShell )
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( mpViewShell->GetViewShellBase() ) );
-
+  
          if( xSlideShow.is() )
         {
             AddWindowToPaintView();
-
+    
             if( SHOWWINDOWMODE_BLANK == eOldShowWindowMode )
             {
                 xSlideShow->pause(false);
@@ -575,16 +575,16 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
 
 void ShowWindow::DrawPauseScene( BOOL bTimeoutOnly )
 {
-    const MapMode&  rMap = GetMapMode();
-    const Point     aOutOrg( PixelToLogic( Point() ) );
-    const Size      aOutSize( GetOutputSize() );
-    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, rMap ) );
-    const Size      aOffset( LogicToLogic( Size( 1000, 1000 ), MAP_100TH_MM, rMap ) );
-    String          aText( SdResId( STR_PRES_PAUSE ) );
-    BOOL            bDrawn = FALSE;
+    const MapMode&	rMap = GetMapMode();
+    const Point		aOutOrg( PixelToLogic( Point() ) );
+    const Size		aOutSize( GetOutputSize() );
+    const Size		aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, rMap ) );
+    const Size		aOffset( LogicToLogic( Size( 1000, 1000 ), MAP_100TH_MM, rMap ) );
+    String			aText( SdResId( STR_PRES_PAUSE ) );
+    BOOL			bDrawn = FALSE;
 
-    Font            aFont( GetSettings().GetStyleSettings().GetMenuFont() );
-    const Font      aOldFont( GetFont() );
+    Font 			aFont( GetSettings().GetStyleSettings().GetMenuFont() );
+    const Font 		aOldFont( GetFont() );
 
     aFont.SetSize( aTextSize );
     aFont.SetColor( COL_WHITE );
@@ -600,7 +600,7 @@ void ShowWindow::DrawPauseScene( BOOL bTimeoutOnly )
         else
             aGrfSize = LogicToLogic( maLogo.GetPrefSize(), maLogo.GetPrefMapMode(), rMap );
 
-        const Point aGrfPos( Max( aOutOrg.X() + aOutSize.Width() - aGrfSize.Width() - aOffset.Width(), aOutOrg.X() ),
+        const Point	aGrfPos( Max( aOutOrg.X() + aOutSize.Width() - aGrfSize.Width() - aOffset.Width(), aOutOrg.X() ),
                              Max( aOutOrg.Y() + aOutSize.Height() - aGrfSize.Height() - aOffset.Height(), aOutOrg.Y() ) );
 
         if( maLogo.IsAnimated() )
@@ -611,24 +611,24 @@ void ShowWindow::DrawPauseScene( BOOL bTimeoutOnly )
 
     if( SLIDE_NO_TIMEOUT != mnPauseTimeout )
     {
-        MapMode         aVMap( rMap );
-        VirtualDevice   aVDev( *this );
+        MapMode			aVMap( rMap );
+        VirtualDevice	aVDev( *this );
 
         aVMap.SetOrigin( Point() );
         aVDev.SetMapMode( aVMap );
         aVDev.SetBackground( Wallpaper( Color( COL_BLACK ) ) );
-
+        
         // set font first, to determine real output height
         aVDev.SetFont( aFont );
-
+            
         const Size aVDevSize( aOutSize.Width(), aVDev.GetTextHeight() );
 
         if( aVDev.SetOutputSize( aVDevSize ) )
         {
             // Note: if performance gets an issue here, we can use NumberFormatter directly
-            SvtSysLocale                aSysLocale;
+            SvtSysLocale				aSysLocale;
             const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
-
+            
             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ));
             aText += aLocaleData.getDuration( Time( 0, 0, mnPauseTimeout ) );
             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ));
@@ -650,12 +650,12 @@ void ShowWindow::DrawPauseScene( BOOL bTimeoutOnly )
 
 void ShowWindow::DrawEndScene()
 {
-    const Font      aOldFont( GetFont() );
-    Font            aFont( GetSettings().GetStyleSettings().GetMenuFont() );
+    const Font		aOldFont( GetFont() );
+    Font			aFont( GetSettings().GetStyleSettings().GetMenuFont() );
 
-    const Point     aOutOrg( PixelToLogic( Point() ) );
-    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, GetMapMode() ) );
-    const String    aText( SdResId( STR_PRES_SOFTEND ) );
+    const Point		aOutOrg( PixelToLogic( Point() ) );
+    const Size		aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, GetMapMode() ) );
+    const String	aText( SdResId( STR_PRES_SOFTEND ) );
 
     aFont.SetSize( aTextSize );
     aFont.SetColor( COL_WHITE );

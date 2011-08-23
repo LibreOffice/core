@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ class SdFileDialog_Imp;
 /******************************************************************************/
 
 /**
-   The class SdOpenSoundFileDialog wraps the FileDialogHelper, displaying the
-   FILEOPEN_PLAY dialog template and performing the 'preview' functionality
-   (playing the selected sound file). The interface is a downstripped version
+   The class SdOpenSoundFileDialog wraps the FileDialogHelper, displaying the 
+   FILEOPEN_PLAY dialog template and performing the 'preview' functionality 
+   (playing the selected sound file). The interface is a downstripped version 
    of the aforementioned class, with similar semantics.
  */
 class SD_DLLPUBLIC SdOpenSoundFileDialog
 {
-    const std::auto_ptr< SdFileDialog_Imp > mpImpl;
+    const std::auto_ptr< SdFileDialog_Imp >	mpImpl;
 
     // forbidden and not implemented
     SdOpenSoundFileDialog (const SdOpenSoundFileDialog &);
@@ -62,8 +62,8 @@ public:
                             SdOpenSoundFileDialog();
                             ~SdOpenSoundFileDialog();
 
-    ErrCode                  Execute();
-    String                   GetPath() const;
+    ErrCode					 Execute();
+    String					 GetPath() const;
     void                     SetPath( const String& rPath );
 
     String                   ReqDisplayDirectory() const;

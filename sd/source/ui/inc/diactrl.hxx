@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@ class SdPagesField : public SvxMetricField
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 protected:
-    virtual void    Modify();
+    virtual void 	Modify();
 
 public:
-                    SdPagesField( Window* pParent,
+                    SdPagesField( Window* pParent, 
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                   WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
                     ~SdPagesField();
 
-    void            UpdatePagesField( const SfxUInt16Item* pItem );
+    void			UpdatePagesField( const SfxUInt16Item* pItem );
 };
 
 //========================================================================
@@ -65,9 +65,9 @@ public:
 class SdTbxCtlDiaPages : public SfxToolBoxControl
 {
 public:
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual Window*		CreateItemWindow( Window *pParent );
 
     SFX_DECL_TOOLBOX_CONTROL();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,14 +53,14 @@ uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
 }
 
 SdXCustomPresentation::SdXCustomPresentation() throw()
-:   mpSdCustomShow(NULL), mpModel(NULL),
+:	mpSdCustomShow(NULL), mpModel(NULL),
     aDisposeListeners( aDisposeContainerMutex ),
     bDisposing( sal_False )
 {
 }
 
 SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow, SdXImpressDocument* pMyModel) throw()
-:   mpSdCustomShow(pShow), mpModel(pMyModel),
+:	mpSdCustomShow(pShow), mpModel(pMyModel),
     aDisposeListeners( aDisposeContainerMutex ),
     bDisposing( sal_False )
 {
@@ -138,7 +138,7 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
 
     if(mpSdCustomShow)
     {
-        uno::Reference< drawing::XDrawPage > xPage;
+        uno::Reference< drawing::XDrawPage > xPage;	
         getByIndex( Index ) >>= xPage;
 
         if( xPage.is() )
@@ -249,7 +249,7 @@ void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
 
     if( bDisposing )
-        return; // catched a recursion
+        return;	// catched a recursion
 
     bDisposing = sal_True;
 
@@ -280,8 +280,8 @@ void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< 
 }
 
 /*===========================================================================*
- *  class SdXCustomPresentationAccess : public XCustomPresentationAccess,    *
- *                                      public UsrObject                     *
+ *  class SdXCustomPresentationAccess : public XCustomPresentationAccess,	 *
+ * 										public UsrObject					 *
  *===========================================================================*/
 
 SdXCustomPresentationAccess::SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) throw()

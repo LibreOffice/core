@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -466,7 +466,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "importing %s", aFile.GetBuffer() );
 #endif
 
-    sal_uInt32  nRet = 0;
+    sal_uInt32	nRet = 0;
 
     // Get service factory
     Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -494,11 +494,11 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     PropertyMapEntry aImportInfoMap[] =
     {
         // #80365# necessary properties for XML progress bar at load time
-        { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "Preview" ),         0, &::getCppuType((const sal_Bool*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "PageLayouts" ), 0, SEQTYPE(::getCppuType((const uno::Reference< container::XNameAccess >*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { MAP_LEN( "ProgressRange" ),	0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressMax" ),		0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressCurrent" ),	0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "Preview" ),			0, &::getCppuType((const sal_Bool*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "PageLayouts" ), 0, SEQTYPE(::getCppuType((const uno::Reference< container::XNameAccess >*)0)), 	::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
         { MAP_LEN( "PrivateData" ), 0,
               &::getCppuType( (Reference<XInterface> *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -841,9 +841,9 @@ sal_Bool SdXMLFilter::Export()
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "exporting %s", aFile.GetBuffer() );
 #endif
 
-    SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
-    SvXMLGraphicHelper*         pGraphicHelper = NULL;
-    sal_Bool                    bDocRet = FALSE;
+    SvXMLEmbeddedObjectHelper*	pObjectHelper = NULL;
+    SvXMLGraphicHelper*			pGraphicHelper = NULL;
+    sal_Bool					bDocRet = FALSE;
 
     if( !mxModel.is() )
     {
@@ -880,18 +880,18 @@ sal_Bool SdXMLFilter::Export()
             DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
             return FALSE;
         }
-        uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+        uno::Reference<xml::sax::XDocumentHandler>	xHandler( xWriter, uno::UNO_QUERY );
 
         /** property map for export info set */
         PropertyMapEntry aExportInfoMap[] =
         {
             // #82003#
-            { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "UsePrettyPrinting"),0, &::getBooleanCppuType(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressRange" ),	0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressMax" ),		0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressCurrent" ),	0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "UsePrettyPrinting"),0, &::getBooleanCppuType(),				::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
-            { MAP_LEN( "PageLayoutNames" ), 0, SEQTYPE(::getCppuType((const OUString*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+            { MAP_LEN( "PageLayoutNames" ), 0, SEQTYPE(::getCppuType((const OUString*)0)), 	::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
             { MAP_LEN( "BaseURI" ), 0,
                   &::getCppuType( (OUString *)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -957,7 +957,7 @@ sal_Bool SdXMLFilter::Export()
 
         {
             uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-            uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
+            uno::Reference< document::XGraphicObjectResolver >	xGrfResolver;
 
             // create helper for graphic and ole export if we have a storage
             if( xStorage.is() )
@@ -1062,9 +1062,9 @@ sal_Bool SdXMLFilter::Export()
                 uno::Sequence< uno::Any > aArgs( 2 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                 uno::Any* pArgs = aArgs.getArray();
                 *pArgs++ <<= xInfoSet;
-                if( xGrfResolver.is() )         *pArgs++ <<= xGrfResolver;
-                if( xObjectResolver.is() )      *pArgs++ <<= xObjectResolver;
-                if( mxStatusIndicator.is() )    *pArgs++ <<= mxStatusIndicator;
+                if( xGrfResolver.is() ) 		*pArgs++ <<= xGrfResolver;
+                if( xObjectResolver.is() )		*pArgs++ <<= xObjectResolver;
+                if( mxStatusIndicator.is() )	*pArgs++ <<= mxStatusIndicator;
 
                 *pArgs   <<= xHandler;
 

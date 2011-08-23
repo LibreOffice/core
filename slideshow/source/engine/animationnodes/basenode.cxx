@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,38 +71,38 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
                                     sal_Int16 nFillMode )
 {
     // TODO(F2): restart issues in below tables
-
+    
     // transition table for restart=NEVER, fill=REMOVE
     static const StateTransitionTable stateTransitionTable_Never_Remove = {
         AnimationNode::INVALID,
         AnimationNode::RESOLVED|AnimationNode::ENDED,   // active successors for UNRESOLVED
         AnimationNode::ACTIVE|AnimationNode::ENDED,     // active successors for RESOLVED
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
         AnimationNode::ENDED,                           // active successors for ACTIVE: no freeze here
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
         AnimationNode::INVALID,                         // active successors for FROZEN: this state is unreachable here
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
         AnimationNode::ENDED                            // active successors for ENDED: this state is a sink here (cannot restart)
     };
-
+    
     // transition table for restart=WHEN_NOT_ACTIVE, fill=REMOVE
     static const StateTransitionTable stateTransitionTable_NotActive_Remove = {
         AnimationNode::INVALID,
         AnimationNode::RESOLVED|AnimationNode::ENDED,                       // active successors for UNRESOLVED
         AnimationNode::ACTIVE|AnimationNode::ENDED,                         // active successors for RESOLVED
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
         AnimationNode::ENDED,                                               // active successors for ACTIVE: no freeze here
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
         AnimationNode::INVALID,                                             // active successors for FROZEN:
                                                                             // this state is unreachable here
         AnimationNode::INVALID,
@@ -115,13 +115,13 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         AnimationNode::ENDED|AnimationNode::RESOLVED|AnimationNode::ACTIVE  // active successors for ENDED:
                                                                             // restart possible when ended
     };
-
+    
     // transition table for restart=ALWAYS, fill=REMOVE
     static const StateTransitionTable stateTransitionTable_Always_Remove = {
         AnimationNode::INVALID,
         AnimationNode::RESOLVED|AnimationNode::ENDED,                       // active successors for UNRESOLVED
         AnimationNode::ACTIVE|AnimationNode::ENDED,                         // active successors for RESOLVED
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
         AnimationNode::ENDED|AnimationNode::ACTIVE|AnimationNode::RESOLVED, // active successors for ACTIVE: restart
         AnimationNode::INVALID,
         AnimationNode::INVALID,
@@ -137,38 +137,38 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         AnimationNode::INVALID,
         AnimationNode::ENDED|AnimationNode::ACTIVE|AnimationNode::RESOLVED  // active successors for ENDED: restart
     };
-
+    
     // transition table for restart=NEVER, fill=FREEZE
     static const StateTransitionTable stateTransitionTable_Never_Freeze = {
         AnimationNode::INVALID,
         AnimationNode::RESOLVED|AnimationNode::ENDED,   // active successors for UNRESOLVED
         AnimationNode::ACTIVE|AnimationNode::ENDED,     // active successors for RESOLVED
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                           
         AnimationNode::FROZEN|AnimationNode::ENDED,     // active successors for ACTIVE: freeze object
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::ENDED,                           // active successors for FROZEN: end
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::ENDED,                           // active successors for FROZEN: end 
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
         AnimationNode::ENDED,                           // active successors for ENDED: this state is a sink here (cannot restart)
     };
-
+    
     // transition table for restart=WHEN_NOT_ACTIVE, fill=FREEZE
     static const StateTransitionTable stateTransitionTable_NotActive_Freeze = {
         AnimationNode::INVALID,
         AnimationNode::RESOLVED|AnimationNode::ENDED,                       // active successors for UNRESOLVED
         AnimationNode::ACTIVE|AnimationNode::ENDED,                         // active successors for RESOLVED
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
         AnimationNode::FROZEN|AnimationNode::ENDED,                         // active successors for ACTIVE: freeze object
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
         AnimationNode::ENDED|AnimationNode::RESOLVED|AnimationNode::ACTIVE, // active successors for FROZEN:
                                                                             // restart possible when ended
         AnimationNode::INVALID,
@@ -181,29 +181,29 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         AnimationNode::ENDED|AnimationNode::RESOLVED|AnimationNode::ACTIVE  // active successors for ENDED:
                                                                             // restart possible when ended
     };
-
+    
     // transition table for restart=ALWAYS, fill=FREEZE
     static const StateTransitionTable stateTransitionTable_Always_Freeze = {
         AnimationNode::INVALID,
         AnimationNode::RESOLVED|AnimationNode::ENDED,                       // active successors for UNRESOLVED
         AnimationNode::ACTIVE|AnimationNode::ENDED,                         // active successors for RESOLVED
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
         AnimationNode::FROZEN|AnimationNode::ENDED|AnimationNode::ACTIVE|AnimationNode::RESOLVED, // active successors for ACTIVE:
                                                                                                   // end object, restart
         AnimationNode::INVALID,
         AnimationNode::INVALID,
         AnimationNode::INVALID,
         AnimationNode::ENDED|AnimationNode::RESOLVED|AnimationNode::ACTIVE, // active successors for FROZEN: restart possible
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
-        AnimationNode::INVALID,
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
+        AnimationNode::INVALID,                            
         AnimationNode::ENDED|AnimationNode::ACTIVE|AnimationNode::RESOLVED  // active successors for ENDED: restart
     };
-
+    
     static const StateTransitionTable* tableGuide[] = {
         &stateTransitionTable_Never_Remove,
         &stateTransitionTable_NotActive_Remove,
@@ -212,12 +212,12 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         &stateTransitionTable_NotActive_Freeze,
         &stateTransitionTable_Always_Freeze
     };
-
+    
     int nRestartValue;
     switch( nRestartMode ) {
     default:
     case animations::AnimationRestart::DEFAULT:
-        // same value: animations::AnimationRestart::INHERIT:
+        // same value: animations::AnimationRestart::INHERIT: 
         OSL_ENSURE(
             false, "getStateTransitionTable(): unexpected case for restart" );
         // FALLTHROUGH intended
@@ -231,7 +231,7 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         nRestartValue = 2;
         break;
     }
-
+    
     int nFillValue;
     switch( nFillMode ) {
     default:
@@ -250,7 +250,7 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         nFillValue = 1;
         break;
     }
-
+    
     return *tableGuide[ 3*nFillValue + nRestartValue ];
 }
 
@@ -260,10 +260,10 @@ bool isMainSequenceRootNode_(
 {
     // detect main sequence root node (need that for
     // end-of-mainsequence signalling below)
-    beans::NamedValue const aSearchKey(
+    beans::NamedValue const aSearchKey( 
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) ),
         uno::makeAny( presentation::EffectNodeType::MAIN_SEQUENCE ) );
-
+    
     uno::Sequence<beans::NamedValue> const userData(xNode->getUserData());
     return findNamedValue( userData, aSearchKey );
 }
@@ -279,14 +279,14 @@ class BaseNode::StateTransition : private boost::noncopyable
 {
 public:
     enum Options { NONE, FORCE };
-
+    
     explicit StateTransition( BaseNode * pNode )
         : mpNode(pNode), meToState(INVALID) {}
-
+    
     ~StateTransition() {
         clear();
     }
-
+    
     bool enter( NodeState eToState, int options = NONE )
     {
         OSL_ENSURE( meToState == INVALID,
@@ -304,7 +304,7 @@ public:
         meToState = eToState;
         return true; // in transition
     }
-
+    
     void commit() {
         OSL_ENSURE( meToState != INVALID, "### nothing to commit!" );
         if (meToState != INVALID) {
@@ -316,7 +316,7 @@ public:
         // every state change of one of its nodes.
         //     Debug_ShowNodeTree(mpNode->mpSelf);
     }
-
+    
     void clear() {
         if (meToState != INVALID) {
             OSL_ASSERT( (mpNode->meCurrentStateTransition & meToState) != 0 );
@@ -324,13 +324,13 @@ public:
             meToState = INVALID;
         }
     }
-
+    
 private:
     BaseNode *const mpNode;
     NodeState meToState;
 };
 
-BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
+BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode, 
                     const BaseContainerNodeSharedPtr&                   rParent,
                     const NodeContext&                                  rContext ) :
     maContext( rContext.maContext ),
@@ -347,7 +347,7 @@ BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
 {
     ENSURE_OR_THROW( mxAnimationNode.is(),
                       "BaseNode::BaseNode(): Invalid XAnimationNode" );
-
+    
     // setup state transition table
     mpStateTransitionTable = getStateTransitionTable( getRestartMode(),
                                                       getFillMode() );
@@ -356,7 +356,7 @@ BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
 void BaseNode::dispose()
 {
     meCurrState = INVALID;
-
+    
     // discharge a loaded event, if any:
     if (mpCurrentEvent) {
         mpCurrentEvent->dispose();
@@ -384,13 +384,13 @@ sal_Int16 BaseNode::getFillMode()
     const sal_Int16 nFill((nTmp != animations::AnimationFill::DEFAULT &&
                            nTmp != animations::AnimationFill::INHERIT)
                           ? nTmp : getFillDefaultMode());
-
+    
     // For AUTO fill mode, SMIL specifies that fill mode is FREEZE,
     // if no explicit active duration is given
-    // (no duration, end, repeatCount or repeatDuration given),
+    // (no duration, end, repeatCount or repeatDuration given), 
     // and REMOVE otherwise
     if( nFill == animations::AnimationFill::AUTO ) {
-        return (isIndefiniteTiming( mxAnimationNode->getDuration() ) &&
+        return (isIndefiniteTiming( mxAnimationNode->getDuration() ) && 
                 isIndefiniteTiming( mxAnimationNode->getEnd() ) &&
                 !mxAnimationNode->getRepeatCount().hasValue() &&
                 isIndefiniteTiming( mxAnimationNode->getRepeatDuration() ))
@@ -451,31 +451,31 @@ bool BaseNode::resolve()
 {
     if (! checkValidNode())
         return false;
-
+    
     OSL_ASSERT( meCurrState != RESOLVED );
     if (inStateOrTransition( RESOLVED ))
         return true;
-
+    
     StateTransition st(this);
     if (st.enter( RESOLVED ) &&
         isTransition( RESOLVED, ACTIVE ) &&
         resolve_st() /* may call derived class */)
     {
         st.commit(); // changing state
-
+        
         // discharge a loaded event, if any:
         if (mpCurrentEvent)
             mpCurrentEvent->dispose();
-
+        
         // schedule activation event:
-
+        
         // This method takes the NodeContext::mnStartDelay value into account,
         // to cater for iterate container time shifts. We cannot put different
-        // iterations of the iterate container's children into different
+        // iterations of the iterate container's children into different 
         // subcontainer (such as a 'DelayContainer', which delays resolving its
-        // children by a fixed amount), since all iterations' nodes must be
+        // children by a fixed amount), since all iterations' nodes must be 
         // resolved at the same time (otherwise, the delayed subset creation
-        // will not work, i.e. deactivate the subsets too late in the master
+        // will not work, i.e. deactivate the subsets too late in the master 
         // shape).
         uno::Any const aBegin( mxAnimationNode->getBegin() );
         if (aBegin.hasValue()) {
@@ -487,7 +487,7 @@ bool BaseNode::resolve()
             // For some leaf nodes, PPT import yields empty begin time,
             // although semantically, it should be 0.0
             // TODO(F3): That should really be provided by the PPT import
-
+            
             // schedule delayed activation event. Take iterate node
             // timeout into account
             mpCurrentEvent = makeDelay(
@@ -496,7 +496,7 @@ bool BaseNode::resolve()
                 "AnimationNode::activate with delay");
             maContext.mrEventQueue.addEvent( mpCurrentEvent );
         }
-
+        
         return true;
     }
     return false;
@@ -512,23 +512,23 @@ bool BaseNode::activate()
 {
     if (! checkValidNode())
         return false;
-
+    
     OSL_ASSERT( meCurrState != ACTIVE );
     if (inStateOrTransition( ACTIVE ))
         return true;
-
+    
     StateTransition st(this);
     if (st.enter( ACTIVE )) {
-
+        
         activate_st(); // calling derived class
-
+        
         st.commit(); // changing state
-
+        
         maContext.mrEventMultiplexer.notifyAnimationStart( mpSelf );
-
+        
         return true;
     }
-
+    
     return false;
 }
 
@@ -553,12 +553,12 @@ void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
         // because the deactivation event is only scheduled
         // when the effect is started: the timeout is then
         // already respected.
-
+        
         // xxx todo:
         // think about set node, anim base node!
         // if anim base node has no activity, this is called to schedule deactivatiion,
         // but what if it does not schedule anything?
-
+        
         // TODO(F2): Handle end time attribute, too
         mpCurrentEvent = generateEvent(
             mxAnimationNode->getDuration(),
@@ -571,17 +571,17 @@ void BaseNode::deactivate()
 {
     if (inStateOrTransition( ENDED | FROZEN ) || !checkValidNode())
         return;
-
+    
     if (isTransition( meCurrState, FROZEN, false /* no OSL_ASSERT */ )) {
         // do transition to FROZEN:
         StateTransition st(this);
         if (st.enter( FROZEN, StateTransition::FORCE )) {
-
+            
             deactivate_st( FROZEN );
             st.commit();
-
+            
             notifyEndListeners();
-
+            
             // discharge a loaded event, before going on:
             if (mpCurrentEvent) {
                 mpCurrentEvent->dispose();
@@ -605,15 +605,15 @@ void BaseNode::end()
     bool const bIsFrozenOrInTransitionToFrozen = inStateOrTransition( FROZEN );
     if (inStateOrTransition( ENDED ) || !checkValidNode())
         return;
-
-    // END must always be reachable. If not, that's an error in the
+    
+    // END must always be reachable. If not, that's an error in the 
     // transition tables
     OSL_ENSURE( isTransition( meCurrState, ENDED ),
                 "end state not reachable in transition table" );
-
+    
     StateTransition st(this);
     if (st.enter( ENDED, StateTransition::FORCE )) {
-
+        
         deactivate_st( ENDED );
         st.commit(); // changing state
 
@@ -621,7 +621,7 @@ void BaseNode::end()
         // will/already notified deactivating listeners
         if (!bIsFrozenOrInTransitionToFrozen)
             notifyEndListeners();
-
+        
         // discharge a loaded event, before going on:
         if (mpCurrentEvent) {
             mpCurrentEvent->dispose();
@@ -645,10 +645,10 @@ void BaseNode::notifyEndListeners() const
                    maDeactivatingListeners.end(),
                    boost::bind( &AnimationNode::notifyDeactivating, _1,
                                 boost::cref(mpSelf) ) );
-
+    
     // notify state change
     maContext.mrEventMultiplexer.notifyAnimationEnd( mpSelf );
-
+    
     // notify main sequence end (iff we're the main
     // sequence root node). This is because the main
     // sequence determines the active duration of the
@@ -671,12 +671,12 @@ bool BaseNode::registerDeactivatingListener(
 {
     if (! checkValidNode())
         return false;
-
+    
     ENSURE_OR_RETURN_FALSE(
         rNotifee,
         "BaseNode::registerDeactivatingListener(): invalid notifee" );
     maDeactivatingListeners.push_back( rNotifee );
-
+    
     return true;
 }
 
@@ -686,7 +686,7 @@ void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
                       "BaseNode::setSelf(): got ptr to different object" );
     ENSURE_OR_THROW( !mpSelf,
                       "BaseNode::setSelf(): called multiple times" );
-
+    
     mpSelf = rSelf;
 }
 
@@ -697,7 +697,7 @@ void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 void BaseNode::showState() const
 {
     const AnimationNode::NodeState eNodeState( getState() );
-
+    
     if( eNodeState == AnimationNode::INVALID )
         VERBOSE_TRACE( "Node state: n0x%X [label=\"%s\",style=filled,"
                        "fillcolor=\"0.5,0.2,0.5\"]",
@@ -709,7 +709,7 @@ void BaseNode::showState() const
                        (const char*)this+debugGetCurrentOffset(),
                        getDescription(),
                        log(double(getState()))/4.0 );
-
+    
     // determine additional node information
     uno::Reference<animations::XAnimate> const xAnimate( mxAnimationNode,
                                                          uno::UNO_QUERY );
@@ -717,31 +717,31 @@ void BaseNode::showState() const
     {
         uno::Reference< drawing::XShape > xTargetShape( xAnimate->getTarget(),
                                                         uno::UNO_QUERY );
-
+        
         if( !xTargetShape.is() )
         {
             ::com::sun::star::presentation::ParagraphTarget aTarget;
-
+            
             // no shape provided. Maybe a ParagraphTarget?
             if( (xAnimate->getTarget() >>= aTarget) )
                 xTargetShape = aTarget.Shape;
         }
-
+        
         if( xTargetShape.is() )
         {
-            uno::Reference< beans::XPropertySet > xPropSet( xTargetShape,
+            uno::Reference< beans::XPropertySet > xPropSet( xTargetShape, 
                                                             uno::UNO_QUERY );
-
+            
             // read shape name
             ::rtl::OUString aName;
-            if( (xPropSet->getPropertyValue(
+            if( (xPropSet->getPropertyValue( 
                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) )
                  >>= aName) )
             {
-                const ::rtl::OString& rAsciiName(
-                    ::rtl::OUStringToOString( aName,
-                                              RTL_TEXTENCODING_ASCII_US ) );
-
+                const ::rtl::OString& rAsciiName( 
+                    ::rtl::OUStringToOString( aName, 
+                                              RTL_TEXTENCODING_ASCII_US ) ); 
+                
                 VERBOSE_TRACE( "Node info: n0x%X, name \"%s\"",
                                (const char*)this+debugGetCurrentOffset(),
                                rAsciiName.getStr() );
@@ -760,7 +760,7 @@ void BaseNode::showTreeFromWithin() const
     // find root node
     BaseNodeSharedPtr pCurrNode( mpSelf );
     while( pCurrNode->mpParent ) pCurrNode = pCurrNode->mpParent;
-
+    
     pCurrNode->showState();
 }
 #endif

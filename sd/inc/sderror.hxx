@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,13 @@
 
 #include <tools/errcode.hxx>
 
-#define ERROR_SD_BASE           (ERRCODE_AREA_SD)
-#define ERROR_SD_READ_BASE      (ERROR_SD_BASE | ERRCODE_CLASS_READ)
-#define ERROR_SD_WRITE_BASE     (ERROR_SD_BASE | ERRCODE_CLASS_WRITE)
+#define ERROR_SD_BASE			(ERRCODE_AREA_SD)
+#define ERROR_SD_READ_BASE		(ERROR_SD_BASE | ERRCODE_CLASS_READ)
+#define ERROR_SD_WRITE_BASE		(ERROR_SD_BASE | ERRCODE_CLASS_WRITE)
 
-#define WARN_SD_BASE            (ERRCODE_AREA_SD | ERRCODE_WARNING_MASK)
-#define WARN_SD_READ_BASE       (WARN_SD_BASE | ERRCODE_CLASS_READ )
-#define WARN_SD_WRITE_BASE      (WARN_SD_BASE | ERRCODE_CLASS_WRITE )
+#define WARN_SD_BASE			(ERRCODE_AREA_SD | ERRCODE_WARNING_MASK)
+#define WARN_SD_READ_BASE		(WARN_SD_BASE | ERRCODE_CLASS_READ )
+#define WARN_SD_WRITE_BASE		(WARN_SD_BASE | ERRCODE_CLASS_WRITE )
 
 
 // Import errors

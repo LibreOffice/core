@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,33 +28,33 @@
 #ifndef _SD_CUSTOMANIMATIONPANE_HRC
 #define _SD_CUSTOMANIMATIONPANE_HRC
 
-#define CM_WITH_CLICK               1
-#define CM_WITH_PREVIOUS            2
-#define CM_AFTER_PREVIOUS           3
-#define CM_OPTIONS                  4
-#define CM_DURATION                 5
-#define CM_REMOVE                   6
+#define CM_WITH_CLICK				1
+#define CM_WITH_PREVIOUS			2
+#define CM_AFTER_PREVIOUS			3
+#define CM_OPTIONS					4
+#define CM_DURATION					5
+#define CM_REMOVE					6
 
-#define FL_EFFECT                    1
-#define PB_ADD_EFFECT                2
-#define PB_CHANGE_EFFECT             3
-#define PB_REMOVE_EFFECT             4
-#define FL_MODIFY                    5
-#define FT_START                     6
-#define LB_START                     7
-#define FT_PROPERTY                  8
-#define LB_PROPERTY                  9
-#define PB_PROPERTY_MORE            10
-#define FT_SPEED                    12
-#define CB_SPEED                    13
-#define CT_CUSTOM_ANIMATION_LIST    14
-#define FT_CHANGE_ORDER             15
-#define PB_MOVE_UP                  16
-#define PB_MOVE_DOWN                17
-#define FL_SEPERATOR1               18
-#define PB_PLAY                     19
-#define PB_SLIDE_SHOW               20
-#define FL_SEPERATOR2               21
-#define CB_AUTOPREVIEW              22
+#define FL_EFFECT					 1
+#define PB_ADD_EFFECT				 2
+#define PB_CHANGE_EFFECT			 3
+#define PB_REMOVE_EFFECT			 4
+#define FL_MODIFY					 5
+#define FT_START					 6
+#define LB_START					 7
+#define FT_PROPERTY					 8
+#define LB_PROPERTY					 9
+#define PB_PROPERTY_MORE			10
+#define FT_SPEED					12
+#define CB_SPEED					13
+#define CT_CUSTOM_ANIMATION_LIST	14
+#define FT_CHANGE_ORDER				15
+#define PB_MOVE_UP					16
+#define PB_MOVE_DOWN				17
+#define FL_SEPERATOR1				18
+#define PB_PLAY						19
+#define PB_SLIDE_SHOW				20
+#define FL_SEPERATOR2				21
+#define CB_AUTOPREVIEW				22
 
 #endif // _SD_CUSTOMANIMATIONPANE_HXX

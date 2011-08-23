@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    /// Return the number of currently visible children.
+    ///	Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount (void) throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the specified child or throw exception.
+    ///	Return the specified child or throw exception.
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
@@ -66,7 +66,7 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)

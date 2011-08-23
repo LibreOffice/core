@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ namespace slideshow
                 direct corresponding XShape (the background comes to
                 mind here).
              */
-            virtual ::com::sun::star::uno::Reference<
+            virtual ::com::sun::star::uno::Reference< 
                 ::com::sun::star::drawing::XShape > getXShape() const = 0;
 
 
@@ -92,15 +92,15 @@ namespace slideshow
                 @param bRedrawLayer
                 Redraw shape on given layer
              */
-            virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
-                                       bool                         bRedrawLayer ) = 0;
+            virtual void addViewLayer( const ViewLayerSharedPtr& 	rNewLayer,
+                                       bool							bRedrawLayer ) = 0;
 
             /** Withdraw the shape from a view layer
 
                 This method removes the shape from the given view
                 layer.
 
-                @return true, if the shape was successfully removed
+                @return true, if the shape was successfully removed 
              */
             virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) = 0;
 
@@ -230,23 +230,23 @@ namespace slideshow
                 // make functor adaptable (to boost::bind)
                 typedef bool result_type;
 
-                // since the ZOrder property on the XShape has somewhat
+                // since the ZOrder property on the XShape has somewhat 
                 // peculiar attributes (it's basically the index of the shapes
                 // in the drawing layer's SdrObjList - which means, it starts
-                // from 0 for children of group objects), we cannot use it to determine
-                // drawing order. Thus, we rely on importer-provided order values here,
+                // from 0 for children of group objects), we cannot use it to determine 
+                // drawing order. Thus, we rely on importer-provided order values here, 
                 // which is basically a running counter during shape import (i.e. denotes
                 // the order of shape import). This is the correct order, at least for the
                 // current drawing core.
                 //
-                // If, someday, the above proposition is no longer true, one directly use
+                // If, someday, the above proposition is no longer true, one directly use 
                 // the shape's ZOrder property
                 //
                 static bool compare(const Shape* pLHS, const Shape* pRHS)
                 {
                     const double nPrioL( pLHS->getPriority() );
                     const double nPrioR( pRHS->getPriority() );
-
+            
                     // if prios are equal, tie-break on ptr value
                     return nPrioL == nPrioR ? pLHS < pRHS : nPrioL < nPrioR;
                 }
@@ -267,7 +267,7 @@ namespace slideshow
 
         /** A set which contains all shapes in an ordered fashion.
          */
-        typedef ::std::set< ShapeSharedPtr, Shape::lessThanShape >  ShapeSet;
+        typedef ::std::set< ShapeSharedPtr, Shape::lessThanShape > 	ShapeSet;
     }
 }
 

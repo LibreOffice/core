@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,8 +92,8 @@ struct WrappedMouseEvent : public ::com::sun::star::lang::EventObject
         EXITED
     };
 
-    EventType       meType;
-    ::com::sun::star::awt::MouseEvent   maEvent;
+    EventType 		meType;
+    ::com::sun::star::awt::MouseEvent	maEvent;
 };
 
 struct WrappedMouseMotionEvent : public ::com::sun::star::lang::EventObject
@@ -104,8 +104,8 @@ struct WrappedMouseMotionEvent : public ::com::sun::star::lang::EventObject
         MOVED
     };
 
-    EventType       meType;
-    ::com::sun::star::awt::MouseEvent   maEvent;
+    EventType 		meType;
+    ::com::sun::star::awt::MouseEvent	maEvent;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -128,14 +128,14 @@ protected:
     ::osl::Mutex& mrMutex;
 };
 
-typedef ::std::auto_ptr< SlideShowViewListeners >   SlideShowViewListenersPtr;
+typedef ::std::auto_ptr< SlideShowViewListeners >	SlideShowViewListenersPtr;
 
 ///////////////////////////////////////////////////////////////////////
 // SlideShowViewPaintListeners
 ///////////////////////////////////////////////////////////////////////
 
 typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XPaintListener,
-                                                ::com::sun::star::awt::PaintEvent >         SlideShowViewPaintListeners_Base;
+                                                ::com::sun::star::awt::PaintEvent >   		SlideShowViewPaintListeners_Base;
 
 class SlideShowViewPaintListeners : public SlideShowViewPaintListeners_Base
 {
@@ -145,7 +145,7 @@ public:
 protected:
     virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener, const ::com::sun::star::awt::PaintEvent& rEvent ) throw( ::com::sun::star::uno::Exception );
 };
-typedef ::std::auto_ptr< SlideShowViewPaintListeners >  SlideShowViewPaintListenersPtr;
+typedef ::std::auto_ptr< SlideShowViewPaintListeners >	SlideShowViewPaintListenersPtr;
 
 ///////////////////////////////////////////////////////////////////////
 // SlideShowViewMouseListeners
@@ -159,11 +159,11 @@ public:
     SlideShowViewMouseListeners( ::osl::Mutex& rMutex );
 
 protected:
-    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >&  rListener,
-                             const WrappedMouseEvent&                   rEvent ) throw( ::com::sun::star::uno::Exception );
+    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >&	rListener,
+                             const WrappedMouseEvent& 			  		rEvent ) throw( ::com::sun::star::uno::Exception );
 };
 
-typedef ::std::auto_ptr< SlideShowViewMouseListeners >  SlideShowViewMouseListenersPtr;
+typedef ::std::auto_ptr< SlideShowViewMouseListeners >	SlideShowViewMouseListenersPtr;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -179,10 +179,10 @@ public:
     SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex );
 
 protected:
-    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >&    rListener,
-                             const WrappedMouseMotionEvent&                 rEvent ) throw( ::com::sun::star::uno::Exception );
+    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >&	rListener,
+                             const WrappedMouseMotionEvent& 		  		rEvent ) throw( ::com::sun::star::uno::Exception );
 };
-typedef ::std::auto_ptr< SlideShowViewMouseMotionListeners >    SlideShowViewMouseMotionListenersPtr;
+typedef ::std::auto_ptr< SlideShowViewMouseMotionListeners >	SlideShowViewMouseMotionListenersPtr;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -258,23 +258,23 @@ private:
 
     void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow );
 
-    ::cppcanvas::SpriteCanvasSharedPtr                                              mpCanvas;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              mxWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >          mxWindowPeer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >             mxPointer;
-    SlideshowImpl*                          mpSlideShow;
-    ShowWindow&                             mrOutputWindow;
-    SlideShowViewListenersPtr               mpViewListeners;
-    SlideShowViewPaintListenersPtr          mpPaintListeners;
-    SlideShowViewMouseListenersPtr          mpMouseListeners;
-    SlideShowViewMouseMotionListenersPtr    mpMouseMotionListeners;
-    SdDrawDocument*                         mpDoc;
-    bool                                    mbIsMouseMotionListener;
-    Rectangle                               maPresentationArea;
-    AnimationMode                           meAnimationMode;
-    bool                                    mbFirstPaint;
+    ::cppcanvas::SpriteCanvasSharedPtr												mpCanvas;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >				mxWindow;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >			mxWindowPeer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >				mxPointer;
+    SlideshowImpl*							mpSlideShow;
+    ShowWindow&								mrOutputWindow;
+    SlideShowViewListenersPtr				mpViewListeners;
+    SlideShowViewPaintListenersPtr			mpPaintListeners;
+    SlideShowViewMouseListenersPtr			mpMouseListeners;
+    SlideShowViewMouseMotionListenersPtr	mpMouseMotionListeners;
+    SdDrawDocument*							mpDoc;
+    bool									mbIsMouseMotionListener;
+    Rectangle								maPresentationArea;
+    AnimationMode							meAnimationMode;
+    bool									mbFirstPaint;
     bool                                    mbFullScreen;
-    bool                                    mbMousePressedEaten;
+    bool									mbMousePressedEaten;
 };
 
 

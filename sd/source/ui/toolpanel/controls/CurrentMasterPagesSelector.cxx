@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
     {
         OSL_ASSERT(mrDocument.GetDocSh() != NULL);
     }
-
+    
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 }
@@ -237,7 +237,7 @@ void CurrentMasterPagesSelector::Execute (SfxRequest& rRequest)
             }
         }
         break;
-
+            
         default:
             MasterPagesSelector::Execute(rRequest);
             break;
@@ -306,7 +306,7 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
                 break;
         }
     }
-
+    
     return 0;
 }
 

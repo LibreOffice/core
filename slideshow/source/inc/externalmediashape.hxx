@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace slideshow
             /** Notify the Shape that it should start with playback
 
                 This method enters playback mode on all registered
-                views. It makes the media initially visible (for videos).
+                views. It makes the media initially visible (for videos). 
              */
             virtual void play() = 0;
 

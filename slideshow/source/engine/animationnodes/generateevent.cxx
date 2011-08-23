@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,15 +58,15 @@ EventSharedPtr generateEvent(
     double nAdditionalDelay )
 {
     EventSharedPtr pEvent;
-
+    
     if (! rEventDescription.hasValue())
         return pEvent;
-
+    
     animations::Timing eTiming;
     animations::Event aEvent;
     uno::Sequence<uno::Any> aSequence;
     double nDelay1 = 0;
-
+    
     if (rEventDescription >>= eTiming) {
         switch (eTiming) {
         case animations::Timing_INDEFINITE:
@@ -79,21 +79,21 @@ EventSharedPtr generateEvent(
         }
     }
     else if (rEventDescription >>= aEvent) {
-
+        
         // try to extract additional event delay
         double nDelay2 = 0.0;
         if (aEvent.Offset.hasValue() && !(aEvent.Offset >>= nDelay2)) {
             OSL_ENSURE( false, "offset values apart from DOUBLE not "
                         "recognized in animations::Event!" );
         }
-
+        
         // common vars used inside switch
         uno::Reference<animations::XAnimationNode> xNode;
         uno::Reference<drawing::XShape> xShape;
         ShapeSharedPtr pShape;
-
+        
         // TODO(F1): Respect aEvent.Repeat value
-
+        
         switch (aEvent.Trigger) {
         default:
             ENSURE_OR_THROW( false, "unexpected event trigger!" );
@@ -112,7 +112,7 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, BEGIN_EVENT");
-                rContext.mrUserEventQueue.registerAnimationStartEvent(
+                rContext.mrUserEventQueue.registerAnimationStartEvent( 
                     pEvent, xNode );
             }
             else {
@@ -126,7 +126,7 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, END_EVENT");
-                rContext.mrUserEventQueue.registerAnimationEndEvent(
+                rContext.mrUserEventQueue.registerAnimationEndEvent( 
                     pEvent, xNode );
             }
             else {
@@ -158,14 +158,14 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, ON_DBL_CLICK");
-                rContext.mrUserEventQueue.registerShapeDoubleClickEvent(
+                rContext.mrUserEventQueue.registerShapeDoubleClickEvent( 
                     pEvent, pShape );
             }
             else {
                 OSL_ENSURE( false, "could not extract source XAnimationNode "
                             "for ON_DBL_CLICK!" );
             }
-            break;
+            break;    
         case animations::EventTrigger::ON_MOUSE_ENTER:
             // try to extract XShape event source
             if ((aEvent.Source >>= xShape) &&
@@ -174,7 +174,7 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, ON_MOUSE_ENTER");
-                rContext.mrUserEventQueue.registerMouseEnterEvent(
+                rContext.mrUserEventQueue.registerMouseEnterEvent( 
                     pEvent, pShape );
             }
             else {
@@ -190,7 +190,7 @@ EventSharedPtr generateEvent(
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
                                     "generateEvent, ON_MOUSE_LEAVE");
-                rContext.mrUserEventQueue.registerMouseLeaveEvent(
+                rContext.mrUserEventQueue.registerMouseLeaveEvent( 
                     pEvent, pShape );
             }
             else {
@@ -238,7 +238,7 @@ EventSharedPtr generateEvent(
         // schedule delay event
         rContext.mrEventQueue.addEvent( pEvent );
     }
-
+    
     return pEvent;
 }
 

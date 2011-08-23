@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -457,7 +457,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         SdPresentationDocument_createInstance,
                         SdPresentationDocument_getSupportedServiceNames());
                     break;
-
+                    
                 case SdUnoModuleFactoryId:
                     xFactory = ::cppu::createSingleFactory(
                         xMSF,
@@ -494,7 +494,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         sd::framework::ModuleController_getImplementationName(),
                         sd::framework::ModuleController_getSupportedServiceNames());
                     break;
-
+                    
                 case BasicPaneFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::BasicPaneFactory_createInstance,
@@ -508,7 +508,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         sd::framework::BasicToolBarFactory_getImplementationName(),
                         sd::framework::BasicToolBarFactory_getSupportedServiceNames());
                     break;
-
+                    
                 case BasicViewFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::BasicViewFactory_createInstance,
