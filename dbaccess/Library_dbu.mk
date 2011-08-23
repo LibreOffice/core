@@ -57,8 +57,7 @@ $(eval $(call gb_Library_add_defs,dbu,\
 endif
 
 ifeq ($(GUI)$(COM),WNTGCC) # for adoint.h
-$(eval $(call gb_Library_set_cxxflags,dbu,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Library_add_cxxflags,dbu,\
     -fpermissive \
 ))
 endif
