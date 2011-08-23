@@ -72,7 +72,17 @@ xslt_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--without-crypto --without-python --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xslt_CC)" CFLAGS="$(xslt_CFLAGS)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -L$(ILIB:s/;/ -L/)" LIBS="$(xslt_LIBS)"  LIBXML2LIB=$(LIBXML2LIB) OBJDUMP=objdump
+.IF "$(CROSS_COMPILING)"=="YES"
+BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ELSE
+BUILD_AND_HOST=--build=i586-pc-mingw32 --host=i586-pc-mingw32
+.ENDIF
+.IF "$(ILIB)" == ""
+CONF_ILIB=
+.ELSE
+CONF_ILIB=-L$(ILIB:s/;/ -L/)
+.ENDIF
+CONFIGURE_FLAGS=--without-crypto --without-python --enable-static=no $(BUILD_AND_HOST) CC="$(xslt_CC)" CFLAGS="$(xslt_CFLAGS)" LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 $(CONF_ILIB)" LIBS="$(xslt_LIBS)"  LIBXML2LIB=$(LIBXML2LIB) OBJDUMP=objdump
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
