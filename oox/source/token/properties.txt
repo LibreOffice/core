@@ -156,6 +156,8 @@ FillGradient
 FillGradientName
 FillStyle
 FillTransparence
+FillTransparenceGradient
+FillTransparenceGradientName
 Filter
 FilterCriteriaSource
 FilterOptions

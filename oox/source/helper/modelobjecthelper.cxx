@@ -112,9 +112,11 @@ ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& r
     maMarkerContainer(    rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
     maDashContainer(      rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
     maGradientContainer(  rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
+    maTransGradContainer(  rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.TransparencyGradientTable" ) ),
     maBitmapUrlContainer( rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
     maDashNameBase(      CREATE_OUSTRING( "msLineDash " ) ),
     maGradientNameBase(  CREATE_OUSTRING( "msFillGradient " ) ),
+    maTransGradNameBase(  CREATE_OUSTRING( "msTransGradient " ) ),
     maBitmapUrlNameBase( CREATE_OUSTRING( "msFillBitmap " ) )
 {
 }
@@ -140,6 +142,11 @@ OUString ModelObjectHelper::insertLineDash( const LineDash& rDash )
 OUString ModelObjectHelper::insertFillGradient( const Gradient& rGradient )
 {
     return maGradientContainer.insertObject( maGradientNameBase, Any( rGradient ), true );
+}
+
+OUString ModelObjectHelper::insertTransGrandient( const Gradient& rGradient )
+{
+    return maTransGradContainer.insertObject( maTransGradNameBase, Any( rGradient ), true );
 }
 
 OUString ModelObjectHelper::insertFillBitmapUrl( const OUString& rGraphicUrl )

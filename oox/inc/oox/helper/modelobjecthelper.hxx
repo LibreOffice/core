@@ -109,6 +109,8 @@ public:
         an internal constant name with a new unused index appended. */
     ::rtl::OUString     insertFillGradient( const ::com::sun::star::awt::Gradient& rGradient );
 
+    ::rtl::OUString     insertTransGrandient( const ::com::sun::star::awt::Gradient& rGradient );
+
     /** Inserts a new named fill bitmap URL, returns the bitmap name, based on
         an internal constant name with a new unused index appended. */
     ::rtl::OUString     insertFillBitmapUrl( const ::rtl::OUString& rGraphicUrl );
@@ -117,9 +119,11 @@ private:
     ObjectContainer     maMarkerContainer;      /// Contains all named line markers (line end polygons).
     ObjectContainer     maDashContainer;        /// Contains all named line dsahes.
     ObjectContainer     maGradientContainer;    /// Contains all named fill gradients.
+    ObjectContainer     maTransGradContainer;   /// Contains all named transparency Gradients.
     ObjectContainer     maBitmapUrlContainer;   /// Contains all named fill bitmap URLs.
     const ::rtl::OUString maDashNameBase;       /// Base name for all named line dashes.
     const ::rtl::OUString maGradientNameBase;   /// Base name for all named fill gradients.
+    const ::rtl::OUString maTransGradNameBase;   /// Base name for all named fill gradients.
     const ::rtl::OUString maBitmapUrlNameBase;  /// Base name for all named fill bitmap URLs.
 };
 

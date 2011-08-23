@@ -217,6 +217,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // do not create gradient struct if property is not supported...
                 if( rPropMap.supportsProperty( SHAPEPROP_FillGradient ) )
                 {
+                    sal_Int32 nEndTrans     = 0;
+                    sal_Int32 nStartTrans   = 0;
                     awt::Gradient aGradient;
                     aGradient.Angle = 900;
                     aGradient.StartIntensity = 100;
@@ -227,6 +229,10 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     {
                         aGradient.StartColor = maGradientProps.maGradientStops.begin()->second.getColor( rGraphicHelper, nPhClr );
                         aGradient.EndColor = maGradientProps.maGradientStops.rbegin()->second.getColor( rGraphicHelper, nPhClr );
+                        if( maGradientProps.maGradientStops.rbegin()->second.hasTransparency() )
+                            nEndTrans = maGradientProps.maGradientStops.rbegin()->second.getTransparency()*255/100;
+                        if( maGradientProps.maGradientStops.begin()->second.hasTransparency() )
+                            nStartTrans = maGradientProps.maGradientStops.begin()->second.getTransparency()*255/100;
                     }
 
                     // "rotate with shape" not set, or set to false -> do not rotate
@@ -244,29 +250,55 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
                         aGradient.YOffset = getLimitedValue< sal_Int16, sal_Int32 >( nCenterY / PER_PERCENT, 30, 70 );
                         ::std::swap( aGradient.StartColor, aGradient.EndColor );
+                        ::std::swap( nStartTrans, nEndTrans );
                         nDmlAngle = nShapeRotation;
                     }
                     else
                     {
                         /*  Try to detect a VML axial gradient. This type of
-                            gradient is simulated by a 3-point linear gradient
-                            with equal start and end color. */
-                        bool bAxial = (nColorCount == 3) && (aGradient.StartColor == aGradient.EndColor);
+                            gradient is simulated by a 3-point linear gradient.
+                            Even if its a multi-color linear gradient, its probably better to assume
+                            axial gradient, when there are 3 or more points.
+                         */
+                        bool bAxial = (nColorCount >= 3);
                         aGradient.Style = bAxial ? awt::GradientStyle_AXIAL : awt::GradientStyle_LINEAR;
+                        nDmlAngle = maGradientProps.moShadeAngle.get( 0 ) - nShapeRotation;
+                        // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
+                        aGradient.Angle = static_cast< sal_Int16 >( (4500 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
                         if( bAxial )
                         {
                             GradientFillProperties::GradientStopMap::const_iterator aIt = maGradientProps.maGradientStops.begin();
+                            // Try to find the axial median
+                            for(size_t i=0;i<nColorCount;i+=3)
+                                aIt++;
                             // API StartColor is inner color in axial gradient
-                            aGradient.StartColor = (++aIt)->second.getColor( rGraphicHelper, nPhClr );
+                            // aIt->second.hasColor() kind would be better than Color != API_RGB_WHITE
+                            if( aGradient.StartColor == aGradient.EndColor &&
+                                ( !aIt->second.hasTransparency() || aIt->second.getColor( rGraphicHelper, nPhClr ) != API_RGB_WHITE ) )
+                            {
+                                aGradient.StartColor = aIt->second.getColor( rGraphicHelper, nPhClr );
+                            }
+
+                            if( nStartTrans == nEndTrans && aIt->second.hasTransparency() )
+                                nStartTrans = aIt->second.getTransparency()*255/100;
                         }
-                        nDmlAngle = maGradientProps.moShadeAngle.get( 0 ) - nShapeRotation;
                     }
-                    // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
-                    aGradient.Angle = static_cast< sal_Int16 >( (4500 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
 
                     // push gradient or named gradient to property map
                     if( rPropMap.setProperty( SHAPEPROP_FillGradient, aGradient ) )
                         eFillStyle = FillStyle_GRADIENT;
+
+                    // push gradient transparency to property map
+                    if( nStartTrans != 0 || nEndTrans != 0 )
+                    {
+                        awt::Gradient aGrad(aGradient);
+                        uno::Any aVal;
+                        aGrad.EndColor = (sal_Int32)( nEndTrans | nEndTrans << 8 | nEndTrans << 16 );
+                        aGrad.StartColor = (sal_Int32)( nStartTrans | nStartTrans << 8 | nStartTrans << 16 );
+                        aVal <<= aGrad;
+                        rPropMap.setProperty( SHAPEPROP_GradientTransparency, aGrad );
+                    }
+
                 }
             break;
 

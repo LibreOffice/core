@@ -59,6 +59,7 @@ enum ShapePropertyId
     SHAPEPROP_FillStyle,
     SHAPEPROP_FillColor,
     SHAPEPROP_FillTransparency,
+    SHAPEPROP_GradientTransparency,
     SHAPEPROP_FillGradient,                 /// Explicit fill gradient or name of a fill gradient stored in a global container.
     SHAPEPROP_FillBitmapUrl,                /// Explicit fill bitmap URL or name of a fill bitmap URL stored in a global container.
     SHAPEPROP_FillBitmapMode,
@@ -128,6 +129,8 @@ private:
     bool                setLineDash( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
     /** Sets an explicit fill gradient, or creates a named fill gradient. */
     bool                setFillGradient( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    /** Creates a named transparency gradient. */
+    bool                setGradientTrans( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
     /** Sets an explicit fill bitmap URL, or creates a named fill bitmap URL. */
     bool                setFillBitmapUrl( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
 
