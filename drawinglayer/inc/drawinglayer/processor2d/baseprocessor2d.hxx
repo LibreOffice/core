@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ namespace drawinglayer
 
                     case PRIMITIVE2D_ID_SOME_TEXT :
                     {
-                        // encapsulate e.g. with changing local varibles, e.g.
+                        // encapsulate e.g. with changing local varibles, e.g. 
                         // sometimes it's good to know if a basic primitive is
                         // part of a text, especially when not handling the text
                         // self but by purpose want to handle the decomposed
@@ -151,9 +151,9 @@ namespace drawinglayer
                     }
 
             As an example a processor collecting the outlines of a sequence of primitives
-            only needs to handle some Basic Primitives and create outline and collect
-            outline polygons e.g. for primitives with area like BitmapPrimitive2D (a
-            rectangle) and PolyPolygonColorPrimitive2D. When also handling the Grouping
+            only needs to handle some Basic Primitives and create outline and collect 
+            outline polygons e.g. for primitives with area like BitmapPrimitive2D (a 
+            rectangle) and PolyPolygonColorPrimitive2D. When also handling the Grouping 
             Primitives MaskPrimitive2D (e.g. ignoring it's content, using the mask polyPolygon)
             and TransformPrimitive2D (to have the correct local transformation), a processor
             creating the outline can be written using just four (4) primitives. As a tipp, it can
@@ -164,7 +164,7 @@ namespace drawinglayer
         {
         private:
             /// The ViewInformation2D itself. It's private to isolate accesses to it
-            geometry::ViewInformation2D                     maViewInformation2D;
+            geometry::ViewInformation2D						maViewInformation2D;
 
         protected:
             /*  access method to allow the implementations to change the current
@@ -212,7 +212,7 @@ namespace drawinglayer
         class CollectingProcessor2D : public BaseProcessor2D
         {
         private:
-            primitive2d::Primitive2DSequence                        maPrimitive2DSequence;
+            primitive2d::Primitive2DSequence						maPrimitive2DSequence;
 
         public:
             CollectingProcessor2D(const geometry::ViewInformation2D& rViewInformation);
@@ -222,9 +222,9 @@ namespace drawinglayer
             virtual void process(const primitive2d::Primitive2DSequence& rSource);
 
             /// helpers for adding to local sequence
-            void appendPrimitive2DReference(const primitive2d::Primitive2DReference& rSource)
-            {
-                primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
+            void appendPrimitive2DReference(const primitive2d::Primitive2DReference& rSource) 
+            { 
+                primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, rSource); 
             }
 
             /// data access and reset

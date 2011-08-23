@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ public:
     XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef );
     virtual ~XMLTableImport();
 
-    SvXMLImportContext* CreateTableContext( USHORT nPrfx, const ::rtl::OUString& rLName,
+    SvXMLImportContext* CreateTableContext( USHORT nPrfx, const ::rtl::OUString& rLName, 
                                             ::com::sun::star::uno::Reference< ::com::sun::star::table::XColumnRowRange >& xColumnRowRange );
 
     SvXMLStyleContext* CreateTableTemplateContext( USHORT nPrfx, const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -68,12 +68,12 @@ public:
     void finishStyles();
 
 private:
-    SvXMLImport&                                 mrImport;
+    SvXMLImport&								 mrImport;
     rtl::Reference< SvXMLImportPropertyMapper > mxCellImportPropertySetMapper;
     rtl::Reference< SvXMLImportPropertyMapper > mxRowImportPropertySetMapper;
     rtl::Reference< SvXMLImportPropertyMapper > mxColumnImportPropertySetMapper;
 
-    XMLTableTemplateMap                         maTableTemplates;
+    XMLTableTemplateMap							maTableTemplates;
 };
 
 #endif /*XMLTABLEIMPORT_HXX_*/

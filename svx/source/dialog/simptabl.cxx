@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
 
     HbSize.Width()=theWinSize.Width();
     theWinSize.Height()-=HbSize.Height();
-    Point   thePos(0,0);
+    Point	thePos(0,0);
 
     aHeaderBar.SetPosPixel(thePos);
     aHeaderBar.SetSizePixel(HbSize);
@@ -170,7 +170,7 @@ void SvxSimpleTable::UpdateViewSize()
 
     HbSize.Width()=theWinSize.Width();
     theWinSize.Height()-=HbSize.Height();
-    Point   thePos(0,0);
+    Point	thePos(0,0);
 
     aHeaderBar.SetPosPixel(thePos);
     aHeaderBar.SetSizePixel(HbSize);
@@ -263,7 +263,7 @@ void SvxSimpleTable::InsertHeaderEntry(const XubString& rText,USHORT nCol,
 
         for( xub_StrLen i=0; i<nCount; i++ )
         {
-            String  aString=rText.GetToken(i, sal_Unicode( '\t' ) );
+            String	aString=rText.GetToken(i, sal_Unicode( '\t' ) );
             aHeaderBar.InsertItem(nHeaderItemId++, aString, 0, nBits, nCol);
         }
     }

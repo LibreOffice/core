@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -508,7 +508,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // create the menu bar for the backing component
     css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+    xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager; 
     if (xLayoutManager.is())
     {
         xLayoutManager->lock();
@@ -520,14 +520,14 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
         */
         xLayoutManager->unlock();
-    }
+    }        
 
     if (pWindow)
     {
         // set help ID for our canvas
         pWindow->SetHelpId(HID_BACKINGWINDOW);
     }
-
+    
     // inform BackingWindow about frame
     BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
     if( pBack )
@@ -658,7 +658,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 {
     // Attention: dont free m_pAccExec here! see comments inside dtor and
     // keyPressed() for further details.
-
+    
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
@@ -837,7 +837,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
         xBroadcaster->addEventListener(static_cast< css::lang::XEventListener* >(this));
 
     m_xWindow->setVisible(sal_True);
-
+    
     aWriteLock.unlock();
     /* } SAFE */
 }

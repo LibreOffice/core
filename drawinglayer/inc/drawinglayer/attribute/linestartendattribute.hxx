@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             LineStartEndAttribute(
-                double fWidth,
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                double fWidth, 
+                const basegfx::B2DPolyPolygon& rPolyPolygon, 
                 bool bCentered);
             LineStartEndAttribute();
             LineStartEndAttribute(const LineStartEndAttribute& rCandidate);

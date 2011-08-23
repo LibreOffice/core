@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ StatusLine::StatusLine( BasicFrame* p )
 , pFrame( p )
 {
     // initialize TaskToolBox
-    TaskToolBox*    pTempTaskToolBox = GetTaskToolBox();
+    TaskToolBox*	pTempTaskToolBox = GetTaskToolBox();
     pTempTaskToolBox->SetActivateTaskHdl( LINK( this, StatusLine, ActivateTask ) );
 
     // initialize TaskStatusBar
-    TaskStatusBar*  pTempStatusBar = GetStatusBar();
-    long nCharWidth = GetTextWidth( '0' );  // We state: All numbers has the same width
+    TaskStatusBar*	pTempStatusBar = GetStatusBar();
+    long nCharWidth = GetTextWidth( '0' );	// We state: All numbers has the same width
     pTempStatusBar->InsertItem( ST_MESSAGE, GetTextWidth( 'X' ) * 20, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
     pTempStatusBar->InsertItem( ST_LINE, 5*nCharWidth );
     pTempStatusBar->InsertItem( ST_PROF, GetTextWidth( 'X' ) * 10 );
@@ -109,7 +109,7 @@ void StatusLine::LoadTaskToolBox()
     pTaskToolBox->StartUpdateTask();
 
     while ( nFirstWinPos < pWinMenu->GetItemCount() )
-    {   // There are windows
+    {	// There are windows
         Window* pWin = pFrame->FindWin( pWinMenu->GetItemId( nFirstWinPos ) );
 
         if ( pWin )

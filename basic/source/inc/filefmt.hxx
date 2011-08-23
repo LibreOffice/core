@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,24 +64,24 @@ class SvStream;
 
 // Alle Datei-Offsets in Records sind relativ zum Start des Moduls!
 
-#define B_LIBRARY       0x4C42      // BL Library Record
-#define B_MODULE        0x4D42      // BM Module Record
-#define B_NAME          0x4E4D      // MN module name
-#define B_COMMENT       0x434D      // MC comment
-#define B_SOURCE        0x4353      // SC source code
-#define B_PCODE         0x4350      // PC p-code
-#define B_OLDPUBLICS    0x7550      // Pu publics
-#define B_PUBLICS       0x5550      // PU publics
-#define B_POOLDIR       0x4450      // PD symbol pool directory
-#define B_SYMPOOL       0x5953      // SY symbol pool
-#define B_STRINGPOOL    0x5453      // ST symbol pool
-#define B_LINERANGES    0x524C      // LR line ranges for publics
-#define B_MODEND        0x454D      // ME module end
-#define B_SBXOBJECTS    0x5853      // SX SBX objects
+#define B_LIBRARY		0x4C42		// BL Library Record
+#define	B_MODULE		0x4D42		// BM Module Record
+#define	B_NAME			0x4E4D		// MN module name
+#define	B_COMMENT		0x434D		// MC comment
+#define	B_SOURCE		0x4353		// SC source code
+#define	B_PCODE			0x4350		// PC p-code
+#define	B_OLDPUBLICS 	0x7550		// Pu publics
+#define	B_PUBLICS 		0x5550		// PU publics
+#define	B_POOLDIR 		0x4450		// PD symbol pool directory
+#define	B_SYMPOOL		0x5953		// SY symbol pool
+#define	B_STRINGPOOL	0x5453		// ST symbol pool
+#define	B_LINERANGES	0x524C		// LR line ranges for publics
+#define	B_MODEND		0x454D		// ME module end
+#define	B_SBXOBJECTS	0x5853		// SX SBX objects
 
-#define EXTENDED_BINARY_MODULES
+#define	EXTENDED_BINARY_MODULES
 #ifdef  EXTENDED_BINARY_MODULES
-#define B_EXTSOURCE     0x5345      // ES extended source
+#define	B_EXTSOURCE		0x5345		// ES extended source
 #endif
 
 // Ein Library Record enthaelt nur Module Records

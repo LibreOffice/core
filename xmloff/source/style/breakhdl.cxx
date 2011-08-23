@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry pXML_BreakTypes[] =
 {
-    { XML_AUTO,         0 },
+    { XML_AUTO,	        0 },
     { XML_COLUMN,       1 },
     { XML_PAGE,         2 },
     { XML_EVEN_PAGE,    2 },
@@ -62,7 +62,7 @@ XMLFmtBreakBeforePropHdl::~XMLFmtBreakBeforePropHdl()
 }
 
 sal_Bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     sal_uInt16 nEnum;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
     if( bRet )
@@ -83,11 +83,11 @@ sal_Bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno:
         rValue <<= eBreak;
     }
 
-    return bRet;
+    return bRet; 
 }
 
 sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     style::BreakType eBreak;
 
     if( !( rValue >>= eBreak ) )
@@ -98,7 +98,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
 
         eBreak = (style::BreakType) nValue;
     }
-
+    
     sal_uInt16 nEnum = 0;
     switch( eBreak )
     {
@@ -114,7 +114,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
         default:
             return sal_False;
     }
-
+    
     OUStringBuffer aOut;
     /* sal_Bool bOk = */ SvXMLUnitConverter::convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
@@ -133,7 +133,7 @@ XMLFmtBreakAfterPropHdl::~XMLFmtBreakAfterPropHdl()
 }
 
 sal_Bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     sal_uInt16 nEnum;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
     if( bRet )
@@ -154,11 +154,11 @@ sal_Bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::
         rValue <<= eBreak;
     }
 
-    return bRet;
+    return bRet; 
 }
 
 sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     style::BreakType eBreak;
 
     if( !( rValue >>= eBreak ) )
@@ -169,7 +169,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
 
         eBreak = (style::BreakType) nValue;
     }
-
+    
     sal_uInt16 nEnum = 0;
     switch( eBreak )
     {
@@ -185,7 +185,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
         default:
             return sal_False;
     }
-
+    
     OUStringBuffer aOut;
     /* sal_Bool bOk = */ SvXMLUnitConverter::convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();

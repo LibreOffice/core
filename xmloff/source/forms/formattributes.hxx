@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,38 +43,38 @@ namespace xmloff
 //.........................................................................
 
     // flags for common control attributes
-    #define CCA_NAME                    0x00000001
-    #define CCA_SERVICE_NAME            0x00000002
-    #define CCA_BUTTON_TYPE             0x00000004
-    #define CCA_CONTROL_ID              0x00000008
-    #define CCA_CURRENT_SELECTED        0x00000010
-    #define CCA_CURRENT_VALUE           0x00000020
-    #define CCA_DISABLED                0x00000040
-    #define CCA_DROPDOWN                0x00000080
-    #define CCA_FOR                     0x00000100
-    #define CCA_IMAGE_DATA              0x00000200
-    #define CCA_LABEL                   0x00000400
-    #define CCA_MAX_LENGTH              0x00000800
-    #define CCA_PRINTABLE               0x00001000
-    #define CCA_READONLY                0x00002000
-    #define CCA_SELECTED                0x00004000
-    #define CCA_SIZE                    0x00008000
-    #define CCA_TAB_INDEX               0x00010000
-    #define CCA_TARGET_FRAME            0x00020000
-    #define CCA_TARGET_LOCATION         0x00040000
-    #define CCA_TAB_STOP                0x00080000
-    #define CCA_TITLE                   0x00100000
-    #define CCA_VALUE                   0x00200000
+    #define CCA_NAME					0x00000001
+    #define CCA_SERVICE_NAME			0x00000002
+    #define CCA_BUTTON_TYPE				0x00000004
+    #define CCA_CONTROL_ID				0x00000008
+    #define CCA_CURRENT_SELECTED		0x00000010
+    #define CCA_CURRENT_VALUE			0x00000020
+    #define CCA_DISABLED				0x00000040
+    #define CCA_DROPDOWN				0x00000080
+    #define CCA_FOR						0x00000100
+    #define CCA_IMAGE_DATA				0x00000200
+    #define CCA_LABEL					0x00000400
+    #define CCA_MAX_LENGTH				0x00000800
+    #define CCA_PRINTABLE				0x00001000
+    #define CCA_READONLY				0x00002000
+    #define CCA_SELECTED				0x00004000
+    #define CCA_SIZE					0x00008000
+    #define CCA_TAB_INDEX				0x00010000
+    #define CCA_TARGET_FRAME			0x00020000
+    #define CCA_TARGET_LOCATION			0x00040000
+    #define CCA_TAB_STOP				0x00080000
+    #define CCA_TITLE					0x00100000
+    #define CCA_VALUE					0x00200000
     #define CCA_ORIENTATION             0x00400000
     #define CCA_VISUAL_EFFECT           0x00800000
     #define CCA_ENABLEVISIBLE                 0x01000000
 
     // flags for database control atttributes
-    #define DA_BOUND_COLUMN             0x00000001
-    #define DA_CONVERT_EMPTY            0x00000002
-    #define DA_DATA_FIELD               0x00000004
-    #define DA_LIST_SOURCE              0x00000008
-    #define DA_LIST_SOURCE_TYPE         0x00000010
+    #define DA_BOUND_COLUMN				0x00000001
+    #define DA_CONVERT_EMPTY			0x00000002
+    #define DA_DATA_FIELD				0x00000004
+    #define DA_LIST_SOURCE				0x00000008
+    #define DA_LIST_SOURCE_TYPE			0x00000010
     #define DA_INPUT_REQUIRED           0x00000020
 
     // flags for binding related control attributes
@@ -86,11 +86,11 @@ namespace xmloff
     #define BA_XFORMS_SUBMISSION        0x00000020
 
     // flags for event attributes
-    #define EA_CONTROL_EVENTS           0x00000001
-    #define EA_ON_CHANGE                0x00000002
-    #define EA_ON_CLICK                 0x00000004
-    #define EA_ON_DBLCLICK              0x00000008
-    #define EA_ON_SELECT                0x00000010
+    #define EA_CONTROL_EVENTS			0x00000001
+    #define EA_ON_CHANGE				0x00000002
+    #define EA_ON_CLICK					0x00000004
+    #define EA_ON_DBLCLICK				0x00000008
+    #define EA_ON_SELECT				0x00000010
 
     /// attributes in the xml tag representing a form
     enum FormAttributes
@@ -120,19 +120,19 @@ namespace xmloff
     };
 
     // any other attributes, which are special to some control types
-    #define SCA_ECHO_CHAR               0x00000001
-    #define SCA_MAX_VALUE               0x00000002
-    #define SCA_MIN_VALUE               0x00000004
-    #define SCA_VALIDATION              0x00000008
+    #define SCA_ECHO_CHAR				0x00000001
+    #define SCA_MAX_VALUE				0x00000002
+    #define SCA_MIN_VALUE				0x00000004
+    #define SCA_VALIDATION				0x00000008
     #define SCA_GROUP_NAME              0x00000010
-    #define SCA_MULTI_LINE              0x00000020
-    #define SCA_AUTOMATIC_COMPLETION    0x00000080
-    #define SCA_MULTIPLE                0x00000100
-    #define SCA_DEFAULT_BUTTON          0x00000200
-    #define SCA_CURRENT_STATE           0x00000400
-    #define SCA_IS_TRISTATE             0x00000800
-    #define SCA_STATE                   0x00001000
-    #define SCA_COLUMN_STYLE_NAME       0x00002000
+    #define SCA_MULTI_LINE				0x00000020
+    #define SCA_AUTOMATIC_COMPLETION	0x00000080
+    #define SCA_MULTIPLE				0x00000100
+    #define SCA_DEFAULT_BUTTON			0x00000200
+    #define SCA_CURRENT_STATE			0x00000400
+    #define SCA_IS_TRISTATE				0x00000800
+    #define SCA_STATE					0x00001000
+    #define SCA_COLUMN_STYLE_NAME		0x00002000
     #define SCA_STEP_SIZE               0x00004000
     #define SCA_PAGE_STEP_SIZE          0x00008000
     #define SCA_REPEAT_DELAY            0x00010000
@@ -171,13 +171,13 @@ namespace xmloff
         static sal_uInt16 getCommonControlAttributeNamespace(sal_Int32 _nId);
 
         /** retrieves the name of an attribute of a form xml representation
-            @param  _eAttrib
+            @param	_eAttrib
                 enum value specifying the attribute
         */
         static const sal_Char* getFormAttributeName(FormAttributes _eAttrib);
 
         /** calculates the xml namespace key to use for a attribute of a form xml representation
-            @param  _eAttrib
+            @param	_eAttrib
                 enum value specifying the attribute
         */
         static sal_uInt16 getFormAttributeNamespace(FormAttributes _eAttrib);
@@ -247,21 +247,21 @@ namespace xmloff
         // store it's instances in a map, but in a vector for faster access.
         struct AttributeAssignment
         {
-            ::rtl::OUString                 sAttributeName;         // the attribute name
-            ::rtl::OUString                 sPropertyName;          // the property name
-            ::com::sun::star::uno::Type     aPropertyType;          // the property type
-            ::rtl::OUString                 sAttributeDefault;      // the default if the attribute is not present
+            ::rtl::OUString					sAttributeName;			// the attribute name
+            ::rtl::OUString					sPropertyName;			// the property name
+            ::com::sun::star::uno::Type		aPropertyType;			// the property type
+            ::rtl::OUString					sAttributeDefault;		// the default if the attribute is not present
 
             // entries which are special to some value types
-            const SvXMLEnumMapEntry*        pEnumMap;               // the enum map, if appliable
-            sal_Bool                        bInverseSemantics;      // for booleanss: attribute and property value have the same or an inverse semantics?
+            const SvXMLEnumMapEntry*		pEnumMap;				// the enum map, if appliable
+            sal_Bool						bInverseSemantics;		// for booleanss: attribute and property value have the same or an inverse semantics?
 
             AttributeAssignment() : pEnumMap(NULL), bInverseSemantics(sal_False) { }
         };
 
     protected:
         DECLARE_STL_USTRINGACCESS_MAP( AttributeAssignment, AttributeAssignments );
-        AttributeAssignments        m_aKnownProperties;
+        AttributeAssignments		m_aKnownProperties;
 
     public:
         OAttribute2Property();
@@ -287,7 +287,7 @@ namespace xmloff
                 the default value for the attribute, if any. May be NULL, in this case the default is assumed to be
                 an empty string.
         */
-        void    addStringProperty(
+        void	addStringProperty(
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
             const sal_Char* _pAttributeDefault = NULL);
 
@@ -303,7 +303,7 @@ namespace xmloff
                 if <TRUE/>, a attribute value of <TRUE/> means a property value of <FALSE/> and vice verse.<br/>
                 if <FALSE/>, the attribute value is used as property value directly
         */
-        void    addBooleanProperty(
+        void	addBooleanProperty(
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
             const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics = sal_False);
 
@@ -316,7 +316,7 @@ namespace xmloff
             @param _nAttributeDefault
                 the default value for the attribute.
         */
-        void    addInt16Property(
+        void	addInt16Property(
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
             const sal_Int16 _nAttributeDefault);
 
@@ -329,7 +329,7 @@ namespace xmloff
             @param _nAttributeDefault
                 the default value for the attribute.
         */
-        void    addInt32Property(
+        void	addInt32Property(
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
             const sal_Int32 _nAttributeDefault );
 
@@ -346,7 +346,7 @@ namespace xmloff
             @param _pType
                 the type of the property. May be NULL, in this case 32bit integer is assumed.
         */
-        void    addEnumProperty(
+        void	addEnumProperty(
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
             const ::com::sun::star::uno::Type* _pType = NULL);
@@ -358,7 +358,7 @@ namespace xmloff
             const ::com::sun::star::uno::Type& _rType, const ::rtl::OUString& _rDefaultString);
     };
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMATTRIBUTES_HXX_

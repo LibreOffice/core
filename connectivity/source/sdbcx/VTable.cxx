@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ sal_Bool SAL_CALL OTable::supportsService( const ::rtl::OUString& _rServiceName 
     return pSupported != pEnd;
 }
 // -------------------------------------------------------------------------
-OTable::OTable(OCollection* _pTables,
+OTable::OTable(OCollection*	_pTables,
                sal_Bool _bCase)
                : OTableDescriptor_BASE(m_aMutex)
                 ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase,sal_True)
@@ -92,11 +92,11 @@ OTable::OTable(OCollection* _pTables,
 {
 }
 // -----------------------------------------------------------------------------
-OTable::OTable( OCollection*    _pTables,
+OTable::OTable( OCollection*	_pTables,
                 sal_Bool _bCase,
-                const ::rtl::OUString& _Name,       const ::rtl::OUString& _Type,
+                const ::rtl::OUString& _Name,		const ::rtl::OUString& _Type,
                 const ::rtl::OUString& _Description,const ::rtl::OUString& _SchemaName,
-                const ::rtl::OUString& _CatalogName) :  OTableDescriptor_BASE(m_aMutex)
+                const ::rtl::OUString& _CatalogName) :	OTableDescriptor_BASE(m_aMutex)
                 ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase)
                 ,m_CatalogName(_CatalogName)
                 ,m_SchemaName(_SchemaName)
@@ -123,10 +123,10 @@ void OTable::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),     PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),     PROPERTY_ID_DESCRIPTION,nAttrib,&m_Description, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),		PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName,	::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),		PROPERTY_ID_SCHEMANAME,	nAttrib,&m_SchemaName,	::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION),		PROPERTY_ID_DESCRIPTION,nAttrib,&m_Description,	::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),			PROPERTY_ID_TYPE,		nAttrib,&m_Type,		::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTable::acquire() throw()

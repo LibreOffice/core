@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,10 +58,10 @@ enum SbiOpcode {
     _ARGV,              // TOS ==> aktueller Argv
     _INPUT,             // Input ==> TOS
     _LINPUT,            // Line Input ==> TOS
-    _GET,               // TOS anfassen
+    _GET,				// TOS anfassen
     _SET,               // Speichern Objekt TOS ==> TOS-1
-    _PUT,               // TOS ==> TOS-1
-    _PUTC,              // TOS ==> TOS-1, dann ReadOnly
+    _PUT,				// TOS ==> TOS-1
+    _PUTC,				// TOS ==> TOS-1, dann ReadOnly
     _DIM,               // DIM
     _REDIM,             // REDIM
     _REDIMP,            // REDIM PRESERVE
@@ -70,7 +70,7 @@ enum SbiOpcode {
     _STOP,              // Programmende
     _INITFOR,           // FOR-Variable initialisieren
     _NEXT,              // FOR-Variable inkrementieren
-    _CASE,              // Anfang CASE
+    _CASE,				// Anfang CASE
     _ENDCASE,           // Ende CASE
     _STDERROR,          // Standard-Fehlerbehandlung
     _NOERROR,           // keine Fehlerbehandlung
@@ -83,13 +83,13 @@ enum SbiOpcode {
     _RENAME,            // Rename Tos+1 to Tos
     _PROMPT,            // TOS = Prompt for Input
     _RESTART,           // Restartpunkt definieren
-    _CHAN0,             // I/O-Kanal 0
+    _CHAN0,				// I/O-Kanal 0
     // Sonstiges
     _EMPTY,             // Leeren Ausdruck auf Stack
-    _ERROR,             // TOS = Fehlercode
-    _LSET,              // Speichern Objekt TOS ==> TOS-1
+    _ERROR,				// TOS = Fehlercode
+    _LSET,				// Speichern Objekt TOS ==> TOS-1
     _RSET,              // Speichern Objekt TOS ==> TOS-1
-    _REDIMP_ERASE,      // Copies array to be later used by REDIM PRESERVE before erasing it
+    _REDIMP_ERASE,		// Copies array to be later used by REDIM PRESERVE before erasing it
     _INITFOREACH,
     _VBASET,            // VBA-like Set
     _ERASE_CLEAR,       // Erase array and clear variable
@@ -124,45 +124,45 @@ enum SbiOpcode {
     // Verwaltung
     _SETCLASS,          // Set + Klassennamen testen (+StringId)
     _TESTCLASS,         // Check TOS class (+StringId)
-    _LIB,               // Libnamen fuer Declare-Procs setzen (+StringId)
-    _BASED,             // TOS wird um BASE erhoeht, BASE davor gepusht (+base)
+    _LIB,				// Libnamen fuer Declare-Procs setzen (+StringId)
+    _BASED,          	// TOS wird um BASE erhoeht, BASE davor gepusht (+base)
     // Typanpassung im Argv
-    _ARGTYP,            // Letzten Parameter in Argv konvertieren (+Typ)
+    _ARGTYP,          	// Letzten Parameter in Argv konvertieren (+Typ)
     _VBASETCLASS,       // VBA-like Set
     SbOP1_END,
 
     // Alle Opcodes mit zwei Operanden
 
-    _RTL = 0x80,        // Laden aus RTL (+StringID+Typ)
+    _RTL = 0x80,   		// Laden aus RTL (+StringID+Typ)
 
     SbOP2_START = _RTL,
 
-    _FIND,              // Laden (+StringID+Typ)
-    _ELEM,              // Laden Element (+StringID+Typ)
-    _PARAM,             // Parameter (+Offset+Typ)
+    _FIND,       		// Laden (+StringID+Typ)
+    _ELEM,       		// Laden Element (+StringID+Typ)
+    _PARAM,				// Parameter (+Offset+Typ)
     // Verzweigen
-    _CALL,              // DECLARE-Methode rufen (+StringID+Typ)
-    _CALLC,             // Cdecl-DECLARE-Methode rufen (+StringID+Typ)
+    _CALL,				// DECLARE-Methode rufen (+StringID+Typ)
+    _CALLC,				// Cdecl-DECLARE-Methode rufen (+StringID+Typ)
     _CASEIS,            // Case-Test (+Test-Opcode+True-Target)
     // Verwaltung
     _STMNT,             // Beginn eines Statements (+Line+Col)
     // E/A
     _OPEN,              // (+SvStreamFlags+Flags)
     // Objekte
-    _LOCAL,             // Lokale Variable definieren (+StringID+Typ)
-    _PUBLIC,            // Modulglobale Variable (+StringID+Typ)
-    _GLOBAL,            // Globale Variable definieren, public-Anweisung (+StringID+Typ)
-    _CREATE,            // Objekt kreieren (+StringId+StringID)
-    _STATIC,            // Statische Variabl (+StringID+Typ) JSM
-    _TCREATE,           // User Defined Objekt kreieren
-    _DCREATE,           // Objekt-Array kreieren (+StringId+StringID)
-    _GLOBAL_P,          // Globale Variable definieren, die beim Neustart von Basic
+    _LOCAL,				// Lokale Variable definieren (+StringID+Typ)
+    _PUBLIC, 			// Modulglobale Variable (+StringID+Typ)
+    _GLOBAL,			// Globale Variable definieren, public-Anweisung (+StringID+Typ)
+    _CREATE,			// Objekt kreieren (+StringId+StringID)
+    _STATIC,			// Statische Variabl (+StringID+Typ) JSM
+    _TCREATE,			// User Defined Objekt kreieren
+    _DCREATE,			// Objekt-Array kreieren (+StringId+StringID)
+    _GLOBAL_P,      	// Globale Variable definieren, die beim Neustart von Basic
                         // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
-    _FIND_G,            // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
-    _DCREATE_REDIMP,    // Objekt-Array redimensionieren (+StringId+StringID)
-    _FIND_CM,           // Search inside a class module (CM) to enable global search in time
-    _PUBLIC_P,          //  Module global Variable (persisted between calls)(+StringID+Typ)
-    _FIND_STATIC,           //  local static var lookup (+StringID+Typ)
+    _FIND_G,        	// Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
+    _DCREATE_REDIMP,	// Objekt-Array redimensionieren (+StringId+StringID)
+    _FIND_CM,        	// Search inside a class module (CM) to enable global search in time
+    _PUBLIC_P, 			//  Module global Variable (persisted between calls)(+StringID+Typ)
+    _FIND_STATIC,        	//  local static var lookup (+StringID+Typ) 
 
     SbOP2_END
 

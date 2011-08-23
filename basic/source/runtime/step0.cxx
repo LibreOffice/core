@@ -171,29 +171,29 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
 #endif
 }
 
-void SbiRuntime::StepEXP()      { StepArith( SbxEXP );      }
-void SbiRuntime::StepMUL()      { StepArith( SbxMUL );      }
-void SbiRuntime::StepDIV()      { StepArith( SbxDIV );      }
-void SbiRuntime::StepIDIV()     { StepArith( SbxIDIV );     }
-void SbiRuntime::StepMOD()      { StepArith( SbxMOD );      }
-void SbiRuntime::StepPLUS()     { StepArith( SbxPLUS );     }
-void SbiRuntime::StepMINUS()        { StepArith( SbxMINUS );    }
-void SbiRuntime::StepCAT()      { StepArith( SbxCAT );      }
-void SbiRuntime::StepAND()      { StepArith( SbxAND );      }
-void SbiRuntime::StepOR()       { StepArith( SbxOR );       }
-void SbiRuntime::StepXOR()      { StepArith( SbxXOR );      }
-void SbiRuntime::StepEQV()      { StepArith( SbxEQV );      }
-void SbiRuntime::StepIMP()      { StepArith( SbxIMP );      }
+void SbiRuntime::StepEXP()		{ StepArith( SbxEXP );		}
+void SbiRuntime::StepMUL()		{ StepArith( SbxMUL );		}
+void SbiRuntime::StepDIV()		{ StepArith( SbxDIV );		}
+void SbiRuntime::StepIDIV()		{ StepArith( SbxIDIV );		}
+void SbiRuntime::StepMOD()		{ StepArith( SbxMOD );		}
+void SbiRuntime::StepPLUS()		{ StepArith( SbxPLUS );		}
+void SbiRuntime::StepMINUS()		{ StepArith( SbxMINUS );	}
+void SbiRuntime::StepCAT()		{ StepArith( SbxCAT );		}
+void SbiRuntime::StepAND()		{ StepArith( SbxAND );		}
+void SbiRuntime::StepOR()		{ StepArith( SbxOR );		}
+void SbiRuntime::StepXOR()		{ StepArith( SbxXOR );		}
+void SbiRuntime::StepEQV()		{ StepArith( SbxEQV );		}
+void SbiRuntime::StepIMP()		{ StepArith( SbxIMP );		}
 
-void SbiRuntime::StepNEG()      { StepUnary( SbxNEG );      }
-void SbiRuntime::StepNOT()      { StepUnary( SbxNOT );      }
+void SbiRuntime::StepNEG()		{ StepUnary( SbxNEG );		}
+void SbiRuntime::StepNOT()		{ StepUnary( SbxNOT );		}
 
-void SbiRuntime::StepEQ()       { StepCompare( SbxEQ );     }
-void SbiRuntime::StepNE()       { StepCompare( SbxNE );     }
-void SbiRuntime::StepLT()       { StepCompare( SbxLT );     }
-void SbiRuntime::StepGT()       { StepCompare( SbxGT );     }
-void SbiRuntime::StepLE()       { StepCompare( SbxLE );     }
-void SbiRuntime::StepGE()       { StepCompare( SbxGE );     }
+void SbiRuntime::StepEQ()		{ StepCompare( SbxEQ );		}
+void SbiRuntime::StepNE()		{ StepCompare( SbxNE );		}
+void SbiRuntime::StepLT()		{ StepCompare( SbxLT );		}
+void SbiRuntime::StepGT()		{ StepCompare( SbxGT );		}
+void SbiRuntime::StepLE()		{ StepCompare( SbxLE );		}
+void SbiRuntime::StepGE()		{ StepCompare( SbxGE );		}
 
 namespace
 {
@@ -443,7 +443,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
 
     // Check value, !object is no error for sure if, only if type is fixed
     SbxDataType eValType = refVal->GetType();
-//  bool bGetValObject = false;
+//	bool bGetValObject = false;
     if( !bHandleDefaultProp && eValType != SbxOBJECT && !(eValType & SbxARRAY) && refVal->IsFixed() )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
@@ -549,7 +549,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 xComListener = createComListener( aControlAny, aVBAType, aPrefix, xScopeObj );
 
                 refVal->SetDeclareClassName( aDeclareClassName );
-                refVal->SetComListener( xComListener );     // Hold reference
+                refVal->SetComListener( xComListener );		// Hold reference
             }
 
             *refVar = *refVal;
@@ -851,7 +851,7 @@ void SbiRuntime::StepREDIMP()
 
 // REDIM_COPY
 // TOS  = Array-Variable, Reference to array is copied
-//        Variable is cleared as in ERASE
+//		  Variable is cleared as in ERASE
 
 void SbiRuntime::StepREDIMP_ERASE()
 {
@@ -1197,7 +1197,7 @@ void SbiRuntime::StepLEAVE()
         SbxErrObject::getUnoErrObject()->Clear();
 }
 
-void SbiRuntime::StepCHANNEL()      // TOS = Kanalnummer
+void SbiRuntime::StepCHANNEL()	  	// TOS = Kanalnummer
 {
     SbxVariableRef pChan = PopVar();
     short nChan = pChan->GetInteger();
@@ -1210,26 +1210,26 @@ void SbiRuntime::StepCHANNEL0()
     pIosys->ResetChannel();
 }
 
-void SbiRuntime::StepPRINT()        // print TOS
+void SbiRuntime::StepPRINT()	  	// print TOS
 {
     SbxVariableRef p = PopVar();
     String s1 = p->GetString();
     String s;
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
-        s = ' ';    // ein Blank davor
+        s = ' ';	// ein Blank davor
     s += s1;
     ByteString aByteStr( s, gsl_getSystemTextEncoding() );
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }
 
-void SbiRuntime::StepPRINTF()       // print TOS in field
+void SbiRuntime::StepPRINTF()	  	// print TOS in field
 {
     SbxVariableRef p = PopVar();
     String s1 = p->GetString();
     String s;
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
-        s = ' ';    // ein Blank davor
+        s = ' ';	// ein Blank davor
     s += s1;
     s.Expand( 14, ' ' );
     ByteString aByteStr( s, gsl_getSystemTextEncoding() );
@@ -1237,7 +1237,7 @@ void SbiRuntime::StepPRINTF()       // print TOS in field
     Error( pIosys->GetError() );
 }
 
-void SbiRuntime::StepWRITE()        // write TOS
+void SbiRuntime::StepWRITE()	  	// write TOS
 {
     SbxVariableRef p = PopVar();
     // Muss der String gekapselt werden?
@@ -1261,7 +1261,7 @@ void SbiRuntime::StepWRITE()        // write TOS
     Error( pIosys->GetError() );
 }
 
-void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
+void SbiRuntime::StepRENAME()	  	// Rename Tos+1 to Tos
 {
     SbxVariableRef pTos1 = PopVar();
     SbxVariableRef pTos  = PopVar();

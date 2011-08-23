@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ import java.io.*;
 import workben.odbc.*;
 
 import com.sun.star.comp.servicemanager.ServiceManager;
-//  import java.io.IOException;
+//	import java.io.IOException;
 
 //import com.sun.star.beans.PropertyValue;
 //import com.sun.star.beans.PropertyState;
@@ -41,10 +41,10 @@ import com.sun.star.bridge.XBridge;
 
 //  import com.sun.star.comp.bootstrap.Bootstrap;
 
-//  import com.sun.star.io.XInputStream;
-//  import com.sun.star.io.XOutputStream;
+//	import com.sun.star.io.XInputStream;
+//	import com.sun.star.io.XOutputStream;
 
-//  import com.sun.star.lang.XComponent;
+//	import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 
@@ -54,11 +54,11 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
 
 import com.sun.star.sdbc.*;
-//  import com.sun.star.sdbc.XConnection;
-//  import com.sun.star.uno.Enum;
+//	import com.sun.star.sdbc.XConnection;
+//	import com.sun.star.uno.Enum;
 
-//  import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
-//  import com.sun.star.lib.uno.typeinfo.TypeInfo;
+//	import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
+//	import com.sun.star.lib.uno.typeinfo.TypeInfo;
 
 public class StartTest
 {
@@ -196,7 +196,7 @@ public class StartTest
         XConnector  xConnector  = (XConnector)smgr.createInstance("com.sun.star.connection.Connector");
     if(xConnector == null) System.err.println("no connector!");
 
-        XConnection xConn       = xConnector.connect("socket,host=localhost,port=6001");
+        XConnection xConn		= xConnector.connect("socket,host=localhost,port=6001");
     if(xConn == null) System.err.println("no XConnection!");
 
         IBridge iBridge = UnoRuntime.getBridgeByName("java", null, "remote", null, new Object[]{"iiop", xConn, null});

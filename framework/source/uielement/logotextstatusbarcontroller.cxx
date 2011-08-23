@@ -50,9 +50,9 @@ using namespace ::com::sun::star::frame;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   LogoTextStatusbarController             ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   LogoTextStatusbarController     	    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_STATUSBARCONTROLLER         ,
+                                            SERVICENAME_STATUSBARCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_LOGOTEXTSTATUSBARCONTROLLER
                                         )
 

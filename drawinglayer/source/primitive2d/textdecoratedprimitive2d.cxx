@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,8 +84,8 @@ namespace drawinglayer
                 // TextLayouterDevice is needed to get metrics for text decorations like
                 // underline/strikeout/emphasis marks from it. For setup, the font size is needed
                 aTextLayouter.setFontAttribute(
-                    getFontAttribute(),
-                    rDecTrans.getScale().getX(),
+                    getFontAttribute(), 
+                    rDecTrans.getScale().getX(), 
                     rDecTrans.getScale().getY(),
                     getLocale());
 
@@ -100,8 +100,8 @@ namespace drawinglayer
                 {
                     fTextWidth = rDXArray.back() * rDecTrans.getScale().getX();
                     const double fFontScaleX(rDecTrans.getScale().getX());
-
-                    if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                    
+                    if(!basegfx::fTools::equal(fFontScaleX, 1.0) 
                         && !basegfx::fTools::equalZero(fFontScaleX))
                     {
                         // need to take FontScaling out of the DXArray
@@ -256,8 +256,8 @@ namespace drawinglayer
                     {
                         // ..but only completely when no DXArray
                         aTextLayouter.setFontAttribute(
-                            getFontAttribute(),
-                            rDecTrans.getScale().getX(),
+                            getFontAttribute(), 
+                            rDecTrans.getScale().getX(), 
                             rDecTrans.getScale().getY(),
                             getLocale());
                     }
@@ -278,7 +278,7 @@ namespace drawinglayer
                         {
                             // prepare new DXArray for the single word
                             aNewDXArray = ::std::vector< double >(
-                                getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()),
+                                getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()), 
                                 getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
                         }
 
@@ -286,7 +286,7 @@ namespace drawinglayer
                         {
                             // needs to be moved to a new start position
                             double fOffset(0.0);
-
+                            
                             if(bNoDXArray)
                             {
                                 // evaluate using TextLayouter
@@ -304,8 +304,8 @@ namespace drawinglayer
                             // so FontScale would be double
                             double fOffsetNoScale(fOffset);
                             const double fFontScaleX(rDecTrans.getScale().getX());
-
-                            if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                            
+                            if(!basegfx::fTools::equal(fFontScaleX, 1.0) 
                                 && !basegfx::fTools::equalZero(fFontScaleX))
                             {
                                 fOffsetNoScale /= fFontScaleX;
@@ -333,8 +333,8 @@ namespace drawinglayer
                         // create geometry content for the single word. Do not forget
                         // to use the new transformation
                         basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(aNewTransform);
-
-                        impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
+                        
+                        impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart, 
                             nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttribute);
 
                         if(aNextWordBoundary.endPos >= getTextPosition() + getTextLength())
@@ -348,14 +348,14 @@ namespace drawinglayer
                             const sal_Int32 nLastEndPos(aNextWordBoundary.endPos);
 
                             aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
-                                getText(), aNextWordBoundary.endPos, getLocale(),
+                                getText(), aNextWordBoundary.endPos, getLocale(), 
                                 ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
 
                             if(nLastEndPos == aNextWordBoundary.endPos)
                             {
                                 // backward hit, force next word
                                 aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
-                                    getText(), nLastEndPos + 1, getLocale(),
+                                    getText(), nLastEndPos + 1, getLocale(), 
                                     ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
                             }
 
@@ -532,7 +532,7 @@ namespace drawinglayer
             bool bEmphasisMarkBelow,
             TextRelief eTextRelief,
             bool bShadow)
-        :   TextSimplePortionPrimitive2D(rNewTransform, rText, aTextPosition, aTextLength, rDXArray, rFontAttribute, rLocale, rFontColor),
+        :	TextSimplePortionPrimitive2D(rNewTransform, rText, aTextPosition, aTextLength, rDXArray, rFontAttribute, rLocale, rFontColor),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),

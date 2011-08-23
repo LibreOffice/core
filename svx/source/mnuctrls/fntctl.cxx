@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 
 //--------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Ctor; setzt den Select-Handler am Men"u und tr"agt das Men"u
     in seinen Parent ein.
@@ -54,12 +54,12 @@ SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 
 SvxFontMenuControl::SvxFontMenuControl
 (
-    USHORT          _nId,
-    Menu&           rMenu,
-    SfxBindings&    rBindings
+    USHORT 			_nId,
+    Menu&			rMenu,
+    SfxBindings&	rBindings
 ) :
-    pMenu   ( new FontNameMenu ),
-    rParent ( rMenu )
+    pMenu	( new FontNameMenu ),
+    rParent	( rMenu )
 {
     rMenu.SetPopupMenu( _nId, pMenu );
     pMenu->SetSelectHdl( LINK( this, SvxFontMenuControl, MenuSelect ) );
@@ -69,7 +69,7 @@ SvxFontMenuControl::SvxFontMenuControl
 
 //--------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     F"ullt das Men"u mit den aktuellen Fonts aus der Fontlist
     der DocumentShell.
@@ -91,7 +91,7 @@ void SvxFontMenuControl::FillMenu()
 
 //--------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Statusbenachrichtigung;
     f"ullt ggf. das Men"u mit den aktuellen Fonts aus der Fontlist
@@ -123,7 +123,7 @@ void SvxFontMenuControl::StateChanged(
 
 //--------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Statusbenachrichtigung "uber Bindings;  bei DOCCHANGED
     wird das Men"u mit den aktuellen Fonts aus der Fontlist
@@ -139,7 +139,7 @@ void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 //--------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Select-Handler des Men"us; der Name des selektierten Fonts
     wird in einem SvxFontItem verschickt. Das F"ullen mit den
@@ -157,7 +157,7 @@ IMPL_LINK_INLINE_END( SvxFontMenuControl, MenuSelect, FontNameMenu *, pMen )
 
 //--------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Dtor; gibt das Men"u frei.
 */
@@ -169,7 +169,7 @@ SvxFontMenuControl::~SvxFontMenuControl()
 
 //--------------------------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Gibt das Men"u zur"uck
 */

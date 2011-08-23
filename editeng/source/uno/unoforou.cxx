@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,8 +76,8 @@ USHORT SvxOutlinerForwarder::GetTextLen( USHORT nParagraph ) const
 
 String SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 {
-    //! GetText(ESelection) sollte es wohl auch mal am Outliner geben
-    //  solange den Hack fuer die EditEngine uebernehmen:
+    //!	GetText(ESelection) sollte es wohl auch mal am Outliner geben
+    //	solange den Hack fuer die EditEngine uebernehmen:
     EditEngine* pEditEngine = (EditEngine*)&rOutliner.GetEditEngine();
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
@@ -128,8 +128,8 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyH
         }
     }
 
-    //! gibt's das nicht am Outliner ???
-    //! und warum ist GetAttribs an der EditEngine nicht const?
+    //!	gibt's das nicht am Outliner ???
+    //!	und warum ist GetAttribs an der EditEngine nicht const?
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
     SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, bOnlyHardAttrib, rEditEngine ) );
@@ -431,16 +431,16 @@ USHORT SvxOutlinerForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
 {
     return rOutliner.GetLineLen(nPara, nLine);
 }
-
+    
 void SvxOutlinerForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
 {
     return rOutliner.GetEditEngine().GetLineBoundaries( rStart, rEnd, nPara, nLine );
 }
-
+    
 USHORT SvxOutlinerForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
 {
     return rOutliner.GetEditEngine().GetLineNumberAtIndex( nPara, nIndex );
-}
+}    
 
 sal_Bool SvxOutlinerForwarder::QuickFormatDoc( BOOL )
 {
@@ -492,7 +492,7 @@ sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, sal_Int16 nNewDepth )
         {
             rOutliner.SetDepth( pPara, nNewDepth );
 
-//          const bool bOutlinerText = pSdrObject && (pSdrObject->GetObjInventor() == SdrInventor) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
+//			const bool bOutlinerText = pSdrObject && (pSdrObject->GetObjInventor() == SdrInventor) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
             if( bOutlinerText )
                 rOutliner.SetLevelDependendStyleSheet( nPara );
 

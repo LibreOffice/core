@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,14 +71,14 @@ class SdrUnoControlList;
 class ImplMarkingOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    ::sdr::overlay::OverlayObjectList				maObjects;
 
     // The remembered second position in logical coodinates
-    basegfx::B2DPoint                               maSecondPosition;
+    basegfx::B2DPoint								maSecondPosition;
 
     // bitfield
     // A flag to remember if the action is for unmarking.
-    unsigned                                        mbUnmarking : 1;
+    unsigned										mbUnmarking : 1;
 
 public:
     ImplMarkingOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos, sal_Bool bUnmarking = sal_False);
@@ -89,7 +89,7 @@ public:
 };
 
 ImplMarkingOverlay::ImplMarkingOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos, sal_Bool bUnmarking)
-:   maSecondPosition(rStartPos),
+:	maSecondPosition(rStartPos),
     mbUnmarking(bUnmarking)
 {
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
@@ -174,7 +174,7 @@ void SdrMarkView::ImpClearVars()
 }
 
 SdrMarkView::SdrMarkView(SdrModel* pModel1, OutputDevice* pOut)
-:   SdrSnapView(pModel1,pOut),
+:	SdrSnapView(pModel1,pOut),
     mpMarkObjOverlay(0L),
     mpMarkPointsOverlay(0L),
     mpMarkGluePointsOverlay(0L),
@@ -197,20 +197,20 @@ SdrMarkView::~SdrMarkView()
 void __EXPORT SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
-    if (pSdrHint!=NULL)
+    if (pSdrHint!=NULL) 
     {
         SdrHintKind eKind=pSdrHint->GetKind();
 
-        if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED)
+        if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED) 
         {
             bMarkedObjRectDirty=TRUE;
             bMarkedPointsRectsDirty=TRUE;
         }
-/* removed for now since this breaks existing code who iterates over the mark list and sequentially replaces objects
+/* removed for now since this breaks existing code who iterates over the mark list and sequentially replaces objects		
         if( eKind==HINT_OBJREMOVED && IsObjMarked( const_cast<SdrObject*>(pSdrHint->GetObject()) ) )
         {
             MarkObj( const_cast<SdrObject*>(pSdrHint->GetObject()), GetSdrPageView(), TRUE );
-        }
+        }		
 */
     }
     SdrSnapView::Notify(rBC,rHint);
@@ -245,16 +245,16 @@ BOOL SdrMarkView::IsAction() const
 void SdrMarkView::MovAction(const Point& rPnt)
 {
     SdrSnapView::MovAction(rPnt);
-
-    if(IsMarkObj())
+    
+    if(IsMarkObj()) 
     {
         MovMarkObj(rPnt);
     }
-    else if(IsMarkPoints())
+    else if(IsMarkPoints()) 
     {
         MovMarkPoints(rPnt);
     }
-    else if(IsMarkGluePoints())
+    else if(IsMarkGluePoints()) 
     {
         MovMarkGluePoints(rPnt);
     }
@@ -262,15 +262,15 @@ void SdrMarkView::MovAction(const Point& rPnt)
 
 void SdrMarkView::EndAction()
 {
-    if(IsMarkObj())
+    if(IsMarkObj()) 
     {
         EndMarkObj();
     }
-    else if(IsMarkPoints())
+    else if(IsMarkPoints()) 
     {
         EndMarkPoints();
     }
-    else if(IsMarkGluePoints())
+    else if(IsMarkGluePoints()) 
     {
         EndMarkGluePoints();
     }
@@ -296,11 +296,11 @@ void SdrMarkView::BrkAction()
 
 void SdrMarkView::TakeActionRect(Rectangle& rRect) const
 {
-    if(IsMarkObj() || IsMarkPoints() || IsMarkGluePoints())
+    if(IsMarkObj() || IsMarkPoints() || IsMarkGluePoints()) 
     {
         rRect = Rectangle(aDragStat.GetStart(), aDragStat.GetNow());
-    }
-    else
+    } 
+    else 
     {
         SdrSnapView::TakeActionRect(rRect);
     }
@@ -327,7 +327,7 @@ void SdrMarkView::HideSdrPage()
 
         //HMHif(bVis)
         //HMH{
-        //HMH   HideMarkHdl();
+        //HMH	HideMarkHdl();
         //HMH}
 
         // Alle Markierungen dieser Seite verwerfen
@@ -344,7 +344,7 @@ void SdrMarkView::HideSdrPage()
 
     //HMHif(bVis)
     //HMH{
-    //HMH   ShowMarkHdl();
+    //HMH	ShowMarkHdl();
     //HMH}
 }
 
@@ -361,13 +361,13 @@ sal_Bool SdrMarkView::BegMarkObj(const Point& rPnt, sal_Bool bUnmark)
     aDragStat.Reset(rPnt);
     aDragStat.NextPoint();
     aDragStat.SetMinMove(nMinMovLog);
-
+    
     return sal_True;
 }
 
 void SdrMarkView::MovMarkObj(const Point& rPnt)
 {
-    if(IsMarkObj() && aDragStat.CheckMinMoved(rPnt))
+    if(IsMarkObj() && aDragStat.CheckMinMoved(rPnt)) 
     {
         aDragStat.NextMove(rPnt);
         DBG_ASSERT(mpMarkObjOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
@@ -380,9 +380,9 @@ sal_Bool SdrMarkView::EndMarkObj()
 {
     sal_Bool bRetval(sal_False);
 
-    if(IsMarkObj())
+    if(IsMarkObj()) 
     {
-        if(aDragStat.IsMinMoved())
+        if(aDragStat.IsMinMoved()) 
         {
             Rectangle aRect(aDragStat.GetStart(), aDragStat.GetNow());
             aRect.Justify();
@@ -399,7 +399,7 @@ sal_Bool SdrMarkView::EndMarkObj()
 
 void SdrMarkView::BrkMarkObj()
 {
-    if(IsMarkObj())
+    if(IsMarkObj()) 
     {
         DBG_ASSERT(mpMarkObjOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         delete mpMarkObjOverlay;
@@ -411,7 +411,7 @@ void SdrMarkView::BrkMarkObj()
 
 sal_Bool SdrMarkView::BegMarkPoints(const Point& rPnt, sal_Bool bUnmark)
 {
-    if(HasMarkablePoints())
+    if(HasMarkablePoints()) 
     {
         BrkAction();
 
@@ -424,14 +424,14 @@ sal_Bool SdrMarkView::BegMarkPoints(const Point& rPnt, sal_Bool bUnmark)
         aDragStat.SetMinMove(nMinMovLog);
 
         return sal_True;
-    }
+    } 
 
     return sal_False;
 }
 
 void SdrMarkView::MovMarkPoints(const Point& rPnt)
 {
-    if(IsMarkPoints() && aDragStat.CheckMinMoved(rPnt))
+    if(IsMarkPoints() && aDragStat.CheckMinMoved(rPnt)) 
     {
         aDragStat.NextMove(rPnt);
 
@@ -445,7 +445,7 @@ sal_Bool SdrMarkView::EndMarkPoints()
 {
     sal_Bool bRetval(sal_False);
 
-    if(IsMarkPoints())
+    if(IsMarkPoints()) 
     {
         if(aDragStat.IsMinMoved())
         {
@@ -465,7 +465,7 @@ sal_Bool SdrMarkView::EndMarkPoints()
 
 void SdrMarkView::BrkMarkPoints()
 {
-    if(IsMarkPoints())
+    if(IsMarkPoints()) 
     {
         DBG_ASSERT(mpMarkPointsOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         delete mpMarkPointsOverlay;
@@ -477,10 +477,10 @@ void SdrMarkView::BrkMarkPoints()
 
 sal_Bool SdrMarkView::BegMarkGluePoints(const Point& rPnt, sal_Bool bUnmark)
 {
-    if(HasMarkableGluePoints())
+    if(HasMarkableGluePoints()) 
     {
         BrkAction();
-
+        
         DBG_ASSERT(0L == mpMarkGluePointsOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkGluePointsOverlay (!)");
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
         mpMarkGluePointsOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
@@ -488,16 +488,16 @@ sal_Bool SdrMarkView::BegMarkGluePoints(const Point& rPnt, sal_Bool bUnmark)
         aDragStat.Reset(rPnt);
         aDragStat.NextPoint();
         aDragStat.SetMinMove(nMinMovLog);
-
+        
         return sal_True;
-    }
+    } 
 
     return sal_False;
 }
 
 void SdrMarkView::MovMarkGluePoints(const Point& rPnt)
 {
-    if(IsMarkGluePoints() && aDragStat.CheckMinMoved(rPnt))
+    if(IsMarkGluePoints() && aDragStat.CheckMinMoved(rPnt)) 
     {
         aDragStat.NextMove(rPnt);
 
@@ -511,7 +511,7 @@ sal_Bool SdrMarkView::EndMarkGluePoints()
 {
     sal_Bool bRetval(sal_False);
 
-    if(IsMarkGluePoints())
+    if(IsMarkGluePoints()) 
     {
         if(aDragStat.IsMinMoved())
         {
@@ -531,7 +531,7 @@ sal_Bool SdrMarkView::EndMarkGluePoints()
 
 void SdrMarkView::BrkMarkGluePoints()
 {
-    if(IsMarkGluePoints())
+    if(IsMarkGluePoints()) 
     {
         DBG_ASSERT(mpMarkGluePointsOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         delete mpMarkGluePointsOverlay;
@@ -579,27 +579,27 @@ ULONG SdrMarkView::GetMarkableObjCount() const
 
 //HMHvoid SdrMarkView::ImpShowMarkHdl(bool /*bNoRefHdl*/)
 //HMH{
-//HMH   bNoRefHdl=FALSE; // geht leider erstmal nicht anders
-//HMH   if (!bHdlShown) {
-//HMH       bRefHdlShownOnly=FALSE;
-//HMH       bHdlShown=TRUE;
-//HMH   }
+//HMH	bNoRefHdl=FALSE; // geht leider erstmal nicht anders
+//HMH	if (!bHdlShown) {
+//HMH		bRefHdlShownOnly=FALSE;
+//HMH		bHdlShown=TRUE;
+//HMH	}
 //HMH}
 
 //HMHvoid SdrMarkView::ShowMarkHdl(bool /*bNoRefHdl*/)
 //HMH{
-//HMH   bNoRefHdl=FALSE; // geht leider erstmal nicht anders
-//HMH   ImpShowMarkHdl(bNoRefHdl);
+//HMH	bNoRefHdl=FALSE; // geht leider erstmal nicht anders
+//HMH	ImpShowMarkHdl(bNoRefHdl);
 //HMH}
 
 
 //HMHvoid SdrMarkView::HideMarkHdl(bool /*bNoRefHdl*/)
 //HMH{
-//HMH   bNoRefHdl=FALSE; // geht leider erstmal nicht anders
-//HMH   if (bHdlShown) {
-//HMH       bRefHdlShownOnly=bNoRefHdl;
-//HMH       bHdlShown=FALSE;
-//HMH   }
+//HMH	bNoRefHdl=FALSE; // geht leider erstmal nicht anders
+//HMH	if (bHdlShown) {
+//HMH		bRefHdlShownOnly=bNoRefHdl;
+//HMH		bHdlShown=FALSE;
+//HMH	}
 //HMH}
 
 void SdrMarkView::hideMarkHandles()
@@ -687,7 +687,7 @@ void SdrMarkView::SetMarkHandles()
     aHdl.SetDistortShear(eDragMode==SDRDRAG_SHEAR);
     pMarkedObj=NULL;
     pMarkedPV=NULL;
-
+    
     // are handles enabled at all? Create only then
     if(!areMarkHandlesHidden())
     {
@@ -695,51 +695,51 @@ void SdrMarkView::SetMarkHandles()
         BOOL bStdDrag=eDragMode==SDRDRAG_MOVE;
         BOOL bSingleTextObjMark=FALSE;
 
-        if (nMarkAnz==1)
+        if (nMarkAnz==1) 
         {
             pMarkedObj=GetMarkedObjectByIndex(0);
-            bSingleTextObjMark =
-                pMarkedObj &&
+            bSingleTextObjMark = 
+                pMarkedObj && 
                 pMarkedObj->ISA(SdrTextObj) &&
                 static_cast<SdrTextObj*>(pMarkedObj)->IsTextFrame();
         }
-
+        
         BOOL bFrmHdl=ImpIsFrameHandles();
-
-        if (nMarkAnz>0)
+        
+        if (nMarkAnz>0) 
         {
             pMarkedPV=GetSdrPageViewOfMarkedByIndex(0);
-
-            for (ULONG nMarkNum=0; nMarkNum<nMarkAnz && (pMarkedPV!=NULL || !bFrmHdl); nMarkNum++)
+            
+            for (ULONG nMarkNum=0; nMarkNum<nMarkAnz && (pMarkedPV!=NULL || !bFrmHdl); nMarkNum++) 
             {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-
-                if (pMarkedPV!=pM->GetPageView())
+            
+                if (pMarkedPV!=pM->GetPageView()) 
                 {
                     pMarkedPV=NULL;
                 }
             }
         }
-
-        if (bFrmHdl)
+        
+        if (bFrmHdl) 
         {
             Rectangle aRect(GetMarkedObjRect());
 
             // #i33755#
             const sal_Bool bHideHandlesWhenInTextEdit(
                 ((SdrView*)this)->IsTextEdit()
-                && pMarkedObj
-                && pMarkedObj->ISA(SdrTextObj)
+                && pMarkedObj 
+                && pMarkedObj->ISA(SdrTextObj) 
                 && ((SdrTextObj*)pMarkedObj)->IsInEditMode());
-
-            if(!aRect.IsEmpty() && !bHideHandlesWhenInTextEdit)
+            
+            if(!aRect.IsEmpty() && !bHideHandlesWhenInTextEdit) 
             { // sonst nix gefunden
                 if( bSingleTextObjMark )
                 {
                     const ULONG nSiz0=aHdl.GetHdlCount();
                     pMarkedObj->AddToHdlList(aHdl);
                     const ULONG nSiz1=aHdl.GetHdlCount();
-                    for (ULONG i=nSiz0; i<nSiz1; i++)
+                    for (ULONG i=nSiz0; i<nSiz1; i++) 
                     {
                         SdrHdl* pHdl=aHdl.GetHdl(i);
                         pHdl->SetObj(pMarkedObj);
@@ -762,16 +762,16 @@ void SdrMarkView::SetMarkHandles()
                 {
                     BOOL bWdt0=aRect.Left()==aRect.Right();
                     BOOL bHgt0=aRect.Top()==aRect.Bottom();
-                    if (bWdt0 && bHgt0)
+                    if (bWdt0 && bHgt0) 
                     {
                         aHdl.AddHdl(new SdrHdl(aRect.TopLeft(),HDL_UPLFT));
-                    }
-                    else if (!bStdDrag && (bWdt0 || bHgt0))
+                    } 
+                    else if (!bStdDrag && (bWdt0 || bHgt0)) 
                     {
                         aHdl.AddHdl(new SdrHdl(aRect.TopLeft()    ,HDL_UPLFT));
                         aHdl.AddHdl(new SdrHdl(aRect.BottomRight(),HDL_LWRGT));
-                    }
-                    else
+                    } 
+                    else 
                     {
                         if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopLeft()     ,HDL_UPLFT));
                         if (          !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopCenter()   ,HDL_UPPER));
@@ -784,10 +784,10 @@ void SdrMarkView::SetMarkHandles()
                     }
                 }
             }
-        }
-        else
+        } 
+        else 
         {
-            for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)
+            for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) 
             {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -797,24 +797,24 @@ void SdrMarkView::SetMarkHandles()
                 const ULONG nSiz1=aHdl.GetHdlCount();
                 bool bPoly=pObj->IsPolyObj();
                 const SdrUShortCont* pMrkPnts=pM->GetMarkedPoints();
-                for (ULONG i=nSiz0; i<nSiz1; i++)
+                for (ULONG i=nSiz0; i<nSiz1; i++) 
                 {
                     SdrHdl* pHdl=aHdl.GetHdl(i);
                     pHdl->SetObj(pObj);
                     pHdl->SetPageView(pPV);
                     pHdl->SetObjHdlNum(USHORT(i-nSiz0));
-                    if (bPoly)
+                    if (bPoly) 
                     {
                         BOOL bSelected=pMrkPnts!=NULL && pMrkPnts->Exist(USHORT(i-nSiz0));
                         pHdl->SetSelected(bSelected);
                         //BOOL bPlus=bPlusHdlAlways;
-                        if (bPlusHdlAlways || bSelected)
+                        if (bPlusHdlAlways || bSelected) 
                         {
                             sal_uInt32 nPlusAnz=pObj->GetPlusHdlCount(*pHdl);
-                            for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusAnz; nPlusNum++)
+                            for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusAnz; nPlusNum++) 
                             {
                                 SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,nPlusNum);
-                                if (pPlusHdl!=NULL)
+                                if (pPlusHdl!=NULL) 
                                 {
                                     pPlusHdl->SetObj(pObj);
                                     pPlusHdl->SetPageView(pPV);
@@ -829,25 +829,25 @@ void SdrMarkView::SetMarkHandles()
         } // if bFrmHdl else
 
         // GluePoint-Handles
-        for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)
+        for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) 
         {
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             SdrObject* pObj=pM->GetMarkedSdrObj();
             SdrPageView* pPV=pM->GetPageView();
             const SdrUShortCont* pMrkGlue=pM->GetMarkedGluePoints();
-            if (pMrkGlue!=NULL)
+            if (pMrkGlue!=NULL) 
             {
                 const SdrGluePointList* pGPL=pObj->GetGluePointList();
-                if (pGPL!=NULL)
+                if (pGPL!=NULL) 
                 {
                     //USHORT nGlueAnz=pGPL->GetCount();
                     USHORT nAnz=(USHORT)pMrkGlue->GetCount();
-                    for (USHORT nNum=0; nNum<nAnz; nNum++)
+                    for (USHORT nNum=0; nNum<nAnz; nNum++) 
                     {
                         USHORT nId=pMrkGlue->GetObject(nNum);
                         //nNum changed to nNumGP because already used in for loop
                         USHORT nNumGP=pGPL->FindGluePoint(nId);
-                        if (nNumGP!=SDRGLUEPOINT_NOTFOUND)
+                        if (nNumGP!=SDRGLUEPOINT_NOTFOUND) 
                         {
                             const SdrGluePoint& rGP=(*pGPL)[nNumGP];
                             Point aPos(rGP.GetAbsolutePos(*pObj));
@@ -973,7 +973,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                         pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
                         pModel->EndUndo();
                     }
-
+                    
                     //pObj->SetItemAndBroadcast(aNewItem);
                     SfxItemSet aNewSet(pModel->GetItemPool());
                     aNewSet.Put(aNewItem);
@@ -1244,11 +1244,11 @@ void SdrMarkView::CheckMarked()
             bRaus=pOOL!=pVOL;
         }
 
-        if (bRaus)
+        if (bRaus) 
         {
             GetMarkedObjectListWriteAccess().DeleteMark(nm);
-        }
-        else
+        } 
+        else 
         {
             if (!IsGluePointEditMode()) { // Markierte GluePoints nur im GlueEditMode
                 SdrUShortCont* pPts=pM->GetMarkedGluePoints();
@@ -1267,7 +1267,7 @@ void SdrMarkView::CheckMarked()
 void SdrMarkView::SetMarkRects()
 {
     SdrPageView* pPV = GetSdrPageView();
-
+    
     if(pPV)
     {
         pPV->SetHasMarkedObj(GetSnapRectFromMarkedObjects(pPV, pPV->MarkSnap()));
@@ -1364,7 +1364,7 @@ BOOL SdrMarkView::MarkObj(const Point& rPnt, short nTol, BOOL bToggle, BOOL bDee
 BOOL SdrMarkView::MarkNextObj(BOOL bPrev)
 {
     SdrPageView* pPageView = GetSdrPageView();
-
+    
     if(!pPageView)
     {
         return FALSE;
@@ -1403,12 +1403,12 @@ BOOL SdrMarkView::MarkNextObj(BOOL bPrev)
         }
     }
 
-    if(!pMarkObj)
+    if(!pMarkObj) 
     {
         return FALSE;
     }
 
-    if (nChgMarkNum!=ULONG_MAX)
+    if (nChgMarkNum!=ULONG_MAX) 
     {
         GetMarkedObjectListWriteAccess().DeleteMark(nChgMarkNum);
     }
@@ -1431,7 +1431,7 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
     for (nm=nMarkAnz; nm>0 && pTopMarkHit==NULL;) {
         nm--;
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        if(CheckSingleSdrObjectHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),0,0))
+        if(CheckSingleSdrObjectHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),0,0)) 
         {
             pTopMarkHit=pM;
             nTopMarkHit=nm;
@@ -1448,7 +1448,7 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
     for (nm=0; nm<nMarkAnz && pBtmMarkHit==NULL; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrPageView* pPV2=pM->GetPageView();
-        if (pPV2==pPV && CheckSingleSdrObjectHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pPV2,0,0))
+        if (pPV2==pPV && CheckSingleSdrObjectHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pPV2,0,0)) 
         {
             pBtmMarkHit=pM;
             nBtmMarkHit=nm;
@@ -1463,8 +1463,8 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
     sal_uInt32 nSearchBeg;
     E3dScene* pScene = NULL;
     SdrObject* pObjHit = (bPrev) ? pBtmObjHit : pTopObjHit;
-    sal_Bool bRemap = pObjHit->ISA(E3dCompoundObject)
-        ? ((E3dCompoundObject*)pObjHit)->IsAOrdNumRemapCandidate(pScene)
+    sal_Bool bRemap = pObjHit->ISA(E3dCompoundObject) 
+        ? ((E3dCompoundObject*)pObjHit)->IsAOrdNumRemapCandidate(pScene) 
         : sal_False;
 
     if(bPrev)
@@ -1482,7 +1482,7 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
     {
         sal_uInt32 nOrdNumTop(pTopObjHit->GetOrdNum());
 
-        if(bRemap)
+        if(bRemap) 
         {
             nOrdNumTop = pScene->RemapOrdNum(nOrdNumTop);
         }
@@ -1506,7 +1506,7 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
             pObj = pObjList->GetObj(no);
         }
 
-        if (CheckSingleSdrObjectHit(aPt,USHORT(nTol),pObj,pPV,SDRSEARCH_TESTMARKABLE,0))
+        if (CheckSingleSdrObjectHit(aPt,USHORT(nTol),pObj,pPV,SDRSEARCH_TESTMARKABLE,0)) 
         {
             if (TryToFindMarkedObject(pObj)==CONTAINER_ENTRY_NOTFOUND) {
                 pFndObj=pObj;
@@ -1516,7 +1516,7 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
         }
         if (bPrev) no++;
     }
-    if (pFndObj!=NULL)
+    if (pFndObj!=NULL) 
     {
         GetMarkedObjectListWriteAccess().DeleteMark(bPrev?nBtmMarkHit:nTopMarkHit);
         GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pFndObj,pPV));
@@ -1534,7 +1534,7 @@ BOOL SdrMarkView::MarkObj(const Rectangle& rRect, BOOL bUnmark)
     SdrObjList* pObjList;
     BrkAction();
     SdrPageView* pPV = GetSdrPageView();
-
+    
     if(pPV)
     {
         pObjList=pPV->GetObjList();
@@ -1545,14 +1545,14 @@ BOOL SdrMarkView::MarkObj(const Rectangle& rRect, BOOL bUnmark)
             Rectangle aRect(pObj->GetCurrentBoundRect());
             if (aFrm1.IsInside(aRect)) {
                 if (!bUnmark) {
-                    if (IsObjMarkable(pObj,pPV))
+                    if (IsObjMarkable(pObj,pPV)) 
                     {
                         GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pObj,pPV));
                         bFnd=TRUE;
                     }
                 } else {
                     ULONG nPos=TryToFindMarkedObject(pObj);
-                    if (nPos!=CONTAINER_ENTRY_NOTFOUND)
+                    if (nPos!=CONTAINER_ENTRY_NOTFOUND) 
                     {
                         GetMarkedObjectListWriteAccess().DeleteMark(nPos);
                         bFnd=TRUE;
@@ -1574,14 +1574,14 @@ void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, BOOL bUnmark, BOOL 
 {
     if (pObj!=NULL && pPV!=NULL && IsObjMarkable(pObj, pPV)) {
         BrkAction();
-        if (!bUnmark)
+        if (!bUnmark) 
         {
             GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pObj,pPV));
-        }
-        else
+        } 
+        else 
         {
             ULONG nPos=TryToFindMarkedObject(pObj);
-            if (nPos!=CONTAINER_ENTRY_NOTFOUND)
+            if (nPos!=CONTAINER_ENTRY_NOTFOUND) 
             {
                 GetMarkedObjectListWriteAccess().DeleteMark(nPos);
             }
@@ -1639,7 +1639,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, 
     {
         return NULL;
     }
-
+    
     const bool bCheckIfMarkable(nOptions & SDRSEARCH_TESTMARKABLE);
     const bool bDeep(nOptions & SDRSEARCH_DEEP);
     const bool bOLE(pObj->ISA(SdrOle2Obj));
@@ -1650,7 +1650,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, 
 
     // double tolerance for OLE, text frames and objects in
     // active text edit
-    if(bOLE || bTXT || pObj==((SdrObjEditView*)this)->GetTextEditObject())
+    if(bOLE || bTXT || pObj==((SdrObjEditView*)this)->GetTextEditObject()) 
     {
         nTol2*=2;
     }
@@ -1660,28 +1660,28 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, 
     aRect.Right ()+=nTol2;
     aRect.Bottom()+=nTol2;
 
-    if (aRect.IsInside(rPnt))
+    if (aRect.IsInside(rPnt)) 
     {
-        if ((!bCheckIfMarkable || IsObjMarkable(pObj,pPV)))
+        if ((!bCheckIfMarkable || IsObjMarkable(pObj,pPV))) 
         {
             SdrObjList* pOL=pObj->GetSubList();
 
-            if (pOL!=NULL && pOL->GetObjCount()!=0)
+            if (pOL!=NULL && pOL->GetObjCount()!=0) 
             {
                 SdrObject* pTmpObj;
                 // OD 30.06.2003 #108784# - adjustment hit point for virtual
                 // objects.
                 Point aPnt( rPnt );
-
+                
                 if ( pObj->ISA(SdrVirtObj) )
                 {
                     Point aOffset = static_cast<SdrVirtObj*>(pObj)->GetOffset();
                     aPnt.Move( -aOffset.X(), -aOffset.Y() );
                 }
-
+            
                 pRet=CheckSingleSdrObjectHit(aPnt,nTol,pOL,pPV,nOptions,pMVisLay,pTmpObj);
-            }
-            else
+            } 
+            else 
             {
                 if(!pMVisLay || pMVisLay->IsSet(pObj->GetLayer()))
                 {
@@ -1691,7 +1691,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, 
         }
     }
 
-    if (!bDeep && pRet!=NULL)
+    if (!bDeep && pRet!=NULL) 
     {
         pRet=pObj;
     }
@@ -1704,7 +1704,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, 
     BOOL bBack=(nOptions & SDRSEARCH_BACKWARD)!=0;
     SdrObject* pRet=NULL;
     rpRootObj=NULL;
-    if (pOL!=NULL)
+    if (pOL!=NULL) 
     {
         // #110988#
         sal_Bool bRemap(pOL->GetOwnerObj() && pOL->GetOwnerObj()->ISA(E3dScene));
@@ -1777,17 +1777,17 @@ BOOL SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
             pHitObj=CheckSingleSdrObjectHit(aPt,nTol,pObj,pPV,nOptions,NULL);
             if (bBack) nMrkNum++;
         }
-    }
-    else
+    } 
+    else 
     {
         pPV = GetSdrPageView();
 
         if(pPV)
         {
             SdrPage* pPage=pPV->GetPage();
-            USHORT nPgAnz=1;
-
-            if(bMasters && pPage->TRG_HasMasterPage())
+            USHORT nPgAnz=1; 
+            
+            if(bMasters && pPage->TRG_HasMasterPage()) 
             {
                 nPgAnz++;
             }
@@ -1801,16 +1801,16 @@ BOOL SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
                 const SetOfByte* pMVisLay=NULL;
                 SdrObjList* pObjList=NULL;
                 if (pnPassNum!=NULL) *pnPassNum&=~(SDRSEARCHPASS_MASTERPAGE|SDRSEARCHPASS_INACTIVELIST);
-                if (nPgNum>=nPgAnz-1 || (bExtraPassForWholePage && nPgNum>=nPgAnz-2))
+                if (nPgNum>=nPgAnz-1 || (bExtraPassForWholePage && nPgNum>=nPgAnz-2)) 
                 {
                     pObjList=pPV->GetObjList();
                     if (bExtraPassForWholePage && nPgNum==nPgAnz-2) {
                         pObjList=pPage;
                         if (pnPassNum!=NULL) *pnPassNum|=SDRSEARCHPASS_INACTIVELIST;
                     }
-                }
-                else
-                {
+                } 
+                else 
+                { 
                     // sonst MasterPage
                     SdrPage& rMasterPage = pPage->TRG_GetMasterPage();
                     pMVisLay = &pPage->TRG_GetMasterPageVisibleLayers();
@@ -1842,9 +1842,9 @@ BOOL SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
             if (!pObj->HasMacro() || !pObj->IsMacroHit(aHitRec)) pObj=NULL;
         }
         if (pObj!=NULL && (nOptions & SDRSEARCH_WITHTEXT) !=0 && pObj->GetOutlinerParaObject()==NULL) pObj=NULL;
-        if (pObj!=NULL && (nOptions & SDRSEARCH_TESTTEXTAREA) !=0)
+        if (pObj!=NULL && (nOptions & SDRSEARCH_TESTTEXTAREA) !=0) 
         {
-            if(!SdrObjectPrimitiveHit(*pObj, aPt, 0, *pPV, 0, true))
+            if(!SdrObjectPrimitiveHit(*pObj, aPt, 0, *pPV, 0, true)) 
             {
                 pObj = 0;
             }
@@ -1955,11 +1955,11 @@ void SdrMarkView::UnmarkAllObj(SdrPageView* pPV)
         BrkAction();
         //HMHBOOL bVis=bHdlShown;
         //HMHif (bVis) HideMarkHdl();
-        if (pPV!=NULL)
+        if (pPV!=NULL) 
         {
             GetMarkedObjectListWriteAccess().DeletePageView(*pPV);
-        }
-        else
+        } 
+        else 
         {
             GetMarkedObjectListWriteAccess().Clear();
         }
@@ -1976,7 +1976,7 @@ void SdrMarkView::MarkAllObj(SdrPageView* _pPV)
     BrkAction();
     //HMHHideMarkHdl();
 
-    if(!_pPV)
+    if(!_pPV) 
     {
         _pPV = GetSdrPageView();
     }
@@ -1987,13 +1987,13 @@ void SdrMarkView::MarkAllObj(SdrPageView* _pPV)
     {
         const bool bMarkChg(GetMarkedObjectListWriteAccess().InsertPageView(*_pPV));
 
-        if(bMarkChg)
+        if(bMarkChg) 
         {
             MarkListHasChanged();
         }
     }
 
-    if(GetMarkedObjectCount())
+    if(GetMarkedObjectCount()) 
     {
         AdjustMarkHdl(); //HMHTRUE);
         //HMHShowMarkHdl();
@@ -2009,7 +2009,7 @@ void SdrMarkView::AdjustMarkHdl() //HMHBOOL bRestraintPaint)
     SetMarkHandles();
     //HMHif(bRestraintPaint && bVis)
     //HMH{
-    //HMH   ShowMarkHdl();
+    //HMH	ShowMarkHdl();
     //HMH}
 }
 
@@ -2090,7 +2090,7 @@ BOOL SdrMarkView::EnterMarkedGroup()
     if(pPV)
     {
         BOOL bEnter=FALSE;
-        for (sal_uInt32 nm(GetMarkedObjectCount()); nm > 0 && !bEnter;)
+        for (sal_uInt32 nm(GetMarkedObjectCount()); nm > 0 && !bEnter;) 
         {
             nm--;
             SdrMark* pM=GetSdrMarkByIndex(nm);
@@ -2138,9 +2138,9 @@ void SdrMarkView::SetMoveOutside(BOOL bOn)
     aHdl.SetMoveOutside(bOn);
 }
 
-BOOL SdrMarkView::IsMoveOutside() const
-{
-    return aHdl.IsMoveOutside();
+BOOL SdrMarkView::IsMoveOutside() const                     
+{ 
+    return aHdl.IsMoveOutside(); 
 }
 
 void SdrMarkView::SetDesignMode( BOOL _bOn )

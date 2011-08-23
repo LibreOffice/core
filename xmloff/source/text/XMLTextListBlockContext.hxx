@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class XMLTextListBlockContext : public SvXMLImportContext
 
     // text:style-name property of <list> element
     ::rtl::OUString         msListStyleName;
-    ::rtl::OUString         sXmlId;
+    ::rtl::OUString			sXmlId;
 
     SvXMLImportContextRef   mxParentListBlock;
 

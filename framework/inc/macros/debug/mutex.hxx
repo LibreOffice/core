@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #define __FRAMEWORK_MACROS_DEBUG_MUTEX_HXX_
 
 //*****************************************************************************************************************
-//  special macros for mutex handling
+//	special macros for mutex handling
 //*****************************************************************************************************************
 
-#ifdef  ENABLE_MUTEXDEBUG
+#ifdef	ENABLE_MUTEXDEBUG
 
     //_____________________________________________________________________________________________________________
-    //  includes
+    //	includes
     //_____________________________________________________________________________________________________________
 
     #ifndef _RTL_STRBUF_HXX_
@@ -49,7 +49,7 @@
         For follow macros we need a special log file. If user forget to specify anyone, we must do it for him!
     _____________________________________________________________________________________________________________*/
 
-    #ifndef LOGFILE_MUTEX
+    #ifndef	LOGFILE_MUTEX
         #define LOGFILE_MUTEX   "mutex.log"
     #endif
 
@@ -99,22 +99,22 @@
                     WRITE_LOGFILE( LOGFILE_MUTEX, _sBuffer.makeStringAndClear() )                               \
                 }
 
-#else   // #ifdef ENABLE_MUTEXDEBUG
+#else	// #ifdef ENABLE_MUTEXDEBUG
 
     /*_____________________________________________________________________________________________________________
         If right testmode is'nt set - implements these macro with normal functionality!
         We need the guard but not the log mechanism.
     _____________________________________________________________________________________________________________*/
 
-    #undef  LOGFILE_MUTEX
+    #undef	LOGFILE_MUTEX
     #define LOG_LOCKTYPE( _EFALLBACK, _ECURRENT )
 
-#endif  // #ifdef ENABLE_MUTEXDEBUG
+#endif	// #ifdef ENABLE_MUTEXDEBUG
 
 //*****************************************************************************************************************
-//  end of file
+//	end of file
 //*****************************************************************************************************************
 
-#endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_MUTEX_HXX_
+#endif	// #ifndef __FRAMEWORK_MACROS_DEBUG_MUTEX_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

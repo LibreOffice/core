@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ void SdrMediaObj::TakeObjNameSingul(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNameSingulMEDIA);
 
     String aName( GetName() );
-
+    
     if(aName.Len())
     {
         rName += sal_Unicode(' ');
@@ -138,11 +138,11 @@ void SdrMediaObj::TakeObjNamePlural(XubString& rName) const
 void SdrMediaObj::operator=(const SdrObject& rObj)
 {
     SdrRectObj::operator=( rObj );
-
+    
     if( rObj.ISA( SdrMediaObj ) )
     {
         const SdrMediaObj& rMediaObj = static_cast< const SdrMediaObj& >( rObj );
-
+        
         setMediaProperties( rMediaObj.getMediaProperties() );
         setGraphic( rMediaObj.mapGraphic.get() );
     }
@@ -166,9 +166,9 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
              ( aSize.Width()  > aMaxSize.Width()  ) )&&
              aSize.Height() && aMaxSize.Height() )
         {
-            float fGrfWH =  (float)aSize.Width() /
+            float fGrfWH =	(float)aSize.Width() /
                             (float)aSize.Height();
-            float fWinWH =  (float)aMaxSize.Width() /
+            float fWinWH =	(float)aMaxSize.Width() /
                             (float)aMaxSize.Height();
 
             // Grafik an Pagesize anpassen (skaliert)
@@ -200,13 +200,13 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
 void SdrMediaObj::setURL( const ::rtl::OUString& rURL )
 {
     ::avmedia::MediaItem aURLItem;
-
+    
     aURLItem.setURL( rURL );
     setMediaProperties( aURLItem );
 }
 
 // ------------------------------------------------------------------------------
-
+    
 const ::rtl::OUString& SdrMediaObj::getURL() const
 {
     return getMediaProperties().getURL();
@@ -219,7 +219,7 @@ void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
     mediaPropertiesChanged( rState );
     static_cast< ::sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).executeMediaItem( getMediaProperties() );
 }
-
+        
 // ------------------------------------------------------------------------------
 
 const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
@@ -252,7 +252,7 @@ const Graphic& SdrMediaObj::getGraphic() const
 }
 
 // ------------------------------------------------------------------------------
-
+        
 void SdrMediaObj::setGraphic( const Graphic* pGraphic )
 {
     mapGraphic.reset( pGraphic ? new Graphic( *pGraphic ) : NULL );
@@ -265,22 +265,22 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     const sal_uInt32 nMaskSet = rNewProperties.getMaskSet();
 
     // use only a subset of MediaItem properties for own own properties
-    if( ( AVMEDIA_SETMASK_URL & nMaskSet ) &&
+    if( ( AVMEDIA_SETMASK_URL & nMaskSet ) && 
         ( rNewProperties.getURL() != getURL() ) )
     {
         setGraphic();
         maMediaProperties.setURL( rNewProperties.getURL() );
     }
-
+    
     if( AVMEDIA_SETMASK_LOOP & nMaskSet )
         maMediaProperties.setLoop( rNewProperties.isLoop() );
-
+    
     if( AVMEDIA_SETMASK_MUTE & nMaskSet )
         maMediaProperties.setMute( rNewProperties.isMute() );
-
+    
     if( AVMEDIA_SETMASK_VOLUMEDB & nMaskSet )
         maMediaProperties.setVolumeDB( rNewProperties.getVolumeDB() );
-
+    
     if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
         maMediaProperties.setZoom( rNewProperties.getZoom() );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     const ::rtl::OUString sIsPhysical;
     const ::rtl::OUString sPageStyleLayout;
     const ::rtl::OUString sFollowStyle;
-    ::rtl::OUString       sFollow;
-    ::rtl::OUString       sPageMasterName;
+    ::rtl::OUString		  sFollow;
+    ::rtl::OUString		  sPageMasterName;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::style::XStyle > xStyle;
 

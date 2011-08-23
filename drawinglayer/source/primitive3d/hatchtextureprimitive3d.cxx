@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ namespace drawinglayer
                                         // add original primitive for background
                                         aDestination.push_back(xReference);
                                     }
-
+                                    
                                     if(aFillPolyPolygon.areTextureCoordinatesUsed())
                                     {
                                         const sal_uInt32 nPolyCount(aFillPolyPolygon.count());
@@ -125,7 +125,7 @@ namespace drawinglayer
                                                 else if(!b2Y && !a2N.equal(a2Candidate) && !a2X.equal(a2Candidate))
                                                 {
                                                     a2Y = a2Candidate - a2N;
-
+                                                    
                                                     const double fCross(a2X.cross(a2Y));
 
                                                     if(!basegfx::fTools::equalZero(fCross))
@@ -274,12 +274,12 @@ namespace drawinglayer
         }
 
         HatchTexturePrimitive3D::HatchTexturePrimitive3D(
-            const attribute::FillHatchAttribute& rHatch,
-            const Primitive3DSequence& rChildren,
-            const basegfx::B2DVector& rTextureSize,
-            bool bModulate,
+            const attribute::FillHatchAttribute& rHatch, 
+            const Primitive3DSequence& rChildren, 
+            const basegfx::B2DVector& rTextureSize, 
+            bool bModulate, 
             bool bFilter)
-        :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
+        :	TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
             maHatch(rHatch),
             maBuffered3DDecomposition()
         {
@@ -290,7 +290,7 @@ namespace drawinglayer
             if(TexturePrimitive3D::operator==(rPrimitive))
             {
                 const HatchTexturePrimitive3D& rCompare = (HatchTexturePrimitive3D&)rPrimitive;
-
+                
                 return (getHatch() == rCompare.getHatch());
             }
 

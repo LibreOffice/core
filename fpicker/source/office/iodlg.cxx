@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,17 +117,17 @@ using namespace ExtendedFilePickerElementIds;
 using namespace CommonFilePickerElementIds;
 using namespace InternalFilePickerElementIds;
 
-#define IODLG_CONFIGNAME        String(RTL_CONSTASCII_USTRINGPARAM("FileDialog"))
-#define IMPGRF_CONFIGNAME       String(RTL_CONSTASCII_USTRINGPARAM("ImportGraphicDialog"))
+#define IODLG_CONFIGNAME		String(RTL_CONSTASCII_USTRINGPARAM("FileDialog"))
+#define IMPGRF_CONFIGNAME		String(RTL_CONSTASCII_USTRINGPARAM("ImportGraphicDialog"))
 
 #define GET_DECODED_NAME(aObj) \
     aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET )
 
 // Zeit die beim Traveln in der Filterbox gewartet wird,
 // bis in der Browsebox gefiltert wird ( in ms ).
-#define TRAVELFILTER_TIMEOUT    750
+#define TRAVELFILTER_TIMEOUT	750
 
-#define WIDTH_ADDITION  15
+#define WIDTH_ADDITION	15
 
 // functions -------------------------------------------------------------
 
@@ -160,8 +160,8 @@ namespace
 
 #ifdef DBG_UTIL
         String sSelectedDisplayName;
-        DBG_ASSERT( ( _pImpl->GetSelectedFilterEntry( sSelectedDisplayName ) == _pImpl->GetCurFilter() )
-                &&  ( sSelectedDisplayName == _pImpl->GetCurFilterDisplayName() ),
+        DBG_ASSERT(	( _pImpl->GetSelectedFilterEntry( sSelectedDisplayName ) == _pImpl->GetCurFilter() )
+                &&	( sSelectedDisplayName == _pImpl->GetCurFilterDisplayName() ),
             "restoreCurrentFilter: inconsistence!" );
 #endif
         return _pImpl->m_bNeedDelayedFilterExecute;
@@ -400,9 +400,9 @@ namespace
 
 struct ControlChain_Impl
 {
-    Window*            _pControl;
+    Window* 		   _pControl;
     ControlChain_Impl* _pNext;
-    BOOL               _bHasOwnerShip;
+    BOOL			   _bHasOwnerShip;
 
     ControlChain_Impl( Window* pControl, ControlChain_Impl* pNext );
     ~ControlChain_Impl();
@@ -899,8 +899,8 @@ sal_Bool SvtFileDialog::createNewUserFilter( const String& _rNewFilter, sal_Bool
     if ( STRING_NOTFOUND != nSepPos )
     {
         String sUserExt = sUserFilter.Copy( nSepPos + 1 );
-        if  (   ( STRING_NOTFOUND == sUserExt.Search( '*' ) )
-            &&  ( STRING_NOTFOUND == sUserExt.Search( '?' ) )
+        if	(	( STRING_NOTFOUND == sUserExt.Search( '*' ) )
+            &&	( STRING_NOTFOUND == sUserExt.Search( '?' ) )
             )
             bUseCurFilterExt = sal_False;
     }
@@ -918,10 +918,10 @@ sal_Bool SvtFileDialog::createNewUserFilter( const String& _rNewFilter, sal_Bool
 }
 
 //-----------------------------------------------------------------------------
-#define FLT_NONEMPTY        0x0001
-#define FLT_CHANGED         0x0002
-#define FLT_USERFILTER      0x0004
-#define FLT_ALLFILESFILTER  0x0008
+#define FLT_NONEMPTY		0x0001
+#define FLT_CHANGED			0x0002
+#define FLT_USERFILTER		0x0004
+#define FLT_ALLFILESFILTER	0x0008
 
 //-----------------------------------------------------------------------------
 sal_uInt16 SvtFileDialog::adjustFilter( const String& _rFilter )
@@ -963,7 +963,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const String& _rFilter )
 #else
             if ( createNewUserFilter( _rFilter, sal_False ) )
 #endif
-            {   // it's the "all files" filter
+            {	// it's the "all files" filter
                 nReturn |= FLT_ALLFILESFILTER;
 
 #ifdef AUTOSELECT_USERFILTER
@@ -975,7 +975,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const String& _rFilter )
                     _pImp->SetCurFilter( _pImp->GetSelectedFilterEntry( sAllFilesFilter ) );
                 }
                 else
-                    _pImp->SetNoFilterListSelection( ); // there is no "all files" entry
+                    _pImp->SetNoFilterListSelection( );	// there is no "all files" entry
 #endif // AUTOSELECT_USERFILTER
             }
 #ifdef AUTOSELECT_USERFILTER
@@ -1023,7 +1023,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     {
         // if an entry is selected in the view ....
         if ( pThis->_pFileView->GetSelectionCount() )
-        {   // -> use this one. This will allow us to step down this folder
+        {	// -> use this one. This will allow us to step down this folder
             // #i8928# - 2002-12-20 - fs@openoffice.org
             aFileName = pThis->_pFileView->GetCurrentURL();
         }
@@ -1033,7 +1033,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     {
         if ( pThis->_pImp->_eMode == FILEDLG_MODE_OPEN && pThis->_pImp->_pEdFileName->IsTravelSelect() )
             // OpenHdl called from URLBox; travelling through the list of URLs should not cause an opening
-            return 0;                   // MBA->PB: seems to be called never ?!
+            return 0;		            // MBA->PB: seems to be called never ?!
 
         // get the URL from from the edit field ( if not empty )
         if ( pThis->_pImp->_pEdFileName->GetText().Len() )
@@ -1082,7 +1082,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         // if the dialog was opened to select a folder, the last selected folder should be selected
         if( pThis->_pImp->_eDlgType == FILEDLG_TYPE_PATHDLG )
         {
-            aFileName = pThis->_pImp->_pFtCurrentPath->GetText();
+            aFileName =	pThis->_pImp->_pFtCurrentPath->GetText();
             nLen = aFileName.Len();
         }
         else
@@ -1169,10 +1169,10 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
      }
 
     if  (   !bIsFolder                                      // no existent folder
-        &&  pThis->_pImp->_pCbAutoExtension                 // auto extension is enabled in general
-        &&  pThis->_pImp->_pCbAutoExtension->IsChecked()    // auto extension is really to be used
-        &&  pThis->GetDefaultExt().Len()                    // there is a default extension
-        &&  pThis->GetDefaultExt() != '*'                   // the default extension is not "all"
+        &&	pThis->_pImp->_pCbAutoExtension					// auto extension is enabled in general
+        &&	pThis->_pImp->_pCbAutoExtension->IsChecked()	// auto extension is really to be used
+        &&	pThis->GetDefaultExt().Len()					// there is a default extension
+        &&	pThis->GetDefaultExt() != '*'					// the default extension is not "all"
         && !(   FILEDLG_MODE_SAVE == pThis->_pImp->_eMode       // we're saving a file
             &&  pThis->_pFileView->GetSelectionCount()          // there is a selected file in the file view -> it will later on
             )                                                   //    (in SvtFileDialog::GetPathList) be taken as file to save to
@@ -1290,7 +1290,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
                     String sInvalidFile( aFileObj.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
                     if ( INET_PROT_FILE == aFileObj.GetProtocol() )
-                    {   // if it's a file URL, transform the URL into system notation
+                    {	// if it's a file URL, transform the URL into system notation
                         ::rtl::OUString sURL( sInvalidFile );
                         ::rtl::OUString sSystem;
                         osl_getSystemPathFromFileURL( sURL.pData, &sSystem.pData );
@@ -1350,7 +1350,7 @@ IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
     String sSelectedFilterDisplayName;
     SvtFileDialogFilter_Impl* pSelectedFilter = pThis->_pImp->GetSelectedFilterEntry( sSelectedFilterDisplayName );
     if ( !pSelectedFilter )
-    {   // there is no current selection. This happens if for instance the user selects a group separator using
+    {	// there is no current selection. This happens if for instance the user selects a group separator using
         // the keyboard, and then presses enter: When the selection happens, we immediately deselect the entry,
         // so in this situation there is no current selection.
         if ( restoreCurrentFilter( pThis->_pImp ) )
@@ -1359,7 +1359,7 @@ IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
     else
     {
         if ( pSelectedFilter->isGroupSeparator() )
-        {   // group separators can't be selected
+        {	// group separators can't be selected
             // return to the previously selected entry
             if ( pThis->_pImp->IsFilterListTravelSelect() )
             {
@@ -1376,8 +1376,8 @@ IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
                     pThis->ExecuteFilter();
             }
         }
-        else if (   ( pSelectedFilter != pThis->_pImp->GetCurFilter() )
-                ||  pThis->_pImp->_pUserFilter
+        else if	(	( pSelectedFilter != pThis->_pImp->GetCurFilter() )
+                ||	pThis->_pImp->_pUserFilter
                 )
         {
             // Store the old filter for the auto extension handling
@@ -1441,14 +1441,14 @@ IMPL_STATIC_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void*, EMPTYARG )
 SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 (
     const String& _rFilter,
-    sal_Bool _bMultiExt,/*  TRUE - auch Filter mit mehreren Endungen
+    sal_Bool _bMultiExt,/*	TRUE - auch Filter mit mehreren Endungen
                             beruecksichtigen
                             FALSE - keine ...
                         */
     sal_Bool& _rFilterChanged
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Methode sucht in den eingef"ugten Filtern nach der
     spezifizierten Endung.
@@ -1511,7 +1511,7 @@ void SvtFileDialog::ExecuteFilter()
 
 void SvtFileDialog::OpenMultiSelection_Impl()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     OpenHandler f"ur MultiSelektion
 */
@@ -1746,7 +1746,7 @@ IMPL_LINK( SvtFileDialog, PlayButtonHdl_Impl, PushButton*, EMPTYARG )
 
 long SvtFileDialog::Notify( NotifyEvent& rNEvt )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Methode wird gerufen, <BACKSPACE> abzufangen.
 */
@@ -1771,15 +1771,15 @@ long SvtFileDialog::Notify( NotifyEvent& rNEvt )
                 nRet = 1;
             }
         }
-//      else if ( rKeyCode.IsMod1() && ( KEY_C == nCode || KEY_V == nCode || KEY_X == nCode ) )
-//      {
+//		else if ( rKeyCode.IsMod1() && ( KEY_C == nCode || KEY_V == nCode || KEY_X == nCode ) )
+//		{
 /* (mhu)
             String aVerb = KEY_C == nCode ? UniString(RTL_CONSTASCII_USTRINGPARAM(SVT_MENUPART_VERB_COPY)) :
                 ( KEY_V == nCode ? UniString(RTL_CONSTASCII_USTRINGPARAM(SVT_MENUPART_VERB_PASTE)) : UniString(RTL_CONSTASCII_USTRINGPARAM(SVT_MENUPART_VERB_CUT)) );
-//(dv)          if ( !CntPopupMenu::DoVerbCommand( aVerb, _pFileView->GetView() ) )
-//(dv)              Sound::Beep();
+//(dv)			if ( !CntPopupMenu::DoVerbCommand( aVerb, _pFileView->GetView() ) )
+//(dv)				Sound::Beep();
 */
-//      }
+//		}
     }
     return nRet ? nRet : ModalDialog::Notify( rNEvt );
 }
@@ -1796,7 +1796,7 @@ long SvtFileDialog::OK()
 class SvtDefModalDialogParent_Impl
 {
 private:
-    Window* _pOld;
+    Window*	_pOld;
 
 public:
     SvtDefModalDialogParent_Impl( Window *pNew ) :
@@ -1852,7 +1852,7 @@ bool implIsInvalid( const String & rURL )
 {
     SmartContent aContent( rURL );
     aContent.enableOwnInteractionHandler( ::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST );
-    aContent.isFolder();    // do this _before_ asking isInvalid! Otherwise result might be wrong.
+    aContent.isFolder();	// do this _before_ asking isInvalid! Otherwise result might be wrong.
     return aContent.isInvalid();
 }
 
@@ -1870,11 +1870,11 @@ String SvtFileDialog::implGetInitialURL( const String& _rPath, const String& _rF
 
     // is it a valid folder?
     m_aContent.bindTo( aURLParser.GetMainURL( INetURLObject::NO_DECODE ) );
-    sal_Bool bIsFolder = m_aContent.isFolder( );    // do this _before_ asking isInvalid!
+    sal_Bool bIsFolder = m_aContent.isFolder( );	// do this _before_ asking isInvalid!
     sal_Bool bIsInvalid = m_aContent.isInvalid();
 
     if ( bIsInvalid && m_bHasFilename && !aURLParser.hasFinalSlash() )
-    {   // check if the parent folder exists
+    {	// check if the parent folder exists
         // #108429# - 2003-03-26 - fs@openoffice.org
         INetURLObject aParent( aURLParser );
         aParent.removeSegment( );
@@ -2253,7 +2253,7 @@ short SvtFileDialog::PrepareExecute()
     FilterSelect();
 
     // Zustand der Steuerelemente anpassen.
-//  EndListeningAll();
+//	EndListeningAll();
 
     ViewHdl_Impl( this, NULL );
     OpenURL_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -2335,7 +2335,7 @@ void SvtFileDialog::FilterSelect()
 
 void SvtFileDialog::SetStandardDir( const String& rStdDir )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Methode setzt den Pfad f"ur den Standardknopf.
 */
@@ -2362,7 +2362,7 @@ const ::com::sun::star::uno::Sequence< ::rtl::OUString >& SvtFileDialog::GetBlac
 
 const String& SvtFileDialog::GetStandardDir() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode gibt den eingestellten Standardpfad zur"uck.
 */
@@ -2417,8 +2417,8 @@ void SvtFileDialog::AddFilterGroup( const String& _rFilter, const Sequence< Stri
     DBG_ASSERT( !IsInExecute(), "SvtFileDialog::AddFilter: currently executing!" );
 
     implAddFilter( _rFilter, String() );
-    const StringPair* pSubFilters       =               _rFilters.getConstArray();
-    const StringPair* pSubFiltersEnd    = pSubFilters + _rFilters.getLength();
+    const StringPair* pSubFilters		=				_rFilters.getConstArray();
+    const StringPair* pSubFiltersEnd	= pSubFilters +	_rFilters.getLength();
     for ( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
         implAddFilter( pSubFilters->First, pSubFilters->Second );
 }
@@ -2514,9 +2514,9 @@ void SvtFileDialog::InitSize()
 
 SvStringsDtor* SvtFileDialog::GetPathList() const
 {
-    SvStringsDtor*  pList = new SvStringsDtor;
-    ULONG           nCount = _pFileView->GetSelectionCount();
-    SvLBoxEntry*    pEntry = nCount ? _pFileView->FirstSelected() : NULL;
+    SvStringsDtor*	pList = new SvStringsDtor;
+    ULONG			nCount = _pFileView->GetSelectionCount();
+    SvLBoxEntry*	pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 
     if ( ! pEntry )
     {
@@ -2839,9 +2839,9 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelContr
             break;
 
         case EDIT_FILEURL:
-            pReturn =   _bLabelControl
-                    ?   static_cast< Control* >( _pImp->_pFtFileName )
-                    :   static_cast< Control* >( _pImp->_pEdFileName );
+            pReturn =	_bLabelControl
+                    ?	static_cast< Control* >( _pImp->_pFtFileName )
+                    :	static_cast< Control* >( _pImp->_pEdFileName );
             break;
 
         case EDIT_FILEURL_LABEL:
@@ -2889,21 +2889,21 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelContr
             break;
 
         case LISTBOX_VERSION:
-            pReturn =   _bLabelControl
-                    ?   static_cast< Control* >( _pImp->_pFtFileVersion )
-                    :   static_cast< Control* >( _pImp->_pLbFileVersion );
+            pReturn =	_bLabelControl
+                    ?	static_cast< Control* >( _pImp->_pFtFileVersion )
+                    :	static_cast< Control* >( _pImp->_pLbFileVersion );
             break;
 
         case LISTBOX_TEMPLATE:
-            pReturn =   _bLabelControl
-                    ?   static_cast< Control* >( _pImp->_pFtTemplates )
-                    :   static_cast< Control* >( _pImp->_pLbTemplates );
+            pReturn =	_bLabelControl
+                    ?	static_cast< Control* >( _pImp->_pFtTemplates )
+                    :	static_cast< Control* >( _pImp->_pLbTemplates );
             break;
 
         case LISTBOX_IMAGE_TEMPLATE:
-            pReturn =   _bLabelControl
-                    ?   static_cast< Control* >( _pImp->_pFtImageTemplates )
-                    :   static_cast< Control* >( _pImp->_pLbImageTemplates );
+            pReturn =	_bLabelControl
+                    ?	static_cast< Control* >( _pImp->_pFtImageTemplates )
+                    :	static_cast< Control* >( _pImp->_pLbImageTemplates );
             break;
 
         case LISTBOX_VERSION_LABEL:
@@ -3048,7 +3048,7 @@ void SvtFileDialog::AddControls_Impl( )
 
     if ( _nExtraBits & SFX_EXTRA_SHOWVERSIONS )
     {
-        _pImp->_pFtFileVersion = new FixedText( this, SvtResId( FT_EXPLORERFILE_SHARED_LISTBOX ) );
+        _pImp->_pFtFileVersion = new FixedText(	this, SvtResId( FT_EXPLORERFILE_SHARED_LISTBOX ) );
         _pImp->_pFtFileVersion->SetText( SvtResId( STR_SVT_FILEPICKER_VERSION ) );
 
         _pImp->_pLbFileVersion = new ListBox( this, SvtResId( LB_EXPLORERFILE_SHARED_LISTBOX ) );
@@ -3239,8 +3239,8 @@ BOOL SvtFileDialog::AddControl( Window* pControl, BOOL bNewLine )
             long nTextWidth = pControl->GetTextWidth( pControl->GetText() );
             aSize.Width() = nTextWidth + WIDTH_ADDITION;
 
-            // PushButton:  Mindestbreite 50 logische Einheiten,
-            //              H"ohe immer 14 logische Einheiten
+            // PushButton:	Mindestbreite 50 logische Einheiten,
+            //				H"ohe immer 14 logische Einheiten
             if ( aDefSiz.Width() > aSize.Width() )
                 aSize.Width() = aDefSiz.Width();
             aSize.Height() = aDefSiz.Height();
@@ -3422,11 +3422,11 @@ QueryFolderNameDialog::QueryFolderNameDialog
 ) :
     ModalDialog( _pParent, SvtResId( DLG_SVT_QUERYFOLDERNAME ) ),
 
-    aNameText   ( this, SvtResId( FT_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
-    aNameEdit   ( this, SvtResId( ED_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
-    aNameLine   ( this, SvtResId( FL_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
-    aOKBtn      ( this, SvtResId( BT_SVT_QUERYFOLDERNAME_DLG_OK ) ),
-    aCancelBtn  ( this, SvtResId( BT_SVT_QUERYFOLDERNAME_DLG_CANCEL ) )
+    aNameText	( this, SvtResId( FT_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
+    aNameEdit	( this, SvtResId( ED_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
+    aNameLine	( this, SvtResId( FL_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
+    aOKBtn		( this, SvtResId( BT_SVT_QUERYFOLDERNAME_DLG_OK ) ),
+    aCancelBtn	( this, SvtResId( BT_SVT_QUERYFOLDERNAME_DLG_CANCEL ) )
 {
     FreeResource();
     SetText( rTitle );

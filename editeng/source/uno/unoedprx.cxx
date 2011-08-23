@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ public:
     sal_Bool IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const;
 
 private:
-    USHORT    mnPara;
+    USHORT 	  mnPara;
     sal_Int32 mnIndex;
     sal_Int32 mnEEIndex;
     sal_Int32 mnFieldOffset;
@@ -201,7 +201,7 @@ void SvxAccessibleTextIndex::SetEEIndex( USHORT nEEIndex, const SvxTextForwarder
     mnEEIndex = nEEIndex;
 
     // calculate unknowns
-    USHORT                  nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
+    USHORT					nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
 
     mnIndex = nEEIndex;
 
@@ -247,7 +247,7 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
     mnIndex = nIndex;
 
     // calculate unknowns
-    USHORT                  nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
+    USHORT					nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
 
     DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
@@ -589,7 +589,7 @@ void SvxAccessibleTextAdapter::SetParaAttribs( USHORT nPara, const SfxItemSet& r
 void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , sal_Bool , sal_uInt16 )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
-}
+}    
 
 void SvxAccessibleTextAdapter::GetPortions( USHORT nPara, SvUShorts& rList ) const
 {
@@ -698,7 +698,7 @@ void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField, USHORT 
 sal_Int32 SvxAccessibleTextAdapter::CalcLogicalIndex( USHORT nPara, USHORT nEEIndex )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
-
+    
     SvxAccessibleTextIndex aIndex;
     aIndex.SetEEIndex(nPara, nEEIndex, *mrTextForwarder);
     return aIndex.GetIndex();
@@ -707,7 +707,7 @@ sal_Int32 SvxAccessibleTextAdapter::CalcLogicalIndex( USHORT nPara, USHORT nEEIn
 USHORT SvxAccessibleTextAdapter::CalcEditEngineIndex( USHORT nPara, sal_Int32 nLogicalIndex )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
-
+    
     SvxAccessibleTextIndex aIndex;
     aIndex.SetIndex(nPara, nLogicalIndex, *mrTextForwarder);
     return aIndex.GetEEIndex();
@@ -1070,12 +1070,12 @@ USHORT SvxAccessibleTextAdapter::GetLineLen( USHORT nPara, USHORT nLine ) const
 void SvxAccessibleTextAdapter::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const
 {
     mrTextForwarder->GetLineBoundaries( rStart, rEnd, nParagraph, nLine );
-}
+}    
 
 USHORT SvxAccessibleTextAdapter::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
 {
     return mrTextForwarder->GetLineNumberAtIndex( nPara, nIndex );
-}
+}    
 
 sal_Bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
 {
@@ -1248,7 +1248,7 @@ Point SvxAccessibleTextEditViewAdapter::PixelToLogic( const Point& rPoint, const
 
     return mrViewForwarder->PixelToLogic(rPoint, rMapMode);
 }
-
+    
 sal_Bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) const
 {
     DBG_ASSERT(mrViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
@@ -1308,8 +1308,8 @@ sal_Bool SvxAccessibleTextEditViewAdapter::Paste()
     return mrViewForwarder->Paste();
 }
 
-void SvxAccessibleTextEditViewAdapter::SetForwarder( SvxEditViewForwarder&      rForwarder,
-                                                     SvxAccessibleTextAdapter&  rTextForwarder )
+void SvxAccessibleTextEditViewAdapter::SetForwarder( SvxEditViewForwarder& 		rForwarder,
+                                                     SvxAccessibleTextAdapter&	rTextForwarder )
 {
     mrViewForwarder = &rForwarder;
     mrTextForwarder = &rTextForwarder;

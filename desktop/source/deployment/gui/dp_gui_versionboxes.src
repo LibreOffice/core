@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ String RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES {
     Text [en-US] = "You are about to install version $NEW of the extension \'$NAME\'.\n"
     "The newer version $DEPLOYED, named \'$OLDNAME\', is already installed.\n"
     "Click \'OK\' to replace the installed extension.\n"
-    "Click \'Cancel\' to stop the installation.";
+    "Click \'Cancel\' to stop the installation.";  
 };
 
 WarningBox RID_WARNINGBOX_VERSION_EQUAL {
@@ -62,7 +62,7 @@ String RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES {
 WarningBox RID_WARNINGBOX_VERSION_GREATER {
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_OK;
-    Message[en-US] = "You are about to install version $NEW of the extension \'$NAME\'.\n"
+    Message[en-US] = "You are about to install version $NEW of the extension \'$NAME\'.\n" 
     "The older version $DEPLOYED is already installed.\n"
     "Click \'OK\' to replace the installed extension.\n"
     "Click \'Cancel\' to stop the installation.";

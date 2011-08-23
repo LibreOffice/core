@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -826,11 +826,11 @@ static const ::rtl::OUString& getProductRegistrationServiceName( )
     return s_sServiceName;
 }
 
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(XModel*, BOOL, rtl_uString*);
-typedef void (SAL_CALL *basicide_macro_organizer)( INT16 );
+typedef	rtl_uString* (SAL_CALL *basicide_choose_macro)(XModel*, BOOL, rtl_uString*);
+typedef	void (SAL_CALL *basicide_macro_organizer)( INT16 );
 
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
+#define DOSTRING( x )			   			#x
+#define STRING( x )				   			DOSTRING( x )
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
@@ -962,14 +962,14 @@ namespace
     }
 }
 
-static ::rtl::OUString getConfigurationStringValue(
-    const ::rtl::OUString& rPackage,
-    const ::rtl::OUString& rRelPath,
+static ::rtl::OUString getConfigurationStringValue( 
+    const ::rtl::OUString& rPackage, 
+    const ::rtl::OUString& rRelPath, 
     const ::rtl::OUString& rKey,
     const ::rtl::OUString& rDefaultValue )
 {
     ::rtl::OUString aDefVal( rDefaultValue );
-
+                    
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
@@ -1038,15 +1038,15 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 uno::Reference< css::system::XSystemShellExecute > xSystemShell(
                     xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute" ) ),
                     uno::UNO_QUERY_THROW );
-
+                
                 // read repository URL from configuration
-                ::rtl::OUString sTemplRepoURL =
+                ::rtl::OUString sTemplRepoURL = 
                     getConfigurationStringValue(
                         ::rtl::OUString::createFromAscii("org.openoffice.Office.Common"),
                         ::rtl::OUString::createFromAscii("Dictionaries"),
                         ::rtl::OUString::createFromAscii("RepositoryURL"),
                         ::rtl::OUString());
-
+                    
                 if ( xSystemShell.is() && sTemplRepoURL.getLength() > 0 )
                 {
                     ::rtl::OUStringBuffer aURLBuf( sTemplRepoURL );
@@ -1059,11 +1059,11 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                         ::rtl::OUString::createFromAscii("L10N"),
                         ::rtl::OUString::createFromAscii("ooLocale"),
                         ::rtl::OUString::createFromAscii("en-US"));
-
+                    
                     aURLBuf.append( sLocale );
-                    xSystemShell->execute(
-                        aURLBuf.makeStringAndClear(),
-                        ::rtl::OUString(),
+                    xSystemShell->execute( 
+                        aURLBuf.makeStringAndClear(), 
+                        ::rtl::OUString(), 
                         css::system::SystemShellExecuteFlags::DEFAULTS );
                 }
             }

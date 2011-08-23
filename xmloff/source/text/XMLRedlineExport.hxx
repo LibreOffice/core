@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <set>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace beans { class XPropertySet; }
     namespace beans { struct PropertyValue; }
     namespace text { class XText; }
@@ -61,7 +61,7 @@ typedef ::std::map<
             ChangesListType* > ChangesMapType;
 
 
-/**
+/** 
  * This class handles the export of redline portions.
  * It is to be called from XMLTextParagraphExport.
  */
@@ -97,7 +97,7 @@ class XMLRedlineExport
     SvXMLExport& rExport;
 
 
-    // handling of change recording:
+    // handling of change recording: 
 
     // To support change tracking in headers and footers we need to
     // write these changes separately. To do this, we record the
@@ -105,10 +105,10 @@ class XMLRedlineExport
     // get the complete list of changes from the document, which
     // should be much more efficient than recording all of those.
 
-    ChangesMapType aChangeMap;              /// map of recorded changes
+    ChangesMapType aChangeMap;				/// map of recorded changes
 
     /// list of current changes; is NULL or points to member of aChangeMap
-    ChangesListType* pCurrentChangesList;
+    ChangesListType* pCurrentChangesList;	
 
 
 public:
@@ -116,7 +116,7 @@ public:
 
     ~XMLRedlineExport();
 
-    /// export a change
+    /// export a change 
     void ExportChange(
         /// PropertySet of RedlinePortion
         const ::com::sun::star::uno::Reference<
@@ -138,7 +138,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XText> & rText);
 
-    /// Do not record changes.
+    /// Do not record changes. 
     /// Same as SetCurrentXText(Reference<XText>) with empty argument.
     void SetCurrentXText();
 
@@ -147,7 +147,7 @@ public:
     void ExportStartOrEndRedline(
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet,
-        sal_Bool bStart);   /// start or end of text entity (e.g. paragraph)?
+        sal_Bool bStart);	/// start or end of text entity (e.g. paragraph)?
 
     /// convenience method, calls XPropertySet-version of this method
     void ExportStartOrEndRedline(
@@ -164,7 +164,7 @@ public:
         sal_Bool bStart);
 
 private:
-
+    
     /// export the change mark contained in the text body
     void ExportChangeInline(
         /// PropertySet of RedlinePortion

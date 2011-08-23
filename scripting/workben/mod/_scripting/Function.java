@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,19 +62,19 @@ public class Function extends TestCase {
 
         log.println("creating test environment");
         try {
-
+      
             XMultiServiceFactory xMSF = tParam.getMSF();
             SOfficeFactory SOF = null;
             SOF = SOfficeFactory.getFactory( xMSF );
-            String docPath = util.utils.getFullTestURL(doc);
+            String docPath = util.utils.getFullTestURL(doc); 
             XComponent doc = SOF.loadDocument( docPath );
             XModel model = ( XModel ) UnoRuntime.queryInterface( XModel.class,
                 doc );
-            oObj  =
+            oObj  = 
                 (XInterface)xMSF.createInstanceWithArguments( "drafts.com.sun.star.script.framework.provider.FunctionProvider", new Object[]{ model } );
-            provider = ( XFunctionProvider )UnoRuntime.queryInterface( XFunctionProvider.class, oObj );
+            provider = ( XFunctionProvider )UnoRuntime.queryInterface( XFunctionProvider.class, oObj );           
             oObj = provider.getFunction( script );
-
+            
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
             throw new StatusException("Can't create object environment", e) ;

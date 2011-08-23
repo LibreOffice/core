@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,9 +74,9 @@ class ChineseTranslation_UnoDialog : public ::cppu::WeakImplHelper5 <
                             , ::com::sun::star::lang::XComponent
                             , ::com::sun::star::lang::XServiceInfo
                             >
-                            //  ,public ::com::sun::star::uno::XWeak            // implemented by WeakImplHelper(optional interface)
-                            //  ,public ::com::sun::star::uno::XInterface       // implemented by WeakImplHelper(optional interface)
-                            //  ,public ::com::sun::star::lang::XTypeProvider   // implemented by WeakImplHelper
+                            //	,public ::com::sun::star::uno::XWeak			// implemented by WeakImplHelper(optional interface)
+                            //	,public ::com::sun::star::uno::XInterface		// implemented by WeakImplHelper(optional interface)
+                            //	,public ::com::sun::star::lang::XTypeProvider	// implemented by WeakImplHelper
 {
 public:
     ChineseTranslation_UnoDialog( const ::com::sun::star::uno::Reference<
@@ -87,7 +87,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
-
+    
     static ::rtl::OUString getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
 
@@ -134,7 +134,7 @@ private:
 
     sal_Bool m_bDisposed; ///Dispose call ready.
     sal_Bool m_bInDispose;///In dispose call
-    osl::Mutex                      m_aContainerMutex;
+    osl::Mutex				        m_aContainerMutex;
     cppu::OInterfaceContainerHelper m_aDisposeEventListeners;
 };
 

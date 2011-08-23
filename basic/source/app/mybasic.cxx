@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ MyBasic::MyBasic() : StarBASIC()
     // AB-Uno-Test
 #ifdef unotest
     // Get Uno-Service-Manager and Reflection Service
-    createAndSetDefaultServiceManager();        // done later
+    createAndSetDefaultServiceManager();		// done later
 
     // Get Uno-Test-Object
     UsrAny aObjAny = getIntrospectionTestObject();
@@ -153,8 +153,8 @@ void MyBasic::LoadIniFile()
 
 SbTextType MyBasic::GetSymbolType( const String &rSymbol, BOOL bWasTTControl )
 {
-    (void) rSymbol;       /* avoid warning about unused parameter */
-    (void) bWasTTControl; /* avoid warning about unused parameter */
+    (void) rSymbol;       /* avoid warning about unused parameter */ 
+    (void) bWasTTControl; /* avoid warning about unused parameter */ 
     return SB_SYMBOL;     // Everything here is of type SB_SYMBOL and continues to be so
 }
 
@@ -186,7 +186,7 @@ BOOL MyBasic::ErrorHdl()
 {
     AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( GetActiveModule()->GetName() );
     if( !pWin )
-    {       // open a window
+    {		// open a window
         pWin = aBasicApp.pFrame->CreateModuleWin( GetActiveModule() );
     }
     else
@@ -199,7 +199,7 @@ BOOL MyBasic::ErrorHdl()
               0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() ),
               LIST_APPEND );
         nError++;
-        return BOOL( nError < 20 ); // Cancel after 20 errors
+        return BOOL( nError < 20 );	// Cancel after 20 errors
     }
     else
     {
@@ -213,7 +213,7 @@ void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
     String nErrorText;
     nErrorText = GetSpechialErrorText();
 
-    if ( pEditWin )     // just in case the focus is not right
+    if ( pEditWin )		// just in case the focus is not right
         pEditWin->ToTop();
 
     BasicError( pEditWin,
@@ -223,7 +223,7 @@ void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
 
 void MyBasic::DebugFindNoErrors( BOOL bDebugFindNoErrors )
 {
-    (void) bDebugFindNoErrors; /* avoid warning about unused parameter */
+    (void) bDebugFindNoErrors; /* avoid warning about unused parameter */ 
 }
 
 const String MyBasic::GetSpechialErrorText()
@@ -238,7 +238,7 @@ USHORT MyBasic::BreakHdl()
     {
         AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( pMod->GetName() );
         if( !pWin )
-        {       // open a window
+        {		// open a window
             pWin = aBasicApp.pFrame->CreateModuleWin( pMod );
         }
         else
@@ -246,10 +246,10 @@ USHORT MyBasic::BreakHdl()
         pWin->Highlight( GetLine(), GetCol1(), GetCol2() );
     }
 
-    if( IsBreak() ) // If Breakpoint (or "Run to Cursor")
+    if( IsBreak() )	// If Breakpoint (or "Run to Cursor")
     {
-//      if ( GetActiveModule()->IsBP(GetLine()) )
-//          GetActiveModule()->ClearBP(GetLine());
+//		if ( GetActiveModule()->IsBP(GetLine()) )
+//			GetActiveModule()->ClearBP(GetLine());
         return aBasicApp.pFrame->BreakHandler();
     }
     else
@@ -286,12 +286,12 @@ BasicError::BasicError
 // to highlight a statement
 void BasicError::Show()
 {
-    if( pWin && aBasicApp.pFrame->IsWinValid( pWin ) )
+    if( pWin && aBasicApp.pFrame->IsWinValid( pWin ) ) 
     {
         pWin->Highlight( nLine, nCol1, nCol2 );
         aBasicApp.pFrame->pStatus->Message( aText );
-    }
-    else
+    } 
+    else 
         MessBox( aBasicApp.pFrame, WB_OK, aBasicApp.pFrame->GetText(),
                  aText ).Execute();
 }

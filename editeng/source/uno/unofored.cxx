@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/editobj.hxx>      // nur fuer die GetText-Kruecke
+#include <editeng/editobj.hxx>		// nur fuer die GetText-Kruecke
 
 #include <editeng/unofored.hxx>
 
@@ -54,7 +54,7 @@ SvxEditEngineForwarder::SvxEditEngineForwarder( EditEngine& rEngine ) :
 
 SvxEditEngineForwarder::~SvxEditEngineForwarder()
 {
-    //  die EditEngine muss ggf. von aussen geloescht werden
+    //	die EditEngine muss ggf. von aussen geloescht werden
 }
 
 USHORT SvxEditEngineForwarder::GetParagraphCount() const
@@ -128,7 +128,7 @@ void SvxEditEngineForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSe
 void SvxEditEngineForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
     rEditEngine.RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
-}
+}    
 
 SfxItemPool* SvxEditEngineForwarder::GetPool() const
 {
@@ -161,8 +161,8 @@ void SvxEditEngineForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESel
 }
 
 BOOL SvxEditEngineForwarder::IsValid() const
-{
-    // cannot reliably query EditEngine state
+{ 
+    // cannot reliably query EditEngine state 
     // while in the middle of an update
     return rEditEngine.GetUpdateMode();
 }
@@ -181,7 +181,7 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
 {
     EECharAttribArray aAttribs;
 
-    const SfxPoolItem*  pLastItem = NULL;
+    const SfxPoolItem*	pLastItem = NULL;
 
     SfxItemState eState = SFX_ITEM_DEFAULT;
 
@@ -203,8 +203,8 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
         // get list of char attribs
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        BOOL bEmpty = TRUE;     // we found no item inside the selektion of this paragraph
-        BOOL bGaps  = FALSE;    // we found items but theire gaps between them
+        BOOL bEmpty = TRUE;		// we found no item inside the selektion of this paragraph
+        BOOL bGaps  = FALSE;	// we found items but theire gaps between them
         USHORT nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
@@ -216,10 +216,10 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
 
             const sal_Bool bEmptyPortion = aAttrib.nStart == aAttrib.nEnd;
             if( (!bEmptyPortion && (aAttrib.nStart >= nEndPos)) || (bEmptyPortion && (aAttrib.nStart > nEndPos)) )
-                break;  // break if we are already behind our selektion
+                break;	// break if we are already behind our selektion
 
             if( (!bEmptyPortion && (aAttrib.nEnd <= nPos)) || (bEmptyPortion && (aAttrib.nEnd < nPos)) )
-                continue;   // or if the attribute ends before our selektion
+                continue;	// or if the attribute ends before our selektion
 
             if( aAttrib.pAttr->Which() != nWhich )
                 continue; // skip if is not the searched item
@@ -262,7 +262,7 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
                 {
                     if( *pParaItem != *pTempItem )
                         return SFX_ITEM_DONTCARE;
-                }
+                } 
                 else
                 {
                     pParaItem = pTempItem;
@@ -327,7 +327,7 @@ LanguageType SvxEditEngineForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) 
 
 USHORT SvxEditEngineForwarder::GetFieldCount( USHORT nPara ) const
 {
-    return rEditEngine.GetFieldCount(nPara);
+    return rEditEngine.GetFieldCount(nPara); 
 }
 
 EFieldInfo SvxEditEngineForwarder::GetFieldInfo( USHORT nPara, USHORT nField ) const
@@ -391,7 +391,7 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) c
 Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
 {
     const Point aPnt = rEditEngine.GetDocPosTopLeft( nPara );
-    ULONG nWidth;
+    ULONG nWidth; 
     ULONG nHeight;
     ULONG nTextWidth;
 
@@ -409,7 +409,7 @@ Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
     }
     else
     {
-        nWidth = rEditEngine.CalcTextWidth();
+        nWidth = rEditEngine.CalcTextWidth();        
         nHeight = rEditEngine.GetTextHeight( nPara );
 
         return Rectangle( 0, aPnt.Y(), nWidth, aPnt.Y() + nHeight );
@@ -431,7 +431,7 @@ sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPa
     // #101701#
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
-    Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
+    Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos, 
                                                       aSize,
                                                       rEditEngine.IsVertical() == TRUE ));
 
@@ -473,17 +473,17 @@ USHORT SvxEditEngineForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
 {
     return rEditEngine.GetLineLen(nPara, nLine);
 }
-
+    
 void SvxEditEngineForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
 {
     rEditEngine.GetLineBoundaries(rStart, rEnd, nPara, nLine);
 }
-
+    
 USHORT SvxEditEngineForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
 {
     return rEditEngine.GetLineNumberAtIndex(nPara, nIndex);
 }
-
+    
 
 sal_Bool SvxEditEngineForwarder::QuickFormatDoc( BOOL )
 {
@@ -553,7 +553,7 @@ void SvxEditEngineForwarder::CopyText(const SvxTextForwarder& rSource)
     EditTextObject* pNewTextObject = pSourceForwarder->rEditEngine.CreateTextObject();
     rEditEngine.SetText( *pNewTextObject );
     delete pNewTextObject;
-}
+}    
 
 //------------------------------------------------------------------------
 

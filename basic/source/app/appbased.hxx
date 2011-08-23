@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,27 +36,27 @@
 class BasicFrame;
 class BreakpointWindow;
 
-class AppBasEd : public AppEdit  {  // Editor-Window:
+class AppBasEd : public AppEdit	 {	// Editor-Window:
 using DockingWindow::Notify;
 
-    SbModuleRef pMod;               // compile module
-    BOOL bCompiled;                 // TRUE if compiled
+    SbModuleRef pMod;	   			// compile module
+    BOOL bCompiled;					// TRUE if compiled
 protected:
     DECL_LINK( EditChange, void * );
 #define BREAKPOINTSWIDTH 15
     BreakpointWindow *pBreakpoints;
-    virtual USHORT ImplSave();              // Save file
+    virtual USHORT ImplSave();				// Save file
 
 public:
     TYPEINFO();
     AppBasEd( BasicFrame*, SbModule* );
     ~AppBasEd();
-    FileType GetFileType();         // Returns Filetype
-    SbModule* GetModule()           { return pMod; }
-    long InitMenu( Menu* );         // Initialision of the menus
-    virtual long DeInitMenu( Menu* );   // Reset to enable all shortcuts
-    virtual void Command( const CommandEvent& rCEvt );  // Command handler
-    virtual void Resize();              // Includes the breakpoint bar
+    FileType GetFileType();			// Returns Filetype
+    SbModule* GetModule()			{ return pMod; }
+    long InitMenu( Menu* );			// Initialision of the menus
+    virtual long DeInitMenu( Menu* );	// Reset to enable all shortcuts
+    virtual void Command( const CommandEvent& rCEvt );	// Command handler
+    virtual void Resize();				// Includes the breakpoint bar
     virtual void PostLoad();         // Set source of module
     virtual void PostSaveAs();       // Postprocess of module...
     void Reload();

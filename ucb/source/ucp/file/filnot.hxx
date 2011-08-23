@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,27 +37,27 @@
 
 
 namespace fileaccess {
-
+    
     class shell;
     class BaseContent;
-
+    
     class ContentEventNotifier
     {
     private:
         shell* m_pMyShell;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XContent >	m_xCreatorContent;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xOldId;
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > > m_sListeners;
     public:
-
-        ContentEventNotifier(
+        
+        ContentEventNotifier( 
             shell* pMyShell,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
             const com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
-
+        
         ContentEventNotifier(
             shell* pMyShell,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
@@ -65,19 +65,19 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xOldId,
             const com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
-
+        
         void notifyChildInserted( const rtl::OUString& aChildName );
         void notifyDeleted( void );
         void notifyRemoved( const rtl::OUString& aChildName );
         void notifyExchanged( );
     };
-
-
+    
+    
     class PropertySetInfoChangeNotifier
     {
     private:
         shell* m_pMyShell;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XContent >	m_xCreatorContent;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > > m_sListeners;
     public:
@@ -92,17 +92,17 @@ namespace fileaccess {
         void SAL_CALL notifyPropertyRemoved( const rtl::OUString & aPropertyName );
     };
 
-
+    
     typedef std::hash_map< rtl::OUString,
                            com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >,
                            hashOUString,
                            equalOUString >      ListenerMap;
-
+    
     class PropertyChangeNotifier
     {
     private:
         shell* m_pMyShell;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XContent >	m_xCreatorContent;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
         ListenerMap* m_pListeners;
     public:
@@ -111,14 +111,14 @@ namespace fileaccess {
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
             ListenerMap* pListeners );
-
+        
         ~PropertyChangeNotifier();
 
-        void notifyPropertyChanged(
+        void notifyPropertyChanged( 
             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent > seqChanged );
     };
 
-
+    
     class Notifier
     {
     public:
@@ -131,8 +131,8 @@ namespace fileaccess {
         virtual PropertyChangeNotifier*        cPCL( void ) = 0;
         virtual rtl::OUString                  getKey( void ) = 0;
     };
-
-
+    
+    
 }   // end namespace fileaccess
 
 #endif

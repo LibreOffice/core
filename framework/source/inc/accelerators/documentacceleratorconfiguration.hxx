@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,29 +66,29 @@ class DocumentAcceleratorConfiguration : public XMLBasedAcceleratorConfiguration
 {
     //______________________________________
     // member
-
+    
     private:
-
+        
         //----------------------------------
         /** points to the root storage of the outside document,
             where we can read/save our configuration data. */
-        css::uno::Reference< css::embed::XStorage > m_xDocumentRoot;
-
+        css::uno::Reference< css::embed::XStorage > m_xDocumentRoot;      
+    
     //______________________________________
     // interface
 
     public:
-
+        
         //----------------------------------
         /** initialize this instance and fill the internal cache.
-
+        
             @param  xSMGR
                     reference to an uno service manager, which is used internaly.
          */
         DocumentAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR);
         virtual ~DocumentAcceleratorConfiguration();
-
-        // XInterface, XTypeProvider, XServiceInfo
+        
+        // XInterface, XTypeProvider, XServiceInfo         
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
@@ -98,22 +98,22 @@ class DocumentAcceleratorConfiguration : public XMLBasedAcceleratorConfiguration
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException);
 
-        // XUIConfigurationStorage
+        // XUIConfigurationStorage                  
         virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
             throw(css::uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL hasStorage()
             throw(css::uno::RuntimeException);
-
+      
     //______________________________________
     // helper
-
+    
     private:
-
+         
         //----------------------------------
         /** read all data into the cache. */
         void impl_ts_fillCache();
-
+        
         //----------------------------------
         /** forget all currently cached data AND(!)
             forget all currently used storages. */

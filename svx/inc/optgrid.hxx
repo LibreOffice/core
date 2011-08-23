@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,42 +44,42 @@ class SvxGridTabPage;
 class SVX_DLLPUBLIC SvxOptionsGrid
 {
 protected:
-    UINT32  nFldDrawX;
-    UINT32  nFldDivisionX;
-    UINT32  nFldDrawY;
-    UINT32  nFldDivisionY;
-    UINT32  nFldSnapX;
-    UINT32  nFldSnapY;
-    BOOL    bUseGridsnap:1;
-    BOOL    bSynchronize:1;
-    BOOL    bGridVisible:1;
-    BOOL    bEqualGrid:  1;
+    UINT32	nFldDrawX;
+    UINT32 	nFldDivisionX;
+    UINT32	nFldDrawY;
+    UINT32 	nFldDivisionY;
+    UINT32	nFldSnapX;
+    UINT32	nFldSnapY;
+    BOOL	bUseGridsnap:1;
+    BOOL	bSynchronize:1;
+    BOOL	bGridVisible:1;
+    BOOL	bEqualGrid:	 1;
 
 public:
     SvxOptionsGrid();
     ~SvxOptionsGrid();
 
-    void    SetFldDrawX(    UINT32 nSet){nFldDrawX      = nSet;}
-    void    SetFldDivisionX(UINT32 nSet){nFldDivisionX  = nSet;}
-    void    SetFldDrawY   ( UINT32 nSet){nFldDrawY      = nSet;}
-    void    SetFldDivisionY(UINT32 nSet){nFldDivisionY  = nSet;}
-    void    SetFldSnapX(    UINT32 nSet){nFldSnapX      = nSet;}
-    void    SetFldSnapY   ( UINT32 nSet){nFldSnapY      = nSet;}
-    void    SetUseGridSnap( BOOL bSet ) {bUseGridsnap   = bSet;}
-    void    SetSynchronize( BOOL bSet ) {bSynchronize   = bSet;}
-    void    SetGridVisible( BOOL bSet ) {bGridVisible   = bSet;}
-    void    SetEqualGrid( BOOL bSet )   {bEqualGrid     = bSet;}
+    void 	SetFldDrawX(	UINT32 nSet){nFldDrawX 		= nSet;}
+    void 	SetFldDivisionX(UINT32 nSet){nFldDivisionX  = nSet;}
+    void 	SetFldDrawY   (	UINT32 nSet){nFldDrawY      = nSet;}
+    void 	SetFldDivisionY(UINT32 nSet){nFldDivisionY  = nSet;}
+    void 	SetFldSnapX(	UINT32 nSet){nFldSnapX 		= nSet;}
+    void 	SetFldSnapY   (	UINT32 nSet){nFldSnapY      = nSet;}
+    void 	SetUseGridSnap( BOOL bSet ) {bUseGridsnap	= bSet;}
+    void 	SetSynchronize( BOOL bSet ) {bSynchronize	= bSet;}
+    void 	SetGridVisible( BOOL bSet ) {bGridVisible	= bSet;}
+    void 	SetEqualGrid( BOOL bSet )	{bEqualGrid		= bSet;}
 
-    UINT32  GetFldDrawX(    ) const {  return nFldDrawX;    }
-    UINT32  GetFldDivisionX() const {  return nFldDivisionX;}
-    UINT32  GetFldDrawY   ( ) const {  return nFldDrawY;    }
-    UINT32  GetFldDivisionY() const {  return nFldDivisionY;}
-    UINT32  GetFldSnapX(    ) const {  return nFldSnapX;    }
-    UINT32  GetFldSnapY   ( ) const {  return nFldSnapY;    }
-    BOOL    GetUseGridSnap( ) const {  return bUseGridsnap; }
-    BOOL    GetSynchronize( ) const {  return bSynchronize; }
-    BOOL    GetGridVisible( ) const {  return bGridVisible; }
-    BOOL    GetEqualGrid()    const {  return bEqualGrid;   }
+    UINT32	GetFldDrawX(	) const {  return nFldDrawX;    }
+    UINT32 	GetFldDivisionX() const {  return nFldDivisionX;}
+    UINT32	GetFldDrawY   (	) const {  return nFldDrawY;    }
+    UINT32 	GetFldDivisionY() const {  return nFldDivisionY;}
+    UINT32	GetFldSnapX(	) const {  return nFldSnapX;    }
+    UINT32	GetFldSnapY   (	) const {  return nFldSnapY;    }
+    BOOL	GetUseGridSnap( ) const {  return bUseGridsnap; }
+    BOOL	GetSynchronize( ) const {  return bSynchronize; }
+    BOOL	GetGridVisible( ) const {  return bGridVisible; }
+    BOOL	GetEqualGrid()	  const {  return bEqualGrid;   }
 };
 
 // class SvxGridItem -----------------------------------------------------
@@ -113,23 +113,23 @@ class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 public:
     SvxGridTabPage( Window* pParent, const SfxItemSet& rSet );
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-    virtual int         DeactivatePage( SfxItemSet* pSet );
+    virtual void 		ActivatePage( const SfxItemSet& rSet );
+    virtual int  		DeactivatePage( SfxItemSet* pSet );
 
 private:
-    CheckBox            aCbxUseGridsnap;
-    CheckBox            aCbxGridVisible;
+    CheckBox			aCbxUseGridsnap;
+    CheckBox			aCbxGridVisible;
 
     FixedLine           aFlResolution;
-    FixedText           aFtDrawX;
-    MetricField         aMtrFldDrawX;
-    FixedText           aFtDrawY;
-    MetricField         aMtrFldDrawY;
+    FixedText			aFtDrawX;
+    MetricField			aMtrFldDrawX;
+    FixedText			aFtDrawY;
+    MetricField			aMtrFldDrawY;
 
     FixedLine           aFlDivision;
     FixedText           aFtDivisionX;
@@ -147,21 +147,21 @@ protected:
     //these controls are used in draw and impress
     FixedLine       aGrpSnap;
     CheckBox        aCbxSnapHelplines;
-    CheckBox        aCbxSnapBorder;
-    CheckBox        aCbxSnapFrame;
-    CheckBox        aCbxSnapPoints;
-    FixedText       aFtSnapArea;
-    MetricField     aMtrFldSnapArea;
+    CheckBox		aCbxSnapBorder;
+    CheckBox		aCbxSnapFrame;
+    CheckBox		aCbxSnapPoints;
+    FixedText		aFtSnapArea;
+    MetricField 	aMtrFldSnapArea;
 
     FixedLine       aSeparatorFL;
 
     FixedLine       aGrpOrtho;
     CheckBox        aCbxOrtho;
-    CheckBox        aCbxBigOrtho;
-    CheckBox        aCbxRotate;
-    MetricField     aMtrFldAngle;
-    FixedText       aFtBezAngle;
-    MetricField     aMtrFldBezAngle;
+    CheckBox		aCbxBigOrtho;
+    CheckBox		aCbxRotate;
+    MetricField 	aMtrFldAngle;
+    FixedText		aFtBezAngle;
+    MetricField 	aMtrFldBezAngle;
 
 private:
     BOOL                bAttrModified;

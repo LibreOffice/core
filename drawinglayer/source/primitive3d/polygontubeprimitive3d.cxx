@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace drawinglayer
         namespace // anonymous namespace
         {
             Primitive3DSequence getLineTubeSegments(
-                sal_uInt32 nSegments,
+                sal_uInt32 nSegments, 
                 const attribute::MaterialAttribute3D& rMaterial)
             {
                 // static data for buffered tube primitives
@@ -80,7 +80,7 @@ namespace drawinglayer
                         const basegfx::B3DPoint aNextLeft(aRot * aLastLeft);
                         const basegfx::B3DPoint aNextRight(aRot * aLastRight);
                         basegfx::B3DPolygon aNewPolygon;
-
+                        
                         aNewPolygon.append(aNextLeft);
                         aNewPolygon.setNormal(0L, basegfx::B3DVector(aNextLeft - aLeft));
 
@@ -92,7 +92,7 @@ namespace drawinglayer
 
                         aNewPolygon.append(aNextRight);
                         aNewPolygon.setNormal(3L, basegfx::B3DVector(aNextRight - aRight));
-
+                        
                         aNewPolygon.setClosed(true);
 
                         const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
@@ -108,7 +108,7 @@ namespace drawinglayer
             }
 
             Primitive3DSequence getLineCapSegments(
-                sal_uInt32 nSegments,
+                sal_uInt32 nSegments, 
                 const attribute::MaterialAttribute3D& rMaterial)
             {
                 // static data for buffered tube primitives
@@ -138,7 +138,7 @@ namespace drawinglayer
                     {
                         const basegfx::B3DPoint aNext(aRot * aLast);
                         basegfx::B3DPolygon aNewPolygon;
-
+                        
                         aNewPolygon.append(aLast);
                         aNewPolygon.setNormal(0L, basegfx::B3DVector(aLast - aNull));
 
@@ -162,11 +162,11 @@ namespace drawinglayer
             }
 
             Primitive3DSequence getLineJoinSegments(
-                sal_uInt32 nSegments,
-                const attribute::MaterialAttribute3D& rMaterial,
+                sal_uInt32 nSegments, 
+                const attribute::MaterialAttribute3D& rMaterial, 
                 double fAngle,
-                double /*fDegreeStepWidth*/,
-                double fMiterMinimumAngle,
+                double /*fDegreeStepWidth*/, 
+                double fMiterMinimumAngle, 
                 basegfx::B2DLineJoin aLineJoin)
             {
                 // nSegments is for whole circle, adapt to half circle
@@ -238,26 +238,26 @@ namespace drawinglayer
                             if(bFirst || !bLast)
                             {
                                 fPos += fInc;
-
+                                
                                 aNextPointOnXY = basegfx::B3DPoint(
-                                    cos(fPos),
-                                    sin(fPos),
+                                    cos(fPos), 
+                                    sin(fPos), 
                                     0.0);
-
+                                
                                 aNextPointRotY = basegfx::B3DPoint(
-                                    aNextPointOnXY.getX() * fCos,
-                                    aNextPointOnXY.getY(),
+                                    aNextPointOnXY.getX() * fCos, 
+                                    aNextPointOnXY.getY(), 
                                     aNextPointOnXY.getX() * fSin);
 
                                 if(bMiter)
                                 {
                                     aNextMiter = basegfx::B3DPoint(
-                                        aNextPointOnXY.getX(),
-                                        aNextPointOnXY.getY(),
+                                        aNextPointOnXY.getX(), 
+                                        aNextPointOnXY.getY(), 
                                         fMiterSin * (aNextPointOnXY.getX() / fMiterCos));
                                 }
                             }
-
+                            
                             if(bFirst)
                             {
                                 aNewPolygon.clear();
@@ -283,7 +283,7 @@ namespace drawinglayer
                             else if(bLast)
                             {
                                 aNewPolygon.clear();
-
+        
                                 if(bMiter)
                                 {
                                     aNewPolygon.append(basegfx::B3DPoint(0.0, 1.0, 0.0));
@@ -327,7 +327,7 @@ namespace drawinglayer
                                     aNewPolygon.append(aNextPointRotY);
                                 }
                             }
-
+                        
                             // set normals
                             for(sal_uInt32 b(0L); b < aNewPolygon.count(); b++)
                             {
@@ -341,7 +341,7 @@ namespace drawinglayer
                                 BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, rMaterial, false);
                                 aResultVector.push_back(pNew);
                             }
-
+                            
                             if(bMiter && aMiterPolygon.count())
                             {
                                 // set normals
@@ -355,13 +355,13 @@ namespace drawinglayer
                                 BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aMiterPolyPolygon, rMaterial, false);
                                 aResultVector.push_back(pNew);
                             }
-
+                            
                             // prepare next step
                             if(bFirst || !bLast)
                             {
                                 aPointOnXY = aNextPointOnXY;
                                 aPointRotY = aNextPointRotY;
-
+                                
                                 if(bMiter)
                                 {
                                     aCurrMiter = aNextMiter;
@@ -496,7 +496,7 @@ namespace drawinglayer
                                 aBackTrans.scale(fForwLen, getRadius(), getRadius());
                                 aBackTrans *= aRotVector;
                                 aBackTrans.translate(aCurr.getX(), aCurr.getY(), aCurr.getZ());
-
+                                
                                 // line end edge, build transformed primitiveVector3D
                                 TransformPrimitive3D* pNewTransformedD = new TransformPrimitive3D(aBackTrans, getLineCapSegments(nSegments, aMaterial));
                                 aResultVector.push_back(pNewTransformedD);
@@ -528,12 +528,12 @@ namespace drawinglayer
         }
 
         PolygonTubePrimitive3D::PolygonTubePrimitive3D(
-            const basegfx::B3DPolygon& rPolygon,
+            const basegfx::B3DPolygon& rPolygon, 
             const basegfx::BColor& rBColor,
             double fRadius, basegfx::B2DLineJoin aLineJoin,
             double fDegreeStepWidth,
             double fMiterMinimumAngle)
-        :   PolygonHairlinePrimitive3D(rPolygon, rBColor),
+        :	PolygonHairlinePrimitive3D(rPolygon, rBColor),
             maLast3DDecomposition(),
             mfRadius(fRadius),
             mfDegreeStepWidth(fDegreeStepWidth),

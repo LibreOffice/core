@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -260,7 +260,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 }
 
 // ::com::sun::star::util::XModifyListener
-void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException )
+void SmartTagMgr::modified( const lang::EventObject& )	throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
 

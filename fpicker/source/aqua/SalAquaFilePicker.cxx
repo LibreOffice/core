@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,10 +113,10 @@ cppu::WeakComponentImplHelper8<XFilterManager, XFilterGroupManager, XFilePickerC
 , m_pFilterHelper( NULL )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+    
     m_pDelegate = [[AquaFilePickerDelegate alloc] initWithFilePicker:this];
     m_pControlHelper->setFilePickerDelegate(m_pDelegate);
-
+    
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
@@ -126,7 +126,7 @@ SalAquaFilePicker::~SalAquaFilePicker()
 
     if (NULL != m_pFilterHelper)
         delete m_pFilterHelper;
-
+        
     [m_pDelegate release];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -183,8 +183,8 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
     sal_Int16 retVal = 0;
 
     implInitialize();
-
-    // if m_pDialog is nil after initialization, something must have gone wrong before
+    
+    // if m_pDialog is nil after initialization, something must have gone wrong before 
     // or there was no initialization (see issue http://www.openoffice.org/issues/show_bug.cgi?id=100214)
     if (m_pDialog == nil) {
         //throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog was not properly initialized!"), static_cast< XFilePicker* >( this ));
@@ -226,9 +226,9 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 
     //Set the delegate to be notified of certain events
     [m_pDialog setDelegate:m_pDelegate];
-
+    
     int nStatus = runandwaitforresult();
-
+    
     [m_pDialog setDelegate:nil];
 
     switch( nStatus )
@@ -310,7 +310,7 @@ rtl::OUString SAL_CALL SalAquaFilePicker::getDisplayDirectory() throw( uno::Runt
 uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+    
     SolarMutexGuard aGuard;
 
     // OSL_TRACE("starting work");
@@ -326,12 +326,12 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
     else if (m_nDialogType == NAVIGATIONSERVICES_SAVE) {
         files = [NSArray arrayWithObjects:[m_pDialog URL], nil];
     }
-
+    
     long nFiles = [files count];
     OSL_TRACE("# of items: %d", nFiles);
-
+    
     uno::Sequence< rtl::OUString > aSelectedFiles(nFiles > 1 ? nFiles + 1 : nFiles);
-
+    
     for(int nIndex = 0; nIndex < nFiles; nIndex += 1)
     {
         NSURL *url = [files objectAtIndex:nIndex];
@@ -342,7 +342,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
             info = FILENAME;
         }
         OUString sFileOrDirURL = [url OUStringForInfo:info];
-
+    
         //get the directory information, only on the first file processed
         if (nIndex == 0) {
             OUString sDirectoryURL = [url OUStringForInfo:PATHWITHOUTLASTCOMPONENT];
@@ -351,10 +351,10 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
                 aSelectedFiles[0] = OUString(sDirectoryURL);
             }
         }
-
+    
         short nSequenceIndex = nFiles > 1 ? nIndex + 1 : nIndex;
         aSelectedFiles[nSequenceIndex] = sFileOrDirURL;
-
+    
         OSL_TRACE("Returned file in getFiles: \"%s\".", OUStringToOString(sFileOrDirURL, RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -393,9 +393,9 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
     ensureFilterHelper();
     m_pFilterHelper->setCurrentFilter(aTitle);
     updateFilterUI();
-
+    
     updateSaveFileNameExtension();
-
+    
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
@@ -440,11 +440,11 @@ throw( uno::RuntimeException )
     SolarMutexGuard aGuard;
 
     m_pControlHelper->setValue(nControlId, nControlAction, rValue);
-
+    
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION && m_nDialogType == NAVIGATIONSERVICES_SAVE) {
         updateSaveFileNameExtension();
     }
-
+    
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
@@ -452,9 +452,9 @@ uno::Any SAL_CALL SalAquaFilePicker::getValue( sal_Int16 nControlId, sal_Int16 n
 throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+    
     uno::Any aValue = m_pControlHelper->getValue(nControlId, nControlAction);
-
+    
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
     return aValue;
 }
@@ -572,7 +572,7 @@ throw( uno::Exception, uno::RuntimeException )
     }
 
     m_pControlHelper->initialize(templateId);
-
+    
     implInitialize();
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -670,28 +670,28 @@ throw( uno::RuntimeException )
 void SAL_CALL SalAquaFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 {
     OSL_TRACE( "file selection changed");
-    if (m_xListener.is())
+    if (m_xListener.is()) 
         m_xListener->fileSelectionChanged( aEvent );
 }
 
 void SAL_CALL SalAquaFilePicker::directoryChanged( FilePickerEvent aEvent )
 {
     OSL_TRACE("directory changed");
-    if (m_xListener.is())
+    if (m_xListener.is()) 
         m_xListener->directoryChanged( aEvent );
 }
 
 void SAL_CALL SalAquaFilePicker::controlStateChanged( FilePickerEvent aEvent )
 {
     OSL_TRACE("control state changed");
-    if (m_xListener.is())
+    if (m_xListener.is()) 
         m_xListener->controlStateChanged( aEvent );
 }
 
 void SAL_CALL SalAquaFilePicker::dialogSizeChanged()
 {
     OSL_TRACE("dialog size changed");
-    if (m_xListener.is())
+    if (m_xListener.is()) 
         m_xListener->dialogSizeChanged();
 }
 
@@ -758,10 +758,10 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
     if (m_nDialogType != NAVIGATIONSERVICES_SAVE) {
         return;
     }
-
-    // we need to set this here again because initial setting does
+    
+    // we need to set this here again because initial setting does 
     //[m_pDialog setExtensionHidden:YES];
-
+    
     SolarMutexGuard aGuard;
 
     if (m_pControlHelper->isAutoExtensionEnabled() == false) {
@@ -777,9 +777,9 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
 
         rtl::OUString suffix = (*(aStringList.begin())).copy(1);
         NSString *requiredFileType = [NSString stringWithOUString:suffix];
-
+        
         [m_pDialog setRequiredFileType:requiredFileType];
-
+        
         OSL_TRACE("disallowing other file types");
         [m_pDialog setAllowsOtherFileTypes:NO];
     }
@@ -789,17 +789,17 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
 
 void SalAquaFilePicker::filterControlChanged() {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-
+    
     if (m_pDialog == nil) {
         return;
     }
-
+    
     SolarMutexGuard aGuard;
 
     updateSaveFileNameExtension();
-
+    
     [m_pDialog validateVisibleColumns];
-
+    
     FilePickerEvent evt;
     evt.ElementId = LISTBOX_FILTER;
     controlStateChanged( evt );

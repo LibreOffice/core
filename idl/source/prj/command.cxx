@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 /*************************************************************************
 |*
-|*    Syntaxbeschreibung
+|*	  Syntaxbeschreibung
 |*
 *************************************************************************/
 char const * SyntaxStrings[] = {
@@ -136,26 +136,26 @@ char CommandLineSyntax[] =
 
 /*************************************************************************
 |*
-|*    Init()
+|*	  Init()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.12.94
-|*    Letzte Aenderung  MM 15.12.94
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.12.94
+|*	  Letzte Aenderung	MM 15.12.94
 |*
 *************************************************************************/
 void Init()
 {
     if( !IDLAPP->pHashTable )
-        IDLAPP->pHashTable      = new SvStringHashTable( 2801 );
+        IDLAPP->pHashTable		= new SvStringHashTable( 2801 );
     if( !IDLAPP->pGlobalNames )
-        IDLAPP->pGlobalNames    = new SvGlobalHashNames();
+        IDLAPP->pGlobalNames	= new SvGlobalHashNames();
 }
 
 /*************************************************************************
 |*
-|*    DeInit()
+|*	  DeInit()
 |*
-|*    Beschreibung
+|*	  Beschreibung
 |*
 *************************************************************************/
 void DeInit()
@@ -165,9 +165,9 @@ void DeInit()
 
 /*************************************************************************
 |*
-|*    DeInit()
+|*	  DeInit()
 |*
-|*    Beschreibung
+|*	  Beschreibung
 |*
 *************************************************************************/
 BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
@@ -210,9 +210,9 @@ BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 
 /*************************************************************************
 |*
-|*    SvCommand::SvCommand()
+|*	  SvCommand::SvCommand()
 |*
-|*    Beschreibung
+|*	  Beschreibung
 |*
 *************************************************************************/
 static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
@@ -251,9 +251,9 @@ static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
 }
 
 /*************************************************************************
-|*    SvCommand::SvCommand()
+|*	  SvCommand::SvCommand()
 |*
-|*    Beschreibung
+|*	  Beschreibung
 *************************************************************************/
 SvCommand::SvCommand( int argc, char ** argv )
     : nVerbosity(1), nFlags( 0 )
@@ -419,9 +419,9 @@ SvCommand::SvCommand( int argc, char ** argv )
 
 /*************************************************************************
 |*
-|*    SvCommand::~SvCommand()
+|*	  SvCommand::~SvCommand()
 |*
-|*    Beschreibung
+|*	  Beschreibung
 |*
 *************************************************************************/
 SvCommand::~SvCommand()

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace scripting_util
     inline void validateXRef(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRef, const sal_Char* Msg) throw (::com::sun::star::uno::RuntimeException)
     {
         OSL_ENSURE( xRef.is(), Msg );
-
+    
         if(!xRef.is())
         {
             throw ::com::sun::star::uno::RuntimeException(OUSTR(Msg), ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());

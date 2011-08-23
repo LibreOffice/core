@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ void SampleElement::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar_ = pVar->GetParameters();
         ULONG t = pHint->GetId();
-        if( t == SBX_HINT_DATAWANTED && pVar->GetUserData() == 0x12345678 )
+        if( t == SBX_HINT_DATAWANTED &&	pVar->GetUserData() == 0x12345678 )
         {
             // Die Say-Methode:
             // 1 Parameter + Returnwert

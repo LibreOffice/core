@@ -1089,9 +1089,9 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             addToBuffer((const char*)doc_txt_ptr, doc_txt_len);
             xmlFree(doc_txt_ptr);
         }
-        xmlPopInputCallbacks(); //filePatch
-        xmlPopInputCallbacks(); //helpPatch
-        xmlPopInputCallbacks(); //zipMatch
+        xmlPopInputCallbacks();	//filePatch
+        xmlPopInputCallbacks();	//helpPatch
+        xmlPopInputCallbacks();	//zipMatch
         xmlFreeDoc(res);
         xmlFreeDoc(doc);
         xsltFreeStylesheet(cur);

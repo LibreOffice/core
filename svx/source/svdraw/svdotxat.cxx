@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -413,7 +413,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
         if(pOutlinerParaObject)
         {
             Outliner* pOutliner = 0;
-
+            
             if( pEdtOutl || (pText == getActiveText()) )
                 pOutliner = pEdtOutl;
 
@@ -445,7 +445,7 @@ bool SdrTextObj::HasText() const
 {
     if( pEdtOutl )
         return HasEditText();
-
+    
     OutlinerParaObject* pOPO = GetOutlinerParaObject();
 
     bool bHasText = false;

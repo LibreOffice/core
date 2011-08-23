@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ enum SvxNumType
 
 enum SvxPageUsage
 {
-    SVX_PAGE_LEFT           = 0x0001,
-    SVX_PAGE_RIGHT          = 0x0002,
-    SVX_PAGE_ALL            = 0x0003,
-    SVX_PAGE_MIRROR         = 0x0007,
+    SVX_PAGE_LEFT			= 0x0001,
+    SVX_PAGE_RIGHT		  	= 0x0002,
+    SVX_PAGE_ALL			= 0x0003,
+    SVX_PAGE_MIRROR		  	= 0x0007,
     SVX_PAGE_HEADERSHARE    = 0x0040,
     SVX_PAGE_FOOTERSHARE    = 0x0080
 };
@@ -73,10 +73,10 @@ portait or landscape, layout)
 class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem
 {
 private:
-    String          aDescName;          // name of the template
-    SvxNumType      eNumType;           // enumeration
-    BOOL            bLandscape;         // portrait / landscape
-    USHORT          eUse;               // layout
+    String			aDescName;			// name of the template
+    SvxNumType		eNumType;			// enumeration
+    BOOL			bLandscape;     	// portrait / landscape
+    USHORT			eUse;				// layout
 
 public:
 
@@ -92,25 +92,25 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
     virtual SfxPoolItem*     Create( SvStream&, USHORT ) const;
-    virtual SvStream&        Store( SvStream& , USHORT nItemVersion ) const;
+    virtual SvStream&		 Store( SvStream& , USHORT nItemVersion ) const;
 
     // orientation
-    USHORT          GetPageUsage() const                { return eUse;       }
-    void            SetPageUsage(USHORT eU)             { eUse= eU;          }
+    USHORT 			GetPageUsage() const 				{ return eUse; 		 }
+    void			SetPageUsage(USHORT eU)				{ eUse= eU; 		 }
 
-    BOOL            IsLandscape() const                 { return bLandscape; }
-    void            SetLandscape(BOOL bL)               { bLandscape = bL;   }
+    BOOL			IsLandscape() const 				{ return bLandscape; }
+    void			SetLandscape(BOOL bL)				{ bLandscape = bL; 	 }
 
     // enumeration
-    SvxNumType      GetNumType() const                  { return eNumType;   }
-    void            SetNumType(SvxNumType eNum)         { eNumType = eNum;   }
+    SvxNumType		GetNumType() const 					{ return eNumType;	 }
+    void			SetNumType(SvxNumType eNum)			{ eNumType = eNum;   }
 
     // name of the descriptor
-    const String&   GetDescName() const                 { return aDescName;  }
-    void            SetDescName(const String& rStr)     { aDescName = rStr;  }
+    const String& 	GetDescName() const 				{ return aDescName;  }
+    void			SetDescName(const String& rStr)		{ aDescName = rStr;  }
 };
 
 
@@ -133,8 +133,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*    Create( SvStream&, USHORT nVersion ) const;
-    virtual SvStream&       Store( SvStream&, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*	Create( SvStream&, USHORT nVersion ) const;
+    virtual SvStream&		Store( SvStream&, USHORT nItemVersion ) const;
 };
 
 

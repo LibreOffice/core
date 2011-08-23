@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace sfx2
     /** === end UNO using === **/
 
     //====================================================================
-    //=
+    //= 
     //====================================================================
     //--------------------------------------------------------------------
     DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::osl::SolarMutex& _rMutex )
@@ -83,7 +83,7 @@ namespace sfx2
         if ( m_pDocument )
             m_pDocument->storageIsModified();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL DocumentStorageModifyListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {

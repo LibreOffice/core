@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <services/tabwindowservice.hxx>
@@ -40,14 +40,14 @@
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -56,21 +56,21 @@
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  css::uno::XInterface, XTypeProvider, XServiceInfo
+//	css::uno::XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
 DEFINE_XINTERFACE_6                 (   TabWindowService                                ,
@@ -104,17 +104,17 @@ DEFINE_INIT_SERVICE                 (   TabWindowService,
                                             m_aTransactionManager.setWorkingMode( E_WORK );
                                         }
                                     )
-
+                                    
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 TabWindowService::TabWindowService( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
-        //  Attention:
-        //      Don't change order of initialization!
+        //	Init baseclasses first
+        //	Attention:
+        //		Don't change order of initialization!
         //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
-        //      we must garant right initialization and a valid value of this! First initialize
-        //      baseclasses and then members. And we need the mutex for other baseclasses !!!
+        //		we must garant right initialization and a valid value of this! First initialize
+        //		baseclasses and then members. And we need the mutex for other baseclasses !!!
         :   ThreadHelpBase          ( &Application::GetSolarMutex() )
         ,   TransactionBase         (                               )
         ,   PropertySetHelper       ( xFactory                      ,
@@ -138,7 +138,7 @@ TabWindowService::TabWindowService( const css::uno::Reference< css::lang::XMulti
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 TabWindowService::~TabWindowService()
 {
@@ -293,7 +293,7 @@ void SAL_CALL TabWindowService::dispose()
 
     if (m_pTabWin)
         m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
-
+    
     m_pTabWin = NULL;
     m_xTabWin.clear();
 }
@@ -368,13 +368,13 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
 
     if ( !pEvent && !pEvent->ISA(VclWindowEvent))
         return 0;
-
+    
     ULONG           nEventId = pEvent->GetId();
     VclWindowEvent* pWinEvt  = static_cast< VclWindowEvent* >(pEvent);
 
     css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::lang::EventObject aEvent( xThis );
-
+    
     if (nEventId == VCLEVENT_OBJECT_DYING)
     {
         m_lListener.disposeAndClear (aEvent);
@@ -389,14 +389,14 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(::getCppuType((const css::uno::Reference< css::awt::XTabListener >*) NULL));
     if ( ! pContainer)
         return 0;
-
+    
     ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
     while (pIterator.hasMoreElements())
     {
         try
         {
             css::awt::XTabListener* pListener = (css::awt::XTabListener*)pIterator.next();
-
+        
             switch (nEventId)
             {
                 case VCLEVENT_TABPAGE_ACTIVATE :
@@ -470,19 +470,19 @@ FwkTabWindow* TabWindowService::mem_TabWin ()
     if ( ! m_xTabWin.is ())
     {
         Window* pFakeParent = dynamic_cast< Window* >(Application::GetDefaultDevice ());
-
+    
         m_pTabWin = new FwkTabWindow (pFakeParent);
         m_xTabWin = VCLUnoHelper::GetInterface (m_pTabWin);
-
+    
         m_pTabWin->AddEventListener( LINK( this, TabWindowService, EventListener ) );
     }
 
     if (m_xTabWin.is ())
         pWin = m_pTabWin;
-
+        
     return pWin;
 }
 
-} //    namespace framework
+} //	namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

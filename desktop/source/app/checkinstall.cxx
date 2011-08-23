@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ sal_Bool CheckInstallation( OUString& rTitle )
     try
     {
         Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-        Reference< XExactName > xExactName( xSMgr->createInstance(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.comp.desktop.Evaluation" ))),
+        Reference< XExactName > xExactName( xSMgr->createInstance( 
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
+                                        "com.sun.star.comp.desktop.Evaluation" ))), 
                                     UNO_QUERY );
         if ( xExactName.is() )
         {
@@ -77,7 +77,7 @@ sal_Bool CheckInstallation( OUString& rTitle )
                             return sal_False;
                         }
                     }
-
+                    
                     return sal_True;
                 }
                 else
@@ -112,7 +112,7 @@ sal_Bool CheckInstallation( OUString& rTitle )
     catch(Exception)
     {
     }
-
+    
     return sal_True;
 }
 

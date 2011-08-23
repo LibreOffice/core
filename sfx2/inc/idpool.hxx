@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _SFXIDPOOL_HXX
 #define _SFXIDPOOL_HXX
 
-#include <limits.h>     // USHRT_MAX
+#include <limits.h>		// USHRT_MAX
 #include "bitset.hxx"
 
 // class IdPool ----------------------------------------------------------

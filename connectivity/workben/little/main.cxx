@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,11 +61,11 @@ void _cdecl main( int argc, char * argv[] )
 #endif
 
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  m_xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver>      m_xDriver;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>	m_xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver>		m_xDriver;
 
     try{
-        Reference< ::com::sun::star::lang::XMultiServiceFactory > xFac =
+        Reference< ::com::sun::star::lang::XMultiServiceFactory > xFac = 
                 createRegistryServiceFactory(OUString::createFromAscii("g:\\office50\\program\\applicat.rdb"),OUString());
         if(!xFac.is())
             return;
@@ -73,10 +73,10 @@ void _cdecl main( int argc, char * argv[] )
         m_xDriver = Reference<XDriver>(xFac->createInstance(OUString::createFromAscii("com.sun.star.sdbc.driver.dbase.Driver")),UNO_QUERY);
         if(m_xDriver.is())
         {
-
+            
             Sequence<PropertyValue> aValue;
-    //      aValue.getArray()[0] = PropertyValue( OUString::createFromAscii("user"),0,makeAny(OUString::createFromAscii("TEST1")),PropertyState_DIRECT_VALUE);
-    //      aValue.getArray()[1] = PropertyValue( OUString::createFromAscii("password"),0,makeAny(OUString::createFromAscii("TEST1")),PropertyState_DIRECT_VALUE);
+    //		aValue.getArray()[0] = PropertyValue( OUString::createFromAscii("user"),0,makeAny(OUString::createFromAscii("TEST1")),PropertyState_DIRECT_VALUE);
+    //		aValue.getArray()[1] = PropertyValue( OUString::createFromAscii("password"),0,makeAny(OUString::createFromAscii("TEST1")),PropertyState_DIRECT_VALUE);
     //
             m_xConnection = m_xDriver->connect(OUString::createFromAscii("sdbc:dbase:g:\\"),aValue);
             if(m_xConnection.is())

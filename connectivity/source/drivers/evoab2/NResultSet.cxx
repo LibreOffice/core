@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ using namespace com::sun::star::io;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
+::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)	\
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.evoab.ResultSet");
 }
@@ -182,7 +182,8 @@ static bool isLDAP( EBook *pBook )
 
 static bool isLocal( EBook *pBook )
 {
-    return pBook && !strncmp( "file://", e_book_get_uri( pBook ), 6 );
+    return pBook && ( !strncmp( "file://", e_book_get_uri( pBook ), 6 ) ||
+                      !strncmp( "local:", e_book_get_uri( pBook ), 6 ) );
 }
 
 static bool isAuthRequired( EBook *pBook )

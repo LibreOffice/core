@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ E3dDragMethod::E3dDragMethod (
     const SdrMarkList& rMark,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   SdrDragMethod(_rView),
+:	SdrDragMethod(_rView),
     meConstraint(eConstr),
     mbMoveFull(bFull),
     mbMovedAtAll(FALSE)
@@ -323,7 +323,7 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
     const SdrMarkList& rMark,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   E3dDragMethod(_rView, rMark, eConstr, bFull)
+:	E3dDragMethod(_rView, rMark, eConstr, bFull)
 {
     // Zentrum aller selektierten Objekte in Augkoordinaten holen
     const sal_uInt32 nCnt(maGrp.size());
@@ -473,7 +473,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
             // ...und anwenden
             rCandidate.maTransform *= aTransMat;
-
+            
             if(mbMoveFull)
             {
                 E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
@@ -516,7 +516,7 @@ E3dDragMove::E3dDragMove(SdrDragView &_rView,
     SdrHdlKind eDrgHdl,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   E3dDragMethod(_rView, rMark, eConstr, bFull),
+:	E3dDragMethod(_rView, rMark, eConstr, bFull),
     meWhatDragHdl(eDrgHdl)
 {
     switch(meWhatDragHdl)
@@ -598,7 +598,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                 basegfx::B2DPoint aGlobalMoveHead2D((double)(rPnt.X() - maLastPos.X()), (double)(rPnt.Y() - maLastPos.Y()));
                 basegfx::B2DPoint aGlobalMoveTail2D(0.0, 0.0);
                 basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
-
+                
                 aInverseSceneTransform.invert();
                 aGlobalMoveHead2D = aInverseSceneTransform * aGlobalMoveHead2D;
                 aGlobalMoveTail2D = aInverseSceneTransform * aGlobalMoveTail2D;
@@ -667,7 +667,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                 // transform from 2D world view to 3D eye
                 const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mp3DObj->GetScene()->GetViewContact());
                 const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
-
+                
                 basegfx::B2DPoint aGlobalScaleStart2D((double)(aStartPos.X()), (double)(aStartPos.Y()));
                 basegfx::B2DPoint aGlobalScaleNext2D((double)(rPnt.X()), (double)(rPnt.Y()));
                 basegfx::B2DPoint aGlobalScaleFixPos2D((double)(maScaleFixPos.X()), (double)(maScaleFixPos.Y()));
@@ -757,7 +757,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 
                 // ...und anwenden
                 rCandidate.maTransform = aNewTrans;
-
+                
                 if(mbMoveFull)
                 {
                     E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);

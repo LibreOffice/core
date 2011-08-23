@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ class InteractionContinuationImpl : public ::cppu::OWeakObject,
 {
     const Type m_type;
     bool * m_pselect;
-
-public:
+    
+public:    
     inline InteractionContinuationImpl( Type const & type, bool * pselect )
         : m_type( type ),
           m_pselect( pselect )
@@ -58,13 +58,13 @@ public:
             ::getCppuType(
                 static_cast< Reference<task::XInteractionContinuation>
                 const *>(0) ).isAssignableFrom(m_type) ); }
-
+    
     // XInterface
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
     virtual Any SAL_CALL queryInterface( Type const & type )
         throw (RuntimeException);
-
+    
     // XInteractionContinuation
     virtual void SAL_CALL select() throw (RuntimeException);
 };
@@ -107,7 +107,7 @@ class InteractionRequest :
 {
     Any m_request;
     Sequence< Reference<task::XInteractionContinuation> > m_conts;
-
+    
 public:
     inline InteractionRequest(
         Any const & request,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,15 +53,15 @@ namespace xmloff
     class IFormsExportContext
     {
     public:
-        virtual SvXMLExport&                                getGlobalContext() = 0;
-        virtual ::rtl::Reference< SvXMLExportPropertyMapper >   getStylePropertyMapper() = 0;
+        virtual SvXMLExport&								getGlobalContext() = 0;
+        virtual ::rtl::Reference< SvXMLExportPropertyMapper >	getStylePropertyMapper() = 0;
 
         /** steps through a collection and exports all children of this collection
         */
-        virtual void    exportCollectionElements(
+        virtual void	exportCollectionElements(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection) = 0;
 
-        virtual ::rtl::OUString                             getObjectStyleName(
+        virtual ::rtl::OUString								getObjectStyleName(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) = 0;
     };
 
@@ -89,7 +89,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_CALLBACKS_HXX_

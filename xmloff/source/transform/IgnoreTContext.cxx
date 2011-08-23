@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ using namespace ::com::sun::star::xml::sax;
 
 TYPEINIT1( XMLIgnoreTransformerContext, XMLTransformerContext );
 
-XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
-        XMLTransformerBase& rImp,
+XMLIgnoreTransformerContext::XMLIgnoreTransformerContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         sal_Bool bIgnoreChars,
         sal_Bool bIgnoreElems ) :
@@ -50,8 +50,8 @@ XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
 {
 }
 
-XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
-        XMLTransformerBase& rTransformer,
+XMLIgnoreTransformerContext::XMLIgnoreTransformerContext( 
+        XMLTransformerBase& rTransformer, 
         const ::rtl::OUString& rQName,
         sal_Bool bAllowCharactersRecursive ) :
     XMLTransformerContext( rTransformer, rQName ),
@@ -74,11 +74,11 @@ XMLTransformerContext *XMLIgnoreTransformerContext::CreateChildContext(
 {
     XMLTransformerContext *pContext = 0;
     if( m_bIgnoreElements )
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
-                                                    rQName, sal_True,
+        pContext = new XMLIgnoreTransformerContext( GetTransformer(), 
+                                                    rQName, sal_True, 
                                                     sal_True );
     else if (m_bRecursiveUse)
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+        pContext = new XMLIgnoreTransformerContext( GetTransformer(), 
                                                     rQName, m_bAllowCharactersRecursive );
     else
         pContext = XMLTransformerContext::CreateChildContext(

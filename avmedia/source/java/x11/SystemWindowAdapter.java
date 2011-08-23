@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,16 +37,16 @@ public class SystemWindowAdapter
 
         if( aOS.startsWith( "SunOS" ) )
         {
-            try
+            try 
             {
                 Class aClass = Class.forName( "sun.awt.motif.MEmbeddedFrame" );
-
+                    
                 if( aClass != null )
-                {
+                { 
                     try
                     {
                         Constructor aCtor = aClass.getConstructor( new Class[] { long.class, boolean.class } );
-
+                    
                         if( aCtor != null )
                         {
                             aFrame = (java.awt.Frame) aCtor.newInstance( new Object[] { new Long( windowHandle ),
@@ -56,7 +56,7 @@ public class SystemWindowAdapter
                     catch( Exception e )
                     {
                     }
-
+                    
                     if( aFrame == null )
                     {
                         try
@@ -80,12 +80,12 @@ public class SystemWindowAdapter
         }
         else
         {
-            try
+            try 
             {
                 Class aClass = Class.forName( "sun.awt.motif.MEmbeddedFrame" );
 
                 if( aClass != null )
-                {
+                { 
                     Constructor aCtor = aClass.getConstructor( new Class[] { long.class } );
 
                     if( aCtor != null )
@@ -100,12 +100,12 @@ public class SystemWindowAdapter
 
             if( aFrame == null )
             {
-                try
+                try 
                 {
                     Class aClass = Class.forName( "sun.awt.X11.XEmbeddedFrame" );
 
                     if( aClass != null )
-                    {
+                    { 
                         Constructor aCtor = aClass.getConstructor( new Class[] { long.class } );
 
                         if( aCtor != null )
@@ -117,7 +117,7 @@ public class SystemWindowAdapter
                 }
             }
         }
-
+        
         return aFrame;
     }
 }

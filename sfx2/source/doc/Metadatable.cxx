@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@
     the XML ID is not lost.
     The goal is that it should be hard to lose an XML ID by accident, which
     is especially important as long as we do not have an UI that displays them.
-
+    
     There are two subclasses of <type>Metadatable</type>:
     <ul><li><type>MetadatableClipboard</type>: for copies in the clipboard</li>
         <li><type>MetadatableUndo</type>: for undo, because a Metadatable
@@ -97,7 +97,7 @@
             Metadatable, because if we delete a text node, undo, and then
             do something to clear the redo array, the original text node is
             destroyed, and is replaced by the copy created by undo</li></ul>
-
+    
     If content from a non-clipboard document is copied into a clipboard
     document, a dummy <type>MetadatableClipboard</type> is inserted into the
     non-clipboard document registry in order to track the position of the
@@ -1258,7 +1258,7 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
 
     // N.B.: when copying to the clipboard, the selection is always inserted
     //       into the body, even if the source is a header/footer!
-    //       so we do not check whether the stream is right in this function
+    //       so we do not check whether the stream is right in this function 
 
     if (!isValidXmlId(i_rReference.First, i_rReference.Second))
     {

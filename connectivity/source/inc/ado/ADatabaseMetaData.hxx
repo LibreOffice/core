@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,16 +47,16 @@ namespace connectivity
 
         class ODatabaseMetaData : public ODatabaseMetaDataBase
         {
-            typedef struct  _LiteralInfo
+            typedef struct	_LiteralInfo
             {
                 ::rtl::OUString pwszLiteralValue;
-                sal_uInt32      cchMaxLen;
+                sal_uInt32		cchMaxLen;
                 sal_Bool        fSupported;
             } LiteralInfo;
 
-            ::std::map<sal_uInt32,LiteralInfo>  m_aLiteralInfo;
-            WpADOConnection*                    m_pADOConnection;
-            OConnection*                        m_pConnection;
+            ::std::map<sal_uInt32,LiteralInfo>	m_aLiteralInfo;
+            WpADOConnection*					m_pADOConnection;
+            OConnection*						m_pConnection;
 
             void fillLiterals();
             // get information out of rowset
@@ -110,10 +110,10 @@ namespace connectivity
             virtual sal_Bool SAL_CALL storesUpperCaseIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL storesLowerCaseIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL storesMixedCaseIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
+            
             virtual sal_Bool SAL_CALL storesUpperCaseQuotedIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL storesLowerCaseQuotedIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
+            
             virtual ::rtl::OUString SAL_CALL getSQLKeywords(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::rtl::OUString SAL_CALL getNumericFunctions(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::rtl::OUString SAL_CALL getStringFunctions(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

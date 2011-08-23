@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace rtl
 class SvxXMLTabStopImportContext : public XMLElementPropertyContext
 {
 private:
-    SvxXMLTabStopArray_Impl*    mpTabStops;
+    SvxXMLTabStopArray_Impl*	mpTabStops;
 
 public:
     TYPEINFO();
@@ -62,6 +62,6 @@ public:
 };
 
 
-#endif  //  _XMLOFF_XMLTABI_HXX
+#endif	//  _XMLOFF_XMLTABI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -341,7 +341,7 @@ void LinkManager::UpdateAllLinks(
             }
 
         if( USHRT_MAX == nFndPos )
-            continue;                   // war noch nicht vorhanden!
+            continue;					// war noch nicht vorhanden!
 
         // Graphic-Links noch nicht updaten
         if( !pLink->IsVisible() ||
@@ -352,8 +352,8 @@ void LinkManager::UpdateAllLinks(
         {
             int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ) ).Execute();
             if( RET_YES != nRet )
-                return ;        // es soll nichts geupdatet werden
-            bAskUpdate = FALSE;     // einmal reicht
+                return ;		// es soll nichts geupdatet werden
+            bAskUpdate = FALSE;		// einmal reicht
         }
 
         pLink->Update();
@@ -505,8 +505,8 @@ void LinkManager::CancelTransfers()
         if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
             0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )
-//          0 != ( pFileObj = (SvFileObject*)SvFileObject::ClassFactory()->
-//                                  CastAndAddRef( pLnk->GetObj() )) )
+//			0 != ( pFileObj = (SvFileObject*)SvFileObject::ClassFactory()->
+//									CastAndAddRef( pLnk->GetObj() )) )
             pFileObj->CancelTransfers();
 }
 
@@ -522,7 +522,7 @@ ULONG LinkManager::RegisterStatusInfoId()
     if( !nFormat )
     {
 // wie sieht die neue Schnittstelle aus?
-//      nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
+//		nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
         nFormat = SotExchange::RegisterFormatName(
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                                 "StatusInfo vom SvxInternalLink" )));
@@ -635,7 +635,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 
             aCC.toLower( sTmp );
-            if( sTmp == sNmURL )        // die wollen wir haben
+            if( sTmp == sNmURL )		// die wollen wir haben
             {
                 pFndShell = pShell;
                 break;

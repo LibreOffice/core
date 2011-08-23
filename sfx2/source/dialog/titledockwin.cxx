@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,7 +133,7 @@ namespace sfx2
     void TitledDockingWindow::impl_layout()
     {
         m_bLayoutPending = false;
-
+        
         m_aToolbox.ShowItem( 1, !IsFloatingMode() );
 
         const Size aToolBoxSize( m_aToolbox.CalcWindowSizePixel() );
@@ -202,8 +202,8 @@ namespace sfx2
         // Paint title bar background.
         Rectangle aTitleBarBox( Rectangle(
             nOuterLeft,
-            0,
-            nOuterRight,
+            0, 
+            nOuterRight, 
             nInnerTop-1
         ) );
         DrawRect( aTitleBarBox );
@@ -254,7 +254,7 @@ namespace sfx2
         Image aImageHC( SfxResId( SFX_IMG_CLOSE_DOC_HC ) );
         m_aToolbox.InsertItem( 1,
                 GetSettings().GetStyleSettings().GetHighContrastMode()
-            ?   aImageHC
+            ?   aImageHC 
             :   aImage
         );
         m_aToolbox.ShowItem( 1 );
@@ -275,7 +275,7 @@ namespace sfx2
         // resized.
         impl_scheduleLayout();
         Invalidate();
-
+        
         return nItemId;
     }
 
@@ -343,7 +343,7 @@ namespace sfx2
                 if ( IsControlFont() )
                     aFont.Merge( GetControlFont() );
                 SetZoomedPointFont( aFont );
-
+                
                 // Color.
                 Color aColor;
                 if ( IsControlForeground() )

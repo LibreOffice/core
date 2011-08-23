@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ namespace drawinglayer
     {
         /** MarkerArrayPrimitive2D class
 
-            This primtive defines an array of markers. Their size is defined
-            in pixels and independent from the view transformation which makes
+            This primtive defines an array of markers. Their size is defined 
+            in pixels and independent from the view transformation which makes 
             this primitive highly view-dependent. It is also transformation
-            invariant, so that the bitmap is always visualized unscaled and
+            invariant, so that the bitmap is always visualized unscaled and 
             unrotated.
-            It is used e.g. for grid position visualisation. The given Bitmap
-            (with transparence) is defined to be visible centered at each of the given
+            It is used e.g. for grid position visualisation. The given Bitmap 
+            (with transparence) is defined to be visible centered at each of the given 
             positions.
             It decomposes to the needed number of BitmapPrimitive2D's, so it would
             be efficient to handle it directly in a renderer.
@@ -57,10 +57,10 @@ namespace drawinglayer
         {
         private:
             /// the positions for the marker
-            std::vector< basegfx::B2DPoint >                maPositions;
+            std::vector< basegfx::B2DPoint >				maPositions;
 
             /// the marker definintion to visualize
-            BitmapEx                                        maMarker;
+            BitmapEx										maMarker;
 
         protected:
             /// create local decomposition

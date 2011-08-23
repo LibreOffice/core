@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ import org.openide.util.datatransfer.NewType;
 import org.openoffice.netbeans.modules.office.actions.ParcelFolderCookie;
 import org.openoffice.netbeans.modules.office.utils.PackageRemover;
 
-public class ParcelContentsFolder extends DataFolder {
+public class ParcelContentsFolder extends DataFolder {    
     public ParcelContentsFolder(FileObject pf, ParcelContentsFolderDataLoader loader)
         throws DataObjectExistsException {
         super(pf, loader);
@@ -108,7 +108,7 @@ public class ParcelContentsFolder extends DataFolder {
 
         FileObject fo = result.getPrimaryFile();
         if (fo.getExt().equals("java")) {
-            FileLock lock = null;
+            FileLock lock = null; 
             try {
                 PackageRemover.removeDeclaration(FileUtil.toFile(fo));
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 */
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/protocolhandlercache.hxx>
@@ -46,18 +46,18 @@
 #include <threadhelp/lockhelper.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <tools/wldcrd.hxx>
 #include <unotools/configpathes.hxx>
 #include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -235,7 +235,7 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 
     HandlerHash* pOldHandler = m_pHandler;
     PatternHash* pOldPattern = m_pPattern;
-
+    
     m_pHandler = pHandler;
     m_pPattern = pPattern;
 
@@ -243,7 +243,7 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
     pOldPattern->free();
     delete pOldHandler;
     delete pOldPattern;
-
+    
     aWriteLock.unlock();
     // <- SAFE
 }
@@ -344,7 +344,7 @@ void HandlerCFGAccess::Notify(const css::uno::Sequence< rtl::OUString >& /*lProp
 {
     HandlerHash* pHandler = new HandlerHash;
     PatternHash* pPattern = new PatternHash;
-
+    
     read(&pHandler, &pPattern);
     if (m_pCache)
         m_pCache->takeOver(pHandler, pPattern);

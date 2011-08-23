@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ import helper.*;
 //-----------------------------------------------
 /** @short todo document me
  */
-public class AcceleratorsConfigurationTest extends ComplexTestCase
+public class AcceleratorsConfigurationTest extends ComplexTestCase 
 {
     /** points to the global uno service manager. */
     private XMultiServiceFactory m_xSmgr = null;
@@ -106,7 +106,7 @@ public class AcceleratorsConfigurationTest extends ComplexTestCase
             m_xSecondaryKeys = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, m_xConfig.getByName("SecondaryKeys"));
         }
     }
-
+    
     //-------------------------------------------
     /** @short  close the environment.
      */
@@ -157,7 +157,7 @@ public class AcceleratorsConfigurationTest extends ComplexTestCase
             "com.sun.star.frame.StartModule",
             "com.sun.star.drawing.DrawingDocument",
             "com.sun.star.presentation.PresentationDocument",
-            "com.sun.star.sheet.SpreadsheetDocument",
+            "com.sun.star.sheet.SpreadsheetDocument",    
             "com.sun.star.text.TextDocument",
             // add other modules here
         };
@@ -176,7 +176,7 @@ public class AcceleratorsConfigurationTest extends ComplexTestCase
 
             XInitialization xInit = (XInitialization)UnoRuntime.queryInterface(XInitialization.class, m_xModuleAccelCfg);
             xInit.initialize(aProp); // to fill cache
-
+                        
             XNameAccess xPrimaryModules = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, m_xPrimaryKeys.getByName("Modules"));
             XNameAccess xSecondaryModules = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, m_xSecondaryKeys.getByName("Modules"));
 
@@ -258,7 +258,7 @@ public class AcceleratorsConfigurationTest extends ComplexTestCase
         SaveDocumentAcceleratorConfiguration(sDocCfgName);
 
         sDocCfgName = "file:///c:/test.cfg";
-        LoadDocumentAcceleratorConfiguration(sDocCfgName);
+        LoadDocumentAcceleratorConfiguration(sDocCfgName);        
     }
 
     //-------------------------------------------
@@ -276,7 +276,7 @@ public class AcceleratorsConfigurationTest extends ComplexTestCase
                 log.println("** get command by " + sKeys[i] + " **");
 
                 String sCmdFromCache = new String(); // get a value using XAcceleratorConfiguration API
-                String sCmdFromConfiguration = new String(); // get a value using configuration API
+                String sCmdFromConfiguration = new String(); // get a value using configuration API            
 
                 // GET shortcuts/commands using XAcceleratorConfiguration API
                 sCmdFromCache = xAccelCfg.getCommandByKeyEvent(convertShortcut2AWTKey(sKeys[i]));
@@ -434,7 +434,7 @@ public class AcceleratorsConfigurationTest extends ComplexTestCase
             XNameAccess xCommand = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, xKey.getByName("Command"));
 
             String sLocale = getOfficeLocale();
-            if (xCommand.hasByName(sLocale))
+            if (xCommand.hasByName(sLocale))            
                 sCommand = (String)UnoRuntime.queryInterface(String.class, xCommand.getByName(sLocale));
         }
 

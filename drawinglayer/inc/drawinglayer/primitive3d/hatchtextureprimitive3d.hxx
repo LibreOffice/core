@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace drawinglayer
     namespace primitive3d
     {
         /** HatchTexturePrimitive3D class
-
+        
             HatchTexturePrimitive3D is derived from GroupPrimitive3D, but implements
             a decomposition which is complicated enough for buffering. Since the group
             primitive has no default buffering, it is necessary here to add a local
@@ -49,7 +49,7 @@ namespace drawinglayer
         {
         private:
             /// the hatch definition
-            attribute::FillHatchAttribute                   maHatch;
+            attribute::FillHatchAttribute					maHatch;
 
             /// the buffered decomposed hatch
             Primitive3DSequence                             maBuffered3DDecomposition;
@@ -65,10 +65,10 @@ namespace drawinglayer
         public:
             /// constructor
             HatchTexturePrimitive3D(
-                const attribute::FillHatchAttribute& rHatch,
-                const Primitive3DSequence& rChildren,
-                const basegfx::B2DVector& rTextureSize,
-                bool bModulate,
+                const attribute::FillHatchAttribute& rHatch, 
+                const Primitive3DSequence& rChildren, 
+                const basegfx::B2DVector& rTextureSize, 
+                bool bModulate, 
                 bool bFilter);
 
             /// data read access

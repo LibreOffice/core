@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,6 +94,6 @@ enum ActionMapTypesOOo
     MAX_OASIS_ACTIONS
 };
 
-#endif  //  _XMLOFF_ACTIONMAPTYPESOASIS_HXX
+#endif	//  _XMLOFF_ACTIONMAPTYPESOASIS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

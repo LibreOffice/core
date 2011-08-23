@@ -38,8 +38,10 @@
 
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/bootstrap.hxx>
 #include <tools/resmgr.hxx>
 
 #include <svtools/svtools.hrc>
@@ -715,7 +717,11 @@ void UnxFilePicker::initFilePicker()
 #endif
 
         // The executable name
-        const char *pFname = "kdefilepicker";
+        rtl::OUString helperurl( RTL_CONSTASCII_USTRINGPARAM("${ORIGIN}/kdefilepicker"));
+        rtl::Bootstrap::expandMacros( helperurl );
+        rtl::OUString helperpath;
+        osl::FileBase::getSystemPathFromFileURL( helperurl, helperpath );
+        rtl::OString helper( rtl::OUStringToOString( helperpath, osl_getThreadTextEncoding()));
 
         // ID of the main window
         const int nIdLen = 20;
@@ -736,7 +742,7 @@ void UnxFilePicker::initFilePicker()
         }
 
         // Execute the fpicker implementation
-        execlp( pFname, pFname, "--winid", pWinId, NULL );
+        execlp( helper.getStr(), helper.getStr(), "--winid", pWinId, NULL );
 
         // Error, finish the child
         exit( -1 );

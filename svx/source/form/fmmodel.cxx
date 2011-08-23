@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@ TYPEINIT1(FmFormModel, SdrModel);
 
 struct FmFormModelImplData
 {
-    FmXUndoEnvironment*     pUndoEnv;
-    sal_Bool                bOpenInDesignIsDefaulted;
-    sal_Bool                bMovingPage;
+    FmXUndoEnvironment*		pUndoEnv;
+    sal_Bool				bOpenInDesignIsDefaulted;
+    sal_Bool				bMovingPage;
     ::boost::optional< sal_Bool >
                             aControlsUseRefDevice;
 
@@ -364,7 +364,7 @@ void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
 }
 
 //------------------------------------------------------------------------
-FmXUndoEnvironment& FmFormModel::GetUndoEnv()
+FmXUndoEnvironment&	FmFormModel::GetUndoEnv()
 {
     return *m_pImpl->pUndoEnv;
 }

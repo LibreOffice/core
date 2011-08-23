@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,7 +122,7 @@ class SessionListener :   // interfaces
 
         sal_Bool m_bAllowUserInteractionOnQuit;
         sal_Bool m_bTerminated;
-
+ 
 
         // in case of synchronous call the caller should do saveDone() call himself!
         void StoreSession( sal_Bool bAsync );
@@ -136,7 +136,7 @@ class SessionListener :   // interfaces
         // XInterface, XTypeProvider, XServiceInfo
 
         FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
+        FWK_DECLARE_XTYPEPROVIDER    
         DECLARE_XSERVICEINFO
 
         #ifdef ENABLE_AUTODOC_FIX
@@ -164,7 +164,7 @@ class SessionListener :   // interfaces
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any  >& args) throw (css::uno::RuntimeException);
 
         // XSessionManagerListener
-        virtual void SAL_CALL doSave( sal_Bool bShutdown, sal_Bool bCancelable )
+        virtual void SAL_CALL doSave( sal_Bool bShutdown, sal_Bool bCancelable ) 
             throw (css::uno::RuntimeException);
         virtual void SAL_CALL approveInteraction( sal_Bool bInteractionGranted )
             throw (css::uno::RuntimeException);
@@ -178,7 +178,7 @@ class SessionListener :   // interfaces
             throw (::com::sun::star::uno::RuntimeException);
 
        // XStatusListener
-       virtual void SAL_CALL statusChanged(const com::sun::star::frame::FeatureStateEvent& event)
+       virtual void SAL_CALL statusChanged(const com::sun::star::frame::FeatureStateEvent& event) 
            throw (css::uno::RuntimeException);
 
         void doSaveImpl( sal_Bool bShutdown, sal_Bool bCancelable ) throw (css::uno::RuntimeException);

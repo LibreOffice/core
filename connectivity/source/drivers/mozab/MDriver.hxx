@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ namespace connectivity
     namespace mozab
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MozabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
-
+        
         typedef       void* (SAL_CALL * OMozabConnection_CreateInstanceFunction)(void* _pDriver );
         typedef       void  (SAL_CALL * OSetMozabServiceFactory)( void* _pFactory );
         typedef const void* (SAL_CALL * OGetSdbcScheme_Function)( short );
 
 
-        typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,
+        typedef ::cppu::WeakComponentImplHelper2<	::com::sun::star::sdbc::XDriver, 
                                                     ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
 
         enum EDriverType
@@ -66,11 +66,11 @@ namespace connectivity
         protected:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xMSFactory;
 
-            ::osl::Mutex                            m_aMutex;       // mutex is need to control member access
-            connectivity::OWeakRefArray             m_xConnections; //  vector containing a list
+            ::osl::Mutex				            m_aMutex;		// mutex is need to control member access
+            connectivity::OWeakRefArray	            m_xConnections;	//	vector containing a list
                                                                     //  of all the Connection objects
                                                                     //  for this Driver
-            oslModule                               m_hModule;
+            oslModule					            m_hModule;
             OMozabConnection_CreateInstanceFunction m_pCreationFunc;
             OGetSdbcScheme_Function                 m_pSchemeFunction;
 

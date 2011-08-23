@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ TYPEINIT1_FACTORY(SvxDoubleItem, SfxPoolItem, new SvxDoubleItem(0.0, 0));
 
 /*************************************************************************
 |*
-|*  SvxChartStyleItem
+|*	SvxChartStyleItem
 |*
 *************************************************************************/
 
@@ -93,7 +93,7 @@ SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*  SvxChartDataDescrItem
+|*	SvxChartDataDescrItem
 |*
 *************************************************************************/
 
@@ -126,7 +126,7 @@ SfxPoolItem* SvxChartDataDescrItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*  SvxChartLegendPosItem
+|*	SvxChartLegendPosItem
 |*
 *************************************************************************/
 
@@ -159,7 +159,7 @@ SfxPoolItem* SvxChartLegendPosItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*  SvxChartTextOrderItem
+|*	SvxChartTextOrderItem
 |*
 *************************************************************************/
 
@@ -253,7 +253,7 @@ bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
 
 /*************************************************************************
 |*
-|*  SvxChartTextOrientItem
+|*	SvxChartTextOrientItem
 |*
 *************************************************************************/
 
@@ -286,7 +286,7 @@ SfxPoolItem* SvxChartTextOrientItem::Create(SvStream& rIn, USHORT /*nVer*/) cons
 
 /*************************************************************************
 |*
-|*  SvxDoubleItem
+|*	SvxDoubleItem
 |*
 *************************************************************************/
 
@@ -410,7 +410,7 @@ bool SvxDoubleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 
 /*************************************************************************
 |*
-|*  SvxChartKindErrorItem
+|*	SvxChartKindErrorItem
 |*
 *************************************************************************/
 
@@ -452,7 +452,7 @@ USHORT SvxChartKindErrorItem::GetVersion (USHORT nFileFormatVersion) const
 
 /*************************************************************************
 |*
-|*  SvxChartIndicateItem
+|*	SvxChartIndicateItem
 |*
 *************************************************************************/
 
@@ -494,7 +494,7 @@ USHORT SvxChartIndicateItem::GetVersion (USHORT nFileFormatVersion) const
 
 /*************************************************************************
 |*
-|*  SvxChartRegressItem
+|*	SvxChartRegressItem
 |*
 *************************************************************************/
 

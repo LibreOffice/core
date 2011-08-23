@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@ inline void progressUpdate(
 class ProgressLevel
 {
     css::uno::Reference<css::ucb::XProgressHandler> m_xProgressHandler;
-
+    
 public:
     inline ~ProgressLevel();
     inline ProgressLevel(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         ::rtl::OUString const & status );
-
+    
     inline void update( ::rtl::OUString const & status ) const;
     inline void update( css::uno::Any const & status ) const;
 };
@@ -119,18 +119,18 @@ class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC AbortChannel :
 {
     bool m_aborted;
     css::uno::Reference<css::task::XAbortChannel> m_xNext;
-
+    
 public:
     inline AbortChannel() : m_aborted( false ) {}
     inline static AbortChannel * get(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel )
         { return static_cast<AbortChannel *>(xAbortChannel.get()); }
-
+    
     inline bool isAborted() const { return m_aborted; }
-
+    
     // XAbortChannel
     virtual void SAL_CALL sendAbort() throw (css::uno::RuntimeException);
-
+    
     class SAL_DLLPRIVATE Chain
     {
         const ::rtl::Reference<AbortChannel> m_abortChannel;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 , mpPage( pInPage )
 , mpModel( 0 )
 {
-    DBG_CTOR(SvxDrawPage,NULL);
+    DBG_CTOR(SvxDrawPage,NULL);    
     // Am Broadcaster anmelden
     if( mpPage )
         mpModel = mpPage->GetModel();
@@ -112,7 +112,7 @@ SvxDrawPage::SvxDrawPage() throw()
 , mpModel( NULL )
 , mpView( NULL )
 {
-    DBG_CTOR(SvxDrawPage,NULL);
+    DBG_CTOR(SvxDrawPage,NULL);    
 }
 
 //----------------------------------------------------------------------
@@ -124,7 +124,7 @@ SvxDrawPage::~SvxDrawPage() throw()
         acquire();
         dispose();
     }
-    DBG_DTOR(SvxDrawPage,NULL);
+    DBG_DTOR(SvxDrawPage,NULL);    
 }
 
 //----------------------------------------------------------------------
@@ -348,7 +348,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
 
     if(pShape)
     {
-        SdrObject*  pObj = pShape->GetSdrObject();
+        SdrObject*	pObj = pShape->GetSdrObject();
         if(pObj)
         {
             // SdrObject aus der Page loeschen
@@ -725,8 +725,8 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
         {
             switch( nType )
             {
-//              case OBJ_NONE:
-//                  break;
+//				case OBJ_NONE:
+//					break;
                 case OBJ_GRUP:
                     pRet = new SvxShapeGroup( pObj, mpPage );
                     break;
@@ -848,8 +848,8 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case OBJ_MEASURE:
                     pRet = new SvxShapeDimensioning( pObj );
                     break;
-//              case OBJ_DUMMY:
-//                  break;
+//				case OBJ_DUMMY:
+//					break;
                 case OBJ_UNO:
                     pRet = new SvxShapeControl( pObj );
                     break;
@@ -885,9 +885,9 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
 
         switch(nObjId)
         {
-        case OBJ_CCUT:          // Kreisabschnitt
-        case OBJ_CARC:          // Kreisbogen
-        case OBJ_SECT:          // Kreissektor
+        case OBJ_CCUT:			// Kreisabschnitt
+        case OBJ_CARC:			// Kreisbogen
+        case OBJ_SECT:			// Kreissektor
             nObjId = OBJ_CIRC;
             break;
 
@@ -994,7 +994,7 @@ SdrPage* GetSdrPageFromXDrawPage( uno::Reference< drawing::XDrawPage > xDrawPage
     if(xDrawPage.is())
     {
         SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xDrawPage );
-
+        
         if(pDrawPage)
         {
             return pDrawPage->GetSdrPage();

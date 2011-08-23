@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,19 +69,19 @@ namespace sdr
         }
 
         MeasureProperties::MeasureProperties(SdrObject& rObj)
-        :   TextProperties(rObj)
+        :	TextProperties(rObj)
         {
         }
 
         MeasureProperties::MeasureProperties(const MeasureProperties& rProps, SdrObject& rObj)
-        :   TextProperties(rProps, rObj)
+        :	TextProperties(rProps, rObj)
         {
         }
 
         MeasureProperties::~MeasureProperties()
         {
         }
-
+        
         BaseProperties& MeasureProperties::Clone(SdrObject& rObj) const
         {
             return *(new MeasureProperties(*this, rObj));

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class AnimationsExporterImpl;
 
 class AnimationsExporter : public UniRefBase
 {
-    AnimationsExporterImpl* mpImpl;
+    AnimationsExporterImpl*	mpImpl;	
 
 public:
     AnimationsExporter( SvXMLExport& rExport, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPageProps  );
@@ -53,6 +53,6 @@ public:
 
 }
 
-#endif  //  _XMLOFF_ANIMATIONEXPORT_HXX
+#endif	//  _XMLOFF_ANIMATIONEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

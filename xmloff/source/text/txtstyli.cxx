@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,8 +120,8 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         {
             sal_Int32 nTmp;
             if( SvXMLUnitConverter::convertNumber( nTmp, rValue ) &&
-            //  nTmp > 0 && nTmp < 256 )    //#outline level, removed by zhaojianwei
-                0 <= nTmp && nTmp <= 10 )   //<-end,add by zhaojianwei
+            //	nTmp > 0 && nTmp < 256 )	//#outline level, removed by zhaojianwei
+                0 <= nTmp && nTmp <= 10 )	//<-end,add by zhaojianwei
                 nOutlineLevel = static_cast< sal_Int8 >( nTmp );
         }
         else
@@ -142,22 +142,22 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
         sal_Bool bDefaultStyle )
-:   XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
-,   sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) )
-,   sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) )
-,   sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) )
+:	XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
+,	sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) )
+,	sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) )
+,	sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) )
 ,       sOutlineLevel(RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) )//#outline level,add by zhaojianwei
-,   sDropCapCharStyleName( RTL_CONSTASCII_USTRINGPARAM( "DropCapCharStyleName" ) )
-,   sPageDescName( RTL_CONSTASCII_USTRINGPARAM( "PageDescName" ) )
-//, nOutlineLevel( 0 )  // removed by zhaojianwei
-,   nOutlineLevel( -1 ) //<-end, add by zhaojianwei
-,   bAutoUpdate( sal_False )
-,   bHasMasterPageName( sal_False )
-,   bHasCombinedCharactersLetter( sal_False )
+,	sDropCapCharStyleName( RTL_CONSTASCII_USTRINGPARAM( "DropCapCharStyleName" ) )
+,	sPageDescName( RTL_CONSTASCII_USTRINGPARAM( "PageDescName" ) )
+//,	nOutlineLevel( 0 )	// removed by zhaojianwei
+,	nOutlineLevel( -1 )	//<-end, add by zhaojianwei
+,	bAutoUpdate( sal_False )
+,	bHasMasterPageName( sal_False )
+,	bHasCombinedCharactersLetter( sal_False )
 // --> OD 2006-09-21 #i69523#
 ,   mbListStyleSet( sal_False )
 // <--
-,   pEventContext( NULL )
+,	pEventContext( NULL )
 {
 }
 
@@ -290,7 +290,7 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     // consider set empty list style
 //    if ( !( sListStyleName.getLength() ||
     if ( !( mbListStyleSet ||
-            nOutlineLevel >= 0 ||   //#outline level,add by zhaojianwei
+            nOutlineLevel >= 0 ||	//#outline level,add by zhaojianwei
             sDropCapTextStyleName.getLength() ||
             bHasMasterPageName ) ||
          !xStyle.is() ||

@@ -1,7 +1,7 @@
-/*************************************************************************
+/************************************************************************* 
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ public class ScriptProviderForJava
             }
             catch ( com.sun.star.uno.RuntimeException re )
             {
-                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(),
+                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(), 
                     null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN );
             }
 
@@ -216,7 +216,7 @@ class ScriptImpl implements XScript
          *              this information is captured and rethrown as this exception type.
          */
 
-        public Object invoke(
+        public Object invoke( 
                                      /*IN*/Object[]  params,
                                      /*OUT*/short[][]  aOutParamIndex,
                                      /*OUT*/Object[][]  aOutParam )
@@ -224,7 +224,7 @@ class ScriptImpl implements XScript
         throws  ScriptFrameworkErrorException, com.sun.star.reflection.InvocationTargetException
         {
             LogUtils.DEBUG( "** ScriptProviderForJava::invoke: Starting..." );
-
+            
             // Initialise the out paramters - not used at the moment
             aOutParamIndex[0] = new short[0];
             aOutParam[0] = new Object[0];
@@ -232,29 +232,29 @@ class ScriptImpl implements XScript
 
             Map languageProps = metaData.getLanguageProperties();
 
-            ScriptDescriptor scriptDesc =
+            ScriptDescriptor scriptDesc = 
                 new ScriptDescriptor( metaData.getLanguageName() );
 
             ClassLoader scriptLoader = null;
-
+     
             try {
                 LogUtils.DEBUG( "Classloader starting..." );
-                scriptLoader = ClassLoaderFactory.getURLClassLoader(
-                        metaData );
+                scriptLoader = ClassLoaderFactory.getURLClassLoader( 
+                        metaData ); 
                 LogUtils.DEBUG( "Classloader finished..." );
             }
             catch (MalformedURLException mfe )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
-                    mfe.getMessage(), null,
+                throw new ScriptFrameworkErrorException( 
+                    mfe.getMessage(), null, 
                     metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.MALFORMED_URL );
+                    ScriptFrameworkErrorType.MALFORMED_URL );                
             }
             catch (NoSuitableClassLoaderException ncl )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     ncl.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
@@ -262,7 +262,7 @@ class ScriptImpl implements XScript
             catch (ArrayStoreException e )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     e.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
@@ -290,7 +290,7 @@ class ScriptImpl implements XScript
                 invocationArgs = invocationArgList.toArray();
             }
 
-
+             
 
             LogUtils.DEBUG( "ScriptProxy starting... " );
             ScriptProxy script = null;
@@ -316,7 +316,7 @@ class ScriptImpl implements XScript
                 catch( NoSuchMethodException e )
                 {
                     // Framework error
-                    throw new ScriptFrameworkErrorException(
+                    throw new ScriptFrameworkErrorException( 
                         e.getMessage(), null,
                         metaData.getLanguageName(), metaData.getLanguage(),
                         ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
@@ -325,7 +325,7 @@ class ScriptImpl implements XScript
             catch ( ClassNotFoundException e )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     e.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
@@ -345,15 +345,15 @@ class ScriptImpl implements XScript
             }
             catch ( java.lang.IllegalArgumentException iae )
             {
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     iae.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
-
+         
             }
             catch ( java.lang.IllegalAccessException ia )
             {
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     ia.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
@@ -362,7 +362,7 @@ class ScriptImpl implements XScript
             {
                 Throwable targetException = ite.getTargetException();
                 ScriptExceptionRaisedException se =
-                    new ScriptExceptionRaisedException(
+                    new ScriptExceptionRaisedException( 
                         targetException.toString() );
                 se.lineNum = -1;
                 se.scriptName = metaData.getLanguageName();
@@ -374,7 +374,7 @@ class ScriptImpl implements XScript
             catch ( Exception unknown )
             {
                 ScriptExceptionRaisedException se =
-                    new ScriptExceptionRaisedException(
+                    new ScriptExceptionRaisedException( 
                         unknown.toString() );
                 se.lineNum = -1;
                 se.scriptName = metaData.getLanguageName();

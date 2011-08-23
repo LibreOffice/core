@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
         try
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
-                static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
+                static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(                                
                 ::rtl::OUString::createFromAscii( "/com.sun.star.comp.media.Manager_DirectX/UNO/SERVICES/com.sun.star.media.Manager_DirectX" ) ) );
 
             bRet = sal_True;
@@ -83,7 +83,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void*, void* pRegistryKey )
 extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
-    void*                                   pRet = 0;
+    void*									pRet = 0;
 
     if( rtl_str_compare( pImplName, "com.sun.star.comp.media.Manager_DirectX" ) == 0 )
     {

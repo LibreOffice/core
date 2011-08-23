@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ namespace connectivity
 
 IMPLEMENT_SERVICE_INFO(MacabStatement, "com.sun.star.sdbc.drivers.MacabStatement", "com.sun.star.sdbc.Statement");
 //------------------------------------------------------------------------------
-MacabCommonStatement::MacabCommonStatement(MacabConnection* _pConnection )
+MacabCommonStatement::MacabCommonStatement(MacabConnection* _pConnection ) 
     : MacabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(MacabCommonStatement_BASE::rBHelper),
     m_aParser(_pConnection->getDriver()->getMSFactory()),
@@ -147,9 +147,9 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
                 {
                     ::rtl::OUString sMatchString;
 
-                    if (pRight->isToken())                      // WHERE Name = 'Doe'
+                    if (pRight->isToken())						// WHERE Name = 'Doe'
                         sMatchString = pRight->getTokenValue();
-                    else if (SQL_ISRULE(pRight, parameter))     // WHERE Name = ?
+                    else if (SQL_ISRULE(pRight, parameter))		// WHERE Name = ?
                         getNextParameter(sMatchString);
 
                     switch (pMiddle->getNodeType())
@@ -192,7 +192,7 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
     else if (SQL_ISRULE(pParseNode, test_for_null) || SQL_ISRULE(pParseNode, like_predicate))
     {
         const OSQLParseNode *pLeft = pParseNode->getChild(0);
-        const OSQLParseNode* pPart2 = pParseNode->getChild(1);
+        const OSQLParseNode* pPart2 = pParseNode->getChild(1);		
         const OSQLParseNode *pMiddleLeft = pPart2->getChild(0),
                             *pMiddleRight = pPart2->getChild(1),
                             *pRight = pPart2->getChild(2);
@@ -233,9 +233,9 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
                 {
                     ::rtl::OUString sMatchString;
 
-                    if (pMiddleRight->isToken())                    // WHERE Name LIKE 'Sm%'
+                    if (pMiddleRight->isToken())					// WHERE Name LIKE 'Sm%'
                         sMatchString = pMiddleRight->getTokenValue();
-                    else if (SQL_ISRULE(pMiddleRight, parameter))   // WHERE Name LIKE ?
+                    else if (SQL_ISRULE(pMiddleRight, parameter))	// WHERE Name LIKE ?
                         getNextParameter(sMatchString);
 
                     return new MacabConditionSimilar(m_pHeader, sColumnName, sMatchString);
@@ -313,8 +313,8 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
 //------------------------------------------------------------------------------
 void MacabCommonStatement::setMacabFields(MacabResultSet *pResult) const throw(SQLException)
 {
-    ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
-    MacabResultSetMetaData *pMeta;              // meta information - holds the list of AddressBook fields
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns;	// selected columns
+    MacabResultSetMetaData *pMeta;				// meta information - holds the list of AddressBook fields
 
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.is())
@@ -385,7 +385,7 @@ Any SAL_CALL MacabCommonStatement::queryInterface( const Type & rType ) throw(Ru
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL MacabCommonStatement::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
@@ -405,7 +405,7 @@ void SAL_CALL MacabCommonStatement::close(  ) throw(SQLException, RuntimeExcepti
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
-
+            
     }
     dispose();
 }
@@ -460,20 +460,20 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
 
                     pResult->setTableName(sTableName);
 
-                    setMacabFields(pResult);        // SELECT which columns ?
-                    selectRecords(pResult); // WHERE which condition ?
-                    sortRecords(pResult);   // ORDER BY which columns ?
+                    setMacabFields(pResult);		// SELECT which columns ?
+                    selectRecords(pResult);	// WHERE which condition ?
+                    sortRecords(pResult);	// ORDER BY which columns ?
                 }
 // To be continued: DISTINCT
-//                  etc...
+//				    etc...
             }
             }
             break;
 
         default:
 // To be continued: UPDATE
-//                  DELETE
-//                  etc...
+//				    DELETE
+//				    etc...
             impl_throwError(STR_QUERY_TOO_COMPLEX);
     }
 
@@ -485,7 +485,7 @@ Reference< XConnection > SAL_CALL MacabCommonStatement::getConnection(  ) throw(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
-
+        
     // just return our connection here
     return (Reference< XConnection >) m_pConnection;
 }
@@ -494,8 +494,8 @@ sal_Int32 SAL_CALL MacabCommonStatement::executeUpdate( const ::rtl::OUString& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
-
-    // the return values gives information about how many rows are affected by executing the sql statement
+        
+    // the return values gives information about how many rows are affected by executing the sql statement		
     return 0;
 }
 // -------------------------------------------------------------------------
@@ -522,12 +522,12 @@ void SAL_CALL MacabCommonStatement::clearWarnings(  ) throw(SQLException, Runtim
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
+    DECL_PROP0(CURSORNAME,	::rtl::OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
-    DECL_PROP0(FETCHSIZE,   sal_Int32);
+    DECL_PROP0(FETCHSIZE,	sal_Int32);
     DECL_PROP0(MAXFIELDSIZE,sal_Int32);
-    DECL_PROP0(MAXROWS,     sal_Int32);
+    DECL_PROP0(MAXROWS,		sal_Int32);
     DECL_PROP0(QUERYTIMEOUT,sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
     DECL_PROP0(RESULTSETTYPE,sal_Int32);
@@ -548,7 +548,7 @@ sal_Bool MacabCommonStatement::convertFastPropertyValue(
         const Any&) throw (::com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bConverted = sal_False;
-    // here we have to try to convert
+    // here we have to try to convert 
     return bConverted;
 }
 // -------------------------------------------------------------------------

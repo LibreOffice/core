@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 
 //-----------------------------------
-// A FilePicker event without
+// A FilePicker event without 
 // parameter
 //-----------------------------------
 
@@ -66,7 +66,7 @@ public:
     virtual void SAL_CALL notifyEventListener( com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xListener );
 
 private:
-    EventListenerMethod_t                        m_EventListenerMethod;
+    EventListenerMethod_t						 m_EventListenerMethod;
     com::sun::star::ui::dialogs::FilePickerEvent m_FilePickerEvent;
 };
 

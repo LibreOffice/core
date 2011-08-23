@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace drawinglayer
 
             if(pSource)
             {
-                Graphic* pOLEGraphic = (getHighContrast())
+                Graphic* pOLEGraphic = (getHighContrast()) 
                     ? pSource->getEmbeddedObjectRef().GetHCGraphic()
                     : pSource->GetGraphic();
 
@@ -77,7 +77,7 @@ namespace drawinglayer
                 const GraphicObject aGraphicObject(aGraphic);
                 const GraphicAttr aGraphicAttr;
                 drawinglayer::primitive2d::Primitive2DSequence xOLEContent;
-
+                
                 if(bScaleContent)
                 {
                     // get transformation atoms
@@ -110,8 +110,8 @@ namespace drawinglayer
 
                         const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                             new drawinglayer::primitive2d::GraphicPrimitive2D(
-                                aInnerObjectMatrix,
-                                aGraphicObject,
+                                aInnerObjectMatrix, 
+                                aGraphicObject, 
                                 aGraphicAttr));
                         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aGraphicPrimitive);
                     }
@@ -121,8 +121,8 @@ namespace drawinglayer
                     // create graphic primitive for content
                     const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                         new drawinglayer::primitive2d::GraphicPrimitive2D(
-                            getObjectTransform(),
-                            aGraphicObject,
+                            getObjectTransform(), 
+                            aGraphicObject, 
                             aGraphicAttr));
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aGraphicPrimitive);
                 }
@@ -151,10 +151,10 @@ namespace drawinglayer
 
         SdrOleContentPrimitive2D::SdrOleContentPrimitive2D(
             const SdrOle2Obj& rSdrOle2Obj,
-            const basegfx::B2DHomMatrix& rObjectTransform,
+            const basegfx::B2DHomMatrix& rObjectTransform, 
             sal_uInt32 nGraphicVersion,
             bool bHighContrast)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             mpSdrOle2Obj(const_cast< SdrOle2Obj* >(&rSdrOle2Obj)),
             maObjectTransform(rObjectTransform),
             mnGraphicVersion(nGraphicVersion),
@@ -168,9 +168,9 @@ namespace drawinglayer
             {
                 const SdrOleContentPrimitive2D& rCompare = (SdrOleContentPrimitive2D&)rPrimitive;
                 const bool bBothNot(!mpSdrOle2Obj.is() && !rCompare.mpSdrOle2Obj.is());
-                const bool bBothAndEqual(mpSdrOle2Obj.is() && rCompare.mpSdrOle2Obj.is()
+                const bool bBothAndEqual(mpSdrOle2Obj.is() && rCompare.mpSdrOle2Obj.is() 
                     && mpSdrOle2Obj.get() == rCompare.mpSdrOle2Obj.get());
-
+                
                 return ((bBothNot || bBothAndEqual)
                     && getObjectTransform() == rCompare.getObjectTransform()
 
@@ -188,7 +188,7 @@ namespace drawinglayer
         {
             basegfx::B2DRange aRange(0.0, 0.0, 1.0, 1.0);
             aRange.transform(getObjectTransform());
-
+            
             return aRange;
         }
 

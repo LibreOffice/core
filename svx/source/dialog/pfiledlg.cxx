@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <list>
-
+ 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -64,7 +64,7 @@ String SvxPluginFileDlg::GetPath() const
     return maFileDlg.GetPath();
 }
 
-SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
+SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) : 
     maFileDlg(SFXWB_INSERT)
 {
     // set title of the dialogwindow
@@ -95,8 +95,8 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
             const plugin::PluginDescription* pDescription = aSeq.getConstArray();
             sal_Int32 nAnzahlPlugins = rPluginManager->getPluginDescriptions().getLength();
 
-            std::list< String > aPlugNames;
-            std::list< String > aPlugExtensions;
+            std::list< String >	aPlugNames;
+            std::list< String >	aPlugExtensions;
             std::list< String >::iterator j;
             std::list< String >::iterator k;
             std::list< String >::const_iterator end;
@@ -124,10 +124,10 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
                     {
                         // filterdescription already there?
                         // (then append the new extension to the existing filter)
-                        int nfound = -1;
+                        int nfound = -1;						
                          for ( j = aPlugNames.begin(),
                                   k = aPlugExtensions.begin(),
-                                  end = aPlugNames.end();
+                                  end = aPlugNames.end(); 
                               j != end && nfound != 0;  )
                         {
                             if ( ( nfound = j->Search( aStrPlugName ) ) == 0 )
@@ -138,9 +138,9 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
 
                                 // remove old entry, increment (iterators are invalid thereafter, thus the postincrement)
                                 aPlugNames.erase(j++); aPlugExtensions.erase(k++);
-
+                                
                                 // update end iterator (which may be invalid, too!)
-                                end = aPlugNames.end();
+                                end = aPlugNames.end(); 
                             }
                             else
                             {
@@ -177,10 +177,10 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
                 }
             }
 
-            // add filter to dialog
-            for ( j = aPlugNames.begin(),
+            // add filter to dialog			
+            for ( j = aPlugNames.begin(), 
                       k = aPlugExtensions.begin(),
-                      end = aPlugNames.end();
+                      end = aPlugNames.end(); 
                   j != end; ++j, ++k )
             {
                 maFileDlg.AddFilter( *j, *k );
@@ -214,10 +214,10 @@ SvxPluginFileDlg::~SvxPluginFileDlg()
 |*
 \************************************************************************/
 
-#define PFDLG_CHECKED_SOUND     0x0001
-#define PFDLG_CHECKED_VIDEO     0x0002
-#define PFDLG_FOUND_SOUND       0x0004
-#define PFDLG_FOUND_VIDEO       0x0008
+#define PFDLG_CHECKED_SOUND		0x0001
+#define PFDLG_CHECKED_VIDEO		0x0002
+#define PFDLG_FOUND_SOUND		0x0004
+#define PFDLG_FOUND_VIDEO		0x0008
 
 bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
 {

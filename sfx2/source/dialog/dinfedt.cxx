@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ SfxDocInfoEditDlg::SfxDocInfoEditDlg( Window* pParent ) :
 
     ModalDialog( pParent, SfxResId( DLG_DOCINFO_EDT ) ),
 
-    aInfoFL     ( this, SfxResId( FL_INFO ) ),
-    aInfo1ED    ( this, SfxResId( ED_INFO1 ) ),
-    aInfo2ED    ( this, SfxResId( ED_INFO2 ) ),
-    aInfo3ED    ( this, SfxResId( ED_INFO3 ) ),
-    aInfo4ED    ( this, SfxResId( ED_INFO4 ) ),
-    aOkBT       ( this, SfxResId( BT_OK ) ),
-    aCancelBT   ( this, SfxResId( BT_CANCEL ) ),
-    aHelpBtn    ( this, SfxResId( BTN_HELP ) )
+    aInfoFL	 	( this, SfxResId( FL_INFO ) ),
+    aInfo1ED	( this, SfxResId( ED_INFO1 ) ),
+    aInfo2ED	( this, SfxResId( ED_INFO2 ) ),
+    aInfo3ED	( this, SfxResId( ED_INFO3 ) ),
+    aInfo4ED	( this, SfxResId( ED_INFO4 ) ),
+    aOkBT		( this, SfxResId( BT_OK ) ),
+    aCancelBT 	( this, SfxResId( BT_CANCEL ) ),
+    aHelpBtn	( this, SfxResId( BTN_HELP ) )
 
 {
     FreeResource();

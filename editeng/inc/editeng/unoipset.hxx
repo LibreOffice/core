@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ class EDITENG_DLLPUBLIC SvxItemPropertySet
     SfxItemPropertyMap          m_aPropertyMap;
     mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
     const SfxItemPropertyMapEntry*  _pMap;
-    SvxIDPropertyCombineList*   pCombiList;
-    sal_Bool                    mbConvertTwips;
-    SfxItemPool&                mrItemPool;
+    SvxIDPropertyCombineList*	pCombiList;
+    sal_Bool					mbConvertTwips;
+    SfxItemPool&				mrItemPool;
 
 public:
     SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, SfxItemPool& rPool, sal_Bool bConvertTwips = sal_False );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        CutFindProcessor::CutFindProcessor(const geometry::ViewInformation3D& rViewInformation,
-            const basegfx::B3DPoint& rFront,
+        CutFindProcessor::CutFindProcessor(const geometry::ViewInformation3D& rViewInformation, 
+            const basegfx::B3DPoint& rFront, 
             const basegfx::B3DPoint& rBack,
             bool bAnyHit)
         :   BaseProcessor3D(rViewInformation),
@@ -72,7 +72,7 @@ namespace drawinglayer
             {
                 case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
                 {
-                    // transform group.
+                    // transform group. 
                     const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(rCandidate);
 
                     // remember old and transform front, back to object coordinates
@@ -93,7 +93,7 @@ namespace drawinglayer
                         aLastViewInformation3D.getViewTime(),
                         aLastViewInformation3D.getExtendedInformationSequence());
                     updateViewInformation(aNewViewInformation3D);
-
+                    
                     // #i102956# remember needed back-transform for found cuts (combine from right side)
                     const basegfx::B3DHomMatrix aLastCombinedTransform(maCombinedTransform);
                     maCombinedTransform = maCombinedTransform * rPrimitive.getTransformation();
@@ -182,7 +182,7 @@ namespace drawinglayer
                         {
                                const basegfx::B3DPolygon aPolygon(rPolyPolygon.getB3DPolygon(0));
                             const sal_uInt32 nPointCount(aPolygon.count());
-
+                            
                             if(nPointCount > 2)
                             {
                                 const basegfx::B3DVector aPlaneNormal(aPolygon.getNormal());
@@ -208,7 +208,7 @@ namespace drawinglayer
                             }
                         }
                     }
-
+                    
                     break;
                 }
                 default :

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _FOLDERPICKER_HXX_
 
 //---------------------------------------------------------
-//  includes of other projects
+//	includes of other projects
 //---------------------------------------------------------
 
 #include <cppuhelper/implbase3.hxx>
@@ -45,12 +45,12 @@
 #include "WinFOPImpl.hxx"
 
 //----------------------------------------------------------
-// class declaration
+// class declaration		
 //----------------------------------------------------------
 
-class CFolderPicker :
-    public  cppu::WeakImplHelper3<
-                com::sun::star::ui::dialogs::XFolderPicker,
+class CFolderPicker : 
+    public  cppu::WeakImplHelper3< 
+                com::sun::star::ui::dialogs::XFolderPicker, 				
                 com::sun::star::lang::XServiceInfo,
                 com::sun::star::util::XCancellable >
 {
@@ -62,23 +62,23 @@ public:
     //------------------------------------------------------------------------------------
     // XExecutableDialog
     //------------------------------------------------------------------------------------
+    
+    virtual void SAL_CALL setTitle( const rtl::OUString& aTitle ) 
+        throw( com::sun::star::uno::RuntimeException );    
 
-    virtual void SAL_CALL setTitle( const rtl::OUString& aTitle )
-        throw( com::sun::star::uno::RuntimeException );
-
-    virtual sal_Int16 SAL_CALL execute(  )
+    virtual sal_Int16 SAL_CALL execute(  ) 
         throw( com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
     // XFolderPicker functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL setDisplayDirectory( const rtl::OUString& aDirectory )
+    virtual void SAL_CALL setDisplayDirectory( const rtl::OUString& aDirectory ) 
         throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL getDisplayDirectory(  )
+    virtual rtl::OUString SAL_CALL getDisplayDirectory(  ) 
         throw( com::sun::star::uno::RuntimeException );
-
+    
     virtual rtl::OUString SAL_CALL getDirectory( )
         throw( com::sun::star::uno::RuntimeException );
 
@@ -87,42 +87,42 @@ public:
 
     //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------
+    //------------------------------------------------ 
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
         throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XCancellable
-    //------------------------------------------------
+    //------------------------------------------------ 
 
     virtual void SAL_CALL cancel( )
         throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
-    // overwrite base class method, which is called
+    // overwrite base class method, which is called 
     // by base class dispose function
     //------------------------------------------------
 
     virtual void SAL_CALL disposing();
 
-private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
-    std::auto_ptr< CWinFolderPickerImpl >   m_pFolderPickerImpl;
+private:	
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   
+    std::auto_ptr< CWinFolderPickerImpl >	m_pFolderPickerImpl;
     osl::Mutex  m_aMutex;
 
 // prevent copy and assignment
 private:
-    CFolderPicker( const CFolderPicker& );
+    CFolderPicker( const CFolderPicker& );            
     CFolderPicker& operator=( const CFolderPicker&  );
-};
+}; 
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

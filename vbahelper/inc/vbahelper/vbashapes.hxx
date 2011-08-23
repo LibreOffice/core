@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ typedef CollTestImplHelper< ov::msforms::XShapes > ScVbaShapes_BASE;
 
 class VBAHELPER_DLLPUBLIC ScVbaShapes : public ScVbaShapes_BASE
 {
-private:
+private: 
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
     css::uno::Reference< css::drawing::XDrawPage > m_xDrawPage;
     sal_Int32 m_nNewShapeCount;
@@ -59,7 +59,7 @@ protected:
     css::uno::Any AddShape( const rtl::OUString& sService, const rtl::OUString& sName, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (css::uno::RuntimeException);
     //TODO helperapi using a writer document
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
-
+    
 public:
     ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
     static void setDefaultShapeProperties( css::uno::Reference< css::drawing::XShape > xShape ) throw (css::uno::RuntimeException);

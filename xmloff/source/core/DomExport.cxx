@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -215,18 +215,18 @@ void DomExport::addNamespace( const OUString& sPrefix, const OUString& sURI )
 
     // we need to register the namespace, if either the prefix isn't known or
     // is used for a different namespace
-    if( nKey == XML_NAMESPACE_UNKNOWN  ||
+    if( nKey == XML_NAMESPACE_UNKNOWN  || 
         rMap.GetNameByKey( nKey ) != sURI )
     {
         // add prefix to map, and add declaration
         rMap.Add( sPrefix, sURI );
-        mrExport.AddAttribute(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:" ) ) + sPrefix,
+        mrExport.AddAttribute( 
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:" ) ) + sPrefix, 
             sURI );
     }
 }
 
-OUString DomExport::qualifiedName( const OUString& sPrefix,
+OUString DomExport::qualifiedName( const OUString& sPrefix, 
                                    const OUString& sURI,
                                    const OUString& sLocalName )
 {
@@ -261,7 +261,7 @@ OUString DomExport::qualifiedName( const Reference<XAttr>& xAttr )
 
 void DomExport::addAttribute( const Reference<XAttr>& xAttribute )
 {
-    mrExport.AddAttribute( qualifiedName( xAttribute ),
+    mrExport.AddAttribute( qualifiedName( xAttribute ), 
                            xAttribute->getNodeValue() );
 }
 

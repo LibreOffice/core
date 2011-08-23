@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class SVX_DLLPUBLIC XOBitmap
 protected:
     XBitmapType     eType;
     XBitmapStyle    eStyle;
-    GraphicObject   aGraphicObject;
+    GraphicObject	aGraphicObject;
     USHORT*         pPixelArray;
     Size            aArraySize;
     Color           aPixelColor;
@@ -77,22 +77,22 @@ public:
     void Bitmap2Array();
     void Array2Bitmap();
 
-    void SetGraphicObject( const GraphicObject& rObj )  { aGraphicObject = rObj; bGraphicDirty = FALSE; }
-    void SetBitmap( const Bitmap& rBmp )                { aGraphicObject = GraphicObject( Graphic( rBmp ) ); bGraphicDirty = FALSE; }
-    void SetBitmapType( XBitmapType eNewType )          { eType = eNewType; }
-    void SetBitmapStyle( XBitmapStyle eNewStyle )       { eStyle = eNewStyle; }
+    void SetGraphicObject( const GraphicObject& rObj )	{ aGraphicObject = rObj; bGraphicDirty = FALSE; }
+    void SetBitmap( const Bitmap& rBmp )				{ aGraphicObject = GraphicObject( Graphic( rBmp ) ); bGraphicDirty = FALSE; }
+    void SetBitmapType( XBitmapType eNewType )			{ eType = eNewType; }
+    void SetBitmapStyle( XBitmapStyle eNewStyle )		{ eStyle = eNewStyle; }
     void SetPixelArray( const USHORT* pArray );
-    void SetPixelSize( const Size& rSize )              { aArraySize  = rSize;  bGraphicDirty = TRUE; }
-    void SetPixelColor( const Color& rColor )           { aPixelColor = rColor; bGraphicDirty = TRUE; }
-    void SetBackgroundColor( const Color& rColor )      { aBckgrColor = rColor; bGraphicDirty = TRUE; }
+    void SetPixelSize( const Size& rSize )				{ aArraySize  = rSize;  bGraphicDirty = TRUE; }
+    void SetPixelColor( const Color& rColor )			{ aPixelColor = rColor; bGraphicDirty = TRUE; }
+    void SetBackgroundColor( const Color& rColor )		{ aBckgrColor = rColor; bGraphicDirty = TRUE; }
 
-    XBitmapType             GetBitmapType() const               { return eType; }
-    XBitmapStyle            GetBitmapStyle() const              { return eStyle; }
-    const GraphicObject&    GetGraphicObject() const;
-    Bitmap                  GetBitmap() const;
-    USHORT*                 GetPixelArray() const               { return pPixelArray; }
-    Color                   GetPixelColor() const               { return aPixelColor; }
-    Color                   GetBackgroundColor() const          { return aBckgrColor; }
+    XBitmapType				GetBitmapType() const				{ return eType; }
+    XBitmapStyle			GetBitmapStyle() const				{ return eStyle; }
+    const GraphicObject&	GetGraphicObject() const;
+    Bitmap					GetBitmap() const;
+    USHORT*					GetPixelArray() const				{ return pPixelArray; }
+    Color					GetPixelColor() const				{ return aPixelColor; }
+    Color					GetBackgroundColor() const			{ return aBckgrColor; }
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef REGISTRY_HXX_INCLUDED
 #define REGISTRY_HXX_INCLUDED
 
@@ -39,7 +39,7 @@
 #include <objbase.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 #include <string>
 
 /** Sets a value of the specified registry key, an empty ValueName sets the default

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ void KabColumns::impl_refresh() throw(RuntimeException)
     m_pTable->refreshColumns();
 }
 // -------------------------------------------------------------------------
-KabColumns::KabColumns( KabTable* _pTable,
+KabColumns::KabColumns(	KabTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector)
     : sdbcx::OCollection(*_pTable, sal_True, _rMutex, _rVector),

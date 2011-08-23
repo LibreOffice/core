@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,17 +59,17 @@ SV_IMPL_PTRARR( NfShCurrencyEntries, NfCurrencyEntry* );
 SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumFormatter,
                                               sal_uInt32              nFormatKey,
                                               SvxNumberValueType eNumValType,
-                                              const String&      rNumStr )
+                                              const String&		 rNumStr )
 {
     return new SvxNumberFormatShell(pNumFormatter,nFormatKey,
                                     eNumValType,rNumStr );
 }
 
 SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumFormatter,
-                                              sal_uInt32                 nFormatKey,
+                                              sal_uInt32				 nFormatKey,
                                               SvxNumberValueType eNumValType,
-                                              double             nNumVal,
-                                              const String*      pNumStr )
+                                              double			 nNumVal,
+                                              const String*		 pNumStr )
 {
     return new SvxNumberFormatShell(pNumFormatter,nFormatKey,
                                     eNumValType,nNumVal,pNumStr );
@@ -78,23 +78,23 @@ SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumForma
 // -----------------------------------------------------------------------
 
 #define _INIT \
-    pFormatter      ( pNumFormatter ),  \
-    pCurFmtTable    ( NULL ),           \
+    pFormatter		( pNumFormatter ), 	\
+    pCurFmtTable	( NULL ), 			\
     eValType        ( eNumValType ),    \
     bUndoAddList    ( sal_True ),       \
     nInitFormatKey  ( nFormatKey ),     \
     nCurFormatKey   ( nFormatKey ),     \
     pCurCurrencyEntry(NULL),            \
-    bBankingSymbol  (sal_False),            \
+    bBankingSymbol	(sal_False),			\
     nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
 
 // -----------------------------------------------------------------------
 
-SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
-                                            sal_uInt32              nFormatKey,
-                                            SvxNumberValueType  eNumValType,
-                                            const String&       rNumStr )
-    :   _INIT
+SvxNumberFormatShell::SvxNumberFormatShell(	SvNumberFormatter*	pNumFormatter,
+                                            sal_uInt32				nFormatKey,
+                                            SvxNumberValueType	eNumValType,
+                                            const String&		rNumStr )
+    :	_INIT
 {
     nValNum = DEFAULT_NUMVALUE;
 
@@ -112,15 +112,15 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
 
 // -----------------------------------------------------------------------
 
-SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
-                                            sal_uInt32              nFormatKey,
-                                            SvxNumberValueType  eNumValType,
-                                            double              nNumVal,
-                                            const String*       pNumStr )
-    :   _INIT
+SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*	pNumFormatter,
+                                            sal_uInt32				nFormatKey,
+                                            SvxNumberValueType	eNumValType,
+                                            double				nNumVal,
+                                            const String*		pNumStr )
+    :	_INIT
 {
-    //  #50441# When used in Writer, the SvxNumberInfoItem contains the
-    //  original string in addition to the value
+    //	#50441# When used in Writer, the SvxNumberInfoItem contains the
+    //	original string in addition to the value
 
     if ( pNumStr )
         aValStr = *pNumStr;
@@ -210,7 +210,7 @@ void SvxNumberFormatShell::CategoryChanged( sal_uInt16     nCatLbPos,
 // -----------------------------------------------------------------------
 
 void SvxNumberFormatShell::LanguageChanged( LanguageType eLangType,
-                                            short&       rFmtSelPos,
+                                            short&		 rFmtSelPos,
                                             SvStrings&   rFmtEntries )
 {
     eCurLanguage = eLangType;
@@ -253,23 +253,23 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
                                       sal_uInt16& rCatLbSelPos, short& rFmtSelPos,
                                       SvStrings& rFmtEntries )
 {
-    sal_Bool    bInserted   = sal_False;
-    sal_uInt32  nAddKey     = pFormatter->GetEntryKey( rFormat, eCurLanguage );
+    sal_Bool 	bInserted	= sal_False;
+    sal_uInt32	nAddKey		= pFormatter->GetEntryKey( rFormat, eCurLanguage );
 
     if ( nAddKey != NUMBERFORMAT_ENTRY_NOT_FOUND ) // bereits vorhanden?
     {
         if ( IsRemoved_Impl( nAddKey ) )
         {
             // Key suchen und loeschen
-            sal_Bool    bFound  = sal_False;
-            sal_uInt16  nAt     = 0;
+            sal_Bool	bFound	= sal_False;
+            sal_uInt16	nAt		= 0;
 
             for ( sal_uInt16 i = 0; !bFound && i < aDelList.Count(); ++i )
             {
                 if ( aDelList[i] == nAddKey )
                 {
-                    bFound  = sal_True;
-                    nAt     = i;
+                    bFound	= sal_True;
+                    nAt		= i;
                 }
             }
             DBG_ASSERT( bFound, "Key not found" );
@@ -316,10 +316,10 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxNumberFormatShell::RemoveFormat( const String&  rFormat,
-                                         sal_uInt16&        rCatLbSelPos,
-                                         short&         rFmtSelPos,
-                                         SvStrings&     rFmtEntries )
+sal_Bool SvxNumberFormatShell::RemoveFormat( const String& 	rFormat,
+                                         sal_uInt16&		rCatLbSelPos,
+                                         short&			rFmtSelPos,
+                                         SvStrings& 	rFmtEntries )
 {
     sal_uInt32 nDelKey = pFormatter->GetEntryKey( rFormat, eCurLanguage );
 
@@ -333,15 +333,15 @@ sal_Bool SvxNumberFormatShell::RemoveFormat( const String&  rFormat,
         if ( IsAdded_Impl( nDelKey ) )
         {
             // Key suchen und loeschen
-            sal_Bool    bFound  = sal_False;
-            sal_uInt16  nAt     = 0;
+            sal_Bool	bFound	= sal_False;
+            sal_uInt16	nAt		= 0;
 
             for ( sal_uInt16 i = 0; !bFound && i < aAddList.Count(); ++i )
             {
                 if ( aAddList[i] == nDelKey )
                 {
-                    bFound  = sal_True;
-                    nAt     = i;
+                    bFound	= sal_True;
+                    nAt		= i;
                 }
             }
             DBG_ASSERT( bFound, "Key not found" );
@@ -405,12 +405,12 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
 
 // -----------------------------------------------------------------------
 
-void SvxNumberFormatShell::GetOptions( const String&    rFormat,
-                                       sal_Bool&            rThousand,
-                                       sal_Bool&            rNegRed,
-                                       sal_uInt16&          rPrecision,
-                                       sal_uInt16&          rLeadingZeroes,
-                                       sal_uInt16&          rCatLbPos )
+void SvxNumberFormatShell::GetOptions( const String&	rFormat,
+                                       sal_Bool&			rThousand,
+                                       sal_Bool&			rNegRed,
+                                       sal_uInt16&			rPrecision,
+                                       sal_uInt16&			rLeadingZeroes,
+                                       sal_uInt16&			rCatLbPos )
 {
 
     sal_uInt32 nFmtKey = pFormatter->GetEntryKey( rFormat, eCurLanguage );
@@ -456,16 +456,16 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
     ULONG nExistingFormat = pFormatter->GetEntryKey( rFormatStr, eCurLanguage );
     if ( nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        //  real preview - not implemented in NumberFormatter for text formats
+        //	real preview - not implemented in NumberFormatter for text formats
 
         pFormatter->GetPreviewString( rFormatStr, nValNum, rPreviewStr,
                                       &rpFontColor, eCurLanguage );
     }
     else
     {
-        //  format exists
+        //	format exists
 
-        //  #50441# if a string was set in addition to the value, use it for text formats
+        //	#50441# if a string was set in addition to the value, use it for text formats
         BOOL bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                             ( aValStr.Len() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
         if ( bUseText )
@@ -490,7 +490,7 @@ sal_Bool SvxNumberFormatShell::IsUserDefined( const String& rFmtString )
 
         if(bFlag)
         {
-            const SvNumberformat* pNumEntry = pFormatter->GetEntry(nFound);
+            const SvNumberformat* pNumEntry	= pFormatter->GetEntry(nFound);
 
             if(pNumEntry!=NULL && pNumEntry->HasNewCurrency())
             {
@@ -548,16 +548,16 @@ void SvxNumberFormatShell::GetInitSettings(
     DBG_ASSERT( pFormatter != NULL, "Zahlenformatierer nicht gefunden!" );
 
 //  sal_uInt16                  nCount      = 0;
-    short                   nSelPos     = SELPOS_NONE;
+    short					nSelPos		= SELPOS_NONE;
 //  SvNumberFormatTable*    pFmtTable   = NULL;
 
     // Sonderbehandlung fuer undefiniertes Zahlenformat:
     if ( (eValType == SVX_VALUE_TYPE_UNDEFINED) && (nCurFormatKey == 0) )
-        PosToCategory_Impl( CAT_ALL, nCurCategory );        // Kategorie = Alle
+        PosToCategory_Impl( CAT_ALL, nCurCategory );		// Kategorie = Alle
     else
-        nCurCategory = NUMBERFORMAT_UNDEFINED;      // Kategorie = Undefiniert
+        nCurCategory = NUMBERFORMAT_UNDEFINED;		// Kategorie = Undefiniert
 
-    pCurFmtTable =  &(pFormatter->GetFirstEntryTable( nCurCategory,
+    pCurFmtTable =	&(pFormatter->GetFirstEntryTable( nCurCategory,
                                                       nCurFormatKey,
                                                       eCurLanguage ));
 
@@ -585,7 +585,7 @@ short SvxNumberFormatShell::FillEntryList_Impl( SvStrings& rList )
      */
     short nSelPos=0;
     aCurEntryList.Remove(nSelPos,aCurEntryList.Count());
-    sal_uInt16          nPrivCat = CAT_CURRENCY;
+    sal_uInt16			nPrivCat = CAT_CURRENCY;
     nSelPos=SELPOS_NONE;
 
     if(nCurCategory==NUMBERFORMAT_ALL)
@@ -606,7 +606,7 @@ short SvxNumberFormatShell::FillEntryList_Impl( SvStrings& rList )
         FillEListWithStd_Impl(rList,nPrivCat,nSelPos);
     }
 
-    if( nPrivCat!=CAT_CURRENCY)
+    if(	nPrivCat!=CAT_CURRENCY)
         nSelPos=FillEListWithUsD_Impl(rList,nPrivCat,nSelPos);
 
     return nSelPos;
@@ -635,34 +635,34 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( SvStrings& rList,sal_uInt16 nP
 
         switch(nPrivCat)
         {
-            case CAT_NUMBER         :eOffsetStart=NF_NUMBER_START;
+            case CAT_NUMBER			:eOffsetStart=NF_NUMBER_START;
                                      eOffsetEnd=NF_NUMBER_END;
                                      break;
-            case CAT_PERCENT        :eOffsetStart=NF_PERCENT_START;
+            case CAT_PERCENT		:eOffsetStart=NF_PERCENT_START;
                                      eOffsetEnd=NF_PERCENT_END;
                                      break;
-            case CAT_CURRENCY       :eOffsetStart=NF_CURRENCY_START;
+            case CAT_CURRENCY		:eOffsetStart=NF_CURRENCY_START;
                                      eOffsetEnd=NF_CURRENCY_END;
                                      break;
-            case CAT_DATE           :eOffsetStart=NF_DATE_START;
+            case CAT_DATE			:eOffsetStart=NF_DATE_START;
                                      eOffsetEnd=NF_DATE_END;
                                      break;
-            case CAT_TIME           :eOffsetStart=NF_TIME_START;
+            case CAT_TIME			:eOffsetStart=NF_TIME_START;
                                      eOffsetEnd=NF_TIME_END;
                                      break;
-            case CAT_SCIENTIFIC     :eOffsetStart=NF_SCIENTIFIC_START;
+            case CAT_SCIENTIFIC		:eOffsetStart=NF_SCIENTIFIC_START;
                                      eOffsetEnd=NF_SCIENTIFIC_END;
                                      break;
-            case CAT_FRACTION       :eOffsetStart=NF_FRACTION_START;
+            case CAT_FRACTION		:eOffsetStart=NF_FRACTION_START;
                                      eOffsetEnd=NF_FRACTION_END;
                                      break;
-            case CAT_BOOLEAN        :eOffsetStart=NF_BOOLEAN;
+            case CAT_BOOLEAN		:eOffsetStart=NF_BOOLEAN;
                                      eOffsetEnd=NF_BOOLEAN;
                                      break;
-            case CAT_TEXT           :eOffsetStart=NF_TEXT;
+            case CAT_TEXT			:eOffsetStart=NF_TEXT;
                                      eOffsetEnd=NF_TEXT;
                                      break;
-            default                 :return;
+            default					:return;
         }
 
         nSelPos=FillEListWithFormats_Impl(rList,nSelPos,eOffsetStart,eOffsetEnd);
@@ -684,19 +684,19 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
      * Ist die Liste leer oder gibt es kein aktuelles Format,
      * so wird SELPOS_NONE geliefert.
      */
-    sal_uInt16  nMyType;
+    sal_uInt16	nMyType;
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
+    const SvNumberformat*	pNumEntry	= pCurFmtTable->First();
 //  sal_uInt16          nCount      = 0;
-    sal_uInt32          nNFEntry;
-    String          aStrComment;
-    String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
+    sal_uInt32			nNFEntry;
+    String			aStrComment;
+    String			aNewFormNInfo;
+    String			aPrevString;
+    String			a2PrevString;
 
-    short           nMyCat      = SELPOS_NONE;
+    short			nMyCat		= SELPOS_NONE;
 //  short           nIq=0;
 
     long nIndex;
@@ -705,14 +705,14 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = pFormatter->GetEntry(nNFEntry);
+        pNumEntry	= pFormatter->GetEntry(nNFEntry);
 
         if(pNumEntry==NULL) continue;
 
         nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
         aStrComment=pNumEntry->GetComment();
         CategoryToPos_Impl(nMyCat,nMyType);
-        aNewFormNInfo=  pNumEntry->GetFormatstring();
+        aNewFormNInfo=	pNumEntry->GetFormatstring();
 
         const StringPtr pStr = new String(aNewFormNInfo);
 
@@ -730,19 +730,19 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
 
 short SvxNumberFormatShell::FillEListWithDateTime_Impl( SvStrings& rList,short nSelPos)
 {
-    sal_uInt16  nMyType;
+    sal_uInt16	nMyType;
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
+    const SvNumberformat*	pNumEntry	= pCurFmtTable->First();
 //  sal_uInt16          nCount      = 0;
-    sal_uInt32          nNFEntry;
-    String          aStrComment;
-    String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
+    sal_uInt32			nNFEntry;
+    String			aStrComment;
+    String			aNewFormNInfo;
+    String			aPrevString;
+    String			a2PrevString;
 
-    short           nMyCat      = SELPOS_NONE;
+    short			nMyCat		= SELPOS_NONE;
 //  short           nIq=0;
 
     long nIndex;
@@ -751,13 +751,13 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( SvStrings& rList,short n
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = pFormatter->GetEntry(nNFEntry);
+        pNumEntry	= pFormatter->GetEntry(nNFEntry);
         if(pNumEntry!=NULL)
         {
             nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
             aStrComment=pNumEntry->GetComment();
             CategoryToPos_Impl(nMyCat,nMyType);
-            aNewFormNInfo=  pNumEntry->GetFormatstring();
+            aNewFormNInfo=	pNumEntry->GetFormatstring();
 
             const StringPtr pStr = new String(aNewFormNInfo);
 
@@ -784,14 +784,14 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( SvStrings& rList,short n
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
-    sal_Bool             bTmpBanking;
-    XubString        rSymbol;
+    sal_Bool			 bTmpBanking;
+    XubString		 rSymbol;
 
     sal_Bool bFlag=pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
                 &pTmpCurrencyEntry,&bTmpBanking);
 
-    if((!bFlag && pCurCurrencyEntry==NULL)  ||
-        (bFlag && pTmpCurrencyEntry==NULL && !rSymbol.Len())    ||
+    if((!bFlag && pCurCurrencyEntry==NULL)	||
+        (bFlag && pTmpCurrencyEntry==NULL && !rSymbol.Len())	||
         nCurCategory==NUMBERFORMAT_ALL)
     {
         if ( nCurCategory == NUMBERFORMAT_ALL )
@@ -814,21 +814,21 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
      * Ist die Liste leer oder gibt es kein aktuelles Format,
      * so wird SELPOS_NONE geliefert.
      */
-    sal_uInt16  nMyType;
+    sal_uInt16	nMyType;
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
-    sal_uInt16          nCount      = 0;
-    sal_uInt32          nNFEntry;
-    String          aStrComment;
-    String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
+    const SvNumberformat*	pNumEntry	= pCurFmtTable->First();
+    sal_uInt16 			nCount		= 0;
+    sal_uInt32			nNFEntry;
+    String			aStrComment;
+    String			aNewFormNInfo;
+    String			aPrevString;
+    String			a2PrevString;
 
     nCurCurrencyEntryPos=0;
 
-    short           nMyCat      = SELPOS_NONE;
+    short			nMyCat		= SELPOS_NONE;
 //  short           nIq=0;
 
     NfIndexTableOffset eOffsetStart=NF_CURRENCY_START;
@@ -839,14 +839,14 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = pFormatter->GetEntry(nNFEntry);
+        pNumEntry	= pFormatter->GetEntry(nNFEntry);
 
         if(pNumEntry==NULL) continue;
 
         nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
         aStrComment=pNumEntry->GetComment();
         CategoryToPos_Impl(nMyCat,nMyType);
-        aNewFormNInfo=  pNumEntry->GetFormatstring();
+        aNewFormNInfo=	pNumEntry->GetFormatstring();
 
         const StringPtr pStr = new String(aNewFormNInfo);
 
@@ -861,8 +861,8 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
 
     if(nCurCategory!=NUMBERFORMAT_ALL)
     {
-        pNumEntry   = pCurFmtTable->First();
-        nCount      = 0;
+        pNumEntry	= pCurFmtTable->First();
+        nCount		= 0;
         while ( pNumEntry )
         {
             sal_uInt32 nKey = pCurFmtTable->GetCurKey();
@@ -875,8 +875,8 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
                 if(pNumEntry->HasNewCurrency())
                 {
                     const NfCurrencyEntry* pTmpCurrencyEntry;
-                    sal_Bool            bTmpBanking;
-                    XubString       rSymbol;
+                    sal_Bool			bTmpBanking;
+                    XubString		rSymbol;
 
                     pFormatter->GetNewCurrencySymbolString(nKey,rSymbol,
                         &pTmpCurrencyEntry,&bTmpBanking);
@@ -889,7 +889,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
                     nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
                     aStrComment=pNumEntry->GetComment();
                     CategoryToPos_Impl(nMyCat,nMyType);
-                    aNewFormNInfo=  pNumEntry->GetFormatstring();
+                    aNewFormNInfo=	pNumEntry->GetFormatstring();
 
                     const StringPtr pStr = new String(aNewFormNInfo);
 
@@ -915,21 +915,21 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    sal_uInt16          nCount      = 0;
-    String          aStrComment;
-    String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
-    short           nMyCat = SELPOS_NONE;
+    sal_uInt16 			nCount		= 0;
+    String			aStrComment;
+    String			aNewFormNInfo;
+    String			aPrevString;
+    String			a2PrevString;
+    short			nMyCat = SELPOS_NONE;
 //  short           nIq=0;
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
     sal_Bool        bTmpBanking, bAdaptSelPos;
-    XubString       rSymbol;
-    XubString       rBankSymbol;
+    XubString		rSymbol;
+    XubString		rBankSymbol;
 
-    SvStrings       aList;
-    SvULongs        aKeyList;
+    SvStrings		aList;
+    SvULongs		aKeyList;
 
     /*sal_Bool bFlag=*/pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
                 &pTmpCurrencyEntry,&bTmpBanking);
@@ -966,7 +966,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
         pTmpCurrencyEntry->BuildSymbolString(rShortSymbol,bTmpBanking,sal_True);
     }
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
+    const SvNumberformat*	pNumEntry	= pCurFmtTable->First();
 
     while ( pNumEntry )
     {
@@ -982,11 +982,11 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                 nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
                 aStrComment=pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
-                aNewFormNInfo=  pNumEntry->GetFormatstring();
+                aNewFormNInfo=	pNumEntry->GetFormatstring();
 
                 sal_Bool bInsFlag=sal_False;
                 if ( pNumEntry->HasNewCurrency() )
-                    bInsFlag = sal_True;    // merge locale formats into currency selection
+                    bInsFlag = sal_True;	// merge locale formats into currency selection
                 else if( (!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND) ||
                    (bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND) )
                 {
@@ -1025,7 +1025,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     if ( pTmpCurrencyEntry && nCurCategory != NUMBERFORMAT_ALL )
     {
         nDefault = pFormatter->GetCurrencyFormatStrings(
-            aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking );
+            aWSStringsDtor,	*pTmpCurrencyEntry, bTmpBanking );
         if ( !bTmpBanking )
             pFormatter->GetCurrencyFormatStrings(
                 aWSStringsDtor, *pTmpCurrencyEntry, TRUE );
@@ -1114,16 +1114,16 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
-    sal_uInt16          nCount      = 0;
-    String          aStrComment;
-    String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
+    const SvNumberformat*	pNumEntry	= pCurFmtTable->First();
+    sal_uInt16 			nCount		= 0;
+    String			aStrComment;
+    String			aNewFormNInfo;
+    String			aPrevString;
+    String			a2PrevString;
 
-    short           nMyCat      = SELPOS_NONE;
+    short			nMyCat		= SELPOS_NONE;
 //  short           nIq=0;
-    sal_Bool        bAdditional = (nPrivCat != CAT_USERDEFINED &&
+    sal_Bool		bAdditional = (nPrivCat != CAT_USERDEFINED &&
                                     nCurCategory != NUMBERFORMAT_ALL);
 
     while ( pNumEntry )
@@ -1140,7 +1140,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 
                 nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
                 aStrComment=pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
-                aNewFormNInfo=  pNumEntry->GetFormatstring();
+                aNewFormNInfo=	pNumEntry->GetFormatstring();
 
                 sal_Bool bFlag=sal_True;
                 if(pNumEntry->HasNewCurrency())
@@ -1171,7 +1171,7 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpCol
 {
     rpColor = NULL;
 
-    //  #50441# if a string was set in addition to the value, use it for text formats
+    //	#50441# if a string was set in addition to the value, use it for text formats
     BOOL bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                         ( aValStr.Len() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
 
@@ -1212,18 +1212,18 @@ void SvxNumberFormatShell::PosToCategory_Impl( sal_uInt16 nPos, short& rCategory
     // Kategorie ::com::sun::star::form-Positionen abbilden (->Resource)
     switch ( nPos )
     {
-        case CAT_USERDEFINED:   rCategory = NUMBERFORMAT_DEFINED;       break;
-        case CAT_NUMBER:        rCategory = NUMBERFORMAT_NUMBER;        break;
-        case CAT_PERCENT:       rCategory = NUMBERFORMAT_PERCENT;       break;
-        case CAT_CURRENCY:      rCategory = NUMBERFORMAT_CURRENCY;      break;
-        case CAT_DATE:          rCategory = NUMBERFORMAT_DATE;          break;
-        case CAT_TIME:          rCategory = NUMBERFORMAT_TIME;          break;
-        case CAT_SCIENTIFIC:    rCategory = NUMBERFORMAT_SCIENTIFIC;    break;
-        case CAT_FRACTION:      rCategory = NUMBERFORMAT_FRACTION;      break;
-        case CAT_BOOLEAN:       rCategory = NUMBERFORMAT_LOGICAL;       break;
-        case CAT_TEXT:          rCategory = NUMBERFORMAT_TEXT;          break;
+        case CAT_USERDEFINED:	rCategory = NUMBERFORMAT_DEFINED;		break;
+        case CAT_NUMBER:		rCategory = NUMBERFORMAT_NUMBER;		break;
+        case CAT_PERCENT:		rCategory = NUMBERFORMAT_PERCENT;		break;
+        case CAT_CURRENCY:		rCategory = NUMBERFORMAT_CURRENCY;		break;
+        case CAT_DATE:			rCategory = NUMBERFORMAT_DATE;			break;
+        case CAT_TIME:			rCategory = NUMBERFORMAT_TIME;			break;
+        case CAT_SCIENTIFIC:	rCategory = NUMBERFORMAT_SCIENTIFIC;	break;
+        case CAT_FRACTION:		rCategory = NUMBERFORMAT_FRACTION;		break;
+        case CAT_BOOLEAN:		rCategory = NUMBERFORMAT_LOGICAL;		break;
+        case CAT_TEXT:			rCategory = NUMBERFORMAT_TEXT;			break;
         case CAT_ALL:
-        default:    rCategory = NUMBERFORMAT_ALL; break;
+        default:	rCategory = NUMBERFORMAT_ALL; break;
     }
 }
 
@@ -1234,35 +1234,35 @@ void SvxNumberFormatShell::CategoryToPos_Impl( short nCategory, sal_uInt16& rPos
     // Kategorie auf ::com::sun::star::form-Positionen abbilden (->Resource)
     switch ( nCategory )
     {
-        case NUMBERFORMAT_DEFINED:      rPos = CAT_USERDEFINED; break;
-        case NUMBERFORMAT_NUMBER:       rPos = CAT_NUMBER;      break;
-        case NUMBERFORMAT_PERCENT:      rPos = CAT_PERCENT;     break;
-        case NUMBERFORMAT_CURRENCY:     rPos = CAT_CURRENCY;    break;
+        case NUMBERFORMAT_DEFINED:		rPos = CAT_USERDEFINED;	break;
+        case NUMBERFORMAT_NUMBER:		rPos = CAT_NUMBER;		break;
+        case NUMBERFORMAT_PERCENT:		rPos = CAT_PERCENT;		break;
+        case NUMBERFORMAT_CURRENCY:		rPos = CAT_CURRENCY;	break;
         case NUMBERFORMAT_DATETIME:
-        case NUMBERFORMAT_DATE:         rPos = CAT_DATE;        break;
-        case NUMBERFORMAT_TIME:         rPos = CAT_TIME;        break;
-        case NUMBERFORMAT_SCIENTIFIC:   rPos = CAT_SCIENTIFIC;  break;
-        case NUMBERFORMAT_FRACTION:     rPos = CAT_FRACTION;    break;
-        case NUMBERFORMAT_LOGICAL:      rPos = CAT_BOOLEAN;     break;
-        case NUMBERFORMAT_TEXT:         rPos = CAT_TEXT;        break;
+        case NUMBERFORMAT_DATE:			rPos = CAT_DATE;		break;
+        case NUMBERFORMAT_TIME:			rPos = CAT_TIME;		break;
+        case NUMBERFORMAT_SCIENTIFIC:	rPos = CAT_SCIENTIFIC;	break;
+        case NUMBERFORMAT_FRACTION:		rPos = CAT_FRACTION;	break;
+        case NUMBERFORMAT_LOGICAL:		rPos = CAT_BOOLEAN;		break;
+        case NUMBERFORMAT_TEXT:			rPos = CAT_TEXT;		break;
         case NUMBERFORMAT_ALL:
-        default:                        rPos = CAT_ALL;
+        default:						rPos = CAT_ALL;
     }
 }
 
 
 /*************************************************************************
-#*  Member:     MakePrevStringFromVal                       Datum:19.09.97
+#*	Member:		MakePrevStringFromVal						Datum:19.09.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     SvxNumberFormatShell
+#*  Klasse:		SvxNumberFormatShell
 #*
-#*  Funktion:   Formatiert die Zahl nValue abhaengig von rFormatStr
-#*              und speichert das Ergebnis in rPreviewStr.
+#*  Funktion:	Formatiert die Zahl nValue abhaengig von rFormatStr
+#*				und speichert das Ergebnis in rPreviewStr.
 #*
-#*  Input:      FormatString, Farbe, zu formatierende Zahl
+#*  Input:		FormatString, Farbe, zu formatierende Zahl
 #*
-#*  Output:     Ausgabestring rPreviewStr
+#*	Output:		Ausgabestring rPreviewStr
 #*
 #************************************************************************/
 
@@ -1277,17 +1277,17 @@ void SvxNumberFormatShell::MakePrevStringFromVal(
 }
 
 /*************************************************************************
-#*  Member:     GetComment4Entry                            Datum:30.10.97
+#*	Member:		GetComment4Entry							Datum:30.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     SvxNumberFormatShell
+#*  Klasse:		SvxNumberFormatShell
 #*
-#*  Funktion:   Liefert den Kommentar fuer einen gegebenen
-#*              Eintrag zurueck.
+#*  Funktion:	Liefert den Kommentar fuer einen gegebenen
+#*				Eintrag zurueck.
 #*
-#*  Input:      Nummer des Eintrags
+#*  Input:		Nummer des Eintrags
 #*
-#*  Output:     Kommentar-String
+#*	Output:		Kommentar-String
 #*
 #************************************************************************/
 
@@ -1295,23 +1295,23 @@ void SvxNumberFormatShell::SetComment4Entry(short nEntry,String aEntStr)
 {
     SvNumberformat *pNumEntry;
     if(nEntry<0) return;
-    sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
+    sal_uInt32	nMyNfEntry=aCurEntryList[nEntry];
     pNumEntry = (SvNumberformat*)pFormatter->GetEntry(nMyNfEntry);
     if(pNumEntry!=NULL) pNumEntry->SetComment(aEntStr);
 }
 
 /*************************************************************************
-#*  Member:     GetComment4Entry                            Datum:30.10.97
+#*	Member:		GetComment4Entry							Datum:30.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     SvxNumberFormatShell
+#*  Klasse:		SvxNumberFormatShell
 #*
-#*  Funktion:   Liefert den Kommentar fuer einen gegebenen
-#*              Eintrag zurueck.
+#*  Funktion:	Liefert den Kommentar fuer einen gegebenen
+#*				Eintrag zurueck.
 #*
-#*  Input:      Nummer des Eintrags
+#*  Input:		Nummer des Eintrags
 #*
-#*  Output:     Kommentar-String
+#*	Output:		Kommentar-String
 #*
 #************************************************************************/
 
@@ -1324,7 +1324,7 @@ String SvxNumberFormatShell::GetComment4Entry(short nEntry)
 
     if(nEntry<aCurEntryList.Count())
     {
-        sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
+        sal_uInt32	nMyNfEntry=aCurEntryList[nEntry];
         pNumEntry = pFormatter->GetEntry(nMyNfEntry);
         if(pNumEntry!=NULL)
             return pNumEntry->GetComment();
@@ -1334,17 +1334,17 @@ String SvxNumberFormatShell::GetComment4Entry(short nEntry)
 }
 
 /*************************************************************************
-#*  Member:     GetCategory4Entry                           Datum:30.10.97
+#*	Member:		GetCategory4Entry							Datum:30.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     SvxNumberFormatShell
+#*  Klasse:		SvxNumberFormatShell
 #*
-#*  Funktion:   Liefert die Kategorie- Nummer fuer einen gegebenen
-#*              Eintrag zurueck.
+#*  Funktion:	Liefert die Kategorie- Nummer fuer einen gegebenen
+#*				Eintrag zurueck.
 #*
-#*  Input:      Nummer des Eintrags
+#*  Input:		Nummer des Eintrags
 #*
-#*  Output:     Kategorie- Nummer
+#*	Output:		Kategorie- Nummer
 #*
 #************************************************************************/
 
@@ -1355,7 +1355,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 
     if(nEntry<aCurEntryList.Count())
     {
-        sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
+        sal_uInt32	nMyNfEntry=aCurEntryList[nEntry];
 
         if(nMyNfEntry!=NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
@@ -1380,17 +1380,17 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 }
 
 /*************************************************************************
-#*  Member:     GetUserDefined4Entry                        Datum:31.10.97
+#*	Member:		GetUserDefined4Entry						Datum:31.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     SvxNumberFormatShell
+#*  Klasse:		SvxNumberFormatShell
 #*
-#*  Funktion:   Liefert die Information, ob ein Eintrag
-#*              benutzerspezifisch ist zurueck.
+#*  Funktion:	Liefert die Information, ob ein Eintrag
+#*				benutzerspezifisch ist zurueck.
 #*
-#*  Input:      Nummer des Eintrags
+#*  Input:		Nummer des Eintrags
 #*
-#*  Output:     Benutzerspezifisch?
+#*	Output:		Benutzerspezifisch?
 #*
 #************************************************************************/
 
@@ -1400,7 +1400,7 @@ sal_Bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
     if(nEntry<0) return 0;
     if(nEntry<aCurEntryList.Count())
     {
-        sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
+        sal_uInt32	nMyNfEntry=aCurEntryList[nEntry];
         pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
         if(pNumEntry!=NULL)
@@ -1416,17 +1416,17 @@ sal_Bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 
 
 /*************************************************************************
-#*  Member:     GetFormat4Entry                             Datum:30.10.97
+#*	Member:		GetFormat4Entry								Datum:30.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     SvxNumberFormatShell
+#*  Klasse:		SvxNumberFormatShell
 #*
-#*  Funktion:   Liefert den Format- String fuer einen gegebenen
-#*              Eintrag zurueck.
+#*  Funktion:	Liefert den Format- String fuer einen gegebenen
+#*				Eintrag zurueck.
 #*
-#*  Input:      Nummer des Eintrags
+#*  Input:		Nummer des Eintrags
 #*
-#*  Output:     Format- String
+#*	Output:		Format- String
 #*
 #************************************************************************/
 
@@ -1444,7 +1444,7 @@ String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
     }
     else
     {
-        sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
+        sal_uInt32	nMyNfEntry=aCurEntryList[nEntry];
         pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
         if(pNumEntry!=NULL)
@@ -1454,17 +1454,17 @@ String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 }
 
 /*************************************************************************
-#*  Member:     GetListPos4Entry                            Datum:31.10.97
+#*	Member:		GetListPos4Entry							Datum:31.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:     SvxNumberFormatShell
+#*  Klasse:		SvxNumberFormatShell
 #*
-#*  Funktion:   Liefert die Listen- Nummer fuer einen gegebenen
-#*              Formatindex zurueck.
+#*  Funktion:	Liefert die Listen- Nummer fuer einen gegebenen
+#*				Formatindex zurueck.
 #*
-#*  Input:      Nummer des Eintrags
+#*  Input:		Nummer des Eintrags
 #*
-#*  Output:     Kategorie- Nummer
+#*	Output:		Kategorie- Nummer
 #*
 #************************************************************************/
 
@@ -1616,7 +1616,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_Bool bF
     }
 
     // Append ISO codes to symbol list.
-    // XXX If this is to be changed, various other places would had to be
+    // XXX If this is to be changed, various other places would had to be 
     // adapted that assume this order!
     sal_uInt16 nCont = rList.Count();
 
@@ -1758,7 +1758,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
     if ( nFound != NUMBERFORMAT_ENTRY_NOT_FOUND &&
             ((pFormat = pFormatter->GetEntry( nFound )) != 0) &&
             pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
-    {   // eventually match with format locale
+    {	// eventually match with format locale
         const NfCurrencyEntry* pTmpCurrencyEntry =
             SvNumberFormatter::GetCurrencyEntry( bTestBanking, aSymbol, aExtension,
             pFormat->GetLanguage() );
@@ -1775,7 +1775,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
         }
     }
     else
-    {   // search symbol string only
+    {	// search symbol string only
         for(sal_uInt16 i=0;i<nCount;i++)
         {
             const NfCurrencyEntry* pTmpCurrencyEntry=rCurrencyTable[i];

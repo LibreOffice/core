@@ -52,7 +52,7 @@ namespace drawinglayer
     {
         HiddenGeometryPrimitive3D::HiddenGeometryPrimitive3D(
             const Primitive3DSequence& rChildren)
-        :   GroupPrimitive3D(rChildren)
+        :	GroupPrimitive3D(rChildren)
         {
         }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ ScVbaCheckbox::ScVbaCheckbox( const uno::Reference< ov::XHelperInterface >& xPar
 }
 
 // Attributes
-rtl::OUString SAL_CALL
+rtl::OUString SAL_CALL 
 ScVbaCheckbox::getCaption() throw (css::uno::RuntimeException)
 {
     rtl::OUString Label;
@@ -48,26 +48,26 @@ ScVbaCheckbox::getCaption() throw (css::uno::RuntimeException)
     return Label;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaCheckbox::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaCheckbox::getValue() throw (css::uno::RuntimeException)
 {
     sal_Int16 nValue = -1;
     m_xProps->getPropertyValue( STATE ) >>= nValue;
     if( nValue != 0 )
         nValue = -1;
-//    return uno::makeAny( nValue );
+//    return uno::makeAny( nValue ); 
 // I must be missing something MSO says value should be -1 if selected, 0 if not
 // selected
-    return uno::makeAny( ( nValue == -1 ) ? sal_True : sal_False );
+    return uno::makeAny( ( nValue == -1 ) ? sal_True : sal_False ); 
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException)
 {
     sal_Int16 nValue = 0;
@@ -88,14 +88,14 @@ ScVbaCheckbox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcept
     if ( nValue != nOldValue )
         fireClickEvent();
 }
-rtl::OUString&
+rtl::OUString& 
 ScVbaCheckbox::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCheckbox") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaCheckbox::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

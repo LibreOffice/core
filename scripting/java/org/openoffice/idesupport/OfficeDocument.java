@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class OfficeDocument
     public static final String OFFICE_PRODUCT_NAME = "OpenOffice.org";
 
     private File file = null;
-
+    
     public OfficeDocument(File file) throws IllegalArgumentException
     {
         if (!file.exists() || file.isDirectory() || !isOfficeFile(file)) {
@@ -63,7 +63,7 @@ public class OfficeDocument
                 return true;
         return false;
     }
-
+    
     public Enumeration getParcels() {
 
         Vector parcels = new Vector();
@@ -72,7 +72,7 @@ public class OfficeDocument
         try
         {
             zp = new ZipFile(this.file);
-
+            
             for (Enumeration enumer = zp.entries(); enumer.hasMoreElements(); )
             {
                 ZipEntry ze = (ZipEntry)enumer.nextElement();
@@ -105,7 +105,7 @@ public class OfficeDocument
 
         return parcels.elements();
     }
-
+    
     public boolean removeParcel(String parcelName) {
 
         try {

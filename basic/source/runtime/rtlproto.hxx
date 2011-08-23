@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
 
 #include <basic/sbstar.hxx>
 
-#define RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
-#define RTLNAME( name ) &SbRtl_##name
+#define	RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+#define	RTLNAME( name ) &SbRtl_##name
 
 typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, BOOL bWrite );
 

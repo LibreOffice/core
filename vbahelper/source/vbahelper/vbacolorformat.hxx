@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ struct MsoColorIndizes
     const static sal_Int32 HAPICOLOR_GRAY_80_PERCENT = 3355443;
 
     static sal_Int32 getColorIndex( sal_Int32 nIndex );
-
+    
 };
 
 class ScVbaColorFormat : public ScVbaColorFormat_BASE

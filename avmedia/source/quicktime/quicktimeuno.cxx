@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,11 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, v
         try
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
-                static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
+                static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(                                
                 ::rtl::OUString::createFromAscii(
                     "/" AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME "/UNO/SERVICES/"
                     AVMEDIA_QUICKTIME_MANAGER_SERVICENAME ) ) );
-
+            
             bRet = sal_True;
         }
         catch( registry::InvalidRegistryException& )
@@ -85,7 +85,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, v
 extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
-    void*                                   pRet = 0;
+    void*									pRet = 0;
 
     if( rtl_str_compare( pImplName, AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ) == 0 )
     {

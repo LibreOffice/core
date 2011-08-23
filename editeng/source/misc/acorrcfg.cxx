@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace com::sun::star::uno;
 static SvxAutoCorrCfg* pAutoCorrCfg = 0;
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Ctor Dtor
+    Beschreibung:	Ctor Dtor
  --------------------------------------------------------------------*/
 
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
@@ -99,27 +99,27 @@ void SvxAutoCorrCfg::SetAutoCorrect( SvxAutoCorrect* pNew )
 /*-- 12.10.00 11:44:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
+Sequence<OUString> 	SvxBaseAutoCorrCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Exceptions/TwoCapitalsAtStart",        //  0
-        "Exceptions/CapitalAtStartSentence",    //  1
-        "UseReplacementTable",                  //  2
-        "TwoCapitalsAtStart",                   //  3
-        "CapitalAtStartSentence",               //  4
-        "ChangeUnderlineWeight",                //  5
-        "SetInetAttribute",                     //  6
-        "ChangeOrdinalNumber",                  //  7
+        "Exceptions/TwoCapitalsAtStart",		//  0
+        "Exceptions/CapitalAtStartSentence",	//  1
+        "UseReplacementTable",					//  2
+        "TwoCapitalsAtStart",					//  3
+        "CapitalAtStartSentence",				//  4
+        "ChangeUnderlineWeight",				//  5
+        "SetInetAttribute",						//  6
+        "ChangeOrdinalNumber",					//  7
         "AddNonBreakingSpace",                  //  8
-        "ChangeDash",                           //  9
-        "RemoveDoubleSpaces",                   // 10
-        "ReplaceSingleQuote",                   // 11
-        "SingleQuoteAtStart",                   // 12
-        "SingleQuoteAtEnd",                     // 13
-        "ReplaceDoubleQuote",                   // 14
-        "DoubleQuoteAtStart",                   // 15
-        "DoubleQuoteAtEnd",                     // 16
+        "ChangeDash",							//  9
+        "RemoveDoubleSpaces",					// 10
+        "ReplaceSingleQuote",					// 11
+        "SingleQuoteAtStart",					// 12
+        "SingleQuoteAtEnd",						// 13
+        "ReplaceDoubleQuote",					// 14
+        "DoubleQuoteAtStart",					// 15
+        "DoubleQuoteAtEnd",						// 16
         "CorrectAccidentalCapsLock"             // 17
     };
     const int nCount = 18;
@@ -142,7 +142,7 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
-        long nFlags = 0;        // default alles aus
+        long nFlags = 0;		// default alles aus
         sal_Int32 nTemp = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
@@ -348,14 +348,14 @@ void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
 /*-- 12.10.00 11:51:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
+Sequence<OUString> 	SvxSwAutoCorrCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Text/FileLinks",                             // 0
-        "Text/InternetLinks",                         // 1
-        "Text/ShowPreview",                           // 2
-        "Text/ShowToolTip",                           // 3
+        "Text/FileLinks",							  // 0
+        "Text/InternetLinks",						  // 1
+        "Text/ShowPreview",							  // 2
+        "Text/ShowToolTip",							  // 3
         "Text/SearchInAllCategories",                                   // 4
         "Format/Option/UseReplacementTable",                            // 5
         "Format/Option/TwoCapitalsAtStart",                             // 6
@@ -677,7 +677,7 @@ void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
     Load(sal_False);
 }
 
-SvxAutoCorrCfg* SvxAutoCorrCfg::Get()
+SvxAutoCorrCfg*	SvxAutoCorrCfg::Get()
 {
     if( !pAutoCorrCfg )
         pAutoCorrCfg = new SvxAutoCorrCfg;

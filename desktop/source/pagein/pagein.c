@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ int  main (int argc, char **argv)
             /* next argv */
             continue;
         }
-
+        
 
         if ((argv[i][0] == '@') && ((fp = fopen (argv[i], "r")) == 0))
         {

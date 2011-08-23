@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ using namespace ::com::sun::star;
 SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+    uno::Reference< drawing::XShapes >& rShapes) 
+:	SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
     OUString sStyleName;
 

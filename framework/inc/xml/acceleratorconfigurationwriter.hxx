@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,46 +53,46 @@ class AcceleratorConfigurationWriter : private ThreadHelpBase
 {
     //-------------------------------------------
     // member
-
+    
     private:
-
+    
         //---------------------------------------
         /** @short  needed to write the xml configuration. */
         css::uno::Reference< css::xml::sax::XDocumentHandler > m_xConfig;
-
+        
         //---------------------------------------
         /** @short  reference to the outside container, where this
                     writer must work on. */
         const AcceleratorCache& m_rContainer;
-
+    
         //---------------------------------------
         /** @short  is used to map key codes to its
                     string representation.
-
+                    
             @descr  To perform this operatio is
                     created only one times and holded
                     alive forever ...*/
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
-
+        
     //-------------------------------------------
     // interface
-
+    
     public:
 
         //---------------------------------------
         /** @short  connect this new writer instance
                     to an outside container, which should be
                     flushed to the underlying XML configuration.
-
+        
             @param  rContainer
                     a reference to the outside container.
-
+                    
             @param  xConfig
-                    used to write the configuration there.
+                    used to write the configuration there.                    
           */
         AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
                                        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   );
-
+        
         //---------------------------------------
         /** @short  does nothing real ... */
         virtual ~AcceleratorConfigurationWriter();
@@ -100,12 +100,12 @@ class AcceleratorConfigurationWriter : private ThreadHelpBase
         //---------------------------------------
         /** @short  TODO */
         virtual void flush();
-
+        
     //-------------------------------------------
     // helper
-
+    
     private:
-
+    
         //---------------------------------------
         /** @short  TODO */
         void impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,

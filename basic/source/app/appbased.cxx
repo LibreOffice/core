@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
 
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextView->SetAutoIndentMode( TRUE );
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetMaxTextLen( STRING_MAXLEN );
-//  ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetWordDelimiters( CUniString(" ,.;:(){}[]\"'+-*/<>^\\") );
+//	((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetWordDelimiters( CUniString(" ,.;:(){}[]\"'+-*/<>^\\") );
     ((TextEdit*)pDataEdit)->GetTextEditImp().SyntaxHighlight( TRUE );
     ((TextEdit*)pDataEdit)->SaveAsUTF8( TRUE );
 
@@ -77,8 +77,8 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
     pBreakpoints->SetModule( pMod );
 
     // Define icon:
-//  pIcon = new Icon( ResId( RID_WORKICON ) );
-//  if( pIcon ) SetIcon( *pIcon );
+//	pIcon = new Icon( ResId( RID_WORKICON ) );
+//	if( pIcon ) SetIcon( *pIcon );
 
     SetText( pMod->GetName() );
     pDataEdit->SetText( pMod->GetSource() );
@@ -122,7 +122,7 @@ FileType AppBasEd::GetFileType()
 
 IMPL_LINK_INLINE_START( AppBasEd, EditChange, void *, p )
 {
-    (void) p; /* avoid warning about unused parameter */
+    (void) p; /* avoid warning about unused parameter */ 
     bCompiled = FALSE;
     return TRUE;
 }
@@ -133,7 +133,7 @@ long AppBasEd::InitMenu( Menu* pMenu )
 {
     AppEdit::InitMenu (pMenu );
     BOOL bRunning = pFrame->Basic().IsRunning();
-    pMenu->EnableItem( RID_RUNCOMPILE,  !bCompiled && !bRunning );
+    pMenu->EnableItem( RID_RUNCOMPILE,	!bCompiled && !bRunning );
     return TRUE;
 }
 
@@ -158,7 +158,7 @@ void AppBasEd::Command( const CommandEvent& rCEvt )
 
 void AppBasEd::Resize()
 {
-  if( pDataEdit )
+  if( pDataEdit ) 
   {
     AppEdit::Resize();
 
@@ -207,7 +207,7 @@ void AppBasEd::LoadSource()
 {
     BOOL bErr;
 
-//  if( pDataEdit->GetText().Len() != 0 ) return;
+//	if( pDataEdit->GetText().Len() != 0 ) return;
     String aName = pMod->GetName();
     bErr = !pDataEdit->Load( aName );
     pBreakpoints->LoadBreakpoints( GetText() );
@@ -285,7 +285,7 @@ void AppBasEd::Run()
         if (aBasicApp.pFrame)
         {
             BasicError* pErr = aBasicApp.pFrame->Basic().aErrors.First();
-            if( pErr )
+            if( pErr ) 
                 pErr->Show();
             aBasicApp.pFrame->SetAppMode( String() );
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace drawinglayer
                     aTexTransform.set(0, 1, 1.0);
                     aTexTransform.set(1, 0, 1.0);
                     aTexTransform.set(1, 1, 0.0);
-
+                    
                     aTexTransform.translate(0.0, -0.5);
                     aTexTransform.scale(1.0, -1.0);
                     aTexTransform.translate(0.0, 0.5);
@@ -86,7 +86,7 @@ namespace drawinglayer
 
                 // create geometry
                 ::std::vector< basegfx::B3DPolyPolygon > aFill;
-                extractPlanesFromSlice(aFill, rSliceVector,
+                extractPlanesFromSlice(aFill, rSliceVector, 
                     bCreateNormals, getSmoothHorizontalNormals(), getSmoothNormals(), getSmoothLids(), bClosedRotation,
                     0.85, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
 
@@ -126,20 +126,20 @@ namespace drawinglayer
                 {
                     // add fill
                     aRetval = create3DPolyPolygonFillPrimitives(
-                        aFill,
-                        getTransform(),
+                        aFill, 
+                        getTransform(), 
                         getTextureSize(),
-                        getSdr3DObjectAttribute(),
-                        getSdrLFSAttribute().getFill(),
+                        getSdr3DObjectAttribute(), 
+                        getSdrLFSAttribute().getFill(), 
                         getSdrLFSAttribute().getFillFloatTransGradient());
                 }
                 else
                 {
                     // create simplified 3d hit test geometry
                     aRetval = createHiddenGeometryPrimitives3D(
-                        aFill,
-                        getTransform(),
-                        getTextureSize(),
+                        aFill, 
+                        getTransform(), 
+                        getTextureSize(), 
                         getSdr3DObjectAttribute());
                 }
 
@@ -157,10 +157,10 @@ namespace drawinglayer
                         {
                             // for each loop pair create the connection edges
                             createReducedOutlines(
-                                rViewInformation,
-                                getTransform(),
-                                aHorLine.getB3DPolygon(a - 1),
-                                aHorLine.getB3DPolygon(a),
+                                rViewInformation, 
+                                getTransform(), 
+                                aHorLine.getB3DPolygon(a - 1), 
+                                aHorLine.getB3DPolygon(a), 
                                 aNewLineGeometry);
                         }
 
@@ -252,23 +252,23 @@ namespace drawinglayer
         }
 
         SdrLathePrimitive3D::SdrLathePrimitive3D(
-            const basegfx::B3DHomMatrix& rTransform,
+            const basegfx::B3DHomMatrix& rTransform, 
             const basegfx::B2DVector& rTextureSize,
             const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             sal_uInt32 nHorizontalSegments,
             sal_uInt32 nVerticalSegments,
-            double fDiagonal,
+            double fDiagonal, 
             double fBackScale,
             double fRotation,
-            bool bSmoothNormals,
+            bool bSmoothNormals, 
             bool bSmoothHorizontalNormals,
-            bool bSmoothLids,
-            bool bCharacterMode,
-            bool bCloseFront,
+            bool bSmoothLids, 
+            bool bCharacterMode, 
+            bool bCloseFront, 
             bool bCloseBack)
-        :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
+        :	SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
             maCorrectedPolyPolygon(),
             maSlices(),
             maPolyPolygon(rPolyPolygon),
@@ -361,7 +361,7 @@ namespace drawinglayer
             if(getSdr3DObjectAttribute().getReducedLineGeometry())
             {
                 if(!mpLastRLGViewInformation ||
-                    (getBuffered3DDecomposition().hasElements()
+                    (getBuffered3DDecomposition().hasElements() 
                         && *mpLastRLGViewInformation != rViewInformation))
                 {
                     // conditions of last local decomposition with reduced lines have changed. Remember
@@ -373,7 +373,7 @@ namespace drawinglayer
                     pThat->mpLastRLGViewInformation = new geometry::ViewInformation3D(rViewInformation);
                 }
             }
-
+            
             // no test for buffering needed, call parent
             return SdrPrimitive3D::get3DDecomposition(rViewInformation);
         }

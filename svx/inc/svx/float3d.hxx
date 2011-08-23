@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,162 +66,162 @@ struct Svx3DWinImpl;
 
 class SVX_DLLPUBLIC Svx3DWin : public SfxDockingWindow
 {
-    friend class        Svx3DChildWindow;
-    friend class        Svx3DCtrlItem;
+    friend class		Svx3DChildWindow;
+    friend class		Svx3DCtrlItem;
     using Window::Update;
 
 private:
-    ImageButton         aBtnGeo;
-    ImageButton         aBtnRepresentation;
-    ImageButton         aBtnLight;
-    ImageButton         aBtnTexture;
-    ImageButton         aBtnMaterial;
-    ImageButton         aBtnUpdate;
-    ImageButton         aBtnAssign;
+    ImageButton			aBtnGeo;
+    ImageButton			aBtnRepresentation;
+    ImageButton			aBtnLight;
+    ImageButton			aBtnTexture;
+    ImageButton			aBtnMaterial;
+    ImageButton			aBtnUpdate;
+    ImageButton			aBtnAssign;
 
 // geometry
-    FixedText           aFtPercentDiagonal;
-    MetricField         aMtrPercentDiagonal;
-    FixedText           aFtBackscale;
-    MetricField         aMtrBackscale;
-    FixedText           aFtEndAngle;
-    MetricField         aMtrEndAngle;
-    FixedText           aFtDepth;
-    MetricField         aMtrDepth;
+    FixedText			aFtPercentDiagonal;
+    MetricField			aMtrPercentDiagonal;
+    FixedText			aFtBackscale;
+    MetricField			aMtrBackscale;
+    FixedText			aFtEndAngle;
+    MetricField			aMtrEndAngle;
+    FixedText			aFtDepth;
+    MetricField			aMtrDepth;
     FixedLine           aFLGeometrie;
 
-    FixedText           aFtHorizontal;
-    NumericField        aNumHorizontal;
-    FixedText           aFtVertical;
-    NumericField        aNumVertical;
+    FixedText			aFtHorizontal;
+    NumericField		aNumHorizontal;
+    FixedText			aFtVertical;
+    NumericField		aNumVertical;
     FixedLine           aFLSegments;
 
-    ImageButton         aBtnNormalsObj;
-    ImageButton         aBtnNormalsFlat;
-    ImageButton         aBtnNormalsSphere;
-    ImageButton         aBtnNormalsInvert;
-    ImageButton         aBtnTwoSidedLighting;
+    ImageButton			aBtnNormalsObj;
+    ImageButton			aBtnNormalsFlat;
+    ImageButton			aBtnNormalsSphere;
+    ImageButton			aBtnNormalsInvert;
+    ImageButton			aBtnTwoSidedLighting;
     FixedLine           aFLNormals;
 
-    ImageButton         aBtnDoubleSided;
+    ImageButton			aBtnDoubleSided;
 
 // presentation
-    FixedText           aFtShademode;
-    ListBox             aLbShademode;
-    ImageButton         aBtnShadow3d;
-    FixedText           aFtSlant;
-    MetricField         aMtrSlant;
+    FixedText			aFtShademode;
+    ListBox				aLbShademode;
+    ImageButton			aBtnShadow3d;
+    FixedText			aFtSlant;
+    MetricField			aMtrSlant;
     FixedLine           aFLShadow;
-    FixedText           aFtDistance;
-    MetricField         aMtrDistance;
-    FixedText           aFtFocalLeng;
-    MetricField         aMtrFocalLength;
+    FixedText			aFtDistance;
+    MetricField			aMtrDistance;
+    FixedText			aFtFocalLeng;
+    MetricField			aMtrFocalLength;
     FixedLine           aFLCamera;
     FixedLine           aFLRepresentation;
 
 // lighting
-    ImageButton         aBtnLight1;
-    ImageButton         aBtnLight2;
-    ImageButton         aBtnLight3;
-    ImageButton         aBtnLight4;
-    ImageButton         aBtnLight5;
-    ImageButton         aBtnLight6;
-    ImageButton         aBtnLight7;
-    ImageButton         aBtnLight8;
-    ColorLB             aLbLight1;
-    ColorLB             aLbLight2;
-    ColorLB             aLbLight3;
-    ColorLB             aLbLight4;
-    ColorLB             aLbLight5;
-    ColorLB             aLbLight6;
-    ColorLB             aLbLight7;
-    ColorLB             aLbLight8;
+    ImageButton			aBtnLight1;
+    ImageButton			aBtnLight2;
+    ImageButton			aBtnLight3;
+    ImageButton			aBtnLight4;
+    ImageButton			aBtnLight5;
+    ImageButton			aBtnLight6;
+    ImageButton			aBtnLight7;
+    ImageButton			aBtnLight8;
+    ColorLB				aLbLight1;
+    ColorLB				aLbLight2;
+    ColorLB				aLbLight3;
+    ColorLB				aLbLight4;
+    ColorLB				aLbLight5;
+    ColorLB				aLbLight6;
+    ColorLB				aLbLight7;
+    ColorLB				aLbLight8;
 
-    ImageButton         aBtnLightColor;
+    ImageButton			aBtnLightColor;
     FixedText           aFTLightsource;
 
     // #99694# Keyboard shortcuts activate the next control, so the
     // order needed to be changed here
-    FixedText           aFTAmbientlight;    // Text label
-    ColorLB             aLbAmbientlight;    // ListBox
-    ImageButton         aBtnAmbientColor;   // color button
+    FixedText           aFTAmbientlight;	// Text label
+    ColorLB				aLbAmbientlight;	// ListBox
+    ImageButton			aBtnAmbientColor;	// color button
 
     FixedLine           aFLLight;
 
 // Textures
-    FixedText           aFtTexKind;
-    ImageButton         aBtnTexLuminance;
-    ImageButton         aBtnTexColor;
-    FixedText           aFtTexMode;
-    ImageButton         aBtnTexReplace;
-    ImageButton         aBtnTexModulate;
-    ImageButton         aBtnTexBlend;
-    FixedText           aFtTexProjectionX;
-    ImageButton         aBtnTexObjectX;
-    ImageButton         aBtnTexParallelX;
-    ImageButton         aBtnTexCircleX;
-    FixedText           aFtTexProjectionY;
-    ImageButton         aBtnTexObjectY;
-    ImageButton         aBtnTexParallelY;
-    ImageButton         aBtnTexCircleY;
-    FixedText           aFtTexFilter;
-    ImageButton         aBtnTexFilter;
+    FixedText			aFtTexKind;
+    ImageButton			aBtnTexLuminance;
+    ImageButton			aBtnTexColor;
+    FixedText			aFtTexMode;
+    ImageButton			aBtnTexReplace;
+    ImageButton			aBtnTexModulate;
+    ImageButton			aBtnTexBlend;
+    FixedText			aFtTexProjectionX;
+    ImageButton			aBtnTexObjectX;
+    ImageButton			aBtnTexParallelX;
+    ImageButton			aBtnTexCircleX;
+    FixedText			aFtTexProjectionY;
+    ImageButton			aBtnTexObjectY;
+    ImageButton			aBtnTexParallelY;
+    ImageButton			aBtnTexCircleY;
+    FixedText			aFtTexFilter;
+    ImageButton			aBtnTexFilter;
     FixedLine           aFLTexture;
 
 // material
 // material editor
-    FixedText           aFtMatFavorites;
-    ListBox             aLbMatFavorites;
-    FixedText           aFtMatColor;
-    ColorLB             aLbMatColor;
-    ImageButton         aBtnMatColor;
-    FixedText           aFtMatEmission;
-    ColorLB             aLbMatEmission;
-    ImageButton         aBtnEmissionColor;
-    FixedText           aFtMatSpecular;
-    ColorLB             aLbMatSpecular;
-    ImageButton         aBtnSpecularColor;
-    FixedText           aFtMatSpecularIntensity;
-    MetricField         aMtrMatSpecularIntensity;
+    FixedText			aFtMatFavorites;
+    ListBox  			aLbMatFavorites;
+    FixedText			aFtMatColor;
+    ColorLB				aLbMatColor;
+    ImageButton			aBtnMatColor;
+    FixedText			aFtMatEmission;
+    ColorLB				aLbMatEmission;
+    ImageButton			aBtnEmissionColor;
+    FixedText			aFtMatSpecular;
+    ColorLB				aLbMatSpecular;
+    ImageButton			aBtnSpecularColor;
+    FixedText			aFtMatSpecularIntensity;
+    MetricField			aMtrMatSpecularIntensity;
     FixedLine           aFLMatSpecular;
     FixedLine           aFLMaterial;
 
 // bottom part
-    ImageButton         aBtnConvertTo3D;
-    ImageButton         aBtnLatheObject;
-    ImageButton         aBtnPerspective;
-    Svx3DPreviewControl aCtlPreview;
-    SvxLightCtl3D       aCtlLightPreview;
+    ImageButton			aBtnConvertTo3D;
+    ImageButton			aBtnLatheObject;
+    ImageButton			aBtnPerspective;
+    Svx3DPreviewControl	aCtlPreview;
+    SvxLightCtl3D		aCtlLightPreview;
 
 // the rest ...
-    Image               aImgLightOn;
-    Image               aImgLightOff;
-    BOOL                bUpdate;
-    ViewType3D          eViewType;
-    Size                aSize;
+    Image				aImgLightOn;
+    Image				aImgLightOff;
+    BOOL				bUpdate;
+    ViewType3D			eViewType;
+    Size				aSize;
 
     // Model, Page, View etc. for favourites
-    FmFormModel*        pModel;
-    FmFormPage*         pFmPage;
-    VirtualDevice*      pVDev;
-    E3dView*            p3DView;
-    List*               pFavorSetList;
-    List*               pMatFavSetList;
+    FmFormModel*		pModel;
+    FmFormPage*			pFmPage;
+    VirtualDevice*		pVDev;
+    E3dView*			p3DView;
+    List*				pFavorSetList;
+    List*				pMatFavSetList;
 
-    SfxBindings*                pBindings;
-    Svx3DCtrlItem*              pControllerItem;
+    SfxBindings*				pBindings;
+    Svx3DCtrlItem*				pControllerItem;
 
-    SvxConvertTo3DItem*         pConvertTo3DItem;
-    SvxConvertTo3DItem*         pConvertTo3DLatheItem;
+    SvxConvertTo3DItem*			pConvertTo3DItem;
+    SvxConvertTo3DItem*			pConvertTo3DLatheItem;
 
-    Svx3DWinImpl*       mpImpl;
+    Svx3DWinImpl*		mpImpl;
     SfxMapUnit          ePoolUnit;
     FieldUnit           eFUnit;
 
     // ItemSet used to remember set 2d attributes
-    SfxItemSet*         mpRemember2DAttributes;
+    SfxItemSet*			mpRemember2DAttributes;
 
-    BOOL                bOnly3DChanged;
+    BOOL				bOnly3DChanged;
 
     //------------------------------------
 
@@ -239,29 +239,29 @@ private:
     DECL_LINK( ChangeLightCallbackHdl, void * );
     DECL_LINK( ChangeSelectionCallbackHdl, void * );
 
-    SVX_DLLPRIVATE void         Construct();
-    SVX_DLLPRIVATE void         Reset();
+    SVX_DLLPRIVATE void			Construct();
+    SVX_DLLPRIVATE void			Reset();
 
-    SVX_DLLPRIVATE BOOL         LBSelectColor( ColorLB* pLb, const Color& rColor );
-    SVX_DLLPRIVATE USHORT           GetLightSource( const PushButton* pBtn = NULL );
-    SVX_DLLPRIVATE ColorLB*     GetLbByButton( const PushButton* pBtn = NULL );
+    SVX_DLLPRIVATE BOOL			LBSelectColor( ColorLB* pLb, const Color& rColor );
+    SVX_DLLPRIVATE USHORT			GetLightSource( const PushButton* pBtn = NULL );
+    SVX_DLLPRIVATE ColorLB*		GetLbByButton( const PushButton* pBtn = NULL );
 
-    SVX_DLLPRIVATE bool         GetUILightState( ImageButton& aBtn ) const;
-    SVX_DLLPRIVATE void         SetUILightState( ImageButton& aBtn, bool bState );
+    SVX_DLLPRIVATE bool			GetUILightState( ImageButton& aBtn ) const;
+    SVX_DLLPRIVATE void			SetUILightState( ImageButton& aBtn, bool bState );
 
 protected:
-    virtual void    Resize();
+    virtual void	Resize();
 
 public:
             Svx3DWin( SfxBindings* pBindings, SfxChildWindow *pCW,
                         Window* pParent );
             ~Svx3DWin();
 
-    void    InitColorLB( const SdrModel* pDoc );
-    BOOL    IsUpdateMode() const { return bUpdate; }
+    void	InitColorLB( const SdrModel* pDoc );
+    BOOL	IsUpdateMode() const { return bUpdate; }
 
-    void    Update( SfxItemSet& rSet );
-    void    GetAttr( SfxItemSet& rSet );
+    void	Update( SfxItemSet& rSet );
+    void	GetAttr( SfxItemSet& rSet );
 
     void UpdatePreview(); // nach oben (private)
     void DocumentReload(); // #83951#
@@ -294,7 +294,7 @@ class Svx3DCtrlItem : public SfxControllerItem
 
 class SvxConvertTo3DItem : public SfxControllerItem
 {
-    BOOL                        bState;
+    BOOL						bState;
 
 protected:
     virtual void StateChanged(UINT16 nSId, SfxItemState eState, const SfxPoolItem* pState);
@@ -304,6 +304,6 @@ public:
     BOOL GetState() const { return bState; }
 };
 
-#endif      // _SVX_FLOAT3D_HXX
+#endif		// _SVX_FLOAT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

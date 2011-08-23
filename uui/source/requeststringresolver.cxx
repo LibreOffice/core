@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver()
     delete m_pImpl;
 }
 
-rtl::OUString SAL_CALL
+rtl::OUString SAL_CALL 
 UUIInteractionRequestStringResolver::getImplementationName()
     throw (star::uno::RuntimeException)
 {
@@ -72,10 +72,10 @@ UUIInteractionRequestStringResolver::getSupportedServiceNames()
     return getSupportedServiceNames_static();
 }
 
-star::beans::Optional< rtl::OUString > SAL_CALL
-UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
-    const star::uno::Reference<
-        star::task::XInteractionRequest >& Request )
+star::beans::Optional< rtl::OUString > SAL_CALL 
+UUIInteractionRequestStringResolver::getStringFromInformationalRequest( 
+    const star::uno::Reference< 
+        star::task::XInteractionRequest >& Request ) 
     throw (star::uno::RuntimeException)
 {
     try

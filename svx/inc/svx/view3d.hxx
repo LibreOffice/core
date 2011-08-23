@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,29 +53,29 @@ class Impl3DMirrorConstructOverlay;
 class SVX_DLLPUBLIC E3dView : public SdrView
 {
 protected:
-    E3dDefaultAttributes        a3DDefaultAttr;
-    MouseEvent                  aMouseEvent;                    // Die Parameter der letzten Events (Mouse, Keyboard)
-    Color                       aDefaultLightColor;             // dito mit den Farben
-    Color                       aDefaultAmbientColor;
+    E3dDefaultAttributes		a3DDefaultAttr;
+    MouseEvent					aMouseEvent;					// Die Parameter der letzten Events (Mouse, Keyboard)
+    Color						aDefaultLightColor;             // dito mit den Farben
+    Color						aDefaultAmbientColor;
 
-    double                      fDefaultScaleX;                 // Verzerrungen
-    double                      fDefaultScaleY;
-    double                      fDefaultScaleZ;
-    double                      fDefaultRotateX;                // und Drehungen
-    double                      fDefaultRotateY;
-    double                      fDefaultRotateZ;
-    double                      fDefaultExtrusionDeepth;        // Extrusionstiefe
-    double                      fDefaultLightIntensity;         // Intensitaeten der beiden (notwendigen) Licht-
-    double                      fDefaultAmbientIntensity;       // quellen
-    long                        nHDefaultSegments;              // wieviele HSegmente braucht mein Lathe-Ojekt
-    long                        nVDefaultSegments;              // wieviele VSegmente braucht mein Lathe-Ojekt
+    double						fDefaultScaleX;                 // Verzerrungen
+    double						fDefaultScaleY;
+    double						fDefaultScaleZ;
+    double						fDefaultRotateX;                // und Drehungen
+    double						fDefaultRotateY;
+    double						fDefaultRotateZ;
+    double						fDefaultExtrusionDeepth;        // Extrusionstiefe
+    double						fDefaultLightIntensity;         // Intensitaeten der beiden (notwendigen) Licht-
+    double						fDefaultAmbientIntensity;       // quellen
+    long						nHDefaultSegments;              // wieviele HSegmente braucht mein Lathe-Ojekt
+    long						nVDefaultSegments;              // wieviele VSegmente braucht mein Lathe-Ojekt
 
-    E3dDragConstraint           eDragConstraint;
+    E3dDragConstraint			eDragConstraint;
 
     // Migrate selections
-    Impl3DMirrorConstructOverlay*                   mpMirrorOverlay;
+    Impl3DMirrorConstructOverlay*					mpMirrorOverlay;
 
-    BOOL                        bDoubleSided;
+    BOOL						bDoubleSided;
 
     void InitView();
 
@@ -99,7 +99,7 @@ public:
     // Zugriff auf die Default-Attribute
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
     virtual BOOL BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL);
-    virtual void CheckPossibilities();
+    virtual	void CheckPossibilities();
 
     // Event setzen/rausruecken
     void SetMouseEvent(const MouseEvent& rNew) { aMouseEvent = rNew; }
@@ -275,6 +275,6 @@ public:
     void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, BOOL bOnly3DAttr=FALSE);
 };
 
-#endif          // _E3D_VIEW3D_HXX
+#endif			// _E3D_VIEW3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

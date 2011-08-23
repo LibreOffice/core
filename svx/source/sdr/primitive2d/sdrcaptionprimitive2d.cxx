@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,27 +50,27 @@ namespace drawinglayer
 
             // create unit outline polygon
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
-                basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
-                getCornerRadiusX(),
+                basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), 
+                getCornerRadiusX(), 
                 getCornerRadiusY()));
 
             // add fill
             if(getSdrLFSTAttribute().getFill().isDefault())
             {
                 // create invisible fill for HitTest
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createHiddenGeometryPrimitives2D(
-                        true,
+                        true, 
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform()));
             }
             else
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        getSdrLFSTAttribute().getFill(),
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getFill(), 
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
@@ -78,45 +78,45 @@ namespace drawinglayer
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
                 // create invisible line for HitTest/BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createHiddenGeometryPrimitives2D(
                         false,
-                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
                         getTransform()));
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createHiddenGeometryPrimitives2D(
                         false,
-                        basegfx::B2DPolyPolygon(getTail()),
+                        basegfx::B2DPolyPolygon(getTail()), 
                         getTransform()));
             }
             else
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolygonLinePrimitive(
-                        aUnitOutline,
-                        getTransform(),
+                        aUnitOutline, 
+                        getTransform(), 
                         getSdrLFSTAttribute().getLine(),
                         attribute::SdrLineStartEndAttribute()));
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolygonLinePrimitive(
-                        getTail(),
-                        getTransform(),
-                        getSdrLFSTAttribute().getLine(),
+                        getTail(), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getLine(), 
                         getSdrLFSTAttribute().getLineStartEnd()));
             }
 
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createTextPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline),
-                        getTransform(),
-                        getSdrLFSTAttribute().getText(),
-                        getSdrLFSTAttribute().getLine(),
-                        false,
+                        basegfx::B2DPolyPolygon(aUnitOutline), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getText(), 
+                        getSdrLFSTAttribute().getLine(), 
+                        false, 
                         false,
                         false));
             }
@@ -131,12 +131,12 @@ namespace drawinglayer
         }
 
         SdrCaptionPrimitive2D::SdrCaptionPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform, 
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-            const basegfx::B2DPolygon& rTail,
-            double fCornerRadiusX,
+            const basegfx::B2DPolygon& rTail, 
+            double fCornerRadiusX, 
             double fCornerRadiusY)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maTail(rTail),
@@ -157,7 +157,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCaptionPrimitive2D& rCompare = (SdrCaptionPrimitive2D&)rPrimitive;
-
+                
                 return (getCornerRadiusX() == rCompare.getCornerRadiusX()
                     && getCornerRadiusY() == rCompare.getCornerRadiusY()
                     && getTail() == rCompare.getTail()

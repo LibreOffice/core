@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,31 +58,31 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     SfxTabPage( pParent, SfxResId( TP_MANAGE_STYLES ), rAttrSet ),
 
-    aNameFt     ( this, SfxResId( FT_NAME ) ),
-    aNameEd     ( this, SfxResId( ED_NAME ) ),
+    aNameFt		( this, SfxResId( FT_NAME ) ),
+    aNameEd		( this, SfxResId( ED_NAME ) ),
     aAutoCB     ( this, SfxResId( CB_AUTO ) ),
 
-    aFollowFt   ( this, SfxResId( FT_NEXT ) ),
-    aFollowLb   ( this, SfxResId( LB_NEXT ) ),
+    aFollowFt	( this, SfxResId( FT_NEXT ) ),
+    aFollowLb	( this, SfxResId( LB_NEXT ) ),
 
-    aBaseFt     ( this, SfxResId( FT_BASE ) ),
-    aBaseLb     ( this, SfxResId( LB_BASE ) ),
+    aBaseFt		( this, SfxResId( FT_BASE ) ),
+    aBaseLb		( this, SfxResId( LB_BASE ) ),
 
-    aFilterFt   ( this, SfxResId( FT_REGION ) ),
-    aFilterLb   ( this, SfxResId( LB_REGION ) ),
+    aFilterFt	( this, SfxResId( FT_REGION ) ),
+    aFilterLb	( this, SfxResId( LB_REGION ) ),
 
-    aDescFt     ( this, SfxResId( FT_DESC ) ),
-    aDescED     ( this, SfxResId( ED_DESC ) ),
-    aDescGb     ( this, SfxResId( GB_DESC ) ),
+    aDescFt		( this, SfxResId( FT_DESC ) ),
+    aDescED		( this, SfxResId( ED_DESC ) ),
+    aDescGb		( this, SfxResId( GB_DESC ) ),
 
     pStyle( &( (SfxStyleDialog*)pParent->GetParent() )->GetStyleSheet() ),
 
-    pItem       ( 0 ),
-    bModified   ( FALSE ),
-    aName       ( pStyle->GetName() ),
-    aFollow     ( pStyle->GetFollow() ),
-    aParent     ( pStyle->GetParent() ),
-    nFlags      ( pStyle->GetMask() )
+    pItem		( 0 ),
+    bModified	( FALSE ),
+    aName		( pStyle->GetName() ),
+    aFollow		( pStyle->GetFollow() ),
+    aParent		( pStyle->GetParent() ),
+    nFlags		( pStyle->GetMask() )
 
 /*  [Beschreibung]
 
@@ -214,16 +214,16 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         USHORT nIdx = 0;
         USHORT nMask = pStyle->GetMask() & ~SFXSTYLEBIT_USERDEF;
 
-        if ( !nMask )   // Benutzervorlage?
+        if ( !nMask )	// Benutzervorlage?
             nMask = pStyle->GetMask();
 
         for ( i = 0; i < nCount; ++i )
         {
             SfxFilterTupel* pTupel = rList.GetObject(i);
 
-            if ( pTupel->nFlags != SFXSTYLEBIT_AUTO     &&
-                 pTupel->nFlags != SFXSTYLEBIT_USED     &&
-//               pTupel->nFlags != SFXSTYLEBIT_USERDEF  &&
+            if ( pTupel->nFlags != SFXSTYLEBIT_AUTO 	&&
+                 pTupel->nFlags != SFXSTYLEBIT_USED		&&
+//				 pTupel->nFlags != SFXSTYLEBIT_USERDEF	&&
                  pTupel->nFlags != SFXSTYLEBIT_ALL )
             {
                 aFilterLb.InsertEntry( pTupel->aName, nIdx );
@@ -297,9 +297,9 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
 
     [Parameter]
 
-    ListBox* pBox           ListBox, deren Eintr"age aktualisiert
+    ListBox* pBox			ListBox, deren Eintr"age aktualisiert
                             werden sollen
-    const String& rNew      der neue Name
+    const String& rNew		der neue Name
 
 */
 
@@ -339,18 +339,18 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
     switch ( eFieldUnit )
     {
-        case FUNIT_MM:      eUnit = SFX_MAPUNIT_MM; break;
+        case FUNIT_MM:		eUnit = SFX_MAPUNIT_MM; break;
 
         case FUNIT_CM:
         case FUNIT_M:
-        case FUNIT_KM:      eUnit = SFX_MAPUNIT_CM; break;
+        case FUNIT_KM:		eUnit = SFX_MAPUNIT_CM; break;
 
         case FUNIT_POINT:
-        case FUNIT_PICA:    eUnit = SFX_MAPUNIT_POINT; break;
+        case FUNIT_PICA:	eUnit = SFX_MAPUNIT_POINT; break;
 
         case FUNIT_INCH:
         case FUNIT_FOOT:
-        case FUNIT_MILE:    eUnit = SFX_MAPUNIT_INCH; break;
+        case FUNIT_MILE:	eUnit = SFX_MAPUNIT_INCH; break;
 
         default:
             DBG_ERRORFILE( "not supported fieldunit" );
@@ -409,12 +409,12 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
     [Parameter]
 
-    SfxItemSet &rAttrSet        das Set, das die Daten entgegennimmt.
+    SfxItemSet &rAttrSet		das Set, das die Daten entgegennimmt.
 
 
     [R"uckgabewert]
 
-    BOOL                        TRUE:  es hat eine "Anderung der Daten
+    BOOL						TRUE:  es hat eine "Anderung der Daten
                                        stattgefunden
                                 FALSE: es hat keine "Anderung der Daten
                                        stattgefunden
@@ -430,8 +430,8 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
     // Filter setzen
 
-    if ( LISTBOX_ENTRY_NOTFOUND  != nFilterIdx      &&
-         nFilterIdx != aFilterLb.GetSavedValue()    &&
+    if ( LISTBOX_ENTRY_NOTFOUND  != nFilterIdx 		&&
+         nFilterIdx != aFilterLb.GetSavedValue() 	&&
          aFilterLb.IsEnabled() )
     {
         bModified = TRUE;
@@ -467,7 +467,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
     [Parameter]
 
-    const SfxItemSet &rAttrSet      das Set mit den Daten
+    const SfxItemSet &rAttrSet		das Set mit den Daten
 
 
     [Querverweise]
@@ -559,7 +559,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
     [Parameter]
 
-    const SfxItemSet&       das Set f"ur den Datenaustausch; wird
+    const SfxItemSet&		das Set f"ur den Datenaustausch; wird
                             hier nicht verwendet.
 
     [Querverweise]
@@ -593,7 +593,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
     [Parameter]
 
-    SfxItemSet*         das Set f"ur den Datenaustausch; wird hier nicht verwendet.
+    SfxItemSet*			das Set f"ur den Datenaustausch; wird hier nicht verwendet.
 
     [Querverweise]
 

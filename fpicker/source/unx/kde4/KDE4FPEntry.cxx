@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiS
 }
 
 // the three uno functions that will be exported
-extern "C"
+extern "C" 
 {
     void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
@@ -64,12 +64,12 @@ extern "C"
         {
             try
             {
-                Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
+                Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );				
                 pXNewKey->createKey( OUString::createFromAscii( FILE_PICKER_REGKEY_NAME ) );
             }
             catch( InvalidRegistryException& )
-            {
-                OSL_ENSURE( sal_False, "InvalidRegistryException caught" );
+            {			
+                OSL_ENSURE( sal_False, "InvalidRegistryException caught" );			
                 bRetVal = sal_False;
             }
         }
@@ -84,7 +84,7 @@ extern "C"
         if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, FILE_PICKER_IMPL_NAME ) ) )
         {
             Sequence< OUString > aSNS( 1 );
-            aSNS.getArray( )[0] = OUString::createFromAscii( FILE_PICKER_SERVICE_NAME );
+            aSNS.getArray( )[0] = OUString::createFromAscii( FILE_PICKER_SERVICE_NAME );		
 
             Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
                         reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -95,7 +95,7 @@ extern "C"
             {
                 xFactory->acquire();
                 pRet = xFactory.get();
-            }
+            }			
         }
 
         return pRet;

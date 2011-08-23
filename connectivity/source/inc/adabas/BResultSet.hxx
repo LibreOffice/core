@@ -34,9 +34,9 @@ namespace connectivity
 {
     namespace adabas
     {
-        class OAdabasResultSet :    public  ::connectivity::odbc::OResultSet
+        class OAdabasResultSet :	public	::connectivity::odbc::OResultSet
         {
-            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>	m_aSelectColumns;
         public:
             OAdabasResultSet(SQLHANDLE _pStatementHandle,::connectivity::odbc::OStatement_Base* pStmt,const ::rtl::Reference<OSQLColumns>& _rSelectColumns)
              : ::connectivity::odbc::OResultSet( _pStatementHandle,pStmt)

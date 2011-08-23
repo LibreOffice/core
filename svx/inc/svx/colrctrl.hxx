@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class SvxColorValueSet : public ValueSet, public DragSourceHelper
 
 private:
 
-    BOOL            bLeft;
+    BOOL			bLeft;
     Point           aDragPosPixel;
 
 protected:
@@ -58,12 +58,12 @@ protected:
     void            DoDrag();
 
     // ValueSet
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    Command(const CommandEvent& rCEvt );
 
     // DragSourceHelper
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPtPixel );
+    virtual void	StartDrag( sal_Int8 nAction, const Point& rPtPixel );
 
                     DECL_STATIC_LINK(SvxColorValueSet, ExecDragHdl, void*);
 
@@ -71,7 +71,7 @@ public:
                     SvxColorValueSet( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
                     SvxColorValueSet( Window* pParent, const ResId& rResId );
 
-    BOOL            IsLeftButton() const { return bLeft; }
+    BOOL			IsLeftButton() const { return bLeft; }
 };
 
 /*************************************************************************
@@ -100,18 +100,18 @@ class SvxColorDockingWindow : public SfxDockingWindow, public SfxListener
  friend class SvxColorChildWindow;
 
 private:
-    XColorTable*        pColorTable;
-    SvxColorValueSet    aColorSet;
-    USHORT              nLeftSlot;
-    USHORT              nRightSlot;
-    USHORT              nCols;
-    USHORT              nLines;
-    long                nCount;
-    Size                aColorSize;
-    Size                aItemSize;
+    XColorTable*		pColorTable;
+    SvxColorValueSet	aColorSet;
+    USHORT				nLeftSlot;
+    USHORT				nRightSlot;
+    USHORT				nCols;
+    USHORT				nLines;
+    long				nCount;
+    Size				aColorSize;
+    Size				aItemSize;
 
-    void                FillValueSet();
-    void                SetSize();
+    void				FillValueSet();
+    void 				SetSize();
                         DECL_LINK( SelectHdl, void * );
 
     /** This function is called when the window gets the focus.  It grabs
@@ -121,9 +121,9 @@ private:
     virtual void GetFocus (void);
 
 protected:
-    virtual BOOL    Close();
-    virtual void    Resize();
-    virtual void    Resizing( Size& rSize );
+    virtual BOOL	Close();
+    virtual void	Resize();
+    virtual void	Resizing( Size& rSize );
 
 public:
                     SvxColorDockingWindow( SfxBindings* pBindings,
@@ -132,12 +132,12 @@ public:
                                            const ResId& rResId );
                     ~SvxColorDockingWindow();
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void 	Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void            SetSlotIDs( USHORT nLeft, USHORT nRight )
+    void			SetSlotIDs( USHORT nLeft, USHORT nRight )
                         { nLeftSlot = nLeft; nRightSlot = nRight; }
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual long	Notify( NotifyEvent& rNEvt );
 };
 
 #endif

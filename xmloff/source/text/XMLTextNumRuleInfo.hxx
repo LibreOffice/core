@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,6 +198,6 @@ inline void XMLTextNumRuleInfo::Reset()
     msListLabelString = ::rtl::OUString();
     // <--
 }
-#endif  //  _XMLOFF_XMLTEXTNUMRULEINFO_HXX
+#endif	//  _XMLOFF_XMLTEXTNUMRULEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

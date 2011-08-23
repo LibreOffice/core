@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ public:
 //========================================================================
 class FmNavModelReplacedHint : public SfxHint
 {
-    FmEntryData* pEntryData;    // die Daten des Eintrages, der ein neues Model bekommen hat
+    FmEntryData* pEntryData;	// die Daten des Eintrages, der ein neues Model bekommen hat
 
 public:
     TYPEINFO();
@@ -151,20 +151,20 @@ class FmEntryDataList;
 class FmEntryData
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       m_xNormalizedIFace;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xProperties;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >     m_xChild;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >		m_xNormalizedIFace;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	m_xProperties;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >		m_xChild;
 
 protected:
-    Image               m_aNormalImage;
-    Image               m_aHCImage;
-    ::rtl::OUString     aText;
+    Image				m_aNormalImage;
+    Image				m_aHCImage;
+    ::rtl::OUString		aText;
 
     FmEntryDataList*    pChildList;
     FmEntryData*        pParent;
 
 protected:
-    void    newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace );
+    void	newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace );
 
 public:
     TYPEINFO();
@@ -177,8 +177,8 @@ public:
     void    SetText( const ::rtl::OUString& rText ){ aText = rText; }
     void    SetParent( FmEntryData* pParentData ){ pParent = pParentData; }
 
-    const Image&    GetNormalImage() const { return m_aNormalImage; }
-    const Image&    GetHCImage() const { return m_aHCImage; }
+    const Image&	GetNormalImage() const { return m_aNormalImage; }
+    const Image&	GetHCImage() const { return m_aHCImage; }
 
     ::rtl::OUString          GetText() const { return aText; }
     FmEntryData*    GetParent() const { return pParent; }
@@ -240,8 +240,8 @@ public:
 //========================================================================
 class FmFormData : public FmEntryData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >           m_xForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > m_xContainer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >			m_xForm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >	m_xContainer;
 
 public:
     TYPEINFO();
@@ -313,11 +313,11 @@ namespace svxform
     // class OFormComponentObserver
     //========================================================================
     class OFormComponentObserver
-        :public ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertyChangeListener
-                                        ,   ::com::sun::star::container::XContainerListener
+        :public ::cppu::WeakImplHelper2	<	::com::sun::star::beans::XPropertyChangeListener
+                                        ,	::com::sun::star::container::XContainerListener
                                         >
     {
-        ::svxform::NavigatorTreeModel*  m_pNavModel;
+        ::svxform::NavigatorTreeModel*	m_pNavModel;
         sal_uInt32 m_nLocks;
         sal_Bool   m_bCanUndo;
 
@@ -359,10 +359,10 @@ namespace svxform
         FmFormShell*                m_pFormShell;
         FmFormPage*                 m_pFormPage;
         FmFormModel*                m_pFormModel;
-        OFormComponentObserver*     m_pPropChangeList;
+        OFormComponentObserver*		m_pPropChangeList;
 
-        ImageList                   m_aNormalImages;
-        ImageList                   m_aHCImages;
+        ImageList					m_aNormalImages;
+        ImageList					m_aHCImages;
 
         void UpdateContent( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
         FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
@@ -403,7 +403,7 @@ namespace svxform
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >    GetForms() const;
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
-        FmFormPage*         GetFormPage() const { return m_pFormPage; }
+        FmFormPage*			GetFormPage() const { return m_pFormPage; }
         FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, sal_Bool bRecurs=sal_True );
         FmEntryData*        FindData( const ::rtl::OUString& rText, FmFormData* pParentData, sal_Bool bRecurs=sal_True );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
@@ -434,9 +434,9 @@ namespace svxform
         ImageList           m_aNavigatorImages;
         ImageList           m_aNavigatorImagesHC;
 
-        ::svxform::OControlExchangeHelper   m_aControlExchange;
+        ::svxform::OControlExchangeHelper	m_aControlExchange;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xORB;
         NavigatorTreeModel* m_pNavModel;
         SvLBoxEntry*        m_pRootEntry;
         SvLBoxEntry*        m_pEditEntry;
@@ -451,15 +451,15 @@ namespace svxform
         sal_uInt16          m_nFormsSelected;
         sal_uInt16          m_nControlsSelected;
         sal_uInt16          m_nHiddenControls;      // (die Zahl geht in m_nControlsSelected mit ein)
-
+        
         unsigned short      m_aTimerCounter;
 
-        sal_Bool            m_bDragDataDirty        : 1;    // dito
-        sal_Bool            m_bPrevSelectionMixed   : 1;
-        sal_Bool            m_bMarkingObjects       : 1;    // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
-        sal_Bool            m_bRootSelected         : 1;
-        sal_Bool            m_bInitialUpdate        : 1;   // bin ich das erste Mal im UpdateContent ?
-        sal_Bool            m_bKeyboardCut          : 1;
+        sal_Bool            m_bDragDataDirty		: 1;    // dito
+        sal_Bool            m_bPrevSelectionMixed	: 1;
+        sal_Bool            m_bMarkingObjects		: 1;    // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
+        sal_Bool            m_bRootSelected			: 1;
+        sal_Bool            m_bInitialUpdate		: 1;   // bin ich das erste Mal im UpdateContent ?
+        sal_Bool			m_bKeyboardCut			: 1;
 
 
         void            UpdateContent();
@@ -512,14 +512,14 @@ namespace svxform
         DECL_LINK( OnClipboardAction, void* );
 
     protected:
-        virtual void    Command( const CommandEvent& rEvt );
+        virtual void	Command( const CommandEvent& rEvt );
 
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
         virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual void		StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     public:
-        NavigatorTree(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&   _xORB, Window* pParent );
+        NavigatorTree(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&	_xORB, Window* pParent );
         virtual ~NavigatorTree();
 
         void Clear();
@@ -550,25 +550,25 @@ namespace svxform
         using SvTreeListBox::Notify;
 
     private:
-        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
-        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD );
+        sal_Int8	implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
+        sal_Int8	implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD );
 
-        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
-        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD );
+        sal_Int8	implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
+        sal_Int8	implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD );
 
         // check if a cut, copy, or drag operation can be started in the current situation
-        sal_Bool    implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden = NULL );
+        sal_Bool	implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden = NULL );
         // check if a paste with the current clipboard content can be accepted
-        sal_Bool    implAcceptPaste( );
+        sal_Bool	implAcceptPaste( );
 
         // fills m_aControlExchange in preparation of a DnD or clipboard operation
-        sal_Bool    implPrepareExchange( sal_Int8 _nAction );
+        sal_Bool	implPrepareExchange( sal_Int8 _nAction );
 
-        void        doPaste();
-        void        doCopy();
-        void        doCut();
+        void		doPaste();
+        void		doCopy();
+        void		doCut();
 
-        sal_Bool    doingKeyboardCut( ) const { return m_bKeyboardCut; }
+        sal_Bool	doingKeyboardCut( ) const { return m_bKeyboardCut; }
     };
 
     //========================================================================
@@ -606,7 +606,7 @@ namespace svxform
     };
 
 //............................................................................
-}   // namespace svxform
+}	// namespace svxform
 //............................................................................
 
 #endif // _SVX_FMEXPL_HXX

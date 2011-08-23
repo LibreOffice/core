@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ public:
     ~SfxViewFactory();
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
-    void          InitFactory();
+    void		  InitFactory();
 
-    USHORT        GetOrdinal() const { return nOrd; }
+    USHORT		  GetOrdinal() const { return nOrd; }
 
     /// returns a legacy view name. This is "view" with an appended ordinal/ID.
     String        GetLegacyViewName() const;

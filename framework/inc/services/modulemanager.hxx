@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ class ModuleManager : public  css::lang::XTypeProvider
                    css::container::NoSuchElementException,
                    css::lang::WrappedTargetException     ,
                    css::uno::RuntimeException            );
-
+    
         // XNameAccess
         virtual css::uno::Any SAL_CALL getByName(const ::rtl::OUString& sName)
             throw(css::container::NoSuchElementException,
@@ -140,7 +140,7 @@ class ModuleManager : public  css::lang::XTypeProvider
         // XContainerQuery
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
             throw(css::uno::RuntimeException);
-
+            
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
             throw(css::uno::RuntimeException);
     //___________________________________________
@@ -156,7 +156,7 @@ class ModuleManager : public  css::lang::XTypeProvider
                     method works together with the member
                     m_xCFG, open it on demand and cache it
                     afterwards.
-
+    
                     Note: A writable configuration access
                     must be created explicitly. Otherwise
                     we cant make sure that broken write requests
@@ -179,11 +179,11 @@ class ModuleManager : public  css::lang::XTypeProvider
             @descr  It checks for the optional but preferred interface
                     XModule first. If this module does not exists at the
                     given component it tries to use XServiceInfo instead.
-
+                    
                     Note: This method try to locate a suitable module name.
                     Nothing else. Selecting the right component and throwing suitable
                     exceptions must be done outside.
-
+                    
             @see    identify()
 
             @param  xComponent

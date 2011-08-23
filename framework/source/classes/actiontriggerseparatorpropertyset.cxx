@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@ namespace framework
 ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet( const Reference< XMultiServiceFactory >& /*ServiceManager*/ )
         :   ThreadHelpBase          ( &Application::GetSolarMutex()                     )
         ,   OBroadcastHelper        ( m_aLock.getShareableOslMutex()                    )
-        ,   OPropertySetHelper      ( *SAL_STATIC_CAST( OBroadcastHelper *, this )      )
-        ,   OWeakObject             (                                                   )
-        ,   m_nSeparatorType( 0 )
+        ,	OPropertySetHelper		( *SAL_STATIC_CAST( OBroadcastHelper *, this )		)
+        ,	OWeakObject				(													)
+        ,	m_nSeparatorType( 0 )
 {
 }
 
@@ -142,11 +142,11 @@ Sequence< Type > SAL_CALL ActionTriggerSeparatorPropertySet::getTypes() throw ( 
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XPropertySet           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XFastPropertySet       >*)NULL ) ,
-                        ::getCppuType(( const Reference< XMultiPropertySet      >*)NULL ) ,
-                        ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
+                        ::getCppuType(( const Reference< XPropertySet			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XFastPropertySet		>*)NULL	) ,
+                        ::getCppuType(( const Reference< XMultiPropertySet		>*)NULL	) ,
+                        ::getCppuType(( const Reference< XServiceInfo			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XTypeProvider			>*)NULL ) ) ;
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -185,21 +185,21 @@ Sequence< sal_Int8 > SAL_CALL ActionTriggerSeparatorPropertySet::getImplementati
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  OPropertySetHelper implementation
+//	OPropertySetHelper implementation
 //---------------------------------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::convertFastPropertyValue(
-    Any&        aConvertedValue,
-    Any&        aOldValue,
-    sal_Int32   nHandle,
-    const Any&  aValue  )
+    Any&		aConvertedValue,
+    Any&		aOldValue,
+    sal_Int32	nHandle,
+    const Any&	aValue	)
 throw( IllegalArgumentException )
 {
-    //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
-    //  Return TRUE, if changed - else return FALSE.
-    //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
-    //  Initialize return value with FALSE !!!
-    //  (Handle can be invalid)
+    //	Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
+    //	Return TRUE, if changed - else return FALSE.
+    //	Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
+    //	Initialize return value with FALSE !!!
+    //	(Handle can be invalid)
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
@@ -309,13 +309,13 @@ const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticProp
 
 
 //******************************************************************************************************************************
-//  private method
+//	private method
 //******************************************************************************************************************************
 sal_Bool ActionTriggerSeparatorPropertySet::impl_tryToChangeProperty(
-    sal_Int16           aCurrentValue   ,
-    const   Any&        aNewValue       ,
-    Any&                aOldValue       ,
-    Any&                aConvertedValue )
+    sal_Int16			aCurrentValue	,
+    const	Any&		aNewValue		,
+    Any&				aOldValue		,
+    Any&				aConvertedValue	)
 throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
@@ -329,16 +329,16 @@ throw( IllegalArgumentException )
     if( aValue != aCurrentValue )
     {
         // ... set information of change.
-        aOldValue       <<= aCurrentValue   ;
-        aConvertedValue <<= aValue          ;
+        aOldValue		<<= aCurrentValue	;
+        aConvertedValue	<<= aValue			;
         // Return OK - "value will be change ..."
         bReturn = sal_True;
     }
     else
     {
         // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
+        aOldValue.clear			() ;
+        aConvertedValue.clear	() ;
         // Return NOTHING - "value will not be change ..."
         bReturn = sal_False;
     }

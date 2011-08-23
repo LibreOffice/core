@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@
 
 class SfxStatusInd_Impl : public cppu::WeakImplHelper1< ::com::sun::star::task::XStatusIndicator >
 {
-    long                        nValue;
-    long                        nRange;
-    sal_uInt16                  nProgressCount;
+    long						nValue;
+    long 						nRange;
+    sal_uInt16					nProgressCount;
 
 friend class SfxPopupStatusIndicator;
-    SfxPopupStatusIndicator*    pWindow;
+    SfxPopupStatusIndicator*	pWindow;
 
 public:
 
@@ -63,19 +63,19 @@ public:
 class SfxPopupStatusIndicator : public Window
 {
 friend class SfxStatusInd_Impl;
-    FixedText                   aTextBar;
-    ProgressBar                 aProgressBar;
-    SfxStatusInd_Impl*          pInterface;
+    FixedText					aTextBar;
+    ProgressBar					aProgressBar;
+    SfxStatusInd_Impl*			pInterface;
 
 public:
                                 SfxPopupStatusIndicator( Window* pParent );
                                 ~SfxPopupStatusIndicator();
 
-    virtual void                MakeVisible( sal_Bool bVisible );
-    virtual void                Resize();
-    virtual void                Paint( const Rectangle& rRect );
-    Size                        CalcWindowSizePixel();
-    ::com::sun::star::task::XStatusIndicator*           GetInterface()
+    virtual void				MakeVisible( sal_Bool bVisible );
+    virtual void				Resize();
+    virtual void				Paint( const Rectangle& rRect );
+    Size						CalcWindowSizePixel();
+    ::com::sun::star::task::XStatusIndicator*			GetInterface()
                                 { return pInterface; }
 };
 

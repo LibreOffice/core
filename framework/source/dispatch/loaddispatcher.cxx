@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -170,12 +170,12 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
         m_aLoader.startLoading();
         m_aLoader.waitWhileLoading(); // wait for ever!
         xComponent = m_aLoader.getTargetComponent();
-
+        
         // TODO thinking about asynchronous operations and listener support
     }
     catch(const LoadEnvException&)
         { xComponent.clear(); }
-
+        
     if (xListener.is())
     {
         if (xComponent.is())

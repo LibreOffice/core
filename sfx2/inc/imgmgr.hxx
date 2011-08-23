@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ public:
     void            ReleaseToolBox( ToolBox *pBox );
 
                     // get images from resources
-    void            SetImages( ToolBox& rToolBox );
-    void            SetImages( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge );
+    void			SetImages( ToolBox& rToolBox );
+    void			SetImages( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge );
     void            SetImagesForceSize( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge );
 
     Image           GetImage( USHORT nId, BOOL bLarge, BOOL bHiContrast ) const;
@@ -63,6 +63,6 @@ public:
     Image           SeekImage( USHORT nId, BOOL bHiContrast ) const;
 };
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,29 +40,29 @@ namespace sdr
     namespace contact
     {
         class SdrMediaWindow;
-
+    
         class ViewObjectContactOfSdrMediaObj : public ViewObjectContactOfSdrObj
         {
         public:
-
-            ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
+            
+            ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact, 
                                             ViewContact& rViewContact,
                                             const ::avmedia::MediaItem& rMediaItem );
             virtual ~ViewObjectContactOfSdrMediaObj();
-
+        
         public:
+        
+            Window*	getWindow() const;
 
-            Window* getWindow() const;
+            bool	hasPreferredSize() const;
+            Size	getPreferredSize() const;
 
-            bool    hasPreferredSize() const;
-            Size    getPreferredSize() const;
-
-            void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
-            void    executeMediaItem( const ::avmedia::MediaItem& rItem );
+            void	updateMediaItem( ::avmedia::MediaItem& rItem ) const;
+            void	executeMediaItem( const ::avmedia::MediaItem& rItem );
 
         private:
-
-            ::sdr::contact::SdrMediaWindow* mpMediaWindow;
+        
+            ::sdr::contact::SdrMediaWindow*	mpMediaWindow;
 
         };
     } // end of namespace contact

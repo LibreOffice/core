@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ public:
 private:
     // #111111#
     // To make things more safe, remember the page, not a number
-    SdrPage*                                mpShownPage;
+    SdrPage*								mpShownPage;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -301,7 +301,7 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
             case RID_TP_FON:
                 pNewTabPage = new FontOptions( pTabCtrl, aConfig );
                 break;
-            default:    DBG_ERROR( "PageHdl: Unbekannte ID!" );
+            default:	DBG_ERROR( "PageHdl: Unbekannte ID!" );
         }
         DBG_ASSERT( pNewTabPage, "Keine Page!" );
         pTabCtrl->SetTabPage( nId, pNewTabPage );
@@ -314,7 +314,7 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 {
-    (void) pButton; /* avoid warning about unused parameter */
+    (void) pButton; /* avoid warning about unused parameter */ 
     aConfig.EnablePersistence();
     GenericOptions *pGeneric;
     pGeneric = (GenericOptions*)aTabCtrl.GetTabPage( RID_TP_GEN );
@@ -468,7 +468,7 @@ IMPL_LINK( ProfileOptions, NewProfile, Button*, EMPTYARG )
 
 IMPL_LINK( ProfileOptions, CheckButtonsHdl, ComboBox*, pCB )
 {
-    (void) pCB; /* avoid warning about unused parameter */
+    (void) pCB; /* avoid warning about unused parameter */ 
     CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
     return 0;
 }
@@ -613,7 +613,7 @@ MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
     aNFUNOPort.SetValue( aTemp.ToInt32() );
 
     aConfig.SetGroup("Misc");
-    aTemp = aConfig.ReadKey( "ServerTimeout", "10000" );    // Default 1 Minute
+    aTemp = aConfig.ReadKey( "ServerTimeout", "10000" );	// Default 1 Minute
     aServerTimeout.SetTime( Time(aTemp.ToInt32()) );
 
     aConfig.SetGroup("LRU");
@@ -881,10 +881,10 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
     String aType;
 
     if ( aLastGroupName.Len() )
-    {   // Cache values?
+    {	// Cache values?
         aCurrentValue = aCbValue.GetText();
         if ( aCbValue.GetEntryPos( aCurrentValue ) == COMBOBOX_ENTRY_NOTFOUND )
-        {   // Create a new value
+        {	// Create a new value
             LINK( this, GenericOptions, NewValue ).Call( NULL );
         }
 
@@ -993,7 +993,7 @@ IMPL_LINK( GenericOptions, CheckButtonsHdl, ComboBox*, pCB )
 
 void GenericOptions::Save( Config &aConfig )
 {
-    (void) aConfig; /* avoid warning about unused parameter */
+    (void) aConfig; /* avoid warning about unused parameter */ 
     DBG_ASSERT( &aConfig == &aConf, "Saving to different Configuration" );
 
     // Save changes
@@ -1007,7 +1007,7 @@ class TextAndWin : public DockingWindow
     Window *pWin;
     Window* pFtOriginalParent;
     Window* pWinOriginalParent;
-    long nSpace;    // default space
+    long nSpace;	// default space
     BOOL bAlignTop;
 
 public:
@@ -1083,7 +1083,7 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
 {
     FreeResource();
 
-/*  ResMgr* pRM = CREATERESMGR( svt );
+/*	ResMgr* pRM = CREATERESMGR( svt );
     ToolBox aOrig( this, ResId( 12345, pRM ) );
     delete pRM;
 
@@ -1184,7 +1184,7 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
         aMlbControls.Clear();
         aMlbSlots.Clear();
 
-        if ( pWinInfo->nRType & DH_MODE_DATA_VALID )    // no old office
+        if ( pWinInfo->nRType & DH_MODE_DATA_VALID )	// no old office
             nDisplayMode = pWinInfo->nRType; // Is used for mode transmission while reset
 
         return;
@@ -1251,7 +1251,7 @@ void DisplayHidDlg::Resize()
     }
     else
     {
-//      SetUpdateMode( FALSE );
+//		SetUpdateMode( FALSE );
 
         // Minimum size
         Size aSize( GetOutputSizePixel() );
@@ -1278,7 +1278,7 @@ void DisplayHidDlg::Resize()
         // Calculate hight of SplitWindows
         long nSplitHeight = GetOutputSizePixel().Height();
         nSplitHeight -= pSplit->GetPosPixel().Y();
-        nSplitHeight -= nSpace; // bottom margin
+        nSplitHeight -= nSpace;	// bottom margin
 
         // Set size of SplitWindows
         pSplit->SetSizePixel( Size( nSplitWidth, nSplitHeight ) );
@@ -1307,8 +1307,8 @@ void DisplayHidDlg::Resize()
         aPos.Move( pSplit->GetSizePixel().Width(), pSplit->GetSizePixel().Height() );
         aOKClose.SetPosPixel( aPos );
 
-//      SetUpdateMode( TRUE );
-//      Invalidate();
+//		SetUpdateMode( TRUE );
+//		Invalidate();
     }
     FloatingWindow::Resize();
 }
@@ -1348,9 +1348,9 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 else
                     aRadioButtonRID_RB_NEW_BOOL_F.Check();
                 break;
-//              case SbxCURRENCY:
-//              case SbxDATE:
-//              break;
+//				case SbxCURRENCY:
+//				case SbxDATE:
+//				break;
             case SbxINTEGER:
                 aNumericFieldRID_NF_NEW_INTEGER.Show();
                 aNumericFieldRID_NF_NEW_INTEGER.SetText( pVar->GetString() );
@@ -1364,8 +1364,8 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 aNumericFieldRID_NF_NEW_LONG.SetMin( -aNumericFieldRID_NF_NEW_LONG.GetMax()-1 );
                 aNumericFieldRID_NF_NEW_LONG.SetFirst( -aNumericFieldRID_NF_NEW_LONG.GetLast()-1 );
                 break;
-//              case SbxOBJECT:     // cannot be edited
-//              break;
+//				case SbxOBJECT:		// cannot be edited
+//				break;
             case SbxSINGLE:
             case SbxDOUBLE:
             case SbxSTRING:
@@ -1386,8 +1386,8 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
 
 IMPL_LINK( VarEditDialog, OKClick, Button *, pButton )
 {
-    (void) pButton; /* avoid warning about unused parameter */
-    BOOL bWasError = SbxBase::IsError();    // Probably an error is thrown
+    (void) pButton; /* avoid warning about unused parameter */ 
+    BOOL bWasError = SbxBase::IsError();	// Probably an error is thrown
 
 
     SbxDataType eType = pVar->GetType();
@@ -1416,7 +1416,7 @@ SvNumberformat::
                                 int& nErrno,
                                 const xub_Unicode** ppEnd = NULL );
     // Converts just as strtod a decimal string to a double.
-    // Decimal and thousand separators come from International,
+    // Decimal and thousand separators come from International, 
     // leading spaces are omitted.
     // If ppEnd!=NULL then *ppEnd is set after the parsed data.
     // If pStr contains only the String to be parsed, then if success:
@@ -1436,12 +1436,12 @@ SvNumberformat::
         case SbxBOOL:
             pVar->PutBool( aRadioButtonRID_RB_NEW_BOOL_T.IsChecked() );
             break;
-//      case SbxCURRENCY:
-//          pVar->PutCurrency( aContent );
-//          break;
-//      case SbxDATE:
-//          pVar->PutDate( aContent );
-//          break;
+//		case SbxCURRENCY:
+//			pVar->PutCurrency( aContent );
+//			break;
+//		case SbxDATE:
+//			pVar->PutDate( aContent );
+//			break;
         case SbxINTEGER:
             pVar->PutInteger( (INT16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
             break;
@@ -1464,7 +1464,7 @@ SvNumberformat::
     }
 
 
-//  pVar->PutStringExt( aEditRID_ED_NEW_STRING.GetText() );
+//	pVar->PutStringExt( aEditRID_ED_NEW_STRING.GetText() );
     if ( !bWasError && SbxBase::IsError() )
     {
         bError = TRUE;
@@ -1477,12 +1477,12 @@ SvNumberformat::
         return 1;
     }
 
-//  if ( aEditRID_ED_NEW_STRING.GetText().Compare( pVar->GetString() ) != COMPARE_EQUAL )
-//  {
-//      aFixedTextRID_FT_CONTENT_VALUE.SetText( pVar->GetString() );
-//      aEditRID_ED_NEW_STRING.SetText( pVar->GetString() );
-//      return 1;
-//  }
+//	if ( aEditRID_ED_NEW_STRING.GetText().Compare( pVar->GetString() ) != COMPARE_EQUAL )
+//	{
+//		aFixedTextRID_FT_CONTENT_VALUE.SetText( pVar->GetString() );
+//		aEditRID_ED_NEW_STRING.SetText( pVar->GetString() );
+//		return 1;
+//	}
 
     Close();
     return 0;

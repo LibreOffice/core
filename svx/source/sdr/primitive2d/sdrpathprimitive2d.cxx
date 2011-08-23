@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,16 +49,16 @@ namespace drawinglayer
             Primitive2DSequence aRetval;
 
             // add fill
-            if(!getSdrLFSTAttribute().getFill().isDefault()
+            if(!getSdrLFSTAttribute().getFill().isDefault() 
                 && getUnitPolyPolygon().isClosed())
             {
                 // #i108255# no need to use correctOrientations here; target is
                 // straight visualisation
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createPolyPolygonFillPrimitive(
-                        getUnitPolyPolygon(),
-                        getTransform(),
-                        getSdrLFSTAttribute().getFill(),
+                        getUnitPolyPolygon(), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getFill(), 
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
@@ -79,9 +79,9 @@ namespace drawinglayer
                 for(sal_uInt32 a(0); a < getUnitPolyPolygon().count(); a++)
                 {
                     aTemp[a] = createPolygonLinePrimitive(
-                        getUnitPolyPolygon().getB2DPolygon(a),
-                        getTransform(),
-                        getSdrLFSTAttribute().getLine(),
+                        getUnitPolyPolygon().getB2DPolygon(a), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getLine(), 
                         getSdrLFSTAttribute().getLineStartEnd());
                 }
 
@@ -91,14 +91,14 @@ namespace drawinglayer
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
                     createTextPrimitive(
-                        getUnitPolyPolygon(),
-                        getTransform(),
-                        getSdrLFSTAttribute().getText(),
-                        getSdrLFSTAttribute().getLine(),
-                        false,
-                        false,
+                        getUnitPolyPolygon(), 
+                        getTransform(), 
+                        getSdrLFSTAttribute().getText(), 
+                        getSdrLFSTAttribute().getLine(), 
+                        false, 
+                        false, 
                         false));
             }
 
@@ -106,7 +106,7 @@ namespace drawinglayer
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval,
+                    aRetval, 
                     getSdrLFSTAttribute().getShadow());
             }
 
@@ -114,10 +114,10 @@ namespace drawinglayer
         }
 
         SdrPathPrimitive2D::SdrPathPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform, 
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             const basegfx::B2DPolyPolygon& rUnitPolyPolygon)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maUnitPolyPolygon(rUnitPolyPolygon)
@@ -129,7 +129,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrPathPrimitive2D& rCompare = (SdrPathPrimitive2D&)rPrimitive;
-
+                
                 return (getUnitPolyPolygon() == rCompare.getUnitPolyPolygon()
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());

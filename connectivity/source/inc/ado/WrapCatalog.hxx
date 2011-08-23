@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace connectivity
         class WpADOCatalog : public WpOLEBase<_ADOCatalog>
         {
         public:
-            WpADOCatalog(_ADOCatalog* pInt = NULL)  :   WpOLEBase<_ADOCatalog>(pInt){}
+            WpADOCatalog(_ADOCatalog* pInt = NULL)	:	WpOLEBase<_ADOCatalog>(pInt){}
             WpADOCatalog(const WpADOCatalog& rhs){operator=(rhs);}
 
             inline WpADOCatalog& operator=(const WpADOCatalog& rhs)
@@ -46,11 +46,11 @@ namespace connectivity
             ::rtl::OUString GetObjectOwner(const ::rtl::OUString& _rName, ObjectTypeEnum _eNum);
 
             void putref_ActiveConnection(IDispatch* pCon);
-            WpADOTables     get_Tables();
-            WpADOViews      get_Views();
-            WpADOGroups     get_Groups();
-            WpADOUsers      get_Users();
-            ADOProcedures*  get_Procedures();
+            WpADOTables		get_Tables();
+            WpADOViews		get_Views();
+            WpADOGroups		get_Groups();
+            WpADOUsers		get_Users();
+            ADOProcedures*	get_Procedures();
             void Create();
         };
     }

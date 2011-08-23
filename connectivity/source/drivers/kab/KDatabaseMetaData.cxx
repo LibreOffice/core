@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-KabDatabaseMetaData::KabDatabaseMetaData(KabConnection* _pCon)
+KabDatabaseMetaData::KabDatabaseMetaData(KabConnection* _pCon) 
         : m_xConnection(_pCon),
           m_bUseCatalog(sal_True)
 {
     OSL_ENSURE(_pCon,"KabDatabaseMetaData::KabDatabaseMetaData: No connection set!");
 
     osl_incrementInterlockedCount( &m_refCount );
-    m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
+    m_bUseCatalog	= !(usesLocalFiles() || usesLocalFilePerTable());
     osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
@@ -852,17 +852,17 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getSchemas(  ) throw(SQLEx
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eSchemas );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumnPrivileges(
-    const Any&, const ::rtl::OUString&, const ::rtl::OUString&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumnPrivileges( 
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, 
     const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumnPrivileges );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns( 
     const Any&,
     const ::rtl::OUString&,
-    const ::rtl::OUString& tableNamePattern,
+    const ::rtl::OUString& tableNamePattern, 
     const ::rtl::OUString& columnNamePattern) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
@@ -907,7 +907,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
         ::KABC::Field::List aFields = ::KABC::Field::allFields();
         ::KABC::Field::List::iterator aField;
 
-        for (   aField = aFields.begin();
+        for (	aField = aFields.begin();
                 aField != aFields.end();
                 ++aField, ++nPosition)
         {
@@ -929,7 +929,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables( 
     const Any&,
     const ::rtl::OUString&,
     const ::rtl::OUString&,
@@ -980,25 +980,25 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedureColumns(
-    const Any&, const ::rtl::OUString&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedureColumns( 
+    const Any&, const ::rtl::OUString&, 
     const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedures(
-    const Any&, const ::rtl::OUString&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedures( 
+    const Any&, const ::rtl::OUString&, 
     const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eVersionColumns);
-
+    
     Reference< XResultSet > xRef = pResult;
 
     ODatabaseMetaDataResultSet::ORows aRows;
@@ -1027,47 +1027,47 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getExportedKeys(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getExportedKeys( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getImportedKeys(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getImportedKeys( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eImportedKeys );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getPrimaryKeys(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getPrimaryKeys( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::ePrimaryKeys );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getIndexInfo(
-    const Any&, const ::rtl::OUString&, const ::rtl::OUString&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getIndexInfo( 
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, 
     sal_Bool, sal_Bool ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getBestRowIdentifier(
-    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, sal_Int32,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getBestRowIdentifier( 
+    const Any&, const ::rtl::OUString&, const ::rtl::OUString&, sal_Int32, 
     sal_Bool ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTablePrivileges(
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTablePrivileges( 
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCrossReference(
-    const Any&, const ::rtl::OUString&,
-    const ::rtl::OUString&, const Any&,
+Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getCrossReference( 
+    const Any&, const ::rtl::OUString&, 
+    const ::rtl::OUString&, const Any&, 
     const ::rtl::OUString&, const ::rtl::OUString& ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );

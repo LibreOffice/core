@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,27 +97,27 @@ void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL)
         if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )  && c != '/' && c != '.' )
             rBuffer.append( '\\' );
 #endif
-
+        
         rBuffer.append( c );
     }
 }
 
 //-----------------------------------------------------------------------------------------
-//
+// 
 //-----------------------------------------------------------------------------------------
 
-ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
+ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) : 
     WeakImplHelper2< XSystemShellExecute, XServiceInfo >(),
     m_xContext(xContext)
 {
     try {
         Reference< XCurrentContext > xCurrentContext(getCurrentContext());
-
+        
         if (xCurrentContext.is())
         {
             Any aValue = xCurrentContext->getValueByName(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "system.desktop-environment" ) ) );
-
+        
             OUString aDesktopEnvironment;
             if (aValue >>= aDesktopEnvironment)
             {
@@ -132,17 +132,17 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 //
 //-------------------------------------------------
 
-void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
+void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags ) 
     throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
     OStringBuffer aBuffer, aLaunchBuffer;
 
     // DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
     static const char *pDesktopLaunch = getenv( "DESKTOP_LAUNCH" );
-
+    
     // Check wether aCommand contains a document url or not
     sal_Int32 nIndex = aCommand.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM(":/") ) );
-
+    
     if( nIndex > 0 || 0 == aCommand.compareToAscii("mailto:", 7) )
     {
         // It seems to be a url ..
@@ -161,7 +161,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                  + aCommand),
                 static_cast< cppu::OWeakObject * >(this));
         }
-
+        
 #ifdef MACOSX
         aBuffer.append("open");
 #else
@@ -192,15 +192,15 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         } catch (com::sun::star::lang::IllegalArgumentException &)
         {
             throw SystemShellExecuteException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not expand $OOO_BASE_DIR path")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not expand $OOO_BASE_DIR path")), 
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
-
+        
         OUString aProgram;
         if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
         {
             throw SystemShellExecuteException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not convert executable path")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not convert executable path")), 
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 
@@ -211,12 +211,12 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         if ( -1 == spawnl(P_NOWAIT, aProg.getStr(), aProg.getStr(), aUrl.getStr() , NULL) )
         {
             int nerr = errno;
-            throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
+            throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ), 
                 static_cast < XSystemShellExecute * > (this), nerr );
         }
         return;
 #endif
-
+        
         OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
         escapeForShell(aBuffer, aTmp);
 
@@ -224,36 +224,36 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         if ( m_aDesktopEnvironment.getLength() == 0 )
              m_aDesktopEnvironment = OString("GNOME");
 #endif
-
-        // Respect the desktop environment - if there is an executable named
+            
+        // Respect the desktop environment - if there is an executable named 
         // <desktop-environement-is>-open-url, pass the url to this one instead
         // of the default "open-url" script.
         if ( m_aDesktopEnvironment.getLength() > 0 )
         {
             OString aDesktopEnvironment(m_aDesktopEnvironment.toAsciiLowerCase());
             OStringBuffer aCopy(aTmp);
-
+            
             aCopy.append(aDesktopEnvironment);
             aCopy.append("-open-url");
-
+            
             if ( 0 == access( aCopy.getStr(), X_OK) )
             {
                 aBuffer.append(aDesktopEnvironment);
                 aBuffer.append("-");
 
-                /* CDE requires file urls to be decoded */
+                /* CDE requires file urls to be decoded */                
                 if ( m_aDesktopEnvironment.equals("CDE") && 0 == aURL.compareToAscii("file://", 7) )
                 {
                     aURL = rtl::Uri::decode(aURL, rtl_UriDecodeWithCharset, osl_getThreadTextEncoding());
                 }
             }
         }
-
+             
         aBuffer.append("open-url");
 #endif
         aBuffer.append(" ");
         escapeForShell(aBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
-
+        
         if ( pDesktopLaunch && *pDesktopLaunch )
         {
             aLaunchBuffer.append( pDesktopLaunch );
@@ -268,7 +268,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         else
             aBuffer.append(OUStringToOString(aParameter, osl_getThreadTextEncoding()));
     }
-
+    
     // Prefer DESKTOP_LAUNCH when available
     if ( aLaunchBuffer.getLength() > 0 )
     {
@@ -292,7 +292,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     if ( 0 != pclose(popen(cmd.getStr(), "w")) )
     {
         int nerr = errno;
-        throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
+        throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ), 
             static_cast < XSystemShellExecute * > (this), nerr );
     }
 }
@@ -302,17 +302,17 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 // XServiceInfo
 // -------------------------------------------------
 
-OUString SAL_CALL ShellExec::getImplementationName(  )
+OUString SAL_CALL ShellExec::getImplementationName(  ) 
     throw( RuntimeException )
 {
     return OUString::createFromAscii( SHELLEXEC_IMPL_NAME );
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName ) 
     throw( RuntimeException )
 {
     Sequence < OUString > SupportedServicesNames = ShellExec_getSupportedServiceNames();
@@ -325,10 +325,10 @@ sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-Sequence< OUString > SAL_CALL ShellExec::getSupportedServiceNames(   )
+Sequence< OUString > SAL_CALL ShellExec::getSupportedServiceNames(	 ) 
     throw( RuntimeException )
 {
     return ShellExec_getSupportedServiceNames();

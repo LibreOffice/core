@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -262,7 +262,7 @@ void ServiceImpl::startExecuteModal(
             app->SetSettings( as );
             String sTitle = ::utl::ConfigManager::GetDirectConfigProperty(
                                 ::utl::ConfigManager::PRODUCTNAME).get<OUString>()
-                                + String(static_cast<sal_Unicode>(' '))
+                                + String(static_cast<sal_Unicode>(' '))     
                                 + ::utl::ConfigManager::GetDirectConfigProperty(
                                     ::utl::ConfigManager::PRODUCTVERSION).get<OUString>();
             app->SetDisplayName(sTitle);
@@ -272,12 +272,12 @@ void ServiceImpl::startExecuteModal(
     else
     {
         // When m_bShowUpdateOnly is set, we are inside the office and the user clicked
-        // the update notification icon in the menu bar. We must not close the extensions
+        // the update notification icon in the menu bar. We must not close the extensions 
         // dialog after displaying the update dialog when it has been visible before
         if ( m_bShowUpdateOnly )
             bCloseDialog = ! dp_gui::TheExtensionManager::s_ExtMgr->isVisible();
     }
-
+    
     {
         const SolarMutexGuard guard;
         ::rtl::Reference< ::dp_gui::TheExtensionManager > myExtMgr(

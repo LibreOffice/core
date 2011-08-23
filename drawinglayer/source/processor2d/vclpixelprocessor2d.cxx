@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ namespace drawinglayer
     namespace processor2d
     {
         VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
-        :   VclProcessor2D(rViewInformation, rOutDev),
+        :	VclProcessor2D(rViewInformation, rOutDev),
             maOriginalMapMode(rOutDev.GetMapMode())
         {
             // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
@@ -121,8 +121,8 @@ namespace drawinglayer
                         const primitive2d::WrongSpellPrimitive2D& rWrongSpellPrimitive = static_cast< const primitive2d::WrongSpellPrimitive2D& >(rCandidate);
 
                         if(!renderWrongSpellPrimitive2D(
-                            rWrongSpellPrimitive,
-                            *mpOutputDevice,
+                            rWrongSpellPrimitive, 
+                            *mpOutputDevice, 
                             maCurrentTransformation,
                             maBColorModifierStack))
                         {
@@ -153,10 +153,10 @@ namespace drawinglayer
                     {
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
-
+                    
                     // restore DrawMode
                     mpOutputDevice->SetDrawMode(nOriginalDrawMode);
-
+                    
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
@@ -242,12 +242,12 @@ namespace drawinglayer
                         // direct draw of MetaFile
                         RenderMetafilePrimitive2D( rMetafilePrimitive );
                     }
-
+                    
                     if(bForceLineSnap)
                     {
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase);
                     }
-
+                    
                     break;
                 }
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
@@ -301,10 +301,10 @@ namespace drawinglayer
                                             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
                                             mpOutputDevice->SetFillColor(Color(aPolygonColor));
                                             mpOutputDevice->SetLineColor();
-
+                                            
                                             basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
                                             aLocalPolyPolygon.transform(maCurrentTransformation);
-
+                                            
                                             mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniTransparenceCandidate.getTransparence());
                                             bDrawTransparentUsed = true;
                                             break;
@@ -312,10 +312,10 @@ namespace drawinglayer
                                         // #i# need to wait for #i101378# which is in CWS vcl112 to directly paint transparent hairlines
                                         //case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
                                         //{
-                                        //  // single transparent PolygonHairlinePrimitive2D identified, use directly
-                                        //  const primitive2d::PolygonHairlinePrimitive2D* pPoHair = static_cast< const primitive2d::PolygonHairlinePrimitive2D* >(pBasePrimitive);
-                                        //  OSL_ENSURE(pPoHair, "OOps, PrimitiveID and PrimitiveType do not match (!)");
-                                        //  break;
+                                        //	// single transparent PolygonHairlinePrimitive2D identified, use directly
+                                        //	const primitive2d::PolygonHairlinePrimitive2D* pPoHair = static_cast< const primitive2d::PolygonHairlinePrimitive2D* >(pBasePrimitive);
+                                        //	OSL_ENSURE(pPoHair, "OOps, PrimitiveID and PrimitiveType do not match (!)");
+                                        //	break;
                                         //}
                                     }
                                 }
@@ -387,17 +387,17 @@ namespace drawinglayer
                             // it does not need to be painted at all.
                             uno::Reference< awt::XWindow2 > xControlWindow(rXControl, uno::UNO_QUERY_THROW);
                             const bool bControlIsVisibleAsChildWindow(rXControl->getPeer().is() && xControlWindow->isVisible());
-
+                            
                             if(!bControlIsVisibleAsChildWindow)
                             {
                                 // draw it. Do not forget to use the evtl. offsetted origin of the target device,
                                 // e.g. when used with mask/transparence buffer device
                                 const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
                                 xControlView->draw(
-                                    aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
+                                    aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()), 
                                     aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
                             }
-
+                            
                             // restore original graphics
                             xControlView->setGraphics(xOriginalGraphics);
                         }
@@ -405,7 +405,7 @@ namespace drawinglayer
                     catch(const uno::Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION();
-
+                        
                         // process recursively and use the decomposition as Bitmap
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
@@ -443,7 +443,7 @@ namespace drawinglayer
                         // the right and bottom pixels. The used method evaluates that and takes the correct action,
                         // including calling recursively with decomposition if line is wide enough
                         const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive = static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate);
-
+                        
                         RenderPolygonStrokePrimitive2D(rPolygonStrokePrimitive);
                     }
 
@@ -459,16 +459,16 @@ namespace drawinglayer
                     const primitive2d::ChartPrimitive2D& rChartPrimitive = static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate);
                        mpOutputDevice->Push(PUSH_MAPMODE);
                     mpOutputDevice->SetMapMode(maOriginalMapMode);
-
+                    
                     if(!renderChartPrimitive2D(
-                        rChartPrimitive,
+                        rChartPrimitive, 
                         *mpOutputDevice,
                         getViewInformation2D()))
                     {
                         // fallback to decomposition (MetaFile)
                         process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));
                     }
-
+                       
                     mpOutputDevice->Pop();
                     break;
                 }
@@ -478,19 +478,19 @@ namespace drawinglayer
 
                     if(bForceIgnoreHatchSmoothing || getOptionsDrawinglayer().IsAntiAliasing())
                     {
-                        // if AA is used (or ignore smoothing is on), there is no need to smooth
+                        // if AA is used (or ignore smoothing is on), there is no need to smooth 
                         // hatch painting, use decomposition
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
                     else
                     {
-                        // without AA, use VCL to draw the hatch. It snaps hatch distances to the next pixel
-                        // and forces hatch distance to be >= 3 pixels to make the hatch display look smoother.
+                        // without AA, use VCL to draw the hatch. It snaps hatch distances to the next pixel 
+                        // and forces hatch distance to be >= 3 pixels to make the hatch display look smoother. 
                         // This is wrong in principle, but looks nicer. This could also be done here directly
                         // without VCL usage if needed
                         const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive = static_cast< const primitive2d::FillHatchPrimitive2D& >(rCandidate);
                         const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
-
+                        
                         // create hatch polygon in range size and discrete coordinates
                         basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getObjectRange());
                         aHatchRange.transform(maCurrentTransformation);
@@ -500,7 +500,7 @@ namespace drawinglayer
                         {
                             // #i111846# background fill is active; draw fill polygon
                             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
-
+                            
                             mpOutputDevice->SetFillColor(Color(aPolygonColor));
                             mpOutputDevice->SetLineColor();
                             mpOutputDevice->DrawPolygon(aHatchPolygon);

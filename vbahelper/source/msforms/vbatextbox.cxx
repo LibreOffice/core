@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@ ScVbaTextBox::ScVbaTextBox( const uno::Reference< ov::XHelperInterface >& xParen
 }
 
 // Attributes
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaTextBox::getValue() throw (css::uno::RuntimeException)
 {
     return uno::makeAny( getText() );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException)
 {
     rtl::OUString sVal = getAnyAsString( _value );
@@ -54,7 +54,7 @@ ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcepti
 }
 
 //getString() will cause some imfo lose.
-rtl::OUString SAL_CALL
+rtl::OUString SAL_CALL 
 ScVbaTextBox::getText() throw (css::uno::RuntimeException)
 {
     uno::Any aValue;
@@ -65,7 +65,7 @@ ScVbaTextBox::getText() throw (css::uno::RuntimeException)
     return sString;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaTextBox::setText( const rtl::OUString& _text ) throw (css::uno::RuntimeException)
 {
     rtl::OUString sOldText = getText();
@@ -76,7 +76,7 @@ ScVbaTextBox::setText( const rtl::OUString& _text ) throw (css::uno::RuntimeExce
         xTextRange->setString( _text );
     }
     else
-        m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ), uno::makeAny( _text ) );
+        m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ), uno::makeAny( _text ) ); 
 
     if ( _text != sOldText )
     {
@@ -84,7 +84,7 @@ ScVbaTextBox::setText( const rtl::OUString& _text ) throw (css::uno::RuntimeExce
     }
 }
 
-sal_Int32 SAL_CALL
+sal_Int32 SAL_CALL 
 ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
 {
     uno::Any aValue;
@@ -95,7 +95,7 @@ ScVbaTextBox::getMaxLength() throw (css::uno::RuntimeException)
     return nMaxLength;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException)
 {
     sal_Int16 _maxlength16 = static_cast<sal_Int16> (_maxlength);
@@ -104,7 +104,7 @@ ScVbaTextBox::setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeExcep
             (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxTextLen" ) ), aValue);
 }
 
-sal_Bool SAL_CALL
+sal_Bool SAL_CALL 
 ScVbaTextBox::getMultiline() throw (css::uno::RuntimeException)
 {
     uno::Any aValue;
@@ -115,7 +115,7 @@ ScVbaTextBox::getMultiline() throw (css::uno::RuntimeException)
     return bRet;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaTextBox::setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeException)
 {
     uno::Any aValue( _multiline );
@@ -123,14 +123,14 @@ ScVbaTextBox::setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeExcept
             (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ), aValue);
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaTextBox::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaTextBox") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaTextBox::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

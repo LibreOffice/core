@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ namespace drawinglayer
     namespace primitive2d
     {
         AnimatedSwitchPrimitive2D::AnimatedSwitchPrimitive2D(
-            const animation::AnimationEntry& rAnimationEntry,
+            const animation::AnimationEntry& rAnimationEntry, 
             const Primitive2DSequence& rChildren,
             bool bIsTextAnimation)
-        :   GroupPrimitive2D(rChildren),
+        :	GroupPrimitive2D(rChildren),
             mpAnimationEntry(0),
             mbIsTextAnimation(bIsTextAnimation)
         {
@@ -108,10 +108,10 @@ namespace drawinglayer
     namespace primitive2d
     {
         AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
-            const animation::AnimationEntry& rAnimationEntry,
+            const animation::AnimationEntry& rAnimationEntry, 
             const Primitive2DSequence& rChildren,
             bool bIsTextAnimation)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation)
+        :	AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation)
         {
         }
 
@@ -144,16 +144,16 @@ namespace drawinglayer
     {
         AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
             const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
-            const animation::AnimationEntry& rAnimationEntry,
+            const animation::AnimationEntry& rAnimationEntry, 
             const Primitive2DSequence& rChildren,
             bool bIsTextAnimation)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation),
+        :	AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation),
             maMatrixStack()
         {
             // copy matrices to locally pre-decomposed matrix stack
             const sal_uInt32 nCount(rmMatrixStack.size());
             maMatrixStack.reserve(nCount);
-
+            
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
                 maMatrixStack.push_back(basegfx::tools::B2DHomMatrixBufferedDecompose(rmMatrixStack[a]));

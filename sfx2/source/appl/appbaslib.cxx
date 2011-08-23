@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,7 +157,7 @@ void SfxBasicManagerHolder::impl_releaseContainers()
 sal_Bool
 SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< rtl::OUString >& sModules )
 {
-    if ( mpBasicManager )
+    if ( mpBasicManager ) 
         return mpBasicManager->LegacyPsswdBinaryLimitExceeded( sModules );
     return sal_True;
 }
@@ -196,11 +196,11 @@ OUString SfxApplicationDialogLibraryContainer::impl_getStaticImplementationName(
 }
 
 Reference< XInterface > SAL_CALL SfxApplicationDialogLibraryContainer::impl_createInstance
-    ( const Reference< XMultiServiceFactory >& )
+    ( const Reference< XMultiServiceFactory >& ) 
         throw( Exception )
 {
     SFX_APP()->GetBasicManager();
-    Reference< XInterface > xRet =
+    Reference< XInterface > xRet = 
         Reference< XInterface >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
     return xRet;
 }

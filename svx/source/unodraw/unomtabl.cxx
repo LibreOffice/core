@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xflhtit.hxx>
-
+    
 #include <vector>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -65,14 +65,14 @@ class SvxUnoMarkerTable : public WeakImplHelper2< container::XNameContainer, lan
                           public SfxListener
 {
 private:
-    SdrModel*       mpModel;
-    SfxItemPool*    mpModelPool;
+    SdrModel*		mpModel;
+    SfxItemPool*	mpModelPool;
 
     ItemPoolVector maItemSetVector;
 
 public:
     SvxUnoMarkerTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoMarkerTable() throw();
+    virtual	~SvxUnoMarkerTable() throw();
 
     void dispose();
 
@@ -173,9 +173,9 @@ void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const 
     XLineEndItem aEndMarker;
     aEndMarker.SetName( String( aName ) );
     aEndMarker.PutValue( aElement );
-
+    
     mpInSet->Put( aEndMarker, XATTR_LINEEND );
-
+    
     XLineStartItem aStartMarker;
     aStartMarker.SetName( String( aName ) );
     aStartMarker.PutValue( aElement );
@@ -260,13 +260,13 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
             aEndMarker.SetName( aSearchName );
             if( !aEndMarker.PutValue( aElement ) )
                 throw lang::IllegalArgumentException();
-
+            
             (*aIter)->Put( aEndMarker, XATTR_LINEEND );
 
             XLineStartItem aStartMarker;
             aStartMarker.SetName( aSearchName );
             aStartMarker.PutValue( aElement );
-
+            
             (*aIter)->Put( aStartMarker, XATTR_LINESTART );
             return;
         }

@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ XInteractionAbortImpl::queryInterface( const Type& rType )
 //  XTypeProvider
 //////////////////////////////////////////////////////////////////////////////////////////
 
-XTYPEPROVIDER_IMPL_2( XInteractionAbortImpl,
+XTYPEPROVIDER_IMPL_2( XInteractionAbortImpl, 
                       XTypeProvider,
                       XInteractionAbort )
 
@@ -145,7 +145,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
     m_aSeq[1] = Reference<XInteractionContinuation>(p2);
 }
 
-
+    
 void SAL_CALL
 XInteractionRequestImpl::acquire( void )
     throw()
@@ -168,8 +168,8 @@ Any SAL_CALL
 XInteractionRequestImpl::queryInterface( const Type& rType )
     throw( RuntimeException )
 {
-    Any aRet =
-        cppu::queryInterface(
+    Any aRet = 
+        cppu::queryInterface( 
             rType,
             SAL_STATIC_CAST( lang::XTypeProvider*, this ),
             SAL_STATIC_CAST( XInteractionRequest*,this) );
@@ -181,10 +181,10 @@ XInteractionRequestImpl::queryInterface( const Type& rType )
 //  XTypeProvider
 //////////////////////////////////////////////////////////////////////////////////////////
 
-XTYPEPROVIDER_IMPL_2( XInteractionRequestImpl,
+XTYPEPROVIDER_IMPL_2( XInteractionRequestImpl, 
                       XTypeProvider,
                       XInteractionRequest )
-
+    
 
 Any SAL_CALL
 XInteractionRequestImpl::getRequest()
@@ -219,7 +219,7 @@ XInteractionRequestImpl::getRequest()
             RTL_CONSTASCII_USTRINGPARAM(
                 "the name contained invalid characters"));
         aAny <<= excep;
-
+        
     }
     return aAny;
 }

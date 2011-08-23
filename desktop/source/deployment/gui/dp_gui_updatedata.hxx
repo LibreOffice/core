@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 #include <boost/shared_ptr.hpp>
 
 
-namespace com { namespace sun { namespace star { namespace deployment {
+namespace com { namespace sun { namespace star { namespace deployment { 
         class XPackage;
 }}}}
-namespace com { namespace sun { namespace star { namespace xml { namespace dom {
-        class XNode;
+namespace com { namespace sun { namespace star { namespace xml { namespace dom { 
+        class XNode; 
 }}}}}
 
 

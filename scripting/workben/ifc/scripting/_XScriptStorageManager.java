@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public class _XScriptStorageManager extends MultiMethodTest {
     public void _createScriptStorage() {
         boolean result = true;
 
-        Collection c =
+        Collection c = 
             (Collection) tEnv.getObjRelation("_createScriptStorage");
 
         if (c == null) {
@@ -98,7 +98,7 @@ public class _XScriptStorageManager extends MultiMethodTest {
     public void _createScriptStorageWithURI() {
         boolean result = true;
 
-        Collection c =
+        Collection c = 
             (Collection) tEnv.getObjRelation("_createScriptStorageWithURI");
 
         if (c == null) {
@@ -143,14 +143,14 @@ public class _XScriptStorageManager extends MultiMethodTest {
             log.println("expected: " + expected + ", output: " + output);
             result &= output.equals(expected);
         }
-
+        
         tRes.tested("createScriptStorageWithURI()", result);
     }
 
     public void _getScriptStorage() {
         boolean result = true;
 
-        Collection c =
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getScriptStorage");
 
         if (c == null) {
@@ -198,7 +198,7 @@ public class _XScriptStorageManager extends MultiMethodTest {
     public void _refreshScriptStorage() {
         boolean result = true;
 
-        Collection c =
+        Collection c = 
             (Collection) tEnv.getObjRelation("_refreshScriptStorage");
 
         if (c == null) {

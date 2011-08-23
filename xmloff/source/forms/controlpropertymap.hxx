@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,17 +51,17 @@ namespace xmloff
         OFormComponentStyleExportMapper( const UniReference< XMLPropertySetMapper >& _rMapper );
 
         void handleSpecialItem(
-            SvXMLAttributeList&                         _rAttrList,
-            const XMLPropertyState&                     _rProperty,
-            const SvXMLUnitConverter&                   _rUnitConverter,
-            const SvXMLNamespaceMap&                    _rNamespaceMap,
-            const ::std::vector< XMLPropertyState >*    _pProperties,
-            sal_uInt32                                  _nIdx
+            SvXMLAttributeList&							_rAttrList,
+            const XMLPropertyState&						_rProperty,
+            const SvXMLUnitConverter&					_rUnitConverter,
+            const SvXMLNamespaceMap&					_rNamespaceMap,
+            const ::std::vector< XMLPropertyState >*	_pProperties,
+            sal_uInt32									_nIdx
         ) const;
     };
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_

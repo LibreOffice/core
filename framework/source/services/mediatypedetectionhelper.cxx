@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <services/mediatypedetectionhelper.hxx>
 #include <services.h>
@@ -39,25 +39,25 @@
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework
 {
 
-using namespace ::com::sun::star        ;
-using namespace ::rtl                   ;
+using namespace ::com::sun::star		;
+using namespace ::rtl					;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 MediaTypeDetectionHelper::MediaTypeDetectionHelper( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
@@ -65,13 +65,13 @@ MediaTypeDetectionHelper::MediaTypeDetectionHelper( const uno::Reference< lang::
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 MediaTypeDetectionHelper::~MediaTypeDetectionHelper()
 {
 }
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MediaTypeDetectionHelper
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE	(	MediaTypeDetectionHelper
                                         , ::cppu::OWeakObject
                                         , SERVICENAME_MEDIATYPEDETECTIONHELPER
                                         , IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER
@@ -83,7 +83,7 @@ DEFINE_INIT_SERVICE                 (   MediaTypeDetectionHelper,
                                     )
 
 //*****************************************************************************************************************
-//   XStringMapping
+//	 XStringMapping
 //*****************************************************************************************************************
 
 //virtual
@@ -108,6 +108,6 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
     return bModified;
 }
 
-}   // namespace framework
+}	// namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

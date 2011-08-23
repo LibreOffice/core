@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
 
 RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier, const Reference< XMultiServiceFactory >& rServiceManager ) :
     PropertySetContainer( rServiceManager )
-    ,   m_bContainerCreated( sal_False )
-    ,   m_bContainerChanged( sal_False )
-    ,   m_bInContainerCreation( sal_False )
+    ,	m_bContainerCreated( sal_False )
+    ,	m_bContainerChanged( sal_False )
+    ,	m_bInContainerCreation( sal_False )
     ,   m_pMenu( pMenu )
     ,   m_pMenuIdentifier( pMenuIdentifier )
 {
@@ -102,9 +102,9 @@ throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
-                SAL_STATIC_CAST( XMultiServiceFactory*  , this ),
-                SAL_STATIC_CAST( XServiceInfo*          , this ),
-                SAL_STATIC_CAST( XUnoTunnel*            , this ),
+                SAL_STATIC_CAST( XMultiServiceFactory*	, this ),
+                SAL_STATIC_CAST( XServiceInfo*			, this ),
+                SAL_STATIC_CAST( XUnoTunnel*			, this ),
                 SAL_STATIC_CAST( XTypeProvider*         , this ),
                 SAL_STATIC_CAST( XNamed*                , this ));
 
@@ -308,12 +308,12 @@ Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( Runtime
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexAccess           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexReplace          >*)NULL ) ,
-                        ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ,
+                        ::getCppuType(( const Reference< XMultiServiceFactory	>*)NULL ) ,
+                        ::getCppuType(( const Reference< XIndexContainer		>*)NULL ) ,
+                        ::getCppuType(( const Reference< XIndexAccess			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XIndexReplace			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XServiceInfo			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XTypeProvider			>*)NULL ) ,
                         ::getCppuType(( const Reference< XUnoTunnel             >*)NULL ) ,
                         ::getCppuType(( const Reference< XNamed                 >*)NULL )) ;
 
@@ -364,7 +364,7 @@ void RootActionTriggerContainer::FillContainer()
         m_pMenu );
     m_bInContainerCreation = sal_False;
 }
-::rtl::OUString RootActionTriggerContainer::getName() throw ( RuntimeException )
+::rtl::OUString RootActionTriggerContainer::getName() throw ( RuntimeException ) 
 {
     ::rtl::OUString sRet;
     if( m_pMenuIdentifier )
@@ -374,7 +374,7 @@ void RootActionTriggerContainer::FillContainer()
 
 void RootActionTriggerContainer::setName( const ::rtl::OUString& ) throw ( RuntimeException)
 {
-    throw RuntimeException();
+    throw RuntimeException();        
 }
 }
 

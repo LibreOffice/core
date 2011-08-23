@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,16 +25,16 @@
  *
  ************************************************************************/
 
-#define CB_AUTO_DETECT          1
-#define FT_CHAR_STYLE           2
-#define LB_CHAR_STYLE           3
-#define PB_STYLIST              4
-#define FT_PREVIEW              5
-#define WIN_PREVIEW             6
-#define PB_APPLY                7
-#define PB_CLOSE                8
-#define PB_HELP                 9
-#define ED_LEFT_1               10
+#define CB_AUTO_DETECT	 		1
+#define FT_CHAR_STYLE		    2
+#define LB_CHAR_STYLE		    3
+#define PB_STYLIST		        4
+#define FT_PREVIEW		        5
+#define WIN_PREVIEW		        6
+#define PB_APPLY			    7
+#define PB_CLOSE			    8
+#define PB_HELP			        9
+#define ED_LEFT_1				10
 #define ED_LEFT_2               11
 #define ED_LEFT_3               12
 #define ED_LEFT_4               13
@@ -46,8 +46,8 @@
 #define SB_SCROLL               19
 #define FT_LEFT                 20
 #define FT_RIGHT                21
-#define FT_ADJUST               22
-#define LB_ADJUST               23
+#define FT_ADJUST				22
+#define LB_ADJUST				23
 #define FT_POSITION             24
 #define LB_POSITION             25
 

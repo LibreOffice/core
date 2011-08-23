@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ public:
     SFX_DECL_CHILDWINDOW(SfxExplorerHorizChildWnd_Impl);
 
 
-    virtual sal_Bool        QueryClose();
+    virtual sal_Bool		QueryClose();
 };
 
 // class SfxExplorerDockWnd_Impl -----------------------------------------
@@ -76,11 +76,11 @@ public:
 class SfxExplorerHorizDockWnd_Impl : public SfxDockingWindow
 {
 private:
-    SfxBeamerUnoFrame_Impl* _pFrame;
+    SfxBeamerUnoFrame_Impl*	_pFrame;
 
 protected:
-    virtual void            GetFocus();
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual void 			GetFocus();
+    virtual long			Notify( NotifyEvent& rNEvt );
 
 public:
     SfxExplorerHorizDockWnd_Impl( SfxBindings* pBindings,
@@ -88,13 +88,13 @@ public:
                                   Window* pParent, const ResId& rResId );
     ~SfxExplorerHorizDockWnd_Impl();
 
-    virtual void            FillInfo( SfxChildWinInfo& ) const;
-    virtual void            FadeIn( sal_Bool );
-    sal_Bool                    QueryClose();
-    void                    SetURL( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
-    const ::com::sun::star::util::URL&              GetURL() const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             GetFrameInterface();
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    GetArgs() const;
+    virtual void    		FillInfo( SfxChildWinInfo& ) const;
+    virtual void        	FadeIn( sal_Bool );
+    sal_Bool					QueryClose();
+    void 					SetURL( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+    const ::com::sun::star::util::URL&				GetURL() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >				GetFrameInterface();
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&	GetArgs() const;
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_DrawAspect_Enum[] =
 {
-    { XML_CONTENT,          1   },
-    { XML_THUMBNAIL,        2   },
-    { XML_ICON,             4   },
-    { XML_PRINT,            8   },
+    { XML_CONTENT,			1	},
+    { XML_THUMBNAIL,		2	},
+    { XML_ICON,			    4	},
+    { XML_PRINT,			8	},
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -60,17 +60,17 @@ DrawAspectHdl::~DrawAspectHdl()
 }
 
 sal_Bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     sal_Int64 nAspect = 0;
 
     SvXMLUnitConverter::convertNumber64( nAspect, rStrImpValue );
     rValue <<= nAspect;
 
-    return nAspect > 0;
+    return nAspect > 0; 
 }
 
 sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     sal_Bool bRet = sal_False;
       OUStringBuffer aOut;
 

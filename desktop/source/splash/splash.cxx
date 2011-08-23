@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -175,7 +175,7 @@ void SAL_CALL
 SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
     throw (RuntimeException)
 {
-    ::osl::ClearableMutexGuard  aGuard( _aMutex );
+    ::osl::ClearableMutexGuard	aGuard(	_aMutex );
     if (aArguments.getLength() > 0)
     {
         aArguments[0] >>= _bVisible;
@@ -202,7 +202,7 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
                 _barwidth = 263;
             if ( NOT_LOADED == _barheight )
                 _barheight = 8;
-            if (( _eBitmapMode == BM_FULLSCREEN ) &&
+            if (( _eBitmapMode == BM_FULLSCREEN ) && 
                 _bFullScreenSplash )
             {
                 if( ( _fXPos >= 0.0 ) && ( _fYPos >= 0.0 ))
@@ -214,7 +214,7 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
                     _barwidth  = sal_Int32( double( aSize.Width() ) * _fWidth );
                 if ( _fHeight >= 0.0 )
                     _barheight = sal_Int32( double( aSize.Width() ) * _fHeight );
-            }
+            }   
         }
         else
         {
@@ -308,10 +308,10 @@ void SplashScreen::loadConfig()
         OUString( RTL_CONSTASCII_USTRINGPARAM( "FullScreenSplash" ) ) );
     OUString sNativeProgress = implReadBootstrapKey(
         OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeProgress" ) ) );
-
+                                                    
 
     // Determine full screen splash mode
-    _bFullScreenSplash = (( sFullScreenSplash.getLength() > 0 ) &&
+    _bFullScreenSplash = (( sFullScreenSplash.getLength() > 0 ) && 
                           ( !sFullScreenSplash.equalsAsciiL( "0", 1 )));
 
     // Try to retrieve the relative values for the progress bar. The current
@@ -358,7 +358,7 @@ void SplashScreen::loadConfig()
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
     }
-
+    
     if( sNativeProgress.getLength() )
     {
         _bNativeProgress = sNativeProgress.toBoolean();
@@ -404,7 +404,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
     }
-
+    
     // create file name from screen resolution information
     OStringBuffer aStrBuf( 128 );
     OStringBuffer aResBuf( 32 );
@@ -431,8 +431,8 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     Application::LoadBrandBitmap ("intro", rBitmap);
 }
 
-void SplashScreen::determineProgressRatioValues(
-    double& rXRelPos, double& rYRelPos,
+void SplashScreen::determineProgressRatioValues( 
+    double& rXRelPos, double& rYRelPos, 
     double& rRelWidth, double& rRelHeight )
 {
     sal_Int32 nWidth( 0 );
@@ -473,7 +473,7 @@ void SplashScreen::determineProgressRatioValues(
                     OUString::createFromAscii( szFullScreenProgressPos ) );
                 OUString sFullScreenProgressSize = implReadBootstrapKey(
                     OUString::createFromAscii( szFullScreenProgressSize ) );
-
+                
                 if ( sFullScreenProgressPos.getLength() )
                 {
                     sal_Int32 idx = 0;
@@ -508,27 +508,27 @@ void SplashScreen::Paint( const Rectangle&)
 
     //native drawing
     BOOL bNativeOK = FALSE;
-
+    
     // in case of native controls we need to draw directly to the window
     if( _bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
     {
         DrawBitmapEx( Point(), _aIntroBmp );
-
+        
         ImplControlValue aValue( _iProgress * _barwidth / _iMax);
         Rectangle aDrawRect( Point(_tlx, _tly), Size( _barwidth, _barheight ) );
         Rectangle aNativeControlRegion, aNativeContentRegion;
 
         if( GetNativeControlRegion( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
                                              CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                             aNativeControlRegion, aNativeContentRegion ) )
+                                             aNativeControlRegion, aNativeContentRegion ) ) 
         {
               long nProgressHeight = aNativeControlRegion.GetHeight();
               aDrawRect.Top() -= (nProgressHeight - _barheight)/2;
               aDrawRect.Bottom() += (nProgressHeight - _barheight)/2;
         }
-
+        
         if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) != FALSE )
+                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) != FALSE ) 
         {
             return;
         }
@@ -542,7 +542,7 @@ void SplashScreen::Paint( const Rectangle&)
         // draw progress...
         long length = (_iProgress * _barwidth / _iMax) - (2 * _barspace);
         if (length < 0) length = 0;
-
+        
         // border
         _vdev.SetFillColor();
         _vdev.SetLineColor( _cProgressFrameColor );

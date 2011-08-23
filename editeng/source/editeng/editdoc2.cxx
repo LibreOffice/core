@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/charscaleitem.hxx>
 
-#include <vcl/svapp.hxx>    // Fuer AppWindow...
+#include <vcl/svapp.hxx>	// Fuer AppWindow...
 
 DBG_NAME( EE_ParaPortion )
 
@@ -190,16 +190,16 @@ ParaPortion::ParaPortion( ContentNode* pN )
 {
     DBG_CTOR( EE_ParaPortion, 0 );
 
-    pNode               = pN;
-    bInvalid            = TRUE;
-    bVisible            = TRUE;
-    bSimple             = FALSE;
-    bForceRepaint       = FALSE;
-    nInvalidPosStart    = 0;
-    nInvalidDiff        = 0;
-    nHeight             = 0;
-    nFirstLineOffset    = 0;
-    nBulletX            = 0;
+    pNode 				= pN;
+    bInvalid 			= TRUE;
+    bVisible 			= TRUE;
+    bSimple 			= FALSE;
+    bForceRepaint 		= FALSE;
+    nInvalidPosStart	= 0;
+    nInvalidDiff 		= 0;
+    nHeight 			= 0;
+    nFirstLineOffset 	= 0;
+    nBulletX			= 0;
 }
 
 ParaPortion::~ParaPortion()
@@ -211,7 +211,7 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
 {
     if ( bInvalid == FALSE )
     {
-//      nInvalidPosEnd = nStart;    // ??? => CreateLines
+//		nInvalidPosEnd = nStart;	// ??? => CreateLines
         nInvalidPosStart = ( nDiff >= 0 ) ? nStart : ( nStart + nDiff );
         nInvalidDiff = nDiff;
     }
@@ -231,7 +231,7 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
         }
         else
         {
-//          nInvalidPosEnd = pNode->Len();
+//			nInvalidPosEnd = pNode->Len();
             DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
             nInvalidPosStart = Min( nInvalidPosStart, (USHORT) ( nDiff < 0 ? nStart+nDiff : nDiff ) );
             nInvalidDiff = 0;
@@ -241,7 +241,7 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
     bInvalid = TRUE;
     aScriptInfos.Remove( 0, aScriptInfos.Count() );
     aWritingDirectionInfos.Remove( 0, aWritingDirectionInfos.Count() );
-//  aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
+//	aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
 }
 
 void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /* nEnd */ )
@@ -249,19 +249,19 @@ void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /* nEnd */ )
     if ( bInvalid == FALSE )
     {
         nInvalidPosStart = nStart;
-//      nInvalidPosEnd = nEnd;
+//		nInvalidPosEnd = nEnd;
     }
     else
     {
         nInvalidPosStart = Min( nInvalidPosStart, nStart );
-//      nInvalidPosEnd = pNode->Len();
+//		nInvalidPosEnd = pNode->Len();
     }
     nInvalidDiff = 0;
     bInvalid = TRUE;
     bSimple = FALSE;
     aScriptInfos.Remove( 0, aScriptInfos.Count() );
     aWritingDirectionInfos.Remove( 0, aWritingDirectionInfos.Count() );
-//  aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
+//	aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
 }
 
 USHORT ParaPortion::GetLineNumber( USHORT nIndex )
@@ -295,7 +295,7 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLin
         const EditLine* pUnformatted = aLineList[ nLastFormattedLine+1 ];
         short nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
         short nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;    // LastFormatted->GetEnd() war incl. => 1 zuviel abgezogen!
+        nTextDiff++;	// LastFormatted->GetEnd() war incl. => 1 zuviel abgezogen!
 
         // Die erste unformatierte muss genau eine Portion hinter der letzten der
         // formatierten beginnen:
@@ -414,7 +414,7 @@ USHORT ParaPortionList::FindParagraph( long nYOffset )
         if ( nY > nYOffset )
             return nPortion;
     }
-    return 0xFFFF;  // solte mal ueber EE_PARA_NOT_FOUND erreicht werden!
+    return 0xFFFF;	// solte mal ueber EE_PARA_NOT_FOUND erreicht werden!
 }
 
 void ParaPortionList::DbgCheck( EditDoc&
@@ -453,7 +453,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
             SvxLRSpaceItem& rItem = (SvxLRSpaceItem&)rPoolItem;
             rItem.SetTxtFirstLineOfst( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTxtFirstLineOfst(), eSourceUnit, eDestUnit ) ) );
             rItem.SetTxtLeft( OutputDevice::LogicToLogic( rItem.GetTxtLeft(), eSourceUnit, eDestUnit ) );
-//          rItem.SetLeft( OutputDevice::LogicToLogic( rItem.GetLeft(), eSourceUnit, eDestUnit ) ); // #96298# SetLeft manipulates nTxtLeft!
+//			rItem.SetLeft( OutputDevice::LogicToLogic( rItem.GetLeft(), eSourceUnit, eDestUnit ) ); // #96298# SetLeft manipulates nTxtLeft!
             rItem.SetRight( OutputDevice::LogicToLogic( rItem.GetRight(), eSourceUnit, eDestUnit ) );
         }
         break;
@@ -525,7 +525,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
             if ( eSourceUnit != eDestUnit )
             {
                 SfxPoolItem* pItem = rSource.Get( nSourceWhich ).Clone();
-//              pItem->SetWhich( nWhich );
+//				pItem->SetWhich( nWhich );
                 ConvertItem( *pItem, eSourceUnit, eDestUnit );
                 rDest.Put( *pItem, nWhich );
                 delete pItem;
@@ -538,7 +538,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
         else
         {
             // MT 3.3.99: Waere so eigentlich richtig, aber schon seit Jahren nicht so...
-//          rDest.ClearItem( nWhich );
+//			rDest.ClearItem( nWhich );
         }
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 // defines
 //------------------------------------------------------------------------
 
-// the service name is a description of a set of
+// the service name is a description of a set of 
 // interfaces (is the same as component categories in COM)
 
 #define TMPL95_FILEOPEN_READONLY_VERSION_BOX_ID       1000
@@ -67,12 +67,12 @@
 // the service names
 #define FILE_PICKER_SERVICE_NAME  "com.sun.star.ui.dialogs.SystemFilePicker"
 
-// the implementation names
+// the implementation names		
 #define FILE_PICKER_IMPL_NAME  "com.sun.star.ui.dialogs.Win32FilePicker"
 
 // the registry key names
 // a key under which this service will be registered, Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name           >
+//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name           > 
 #define FILE_PICKER_REGKEY_NAME  "/com.sun.star.ui.dialogs.Win32FilePicker/UNO/SERVICES/com.sun.star.ui.dialogs.SystemFilePicker"
 
 #endif

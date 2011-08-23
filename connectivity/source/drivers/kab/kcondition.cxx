@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ sal_Bool KabConditionEqual::eval(const ::KABC::Addressee &aAddressee) const
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
 // Timestamps should not be compared according to their string value
 // The syntax for such queries should be like
-//  {ts '2004-03-29 12:55:00.000000'}
+//	{ts '2004-03-29 12:55:00.000000'}
 // They should also support operators like '<' or '>='
 
     if (aQtName.isNull()) return sal_False;

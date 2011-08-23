@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,13 +59,13 @@ BlobHelper::BlobHelper(const ::com::sun::star::uno::Sequence< sal_Int8 >& _val) 
 // -----------------------------------------------------------------------------
 ::sal_Int64 SAL_CALL BlobHelper::position( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XBlob::position", *this );
+    ::dbtools::throwFeatureNotImplementedException( "XBlob::position", *this );    
     return 0;
 }
 // -----------------------------------------------------------------------------
 ::sal_Int64 SAL_CALL BlobHelper::positionOfBlob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XBlob::positionOfBlob", *this );
+    ::dbtools::throwFeatureNotImplementedException( "XBlob::positionOfBlob", *this ); 
     return 0;
 }
 

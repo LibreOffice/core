@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImp
     if( rValue.hasValue())
         rValue >>= eType;
 
-    if( bValue )    // enable flag
+    if( bValue )	// enable flag
     {
         if( eType != chart::ChartErrorIndicatorType_TOP_AND_BOTTOM )
         {
@@ -63,7 +63,7 @@ sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImp
                     : chart::ChartErrorIndicatorType_LOWER;
         }
     }
-    else            // disable flag
+    else			// disable flag
     {
         if( eType != chart::ChartErrorIndicatorType_NONE )
         {

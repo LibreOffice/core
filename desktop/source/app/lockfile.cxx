@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -197,7 +197,7 @@ namespace desktop {
         OUString aUserName;
         Security aSecurity;
         aSecurity.getUserName( aUserName );
-        ByteString aUser  = OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US );
+        ByteString aUser  = OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US );		
         ByteString aTime  = OUStringToOString( m_aDate, RTL_TEXTENCODING_ASCII_US );
         ByteString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
 

@@ -11,7 +11,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>    c++    </language>
         <status value="beta"/>
-        <supported-service>    com.sun.star.ui.dialogs.FilePicker </supported-service>
+        <supported-service>    com.sun.star.ui.dialogs.FilePicker </supported-service>        
         <service-dependency>...</service-dependency>
         <type>    com.sun.star.ui.dialogs.XExecutableDialog            </type>
         <type>    com.sun.star.ui.dialogs.XFilePicker                  </type>
@@ -23,12 +23,12 @@
         <type>    com.sun.star.ui.dialogs.XFilePickerControlAccess     </type>
         <type>    com.sun.star.ui.dialogs.XFilePreview                 </type>
         <type>    com.sun.star.ui.dialogs.ExtendedFilePickerElementIds </type>
-        <type>    com.sun.star.ui.dialogs.ExecutableDialogResults      </type>
+        <type>    com.sun.star.ui.dialogs.ExecutableDialogResults      </type>        
         <type>    com.sun.star.ui.dialogs.FilePickerEvent              </type>
         <type>    com.sun.star.ui.dialogs.CommonFilePickerElementIds   </type>
         <type>    com.sun.star.ui.dialogs.ListboxControlActions        </type>
-        <type>    com.sun.star.ui.dialogs.TemplateDescription          </type>
-        <type>    com.sun.star.ui.dialogs.FilePreviewImageFormats      </type>
+        <type>    com.sun.star.ui.dialogs.TemplateDescription          </type>        
+        <type>    com.sun.star.ui.dialogs.FilePreviewImageFormats      </type>    
         <type>    com.sun.star.util.XCancellable                       </type>
         <type>    com.sun.star.lang.XComponent                         </type>
         <type>    com.sun.star.lang.XMultiServiceFactory               </type>

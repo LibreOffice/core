@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace dbtools
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XWarningsSupplier >   m_xExternalWarnings;
-        ::com::sun::star::uno::Any                                                      m_aOwnWarnings;
+        ::com::sun::star::uno::Any	                                                    m_aOwnWarnings;
 
     public:
         WarningsContainer() { }
@@ -102,7 +102,7 @@ namespace dbtools
     };
 
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 #endif // DBTOOLS_WARNINGSCONTAINER_HXX
