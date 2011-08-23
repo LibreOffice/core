@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
     public void _UserDefinedAttributes() {
         XNameContainer uda = null;
         boolean res = false;
-        try {
+        try {            
             uda = (XNameContainer) AnyConverter.toObject(
                     new Type(XNameContainer.class),
                         oObj.getPropertyValue("UserDefinedAttributes"));
@@ -44,8 +44,8 @@ public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
             attr.Namespace = "http://www.sun.com/staroffice/apitest/Chartprop";
             attr.Type="CDATA";
             attr.Value="true";
-            uda.insertByName("Chartprop:has-first-alien-attribute",attr);
-            String[] els = uda.getElementNames();
+            uda.insertByName("Chartprop:has-first-alien-attribute",attr);            
+            String[] els = uda.getElementNames();            
             oObj.setPropertyValue("UserDefinedAttributes",uda);
             uda = (XNameContainer) AnyConverter.toObject(
                     new Type(XNameContainer.class),
@@ -65,7 +65,7 @@ public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
             log.println("PropertyVetoException while getting Property 'UserDefinedAttributes'");
         } catch (com.sun.star.container.ElementExistException eee) {
             log.println("ElementExistException while getting Property 'UserDefinedAttributes'");
-        }
+        } 
         tRes.tested("UserDefinedAttributes",res);
     }
 

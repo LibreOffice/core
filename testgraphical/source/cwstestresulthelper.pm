@@ -3,7 +3,7 @@ package cwstestresulthelper;
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ sub cwstestresult($$$$$$)
             sleep(1);
             if (! -e $sSOLARENV)
             {
-                # fallback to old before ause103 (treeconfig)
+                # fallback to old before ause103 (treeconfig)                
                 $sSOLARENV="/so/ws/$MAJOR/src.$MINOR/solenv";
             }
         }
@@ -139,7 +139,7 @@ sub cwstestresult($$$$$$)
         log_print( "COMMON_ENV_TOOLS is: $ENV{COMMON_ENV_TOOLS} faked\n");
         $nCOMMON_ENV_TOOLS_fake = 1;
     }
-
+    
     # if ( !defined($ENV{WORK_STAMP}) )
     # {
     #     $ENV{WORK_STAMP} = $MAJOR;
@@ -166,7 +166,7 @@ sub cwstestresult($$$$$$)
         log_print("        UPDMINOR is: $ENV{UPDMINOR} faked\n");
         $nUPDMINOR_fake = 1;
     }
-
+    
     # my $sStatus = "ok";
     # if ($nFailure == 0)
     # {
@@ -180,7 +180,7 @@ sub cwstestresult($$$$$$)
     # {
     #     $sStatus = "incomplete";
     # }
-
+    
     # system("cwstestresult -c mycws -n Performance -p Windows ok");
     my $sPerlProgram = appendPath($sSOLARENV, "bin/cwstestresult.pl");
     # if ( -e "cwstestresult.pl" )
@@ -218,10 +218,10 @@ sub cwstestresult($$$$$$)
     }
     $sPerlParam .= " -p " . $sCWSEnv;
     $sPerlParam .= " -r http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/status_new.php?distinct=$sDBdistinct";
-
+    
     $sPerlParam .= " ";
     $sPerlParam .= $sStatus;
-
+    
 
     # my $sSetcwsAndPerl = "setcws $destinationversion; " . getPerlExecutable();
 
@@ -246,7 +246,7 @@ sub cwstestresult($$$$$$)
         undef( $ENV{COMMON_ENV_TOOLS} );
         $nCOMMON_ENV_TOOLS_fake = 0;
     }
-
+    
     if ( $nWORK_STAMP_fake == 1 )
     {
         # undef($ENV{WORK_STAMP});

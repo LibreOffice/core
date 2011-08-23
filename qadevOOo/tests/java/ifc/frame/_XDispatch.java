@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,8 +120,8 @@ public class _XDispatch extends MultiMethodTest {
     TestNotificationListener notificationListener = null;
     URL url = null ;
 
-    /**
-     * Not all implementations could call the
+    /** 
+     * Not all implementations could call the 
      * <code>com.sun.star.frame.XStatusListener</code>. For this purposes the
      * <code>com.sun.star.frame.XDispatchWithNotification</code> was designed.
      * If <code>com.sun.star.frame.XStatusListener</code> was not called and
@@ -130,13 +130,13 @@ public class _XDispatch extends MultiMethodTest {
     */
     private boolean checkXDispatchWithNotification()
     {
-        XNotifyingDispatch xND = (XNotifyingDispatch)
+        XNotifyingDispatch xND = (XNotifyingDispatch) 
                       UnoRuntime.queryInterface(XNotifyingDispatch.class, oObj);
         if ( xND != null) {
             log.println("   XNotifyingDispatch found:");
-            PropertyValue[] arguments = (PropertyValue[])
+            PropertyValue[] arguments = (PropertyValue[]) 
                               tEnv.getObjRelation("XNotifyingDispatchArgument");
-
+            
             notificationListener = new TestNotificationListener(log) ;
             xND.dispatchWithNotification(url, arguments, notificationListener);
 
@@ -151,7 +151,7 @@ public class _XDispatch extends MultiMethodTest {
         } else {
             return false;
         }
-
+       
     }
     /**
     * Retrieves object relations and creates new listeners.
@@ -189,9 +189,9 @@ public class _XDispatch extends MultiMethodTest {
         catch(java.lang.InterruptedException e) {}
 
         log.println("Listener called: "+ listener.statusChangedCalled);
-
+        
         result = listener.statusChangedCalled;
-
+        
         if (result == false) {
             result = checkXDispatchWithNotification();
         }
@@ -234,9 +234,9 @@ public class _XDispatch extends MultiMethodTest {
         catch(java.lang.InterruptedException e) {}
 
         System.out.println("Listener called: "+ listener.statusChangedCalled);
-
+        
         result = ! listener.statusChangedCalled;
-
+        
         tRes.tested("removeStatusListener()", result) ;
     }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ public class AccessibleEdit extends TestCase {
      * button 'Close' (for closing this dialog when disposing)
      * walking through the accessible component tree.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
 
@@ -111,13 +111,13 @@ public class AccessibleEdit extends TestCase {
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
         XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                          XDispatchProvider.class,
+                                          XDispatchProvider.class, 
                                           secondController);
 
         XURLTransformer urlTransf = null;
@@ -148,12 +148,12 @@ public class AccessibleEdit extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, 
                                              "Close");
         action = (XAccessibleAction) UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
@@ -165,11 +165,11 @@ public class AccessibleEdit extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleEditableText edText = (XAccessibleEditableText) UnoRuntime.queryInterface(
-                                                       XAccessibleEditableText.class,
+                                                       XAccessibleEditableText.class, 
                                                        oObj);
         edText.setText("AccessibleEdit");
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 //                    buttonAccComp.grabFocus();

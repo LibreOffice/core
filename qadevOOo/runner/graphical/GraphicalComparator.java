@@ -11,7 +11,7 @@ package graphical;
  *
  * @author ll93751
  */
-public class GraphicalComparator extends EnhancedComplexTestCase
+public class GraphicalComparator extends EnhancedComplexTestCase 
 {
 
     // @Override
@@ -22,7 +22,7 @@ public class GraphicalComparator extends EnhancedComplexTestCase
     public void check()
     {
     }
-
+    
     public void checkOneFile(String _sDocument, String _sResult, ParameterHelper _aParams) throws OfficeException {
         throw new UnsupportedOperationException("Not supported yet.");
     }

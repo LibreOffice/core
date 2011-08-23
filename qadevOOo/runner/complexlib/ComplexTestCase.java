@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
     protected int m_nThreadTimeOut = 0;
     /** Continue a test even if it did fail **/
     // public static final boolean CONTINUE = true;
-
+    
     /** End a test if it did fail **/
     public static final boolean BREAK = true;
 
     private boolean m_bBeforeCalled;
-
+    
     /**
      * is called before the real test starts
      */
@@ -97,7 +97,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 t.printStackTrace((PrintWriter) log);
             }
         }
-
+        
     }
 
     /** Description entry **/

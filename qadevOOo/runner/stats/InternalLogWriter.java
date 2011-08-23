@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,13 +112,13 @@ public class InternalLogWriter extends PrintWriter
         writer = new StringWriter();
         return message;
     }
-
+    
     public Object getWatcher() {
         return null;
     }
-
+    
     public void setWatcher(Object watcher) {
     }
-
+    
 }
 

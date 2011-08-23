@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class GraphicalComparator implements DocComparator
         {
             m_aArguments = new GraphicalTestArguments(aParams);
         }
-
+    
     /**
      * @return an instance of this object, but only it's interface
      */
@@ -93,7 +93,7 @@ class GraphicalComparator implements DocComparator
                 sNewSubDir = FileHelper.removeFirstDirectorysAndBasenameFrom(_sEntry, _sInputPath);
             }
             String sNameNoSuffix = FileHelper.getNameNoSuffix(FileHelper.getBasename(_sEntry));
-
+            
             // add the sub path to the difference path
             String sNewReferencePath;
             if (sNewSubDir.length() > 0)
@@ -108,11 +108,11 @@ class GraphicalComparator implements DocComparator
             sNewReferencePath += fs + sNameNoSuffix + _sNewSuffix;
             return sNewReferencePath;
         }
-
+    
     boolean isReferenceOrDiffExistent(String _sNewSuffix)
         {
             boolean isExistent = false;
-
+            
             // LLA? What if sReferencePath is a directory, but directory is empty? is the result then true or false;
 
             // wir muessen durch den InputPath durch und dann fuer jedes Dokument prufen, ob im angegebenen ReferencePath eine Reference existiert.
@@ -134,7 +134,7 @@ class GraphicalComparator implements DocComparator
             }
             else
             {
-                // sInputPath is a file
+                // sInputPath is a file                
                 String sNewReferencePath = createSpecialFile(sInputPath, "", m_aArguments.getReferencePath(), _sNewSuffix);
                 if (FileHelper.exists(sNewReferencePath))
                 {
@@ -143,7 +143,7 @@ class GraphicalComparator implements DocComparator
             }
             return isExistent;
         }
-
+    
     /**
      *  REFERENCE_PATH must set to directory/file, where the reference (*.prn files) (should) exist
      */
@@ -198,7 +198,7 @@ class GraphicalComparator implements DocComparator
                     System.err.println("    Inputpath: '" + m_aArguments.getInputPath() + "'");
                     System.err.println("   Outputpath: '" + m_aArguments.getOutputPath() + "'");
                     System.err.println("Referencepath: '" + m_aArguments.getReferencePath() + "'");
-                }
+                }                
                 return GraphicalDifferenceCheck.check(m_aArguments.getInputPath(), m_aArguments.getOutputPath(), m_aArguments.getReferencePath(), m_aArguments);
             }
             catch(ConvWatchException e)
@@ -228,7 +228,7 @@ class GraphicalComparator implements DocComparator
     /**
      *  INPUT_PATH must set, to directory/file, where the documents exist.
      *  REFERENCE_PATH must set to directory/file, where the created references (*.prn files) exists.
-     *  OUTPUT_PATH must set to a directory, where the whole ouptut will create. Here the diffReference will create.
+     *  OUTPUT_PATH must set to a directory, where the whole ouptut will create. Here the diffReference will create. 
      *              At the momemt it's not possible to say only where the diffreferences will create.
      */
     public void createDiffReference() throws IOException
@@ -236,11 +236,11 @@ class GraphicalComparator implements DocComparator
             // this is the same like compareDiff(), but trash the result.
             compareDiff();
         }
-
+    
     /**
      *  INPUT_PATH must set, to directory/file, where the documents exist.
      *  REFERENCE_PATH must set to directory/file, where the created references (*.prn files) exists.
-     *  OUTPUT_PATH must set to a directory, where the whole ouptut will create.
+     *  OUTPUT_PATH must set to a directory, where the whole ouptut will create. 
      *  DIFF_PATH must set to a directory, where the older difference references exist, it's possible to set this to the same as REFERENCE_PATH
      *  but this is not the default and will not automatically set.
      */
@@ -256,5 +256,5 @@ class GraphicalComparator implements DocComparator
                 throw new java.io.IOException(e.getMessage());
             }
         }
-
+    
 }

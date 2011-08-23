@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@ import ifc.style._PageProperties;
 
 /**
  * Test page style properties.
- * These properties are a subset of the PageProperties. So just use the
+ * These properties are a subset of the PageProperties. So just use the 
  * PageProperties test
  */
 public class _PageStyle extends _PageProperties {
-
+ 
     /**
      * This property is system dependent and printer dependent.
      * Test is used from _PageProperties
@@ -44,13 +44,13 @@ public class _PageStyle extends _PageProperties {
     public void _PrinterPaperTray() {
         super._PrinterPaperTray();
     }
-
+        
     /**
      * Create some valid user defined attributes
      * Test is used from _PageProperties
      * @see ifc.style._PageProperties
-     */
+     */ 
     public void _UserDefinedAttributes() {
         super._UserDefinedAttributes();
-    }
+    } 
 }

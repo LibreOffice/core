@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,17 +94,17 @@ import com.sun.star.util.XCloseable;
  */
 public class SwXParagraph extends TestCase {
     XTextDocument xTextDoc;
-
+    
     /**
      * Creates text document.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-
+        
     }
-
+    
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-
+        
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
             XCloseable.class, xTextDoc);
@@ -115,8 +115,8 @@ public class SwXParagraph extends TestCase {
             log.println("couldn't close document");
         }
     }
-
-
+    
+    
     /**
      * Creating a Testenvironment for the interfaces to be tested. To obtain
      * test component, at first several paragraphs are inserted to a major text
@@ -140,10 +140,10 @@ public class SwXParagraph extends TestCase {
      */
     protected synchronized TestEnvironment createTestEnvironment
     (TestParameters tParam, PrintWriter log) {
-
+        
         if (xTextDoc != null) {
             log.println("    disposing xTextDoc ");
-
+            
             try {
                 XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
                 XCloseable.class, xTextDoc);
@@ -162,20 +162,20 @@ public class SwXParagraph extends TestCase {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }
-
+        
         XInterface oObj = null;
         XPropertySet paraP = null;
         XPropertySet portP = null;
         Object nRules = null;
         XInterface port = null;
         XInterface para = null;
-
+        
         log.println( "creating a test environment" );
-
-
+        
+        
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
-
+        
         log.println( "inserting some lines" );
         try {
             for (int i=0; i<5; i++){
@@ -197,12 +197,12 @@ public class SwXParagraph extends TestCase {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't insert lines", e );
         }
-
+        
         // Enumeration
         XEnumerationAccess oEnumA = (XEnumerationAccess)
         UnoRuntime.queryInterface(XEnumerationAccess.class, oText );
         XEnumeration oEnum = oEnumA.createEnumeration();
-
+        
         try {
             para = (XInterface) AnyConverter.toObject(
             new Type(XInterface.class),oEnum.nextElement());
@@ -221,7 +221,7 @@ public class SwXParagraph extends TestCase {
             e.printStackTrace(log);
             log.println("Error: exception occured...");
         }
-
+        
         try {
             portP = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, port);
@@ -246,8 +246,8 @@ public class SwXParagraph extends TestCase {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         }
-
-
+        
+        
         try {
             oObj = (XInterface) AnyConverter.toObject(
             new Type(XInterface.class),oEnum.nextElement());
@@ -256,24 +256,24 @@ public class SwXParagraph extends TestCase {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         }
-
-
+        
+        
         log.println( "creating a new environment for Paragraph object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
-
+        
         log.println("adding ObjectRelation 'PARA' for CharacterProperties");
         tEnv.addObjRelation("PARA", paraP);
-
+        
         log.println("adding ObjectRelation 'PORTION' for CharacterProperties");
         tEnv.addObjRelation("PORTION", portP);
-
+        
         log.println("adding ObjectRelation 'NRULES' for ParagraphProperties");
         tEnv.addObjRelation("NRULES", nRules);
-
+        
         tEnv.addObjRelation("NoAttach","SwXParagraph");
-
+        
         return tEnv;
     } // finish method getTestEnvironment
-
+    
 }    // finish class SwXParagraph
 

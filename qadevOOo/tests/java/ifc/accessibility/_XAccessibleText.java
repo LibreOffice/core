@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ public class _XAccessibleText extends MultiMethodTest {
 
         if (component == null) {
             component = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                XAccessibleComponent.class,
+                                XAccessibleComponent.class, 
                                 tEnv.getTestObject());
         }
 
@@ -260,7 +260,7 @@ public class _XAccessibleText extends MultiMethodTest {
                 res &= isEqCh;
 
                 if (!isEqCh) {
-                    log.println("At the position " + i +
+                    log.println("At the position " + i + 
                                 "was expected character: " + text.charAt(i));
                     log.println("but was returned: " + ch);
 
@@ -316,7 +316,7 @@ public class _XAccessibleText extends MultiMethodTest {
         try {
             log.println("getCharacterAttributes(chCount-1)");
 
-            PropertyValue[] props = oObj.getCharacterAttributes(chCount - 1,
+            PropertyValue[] props = oObj.getCharacterAttributes(chCount - 1, 
                                                                 attr);
             res &= (props != null);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -379,7 +379,7 @@ public class _XAccessibleText extends MultiMethodTest {
         try {
             for (int i = 0; i < lastIndex; i++) {
                 log.println("getCharacterBounds(" + i + ")");
-                chBounds = oObj.getCharacterBounds(i);
+                chBounds = oObj.getCharacterBounds(i);                
 
                 boolean localres = true;
                 localres = chBounds.X >= 0;
@@ -390,13 +390,13 @@ public class _XAccessibleText extends MultiMethodTest {
                 localres &= ((chBounds.Y + chBounds.Height) > 0);
 
                 if (!localres) {
-                    log.println("Text at this place: "+oObj.getCharacter(i));
+                    log.println("Text at this place: "+oObj.getCharacter(i));                    
                     log.println("Character bounds outside component");
-                    log.println("Character rect: " + chBounds.X + ", " +
-                                chBounds.Y + ", " + chBounds.Width + ", " +
+                    log.println("Character rect: " + chBounds.X + ", " + 
+                                chBounds.Y + ", " + chBounds.Width + ", " + 
                                 chBounds.Height);
-                    log.println("Component rect: " + bounds.X + ", " +
-                                bounds.Y + ", " + bounds.Width + ", " +
+                    log.println("Component rect: " + bounds.X + ", " + 
+                                bounds.Y + ", " + bounds.Width + ", " + 
                                 bounds.Height);
                     res &= localres;
                 }
@@ -435,7 +435,7 @@ public class _XAccessibleText extends MultiMethodTest {
      * </ul>
      */
     public void _getIndexAtPoint() {
-        //requiredMethod("getCharacterBounds()");
+        //requiredMethod("getCharacterBounds()");         
         boolean res = true;
         log.print("getIndexAtPoint(-1, -1):");
 
@@ -471,13 +471,13 @@ public class _XAccessibleText extends MultiMethodTest {
             int y = aRect.Y + (aRect.Height / 2);
             Point aPoint = new Point(x, y);
             int nIndex = oObj.getIndexAtPoint(aPoint);
-
+            
             x = aRect.X;
             y = aRect.Y + (aRect.Height / 2);
             aPoint = new Point(x, y);
-            int left = oObj.getIndexAtPoint(aPoint);
-
-
+            int left = oObj.getIndexAtPoint(aPoint);            
+            
+            
 
             int[] previous = (int[]) tEnv.getObjRelation("PreviousUsed");
 
@@ -492,12 +492,12 @@ public class _XAccessibleText extends MultiMethodTest {
             if (nIndex != i) {
                 // for some letters the center of the rectangle isn't recognised
                 // in this case we are happy if the left border of the rectangle
-                // returns the correct value.
+                // returns the correct value. 
                 if (left !=i) {
-                    log.println("## Method didn't work for Point (" + x + "," + y +
+                    log.println("## Method didn't work for Point (" + x + "," + y + 
                             ")");
                     log.println("Expected Index " + i);
-                    log.println("Gained Index: " + nIndex);
+                    log.println("Gained Index: " + nIndex); 
                     log.println("Left Border: "+left);
                     log.println("CharacterAtIndex: " + text);
                     res &= false;
@@ -748,7 +748,7 @@ public class _XAccessibleText extends MultiMethodTest {
 
         boolean res = true;
         boolean locRes = true;
-
+        
         String txtRange = "";
 
         try {
@@ -761,7 +761,7 @@ public class _XAccessibleText extends MultiMethodTest {
                 res &= locRes;
 
                 if (!locRes) {
-                    log.println("Was expected: " +
+                    log.println("Was expected: " + 
                                 text.substring(1, chCount - 2));
                 }
             }
@@ -774,7 +774,7 @@ public class _XAccessibleText extends MultiMethodTest {
             res &= locRes;
 
             if (!locRes) {
-                log.println("Was expected: " +
+                log.println("Was expected: " + 
                             text.substring(0, chCount - 1));
             }
 
@@ -853,7 +853,7 @@ public class _XAccessibleText extends MultiMethodTest {
         try {
             log.print("getTextAtIndex(-1, AccessibleTextType.PARAGRAPH):");
 
-            txt = oObj.getTextAtIndex(-1,
+            txt = oObj.getTextAtIndex(-1, 
                                                   AccessibleTextType.PARAGRAPH);
             log.println("Exception was expected");
             res &= false;
@@ -866,10 +866,10 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.print("getTextAtIndex(chCount+1," +
+            log.print("getTextAtIndex(chCount+1," + 
                       " AccessibleTextType.PARAGRAPH):");
 
-            txt = oObj.getTextAtIndex(chCount + 1,
+            txt = oObj.getTextAtIndex(chCount + 1, 
                                                   AccessibleTextType.PARAGRAPH);
             log.println("Exception was expected");
             res &= false;
@@ -882,14 +882,14 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.print("getTextAtIndex(chCount," +
+            log.print("getTextAtIndex(chCount," + 
                       " AccessibleTextType.WORD):");
 
             txt = oObj.getTextAtIndex(chCount, AccessibleTextType.WORD);
             log.println("'" + txt.SegmentText + "'");
             res &= compareLength(0,txt.SegmentText);
             if (!tEnv.getTestCase().getObjectName().equals("SmGraphicAccessible")) {
-                log.print("getTextAtIndex(1," +
+                log.print("getTextAtIndex(1," + 
                           " AccessibleTextType.PARAGRAPH):");
                 txt = oObj.getTextAtIndex(1, AccessibleTextType.PARAGRAPH);
                 log.println("'" + txt.SegmentText + "'");
@@ -927,7 +927,7 @@ public class _XAccessibleText extends MultiMethodTest {
         try {
             log.print("getTextBeforeIndex(-1, AccessibleTextType.PARAGRAPH):");
 
-            txt = oObj.getTextBeforeIndex(-1,
+            txt = oObj.getTextBeforeIndex(-1, 
                                                       AccessibleTextType.PARAGRAPH);
             log.println("Exception was expected");
             res &= false;
@@ -940,10 +940,10 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.print("getTextBeforeIndex(chCount+1, " +
+            log.print("getTextBeforeIndex(chCount+1, " + 
                       "AccessibleTextType.PARAGRAPH):");
 
-            txt = oObj.getTextBeforeIndex(chCount + 1,
+            txt = oObj.getTextBeforeIndex(chCount + 1, 
                                                       AccessibleTextType.PARAGRAPH);
             log.println("Exception was expected");
             res &= false;
@@ -957,31 +957,31 @@ public class _XAccessibleText extends MultiMethodTest {
 
         try {
             if (!tEnv.getTestCase().getObjectName().equals("SmGraphicAccessible")) {
-                log.print("getTextBeforeIndex(chCount," +
+                log.print("getTextBeforeIndex(chCount," + 
                           " AccessibleTextType.WORD):");
 
-                txt = oObj.getTextBeforeIndex(chCount,
+                txt = oObj.getTextBeforeIndex(chCount, 
                                                      AccessibleTextType.WORD);
                 log.println("'" + txt.SegmentText + "'");
                 res &= compareLength(chCount, txt.SegmentText);
             }
 
-            log.print("getTextBeforeIndex(1," +
+            log.print("getTextBeforeIndex(1," + 
                       " AccessibleTextType.PARAGRAPH):");
             txt = oObj.getTextBeforeIndex(1, AccessibleTextType.PARAGRAPH);
             log.println("'" + txt.SegmentText + "'");
             res &= compareLength(0, txt.SegmentText);
 
-            log.print("getTextBeforeIndex(chCount-1," +
+            log.print("getTextBeforeIndex(chCount-1," + 
                       " AccessibleTextType.CHARACTER):");
-            txt = oObj.getTextBeforeIndex(chCount - 1,
+            txt = oObj.getTextBeforeIndex(chCount - 1, 
                                           AccessibleTextType.CHARACTER);
             log.println("'" + txt.SegmentText + "'");
-            res &= compareStrings(text.substring(chCount - 2, chCount - 1),
+            res &= compareStrings(text.substring(chCount - 2, chCount - 1), 
                                   txt.SegmentText);
 
             if (chCount > 2) {
-                log.print("getTextBeforeIndex(2," +
+                log.print("getTextBeforeIndex(2," + 
                           " AccessibleTextType.CHARACTER):");
                 txt = oObj.getTextBeforeIndex(2, AccessibleTextType.CHARACTER);
                 log.println("'" + txt.SegmentText + "'");
@@ -1019,7 +1019,7 @@ public class _XAccessibleText extends MultiMethodTest {
         try {
             log.print("getTextBehindIndex(-1, AccessibleTextType.PARAGRAPH):");
 
-            txt = oObj.getTextBehindIndex(-1,
+            txt = oObj.getTextBehindIndex(-1, 
                                                       AccessibleTextType.PARAGRAPH);
             log.println("Exception was expected");
             res &= false;
@@ -1032,10 +1032,10 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.print("getTextBehindIndex(chCount+1, " +
+            log.print("getTextBehindIndex(chCount+1, " + 
                       "AccessibleTextType.PARAGRAPH):");
 
-            txt = oObj.getTextBehindIndex(chCount + 1,
+            txt = oObj.getTextBehindIndex(chCount + 1, 
                                                       AccessibleTextType.PARAGRAPH);
             log.println("Exception was expected");
             res &= false;
@@ -1048,31 +1048,31 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.print("getTextBehindIndex(chCount," +
+            log.print("getTextBehindIndex(chCount," + 
                       " AccessibleTextType.PARAGRAPH):");
 
-            txt = oObj.getTextBehindIndex(chCount,
+            txt = oObj.getTextBehindIndex(chCount, 
                                                  AccessibleTextType.PARAGRAPH);
             log.println("'" + txt.SegmentText + "'");
             res &= (txt.SegmentText.length() == 0);
 
-            log.print("getTextBehindIndex(chCount-1," +
+            log.print("getTextBehindIndex(chCount-1," + 
                       " AccessibleTextType.PARAGRAPH):");
-            txt = oObj.getTextBehindIndex(chCount - 1,
+            txt = oObj.getTextBehindIndex(chCount - 1, 
                                           AccessibleTextType.PARAGRAPH);
             log.println("'" + txt.SegmentText + "'");
             res &= (txt.SegmentText.length() == 0);
 
-            log.print("getTextBehindIndex(1," +
+            log.print("getTextBehindIndex(1," + 
                       " AccessibleTextType.CHARACTER):");
             txt = oObj.getTextBehindIndex(1, AccessibleTextType.CHARACTER);
             log.println("'" + txt.SegmentText + "'");
             res &= txt.SegmentText.equals(text.substring(2, 3));
 
             if (chCount > 2) {
-                log.print("getTextBehindIndex(chCount-2," +
+                log.print("getTextBehindIndex(chCount-2," + 
                           " AccessibleTextType.CHARACTER):");
-                txt = oObj.getTextBehindIndex(chCount - 2,
+                txt = oObj.getTextBehindIndex(chCount - 2, 
                                               AccessibleTextType.CHARACTER);
                 log.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.equals(text.substring(chCount - 1, chCount));

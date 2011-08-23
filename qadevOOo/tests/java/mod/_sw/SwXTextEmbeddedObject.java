@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ public class SwXTextEmbeddedObject extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         XInterface oObj = null;
 
@@ -132,7 +132,7 @@ public class SwXTextEmbeddedObject extends TestCase {
         }
 
         XTextEmbeddedObjectsSupplier oTEOS = (XTextEmbeddedObjectsSupplier) UnoRuntime.queryInterface(
-                                                     XTextEmbeddedObjectsSupplier.class,
+                                                     XTextEmbeddedObjectsSupplier.class, 
                                                      xTextDoc);
 
         XNameAccess oEmObj = oTEOS.getEmbeddedObjects();

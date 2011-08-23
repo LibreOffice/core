@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ public class PerformanceContainer /* extends *//* implements */ {
         {
             m_nStartTime = _nStartTime;
         }
-
+    
     /*
       return the time, which is done until last startTime()
      */
@@ -65,7 +65,7 @@ public class PerformanceContainer /* extends *//* implements */ {
             long nMeanTime = System.currentTimeMillis();
             return nMeanTime - _nCurrentTimer;
         }
-
+    
     /*
       public long stopTimer()
         {
@@ -90,7 +90,7 @@ public class PerformanceContainer /* extends *//* implements */ {
 
     private long m_nTime[];
     private String m_sMSOfficeVersion;
-
+    
     public PerformanceContainer()
         {
             m_nTime = new long[LAST_VALUE];
@@ -100,7 +100,7 @@ public class PerformanceContainer /* extends *//* implements */ {
                 m_nTime[i] = 0;
             }
         }
-
+    
     public void setTime(int _nIndex, long _nValue)
         {
             m_nTime[_nIndex] = _nValue;
@@ -109,12 +109,12 @@ public class PerformanceContainer /* extends *//* implements */ {
         {
             return m_nTime[_nIndex];
         }
-
+    
     public void startTime(int _nIndex)
         {
             m_nTime[_nIndex] = getStartTime();
         }
-
+    
     public void stopTime(int _nIndex)
         {
             m_nTime[_nIndex] = meanTime(m_nTime[_nIndex]);
@@ -164,12 +164,12 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
             return nValue;
         }
-
+    
     public static long secondsToMilliSeconds(double _nSeconds)
         {
             return (long)(_nSeconds * 1000.0);
         }
-
+    
     /*
       Helper function, which read some values from a given file
 
@@ -215,7 +215,7 @@ public class PerformanceContainer /* extends *//* implements */ {
                         {
                             String sTime = sLine.substring(14);
                             m_nTime[Print] = secondsToMilliSeconds(stringToDouble(sTime));
-                        }
+                        }                        
                         else if (sLine.startsWith("WordVersion="))
                         {
                             String sMSOfficeVersion = sLine.substring(12);
@@ -246,7 +246,7 @@ public class PerformanceContainer /* extends *//* implements */ {
             }
             try
             {
-                aRandomAccessFile.close();
+                aRandomAccessFile.close();  
             }
             catch (java.io.IOException ie)
             {

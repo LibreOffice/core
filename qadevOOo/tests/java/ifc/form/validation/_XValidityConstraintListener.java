@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,20 +42,20 @@ public class _XValidityConstraintListener extends MultiMethodTest {
         boolean res = false;
         try {
             XValidatable xValidatable = (XValidatable) UnoRuntime.queryInterface(
-                                                XValidatable.class,
+                                                XValidatable.class, 
                                                 tEnv.getTestObject());
 
             log.println("adding Validator");
             XValidator xValidator = new MyValidator();
-            xValidatable.setValidator(xValidator);
+            xValidatable.setValidator(xValidator);    
             ValidatorCalled = false;
-
+            
             log.println("calling validityConstraintChanged()");
             oObj.validityConstraintChanged(
                     new com.sun.star.lang.EventObject());
             res = ValidatorCalled;
         } catch (com.sun.star.util.VetoException e) {
-            e.printStackTrace();
+            e.printStackTrace();       
         }
         tRes.tested("validityConstraintChanged()",res);
     }

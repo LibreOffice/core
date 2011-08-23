@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ public class TimeHelper
 
     public TimeHelper()
     {}
-
+    
     public void start()
         {
             m_bIsStopped = false;
@@ -77,7 +77,7 @@ public class TimeHelper
                 // add a minute
                 m_nSeconds += 60;
             }
-
+            
             int nMilliSeconds = cal.get(Calendar.MILLISECOND);
             m_nMilliSeconds = nMilliSeconds - m_nMilliSeconds;
             m_nRealMilliSeconds = m_nSeconds * 1000 + m_nMilliSeconds;

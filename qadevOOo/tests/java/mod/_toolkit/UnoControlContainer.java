@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ public class UnoControlContainer extends TestCase {
         util.DesktopTools.closeDoc(xTD2);
     }
 
-    public TestEnvironment createTestEnvironment(TestParameters param,
+    public TestEnvironment createTestEnvironment(TestParameters param, 
                                                  PrintWriter log) {
         // create Object Relations -------------------------------------------
         XInterface oObj = null;
@@ -106,7 +106,7 @@ public class UnoControlContainer extends TestCase {
 
         // create 3 XControls
         // create first XControl
-        shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
+        shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000, 
                                              10000, "TextField");
         WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
         model = shape.getControl();
@@ -122,7 +122,7 @@ public class UnoControlContainer extends TestCase {
 
 
         // create second XControl
-        shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
+        shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000, 
                                              10000, "TextField");
         WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
         model = shape.getControl();
@@ -138,7 +138,7 @@ public class UnoControlContainer extends TestCase {
 
 
         // create third XControl
-        shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
+        shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000, 
                                              10000, "CommandButton");
         WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
         model = shape.getControl();
@@ -154,10 +154,10 @@ public class UnoControlContainer extends TestCase {
 
         // create XToolkit, XWindowPeer, XDevice
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
-                                                               4500, 15000,
-                                                               10000,
-                                                               "CommandButton",
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000, 
+                                                               4500, 15000, 
+                                                               10000, 
+                                                               "CommandButton", 
                                                                "UnoControlButton");
 
         WriterTools.getDrawPage(xTD2).add((XShape) aShape);
@@ -166,7 +166,7 @@ public class UnoControlContainer extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class,
+                                            XControlAccess.class, 
                                             xTD2.getCurrentController());
 
         //get the ButtonControl for the needed Object relations
@@ -213,7 +213,7 @@ public class UnoControlContainer extends TestCase {
                 "creating a new environment for UnoControlContainer object");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
+        
         XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oObj);
         Rectangle ps = xWindow.getPosSize();
         xWindow.setPosSize(ps.X+10, ps.Y+10, ps.Width+10, ps.Height+10, PosSize.POSSIZE);

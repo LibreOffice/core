@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,16 +57,16 @@ public class GlobalLogWriter
             }
             return m_aGlobalLogWriter;
         }
-
+    
 //     public static synchronized void initialize()
 //         {
 //             get().initialize(null, true);
 //         }
-
+    
     protected static synchronized void set(LogWriter _aLog)
         {
             m_aGlobalLogWriter = _aLog;
         }
-
+    
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ import share.LogWriter;
  * @author  sw93809
  */
 public class SimpleOutProducer implements LogWriter {
-
+    
 
     /** initialization, here a filename might be given
      * or a dbUrL
@@ -41,13 +41,13 @@ public class SimpleOutProducer implements LogWriter {
     public boolean initialize(share.DescEntry entry, boolean active) {
         return true;
     }
-
+    
     /** Method to print
      */
     public void println(String msg) {
 
     }
-
+    
     /** will mostly be used by outproducers to sum up
      * the information, maybe write them to a db
      */
@@ -61,7 +61,7 @@ public class SimpleOutProducer implements LogWriter {
             System.out.println("Whole "+entry.EntryType+": "+entry.State);
         }
         for (int i=0;i<header.length();i++) {
-            System.out.print("*");
+            System.out.print("*");        
         }
         System.out.println("");
         return true;
@@ -69,9 +69,9 @@ public class SimpleOutProducer implements LogWriter {
 
     public Object getWatcher() {
         return null;
-    }
-
+    }    
+    
     public void setWatcher(Object watcher) {
     }
-
+    
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
             throw new StatusException("Couldn't change Diagram to 3D", e);
         }
     }
-
+    
     /**
     * Sets the diagram back to 2D as 2D rendering is much faster for the following tests.
     */
@@ -126,7 +126,7 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
             throw new StatusException("Couldn't change Diagram back to 2D", e);
         }
     }
-
+    
 }  // finish class _Chart3DBarProperties
 
 

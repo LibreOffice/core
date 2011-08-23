@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@ import java.awt.event.InputEvent;
 import lib.MultiMethodTest;
 
 public class _XSpinValue extends MultiMethodTest {
-
+    
     public XSpinValue oObj;
     public boolean adjusted = false;
     com.sun.star.awt.XAdjustmentListener listener = new AdjustmentListener();
 
     public void _addAdjustmentListener() {
-        util.FormTools.switchDesignOf((XMultiServiceFactory) tParam.getMSF(),
+        util.FormTools.switchDesignOf((XMultiServiceFactory) tParam.getMSF(), 
                                  (XTextDocument) tEnv.getObjRelation("Document"));
         shortWait();
         oObj.addAdjustmentListener(listener);
@@ -67,22 +67,22 @@ public class _XSpinValue extends MultiMethodTest {
         requiredMethod("addAdjustmentListener()");
         tRes.tested("removeAdjustmentListener()", true);
     }
-
+    
     public void _setSpinIncrement() {
         oObj.setSpinIncrement(15);
         oObj.setSpinIncrement(5);
         int bi = oObj.getSpinIncrement();
         tRes.tested("setSpinIncrement()",bi==5);
-    }
+    }    
 
     public void _getSpinIncrement() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setSpinIncrement()");
-        tRes.tested("getSpinIncrement()", true);
+        tRes.tested("getSpinIncrement()", true);        
     }
-
+    
 
     public void _setMaximum() {
         oObj.setMaximum(490);
@@ -90,30 +90,30 @@ public class _XSpinValue extends MultiMethodTest {
         int max = oObj.getMaximum();
         tRes.tested("setMaximum()",max==480);
     }
-
+    
     public void _getMaximum() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setMaximum()");
-        tRes.tested("getMaximum()", true);
+        tRes.tested("getMaximum()", true);                        
     }
-
+    
     public void _setMinimum() {
         oObj.setMinimum(90);
         oObj.setMinimum(80);
         int max = oObj.getMinimum();
         tRes.tested("setMinimum()",max==80);
     }
-
+    
     public void _getMinimum() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setMinimum()");
-        tRes.tested("getMinimum()", true);
-    }
-
+        tRes.tested("getMinimum()", true);                        
+    }    
+    
     public void _setOrientation() {
         boolean res = true;
         try {
@@ -125,30 +125,30 @@ public class _XSpinValue extends MultiMethodTest {
         int ori = oObj.getOrientation();
         res &= (ori==ScrollBarOrientation.VERTICAL);
         tRes.tested("setOrientation()",res );
-    }
+    }    
 
     public void _getOrientation() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setOrientation()");
-        tRes.tested("getOrientation()", true);
+        tRes.tested("getOrientation()", true);                                
     }
-
+    
     public void _setValue() {
         oObj.setMaximum(600);
         oObj.setValue(480);
         oObj.setValue(520);
         int val = oObj.getValue();
         tRes.tested("setValue()",val==520);
-    }
+    }    
 
     public void _getValue() {
         //this method is checked in the corresponding set method
         //so that method is requiered here and if it works
         //this method is given OK too
         requiredMethod("setValue()");
-        tRes.tested("getValue()", true);
+        tRes.tested("getValue()", true);          
     }
 
     public void _setValues() {
@@ -156,8 +156,8 @@ public class _XSpinValue extends MultiMethodTest {
         oObj.setValues(70, 210, 200);
         int val = oObj.getValue();
         int min = oObj.getMinimum();
-        int max = oObj.getMaximum();
-        tRes.tested("setValues()",((min==70) && (max==210) && (val==200)));
+        int max = oObj.getMaximum();        
+        tRes.tested("setValues()",((min==70) && (max==210) && (val==200)));        
     }
 
     private void adjustScrollBar() {
@@ -167,17 +167,17 @@ public class _XSpinValue extends MultiMethodTest {
                                 XSpinValue.class, tEnv.getTestObject());
 
         sv.setValue(500);
-
+        
         shortWait();
 
         XAccessible acc = (XAccessible) UnoRuntime.queryInterface(
                                   XAccessible.class, tEnv.getTestObject());
 
         XAccessibleComponent aCom = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                            XAccessibleComponent.class,
+                                            XAccessibleComponent.class, 
                                             acc.getAccessibleContext());
 
-        Point location = aCom.getLocationOnScreen();
+        Point location = aCom.getLocationOnScreen();        
         //Point location = (Point) tEnv.getObjRelation("Location");
         //XAccessibleComponent aCom = (XAccessibleComponent) tEnv.getObjRelation("Location");
         //Point location = aCom.getLocationOnScreen();
@@ -216,5 +216,5 @@ public class _XSpinValue extends MultiMethodTest {
             System.out.println("Listener disposed");
         }
     }
-
+    
 }

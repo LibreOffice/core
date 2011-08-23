@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,13 +81,13 @@ public class SwXTextTable extends TestCase {
      @param tParam    TestParameters class which contains additional
         test parameters
      @param log        PrintWriter class to log the test state and result
-
+        
      @return    TestEnvironment class
-
+        
      @see TestParameters
      @see PrintWriter
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                                  PrintWriter log) {
         // creation of testobject here
         XTextTable oObj = null;
@@ -99,7 +99,7 @@ public class SwXTextTable extends TestCase {
             instance = SOF.createTextTable(xTextDoc);
         } catch (com.sun.star.uno.Exception uE) {
             uE.printStackTrace(log);
-            throw new StatusException("Couldn't create testobj : " +
+            throw new StatusException("Couldn't create testobj : " + 
                                       uE.getMessage(), uE);
         }
 
@@ -115,7 +115,7 @@ public class SwXTextTable extends TestCase {
                 SOF.insertTextContent(xTextDoc, oObj);
             } catch (com.sun.star.uno.Exception uE) {
                 uE.printStackTrace(log);
-                throw new StatusException("Couldn't create TextTable : " +
+                throw new StatusException("Couldn't create TextTable : " + 
                                           uE.getMessage(), uE);
             }
         }
@@ -151,7 +151,7 @@ public class SwXTextTable extends TestCase {
         //Adding relation for util.XSortable
         final PrintWriter finalLog = log;
         final XTextTable oTable = oObj;
-        tEnv.addObjRelation("SORTCHECKER",
+        tEnv.addObjRelation("SORTCHECKER", 
                             new ifc.util._XSortable.XSortChecker() {
             PrintWriter out = finalLog;
 
@@ -163,23 +163,23 @@ public class SwXTextTable extends TestCase {
                 oTable.getCellByName("A1").setValue(4);
 
                 XTextRange textRange = (XTextRange) UnoRuntime.queryInterface(
-                                               XTextRange.class,
+                                               XTextRange.class, 
                                                oTable.getCellByName("A2"));
                 textRange.setString("b");
                 oTable.getCellByName("A3").setValue(3);
                 textRange = (XTextRange) UnoRuntime.queryInterface(
-                                    XTextRange.class,
+                                    XTextRange.class, 
                                     oTable.getCellByName("A4"));
                 textRange.setString("a");
                 oTable.getCellByName("A5").setValue(23);
                 textRange = (XTextRange) UnoRuntime.queryInterface(
-                                    XTextRange.class,
+                                    XTextRange.class, 
                                     oTable.getCellByName("A6"));
                 textRange.setString("ab");
 
             }
 
-            public boolean checkSort(boolean isSortNumbering,
+            public boolean checkSort(boolean isSortNumbering, 
                                      boolean isSortAscending) {
                 out.println("Sort checking...");
 
@@ -201,7 +201,7 @@ public class SwXTextTable extends TestCase {
 
                         if (!res) {
                             out.println("Expected: 3, 4, 23");
-                            out.println("Getting: " + value[3] + ", " +
+                            out.println("Getting: " + value[3] + ", " + 
                                             value[4] + ", " + value[5]);
                         }
                     } else {
@@ -211,7 +211,7 @@ public class SwXTextTable extends TestCase {
 
                         if (!res) {
                             out.println("Expected: 23, 4, 3");
-                            out.println("Getting: " + value[1] + ", " +
+                            out.println("Getting: " + value[1] + ", " + 
                                             value[2] + ", " + value[3]);
                         }
                     }
@@ -222,9 +222,9 @@ public class SwXTextTable extends TestCase {
 
                         if (!res) {
                             out.println("Expected: 23, 3, 4, a, ab, b");
-                            out.println("Getting: " + value[0] + ", " +
-                                            value[1] + ", " + value[2] +
-                                            ", " + value[3] + ", " +
+                            out.println("Getting: " + value[0] + ", " + 
+                                            value[1] + ", " + value[2] + 
+                                            ", " + value[3] + ", " + 
                                             value[4] + ", " + value[5]);
                         }
                     } else {
@@ -233,9 +233,9 @@ public class SwXTextTable extends TestCase {
 
                         if (!res) {
                             out.println("Expected: b, ab, a, 4, 3, 23");
-                            out.println("Getting: " + value[0] + ", " +
-                                            value[1] + ", " + value[2] +
-                                            ", " + value[3] + ", " +
+                            out.println("Getting: " + value[0] + ", " + 
+                                            value[1] + ", " + value[2] + 
+                                            ", " + value[3] + ", " + 
                                             value[4] + ", " + value[5]);
                         }
                     }
@@ -251,7 +251,7 @@ public class SwXTextTable extends TestCase {
             }
         });
 
-        tEnv.addObjRelation("CONTENT",
+        tEnv.addObjRelation("CONTENT", 
                             (XTextContent) UnoRuntime.queryInterface(
                                     XTextContent.class, instance));
         tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());

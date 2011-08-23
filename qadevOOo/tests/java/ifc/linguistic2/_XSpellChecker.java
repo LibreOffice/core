@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ public class _XSpellChecker extends MultiMethodTest {
 
     public XSpellChecker oObj = null;
     XSpellChecker alternative = null;
-
+    
     public void before() {
         alternative = (XSpellChecker) tEnv.getObjRelation("AlternativeChecker");
         if  (alternative == null) throw new StatusException(Status.failed
@@ -70,10 +70,10 @@ public class _XSpellChecker extends MultiMethodTest {
             PropertyValue[] empty = new PropertyValue[0] ;
             res &= oObj.isValid("Sun", new Locale("en","US",""), empty);
             res &= !oObj.isValid("Summersun", new Locale("en","US","") ,empty);
-            log.println("Result so far is - "+ (res ? "OK" : "failed"));
+            log.println("Result so far is - "+ (res ? "OK" : "failed"));            
             log.println("Checking alternative Spellchecker");
             res &= alternative.isValid("Sun", new Locale("en","US",""), empty);
-            res &= !alternative.isValid("Summersun", new Locale("en","US","") ,empty);
+            res &= !alternative.isValid("Summersun", new Locale("en","US","") ,empty);            
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             log.println("Exception while checking 'isValid'");
             res = false;
@@ -97,7 +97,7 @@ public class _XSpellChecker extends MultiMethodTest {
                             "Summersun",new Locale("en","US",""),empty);
             String alternatives = alt.getAlternatives()[0];
             res = (alternatives != null);
-            log.println("Result so far is - "+ (res ? "OK" : "failed"));
+            log.println("Result so far is - "+ (res ? "OK" : "failed"));            
             log.println("Checking alternative Spellchecker");
             alt =alternative.spell(
                             "Summersun",new Locale("en","US",""),empty);

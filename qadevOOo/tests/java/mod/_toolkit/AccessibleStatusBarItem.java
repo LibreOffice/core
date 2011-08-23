@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ public class AccessibleStatusBarItem extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -126,7 +126,7 @@ public class AccessibleStatusBarItem extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -149,7 +149,7 @@ public class AccessibleStatusBarItem extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                            xTextDoc);
 
         XInterface oObj = null;
@@ -158,13 +158,13 @@ public class AccessibleStatusBarItem extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = at.getCurrentContainerWindow(
-                                  (XMultiServiceFactory) tParam.getMSF(),
+                                  (XMultiServiceFactory) tParam.getMSF(), 
                                   aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext statusbar = at.getAccessibleObjectForRole(xRoot,
+        XAccessibleContext statusbar = at.getAccessibleObjectForRole(xRoot, 
                                                                      AccessibleRole.STATUS_BAR);
 
         try {
@@ -177,7 +177,7 @@ public class AccessibleStatusBarItem extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("EditOnly",
+        tEnv.addObjRelation("EditOnly", 
                             "Can't change or select Text in StatusBarItem");
         tEnv.addObjRelation("XAccessibleText", secondItem);
 
@@ -185,7 +185,7 @@ public class AccessibleStatusBarItem extends TestCase {
 
         final XTextDocument doc = xTextDoc;
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 doc.getText().setString("AccessibleStatusBarItem");

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
                 log.println("found " + PropertyName.DOC_COMPARATOR_INPUT_PATH + " " + sINPATH);
                 m_sInputPath = sINPATH;
             }
-
+            
             // REFERENCE_PATH ----------
             String sREF = (String)param.get( PropertyName.DOC_COMPARATOR_REFERENCE_PATH );
             if (sREF == null || sREF.length() == 0)
@@ -122,21 +122,21 @@ public class DocumentConverter extends EnhancedComplexTestCase
                 log.println("found " + PropertyName.DOC_COMPARATOR_REFERENCE_PATH + " " + sREF);
                 m_sReferencePath = sREF;
             }
-
+            
             if (bQuit == true)
             {
                 // log.println("must quit.");
                 assure("Must quit, Parameter problems.", false);
             }
-
+            
             if (m_sInputPath.startsWith("file:") ||
                 m_sReferencePath.startsWith("file:"))
             {
                 assure("We can't handle file: URL right, use system path instead.", false);
             }
-
+            
         }
-
+    
     /**
      * Function returns a List of software which must accessable as an external executable
      */
@@ -148,7 +148,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
         }
 
     // the test ======================================================================
-    public void convert()
+    public void convert() 
         {
             GlobalLogWriter.set(log);
             // check if all need software is installed and accessable
@@ -162,7 +162,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
             {
                 assure("Must quit", false);
             }
-
+            
             initMember();
 
             File aInputPath = new File(m_sInputPath);
@@ -173,7 +173,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
                 String sRemovePath = aInputPath.getAbsolutePath();
                 // a whole directory
                 FileFilter aFileFilter = FileHelper.getFileFilter();
-
+                
                 Object[] aList = DirectoryHelper.traverse(m_sInputPath, aFileFilter, aGTA.includeSubDirectories());
                 for (int i=0;i<aList.length;i++)
                 {
@@ -218,7 +218,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
                 param.put("ServiceFactory", xMSF);
             }
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
-
+            
             if (aGTA.getOfficeProgram().toLowerCase().equals("msoffice"))
             {
                 // ReferenceType is MSOffice
@@ -238,7 +238,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
                     {
                         sOutputFile += fs + sInputFileBasename;
                     }
-
+                    
                     a.storeToFileWithMSOffice(aGTA, _sInputFile, sOutputFile);
                 }
                 catch(ConvWatchCancelException e)
@@ -265,7 +265,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
                     assure(e.getMessage(), false);
                 }
             }
-
+            
             if (aGTA.restartOffice())
             {
                 // Office shutdown

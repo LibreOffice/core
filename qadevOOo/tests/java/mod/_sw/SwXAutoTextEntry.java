@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ import com.sun.star.uno.XInterface;
 public class SwXAutoTextEntry extends TestCase {
     XTextDocument xTextDoc;
     XAutoTextGroup oGroup;
-
+    
     /**
      * Creates text document.
      */
@@ -91,7 +91,7 @@ public class SwXAutoTextEntry extends TestCase {
             throw new StatusException( "Couldn't create document", e );
         }
     }
-
+    
     /**
      *  Removes added element from AutoTextGroup
      */
@@ -108,8 +108,8 @@ public class SwXAutoTextEntry extends TestCase {
         log.println( "disposing xTextDoc " );
         util.DesktopTools.closeDoc(xTextDoc);
     }
-
-
+    
+    
     /**
      * Creating a Testenvironment for the interfaces to be tested.
      * Creates an instance of the service
@@ -127,13 +127,13 @@ public class SwXAutoTextEntry extends TestCase {
      */
     protected synchronized TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
-
+        
         XAutoTextEntry oEntry = null;
         XAutoTextContainer oContainer;
         XInterface oObj = null;
         int n = 0;
         int nCount = 0;
-
+        
         log.println( "creating a test environment" );
         try {
             XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
@@ -145,28 +145,28 @@ public class SwXAutoTextEntry extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create AutoTextContainer", e);
         }
-
+        
         XNameAccess oContNames = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oContainer);
-
+        
         String contNames[] = oContNames.getElementNames();
         for (int i =0; i < contNames.length; i++){
             log.println("ContainerNames[ "+ i + "]: " + contNames[i]);
         }
-
+        
         try{
             oObj = (XInterface) AnyConverter.toObject(new Type(XInterface.class),oContNames.getByName("mytexts"));
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get AutoTextGroup", e);
         }
-
+        
         oGroup = (XAutoTextGroup) UnoRuntime.queryInterface
                 (XAutoTextGroup.class, oObj);
         String[] oENames = oGroup.getElementNames();
         for (int i=0; i<oENames.length; i++) {
             log.println("AutoTextEntryNames[" + i + "]: " + oENames[i]);
         }
-
+        
         XText oText = xTextDoc.getText();
         oText.insertString(oText.getStart(), "New AutoText", true);
         XTextRange oTextRange = (XTextRange) oText;
@@ -188,30 +188,30 @@ public class SwXAutoTextEntry extends TestCase {
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace(log);
         }
-
+        
         oObj = oEntry;
-
+        
         log.println("Trying to use XText as TextRange in the method applyTo");
         oEntry.applyTo(oTextRange);
-
+        
         oTextRange = oText.createTextCursor();
         log.println("Trying to use XTextCursor as TextRange in the method applyTo");
         oEntry.applyTo(oTextRange);
-
+        
         log.println( "creating a new environment for AutoTextEntry object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
-
+        
         // adding relation for XText
         DefaultDsc tDsc = new DefaultDsc("com.sun.star.text.XTextContent",
                 "com.sun.star.text.TextField.DateTime");
         log.println( "    adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xTextDoc, tDsc ) );
-
+        
         log.println( "adding TextDocument as mod relation to environment" );
         tEnv.addObjRelation("TEXTDOC", xTextDoc);
-
+        
         return tEnv;
     } // finish method getTestEnvironment
-
-
+    
+    
 }    // finish class SwXAutoTextEntry

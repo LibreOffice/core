@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,18 +53,18 @@ public class CLITest extends ComplexTestCase
             if (arg1.length() == 0)
                 failed("Check the make file. Java must be called with " +
                        "-Dcli_test_arg=path_to_bootstrap_ini");
-            String[] cmdarray = new String[] {testProgram, arg1};
+            String[] cmdarray = new String[] {testProgram, arg1}; 
 
             Process proc = null;
             Reader outReader;
             Reader errReader;
             try{
-
+                
                 proc = Runtime.getRuntime().exec(cmdarray);
                 outReader = new Reader(proc.getInputStream());
                 errReader = new Reader(proc.getErrorStream());
-
-
+                
+                
             }
             catch(Exception e)
             {
@@ -81,7 +81,7 @@ public class CLITest extends ComplexTestCase
         {
             failed("Unexpected exception.");
         }
-
+        
     }
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 log.println("found " + PropertyName.DOC_COMPARATOR_INPUT_PATH + " " + sINPATH);
                 m_sInputPath = sINPATH;
             }
-
+            
             // REFERENCE_PATH ----------
             String sREF = (String)param.get( PropertyName.DOC_COMPARATOR_REFERENCE_PATH );
             if (sREF == null || sREF.length() == 0)
@@ -122,21 +122,21 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 log.println("found " + PropertyName.DOC_COMPARATOR_REFERENCE_PATH + " " + sREF);
                 m_sReferencePath = sREF;
             }
-
+            
             if (bQuit == true)
             {
                 // log.println("must quit.");
                 assure("Must quit, Parameter problems.", false);
             }
-
+            
             if (m_sInputPath.startsWith("file:") ||
                 m_sReferencePath.startsWith("file:"))
             {
                 assure("We can't handle file: URL right, use system path instead.", false);
             }
-
+            
         }
-
+    
     /**
      * Function returns a List of software which must accessable as an external executable
      */
@@ -148,7 +148,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
         }
 
     // the test ======================================================================
-    public void buildreference()
+    public void buildreference() 
         {
             GlobalLogWriter.set(log);
             String sDBConnection = (String)param.get( PropertyName.DB_CONNECTION_STRING );
@@ -168,7 +168,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             {
                 return;
             }
-
+            
             initMember();
             DB.init(aGTA.getDBInfoString() + "," + sDBConnection);
             File aInputPath = new File(m_sInputPath);
@@ -182,18 +182,18 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
 
                 Object[] aList = DirectoryHelper.traverse(m_sInputPath, aFileFilter, aGTA.includeSubDirectories());
                 // fill into DB
-                // DB.filesRemove(aGTA.getDBInfoString());
+                // DB.filesRemove(aGTA.getDBInfoString());                    
                 // for (int j=0;j<aList.length;j++)
                 // {
                 //     String sEntry = (String)aList[j];
                 //     DB.fileInsert(aGTA.getDBInfoString(), sEntry, sRemovePath);
                 // }
-
+                
                 // normal run.
                 for (int i=0;i<aList.length;i++)
                 {
                     String sEntry = (String)aList[i];
-
+                    
                     String sNewReferencePath = m_sReferencePath + fs + FileHelper.removeFirstDirectorysAndBasenameFrom(sEntry, m_sInputPath);
                     log.println("- next file is: ------------------------------");
                     log.println(sEntry);
@@ -247,7 +247,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     aGTA = getGraphicalTestArguments();
                     aGTA.getPerformance().setTime(PerformanceContainer.OfficeStart, nStartTime);
                 }
-
+                
                 // Watcher Object is need in log object to give a simple way to say if a running office is alive.
                 // As long as a log comes, it pings the Watcher and says the office is alive, if not an
                 // internal counter increase and at a given point (300 seconds) the office is killed.
@@ -278,7 +278,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     assure(e.getMessage(), false, true);
                     DB.source_failed(e.getMessage());
                 }
-
+                
                 // Office shutdown
                 if (aProvider != null)
                 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public class CharacterStyle extends TestCase {
         log.println( "    disposing xTextDoc " );
         DesktopTools.closeDoc(xTextDoc);
     }
-
+    
     /**
     * Creating a Testenvironment for the interfaces to be tested.
     * At first style families are gotten from a text document using
@@ -201,7 +201,7 @@ public class CharacterStyle extends TestCase {
         short exclude = PropertyAttribute.MAYBEVOID + PropertyAttribute.READONLY;
         tEnv.addObjRelation("PropertyNames",utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude));
 
-        return tEnv;
+        return tEnv; 
     }
 
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,10 +110,10 @@ public class _XDriver extends MultiMethodTest {
             res &= (connection == null);
             log.println("Connected? " + !res);
         } catch(SQLException e) {
-            log.println("Unexpected exception");
+            log.println("Unexpected exception");            
             res &= false;
         }
-
+        
         if (nbu==null) {
             try {
                 String badUrl = url + "bla";

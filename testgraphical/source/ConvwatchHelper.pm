@@ -61,11 +61,11 @@ our $tempprefix;
 # ------------------------------------------------------------------------------
 # in filehelper
 # our $programprefix;
-#
+# 
 # sub getProgramPrefix($)
 # {
 #     my $sDBDistinct = shift;
-#
+# 
 #     my $sProgramPrefix;
 #     if (! $programprefix)
 #     {
@@ -102,7 +102,7 @@ sub getQADEVToolsPath()
 
 # in filehelper
 # our $toolsprefix;
-#
+# 
 # sub getToolsPrefix()
 # {
 #     my $sToolsPrefix;
@@ -202,13 +202,13 @@ our $dataprefix;
 # #    sleep 1;
 #     select(undef, undef, undef, 0.333);
 # }
-#
+# 
 # sub _waitInSeconds($)
 # {
 #     my $nLength = shift;
 #     my $i;
 #     my $j;
-#
+# 
 #     for ($j=0;$j<$nLength;$j++)
 #     {
 #         for ($i=0;$i<$j;$i++)
@@ -222,7 +222,7 @@ our $dataprefix;
 #         _shortsleep( 1 );
 #         print "\r";
 #     }
-#
+# 
 #     for ($j=0;$j<=$nLength;$j++)
 #     {
 #         for ($i=0;$i<$j;$i++)
@@ -237,7 +237,7 @@ our $dataprefix;
 #         print "\r";
 #     }
 # }
-#
+# 
 # sub wait30seconds()
 # {
 #     _waitInSeconds(20);
@@ -319,7 +319,7 @@ sub readdirectory($$$)
                     my $nFileCount = readdirectory($sNewStartDir, $sUserParameter, $hook);
                     # workOnDir($sNewDir, $nFileCount);
                     $nCountFiles += $nFileCount;
-
+                    
                     chdir ($startdir);                      # zurueckwechseln.
                     cwd();
                 }
@@ -373,13 +373,13 @@ sub searchSofficeBin($$$)
 }
 
 # our $lcl_sUnoPkgPath;
-#
+# 
 # sub searchUnoPkgBin($$$)
 # {
 #     my $currentDir = shift;
 #     my $currentFile = shift;
 #     my $sUserParameter = shift;
-#
+# 
 #     if ($currentFile eq $sUserParameter)
 #     {
 #         my $sSourceFilename;
@@ -398,7 +398,7 @@ sub searchSofficeBin($$$)
 #     my $currentDir = shift;
 #     my $currentFile = shift;
 #     my $sUserParameter = shift;
-#
+# 
 #     if ($currentFile eq $sUserParameter)
 #     {
 #         my $sSourceFilename;
@@ -415,36 +415,36 @@ sub searchSofficeBin($$$)
 # {
 #     my $sPathToInstallOffice = shift;
 #     my $sJARFileName = shift;
-#
+# 
 #     my $sCurrentPath = cwd();
-#
+# 
 #     $lcl_sJARPath = "";
 #     readdirectory(${sPathToInstallOffice}, ${sJARFileName}, \&searchJARFile);
-#
+# 
 #     chdir $sCurrentPath;
 #     cwd();
-#
+# 
 #     return $lcl_sJARPath;
 # }
 
 # sub getUnoPkg($)
 # {
 #     my $sPathToInstallOffice = shift;
-#
+# 
 #     my $sUnoPkgName = "unopkg.bin";
 #     if (isWindowsEnvironment())
 #     {
 #         $sUnoPkgName = "unopkg.exe";
 #     }
-#
+# 
 #     my $sCurrentPath = cwd();
-#
+# 
 #     $lcl_sUnoPkgPath = "";
 #     readdirectory(${sPathToInstallOffice}, ${sUnoPkgName}, \&searchUnoPkgBin);
-#
+# 
 #     chdir $sCurrentPath;
 #     cwd();
-#
+# 
 #     return ($lcl_sUnoPkgPath, $sUnoPkgName);
 # }
 
@@ -473,9 +473,9 @@ sub getSofficeExe($)
 # sub checkOfficeAlreadyInstalled($)
 # {
 #     my $sOfficePath = shift;
-#
+# 
 #     my $sCurrentPath = cwd();
-#
+# 
 #     $lcl_sSofficeBinPath = "";
 #     my $sOldOfficePath = appendPath($sOfficePath, "program");
 #     if ( -d "$sOldOfficePath" )
@@ -494,7 +494,7 @@ sub getSofficeExe($)
 #             $sThreeLayerOffice = appendPath($sThreeLayerOffice, "StarOffice 9");
 #             $sThreeLayerOffice = appendPath($sThreeLayerOffice, "program");
 #             $sThreeLayerOffice = appendPath($sThreeLayerOffice, "soffice.bin");
-#
+# 
 #             if ( -e "$sThreeLayerOffice" )
 #             {
 #                 return 1;
@@ -511,12 +511,12 @@ sub getSofficeExe($)
 #             }
 #         }
 #     }
-#
+#     
 #     # soffice.bin not found in fast path
 #     readdirectory($sOfficePath, "soffice.bin", \&searchSofficeBin);
 #     chdir $sCurrentPath;
 #     cwd();
-#
+# 
 #     if ( $lcl_sSofficeBinPath ne "" )
 #     {
 #         return 1;
@@ -529,7 +529,7 @@ sub getSofficeExe($)
 #     # {
 #     #     return 1;
 #     # }
-#     #
+#     # 
 #     # # check path system of tree layer office
 #     # if ( isWindowsEnvironment() )
 #     # {
@@ -541,14 +541,14 @@ sub getSofficeExe($)
 #     #     }
 #     #     else
 #     #     {
-#     #
+#     #         
 #     #         $sOfficePathCheck = appendPath($sOfficePathCheck, "StarOffice 9");
 #     #         $sOfficePathCheck = appendPath($sOfficePathCheck, "program");
 #     #         $sOfficePathCheck = appendPath($sOfficePathCheck, "soffice.bin");
 #     #         if ( -e $sOfficePathCheck )
 #     #         {
 #     #             return 1;
-#     #         }
+#     #         }    
 #     #         print "Error: There exist no Office, maybe an unsupported version?\n";
 #     #     }
 #     # }

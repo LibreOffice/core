@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ import com.sun.star.uno.XInterface;
 public class ScShapeObj extends TestCase {
 
     static XComponent xSheetDoc;
-
+    
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
@@ -107,9 +107,9 @@ public class ScShapeObj extends TestCase {
 
         // create test environment here
         TestEnvironment tEnv = new TestEnvironment( oShape );
-
+        
         log.println("Implementation name: "+util.utils.getImplName(oObj));
-        tEnv.addObjRelation("DOCUMENT",xSheetDoc);
+        tEnv.addObjRelation("DOCUMENT",xSheetDoc); 
 
         return tEnv;
     } // finish method getTestEnvironment

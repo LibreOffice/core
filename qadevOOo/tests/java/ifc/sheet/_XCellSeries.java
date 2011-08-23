@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,16 @@ public class _XCellSeries extends MultiMethodTest {
     protected boolean isSpreadSheet = false;
     protected boolean fillAuto = true;
     protected boolean forceFillAuto = false;
-
+    
 
     protected void before() {
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
-
+        
         if (oSheet == null) {
             log.println("Object relation oSheet is missing");
             log.println("Trying to query the needed Interface");
             oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
-                             XSpreadsheet.class, tEnv.getTestObject());
+                             XSpreadsheet.class, tEnv.getTestObject());            
 
             if (oSheet == null) {
                 throw new StatusException(Status.failed(
@@ -61,11 +61,11 @@ public class _XCellSeries extends MultiMethodTest {
                 isSpreadSheet = true;
             }
         }
-
+        
         Boolean myFillAuto = (Boolean) tEnv.getObjRelation("XCELLSERIES_FILLAUTO");
-
+        
         if (myFillAuto != null) fillAuto = myFillAuto.booleanValue();
-
+        
         if (tParam.containsKey("force_fillauto")){
             fillAuto = tParam.getBool("force_fillauto");
             forceFillAuto = tParam.getBool("force_fillauto");
@@ -73,14 +73,14 @@ public class _XCellSeries extends MultiMethodTest {
     }
 
     public void _fillAuto() {
-
+        
         if ((isSpreadSheet && !forceFillAuto) || !fillAuto) {
             log.println("This method consumes to much time for a complete SpreadSheet");
             log.println("Please use parameter '-force_fillauto true' to force this test");
             tRes.tested("fillAuto()",Status.skipped(true));
             return;
         }
-
+        
         boolean res = true;
 
         try {
@@ -125,13 +125,13 @@ public class _XCellSeries extends MultiMethodTest {
     }
 
     public void _fillSeries() {
-
+        
         if (isSpreadSheet) {
             log.println("This method consumes to much time for a complete SpreadSheet");
             tRes.tested("fillSeries()",Status.skipped(true));
             return;
         }
-
+        
         boolean res = true;
 
         try {
@@ -142,16 +142,16 @@ public class _XCellSeries extends MultiMethodTest {
 
             log.println(
                     "calling oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT, com.sun.star.sheet.FillMode.LINEAR, com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 8)");
-            oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT,
-                            com.sun.star.sheet.FillMode.LINEAR,
+            oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT, 
+                            com.sun.star.sheet.FillMode.LINEAR, 
                             com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 8);
             oSheet.getCellByPosition(0, 4).setFormula("=sum(A1:D1)");
 
             double getting = oSheet.getCellByPosition(0, 4).getValue();
             boolean locres = (getting == 20);
-
+            
             logger.finish();
-
+            
             if (!locres) {
                 log.println("Operation failed");
             } else {
@@ -159,22 +159,22 @@ public class _XCellSeries extends MultiMethodTest {
             }
 
             res &= locres;
-
+            
             logger = new LoggingThread((LogWriter)log, tParam);
             logger.start();
-
+            
             log.println(
                     "calling oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT, com.sun.star.sheet.FillMode.GROWTH, com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 16)");
-            oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT,
-                            com.sun.star.sheet.FillMode.GROWTH,
-                            com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2,
+            oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT, 
+                            com.sun.star.sheet.FillMode.GROWTH, 
+                            com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 
                             16);
             oSheet.getCellByPosition(0, 4).setFormula("=sum(A1:D1)");
             getting = oSheet.getCellByPosition(0, 4).getValue();
             locres = (getting == 30);
-
+            
             logger.finish();
-
+            
             if (!locres) {
                 log.println("Operation failed");
             } else {
@@ -185,11 +185,11 @@ public class _XCellSeries extends MultiMethodTest {
 
             logger = new LoggingThread((LogWriter)log, tParam);
             logger.start();
-
+            
             log.println(
                     "calling oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM, com.sun.star.sheet.FillMode.LINEAR, com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 8)");
-            oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM,
-                            com.sun.star.sheet.FillMode.LINEAR,
+            oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM, 
+                            com.sun.star.sheet.FillMode.LINEAR, 
                             com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 8);
             oSheet.getCellByPosition(4, 0).setFormula("=sum(A1:A4)");
             getting = oSheet.getCellByPosition(4, 0).getValue();
@@ -207,12 +207,12 @@ public class _XCellSeries extends MultiMethodTest {
 
             logger = new LoggingThread((LogWriter)log, tParam);
             logger.start();
-
+            
             log.println(
                     "calling oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM, com.sun.star.sheet.FillMode.GROWTH, com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 16)");
-            oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM,
-                            com.sun.star.sheet.FillMode.GROWTH,
-                            com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2,
+            oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM, 
+                            com.sun.star.sheet.FillMode.GROWTH, 
+                            com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 
                             16);
             oSheet.getCellByPosition(4, 0).setFormula("=sum(A1:A4)");
             getting = oSheet.getCellByPosition(4, 0).getValue();
@@ -234,11 +234,11 @@ public class _XCellSeries extends MultiMethodTest {
 
         tRes.tested("fillSeries()", res);
     }
-
+    
     /**
     * Forces environment recreation.
     */
     public void after() {
         disposeEnvironment();
-    }
+    }    
 }

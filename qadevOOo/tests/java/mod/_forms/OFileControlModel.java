@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,13 +100,13 @@ import com.sun.star.util.XCloseable;
  */
 public class OFileControlModel extends TestCase {
     XComponent xDrawDoc;
-
+    
     /**
      * Creates Draw document where controls are placed.
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
-
+        
         try {
             log.println("creating a draw document");
             xDrawDoc = SOF.createDrawDoc(null);
@@ -116,13 +116,13 @@ public class OFileControlModel extends TestCase {
             throw new StatusException(Status.failed("Can't create a document"));
         }
     }
-
+    
     /**
      * Disposes Draw document.
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xDrawDoc ");
-
+        
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
                 XCloseable.class, xDrawDoc);
@@ -133,7 +133,7 @@ public class OFileControlModel extends TestCase {
             log.println("couldn't close document");
         }
     }
-
+    
     /**
      * Creating a Testenvironment for the interfaces to be tested.
      * Creates FileControl in the Form. <p>
@@ -147,26 +147,26 @@ public class OFileControlModel extends TestCase {
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) {
         XInterface oObj = null;
-
-
+        
+        
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println("creating a test environment");
-
+        
         //get FileControlModel
         String objName = "FileControl";
-
+        
         XControlShape aShape = null;
-
+        
         Size size = new Size();
         Point position = new Point();
         XControlModel aControl = null;
-
+        
         //get MSF
         XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
             XMultiServiceFactory.class,
             xDrawDoc);
-
+        
         try {
             Object oInt = oDocMSF.createInstance(
                 "com.sun.star.drawing.ControlShape");
@@ -187,16 +187,16 @@ public class OFileControlModel extends TestCase {
             log.println("Couldn't create a component " + e);
             throw new StatusException(Status.failed("Can't create component"));
         }
-
+        
         aShape.setControl(aControl);
-
+        
         DrawTools.getDrawPage(xDrawDoc, 0).add((XShape) aShape);
         oObj = aShape.getControl();
-
+        
         log.println("creating a new environment for drawpage object");
-
+        
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
+        
         tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
             objName);
         PropertyValue prop = new PropertyValue();
@@ -204,7 +204,7 @@ public class OFileControlModel extends TestCase {
         prop.Value = "new Help Text since XPropertyAccess";
         tEnv.addObjRelation("XPropertyAccess.propertyToChange", prop);
         tEnv.addObjRelation("XPropertyContainer.propertyNotRemovable", "HelpText");
-
+        
         return tEnv;
     } // finish method getTestEnvironment
 } // finish class OFileControlModel

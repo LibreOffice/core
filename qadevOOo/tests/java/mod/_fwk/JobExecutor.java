@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,7 +176,7 @@ public class JobExecutor extends TestCase {
                     UnoRuntime.queryInterface(XSingleServiceFactory.class, events);
                 Object oNewEvent = eventsFac.createInstance();
 
-                XNameAccess xNewEventNA = (XNameAccess)
+                XNameAccess xNewEventNA = (XNameAccess) 
                     UnoRuntime.queryInterface(XNameAccess.class, oNewEvent);
                 Object oJobList = xNewEventNA.getByName("JobList");
                 XSingleServiceFactory jobListFac = (XSingleServiceFactory)
@@ -187,10 +187,10 @@ public class JobExecutor extends TestCase {
                     oJobList);
                 log.println("\tAdding TimeStamps to Events ...");
                 Object oNewJobTimeStamps = jobListFac.createInstance();
-
+                
                 jobListNC.insertByName("TestJob",  oNewJobTimeStamps);
-
-
+                
+                
                 XNameContainer xEventsNC = (XNameContainer)
                     UnoRuntime.queryInterface(XNameContainer.class, events);
                 xEventsNC.insertByName("TestEvent", oNewEvent);

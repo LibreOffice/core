@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ public class _XNamed extends MultiMethodTest {
             result &= loc_result;
             oObj.setName(oldName);
         } else {
-            log.println("The names for the object '" + testobjname +
+            log.println("The names for the object '" + testobjname + 
                         "' are fixed.");
             log.println("It is not possible to rename.");
             log.println("So 'setName()' is always OK");

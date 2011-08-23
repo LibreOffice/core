@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 
-/**
+/** 
  * Testing <code>com.sun.star.sheet.XDataPilotTable2</code>
  * interface methods :
  * <ul>
@@ -56,12 +56,12 @@ import lib.StatusException;
  *  <li><code> insertDrillDownSheet()</code></li>
  *  <li><code> getOutputRangeByType</code></li>
  * </ul>
- *
+ * 
  * @see com.sun.star.sheet.XDataPilotTable2
  * @see com.sun.star.table.CellAddress
- *
+ * 
  */
-public class _XDataPilotTable2 extends MultiMethodTest
+public class _XDataPilotTable2 extends MultiMethodTest 
 {
     private XSpreadsheetDocument xSheetDoc = null;
     private XDataPilotTable2 xDPTab2 = null;
@@ -71,13 +71,13 @@ public class _XDataPilotTable2 extends MultiMethodTest
     private ArrayList mDataFieldDims = null;
     private ArrayList mResultCells = null;
 
-    /**
+    /** 
      * exception to be thrown when obtaining a result data for a cell fails
      * (probably because the cell is not a result cell).
      */
     private class ResultCellFailure extends com.sun.star.uno.Exception {}
 
-    protected void before()
+    protected void before() 
     {
         Object o = tEnv.getObjRelation("DATAPILOTTABLE2");
         xDPTab2 = (XDataPilotTable2)UnoRuntime.queryInterface(
@@ -101,7 +101,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
         }
     }
 
-    public void _getDrillDownData()
+    public void _getDrillDownData() 
     {
         boolean testResult = true;
         int cellCount = mResultCells.size();
@@ -133,7 +133,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
         tRes.tested("getDrillDownData()", testResult);
     }
 
-    public void _getPositionData()
+    public void _getPositionData() 
     {
         boolean testResult = false;
 
@@ -192,7 +192,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
         tRes.tested("getPositionData()", testResult);
     }
 
-    public void _insertDrillDownSheet()
+    public void _insertDrillDownSheet() 
     {
         boolean testResult = true;
         int cellCount = mResultCells.size();
@@ -251,7 +251,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
                 String name = xNamed.getName();
                 try
                 {
-                    xSheets.removeByName(name);
+                    xSheets.removeByName(name);    
                 }
                 catch (com.sun.star.uno.Exception e)
                 {
@@ -279,13 +279,13 @@ public class _XDataPilotTable2 extends MultiMethodTest
         tRes.tested("insertDrillDownSheet()", testResult);
     }
 
-    public void _getOutputRangeByType()
+    public void _getOutputRangeByType() 
     {
         boolean testResult = false;
 
         do
         {
-            // Let's make sure this doesn't cause a crash.  A range returned for an
+            // Let's make sure this doesn't cause a crash.  A range returned for an 
             // out-of-bound condition is undefined.
             try
             {
@@ -310,7 +310,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
             }
 
             // Check to make sure the whole range is not empty.
-            if (mRangeWhole.EndColumn - mRangeWhole.StartColumn <= 0 ||
+            if (mRangeWhole.EndColumn - mRangeWhole.StartColumn <= 0 || 
                 mRangeWhole.EndRow - mRangeWhole.EndColumn <= 0)
             {
                 log.println("whole range is empty");
@@ -359,8 +359,8 @@ public class _XDataPilotTable2 extends MultiMethodTest
         else if (posData.PositionType == DataPilotTablePositionType.ROW_HEADER)
             posType = "row header";
 
-        log.println(posType + "; member name: " + header.MemberName + "; dimension: " +
-                    header.Dimension + "; hierarchy: " + header.Hierarchy +
+        log.println(posType + "; member name: " + header.MemberName + "; dimension: " + 
+                    header.Dimension + "; hierarchy: " + header.Hierarchy + 
                     "; level: " + header.Level);
     }
 
@@ -372,7 +372,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
         double val = res.Value;
         int flags = res.Flags;
         int filterCount = resultData.FieldFilters.length;
-        log.println("result; data field index: " + dataId + "; value: " + val + "; flags: " + flags +
+        log.println("result; data field index: " + dataId + "; value: " + val + "; flags: " + flags + 
                     "; filter count: " + filterCount);
 
         for (int i = 0; i < filterCount; ++i)
@@ -436,7 +436,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
                 Object field = xFields.getByIndex(i);
                 XPropertySet propSet = (XPropertySet)UnoRuntime.queryInterface(
                     XPropertySet.class, field);
-                DataPilotFieldOrientation orient =
+                DataPilotFieldOrientation orient = 
                     (DataPilotFieldOrientation)propSet.getPropertyValue("Orientation");
                 if (orient == DataPilotFieldOrientation.DATA)
                 {
@@ -554,7 +554,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
         {
             XCellRange xRng = xSheet.getCellRangeByPosition(nCol, nRow, nCol, nRow);
             XSheetCellRange xSCR = (XSheetCellRange)UnoRuntime.queryInterface(
-                XSheetCellRange.class, xRng);
+                XSheetCellRange.class, xRng);          
 
             XSheetCellCursor xCursor = xSheet.createCursorByRange(xSCR);
             XCellCursor xCellCursor = (XCellCursor)UnoRuntime.queryInterface(

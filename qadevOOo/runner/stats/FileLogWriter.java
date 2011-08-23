@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ import java.util.Iterator;
 
 public class FileLogWriter extends PrintWriter implements LogWriter {
 
-
+    
     HashMap mFileWriters = null;
     boolean logging = false;
     share.DescEntry entry = null;
     share.Watcher ow = null;
-
+   
     public FileLogWriter() {
         super(System.out);
         Calendar cal = new GregorianCalendar();
@@ -65,38 +65,38 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
          this.entry = entry;
          return true;
     }
-
-
-    public void addFileLog(String filePath){
+    
+    
+    public void addFileLog(String filePath){               
         try{
             if(mFileWriters == null)
-                mFileWriters = new HashMap();
-            mFileWriters.put(filePath, new FileWriter(filePath));
+                mFileWriters = new HashMap();            
+            mFileWriters.put(filePath, new FileWriter(filePath));        
         }catch(IOException e ){
             e.printStackTrace(this);
-        }
+        }            
     }
-
-
-    public void removeFileLog(String filePath){
+    
+    
+    public void removeFileLog(String filePath){               
         if(filePath != null)
-            mFileWriters.remove(filePath);
+            mFileWriters.remove(filePath);        
     }
-
-
+    
+    
     public void println(String msg) {
-
+        
         this.ow = (share.Watcher) entry.UserDefinedParams.get("Watcher");
-
+        
         if (ow != null) {
             ow.ping();
         }
         if (logging) {
-
+            
             // logoutput to console
             super.println("LOG> "+msg);
-            super.flush();
-
+            super.flush();        
+            
             //logoutput to file
             if(mFileWriters != null && mFileWriters.size() > 0){
                 try{
@@ -110,7 +110,7 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
                 }catch(IOException e ){
                     e.printStackTrace(this);
                 }
-            }
+            }                        
         }
     }
 
@@ -124,7 +124,7 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
             System.out.println("Whole "+entry.EntryType+": "+entry.State);
         }
         for (int i=0;i<header.length();i++) {
-            System.out.print("*");
+            System.out.print("*");        
         }
         System.out.println("");
         return true;
@@ -133,9 +133,9 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
     public Object getWatcher() {
         return this.ow;
     }
-
+    
     public void setWatcher(Object watcher) {
         entry.UserDefinedParams.put("Watcher", (share.Watcher) watcher);
     }
-
+    
 }

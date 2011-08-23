@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@ package ifc.presentation;
 import lib.MultiPropertyTest;
 
 public class _PreviewView extends MultiPropertyTest {
-
+    
     public void _CurrentPage() {
         Object obj1 = tEnv.getObjRelation("FirstPage");
         Object obj2 = tEnv.getObjRelation("SecondPage");

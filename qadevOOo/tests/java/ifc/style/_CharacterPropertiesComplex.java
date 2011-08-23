@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ import lib.MultiPropertyTest;
 * @see com.sun.star.style.CharacterPropertiesComplex
 */
 public class _CharacterPropertiesComplex extends MultiPropertyTest {
-
+    
     public void _CharWeightComplex() {
         testProperty("CharWeightComplex", new Float(com.sun.star.awt.FontWeight.BOLD),
             new Float(com.sun.star.awt.FontWeight.THIN)) ;
@@ -56,14 +56,14 @@ public class _CharacterPropertiesComplex extends MultiPropertyTest {
     public void _CharPostureComplex() {
         testProperty("CharPostureComplex", com.sun.star.awt.FontSlant.ITALIC,
             com.sun.star.awt.FontSlant.NONE) ;
-    }
+    }    
 
     /**
     * Forces environment recreation.
     */
     protected void after() {
         disposeEnvironment();
-    }
+    }    
 
 } //finish class _CharacterPropertiesComplex
 

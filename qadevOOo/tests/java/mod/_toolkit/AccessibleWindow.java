@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ public class AccessibleWindow extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -136,7 +136,7 @@ public class AccessibleWindow extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleText
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -163,7 +163,7 @@ public class AccessibleWindow extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                            xTextDoc);
 
         XInterface oObj = null;
@@ -171,7 +171,7 @@ public class AccessibleWindow extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = at.getCurrentWindow(
-                                  (XMultiServiceFactory) tParam.getMSF(),
+                                  (XMultiServiceFactory) tParam.getMSF(), 
                                   aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -187,7 +187,7 @@ public class AccessibleWindow extends TestCase {
         final XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                             XExtendedToolkit.class, toolkit);
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 XWindow xWin = (XWindow) UnoRuntime.queryInterface(
@@ -197,7 +197,7 @@ public class AccessibleWindow extends TestCase {
                 newPosSize.Height = newPosSize.Height - 20;
                 newPosSize.X = newPosSize.X + 20;
                 newPosSize.Y = newPosSize.Y + 20;
-                xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
+                xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width, 
                                 newPosSize.Height, PosSize.POSSIZE);
             }
         });

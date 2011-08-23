@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ import util.SOfficeFactory;
  * @see ifc.util.XFlushable
  */
 public class TypeDetection extends TestCase {
-
+    
     /**
     * Disposes text document.
     */
@@ -88,7 +88,7 @@ public class TypeDetection extends TestCase {
     }
 
     XTextDocument xTextDoc = null;
-
+    
     /**
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates an instance of the service
@@ -133,35 +133,35 @@ public class TypeDetection extends TestCase {
             throw new StatusException(
             Status.failed("Couldn't get elements from object"));
         }
-
+        
         log.println("adding INSTANCE 1 as obj relation to environment");
-
+        
         setPropertyValueValue((PropertyValue[])instance, "Preferred", "INSTANCE1");
         tEnv.addObjRelation("INSTANCE" +1, instance);
 
         // com.sun.star.container.XContainerQuery
-        NamedValue[] querySequenze = new NamedValue[1];
+        NamedValue[] querySequenze = new NamedValue[1]; 
         NamedValue query = new NamedValue();
         query.Name = "Name";
         query.Value = "writer_Text";
         querySequenze[0] = query;
-
-
+        
+        
         log.println("create text document with bookmarks");
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );        
         String fileURL = null;
         try {
             xTextDoc = SOF.createTextDoc( null );
             XInterface xBookMark = SOF.createBookmark( xTextDoc );
             SOF.insertTextContent( xTextDoc, (XTextContent) xBookMark );
-
+            
             fileURL = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF() );
             fileURL = fileURL + "bookmarks.oot";
 
             XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDoc);
             System.out.println(fileURL);
             store.storeToURL(fileURL, new PropertyValue[0]);
-
+            
         } catch( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create Bookmark", e );
@@ -174,7 +174,7 @@ public class TypeDetection extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
-
+    
     protected void setPropertyValueValue(PropertyValue[] props, String pName, Object pValue) {
         int i = 0;
         while (i < props.length && !props[i].Name.equals(pName)) {

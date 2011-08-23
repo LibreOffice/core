@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ import lib.TestParameters;
  * @see ifc.lang._XComponent
  */
 public class OButtonModel extends GenericModelTest {
-
+    
     /**
      * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
      * <pre>
@@ -98,17 +98,17 @@ public class OButtonModel extends GenericModelTest {
      * @param tParam the test parameter
      * @param log the log writer
      */
-
+    
     protected void initialize(TestParameters tParam, PrintWriter log) {
-
+        
         super.initialize(tParam, log);
-
+        
         super.m_kindOfControl="CommandButton";
-
+        
         super.m_ObjectName = "stardiv.one.form.component.CommandButton";
-
+        
         super.m_LCShape_Type = "CommandButton";
-
+        
     }
     /**
      * calls <CODE>cleanup()</CODE> from it's super class
@@ -118,8 +118,8 @@ public class OButtonModel extends GenericModelTest {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         super.cleanup(tParam, log);
     }
-
-
+    
+    
     /**
      * calls <CODE>createTestEnvironment()</CODE> from it's super class
      * @param Param the test parameter
@@ -130,5 +130,5 @@ public class OButtonModel extends GenericModelTest {
             PrintWriter log) {
         return super.createTestEnvironment(Param, log);
     }
-
+    
 }    // finish class OButtonModelold

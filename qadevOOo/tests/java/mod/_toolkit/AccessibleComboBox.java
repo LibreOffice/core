@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ public class AccessibleComboBox extends TestCase {
      * finds AccessibleComboBox walking through the
      * accessible component tree.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
 
@@ -102,7 +102,7 @@ public class AccessibleComboBox extends TestCase {
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        DiagThread psDiag = new DiagThread(xTextDoc,
+        DiagThread psDiag = new DiagThread(xTextDoc, 
                                            (XMultiServiceFactory) Param.getMSF());
         psDiag.start();
 
@@ -114,21 +114,21 @@ public class AccessibleComboBox extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, 
                                              "Cancel");
         action = (XAccessibleAction) UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
+        oObj = at.getAccessibleObjectForRole(xRoot, 
                                              AccessibleRole.PAGE_TAB_LIST);
 
         XAccessibleSelection xAccSel = (XAccessibleSelection) UnoRuntime.queryInterface(
-                                               XAccessibleSelection.class,
+                                               XAccessibleSelection.class, 
                                                oObj);
 
         try {
@@ -139,7 +139,7 @@ public class AccessibleComboBox extends TestCase {
         util.utils.shortWait(Param.getInt("ShortWait"));
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "", 
                                              "AccessibleComboBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
@@ -147,13 +147,13 @@ public class AccessibleComboBox extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                                   XAccessibleComponent.class,
+                                                   XAccessibleComponent.class, 
                                                    oObj);
         final XAccessibleComponent acomp1 = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                                    XAccessibleComponent.class,
+                                                    XAccessibleComponent.class, 
                                                     action);
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 acomp1.grabFocus();
@@ -210,7 +210,7 @@ public class AccessibleComboBox extends TestCase {
         }
 
         public void run() {
-            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                                xTextDoc);
 
             XController xController = aModel.getCurrentController();
@@ -219,10 +219,10 @@ public class AccessibleComboBox extends TestCase {
             try {
                 String aSlotID = ".uno:FontDialog";
                 XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                                      XDispatchProvider.class,
+                                                      XDispatchProvider.class, 
                                                       xController);
                 XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
-                                                  XURLTransformer.class,
+                                                  XURLTransformer.class, 
                                                   msf.createInstance(
                                                           "com.sun.star.util.URLTransformer"));
 

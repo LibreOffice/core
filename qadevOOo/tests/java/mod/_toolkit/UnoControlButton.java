@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public class UnoControlButton extends TestCase {
         util.DesktopTools.closeDoc(xTD2);
     }
 
-    public TestEnvironment createTestEnvironment(TestParameters Param,
+    public TestEnvironment createTestEnvironment(TestParameters Param, 
                                                  PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
@@ -92,10 +92,10 @@ public class UnoControlButton extends TestCase {
         XWindow anotherWindow = null;
 
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
-                                                               4500, 15000,
-                                                               10000,
-                                                               "CommandButton",
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000, 
+                                                               4500, 15000, 
+                                                               10000, 
+                                                               "CommandButton", 
                                                                "UnoControlButton");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
@@ -104,7 +104,7 @@ public class UnoControlButton extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class,
+                                            XControlAccess.class, 
                                             xTextDoc.getCurrentController());
 
         //get the ButtonControl for the needed Object relations

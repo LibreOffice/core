@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,7 +157,7 @@ public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
 
         String entryState = (String)mSqlInput.get("EntryState");
         String status = (String)mSqlInput.get("test_state.status");
-
+        
         if (!entryState.equals("SKIPPED.FAILED")) { // occurs in case of misspellings: do not make an database entry.
             if (status == null) {
                 executeSQLCommand("INSERT test_state (test_run_id, entry_id, status)"+
@@ -173,9 +173,9 @@ public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
 
     public Object getWatcher() {
         return null;
-    }
-
+    }    
+    
     public void setWatcher(Object watcher) {
     }
-
+    
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ public class AccessiblePopupMenu extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -75,7 +75,7 @@ public class AccessiblePopupMenu extends TestCase {
      * <code>createTestEnvironment</code> method.
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
-
+        
         log.println("release the popup menu");
         try {
             Robot rob = new Robot();
@@ -87,7 +87,7 @@ public class AccessiblePopupMenu extends TestCase {
         } catch (java.awt.AWTException e) {
             log.println("couldn't press mouse button");
         }
-
+        
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
@@ -118,7 +118,7 @@ public class AccessiblePopupMenu extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleText
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -145,7 +145,7 @@ public class AccessiblePopupMenu extends TestCase {
 
         shortWait(tParam);
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                            xTextDoc);
 
         XInterface oObj = null;
@@ -153,7 +153,7 @@ public class AccessiblePopupMenu extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = at.getCurrentWindow(
-                                  (XMultiServiceFactory) tParam.getMSF(),
+                                  (XMultiServiceFactory) tParam.getMSF(), 
                                   aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -176,14 +176,14 @@ public class AccessiblePopupMenu extends TestCase {
         } catch (java.awt.AWTException e) {
             log.println("couldn't press mouse button");
         }
-
+        
         shortWait(tParam);
 
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
 
         try {
-            xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+            xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                           tk.getTopWindow(0));
 
             xRoot = at.getAccessibleObject(xWindow);
@@ -199,14 +199,14 @@ public class AccessiblePopupMenu extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection", 
                             new Boolean(false));
 
         final XAccessibleSelection sel = (XAccessibleSelection) UnoRuntime.queryInterface(
-                                                 XAccessibleSelection.class,
+                                                 XAccessibleSelection.class, 
                                                  oObj);
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {
