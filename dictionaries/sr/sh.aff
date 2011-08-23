@@ -1,0 +1,20 @@
+SET UTF-8
+
+LANG sr-Latn
+TRY aioenrtsvumklpjdgzbščchćnjljžfđdžAIOENRTSVUMKLPJDGZBŠČCHĆNJLJŽFĐDŽ
+KEY qwertyuiopšđž|asdfghjklčć|zxcvbnm|žšđ|ćšč|žčđ|đćž|zy|qawsedrftgyhuj|jikolpč|azsxdcfvgbh|hnjmk
+
+MAP 4
+MAP cć
+MAP cč
+MAP zž
+MAP sš
+
+REP 1
+REP dj đ
+
+ICONV ﬁ fi
+ICONV ﬂ fl
+ICONV ﬆ st
+ICONV ĳ ij
+ICONV œ oe

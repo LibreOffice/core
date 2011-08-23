@@ -1,0 +1,8 @@
+﻿Versió 1.5 (25/3/2009)
+ Versió amb més de 8.000 entrades.
+Versió 1.0 (8/3/2009)
+ Versió amb més de 5.000 entrades, gràcies a la col·laboració d'estudiants de la UPF.
+Versió 0.5.1 (1/11/2008)
+ Informació per actualització remota.
+Versió 0.5.0 (30/10/2008)
+ Primera versió pública. Dades del Freeling. S'està muntat el sistema web.

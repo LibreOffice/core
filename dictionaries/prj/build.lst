@@ -1,0 +1,35 @@
+di      dictionaries : soltools mythes NULL
+di	dictionaries					usr1 - all di_mkout NULL
+di      dictionaries\af_ZA      nmake   -       all     di_af_ZA NULL
+di      dictionaries\ca         nmake   -       all     di_ca NULL
+di      dictionaries\cs_CZ      nmake   -       all     di_cs_CZ NULL
+di      dictionaries\da_DK      nmake   -       all     di_da_DK NULL
+di      dictionaries\de_AT      nmake   -       all     di_de_AT NULL
+di      dictionaries\de_CH      nmake   -       all     di_de_CH NULL
+di      dictionaries\de_DE      nmake   -       all     di_de_DE di_de_AT di_de_CH NULL
+di      dictionaries\en         nmake   -       all     di_en NULL
+di      dictionaries\es_ES      nmake   -       all     di_es_ES NULL
+di      dictionaries\et_EE      nmake   -       all     di_et_EE NULL
+di      dictionaries\fr_FR      nmake   -       all     di_fr_FR NULL
+di      dictionaries\gl         nmake   -       all     di_gl NULL
+di      dictionaries\he_IL      nmake   -       all     di_he_IL NULL
+di      dictionaries\hr_HR      nmake   -       all     di_hr_HR NULL
+di      dictionaries\hu_HU      nmake   -       all     di_hu_HU NULL
+di      dictionaries\it_IT      nmake   -       all     di_it_IT NULL
+di      dictionaries\ku_TR      nmake   -       all     di_ku_TR NULL
+di      dictionaries\lt_LT      nmake   -       all     di_lt_LT NULL
+di      dictionaries\ne_NP      nmake   -       all     di_ne_NP NULL
+di      dictionaries\nl_NL      nmake   -       all     di_nl_NL NULL
+di      dictionaries\no         nmake   -       all     di_no NULL
+di      dictionaries\pl_PL      nmake   -       all     di_pl_PL NULL
+di      dictionaries\pt_BR      nmake   -       all     di_pt_BR NULL
+di      dictionaries\ro         nmake   -       all     di_ro NULL
+di      dictionaries\ru_RU      nmake   -       all     di_ru_RU NULL
+di      dictionaries\sk_SK      nmake   -       all     di_sk_SK NULL
+di      dictionaries\sl_SI      nmake   -       all     di_sl_SI NULL
+di      dictionaries\sr         nmake   -       all     di_sr NULL
+di      dictionaries\sv_SE      nmake   -       all     di_sv_SE NULL
+di      dictionaries\sw_TZ      nmake   -       all     di_sw_TZ NULL
+di      dictionaries\th_TH      nmake   -       all     di_th_TH NULL
+di      dictionaries\vi         nmake   -       all     di_vi NULL
+di      dictionaries\zu_ZA      nmake   -       all     di_zu_ZA NULL

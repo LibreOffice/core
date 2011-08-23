@@ -1,0 +1,8 @@
+Versió 0.9.2 (12/4/2009)
+ Informació per a actualització remota.
+Versió 0.9.1 (5/4/2009)
+ S'afegeix informació d'ús per evitar problemes amb la ela geminada.
+Versió 0.9 (3/4/2009)
+ Es millora el tractament de la ela geminada.
+Versió 0.1 (30/10/2008)
+ Versió inicial. Basada en els patrons de TeX d'en Gonçal Badenes
