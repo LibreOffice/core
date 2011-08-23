@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ ScDBFunc::~ScDBFunc()
 }
 
 //
-//      Hilfsfunktionen
+//		Hilfsfunktionen
 //
 
 void ScDBFunc::GotoDBArea( const String& rDBName )
@@ -89,7 +89,7 @@ void ScDBFunc::GotoDBArea( const String& rDBName )
             SetTabNo( nTab );
 
             MoveCursorAbs( nStartCol, nStartRow, ScFollowMode( SC_FOLLOW_JUMP ),
-                               FALSE, FALSE );  // bShift,bControl
+                               FALSE, FALSE );	// bShift,bControl
             DoneBlockMode();
             InitBlockMode( nStartCol, nStartRow, nTab );
             MarkCursor( nEndCol, nEndRow, nTab );
@@ -98,7 +98,7 @@ void ScDBFunc::GotoDBArea( const String& rDBName )
     }
 }
 
-//  aktuellen Datenbereich fuer Sortieren / Filtern suchen
+//	aktuellen Datenbereich fuer Sortieren / Filtern suchen
 
 ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, ScGetDBSelection eSel, bool /*bShrinkToData*/, bool bExpandRows )
 {
@@ -111,20 +111,20 @@ ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, ScGetDBSelection e
         bool bShrinkColumnsOnly = false;
         if (eSel == SC_DBSEL_ROW_DOWN)
         {
-            // Don't alter row range, additional rows may have been selected on
+            // Don't alter row range, additional rows may have been selected on 
             // purpose to append data, or to have a fake header row.
             bShrinkColumnsOnly = true;
-            // Select further rows only if only one row or a portion thereof is
+            // Select further rows only if only one row or a portion thereof is 
             // selected.
             if (aRange.aStart.Row() != aRange.aEnd.Row())
             {
-                // If an area is selected shrink that to the actual used
+                // If an area is selected shrink that to the actual used 
                 // columns, don't draw filter buttons for empty columns.
                 eSel = SC_DBSEL_SHRINK_TO_USED_DATA;
             }
             else if (aRange.aStart.Col() == aRange.aEnd.Col())
             {
-                // One cell only, if it is not marked obtain entire used data
+                // One cell only, if it is not marked obtain entire used data 
                 // area.
                 const ScMarkData& rMarkData = GetViewData()->GetMarkData();
                 if (!(rMarkData.IsMarked() || rMarkData.IsMultiMarked()))
@@ -193,7 +193,7 @@ ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, ScGetDBSelection e
     return pData;
 }
 
-//  Datenbankbereiche aendern (Dialog)
+//	Datenbankbereiche aendern (Dialog)
 
 void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList )
 {
@@ -219,18 +219,18 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List&
                                        rStart.Col(), rStart.Row(),
                                        rEnd.Col(),   rEnd.Row() );
 
-            //  Targets am SBA abmelden nicht mehr noetig
+            //	Targets am SBA abmelden nicht mehr noetig
         }
     }
 
     if (bRecord)
         pUndoColl = new ScDBCollection( *pOldColl );
 
-    //  neue Targets am SBA anmelden nicht mehr noetig
+    //	neue Targets am SBA anmelden nicht mehr noetig
 
-    pDoc->CompileDBFormula( TRUE );     // CreateFormulaString
+    pDoc->CompileDBFormula( TRUE );		// CreateFormulaString
     pDoc->SetDBCollection( new ScDBCollection( rNewColl ) );
-    pDoc->CompileDBFormula( FALSE );    // CompileFormulaString
+    pDoc->CompileDBFormula( FALSE );	// CompileFormulaString
     pOldColl = NULL;
     pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
     aModificator.SetDocumentModified();
@@ -245,7 +245,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List&
 }
 
 //
-//      wirkliche Funktionen
+//		wirkliche Funktionen
 //
 
 // Sortieren
@@ -267,13 +267,13 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, BOOL bRecord )
     pDBData->GetSubTotalParam( aSubTotalParam );
     if (aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly)
     {
-        //  Subtotals wiederholen, mit neuer Sortierung
+        //	Subtotals wiederholen, mit neuer Sortierung
 
         DoSubTotals( aSubTotalParam, bRecord, &rSortParam );
     }
     else
     {
-        Sort( rSortParam, bRecord );        // nur sortieren
+        Sort( rSortParam, bRecord );		// nur sortieren
     }
 }
 
@@ -285,7 +285,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, BOOL bRecord, BOOL bPaint )
     BOOL bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, FALSE );
     if ( bSuccess && !rSortParam.bInplace )
     {
-        //  Ziel markieren
+        //	Ziel markieren
         ScRange aDestRange( rSortParam.nDestCol, rSortParam.nDestRow, rSortParam.nDestTab,
                             rSortParam.nDestCol + rSortParam.nCol2 - rSortParam.nCol1,
                             rSortParam.nDestRow + rSortParam.nRow2 - rSortParam.nRow1,
@@ -294,7 +294,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, BOOL bRecord, BOOL bPaint )
     }
 }
 
-//  Filtern
+//	Filtern
 
 void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource, BOOL bRecord )
 {
@@ -308,7 +308,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
         BOOL bCopy = !rQueryParam.bInplace;
         if (bCopy)
         {
-            //  Zielbereich markieren (DB-Bereich wurde ggf. angelegt)
+            //	Zielbereich markieren (DB-Bereich wurde ggf. angelegt)
             ScDocument* pDoc = pDocSh->GetDocument();
             ScDBData* pDestData = pDoc->GetDBAtCursor(
                                             rQueryParam.nDestCol, rQueryParam.nDestRow,
@@ -331,18 +331,18 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
     }
 }
 
-//  Autofilter-Knoepfe ein-/ausblenden
+//	Autofilter-Knoepfe ein-/ausblenden
 
 void ScDBFunc::ToggleAutoFilter()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocShellModificator aModificator( *pDocSh );
 
-    ScQueryParam    aParam;
-    ScDocument*     pDoc    = GetViewData()->GetDocument();
-    ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, false, true);
+    ScQueryParam	aParam;
+    ScDocument*		pDoc	= GetViewData()->GetDocument();
+    ScDBData*		pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, false, true);
 
-    pDBData->SetByRow( TRUE );              //! Undo, vorher abfragen ??
+    pDBData->SetByRow( TRUE );				//! Undo, vorher abfragen ??
     pDBData->GetQueryParam( aParam );
 
 
@@ -350,11 +350,11 @@ void ScDBFunc::ToggleAutoFilter()
     SCROW  nRow = aParam.nRow1;
     SCTAB  nTab = GetViewData()->GetTabNo();
     INT16   nFlag;
-    BOOL    bHasAuto = TRUE;
-    BOOL    bHeader  = pDBData->HasHeader();
-    BOOL    bPaint   = FALSE;
+    BOOL	bHasAuto = TRUE;
+    BOOL	bHeader  = pDBData->HasHeader();
+    BOOL	bPaint   = FALSE;
 
-    //!     stattdessen aus DB-Bereich abfragen?
+    //!		stattdessen aus DB-Bereich abfragen?
 
     for (nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAuto; nCol++)
     {
@@ -365,9 +365,9 @@ void ScDBFunc::ToggleAutoFilter()
             bHasAuto = FALSE;
     }
 
-    if (bHasAuto)                               // aufheben
+    if (bHasAuto)								// aufheben
     {
-        //  Filterknoepfe ausblenden
+        //	Filterknoepfe ausblenden
 
         for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
         {
@@ -388,7 +388,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         pDBData->SetAutoFilter(FALSE);
 
-        //  Filter aufheben (incl. Paint / Undo)
+        //	Filter aufheben (incl. Paint / Undo)
 
         SCSIZE nEC = aParam.GetEntryCount();
         for (SCSIZE i=0; i<nEC; i++)
@@ -400,7 +400,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         bPaint = TRUE;
     }
-    else                                    // Filterknoepfe einblenden
+    else									// Filterknoepfe einblenden
     {
         if ( !pDoc->IsBlockEmpty( nTab,
                                   aParam.nCol1, aParam.nRow1,
@@ -409,11 +409,11 @@ void ScDBFunc::ToggleAutoFilter()
             if (!bHeader)
             {
                 if ( MessBox( GetViewData()->GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
-                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // Koepfe aus erster Zeile?
+                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),		// "StarCalc"
+                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 ) 	// Koepfe aus erster Zeile?
                     ).Execute() == RET_YES )
                 {
-                    pDBData->SetHeader( TRUE );     //! Undo ??
+                    pDBData->SetHeader( TRUE ); 	//! Undo ??
                     bHeader = TRUE;
                 }
             }
@@ -453,7 +453,7 @@ void ScDBFunc::ToggleAutoFilter()
     }
 }
 
-//      nur ausblenden, keine Daten veraendern
+//		nur ausblenden, keine Daten veraendern
 
 void ScDBFunc::HideAutoFilter()
 {
@@ -492,7 +492,7 @@ void ScDBFunc::HideAutoFilter()
     rBindings.Invalidate( SID_AUTOFILTER_HIDE );
 }
 
-//      Re-Import
+//		Re-Import
 
 BOOL ScDBFunc::ImportData( const ScImportParam& rParam, BOOL bRecord )
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,35 +46,35 @@ class ScNameDlg : public ScAnyRefDlg
 {
 private:
     FixedLine       aFlName;
-    ComboBox        aEdName;
+    ComboBox		aEdName;
 
     FixedLine       aFlAssign;
-    formula::RefEdit        aEdAssign;
-    formula::RefButton      aRbAssign;
+    formula::RefEdit		aEdAssign;
+    formula::RefButton		aRbAssign;
 
-    FixedLine       aFlType;
-    CheckBox        aBtnPrintArea;
-    CheckBox        aBtnColHeader;
-    CheckBox        aBtnCriteria;
-    CheckBox        aBtnRowHeader;
+    FixedLine		aFlType;
+    CheckBox		aBtnPrintArea;
+    CheckBox		aBtnColHeader;
+    CheckBox		aBtnCriteria;
+    CheckBox		aBtnRowHeader;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    MoreButton      aBtnMore;
-    BOOL            bSaved;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
+    PushButton		aBtnAdd;
+    PushButton		aBtnRemove;
+    MoreButton		aBtnMore;
+    BOOL			bSaved;
 
-    const String    aStrAdd;    // "Hinzufuegen"
-    const String    aStrModify; // "Aendern"
-    const String    errMsgInvalidSym;
+    const String	aStrAdd;	// "Hinzufuegen"
+    const String	aStrModify;	// "Aendern"
+    const String	errMsgInvalidSym;
 
-    ScViewData*     pViewData;
-    ScDocument*     pDoc;
-    ScRangeName     aLocalRangeName;
-    const ScAddress theCursorPos;
-    Selection       theCurSel;
+    ScViewData*		pViewData;
+    ScDocument*		pDoc;
+    ScRangeName		aLocalRangeName;
+    const ScAddress	theCursorPos;
+    Selection		theCurSel;
 
 #ifdef _NAMEDLG_CXX
 private:
@@ -95,20 +95,20 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( BOOL bForced = FALSE );
+    virtual void	RefInputDone( BOOL bForced = FALSE );
 
 
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                               ScViewData*      ptrViewData,
-                               const ScAddress& aCursorPos );
+                               ScViewData*		ptrViewData,
+                               const ScAddress&	aCursorPos );
                     ~ScNameDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL    IsRefInputMode() const;
+    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual BOOL	IsRefInputMode() const;
 
-    virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual void	SetActive();
+    virtual BOOL	Close();
 
 };
 

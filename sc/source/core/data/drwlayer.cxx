@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,15 +85,15 @@
 
 #include <vcl/field.hxx>
 
-#define DET_ARROW_OFFSET    1000
+#define DET_ARROW_OFFSET	1000
 
-//  Abstand zur naechsten Zelle beim Loeschen (bShrink), damit der Anker
-//  immer an der richtigen Zelle angezeigt wird
-//#define SHRINK_DIST       3
-//  und noch etwas mehr, damit das Objekt auch sichtbar in der Zelle liegt
-#define SHRINK_DIST     25
+//	Abstand zur naechsten Zelle beim Loeschen (bShrink), damit der Anker
+//	immer an der richtigen Zelle angezeigt wird
+//#define SHRINK_DIST		3
+//	und noch etwas mehr, damit das Objekt auch sichtbar in der Zelle liegt
+#define SHRINK_DIST		25
 
-#define SHRINK_DIST_TWIPS   15
+#define SHRINK_DIST_TWIPS	15
 
 using namespace ::com::sun::star;
 
@@ -107,9 +107,9 @@ static E3dObjFactory* pF3d = NULL;
 static USHORT nInst = 0;
 
 SfxObjectShell* ScDrawLayer::pGlobalDrawPersist = NULL;
-//REMOVE    SvPersist* ScDrawLayer::pGlobalDrawPersist = NULL;
+//REMOVE	SvPersist* ScDrawLayer::pGlobalDrawPersist = NULL;
 
-BOOL bDrawIsInUndo = FALSE;         //! Member
+BOOL bDrawIsInUndo = FALSE;			//! Member
 
 // -----------------------------------------------------------------------
 
@@ -171,7 +171,7 @@ __EXPORT ScTabSizeChangedHint::~ScTabSizeChangedHint()
 
 // -----------------------------------------------------------------------
 
-#define MAXMM   10000000
+#define MAXMM	10000000
 
 inline long TwipsToHmm (long nVal)
 {
@@ -220,11 +220,11 @@ void lcl_ReverseTwipsToMM( Rectangle& rRect )
 
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     FmFormModel( SvtPathOptions().GetPalettePath(),
-                 NULL,                          // SfxItemPool* Pool
+                 NULL, 							// SfxItemPool* Pool
                  pGlobalDrawPersist ?
                      pGlobalDrawPersist :
                      ( pDocument ? pDocument->GetDocumentShell() : NULL ),
-                 TRUE ),        // bUseExtColorTable (is set below)
+                 TRUE ),		// bUseExtColorTable (is set below)
     aName( rName ),
     pDoc( pDocument ),
     pUndoGroup( NULL ),
@@ -232,7 +232,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     bAdjustEnabled( TRUE ),
     bHyphenatorSet( FALSE )
 {
-    pGlobalDrawPersist = NULL;          // nur einmal benutzen
+    pGlobalDrawPersist = NULL;			// nur einmal benutzen
 
     SfxObjectShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : NULL;
     if ( pObjSh )
@@ -248,7 +248,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
         SetColorTable( XColorTable::GetStdColorTable() );
 
     SetSwapGraphics(TRUE);
-//  SetSwapAsynchron(TRUE);     // an der View
+//	SetSwapAsynchron(TRUE);		// an der View
 
     SetScaleUnit(MAP_100TH_MM);
     SfxItemPool& rPool = GetItemPool();
@@ -270,7 +270,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
         rPool.GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( FALSE, EE_PARA_ASIANCJKSPACING ) );
     }
 
-    rPool.FreezeIdRanges();                         // the pool is also used directly
+    rPool.FreezeIdRanges();							// the pool is also used directly
 
     SdrLayerAdmin& rAdmin = GetLayerAdmin();
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("vorne")),    SC_LAYER_FRONT);
@@ -280,7 +280,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("hidden")),   SC_LAYER_HIDDEN);
     // "Controls" is new - must also be created when loading
 
-    //  Link fuer URL-Fields setzen
+    //	Link fuer URL-Fields setzen
     ScModule* pScMod = SC_MOD();
     Outliner& rOutliner = GetDrawOutliner();
     rOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
@@ -296,7 +296,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     if ( pHitOutlinerPool )
          pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));    // 12Pt
 
-    //  URL-Buttons haben keinen Handler mehr, machen alles selber
+    //	URL-Buttons haben keinen Handler mehr, machen alles selber
 
     if( !nInst++ )
     {
@@ -337,7 +337,7 @@ void ScDrawLayer::UseHyphenator()
 
 SdrPage* __EXPORT ScDrawLayer::AllocPage(bool bMasterPage)
 {
-    //  don't create basic until it is needed
+    //	don't create basic until it is needed
     StarBASIC* pBasic = NULL;
     ScDrawPage* pPage = new ScDrawPage( *this, pBasic, bMasterPage);
     return pPage;
@@ -357,14 +357,14 @@ BOOL ScDrawLayer::HasObjects() const
 
 void ScDrawLayer::UpdateBasic()
 {
-    //  don't create basic until it is needed
-    //! remove this method?
+    //	don't create basic until it is needed
+    //!	remove this method?
 }
 
 SdrModel* __EXPORT ScDrawLayer::AllocModel() const
 {
-    //  #103849# Allocated model (for clipboard etc) must not have a pointer
-    //  to the original model's document, pass NULL as document:
+    //	#103849# Allocated model (for clipboard etc) must not have a pointer
+    //	to the original model's document, pass NULL as document:
 
     return new ScDrawLayer( NULL, aName );
 }
@@ -406,11 +406,11 @@ void ScDrawLayer::ScRemovePage( SCTAB nTab )
     if (bRecording)
     {
         SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-        AddCalcUndo(new SdrUndoDelPage(*pPage));        // Undo-Action wird Owner der Page
-        RemovePage( static_cast<sal_uInt16>(nTab) );                            // nur austragen, nicht loeschen
+        AddCalcUndo(new SdrUndoDelPage(*pPage));		// Undo-Action wird Owner der Page
+        RemovePage( static_cast<sal_uInt16>(nTab) );							// nur austragen, nicht loeschen
     }
     else
-        DeletePage( static_cast<sal_uInt16>(nTab) );                            // einfach weg damit
+        DeletePage( static_cast<sal_uInt16>(nTab) );							// einfach weg damit
 }
 
 void ScDrawLayer::ScRenamePage( SCTAB nTab, const String& rNewName )
@@ -427,7 +427,7 @@ void ScDrawLayer::ScMovePage( USHORT nOldPos, USHORT nNewPos )
 
 void ScDrawLayer::ScCopyPage( USHORT nOldPos, USHORT nNewPos, BOOL bAlloc )
 {
-    //! remove argument bAlloc (always FALSE)
+    //!	remove argument bAlloc (always FALSE)
 
     if (bDrawIsInUndo)
         return;
@@ -519,12 +519,12 @@ void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize, bool bUpdateNo
         if ( rSize != pPage->GetSize() )
         {
             pPage->SetSize( rSize );
-            Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() an den Views
+            Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );	// SetWorkArea() an den Views
         }
 
         // Detektivlinien umsetzen (an neue Hoehen/Breiten anpassen)
-        //  auch wenn Groesse gleich geblieben ist
-        //  (einzelne Zeilen/Spalten koennen geaendert sein)
+        //	auch wenn Groesse gleich geblieben ist
+        //	(einzelne Zeilen/Spalten koennen geaendert sein)
 
         BOOL bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
 
@@ -582,15 +582,15 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
         TwipsToMM( aPos.X() );
         TwipsToMM( aPos.Y() );
 
-        //  Berechnung und Werte wie in detfunc.cxx
+        //	Berechnung und Werte wie in detfunc.cxx
 
         Size aSize( (long)( TwipsToHmm( pDoc->GetColWidth( nCol1, nTab1) ) ),
                     (long)( TwipsToHmm( pDoc->GetRowHeight( nRow1, nTab1) ) ) );
         Rectangle aRect( aPos, aSize );
-        aRect.Left()    -= 250;
-        aRect.Right()   += 250;
-        aRect.Top()     -= 70;
-        aRect.Bottom()  += 70;
+        aRect.Left()	-= 250;
+        aRect.Right()	+= 250;
+        aRect.Top()		-= 70;
+        aRect.Bottom()	+= 70;
         if ( bNegativePage )
             MirrorRectRTL( aRect );
 
@@ -603,7 +603,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
     }
     else if( bArrow )
     {
-        //! nicht mehrere Undos fuer ein Objekt erzeugen (hinteres kann dann weggelassen werden)
+        //!	nicht mehrere Undos fuer ein Objekt erzeugen (hinteres kann dann weggelassen werden)
 
         SCCOL nLastCol;
         SCROW nLastRow;
@@ -618,7 +618,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
             TwipsToMM( aPos.Y() );
             Point aStartPos = aPos;
             if ( bNegativePage )
-                aStartPos.X() = -aStartPos.X();     // don't modify aPos - used below
+                aStartPos.X() = -aStartPos.X();		// don't modify aPos - used below
             if ( pObj->GetPoint( 0 ) != aStartPos )
             {
                 if (bRecording)
@@ -652,7 +652,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
             TwipsToMM( aPos.Y() );
             Point aEndPos = aPos;
             if ( bNegativePage )
-                aEndPos.X() = -aEndPos.X();         // don't modify aPos - used below
+                aEndPos.X() = -aEndPos.X();			// don't modify aPos - used below
             if ( pObj->GetPoint( 1 ) != aEndPos )
             {
                 if (bRecording)
@@ -678,7 +678,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
             }
         }
     }
-    else                                // Referenz-Rahmen
+    else								// Referenz-Rahmen
     {
         DBG_ASSERT( bValid1, "ScDrawLayer::RecalcPos - invalid start position" );
         Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
@@ -759,7 +759,7 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
 
     if ( bNegativePage )
     {
-        nStartX = -nStartX;     // positions are negative, swap start/end so the same comparisons work
+        nStartX = -nStartX;		// positions are negative, swap start/end so the same comparisons work
         nEndX   = -nEndX;
         ::std::swap( nStartX, nEndX );
     }
@@ -801,7 +801,7 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
 
     if ( bNegativePage )
     {
-        nStartX = -nStartX;     // reverse transformation, so the same cell address calculation works
+        nStartX = -nStartX;		// reverse transformation, so the same cell address calculation works
         nEndX   = -nEndX;
         ::std::swap( nStartX, nEndX );
     }
@@ -823,7 +823,7 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
             rRange.aStart.SetCol( i>0 ? (i-1) : 0 );
 
             nWidth = 0;
-            for (i=0; i<=MAXCOL && nWidth<=nEndX; i++)          //! bei Start anfangen
+            for (i=0; i<=MAXCOL && nWidth<=nEndX; i++)			//! bei Start anfangen
                 nWidth += pDoc->GetColWidth(i,nTab);
             rRange.aEnd.SetCol( i>0 ? (i-1) : 0 );
         }
@@ -886,12 +886,12 @@ SdrUndoGroup* ScDrawLayer::GetCalcUndo()
     return pRet;
 }
 
-//  MoveAreaTwips: all measures are kept in twips
+//	MoveAreaTwips: all measures are kept in twips
 void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
         const Point& rMove, const Point& rTopLeft )
 {
     if (!rMove.X() && !rMove.Y())
-        return;                                     // nix
+        return; 									// nix
 
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page nicht gefunden");
@@ -903,9 +903,9 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
     // fuer Shrinking!
     Rectangle aNew( rArea );
     BOOL bShrink = FALSE;
-    if ( rMove.X() < 0 || rMove.Y() < 0 )       // verkleinern
+    if ( rMove.X() < 0 || rMove.Y() < 0 )		// verkleinern
     {
-        if ( rTopLeft != rArea.TopLeft() )      // sind gleich beim Verschieben von Zellen
+        if ( rTopLeft != rArea.TopLeft() )		// sind gleich beim Verschieben von Zellen
         {
             bShrink = TRUE;
             aNew.Left() = rTopLeft.X();
@@ -918,14 +918,14 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
     {
         if( GetAnchor( pObject ) == SCA_CELL )
         {
-            if ( GetObjData( pObject ) )                    // Detektiv-Pfeil ?
+            if ( GetObjData( pObject ) )					// Detektiv-Pfeil ?
             {
                 // hier nichts
             }
-            else if ( pObject->ISA( SdrEdgeObj ) )          // Verbinder?
+            else if ( pObject->ISA( SdrEdgeObj ) )			// Verbinder?
             {
-                //  hier auch nichts
-                //! nicht verbundene Enden wie bei Linien (s.u.) behandeln?
+                //	hier auch nichts
+                //!	nicht verbundene Enden wie bei Linien (s.u.) behandeln?
             }
             else if ( pObject->IsPolyObj() && pObject->GetPointCount()==2 )
             {
@@ -940,7 +940,7 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
                     }
                     else if (bShrink && aNew.IsInside(aPoint))
                     {
-                        //  Punkt ist in betroffener Zelle - Test auf geloeschten Bereich
+                        //	Punkt ist in betroffener Zelle - Test auf geloeschten Bereich
                         if ( rMove.X() && aPoint.X() >= rArea.Left() + rMove.X() )
                         {
                             aPoint.X() = rArea.Left() + rMove.X() - SHRINK_DIST_TWIPS;
@@ -968,7 +968,7 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
                 // aOldMMPos: not converted, millimeters
                 Point aOldMMPos = bNegativePage ? aObjRect.TopRight() : aObjRect.TopLeft();
                 lcl_ReverseTwipsToMM( aObjRect );
-                Point aTopLeft = bNegativePage ? aObjRect.TopRight() : aObjRect.TopLeft();  // logical left
+                Point aTopLeft = bNegativePage ? aObjRect.TopRight() : aObjRect.TopLeft();	// logical left
                 Size aMoveSize;
                 BOOL bDoMove = FALSE;
                 if (rArea.IsInside(aTopLeft))
@@ -978,7 +978,7 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
                 }
                 else if (bShrink && aNew.IsInside(aTopLeft))
                 {
-                    //  Position ist in betroffener Zelle - Test auf geloeschten Bereich
+                    //	Position ist in betroffener Zelle - Test auf geloeschten Bereich
                     if ( rMove.X() && aTopLeft.X() >= rArea.Left() + rMove.X() )
                     {
                         aMoveSize.Width() = rArea.Left() + rMove.X() - SHRINK_DIST - aTopLeft.X();
@@ -1005,10 +1005,10 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
                     if ( aTopLeft.Y() + aMoveSize.Height() < 0 )
                         aMoveSize.Height() = -aTopLeft.Y();
 
-                    //  get corresponding move size in millimeters:
+                    //	get corresponding move size in millimeters:
                     Point aNewPos( aTopLeft.X() + aMoveSize.Width(), aTopLeft.Y() + aMoveSize.Height() );
                     lcl_TwipsToMM( aNewPos );
-                    aMoveSize = Size( aNewPos.X() - aOldMMPos.X(), aNewPos.Y() - aOldMMPos.Y() );   // millimeters
+                    aMoveSize = Size( aNewPos.X() - aOldMMPos.X(), aNewPos.Y() - aOldMMPos.Y() );	// millimeters
 
                     AddCalcUndo( new SdrUndoMoveObj( *pObject, aMoveSize ) );
                     pObject->Move( aMoveSize );
@@ -1016,12 +1016,12 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
                 else if ( rArea.IsInside( bNegativePage ? aObjRect.BottomLeft() : aObjRect.BottomRight() ) &&
                             !pObject->IsResizeProtect() )
                 {
-                    //  geschuetzte Groessen werden nicht veraendert
-                    //  (Positionen schon, weil sie ja an der Zelle "verankert" sind)
+                    //	geschuetzte Groessen werden nicht veraendert
+                    //	(Positionen schon, weil sie ja an der Zelle "verankert" sind)
                     AddCalcUndo( new SdrUndoGeoObj( *pObject ) );
                     long nOldSizeX = aObjRect.Right() - aObjRect.Left() + 1;
                     long nOldSizeY = aObjRect.Bottom() - aObjRect.Top() + 1;
-                    long nLogMoveX = rMove.X() * ( bNegativePage ? -1 : 1 );    // logical direction
+                    long nLogMoveX = rMove.X() * ( bNegativePage ? -1 : 1 );	// logical direction
                     pObject->Resize( aOldMMPos, Fraction( nOldSizeX+nLogMoveX, nOldSizeX ),
                                                 Fraction( nOldSizeY+rMove.Y(), nOldSizeY ) );
                 }
@@ -1045,7 +1045,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
 
     Rectangle aRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
     lcl_ReverseTwipsToMM( aRect );
-    //! use twips directly?
+    //!	use twips directly?
 
     Point aMove;
 
@@ -1063,22 +1063,22 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
     if ( bNegativePage )
         aMove.X() = -aMove.X();
 
-    Point aTopLeft = aRect.TopLeft();       // Anfang beim Verkleinern
+    Point aTopLeft = aRect.TopLeft();		// Anfang beim Verkleinern
     if (bInsDel)
     {
-        if ( aMove.X() != 0 && nDx < 0 )    // nDx counts cells, sign is independent of RTL
+        if ( aMove.X() != 0 && nDx < 0 )	// nDx counts cells, sign is independent of RTL
             aTopLeft.X() += aMove.X();
         if ( aMove.Y() < 0 )
             aTopLeft.Y() += aMove.Y();
     }
 
-    //  drawing objects are now directly included in cut&paste
-    //  -> only update references when inserting/deleting (or changing widths or heights)
+    //	drawing objects are now directly included in cut&paste
+    //	-> only update references when inserting/deleting (or changing widths or heights)
     if ( bInsDel )
         MoveAreaTwips( nTab, aRect, aMove, aTopLeft );
 
         //
-        //      Detektiv-Pfeile: Zellpositionen anpassen
+        //		Detektiv-Pfeile: Zellpositionen anpassen
         //
 
     MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
@@ -1105,7 +1105,7 @@ void ScDrawLayer::WidthChanged( SCTAB nTab, SCCOL nCol, long nDifTwips )
     aRect.Top() = 0;
     aRect.Bottom() = MAXMM;
 
-    //! aTopLeft ist falsch, wenn mehrere Spalten auf einmal ausgeblendet werden
+    //!	aTopLeft ist falsch, wenn mehrere Spalten auf einmal ausgeblendet werden
 
     BOOL bNegativePage = pDoc->IsNegativePage( nTab );
     if ( bNegativePage )
@@ -1138,7 +1138,7 @@ void ScDrawLayer::HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips )
     aRect.Left() = 0;
     aRect.Right() = MAXMM;
 
-    //! aTopLeft ist falsch, wenn mehrere Zeilen auf einmal ausgeblendet werden
+    //!	aTopLeft ist falsch, wenn mehrere Zeilen auf einmal ausgeblendet werden
 
     BOOL bNegativePage = pDoc->IsNegativePage( nTab );
     if ( bNegativePage )
@@ -1190,7 +1190,7 @@ BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     SdrObject* pObject = aIter.Next();
     while ( pObject && !bFound )
     {
-        aObjRect = pObject->GetSnapRect();  //! GetLogicRect ?
+        aObjRect = pObject->GetSnapRect();	//! GetLogicRect ?
         if (aTestRect.IsInside(aObjRect.TopLeft()) || aTestRect.IsInside(aObjRect.BottomLeft()))
             bFound = TRUE;
 
@@ -1214,8 +1214,8 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
     pPage->RecalcObjOrdNums();
 
-    long    nDelCount = 0;
-    ULONG   nObjCount = pPage->GetObjCount();
+    long	nDelCount = 0;
+    ULONG	nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
         Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
@@ -1270,11 +1270,11 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
             if (pPage)
             {
                 pPage->RecalcObjOrdNums();
-                long    nDelCount = 0;
-                ULONG   nObjCount = pPage->GetObjCount();
+                long	nDelCount = 0;
+                ULONG	nObjCount = pPage->GetObjCount();
                 if (nObjCount)
                 {
-                    //  Rechteck um die ganze Selektion
+                    //	Rechteck um die ganze Selektion
                     Rectangle aMarkBound = pDoc->GetMMRect(
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                                 aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), nTab );
@@ -1301,7 +1301,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                         pObject = aIter.Next();
                     }
 
-                    //  Objekte loeschen (rueckwaerts)
+                    //	Objekte loeschen (rueckwaerts)
 
                     long i;
                     if (bRecording)
@@ -1323,7 +1323,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
 
 void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle& rRange )
 {
-    //  copy everything in the specified range into the same page (sheet) in the clipboard doc
+    //	copy everything in the specified range into the same page (sheet) in the clipboard doc
 
     SdrPage* pSrcPage = GetPage(static_cast<sal_uInt16>(nTab));
     if (pSrcPage)
@@ -1341,12 +1341,12 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
             {
                 if ( !pDestModel )
                 {
-                    pDestModel = pClipDoc->GetDrawLayer();      // does the document already have a drawing layer?
+                    pDestModel = pClipDoc->GetDrawLayer();		// does the document already have a drawing layer?
                     if ( !pDestModel )
                     {
-                        //  allocate drawing layer in clipboard document only if there are objects to copy
+                        //	allocate drawing layer in clipboard document only if there are objects to copy
 
-                        pClipDoc->InitDrawLayer();                  //! create contiguous pages
+                        pClipDoc->InitDrawLayer();					//!	create contiguous pages
                         pDestModel = pClipDoc->GetDrawLayer();
                     }
                     if (pDestModel)
@@ -1367,8 +1367,8 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
                         pNewObject->NbcMove(Size(0,0));
                     pDestPage->InsertObject( pNewObject );
 
-                    //  no undo needed in clipboard document
-                    //  charts are not updated
+                    //	no undo needed in clipboard document
+                    //	charts are not updated
                 }
             }
 
@@ -1379,7 +1379,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
 
 BOOL lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
 {
-    //  check if every range of rRangesVector is completely in rClipRange
+    //	check if every range of rRangesVector is completely in rClipRange
 
     ::std::vector< ScRangeList >::const_iterator aIt = rRangesVector.begin();
     for( ;aIt!=rRangesVector.end(); ++aIt )
@@ -1391,12 +1391,12 @@ BOOL lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const 
             ScRange aRange = *rRanges.GetObject(i);
             if ( !rClipRange.In( aRange ) )
             {
-                return FALSE;   // at least one range is not valid
+                return FALSE;	// at least one range is not valid
             }
         }
     }
 
-    return TRUE;            // everything is fine
+    return TRUE;			// everything is fine
 }
 
 BOOL lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
@@ -1435,7 +1435,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     if (!pClipModel)
         return;
 
-    if (bDrawIsInUndo)      //! can this happen?
+    if (bDrawIsInUndo)		//! can this happen?
     {
         DBG_ERROR("CopyFromClip, bDrawIsInUndo");
         return;
@@ -1514,7 +1514,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         aVerFract = Fraction( nDestHeight, nSourceHeight );
         bResize = TRUE;
     }
-    Point aRefPos = rDestRange.TopLeft();       // for resizing (after moving)
+    Point aRefPos = rDestRange.TopLeft();		// for resizing (after moving)
 
     while (pOldObject)
     {
@@ -1529,7 +1529,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
             pNewObject->SetPage(pDestPage);
 
             if ( bMirrorObj )
-                MirrorRTL( pNewObject );        // first mirror, then move
+                MirrorRTL( pNewObject );		// first mirror, then move
 
             pNewObject->NbcMove( aMove );
             if ( bResize )
@@ -1539,7 +1539,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
             if (bRecording)
                 AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
 
-            //#i110034# handle chart data references (after InsertObject)
+            //#i110034#	handle chart data references (after InsertObject)
 
             if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
             {
@@ -1612,7 +1612,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                                 uno::Reference< chart::XChartDocument > xNewChartDoc( xNewChart, uno::UNO_QUERY );
                                 if( xOldChartDoc.is() && xNewChartDoc.is() )
                                     xNewChartDoc->attachData( xOldChartDoc->getData() );
-
+                                
                                 //  (see ScDocument::UpdateChartListenerCollection, PastingDrawFromOtherDoc)
                             }
                         }
@@ -1632,8 +1632,8 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
 {
     UINT16 nIdent = pObj->GetObjIdentifier();
 
-    //  don't mirror OLE or graphics, otherwise ask the object
-    //  if it can be mirrored
+    //	don't mirror OLE or graphics, otherwise ask the object
+    //	if it can be mirrored
     BOOL bCanMirror = ( nIdent != OBJ_GRAF && nIdent != OBJ_OLE2 );
     if (bCanMirror)
     {
@@ -1652,9 +1652,9 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
     }
     else
     {
-        //  Move instead of mirroring:
-        //  New start position is negative of old end position
-        //  -> move by sum of start and end position
+        //	Move instead of mirroring:
+        //	New start position is negative of old end position
+        //	-> move by sum of start and end position
         Rectangle aObjRect = pObj->GetLogicRect();
         Size aMoveSize( -(aObjRect.Left() + aObjRect.Right()), 0 );
         if (bRecording)
@@ -1666,7 +1666,7 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
 // static
 void ScDrawLayer::MirrorRectRTL( Rectangle& rRect )
 {
-    //  mirror and swap left/right
+    //	mirror and swap left/right
     long nTemp = rRect.Left();
     rRect.Left() = -rRect.Right();
     rRect.Right() = -nTemp;
@@ -1719,10 +1719,10 @@ String ScDrawLayer::GetVisibleName( SdrObject* pObj )
     String aName = pObj->GetName();
     if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
     {
-        //  #95575# For OLE, the user defined name (GetName) is used
-        //  if it's not empty (accepting possibly duplicate names),
-        //  otherwise the persist name is used so every object appears
-        //  in the Navigator at all.
+        //	#95575# For OLE, the user defined name (GetName) is used
+        //	if it's not empty (accepting possibly duplicate names),
+        //	otherwise the persist name is used so every object appears
+        //	in the Navigator at all.
 
         if ( !aName.Len() )
             aName = static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
@@ -1732,8 +1732,8 @@ String ScDrawLayer::GetVisibleName( SdrObject* pObj )
 
 inline sal_Bool IsNamedObject( SdrObject* pObj, const String& rName )
 {
-    //  TRUE if rName is the object's Name or PersistName
-    //  (used to find a named object)
+    //	TRUE if rName is the object's Name or PersistName
+    //	(used to find a named object)
 
     return ( pObj->GetName() == rName ||
             ( pObj->GetObjIdentifier() == OBJ_OLE2 &&
@@ -1793,7 +1793,7 @@ String ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
 
 void ScDrawLayer::EnsureGraphicNames()
 {
-    //  make sure all graphic objects have names (after Excel import etc.)
+    //	make sure all graphic objects have names (after Excel import etc.)
 
     sal_uInt16 nTabCount = GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
@@ -1840,7 +1840,7 @@ ScAnchorType ScDrawLayer::GetAnchor( const SdrObject* pObj )
     return ( aAnchor.Y() != 0 ) ? SCA_PAGE : SCA_CELL;
 }
 
-ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, BOOL bCreate )     // static
+ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, BOOL bCreate )		// static
 {
     USHORT nCount = pObj ? pObj->GetUserDataCount() : 0;
     for( USHORT i = 0; i < nCount; i++ )
@@ -1884,7 +1884,7 @@ ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
     return (pData && pData->mbNote) ? pData : 0;
 }
 
-ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
+ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )				// static
 {
     USHORT nCount = pObj->GetUserDataCount();
     for( USHORT i = 0; i < nCount; i++ )
@@ -1898,28 +1898,28 @@ ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
 }
 
 // static:
-IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
+IMapObject*	ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
                                           const Point& rWinPoint, const Window& rCmpWnd )
 {
-    const MapMode       aMap100( MAP_100TH_MM );
-    MapMode             aWndMode = rCmpWnd.GetMapMode();
-    Point               aRelPoint( rCmpWnd.LogicToLogic( rWinPoint, &aWndMode, &aMap100 ) );
-    Rectangle           aLogRect = rCmpWnd.LogicToLogic( pObj->GetLogicRect(), &aWndMode, &aMap100 );
-    ScIMapInfo*         pIMapInfo = GetIMapInfo( pObj );
-    IMapObject*         pIMapObj = NULL;
+    const MapMode		aMap100( MAP_100TH_MM );
+    MapMode				aWndMode = rCmpWnd.GetMapMode();
+    Point				aRelPoint( rCmpWnd.LogicToLogic( rWinPoint, &aWndMode, &aMap100 ) );
+    Rectangle			aLogRect = rCmpWnd.LogicToLogic( pObj->GetLogicRect(), &aWndMode, &aMap100 );
+    ScIMapInfo*			pIMapInfo = GetIMapInfo( pObj );
+    IMapObject*			pIMapObj = NULL;
 
     if ( pIMapInfo )
     {
-        Size        aGraphSize;
-        ImageMap&   rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
-        Graphic     aGraphic;
-        BOOL        bObjSupported = FALSE;
+        Size		aGraphSize;
+        ImageMap&	rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
+        Graphic		aGraphic;
+        BOOL		bObjSupported = FALSE;
 
         if ( pObj->ISA( SdrGrafObj )  ) // einfaches Grafik-Objekt
         {
-            const SdrGrafObj*   pGrafObj = (const SdrGrafObj*) pObj;
-            const GeoStat&      rGeo = pGrafObj->GetGeoStat();
-            const Graphic&      rGraphic = pGrafObj->GetGraphic();
+            const SdrGrafObj*	pGrafObj = (const SdrGrafObj*) pObj;
+            const GeoStat&		rGeo = pGrafObj->GetGeoStat();
+            const Graphic&		rGraphic = pGrafObj->GetGraphic();
 
             // Drehung rueckgaengig
             if ( rGeo.nDrehWink )
@@ -1982,7 +1982,7 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, BOOL bCreate )         
     return 0;
 }
 
-void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)            // static
+void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)			// static
 {
     DBG_ASSERT(!pGlobalDrawPersist,"SetGlobalDrawPersist mehrfach");
     pGlobalDrawPersist = pPersist;
@@ -2004,7 +2004,7 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
     uno::Reference< embed::XStorage > xStorage = pDoc->GetDocumentShell() ?
                                                         pDoc->GetDocumentShell()->GetStorage() :
                                                         NULL;
-    SvStream*   pRet = NULL;
+    SvStream*	pRet = NULL;
 
     if( xStorage.is() )
     {
@@ -2043,17 +2043,17 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
             }
         }
         // the following code seems to be related to binary format
-//REMOVE            else
-//REMOVE            {
-//REMOVE                pRet = pStor->OpenStream( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_SCSTREAM)),
-//REMOVE                                          STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+//REMOVE			else
+//REMOVE			{
+//REMOVE				pRet = pStor->OpenStream( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_SCSTREAM)),
+//REMOVE										  STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
 //REMOVE
-//REMOVE                if( pRet )
-//REMOVE                {
-//REMOVE                    pRet->SetVersion( pStor->GetVersion() );
-//REMOVE                    pRet->SetKey( pStor->GetKey() );
-//REMOVE                }
-//REMOVE            }
+//REMOVE				if( pRet )
+//REMOVE				{
+//REMOVE					pRet->SetVersion( pStor->GetVersion() );
+//REMOVE					pRet->SetKey( pStor->GetKey() );
+//REMOVE				}
+//REMOVE			}
 
         rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
     }
@@ -2061,14 +2061,14 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
     return pRet;
 }
 
-//REMOVE    void ScDrawLayer::ReleasePictureStorage()
-//REMOVE    {
-//REMOVE        xPictureStorage.Clear();
-//REMOVE    }
+//REMOVE	void ScDrawLayer::ReleasePictureStorage()
+//REMOVE	{
+//REMOVE		xPictureStorage.Clear();
+//REMOVE	}
 
 SdrLayerID __EXPORT ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const
 {
-    //  Layer fuer Export von Form-Controls in Versionen vor 5.0 - immer SC_LAYER_FRONT
+    //	Layer fuer Export von Form-Controls in Versionen vor 5.0 - immer SC_LAYER_FRONT
     return SC_LAYER_FRONT;
 }
 

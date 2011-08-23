@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,15 +35,15 @@
 class SC_DLLPUBLIC ScPopupMenu : public PopupMenu
 {
 private:
-    USHORT  nSel;
-    BOOL    bHit;
+    USHORT	nSel;
+    BOOL	bHit;
 protected:
     virtual void Select();
 public:
     ScPopupMenu() : nSel(0),bHit(FALSE) {}
     ScPopupMenu(const ResId& rRes) : PopupMenu(rRes),nSel(0),bHit(FALSE) {}
-    USHORT  GetSelected() const { return nSel; }
-    BOOL    WasHit() const      { return bHit; }
+    USHORT	GetSelected() const { return nSel; }
+    BOOL	WasHit() const		{ return bHit; }
 };
 
 

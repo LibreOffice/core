@@ -719,32 +719,32 @@ UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComp
     double UserFormGeometryHelper::getTop()
     {
     sal_Int32 nTop = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  VBA_TOP ) ) ) >>= nTop;
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	VBA_TOP ) ) ) >>= nTop;
     return Millimeter::getInPoints( nTop );
     }
     void UserFormGeometryHelper::setTop( double nTop )
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  VBA_TOP ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	VBA_TOP ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
     }
     double UserFormGeometryHelper::getHeight()
     {
     sal_Int32 nHeight = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLHGT ) ) ) >>= nHeight;
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	SC_UNONAME_CELLHGT ) ) ) >>= nHeight;
     return Millimeter::getInPoints( nHeight );
     }
     void UserFormGeometryHelper::setHeight( double nHeight )
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLHGT ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	SC_UNONAME_CELLHGT ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
     }
     double UserFormGeometryHelper::getWidth()
     {
     sal_Int32 nWidth = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLWID ) ) ) >>= nWidth;
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	SC_UNONAME_CELLWID ) ) ) >>= nWidth;
     return Millimeter::getInPoints( nWidth );
     }
     void UserFormGeometryHelper::setWidth( double nWidth)
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLWID ) ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	SC_UNONAME_CELLWID ) ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
     }
 
 SfxItemSet*

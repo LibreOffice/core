@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class SfxFilter;
 
 class ScDLL
 
-/*  [Description]
+/*	[Description]
 
     This class is a wrapper for a Load-On-Demand-DLL. One instance
     per SfxApplication will be created for the runtime of
@@ -60,15 +60,15 @@ public:
                     ~ScDLL();
 
                     // static-init/exit-code must be linked to the application
-    static void     LibInit();  // called from SfxApplication-subclass::Init()
-    static void     LibExit();  // called from SfxApplication-subclass::Exit()
-    static void     PreExit();  // muss vor LibExit gerufen werden
+    static void 	LibInit();	// called from SfxApplication-subclass::Init()
+    static void 	LibExit();	// called from SfxApplication-subclass::Exit()
+    static void 	PreExit();	// muss vor LibExit gerufen werden
 
                     // DLL-init/exit-code must be linked to the DLL only
-    static void     Init();     // called directly after loading the DLL
-    static void     Exit();     // called directly befor unloading the DLL
+    static void 	Init(); 	// called directly after loading the DLL
+    static void 	Exit(); 	// called directly befor unloading the DLL
 
-    static ULONG    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
+    static ULONG	DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
                                     SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,7 +188,7 @@ struct ScComplexRefData         // Complex reference (a range) into the sheet
         { return Ref1.IsDeleted() || Ref2.IsDeleted(); }
     inline  BOOL Valid() const
         { return Ref1.Valid() && Ref2.Valid(); }
-    /** In external references nTab is -1 for the start tab and -1 for the end
+    /** In external references nTab is -1 for the start tab and -1 for the end 
         tab if one sheet, or >=0 if more than one sheets. */
     inline  bool ValidExternal() const;
 

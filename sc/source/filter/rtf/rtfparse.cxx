@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include "document.hxx"
 #include "docpool.hxx"
 
-#define SC_RTFTWIPTOL 10        // 10 Twips Toleranz bei Spaltenbestimmung
+#define SC_RTFTWIPTOL 10		// 10 Twips Toleranz bei Spaltenbestimmung
 
 
 
@@ -101,7 +101,7 @@ ULONG ScRTFParser::Read( SvStream& rStream, const String& rBaseURL )
                 || ( pE->aSel.nStartPara + 1 == pE->aSel.nEndPara
                     && pE->aSel.nStartPos == pEdit->GetTextLen( pE->aSel.nStartPara )
                     && pE->aSel.nEndPos == 0 )) )
-        {   // den letzten leeren Absatz nicht uebernehmen
+        {	// den letzten leeren Absatz nicht uebernehmen
             pList->Remove();
             delete pE;
         }
@@ -170,8 +170,8 @@ void ScRTFParser::ColAdjust()
             {
                 SeekTwips( pE->nTwips, &nCol );
                 if ( ++nCol <= pE->nCol )
-                    nCol = pE->nCol + 1;        // verschobene Zell-X
-                pE->nColOverlap = nCol - pE->nCol;      // merged cells ohne \clmrg
+                    nCol = pE->nCol + 1;		// verschobene Zell-X
+                pE->nColOverlap = nCol - pE->nCol;		// merged cells ohne \clmrg
             }
             if ( nCol > nColMax )
                 nColMax = nCol;
@@ -205,7 +205,7 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
             break;
         case RTFIMP_END:
             if ( pInfo->aSelection.nEndPos )
-            {   // falls noch Text: letzten Absatz erzeugen
+            {	// falls noch Text: letzten Absatz erzeugen
                 pActDefault = NULL;
                 pInfo->nToken = RTF_PAR;
                 // EditEngine hat keinen leeren Paragraph mehr angehaengt
@@ -291,7 +291,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
     ScEEParseEntry* pE;
     switch ( pInfo->nToken )
     {
-        case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
+        case RTF_TROWD:			// denotes table row defauls, before RTF_CELLX
         {
             if ( (pD = pDefaultList->Last()) != 0 )
                 nLastWidth = pD->nTwips;
@@ -303,28 +303,28 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CLMGF:         // The first cell of cells to be merged
+        case RTF_CLMGF:			// The first cell of cells to be merged
         {
             pDefMerge = pInsDefault;
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CLMRG:         // A cell to be merged with the preceding cell
+        case RTF_CLMRG:			// A cell to be merged with the preceding cell
         {
             if ( !pDefMerge )
                 pDefMerge = pDefaultList->Last();
             DBG_ASSERT( pDefMerge, "RTF_CLMRG: pDefMerge==0" );
-            if ( pDefMerge )        // sonst rottes RTF
-                pDefMerge->nColOverlap++;   // mehrere nacheinander moeglich
-            pInsDefault->nColOverlap = 0;   // Flag: ignoriere diese
+            if ( pDefMerge )		// sonst rottes RTF
+                pDefMerge->nColOverlap++;	// mehrere nacheinander moeglich
+            pInsDefault->nColOverlap = 0;	// Flag: ignoriere diese
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CELLX:         // closes cell default
+        case RTF_CELLX:			// closes cell default
         {
             bNewDef = TRUE;
             pInsDefault->nCol = nColCnt;
-            pInsDefault->nTwips = pInfo->nTokenValue;   // rechter Zellenrand
+            pInsDefault->nTwips = pInfo->nTokenValue;	// rechter Zellenrand
             pDefaultList->Insert( pInsDefault, LIST_APPEND );
             // neuer freifliegender pInsDefault
             pInsDefault = new ScRTFCellDefault( pPool );
@@ -333,7 +333,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_INTBL:         // before the first RTF_CELL
+        case RTF_INTBL:			// before the first RTF_CELL
         {
             // einmal ueber NextToken und einmal ueber UnknownAttrToken
             // oder z.B. \intbl ... \cell \pard \intbl ... \cell
@@ -344,16 +344,16 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             }
         }
         break;
-        case RTF_CELL:          // denotes the end of a cell.
+        case RTF_CELL:			// denotes the end of a cell.
         {
             DBG_ASSERT( pActDefault, "RTF_CELL: pActDefault==0" );
             if ( bNewDef || !pActDefault )
-                NewCellRow( pInfo );    // davor war kein \intbl, bad behavior
+                NewCellRow( pInfo );	// davor war kein \intbl, bad behavior
             // rottes RTF? retten was zu retten ist
             if ( !pActDefault )
                 pActDefault = pInsDefault;
             if ( pActDefault->nColOverlap > 0 )
-            {   // nicht merged mit vorheriger
+            {	// nicht merged mit vorheriger
                 pActEntry->nCol = pActDefault->nCol;
                 pActEntry->nColOverlap = pActDefault->nColOverlap;
                 pActEntry->nTwips = pActDefault->nTwips;
@@ -364,10 +364,10 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 if ( nStartAdjust == (ULONG)~0 )
                     nStartAdjust = pList->Count();
                 pList->Insert( pActEntry, LIST_APPEND );
-                NewActEntry( pActEntry );   // neuer freifliegender pActEntry
+                NewActEntry( pActEntry );	// neuer freifliegender pActEntry
             }
             else
-            {   // aktuelle Twips der MergeCell zuweisen
+            {	// aktuelle Twips der MergeCell zuweisen
                 if ( (pE = pList->Last()) != 0 )
                     pE->nTwips = pActDefault->nTwips;
                 // Selection des freifliegenden pActEntry anpassen
@@ -378,29 +378,29 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_ROW:           // means the end of a row
+        case RTF_ROW:			// means the end of a row
         {
             NextRow();
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_PAR:           // Paragraph
+        case RTF_PAR:			// Paragraph
         {
             if ( !pActDefault )
-            {   // text not in table
-                ColAdjust();    // close the processing table
+            {	// text not in table
+                ColAdjust();	// close the processing table
                 pActEntry->nCol = 0;
                 pActEntry->nRow = nRowCnt;
                 EntryEnd( pActEntry, pInfo->aSelection );
                 pList->Insert( pActEntry, LIST_APPEND );
-                NewActEntry( pActEntry );   // new pActEntry
+                NewActEntry( pActEntry );	// new pActEntry
                 NextRow();
             }
             nLastToken = pInfo->nToken;
         }
         break;
         default:
-        {   // do not set nLastToken
+        {	// do not set nLastToken
             switch ( pInfo->nToken & ~(0xff | RTF_TABLEDEF) )
             {
                 case RTF_SHADINGDEF:

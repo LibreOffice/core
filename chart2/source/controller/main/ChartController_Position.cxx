@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,13 +87,13 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& r
 
     switch( eRP )
     {
-        case RP_LT:
+        case RP_LT: 
             break;
         case RP_MT:
-            nPosX += ( aOriginalSize.Width - nSizX ) / 2;
+            nPosX += ( aOriginalSize.Width - nSizX ) / 2; 
             break;
         case RP_RT:
-            nPosX += aOriginalSize.Width - nSizX;
+            nPosX += aOriginalSize.Width - nSizX; 
             break;
         case RP_LM:
             nPosY += ( aOriginalSize.Height - nSizY ) / 2;
@@ -114,7 +114,7 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& r
             nPosY += aOriginalSize.Height - nSizY;
             break;
         case RP_RB:
-            nPosX += aOriginalSize.Width - nSizX;
+            nPosX += aOriginalSize.Width - nSizX;  
             nPosY += aOriginalSize.Height - nSizY;
             break;
         default:
@@ -158,7 +158,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
             m_pChartWindow, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible );
         DBG_ASSERT( pDlg, "Couldn't create SchTransformTabDialog" );
 
-
+        
         if( pDlg->Execute() == RET_OK )
         {
             const SfxItemSet* pOutItemSet = pDlg->GetOutputItemSet();

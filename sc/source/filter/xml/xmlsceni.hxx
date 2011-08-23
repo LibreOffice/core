@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +38,14 @@ class ScXMLImport;
 class ScXMLTableScenarioContext : public SvXMLImportContext
 {
 private:
-    rtl::OUString   sComment;
-    Color           aBorderColor;
-    ScRangeList     aScenarioRanges;
-    sal_Bool        bDisplayBorder;
-    sal_Bool        bCopyBack;
-    sal_Bool        bCopyStyles;
-    sal_Bool        bCopyFormulas;
-    sal_Bool        bIsActive;
+    rtl::OUString	sComment;
+    Color			aBorderColor;
+    ScRangeList		aScenarioRanges;
+    sal_Bool		bDisplayBorder;
+    sal_Bool		bCopyBack;
+    sal_Bool		bCopyStyles;
+    sal_Bool		bCopyFormulas;
+    sal_Bool		bIsActive;
     sal_Bool        bProtected;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

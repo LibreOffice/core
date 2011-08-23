@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,15 +31,15 @@ interface TableSelection
     uuid = "BA338A41-064E-11d0-89CB-008029E4B0B1" ;
 ]
 {
-    SID_DELETE_PRINTAREA        [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_OPENDLG_EDIT_PRINTAREA  [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_CHANGE_PRINTAREA        [ ExecMethod = Execute; ]
-    FID_DEL_MANUALBREAKS        [ ExecMethod = Execute; StateMethod = GetState; ]
-    FID_RESET_PRINTZOOM         [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DELETE_PRINTAREA		[ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_OPENDLG_EDIT_PRINTAREA	[ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CHANGE_PRINTAREA		[ ExecMethod = Execute; ]
+    FID_DEL_MANUALBREAKS		[ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_RESET_PRINTZOOM			[ ExecMethod = Execute; StateMethod = GetState; ]
     SbxObject Cells SID_SC_CELLS
     (
-        INT16   Column      SID_SC_CELLS,
-        INT32   Row         FN_PARAM_1
+        INT16	Column		SID_SC_CELLS,
+        INT32	Row			FN_PARAM_1
     )
     [
     ]
@@ -47,23 +47,23 @@ interface TableSelection
     [
         Readonly ;
     ]
-    FID_PROTECT_TABLE       [ ExecMethod = Execute; StateMethod = GetState; ]
-    FID_PROTECT_DOC         [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_PROTECT_TABLE		[ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_PROTECT_DOC			[ ExecMethod = Execute; StateMethod = GetState; ]
 
-    SID_AUTO_OUTLINE        [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_OUTLINE_DELETEALL   [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_FORMATPAGE          [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_HFEDIT              [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_DETECTIVE_DEL_ALL   [ ExecMethod = Execute; StateMethod = GetState; ]
-    FID_TABLE_VISIBLE   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TAB_MOVE        [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_DELETE_TABLE    [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TAB_RENAME      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TAB_RTL         [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    SID_AUTO_OUTLINE		[ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_OUTLINE_DELETEALL	[ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_FORMATPAGE			[ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_HFEDIT				[ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DETECTIVE_DEL_ALL	[ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TABLE_VISIBLE	[ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_MOVE		[ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_DELETE_TABLE	[ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_RENAME		[ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_RTL			[ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_SET_TAB_BG_COLOR    [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_TOGGLE_GRID [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
 
-    SID_TABLE_ACTIVATE  [ ExecMethod = Execute; ]
+    SID_TABLE_ACTIVATE	[ ExecMethod = Execute; ]
 }
 
 
@@ -73,42 +73,42 @@ interface TableDocument
     uuid = "BA338A42-064E-11d0-89CB-008029E4B0B1" ;
 ]
 {
-    SID_SBA_IMPORT  [ ExecMethod = Execute; ]
-    SID_SC_CELLS    [ ExecMethod = Execute; ]
-    SID_SC_CELLTEXT [ ExecMethod = Execute; ]
-    SID_SC_SETTEXT  [ ExecMethod = Execute; ]
-    SID_SC_RANGE    [ ExecMethod = Execute; ]
-    SID_SC_SELECTION    [ StateMethod = GetSbxState; ]
-    SID_SC_ACTIVECELL   [ StateMethod = GetSbxState; ]
-    SID_SC_ACTIVETAB    [ StateMethod = GetSbxState; ]
-    SID_TABLES_GET      [ StateMethod = GetSbxState; ]
-    SID_TABLES_COUNT    [ StateMethod = GetState; ]
-    SID_PIVOT_GET       [ StateMethod = GetSbxState; ]
-    SID_SC_ACTIVEOBJECT [ StateMethod = GetDrawObjState; ]
-    SID_ATTR_YEAR2000   [ StateMethod = GetState; ExecMethod = Execute; ]
+    SID_SBA_IMPORT	[ ExecMethod = Execute; ]
+    SID_SC_CELLS	[ ExecMethod = Execute; ]
+    SID_SC_CELLTEXT	[ ExecMethod = Execute; ]
+    SID_SC_SETTEXT	[ ExecMethod = Execute; ]
+    SID_SC_RANGE	[ ExecMethod = Execute; ]
+    SID_SC_SELECTION	[ StateMethod = GetSbxState; ]
+    SID_SC_ACTIVECELL	[ StateMethod = GetSbxState; ]
+    SID_SC_ACTIVETAB	[ StateMethod = GetSbxState; ]
+    SID_TABLES_GET		[ StateMethod = GetSbxState; ]
+    SID_TABLES_COUNT	[ StateMethod = GetState; ]
+    SID_PIVOT_GET		[ StateMethod = GetSbxState; ]
+    SID_SC_ACTIVEOBJECT	[ StateMethod = GetDrawObjState; ]
+    SID_ATTR_YEAR2000	[ StateMethod = GetState; ExecMethod = Execute; ]
     SbxObject OLEObjects
     [
         Readonly ;
         IsCollection ;
     ]
-    SID_CHART_SOURCE    [ ExecMethod = Execute; ]
-    SID_CHART_ADDSOURCE [ ExecMethod = Execute; ]
-    FID_AUTO_CALC   [ ExecMethod = Execute; StateMethod = GetState; ]
-    FID_RECALC      [ ExecMethod = Execute; StateMethod = GetState; ]
-    FID_HARD_RECALC [ ExecMethod = Execute;                         ]
-    SID_UPDATETABLINKS      [ ExecMethod = Execute; ]
-    SID_REIMPORT_AFTER_LOAD [ ExecMethod = Execute; ]
-    SID_AUTO_STYLE          [ ExecMethod = Execute; ]
+    SID_CHART_SOURCE	[ ExecMethod = Execute; ]
+    SID_CHART_ADDSOURCE	[ ExecMethod = Execute; ]
+    FID_AUTO_CALC	[ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_RECALC		[ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_HARD_RECALC	[ ExecMethod = Execute;                         ]
+    SID_UPDATETABLINKS		[ ExecMethod = Execute; ]
+    SID_REIMPORT_AFTER_LOAD	[ ExecMethod = Execute; ]
+    SID_AUTO_STYLE			[ ExecMethod = Execute; ]
 
-    SID_GET_COLORTABLE      [ ExecMethod = Execute; ]
+    SID_GET_COLORTABLE		[ ExecMethod = Execute; ]
 
-    FID_CHG_RECORD          [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_DOCUMENT_COMPARE    [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_DOCUMENT_MERGE      [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_CHG_RECORD			[ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DOCUMENT_COMPARE	[ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DOCUMENT_MERGE		[ ExecMethod = Execute; StateMethod = GetState; ]
     SID_CHG_PROTECT         [ ExecMethod = Execute; StateMethod = GetState; ]
 
-    SID_DELETE_SCENARIO     [ ExecMethod = Execute; ]
-    SID_EDIT_SCENARIO       [ ExecMethod = Execute; ]
+    SID_DELETE_SCENARIO		[ ExecMethod = Execute; ]
+    SID_EDIT_SCENARIO		[ ExecMethod = Execute; ]
     SID_ATTR_CHAR_FONTLIST  [ StateMethod = GetState; ]
     SID_SHARE_DOC           [ ExecMethod = Execute; StateMethod = GetState; ]
 }

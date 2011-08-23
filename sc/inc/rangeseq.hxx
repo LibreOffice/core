@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,19 +40,19 @@ class ScRange;
 class ScRangeToSequence
 {
 public:
-    static BOOL FillLongArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillLongArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static BOOL FillLongArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillLongArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static BOOL FillDoubleArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillDoubleArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static BOOL FillDoubleArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillDoubleArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static BOOL FillStringArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillStringArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static BOOL FillStringArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillStringArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix, SvNumberFormatter* pFormatter );
-    static BOOL FillMixedArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillMixedArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange,
                                 BOOL bAllowNV = FALSE );
 
@@ -62,7 +62,7 @@ public:
             implementation of XFormulaParser. If <FALSE/>, boolean values are
             treated as ordinary double values 1 (true) and 0 (false).
      */
-    static BOOL FillMixedArray( com::sun::star::uno::Any& rAny,
+    static BOOL	FillMixedArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix, bool bDataTypes = false );
 };
 
@@ -105,8 +105,8 @@ public:
 class ScByteSequenceToString
 {
 public:
-    //  rAny must contain Sequence<sal_Int8>,
-    //  may or may not contain 0-bytes at the end
+    //	rAny must contain Sequence<sal_Int8>,
+    //	may or may not contain 0-bytes at the end
     static BOOL GetString( String& rString, const com::sun::star::uno::Any& rAny,
                             sal_uInt16 nEncoding );
 };

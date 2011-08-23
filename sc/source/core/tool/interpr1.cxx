@@ -3448,13 +3448,13 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                 if (nGlobalError)
                     break;
 
-                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fVal, fMem, fRes, bNull);
+                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fVal, fRes, fMem, bNull);
             }
             break;
             case svMatrix :
             {
                 ScMatrixRef pMat = PopMatrix();
-                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fVal, fMem, fRes, bNull);
+                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fVal, fRes, fMem, bNull);
             }
             break;
             case svError:

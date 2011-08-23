@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
         {
             if( !bSwapXY )
                 P0=P1;
-            else
+            else 
                 P2=P1;
         }
     }
@@ -222,7 +222,7 @@ void SAL_CALL VCartesianGrid::createShapes()
     //create named group shape
     Reference< drawing::XShapes > xGroupShape_Shapes(
         this->createGroupShape( m_xLogicTarget, m_aCID ) );
-
+        
     if(!xGroupShape_Shapes.is())
         return;
     //-----------------------------------------
@@ -248,7 +248,7 @@ void SAL_CALL VCartesianGrid::createShapes()
     if(aDepthIter == aDepthEnd)//no tickmarks at all
         return;
 
-
+    
     sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
     for( sal_Int32 nDepth=0
         ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount

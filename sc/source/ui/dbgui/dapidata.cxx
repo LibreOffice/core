@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,18 +52,18 @@ using namespace com::sun::star;
 #include "sc.hrc"
 #include "dapitype.hrc"
 #include "miscuno.hxx"
-#include "dpsdbtab.hxx"         // ScImportSourceDesc
+#include "dpsdbtab.hxx"			// ScImportSourceDesc
 
 //-------------------------------------------------------------------------
 
-#define DP_SERVICE_DBCONTEXT        "com.sun.star.sdb.DatabaseContext"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
+#define DP_SERVICE_DBCONTEXT		"com.sun.star.sdb.DatabaseContext"
+#define SC_SERVICE_INTHANDLER		"com.sun.star.task.InteractionHandler"
 
-//  entries in the "type" ListBox
-#define DP_TYPELIST_TABLE   0
-#define DP_TYPELIST_QUERY   1
-#define DP_TYPELIST_SQL     2
-#define DP_TYPELIST_SQLNAT  3
+//	entries in the "type" ListBox
+#define DP_TYPELIST_TABLE	0
+#define DP_TYPELIST_QUERY	1
+#define DP_TYPELIST_SQL		2
+#define DP_TYPELIST_SQLNAT	3
 
 //-------------------------------------------------------------------------
 
@@ -83,11 +83,11 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
 {
     FreeResource();
 
-    WaitObject aWait( this );       // initializing the database service the first time takes a while
+    WaitObject aWait( this );		// initializing the database service the first time takes a while
 
     try
     {
-        //  get database names
+        //	get database names
 
         uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
@@ -158,11 +158,11 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
     USHORT nSelect = aLbType.GetSelectEntryPos();
     if ( nSelect > DP_TYPELIST_QUERY )
-        return;                                 // only tables and queries
+        return;									// only tables and queries
 
     try
     {
-        //  open connection (for tables or queries)
+        //	open connection (for tables or queries)
 
         uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
@@ -185,30 +185,30 @@ void ScDataPilotDatabaseDlg::FillObjects()
         uno::Sequence<rtl::OUString> aNames;
         if ( nSelect == DP_TYPELIST_TABLE )
         {
-            //  get all tables
+            //	get all tables
 
             uno::Reference<sdbcx::XTablesSupplier> xTablesSupp( xConnection, uno::UNO_QUERY );
             if ( !xTablesSupp.is() ) return;
 
-            uno::Reference<container::XNameAccess> xTables = xTablesSupp->getTables();
+            uno::Reference<container::XNameAccess> xTables = xTablesSupp->getTables(); 
             if ( !xTables.is() ) return;
 
             aNames = xTables->getElementNames();
         }
         else
         {
-            //  get all queries
+            //	get all queries
 
             uno::Reference<sdb::XQueriesSupplier> xQueriesSupp( xConnection, uno::UNO_QUERY );
             if ( !xQueriesSupp.is() ) return;
 
-            uno::Reference<container::XNameAccess> xQueries = xQueriesSupp->getQueries();
+            uno::Reference<container::XNameAccess> xQueries = xQueriesSupp->getQueries(); 
             if ( !xQueries.is() ) return;
 
             aNames = xQueries->getElementNames();
         }
-
-        //  fill list
+        
+        //	fill list
 
         long nCount = aNames.getLength();
         const rtl::OUString* pArray = aNames.getConstArray();
@@ -220,7 +220,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     }
     catch(uno::Exception&)
     {
-        //  #71604# this may happen if an invalid database is selected -> no DBG_ERROR
+        //	#71604# this may happen if an invalid database is selected -> no DBG_ERROR
         DBG_WARNING("exception in database");
     }
 }

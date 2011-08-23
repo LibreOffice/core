@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef SC_TEXTSUNO_HXX
 #define SC_TEXTSUNO_HXX
 
-#include "global.hxx"           // ScRange, ScAddress
+#include "global.hxx"			// ScRange, ScAddress
 #include "address.hxx"
 #include <editeng/unotext.hxx>
 #include <svl/brdcst.hxx>
@@ -56,13 +56,13 @@ class ScFieldEditEngine;
 struct ScHeaderFieldData;
 
 
-#define SC_HDFT_LEFT    0
-#define SC_HDFT_CENTER  1
-#define SC_HDFT_RIGHT   2
+#define SC_HDFT_LEFT	0
+#define SC_HDFT_CENTER	1
+#define	SC_HDFT_RIGHT	2
 
 
-//  ScHeaderFooterContentObj ist ein dummer Container, der per setPropertyValue
-//  wieder in die Seitenvorlage geschrieben werden muss
+//	ScHeaderFooterContentObj ist ein dummer Container, der per setPropertyValue
+//	wieder in die Seitenvorlage geschrieben werden muss
 
 class ScHeaderFooterContentObj : public cppu::WeakImplHelper3<
                             com::sun::star::sheet::XHeaderFooterContent,
@@ -70,10 +70,10 @@ class ScHeaderFooterContentObj : public cppu::WeakImplHelper3<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    EditTextObject* pLeftText;
-    EditTextObject* pCenterText;
-    EditTextObject* pRightText;
-    SfxBroadcaster  aBC;
+    EditTextObject*	pLeftText;
+    EditTextObject*	pCenterText;
+    EditTextObject*	pRightText;
+    SfxBroadcaster	aBC;
 
     ScHeaderFooterContentObj(); // disabled
 
@@ -81,17 +81,17 @@ public:
                             ScHeaderFooterContentObj( const EditTextObject* pLeft,
                                                       const EditTextObject* pCenter,
                                                       const EditTextObject* pRight );
-    virtual                 ~ScHeaderFooterContentObj();
+    virtual					~ScHeaderFooterContentObj();
 
                             // fuer ScPageHFItem (per getImplementation)
-    const EditTextObject*   GetLeftEditObject() const   { return pLeftText; }
-    const EditTextObject*   GetCenterEditObject() const { return pCenterText; }
-    const EditTextObject*   GetRightEditObject() const  { return pRightText; }
+    const EditTextObject*	GetLeftEditObject() const	{ return pLeftText; }
+    const EditTextObject*	GetCenterEditObject() const	{ return pCenterText; }
+    const EditTextObject*	GetRightEditObject() const	{ return pRightText; }
 
-    void                    AddListener( SfxListener& rListener );
-    void                    RemoveListener( SfxListener& rListener );
+    void					AddListener( SfxListener& rListener );
+    void					RemoveListener( SfxListener& rListener );
 
-    void                    UpdateText( USHORT nPart, EditEngine& rSource );
+    void					UpdateText( USHORT nPart, EditEngine& rSource );
 
                             // XHeaderFooterContent
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
@@ -120,35 +120,35 @@ public:
 };
 
 
-//  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
+//	ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
 
 class ScHeaderFooterTextData : public SfxListener
 {
 private:
-    ScHeaderFooterContentObj&   rContentObj;
-    USHORT                      nPart;
-    ScEditEngineDefaulter*      pEditEngine;
-    SvxEditEngineForwarder*     pForwarder;
-    BOOL                        bDataValid;
-    BOOL                        bInUpdate;
+    ScHeaderFooterContentObj&	rContentObj;
+    USHORT						nPart;
+    ScEditEngineDefaulter*		pEditEngine;
+    SvxEditEngineForwarder*		pForwarder;
+    BOOL						bDataValid;
+    BOOL						bInUpdate;
 
 public:
                             ScHeaderFooterTextData( ScHeaderFooterContentObj& rContent,
                                                     USHORT nP );
                             ~ScHeaderFooterTextData();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // helper functions
-    SvxTextForwarder*       GetTextForwarder();
-    void                    UpdateData();
-    ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+    SvxTextForwarder*		GetTextForwarder();
+    void					UpdateData();
+    ScEditEngineDefaulter*	GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
-    USHORT                  GetPart() const         { return nPart; }
-    ScHeaderFooterContentObj& GetContentObj() const { return rContentObj; }
+    USHORT					GetPart() const			{ return nPart; }
+    ScHeaderFooterContentObj& GetContentObj() const	{ return rContentObj; }
 };
 
-//  ScHeaderFooterTextObj veraendert den Text in einem ScHeaderFooterContentObj
+//	ScHeaderFooterTextObj veraendert den Text in einem ScHeaderFooterContentObj
 
 class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
                             com::sun::star::text::XText,
@@ -158,29 +158,29 @@ class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScHeaderFooterTextData      aTextData;
-    SvxUnoText*                 pUnoText;
+    ScHeaderFooterTextData		aTextData;
+    SvxUnoText*					pUnoText;
 
-    void                    CreateUnoText_Impl();
+    void					CreateUnoText_Impl();
 
 public:
                             ScHeaderFooterTextObj( ScHeaderFooterContentObj& rContent,
                                                     USHORT nP );
-    virtual                 ~ScHeaderFooterTextObj();
+    virtual					~ScHeaderFooterTextObj();
 
-    const SvxUnoText&       GetUnoText();
+    const SvxUnoText&		GetUnoText();
 
-    static void             FillDummyFieldData( ScHeaderFieldData& rData );
+    static void				FillDummyFieldData( ScHeaderFieldData& rData );
 
                             // XText
-    virtual void SAL_CALL   insertTextContent( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	insertTextContent( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::text::XTextRange >& xRange,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::text::XTextContent >& xContent,
                                 sal_Bool bAbsorb )
                                     throw(::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeTextContent( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	removeTextContent( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::text::XTextContent >& xContent )
                                     throw(::com::sun::star::container::NoSuchElementException,
                                             ::com::sun::star::uno::RuntimeException);
@@ -192,11 +192,11 @@ public:
                             createTextCursorByRange( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& aTextPosition )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   insertString( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	insertString( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& xRange,
                                         const ::rtl::OUString& aString, sal_Bool bAbsorb )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   insertControlCharacter( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	insertControlCharacter( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& xRange,
                                         sal_Int16 nControlCharacter, sal_Bool bAbsorb )
                                     throw(::com::sun::star::lang::IllegalArgumentException,
@@ -210,11 +210,11 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
                             getEnd() throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setString( const ::rtl::OUString& aString )
+    virtual void SAL_CALL	setString( const ::rtl::OUString& aString )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XTextRangeMover
-    virtual void SAL_CALL   moveTextRange( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL	moveTextRange( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& xRange,
                                         sal_Int16 nParagraphs )
                                     throw(::com::sun::star::uno::RuntimeException);
@@ -244,13 +244,13 @@ public:
 };
 
 
-//  derived cursor objects for getImplementation and getText/getStart/getEnd
+//	derived cursor objects for getImplementation and getText/getStart/getEnd
 
-//! uno3: SvxUnoTextCursor is not derived from XUnoTunnel, but should be (?)
+//!	uno3: SvxUnoTextCursor is not derived from XUnoTunnel, but should be (?)
 
 class ScCellTextCursor : public SvxUnoTextCursor
 {
-    ScCellObj&              rTextObj;
+    ScCellObj&				rTextObj;
 
 public:
                             ScCellTextCursor(const ScCellTextCursor& rOther);
@@ -280,7 +280,7 @@ public:
 class ScHeaderFooterTextCursor : public SvxUnoTextCursor
 {
 private:
-    ScHeaderFooterTextObj&  rTextObj;
+    ScHeaderFooterTextObj&	rTextObj;
 
 public:
                             ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther);
@@ -339,21 +339,21 @@ public:
 // ScAnnotationTextCursor isn't needed anymore - SvxUnoTextCursor is used instead
 
 
-//  ScEditEngineTextObj for formatted cell content that is not inserted in a cell or header/footer
-//  (used for XML export of change tracking contents)
+//	ScEditEngineTextObj for formatted cell content that is not inserted in a cell or header/footer
+//	(used for XML export of change tracking contents)
 
 class ScSimpleEditSourceHelper
 {
-    ScEditEngineDefaulter*  pEditEngine;
-    SvxEditEngineForwarder* pForwarder;
-    ScSimpleEditSource*     pOriginalSource;
+    ScEditEngineDefaulter*	pEditEngine;
+    SvxEditEngineForwarder*	pForwarder;
+    ScSimpleEditSource* 	pOriginalSource;
 
 public:
             ScSimpleEditSourceHelper();
             ~ScSimpleEditSourceHelper();
 
-    ScSimpleEditSource* GetOriginalSource() const   { return pOriginalSource; }
-    ScEditEngineDefaulter* GetEditEngine() const    { return pEditEngine; }
+    ScSimpleEditSource* GetOriginalSource() const	{ return pOriginalSource; }
+    ScEditEngineDefaulter* GetEditEngine() const	{ return pEditEngine; }
 };
 
 class ScEditEngineTextObj : public ScSimpleEditSourceHelper, public SvxUnoText
@@ -362,49 +362,49 @@ public:
                         ScEditEngineTextObj();
         virtual                         ~ScEditEngineTextObj() throw();
 
-    void                SetText( const EditTextObject& rTextObject );
-    EditTextObject*     CreateTextObject();
+    void				SetText( const EditTextObject& rTextObject );
+    EditTextObject*		CreateTextObject();
 };
 
 
-//  ScCellTextData: shared data between sub objects of a cell text object
+//	ScCellTextData: shared data between sub objects of a cell text object
 
 class ScCellTextData : public SfxListener
 {
 protected:
-    ScDocShell*             pDocShell;
-    ScAddress               aCellPos;
-    ScFieldEditEngine*      pEditEngine;
-    SvxEditEngineForwarder* pForwarder;
-    ScSharedCellEditSource* pOriginalSource;
-    BOOL                    bDataValid;
-    BOOL                    bInUpdate;
-    BOOL                    bDirty;
-    BOOL                    bDoUpdate;
+    ScDocShell*				pDocShell;
+    ScAddress				aCellPos;
+    ScFieldEditEngine*		pEditEngine;
+    SvxEditEngineForwarder*	pForwarder;
+    ScSharedCellEditSource*	pOriginalSource;
+    BOOL					bDataValid;
+    BOOL					bInUpdate;
+    BOOL					bDirty;
+    BOOL					bDoUpdate;
 
 protected:
     virtual void            GetCellText(const ScAddress& rCellPos, String& rText);
 
 public:
                             ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual                 ~ScCellTextData();
+    virtual					~ScCellTextData();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // helper functions for ScSharedCellEditSource:
     virtual SvxTextForwarder* GetTextForwarder();
-    void                    UpdateData();
-    ScFieldEditEngine*      GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+    void					UpdateData();
+    ScFieldEditEngine*		GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
-    ScSharedCellEditSource* GetOriginalSource();        // used as argument for SvxUnoText ctor
+    ScSharedCellEditSource*	GetOriginalSource();		// used as argument for SvxUnoText ctor
 
                             // used for ScCellEditSource:
-    ScDocShell*             GetDocShell() const     { return pDocShell; }
-    const ScAddress&        GetCellPos() const      { return aCellPos; }
+    ScDocShell*				GetDocShell() const		{ return pDocShell; }
+    const ScAddress&		GetCellPos() const		{ return aCellPos; }
 
-    void                    SetDirty(BOOL bValue)   { bDirty = bValue; }
-    BOOL                    IsDirty() const         { return bDirty; }
-    void                    SetDoUpdate(BOOL bValue)    { bDoUpdate = bValue; }
+    void					SetDirty(BOOL bValue)	{ bDirty = bValue; }
+    BOOL					IsDirty() const			{ return bDirty; }
+    void					SetDoUpdate(BOOL bValue)	{ bDoUpdate = bValue; }
 };
 
 class ScCellTextObj : public ScCellTextData, public SvxUnoText

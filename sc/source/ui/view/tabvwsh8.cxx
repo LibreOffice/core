@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,10 +64,10 @@ void ScTabViewShell::SetDefaultFrameLine( const SvxBorderLine* pLine )
 BOOL __EXPORT ScTabViewShell::HasSelection( BOOL bText ) const
 {
     BOOL bHas = FALSE;
-    ScViewData* pData = (ScViewData*)GetViewData();     // const weggecasted
+    ScViewData* pData = (ScViewData*)GetViewData();		// const weggecasted
     if ( bText )
     {
-        //  Text enthalten: Anzahl2 >= 1
+        //	Text enthalten: Anzahl2 >= 1
         ScDocument* pDoc = pData->GetDocument();
         ScMarkData& rMark = pData->GetMarkData();
         ScAddress aCursor( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );

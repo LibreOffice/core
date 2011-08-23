@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,102 +36,102 @@
 // ---------------------------------------------------------------------------
 
 
-#define HDR_HORIZONTAL      0
-#define HDR_VERTICAL        1
+#define HDR_HORIZONTAL		0
+#define HDR_VERTICAL		1
 
-#define HDR_SIZE_OPTIMUM    0xFFFF
+#define HDR_SIZE_OPTIMUM	0xFFFF
 
 
                                     // Groesse des Sliders
-#define HDR_SLIDERSIZE      2
+#define HDR_SLIDERSIZE		2
 
 class ScHeaderControl : public Window
 {
 private:
-    SelectionEngine*    pSelEngine;
-    Font                aNormFont;
-    Font                aBoldFont;
-    BOOL                bBoldSet;
+    SelectionEngine*	pSelEngine;
+    Font				aNormFont;
+    Font				aBoldFont;
+    BOOL				bBoldSet;
 
-    USHORT          nFlags;
-    BOOL            bVertical;              // Vertikal = Zeilenheader
+    USHORT			nFlags;
+    BOOL			bVertical;				// Vertikal = Zeilenheader
 
-    long            nWidth;
-    long            nSmallWidth;
-    long            nBigWidth;
+    long			nWidth;
+    long			nSmallWidth;
+    long			nBigWidth;
 
-    SCCOLROW        nSize;
+    SCCOLROW		nSize;
 
-    SCCOLROW        nMarkStart;
-    SCCOLROW        nMarkEnd;
-    BOOL            bMarkRange;
+    SCCOLROW		nMarkStart;
+    SCCOLROW		nMarkEnd;
+    BOOL			bMarkRange;
 
-    BOOL            bDragging;              // Groessen aendern
-    SCCOLROW        nDragNo;
-    long            nDragStart;
-    long            nDragPos;
-    BOOL            bDragMoved;
+    BOOL			bDragging;				// Groessen aendern
+    SCCOLROW		nDragNo;
+    long			nDragStart;
+    long			nDragPos;
+    BOOL			bDragMoved;
 
-    BOOL            bIgnoreMove;
+    BOOL			bIgnoreMove;
 
-    long            GetScrPos( SCCOLROW nEntryNo );
-    SCCOLROW        GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder );
+    long			GetScrPos( SCCOLROW nEntryNo );
+    SCCOLROW		GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder );
     bool            IsSelectionAllowed(SCCOLROW nPos) const;
-    void            ShowDragHelp();
+    void			ShowDragHelp();
 
-    void            DoPaint( SCCOLROW nStart, SCCOLROW nEnd );
+    void			DoPaint( SCCOLROW nStart, SCCOLROW nEnd );
 
     void            DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor );
 
 protected:
-                    //  von Window ueberladen
+                    //	von Window ueberladen
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void	Paint( const Rectangle& rRect );
 
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Tracking( const TrackingEvent& rTEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	Tracking( const TrackingEvent& rTEvt );
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void	RequestHelp( const HelpEvent& rHEvt );
 
-                    //  neue Methoden
+                    //	neue Methoden
 
-    virtual SCCOLROW    GetPos() = 0;                               // aktuelle Position (Scrolling)
-    virtual USHORT  GetEntrySize( SCCOLROW nEntryNo ) = 0;      // Breite / Hoehe (Pixel)
-    virtual String  GetEntryText( SCCOLROW nEntryNo ) = 0;
+    virtual SCCOLROW	GetPos() = 0;								// aktuelle Position (Scrolling)
+    virtual USHORT	GetEntrySize( SCCOLROW nEntryNo ) = 0;		// Breite / Hoehe (Pixel)
+    virtual String	GetEntryText( SCCOLROW nEntryNo ) = 0;
 
     virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo );
-    virtual BOOL    IsLayoutRTL();
-    virtual BOOL    IsMirrored();
+    virtual BOOL	IsLayoutRTL();
+    virtual BOOL	IsMirrored();
 
-    virtual void    SetEntrySize( SCCOLROW nPos, USHORT nNewWidth ) = 0;
-    virtual void    HideEntries( SCCOLROW nStart, SCCOLROW nEnd ) = 0;
+    virtual void	SetEntrySize( SCCOLROW nPos, USHORT nNewWidth ) = 0;
+    virtual void	HideEntries( SCCOLROW nStart, SCCOLROW nEnd ) = 0;
 
-    virtual void    SetMarking( BOOL bSet );
-    virtual void    SelectWindow();
-    virtual BOOL    IsDisabled();
-    virtual BOOL    ResizeAllowed();
-    virtual String  GetDragHelp( long nVal );
+    virtual void	SetMarking( BOOL bSet );
+    virtual void	SelectWindow();
+    virtual BOOL	IsDisabled();
+    virtual BOOL	ResizeAllowed();
+    virtual String	GetDragHelp( long nVal );
 
-    virtual void    DrawInvert( long nDragPos );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void	DrawInvert( long nDragPos );
+    virtual void	Command( const CommandEvent& rCEvt );
 
 public:
             ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
                                 SCCOLROW nNewSize, USHORT nNewFlags );
             ~ScHeaderControl();
 
-    void    SetIgnoreMove(BOOL bSet)            { bIgnoreMove = bSet; }
+    void	SetIgnoreMove(BOOL bSet)			{ bIgnoreMove = bSet; }
 
-    void    StopMarking();
+    void	StopMarking();
 
-    void    SetMark( BOOL bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd );
+    void	SetMark( BOOL bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd );
 
-    long    GetWidth() const                    { return nWidth; }
-    long    GetSmallWidth() const               { return nSmallWidth; }
-    long    GetBigWidth() const                 { return nBigWidth; }
-    void    SetWidth( long nNew );
+    long	GetWidth() const					{ return nWidth; }
+    long	GetSmallWidth() const				{ return nSmallWidth; }
+    long	GetBigWidth() const					{ return nBigWidth; }
+    void	SetWidth( long nNew );
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,16 +61,16 @@
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, ScResId(RID_SCPAGE_OPREDLINE), rSet),
-    aContentFT      ( this, ScResId(FT_CONTENT  )),
-    aContentColorLB ( this, ScResId(CLB_CONTENT )),
-    aRemoveFT       ( this, ScResId(FT_REMOVE   )),
-    aRemoveColorLB  ( this, ScResId(CLB_REMOVE  )),
-    aInsertFT       ( this, ScResId(FT_INSERT   )),
-    aInsertColorLB  ( this, ScResId(CLB_INSERT  )),
-    aMoveFT         ( this, ScResId(FT_MOVE     )),
-    aMoveColorLB    ( this, ScResId(CLB_MOVE    )),
-    aChangedGB      ( this, ScResId(GB_COLORCHGS)),
-    aAuthorStr      (ScResId(STR_AUTHOR))
+    aContentFT      ( this, ScResId(FT_CONTENT	)),
+    aContentColorLB ( this, ScResId(CLB_CONTENT	)),
+    aRemoveFT       ( this, ScResId(FT_REMOVE	)),
+    aRemoveColorLB	( this, ScResId(CLB_REMOVE	)),
+    aInsertFT       ( this, ScResId(FT_INSERT	)),
+    aInsertColorLB  ( this, ScResId(CLB_INSERT	)),
+    aMoveFT         ( this, ScResId(FT_MOVE		)),
+    aMoveColorLB    ( this, ScResId(CLB_MOVE	)),
+    aChangedGB		( this, ScResId(GB_COLORCHGS)),
+    aAuthorStr		(ScResId(STR_AUTHOR))
 {
     FreeResource();
 
@@ -93,7 +93,7 @@ __EXPORT ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
     Beschreibung:
  -----------------------------------------------------------------------*/
 
-SfxTabPage* __EXPORT ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*	__EXPORT ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new ScRedlineOptionsTabPage( pParent, rSet );
 }
@@ -160,8 +160,8 @@ BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 
     SC_MOD()->SetAppOptions(aAppOptions);
 
-    //  Repaint (wenn alles ueber Items laufen wuerde, wie es sich gehoert,
-    //  waere das nicht noetig...)
+    //	Repaint (wenn alles ueber Items laufen wuerde, wie es sich gehoert,
+    //	waere das nicht noetig...)
     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
     if (pDocSh)
         pDocSh->PostPaintGridAll();

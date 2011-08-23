@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #include "vbapane.hxx"
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -46,13 +46,13 @@ ScVbaPane::ScVbaPane(
 {
 }
 
-sal_Int32 SAL_CALL
+sal_Int32 SAL_CALL 
 ScVbaPane::getScrollColumn() throw (uno::RuntimeException)
 {
     return ( m_xViewPane->getFirstVisibleColumn() + 1 );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaPane::setScrollColumn( sal_Int32 _scrollcolumn ) throw (uno::RuntimeException)
 {
     if( _scrollcolumn < 1 )
@@ -63,13 +63,13 @@ ScVbaPane::setScrollColumn( sal_Int32 _scrollcolumn ) throw (uno::RuntimeExcepti
     m_xViewPane->setFirstVisibleColumn( _scrollcolumn - 1 );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32 SAL_CALL 
 ScVbaPane::getScrollRow() throw (uno::RuntimeException)
 {
     return ( m_xViewPane->getFirstVisibleRow() + 1 );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaPane::setScrollRow( sal_Int32 _scrollrow ) throw (uno::RuntimeException)
 {
     if( _scrollrow < 1 )
@@ -94,7 +94,7 @@ ScVbaPane::getVisibleRange() throw (uno::RuntimeException)
 }
 
 //Method
-void SAL_CALL
+void SAL_CALL 
 ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException)
 {
     rtl::OUString messageBuffer;
@@ -137,7 +137,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
     if( messageBuffer.getLength() > 0 )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
 
-    sal_Int32 newStartRow = visibleRange.StartRow + downRows;
+    sal_Int32 newStartRow = visibleRange.StartRow + downRows; 
     if( newStartRow < 0 )
         newStartRow = 0;
     sal_Int32 newStartCol = visibleRange.StartColumn + rightCols;
@@ -147,7 +147,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
     m_xViewPane->setFirstVisibleColumn( newStartCol );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException)
 {
     rtl::OUString messageBuffer;
@@ -169,7 +169,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
     {
         sal_Int32 up = 0;
         if( Up >>= up )
-            downPages -= up;
+            downPages -= up; 
         else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Up\n" );
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -642,7 +642,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
         //don't add the created sequences to the map as they are used temporarily only ...
         return new DataSource( ContainerHelper::ContainerToSequence(aComplexCategories) );
     }
-
+    
     OSL_ASSERT( aRangeRepresentation.equals( lcl_aCompleteRange ));
 
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultLSeqVec;
@@ -900,7 +900,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
 
         transform( aComplexCategories.begin(), aComplexCategories.end(), aNewStrings.begin(),
                    aComplexCategories.begin(), lcl_setStringAtLevel(nLevel) );
-
+        
         if( m_bDataInColumns )
             m_aInternalData.setComplexRowLabels( aComplexCategories );
         else

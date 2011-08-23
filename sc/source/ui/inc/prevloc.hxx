@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <sal/types.h>
 
 
-#define SC_PREVIEW_MAXRANGES    4
+#define SC_PREVIEW_MAXRANGES	4
 #define SC_PREVIEW_RANGE_EDGE   0
 #define SC_PREVIEW_RANGE_REPCOL 1
 #define SC_PREVIEW_RANGE_REPROW 2
@@ -51,10 +51,10 @@ class ScDocument;
 
 struct ScPreviewColRowInfo
 {
-    BOOL    bIsHeader;
+    BOOL	bIsHeader;
     SCCOLROW    nDocIndex;
-    long    nPixelStart;
-    long    nPixelEnd;
+    long	nPixelStart;
+    long	nPixelEnd;
 
     void Set( BOOL bHeader, SCCOLROW nIndex, long nStart, long nEnd )
     {
@@ -67,81 +67,81 @@ struct ScPreviewColRowInfo
 
 class ScPreviewTableInfo
 {
-    SCTAB                   nTab;
-    SCCOL                   nCols;
-    SCROW                   nRows;
-    ScPreviewColRowInfo*    pColInfo;
-    ScPreviewColRowInfo*    pRowInfo;
+    SCTAB					nTab;
+    SCCOL					nCols;
+    SCROW					nRows;
+    ScPreviewColRowInfo*	pColInfo;
+    ScPreviewColRowInfo*	pRowInfo;
 
 public:
             ScPreviewTableInfo();
             ~ScPreviewTableInfo();
 
-    SCTAB                       GetTab() const      { return nTab; }
-    SCCOL                       GetCols() const     { return nCols; }
-    SCROW                       GetRows() const     { return nRows; }
-    const ScPreviewColRowInfo*  GetColInfo() const  { return pColInfo; }
-    const ScPreviewColRowInfo*  GetRowInfo() const  { return pRowInfo; }
+    SCTAB						GetTab() const		{ return nTab; }
+    SCCOL						GetCols() const		{ return nCols; }
+    SCROW						GetRows() const		{ return nRows; }
+    const ScPreviewColRowInfo*	GetColInfo() const	{ return pColInfo; }
+    const ScPreviewColRowInfo*	GetRowInfo() const	{ return pRowInfo; }
 
-    void    SetTab( SCTAB nNewTab );
-    void    SetColInfo( SCCOL nCount, ScPreviewColRowInfo* pNewInfo );
-    void    SetRowInfo( SCROW nCount, ScPreviewColRowInfo* pNewInfo );
-    void    LimitToArea( const Rectangle& rPixelArea );
+    void	SetTab( SCTAB nNewTab );
+    void	SetColInfo( SCCOL nCount, ScPreviewColRowInfo* pNewInfo );
+    void	SetRowInfo( SCROW nCount, ScPreviewColRowInfo* pNewInfo );
+    void	LimitToArea( const Rectangle& rPixelArea );
 };
 
 
 class ScPreviewLocationData
 {
     OutputDevice* pWindow;
-    ScDocument* pDoc;
-    MapMode     aCellMapMode;
-    MapMode     aDrawMapMode[SC_PREVIEW_MAXRANGES];
-    Rectangle   aDrawRectangle[SC_PREVIEW_MAXRANGES];
-        sal_uInt8       aDrawRangeId[SC_PREVIEW_MAXRANGES];
-    USHORT      nDrawRanges;
-    SCTAB       nPrintTab;
-    List        aEntries;
+    ScDocument*	pDoc;
+    MapMode		aCellMapMode;
+    MapMode		aDrawMapMode[SC_PREVIEW_MAXRANGES];
+    Rectangle	aDrawRectangle[SC_PREVIEW_MAXRANGES];
+        sal_uInt8   	aDrawRangeId[SC_PREVIEW_MAXRANGES];
+    USHORT		nDrawRanges;
+    SCTAB		nPrintTab;
+    List		aEntries;
 
-    Rectangle   GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const;
+    Rectangle	GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const;
 
 public:
             ScPreviewLocationData( ScDocument* pDocument, OutputDevice* pWin );
             ~ScPreviewLocationData();
 
-    void    SetCellMapMode( const MapMode& rMapMode );
-    void    SetPrintTab( SCTAB nNew );
-    void    Clear();
-    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow,
+    void	SetCellMapMode( const MapMode& rMapMode );
+    void	SetPrintTab( SCTAB nNew );
+    void	Clear();
+    void	AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow,
                             const MapMode& rDrawMap );
-    void    AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, BOOL bRepCol );
-    void    AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, BOOL bRepRow );
-    void    AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft );
-    void    AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
-    void    AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
+    void	AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, BOOL bRepCol );
+    void	AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, BOOL bRepRow );
+    void	AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft );
+    void	AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
+    void	AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
 
-    SCTAB   GetPrintTab() const     { return nPrintTab; }
+    SCTAB	GetPrintTab() const		{ return nPrintTab; }
 
-    //  Get info on visible columns/rows in the visible area
-    void    GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;
+    //	Get info on visible columns/rows in the visible area
+    void	GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;
 
-    USHORT  GetDrawRanges() const   { return nDrawRanges; }
-    void    GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const;
+    USHORT	GetDrawRanges() const	{ return nDrawRanges; }
+    void	GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const;
 
-    BOOL    GetHeaderPosition( Rectangle& rHeaderRect ) const;
-    BOOL    GetFooterPosition( Rectangle& rFooterRect ) const;
-    BOOL    IsHeaderLeft() const;
-    BOOL    IsFooterLeft() const;
+    BOOL	GetHeaderPosition( Rectangle& rHeaderRect ) const;
+    BOOL	GetFooterPosition( Rectangle& rFooterRect ) const;
+    BOOL	IsHeaderLeft() const;
+    BOOL	IsFooterLeft() const;
 
-    long    GetNoteCountInRange( const Rectangle& rVisiblePixel, BOOL bNoteMarks ) const;
-    BOOL    GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, BOOL bNoteMarks,
+    long	GetNoteCountInRange( const Rectangle& rVisiblePixel, BOOL bNoteMarks ) const;
+    BOOL	GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, BOOL bNoteMarks,
                             ScAddress& rCellPos, Rectangle& rNoteRect ) const;
-    Rectangle GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, BOOL bNoteMarks,
+    Rectangle GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, BOOL bNoteMarks, 
                             const ScAddress& aCellPos) const;
 
-    //  Check if any cells (including column/row headers) are in the visible area
-    BOOL    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
+    //	Check if any cells (including column/row headers) are in the visible area
+    BOOL	HasCellsInRange( const Rectangle& rVisiblePixel ) const;
 
-    BOOL    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
+    BOOL	GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
 
     // returns the rectangle where the EditEngine draws the text of a Header Cell
     // if bColHeader is true it returns the rectangle of the header of the column in rCellPos

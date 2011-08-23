@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,17 +44,17 @@
 
 void ScDrawView::UpdateBrowser()
 {
-    //  VC's und den Browser dazu gibts nicht mehr...
+    //	VC's und den Browser dazu gibts nicht mehr...
 }
 
 void ScDrawView::VCAddWin( Window* /* pWin */ )
 {
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
+    //	GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
 
 void ScDrawView::VCRemoveWin( Window* /* pWin */ )
 {
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
+    //	GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ public:
 };
 
 
-struct ScFunctionData                   // zum Berechnen von einzelnen Funktionen
+struct ScFunctionData					// zum Berechnen von einzelnen Funktionen
 {
-    ScSubTotalFunc  eFunc;
-    double          nVal;
-    long            nCount;
-    BOOL            bError;
+    ScSubTotalFunc	eFunc;
+    double			nVal;
+    long			nCount;
+    BOOL			bError;
 
     ScFunctionData( ScSubTotalFunc eFn ) :
         eFunc(eFn), nVal(0.0), nCount(0), bError(FALSE) {}

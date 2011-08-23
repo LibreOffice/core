@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
         Pos = MAP_APPFONT( 6, 3 ) ;
         Size = MAP_APPFONT( 165, 14 ) ;
 
-        Text [ en-US ] = "Select the language to use for import" ;
+        Text [ en-US ] = "Select the language to use for import" ; 
     };
 
     RadioButton RB_AUTOMATIC
@@ -71,7 +71,7 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
         Size = MAP_APPFONT( 159, 10 ) ;
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Automatic" ;
+        Text [ en-US ] = "Automatic" ; 
     };
 
     RadioButton RB_CUSTOM
@@ -80,7 +80,7 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
         Size = MAP_APPFONT( 159, 10 ) ;
         TabStop = TRUE ;
 
-        Text [ en-US ] = "Custom" ;
+        Text [ en-US ] = "Custom" ; 
     };
 
     ListBox LB_CUSTOM_LANG

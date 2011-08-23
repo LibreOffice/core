@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,19 +55,19 @@ enum ScPrintSelectionMode
 
 class ScPrintSelectionStatus
 {
-    ScPrintSelectionMode    eMode;
-    ScRangeList             aRanges;
+    ScPrintSelectionMode	eMode;
+    ScRangeList				aRanges;
     ScPrintOptions          aOptions;
 
 public:
             ScPrintSelectionStatus() : eMode(SC_PRINTSEL_INVALID) {}
             ~ScPrintSelectionStatus() {}
 
-    void    SetMode(ScPrintSelectionMode eNew)  { eMode = eNew; }
-    void    SetRanges(const ScRangeList& rNew)  { aRanges = rNew; }
+    void	SetMode(ScPrintSelectionMode eNew)	{ eMode = eNew; }
+    void	SetRanges(const ScRangeList& rNew)	{ aRanges = rNew; }
     void    SetOptions(const ScPrintOptions& rNew) { aOptions = rNew; }
 
-    BOOL    operator==(const ScPrintSelectionStatus& rOther) const
+    BOOL	operator==(const ScPrintSelectionStatus& rOther) const
             { return eMode == rOther.eMode && aRanges == rOther.aRanges && aOptions == rOther.aOptions; }
 
     ScPrintSelectionMode GetMode() const { return eMode; }
@@ -97,11 +97,11 @@ struct ScPrintPageLocation
 
 class ScPrintFuncCache
 {
-    ScPrintSelectionStatus  aSelection;
-    ScDocShell*             pDocSh;
-    long                    nTotalPages;
-    long                    nPages[MAXTABCOUNT];
-    long                    nFirstAttr[MAXTABCOUNT];
+    ScPrintSelectionStatus	aSelection;
+    ScDocShell*				pDocSh;
+    long					nTotalPages;
+    long					nPages[MAXTABCOUNT];
+    long					nFirstAttr[MAXTABCOUNT];
     std::vector<ScPrintPageLocation> aLocations;
     bool                    bLocInitialized;
 
@@ -110,16 +110,16 @@ public:
                                 const ScPrintSelectionStatus& rStatus );
             ~ScPrintFuncCache();
 
-    BOOL    IsSameSelection( const ScPrintSelectionStatus& rStatus ) const;
+    BOOL	IsSameSelection( const ScPrintSelectionStatus& rStatus ) const;
 
     void    InitLocations( const ScMarkData& rMark, OutputDevice* pDev );
     bool    FindLocation( const ScAddress& rCell, ScPrintPageLocation& rLocation ) const;
 
-    long    GetPageCount() const                { return nTotalPages; }
-    long    GetFirstAttr( SCTAB nTab ) const    { return nFirstAttr[nTab]; }
-    SCTAB   GetTabForPage( long nPage ) const;
-    long    GetTabStart( SCTAB nTab ) const;
-    long    GetDisplayStart( SCTAB nTab ) const;
+    long	GetPageCount() const				{ return nTotalPages; }
+    long	GetFirstAttr( SCTAB nTab ) const	{ return nFirstAttr[nTab]; }
+    SCTAB	GetTabForPage( long nPage ) const;
+    long	GetTabStart( SCTAB nTab ) const;
+    long	GetDisplayStart( SCTAB nTab ) const;
 };
 
 #endif

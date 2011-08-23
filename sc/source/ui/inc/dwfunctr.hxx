@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@
 
 #include <vcl/combobox.hxx>
 #include "anyrefdg.hxx"
-#include "global.hxx"       // ScAddress
+#include "global.hxx"		// ScAddress
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 
-#ifndef LRU_MAX
+#ifndef	LRU_MAX
 #define LRU_MAX 10
 #endif
 /*************************************************************************
@@ -71,44 +71,44 @@ class ScFunctionDockWin : public SfxDockingWindow, public SfxListener
 {
 
 private:
-    Timer               aTimer;
-    ScPrivatSplit       aPrivatSplit;
-    ListBox             aCatBox;
-    ListBox             aFuncList;
-    ListBox             aDDFuncList;
-    ListBox*            pAllFuncList;
+    Timer				aTimer;
+    ScPrivatSplit		aPrivatSplit;
+    ListBox				aCatBox;
+    ListBox				aFuncList;
+    ListBox				aDDFuncList;
+    ListBox*			pAllFuncList;
 
-    SfxChildAlignment   eSfxNewAlignment;
-    SfxChildAlignment   eSfxOldAlignment;
-    ImageButton         aInsertButton;
-    FixedText           aFiFuncDesc;
-    USHORT              nLeftSlot;
-    USHORT              nRightSlot;
-    ULONG               nMinWidth;
-    ULONG               nMinHeight;
-    Size                aOldSize;
-    BOOL                bSizeFlag;
-    BOOL                bInit;
-    short               nDockMode;
-    Point               aSplitterInitPos;
-    const ScFuncDesc*   pFuncDesc;
-    USHORT              nArgs;
-    String**            pArgArr;
+    SfxChildAlignment	eSfxNewAlignment;
+    SfxChildAlignment	eSfxOldAlignment;
+    ImageButton			aInsertButton;
+    FixedText			aFiFuncDesc;
+    USHORT				nLeftSlot;
+    USHORT				nRightSlot;
+    ULONG				nMinWidth;
+    ULONG				nMinHeight;
+    Size				aOldSize;
+    BOOL 				bSizeFlag;
+    BOOL				bInit;
+    short				nDockMode;
+    Point				aSplitterInitPos;
+    const ScFuncDesc*	pFuncDesc;
+    USHORT				nArgs;
+    String**			pArgArr;
 
 
     const ScFuncDesc*   aLRUList[LRU_MAX];
 
-    void            UpdateFunctionList();
-    void            UpdateLRUList();
-    void            DoEnter(BOOL bOk); //@@ ???
-    void            SetDescription();
-    void            SetLeftRightSize();
-    void            SetTopBottonSize();
-    void            SetMyWidthLeRi(Size &aNewSize);
-    void            SetMyHeightLeRi(Size &aNewSize);
-    void            SetMyWidthToBo(Size &aNewSize);
-    void            SetMyHeightToBo(Size &aNewSize);
-    void            UseSplitterInitPos();
+    void			UpdateFunctionList();
+    void			UpdateLRUList();
+    void			DoEnter(BOOL bOk); //@@ ???
+    void			SetDescription();
+    void			SetLeftRightSize();
+    void			SetTopBottonSize();
+    void			SetMyWidthLeRi(Size &aNewSize);
+    void			SetMyHeightLeRi(Size &aNewSize);
+    void			SetMyWidthToBo(Size &aNewSize);
+    void			SetMyHeightToBo(Size &aNewSize);
+    void			UseSplitterInitPos();
 
                     DECL_LINK( SetSelectionHdl, void* );
                     DECL_LINK( SelHdl, ListBox* );
@@ -117,19 +117,19 @@ private:
 
 protected:
 
-    virtual BOOL    Close();
-    virtual void    Resize();
-    virtual void    Resizing( Size& rSize );
-    virtual void    SetSize();
-    virtual void    ToggleFloatingMode();
-    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual BOOL	Close();
+    virtual void	Resize();
+    virtual void	Resizing( Size& rSize );
+    virtual void 	SetSize();
+    virtual void	ToggleFloatingMode();
+    virtual void	StateChanged( StateChangedType nStateChange );
 
 
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment,
                                 SfxChildAlignment eAlign);
 
 public:
-                    ScFunctionDockWin(  SfxBindings* pBindings,
+                    ScFunctionDockWin(	SfxBindings* pBindings,
                                         SfxChildWindow *pCW,
                                         Window* pParent,
                                         const ResId& rResId );
@@ -137,14 +137,14 @@ public:
                     ~ScFunctionDockWin();
 
     using SfxDockingWindow::Notify;
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void 	Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void            SetSlotIDs( USHORT nLeft, USHORT nRight )
+    void			SetSlotIDs( USHORT nLeft, USHORT nRight )
                         { nLeftSlot = nLeft; nRightSlot = nRight; }
 
-    void            InitLRUList();
-
-    void            Initialize (SfxChildWinInfo* pInfo);
+    void			InitLRUList();
+    
+    void			Initialize (SfxChildWinInfo* pInfo);
     virtual void    FillInfo(SfxChildWinInfo&) const;
 };
 

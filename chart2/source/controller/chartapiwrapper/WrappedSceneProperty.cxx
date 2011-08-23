@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,12 +86,12 @@ void WrappedD3DTransformMatrixProperty::setPropertyValue( const Any& rOuterValue
             ::basegfx::B3DHomMatrix aNewMatrix = aMatrix*aObjectMatrix;
 
             aHM = BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aNewMatrix);
-
+            
             WrappedProperty::setPropertyValue( uno::makeAny(aHM), xInnerPropertySet );
             return;
         }
     }
-
+    
     WrappedProperty::setPropertyValue( rOuterValue, xInnerPropertySet );
 }
 
@@ -106,7 +106,7 @@ Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans:
         {
             ::basegfx::B3DTuple aRotation( BaseGFXHelper::GetRotationFromMatrix(
                 BaseGFXHelper::HomogenMatrixToB3DHomMatrix( aHM ) ) );
-
+            
             ::basegfx::B3DHomMatrix aMatrix;
             aMatrix.rotate( aRotation.getX(), aRotation.getY(), aRotation.getZ() );
             ::basegfx::B3DHomMatrix aObjectMatrix;
@@ -117,7 +117,7 @@ Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans:
             return uno::makeAny(aHM);
         }
     }
-
+    
     return WrappedProperty::getPropertyValue( xInnerPropertySet );
 }
 

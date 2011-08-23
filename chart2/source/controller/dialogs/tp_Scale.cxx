@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,14 +113,14 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     aTxtHelp (this, SchResId (TXT_STEP_HELP)),
     aMtStepHelp (this, SchResId (MT_STEPHELP)),
     aCbxAutoStepHelp(this, SchResId(CBX_AUTO_STEP_HELP)),
-
+    
     aTxtOrigin (this, SchResId (TXT_ORIGIN)),
     aFmtFldOrigin(this, SchResId(EDT_ORIGIN)),
     aCbxAutoOrigin(this, SchResId(CBX_AUTO_ORIGIN)),
 
     aCbxLogarithm(this, SchResId(CBX_LOGARITHM)),
     aCbxReverse(this, SchResId(CBX_REVERSE)),
-
+    
     fMin(0.0),
     fMax(0.0),
     fStepMain(0.0),
@@ -144,10 +144,10 @@ void ScaleTabPage::StateChanged( StateChangedType nType )
 {
     TabPage::StateChanged( nType );
 
-    if( nType == STATE_CHANGE_INITSHOW )
+    if( nType == STATE_CHANGE_INITSHOW )  
         AdjustControlPositions();
 }
-
+ 
 void ScaleTabPage::AdjustControlPositions()
 {
     //optimize position of the controls
@@ -166,7 +166,7 @@ void ScaleTabPage::AdjustControlPositions()
     aCbxAutoStepMain.SetSizePixel( aCbxAutoStepMain.CalcMinimumSize() );
     aCbxAutoStepHelp.SetSizePixel( aCbxAutoStepHelp.CalcMinimumSize() );
     aCbxAutoOrigin.SetSizePixel( aCbxAutoOrigin.CalcMinimumSize() );
-
+    
     //ensure new pos is ok
     long nWidthOfOtherControls = aCbxAutoMin.GetPosPixel().X() + aCbxAutoMin.GetSizePixel().Width() - aFmtFldMin.GetPosPixel().X();
     long nDialogWidth = GetSizePixel().Width();
@@ -181,7 +181,7 @@ void ScaleTabPage::AdjustControlPositions()
         aTxtMain.SetSizePixel(aSize);
         aTxtHelp.SetSizePixel(aSize);
         aTxtOrigin.SetSizePixel(aSize);
-
+        
         lcl_shiftControls( aFmtFldMin, aCbxAutoMin, nNewXPos );
         lcl_shiftControls( aFmtFldMax, aCbxAutoMax, nNewXPos );
         lcl_shiftControls( aFmtFldStepMain, aCbxAutoStepMain, nNewXPos );
@@ -255,16 +255,16 @@ BOOL ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     DBG_ASSERT( pNumFormatter, "No NumberFormatter available" );
 
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MIN      ,aCbxAutoMin.IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MAX      ,aCbxAutoMax.IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MIN		 ,aCbxAutoMin.IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MAX		 ,aCbxAutoMax.IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP,aCbxAutoStepHelp.IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_ORIGIN   ,aCbxAutoOrigin.IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_LOGARITHM     ,aCbxLogarithm.IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_REVERSE       ,aCbxReverse.IsChecked()));
-    rOutAttrs.Put(SvxDoubleItem(fMax     , SCHATTR_AXIS_MAX));
-    rOutAttrs.Put(SvxDoubleItem(fMin     , SCHATTR_AXIS_MIN));
+    rOutAttrs.Put(SvxDoubleItem(fMax	 , SCHATTR_AXIS_MAX));
+    rOutAttrs.Put(SvxDoubleItem(fMin	 , SCHATTR_AXIS_MIN));
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_STEP_HELP, nStepHelp));
-    rOutAttrs.Put(SvxDoubleItem(fOrigin  , SCHATTR_AXIS_ORIGIN));
+    rOutAttrs.Put(SvxDoubleItem(fOrigin	 , SCHATTR_AXIS_ORIGIN));
 
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN,aCbxAutoStepMain.IsChecked()));
     rOutAttrs.Put(SvxDoubleItem(fStepMain,SCHATTR_AXIS_STEP_MAIN));
@@ -385,7 +385,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         pEdit = &aFmtFldStepMain;
         nErrStrId = STR_STEP_GT_ZERO;
     }
-
+    
     //check wich entries need user action
 
     // check for entries that cannot be parsed for the current number format
@@ -422,7 +422,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         pEdit = &aFmtFldStepMain;
         nErrStrId = STR_STEP_GT_ZERO;
     }
-
+    
     if( ShowWarning( nErrStrId, pEdit ) )
         return KEEP_PAGE;
 
@@ -439,7 +439,7 @@ void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     aFmtFldMin.SetFormatter( pNumFormatter );
     aFmtFldStepMain.SetFormatter( pNumFormatter );
     aFmtFldOrigin.SetFormatter( pNumFormatter );
-
+    
     // #101318#, #i6278# allow more decimal places than the output format.  As
     // the numbers shown in the edit fields are used for input, it makes more
     // sense to display the values in the input format rather than the output
@@ -448,7 +448,7 @@ void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     aFmtFldMin.UseInputStringForFormatting();
     aFmtFldStepMain.UseInputStringForFormatting();
     aFmtFldOrigin.UseInputStringForFormatting();
-
+    
     SetNumFormat();
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef SC_VBA_HYPERLINK_HXX
 #define SC_VBA_HYPERLINK_HXX
 
@@ -38,7 +38,7 @@
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XHyperlink > HyperlinkImpl_BASE;
 
-class ScVbaHyperlink : public HyperlinkImpl_BASE
+class ScVbaHyperlink : public HyperlinkImpl_BASE 
 {
 public:
     ScVbaHyperlink(

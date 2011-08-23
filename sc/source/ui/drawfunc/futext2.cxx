@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -292,11 +292,11 @@ SdrOutliner* FuText::MakeOutliner()
 
     pViewData->UpdateOutlinerFlags(*pOutl);
 
-    //  Die EditEngine benutzt beim RTF Export (Clipboard / Drag&Drop)
-    //  den MapMode des RefDevices, um die Fontgroesse zu setzen
+    //	Die EditEngine benutzt beim RTF Export (Clipboard / Drag&Drop)
+    //	den MapMode des RefDevices, um die Fontgroesse zu setzen
 
-    //  #i10426# The ref device isn't set to the EditEngine before SdrBeginTextEdit now,
-    //  so the device must be taken from the model here.
+    //	#i10426# The ref device isn't set to the EditEngine before SdrBeginTextEdit now,
+    //	so the device must be taken from the model here.
     OutputDevice* pRef = pDrDoc->GetRefDevice();
     if (pRef && pRef != pWindow)
         pRef->SetMapMode( MapMode(MAP_100TH_MM) );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,35 +51,35 @@ static const sal_Char __FAR_DATA pStrMrg[] = "MRG";
 // ============================================================================
 
 ScAsciiOptions::ScAsciiOptions() :
-    bFixedLen       ( FALSE ),
-    aFieldSeps      ( ';' ),
-    bMergeFieldSeps ( FALSE ),
+    bFixedLen		( FALSE ),
+    aFieldSeps		( ';' ),
+    bMergeFieldSeps	( FALSE ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
-    cTextSep        ( cDefaultTextSep ),
-    eCharSet        ( gsl_getSystemTextEncoding() ),
+    cTextSep		( cDefaultTextSep ),
+    eCharSet		( gsl_getSystemTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
-    bCharSetSystem  ( FALSE ),
-    nStartRow       ( 1 ),
-    nInfoCount      ( 0 ),
+    bCharSetSystem	( FALSE ),
+    nStartRow		( 1 ),
+    nInfoCount		( 0 ),
     pColStart       ( NULL ),
-    pColFormat      ( NULL )
+    pColFormat		( NULL )
 {
 }
 
 
 ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
-    bFixedLen       ( rOpt.bFixedLen ),
-    aFieldSeps      ( rOpt.aFieldSeps ),
-    bMergeFieldSeps ( rOpt.bMergeFieldSeps ),
+    bFixedLen		( rOpt.bFixedLen ),
+    aFieldSeps		( rOpt.aFieldSeps ),
+    bMergeFieldSeps	( rOpt.bMergeFieldSeps ),
     bQuotedFieldAsText(rOpt.bQuotedFieldAsText),
     bDetectSpecialNumber(rOpt.bDetectSpecialNumber),
-    cTextSep        ( rOpt.cTextSep ),
-    eCharSet        ( rOpt.eCharSet ),
+    cTextSep		( rOpt.cTextSep ),
+    eCharSet		( rOpt.eCharSet ),
     eLang           ( rOpt.eLang ),
-    bCharSetSystem  ( rOpt.bCharSetSystem ),
-    nStartRow       ( rOpt.nStartRow ),
-    nInfoCount      ( rOpt.nInfoCount )
+    bCharSetSystem	( rOpt.bCharSetSystem ),
+    nStartRow		( rOpt.nStartRow ),
+    nInfoCount		( rOpt.nInfoCount )
 {
     if (nInfoCount)
     {
@@ -152,18 +152,18 @@ void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
 }
 
 
-ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
+ScAsciiOptions&	ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 {
     SetColInfo( rCpy.nInfoCount, rCpy.pColStart, rCpy.pColFormat );
 
-    bFixedLen       = rCpy.bFixedLen;
-    aFieldSeps      = rCpy.aFieldSeps;
-    bMergeFieldSeps = rCpy.bMergeFieldSeps;
+    bFixedLen		= rCpy.bFixedLen;
+    aFieldSeps		= rCpy.aFieldSeps;
+    bMergeFieldSeps	= rCpy.bMergeFieldSeps;
     bQuotedFieldAsText = rCpy.bQuotedFieldAsText;
-    cTextSep        = rCpy.cTextSep;
-    eCharSet        = rCpy.eCharSet;
-    bCharSetSystem  = rCpy.bCharSetSystem;
-    nStartRow       = rCpy.nStartRow;
+    cTextSep		= rCpy.cTextSep;
+    eCharSet		= rCpy.eCharSet;
+    bCharSetSystem	= rCpy.bCharSetSystem;
+    nStartRow		= rCpy.nStartRow;
 
     return *this;
 }
@@ -171,15 +171,15 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 
 BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 {
-    if ( bFixedLen       == rCmp.bFixedLen &&
-         aFieldSeps      == rCmp.aFieldSeps &&
+    if ( bFixedLen		 == rCmp.bFixedLen &&
+         aFieldSeps		 == rCmp.aFieldSeps &&
          bMergeFieldSeps == rCmp.bMergeFieldSeps &&
          bQuotedFieldAsText == rCmp.bQuotedFieldAsText &&
-         cTextSep        == rCmp.cTextSep &&
-         eCharSet        == rCmp.eCharSet &&
+         cTextSep		 == rCmp.cTextSep &&
+         eCharSet		 == rCmp.eCharSet &&
          bCharSetSystem  == rCmp.bCharSetSystem &&
-         nStartRow       == rCmp.nStartRow &&
-         nInfoCount      == rCmp.nInfoCount )
+         nStartRow		 == rCmp.nStartRow &&
+         nInfoCount		 == rCmp.nInfoCount )
     {
         DBG_ASSERT( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
                      "0-Zeiger in ScAsciiOptions" );
@@ -194,8 +194,8 @@ BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 }
 
 //
-//  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
-//  darum ab Version 336 Komma stattdessen
+//	Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
+//	darum ab Version 336 Komma stattdessen
 //
 
 
@@ -207,7 +207,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     xub_StrLen i;
 
         //
-        //  Feld-Trenner
+        //	Feld-Trenner
         //
 
     if ( nCount >= 1 )
@@ -234,7 +234,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     }
 
         //
-        //  Text-Trenner
+        //	Text-Trenner
         //
 
     if ( nCount >= 2 )
@@ -245,7 +245,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     }
 
         //
-        //  Zeichensatz
+        //	Zeichensatz
         //
 
     if ( nCount >= 3 )
@@ -255,7 +255,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     }
 
         //
-        //  Startzeile
+        //	Startzeile
         //
 
     if ( nCount >= 4 )
@@ -265,7 +265,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     }
 
         //
-        //  Spalten-Infos
+        //	Spalten-Infos
         //
 
     if ( nCount >= 5 )
@@ -295,7 +295,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
 
     // Language
     if (nCount >= 6)
-    {
+    {    
         aToken = rString.GetToken(5, ',');
         eLang = static_cast<LanguageType>(aToken.ToInt32());
     }
@@ -321,7 +321,7 @@ String ScAsciiOptions::WriteToString() const
     String aOutStr;
 
         //
-        //  Feld-Trenner
+        //	Feld-Trenner
         //
 
     if ( bFixedLen )
@@ -344,34 +344,34 @@ String ScAsciiOptions::WriteToString() const
         }
     }
 
-    aOutStr += ',';                 // Token-Ende
+    aOutStr += ',';					// Token-Ende
 
         //
-        //  Text-Trenner
+        //	Text-Trenner
         //
 
     aOutStr += String::CreateFromInt32(cTextSep);
-    aOutStr += ',';                 // Token-Ende
+    aOutStr += ',';					// Token-Ende
 
         //
-        //  Zeichensatz
+        //	Zeichensatz
         //
 
-    if ( bCharSetSystem )           // force "SYSTEM"
+    if ( bCharSetSystem )			// force "SYSTEM"
         aOutStr += ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW );
     else
         aOutStr += ScGlobal::GetCharsetString( eCharSet );
-    aOutStr += ',';                 // Token-Ende
+    aOutStr += ',';					// Token-Ende
 
         //
-        //  Startzeile
+        //	Startzeile
         //
 
     aOutStr += String::CreateFromInt32(nStartRow);
-    aOutStr += ',';                 // Token-Ende
+    aOutStr += ',';					// Token-Ende
 
         //
-        //  Spalten-Infos
+        //	Spalten-Infos
         //
 
     DBG_ASSERT( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );

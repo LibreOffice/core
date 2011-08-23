@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ private:
 
     // OGenericUnoDialog overridables
     virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
-    virtual Dialog* createDialog(Window* _pParent);
+    virtual Dialog*	createDialog(Window* _pParent);
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException);
@@ -77,7 +77,7 @@ private:
     ChartTypeUnoDlg();
     ChartTypeUnoDlg(const ChartTypeUnoDlg&); // no defined
     void operator =(const ChartTypeUnoDlg&); // no defined
-
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >           m_xChartModel;
 };
 

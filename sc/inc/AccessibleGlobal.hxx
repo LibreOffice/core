@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 #include <set>
 
-/**
+/** 
  * Generic XAccessibleStateSet implementation.
  */
 class ScAccessibleStateSet : public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleStateSet >
@@ -45,17 +45,17 @@ public:
 
     // XAccessibleStateSet
 
-    virtual ::sal_Bool SAL_CALL isEmpty()
+    virtual ::sal_Bool SAL_CALL isEmpty() 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::sal_Bool SAL_CALL contains(sal_Int16 nState)
+    virtual ::sal_Bool SAL_CALL contains(sal_Int16 nState) 
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL containsAll(
-        const ::com::sun::star::uno::Sequence<sal_Int16>& aStateSet)
+        const ::com::sun::star::uno::Sequence<sal_Int16>& aStateSet) 
             throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates()
+    virtual ::com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates() 
         throw (::com::sun::star::uno::RuntimeException);
 
     // Non-UNO Methods

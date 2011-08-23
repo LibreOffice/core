@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,19 +48,19 @@ ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r )
 {
     SetTheComment(r.aComment);
 
-    aFirstDateTime  =r.aFirstDateTime;
-    aLastDateTime   =r.aLastDateTime;
-    aAuthorToShow   =r.aAuthorToShow;
-    aRangeList      =r.aRangeList;
-    eDateMode       =r.eDateMode;
-    bShowIt         =r.bShowIt;
-    bIsDate         =r.bIsDate;
-    bIsAuthor       =r.bIsAuthor;
-    bIsComment      =r.bIsComment;
-    bIsRange        =r.bIsRange;
-    bEveryoneButMe  =r.bEveryoneButMe;
-    bShowAccepted   =r.bShowAccepted;
-    bShowRejected   =r.bShowRejected;
+    aFirstDateTime	=r.aFirstDateTime;
+    aLastDateTime	=r.aLastDateTime;
+    aAuthorToShow	=r.aAuthorToShow;
+    aRangeList		=r.aRangeList;
+    eDateMode		=r.eDateMode;
+    bShowIt			=r.bShowIt;
+    bIsDate			=r.bIsDate;
+    bIsAuthor		=r.bIsAuthor;
+    bIsComment		=r.bIsComment;
+    bIsRange		=r.bIsRange;
+    bEveryoneButMe	=r.bEveryoneButMe;
+    bShowAccepted	=r.bShowAccepted;
+    bShowRejected	=r.bShowRejected;
     mbIsActionRange = r.mbIsActionRange;
     mnFirstAction   = r.mnFirstAction;
     mnLastAction    = r.mnLastAction;
@@ -71,19 +71,19 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
 {
     SetTheComment(r.aComment);
 
-    aFirstDateTime  =r.aFirstDateTime;
-    aLastDateTime   =r.aLastDateTime;
-    aAuthorToShow   =r.aAuthorToShow;
-    aRangeList      =r.aRangeList;
-    eDateMode       =r.eDateMode;
-    bShowIt         =r.bShowIt;
-    bIsDate         =r.bIsDate;
-    bIsAuthor       =r.bIsAuthor;
-    bIsComment      =r.bIsComment;
-    bIsRange        =r.bIsRange;
-    bEveryoneButMe  =r.bEveryoneButMe;
-    bShowAccepted   =r.bShowAccepted;
-    bShowRejected   =r.bShowRejected;
+    aFirstDateTime	=r.aFirstDateTime;
+    aLastDateTime	=r.aLastDateTime;
+    aAuthorToShow	=r.aAuthorToShow;
+    aRangeList		=r.aRangeList;
+    eDateMode		=r.eDateMode;
+    bShowIt			=r.bShowIt;
+    bIsDate			=r.bIsDate;
+    bIsAuthor		=r.bIsAuthor;
+    bIsComment		=r.bIsComment;
+    bIsRange		=r.bIsRange;
+    bEveryoneButMe	=r.bEveryoneButMe;
+    bShowAccepted	=r.bShowAccepted;
+    bShowRejected	=r.bShowRejected;
     mbIsActionRange = r.mbIsActionRange;
     mnFirstAction   = r.mnFirstAction;
     mnLastAction    = r.mnLastAction;
@@ -126,7 +126,7 @@ void ScChangeViewSettings::SetTheComment(const String& rString)
 void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
 {
     switch ( eDateMode )
-    {   // corresponds with ScViewUtil::IsActionShown
+    {	// corresponds with ScViewUtil::IsActionShown
         case SCDM_DATE_EQUAL :
         case SCDM_DATE_NOTEQUAL :
             aFirstDateTime.SetTime( 0 );

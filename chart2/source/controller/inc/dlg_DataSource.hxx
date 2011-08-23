@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,9 +81,9 @@ protected:
 
 private:
     DataSourceTabControl* m_pTabControl;
-    OKButton              m_aBtnOK;
-    CancelButton          m_aBtnCancel;
-    HelpButton            m_aBtnHelp;
+    OKButton		      m_aBtnOK;
+    CancelButton	      m_aBtnCancel;
+    HelpButton		      m_aBtnHelp;
 
     RangeChooserTabPage * m_pRangeChooserTabePage;
     DataSourceTabPage *   m_pDataSourceTabPage;

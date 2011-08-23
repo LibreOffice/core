@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,20 +48,20 @@ class ScDocumentPool;
 
 class ScMessagePool: public SfxItemPool
 {
-    SfxStringItem       aGlobalStringItem;
-    SvxSearchItem       aGlobalSearchItem;
-    ScSortItem          aGlobalSortItem;
-    ScQueryItem         aGlobalQueryItem;
-    ScSubTotalItem      aGlobalSubTotalItem;
-    ScConsolidateItem   aGlobalConsolidateItem;
-    ScPivotItem         aGlobalPivotItem;
-    ScSolveItem         aGlobalSolveItem;
-    ScUserListItem      aGlobalUserListItem;
+    SfxStringItem		aGlobalStringItem;
+    SvxSearchItem		aGlobalSearchItem;
+    ScSortItem			aGlobalSortItem;
+    ScQueryItem			aGlobalQueryItem;
+    ScSubTotalItem		aGlobalSubTotalItem;
+    ScConsolidateItem	aGlobalConsolidateItem;
+    ScPivotItem			aGlobalPivotItem;
+    ScSolveItem			aGlobalSolveItem;
+    ScUserListItem		aGlobalUserListItem;
 
-    SfxBoolItem         aPrintWarnItem;
+    SfxBoolItem			aPrintWarnItem;
 
-    SfxPoolItem**   ppPoolDefaults;
-    ScDocumentPool* pDocPool;
+    SfxPoolItem**	ppPoolDefaults;
+    ScDocumentPool*	pDocPool;
 
 public:
     ScMessagePool();
@@ -69,7 +69,7 @@ protected:
     virtual ~ScMessagePool();
 public:
 
-    virtual SfxMapUnit              GetMetric( USHORT nWhich ) const;
+    virtual SfxMapUnit				GetMetric( USHORT nWhich ) const;
 };
 
 
