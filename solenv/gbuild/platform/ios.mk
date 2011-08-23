@@ -237,7 +237,8 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 # FIXME framework handling very hackish
 define gb_LinkTarget__get_liblinkflags
-$(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(1)),$(call gb_Library_get_filename,$(lib)))) \
+$(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS) $(gb_Library_UNOLIBS_OOO),$(1)),$(call gb_Library_get_filename,$(lib)))) \
+$(foreach lib,$(filter $(gb_Library_UNOLIBS_OOO),$(1)),$(SOLARVER)/$(INPATH)/lib/$(lib)$(gb_Library_UNOEXT)) \
 $(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(1)))
 endef
 
