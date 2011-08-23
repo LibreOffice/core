@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,33 +40,33 @@ namespace connectivity
         ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
         class OHSQLTable;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper< OHSQLTable > OHSQLTable_PROP;
-        class OHSQLTable :  public OTableHelper
+        typedef ::comphelper::OIdPropertyArrayUsageHelper< OHSQLTable >	OHSQLTable_PROP;
+        class OHSQLTable :	public OTableHelper
                             ,public OHSQLTable_PROP
         {
             sal_Int32 m_nPrivileges; // we have to set our privileges by our own
 
             /** executes the statmenmt.
-                @param  _rStatement
+                @param	_rStatement
                     The statement to execute.
                 */
             void executeStatement(const ::rtl::OUString& _rStatement );
         protected:
 
             /** creates the column collection for the table
-                @param  _rNames
+                @param	_rNames
                     The column names.
             */
             virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames);
 
             /** creates the key collection for the table
-                @param  _rNames
+                @param	_rNames
                     The key names.
             */
             virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames);
 
             /** creates the index collection for the table
-                @param  _rNames
+                @param	_rNames
                     The index names.
             */
             virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
@@ -78,15 +78,15 @@ namespace connectivity
                 <BR>
                 as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
                 assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
-                @return                         an pointer to the newly created array helper. Must not be NULL.
+                @return							an pointer to the newly created array helper. Must not be NULL.
             */
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
+            
         public:
-            OHSQLTable( sdbcx::OCollection* _pTables,
+            OHSQLTable(	sdbcx::OCollection* _pTables,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
-            OHSQLTable( sdbcx::OCollection* _pTables,
+            OHSQLTable(	sdbcx::OCollection* _pTables,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                             const ::rtl::OUString& _Name,
                             const ::rtl::OUString& _Type,
@@ -107,7 +107,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // XAlterTable
             virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-
+            
             // XRename
             virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 

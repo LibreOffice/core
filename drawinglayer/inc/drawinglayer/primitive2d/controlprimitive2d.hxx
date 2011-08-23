@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,14 +50,14 @@ namespace drawinglayer
         {
         private:
             /// object's base data
-            basegfx::B2DHomMatrix                                                   maTransform;
-            com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >    mxControlModel;
+            basegfx::B2DHomMatrix													maTransform;
+            com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >	mxControlModel;
 
             /// the created an cached awt::XControl
-            com::sun::star::uno::Reference< com::sun::star::awt::XControl >         mxXControl;
+            com::sun::star::uno::Reference< com::sun::star::awt::XControl >			mxXControl;
 
             /// the last used scaling, used from getDecomposition for buffering
-            basegfx::B2DVector                                                      maLastViewScaling;
+            basegfx::B2DVector														maLastViewScaling;
 
             /** used from getXControl() to create a local awt::XControl which is remembered in mxXControl
                 and from thereon always used and returned by getXControl()
@@ -75,7 +75,7 @@ namespace drawinglayer
         public:
             /// constructor
             ControlPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
+                const basegfx::B2DHomMatrix& rTransform, 
                 const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& rxControlModel);
 
             /** constructor with an additional XControl as parameter to allow to hand it over at incarnation time
@@ -83,7 +83,7 @@ namespace drawinglayer
                 and thus double the XControls.
              */
             ControlPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
+                const basegfx::B2DHomMatrix& rTransform, 
                 const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& rxControlModel,
                 const com::sun::star::uno::Reference< com::sun::star::awt::XControl >& rxXControl);
 

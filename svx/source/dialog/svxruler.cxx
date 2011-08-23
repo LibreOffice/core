@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1076,7 +1076,7 @@ void SvxRuler::UpdatePage()
     Point aEdtWinPos = pEditWin->GetPosPixel();
     if( Application::GetSettings().GetLayoutRTL() && bHorz )
     {
-        //#i73321# in RTL the window and the ruler is not mirrored but the
+        //#i73321# in RTL the window and the ruler is not mirrored but the 
         // influence of the vertical ruler is inverted
         Size aOwnSize = GetSizePixel();
         Size aEdtWinSize = pEditWin->GetSizePixel();
@@ -1291,7 +1291,7 @@ void SvxRuler::UpdateTabs()
                     {
                         pTabs[nTabCount + TAB_GAP].nPos =
                             (pTabs[nTabCount].nPos + nDefTabDist);
-                        pTabs[nTabCount + TAB_GAP].nPos -=
+                        pTabs[nTabCount + TAB_GAP].nPos -= 
                             ((pTabs[nTabCount + TAB_GAP].nPos - lParaIndentPix)
                                 % nDefTabDist );
                     }
@@ -1314,7 +1314,7 @@ void SvxRuler::UpdateTabs()
                     pTabs[nTabCount + TAB_GAP].nPos =
                     pTabs[nTabCount].nPos + nDefTabDist;
                 }
-
+                
                 if(pTabs[nTabCount+TAB_GAP].nPos >= lRightIndent)
                     break;
                 pTabs[nTabCount + TAB_GAP].nStyle = RULER_TAB_DEFAULT;
@@ -1536,7 +1536,7 @@ inline long SvxRuler::GetLeftMin() const
 {
     DBG_ASSERT(pMinMaxItem, "kein MinMax-Wert gesetzt");
     return pMinMaxItem?
-        bHorz?  pMinMaxItem->GetValue().Left(): pMinMaxItem->GetValue().Top()
+        bHorz? 	pMinMaxItem->GetValue().Left(): pMinMaxItem->GetValue().Top()
                 : 0;
 }
 
@@ -1634,7 +1634,7 @@ void ModifyTabs_Impl
 */
 {
     if( pTabs )
-        for(USHORT i = 0; i < nCount; ++i)  pTabs[i].nPos += lDiff;
+        for(USHORT i = 0; i < nCount; ++i)	pTabs[i].nPos += lDiff;
 }
 
 
@@ -1955,7 +1955,7 @@ void SvxRuler::SetActive(BOOL bOn)
     if(bOn)
     {
         Activate();
-/*      pBindings->Invalidate( SID_RULER_LR_MIN_MAX, TRUE, TRUE );
+/*		pBindings->Invalidate( SID_RULER_LR_MIN_MAX, TRUE, TRUE );
         pBindings->Update( SID_RULER_LR_MIN_MAX );
         pBindings->Invalidate( SID_ATTR_LONG_ULSPACE, TRUE, TRUE );
         pBindings->Update( SID_ATTR_LONG_ULSPACE );
@@ -2067,8 +2067,8 @@ ADD_DEBUG_TEXT("lLastLMargin: ", String::CreateFromInt32(pRuler_Imp->lLastLMargi
                 lPos-nDragOffset - pBorders[nIdx].nPos
                 : GetDragType() == RULER_TYPE_MARGIN1 ? lPos - pRuler_Imp->lLastLMargin : lPos - pRuler_Imp->lLastRMargin;
 
-//          pBorders[nIdx].nPos += lDiff;
-//          lDiff = pBorders[nIdx].nPos - nOld;
+//			pBorders[nIdx].nPos += lDiff;
+//			lDiff = pBorders[nIdx].nPos - nOld;
             if(nDragType & DRAG_OBJECT_SIZE_LINEAR)
             {
                 long nRight = GetMargin2()-lMinFrame; // rechter Begrenzer
@@ -2293,8 +2293,8 @@ void SvxRuler::ApplyMargins()
             pLRSpaceItem->SetLeft(lLogicNullOffset=pRuler_Imp->lMaxLeftLogic);
         else
             pLRSpaceItem->SetLeft(PixelHAdjust(
-                lLogicNullOffset =  ConvertHPosLogic(GetFrameLeft()) -
-                lAppNullOffset, pLRSpaceItem->GetLeft()));
+                lLogicNullOffset =	ConvertHPosLogic(GetFrameLeft()) -
+                lAppNullOffset,	pLRSpaceItem->GetLeft()));
 
         if(bAppSetNullOffset)
             lAppNullOffset += lLogicNullOffset - lOldNull;
@@ -2373,7 +2373,7 @@ void SvxRuler::ApplyIndents()
     if(bRTL)
     {
         long nRightFrameMargin = GetRightFrameMargin();
-        nNewFirstLineOffset =   PixelHAdjust(nRightFrameMargin -
+        nNewFirstLineOffset = 	PixelHAdjust(nRightFrameMargin -
                 ConvertHPosLogic(pIndents[INDENT_FIRST_LINE].nPos ) -
                 lAppNullOffset,
                 pParaItem->GetTxtFirstLineOfst());
@@ -2434,14 +2434,14 @@ void SvxRuler::ApplyIndents()
                 ConvertHPosLogic(GetMargin1() +
                              pIndents[INDENT_RIGHT_MARGIN].nPos) - GetLeftFrameMargin() +
                              (pParaBorderItem ? pParaBorderItem->GetLeft() : 0) -
-                lAppNullOffset, pParaItem->GetRight()));
+                lAppNullOffset,	pParaItem->GetRight()));
         }
         else
         {
             pParaItem->SetRight( PixelHAdjust(
                 ConvertHPosLogic(GetMargin2() -
                              pIndents[INDENT_RIGHT_MARGIN].nPos) -
-                lAppNullOffset, pParaItem->GetRight()));
+                lAppNullOffset,	pParaItem->GetRight()));
         }
     }
     USHORT nParaId  = bHorz ? SID_ATTR_PARA_LRSPACE : SID_ATTR_PARA_LRSPACE_VERTICAL;
@@ -2782,7 +2782,7 @@ void SvxRuler::EvalModifier()
          nDragType = DRAG_OBJECT_SIZE_PROPORTIONAL;
          if( RULER_TYPE_TAB == eType ||
              ( ( RULER_TYPE_BORDER == eType || RULER_TYPE_MARGIN1 == eType ) &&
-               pColumnItem ) )
+               pColumnItem ) )  
              PrepareProportional_Impl(eType);
          break;
      }
@@ -3614,8 +3614,8 @@ void __EXPORT SvxRuler::EndDrag()
         {
             pCtrlItem[i]->ClearCache();
             pCtrlItem[i]->GetBindings().Invalidate(pCtrlItem[i]->GetId());
-            //      pCtrlItem[i]->UnBind();
-//          pCtrlItem[i]->ReBind();
+            //		pCtrlItem[i]->UnBind();
+//			pCtrlItem[i]->ReBind();
         }
 }
 
@@ -3763,8 +3763,15 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
                         (nId == FUNIT_M ||
                          nId == FUNIT_KM ||
                          nId == FUNIT_FOOT ||
-                         nId == FUNIT_MILE ))
-                    aMenu.RemoveItem(i - 1);
+                         nId == FUNIT_MILE ||
+                         nId == FUNIT_CHAR ||
+                         nId == FUNIT_LINE ))
+                    if (( nId == FUNIT_CHAR ) && bHorz )
+                           ;
+                    else if (( nId == FUNIT_LINE ) && !bHorz )
+                           ;
+                    else
+                           aMenu.RemoveItem(i - 1);
             }
             aMenu.Execute( this, rCEvt.GetMousePosPixel() );
         }

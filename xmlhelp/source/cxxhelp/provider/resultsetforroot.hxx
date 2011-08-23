@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace chelp {
         : public ResultSetBase
     {
     public:
-
+        
         ResultSetForRoot( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >&  xMSF,
                           const com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >&  xProvider,
                           sal_Int32 nOpenMode,
@@ -51,10 +51,10 @@ namespace chelp {
                           const com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo >& seqSort,
                           URLParameter& aURLParameter,
                           Databases* pDatabases );
-
+        
 
     private:
-
+        
         URLParameter m_aURLParameter;
         Databases*   m_pDatabases;
     };

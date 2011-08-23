@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -173,7 +173,7 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
     // inside of ImpEditEngine::Paint which calls pOwner->PaintBullet with the correct
     // values for hor and ver. No change for not-layouting (painting).
     // changed, bullet rendering now using PaintBullet via
-/*  if ( nIndex == 0 )
+/*	if ( nIndex == 0 )
     {
         // Dann das Bullet 'malen', dort wird bStrippingPortions ausgewertet
         // und Outliner::DrawingText gerufen
@@ -204,9 +204,18 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
         pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rOverlineColor, rTextLineColor);
 }
 
+void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar,
+    const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
+    bool bEndOfLine, bool bEndOfParagraph,
+    const Color& rOverlineColor, const Color& rTextLineColor)
+{
+    pOwner->DrawingTab(rStartPos, nWidth, rChar, rFont, nPara, nIndex, nRightToLeft,
+            bEndOfLine, bEndOfParagraph, rOverlineColor, rTextLineColor );
+}
+
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
-    EditEngine::FieldClicked( rField, nPara, nPos );    // Falls URL
+    EditEngine::FieldClicked( rField, nPara, nPos );	// Falls URL
     pOwner->FieldClicked( rField, nPara, nPos );
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace com::sun::star::sdbcx;
 
 IMPLEMENT_SERVICE_INFO(KabConnection, "com.sun.star.sdbc.drivers.KabConnection", "com.sun.star.sdbc.Connection")
 //-----------------------------------------------------------------------------
-KabConnection::KabConnection(KabDriver* _pDriver)
+KabConnection::KabConnection(KabDriver*	_pDriver)
          : OMetaConnection_BASE(m_aMutex),
          OSubComponent<KabConnection, KabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
          m_xMetaData(NULL),

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,13 +115,13 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl(
 {
     OSL_ENSURE( m_nObjectState != embed::EmbedStates::LOADED, "Loaded object is switched to running state without verbs using!" );
 
-    // actually there will be only one verb
+    // actually there will be only one verb 
     if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
     {
         uno::Sequence< sal_Int32 > aVerbs( 1 );
         aVerbs[0] = embed::EmbedVerbs::MS_OLEVERB_OPEN;
     }
-
+    
     return uno::Sequence< sal_Int32 >();
 }
 #endif
@@ -349,7 +349,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 
                 if ( !aEmbedFactory.getLength() )
                     throw uno::RuntimeException();
-
+        
                 uno::Reference< uno::XInterface > xFact = m_xFactory->createInstance( aEmbedFactory );
 
                 uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY_THROW );
@@ -401,7 +401,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                     try {
                         close( sal_True );
                     } catch( uno::Exception& ) {}
-
+                    
                     m_xParentStorage->dispose(); // ??? the storage has information loss, it should be closed without commiting!
                     throw uno::RuntimeException(); // the repairing is not possible
                 }
@@ -477,7 +477,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    // in case the object is already in requested state
+    // in case the object is already in requested state 
     if ( m_nObjectState == nNewState )
         return;
 
@@ -495,7 +495,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         TargetStateControl_Impl aControl( m_nTargetState, nNewState );
 
         // TODO: additional verbs can be a problem, since nobody knows how the object
-        //       will behave after activation
+        //		 will behave after activation
 
         sal_Int32 nOldState = m_nObjectState;
         aGuard.clear();
@@ -531,7 +531,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 {
                     // if the target object is in loaded state and a different state is specified
                     // as a new one the object first must be switched to running state.
-
+                    
                     // the component can exist already in nonrunning state
                     // it can be created during loading to detect type of object
                     CreateOleComponentAndLoad_Impl( m_pOleComponent );
@@ -556,7 +556,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     if ( m_nObjectState == nNewState )
                         return;
                 }
-
+        
                 // so now the object is either switched from Active to Running state or vise versa
                 // the notification about object state change will be done asynchronously
                 if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
@@ -600,7 +600,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         {
             aGuard.clear();
             StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
-            throw;
+            throw;	
         }
     }
     else
@@ -720,7 +720,7 @@ namespace
             xFactory->createInstanceWithArguments(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OLESimpleStorage")),
                 aArgs ), uno::UNO_QUERY_THROW );
-
+        
         uno::Reference< io::XStream > xCONTENTS;
         xNameContainer->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONTENTS"))) >>= xCONTENTS;
 
@@ -928,8 +928,8 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         // registry could be used in this case
         // if ( m_nObjectState == embed::EmbedStates::LOADED )
         // {
-        //  // the list of supported verbs can be retrieved only when object is in running state
-        //  throw embed::NeedsRunningStateException(); // TODO:
+        // 	// the list of supported verbs can be retrieved only when object is in running state
+        // 	throw embed::NeedsRunningStateException(); // TODO:
         // }
 
         return m_pOleComponent->GetVerbList();
@@ -993,7 +993,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSi
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
-
+    
     return m_xClientSite;
 }
 
@@ -1020,7 +1020,7 @@ void SAL_CALL OleEmbeddedObject::update()
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
-
+    
     if ( m_nUpdateMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE )
     {
         // TODO: update view representation
@@ -1054,7 +1054,7 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
-
+    
     OSL_ENSURE( nMode == embed::EmbedUpdateModes::ALWAYS_UPDATE
                     || nMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE,
                 "Unknown update mode!\n" );
@@ -1094,7 +1094,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
     {
         // OLE should allow to get status even in loaded state
         // if ( m_nObjectState == embed::EmbedStates::LOADED )
-        //  changeState( m_nObjectState == embed::EmbedStates::RUNNING );
+        //	changeState( m_nObjectState == embed::EmbedStates::RUNNING );
 
         m_nStatus = m_pOleComponent->GetMiscStatus( nAspect );
         m_nStatusAspect = nAspect;

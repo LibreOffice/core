@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ void XMLReplacementImageContext::EndElement()
         m_xBase64Stream = 0;
     }
 
-    Reference < XPropertySetInfo > xPropSetInfo =
+    Reference < XPropertySetInfo > xPropSetInfo = 
         m_xPropSet->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( m_sGraphicURL ) )
         m_xPropSet->setPropertyValue( m_sGraphicURL, makeAny( sHRef ) );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ class SvXMLAttrContainerData_Impl;
 
 class XMLOFF_DLLPUBLIC SvXMLAttrContainerData
 {
-    SvXMLNamespaceMap   aNamespaceMap;
-    SvUShorts           aPrefixPoss;
-    SvXMLAttrContainerData_Impl *pLNames;
-    SvXMLAttrContainerData_Impl *pValues;
+    SvXMLNamespaceMap	aNamespaceMap;
+    SvUShorts			aPrefixPoss;
+    SvXMLAttrContainerData_Impl	*pLNames;
+    SvXMLAttrContainerData_Impl	*pValues;
 
     SAL_DLLPRIVATE inline sal_uInt16 GetPrefixPos( sal_uInt16 i ) const;
 public:
@@ -91,8 +91,8 @@ public:
 
 inline sal_uInt16 SvXMLAttrContainerData::GetPrefixPos( sal_uInt16 i ) const
 {
-//  DBG_ASSERT( i >= 0 && i < aPrefixPoss.Count(),
-//              "SvXMLAttrContainerData::GetPrefixPos: illegal index" );
+//	DBG_ASSERT( i >= 0 && i < aPrefixPoss.Count(),
+//				"SvXMLAttrContainerData::GetPrefixPos: illegal index" );
     return aPrefixPoss[i];
 }
 

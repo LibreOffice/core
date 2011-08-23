@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ OUString lcl_getXSDType( SvXMLExport& rExport,
 // the model
 //
 
-static const ExportTable aXFormsModelTable[] =
+static const ExportTable aXFormsModelTable[] = 
 {
     TABLE_ENTRY( "ID", NONE, ID, lcl_string ),
     TABLE_ENTRY( "SchemaRef", NONE, SCHEMA, lcl_string ),
@@ -200,18 +200,18 @@ void exportXFormsModel( SvXMLExport& rExport,
     nCount = xBindings->getCount();
     for( i = 0; i < nCount; i++ )
     {
-        Reference<XPropertySet> aBinding( xBindings->getByIndex( i ),
+        Reference<XPropertySet> aBinding( xBindings->getByIndex( i ), 
                                           UNO_QUERY_THROW );
         exportXFormsBinding( rExport, aBinding );
     }
 
     // submissions
-    Reference<XIndexAccess> xSubmissions( xModel->getSubmissions(),
+    Reference<XIndexAccess> xSubmissions( xModel->getSubmissions(), 
                                           UNO_QUERY_THROW );
     nCount = xSubmissions->getCount();
     for( i = 0; i < nCount; i++ )
     {
-        Reference<XPropertySet> xSubmission( xSubmissions->getByIndex( i ),
+        Reference<XPropertySet> xSubmission( xSubmissions->getByIndex( i ), 
                                           UNO_QUERY_THROW );
         exportXFormsSubmission( rExport, xSubmission );
     }
@@ -224,7 +224,7 @@ void exportXFormsModel( SvXMLExport& rExport,
 // the instance
 //
 
-static const ExportTable aXFormsInstanceTable[] =
+static const ExportTable aXFormsInstanceTable[] = 
 {
     TABLE_ENTRY( "InstanceURL", NONE, SRC, lcl_string ),
     TABLE_END
@@ -271,7 +271,7 @@ void exportXFormsInstance( SvXMLExport& rExport,
 // the binding
 //
 
-static const ExportTable aXFormsBindingTable[] =
+static const ExportTable aXFormsBindingTable[] = 
 {
     TABLE_ENTRY( "BindingID",            NONE, ID,         lcl_string ),
     TABLE_ENTRY( "BindingExpression",    NONE, NODESET,    lcl_string ),
@@ -315,7 +315,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
         {
             // now get type, and determine whether its a standard type. If
             // so, export the XSD name
-            Reference<com::sun::star::xforms::XModel> xModel(
+            Reference<com::sun::star::xforms::XModel> xModel( 
                 xBinding->getPropertyValue( OUSTRING("Model") ),
                 UNO_QUERY );
             Reference<XDataTypeRepository> xRepository(
@@ -342,7 +342,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
         // now that we have the proper type name, write out the attribute
         if( sTypeName.getLength() > 0 )
         {
-            rExport.AddAttribute( XML_NAMESPACE_NONE, XML_TYPE,
+            rExport.AddAttribute( XML_NAMESPACE_NONE, XML_TYPE, 
                                   sTypeName );
         }
     }
@@ -350,7 +350,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
     // we need to ensure all the namespaces in the binding will work correctly.
     // to do so, we will write out all missing namespace declaractions.
     const SvXMLNamespaceMap& rMap = rExport.GetNamespaceMap();
-    Reference<XNameAccess> xNamespaces(
+    Reference<XNameAccess> xNamespaces( 
         xBinding->getPropertyValue( OUSTRING("ModelNamespaces") ), UNO_QUERY);
     if( xNamespaces.is() )
     {
@@ -385,7 +385,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
 // the submission
 //
 
-static const ExportTable aXFormsSubmissionTable[] =
+static const ExportTable aXFormsSubmissionTable[] = 
 {
     TABLE_ENTRY( "ID",         NONE, ID,        lcl_string ),
     TABLE_ENTRY( "Bind",       NONE, BIND,      lcl_string ),
@@ -419,7 +419,7 @@ void exportXFormsSubmission( SvXMLExport& rExport,
 // export data types as XSD schema
 //
 
-static const ExportTable aDataTypeFacetTable[] =
+static const ExportTable aDataTypeFacetTable[] = 
 {
     TABLE_ENTRY( "Length",               XSD, LENGTH,         lcl_int32 ),
     TABLE_ENTRY( "MinLength",            XSD, MINLENGTH,      lcl_int32 ),
@@ -458,20 +458,20 @@ void lcl_exportDataTypeFacets( SvXMLExport& rExport,
                                const ExportTable* pTable )
 {
     Reference<XPropertySetInfo> xInfo = rPropertySet->getPropertySetInfo();
-    for( const ExportTable* pCurrent = pTable;
-         pCurrent->pPropertyName != NULL;
+    for( const ExportTable* pCurrent = pTable; 
+         pCurrent->pPropertyName != NULL; 
          pCurrent++ )
     {
         OUString sName( OUString::createFromAscii( pCurrent->pPropertyName ) );
         if( xInfo->hasPropertyByName( sName ) )
         {
-            OUString sValue = (*pCurrent->aConverter)(
+            OUString sValue = (*pCurrent->aConverter)( 
                 rPropertySet->getPropertyValue( sName ) );
-
+        
             if( sValue.getLength() > 0 )
             {
                 rExport.AddAttribute( XML_NAMESPACE_NONE, XML_VALUE, sValue );
-                SvXMLElementExport aFacet(
+                SvXMLElementExport aFacet( 
                     rExport,
                     pCurrent->nNamespace,
                     static_cast<XMLTokenEnum>( pCurrent->nToken ),
@@ -538,7 +538,7 @@ OUString lcl_getXSDType( SvXMLExport& rExport,
         DBG_ERROR( "unknown data type" );
     }
 
-    return rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_XSD,
+    return rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_XSD, 
                                                     GetXMLToken( eToken ) );
 }
 
@@ -557,12 +557,12 @@ void lcl_exportDataType( SvXMLExport& rExport,
     OUString sName;
     xType->getPropertyValue( OUSTRING("Name") ) >>= sName;
     rExport.AddAttribute( XML_NAMESPACE_NONE, XML_NAME, sName );
-    SvXMLElementExport aSimpleType( rExport,
+    SvXMLElementExport aSimpleType( rExport, 
                                     XML_NAMESPACE_XSD, XML_SIMPLETYPE,
                                     sal_True, sal_True );
 
     // <xsd:restriction base="xsd:...">
-    rExport.AddAttribute( XML_NAMESPACE_NONE, XML_BASE,
+    rExport.AddAttribute( XML_NAMESPACE_NONE, XML_BASE, 
                           lcl_getXSDType( rExport, xType ) );
     SvXMLElementExport aRestriction( rExport,
                                      XML_NAMESPACE_XSD,
@@ -602,7 +602,7 @@ void exportXFormsSchemas( SvXMLExport& rExport,
     Reference<XPropertySet> xPropSet( xModel, UNO_QUERY );
     if( xPropSet.is() )
     {
-        Reference<XDocument> xDocument(
+        Reference<XDocument> xDocument( 
             xPropSet->getPropertyValue( OUSTRING("ForeignSchema") ),
             UNO_QUERY );
 
@@ -621,17 +621,17 @@ void lcl_export( const Reference<XPropertySet>& rPropertySet,
                  SvXMLExport& rExport,
                  const ExportTable* pTable )
 {
-    for( const ExportTable* pCurrent = pTable;
-         pCurrent->pPropertyName != NULL;
+    for( const ExportTable* pCurrent = pTable; 
+         pCurrent->pPropertyName != NULL; 
          pCurrent++ )
     {
-        Any aAny = rPropertySet->getPropertyValue(
+        Any aAny = rPropertySet->getPropertyValue( 
                        OUString::createFromAscii( pCurrent->pPropertyName ) );
         OUString sValue = (*pCurrent->aConverter)( aAny );
-
+        
         if( sValue.getLength() > 0 )
-            rExport.AddAttribute(
-                pCurrent->nNamespace,
+            rExport.AddAttribute( 
+                pCurrent->nNamespace, 
                 static_cast<XMLTokenEnum>( pCurrent->nToken ),
                 sValue );
     }
@@ -748,8 +748,8 @@ OUString lcl_getXFormsBindName( const Reference<XPropertySet>& xBinding )
 OUString getXFormsBindName( const Reference<XPropertySet>& xControl )
 {
     Reference<XBindableValue> xBindable( xControl, UNO_QUERY );
-    return xBindable.is()
-        ? lcl_getXFormsBindName(
+    return xBindable.is() 
+        ? lcl_getXFormsBindName( 
             Reference<XPropertySet>( xBindable->getValueBinding(), UNO_QUERY ))
         : OUString();
 }
@@ -758,8 +758,8 @@ OUString getXFormsBindName( const Reference<XPropertySet>& xControl )
 OUString getXFormsListBindName( const Reference<XPropertySet>& xControl )
 {
     Reference<XListEntrySink> xListEntrySink( xControl, UNO_QUERY );
-    return xListEntrySink.is()
-        ? lcl_getXFormsBindName(
+    return xListEntrySink.is() 
+        ? lcl_getXFormsBindName( 
             Reference<XPropertySet>( xListEntrySink->getListEntrySource(),
                                      UNO_QUERY ) )
         : OUString();
@@ -772,7 +772,7 @@ OUString getXFormsSubmissionName( const Reference<XPropertySet>& xBinding )
     Reference<XSubmissionSupplier> xSubmissionSupplier( xBinding, UNO_QUERY );
     if( xSubmissionSupplier.is() )
     {
-        Reference<XPropertySet> xPropertySet(
+        Reference<XPropertySet> xPropertySet( 
             xSubmissionSupplier->getSubmission(), UNO_QUERY );
         OUString sProp( OUSTRING("ID") );
         if( xPropertySet.is() &&

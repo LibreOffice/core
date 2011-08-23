@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@
 
 namespace framework
 {
-
+    
 //__________________________________________
 /**
     implements the backing component.
@@ -97,13 +97,13 @@ class BackingComp : public  css::lang::XTypeProvider
 
         /** reference to the component window. */
         css::uno::Reference< css::awt::XWindow > m_xWindow;
-
+        
         /** the owner frame of this component. */
         css::uno::Reference< css::frame::XFrame > m_xFrame;
 
         /** helper for drag&drop. */
         css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > m_xDropTargetListener;
-
+        
     //______________________________________
     // interface
 

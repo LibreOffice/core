@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // materialAttribute3D definitions
-            basegfx::BColor                         maColor;                // object color
-            basegfx::BColor                         maSpecular;             // material specular color
-            basegfx::BColor                         maEmission;             // material emissive color
-            sal_uInt16                              mnSpecularIntensity;    // material specular intensity [0..128]
+            basegfx::BColor							maColor;				// object color
+            basegfx::BColor							maSpecular;				// material specular color
+            basegfx::BColor							maEmission;				// material emissive color
+            sal_uInt16								mnSpecularIntensity;	// material specular intensity [0..128]
 
             ImpMaterialAttribute3D(const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maColor(rColor),
                 maSpecular(rSpecular),
                 maEmission(rEmission),
@@ -59,7 +59,7 @@ namespace drawinglayer
             }
 
             ImpMaterialAttribute3D(const basegfx::BColor& rColor)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maColor(rColor),
                 maSpecular(1.0, 1.0, 1.0),
                 maEmission(),
@@ -102,29 +102,29 @@ namespace drawinglayer
         };
 
         MaterialAttribute3D::MaterialAttribute3D(
-            const basegfx::BColor& rColor,
-            const basegfx::BColor& rSpecular,
-            const basegfx::BColor& rEmission,
+            const basegfx::BColor& rColor, 
+            const basegfx::BColor& rSpecular, 
+            const basegfx::BColor& rEmission, 
             sal_uInt16 nSpecularIntensity)
-        :   mpMaterialAttribute3D(new ImpMaterialAttribute3D(
+        :	mpMaterialAttribute3D(new ImpMaterialAttribute3D(
                 rColor, rSpecular, rEmission, nSpecularIntensity))
         {
         }
 
         MaterialAttribute3D::MaterialAttribute3D(
             const basegfx::BColor& rColor)
-        :   mpMaterialAttribute3D(new ImpMaterialAttribute3D(rColor))
+        :	mpMaterialAttribute3D(new ImpMaterialAttribute3D(rColor))
         {
         }
 
         MaterialAttribute3D::MaterialAttribute3D()
-        :   mpMaterialAttribute3D(ImpMaterialAttribute3D::get_global_default())
+        :	mpMaterialAttribute3D(ImpMaterialAttribute3D::get_global_default())
         {
             mpMaterialAttribute3D->mnRefCount++;
         }
 
         MaterialAttribute3D::MaterialAttribute3D(const MaterialAttribute3D& rCandidate)
-        :   mpMaterialAttribute3D(rCandidate.mpMaterialAttribute3D)
+        :	mpMaterialAttribute3D(rCandidate.mpMaterialAttribute3D)
         {
             mpMaterialAttribute3D->mnRefCount++;
         }
@@ -158,7 +158,7 @@ namespace drawinglayer
                 {
                     delete mpMaterialAttribute3D;
                 }
-
+                
                 mpMaterialAttribute3D = rCandidate.mpMaterialAttribute3D;
                 mpMaterialAttribute3D->mnRefCount++;
             }
@@ -181,24 +181,24 @@ namespace drawinglayer
             return (*rCandidate.mpMaterialAttribute3D == *mpMaterialAttribute3D);
         }
 
-        const basegfx::BColor& MaterialAttribute3D::getColor() const
-        {
+        const basegfx::BColor& MaterialAttribute3D::getColor() const 
+        { 
             return mpMaterialAttribute3D->getColor();
         }
 
-        const basegfx::BColor& MaterialAttribute3D::getSpecular() const
-        {
+        const basegfx::BColor& MaterialAttribute3D::getSpecular() const 
+        { 
             return mpMaterialAttribute3D->getSpecular();
         }
 
-        const basegfx::BColor& MaterialAttribute3D::getEmission() const
-        {
+        const basegfx::BColor& MaterialAttribute3D::getEmission() const 
+        { 
             return mpMaterialAttribute3D->getEmission();
         }
 
-        sal_uInt16 MaterialAttribute3D::getSpecularIntensity() const
-        {
-            return mpMaterialAttribute3D->getSpecularIntensity();
+        sal_uInt16 MaterialAttribute3D::getSpecularIntensity() const 
+        { 
+            return mpMaterialAttribute3D->getSpecularIntensity(); 
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

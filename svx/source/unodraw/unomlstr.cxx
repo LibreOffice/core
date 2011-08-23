@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) thr
     }
 }
 
-// ::com::sun::star::lang::XEventListener
+// ::com::sun::star::lang::XEventListener  
 void SvxUnoShapeModifyListener::disposing(const lang::EventObject& ) throw( uno::RuntimeException )
 {
     invalidate();
 }
-
+ 
 // internal
 void SvxUnoShapeModifyListener::invalidate() throw()
 {

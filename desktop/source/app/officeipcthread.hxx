@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,14 +58,14 @@ struct ProcessDocumentsRequest
 
     boost::optional< ::rtl::OUString > aCwdUrl;
     ::rtl::OUString aModule;
-    ::rtl::OUString aOpenList;      // Documents that should be opened in the default way
+    ::rtl::OUString aOpenList;		// Documents that should be opened in the default way
     ::rtl::OUString aViewList;      // Documents that should be opened in viewmode
     ::rtl::OUString aStartList;     // Documents/Presentations that should be started
-    ::rtl::OUString aPrintList;     // Documents that should be printed on default printer
+    ::rtl::OUString aPrintList;		// Documents that should be printed on default printer
     ::rtl::OUString aForceOpenList; // Documents that should be forced to open for editing (even templates)
-    ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
-    ::rtl::OUString aPrinterName;   // The printer name that should be used for printing
-    ::rtl::OUString aPrintToList;   // Documents that should be printed on the given printer
+    ::rtl::OUString aForceNewList;	// Documents that should be forced to create a new document
+    ::rtl::OUString aPrinterName;	// The printer name that should be used for printing
+    ::rtl::OUString aPrintToList;	// Documents that should be printed on the given printer
     ::rtl::OUString aConversionList;
     ::rtl::OUString aConversionParams;
     ::rtl::OUString aConversionOut;
@@ -77,16 +77,16 @@ class DispatchWatcher;
 class OfficeIPCThread : public vos::OThread
 {
   private:
-    static OfficeIPCThread*     pGlobalOfficeIPCThread;
-    static ::osl::Mutex*        pOfficeIPCThreadMutex;
+    static OfficeIPCThread*		pGlobalOfficeIPCThread;
+    static ::osl::Mutex*		pOfficeIPCThreadMutex;
 
-    vos::OPipe                  maPipe;
-    vos::OStreamPipe            maStreamPipe;
-    rtl::OUString               maPipeIdent;
+    vos::OPipe					maPipe;
+    vos::OStreamPipe			maStreamPipe;
+    rtl::OUString				maPipeIdent;
     bool                        mbDowning;
     bool                        mbRequestsEnabled;
-    int                         mnPendingRequests;
-    DispatchWatcher*            mpDispatchWatcher;
+    int							mnPendingRequests;
+    DispatchWatcher*			mpDispatchWatcher;
 
     /* condition to be set when the request has been processed */
     ::osl::Condition cProcessed;
@@ -96,7 +96,7 @@ class OfficeIPCThread : public vos::OThread
        requests from a 2nd office */
     ::osl::Condition cReady;
 
-    static ::osl::Mutex&        GetMutex();
+    static ::osl::Mutex&		GetMutex();
     static const char *sc_aTerminationSequence;
     static const int sc_nTSeqLength;
     static const char *sc_aShowSequence;
@@ -121,18 +121,18 @@ class OfficeIPCThread : public vos::OThread
     virtual ~OfficeIPCThread();
 
     // controlling pipe communication during shutdown
-    static void                 SetDowning();
+    static void					SetDowning();
     static void                 EnableRequests( bool i_bEnable = true );
-    static sal_Bool             AreRequestsPending();
-    static void                 RequestsCompleted( int n = 1 );
-    static sal_Bool             ExecuteCmdLineRequests( ProcessDocumentsRequest& );
+    static sal_Bool				AreRequestsPending();
+    static void					RequestsCompleted( int n = 1 );
+    static sal_Bool				ExecuteCmdLineRequests( ProcessDocumentsRequest& );
 
     // return FALSE if second office
-    static Status               EnableOfficeIPCThread();
-    static void                 DisableOfficeIPCThread();
+    static Status				EnableOfficeIPCThread();
+    static void					DisableOfficeIPCThread();
     // start dispatching events...
     static void                 SetReady(OfficeIPCThread* pThread = NULL);
-
+    
     bool                        AreRequestsEnabled() const { return mbRequestsEnabled && ! mbDowning; }
 };
 

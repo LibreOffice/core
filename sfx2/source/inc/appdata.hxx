@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ public:
     // application members
     SfxFilterMatcher*                   pMatcher;
     ResMgr*                             pLabelResMgr;
-    SfxStatusDispatcher*                pAppDispatch;
+    SfxStatusDispatcher*				pAppDispatch;
     SfxDocumentTemplates*               pTemplates;
 
     // global pointers
@@ -144,7 +144,7 @@ public:
     SfxObjectShellArr_Impl*     pObjShells;
     ResMgr*                     pSfxResManager;
     ResMgr*                     pOfaResMgr;
-    SimpleResMgr*               pSimpleResManager;
+    SimpleResMgr*				pSimpleResManager;
     SfxBasicManagerHolder*      pBasicManager;
     SfxBasicManagerCreationListener*
                                 pBasMgrListener;
@@ -154,7 +154,7 @@ public:
     SfxDispatcher*              pAppDispat;     // Dispatcher falls kein Doc
     SfxInterface**              pInterfaces;
 
-    USHORT                      nDocNo;             // Laufende Doc-Nummer (AutoName)
+    USHORT                      nDocNo;     		// Laufende Doc-Nummer (AutoName)
     USHORT                      nInterfaces;
 
     BOOL                        bDispatcherLocked:1;    // nichts ausf"uhren

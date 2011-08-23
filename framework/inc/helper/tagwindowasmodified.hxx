@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_HELPER_TAGWINDOWASMODIFIED_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -39,7 +39,7 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -49,22 +49,22 @@
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -77,7 +77,7 @@ namespace framework{
 
     @base           OWeakObject
                         implements ref counting for this class.
-
+                        
     @devstatus      draft
     @threadsafe     yes
     @modified       as96863
@@ -98,16 +98,16 @@ class TagWindowAsModified :   // interfaces
 
         /// may we need an uno service manager to create own services
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
+        
         /// reference to the frame, where we listen for new loaded documents for updating our own xModel reference
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
-
+    
         /// reference to the frame container window, where we must set the tag
         css::uno::WeakReference< css::awt::XWindow > m_xWindow;
-
+        
         /// we list on the model for modify events
         css::uno::WeakReference< css::frame::XModel > m_xModel;
-
+    
     //________________________________
     // interface
 
@@ -138,18 +138,18 @@ class TagWindowAsModified :   // interfaces
         // XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
             throw(css::uno::RuntimeException);
-
+            
         //____________________________
         // XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
-
+                                                  
     private:
-
+        
         //____________________________
         // @todo document me
         void impl_update(const css::uno::Reference< css::frame::XFrame >& xFrame);
-
+    
 }; // class TagWindowAsModified
 
 } // namespace framework

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@ using namespace ::cppu;
 class SvxUnoColorTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XColorTable*    pTable;
+    XColorTable*	pTable;
 
 public:
     SvxUnoColorTable() throw();
-    virtual ~SvxUnoColorTable() throw();
+    virtual	~SvxUnoColorTable() throw();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
@@ -304,7 +304,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
 
             writeInfo( pKey, ::svx::SvXMLGraphicImportHelper_getImplementationName(),::svx::SvXMLGraphicImportHelper_getSupportedServiceNames() );
             writeInfo( pKey, ::svx::SvXMLGraphicExportHelper_getImplementationName(),::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
-//          writeInfo( pKey, ::svx::ExtrusionDepthController_getImplementationName(),::svx::ExtrusionDepthController_getSupportedServiceNames() );
+//			writeInfo( pKey, ::svx::ExtrusionDepthController_getImplementationName(),::svx::ExtrusionDepthController_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {

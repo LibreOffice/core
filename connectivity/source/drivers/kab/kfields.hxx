@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustring.hxx>
 
-#define KAB_FIELD_REVISION  0
-#define KAB_DATA_FIELDS     1
+#define KAB_FIELD_REVISION	0
+#define KAB_DATA_FIELDS		1
 
 namespace connectivity
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ namespace dlgprov
     // =============================================================================
     // class DialogEventsAttacherImpl
     // =============================================================================
-    typedef std::hash_map< rtl::OUString,
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >,
-        ::rtl::OUStringHash,
+    typedef std::hash_map< rtl::OUString, 
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >, 
+        ::rtl::OUStringHash, 
         ::std::equal_to< ::rtl::OUString > > ListenerHash;
 
     typedef ::cppu::WeakImplHelper1<
@@ -72,24 +72,24 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, rtl::OUString& sCodeName );
         void  SAL_CALL attachEventsToControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier >& events, const ::com::sun::star::uno::Any& Helper  );
     public:
-        DialogEventsAttacherImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& xIntrospect,
-             bool bProviderMode,
+        DialogEventsAttacherImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, 
+             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel, 
+             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl, 
+             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler, 
+             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& xIntrospect, 
+             bool bProviderMode, 
              const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener );
         virtual ~DialogEventsAttacherImpl();
 
         // XScriptEventsAttacher
-        virtual void SAL_CALL attachEvents( const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects,
+        virtual void SAL_CALL attachEvents( const ::com::sun::star::uno::Sequence< 
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects, 
             const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>&,
-            const ::com::sun::star::uno::Any& Helper )
-            throw (::com::sun::star::lang::IllegalArgumentException,
-                   ::com::sun::star::beans::IntrospectionException,
-                   ::com::sun::star::script::CannotCreateAdapterException,
-                   ::com::sun::star::lang::ServiceNotRegisteredException,
+            const ::com::sun::star::uno::Any& Helper ) 
+            throw (::com::sun::star::lang::IllegalArgumentException, 
+                   ::com::sun::star::beans::IntrospectionException, 
+                   ::com::sun::star::script::CannotCreateAdapterException, 
+                   ::com::sun::star::lang::ServiceNotRegisteredException, 
                    ::com::sun::star::uno::RuntimeException);
     };
 
@@ -112,18 +112,18 @@ namespace dlgprov
         virtual void firing_impl( const ::com::sun::star::script::AllEventObject& Event, ::com::sun::star::uno::Any* pRet );
 
     public:
-        DialogAllListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& rxListener,
+        DialogAllListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& rxListener, 
             const ::rtl::OUString& rScriptType, const ::rtl::OUString& rScriptCode );
         virtual ~DialogAllListenerImpl();
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) 
             throw (::com::sun::star::uno::RuntimeException);
 
         // XAllListener
-        virtual void SAL_CALL firing( const ::com::sun::star::script::AllEventObject& Event )
+        virtual void SAL_CALL firing( const ::com::sun::star::script::AllEventObject& Event ) 
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL approveFiring( const ::com::sun::star::script::AllEventObject& Event )
+        virtual ::com::sun::star::uno::Any SAL_CALL approveFiring( const ::com::sun::star::script::AllEventObject& Event ) 
             throw (::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
     };
 
@@ -146,11 +146,11 @@ namespace dlgprov
         virtual ~DialogScriptListenerImpl();
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) 
             throw (::com::sun::star::uno::RuntimeException);
 
         // XScriptListener
-        virtual void SAL_CALL firing( const ::com::sun::star::script::ScriptEvent& aScriptEvent )
+        virtual void SAL_CALL firing( const ::com::sun::star::script::ScriptEvent& aScriptEvent ) 
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL approveFiring( const ::com::sun::star::script::ScriptEvent& aScriptEvent )
             throw (::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
@@ -158,7 +158,7 @@ namespace dlgprov
 
 
 //.........................................................................
-}   // namespace dlgprov
+}	// namespace dlgprov
 //.........................................................................
 
 #endif // SCRIPTING_DLGEVT_HXX

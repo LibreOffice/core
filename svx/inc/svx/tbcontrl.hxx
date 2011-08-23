@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,61 +41,61 @@
     ----------
         SvxFontNameToolBoxControl
         -------------------------
-        Item-Typ:       SvxFontItem
-        Execute-Id:     SID_ATTR_CHAR_FONT
+        Item-Typ:		SvxFontItem
+        Execute-Id:		SID_ATTR_CHAR_FONT
                         -> SvxFontItem
         Zusatzdaten
-        aus DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
+        aus DocShell:	SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
 
         SvxFontHeightToolBoxControl
         ---------------------------
-        Item-Typ:       SvxFontHeightItem
-        Execute-Id:     SID_ATTR_CHAR_FONTHEIGHT
+        Item-Typ:		SvxFontHeightItem
+        Execute-Id:		SID_ATTR_CHAR_FONTHEIGHT
                         -> SvxFontHeightItem
         Zusatzdaten
-        aus DocShell:   SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
+        aus DocShell:	SvxFontListItem (SID_ATTR_CHAR_FONTLIST)
 
         SvxFontColorToolBoxControl
         --------------------------
-        Item-Typ:       SvxFontColorItem
-        Execute-Id:     SID_ATTR_CHAR_COLOR
+        Item-Typ:		SvxFontColorItem
+        Execute-Id:		SID_ATTR_CHAR_COLOR
                         -> SvxFontColorItem
         Zusatzdaten
-        aus DocShell:   z.Zt. keine
+        aus DocShell:	z.Zt. keine
                         in Zukunft: Farbpalette
 
         class SvxFontColorExtToolBoxControl
         -----------------------------------
         fuer die Zeichenfarbe
-        Item-Typ        SvxColorItem
+        Item-Typ		SvxColorItem
                     und SfxBoolItem
-        Execute-Id      SID_ATTR_CHAR_COLOR
+        Execute-Id		SID_ATTR_CHAR_COLOR
                     und SID_ATTR_CHAR_COLOR_EXT
 
         fuer den Zeichenhintergrund
-        Item-Typ        SvxColorItem
+        Item-Typ		SvxColorItem
                     und SfxBoolItem
-        Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
+        Execute-Id		SID_ATTR_CHAR_COLOR_BACKGROUND
                     und SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 
         SvxColorToolBoxControl
         --------------------------------
-        Item-Typ:       SvxBrushItem
-        Execute-Id:     SID_BACKGROUND_COLOR
+        Item-Typ:		SvxBrushItem
+        Execute-Id:		SID_BACKGROUND_COLOR
                         -> SvxColorItem
         Zusatzdaten
-        aus DocShell:   z.Zt. keine
+        aus DocShell:	z.Zt. keine
                         in Zukunft: Farbpalette
 
         SvxPatternToolBoxControl
         ------------------------
-        Item-Typ:       SvxBrushItem
-        Execute-Id:     SID_BACKGROUND_PATTERN
+        Item-Typ:		SvxBrushItem
+        Execute-Id:		SID_BACKGROUND_PATTERN
                         -> SvxBrushItem
         Zusatzdaten
-        aus DocShell:   z.Zt. keine
+        aus DocShell:	z.Zt. keine
                         in Zukunft: Farbpalette
-        Bemerkung:      Auswertung des BrushItems:
+        Bemerkung:		Auswertung des BrushItems:
                         Die Brush-FillColor() wird als Schalter
                         missbraucht, um zu unterscheiden, ob ein
                         neuer Style oder eine neue Farbe
@@ -106,12 +106,12 @@
 
         SvxFrameToolBoxControl
         ----------------------
-        Item-Typ:       SvxBoxItem
-        Execute-Id:     SID_ATTR_BORDER
+        Item-Typ:		SvxBoxItem
+        Execute-Id:		SID_ATTR_BORDER
                         -> SvxBoxItem & SvxBoxInfoItem
         Zusatzdaten
-        aus DocShell:   keine
-        Bemerkung:      liefert je nach gewaehltem ValueSet-Item
+        aus DocShell:	keine
+        Bemerkung:		liefert je nach gewaehltem ValueSet-Item
                         nur SvxBoxItem oder zusaetzlich SvxBoxInfoItem
                         Wird dem Controller ein SfxUInt16Item mit einem
                         Wert != 0 geschickt, so wird der Paragraph-Mode
@@ -121,31 +121,31 @@
 
         SvxFrameLineStyleToolBoxControl
         -------------------------------
-        Item-Typ:       SvxLineItem
-        Execute-Id:     SID_FRAME_LINESTYLE
+        Item-Typ:		SvxLineItem
+        Execute-Id:		SID_FRAME_LINESTYLE
                         -> SvxLineItem
         Zusatzdaten
-        aus DocShell:   keine
-        Bemerkung:      liefert ein SvxLineItem, welches eine SvxBorderLine
+        aus DocShell:	keine
+        Bemerkung:		liefert ein SvxLineItem, welches eine SvxBorderLine
                         ohne Farbinformation liefert.
 
         SvxFrameLineColorToolBoxControl
         -------------------------------
-        Item-Typ:       SvxColorItem
-        Execute-Id:     SID_FRAME_LINECOLOR
+        Item-Typ:		SvxColorItem
+        Execute-Id:		SID_FRAME_LINECOLOR
                         -> SvxColorItem
         Zusatzdaten
-        aus DocShell:   keine
+        aus DocShell:	keine
 
         SvxStyleToolBoxControl
         ----------------------
-        Item-Typ:       SfxTemplateItem
-        Execute-Id:     SID_TEMPLATE_APPLY
+        Item-Typ:		SfxTemplateItem
+        Execute-Id:		SID_TEMPLATE_APPLY
                         -> StyleName (SfxStringItem)
                         -> eStyleFamily (SfxUInt16Item)
         Zusatzdaten
-        aus DocShell:   keine
-        Bemerkung:      Umschalten der Familie ueber Invalidate
+        aus DocShell:	keine
+        Bemerkung:		Umschalten der Familie ueber Invalidate
                         an den Bindings (->SfxStyleControllerItem)
 
 \*--------------------------------------------------------------*/
@@ -189,9 +189,9 @@ public:
     SvxStyleToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxStyleToolBoxControl();
 
-    virtual Window* CreateItemWindow( Window *pParent );
+    virtual Window*	CreateItemWindow( Window *pParent );
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 
     DECL_LINK( VisibilityNotification, void* );
@@ -212,22 +212,22 @@ private:
     SfxStyleSheetBasePool*              pStyleSheetPool;
     SfxStyleControllerItem_Impl*        pBoundItems [MAX_FAMILIES];
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xBoundItems[MAX_FAMILIES];
-    SfxTemplateItem*                    pFamilyState[MAX_FAMILIES];
-    USHORT                              nActFamily; // Id in der ToolBox = Position - 1
-    USHORT                              nActFilter; // FilterIdx
-    USHORT                              nAppFilter; // Filter, den die App gesetzt hat
-    String                              aCurSel;
-    BOOL                                bListening;
-    Impl*                               pImpl;
+    SfxTemplateItem*			        pFamilyState[MAX_FAMILIES];
+    USHORT					 	        nActFamily;	// Id in der ToolBox = Position - 1
+    USHORT						        nActFilter;	// FilterIdx
+    USHORT						        nAppFilter;	// Filter, den die App gesetzt hat
+    String						        aCurSel;
+    BOOL						        bListening;
+    Impl*								pImpl;
 
-    SVX_DLLPRIVATE void Update();
-    SVX_DLLPRIVATE void FillStyleBox();
-    SVX_DLLPRIVATE void     SelectStyle( const String& rStyleName );
+    SVX_DLLPRIVATE void	Update();
+    SVX_DLLPRIVATE void	FillStyleBox();
+    SVX_DLLPRIVATE void 	SelectStyle( const String& rStyleName );
 
 friend class SfxStyleControllerItem_Impl;
 
-    SVX_DLLPRIVATE void         SetFamilyState  ( USHORT nIdx, const SfxTemplateItem* pItem );
-    SVX_DLLPRIVATE SfxStyleFamily   GetActFamily    ();
+    SVX_DLLPRIVATE void			SetFamilyState	( USHORT nIdx, const SfxTemplateItem* pItem );
+    SVX_DLLPRIVATE SfxStyleFamily	GetActFamily	();
 };
 
 //========================================================================
@@ -241,9 +241,9 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFontNameToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 
-    virtual void    StateChanged        ( USHORT nSID, SfxItemState eState,
+    virtual void	StateChanged		( USHORT nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
-    virtual Window* CreateItemWindow    ( Window *pParent );
+    virtual Window*	CreateItemWindow	( Window *pParent );
 };
 
 
@@ -260,7 +260,7 @@ class SvxFontSizeBox_Impl;
 class SVX_DLLPUBLIC SvxFontHeightToolBoxControl : public SfxToolBoxControl
 {
     SvxFontSizeBox_Impl* pBox;                          // ItemWindow f"ur quick-access
-    ::com::sun::star::awt::FontDescriptor aCurrentFont; // Kopie des aktuellen Fonts
+    ::com::sun::star::awt::FontDescriptor aCurrentFont;	// Kopie des aktuellen Fonts
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -272,7 +272,7 @@ public:
     virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual Window*		CreateItemWindow( Window *pParent );
 };
 */
 
@@ -292,10 +292,10 @@ public:
     SvxFontColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFontColorToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
 };
 
 
@@ -311,7 +311,7 @@ class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
     using SfxToolBoxControl::StateChanged;
     using SfxToolBoxControl::Select;
 
-    //  SfxStatusForwarder          aForward;
+    //	SfxStatusForwarder 			aForward;
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
 
 public:
@@ -319,11 +319,11 @@ public:
     SvxFontColorExtToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFontColorExtToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                Select( BOOL bMod1 = FALSE );
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
+    virtual void				Select( BOOL bMod1 = FALSE );
 
 };
 
@@ -342,10 +342,10 @@ public:
     SvxColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxColorToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
 };
 
 
@@ -361,9 +361,9 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFrameToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 
 };
@@ -381,9 +381,9 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFrameLineStyleToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 };
 
@@ -404,10 +404,10 @@ public:
                                      ToolBox& rTbx );
     ~SvxFrameLineColorToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
 };
 
 

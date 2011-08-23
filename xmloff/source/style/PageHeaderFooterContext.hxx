@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,10 @@
 
 class PageHeaderFooterContext : public SvXMLImportContext
 {
-    ::std::vector< XMLPropertyState > &     rProperties;
-    sal_Int32                               nStartIndex;
-    sal_Int32                               nEndIndex;
-    sal_Bool                                bHeader;
+    ::std::vector< XMLPropertyState > &		rProperties;
+    sal_Int32								nStartIndex;
+    sal_Int32								nEndIndex;
+    sal_Bool								bHeader;
     const UniReference < SvXMLImportPropertyMapper > rMap;
 
 public:

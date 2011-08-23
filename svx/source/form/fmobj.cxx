@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, const sal_
 {
     m_xParent = xForm;
     aEvts     = rEvts;
-    m_nPos    = nIdx;
+    m_nPos	  = nIdx;
 }
 
 //------------------------------------------------------------------
@@ -200,7 +200,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
 
     FmFormPage* pNewFormPage = PTR_CAST( FmFormPage, _pNewPage );
     if ( !pNewFormPage )
-    {   // Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
+    {	// Maybe it makes sense to create an environment history here : if somebody set's our page to NULL, and we have a valid page before,
         // me may want to remember our place within the old page. For this we could create a new m_xEnvironmentHistory to store it.
         // So the next SetPage with a valid new page would restore that environment within the new page.
         // But for the original Bug (#57300#) we don't need that, so I omit it here. Maybe this will be implemented later.
@@ -210,8 +210,8 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     }
 
     Reference< XIndexContainer >        xNewPageForms( pNewFormPage->GetForms( true ), UNO_QUERY );
-    Reference< XIndexContainer >        xNewParent;
-    Sequence< ScriptEventDescriptor>    aNewEvents;
+    Reference< XIndexContainer > 	    xNewParent;
+    Sequence< ScriptEventDescriptor>	aNewEvents;
 
     // calc the new parent for my model (within the new page's forms hierarchy)
     // do we have a history ? (from :Clone)
@@ -259,7 +259,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                     break;
                 xSearch = Reference< XChild >( xSearch->getParent(), UNO_QUERY );
             }
-            if ( xSearch.is() ) // implies xSearch == xOldForms, which means we're a valid part of our current page forms hierarchy
+            if ( xSearch.is() )	// implies xSearch == xOldForms, which means we're a valid part of our current page forms hierarchy
             {
                 Reference< XChild >  xMeAsChild( GetUnoControlModel(), UNO_QUERY );
                 xNewParent.set( ensureModelEnv( xMeAsChild->getParent(), xNewPageForms ), UNO_QUERY );
@@ -327,7 +327,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
-
+                
             }
         }
     }
@@ -374,7 +374,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
     Reference< XInterface >  xSourceContainer = xSourceAsChild->getParent();
 
     m_xEnvironmentHistory = Reference< XIndexContainer >(
-        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.Forms")),
+        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.Forms")), 
         UNO_QUERY);
     DBG_ASSERT(m_xEnvironmentHistory.is(), "FmFormObj::clonedFrom : could not create a forms collection !");
 
@@ -500,15 +500,15 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
             // the parent access path should refer to a row set
         try
         {
-            aSrcCursorSource        = xSourceForm->getPropertyValue(FM_PROP_COMMAND);
-            aSrcCursorSourceType    = xSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE);
-            aSrcDataSource          = xSourceForm->getPropertyValue(FM_PROP_DATASOURCE);
+            aSrcCursorSource		= xSourceForm->getPropertyValue(FM_PROP_COMMAND);
+            aSrcCursorSourceType	= xSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE);
+            aSrcDataSource			= xSourceForm->getPropertyValue(FM_PROP_DATASOURCE);
         }
         catch(Exception&)
         {
             DBG_ERROR("FmFormObj::ensureModelEnv : could not retrieve a source DSS !");
         }
-
+        
 
         // calc the number of (source) form siblings with the same DSS
         Reference< XPropertySet >  xCurrentSourceForm, xCurrentDestForm;
@@ -516,18 +516,18 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         while (nCurrentSourceIndex <= nIndex)
         {
             sal_Bool bEqualDSS = sal_False;
-            while (!bEqualDSS)  // (we don't have to check nCurrentSourceIndex here : it's bound by nIndex)
+            while (!bEqualDSS)	// (we don't have to check nCurrentSourceIndex here : it's bound by nIndex)
             {
                 xSourceContainer->getByIndex(nCurrentSourceIndex) >>= xCurrentSourceForm;
                 DBG_ASSERT(xCurrentSourceForm.is(), "FmFormObj::ensureModelEnv : invalid form ancestor (2) !");
                 bEqualDSS = sal_False;
                 if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentSourceForm))
-                {   // it is a form
+                {	// it is a form
                     try
                     {
-                        if  (   ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
-                            &&  ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
-                            &&  ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
+                        if	(	::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
+                            &&	::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
+                            &&	::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
                             )
                         {
                             bEqualDSS = sal_True;
@@ -537,7 +537,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     {
                         DBG_ERROR("FmFormObj::ensureModelEnv : exception while getting a sibling's DSS !");
                     }
-
+                    
                 }
                 ++nCurrentSourceIndex;
             }
@@ -553,12 +553,12 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 DBG_ASSERT(xCurrentDestForm.is(), "FmFormObj::ensureModelEnv : invalid destination form !");
                 bEqualDSS = sal_False;
                 if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentDestForm))
-                {   // it is a form
+                {	// it is a form
                     try
                     {
-                        if  (   ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
-                            &&  ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
-                            &&  ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
+                        if	(	::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
+                            &&	::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
+                            &&	::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
                             )
                         {
                             bEqualDSS = sal_True;
@@ -568,13 +568,13 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     {
                         DBG_ERROR("FmFormObj::ensureModelEnv : exception while getting a destination DSS !");
                     }
-
+                    
                 }
                 ++nCurrentDestIndex;
             }
 
             if (!bEqualDSS)
-            {   // There is at least one more source form with the given DSS than destination forms are.
+            {	// There is at least one more source form with the given DSS than destination forms are.
                 // correct this ...
                 try
                 {
@@ -596,7 +596,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     // no more options anymore ...
                     return Reference< XInterface > ();
                 }
-
+                
             }
         }
 

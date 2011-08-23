@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,8 +120,8 @@ SVX_DLLPUBLIC uno::Sequence< ::rtl::OUString > GalleryThemeProvider::getSupporte
 sal_Bool SAL_CALL GalleryThemeProvider::supportsService( const ::rtl::OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString*              pArray = aSNL.getConstArray();
+    uno::Sequence< ::rtl::OUString >	aSNL( getSupportedServiceNames() );
+    const ::rtl::OUString*				pArray = aSNL.getConstArray();
 
     for( int i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -143,8 +143,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL GalleryThemeProvider::getSupportedServ
 uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
     throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type >  aTypes( 6 );
-    uno::Type*                  pTypes = aTypes.getArray();
+    uno::Sequence< uno::Type >	aTypes( 6 );
+    uno::Type* 					pTypes = aTypes.getArray();
 
     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo>*)0);
     *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
@@ -161,8 +161,8 @@ uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
     throw(uno::RuntimeException)
 {
-    const vos::OGuard                   aGuard( Application::GetSolarMutex() );
-    static uno::Sequence< sal_Int8 >    aId;
+    const vos::OGuard 					aGuard( Application::GetSolarMutex() );
+    static uno::Sequence< sal_Int8 >	aId;
 
     if( aId.getLength() == 0 )
     {
@@ -178,8 +178,8 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
 void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >& rArguments )
     throw ( uno::Exception, uno::RuntimeException )
 {
-    uno::Sequence< beans::PropertyValue >   aParams;
-    sal_Int32                               i;
+    uno::Sequence< beans::PropertyValue >	aParams;
+    sal_Int32 								i;
 
     for( i = 0; i < rArguments.getLength(); ++i )
     {
@@ -220,7 +220,7 @@ uno::Any SAL_CALL GalleryThemeProvider::getByName( const ::rtl::OUString& rName 
     throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    uno::Any            aRet;
+    uno::Any 			aRet;
 
     if( !mpGallery || !mpGallery->HasTheme( rName ) )
     {
@@ -239,9 +239,9 @@ uno::Any SAL_CALL GalleryThemeProvider::getByName( const ::rtl::OUString& rName 
 uno::Sequence< ::rtl::OUString > SAL_CALL GalleryThemeProvider::getElementNames()
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard                 aGuard( Application::GetSolarMutex() );
-    sal_uInt32                          i = 0, nCount = ( mpGallery ? mpGallery->GetThemeCount() : 0 ), nRealCount = 0;
-    uno::Sequence< ::rtl::OUString >    aSeq( nCount );
+    const ::vos::OGuard 				aGuard( Application::GetSolarMutex() );
+    sal_uInt32 							i = 0, nCount = ( mpGallery ? mpGallery->GetThemeCount() : 0 ), nRealCount = 0;
+    uno::Sequence< ::rtl::OUString >	aSeq( nCount );
 
     for( ; i < nCount; ++i )
     {
@@ -276,8 +276,8 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const ::rtl::OUString& rName 
 uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNewByName( const ::rtl::OUString& rThemeName )
     throw (container::ElementExistException, uno::RuntimeException)
 {
-    const ::vos::OGuard                         aGuard( Application::GetSolarMutex() );
-    uno::Reference< gallery::XGalleryTheme >    xRet;
+    const ::vos::OGuard 						aGuard( Application::GetSolarMutex() );
+    uno::Reference< gallery::XGalleryTheme > 	xRet;
 
     if( mpGallery )
     {

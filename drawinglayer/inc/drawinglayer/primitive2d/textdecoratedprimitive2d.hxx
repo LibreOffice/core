@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,16 +63,16 @@ namespace drawinglayer
             basegfx::BColor                             maTextlineColor;
             TextLine                                    meFontOverline;
             TextLine                                    meFontUnderline;
-            TextStrikeout                               meTextStrikeout;
-            TextEmphasisMark                            meTextEmphasisMark;
-            TextRelief                                  meTextRelief;
+            TextStrikeout								meTextStrikeout;
+            TextEmphasisMark							meTextEmphasisMark;
+            TextRelief									meTextRelief;
 
             /// bitfield
-            unsigned                                    mbUnderlineAbove : 1;
-            unsigned                                    mbWordLineMode : 1;
-            unsigned                                    mbEmphasisMarkAbove : 1;
-            unsigned                                    mbEmphasisMarkBelow : 1;
-            unsigned                                    mbShadow : 1;
+            unsigned									mbUnderlineAbove : 1;
+            unsigned									mbWordLineMode : 1;
+            unsigned									mbEmphasisMarkAbove : 1;
+            unsigned									mbEmphasisMarkBelow : 1;
+            unsigned									mbShadow : 1;
 
             /// helper methods
             void impCreateGeometryContent(

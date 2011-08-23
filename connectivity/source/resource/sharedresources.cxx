@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -231,8 +231,8 @@ namespace connectivity
         ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > >::const_iterator aIter = _aStringToSubstitutes.begin();
         ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > >::const_iterator aEnd  = _aStringToSubstitutes.end();
         for(;aIter != aEnd; ++aIter)
-            OSL_VERIFY( lcl_substitute( sString, aIter->first, aIter->second ) );
-
+            OSL_VERIFY( lcl_substitute( sString, aIter->first, aIter->second ) );        
+        
         return sString;
     }
 

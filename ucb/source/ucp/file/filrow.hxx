@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,146 +50,146 @@ namespace fileaccess {
         ~XRow_impl();
 
         virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& aType )
+        queryInterface( 
+            const com::sun::star::uno::Type& aType ) 
             throw( com::sun::star::uno::RuntimeException);
-
+  
         virtual void SAL_CALL
-        acquire(
-            void )
+        acquire( 
+            void ) 
             throw();
-
+  
         virtual void SAL_CALL
         release(
-            void )
+            void ) 
             throw();
 
         // XTypeProvider
-
+        
         XTYPEPROVIDER_DECL()
-
+  
         virtual sal_Bool SAL_CALL
         wasNull(
             void )
-            throw( com::sun::star::sdbc::SQLException,
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException );
-
+      
         virtual rtl::OUString SAL_CALL
-        getString(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getString( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual sal_Bool SAL_CALL
-        getBoolean(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getBoolean( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+      
         virtual sal_Int8 SAL_CALL
-        getByte(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getByte( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual sal_Int16 SAL_CALL
-        getShort(
-            sal_Int32 columnIndex )
-            throw(
-                com::sun::star::sdbc::SQLException,
+        getShort( 
+            sal_Int32 columnIndex ) 
+            throw( 
+                com::sun::star::sdbc::SQLException, 
                 com::sun::star::uno::RuntimeException );
-
+  
         virtual sal_Int32 SAL_CALL
-        getInt(
-            sal_Int32 columnIndex )
+        getInt( 
+            sal_Int32 columnIndex ) 
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException );
-
+  
         virtual sal_Int64 SAL_CALL
-        getLong(
-            sal_Int32 columnIndex )
+        getLong( 
+            sal_Int32 columnIndex ) 
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException );
-
+  
         virtual float SAL_CALL
-        getFloat(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getFloat( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual double SAL_CALL
-        getDouble(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getDouble( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+        
         virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
         getBytes(
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::util::Date SAL_CALL
-        getDate(
+        getDate( 
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::util::Time SAL_CALL
         getTime(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::util::DateTime SAL_CALL
-        getTimestamp(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getTimestamp( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
-        getBinaryStream(
+        getBinaryStream( 
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
-        getCharacterStream(
+        getCharacterStream( 
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::uno::Any SAL_CALL
-        getObject(
-            sal_Int32 columnIndex,
+        getObject( 
+            sal_Int32 columnIndex, 
             const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& typeMap )
-            throw( com::sun::star::sdbc::SQLException,
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRef > SAL_CALL
-        getRef(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getRef( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XBlob > SAL_CALL
-        getBlob(
+        getBlob( 
             sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XClob > SAL_CALL
-        getClob(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getClob( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
         virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XArray > SAL_CALL
-        getArray(
-            sal_Int32 columnIndex )
-            throw( com::sun::star::sdbc::SQLException,
+        getArray( 
+            sal_Int32 columnIndex ) 
+            throw( com::sun::star::sdbc::SQLException, 
                    com::sun::star::uno::RuntimeException);
-
+  
     private:
         osl::Mutex                                                              m_aMutex;
         com::sun::star::uno::Sequence< com::sun::star::uno::Any >                m_aValueMap;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <general.h>
@@ -37,17 +37,17 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @descr          Describe different states of a feature of following implementation.
+    @descr			Describe different states of a feature of following implementation.
                     During live time of an object different working states occure:
                         initialization - working - closing - closed
                     If you whish to implement thread safe classes you should use these feature to protect
@@ -70,8 +70,8 @@ enum EWorkingMode
 *//*-*************************************************************************************************************/
 enum ERejectReason
 {
-    E_UNINITIALIZED ,
-    E_NOREASON      ,
+    E_UNINITIALIZED	,
+    E_NOREASON		,
     E_INCLOSE       ,
     E_CLOSED
 };
@@ -81,12 +81,12 @@ enum ERejectReason
                     e.g. We can throw a DisposedException if user try to work and our mode is E_CLOSE!
                     But sometimes he dont need this feature - will handle it by himself.
                     Then we must differ between some exception-modi:
-                        E_NOEXCEPTIONS          We never throw any exceptions! User handle it private and looks for ERejectReason.
-                        E_HARDEXCEPTIONS        We throw exceptions for all working modes different from E_WORK!
+                        E_NOEXCEPTIONS			We never throw any exceptions! User handle it private and looks for ERejectReason.
+                        E_HARDEXCEPTIONS		We throw exceptions for all working modes different from E_WORK!
                         E_SOFTEXCEPTIONS        We throw exceptions for all working modes different from E_WORK AND E_INCLOSE!
                                                 This mode is useful for impl-methods which should be callable from dispose() method!
 
-                                                e.g.    void dispose()
+                                                e.g.	void dispose()
                                                         {
                                                             m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
                                                             ...
@@ -109,7 +109,7 @@ enum ERejectReason
 *//*-*************************************************************************************************************/
 enum EExceptionMode
 {
-    E_NOEXCEPTIONS  ,
+    E_NOEXCEPTIONS	,
     E_HARDEXCEPTIONS,
     E_SOFTEXCEPTIONS
 };
@@ -123,16 +123,16 @@ enum EExceptionMode
 class ITransactionManager
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
         /*-****************************************************************************************************//**
-            @descr      These functions must be supported by a derived class!
+            @descr		These functions must be supported by a derived class!
                             getWorkingMode()        -return current set working mode
-                            setWorkingMode()        -change working mode
+                            setWorkingMode()		-change working mode
                                                      (This will block till all current transactions are finished!)
-                            isCallRejected()        -test method to check if a call will be rejected by wrong working mode or not
+                            isCallRejected()		-test method to check if a call will be rejected by wrong working mode or not
                             registerTransaction()   -start new transaction (increase internal transaction count)
                             unregisterTransaction() -finish transaction    (decrease internal transaction count)
         *//*-*****************************************************************************************************/
@@ -144,6 +144,6 @@ class ITransactionManager
 
 };      //  class ITransactionManager
 
-}       //  namespace framework
+}		//	namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_

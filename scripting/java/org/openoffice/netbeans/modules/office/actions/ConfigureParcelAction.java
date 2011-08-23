@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@ public class ConfigureParcelAction extends CookieAction {
     protected int mode() {
         return CookieAction.MODE_EXACTLY_ONE;
     }
-
+    
     public HelpCtx getHelpCtx() {
         return HelpCtx.DEFAULT_HELP;
     }
-
+    
     protected void performAction(final Node[] activatedNodes)
     {
         FrameworkJarChecker.mountDependencies();

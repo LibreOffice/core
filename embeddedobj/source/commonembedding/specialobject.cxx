@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType
 {
     uno::Any aReturn;
 
-    aReturn <<= ::cppu::queryInterface( rType,
+    aReturn <<= ::cppu::queryInterface(	rType,
                                         static_cast< embed::XEmbeddedObject* >( this ),
                                         static_cast< embed::XInplaceObject* >( this ),
                                         static_cast< embed::XVisualObject* >( this ),

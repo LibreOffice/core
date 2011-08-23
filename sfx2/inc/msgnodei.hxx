@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 #include <svl/poolitem.hxx>
 #include <tools/list.hxx>
 struct SfxMsgAttachFile {
-    String  aFile;
-    String  aName;
+    String	aFile;
+    String	aName;
 
-    int                 operator==( const SfxMsgAttachFile& rRec ) const
+    int 				operator==( const SfxMsgAttachFile& rRec ) const
                         {
                             if( aName == rRec.aName && aFile == rRec.aFile )
                                 return TRUE;
@@ -60,10 +60,10 @@ enum SfxMsgReceiverRole
 };
 
 struct SfxMsgReceiver {
-    String              aName;
+    String				aName;
     SfxMsgReceiverRole  eRole;
 
-    int                 operator==( const SfxMsgReceiver& rRec ) const
+    int 				operator==( const SfxMsgReceiver& rRec ) const
                         {
                             if( aName == rRec.aName && eRole == rRec.eRole )
                                 return TRUE;
@@ -81,24 +81,24 @@ struct SfxMsgReceiver {
 
 class SfxMsgReceiverList_Impl : public List
 {
-    ULONG           nRef;
+    ULONG 			nRef;
                     ~SfxMsgReceiverList_Impl();
     SfxMsgReceiverList_Impl& operator=( const SfxMsgReceiverList_Impl&); //n.i.
 public:
                     SfxMsgReceiverList_Impl();
                     SfxMsgReceiverList_Impl(const SfxMsgReceiverList_Impl&);
 
-    void            Load( SvStream& );
-    void            Store( SvStream& ) const;
-    void            IncRef() { nRef++; }
-    void            DecRef() { nRef--; if( !nRef ) delete this; }
-    ULONG           GetRefCount() const { return nRef; }
-    int             operator==( const SfxMsgReceiverList_Impl& ) const;
+    void			Load( SvStream& );
+    void			Store( SvStream& ) const;
+    void 			IncRef() { nRef++; }
+    void 			DecRef() { nRef--; if( !nRef ) delete this; }
+    ULONG			GetRefCount() const { return nRef; }
+    int 			operator==( const SfxMsgReceiverList_Impl& ) const;
 };
 
 class SfxMsgReceiverListItem : public SfxPoolItem
 {
-    void                    Disconnect();
+    void					Disconnect();
 protected:
     SfxMsgReceiverList_Impl* pImp;
 public:
@@ -110,21 +110,21 @@ public:
                             SfxMsgReceiverListItem( const SfxMsgReceiverListItem& rItem );
                             ~SfxMsgReceiverListItem();
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     XubString &rText ) const;
 
-    USHORT                  Count() const;
-    SfxMsgReceiver*         GetObject( USHORT nPos );
-    void                    Remove( USHORT nPos );
-    void                    Add( const SfxMsgReceiver& );
+    USHORT					Count() const;
+    SfxMsgReceiver*			GetObject( USHORT nPos );
+    void					Remove( USHORT nPos );
+    void					Add( const SfxMsgReceiver& );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream &, USHORT nVersion ) const;
-    virtual SvStream&       Store( SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*	Create( SvStream &, USHORT nVersion ) const;
+    virtual SvStream&		Store( SvStream &, USHORT nItemVersion ) const;
 };
 
 
@@ -132,7 +132,7 @@ public:
 
 class SfxMsgAttachFileList_Impl : public List
 {
-    ULONG           nRef;
+    ULONG 			nRef;
                     ~SfxMsgAttachFileList_Impl();
     SfxMsgAttachFileList_Impl& operator=( const SfxMsgAttachFileList_Impl&); //n.i.
 
@@ -140,20 +140,20 @@ public:
                     SfxMsgAttachFileList_Impl();
                     SfxMsgAttachFileList_Impl(const SfxMsgAttachFileList_Impl&);
 
-    int             operator==( const SfxMsgAttachFileList_Impl& rRec ) const;
+    int				operator==( const SfxMsgAttachFileList_Impl& rRec ) const;
     SfxMsgAttachFile* GetReceiver(ULONG nPos) { return (SfxMsgAttachFile*)List::GetObject(nPos); }
-    void            Load( SvStream& );
-    void            Store( SvStream& ) const;
-    void            IncRef() { nRef++; }
-    void            DecRef() { nRef--; if( !nRef ) delete this; }
-    ULONG           GetRefCount() const { return nRef; }
+    void			Load( SvStream& );
+    void			Store( SvStream& ) const;
+    void 			IncRef() { nRef++; }
+    void 			DecRef() { nRef--; if( !nRef ) delete this; }
+    ULONG			GetRefCount() const { return nRef; }
 };
 
 class SfxMsgAttachFileListItem : public SfxPoolItem
 {
 protected:
     SfxMsgAttachFileList_Impl* pImp;
-    void                    Disconnect();
+    void					Disconnect();
 public:
                             TYPEINFO();
 
@@ -163,21 +163,21 @@ public:
                             SfxMsgAttachFileListItem( const SfxMsgAttachFileListItem& rItem );
                             ~SfxMsgAttachFileListItem();
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual int 			operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     XubString &rText ) const;
 
-    USHORT                  Count() const;
-    SfxMsgAttachFile*       GetObject( USHORT nPos );
-    void                    Remove( USHORT nPos );
-    void                    Add( const SfxMsgAttachFile& );
+    USHORT					Count() const;
+    SfxMsgAttachFile*		GetObject( USHORT nPos );
+    void					Remove( USHORT nPos );
+    void					Add( const SfxMsgAttachFile& );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream &, USHORT nVersion ) const;
-    virtual SvStream&       Store( SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*	Create( SvStream &, USHORT nVersion ) const;
+    virtual SvStream&		Store( SvStream &, USHORT nItemVersion ) const;
 };
 
 
@@ -198,15 +198,15 @@ public:
 
     SfxMsgPriorityItem( USHORT nWhich, SfxMsgPriority = MSG_PRIORITY_NORMAL);
 
-    virtual SfxPoolItem*        Clone( SfxItemPool* pPool=0 ) const;
-    virtual SfxPoolItem*        Create( SvStream&, USHORT ) const;
-    virtual SvStream&           Store( SvStream&, USHORT ) const;
+    virtual SfxPoolItem*	 	Clone( SfxItemPool* pPool=0 ) const;
+    virtual SfxPoolItem*	 	Create( SvStream&, USHORT ) const;
+    virtual SvStream&		 	Store( SvStream&, USHORT ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePresentation,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresentationMetric,
                                     String &rText ) const;
-    virtual USHORT              GetValueCount() const;
-    virtual String              GetValueTextByPos( USHORT nPos ) const;
+    virtual USHORT			 	GetValueCount() const;
+    virtual String			 	GetValueTextByPos( USHORT nPos ) const;
 
     inline SfxMsgPriorityItem& operator=(const SfxMsgPriorityItem& rPrio)
     {

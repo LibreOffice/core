@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,14 +75,14 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
                                   , public IFileDialogControlEvents
 {
     public:
-
+    
         //------------------------------------------------------------------------------------
         // ctor/dtor
         //------------------------------------------------------------------------------------
-
+    
                  VistaFilePickerEventHandler(IVistaFilePickerInternalNotify* pInternalNotify);
         virtual ~VistaFilePickerEventHandler();
-
+    
         //------------------------------------------------------------------------------------
         // IUnknown
         //------------------------------------------------------------------------------------
@@ -90,62 +90,62 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
                                                          void** ppObject);
         virtual ULONG STDMETHODCALLTYPE AddRef();
         virtual ULONG STDMETHODCALLTYPE Release();
-
+    
         //------------------------------------------------------------------------------------
         // IFileDialogEvents
         //------------------------------------------------------------------------------------
-
+    
         STDMETHODIMP OnFileOk(IFileDialog* pDialog);
-
+    
         STDMETHODIMP OnFolderChanging(IFileDialog* pDialog,
                                       IShellItem*  pFolder);
-
+    
         STDMETHODIMP OnFolderChange(IFileDialog* pDialog);
-
+    
         STDMETHODIMP OnSelectionChange(IFileDialog* pDialog);
-
+    
         STDMETHODIMP OnShareViolation(IFileDialog*                 pDialog  ,
                                       IShellItem*                  pItem    ,
                                       FDE_SHAREVIOLATION_RESPONSE* pResponse);
-
+                                      
         STDMETHODIMP OnTypeChange(IFileDialog* pDialog);
-
+        
         STDMETHODIMP OnOverwrite(IFileDialog*            pDialog  ,
                                  IShellItem*             pItem    ,
                                  FDE_OVERWRITE_RESPONSE* pResponse);
-
+    
         //------------------------------------------------------------------------------------
         // IFileDialogControlEvents
         //------------------------------------------------------------------------------------
-
+    
         STDMETHODIMP OnItemSelected(IFileDialogCustomize* pCustomize,
                                     DWORD                 nIDCtl    ,
                                     DWORD                 nIDItem   );
-
+                                    
         STDMETHODIMP OnButtonClicked(IFileDialogCustomize* pCustomize,
                                      DWORD                 nIDCtl    );
-
+                                     
         STDMETHODIMP OnCheckButtonToggled(IFileDialogCustomize* pCustomize,
                                           DWORD                 nIDCtl    ,
                                           BOOL                  bChecked  );
-
+                                          
         STDMETHODIMP OnControlActivating(IFileDialogCustomize* pCustomize,
                                          DWORD                 nIDCtl    );
-
+        
         //------------------------------------------------------------------------------------
         // XFilePickerNotifier
         //------------------------------------------------------------------------------------
-
-        virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
+    
+        virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) 
             throw( css::uno::RuntimeException );
-
-        virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
+    
+        virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) 
             throw( css::uno::RuntimeException );
-
+            
         //------------------------------------------------------------------------------------
         // native interface
         //------------------------------------------------------------------------------------
-
+        
         //------------------------------------------------------------------------------------
         /** start listening for file picker events on the given file open dialog COM object.
          *
@@ -160,7 +160,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
          *          reference to the dialog, where we should start listening.
          */
         void startListening( const TFileDialog& pBroadcaster );
-
+        
         //------------------------------------------------------------------------------------
         /** stop listening for file picker events on the internaly cached dialog COM object.
          *
@@ -169,7 +169,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
          *  listener handle is used. If listener was not already registered - nothing will happen.
          */
         void stopListening();
-
+        
     public:
 
         enum EEventType
@@ -180,20 +180,20 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
             E_CONTROL_STATE_CHANGED,
             E_DIALOG_SIZE_CHANGED
         };
-
+    
     private:
 
         //------------------------------------------------------------------------------------
         /// @todo document me
         void impl_sendEvent(  EEventType eEventType,
                             ::sal_Int16  nControlID);
-
+    
     private:
-
+        
         //------------------------------------------------------------------------------------
         /// ref count for AddRef/Release()
         oslInterlockedCount m_nRefCount;
-
+    
         //------------------------------------------------------------------------------------
         /// unique handle for this listener provided by the broadcaster on registration time
         DWORD m_nListenerHandle;
@@ -201,10 +201,10 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         //------------------------------------------------------------------------------------
         /// cached file dialog instance (there we listen for events)
         TFileDialog m_pDialog;
-
+    
         //---------------------------------------------------------------------
         IVistaFilePickerInternalNotify* m_pInternalNotify;
-
+    
         //---------------------------------------------------------------------
         /** used to inform file picker listener asynchronously.
          *  Those listener must be called asynchronously .. because

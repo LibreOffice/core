@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace sdr
         }
 
         ViewObjectContactOfPageSubObject::ViewObjectContactOfPageSubObject(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContact(rObjectContact, rViewContact)
+        :	ViewObjectContact(rObjectContact, rViewContact)
         {
         }
 
@@ -111,7 +111,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfPageBackground::ViewObjectContactOfPageBackground(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -155,7 +155,7 @@ namespace sdr
                 else
                 {
                     aInitColor = pPageView->GetApplicationDocumentColor();
-
+                    
                     if(Color(COL_AUTO) == aInitColor)
                     {
                         const svtools::ColorConfig aColorConfig;
@@ -181,7 +181,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfMasterPage::ViewObjectContactOfMasterPage(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -216,7 +216,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfPageFill::ViewObjectContactOfPageFill(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -287,7 +287,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfPageShadow::ViewObjectContactOfPageShadow(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -332,7 +332,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfOuterPageBorder::ViewObjectContactOfOuterPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -373,7 +373,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfInnerPageBorder::ViewObjectContactOfInnerPageBorder(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -401,7 +401,7 @@ namespace sdr
             }
 
             const SdrPage& rPage = getPage();
-
+            
             if(!rPage.GetLftBorder() && !rPage.GetUppBorder() && !rPage.GetRgtBorder() && !rPage.GetLwrBorder())
             {
                 return false;
@@ -425,7 +425,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfPageHierarchy::ViewObjectContactOfPageHierarchy(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -443,7 +443,7 @@ namespace sdr
             if(nSubHierarchyCount)
             {
                 xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
-
+                
                 if(xRetval.hasElements())
                 {
                     // get ranges
@@ -472,7 +472,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfPageGrid::ViewObjectContactOfPageGrid(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -558,7 +558,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfPageHelplines::ViewObjectContactOfPageHelplines(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
+        :	ViewObjectContactOfPageSubObject(rObjectContact, rViewContact)
         {
         }
 
@@ -586,7 +586,7 @@ namespace sdr
             {
                 return false;
             }
-
+            
             // no helplines for preview renderers
             if(GetObjectContact().IsPreviewRenderer())
             {
@@ -663,7 +663,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfSdrPage::ViewObjectContactOfSdrPage(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContact(rObjectContact, rViewContact)
+        :	ViewObjectContact(rObjectContact, rViewContact)
         {
         }
 
@@ -681,7 +681,7 @@ namespace sdr
             if(nSubHierarchyCount)
             {
                 const sal_Bool bDoGhostedDisplaying(
-                    GetObjectContact().DoVisualizeEnteredGroup()
+                    GetObjectContact().DoVisualizeEnteredGroup() 
                     && !GetObjectContact().isOutputToPrinter()
                     && GetObjectContact().getActiveViewContact() == &GetViewContact());
 

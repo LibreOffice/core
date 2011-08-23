@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ DAVRequestEnvironment( const rtl::OUString & rRequestURI,
                            const rtl::Reference< DAVAuthListener > & xListener,
                            const DAVRequestHeaders & rRequestHeaders,
                            const uno::Reference< ucb::XCommandEnvironment > & xEnv)
-    : m_aRequestURI( rRequestURI ),
+    : m_aRequestURI( rRequestURI ), 
       m_xAuthListener( xListener ),
       m_aRequestHeaders( rRequestHeaders ),
       m_xEnv( xEnv ){}

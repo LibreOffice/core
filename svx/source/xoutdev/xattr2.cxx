@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@ TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XLineTransparenceItem::XLineTransparenceItem(USHORT)
+|*	  XLineTransparenceItem::XLineTransparenceItem(USHORT)
 |*
-|*    Beschreibung
-|*    Ersterstellung    07.11.95 KA
-|*    Letzte Aenderung  07.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -67,11 +67,11 @@ XLineTransparenceItem::XLineTransparenceItem(USHORT nLineTransparence) :
 
 /*************************************************************************
 |*
-|*    XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn)
+|*	  XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    07.11.95 KA
-|*    Letzte Aenderung  07.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -82,11 +82,11 @@ XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineTransparenceItem::Clone(SfxItemPool* pPool) const
+|*	  XLineTransparenceItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    07.11.95 KA
-|*    Letzte Aenderung  07.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -97,11 +97,11 @@ SfxPoolItem* XLineTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    07.11.95 KA
-|*    Letzte Aenderung  07.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -115,10 +115,10 @@ SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XLineTransparenceItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -139,7 +139,7 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
 }
 
 //-----------------------
-// class XLineJointItem -
+// class XLineJointItem	-
 //-----------------------
 
 TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
@@ -186,7 +186,7 @@ SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
 
 // -----------------------------------------------------------------------------
 
-SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
+SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres,	SfxMapUnit /*eCoreUnit*/,
                                                      SfxMapUnit /*ePresUnit*/, XubString& rText, const IntlWrapper*) const
 {
     rText.Erase();
@@ -320,11 +320,11 @@ TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XFillTransparenceItem::XFillTransparenceItem(USHORT)
+|*	  XFillTransparenceItem::XFillTransparenceItem(USHORT)
 |*
-|*    Beschreibung
-|*    Ersterstellung    07.11.95 KA
-|*    Letzte Aenderung  07.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -335,11 +335,11 @@ XFillTransparenceItem::XFillTransparenceItem(USHORT nFillTransparence) :
 
 /*************************************************************************
 |*
-|*    XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn)
+|*	  XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    07.11.95 KA
-|*    Letzte Aenderung  07.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -350,11 +350,11 @@ XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFillTransparenceItem::Clone(SfxItemPool* pPool) const
+|*	  XFillTransparenceItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    07.11.95 KA
-|*    Letzte Aenderung  07.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -365,11 +365,11 @@ SfxPoolItem* XFillTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    07.11.95 KA
-|*    Letzte Aenderung  07.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	07.11.95 KA
+|*	  Letzte Aenderung	07.11.95 KA
 |*
 *************************************************************************/
 
@@ -383,10 +383,10 @@ SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XFillTransparenceItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -413,11 +413,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowTranspItem::XFormTextShadowTranspItem(USHORT)
+|*	  XFormTextShadowTranspItem::XFormTextShadowTranspItem(USHORT)
 |*
-|*    Beschreibung
-|*    Ersterstellung    09.11.95 KA
-|*    Letzte Aenderung  09.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.95 KA
+|*	  Letzte Aenderung	09.11.95 KA
 |*
 *************************************************************************/
 
@@ -428,11 +428,11 @@ XFormTextShadowTranspItem::XFormTextShadowTranspItem(USHORT nShdwTransparence) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn)
+|*	  XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    09.11.95 KA
-|*    Letzte Aenderung  09.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.95 KA
+|*	  Letzte Aenderung	09.11.95 KA
 |*
 *************************************************************************/
 
@@ -443,11 +443,11 @@ XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowTranspItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowTranspItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    09.11.95 KA
-|*    Letzte Aenderung  09.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.95 KA
+|*	  Letzte Aenderung	09.11.95 KA
 |*
 *************************************************************************/
 
@@ -458,11 +458,11 @@ SfxPoolItem* XFormTextShadowTranspItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    09.11.95 KA
-|*    Letzte Aenderung  09.11.95 KA
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.95 KA
+|*	  Letzte Aenderung	09.11.95 KA
 |*
 *************************************************************************/
 
@@ -479,11 +479,11 @@ TYPEINIT1_AUTOFACTORY(XGradientStepCountItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XGradientStepCountItem::XGradientStepCountItem( USHORT )
+|*	  XGradientStepCountItem::XGradientStepCountItem( USHORT )
 |*
-|*    Beschreibung
-|*    Ersterstellung    23.01.96 KA
-|*    Letzte Aenderung  23.01.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -494,11 +494,11 @@ XGradientStepCountItem::XGradientStepCountItem( USHORT nStepCount ) :
 
 /*************************************************************************
 |*
-|*    XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn )
+|*	  XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn )
 |*
-|*    Beschreibung
-|*    Ersterstellung    23.01.96 KA
-|*    Letzte Aenderung  23.01.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -509,11 +509,11 @@ XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn ) :
 
 /*************************************************************************
 |*
-|*    XGradientStepCountItem::Clone( SfxItemPool* pPool ) const
+|*	  XGradientStepCountItem::Clone( SfxItemPool* pPool ) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    23.01.96 KA
-|*    Letzte Aenderung  23.01.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -524,11 +524,11 @@ SfxPoolItem* XGradientStepCountItem::Clone( SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    23.01.96 KA
-|*    Letzte Aenderung  23.01.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -542,10 +542,10 @@ SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, USHORT /*nVer*/) cons
 SfxItemPresentation XGradientStepCountItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -554,8 +554,8 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NONE:
             return ePres;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-//          rText = XubString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) );
-//          rText += ": ";
+//			rText = XubString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) );
+//			rText += ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += XubString( UniString::CreateFromInt32((USHORT) GetValue() ));
             return ePres;
@@ -574,9 +574,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpTileItem, SfxBoolItem );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -590,9 +590,9 @@ XFillBmpTileItem::XFillBmpTileItem( BOOL bTile ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -606,9 +606,9 @@ XFillBmpTileItem::XFillBmpTileItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -622,9 +622,9 @@ SfxPoolItem* XFillBmpTileItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -638,19 +638,19 @@ SfxPoolItem* XFillBmpTileItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpTileItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -676,9 +676,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpPosItem, SfxEnumItem );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -692,9 +692,9 @@ XFillBmpPosItem::XFillBmpPosItem( RECT_POINT eRP ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -708,9 +708,9 @@ XFillBmpPosItem::XFillBmpPosItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -724,9 +724,9 @@ SfxPoolItem* XFillBmpPosItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -740,19 +740,19 @@ SfxPoolItem* XFillBmpPosItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpPosItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -789,9 +789,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpSizeXItem, SfxMetricItem );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -805,9 +805,9 @@ XFillBmpSizeXItem::XFillBmpSizeXItem( long nSizeX ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -821,9 +821,9 @@ XFillBmpSizeXItem::XFillBmpSizeXItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -837,9 +837,9 @@ SfxPoolItem* XFillBmpSizeXItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -853,19 +853,19 @@ SfxPoolItem* XFillBmpSizeXItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpSizeXItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -884,9 +884,9 @@ SfxItemPresentation XFillBmpSizeXItem::GetPresentation
 
 /*************************************************************************
 |*
-|*    Beschreibung
-|*    Ersterstellung    05.11.96 KA
-|*    Letzte Aenderung  05.11.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	05.11.96 KA
+|*	  Letzte Aenderung	05.11.96 KA
 |*
 \*************************************************************************/
 
@@ -905,9 +905,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpSizeYItem, SfxMetricItem );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -921,9 +921,9 @@ XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -937,9 +937,9 @@ XFillBmpSizeYItem::XFillBmpSizeYItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -953,9 +953,9 @@ SfxPoolItem* XFillBmpSizeYItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -969,19 +969,19 @@ SfxPoolItem* XFillBmpSizeYItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpSizeYItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -1000,9 +1000,9 @@ SfxItemPresentation XFillBmpSizeYItem::GetPresentation
 
 /*************************************************************************
 |*
-|*    Beschreibung
-|*    Ersterstellung    05.11.96 KA
-|*    Letzte Aenderung  05.11.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	05.11.96 KA
+|*	  Letzte Aenderung	05.11.96 KA
 |*
 \*************************************************************************/
 
@@ -1021,9 +1021,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpSizeLogItem, SfxBoolItem );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1037,9 +1037,9 @@ XFillBmpSizeLogItem::XFillBmpSizeLogItem( BOOL bLog ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1053,9 +1053,9 @@ XFillBmpSizeLogItem::XFillBmpSizeLogItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1069,9 +1069,9 @@ SfxPoolItem* XFillBmpSizeLogItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1085,19 +1085,19 @@ SfxPoolItem* XFillBmpSizeLogItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -1123,9 +1123,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetXItem, SfxUInt16Item );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1139,9 +1139,9 @@ XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( USHORT nOffX ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1155,9 +1155,9 @@ XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1171,9 +1171,9 @@ SfxPoolItem* XFillBmpTileOffsetXItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1187,19 +1187,19 @@ SfxPoolItem* XFillBmpTileOffsetXItem::Create( SvStream& rIn, USHORT /*nVer*/) co
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -1225,9 +1225,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetYItem, SfxUInt16Item );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1241,9 +1241,9 @@ XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( USHORT nOffY ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1257,9 +1257,9 @@ XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1273,9 +1273,9 @@ SfxPoolItem* XFillBmpTileOffsetYItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1289,19 +1289,19 @@ SfxPoolItem* XFillBmpTileOffsetYItem::Create( SvStream& rIn, USHORT /*nVer*/) co
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -1327,9 +1327,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpStretchItem, SfxBoolItem );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1343,9 +1343,9 @@ XFillBmpStretchItem::XFillBmpStretchItem( BOOL bStretch ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1359,9 +1359,9 @@ XFillBmpStretchItem::XFillBmpStretchItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1375,9 +1375,9 @@ SfxPoolItem* XFillBmpStretchItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
@@ -1391,19 +1391,19 @@ SfxPoolItem* XFillBmpStretchItem::Create( SvStream& rIn, USHORT /*nVer*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.02.96 KA
-|*    Letzte Aenderung  28.02.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	28.02.96 KA
+|*	  Letzte Aenderung	28.02.96 KA
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpStretchItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -1429,9 +1429,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetXItem, SfxUInt16Item );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
@@ -1445,9 +1445,9 @@ XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( USHORT nOffPosX ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
@@ -1461,9 +1461,9 @@ XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
@@ -1477,9 +1477,9 @@ SfxPoolItem* XFillBmpPosOffsetXItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
@@ -1493,19 +1493,19 @@ SfxPoolItem* XFillBmpPosOffsetXItem::Create( SvStream& rIn, USHORT /*nVer*/) con
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -1531,9 +1531,9 @@ TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetYItem, SfxUInt16Item );
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
@@ -1547,9 +1547,9 @@ XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( USHORT nOffPosY ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
@@ -1563,9 +1563,9 @@ XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( SvStream& rIn ) :
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
@@ -1579,9 +1579,9 @@ SfxPoolItem* XFillBmpPosOffsetYItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
@@ -1595,19 +1595,19 @@ SfxPoolItem* XFillBmpPosOffsetYItem::Create( SvStream& rIn, USHORT /*nVer*/) con
 |*
 |*
 |*
-|*    Beschreibung
-|*    Ersterstellung    KA 29.04.96
-|*    Letzte Aenderung  KA 29.04.96
+|*	  Beschreibung
+|*	  Ersterstellung	KA 29.04.96
+|*	  Letzte Aenderung	KA 29.04.96
 |*
 *************************************************************************/
 
 SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -1630,11 +1630,11 @@ TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFillBackgroundItem::XFillBackgroundItem( BOOL )
+|*	  XFillBackgroundItem::XFillBackgroundItem( BOOL )
 |*
-|*    Beschreibung
-|*    Ersterstellung    19.11.96 KA
-|*    Letzte Aenderung
+|*	  Beschreibung
+|*	  Ersterstellung	19.11.96 KA
+|*	  Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -1645,11 +1645,11 @@ XFillBackgroundItem::XFillBackgroundItem( BOOL bFill ) :
 
 /*************************************************************************
 |*
-|*    XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn )
+|*	  XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn )
 |*
-|*    Beschreibung
-|*    Ersterstellung    23.01.96 KA
-|*    Letzte Aenderung  23.01.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -1660,11 +1660,11 @@ XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn ) :
 
 /*************************************************************************
 |*
-|*    XFillBackgroundItem::Clone( SfxItemPool* pPool ) const
+|*	  XFillBackgroundItem::Clone( SfxItemPool* pPool ) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    23.01.96 KA
-|*    Letzte Aenderung  23.01.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 
@@ -1675,11 +1675,11 @@ SfxPoolItem* XFillBackgroundItem::Clone( SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    23.01.96 KA
-|*    Letzte Aenderung  23.01.96 KA
+|*	  Beschreibung
+|*	  Ersterstellung	23.01.96 KA
+|*	  Letzte Aenderung	23.01.96 KA
 |*
 *************************************************************************/
 

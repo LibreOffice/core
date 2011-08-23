@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,5 +35,5 @@ namespace utl{
 /* -----------------------------05.09.00 16:42--------------------------------
     appdata.cxx
  ---------------------------------------------------------------------------*/
-utl::ConfigManager*         GetUtlConfigManager();
+utl::ConfigManager*			GetUtlConfigManager();
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ class SvxBrushItem;
 class SvxNumRule;
 struct SvxBmpItemInfo
 {
-    SvxBrushItem*   pBrushItem;
-    USHORT          nItemId;
+    SvxBrushItem* 	pBrushItem;
+    USHORT 			nItemId;
 };
 
 /*-----------------09/09/97 01:05pm-----------------
@@ -63,11 +63,11 @@ struct SvxBmpItemInfo
 --------------------------------------------------*/
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
-    Color           aLineColor;
-    USHORT          nPageType;
-    BOOL            bHTMLMode;
-    Rectangle       aOrgRect;
-    VirtualDevice*  pVDev;
+    Color 			aLineColor;
+    USHORT 			nPageType;
+    BOOL			bHTMLMode;
+    Rectangle		aOrgRect;
+    VirtualDevice* 	pVDev;
 
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
     com::sun::star::lang::Locale aLocale;
@@ -83,17 +83,17 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
         SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nType );
         ~SvxNumValueSet();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void	UserDraw( const UserDrawEvent& rUDEvt );
 
-    void            SetHTMLMode(BOOL bSet) {bHTMLMode = bSet;}
-    void            SetNumberingSettings(
+    void			SetHTMLMode(BOOL bSet) {bHTMLMode = bSet;}
+    void			SetNumberingSettings(
         const com::sun::star::uno::Sequence<
             com::sun::star::uno::Sequence<
                 com::sun::star::beans::PropertyValue> >& aNum,
         com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter>& xFormatter,
-        const com::sun::star::lang::Locale& rLocale );
+        const com::sun::star::lang::Locale& rLocale	);
 
-    void            SetOutlineNumberingSettings(
+    void			SetOutlineNumberingSettings(
             com::sun::star::uno::Sequence<
                 com::sun::star::uno::Reference<
                     com::sun::star::container::XIndexAccess> >& rOutline,
@@ -108,22 +108,22 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 {
     String      sBullets;
-    Timer       aFormatTimer;
-    BOOL        bGrfNotFound;
+    Timer 		aFormatTimer;
+    BOOL		bGrfNotFound;
 
     protected:
         DECL_LINK(FormatHdl_Impl, Timer*);
 
-    void            SetGrfNotFound(BOOL bSet) {bGrfNotFound = bSet;}
-    BOOL            IsGrfNotFound()const {return bGrfNotFound;}
+    void			SetGrfNotFound(BOOL bSet) {bGrfNotFound = bSet;}
+    BOOL			IsGrfNotFound()const {return bGrfNotFound;}
 
-    Timer&          GetFormatTimer() {return aFormatTimer;}
+    Timer&			GetFormatTimer() {return aFormatTimer;}
 
     public:
         SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/);
         ~SvxBmpNumValueSet();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void	UserDraw( const UserDrawEvent& rUDEvt );
 
 };
 /*-----------------02.12.97 10:31-------------------
@@ -132,15 +132,15 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 
 class SvxNumberingPreview : public Window
 {
-    const SvxNumRule*   pActNum;
-    Font                aStdFont;
-    long                nPageWidth;
-    const String*       pOutlineNames;
-    BOOL                bPosition;
-    UINT16              nActLevel;
+    const SvxNumRule* 	pActNum;
+    Font 				aStdFont;
+    long				nPageWidth;
+    const String* 		pOutlineNames;
+    BOOL				bPosition;
+    UINT16 				nActLevel;
 
     protected:
-        virtual void        Paint( const Rectangle& rRect );
+        virtual void		Paint( const Rectangle& rRect );
 
     public:
         SvxNumberingPreview(Window* pParent, const ResId& rResId ) :
@@ -148,15 +148,15 @@ class SvxNumberingPreview : public Window
             pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(FALSE), nActLevel(USHRT_MAX)
             { SetBorderStyle( WINDOW_BORDER_MONO ); }
 
-        void    SetNumRule(const SvxNumRule* pNum)
+        void	SetNumRule(const SvxNumRule* pNum)
                     {pActNum = pNum; Invalidate();};
-        void    SetPageWidth(long nPgWidth)
+        void	SetPageWidth(long nPgWidth)
                                 {nPageWidth = nPgWidth;}
-        void    SetOutlineNames(const String* pNames)
+        void	SetOutlineNames(const String* pNames)
                         {pOutlineNames = pNames;}
-        void    SetPositionMode()
+        void	SetPositionMode()
                         { bPosition = TRUE;}
-        void    SetLevel(USHORT nSet) {nActLevel = nSet;}
+        void	SetLevel(USHORT nSet) {nActLevel = nSet;}
 
 };
 

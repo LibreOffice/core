@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,29 +38,29 @@ namespace connectivity
     {
         class OEvoabConnection : public file::OConnection
         {
-        private:
-            OColumnAlias    m_aColumnAlias;
-            sal_Bool        m_bHeaderLine;          // column names in first row
-            sal_Unicode     m_cFieldDelimiter;      // look at the name
-            sal_Unicode     m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
-            sal_Unicode     m_cDecimalDelimiter;    // Dezimal-delimiter (Dezimalpoint)
-            sal_Unicode     m_cThousandDelimiter;   //
-            rtl::OUString   m_aEvoFlatURI;
+        private:	
+            OColumnAlias	m_aColumnAlias;
+            sal_Bool		m_bHeaderLine; 			// column names in first row
+            sal_Unicode		m_cFieldDelimiter;		// look at the name
+            sal_Unicode		m_cStringDelimiter;		// delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
+            sal_Unicode		m_cDecimalDelimiter;	// Dezimal-delimiter (Dezimalpoint)
+            sal_Unicode		m_cThousandDelimiter;	// 
+            rtl::OUString	m_aEvoFlatURI;
 
         public:
-            OEvoabConnection(OEvoabDriver*  _pDriver);
+            OEvoabConnection(OEvoabDriver*	_pDriver);
             virtual ~OEvoabConnection();
 
             virtual void construct(const ::rtl::OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
 
             // own methods
-            inline const OEvoabDriver*  getDriver()             const { return static_cast< const OEvoabDriver* >( m_pDriver );         }
-            inline sal_Bool         isHeaderLine()              const { return m_bHeaderLine;       }
-            inline sal_Unicode      getFieldDelimiter()         const { return m_cFieldDelimiter;   }
-            inline sal_Unicode      getStringDelimiter()            const { return m_cStringDelimiter;  }
-            inline sal_Unicode      getDecimalDelimiter()           const { return m_cDecimalDelimiter; }
-            inline sal_Unicode      getThousandDelimiter()          const { return m_cThousandDelimiter;}
-            const OColumnAlias&     getColumnAlias()                const { return m_aColumnAlias; }
+            inline const OEvoabDriver*	getDriver()				const { return static_cast< const OEvoabDriver* >( m_pDriver );			}
+            inline sal_Bool			isHeaderLine()				const { return m_bHeaderLine;		}
+            inline sal_Unicode		getFieldDelimiter()			const { return m_cFieldDelimiter;	}
+            inline sal_Unicode		getStringDelimiter()			const { return m_cStringDelimiter;	}
+            inline sal_Unicode		getDecimalDelimiter()			const { return m_cDecimalDelimiter; }
+            inline sal_Unicode		getThousandDelimiter()			const { return m_cThousandDelimiter;}
+            const OColumnAlias& 	getColumnAlias() 				const { return m_aColumnAlias; }
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

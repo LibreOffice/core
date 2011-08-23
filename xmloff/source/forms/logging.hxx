@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,14 +46,14 @@ namespace xmloff
     class OStackedLogging
     {
     private:
-        ::std::stack< ::rtl::Logfile* >     m_aLogger;
+        ::std::stack< ::rtl::Logfile* >		m_aLogger;
 
     protected:
         OStackedLogging() { }
 
     protected:
-        void    enterContext( const sal_Char* _pContextName );
-        void    leaveTopContext( );
+        void	enterContext( const sal_Char* _pContextName );
+        void	leaveTopContext( );
     };
 
 #define ENTER_LOG_CONTEXT( name ) enterContext( name )
@@ -68,7 +68,7 @@ namespace xmloff
 #endif
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // XMLOFF_FORMS_LOGGING_HXX

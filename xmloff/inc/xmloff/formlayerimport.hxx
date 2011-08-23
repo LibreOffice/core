@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace xmloff
     class XMLOFF_DLLPUBLIC OFormLayerXMLImport
                 :public ::vos::OReference
     {
-        OFormLayerXMLImport_Impl*   m_pImpl;
+        OFormLayerXMLImport_Impl*	m_pImpl;
 
     public:
         OFormLayerXMLImport(SvXMLImport& _rImporter);
@@ -164,7 +164,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMLAYERIMPORT_HXX_

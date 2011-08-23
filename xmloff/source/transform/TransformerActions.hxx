@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,15 +40,15 @@ struct NameKey_Impl
     sal_uInt16 m_nPrefix;
     ::rtl::OUString m_aLocalName;
 
-    inline NameKey_Impl( sal_uInt16 nPrfx,
+    inline NameKey_Impl( sal_uInt16 nPrfx, 
                          ::xmloff::token::XMLTokenEnum eLclNm ) :
-        m_nPrefix( nPrfx ),
+        m_nPrefix( nPrfx ), 
         m_aLocalName( ::xmloff::token::GetXMLToken( eLclNm ) )
     {
     }
 
     inline NameKey_Impl( sal_uInt16 nPrfx, const ::rtl::OUString& rLclNm ) :
-        m_nPrefix( nPrfx ),
+        m_nPrefix( nPrfx ), 
         m_aLocalName( rLclNm )
     {
     }
@@ -75,7 +75,7 @@ struct NameHash_Impl
 
 inline size_t NameHash_Impl::operator()( const NameKey_Impl& r ) const
 {
-    return static_cast< size_t >( r.m_nPrefix ) +
+    return static_cast< size_t >( r.m_nPrefix ) + 
            static_cast< size_t >( r.m_aLocalName.hashCode() );
 }
 
@@ -97,17 +97,17 @@ struct TransformerAction_Impl
 
     inline TransformerAction_Impl( sal_uInt32 nActnTp, sal_uInt32 nPrm1,
                                    sal_uInt32 nPrm2, sal_uInt32 nPrm3 ) :
-        m_nActionType( nActnTp ),
-        m_nParam1( nPrm1 ),
-        m_nParam2( nPrm2 ),
+        m_nActionType( nActnTp ), 
+        m_nParam1( nPrm1 ), 
+        m_nParam2( nPrm2 ), 
         m_nParam3( nPrm3 )
     {
 
     }
     inline TransformerAction_Impl() :
-        m_nActionType( XML_TACTION_EOT ),
-        m_nParam1( 0 ),
-        m_nParam2( 0 ),
+        m_nActionType( XML_TACTION_EOT ), 
+        m_nParam1( 0 ), 
+        m_nParam2( 0 ), 
         m_nParam3( 0 )
     {
     }
@@ -148,7 +148,7 @@ struct TransformerAction_Impl
 // -----------------------------------------------------------------------------
 
 class XMLTransformerActions :
-    public ::std::hash_map< NameKey_Impl, TransformerAction_Impl,
+    public ::std::hash_map< NameKey_Impl, TransformerAction_Impl, 
                             NameHash_Impl, NameHash_Impl >
 {
 public:
@@ -158,4 +158,4 @@ public:
     void Add( XMLTransformerActionInit *pInit );
 };
 
-#endif  //  _XMLOFF_TRANSFORMERACTIONS_HXX
+#endif	//  _XMLOFF_TRANSFORMERACTIONS_HXX

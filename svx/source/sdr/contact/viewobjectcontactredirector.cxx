@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace sdr
         }
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-            const sdr::contact::ViewObjectContact& rOriginal,
+            const sdr::contact::ViewObjectContact& rOriginal, 
             const sdr::contact::DisplayInfo& rDisplayInfo)
         {
             return rOriginal.createPrimitive2DSequence(rDisplayInfo);

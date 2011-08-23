@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     throw(SQLException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcConnection::construct" );
-    //  open file
+    //	open file
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
@@ -95,16 +95,16 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     aURL.SetSmartURL(m_aFileName);
     if ( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        //  don't pass invalid URL to loadComponentFromURL
+        //	don't pass invalid URL to loadComponentFromURL
         throw SQLException();
     }
     m_aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
     m_sPassword = ::rtl::OUString();
-    const char* pPwd        = "password";
+    const char* pPwd		= "password";
 
-    const PropertyValue *pIter  = info.getConstArray();
-    const PropertyValue *pEnd   = pIter + info.getLength();
+    const PropertyValue *pIter	= info.getConstArray();
+    const PropertyValue *pEnd	= pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
     {
         if(!pIter->Name.compareToAscii(pPwd))
@@ -125,7 +125,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
         osl_incrementInterlockedCount(&m_nDocCount);
         return m_xDoc;
     }
-    //  open read-only as long as updating isn't implemented
+    //	open read-only as long as updating isn't implemented
     Sequence<PropertyValue> aArgs(2);
     aArgs[0].Name = ::rtl::OUString::createFromAscii("Hidden");
     aArgs[0].Value <<= (sal_Bool) sal_True;
@@ -161,8 +161,8 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
 
     m_xDoc.set(xComponent, UNO_QUERY );
 
-    //  if the URL is not a spreadsheet document, throw the exception here
-    //  instead of at the first access to it
+    //	if the URL is not a spreadsheet document, throw the exception here
+    //	instead of at the first access to it
     if ( !m_xDoc.is() )
     {
         Any aErrorDetails;

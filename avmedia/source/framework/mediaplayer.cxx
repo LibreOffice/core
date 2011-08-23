@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <avmedia/mediaitem.hxx>
+#include <avmedia/mediaitem.hxx> 
 #include "mediamisc.hxx"
 #include "mediacontrol.hrc"
 #include "helpids.hrc"
@@ -81,7 +81,7 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, Window
 }
 
 // -----------------------------------------------------------------------------
-
+    
 MediaFloater::~MediaFloater()
 {
     delete mpMediaWindow;
@@ -99,7 +99,7 @@ void MediaFloater::implInit()
 void MediaFloater::Resize()
 {
     SfxDockingWindow::Resize();
-
+    
     if( mpMediaWindow )
         mpMediaWindow->setPosSize( Rectangle( Point(), GetOutputSizePixel() ) );
 }
@@ -109,20 +109,20 @@ void MediaFloater::Resize()
 void MediaFloater::ToggleFloatingMode()
 {
     ::avmedia::MediaItem aRestoreItem;
-
+    
     mpMediaWindow->updateMediaItem( aRestoreItem );
     delete mpMediaWindow;
     mpMediaWindow = NULL;
 
     SfxDockingWindow::ToggleFloatingMode();
-
+    
     mpMediaWindow = new MediaWindow( this, true );
-
+    
     mpMediaWindow->setPosSize( Rectangle( Point(), GetOutputSizePixel() ) );
     mpMediaWindow->executeMediaItem( aRestoreItem );
-
+    
     Window* pWindow = mpMediaWindow->getWindow();
-
+    
     if( pWindow )
         pWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
 
@@ -136,7 +136,7 @@ void MediaFloater::setURL( const ::rtl::OUString& rURL, bool bPlayImmediately )
     if( mpMediaWindow )
     {
         mpMediaWindow->setURL( rURL );
-
+        
         if( mpMediaWindow->isValid() && bPlayImmediately )
             mpMediaWindow->start();
     }
@@ -155,9 +155,9 @@ const ::rtl::OUString& MediaFloater::getURL() const
 void MediaFloater::dispatchCurrentURL()
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
-
+    
     if( pDispatcher )
-    {
+    {	
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, getURL() );
         pDispatcher->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_RECORD, &aMediaURLItem, 0L );
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ using namespace com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(OCallableStatement,"com.sun.star.sdbcx.ACallableStatement","com.sun.star.sdbc.CallableStatement");
 
-#define GET_PARAM()                                                 \
-    ADOParameter* pParam = NULL;                                    \
-    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);      \
-    if(pParam)                                                      \
+#define GET_PARAM()													\
+    ADOParameter* pParam = NULL;									\
+    m_pParameters->get_Item(OLEVariant(sal_Int32(columnIndex-1)),&pParam);		\
+    if(pParam)														\
         pParam->get_Value(&m_aValue);
 //**************************************************************
 //************ Class: java.sql.CallableStatement

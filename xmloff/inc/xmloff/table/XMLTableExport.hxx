@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ typedef ::std::map< const ::com::sun::star::uno::Reference< ::com::sun::star::un
 
 struct XMLTableInfo
 {
-    TableStyleMap   maColumnStyleMap;
-    TableStyleMap   maRowStyleMap;
-    TableStyleMap   maCellStyleMap;
+    TableStyleMap	maColumnStyleMap;
+    TableStyleMap	maRowStyleMap;
+    TableStyleMap	maCellStyleMap;
     std::vector< ::rtl::OUString > maDefaultRowCellStyles;
 };
 
@@ -89,12 +89,12 @@ public:
 
 private:
     void exportTableTemplates();
-
-    SvXMLExport&                                    mrExport;
-    rtl::Reference< SvXMLExportPropertyMapper >     mxCellExportPropertySetMapper;
-    rtl::Reference< SvXMLExportPropertyMapper >     mxRowExportPropertySetMapper;
-    rtl::Reference< SvXMLExportPropertyMapper >     mxColumnExportPropertySetMapper;
-    TableInfoMap                                    maTableInfoMap;
+    
+    SvXMLExport&									mrExport;
+    rtl::Reference< SvXMLExportPropertyMapper >		mxCellExportPropertySetMapper;
+    rtl::Reference< SvXMLExportPropertyMapper >		mxRowExportPropertySetMapper;
+    rtl::Reference< SvXMLExportPropertyMapper >		mxColumnExportPropertySetMapper;
+    TableInfoMap									maTableInfoMap;
     bool                                            mbExportTables;
 
 protected:
@@ -103,7 +103,7 @@ protected:
 private:
 
     SAL_DLLPRIVATE void ImpExportText( const com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell );
-
+    
     void ExportCell( const com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, const boost::shared_ptr< XMLTableInfo >& pTableInfo, const ::rtl::OUString& sDefaultCellStyle  );
     void ExportTableColumns( const com::sun::star::uno::Reference < com::sun::star::container::XIndexAccess >& xtableColumns, const boost::shared_ptr< XMLTableInfo >& pTableInfo );
 

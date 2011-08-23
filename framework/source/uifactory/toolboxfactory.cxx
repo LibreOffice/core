@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #include <uifactory/toolboxfactory.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/toolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -49,14 +49,14 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
 //
 
@@ -71,11 +71,11 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolBoxFactory                                  ,
-                                            ::cppu::OWeakObject                             ,
-                                            SERVICENAME_TOOLBARFACTORY                      ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolBoxFactory				                    ,
+                                            ::cppu::OWeakObject							    ,
+                                            SERVICENAME_TOOLBARFACTORY	                    ,
                                             IMPLEMENTATIONNAME_TOOLBARFACTORY
                                         )
 

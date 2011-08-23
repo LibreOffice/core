@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #ifndef _CONNECTIVITY_JAVA_LANG_CLASS_HXX_
-#define _CONNECTIVITY_JAVA_LANG_CLASS_HXX_
+#define	_CONNECTIVITY_JAVA_LANG_CLASS_HXX_
 //**************************************************************
 //************ Class: java.lang.Class
 //**************************************************************
@@ -47,7 +47,7 @@ namespace connectivity
         static java_lang_Class * forName( const ::rtl::OUString &_par0 );
         // return the jre object
         jobject newInstanceObject();
-
+        
     };
 }
 

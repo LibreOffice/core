@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@ struct SpellPortion
      should be protected against unintentional deletion.
      */
     bool bIsField;
-    /** Marks the portion hidden content that should not be touched by spell checking
-        and not be removed like redlines. The creator of the portions has to take care
+    /** Marks the portion hidden content that should not be touched by spell checking 
+        and not be removed like redlines. The creator of the portions has to take care 
         for them.
      */
     bool bIsHidden;
@@ -64,7 +64,7 @@ struct SpellPortion
         it's an empty reference
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives> xAlternatives;
-    /** determines whether the error type is a grammar error
+    /** determines whether the error type is a grammar error        
     */
     bool bIsGrammarError;
     /** contains the grammar error information
@@ -78,7 +78,7 @@ struct SpellPortion
     /** contains the proposed dialog title if the proof reading component provides one.
      */
     rtl::OUString   sDialogTitle;
-
+    
     bool bIgnoreThisError;
     SpellPortion() :
         bIsField(false),

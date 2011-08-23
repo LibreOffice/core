@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 class BasicFrame;
 
-class AppEdit : public AppWin    {  // Editor window
+class AppEdit : public AppWin	 {	// Editor window
 using Window::Scroll;
 
 public:
@@ -64,7 +64,7 @@ public:
     void Mark( short, short, short );                   // Select text
     void Highlight( USHORT nLine, USHORT nCol1, USHORT nCol2 );
     virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
-    virtual void LoadIniFile();     // (re)load ini file after change
+    virtual void LoadIniFile();		// (re)load ini file after change
 };
 
 #endif

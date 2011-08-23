@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 #ifndef INCLUDED_FORMULADLLAPI_H
 #define INCLUDED_FORMULADLLAPI_H
-
+                                                                                                                             
 #include "sal/types.h"
 
 #if defined(FORMULA_DLLIMPLEMENTATION)
@@ -36,6 +36,6 @@
 #define FORMULA_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define FORMULA_DLLPRIVATE SAL_DLLPRIVATE
-
+                                                                                    
 #endif /* INCLUDED_FORMULADLLAPI_H */
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ public:
 
     int run();
     int runandwaitforresult();
-
+    
     inline rtl::OUString getDisplayDirectory() { return m_sDisplayDirectory; }
 
     inline ControlHelper* getControlHelper() const {
         return m_pControlHelper;
     }
-
+    
 protected:
 
     rtl::OUString m_sDisplayDirectory;

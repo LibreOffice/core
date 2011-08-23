@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -211,7 +211,7 @@ void SbxDecimal::setUInt( unsigned int val )
 // sbxscan.cxx
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep );
 
-bool SbxDecimal::setString( String* pString )
+bool SbxDecimal::setString( ::rtl::OUString* pOUString )
 {
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
 
@@ -224,11 +224,11 @@ bool SbxDecimal::setString( String* pString )
     HRESULT hResult;
     if( cDecimalSep != '.' || cThousandSep != ',' )
     {
-        int nLen = pString->Len();
+        int nLen = pOUString->getLength();
         sal_Unicode* pBuffer = new sal_Unicode[nLen +  1];
         pBuffer[nLen] = 0;
 
-        const sal_Unicode* pSrc = pString->GetBuffer();
+        const sal_Unicode* pSrc = pOUString->getStr();
         int i;
         for( i = 0 ; i < nLen ; ++i )
             pBuffer[i] = pSrc[i];
@@ -248,7 +248,7 @@ bool SbxDecimal::setString( String* pString )
     }
     else
     {
-        hResult = VarDecFromStr( (OLECHAR*)pString->GetBuffer(), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr( (OLECHAR*)pOUString->getStr(), nLANGID, 0, &maDec );
     }
     bRet = ( hResult == S_OK );
     return bRet;
@@ -363,32 +363,32 @@ SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight
     return (SbxDecimal::CmpResult)0;
 }
 
-void SbxDecimal::setChar( sal_Unicode val )     { (void)val; }
-void SbxDecimal::setByte( BYTE val )            { (void)val; }
-void SbxDecimal::setShort( INT16 val )          { (void)val; }
-void SbxDecimal::setLong( INT32 val )           { (void)val; }
-void SbxDecimal::setUShort( UINT16 val )        { (void)val; }
-void SbxDecimal::setULong( UINT32 val )         { (void)val; }
-bool SbxDecimal::setSingle( float val )         { (void)val; return false; }
-bool SbxDecimal::setDouble( double val )        { (void)val; return false; }
-void SbxDecimal::setInt( int val )              { (void)val; }
-void SbxDecimal::setUInt( unsigned int val )    { (void)val; }
-bool SbxDecimal::setString( String* pString )   { (void)pString;  return false; }
+void SbxDecimal::setChar( sal_Unicode val )		{ (void)val; }
+void SbxDecimal::setByte( BYTE val )			{ (void)val; }
+void SbxDecimal::setShort( INT16 val )			{ (void)val; }
+void SbxDecimal::setLong( INT32 val )			{ (void)val; }
+void SbxDecimal::setUShort( UINT16 val )		{ (void)val; }
+void SbxDecimal::setULong( UINT32 val )			{ (void)val; }
+bool SbxDecimal::setSingle( float val )			{ (void)val; return false; }
+bool SbxDecimal::setDouble( double val )		{ (void)val; return false; }
+void SbxDecimal::setInt( int val )				{ (void)val; }
+void SbxDecimal::setUInt( unsigned int val )	{ (void)val; }
+bool SbxDecimal::setString( ::rtl::OUString* pOUString )	{ (void)pOUString;  return false; }
 
-bool SbxDecimal::getChar( sal_Unicode& rVal )   { (void)rVal; return false; }
-bool SbxDecimal::getByte( BYTE& rVal )          { (void)rVal; return false; }
-bool SbxDecimal::getShort( INT16& rVal )        { (void)rVal; return false; }
-bool SbxDecimal::getLong( INT32& rVal )         { (void)rVal; return false; }
-bool SbxDecimal::getUShort( UINT16& rVal )      { (void)rVal; return false; }
-bool SbxDecimal::getULong( UINT32& rVal )       { (void)rVal; return false; }
-bool SbxDecimal::getSingle( float& rVal )       { (void)rVal; return false; }
-bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
-bool SbxDecimal::getInt( int& rVal )            { (void)rVal; return false; }
-bool SbxDecimal::getUInt( unsigned int& rVal )  { (void)rVal; return false; }
+bool SbxDecimal::getChar( sal_Unicode& rVal )	{ (void)rVal; return false; }
+bool SbxDecimal::getByte( BYTE& rVal )			{ (void)rVal; return false; }
+bool SbxDecimal::getShort( INT16& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getLong( INT32& rVal )			{ (void)rVal; return false; }
+bool SbxDecimal::getUShort( UINT16& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getULong( UINT32& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getSingle( float& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getDouble( double& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getInt( int& rVal )			{ (void)rVal; return false; }
+bool SbxDecimal::getUInt( unsigned int& rVal )	{ (void)rVal; return false; }
 
 #endif
 
-bool SbxDecimal::getString( String& rString )
+bool SbxDecimal::getString( ::rtl::OUString& rString )
 {
 #ifdef WIN32
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
@@ -512,7 +512,7 @@ start:
         case SbxCURRENCY:
             {
             double dVal;
-            if( p->eType == SbxCURRENCY )
+            if( p->eType ==	SbxCURRENCY )
                 dVal = ImpCurrencyToDouble( p->nLong64 );
             else if( p->eType == SbxLONG64 )
                 dVal = ImpINT64ToDouble( p->nLong64 );
@@ -528,7 +528,7 @@ start:
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
-            pnDecRes->setString( p->pString ); break;
+            pnDecRes->setString( p->pOUString ); break;
         case SbxOBJECT:
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
@@ -670,10 +670,10 @@ start:
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
-            if( !p->pString )
-                p->pString = new XubString;
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
             // ImpCvtNum( (double) n, 0, *p->pString );
-            pDec->getString( *p->pString );
+            pDec->getString( *p->pOUString );
             break;
         case SbxOBJECT:
         {
@@ -751,7 +751,7 @@ start:
         case SbxBYREF | SbxSINGLE:
             if( !pDec->getSingle( *p->pSingle ) )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW );
+                SbxBase::SetError( SbxERR_OVERFLOW ); 
                 *p->pSingle = 0;
             }
             break;
@@ -760,7 +760,7 @@ start:
         case SbxBYREF | SbxDOUBLE:
             if( !pDec->getDouble( *p->pDouble ) )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW );
+                SbxBase::SetError( SbxERR_OVERFLOW ); 
                 *p->pDouble = 0;
             }
             break;
@@ -768,14 +768,14 @@ start:
         {
             double d;
             pDec->getDouble( d );
-            *p->pULong64 = ImpDoubleToUINT64( d );
+            *p->pULong64 = ImpDoubleToUINT64( d ); 
             break;
         }
         case SbxBYREF | SbxLONG64:
         {
             double d;
             pDec->getDouble( d );
-            *p->pLong64 = ImpDoubleToINT64( d );
+            *p->pLong64 = ImpDoubleToINT64( d ); 
             break;
         }
         case SbxBYREF | SbxCURRENCY:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <services/urltransformer.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -37,42 +37,42 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-using namespace ::osl                           ;
-using namespace ::cppu                          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::util          ;
+using namespace ::osl							;
+using namespace ::cppu							;
+using namespace ::com::sun::star::uno			;
+using namespace ::com::sun::star::lang			;
+using namespace ::com::sun::star::util			;
 
 //_________________________________________________________________________________________________________________
-//  non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	non exported definitions
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 URLTransformer::URLTransformer( const Reference< XMultiServiceFactory >& /*xFactory*/ )
 {
@@ -82,19 +82,19 @@ URLTransformer::URLTransformer( const Reference< XMultiServiceFactory >& /*xFact
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 URLTransformer::~URLTransformer()
 {
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
-DEFINE_XSERVICEINFO_MULTISERVICE    (   URLTransformer                      ,
+DEFINE_XSERVICEINFO_MULTISERVICE	(	URLTransformer						,
                                         OWeakObject                         ,
-                                        SERVICENAME_URLTRANSFORMER          ,
+                                        SERVICENAME_URLTRANSFORMER			,
                                         IMPLEMENTATIONNAME_URLTRANSFORMER
                                     )
 
@@ -108,11 +108,11 @@ namespace
     void lcl_ParserHelper(INetURLObject& _rParser,URL& _rURL,bool _bUseIntern)
     {
         // Get all information about this URL.
-        _rURL.Protocol  = INetURLObject::GetScheme( _rParser.GetProtocol() );
-        _rURL.User      = _rParser.GetUser  ( INetURLObject::DECODE_WITH_CHARSET );
-        _rURL.Password  = _rParser.GetPass  ( INetURLObject::DECODE_WITH_CHARSET );
-        _rURL.Server        = _rParser.GetHost  ( INetURLObject::DECODE_WITH_CHARSET );
-        _rURL.Port      = (sal_Int16)_rParser.GetPort();
+        _rURL.Protocol	= INetURLObject::GetScheme( _rParser.GetProtocol() );
+        _rURL.User		= _rParser.GetUser	( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Password	= _rParser.GetPass	( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Server		= _rParser.GetHost	( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Port		= (sal_Int16)_rParser.GetPort();
 
         sal_Int32 nCount = _rParser.getSegmentCount( false );
         if ( nCount > 0 )
@@ -136,32 +136,32 @@ namespace
         else
         {
             _rURL.Path       = _rParser.GetURLPath( INetURLObject::NO_DECODE           );
-            _rURL.Name      = _rParser.GetName  (                                    );
+            _rURL.Name		= _rParser.GetName	(									 );
         }
 
         _rURL.Arguments  = _rParser.GetParam  ( INetURLObject::NO_DECODE           );
-        _rURL.Mark      = _rParser.GetMark  ( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Mark		= _rParser.GetMark	( INetURLObject::DECODE_WITH_CHARSET );
 
         // INetURLObject supports only an intelligent method of parsing URL's. So write
         // back Complete to have a valid encoded URL in all cases!
-        _rURL.Complete  = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
+        _rURL.Complete	= _rParser.GetMainURL( INetURLObject::NO_DECODE           );
         if ( _bUseIntern )
             _rURL.Complete   = _rURL.Complete.intern();
 
-        _rParser.SetMark    ( ::rtl::OUString() );
+        _rParser.SetMark	( ::rtl::OUString() );
         _rParser.SetParam( ::rtl::OUString() );
 
         _rURL.Main       = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
     }
 }
 //*****************************************************************************************************************
-//  XURLTransformer
+//	XURLTransformer
 //*****************************************************************************************************************
 sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeException )
 {
     // Safe impossible cases.
-    if  (( &aURL                        ==  NULL    )   ||
-         ( aURL.Complete.getLength()    <   1       )       )
+    if	(( &aURL						==	NULL	)	||
+         ( aURL.Complete.getLength()	<	1		)		)
     {
         return sal_False;
     }
@@ -195,9 +195,9 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
         {
             // Minmal support for unknown protocols. This is mandatory to support the "Protocol Handlers" implemented
             // in framework!
-            aURL.Protocol   = aProtocol;
-            aURL.Main       = aURL.Complete;
-            aURL.Path       = aURL.Complete.copy( nURLIndex+1 );;
+            aURL.Protocol	= aProtocol;
+            aURL.Main		= aURL.Complete;
+            aURL.Path		= aURL.Complete.copy( nURLIndex+1 );;
 
             // Return "URL is parsed".
             return sal_True;
@@ -208,14 +208,14 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
 }
 
 //*****************************************************************************************************************
-//  XURLTransformer
+//	XURLTransformer
 //*****************************************************************************************************************
-sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL            ,
-                                                const   ::rtl::OUString&    sSmartProtocol  ) throw( RuntimeException )
+sal_Bool SAL_CALL URLTransformer::parseSmart(			URL&		aURL			,
+                                                const	::rtl::OUString&	sSmartProtocol	) throw( RuntimeException )
 {
     // Safe impossible cases.
-    if  (( &aURL                            ==  NULL    ) ||
-         ( aURL.Complete.getLength()        <   1       )    )
+    if	(( &aURL							==	NULL	) ||
+         ( aURL.Complete.getLength()		<	1		)	 )
     {
         return sal_False;
     }
@@ -264,12 +264,12 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
 }
 
 //*****************************************************************************************************************
-//  XURLTransformer
+//	XURLTransformer
 //*****************************************************************************************************************
 sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException )
 {
     // Safe impossible cases.
-    if  ( &aURL == NULL )
+    if	( &aURL == NULL )
         return sal_False ;
 
     // Initialize parser.
@@ -293,12 +293,12 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         }
 
         bool bResult = aParser.ConcatData(
-                            INetURLObject::CompareProtocolScheme( aURL.Protocol )   ,
-                             aURL.User                                              ,
-                            aURL.Password                                           ,
-                            aURL.Server                                             ,
-                             aURL.Port                                              ,
-                            aCompletePath.makeStringAndClear()                          );
+                            INetURLObject::CompareProtocolScheme( aURL.Protocol )	,
+                             aURL.User												,
+                            aURL.Password											,
+                            aURL.Server												,
+                             aURL.Port												,
+                            aCompletePath.makeStringAndClear()							);
 
         if ( !bResult )
             return sal_False;
@@ -318,8 +318,8 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         // Minimal support for unknown protocols
         ::rtl::OUStringBuffer aBuffer( aURL.Protocol );
         aBuffer.append( aURL.Path );
-        aURL.Complete   = aBuffer.makeStringAndClear();
-        aURL.Main       = aURL.Complete;
+        aURL.Complete	= aBuffer.makeStringAndClear();
+        aURL.Main		= aURL.Complete;
         return sal_True;
     }
 
@@ -327,16 +327,16 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 }
 
 //*****************************************************************************************************************
-//  XURLTransformer
+//	XURLTransformer
 //*****************************************************************************************************************
-::rtl::OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL            ,
-                                                            sal_Bool    bWithPassword   ) throw( RuntimeException )
+::rtl::OUString SAL_CALL URLTransformer::getPresentation(	const	URL&		aURL			,
+                                                            sal_Bool	bWithPassword	) throw( RuntimeException )
 {
     // Safe impossible cases.
-    if  (( &aURL                        ==  NULL        )   ||
-         ( aURL.Complete.getLength()    <   1           )   ||
-            (( bWithPassword            !=  sal_True    )   &&
-             ( bWithPassword            !=  sal_False   )       ) )
+    if	(( &aURL						==	NULL		)	||
+         ( aURL.Complete.getLength()	<	1			)	||
+            (( bWithPassword			!=	sal_True	)	&&
+             ( bWithPassword			!=	sal_False	)		) )
     {
         return ::rtl::OUString();
     }
@@ -364,9 +364,9 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 }
 
 //_________________________________________________________________________________________________________________
-//  debug methods
+//	debug methods
 //_________________________________________________________________________________________________________________
 
 
-}       //  namespace framework
+}		//	namespace framework
 

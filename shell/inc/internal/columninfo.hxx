@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef COLUMNINFO_HXX_INCLUDED
 #define COLUMNINFO_HXX_INCLUDED
 
@@ -35,10 +35,10 @@
 #include <shlobj.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 
 
-class CColumnInfo : public IColumnProvider
+class CColumnInfo : public IColumnProvider  
 {
 public:
     CColumnInfo(long RefCnt = 1);
@@ -48,12 +48,12 @@ public:
     // IUnknown methods
     //-----------------------------
 
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
-
+        
     virtual ULONG STDMETHODCALLTYPE AddRef( void);
-
+        
     virtual ULONG STDMETHODCALLTYPE Release( void);
 
     //-----------------------------
@@ -71,7 +71,7 @@ private:
     bool IsOOFileExtension(wchar_t* Extension) const;
 
 private:
-    long    m_RefCnt;
+    long	m_RefCnt;	
 };
 
-#endif
+#endif 

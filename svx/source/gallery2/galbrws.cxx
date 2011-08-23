@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,12 +161,12 @@ void GalleryBrowser::Resize()
 {
     SfxDockingWindow::Resize();
 
-    const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
-    const long  nFrameWidth2 = nFrameWidth << 1;
-    Size        aMinSize( GetMinOutputSizePixel() );
-    Size        aNewSize( GetOutputSizePixel() );
-    Point       aSplitPos( mpSplitter->GetPosPixel() );
-    const Size  aSplitSize( mpSplitter->GetOutputSizePixel() );
+    const long	nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
+    const long	nFrameWidth2 = nFrameWidth << 1;
+    Size		aMinSize( GetMinOutputSizePixel() );
+    Size		aNewSize( GetOutputSizePixel() );
+    Point		aSplitPos( mpSplitter->GetPosPixel() );
+    const Size	aSplitSize( mpSplitter->GetOutputSizePixel() );
 
     mpBrowser1->SetPosSizePixel( Point( nFrameWidth, nFrameWidth ),
                                  Size( aSplitPos.X() - nFrameWidth, aNewSize.Height() - nFrameWidth2 ) );

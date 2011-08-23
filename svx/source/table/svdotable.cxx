@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ SfxItemSet& TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
 class TableObjectGeoData : public SdrTextObjGeoData
 {
 public:
-    Rectangle   maLogicRect;
+    Rectangle	maLogicRect;
 };
 
 //------------------------------------------------------------------------
@@ -216,7 +216,7 @@ bool TableStyleSettings::operator==( const TableStyleSettings& rStyle ) const
 class SdrTableObjImpl : public TableDesignUser, public ::cppu::WeakImplHelper1< ::com::sun::star::util::XModifyListener >
 {
 public:
-    CellRef mxActiveCell;
+    CellRef	mxActiveCell;
     TableModelRef mxTable;
     SdrTableObj* mpTableObj;
     TableLayouter* mpLayouter;
@@ -224,7 +224,7 @@ public:
     TableStyleSettings maTableStyle;
     Reference< XIndexAccess > mxTableStyle;
     bool mbModifyPending;
-//  sal_Int32 mnSavedEditRowHeight;
+//	sal_Int32 mnSavedEditRowHeight;
 
     void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
 
@@ -246,7 +246,7 @@ public:
     void DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset );
 
     const SfxPoolItem* GetCellItem( const CellPos& rPos, sal_uInt16 nWhich ) const;
-//  void GetBorderLines( const CellPos& rPos, const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop, const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
+//	void GetBorderLines( const CellPos& rPos, const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop, const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
     void operator=( const SdrTableObjImpl& rSource );
 
@@ -484,7 +484,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
                 sal_Int32 nHeigth = mpLayouter->getRowHeight( nEdge );
                 nHeigth += nOffset;
                 Reference< XIndexAccess > xRows( mxTable->getRows(), UNO_QUERY_THROW );
-                Reference< XPropertySet > xRowSet( xRows->getByIndex( nEdge ), UNO_QUERY_THROW );
+                Reference< XPropertySet > xRowSet( xRows->getByIndex( nEdge ), UNO_QUERY_THROW );			
                 xRowSet->setPropertyValue( sSize, Any( nHeigth ) );
             }
         }
@@ -507,7 +507,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
                         nEdge--;
                     else
                         nEdge++;
-
+                    
                     if( (bRTL && (nEdge >= 0)) || (!bRTL && (nEdge < mxTable->getColumnCount())) )
                     {
                         nWidth = mpLayouter->getColumnWidth( nEdge );
@@ -548,7 +548,7 @@ void SdrTableObjImpl::update()
 
             if(maEditPos.mnCol >= getColumnCount())
                 maEditPos.mnCol = getColumnCount()-1;
-
+            
             mpTableObj->setActiveCell( maEditPos );
         }
 
@@ -556,7 +556,7 @@ void SdrTableObjImpl::update()
 
         mpTableObj->aRect = mpTableObj->maLogicRect;
         LayoutTable( mpTableObj->aRect, false, false );
-
+        
         mpTableObj->SetRectsDirty();
         mpTableObj->ActionChanged();
         mpTableObj->BroadcastObjectChange();
@@ -1278,7 +1278,7 @@ SdrText* SdrTableObj::getText( sal_Int32 nIndex ) const
 /** returns the number of texts available for this object. */
 sal_Int32 SdrTableObj::getTextCount() const
 {
-    if( mpImpl->mxTable.is() )
+    if( mpImpl->mxTable.is() ) 
     {
         const sal_Int32 nColCount = mpImpl->getColumnCount();
         const sal_Int32 nRowCount = mpImpl->getRowCount();
@@ -1385,7 +1385,7 @@ void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     {
         Rectangle aRect0( aRect );
         aRect = maLogicRect;
-//      mpImpl->mpLayouter->setRowHeight( mpImpl->maEditPos.mnRow, mpImpl->mnSavedEditRowHeight );
+//		mpImpl->mpLayouter->setRowHeight( mpImpl->maEditPos.mnRow, mpImpl->mnSavedEditRowHeight );
         mpImpl->LayoutTable( aRect, false, false );
         SetRectsDirty();
         ActionChanged();
@@ -1442,7 +1442,7 @@ void SdrTableObj::SetModel(SdrModel* pNewModel)
 {
     SdrModel* pOldModel = GetModel();
     if( pNewModel != pOldModel )
-    {
+    {	
         SdrTextObj::SetModel(pNewModel);
 
         if( mpImpl )
@@ -1481,7 +1481,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
     TakeTextAnchorRect( rPos, aAnkRect );
 
     SdrTextVertAdjust eVAdj=xCell->GetTextVerticalAdjust();
-//  SdrTextHorzAdjust eHAdj=xCell->GetTextHorizontalAdjust();
+//	SdrTextHorzAdjust eHAdj=xCell->GetTextHorizontalAdjust();
 
     ULONG nStat0=rOutliner.GetControlWord();
     Size aNullSize;
@@ -1493,14 +1493,14 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
 
     // #103516# New try with _BLOCK for hor and ver after completely
     // supporting full width for vertical text.
-//  if( SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
-//  {
+//	if( SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
+//	{
         rOutliner.SetMinAutoPaperSize(Size(aAnkRect.GetWidth(), 0));
-//  }
-//  else if(SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting())
-//  {
-//      rOutliner.SetMinAutoPaperSize(Size(0, aAnkRect.GetHeight()));
-//  }
+//	}
+//	else if(SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting())
+//	{
+//		rOutliner.SetMinAutoPaperSize(Size(0, aAnkRect.GetHeight()));
+//	}
 
     // ---
 
@@ -1693,11 +1693,11 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
 
     CellRef xCell( mpImpl->getCell( rPos ) );
     SdrTextVertAdjust eVAdj = xCell.is() ? xCell->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_TOP;
-//  SdrTextHorzAdjust eHAdj = xCell.is() ? xCell->GetTextHorizontalAdjust() : SDRTEXTHORZADJUST_LEFT;
+//	SdrTextHorzAdjust eHAdj = xCell.is() ? xCell->GetTextHorizontalAdjust() : SDRTEXTHORZADJUST_LEFT;
 
     aPaperMax=aMaxSiz;
 
-//  if((SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting()) || (SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting()))
+//	if((SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting()) || (SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting()))
         aPaperMin.Width() = aAnkSiz.Width();
 
     if (pViewMin!=NULL)
@@ -1757,9 +1757,9 @@ USHORT SdrTableObj::GetOutlinerViewAnchorMode() const
     if( xCell.is() )
     {
         SdrTextVertAdjust eV=xCell->GetTextVerticalAdjust();
-//      SdrTextHorzAdjust eH=xCell->GetTextHorizontalAdjust();
+//		SdrTextHorzAdjust eH=xCell->GetTextHorizontalAdjust();
 
-//      if (eH==SDRTEXTHORZADJUST_LEFT)
+//		if (eH==SDRTEXTHORZADJUST_LEFT)
         {
             if (eV==SDRTEXTVERTADJUST_TOP)
             {
@@ -1856,8 +1856,8 @@ void lcl_VertLineEnds( OutputDevice& rDev, const Point& rTop, const Point& rBott
     rDev.SetLineColor(rColor);              // PEN_NULL ???
     rDev.SetFillColor(rColor);
 
-    //  Position oben/unten muss unabhaengig von der Liniendicke sein,
-    //  damit der Winkel stimmt (oder X-Position auch anpassen)
+    //	Position oben/unten muss unabhaengig von der Liniendicke sein,
+    //	damit der Winkel stimmt (oder X-Position auch anpassen)
     long nTopPos = rTop.Y();
     long nBotPos = rBottom.Y();
 
@@ -1867,7 +1867,7 @@ void lcl_VertLineEnds( OutputDevice& rDev, const Point& rTop, const Point& rBott
     long nBotLeft = rBottom.X() + nXOffs;
     long nBotRight = nBotLeft + nWidth - 1;
 
-    //  oben abschliessen
+    //	oben abschliessen
 
     if ( rTopLine.Prim() )
     {
@@ -1875,15 +1875,15 @@ void lcl_VertLineEnds( OutputDevice& rDev, const Point& rTop, const Point& rBott
         if (nLineW >= 2)
         {
             Point aTriangle[3];
-            aTriangle[0] = Point( nTopLeft, nTopPos );      // wie aPoints[0]
-            aTriangle[1] = Point( nTopRight, nTopPos );     // wie aPoints[1]
+            aTriangle[0] = Point( nTopLeft, nTopPos );		// wie aPoints[0]
+            aTriangle[1] = Point( nTopRight, nTopPos );		// wie aPoints[1]
             aTriangle[2] = Point( rTop.X(), nTopPos - (nLineW - 1) / 2 );
             Polygon aTriPoly( 3, aTriangle );
             rDev.DrawPolygon( aTriPoly );
         }
     }
 
-    //  unten abschliessen
+    //	unten abschliessen
 
     if ( rBottomLine.Prim() )
     {
@@ -1891,8 +1891,8 @@ void lcl_VertLineEnds( OutputDevice& rDev, const Point& rTop, const Point& rBott
         if (nLineW >= 2)
         {
             Point aTriangle[3];
-            aTriangle[0] = Point( nBotLeft, nBotPos );      // wie aPoints[3]
-            aTriangle[1] = Point( nBotRight, nBotPos );     // wie aPoints[2]
+            aTriangle[0] = Point( nBotLeft, nBotPos );		// wie aPoints[3]
+            aTriangle[1] = Point( nBotRight, nBotPos );		// wie aPoints[2]
             aTriangle[2] = Point( rBottom.X(), nBotPos - (nLineW - 1) / 2 + nLineW - 1 );
             Polygon aTriPoly( 3, aTriangle );
             rDev.DrawPolygon( aTriPoly );
@@ -2042,7 +2042,7 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 
     pEdtOutl=&rOutl;
 
-//  ForceOutlinerParaObject();
+//	ForceOutlinerParaObject();
 
     mbInEditMode = TRUE;
 
@@ -2065,9 +2065,9 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 //---
 
     ULONG nStat=rOutl.GetControlWord();
-//  nStat   &= ~EE_CNTRL_AUTOPAGESIZE;
-    nStat   |= EE_CNTRL_AUTOPAGESIZE;
-    nStat   &=~EE_CNTRL_STRETCHING;
+//	nStat	&= ~EE_CNTRL_AUTOPAGESIZE;
+    nStat	|= EE_CNTRL_AUTOPAGESIZE;
+    nStat	&=~EE_CNTRL_STRETCHING;
     rOutl.SetControlWord(nStat);
 
     OutlinerParaObject* pPara = GetOutlinerParaObject();
@@ -2077,7 +2077,7 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.UpdateFields();
     rOutl.ClearModifyFlag();
 
-//  mpImpl->mnSavedEditRowHeight = mpImpl->mpLayouter->getRowHeight( mpImpl->maEditPos.mnRow );
+//	mpImpl->mnSavedEditRowHeight = mpImpl->mpLayouter->getRowHeight( mpImpl->maEditPos.mnRow );
 
     return sal_True;
 }
@@ -2160,8 +2160,8 @@ void SdrTableObj::NbcSetOutlinerParaObject( OutlinerParaObject* pTextObject)
 
         SetTextSizeDirty();
         NbcAdjustTextFrameWidthAndHeight();
-//      ImpSetTextStyleSheetListeners();
-//      ImpCheckMasterCachable();
+//		ImpSetTextStyleSheetListeners();
+//		ImpCheckMasterCachable();
     }
 }
 
@@ -2204,8 +2204,8 @@ void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 {
     Rectangle aOldRect( maLogicRect );
     ResizeRect(maLogicRect,rRef,xFact,yFact);
-
-    aRect = maLogicRect;
+    
+    aRect = maLogicRect; 
     NbcAdjustTextFrameWidthAndHeight( maLogicRect.GetHeight() == aOldRect.GetHeight(), maLogicRect.GetWidth() == aOldRect.GetWidth() );
     SetRectsDirty();
 }
@@ -2403,7 +2403,7 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
         {
             const sal_Int32 nRowHeight = (nRow == nRowCount) ? 0 : rLayouter.getRowHeight(nRow);
             sal_Int32 nX = 0;
-
+            
             for( sal_Int32 nCol = 0; nCol <= nColCount; ++nCol )
             {
                 const sal_Int32 nColWidth = (nCol == nColCount) ? 0 : rLayouter.getColumnWidth(nCol);
@@ -2530,7 +2530,7 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
         case HDL_LWRGT:
         {
             const Rectangle aNewRectangle(ImpDragCalcRect(rDrag));
-
+            
             if(aNewRectangle != aRect)
             {
                    NbcSetLogicRect(aNewRectangle);

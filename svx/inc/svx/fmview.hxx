@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ namespace com { namespace sun { namespace star { namespace form {
 
 class SVX_DLLPUBLIC FmFormView : public E3dView
 {
-    FmXFormView*    pImpl;
-    FmFormShell*    pFormShell;
+    FmXFormView*	pImpl;
+    FmFormShell*	pFormShell;
 
     void Init();
 
@@ -75,15 +75,15 @@ public:
         @deprecated
             This method is deprecated. Use the version with a ODataAccessDescriptor instead.
     */
-    SdrObject*   CreateFieldControl(const UniString& rFieldDesc) const;
+    SdrObject*	 CreateFieldControl(const UniString& rFieldDesc) const;
 
     /** create a control pair (label/bound control) for the database field description given.
     */
-    SdrObject*   CreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
+    SdrObject*	 CreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
 
     /** create a control pair (label/bound control) for the xforms description given.
     */
-    SdrObject*   CreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
+    SdrObject*	 CreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
 
     virtual void MarkListHasChanged();
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
@@ -120,7 +120,7 @@ public:
         @param _bForceSync
             <TRUE/> if the handling should be done synchronously.
     */
-    SVX_DLLPRIVATE void GrabFirstControlFocus( sal_Bool _bForceSync = sal_False );
+    SVX_DLLPRIVATE void	GrabFirstControlFocus( sal_Bool _bForceSync = sal_False );
 
     /** returns the form controller for a given form and a given device
     */
@@ -137,13 +137,13 @@ public:
     SVX_DLLPRIVATE void DeactivateControls(SdrPageView*);
 
      SVX_DLLPRIVATE void ChangeDesignMode(sal_Bool bDesign);
-
+  
      SVX_DLLPRIVATE FmXFormView* GetImpl() const { return pImpl; }
     SVX_DLLPRIVATE FmFormShell* GetFormShell() const { return pFormShell; }
-
+  
     struct FormShellAccess { friend class FmFormShell; private: FormShellAccess() { } };
      void SetFormShell( FmFormShell* pShell, FormShellAccess ) { pFormShell = pShell; }
-
+ 
     struct ImplAccess { friend class FmXFormView; private: ImplAccess() { } };
     void SetMoveOutside( bool _bMoveOutside, ImplAccess ) { E3dView::SetMoveOutside( _bMoveOutside ); }
      virtual void InsertControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);

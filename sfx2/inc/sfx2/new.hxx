@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ class SFX2_DLLPUBLIC SfxPreviewWin: public Window
 {
     SfxObjectShellLock &rDocShell;
 protected:
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void	Paint( const Rectangle& rRect );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     /** state whether a system setting for high contrast should be evaluated

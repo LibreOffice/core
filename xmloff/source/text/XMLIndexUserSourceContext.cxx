@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,11 +70,11 @@ TYPEINIT1(XMLIndexUserSourceContext, XMLIndexSourceBaseContext);
 
 
 XMLIndexUserSourceContext::XMLIndexUserSourceContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
+        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, 
                                   rPropSet, sal_True),
         sCreateFromEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_CreateFromEmbeddedObjects)),
@@ -104,7 +104,7 @@ XMLIndexUserSourceContext::~XMLIndexUserSourceContext()
 }
 
 void XMLIndexUserSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam,
+    enum IndexSourceParamEnum eParam, 
     const OUString& rValue)
 {
     sal_Bool bTmp;
@@ -206,7 +206,7 @@ void XMLIndexUserSourceContext::EndElement()
 }
 
 
-SvXMLImportContext* XMLIndexUserSourceContext::CreateChildContext(
+SvXMLImportContext* XMLIndexUserSourceContext::CreateChildContext( 
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -214,16 +214,16 @@ SvXMLImportContext* XMLIndexUserSourceContext::CreateChildContext(
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          (IsXMLToken(rLocalName, XML_USER_INDEX_ENTRY_TEMPLATE)) )
     {
-        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
+        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet, 
                                            nPrefix, rLocalName,
                                            aLevelNameTOCMap,
                                            XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
                                            aAllowedTokenTypesUser);
     }
-    else
+    else 
     {
-        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
+        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix, 
                                                              rLocalName,
                                                              xAttrList);
     }

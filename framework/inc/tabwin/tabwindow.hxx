@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_TABWIN_TABWINDOW_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <stdtypes.h>
@@ -41,7 +41,7 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -59,7 +59,7 @@
 #include <com/sun/star/awt/XTabListener.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -70,16 +70,16 @@
 namespace framework
 {
 
-class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
-                   public ::com::sun::star::lang::XServiceInfo              ,
-                   public ::com::sun::star::lang::XInitialization           ,
+class TabWindow :  public ::com::sun::star::lang::XTypeProvider		        ,
+                   public ::com::sun::star::lang::XServiceInfo		        ,
+                   public ::com::sun::star::lang::XInitialization			,
                    public ::com::sun::star::lang::XComponent                ,
                    public ::com::sun::star::awt::XWindowListener            ,
                    public ::com::sun::star::awt::XTopWindowListener         ,
                    public ::com::sun::star::awt::XSimpleTabController       ,
-                   protected ThreadHelpBase                                 ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                   public ::cppu::OBroadcastHelper                          ,
-                   public ::cppu::OPropertySetHelper                        ,   // => XPropertySet / XFastPropertySet / XMultiPropertySet
+                   protected ThreadHelpBase							        ,	// Struct for right initalization of mutex member! Must be first of baseclasses.
+                   public ::cppu::OBroadcastHelper							,
+                   public ::cppu::OPropertySetHelper						,   // => XPropertySet / XFastPropertySet / XMultiPropertySet
                    public ::cppu::OWeakObject
 {
     public:
@@ -93,21 +93,21 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
         using ::cppu::OPropertySetHelper::disposing;
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
-
+        
         //---------------------------------------------------------------------------------------------------------
-        //  XInitialization
+        //	XInitialization
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
-        //  XComponent
+        //	XComponent
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
-        //  XSimpleTabController
+        //	XSimpleTabController
         //---------------------------------------------------------------------------------------------------------
         virtual ::sal_Int32 SAL_CALL insertTab() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
@@ -124,7 +124,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XTopWindowListener
+        //	XTopWindowListener
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
@@ -135,7 +135,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
-        //  XWindowListener
+        //	XWindowListener
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
@@ -148,7 +148,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
     private:
         //---------------------------------------------------------------------------------------------------------
-        //  OPropertySetHelper
+        //	OPropertySetHelper
         //---------------------------------------------------------------------------------------------------------
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any&        aConvertedValue ,
                                                                                                        com::sun::star::uno::Any&        aOldValue       ,
@@ -183,15 +183,15 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 
         typedef std::vector< sal_uInt16 > PageIdVector;
 
-        sal_Bool                                                                         m_bInitialized : 1,
+        sal_Bool																		 m_bInitialized : 1,
                                                                                          m_bDisposed : 1;
         sal_Int32                                                                        m_nNextTabID;
         ::rtl::OUString                                                                  m_aTitlePropName;
         ::rtl::OUString                                                                  m_aPosPropName;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow >            m_xTopWindow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >               m_xContainerWindow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >               m_xTabControlWindow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >				 m_xContainerWindow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >				 m_xTabControlWindow;
         ::cppu::OMultiTypeInterfaceContainerHelper                                       m_aListenerContainer; // container for ALL Listener
 };
 

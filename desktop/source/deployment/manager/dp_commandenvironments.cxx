@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ void BaseCommandEnv::handle_(bool approve, bool abort,
             else if (abort) {
                 Reference< task::XInteractionAbort > xInteractionAbort(
                     pConts[ pos ], uno::UNO_QUERY );
-                if (xInteractionAbort.is()) {
+                if (xInteractionAbort.is()) {           
                     xInteractionAbort->select();
                     // don't query again for ongoing continuations:
                     abort = false;
@@ -163,8 +163,8 @@ void TmpRepositoryCommandEnv::handle(
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
-
-    deployment::VersionException verExc;
+    
+    deployment::VersionException verExc;	
     deployment::LicenseException licExc;
     deployment::InstallException instExc;
 
@@ -174,7 +174,7 @@ void TmpRepositoryCommandEnv::handle(
     if ((request >>= verExc)
         || (request >>= licExc)
         || (request >>= instExc))
-    {
+    { 
         approve = true;
     }
 
@@ -197,7 +197,7 @@ void LicenseCommandEnv::handle(
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
-
+    
 
     deployment::LicenseException licExc;
 
@@ -236,7 +236,7 @@ void NoLicenseCommandEnv::handle(
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
-
+    
 
     deployment::LicenseException licExc;
 
@@ -265,9 +265,9 @@ void NoLicenseCommandEnv::handle(
 // {
 //     uno::Any request( xRequest->getRequest() );
 //     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    
 
-
-//  deployment::LicenseException licExc;
+// 	deployment::LicenseException licExc;
 
 //     bool approve = false;
 //     bool abort = false;

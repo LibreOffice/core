@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace drawinglayer
         PointArrayPrimitive2D::PointArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
             const basegfx::BColor& rRGBColor)
-        :   BasePrimitive2D(),
+        :	BasePrimitive2D(),
             maPositions(rPositions),
             maRGBColor(rRGBColor),
             maB2DRange()
@@ -75,7 +75,7 @@ namespace drawinglayer
                 {
                     aNewRange.expand(*aIter);
                 }
-
+                
                 // assign to buffered value
                 const_cast< PointArrayPrimitive2D* >(this)->maB2DRange = aNewRange;
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HDL_
+#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HDL_ 
 #include <com/sun/star/drawing/GluePoint2.hpp>
 #endif
 
@@ -53,7 +53,7 @@ private:
 
 public:
     SvxUnoGluePointAccess( SdrObject* pObject ) throw();
-    virtual ~SvxUnoGluePointAccess() throw();
+    virtual	~SvxUnoGluePointAccess() throw();
 
     // XIdentifierContainer
     virtual sal_Int32 SAL_CALL insert( const uno::Any& aElement ) throw (lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException);
@@ -117,7 +117,7 @@ static void convert( const SdrGluePoint& rSdrGlue, drawing::GluePoint2& rUnoGlue
     case SDRHORZALIGN_RIGHT|SDRVERTALIGN_BOTTOM:
         rUnoGlue.PositionAlignment = drawing::Alignment_BOTTOM_RIGHT;
         break;
-//  case SDRHORZALIGN_LEFT:
+//	case SDRHORZALIGN_LEFT:
     default:
         rUnoGlue.PositionAlignment = drawing::Alignment_LEFT;
         break;
@@ -143,7 +143,7 @@ static void convert( const SdrGluePoint& rSdrGlue, drawing::GluePoint2& rUnoGlue
     case SDRESC_VERT:
         rUnoGlue.Escape = drawing::EscapeDirection_VERTICAL;
         break;
-//          case SDRESC_SMART:
+//			case SDRESC_SMART:
     default:
         rUnoGlue.Escape = drawing::EscapeDirection_SMART;
         break;
@@ -181,7 +181,7 @@ static void convert( const drawing::GluePoint2& rUnoGlue, SdrGluePoint& rSdrGlue
     case drawing::Alignment_BOTTOM_RIGHT:
         rSdrGlue.SetAlign( SDRHORZALIGN_RIGHT|SDRVERTALIGN_BOTTOM );
         break;
-//  case SDRHORZALIGN_LEFT:
+//	case SDRHORZALIGN_LEFT:
     default:
         rSdrGlue.SetAlign( SDRHORZALIGN_LEFT );
         break;
@@ -206,7 +206,7 @@ static void convert( const drawing::GluePoint2& rUnoGlue, SdrGluePoint& rSdrGlue
     case drawing::EscapeDirection_VERTICAL:
         rSdrGlue.SetEscDir(SDRESC_VERT);
         break;
-//  case drawing::EscapeDirection_SMART:
+//	case drawing::EscapeDirection_SMART:
     default:
         rSdrGlue.SetEscDir(SDRESC_SMART);
         break;
@@ -268,7 +268,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier ) 
             if( (*pList)[i].GetId() == nId )
             {
                 pList->Delete( i );
-
+                
                 // only repaint, no objectchange
                 mpObject->ActionChanged();
                 // mpObject->BroadcastObjectChange();
@@ -307,7 +307,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
                 mpObject->ActionChanged();
                 // mpObject->BroadcastObjectChange();
 
-                return;
+                return;					
             }
         }
 
@@ -333,7 +333,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
         {
             const USHORT nId = (USHORT)( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
 
-            const SdrGluePointList* pList = mpObject->GetGluePointList();
+            const SdrGluePointList* pList = mpObject->GetGluePointList();		
             const USHORT nCount = pList ? pList->GetCount() : 0;
             for( USHORT i = 0; i < nCount; i++ )
             {
@@ -359,7 +359,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
 uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() throw (uno::RuntimeException)
 {
     if( mpObject.is() )
-    {
+    { 
         const SdrGluePointList* pList = mpObject->GetGluePointList();
         const USHORT nCount = pList ? pList->GetCount() : 0;
 
@@ -367,7 +367,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() thro
 
         uno::Sequence< sal_Int32 > aIdSequence( nCount + NON_USER_DEFINED_GLUE_POINTS );
         sal_Int32 *pIdentifier = aIdSequence.getArray();
-
+        
         for( i = 0; i < NON_USER_DEFINED_GLUE_POINTS; i++ )
             *pIdentifier++ = (sal_Int32)i;
 
@@ -402,7 +402,7 @@ void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const uno::Any& E
             {
                 convert( aUnoGlue, aSdrGlue );
                 pList->Insert( aSdrGlue );
-
+                
                 // only repaint, no objectchange
                 mpObject->ActionChanged();
                 // mpObject->BroadcastObjectChange();
@@ -429,7 +429,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index )
             if( Index >= 0 && Index < pList->GetCount() )
             {
                 pList->Delete( (USHORT)Index );
-
+                
                 // only repaint, no objectchange
                 mpObject->ActionChanged();
                 // mpObject->BroadcastObjectChange();

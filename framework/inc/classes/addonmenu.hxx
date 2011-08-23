@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #define __FRAMEWORK_CLASSES_ADDONMENU_HXX_
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -62,21 +62,21 @@ class AddonPopupMenu : public AddonMenu
 {
     public:
                                 ~AddonPopupMenu();
-
+                        
         // Check if command URL string has the unique prefix to identify addon popup menus
-        static sal_Bool         IsCommandURLPrefix( const rtl::OUString& aCmdURL );
-
+        static sal_Bool			IsCommandURLPrefix( const rtl::OUString& aCmdURL );
+        
         void                    SetCommandURL( const rtl::OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
         const rtl::OUString&    GetCommandURL() const { return m_aCommandURL; }
 
     protected:
-        void                    Initialize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonPopupMenuDefinition );
-
+        void					Initialize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonPopupMenuDefinition );
+        
     private:
                                 AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
     rtl::OUString               m_aCommandURL;
-
+        
     friend class AddonMenuManager;
 };
 
@@ -91,37 +91,37 @@ class AddonMenuManager
 
         static sal_Bool   HasAddonMenuElements();
         static sal_Bool   HasAddonHelpMenuElements();
-
+        
         static sal_Bool   IsAddonMenuId( USHORT nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
-
+    
         // Check if the context string matches the provided xModel context
-        static sal_Bool   IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContext );
+        static sal_Bool	  IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContext );
 
         // Factory method to create different Add-On menu types
         static PopupMenu* CreatePopupMenuType( MenuType eMenuType, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
         // Create the Add-Ons menu
         static AddonMenu* CreateAddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-
+        
         // Merge the Add-Ons help menu items into the given menu bar at a defined pos
-        static void       MergeAddonHelpMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        static void		  MergeAddonHelpMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                               MenuBar* pMergeMenuBar );
 
         // Merge the addon popup menus into the given menu bar at the provided pos.
         static void       MergeAddonPopupMenus( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                                 const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel,
-                                                USHORT   nMergeAtPos,
+                                                USHORT	 nMergeAtPos,
                                                 MenuBar* pMergeMenuBar );
-
+        
         // Returns the next position to insert a menu item/sub menu
         static USHORT     GetNextPos( USHORT nPos );
-
+        
         // Build up the menu item and sub menu into the provided pCurrentMenu. The sub menus should be of type nSubMenuType.
         static void       BuildMenu( PopupMenu*  pCurrentMenu,
                                      MenuType    nSubMenuType,
                                      USHORT      nInsPos,
                                      USHORT&     nUniqueMenuId,
-                                     com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > aAddonMenuDefinition,
+                                     com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > aAddonMenuDefinition, 
                                      const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                      const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel );
 
@@ -132,7 +132,7 @@ class AddonMenuManager
                                         ::rtl::OUString& rTarget,
                                         ::rtl::OUString& rImageId,
                                         ::rtl::OUString& rContext,
-                                        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rAddonSubMenu );
+                                        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >&	rAddonSubMenu );
 };
 
 } // namespace framework

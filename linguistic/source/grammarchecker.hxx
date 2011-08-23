@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ class GrammarChecker:
     // disallow use of copy c-tor and assignment operator
     GrammarChecker( const GrammarChecker & );
     GrammarChecker & operator = ( const GrammarChecker & );
-
+    
 public:
     explicit GrammarChecker( /* uno::Reference< uno::XComponentContext > const & rXContext */ );
     virtual ~GrammarChecker();
@@ -86,11 +86,11 @@ public:
     static inline ::rtl::OUString getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static() throw();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::linguistic2::SingleGrammarError > GrammarCheckingInDummy(
-        ::sal_Int32 nDocId, const ::rtl::OUString &rFlatParaText, const ::com::sun::star::lang::Locale & rLocale,
+    ::com::sun::star::uno::Sequence< ::com::sun::star::linguistic2::SingleGrammarError > GrammarCheckingInDummy( 
+        ::sal_Int32 nDocId, const ::rtl::OUString &rFlatParaText, const ::com::sun::star::lang::Locale & rLocale, 
         ::sal_Int32 nStartOfSentencePos, ::sal_Int32 nSuggestedSentenceEndPos );
 
-
+    
     inline ::osl::Mutex & GetMutex()
     {
         static osl::Mutex aMutex;

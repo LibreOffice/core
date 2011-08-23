@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,13 +52,13 @@ namespace drawinglayer
         {
         private:
             /// the geometric definition
-            basegfx::B2DRange                       maObjectRange;
+            basegfx::B2DRange						maObjectRange;
 
             /// the hatch definition
-            attribute::FillHatchAttribute           maFillHatch;
+            attribute::FillHatchAttribute			maFillHatch;
 
             /// hatch background color (if used)
-            basegfx::BColor                         maBColor;
+            basegfx::BColor							maBColor;
 
         protected:
             /// local decomposition.
@@ -67,8 +67,8 @@ namespace drawinglayer
         public:
             /// constructor
             FillHatchPrimitive2D(
-                const basegfx::B2DRange& rObjectRange,
-                const basegfx::BColor& rBColor,
+                const basegfx::B2DRange& rObjectRange, 
+                const basegfx::BColor& rBColor, 
                 const attribute::FillHatchAttribute& rFillHatch);
 
             /// data read access

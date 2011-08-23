@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,4 +72,4 @@ extern XMLTransformerActionInit aTableCellPropertyOASISAttrActionTable[];
 extern XMLTransformerActionInit aListLevelPropertyOASISAttrActionTable[];
 extern XMLTransformerActionInit aChartPropertyOASISAttrActionTable[];
 
-#endif  //  _XMLOFF_PROPERTYACTIONSOASIS_HXX
+#endif	//  _XMLOFF_PROPERTYACTIONSOASIS_HXX

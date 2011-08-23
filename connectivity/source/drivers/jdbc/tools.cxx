@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -49,7 +49,7 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     jobject out(0);
-
+    
     {
         jvalue args[2];
         // Parameter konvertieren
@@ -115,8 +115,8 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUStr
 java_util_Properties* connectivity::createStringPropertyArray(const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
 {
     java_util_Properties* pProps = new java_util_Properties();
-    const PropertyValue* pBegin = info.getConstArray();
-    const PropertyValue* pEnd   = pBegin + info.getLength();
+    const PropertyValue* pBegin	= info.getConstArray();
+    const PropertyValue* pEnd	= pBegin + info.getLength();
 
     for(;pBegin != pEnd;++pBegin)
     {
@@ -219,7 +219,7 @@ sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
 }
 // -----------------------------------------------------------------------------
 jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
-{
+{   
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
         return NULL;
@@ -246,7 +246,7 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
 }
 // -----------------------------------------------------------------------------
 jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
-{
+{   
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
         return NULL;

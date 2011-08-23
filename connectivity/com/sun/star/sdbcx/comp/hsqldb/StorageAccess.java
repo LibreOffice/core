@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ public class StorageAccess implements org.hsqldb.lib.Storage {
     String name;
     boolean readonly;
     NativeStorageAccess access;
-//  public SimpleLog appLog;
+//	public SimpleLog appLog;
     /** Creates a new instance of StorageAccess */
     public StorageAccess(String name,Boolean readonly,Object key) throws java.io.IOException{
         this.key = (String)key;
@@ -55,7 +55,7 @@ public class StorageAccess implements org.hsqldb.lib.Storage {
         } catch(Exception e){
             throw new java.io.IOException();
         }
-    //  appLog = new SimpleLog(name +".app3.log", true);
+    //	appLog = new SimpleLog(name +".app3.log", true);
     }
     public void close() throws java.io.IOException{
         //appLog.sendLine("NIOScaledRAFile.close() ");

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/implbase5.hxx>
-
+ 
 #include "rtl/ref.hxx"
 
 namespace ucbhelper
@@ -44,7 +44,7 @@ namespace ucbhelper
 }
 namespace odma
 {
-    typedef ::cppu::WeakImplHelper5<    ::com::sun::star::io::XInputStream,
+    typedef ::cppu::WeakImplHelper5<	::com::sun::star::io::XInputStream,
                                         ::com::sun::star::io::XStream,
                                         ::com::sun::star::io::XTruncate,
                                         ::com::sun::star::io::XSeekable,
@@ -54,22 +54,22 @@ namespace odma
     class ContentProperties;
     class OOdmaStream : public OOdmaStreamBase
     {
-        ::osl::Mutex    m_aMutex;
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>  m_xOutput;
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate>      m_xTruncate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>   m_xInput;
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>      m_xInputSeek;
+        ::osl::Mutex	m_aMutex;
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>	m_xOutput;
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate>		m_xTruncate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>	m_xInput;
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>		m_xInputSeek;
 
-        ::rtl::Reference<ContentProperties> m_aProp;
-        ::ucbhelper::Content*               m_pContent;
-        ContentProvider*                    m_pProvider;
-        sal_Bool                            m_bInputStreamCalled;
-        sal_Bool                            m_bOutputStreamCalled;
-        sal_Bool                            m_bModified;
+        ::rtl::Reference<ContentProperties>	m_aProp;
+        ::ucbhelper::Content*		        m_pContent;
+        ContentProvider*				    m_pProvider;
+        sal_Bool						    m_bInputStreamCalled;
+        sal_Bool						    m_bOutputStreamCalled;
+        sal_Bool						    m_bModified;
 
         void ensureInputStream()  throw( ::com::sun::star::io::IOException );
         void ensureOutputStream()  throw( ::com::sun::star::io::IOException );
-        void SAL_CALL closeStream() throw(  ::com::sun::star::io::NotConnectedException,
+        void SAL_CALL closeStream() throw(	::com::sun::star::io::NotConnectedException,
                                             ::com::sun::star::io::IOException,
                                             ::com::sun::star::uno::RuntimeException );
     public:
@@ -125,11 +125,11 @@ namespace odma
             throw( com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException );
-
+        
         sal_Int64 SAL_CALL getPosition()
             throw( com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException );
-
+        
         sal_Int64 SAL_CALL getLength()
             throw( com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException );

@@ -1,7 +1,7 @@
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 
-void OTools::getValue(  OConnection* _pConnection,
+void OTools::getValue(	OConnection* _pConnection,
                         SQLHANDLE _aStatementHandle,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
@@ -68,7 +68,7 @@ void OTools::getValue(  OConnection* _pConnection,
     _bWasNull = pcbValue == SQL_NULL_DATA;
 }
 // -----------------------------------------------------------------------------
-void OTools::bindParameter( OConnection* _pConnection,
+void OTools::bindParameter(	OConnection* _pConnection,
                             SQLHANDLE _hStmt,
                             sal_Int32 nPos,
                             sal_Int8*& pDataBuffer,
@@ -86,10 +86,10 @@ void OTools::bindParameter( OConnection* _pConnection,
     SQLSMALLINT fSqlType;
     SQLSMALLINT fCType;
     SQLLEN  nMaxLen = 0;
-    //  void*&   pData   = pDataBuffer;
+    //	void*&   pData   = pDataBuffer;
     SQLLEN* pLen    = (SQLLEN*)pLenBuffer;
     SQLULEN nColumnSize=0;
-    SQLSMALLINT nDecimalDigits=0;
+    SQLSMALLINT	nDecimalDigits=0;
 
     OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nODBCtype,fCType,fSqlType);
 
@@ -101,7 +101,7 @@ void OTools::bindParameter( OConnection* _pConnection,
         memcpy(pDataBuffer,&nPos,sizeof(nPos));
 
     // 20.09.2001 OJ: Problems with mysql. mysql returns only CHAR as parameter type
-    //  nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
+    //	nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
 
     nRetcode = (*(T3SQLBindParameter)_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(_hStmt,
                   (SQLUSMALLINT)nPos,
@@ -117,7 +117,7 @@ void OTools::bindParameter( OConnection* _pConnection,
     OTools::ThrowException(_pConnection,nRetcode,_hStmt,SQL_HANDLE_STMT,_xInterface);
 }
 // -----------------------------------------------------------------------------
-void OTools::bindData(  SQLSMALLINT _nOdbcType,
+void OTools::bindData(	SQLSMALLINT _nOdbcType,
                         sal_Bool _bUseWChar,
                         sal_Int8 *&_pData,
                         SQLLEN*& pLen,
@@ -158,7 +158,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
             *pLen = sizeof(sal_Int64);
             _nColumnSize = *pLen;
             break;
-
+        
         case SQL_NUMERIC:
             if(_bUseWChar)
             {
@@ -176,7 +176,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 *pLen = _nColumnSize;
                 memcpy(_pData,aString.getStr(),aString.getLength());
                 ((sal_Int8*)_pData)[_nColumnSize] = '\0';
-            }   break;
+            }	break;
         case SQL_BIT:
         case SQL_TINYINT:
             *((sal_Int8*)_pData) = *(sal_Int8*)_pValue;
@@ -250,7 +250,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
     }
 }
 // -------------------------------------------------------------------------
-void OTools::bindValue( OConnection* _pConnection,
+void OTools::bindValue(	OConnection* _pConnection,
                         SQLHANDLE _aStatementHandle,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
@@ -268,7 +268,7 @@ void OTools::bindValue( OConnection* _pConnection,
     SQLSMALLINT   fCType;
     SQLLEN nMaxLen = _nMaxLen;
 
-    OTools::getBindTypes(   sal_False,
+    OTools::getBindTypes(	sal_False,
                             _bUseOldTimeDate,
                             _nType,
                             fCType,
@@ -294,15 +294,15 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_CHAR:
                 case SQL_VARCHAR:
                 //if(GetODBCConnection()->m_bUserWChar)
-//              {
-//                  _nMaxLen = rCol.GetPrecision();
-//                  *pLen = SQL_NTS;
-//                  *((rtl::OUString*)pData) = (rtl::OUString)_aValue;
+//				{
+//					_nMaxLen = rCol.GetPrecision();
+//					*pLen = SQL_NTS;
+//					*((rtl::OUString*)pData) = (rtl::OUString)_aValue;
 //
-//                  // Zeiger auf Char*
-//                  pData = (void*)((rtl::OUString*)pData)->getStr();
-//              }
-//              else
+//					// Zeiger auf Char*
+//					pData = (void*)((rtl::OUString*)pData)->getStr();
+//				}
+//				else
                 {
                     ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                     *pLen = SQL_NTS;
@@ -311,7 +311,7 @@ void OTools::bindValue( OConnection* _pConnection,
 
                     // Zeiger auf Char*
                     _pData = (void*)aString.getStr();
-                }   break;
+                }	break;
                 case SQL_BIGINT:
                     *((sal_Int64*)_pData) = *(sal_Int64*)_pValue;
                     *pLen = sizeof(sal_Int64);
@@ -319,14 +319,14 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_DECIMAL:
                 case SQL_NUMERIC:
                 //if(GetODBCConnection()->m_bUserWChar)
-//              {
-//                  rtl::OUString aString(rtl::OUString(SdbTools::ToString(ODbTypeConversion::toDouble(*pVariable),rCol.GetScale())));
-//                  *pLen = _nMaxLen;
-//                  *((rtl::OUString*)_pData) = aString;
-//                  // Zeiger auf Char*
-//                  _pData = (void*)((rtl::OUString*)_pData)->getStr();
-//              }
-//              else
+//				{
+//					rtl::OUString aString(rtl::OUString(SdbTools::ToString(ODbTypeConversion::toDouble(*pVariable),rCol.GetScale())));
+//					*pLen = _nMaxLen;
+//					*((rtl::OUString*)_pData) = aString;
+//					// Zeiger auf Char*
+//					_pData = (void*)((rtl::OUString*)_pData)->getStr();
+//				}
+//				else
                 {
                     ::rtl::OString aString = ::rtl::OString::valueOf(*(double*)_pValue);
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
@@ -334,7 +334,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     *((::rtl::OString*)_pData) = aString;
                     // Zeiger auf Char*
                     _pData = (void*)((::rtl::OString*)_pData)->getStr();
-                }   break;
+                }	break;
                 case SQL_BIT:
                 case SQL_TINYINT:
                     *((sal_Int8*)_pData) = *(sal_Int8*)_pValue;
@@ -364,7 +364,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     {
                         _pData = (void*)((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getConstArray();
                         *pLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
-                    }   break;
+                    }	break;
                 case SQL_LONGVARBINARY:
                 {
                     _pData = (void*)(columnIndex);
@@ -462,7 +462,7 @@ void OTools::ThrowException(OConnection* _pConnection,
     OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 
     // Zum Return Code von SQLError siehe ODBC 2.0 Programmer's Reference Seite 287ff
-    throw SQLException( ::rtl::OUString((char *)szErrorMessage,pcbErrorMsg,_nTextEncoding),
+    throw SQLException(	::rtl::OUString((char *)szErrorMessage,pcbErrorMsg,_nTextEncoding),
                                     _xInterface,
                                     ::rtl::OUString((char *)szSqlState,5,_nTextEncoding),
                                     pfNativeError,
@@ -483,7 +483,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
     // Erstmal versuchen, die Daten mit dem kleinen Puffer
     // abzuholen:
     SQLLEN nMaxLen = sizeof aCharArray - 1;
-    //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
+    //	GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
     SQLLEN pcbValue = 0;
     OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
@@ -518,7 +518,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             nBytes = nMaxLen;
 
         // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
-        //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
+        //	GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
         OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         SQL_C_BINARY,
@@ -552,7 +552,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             sal_Unicode waCharArray[2048];
             // read the unicode data
             SQLLEN nMaxLen = (sizeof(waCharArray) / sizeof(sal_Unicode)) - 1;
-            //  GETDATA(SQL_C_WCHAR, waCharArray, nMaxLen + sizeof(sal_Unicode));
+            //	GETDATA(SQL_C_WCHAR, waCharArray, nMaxLen + sizeof(sal_Unicode));
 
             SQLLEN pcbValue=0;
             OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
@@ -589,7 +589,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                     nLen = nMaxLen;
 
                 // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
-                //  GETDATA(SQL_C_CHAR,waCharArray, nLen + 1);
+                //	GETDATA(SQL_C_CHAR,waCharArray, nLen + 1);
                 OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_WCHAR,
@@ -613,7 +613,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             // Erstmal versuchen, die Daten mit dem kleinen Puffer
             // abzuholen:
             SQLLEN nMaxLen = sizeof aCharArray - 1;
-            //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
+            //	GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
             SQLLEN pcbValue = 0;
             OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
@@ -639,7 +639,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             while ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen)
             {
                 // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
-                //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
+                //	GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
                 OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_CHAR,
@@ -656,7 +656,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             }
 
             // delete all blanks
-            //  aData.EraseTrailingChars();
+            //	aData.EraseTrailingChars();
         }
     }
 
@@ -686,7 +686,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                      const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
-    _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
+    _rValue = 0;	// in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
     OTools::ThrowException(_pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
@@ -699,7 +699,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                      const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
-    _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
+    _rValue = 0;	// in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
     OTools::ThrowException(_pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
@@ -712,7 +712,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                      const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     SQLSMALLINT nValueLen;
-    _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
+    _rValue = 0;	// in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
     OTools::ThrowException(_pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,&_rValue,sizeof _rValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
@@ -842,7 +842,7 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getBindTypes" );
     switch(_nOdbcType)
     {
-        case SQL_CHAR:              if(_bUseWChar)
+        case SQL_CHAR:				if(_bUseWChar)
                                     {
                                         fCType   = SQL_C_WCHAR;
                                         fSqlType = SQL_WCHAR;
@@ -853,7 +853,7 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,
                                         fSqlType = SQL_CHAR;
                                     }
                                     break;
-        case SQL_VARCHAR:           if(_bUseWChar)
+        case SQL_VARCHAR:			if(_bUseWChar)
                                     {
                                         fCType   = SQL_C_WCHAR;
                                         fSqlType = SQL_WVARCHAR;
@@ -864,82 +864,82 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,
                                         fSqlType = SQL_VARCHAR;
                                     }
                                     break;
-        case SQL_LONGVARCHAR:       if(_bUseWChar)
+        case SQL_LONGVARCHAR:		if(_bUseWChar)
                                     {
                                         fCType   = SQL_C_WCHAR;
                                         fSqlType = SQL_WLONGVARCHAR;
                                     }
                                     else
                                     {
-                                        fCType   = SQL_C_CHAR;
+                                        fCType	 = SQL_C_CHAR;
                                         fSqlType = SQL_LONGVARCHAR;
                                     }
                                     break;
-        case SQL_DECIMAL:           fCType      = _bUseWChar ? SQL_C_WCHAR : SQL_C_CHAR;
-                                    fSqlType    = SQL_DECIMAL; break;
-        case SQL_NUMERIC:           fCType      = _bUseWChar ? SQL_C_WCHAR : SQL_C_CHAR;
-                                    fSqlType    = SQL_NUMERIC; break;
-        case SQL_BIT:               fCType      = SQL_C_TINYINT;
-                                    fSqlType    = SQL_INTEGER; break;
-        case SQL_TINYINT:           fCType      = SQL_C_TINYINT;
-                                    fSqlType    = SQL_TINYINT; break;
-        case SQL_SMALLINT:          fCType      = SQL_C_SHORT;
-                                    fSqlType    = SQL_SMALLINT; break;
-        case SQL_INTEGER:           fCType      = SQL_C_LONG;
-                                    fSqlType    = SQL_INTEGER; break;
-        case SQL_BIGINT:            fCType      = SQL_C_SBIGINT;
-                                    fSqlType    = SQL_BIGINT; break;
-        case SQL_FLOAT:             fCType      = SQL_C_FLOAT;
-                                    fSqlType    = SQL_FLOAT; break;
-        case SQL_REAL:              fCType      = SQL_C_DOUBLE;
-                                    fSqlType    = SQL_REAL; break;
-        case SQL_DOUBLE:            fCType      = SQL_C_DOUBLE;
-                                    fSqlType    = SQL_DOUBLE; break;
-        case SQL_BINARY:            fCType      = SQL_C_BINARY;
-                                    fSqlType    = SQL_BINARY; break;
+        case SQL_DECIMAL:			fCType		= _bUseWChar ? SQL_C_WCHAR : SQL_C_CHAR;
+                                    fSqlType	= SQL_DECIMAL; break;
+        case SQL_NUMERIC:			fCType		= _bUseWChar ? SQL_C_WCHAR : SQL_C_CHAR;
+                                    fSqlType	= SQL_NUMERIC; break;
+        case SQL_BIT:				fCType		= SQL_C_TINYINT;
+                                    fSqlType	= SQL_INTEGER; break;
+        case SQL_TINYINT:			fCType		= SQL_C_TINYINT;
+                                    fSqlType	= SQL_TINYINT; break;
+        case SQL_SMALLINT:			fCType		= SQL_C_SHORT;
+                                    fSqlType	= SQL_SMALLINT; break;
+        case SQL_INTEGER:			fCType		= SQL_C_LONG;
+                                    fSqlType	= SQL_INTEGER; break;
+        case SQL_BIGINT:			fCType		= SQL_C_SBIGINT;
+                                    fSqlType	= SQL_BIGINT; break;
+        case SQL_FLOAT:				fCType		= SQL_C_FLOAT;
+                                    fSqlType	= SQL_FLOAT; break;			
+        case SQL_REAL:				fCType		= SQL_C_DOUBLE;
+                                    fSqlType	= SQL_REAL; break;
+        case SQL_DOUBLE:			fCType		= SQL_C_DOUBLE;
+                                    fSqlType	= SQL_DOUBLE; break;
+        case SQL_BINARY:			fCType		= SQL_C_BINARY;
+                                    fSqlType	= SQL_BINARY; break;
         case SQL_VARBINARY:
-                                    fCType      = SQL_C_BINARY;
-                                    fSqlType    = SQL_VARBINARY; break;
-        case SQL_LONGVARBINARY:     fCType      = SQL_C_BINARY;
-                                    fSqlType    = SQL_LONGVARBINARY; break;
+                                    fCType		= SQL_C_BINARY;
+                                    fSqlType	= SQL_VARBINARY; break;
+        case SQL_LONGVARBINARY: 	fCType		= SQL_C_BINARY;
+                                    fSqlType	= SQL_LONGVARBINARY; break;
         case SQL_DATE:
                                     if(_bUseOldTimeDate)
                                     {
-                                        fCType      = SQL_C_DATE;
-                                        fSqlType    = SQL_DATE;
+                                        fCType		= SQL_C_DATE;
+                                        fSqlType	= SQL_DATE;
                                     }
                                     else
                                     {
-                                        fCType      = SQL_C_TYPE_DATE;
-                                        fSqlType    = SQL_TYPE_DATE;
+                                        fCType		= SQL_C_TYPE_DATE;
+                                        fSqlType	= SQL_TYPE_DATE;
                                     }
                                     break;
         case SQL_TIME:
                                     if(_bUseOldTimeDate)
                                     {
-                                        fCType      = SQL_C_TIME;
-                                        fSqlType    = SQL_TIME;
+                                        fCType		= SQL_C_TIME;
+                                        fSqlType	= SQL_TIME;
                                     }
                                     else
                                     {
-                                        fCType      = SQL_C_TYPE_TIME;
-                                        fSqlType    = SQL_TYPE_TIME;
+                                        fCType		= SQL_C_TYPE_TIME;
+                                        fSqlType	= SQL_TYPE_TIME;
                                     }
                                     break;
         case SQL_TIMESTAMP:
                                     if(_bUseOldTimeDate)
                                     {
-                                        fCType      = SQL_C_TIMESTAMP;
-                                        fSqlType    = SQL_TIMESTAMP;
+                                        fCType		= SQL_C_TIMESTAMP;
+                                        fSqlType	= SQL_TIMESTAMP;
                                     }
                                     else
                                     {
-                                        fCType      = SQL_C_TYPE_TIMESTAMP;
-                                        fSqlType    = SQL_TYPE_TIMESTAMP;
+                                        fCType		= SQL_C_TYPE_TIMESTAMP;
+                                        fSqlType	= SQL_TYPE_TIMESTAMP;
                                     }
                                     break;
-        default:                        fCType      = SQL_C_BINARY;
-                                        fSqlType    = SQL_LONGVARBINARY; break;
+        default:						fCType		= SQL_C_BINARY;
+                                        fSqlType	= SQL_LONGVARBINARY; break;
     }
 }
 

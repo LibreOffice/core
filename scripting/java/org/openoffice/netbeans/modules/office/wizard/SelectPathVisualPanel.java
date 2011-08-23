@@ -22,13 +22,13 @@ import org.openoffice.netbeans.modules.office.options.OfficeSettings;
  * @author tomaso
  */
 public class SelectPathVisualPanel extends javax.swing.JPanel {
-
+    
     /** The wizard panel descriptor associated with this GUI panel.
      * If you need to fire state changes or something similar, you can
      * use this handle to do so.
      */
     private final SelectPathPanel panel;
-
+    
     /** Create the wizard panel and set up some basic properties. */
     public SelectPathVisualPanel(SelectPathPanel panel) {
         this.panel = panel;
@@ -74,7 +74,7 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         }
          */
     }
-
+    
     private void installationsComboBoxActionPerformed(
         java.awt.event.ActionEvent evt) {
 
@@ -159,11 +159,11 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
         // Add your handling code here:
         File target = null;
-
+        
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int result = chooser.showDialog(null, null);
-
+        
         if (result == JFileChooser.APPROVE_OPTION) {
             target = chooser.getSelectedFile();
 
@@ -174,7 +174,7 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
             catch (IOException ioe) {
                 path = target.getAbsolutePath();
             }
-
+            
             OfficeInstallation oi = new OfficeInstallation(path, path);
 
             if (oi.supportsFramework()) {
@@ -184,7 +184,7 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_browseButtonActionPerformed
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField installPath;
     private javax.swing.JButton browseButton;

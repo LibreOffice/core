@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #define __FRAMEWORK_MACROS_DEBUG_HXX_
 
 //*****************************************************************************************************************
-//  Disable all feature of this file in produkt version!
-//  But enable normal assertion handling (as messagebox) in normal debug version.
-//  User can overwrite these adjustment with his own values! We will do it only if nothing is set.
+//	Disable all feature of this file in produkt version!
+//	But enable normal assertion handling (as messagebox) in normal debug version.
+//	User can overwrite these adjustment with his own values! We will do it only if nothing is set.
 //*****************************************************************************************************************
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -40,14 +40,14 @@
 
     // Enable log mechanism for normal assertion and error handling.
     // Look for user decisions before!
-    #ifndef ENABLE_LOGMECHANISM
-        #define ENABLE_LOGMECHANISM
+    #ifndef	ENABLE_LOGMECHANISM
+        #define	ENABLE_LOGMECHANISM
     #endif
     // Enable assertion handling himself AND additional warnings.
     // The default logtype is MESSAGEBOX.
     // see "assertion.hxx" for further informations
-    #ifndef ENABLE_ASSERTIONS
-        #define ENABLE_ASSERTIONS
+    #ifndef	ENABLE_ASSERTIONS
+        #define	ENABLE_ASSERTIONS
     #endif
     #ifndef ENABLE_WARNINGS
         #define ENABLE_WARNINGS
@@ -59,14 +59,14 @@
 
     // Enable log mechanism for normal assertion and error handling.
     // Look for user decisions before!
-    #ifndef ENABLE_LOGMECHANISM
-        #define ENABLE_LOGMECHANISM
+    #ifndef	ENABLE_LOGMECHANISM
+        #define	ENABLE_LOGMECHANISM
     #endif
     // Enable assertion handling himself.
     // The default logtype is MESSAGEBOX.
     // see "assertion.hxx" for further informations
-    #ifndef ENABLE_ASSERTIONS
-        #define ENABLE_ASSERTIONS
+    #ifndef	ENABLE_ASSERTIONS
+        #define	ENABLE_ASSERTIONS
     #endif
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -76,9 +76,9 @@
     #undef  ENABLE_LOGMECHANISM
     #undef  ENABLE_ASSERTIONS
     #undef  ENABLE_WARNINGS
-    #undef  ENABLE_EVENTDEBUG
-    #undef  ENABLE_REGISTRATIONDEBUG
-    #undef  ENABLE_TARGETINGDEBUG
+    #undef	ENABLE_EVENTDEBUG
+    #undef	ENABLE_REGISTRATIONDEBUG
+    #undef	ENABLE_TARGETINGDEBUG
     #undef  ENABLE_MUTEXDEBUG
 //    #undef  ENABLE_TIMEMEASURE
     #undef  ENABLE_MEMORYMEASURE
@@ -87,28 +87,28 @@
 #endif
 
 //*****************************************************************************************************************
-//  generic macros for logging
+//	generic macros for logging
 //*****************************************************************************************************************
 
 #include <macros/debug/logmechanism.hxx>
 
 //*****************************************************************************************************************
-//  special macros for assertion handling
+//	special macros for assertion handling
 //*****************************************************************************************************************
 #include <macros/debug/assertion.hxx>
 
 //*****************************************************************************************************************
-//  special macros for event handling
+//	special macros for event handling
 //*****************************************************************************************************************
 #include <macros/debug/event.hxx>
 
 //*****************************************************************************************************************
-//  special macros to debug service registration
+//	special macros to debug service registration
 //*****************************************************************************************************************
 #include <macros/debug/registration.hxx>
 
 //*****************************************************************************************************************
-//  special macros to debug targeting of frames
+//	special macros to debug targeting of frames
 //*****************************************************************************************************************
 #include <macros/debug/targeting.hxx>
 
@@ -131,7 +131,7 @@
 #include <macros/debug/filterdbg.hxx>
 
 //*****************************************************************************************************************
-//  end of file
+//	end of file
 //*****************************************************************************************************************
 
-#endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
+#endif	// #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_

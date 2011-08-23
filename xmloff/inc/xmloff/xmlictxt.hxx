@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public SvRefBase
 
     SvXMLImport& mrImport;
 
-    USHORT       mnPrefix;
+    USHORT		 mnPrefix;
     ::rtl::OUString maLocalName;
 
-    SvXMLNamespaceMap   *mpRewindMap;
+    SvXMLNamespaceMap	*mpRewindMap;
 
     SAL_DLLPRIVATE SvXMLNamespaceMap *GetRewindMap() const
     { return mpRewindMap; }
@@ -104,5 +104,5 @@ SV_DECL_REF( SvXMLImportContext )
 SV_IMPL_REF( SvXMLImportContext )
 
 
-#endif  //  _XMLOFF_XMLICTXT_HXX
+#endif	//  _XMLOFF_XMLICTXT_HXX
 

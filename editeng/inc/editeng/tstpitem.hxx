@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ private:
     long            nTabPos;
 
     SvxTabAdjust    eAdjustment;
-    mutable sal_Unicode     m_cDecimal;
-    sal_Unicode     cFill;
+    mutable sal_Unicode		m_cDecimal;
+    sal_Unicode		cFill;
 
     EDITENG_DLLPRIVATE friend SvStream& operator<<( SvStream&, SvxTabStop& );
 
@@ -80,10 +80,10 @@ public:
     sal_Unicode&  GetFill() { return cFill; }
     sal_Unicode   GetFill() const { return cFill; }
 
-    String          GetValueString() const;
+    String			GetValueString() const;
 
     // das "alte" operator==()
-    BOOL            IsEqual( const SvxTabStop& rTS ) const
+    BOOL			IsEqual( const SvxTabStop& rTS ) const
                         {
                             return ( nTabPos     == rTS.nTabPos     &&
                                      eAdjustment == rTS.eAdjustment &&
@@ -151,7 +151,7 @@ public:
 
     // this is already included in SfxPoolItem declaration
     //int             operator!=( const SvxTabStopItem& rTSI ) const
-    //                  { return !( operator==( rTSI ) ); }
+    //					{ return !( operator==( rTSI ) ); }
 
     // SortedArrays liefern nur Stackobjekte zurueck!
     const SvxTabStop& operator[]( const USHORT nPos ) const
@@ -164,18 +164,18 @@ public:
                         {   return SvxTabStopArr::GetData(); }
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual	sal_Bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	sal_Bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream&, USHORT ) const;
-    virtual SvStream&        Store( SvStream& , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	 Create( SvStream&, USHORT ) const;
+    virtual SvStream&		 Store( SvStream& , USHORT nItemVersion ) const;
 
     using SvxTabStopArr::Insert;
     using SvxTabStopArr::Remove;

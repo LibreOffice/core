@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -528,11 +528,13 @@ RTLFUNC(DoEvents)
     (void)pBasic;
     (void)bWrite;
     (void)rPar;
-    Timer aTimer;
-    aTimer.SetTimeout( 1 );
-    aTimer.Start();
-    while ( aTimer.IsActive() )
-        Application::Yield();
+    // Dummy implementation as the following code leads
+    // to performance problems for unknown reasons
+    //Timer aTimer;
+    //aTimer.SetTimeout( 1 );
+    //aTimer.Start();
+    //while ( aTimer.IsActive() )
+    //	Application::Reschedule();
 }
 
 RTLFUNC(GetGUIVersion)
@@ -671,8 +673,8 @@ RTLFUNC(Array)
     }
 
     // Parameter ins Array uebernehmen
-    // ATTENTION: Using type USHORT for loop variable is
-    // mandatory to workaround a problem with the
+    // ATTENTION: Using type USHORT for loop variable is 
+    // mandatory to workaround a problem with the 
     // Solaris Intel compiler optimizer! See i104354
     for( USHORT i = 0 ; i < nArraySize ; i++ )
     {
@@ -1180,7 +1182,7 @@ RTLFUNC(Environ)
             rPar.Get(0)->PutString( aResult );
             return;
         }
-        lpszEnv += lstrlen( lpszEnv ) + 1;  // Next Enviroment-String
+        lpszEnv += lstrlen( lpszEnv ) + 1; 	// Next Enviroment-String
     }
 #else
     ByteString aByteStr( rPar.Get(1)->GetString(), gsl_getSystemTextEncoding() );
@@ -1407,7 +1409,7 @@ RTLFUNC(CreateUnoServiceWithArguments)
 {
     (void)pBasic;
     (void)bWrite;
-
+    
     RTL_Impl_CreateUnoServiceWithArguments( pBasic, rPar, bWrite );
 }
 
@@ -1561,7 +1563,7 @@ RTLFUNC(Join)
     if( pArr )
     {
         if( pArr->GetDims() != 1 )
-            StarBASIC::Error( SbERR_WRONG_DIMS );   // Syntax Error?!
+            StarBASIC::Error( SbERR_WRONG_DIMS );	// Syntax Error?!
 
         String aDelim;
         if( nParCount == 3 )
@@ -1585,8 +1587,6 @@ RTLFUNC(Join)
         StarBASIC::Error( SbERR_MUST_HAVE_DIMS );
 }
 
-
-typedef ::std::vector< String > StringVector;
 
 RTLFUNC(Split)
 {
@@ -1774,14 +1774,14 @@ INT16 implGetWeekDay( double aDate, bool bFirstDayParam = false, INT16 nFirstDay
 {
     Date aRefDate( 1,1,1900 );
     long nDays = (long) aDate;
-    nDays -= 2; // normieren: 1.1.1900 => 0
+    nDays -= 2;	// normieren: 1.1.1900 => 0
     aRefDate += nDays;
     DayOfWeek aDay = aRefDate.GetDayOfWeek();
     INT16 nDay;
     if ( aDay != SUNDAY )
         nDay = (INT16)aDay + 2;
     else
-        nDay = 1;   // 1==Sonntag
+        nDay = 1;	// 1==Sonntag
 
     // #117253 Optional 2. parameter "firstdayofweek"
     if( bFirstDayParam )
@@ -1848,10 +1848,10 @@ enum Interval
 
 struct IntervalInfo
 {
-    Interval    meInterval;
+    Interval	meInterval;
     const char* mpStringCode;
-    double      mdValue;
-    bool        mbSimple;
+    double		mdValue;
+    bool		mbSimple;
 
     IntervalInfo( Interval eInterval, const char* pStringCode, double dValue, bool bSimple )
         : meInterval( eInterval )
@@ -1863,16 +1863,16 @@ struct IntervalInfo
 
 static IntervalInfo pIntervalTable[] =
 {
-    IntervalInfo( INTERVAL_YYYY,    "yyyy",      0.0,               false ),    // Year
-    IntervalInfo( INTERVAL_Q,       "q",         0.0,               false ),    // Quarter
-    IntervalInfo( INTERVAL_M,       "m",         0.0,               false ),    // Month
-    IntervalInfo( INTERVAL_Y,       "y",         1.0,               true ),     // Day of year
-    IntervalInfo( INTERVAL_D,       "d",         1.0,               true ),     // Day
-    IntervalInfo( INTERVAL_W,       "w",         1.0,               true ),     // Weekday
-    IntervalInfo( INTERVAL_WW,      "ww",        7.0,               true ),     // Week
-    IntervalInfo( INTERVAL_H,       "h",        (1.0 /    24.0),    true ),     // Hour
-    IntervalInfo( INTERVAL_N,       "n",        (1.0 /  1440.0),    true),      // Minute
-    IntervalInfo( INTERVAL_S,       "s",        (1.0 / 86400.0),    true ),     // Second
+    IntervalInfo( INTERVAL_YYYY,	"yyyy",		 0.0,				false ),	// Year
+    IntervalInfo( INTERVAL_Q,		"q",		 0.0,				false ),	// Quarter
+    IntervalInfo( INTERVAL_M,		"m",		 0.0,				false ),	// Month
+    IntervalInfo( INTERVAL_Y,		"y",		 1.0,				true ),		// Day of year
+    IntervalInfo( INTERVAL_D,		"d",		 1.0,				true ),		// Day
+    IntervalInfo( INTERVAL_W,		"w",		 1.0,				true ),		// Weekday
+    IntervalInfo( INTERVAL_WW,		"ww",		 7.0,				true ),		// Week
+    IntervalInfo( INTERVAL_H,		"h",		(1.0 /    24.0),	true ),		// Hour
+    IntervalInfo( INTERVAL_N,		"n",		(1.0 /  1440.0),	true),		// Minute
+    IntervalInfo( INTERVAL_S,		"s",		(1.0 / 86400.0),	true ),		// Second
     IntervalInfo( INTERVAL_NONE, NULL, 0.0, false )
 };
 
@@ -2111,7 +2111,7 @@ RTLFUNC(DateDiff)
             double dDays2 = floor( dDate2 );
             if( pInfo->meInterval == INTERVAL_WW )
             {
-                INT16 nFirstDay = 1;    // Default
+                INT16 nFirstDay = 1;	// Default
                 if( nParCount >= 5 )
                 {
                     nFirstDay = rPar.Get(4)->GetInteger();
@@ -2201,10 +2201,10 @@ double implGetDateOfFirstDayInFirstWeek
     if( nFirstDay == 0 )
         nFirstDay = INT16( xCalendar->getFirstDayOfWeek() + 1 );
 
-    INT16 nFirstWeekMinDays = 0;    // Not used for vbFirstJan1 = default
+    INT16 nFirstWeekMinDays = 0;	// Not used for vbFirstJan1 = default
     if( nFirstWeek == 0 )
     {
-        nFirstWeekMinDays = xCalendar->getMinimumNumberOfDaysForFirstWeek();
+        nFirstWeekMinDays =	xCalendar->getMinimumNumberOfDaysForFirstWeek();
         if( nFirstWeekMinDays == 1 )
         {
             nFirstWeekMinDays = 0;
@@ -2216,9 +2216,9 @@ double implGetDateOfFirstDayInFirstWeek
             nFirstWeek = 3;
     }
     else if( nFirstWeek == 2 )
-        nFirstWeekMinDays = 4;      // vbFirstFourDays
+        nFirstWeekMinDays =	4;		// vbFirstFourDays
     else if( nFirstWeek == 3 )
-        nFirstWeekMinDays = 7;      // vbFirstFourDays
+        nFirstWeekMinDays =	7;		// vbFirstFourDays
 
     double dBaseDate;
     implDateSerial( nYear, 1, 1, dBaseDate );
@@ -2297,7 +2297,7 @@ RTLFUNC(DatePart)
         case INTERVAL_W:
         {
             bool bFirstDay = false;
-            INT16 nFirstDay = 1;    // Default
+            INT16 nFirstDay = 1;	// Default
             if( nParCount >= 4 )
             {
                 nFirstDay = rPar.Get(3)->GetInteger();
@@ -2308,11 +2308,11 @@ RTLFUNC(DatePart)
         }
         case INTERVAL_WW:
         {
-            INT16 nFirstDay = 1;    // Default
+            INT16 nFirstDay = 1;	// Default
             if( nParCount >= 4 )
                 nFirstDay = rPar.Get(3)->GetInteger();
 
-            INT16 nFirstWeek = 1;   // Default
+            INT16 nFirstWeek = 1;	// Default
             if( nParCount == 5 )
                 nFirstWeek = rPar.Get(4)->GetInteger();
 
@@ -2420,7 +2420,7 @@ RTLFUNC(FormatDateTime)
                 pFormatter = pINST->GetNumberFormatter();
             else
             {
-                sal_uInt32 n;   // Dummy
+                sal_uInt32 n;	// Dummy
                 SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
             }
 

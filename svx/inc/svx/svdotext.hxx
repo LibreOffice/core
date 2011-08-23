@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ namespace sdr { namespace table {
 //   Defines
 //************************************************************
 
-#define SDRUSERDATA_OBJTEXTLINK         (1)
+#define SDRUSERDATA_OBJTEXTLINK			(1)
 
 //************************************************************
 //   Hilfsklasse SdrTextObjGeoData
@@ -89,8 +89,8 @@ namespace sdr { namespace table {
 class SdrTextObjGeoData : public SdrObjGeoData
 {
 public:
-    Rectangle                   aRect;
-    GeoStat                     aGeo;
+    Rectangle					aRect;
+    GeoStat						aGeo;
 };
 
 //************************************************************
@@ -99,15 +99,15 @@ public:
 
 class ImpSdrObjTextLinkUserData : public SdrObjUserData
 {
-    friend class                SdrTextObj;
-    friend class                ImpSdrObjTextLink;
+    friend class				SdrTextObj;
+    friend class				ImpSdrObjTextLink;
 
-    SdrTextObj*                 pObj;
-    String                      aFileName;   // Name des referenzierten Dokuments
-    String                      aFilterName; // ggf. ein Filter
-    DateTime                    aFileDate0;  // Unnoetiges neuladen vermeiden
-    ImpSdrObjTextLink*          pLink;
-    rtl_TextEncoding            eCharSet;
+    SdrTextObj*					pObj;
+    String						aFileName;   // Name des referenzierten Dokuments
+    String						aFilterName; // ggf. ein Filter
+    DateTime					aFileDate0;  // Unnoetiges neuladen vermeiden
+    ImpSdrObjTextLink*			pLink;
+    rtl_TextEncoding			eCharSet;
 
 public:
     TYPEINFO();
@@ -135,9 +135,9 @@ class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj
 private:
     // Cell needs access to ImpGetDrawOutliner();
 
-    friend class                sdr::table::Cell;
-    friend class                sdr::table::SdrTableRtfExporter;
-    friend class                sdr::table::SdrTableRTFParser;
+    friend class				sdr::table::Cell;
+    friend class				sdr::table::SdrTableRtfExporter;
+    friend class				sdr::table::SdrTableRTFParser;
 
     // CustomShapeproperties need to access the "bTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
@@ -148,9 +148,9 @@ protected:
 
 private:
     // This method is only allowed for sdr::properties::TextProperties
-    SVX_DLLPRIVATE SdrOutliner* GetTextEditOutliner() const
-    {
-        return pEdtOutl;
+    SVX_DLLPRIVATE SdrOutliner* GetTextEditOutliner() const 
+    { 
+        return pEdtOutl; 
     }
 
     // This method is only allowed for sdr::properties::TextProperties
@@ -164,42 +164,42 @@ private:
     friend class sdr::properties::TextProperties;
     friend class sdr::properties::CellProperties;
 
-    friend class                ImpTextPortionHandler;
-    friend class                ImpSdrObjTextLink;
-    friend class                ImpSdrObjTextLinkUserData;
-    friend class                SdrPowerPointImport; // fuer PowerPointImport
-    friend class                SdrExchangeView; // fuer ImpGetDrawOutliner
-    friend class                SdrView;         // fuer ImpGetDrawOutliner
-    friend class                SdrObjEditView;  // fuer TextEdit
-    friend class                SdrMeasureObj;   // fuer ImpGetDrawOutliner
-    friend class                SvxMSDffManager; // fuer ImpGetDrawOutliner
-    friend class                SdrObjCustomShape;// fuer ImpGetDrawOutliner
-    friend class                SdrText;        // fuer ImpGetDrawOutliner
+    friend class				ImpTextPortionHandler;
+    friend class				ImpSdrObjTextLink;
+    friend class				ImpSdrObjTextLinkUserData;
+    friend class				SdrPowerPointImport; // fuer PowerPointImport
+    friend class				SdrExchangeView; // fuer ImpGetDrawOutliner
+    friend class				SdrView;         // fuer ImpGetDrawOutliner
+    friend class				SdrObjEditView;  // fuer TextEdit
+    friend class				SdrMeasureObj;   // fuer ImpGetDrawOutliner
+    friend class				SvxMSDffManager; // fuer ImpGetDrawOutliner
+    friend class				SdrObjCustomShape;// fuer ImpGetDrawOutliner
+    friend class				SdrText;		// fuer ImpGetDrawOutliner
 
 protected:
     // Das aRect ist gleichzeig auch das Rect vom RectObj und CircObj.
     // Bei bTextFrame=TRUE wird der Text in dieses Rect hineinformatiert.
     // Bei bTextFrame=FALSE wird der Text am Mittelpunkt des Rect zentriert.
-    Rectangle                   aRect;
+    Rectangle					aRect;
 
     // Der GeoStat enthaelt den Drehwinkel und einen Shearwinkel
-    GeoStat                     aGeo;
+    GeoStat						aGeo;
 
     // this is the active text
-    SdrText*                    mpText;
+    SdrText*					mpText;
 
     // Hier merke ich mir die Ausmasse des Textes (n.i.)
-    Size                        aTextSize;
+    Size						aTextSize;
 
     // Ein Outliner*, damit
     // 1. das TextObj nicht von mehreren Views gleichzeitig editiert und
     // 2. beim Streamen waerend des Editierens ein Flush() ausgefuehrt
     // werden kann
-    SdrOutliner*                pEdtOutl;
+    SdrOutliner*   				pEdtOutl;
 
     // Bei Fontwork muss soviel auf's BoundRect draufgerechnet werden
     // damit es ausreichend gross ist.
-    Rectangle*                  pFormTextBoundRect;
+    Rectangle*					pFormTextBoundRect;
 
     // Moegliche Werte fuer eTextKind sind:
     //     OBJ_TEXT         normaler Textrahmen
@@ -208,14 +208,14 @@ protected:
     //     OBJ_OUTLINETEXT  OutlineText fuer StarDraw-Praesentation
     // eTextKind hat nur Bedeutung, wenn bTextFrame=TRUE, da es sich sonst
     // um ein beschriftetes Grafikobjekt handelt.
-    SdrObjKind                  eTextKind;
+    SdrObjKind					eTextKind;
 
     // #108784#
     // For text editing in SW Haeder/Footer it is necessary to be
     // able to set an offset for the text edit to allow text editing at the
     // position of the virtual object. This offset is used when setting up
     // and maintaining the OutlinerView.
-    Point                       maTextEditOffset;
+    Point						maTextEditOffset;
 public:
     const Point& GetTextEditOffset() const { return maTextEditOffset; }
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
@@ -225,15 +225,15 @@ protected:
     // wird dann hoizontal und vertikal an aRect zentriert. Bei bTextFrame=
     // TRUE wird der Text in aRect hineinformatiert. Der eigentliche Textrahmen
     // ist durch ein SdrRectObj mit bTextFrame=TRUE realisiert.
-    BOOL                        bTextFrame : 1;
-    BOOL                        bPortionInfoChecked : 1; // Fuer Optimierung von Textobjekten
-    BOOL                        bNoShear : 1;            // Obj darf nicht gesheart werden   (->Graf+Ole+TextFrame)
-    BOOL                        bNoRotate : 1;           // Obj darf nicht gedreht werden    (->Ole)
-    BOOL                        bNoMirror : 1;           // Obj darf nicht gespiegelt werden (->Ole,TextFrame)
-    BOOL                        bTextSizeDirty : 1;
+    BOOL						bTextFrame : 1;
+    BOOL						bPortionInfoChecked : 1; // Fuer Optimierung von Textobjekten
+    BOOL						bNoShear : 1;            // Obj darf nicht gesheart werden   (->Graf+Ole+TextFrame)
+    BOOL						bNoRotate : 1;           // Obj darf nicht gedreht werden    (->Ole)
+    BOOL						bNoMirror : 1;           // Obj darf nicht gespiegelt werden (->Ole,TextFrame)
+    BOOL						bTextSizeDirty : 1;
 
     // #101684#
-    BOOL                        mbInEditMode : 1;   // Is this text obejct in edit mode?
+    BOOL						mbInEditMode : 1;	// Is this text obejct in edit mode?
 
     // Fuer Objekt mit freier Groesse im Draw (Mengentext). Das Flag wird vom
     // der App beim Create gesetzt.
@@ -244,15 +244,15 @@ protected:
     // Resize in der Breite kann sein:
     // - Interaktives Resize in Einfach- oder Mehrfachselektion
     // - Positions+Groesse Dialog
-    BOOL                        bDisableAutoWidthOnDragging : 1;
+    BOOL						bDisableAutoWidthOnDragging : 1;
 
     // #111096#
     // Allow text suppression
-    BOOL                        mbTextHidden : 1;
+    BOOL						mbTextHidden : 1;
 
     // #111096#
     // Flag for allowing text animation. Default is sal_true.
-    BOOL                        mbTextAnimationAllowed : 1;
+    BOOL						mbTextAnimationAllowed : 1;
 
     SdrOutliner& ImpGetDrawOutliner() const;
 
@@ -261,17 +261,17 @@ private:
     // #101029#: Extracted from ImpGetDrawOutliner()
     SVX_DLLPRIVATE void ImpInitDrawOutliner( SdrOutliner& rOutl ) const;
     // #101029#: Extracted from Paint()
-    SVX_DLLPRIVATE void ImpSetupDrawOutlinerForPaint( FASTBOOL      bContourFrame,
-                                       SdrOutliner&     rOutliner,
-                                       Rectangle&       rTextRect,
-                                       Rectangle&       rAnchorRect,
-                                       Rectangle&       rPaintRect,
-                                       Fraction&        aFitXKorreg ) const;
+    SVX_DLLPRIVATE void ImpSetupDrawOutlinerForPaint( FASTBOOL 		bContourFrame, 
+                                       SdrOutliner& 	rOutliner, 
+                                       Rectangle& 		rTextRect, 
+                                       Rectangle& 		rAnchorRect, 
+                                       Rectangle& 		rPaintRect, 
+                                       Fraction& 		aFitXKorreg ) const;
     SVX_DLLPRIVATE SdrObject* ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpLinkAnmeldung();
     SVX_DLLPRIVATE void ImpLinkAbmeldung();
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
-//  void ImpCheckItemSetChanges(const SfxItemSet& rAttr);
+//	void ImpCheckItemSetChanges(const SfxItemSet& rAttr);
 
 protected:
     bool ImpCanConvTextToCurve() const;
@@ -442,7 +442,7 @@ public:
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-
+    
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
@@ -543,8 +543,8 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     // #103836# iterates over the paragraphs of a given SdrObject and removes all
-    //          hard set character attributes with the which ids contained in the
-    //          given vector
+    //			hard set character attributes with the which ids contained in the
+    //			given vector
     virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
 
     // #111096#
@@ -571,19 +571,19 @@ public:
     //////////////////////////////////////////////////////////////////////////////
     // text primitive decomposition helpers
     void impDecomposeContourTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget, 
         const drawinglayer::primitive2d::SdrContourTextPrimitive2D& rSdrContourTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposePathTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget, 
         const drawinglayer::primitive2d::SdrPathTextPrimitive2D& rSdrPathTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposeBlockTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget, 
         const drawinglayer::primitive2d::SdrBlockTextPrimitive2D& rSdrBlockTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
     void impDecomposeStretchTextPrimitive(
-        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget, 
         const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 

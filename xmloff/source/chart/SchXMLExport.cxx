@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -171,7 +171,7 @@ public:
 
     ::com::sun::star::awt::Size getPageSize(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument > & xChartDoc ) const;
+            ::com::sun::star::chart2::XChartDocument > & xChartDoc ) const;    
 
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
@@ -244,7 +244,7 @@ public:
 
     SchXMLExportHelper_Impl(SchXMLExportHelper_Impl &); // not defined
     void operator =(SchXMLExportHelper_Impl &); // not defined
-
+    
 public:
     SvXMLExport& mrExport;
     SvXMLAutoStylePoolP& mrAutoStylePool;
@@ -451,7 +451,7 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
         lcl_getDataSequenceByRole( aSeriesSeqVector, OUString::createFromAscii("values-x" ) ) );
     if( xXValues.is() )
         aLabeledSeqVector.push_back( xXValues );
-
+    
     //add all other sequences now without x-values
     lcl_MatchesRole aHasXValues( OUString::createFromAscii("values-x" ) );
     for( sal_Int32 nN=0; nN<aSeriesSeqVector.getLength(); nN++ )
@@ -704,14 +704,14 @@ struct lcl_TableData
 
     tStringVector       aColumnDescriptions;
     tStringVector       aColumnDescriptions_Ranges;
-
+    
     tStringVector       aRowDescriptions;
     tStringVector       aRowDescriptions_Ranges;
 
     Sequence< Sequence< OUString > >    aComplexColumnDescriptions;//outer index is columns - inner index is level
     Sequence< Sequence< OUString > >    aComplexRowDescriptions;//outer index is rows - inner index is level
 
-    ::std::vector< sal_Int32 > aHiddenColumns;
+    ::std::vector< sal_Int32 > aHiddenColumns; 
 };
 
 // ::std::bind2nd( ::std::mem_fun_ref( &T::resize ), nSize ) does not work
@@ -988,7 +988,7 @@ struct SchXMLDataPointStruct
 // class SchXMLExportHelper
 // ========================================
 
-SchXMLExportHelper::SchXMLExportHelper( SvXMLExport& rExport, SvXMLAutoStylePoolP& rASPool )
+SchXMLExportHelper::SchXMLExportHelper(	SvXMLExport& rExport, SvXMLAutoStylePoolP& rASPool )
     : m_pImpl( new SchXMLExportHelper_Impl( rExport, rASPool ) )
 {
 }
@@ -1206,7 +1206,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                             aAny = xParentDoc->getPropertyValue(sNullDate);
                     }
                 }
-
+                
                 aAny >>= aNullDate;
             }
         }
@@ -1304,7 +1304,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         //element
         pElChart = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_CHART, sal_True, sal_True );
     }
-    else    // autostyles
+    else	// autostyles
     {
         CollectAutoStyle( aPropertyStates );
     }
@@ -1326,7 +1326,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         if( bExportContent )
         {
             Reference< drawing::XShape > xShape = rChartDoc->getTitle();
-            if( xShape.is())    // && "hasTitleBeenMoved"
+            if( xShape.is())	// && "hasTitleBeenMoved"
                 addPosition( xShape );
 
             // write style name
@@ -1346,7 +1346,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 exportText( aText );
             }
         }
-        else    // autostyles
+        else	// autostyles
         {
             CollectAutoStyle( aPropertyStates );
         }
@@ -1390,7 +1390,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 exportText( aText );
             }
         }
-        else    // autostyles
+        else	// autostyles
         {
             CollectAutoStyle( aPropertyStates );
         }
@@ -1430,12 +1430,12 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 switch( aLegendPos )
                 {
                     case chart::ChartLegendPosition_LEFT:
-//                      msString = GetXMLToken(XML_LEFT);
+// 						msString = GetXMLToken(XML_LEFT);
                         // #i35421# change left->start (not clear why this was done)
                         msString = GetXMLToken(XML_START);
                         break;
                     case chart::ChartLegendPosition_RIGHT:
-//                      msString = GetXMLToken(XML_RIGHT);
+// 						msString = GetXMLToken(XML_RIGHT);
                         // #i35421# change right->end (not clear why this was done)
                         msString = GetXMLToken(XML_END);
                         break;
@@ -1468,7 +1468,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             // element
             SvXMLElementExport aLegend( mrExport, XML_NAMESPACE_CHART, XML_LEGEND, sal_True, sal_True );
         }
-        else    // autostyles
+        else	// autostyles
         {
             CollectAutoStyle( aPropertyStates );
         }
@@ -1613,9 +1613,9 @@ void SchXMLExportHelper_Impl::exportTable()
     {
         Reference< chart::XChartDocument > xChartDoc( mrExport.GetModel(), uno::UNO_QUERY );
         if( xChartDoc.is() )
-            xComplexDescriptionAccess = Reference< chart::XComplexDescriptionAccess >( xChartDoc->getData(), uno::UNO_QUERY );
+            xComplexDescriptionAccess = Reference< chart::XComplexDescriptionAccess >( xChartDoc->getData(), uno::UNO_QUERY ); 
     }
-
+    
     if( bHasOwnData )
         lcl_ReorderInternalSequencesAccordingToTheirRangeName( m_aDataSequencesToExport );
     lcl_TableData aData( lcl_getDataForLocalTable( m_aDataSequencesToExport
@@ -1941,7 +1941,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             rShapeExport.is())
             rShapeExport->export3DLamps( xPropSet );
     }
-    else    // autostyles
+    else	// autostyles
     {
         CollectAutoStyle( aPropertyStates );
     }
@@ -2056,7 +2056,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
                     SvXMLElementExport aWall( mrExport, XML_NAMESPACE_CHART, XML_WALL, sal_True, sal_True );
                 }
-                else    // autostyles
+                else	// autostyles
                 {
                     CollectAutoStyle( aPropertyStates );
                 }
@@ -2084,7 +2084,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
                     SvXMLElementExport aFloor( mrExport, XML_NAMESPACE_CHART, XML_FLOOR, sal_True, sal_True );
                 }
-                else    // autostyles
+                else	// autostyles
                 {
                     CollectAutoStyle( aPropertyStates );
                 }
@@ -2112,7 +2112,7 @@ void SchXMLExportHelper_Impl::exportCoordinateRegion( const uno::Reference< char
     awt::Rectangle aRect( xDiaPos->calculateDiagramPositionExcludingAxes() );
     addPosition( awt::Point(aRect.X,aRect.Y) );
     addSize( awt::Size(aRect.Width,aRect.Height) );
-
+    
     SvXMLElementExport aCoordinateRegion( mrExport, XML_NAMESPACE_CHART_EXT, XML_COORDINATE_REGION, sal_True, sal_True );//#i100778# todo: change to chart namespace in future - dependent on fileformat
 }
 
@@ -2152,9 +2152,9 @@ void SchXMLExportHelper_Impl::exportAxes(
     sal_Bool bIs3DChart = sal_False;
 
     // get multiple properties using XMultiPropertySet
-    MultiPropertySetHandler aDiagramProperties (xDiagram);
+    MultiPropertySetHandler	aDiagramProperties (xDiagram);
 
-    //  Check for supported services and then the properties provided by this service.
+    //	Check for supported services and then the properties provided by this service.
     Reference<lang::XServiceInfo> xServiceInfo (xDiagram, uno::UNO_QUERY);
     if (xServiceInfo.is())
     {
@@ -2261,7 +2261,7 @@ void SchXMLExportHelper_Impl::exportAxes(
                 // element
                 pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
             }
-            else    // autostyles
+            else	// autostyles
             {
                 CollectAutoStyle( aPropertyStates );
             }
@@ -2388,7 +2388,7 @@ void SchXMLExportHelper_Impl::exportAxes(
                 AddAutoStyleAttribute( aPropertyStates );
                 pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
             }
-            else    // autostyles
+            else	// autostyles
             {
                 CollectAutoStyle( aPropertyStates );
             }
@@ -2566,7 +2566,7 @@ void SchXMLExportHelper_Impl::exportAxes(
                 AddAutoStyleAttribute( aPropertyStates );
                 pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
             }
-            else    // autostyles
+            else	// autostyles
             {
                 CollectAutoStyle( aPropertyStates );
             }
@@ -2810,7 +2810,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 }
                             }
                             sal_Int32 nSequenceLength = (xTempValueSeq.is()? xTempValueSeq->getData().getLength() : sal_Int32(0));
-                            if( nSeriesLength < nSequenceLength )
+                            if( nSeriesLength < nSequenceLength ) 
                                 nSeriesLength = nSequenceLength;
                         }
 
@@ -2922,7 +2922,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 // open series element until end of for loop
                                 pSeries = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_SERIES, sal_True, sal_True );
                             }
-                            else    // autostyles
+                            else	// autostyles
                             {
                                 CollectAutoStyle( aPropertyStates );
                             }
@@ -3005,7 +3005,7 @@ void SchXMLExportHelper_Impl::exportSeries(
 
                                     SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_MEAN_VALUE, sal_True, sal_True );
                                 }
-                                else    // autostyles
+                                else	// autostyles
                                 {
                                     CollectAutoStyle( aPropertyStates );
                                 }
@@ -3065,7 +3065,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     AddAutoStyleAttribute( aPropertyStates );
                                     SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, sal_True, sal_True );
                                 }
-                                else    // autostyles
+                                else	// autostyles
                                 {
                                     CollectAutoStyle( aPropertyStates );
                                 }
@@ -3183,7 +3183,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                     SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_EQUATION, sal_True, sal_True );
                 }
             }
-            else    // autostyles
+            else	// autostyles
             {
                 if( !aPropertyStates.empty())
                     CollectAutoStyle( aPropertyStates );
@@ -3200,7 +3200,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
     sal_Bool bJapaneseCandleSticks,
     sal_Bool bExportContent )
 {
-//  std::vector< XMLPropertyState > aPropertyStates;
+// 	std::vector< XMLPropertyState > aPropertyStates;
 
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
     {
@@ -3301,7 +3301,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                     exportDataPoints( 0, nSeriesLength, xDiagram, bExportContent );
                 }
             }
-            else    // autostyles
+            else	// autostyles
             {
                 // for close series
 //                 CollectAutoStyle( aPropertyStates );
@@ -3430,7 +3430,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     }
                 }
             }
-            DBG_ASSERT( !bExportContent || (static_cast<sal_Int32>(aDataPointList.size()) == nSeriesLength),
+            DBG_ASSERT( !bExportContent || (static_cast<sal_Int32>(aDataPointList.size()) == nSeriesLength), 
                         "not enough data points on content export" );
         }
         else
@@ -3655,7 +3655,7 @@ void SchXMLExportHelper_Impl::exportText( const OUString& rText, bool bConvertTa
 SchXMLExport::SchXMLExport(
     const Reference< lang::XMultiServiceFactory >& xServiceFactory,
     sal_uInt16 nExportFlags )
-:   SvXMLExport( xServiceFactory, MAP_CM, ::xmloff::token::XML_CHART, nExportFlags ),
+:	SvXMLExport( xServiceFactory, MAP_CM, ::xmloff::token::XML_CHART, nExportFlags ),
     maAutoStylePool( *this ),
     maExportHelper( *this, maAutoStylePool )
 {
@@ -3977,19 +3977,19 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Content_createInstance(
 
 // Sequence< OUString > SAL_CALL SchXMLExport_Meta_getSupportedServiceNames() throw()
 // {
-//  const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLMetaExporter" ));
-//  const Sequence< OUString > aSeq( &aServiceName, 1 );
-//  return aSeq;
+// 	const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLMetaExporter" ));
+// 	const Sequence< OUString > aSeq( &aServiceName, 1 );
+// 	return aSeq;
 // }
 
 // OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw()
 // {
-//  return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Meta" ));
+// 	return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Meta" ));
 // }
 
 // Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 // {
-//  return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
+// 	return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
 // }
 
 // Oasis format

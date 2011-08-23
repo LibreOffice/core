@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,11 +66,11 @@ namespace connectivity
         {
             sal_Int32 funcIndex; //Function Index
             sal_Int32 argCount;  //parameter count
-            void *  arg1;
-            void *  arg2;
-            void *  arg3;
-            void *  arg4;
-            void *  arg5;
+            void *	arg1;
+            void *	arg2;
+            void *	arg3;
+            void *	arg4;
+            void *	arg5;
             void *  arg6;
                 RunArgs()
                     {

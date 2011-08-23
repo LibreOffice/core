@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -171,7 +171,7 @@ OUString SAL_CALL CFolderPicker::getImplementationName(  )
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
 sal_Bool SAL_CALL CFolderPicker::supportsService( const OUString& ServiceName )
@@ -187,17 +187,17 @@ sal_Bool SAL_CALL CFolderPicker::supportsService( const OUString& ServiceName )
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(   )
+Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(	 ) 
     throw( RuntimeException )
 {
     return FolderPicker_getSupportedServiceNames();
 }
 
 // -------------------------------------------------
-//  XCancellable
+//	XCancellable
 // -------------------------------------------------
 
 void SAL_CALL CFolderPicker::cancel( )
@@ -209,11 +209,11 @@ void SAL_CALL CFolderPicker::cancel( )
 }
 
 //------------------------------------------------
-// overwrite base class method, which is called
+// overwrite base class method, which is called 
 // by base class dispose function
 //------------------------------------------------
 
 void SAL_CALL CFolderPicker::disposing()
-{
+{	
 }
 

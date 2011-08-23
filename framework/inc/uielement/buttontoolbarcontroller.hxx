@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <comphelper/broadcasthelper.hxx>
@@ -59,10 +59,10 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
                                 public ::com::sun::star::util::XUpdatable,
                                 public ::com::sun::star::lang::XComponent,
                                 public ::comphelper::OBaseMutex,
-                                public ::cppu::OWeakObject
+                                public ::cppu::OWeakObject 
 {
     public:
-        ButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        ButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
                                  ToolBox*             pToolBar,
                                  const rtl::OUString& aCommand );
         virtual ~ButtonToolbarController();
@@ -71,13 +71,13 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
         virtual void SAL_CALL release() throw ();
-
+         
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException); 
 
         // XUpdatable
         virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
-
+        
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -85,17 +85,17 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
 
         // XEventListener
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-
+        
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
-
+ 
         // XToolbarController
         virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException);
-
+ 
     private:
         sal_Bool                                                                         m_bInitialized : 1,
                                                                                          m_bDisposed : 1;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,26 +43,26 @@ public class ScriptNode extends AbstractNode {
     private Element element;
     private static final String LOGICAL_NAME = "logicalname";
     private static final String LANGUAGE_NAME = "languagename";
-
+    
     public ScriptNode(Element element) {
         super(Children.LEAF);
         this.element = element;
         init();
     }
-
+    
     private void init() {
         setIconBase("/org/openoffice/netbeans/modules/office/resources/OfficeIcon");
         setDefaultAction(SystemAction.get(PropertiesAction.class));
 
         NodeList nl = element.getElementsByTagName(LOGICAL_NAME);
         Element nameElement = (Element)nl.item(0);
-
+        
         String name = nameElement.getAttribute("value");
         setName(name);
         setDisplayName(name.substring(name.lastIndexOf(".") + 1));
         setShortDescription(name);
     }
-
+    
     protected SystemAction[] createActions() {
         return new SystemAction[] {
             SystemAction.get(ToolsAction.class),
@@ -70,11 +70,11 @@ public class ScriptNode extends AbstractNode {
             SystemAction.get(PropertiesAction.class),
         };
     }
-
+    
     public HelpCtx getHelpCtx() {
         return HelpCtx.DEFAULT_HELP;
     }
-
+    
     // RECOMMENDED - handle cloning specially (so as not to invoke the overhead of FilterNode):
     /*
     public Node cloneNode() {
@@ -82,7 +82,7 @@ public class ScriptNode extends AbstractNode {
         return new ScriptNode();
     }
      */
-
+    
     protected Sheet createSheet() {
         Sheet sheet = super.createSheet();
         Sheet.Set props = sheet.get(Sheet.PROPERTIES);
@@ -90,32 +90,32 @@ public class ScriptNode extends AbstractNode {
             props = Sheet.createPropertiesSet();
             sheet.put(props);
         }
-
+        
         org.openide.nodes.Node.Property prop = null;
         if ((prop = getStringProperty(LOGICAL_NAME)) != null)
             props.put(prop);
-
+        
         if ((prop = getStringProperty(LANGUAGE_NAME)) != null)
             props.put(prop);
-
+        
         return sheet;
     }
-
+        
     private org.openide.nodes.Node.Property getStringProperty(String name) {
         NodeList nl = element.getElementsByTagName(name);
         if(nl.getLength() != 1)
             return null;
-
+        
         Element nameElement = (Element)nl.item(0);
         String value = nameElement.getAttribute("value");
-
+        
         return new StringProperty(this, name, value);
     }
-
+    
     private class StringProperty extends PropertySupport.ReadOnly {
         private String name, value;
         private ScriptNode sn;
-
+        
         public StringProperty(ScriptNode sn, String name, String value) {
             super(value, String.class, name,
                 "The name of the java language method for this script");
@@ -123,18 +123,18 @@ public class ScriptNode extends AbstractNode {
             this.name = name;
             this.value = value;
         }
-
+        
         public Object getValue() {
             return value;
         }
-
+        
         /* public void setValue(Object obj) {
             System.out.println("Setting value to: " + obj.toString());
-
+            
             if ((value instanceof String) != true)
                 throw new IllegalArgumentException(name +
                     " property must be of type String");
-
+            
             value = obj.toString();
             if (name.equals(LOGICAL_NAME)) {
                 sn.setName(value);
@@ -143,7 +143,7 @@ public class ScriptNode extends AbstractNode {
             }
         } */
     }
-
+    
     /* public boolean canRename() {
         return true;
     }
@@ -152,7 +152,7 @@ public class ScriptNode extends AbstractNode {
         // Update visible name, fire property changes:
         super.setName(nue);
     } */
-
+    
     /*
      public boolean canDestroy() {
         return true;
@@ -162,7 +162,7 @@ public class ScriptNode extends AbstractNode {
         super.destroy();
         // perform additional actions, i.e. delete underlying object
     } */
-
+    
     // Handle copying and cutting specially:
     /*
     public boolean canCopy() {
@@ -195,7 +195,7 @@ public class ScriptNode extends AbstractNode {
         return et;
     }
      */
-
+    
     // Permit user to customize whole node at once (instead of per-property):
     /*
     public boolean hasCustomizer() {
@@ -205,5 +205,5 @@ public class ScriptNode extends AbstractNode {
         return new MyCustomizingPanel(this);
     }
      */
-
+    
 }

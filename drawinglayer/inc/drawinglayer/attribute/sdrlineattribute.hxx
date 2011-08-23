@@ -65,11 +65,11 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             SdrLineAttribute(
-                basegfx::B2DLineJoin eJoin,
-                double fWidth,
-                double fTransparence,
-                const basegfx::BColor& rColor,
-                const ::std::vector< double >& rDotDashArray,
+                basegfx::B2DLineJoin eJoin, 
+                double fWidth, 
+                double fTransparence, 
+                const basegfx::BColor& rColor, 
+                const ::std::vector< double >& rDotDashArray, 
                 double fFullDotDashLen);
             SdrLineAttribute(const basegfx::BColor& rColor);
             SdrLineAttribute();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,18 +70,18 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 //------------------------------------------------------------------------------
-//  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
+//	IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
+::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)	\
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.mozab.ResultSet"));
 }
 // -------------------------------------------------------------------------
  Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(2);
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(2);	
     aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
     aSupported[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
-    return aSupported;
+    return aSupported;	
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)
@@ -121,7 +121,7 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< conne
     ,m_RowStates(0)
     ,m_bIsReadOnly(-1)
 {
-
+                                                                
     m_aQuery.setMaxNrOfReturns(pStmt->getOwnConnection()->getMaxResultRecords());
 }
 // -------------------------------------------------------------------------
@@ -159,7 +159,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -------------------------------------------------------------------------
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException)
 {
-    OTypeCollection aTypes( ::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+    OTypeCollection aTypes(	::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
@@ -274,7 +274,7 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
     ResultSetEntryGuard aGuard( *this );
 
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(
+        m_xMetaData = new OResultSetMetaData( 
         m_pSQLIterator->getSelectColumns(), m_pSQLIterator->getTables().begin()->first ,m_pTable,determineReadOnly());
     return m_xMetaData;
 }
@@ -334,7 +334,7 @@ sal_Bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("fetchCurrentRow, m_nRowPos = %u", m_nRowPos );
     return fetchRow(getCurrentCardNumber());
-}
+}	
 
 // -------------------------------------------------------------------------
 sal_Bool OResultSet::pushCard(sal_uInt32 cardNumber) throw(SQLException, RuntimeException)
@@ -361,7 +361,7 @@ sal_Bool OResultSet::pushCard(sal_uInt32 cardNumber) throw(SQLException, Runtime
         }
     }
     return sal_True;
-
+    
 }
 // -------------------------------------------------------------------------
 sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(SQLException, RuntimeException)
@@ -376,13 +376,13 @@ sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(
         if (cardNumber == m_nUpdatedRow)
         {
             //write back the changes first
-            if (!pushCard(cardNumber))  //error write back the changes
+            if (!pushCard(cardNumber))	//error write back the changes
                 throw SQLException();
         }
     }
     else
         m_aQuery.resyncRow(cardNumber);
-
+    
     if ( validRow( cardNumber ) == sal_False )
         return sal_False;
 
@@ -620,12 +620,12 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-    DECL_PROP0(FETCHSIZE,               sal_Int32);
+    DECL_PROP0(FETCHDIRECTION,			sal_Int32);
+    DECL_PROP0(FETCHSIZE,				sal_Int32);
      DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
-
+    DECL_PROP1IMPL(RESULTSETTYPE,		sal_Int32) PropertyAttribute::READONLY);
+ 
     return new OPropertyArrayHelper(aProps);
 }
 // -------------------------------------------------------------------------
@@ -895,7 +895,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSQLParseNode *pColumn;
         OSQLParseNode *pAtom;
         OSQLParseNode *pOptEscape;
-        const OSQLParseNode* pPart2 = parseTree->getChild(1);
+        const OSQLParseNode* pPart2 = parseTree->getChild(1);		
         pColumn     = parseTree->getChild(0);                        // Match Item
         pAtom       = pPart2->getChild(parseTree->count()-2);     // Match String
         pOptEscape  = pPart2->getChild(parseTree->count()-1);     // Opt Escape Rule
@@ -1023,7 +1023,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     else if (SQL_ISRULE(parseTree,test_for_null))
     {
         OSL_ENSURE(parseTree->count() == 2,"Error in ParseTree");
-        const OSQLParseNode* pPart2 = parseTree->getChild(1);
+        const OSQLParseNode* pPart2 = parseTree->getChild(1);		
         OSL_ENSURE(SQL_ISTOKEN(pPart2->getChild(0),IS),"Error in ParseTree");
 
         if (!SQL_ISRULE(parseTree->getChild(0),column_ref))
@@ -1451,9 +1451,9 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
 sal_Bool OResultSet::isCount() const
 {
     return (m_pParseTree &&
-            m_pParseTree->count() > 2                                                       &&
-            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)                      &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)               &&
+            m_pParseTree->count() > 2														&&
+            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)						&&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)				&&
             SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct) &&
             m_pParseTree->getChild(2)->getChild(0)->getChild(0)->count() == 4
             );
@@ -1494,7 +1494,7 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
     {
-        sal_Int32   nKeyValue;
+        sal_Int32 	nKeyValue;
         if ( (sal_Int32)m_pKeySet->get().capacity() < nMaxCardNumber )
             m_pKeySet->get().reserve(nMaxCardNumber + 20 );
 
@@ -1509,7 +1509,7 @@ sal_Int32 OResultSet::deletedCount()
 {
     impl_ensureKeySet();
     return m_CurrentRowCount - m_pKeySet->get().size();
-
+    
 }
 // -----------------------------------------------------------------------------
 sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
@@ -1563,9 +1563,9 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     {
         nCurCard = (m_pKeySet->get())[nCurPos-1];
     }
-    else    //The requested row has not been retrived until now. We should get the right card for it.
+    else	//The requested row has not been retrived until now. We should get the right card for it.
         nCurCard = nCurPos + deletedCount();
-
+         
     while ( nCurCard > nNumberOfRecords && !m_aQuery.queryComplete() ) {
             m_aQuery.checkRowAvailable( nCurCard );
             if ( m_aQuery.hadError() )
@@ -1605,7 +1605,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
     ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == sal_False )
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
-
+        
     OSL_ENSURE((!m_aRow->isDeleted()),"getBookmark called for deleted row");
     return makeAny((sal_Int32)(m_aRow->get())[0]);
 }
@@ -1643,7 +1643,7 @@ sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& lhs, c
          nResult = 1;
     else
          nResult = 0;
-
+ 
     return  nResult;
 }
 sal_Bool OResultSet::hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -1671,7 +1671,7 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
 {
     OSL_TRACE("checkPendingUpdate, m_nRowPos = %u", m_nRowPos );
     const sal_Int32 nCurrentRow = getCurrentCardNumber();
-
+        
     if ((m_nNewRow && nCurrentRow != m_nNewRow)
         || ( m_nUpdatedRow && m_nUpdatedRow != nCurrentRow))
     {
@@ -1681,7 +1681,7 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
-
+            
 }
 void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw(SQLException, RuntimeException)
 {
@@ -1858,14 +1858,14 @@ void SAL_CALL OResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
         m_RowStates = RowStates_Error;
         m_pStatement->getOwnConnection()->throwSQLException( STR_ROW_CAN_NOT_SAVE, *this );
     }
-
+        
     if (!m_aQuery.commitRow(nCurrentCard))
     {
         m_RowStates = RowStates_Error;
         m_nUpdatedRow = 0;
         m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
     }
-
+    
     m_nUpdatedRow = 0;
     fetchCurrentRow();
     OSL_TRACE("updateRow out, m_nRowPos = %u", m_nRowPos );
@@ -1877,7 +1877,7 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
     ResultSetEntryGuard aGuard( *this );
     if (rowDeleted())
         m_pStatement->getOwnConnection()->throwSQLException( STR_ROW_ALREADY_DELETED, *this );
-
+        
     const sal_Int32 nCurrentRow = getCurrentCardNumber();
     //fetchRow(nCurrentRow);
     if (!nCurrentRow)
@@ -1906,8 +1906,8 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLE
     OSL_TRACE("moveToInsertRow in, m_nRowPos = %u", m_nRowPos );
     ResultSetEntryGuard aGuard( *this );
     m_nOldRowPos = m_nRowPos;
-
-    if (!m_nNewRow) //no new row now, insert one
+    
+    if (!m_nNewRow)	//no new row now, insert one
     {
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
         checkPendingUpdate();
@@ -1919,7 +1919,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLE
         m_nNewRow = m_aQuery.createNewCard();
         if (!m_nNewRow)
             m_pStatement->getOwnConnection()->throwSQLException( STR_CAN_NOT_CREATE_ROW, *this );
-
+            
         m_RowStates = RowStates_Normal;
         fillKeySet(m_nNewRow);
     }
@@ -1953,10 +1953,10 @@ sal_Bool OResultSet::determineReadOnly()
     return m_bIsReadOnly != 0;
 }
 
-void OResultSet::setTable(OTable* _rTable)
-{
+void OResultSet::setTable(OTable* _rTable) 
+{ 
     OSL_TRACE("In : setTable");
-    m_pTable = _rTable;
+    m_pTable = _rTable; 
     m_pTable->acquire();
     m_xTableColumns = m_pTable->getColumns();
     if(m_xTableColumns.is())
@@ -1964,9 +1964,9 @@ void OResultSet::setTable(OTable* _rTable)
     OSL_TRACE("Out : setTable");
 }
 
-void OResultSet::setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)
+void OResultSet::setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy) 
 {
-    m_aOrderbyColumnNumber = _aColumnOrderBy;
+    m_aOrderbyColumnNumber = _aColumnOrderBy; 
 }
 
 void OResultSet::setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)

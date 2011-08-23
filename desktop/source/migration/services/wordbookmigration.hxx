@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,18 +85,18 @@ namespace migration
             throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) 
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XJob
         virtual ::com::sun::star::uno::Any SAL_CALL execute(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException);        
     };
 
 //.........................................................................
-}   // namespace migration
+}	// namespace migration
 //.........................................................................
 
 #endif // _DESKTOP_AUTOCORRMIGRATION_HXX_

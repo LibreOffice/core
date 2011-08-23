@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ public class ConfigurePanel extends JPanel {
 
     public static final String DIALOG_TITLE =
         "Choose What to Export as Scripts";
-
+    
     public ConfigurePanel(String basedir, Vector classpath,
         ParcelDescriptor descriptor) {
 
@@ -125,7 +125,7 @@ public class ConfigurePanel extends JPanel {
         descriptor.setScriptEntries(scripts);
         return descriptor;
     }
-
+    
     private void initUI() {
 
         JPanel leftPanel = new JPanel();
@@ -134,7 +134,7 @@ public class ConfigurePanel extends JPanel {
 
         leftPanel.setLayout(new BorderLayout());
         leftPanel.add(methodPanel, BorderLayout.CENTER);
-
+      
         JPanel rightPanel = new JPanel();
         JPanel scriptButtons = initScriptButtons();
         scriptPanel = new ScriptPanel(descriptor.getScriptEntries());
@@ -142,11 +142,11 @@ public class ConfigurePanel extends JPanel {
         rightPanel.setLayout(new BorderLayout());
         rightPanel.add(scriptPanel, BorderLayout.CENTER);
         rightPanel.add(scriptButtons, BorderLayout.SOUTH);
-
+        
         setLayout(new GridBagLayout());
         setPreferredSize(new java.awt.Dimension(700, 300));
         setBorder(LineBorder.createBlackLineBorder());
-
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -156,12 +156,12 @@ public class ConfigurePanel extends JPanel {
         gbc.insets = new Insets(10, 5, 5, 5);
         gbc.weightx = 0.75;
         add(leftPanel, gbc);
-
+        
         gbc = new java.awt.GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         add(methodButtons, gbc);
-
+        
         gbc = new java.awt.GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;
@@ -188,13 +188,13 @@ public class ConfigurePanel extends JPanel {
                 }
             }
         );
-
+        
         GridBagConstraints gbc = new java.awt.GridBagConstraints();
         gbc.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
         panel.add(addButton, gbc);
-
+        
         JPanel dummyPanel = new JPanel();
         gbc = new java.awt.GridBagConstraints();
         gbc.gridwidth = java.awt.GridBagConstraints.REMAINDER;
@@ -203,15 +203,15 @@ public class ConfigurePanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         panel.add(dummyPanel, gbc);
-
+        
         return panel;
     }
-
+    
     private JPanel initScriptButtons() {
         JPanel panel = new JPanel();
         JButton removeButton = new JButton("Remove");
         JButton removeAllButton = new JButton("Remove All");
-
+        
         removeButton.addActionListener(
             new ActionListener() {
                 public void actionPerformed(ActionEvent e) {

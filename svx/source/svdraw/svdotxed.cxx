@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     {
         Rectangle aAnchorRect;
         Rectangle aTextRect;
-        TakeTextRect(rOutl, aTextRect, FALSE,
+        TakeTextRect(rOutl, aTextRect, FALSE, 
             &aAnchorRect/* #97097# give TRUE here, not FALSE */);
         Fraction aFitXKorreg(1,1);
         ImpSetCharStretching(rOutl,aTextRect,aAnchorRect,aFitXKorreg);
@@ -133,7 +133,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         {
             // only repaint here, no real objectchange
 
-//          ActionChanged();
+//			ActionChanged();
             BroadcastObjectChange();
         }
     }
@@ -167,13 +167,13 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
         if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
     }
-
+    
     // #106879#
     // Done earlier since used in else tree below
     SdrTextHorzAdjust eHAdj(GetTextHorizontalAdjust());
     SdrTextVertAdjust eVAdj(GetTextVerticalAdjust());
 
-    if(IsTextFrame())
+    if(IsTextFrame()) 
     {
         long nMinWdt=GetMinTextFrameWidth();
         long nMinHgt=GetMinTextFrameHeight();
@@ -192,7 +192,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
             // #101684#
             BOOL bInEditMode = IsInEditMode();
 
-            if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
+            if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE)) 
             {
                 // Grenzenlose Papiergroesse fuer Laufschrift
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nMaxWdt=1000000;
@@ -205,8 +205,8 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         }
         aPaperMin.Width()=nMinWdt;
         aPaperMin.Height()=nMinHgt;
-    }
-    else
+    } 
+    else 
     {
         // #106879#
         // aPaperMin needs to be set to object's size if full width is activated
@@ -246,7 +246,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     }
 
     // #103516# For complete ver adjust support, set paper min height to 0, here.
-    if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize)
+    if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize) 
     {
         aPaperMin.Height() = 0;
     }

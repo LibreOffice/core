@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::lang;
 
 DBG_NAME(ODbaseConnection)
 // --------------------------------------------------------------------------------
-ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
+ODbaseConnection::ODbaseConnection(ODriver*	_pDriver) : OConnection(_pDriver)
 {
     DBG_CTOR(ODbaseConnection,NULL);
     m_aFilenameExtension = String::CreateFromAscii("dbf");

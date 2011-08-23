@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,12 +46,12 @@ class XMLLineNumberingSeparatorImportContext : public SvXMLImportContext
     ::rtl::OUStringBuffer sSeparatorBuf;
     XMLLineNumberingImportContext& rLineNumberingContext;
 
-public:
+public:	
 
     TYPEINFO();
 
     XMLLineNumberingSeparatorImportContext(
-        SvXMLImport& rImport,
+        SvXMLImport& rImport, 
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
         XMLLineNumberingImportContext& rLineNumbering);
@@ -61,7 +61,7 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     virtual void Characters( const ::rtl::OUString& rChars );

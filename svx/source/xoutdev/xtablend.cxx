@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,11 +77,11 @@
 using namespace com::sun::star;
 using namespace rtl;
 
-sal_Unicode const pszExtLineEnd[]   = {'s','o','e'};
+sal_Unicode const pszExtLineEnd[]	= {'s','o','e'};
 
-static char const aChckLEnd[]  = { 0x04, 0x00, 'S','O','E','L'};    // < 5.2
-static char const aChckLEnd0[] = { 0x04, 0x00, 'S','O','E','0'};    // = 5.2
-static char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };       // = 6.0
+static char const aChckLEnd[]  = { 0x04, 0x00, 'S','O','E','L'};	// < 5.2
+static char const aChckLEnd0[] = { 0x04, 0x00, 'S','O','E','0'};	// = 5.2
+static char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };		// = 6.0
 
 // --------------------
 // class XLineEndTable
@@ -171,9 +171,9 @@ class impXLineEndList
 {
 private:
     VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
-    SdrObject*              mpLineObject;
+    SdrModel*				mpSdrModel;
+    SdrObject*			    mpBackgroundObject;
+    SdrObject*			    mpLineObject;
 
 public:
     impXLineEndList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pL)
@@ -211,7 +211,7 @@ void XLineEndList::impCreate()
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
-
+    
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XLineEndList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();
@@ -251,7 +251,7 @@ void XLineEndList::impDestroy()
 }
 
 XLineEndList::XLineEndList(const String& rPath, XOutdevItemPool* _pXPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
-:   XPropertyList(rPath, _pXPool, nInitSize, nReSize),
+:	XPropertyList(rPath, _pXPool, nInitSize, nReSize),
     mpData(0)
 {
     pBmpList = new List(nInitSize, nReSize);

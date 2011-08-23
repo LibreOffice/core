@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -333,7 +333,7 @@ void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
             aEvent.Source = uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) );
             // For now all the events are sent as object events
             // aEvent.Source = ( xSource.is() ? xSource
-            //                     : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
+            //					   : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
             ::cppu::OInterfaceIteratorHelper aIt( *pIC );
             while( aIt.hasMoreElements() )
             {
@@ -512,9 +512,9 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
     }
 
     // if ( m_bWaitSaveCompleted )
-    //  throw embed::WrongStateException(
-    //              ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    // 	throw embed::WrongStateException(
+    // 				::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+    // 				uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     return uno::Reference< util::XCloseable >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
 }

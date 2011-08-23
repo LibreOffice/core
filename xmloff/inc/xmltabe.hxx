@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,18 +43,18 @@ class SvxXMLTabStopExport
     SvXMLExport& rExport;   // for access to document handler
 
 protected:
-
+    
     void exportTabStop( const ::com::sun::star::style::TabStop* pTabStop );
 
 public:
 
     SvxXMLTabStopExport(  SvXMLExport& rExport );
     virtual ~SvxXMLTabStopExport();
-
+    
     // core API
     void Export( const ::com::sun::star::uno::Any& rAny );
 };
 
 
-#endif  //  _XMLOFF_XMLTABE_HXX
+#endif	//  _XMLOFF_XMLTABE_HXX
 

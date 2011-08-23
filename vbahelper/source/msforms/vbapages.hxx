@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <vbahelper/vbacollectionimpl.hxx>
-typedef CollTestImplHelper<
+typedef CollTestImplHelper< 
 ov::msforms::XPages > ScVbaPages_BASE;
 
 class ScVbaPages : public ScVbaPages_BASE

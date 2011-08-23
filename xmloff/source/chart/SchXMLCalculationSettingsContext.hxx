@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ class SchXMLCalculationSettingsContext : public SvXMLImportContext
 {
     com::sun::star::uno::Any m_aNullDate;
 public:
-    SchXMLCalculationSettingsContext( SvXMLImport& rImport,
+    SchXMLCalculationSettingsContext( SvXMLImport& rImport, 
                                     sal_uInt16 nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<

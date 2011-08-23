@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ void AutoScrollEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         ULONG   nId = ((const TextHint&)rHint).GetId();
         if ( nId == TEXT_HINT_VIEWSCROLLED )
-        {
+        {   
             ScrollBar*  pScroll = GetVScrollBar();
             if ( pScroll )
                 pScroll->Show();

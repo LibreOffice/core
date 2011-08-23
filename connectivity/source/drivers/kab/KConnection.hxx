@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace connectivity
         class KabDriver;
         class KabDatabaseMetaData;
 
-        typedef OMetaConnection_BASE                KabConnection_BASE; // implements basics and text encoding
+        typedef OMetaConnection_BASE				KabConnection_BASE; // implements basics and text encoding
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
 
         class KabConnection : public comphelper::OBaseMutex,
@@ -74,13 +74,13 @@ namespace connectivity
             //====================================================================
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
 
-            OWeakRefArray                           m_aStatements;  // vector containing a list of all the Statement objects
+            OWeakRefArray							m_aStatements;	// vector containing a list of all the Statement objects
                                                                     // for this Connection
 
-            ::KABC::StdAddressBook*                 m_pAddressBook; // the address book
-            KabDriver*                              m_pDriver;      // pointer to the owning driver object
+            ::KABC::StdAddressBook*					m_pAddressBook;	// the address book
+            KabDriver*								m_pDriver;		// pointer to the owning driver object
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>
-                                                    m_xCatalog;     // needed for the SQL interpreter
+                                                    m_xCatalog;		// needed for the SQL interpreter
 
         public:
             virtual void construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
@@ -130,8 +130,8 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
 
             // accessors
-            inline KabDriver*           getDriver()         const { return m_pDriver;}
-                   ::KABC::AddressBook* getAddressBook()    const;
+            inline KabDriver*			getDriver()			const { return m_pDriver;}
+                   ::KABC::AddressBook* getAddressBook()	const;
         };
     }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ void SAL_CALL Seekable::truncate( void )
     if (!g_seekable_can_truncate(mpStream))
         throw io::IOException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Truncate unsupported")),
             static_cast< cppu::OWeakObject * >(this));
-
+    
     GError *pError=NULL;
     if (!g_seekable_truncate(mpStream, 0, NULL, &pError))
         convertToException(pError, static_cast< cppu::OWeakObject * >(this));
@@ -94,8 +94,8 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
     bool bOk = false;
     sal_uInt64 nSize = 0;
 
-    GFileInfo* pInfo = G_IS_FILE_INPUT_STREAM(mpStream)
-        ? g_file_input_stream_query_info(G_FILE_INPUT_STREAM(mpStream), const_cast<char*>(G_FILE_ATTRIBUTE_STANDARD_SIZE), NULL, NULL)
+    GFileInfo* pInfo = G_IS_FILE_INPUT_STREAM(mpStream) 
+        ? g_file_input_stream_query_info(G_FILE_INPUT_STREAM(mpStream), const_cast<char*>(G_FILE_ATTRIBUTE_STANDARD_SIZE), NULL, NULL) 
         : g_file_output_stream_query_info(G_FILE_OUTPUT_STREAM(mpStream), const_cast<char*>(G_FILE_ATTRIBUTE_STANDARD_SIZE), NULL, NULL);
 
     if (pInfo)

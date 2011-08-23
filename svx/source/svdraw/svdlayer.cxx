@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 
 sal_Bool SetOfByte::IsEmpty() const
 {
-    for(sal_uInt16 i(0); i < 32; i++)
+    for(sal_uInt16 i(0); i < 32; i++) 
     {
-        if(aData[i] != 0)
+        if(aData[i] != 0) 
             return sal_False;
     }
 
@@ -51,9 +51,9 @@ sal_Bool SetOfByte::IsEmpty() const
 
 sal_Bool SetOfByte::IsFull() const
 {
-    for(sal_uInt16 i(0); i < 32; i++)
+    for(sal_uInt16 i(0); i < 32; i++) 
     {
-        if(aData[i] != 0xFF)
+        if(aData[i] != 0xFF) 
             return sal_False;
     }
 
@@ -64,11 +64,11 @@ sal_uInt16 SetOfByte::GetSetCount() const
 {
     sal_uInt16 nRet(0);
 
-    for(sal_uInt16 i(0); i < 32; i++)
+    for(sal_uInt16 i(0); i < 32; i++) 
     {
         sal_uInt8 a(aData[i]);
 
-        if(a != 0)
+        if(a != 0) 
         {
             if(a & 0x80) nRet++;
             if(a & 0x40) nRet++;
@@ -89,15 +89,15 @@ sal_uInt8 SetOfByte::GetSetBit(sal_uInt16 nNum) const
     nNum++;
     sal_uInt16 i(0), j(0);
     sal_uInt16 nRet(0);
-
-    while(j < nNum && i < 256)
+    
+    while(j < nNum && i < 256) 
     {
-        if(IsSet(sal_uInt8(i)))
+        if(IsSet(sal_uInt8(i))) 
             j++;
         i++;
     }
 
-    if(j == nNum)
+    if(j == nNum) 
         nRet = i - 1;
 
     return sal_uInt8(nRet);
@@ -113,23 +113,23 @@ sal_uInt8 SetOfByte::GetClearBit(sal_uInt16 nNum) const
     nNum++;
     sal_uInt16 i(0), j(0);
     sal_uInt16 nRet(0);
-
-    while(j < nNum && i < 256)
+    
+    while(j < nNum && i < 256) 
     {
-        if(!IsSet(sal_uInt8(i)))
+        if(!IsSet(sal_uInt8(i))) 
             j++;
         i++;
     }
 
-    if(j == nNum)
+    if(j == nNum) 
         nRet = i - 1;
-
+    
     return sal_uInt8(nRet);
 }
 
 void SetOfByte::operator&=(const SetOfByte& r2ndSet)
 {
-    for(sal_uInt16 i(0); i < 32; i++)
+    for(sal_uInt16 i(0); i < 32; i++) 
     {
         aData[i] &= r2ndSet.aData[i];
     }
@@ -137,7 +137,7 @@ void SetOfByte::operator&=(const SetOfByte& r2ndSet)
 
 void SetOfByte::operator|=(const SetOfByte& r2ndSet)
 {
-    for(sal_uInt16 i(0); i < 32; i++)
+    for(sal_uInt16 i(0); i < 32; i++) 
     {
         aData[i] |= r2ndSet.aData[i];
     }
@@ -211,12 +211,12 @@ void SdrLayer::SetStandardLayer(FASTBOOL bStd)
 
 void SdrLayer::SetName(const XubString& rNewName)
 {
-    if(!rNewName.Equals(aName))
+    if(!rNewName.Equals(aName)) 
     {
         aName = rNewName;
         nType = 0; // Userdefined
-
-        if(pModel)
+        
+        if(pModel) 
         {
             SdrHint aHint(HINT_LAYERCHG);
 
@@ -228,8 +228,8 @@ void SdrLayer::SetName(const XubString& rNewName)
 
 bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 {
-    return (nID == rCmpLayer.nID
-        && nType == rCmpLayer.nType
+    return (nID == rCmpLayer.nID 
+        && nType == rCmpLayer.nType 
         && aName.Equals(rCmpLayer.aName));
 }
 
@@ -388,15 +388,15 @@ const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, FASTBOOL /*bInhe
     UINT16 i(0);
     const SdrLayer* pLay = NULL;
 
-    while(i < GetLayerCount() && !pLay)
+    while(i < GetLayerCount() && !pLay) 
     {
         if(rName.Equals(GetLayer(i)->GetName()))
             pLay = GetLayer(i);
-        else
+        else 
             i++;
     }
 
-    if(!pLay && pParent)
+    if(!pLay && pParent) 
     {
         pLay = pParent->GetLayer(rName, TRUE);
     }
@@ -432,25 +432,25 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
     SetOfByte aSet;
     sal_Bool bDown = (pParent == NULL);
     USHORT j;
-    for (j=0; j<GetLayerCount(); j++)
+    for (j=0; j<GetLayerCount(); j++) 
     {
         aSet.Set(GetLayer((sal_uInt16)j)->GetID());
     }
     SdrLayerID i;
-    if (!bDown)
+    if (!bDown) 
     {
         i=254;
-        while (i && aSet.IsSet(BYTE(i)))
+        while (i && aSet.IsSet(BYTE(i))) 
             --i;
-        if (i == 0)
+        if (i == 0) 
             i=254;
-    }
-    else
+    } 
+    else 
     {
         i=0;
-        while (i<=254 && aSet.IsSet(BYTE(i)))
+        while (i<=254 && aSet.IsSet(BYTE(i))) 
             i++;
-        if (i>254)
+        if (i>254) 
             i=0;
     }
     return i;

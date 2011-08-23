@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,20 +37,20 @@ namespace svx {
 class SVX_DLLPUBLIC ExtrusionColorControl : public SfxToolBoxControl
 {
 private:
-    ToolboxButtonColorUpdater*  mpBtnUpdater;
+    ToolboxButtonColorUpdater*	mpBtnUpdater;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     ExtrusionColorControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~ExtrusionColorControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
 };
 
 }
 
-#endif      // _SVX_EXTRUSIONCOLORCONTROL_HXX
+#endif		// _SVX_EXTRUSIONCOLORCONTROL_HXX
 

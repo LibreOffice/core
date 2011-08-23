@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include "sb.hxx"
 
 namespace utl
-{
+{ 
     class TransliterationWrapper;
 }
 class SbUnoFactory;
@@ -50,9 +50,15 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
+typedef ::std::vector< String > StringVector;
+
 struct SbClassData
 {
-    SbxArrayRef     mxIfaces;
+    SbxArrayRef		mxIfaces;
+
+    // types this module depends on because of use in Dim As New <type>
+    // needed for initialization order of class modules
+    StringVector	maRequiredTypes;
 
     SbClassData( void );
     ~SbClassData( void )
@@ -64,7 +70,7 @@ struct SbClassData
 // Implementation: sb.cxx
 class SbClassFactory : public SbxFactory
 {
-    SbxObjectRef    xClassModules;
+    SbxObjectRef	xClassModules;
 
 public:
     SbClassFactory( void );
@@ -96,31 +102,31 @@ SV_DECL_PTRARR_DEL(SbErrorStack, SbErrorStackEntry*, 1, 1)
 
 struct SbiGlobals
 {
-    SbiInstance*    pInst;          // alle aktiven Runtime-Instanzen
-    SbiFactory*     pSbFac;         // StarBASIC-Factory
-    SbUnoFactory*   pUnoFac;        // Factory fuer Uno-Structs bei DIM AS NEW
-    SbTypeFactory*  pTypeFac;       // Factory for user defined types
-    SbClassFactory* pClassFac;      // Factory for user defined classes (based on class modules)
-    SbOLEFactory*   pOLEFac;        // Factory for OLE types
-    SbFormFactory*  pFormFac;       // Factory for user forms
-    SbModule*       pMod;           // aktuell aktives Modul
-    SbModule*       pCompMod;       // aktuell compiliertes Modul
-    short           nInst;          // Anzahl BASICs
-    Link            aErrHdl;        // globaler Error-Handler
-    Link            aBreakHdl;      // globaler Break-Handler
-    SbError         nCode;          // aktueller Fehlercode
-    xub_StrLen      nLine;          // aktuelle Zeile
-    xub_StrLen      nCol1,nCol2;    // aktuelle Spalten (von,bis)
-    BOOL            bCompiler;      // Flag fuer Compiler-Error
-    BOOL            bGlobalInitErr; // Beim GlobalInit trat ein Compiler-Fehler auf
-    BOOL            bRunInit;       // TRUE, wenn RunInit vom Basic aktiv ist
-    String          aErrMsg;        // Puffer fuer GetErrorText()
-    SbLanguageMode  eLanguageMode;  // Flag fuer Visual-Basic-Script-Modus
-    SbErrorStack*   pErrStack;      // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
+    SbiInstance*	pInst; 			// alle aktiven Runtime-Instanzen
+    SbiFactory*		pSbFac;			// StarBASIC-Factory
+    SbUnoFactory*	pUnoFac;		// Factory fuer Uno-Structs bei DIM AS NEW
+    SbTypeFactory*	pTypeFac;		// Factory for user defined types
+    SbClassFactory*	pClassFac;		// Factory for user defined classes (based on class modules)
+    SbOLEFactory*	pOLEFac;		// Factory for OLE types
+    SbFormFactory*	pFormFac;		// Factory for user forms
+    SbModule*		pMod;			// aktuell aktives Modul
+    SbModule*		pCompMod;		// aktuell compiliertes Modul
+    short			nInst;			// Anzahl BASICs
+    Link			aErrHdl;		// globaler Error-Handler
+    Link			aBreakHdl;		// globaler Break-Handler
+    SbError			nCode;			// aktueller Fehlercode
+    xub_StrLen		nLine;			// aktuelle Zeile
+    xub_StrLen		nCol1,nCol2;	// aktuelle Spalten (von,bis)
+    BOOL			bCompiler;		// Flag fuer Compiler-Error
+    BOOL			bGlobalInitErr;	// Beim GlobalInit trat ein Compiler-Fehler auf
+    BOOL			bRunInit;		// TRUE, wenn RunInit vom Basic aktiv ist
+    String			aErrMsg;		// Puffer fuer GetErrorText()
+    SbLanguageMode	eLanguageMode;	// Flag fuer Visual-Basic-Script-Modus
+    SbErrorStack*	pErrStack;		// Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
-    BOOL            bBlockCompilerError;
+    BOOL			bBlockCompilerError;
     BasicManager*   pAppBasMgr;
-    StarBASIC*      pMSOMacroRuntimLib; // Lib containing MSO Macro Runtime API entry symbols
+    StarBASIC*		pMSOMacroRuntimLib;	// Lib containing MSO Macro Runtime API entry symbols
 
     SbiGlobals();
     ~SbiGlobals();
@@ -130,15 +136,15 @@ struct SbiGlobals
 
 SbiGlobals* GetSbData();
 
-#define pINST       GetSbData()->pInst
-#define pMOD        GetSbData()->pMod
-#define pCMOD       GetSbData()->pCompMod
-#define pSBFAC      GetSbData()->pSbFac
-#define pUNOFAC     GetSbData()->pUnoFac
-#define pTYPEFAC    GetSbData()->pTypeFac
-#define pCLASSFAC   GetSbData()->pClassFac
-#define pOLEFAC     GetSbData()->pOLEFac
-#define pFORMFAC    GetSbData()->pFormFac
+#define	pINST		GetSbData()->pInst
+#define pMOD		GetSbData()->pMod
+#define pCMOD		GetSbData()->pCompMod
+#define pSBFAC		GetSbData()->pSbFac
+#define pUNOFAC		GetSbData()->pUnoFac
+#define pTYPEFAC	GetSbData()->pTypeFac
+#define pCLASSFAC	GetSbData()->pClassFac
+#define pOLEFAC		GetSbData()->pOLEFac
+#define pFORMFAC	GetSbData()->pFormFac
 
 #endif
 

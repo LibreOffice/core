@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_SERVICES_TASK_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <services/frame.hxx>
@@ -40,14 +40,14 @@
 #include <macros/xserviceinfo.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XTask.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -56,27 +56,27 @@
 #include <vcl/evntpost.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short      implements an special frame - a task frame
+    @short		implements an special frame - a task frame
 
-    @descr      -
+    @descr		-
 
-    @implements XTask
+    @implements	XTask
 
-    @base       Frame
+    @base		Frame
                 OPropertySet
 *//*-*************************************************************************************************************/
 
@@ -84,50 +84,50 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
                 public Frame                    // Order of baseclasses is neccessary for right initialization!
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      standard constructor to create instance
+            @short		standard constructor to create instance
 
-            @descr      This constructor initialize a new instance of this class,
+            @descr		This constructor initialize a new instance of this class,
                         and will be set valid values on his member and baseclasses.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
          Task( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
         /*-****************************************************************************************************//**
-            @short      standard destructor
+            @short		standard destructor
 
-            @descr      This method destruct an instance of this class and clear some member.
+            @descr		This method destruct an instance of this class and clear some member.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        virtual ~Task();
+        virtual	~Task();
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider, XServiceInfo
+        //	XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
 
         DECLARE_XINTERFACE
@@ -135,90 +135,90 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
         DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------
-        //  XTask
+        //	XTask
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      -
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL close() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      -
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL tileWindows() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      -
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL arrangeWindowsVertical() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      -
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL arrangeWindowsHorizontal() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //   XComponent
+        //	 XComponent
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      We must overwrite this method, because baseclass Frame implements XFrame and XComponent.
+            @descr		We must overwrite this method, because baseclass Frame implements XFrame and XComponent.
                         XTask is derived from these classes to! The compiler don't know, which base is the right one.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL dispose() throw( css::uno::RuntimeException )
@@ -239,22 +239,22 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
         }
 
         //---------------------------------------------------------------------------------------------------------
-        //   XFrame
+        //	 XFrame
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      We must overwrite this method, because baseclass Frame implements XFrame and XComponent.
+            @descr		We must overwrite this method, because baseclass Frame implements XFrame and XComponent.
                         XTask is derived from these classes to! The compiler don't know, which base is right.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL initialize( const css::uno::Reference< css::awt::XWindow >& xWindow ) throw( css::uno::RuntimeException )
@@ -307,8 +307,8 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
             return Frame::isActive();
         }
 
-        virtual sal_Bool SAL_CALL setComponent( const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow    ,
-                                                const   css::uno::Reference< css::frame::XController >& xController         ) throw( css::uno::RuntimeException )
+        virtual sal_Bool SAL_CALL setComponent(	const	css::uno::Reference< css::awt::XWindow >&		xComponentWindow	,
+                                                const	css::uno::Reference< css::frame::XController >&	xController			) throw( css::uno::RuntimeException )
         {
             return Frame::setComponent( xComponentWindow, xController );
         }
@@ -338,196 +338,196 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
             Frame::removeFrameActionListener( xListener );
         }
 
-        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL findFrame(   const   ::rtl::OUString&    sTargetFrameName    ,
-                                                                                           sal_Int32            nSearchFlags        ) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL findFrame(	const	::rtl::OUString&	sTargetFrameName	,
+                                                                                           sal_Int32			nSearchFlags		) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //   XTopWindowListener
+        //	 XTopWindowListener
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      -
+            @descr		-
 
-            @seealso    -
-            @seealso    -
+            @seealso	-
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL windowClosing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      -
+            @descr		-
 
-            @seealso    -
-            @seealso    -
+            @seealso	-
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL windowActivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      -
+            @descr		-
 
-            @seealso    -
-            @seealso    -
+            @seealso	-
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //   XEventListener
+        //	 XEventListener
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      -
+            @short		-
 
-            @descr      This object is forced to release all references to the interfaces given
+            @descr		This object is forced to release all references to the interfaces given
                         by the parameter Source.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
+            @param		-
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
+    //	protected methods
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
         //---------------------------------------------------------------------------
-        //  OPropertySetHelper
+        //	OPropertySetHelper
         //---------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      try to convert a property value
-            @descr      This method is calling from helperclass "OPropertySetHelper".
+            @short		try to convert a property value
+            @descr		This method is calling from helperclass "OPropertySetHelper".
                         Don't use this directly!
                         You must try to convert the value of given propertyhandle and
                         return results of this operation. This will be use to ask vetoable
                         listener. If no listener have a veto, we will change value realy!
                         ( in method setFastPropertyValue_NoBroadcast(...) )
 
-            @seealso    OPropertySetHelper
-            @seealso    setFastPropertyValue_NoBroadcast()
+            @seealso	OPropertySetHelper
+            @seealso	setFastPropertyValue_NoBroadcast()
 
-            @param      "aConvertedValue"   new converted value of property
-            @param      "aOldValue"         old value of property
-            @param      "nHandle"           handle of property
-            @param      "aValue"            new value of property
+            @param		"aConvertedValue"	new converted value of property
+            @param		"aOldValue"			old value of property
+            @param		"nHandle"			handle of property
+            @param		"aValue"			new value of property
 
-            @return     sal_True if value will be changed, sal_FALSE otherway
+            @return		sal_True if value will be changed, sal_FALSE otherway
 
-            @onerror    IllegalArgumentException, if you call this with an invalid argument
+            @onerror	IllegalArgumentException, if you call this with an invalid argument
         *//*-*****************************************************************************************************/
 /*
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(         css::uno::Any&      aConvertedValue ,
-                                                                      css::uno::Any&        aOldValue       ,
-                                                                    sal_Int32           nHandle         ,
-                                                            const   css::uno::Any&      aValue          ) throw( css::lang::IllegalArgumentException );
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(			css::uno::Any&		aConvertedValue	,
+                                                                      css::uno::Any&		aOldValue		,
+                                                                    sal_Int32			nHandle			,
+                                                            const	css::uno::Any&		aValue			) throw( css::lang::IllegalArgumentException );
 */
         /*-****************************************************************************************************//**
-            @short      set value of a transient property
-            @descr      This method is calling from helperclass "OPropertySetHelper".
+            @short		set value of a transient property
+            @descr		This method is calling from helperclass "OPropertySetHelper".
                         Don't use this directly!
                         Handle and value are valid everyway! You must set the new value only.
                         After this, baseclass send messages to all listener automaticly.
 
-            @seealso    OPropertySetHelper
+            @seealso	OPropertySetHelper
 
-            @param      "nHandle"   handle of property to change
-            @param      "aValue"    new value of property
+            @param      "nHandle"	handle of property to change
+            @param      "aValue"	new value of property
 
-            @return     -
+            @return		-
 
-            @onerror    An exception is thrown.
+            @onerror	An exception is thrown.
         *//*-*****************************************************************************************************/
 /*
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32       nHandle ,
-                                                                  const css::uno::Any&  aValue  ) throw( css::uno::Exception );
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(			sal_Int32		nHandle	,
+                                                                  const	css::uno::Any&	aValue	) throw( css::uno::Exception );
 */
         /*-****************************************************************************************************//**
-            @short      get value of a transient property
-            @descr      This method is calling from helperclass "OPropertySetHelper".
+            @short		get value of a transient property
+            @descr		This method is calling from helperclass "OPropertySetHelper".
                         Don't use this directly!
 
-            @seealso    OPropertySetHelper
+            @seealso	OPropertySetHelper
 
-            @param      "nHandle"   handle of property to change
-            @param      "aValue"    current value of property
+            @param      "nHandle"	handle of property to change
+            @param      "aValue"	current value of property
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 /*
-        virtual void SAL_CALL getFastPropertyValue( css::uno::Any&  aValue  ,
-                                                      sal_Int32     nHandle ) const;
+        virtual void SAL_CALL getFastPropertyValue(	css::uno::Any&	aValue	,
+                                                      sal_Int32		nHandle	) const;
 */
         /*-****************************************************************************************************//**
             @short      return structure and information about transient properties
-            @descr      This method is calling from helperclass "OPropertySetHelper".
+            @descr		This method is calling from helperclass "OPropertySetHelper".
                         Don't use this directly!
 
-            @seealso    OPropertySetHelper
+            @seealso	OPropertySetHelper
 
-            @param      -
+            @param		-
 
-            @return     structure with property-informations
+            @return		structure with property-informations
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 /*
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 */
         /*-****************************************************************************************************//**
-            @short      return propertysetinfo
-            @descr      You can call this method to get information about transient properties
+            @short		return propertysetinfo
+            @descr		You can call this method to get information about transient properties
                         of this object.
 
-            @seealso    OPropertySetHelper
-            @seealso    XPropertySet
-            @seealso    XMultiPropertySet
+            @seealso	OPropertySetHelper
+            @seealso	XPropertySet
+            @seealso	XMultiPropertySet
 
-            @param      -
+            @param		-
 
-            @return     reference to object with information [XPropertySetInfo]
+            @return		reference to object with information [XPropertySetInfo]
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 /*
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo();
 */
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -536,43 +536,43 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
 
 //        void    impl_SaveWindowAttributes();
 
-/*      sal_Bool impl_tryToChangeProperty(          sal_Bool            bProperty       ,
-                                            const   css::uno::Any&      aValue          ,
-                                                    css::uno::Any&      aOldValue       ,
-                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
-        sal_Bool impl_tryToChangeProperty(  const   ::rtl::OUString&    sProperty       ,
-                                            const   css::uno::Any&      aValue          ,
-                                                    css::uno::Any&      aOldValue       ,
-                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
-        sal_Bool impl_tryToChangeProperty(  const   css::awt::Point&    aProperty       ,
-                                            const   css::uno::Any&      aValue          ,
-                                                    css::uno::Any&      aOldValue       ,
-                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
-        sal_Bool impl_tryToChangeProperty(  const   css::awt::Size&     aProperty       ,
-                                            const   css::uno::Any&      aValue          ,
-                                                    css::uno::Any&      aOldValue       ,
-                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
+/*		sal_Bool impl_tryToChangeProperty(			sal_Bool			bProperty		,
+                                            const	css::uno::Any&		aValue			,
+                                                    css::uno::Any&		aOldValue		,
+                                                    css::uno::Any&		aConvertedValue	) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(	const	::rtl::OUString&	sProperty		,
+                                            const	css::uno::Any&		aValue			,
+                                                    css::uno::Any&		aOldValue		,
+                                                    css::uno::Any&		aConvertedValue	) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(	const	css::awt::Point&	aProperty		,
+                                            const	css::uno::Any&		aValue			,
+                                                    css::uno::Any&		aOldValue		,
+                                                    css::uno::Any&		aConvertedValue	) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(	const	css::awt::Size&		aProperty		,
+                                            const	css::uno::Any&		aValue			,
+                                                    css::uno::Any&		aOldValue		,
+                                                    css::uno::Any&		aConvertedValue	) throw( css::lang::IllegalArgumentException );
 
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 */
 
     //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
+    //	debug methods
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
+            @short		debug-method to check incoming parameter of some other mehods of this class
+            @descr		The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
 
-            @seealso    ASSERTs in implementation!
+            @seealso	ASSERTs in implementation!
 
-            @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
+            @param		references to checking variables
+            @return		sal_False on invalid parameter<BR>
                         sal_True  otherway
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
     #ifdef ENABLE_ASSERTIONS
@@ -581,11 +581,11 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
 
         // Not used in the moment!
 
-    #endif  // #ifdef ENABLE_ASSERTIONS
+    #endif	// #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
+    //	variables
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
@@ -599,12 +599,12 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
         // Properties
         sal_Bool            m_bIsAlwaysVisible  ;
         sal_Bool            m_bIsFloating       ;
-        css::awt::Point     m_aPosition         ;
-        css::awt::Size      m_aSize             ;
+        css::awt::Point		m_aPosition         ;
+        css::awt::Size		m_aSize             ;
         ::vcl::EventPoster  m_aPoster           ;
 
-};      //  class Tasks
+};		//	class Tasks
 
-}       //  namespace framework
+}		//	namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_TASKS_HXX_
+#endif	//	#ifndef __FRAMEWORK_SERVICES_TASKS_HXX_

@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@
 
 #ifdef DEBUG
     void evo_traceStringMessage( const sal_Char* pFormat, const ::rtl::OUString& rString );
-#   define EVO_TRACE_STRING( pFormat, rString ) evo_traceStringMessage( pFormat, rString )
+#   define EVO_TRACE_STRING( pFormat, rString )	evo_traceStringMessage( pFormat, rString )
 #else
-#   define EVO_TRACE_STRING( pFormat, rString ) ((void)0)
+#   define EVO_TRACE_STRING( pFormat, rString )	((void)0)
 #endif
 
 #endif // CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX

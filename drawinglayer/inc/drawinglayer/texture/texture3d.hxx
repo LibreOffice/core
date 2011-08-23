@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ namespace drawinglayer
         class GeoTexSvxMono : public GeoTexSvx
         {
         protected:
-            basegfx::BColor                             maSingleColor;
-            double                                      mfOpacity;
+            basegfx::BColor								maSingleColor;
+            double										mfOpacity;
 
         public:
             GeoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity);
@@ -70,12 +70,12 @@ namespace drawinglayer
         class GeoTexSvxBitmap : public GeoTexSvx
         {
         protected:
-            Bitmap                                      maBitmap;
-            BitmapReadAccess*                           mpRead;
-            basegfx::B2DPoint                           maTopLeft;
-            basegfx::B2DVector                          maSize;
-            double                                      mfMulX;
-            double                                      mfMulY;
+            Bitmap										maBitmap;
+            BitmapReadAccess*							mpRead;
+            basegfx::B2DPoint							maTopLeft;
+            basegfx::B2DVector							maSize;
+            double										mfMulX;
+            double										mfMulY;
 
             // helpers
             bool impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const;
@@ -134,14 +134,14 @@ namespace drawinglayer
         class GeoTexSvxMultiHatch : public GeoTexSvx
         {
         protected:
-            basegfx::BColor                 maColor;
-            double                          mfLogicPixelSize;
-            GeoTexSvxHatch*                 mp0;
-            GeoTexSvxHatch*                 mp1;
-            GeoTexSvxHatch*                 mp2;
+            basegfx::BColor					maColor;
+            double							mfLogicPixelSize;
+            GeoTexSvxHatch*					mp0;
+            GeoTexSvxHatch*					mp1;
+            GeoTexSvxHatch*					mp2;
 
             // bitfield
-            unsigned                        mbFillBackground : 1;
+            unsigned						mbFillBackground : 1;
 
             // helpers
             bool impIsOnHatch(const basegfx::B2DPoint& rUV) const;

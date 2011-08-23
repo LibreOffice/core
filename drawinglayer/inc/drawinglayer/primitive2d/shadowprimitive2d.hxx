@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,16 +56,16 @@ namespace drawinglayer
         {
         private:
             /// the shadow transformation, normally just an offset
-            basegfx::B2DHomMatrix                   maShadowTransform;
+            basegfx::B2DHomMatrix					maShadowTransform;
 
             /// the shadow color to which all geometry is to be forced
-            basegfx::BColor                         maShadowColor;
+            basegfx::BColor							maShadowColor;
 
         public:
             /// constructor
             ShadowPrimitive2D(
-                const basegfx::B2DHomMatrix& rShadowTransform,
-                const basegfx::BColor& rShadowColor,
+                const basegfx::B2DHomMatrix& rShadowTransform, 
+                const basegfx::BColor& rShadowColor, 
                 const Primitive2DSequence& rChildren);
 
             /// data read access

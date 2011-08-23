@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ namespace rtl
 Dieses Item beschreibt den oberen und unteren Rand einer Seite oder Absatz.
 */
 
-#define ULSPACE_16_VERSION  ((USHORT)0x0001)
+#define	ULSPACE_16_VERSION	((USHORT)0x0001)
 
 class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 {
     USHORT nUpper;  //Oberer Rand
     USHORT nLower;  //Unterer Rand
-    USHORT nPropUpper, nPropLower;      // relativ oder absolut (=100%)
+    USHORT nPropUpper, nPropLower;		// relativ oder absolut (=100%)
 public:
     TYPEINFO();
 
@@ -60,22 +60,22 @@ public:
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual int 			 operator==( const SfxPoolItem& ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	sal_Bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	sal_Bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	 Create(SvStream &, USHORT) const;
+    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT			 GetVersion( USHORT nFileVersion ) const;
+    virtual int				 ScaleMetrics( long nMult, long nDiv );
+    virtual	int				 HasMetrics() const;
 
     inline void SetUpper( const USHORT nU, const USHORT nProp = 100 );
     inline void SetLower( const USHORT nL, const USHORT nProp = 100 );

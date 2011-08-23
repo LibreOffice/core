@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
                     rState.maValue >>= sNumSuffix;
                     break;
                 case CTF_SECTION_FOOTNOTE_END:
-                    DBG_ASSERT( i == nIdx,
+                    DBG_ASSERT( i == nIdx, 
                                 "received wrong property state index" );
                     rState.maValue >>= bEnd;
                     break;
@@ -138,7 +138,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
                     rState.maValue >>= sNumSuffix;
                     break;
                 case CTF_SECTION_ENDNOTE_END:
-                    DBG_ASSERT( i == nIdx,
+                    DBG_ASSERT( i == nIdx, 
                                 "received wrong property state index" );
                     rState.maValue >>= bEnd;
                     break;
@@ -150,16 +150,16 @@ void XMLSectionFootnoteConfigExport::exportXML(
     if (bEnd)
     {
         rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
-                                 GetXMLToken( bEndnote ? XML_ENDNOTE
+                                 GetXMLToken( bEndnote ? XML_ENDNOTE 
                                                          : XML_FOOTNOTE ) );
         // start numbering
         OUStringBuffer sBuf;
         if (bNumRestart)
         {
             // restart number is stored as 0.., but interpreted as 1..
-            SvXMLUnitConverter::convertNumber(sBuf,
+            SvXMLUnitConverter::convertNumber(sBuf, 
                                               (sal_Int32)(nNumRestartAt+1));
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE, 
                                  sBuf.makeStringAndClear());
         }
 
@@ -178,25 +178,25 @@ void XMLSectionFootnoteConfigExport::exportXML(
             }
 
             // number type: num format
-            rExport.GetMM100UnitConverter().convertNumFormat( sBuf,
+            rExport.GetMM100UnitConverter().convertNumFormat( sBuf, 
                                                               nNumberingType );
-            rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
+            rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT, 
                                  sBuf.makeStringAndClear());
 
             // and letter sync, if applicable
-            rExport.GetMM100UnitConverter().convertNumLetterSync(
+            rExport.GetMM100UnitConverter().convertNumLetterSync( 
                 sBuf, nNumberingType );
-            if (sBuf.getLength())
+            if (sBuf.getLength()) 
             {
-                rExport.AddAttribute(XML_NAMESPACE_STYLE,
+                rExport.AddAttribute(XML_NAMESPACE_STYLE, 
                                      XML_NUM_LETTER_SYNC,
                                      sBuf.makeStringAndClear());
             }
         }
 
         // and finally, the element
-        SvXMLElementExport rElem(rExport, XML_NAMESPACE_TEXT,
-                                 XML_NOTES_CONFIGURATION,
+        SvXMLElementExport rElem(rExport, XML_NAMESPACE_TEXT, 
+                                 XML_NOTES_CONFIGURATION, 
                                  sal_True, sal_True);
     }
 }

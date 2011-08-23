@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,29 +57,29 @@ namespace drawinglayer
         class SdrMeasurePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            attribute::SdrLineShadowTextAttribute       maSdrLSTAttribute;
-            basegfx::B2DPoint                           maStart;
-            basegfx::B2DPoint                           maEnd;
-            MeasureTextPosition                         meHorizontal;
-            MeasureTextPosition                         meVertical;
-            double                                      mfDistance;
-            double                                      mfUpper;
-            double                                      mfLower;
-            double                                      mfLeftDelta;
-            double                                      mfRightDelta;
+            attribute::SdrLineShadowTextAttribute		maSdrLSTAttribute;
+            basegfx::B2DPoint							maStart;
+            basegfx::B2DPoint							maEnd;
+            MeasureTextPosition							meHorizontal;
+            MeasureTextPosition							meVertical;
+            double										mfDistance;
+            double										mfUpper;
+            double										mfLower;
+            double										mfLeftDelta;
+            double										mfRightDelta;
 
             // bitfield
-            unsigned                                    mbBelow : 1;
-            unsigned                                    mbTextRotation : 1;
-            unsigned                                    mbTextAutoAngle : 1;
+            unsigned									mbBelow : 1;
+            unsigned									mbTextRotation : 1;
+            unsigned									mbTextAutoAngle : 1;
 
             // internal decomposition helper
             Primitive2DReference impCreatePart(
                 const attribute::SdrLineAttribute& rLineAttribute,
-                const basegfx::B2DHomMatrix& rObjectMatrix,
-                const basegfx::B2DPoint& rStart,
-                const basegfx::B2DPoint& rEnd,
-                bool bLeftActive,
+                const basegfx::B2DHomMatrix& rObjectMatrix, 
+                const basegfx::B2DPoint& rStart, 
+                const basegfx::B2DPoint& rEnd, 
+                bool bLeftActive, 
                 bool bRightActive) const;
 
         protected:
@@ -89,7 +89,7 @@ namespace drawinglayer
         public:
             SdrMeasurePrimitive2D(
                 const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
-                const basegfx::B2DPoint& rStart,
+                const basegfx::B2DPoint& rStart, 
                 const basegfx::B2DPoint& rEnd,
                 MeasureTextPosition eHorizontal,
                 MeasureTextPosition eVertical,

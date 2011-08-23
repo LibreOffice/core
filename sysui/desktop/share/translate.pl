@@ -5,7 +5,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -75,55 +75,55 @@ unless (open(SOURCE, $ARGV[0])) {
 # a template file in $workdir ..
 while (<SOURCE>) {
     $line = $_;
-
+    
     if ( "[" eq substr($line, 0, 1) ) {
-        # Pass the tail of the template to the output file
+        # Pass the tail of the template to the output file 
         while (<TEMPLATE>) {
             print OUTFILE;
         }
-
+        
         close(TEMPLATE);
-
+        
         if (close(OUTFILE)) {
             system "mv -f $outfile.tmp $outfile\n";
         }
-
+        
         $_ = substr($line, 1, index($line,"]")-1);
         $outfile = "$workdir/$prefix$_.$ext";
-
+        
         # open the template file - ignore sections for which no
         # templates exist
         unless(open(TEMPLATE, $outfile)) {
             print STDERR "Warning: No template found for item $_: $outfile: $!\n";
             next;
         }
-
+        
         # open output file
         unless (open(OUTFILE, "> $outfile.tmp")) {
             print STDERR "Can't create output file $outfile.tmp: $!\n";
             exit -1;
         }
-
-        # Pass the head of the template to the output file
+        
+        # Pass the head of the template to the output file 
 KEY:    while (<TEMPLATE>) {
             print OUTFILE;
             last KEY if (/$key/);
         }
-
+        
     } else {
         # split locale = "value" into 2 strings
         ($locale, $value) = split(' = ', $line);
-
+        
         if ( $locale ne $line ) {
             # replace en-US with en
             $locale=~s/en-US/en/;
-
+        
             # use just anything inside the ""
             $value = substr($value, index($value, "\"") + 1, rindex($value, "\"") - 1);
-
+            
             # replace resource placeholder
             $value=~s/%PRODUCTNAME/$productname/g;
-
+        
             $locale=~s/-/_/;
             if ($ext eq "desktop") {
                 print OUTFILE "$key\[$locale\]=$value\n";

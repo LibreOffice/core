@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <iterator>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <classes/checkediterator.hxx>
 #include <classes/wildcard.hxx>
@@ -47,7 +47,7 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -58,7 +58,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <unotools/configitem.hxx>
 #include <cppuhelper/weak.hxx>
@@ -66,13 +66,13 @@
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 #define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )   /// Names of our configuration files.
@@ -173,7 +173,7 @@ namespace framework{
 #define PROPERTY_UICOMPONENT                        DECLARE_ASCII("UIComponent"                                     )
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 enum EModifyState
@@ -202,11 +202,11 @@ struct FileType
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        inline               FileType   (                               ) { impl_clear();               }
-        inline               FileType   (   const   FileType&   rCopy   ) { impl_copy( rCopy );         }
-        inline              ~FileType   (                               ) { impl_clear();               }
-        inline FileType&    operator=   (   const   FileType&   rCopy   ) { return impl_copy( rCopy );  }
-        inline void         free        (                               ) { impl_clear();               }
+        inline				 FileType	(								) { impl_clear();				}
+        inline				 FileType	(	const	FileType&	rCopy	) { impl_copy( rCopy );			}
+        inline				~FileType	(								) { impl_clear();				}
+        inline FileType&	operator=	(	const	FileType&	rCopy	) { return impl_copy( rCopy );	}
+        inline void			free		(								) { impl_clear();				}
 
     //-------------------------------------------------------------------------------------------------------------
     // private methods
@@ -216,25 +216,25 @@ struct FileType
         inline void impl_clear()
         {
             bPreferred          = sal_False         ;
-            sName               = ::rtl::OUString() ;
-            sMediaType          = ::rtl::OUString() ;
-            sClipboardFormat    = ::rtl::OUString() ;
-            nDocumentIconID     = 0                 ;
-            lUINames.free   ();
+            sName				= ::rtl::OUString()	;
+            sMediaType			= ::rtl::OUString()	;
+            sClipboardFormat	= ::rtl::OUString()	;
+            nDocumentIconID		= 0					;
+            lUINames.free	();
             lURLPattern.free();
             lExtensions.free();
         }
 
         inline FileType& impl_copy( const FileType& rCopy )
         {
-            bPreferred          = rCopy.bPreferred      ;
-            sName               = rCopy.sName           ;
-            lUINames            = rCopy.lUINames        ;
-            sMediaType          = rCopy.sMediaType      ;
-            sClipboardFormat    = rCopy.sClipboardFormat;
-            nDocumentIconID     = rCopy.nDocumentIconID ;
-            lURLPattern         = rCopy.lURLPattern     ;
-            lExtensions         = rCopy.lExtensions     ;
+            bPreferred			= rCopy.bPreferred		;
+            sName				= rCopy.sName			;
+            lUINames			= rCopy.lUINames		;
+            sMediaType			= rCopy.sMediaType		;
+            sClipboardFormat	= rCopy.sClipboardFormat;
+            nDocumentIconID		= rCopy.nDocumentIconID	;
+            lURLPattern			= rCopy.lURLPattern		;
+            lExtensions			= rCopy.lExtensions		;
             return (*this);
         }
 
@@ -243,12 +243,12 @@ struct FileType
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        sal_Bool            bPreferred          ;
-        ::rtl::OUString     sName               ;
+        sal_Bool			bPreferred			;
+        ::rtl::OUString		sName				;
         OUStringHash        lUINames            ;
-        ::rtl::OUString     sMediaType          ;
-        ::rtl::OUString     sClipboardFormat    ;
-        sal_Int32           nDocumentIconID     ;
+        ::rtl::OUString		sMediaType			;
+        ::rtl::OUString		sClipboardFormat	;
+        sal_Int32			nDocumentIconID		;
         OUStringList        lURLPattern         ;
         OUStringList        lExtensions         ;
 };
@@ -266,11 +266,11 @@ struct Filter
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        inline           Filter     (                           ) { impl_clear();               }
-        inline           Filter     (   const   Filter& rCopy   ) { impl_copy( rCopy );         }
-        inline          ~Filter     (                           ) { impl_clear();               }
-        inline Filter&  operator=   (   const   Filter& rCopy   ) { return impl_copy( rCopy );  }
-        inline void     free        (                           ) { impl_clear();               }
+        inline			 Filter		(							) { impl_clear();				}
+        inline			 Filter		(	const	Filter&	rCopy	) { impl_copy( rCopy );			}
+        inline			~Filter		(							) { impl_clear();				}
+        inline Filter&	operator=	(	const	Filter&	rCopy	) { return impl_copy( rCopy );	}
+        inline void		free		(							) { impl_clear();				}
 
     //-------------------------------------------------------------------------------------------------------------
     // private methods
@@ -288,23 +288,23 @@ struct Filter
             nFlags              = 0                ;
             nFileFormatVersion  = 0                ;
             sTemplateName       = ::rtl::OUString();
-            lUINames.free   ();
-            lUserData.free  ();
+            lUINames.free	();
+            lUserData.free	();
         }
 
         inline Filter& impl_copy( const Filter& rCopy )
         {
             nOrder              = rCopy.nOrder              ;
-            sName               = rCopy.sName               ;
-            sType               = rCopy.sType               ;
-            lUINames            = rCopy.lUINames            ;
-            sDocumentService    = rCopy.sDocumentService    ;
-            sFilterService      = rCopy.sFilterService      ;
+            sName				= rCopy.sName				;
+            sType				= rCopy.sType				;
+            lUINames			= rCopy.lUINames			;
+            sDocumentService	= rCopy.sDocumentService	;
+            sFilterService		= rCopy.sFilterService		;
             sUIComponent        = rCopy.sUIComponent        ;
-            nFlags              = rCopy.nFlags              ;
-            nFileFormatVersion  = rCopy.nFileFormatVersion  ;
-            sTemplateName       = rCopy.sTemplateName       ;
-            lUserData           = rCopy.lUserData           ;
+            nFlags				= rCopy.nFlags				;
+            nFileFormatVersion	= rCopy.nFileFormatVersion	;
+            sTemplateName		= rCopy.sTemplateName		;
+            lUserData			= rCopy.lUserData			;
             return (*this);
         }
 
@@ -315,15 +315,15 @@ struct Filter
 
         sal_Int32           nOrder              ;
         ::rtl::OUString     sName               ;
-        ::rtl::OUString     sType               ;
+        ::rtl::OUString		sType				;
         OUStringHash        lUINames            ;
-        ::rtl::OUString     sDocumentService    ;
-        ::rtl::OUString     sFilterService      ;
+        ::rtl::OUString		sDocumentService	;
+        ::rtl::OUString		sFilterService		;
         ::rtl::OUString     sUIComponent        ;
-        sal_Int32           nFlags              ;
+        sal_Int32			nFlags				;
         OUStringList        lUserData           ;
-        sal_Int32           nFileFormatVersion  ;
-        ::rtl::OUString     sTemplateName       ;
+        sal_Int32			nFileFormatVersion	;
+        ::rtl::OUString		sTemplateName		;
 };
 
 //*****************************************************************************************************************
@@ -338,11 +338,11 @@ struct Detector
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        inline               Detector   (                               ) { impl_clear();               }
-        inline               Detector   (   const   Detector&   rCopy   ) { impl_copy( rCopy );         }
-        inline              ~Detector   (                               ) { impl_clear();               }
-        inline Detector&    operator=   (   const   Detector&   rCopy   ) { return impl_copy( rCopy );  }
-        inline void         free        (                               ) { impl_clear();               }
+        inline			 	 Detector	(								) { impl_clear();				}
+        inline			 	 Detector	(	const	Detector&	rCopy	) { impl_copy( rCopy );			}
+        inline				~Detector	(								) { impl_clear();				}
+        inline Detector&	operator=	(	const	Detector&	rCopy	) { return impl_copy( rCopy );	}
+        inline void			free		(								) { impl_clear();				}
 
     //-------------------------------------------------------------------------------------------------------------
     // private methods
@@ -383,11 +383,11 @@ struct Loader
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        inline           Loader     (                           ) { impl_clear();               }
-        inline           Loader     (   const   Loader& rCopy   ) { impl_copy( rCopy );         }
-        inline          ~Loader     (                           ) { impl_clear();               }
-        inline Loader&  operator=   (   const   Loader& rCopy   ) { return impl_copy( rCopy );  }
-        inline void     free        (                           ) { impl_clear();               }
+        inline		  	 Loader		(							) { impl_clear();				}
+        inline		  	 Loader		(	const	Loader&	rCopy	) { impl_copy( rCopy );			}
+        inline		 	~Loader		(							) { impl_clear();				}
+        inline Loader&	operator=	(	const	Loader&	rCopy	) { return impl_copy( rCopy );	}
+        inline void	 	free		(							) { impl_clear();				}
 
     //-------------------------------------------------------------------------------------------------------------
     // private methods
@@ -397,15 +397,15 @@ struct Loader
         inline void impl_clear()
         {
             sName = ::rtl::OUString();
-            lUINames.free   ();
-            lTypes.free     ();
+            lUINames.free	();
+            lTypes.free		();
         }
 
         inline Loader& impl_copy( const Loader& rCopy )
         {
             sName       = rCopy.sName       ;
-            lUINames    = rCopy.lUINames    ;
-            lTypes      = rCopy.lTypes      ;
+            lUINames	= rCopy.lUINames	;
+            lTypes		= rCopy.lTypes		;
             return (*this);
         }
 
@@ -414,7 +414,7 @@ struct Loader
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        ::rtl::OUString sName       ;
+        ::rtl::OUString	sName		;
         OUStringHash    lUINames    ;
         OUStringList    lTypes      ;
 };
@@ -513,7 +513,7 @@ class SetNodeHash : public ::std::hash_map< ::rtl::OUString                    ,
 class PerformanceHash   :   public  ::std::hash_map<    ::rtl::OUString                     ,
                                                         OUStringList                        ,
                                                         OUStringHashCode                    ,
-                                                        ::std::equal_to< ::rtl::OUString >  >
+                                                        ::std::equal_to< ::rtl::OUString >	>
 {
     public:
         //---------------------------------------------------------------------------------------------------------
@@ -718,10 +718,10 @@ class DataContainer : private ThreadHelpBase
                     After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
                     After successfuly calling of write() all values of given data container are flushed to our configuration.
 
-    @implements     -
+    @implements		-
     @base           ConfigItem
 
-    @devstatus      ready to use
+    @devstatus		ready to use
     @threadsafe     no
 *//*-*************************************************************************************************************/
 class FilterCFGAccess : public ::utl::ConfigItem

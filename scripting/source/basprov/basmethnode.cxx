@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ namespace basprov
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        return Sequence< Reference< browse::XBrowseNode > >();
+        return Sequence< Reference< browse::XBrowseNode > >(); 
     }
 
     // -----------------------------------------------------------------------------
@@ -206,9 +206,9 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    Any BasicMethodNodeImpl::invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams,
-        Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
-        throw (IllegalArgumentException, script::CannotConvertException,
+    Any BasicMethodNodeImpl::invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams, 
+        Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) 
+        throw (IllegalArgumentException, script::CannotConvertException, 
                reflection::InvocationTargetException, RuntimeException)
     {
         (void)aParams;
@@ -241,7 +241,7 @@ namespace basprov
                                 break;
                             }
                         }
-                    }
+                    }                  
                 }
             }
 
@@ -264,7 +264,7 @@ namespace basprov
 
                 if ( xSMgr.is() )
                 {
-                    Reference< frame::XDesktop > xDesktop( xSMgr->createInstanceWithContext(
+                    Reference< frame::XDesktop > xDesktop( xSMgr->createInstanceWithContext( 
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), m_xContext ), UNO_QUERY );
 
                     if ( xDesktop.is() )
@@ -273,7 +273,7 @@ namespace basprov
 
                         if ( xProv.is() )
                         {
-                            Reference< frame::XDispatchHelper > xHelper( xSMgr->createInstanceWithContext(
+                            Reference< frame::XDispatchHelper > xHelper( xSMgr->createInstanceWithContext( 
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DispatchHelper" ) ), m_xContext ), UNO_QUERY );
 
                             if ( xHelper.is() )
@@ -308,8 +308,8 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    void BasicMethodNodeImpl::setValue( const ::rtl::OUString& aPropertyName, const Any& aValue )
-        throw (UnknownPropertyException, script::CannotConvertException,
+    void BasicMethodNodeImpl::setValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) 
+        throw (UnknownPropertyException, script::CannotConvertException, 
                reflection::InvocationTargetException, RuntimeException)
     {
         (void)aPropertyName;
@@ -354,5 +354,5 @@ namespace basprov
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace basprov
+}	// namespace basprov
 //.........................................................................

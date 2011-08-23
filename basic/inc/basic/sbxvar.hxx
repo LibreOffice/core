@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -164,9 +164,9 @@ class SbxDecimal;
 struct SbxValues
 {
     union {
-        sal_Unicode     nChar;
-        BYTE            nByte;
-        INT16           nInteger;
+        sal_Unicode		nChar;
+        BYTE			nByte;
+        INT16			nInteger;
         INT32           nLong;
         UINT16          nUShort;
         UINT32          nULong;
@@ -178,27 +178,27 @@ struct SbxValues
         sal_uInt64      uInt64;
         int             nInt;
         unsigned int    nUInt;
-        String*         pString;
-        SbxDecimal*     pDecimal;
+        ::rtl::OUString* pOUString;
+        SbxDecimal*		pDecimal;
 
         SbxBase*        pObj;
         sal_Unicode*    pChar;
-        BYTE*           pByte;
-        INT16*          pInteger;
-        INT32*          pLong;
-        UINT16*         pUShort;
-        UINT32*         pULong;
-        float*          pSingle;
-        double*         pDouble;
+        BYTE*	        pByte;
+        INT16*	        pInteger;
+        INT32*	        pLong;
+        UINT16*	        pUShort;
+        UINT32*	        pULong;
+        float*	        pSingle;
+        double*	        pDouble;
         SbxINT64*       pLong64;
         SbxUINT64*      pULong64;
         sal_Int64*      pnInt64;
         sal_uInt64*     puInt64;
-        int*            pInt;
+        int*	        pInt;
         unsigned int*   pUInt;
-        void*           pData;
+        void*	        pData;
     };
-    SbxDataType  eType;
+    SbxDataType	 eType;
 
     SbxValues(): pData( NULL ), eType(SbxEMPTY) {}
     SbxValues( SbxDataType e ): eType(e) {}
@@ -212,7 +212,7 @@ struct SbxValues
     SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
     SbxValues( int _nInt ): nInt( _nInt ), eType(SbxINT) {}
     SbxValues( unsigned int _nUInt ): nUInt( _nUInt ), eType(SbxUINT) {}
-    SbxValues( const String* _pString ): pString( (String*) _pString ), eType(SbxSTRING) {}
+    SbxValues( const ::rtl::OUString* _pString ): pOUString( (::rtl::OUString*)_pString ), eType(SbxSTRING) {}
     SbxValues( SbxBase* _pObj ): pObj( _pObj ), eType(SbxOBJECT) {}
     SbxValues( sal_Unicode* _pChar ): pChar( _pChar ), eType(SbxLPSTR) {}
     SbxValues( void* _pData ): pData( _pData ), eType(SbxPOINTER) {}
@@ -230,16 +230,17 @@ class SbxValueImpl;
 
 class SbxValue : public SbxBase
 {
-    SbxValueImpl* mpSbxValueImplImpl;   // Impl data
+    SbxValueImpl* mpSbxValueImplImpl;	// Impl data
 
     // #55226 Transport additional infos
     SbxValue* TheRealValue( BOOL bObjInObjError ) const;
     SbxValue* TheRealValue() const;
 protected:
     SbxValues aData; // Data
-    String    aPic;  // Picture-String
+    ::rtl::OUString aPic;  // Picture-String
+    String          aToolString;  // tool string copy
 
-    virtual void Broadcast( ULONG );    // Broadcast-Call
+    virtual void Broadcast( ULONG );   	// Broadcast-Call
     virtual ~SbxValue();
     virtual BOOL LoadData( SvStream&, USHORT );
     virtual BOOL StoreData( SvStream& ) const;
@@ -274,8 +275,8 @@ public:
     BOOL IsUInt()    const { return BOOL( GetType() == SbxUINT     ); }
     BOOL IspChar()   const { return BOOL( GetType() == SbxLPSTR    ); }
     BOOL IsNumeric() const;
-    BOOL IsNumericRTL() const;  // #41692 Interface for Basic
-    BOOL ImpIsNumeric( BOOL bOnlyIntntl ) const;    // Implementation
+    BOOL IsNumericRTL() const;	// #41692 Interface for Basic
+    BOOL ImpIsNumeric( BOOL bOnlyIntntl ) const;	// Implementation
 
     virtual SbxClassType GetClass() const;
     virtual SbxDataType GetType() const;
@@ -303,15 +304,16 @@ public:
     UINT16 GetErr() const;
     const  String& GetString() const;
     const  String& GetCoreString() const;
+    ::rtl::OUString GetOUString() const;
     SbxDecimal* GetDecimal() const;
     SbxBase* GetObject() const;
-    BOOL     HasObject() const;
+    BOOL	 HasObject() const;
     void*  GetData() const;
     sal_Unicode GetChar() const;
     BYTE   GetByte() const;
     UINT16 GetUShort() const;
     UINT32 GetULong() const;
-    int    GetInt() const;
+    int	   GetInt() const;
 
     BOOL PutCurrency( const SbxINT64& );
     BOOL PutLong64( const SbxINT64& );
@@ -325,8 +327,8 @@ public:
     BOOL PutDate( double );
     BOOL PutBool( BOOL );
     BOOL PutErr( USHORT );
-    BOOL PutStringExt( const String& );     // with extended analysis (International, "TRUE"/"FALSE")
-    BOOL PutString( const String& );
+    BOOL PutStringExt( const ::rtl::OUString& );     // with extended analysis (International, "TRUE"/"FALSE")
+    BOOL PutString( const ::rtl::OUString& );
     BOOL PutString( const sal_Unicode* );   // Type = SbxSTRING
     BOOL PutpChar( const sal_Unicode* );    // Type = SbxLPSTR
     BOOL PutDecimal( SbxDecimal* pDecimal );
@@ -442,8 +444,8 @@ class SbxVariable : public SbxValue
 {
     friend class SbMethod;
 
-    SbxVariableImpl* mpSbxVariableImpl; // Impl data
-    SfxBroadcaster*  pCst;      // Broadcaster, if needed
+    SbxVariableImpl* mpSbxVariableImpl;	// Impl data
+    SfxBroadcaster*  pCst;		// Broadcaster, if needed
     String           maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     USHORT           nHash;             // Hash-ID for search
@@ -469,11 +471,11 @@ public:
 
     virtual void SetName( const String& );
     virtual const String& GetName( SbxNameType = SbxNAME_NONE ) const;
-    USHORT GetHashCode() const          { return nHash; }
+    USHORT GetHashCode() const			{ return nHash; }
 
     virtual void SetModified( BOOL );
 
-    sal_uIntPtr GetUserData() const        { return nUserData; }
+    sal_uIntPtr GetUserData() const 	   { return nUserData; }
     void SetUserData( sal_uIntPtr n ) { nUserData = n;    }
 
     virtual SbxDataType  GetType()  const;
@@ -483,7 +485,7 @@ public:
     virtual SbxInfo* GetInfo();
     void SetInfo( SbxInfo* p );
     void SetParameters( SbxArray* p );
-    SbxArray* GetParameters() const     { return mpPar; }
+    SbxArray* GetParameters() const		{ return mpPar; }
 
     // Sfx-Broadcasting-Support:
     // Due to data reduction and better DLL-hierarchie currently via casting
@@ -509,4 +511,4 @@ SV_DECL_REF(SbxVariable)
 
 #endif
 
-#endif  // _SBXVAR_HXX
+#endif	// _SBXVAR_HXX

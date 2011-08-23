@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ public class ScriptStorage extends TestCase {
             docPath = "vnd.sun.star.pkg://" + encodedPath;
             System.out.println( "docPath path is " + docPath );
         }
-
+        
     }
 
     public synchronized TestEnvironment createTestEnvironment(
@@ -72,7 +72,7 @@ public class ScriptStorage extends TestCase {
                 "Can't create object environment, no test document available",
                 new Exception() ) ;
         }
-
+ 
         XInterface oObj = null;
         XSimpleFileAccess access = null;
         try {
@@ -84,7 +84,7 @@ public class ScriptStorage extends TestCase {
             oObj = ( XInterface )xMSF.createInstanceWithArguments(
                 "drafts.com.sun.star.script.framework.storage.ScriptStorage",
                 new Object[]{ access, new Integer(99), docPath } );
-
+            
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;
         }

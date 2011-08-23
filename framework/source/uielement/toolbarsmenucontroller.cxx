@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <algorithm>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
@@ -45,7 +45,7 @@
 #include <classes/sfxhelperfunctions.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -60,7 +60,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #ifndef _VCL_MENU_HXX_
@@ -82,7 +82,7 @@
 #include <svtools/miscopt.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
 //
 
@@ -104,7 +104,7 @@ static const char CMD_FORMULABAR[]              = ".uno:InsertFormula";
 static const char CMD_INPUTLINEBAR[]            = ".uno:InputLineVisible";
 static const char CMD_RESTOREVISIBILITY[]       = ".cmd:RestoreVisibility";
 static const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
-static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
+static const char ITEM_DESCRIPTOR_UINAME[]		= "UIName";
 static const char STATIC_PRIVATE_TB_RESOURCE[]  = "private:resource/toolbar/";
 
 static const char STATIC_CMD_PART[]             = ".uno:AvailableToolbars?Toolbar:string=";
@@ -158,9 +158,9 @@ struct ToolBarInfo
     rtl::OUString aToolBarUIName;
 };
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController                  ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController				    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
+                                            SERVICENAME_POPUPMENUCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER
                                         )
 
@@ -225,7 +225,7 @@ void ToolbarsMenuController::addCommand(
 Reference< XDispatch > ToolbarsMenuController::getDispatchFromCommandURL( const rtl::OUString& rCommandURL )
 {
     URL                          aTargetURL;
-    Sequence<PropertyValue>      aArgs;
+    Sequence<PropertyValue>	     aArgs;
     Reference< XURLTransformer > xURLTransformer;
     Reference< XFrame >          xFrame;
 
@@ -339,7 +339,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
 
                     aToolBarInfo.aToolBarResName = aResName;
 
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    vos::OGuard	aGuard( Application::GetSolarMutex() );
                     Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow )
@@ -481,7 +481,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 m_xPopupMenu->checkItem( nIndex, sal_True );
 
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                vos::OGuard	aGuard( Application::GetSolarMutex() );
                 VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
                 PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
@@ -585,7 +585,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 
     // All other status events will be processed here
     sal_Bool bSetCheckmark      = sal_False;
-    sal_Bool bCheckmark         = sal_False;
+    sal_Bool bCheckmark			= sal_False;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
@@ -593,7 +593,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 
     if ( xPopupMenu.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        vos::OGuard	aGuard( Application::GetSolarMutex() );
         VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
         PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
@@ -737,7 +737,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
             else if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART ))) < 0 )
             {
                 URL                     aTargetURL;
-                Sequence<PropertyValue> aArgs;
+                Sequence<PropertyValue>	aArgs;
 
                 aTargetURL.Complete = aCmd;
                 xURLTransformer->parseStrict( aTargetURL );

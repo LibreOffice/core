@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 // A container for custom controls
 // the container is resposible for
 // the destruction of the custom
-// controls
+// controls 
 //-----------------------------------
 
 class CCustomControlContainer : public CCustomControl
@@ -46,7 +46,7 @@ public:
 
     virtual void SAL_CALL Align();
     virtual void SAL_CALL SetFont(HFONT hFont);
-
+    
     virtual void SAL_CALL AddControl(CCustomControl* aCustomControl);
     virtual void SAL_CALL RemoveControl(CCustomControl* aCustomControl);
     virtual void SAL_CALL RemoveAllControls();
@@ -54,7 +54,7 @@ public:
 private:
     typedef std::list<CCustomControl*> ControlContainer_t;
 
-    ControlContainer_t  m_ControlContainer;
+    ControlContainer_t	m_ControlContainer;
 };
 
 #endif

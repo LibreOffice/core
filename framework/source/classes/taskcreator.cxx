@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <classes/taskcreator.hxx>
 #include "services/taskcreatorsrv.hxx"
@@ -38,37 +38,37 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-****************************************************************************************************//**
@@ -140,30 +140,30 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
     if ( ! xCreator.is())
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
                     xSMGR->createInstance(IMPLEMENTATIONNAME_FWK_TASKCREATOR), css::uno::UNO_QUERY_THROW);
-
+    
     css::uno::Sequence< css::uno::Any > lArgs(5);
     css::beans::NamedValue              aArg    ;
-
+    
     aArg.Name    = TaskCreatorService::ARGUMENT_PARENTFRAME;
     aArg.Value <<= css::uno::Reference< css::frame::XFrame >(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
     lArgs[0]   <<= aArg;
-
+    
     aArg.Name    = TaskCreatorService::ARGUMENT_CREATETOPWINDOW;
     aArg.Value <<= sal_True;
     lArgs[1]   <<= aArg;
-
+    
     aArg.Name    = TaskCreatorService::ARGUMENT_MAKEVISIBLE;
     aArg.Value <<= bVisible;
     lArgs[2]   <<= aArg;
-
+    
     aArg.Name    = TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
     aArg.Value <<= sal_True;
     lArgs[3]   <<= aArg;
-
+    
     aArg.Name    = TaskCreatorService::ARGUMENT_FRAMENAME;
     aArg.Value <<= sName;
     lArgs[4]   <<= aArg;
-
+    
     css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     return xTask;
 }

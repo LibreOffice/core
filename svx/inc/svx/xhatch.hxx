@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@
 class SVX_DLLPUBLIC XHatch
 {
 protected:
-    XHatchStyle     eStyle;
-    Color           aColor;
-    long            nDistance;
-    long            nAngle;
+    XHatchStyle		eStyle;
+    Color			aColor;
+    long			nDistance;
+    long			nAngle;
 
 public:
                     XHatch() : eStyle(XHATCH_SINGLE), nDistance(0), nAngle(0) {}
@@ -51,15 +51,15 @@ public:
 
     bool operator==(const XHatch& rHatch) const;
 
-    void            SetHatchStyle(XHatchStyle eNewStyle) { eStyle = eNewStyle; }
-    void            SetColor(const Color& rColor) { aColor = rColor; }
-    void            SetDistance(long nNewDistance) { nDistance = nNewDistance; }
-    void            SetAngle(long nNewAngle) { nAngle = nNewAngle; }
+    void			SetHatchStyle(XHatchStyle eNewStyle) { eStyle = eNewStyle; }
+    void			SetColor(const Color& rColor) { aColor = rColor; }
+    void			SetDistance(long nNewDistance) { nDistance = nNewDistance; }
+    void			SetAngle(long nNewAngle) { nAngle = nNewAngle; }
 
-    XHatchStyle     GetHatchStyle() const { return eStyle; }
-    Color           GetColor() const { return aColor; }
-    long            GetDistance() const { return nDistance; }
-    long            GetAngle() const { return nAngle; }
+    XHatchStyle		GetHatchStyle() const { return eStyle; }
+    Color			GetColor() const { return aColor; }
+    long			GetDistance() const { return nDistance; }
+    long			GetAngle() const { return nAngle; }
 };
 
 #endif

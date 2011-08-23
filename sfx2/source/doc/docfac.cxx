@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,22 +79,22 @@ DBG_NAME(SfxObjectFactory)
 
 struct SfxObjectFactory_Impl
 {
-    SfxViewFactoryArr_Impl      aViewFactoryArr;// Liste von <SfxViewFactory>s
-    SfxFilterArr_Impl           aFilterArr;     // Liste von <SFxFilter>n
-    ResId*                      pNameResId;
-    ::rtl::OUString             aServiceName;
-    SfxFilterContainer*         pFilterContainer;
-    SfxModule*                  pModule;
-    sal_uInt16                  nImageId;
-    String                      aStandardTemplate;
-    sal_Bool                    bTemplateInitialized;
-    SvGlobalName                aClassName;
+    SfxViewFactoryArr_Impl		aViewFactoryArr;// Liste von <SfxViewFactory>s
+    SfxFilterArr_Impl			aFilterArr;     // Liste von <SFxFilter>n
+    ResId*						pNameResId;
+    ::rtl::OUString				aServiceName;
+    SfxFilterContainer*			pFilterContainer;
+    SfxModule*					pModule;
+    sal_uInt16					nImageId;
+    String						aStandardTemplate;
+    sal_Bool					bTemplateInitialized;
+    SvGlobalName				aClassName;
 
     SfxObjectFactory_Impl() :
-        pNameResId          ( NULL ),
-        pFilterContainer    ( NULL ),
-        pModule             ( NULL ),
-        nImageId            ( 0 ),
+        pNameResId			( NULL ),
+        pFilterContainer	( NULL ),
+        pModule				( NULL ),
+        nImageId			( 0 ),
         bTemplateInitialized( sal_False )
         {}
 };
@@ -110,9 +110,9 @@ SfxFilterContainer* SfxObjectFactory::GetFilterContainer( sal_Bool /*bForceLoad*
 
 SfxObjectFactory::SfxObjectFactory
 (
-    const SvGlobalName&     rName,
-    SfxObjectShellFlags     nFlagsP,
-    const char*             pName
+    const SvGlobalName& 	rName,
+    SfxObjectShellFlags 	nFlagsP,
+    const char*				pName
 ) :    pShortName( pName ),
        pImpl( new SfxObjectFactory_Impl ),
        nFlags( nFlagsP )
@@ -215,7 +215,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
         sPath = String( aPathBuffer );
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, sURL );
 
-    ::rtl::OUString aUserTemplateURL( sURL );
+    ::rtl::OUString aUserTemplateURL( sURL ); 
     if ( aUserTemplateURL.getLength() != 0)
     {
         try
@@ -249,7 +249,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
             aUserTemplateURL += DEF_TPL_STR;
             aUserTemplateURL += aExt;
 
-            uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(
+            uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess( 
                 xFactory->createInstance( SERVICE_SIMPLE_ACCESS ), uno::UNO_QUERY_THROW );
 
             ::rtl::OUString aBackupURL;

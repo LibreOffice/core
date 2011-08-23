@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ TYPEINIT1(SbxMethod,SbxVariable)
 TYPEINIT1(SbxProperty,SbxVariable)
 TYPEINIT2(SbxObject,SbxVariable,SfxListener)
 
-static const char* pNameProp;               // Name-Property
-static const char* pParentProp;             // Parent-Property
+static const char* pNameProp;				// Name-Property
+static const char* pParentProp;				// Parent-Property
 
 static USHORT nNameHash = 0, nParentHash = 0;
 
@@ -241,9 +241,9 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
         switch( t )
         {
             case SbxCLASS_VARIABLE:
-            case SbxCLASS_PROPERTY: pArray = pProps;    break;
-            case SbxCLASS_METHOD:   pArray = pMethods;  break;
-            case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+            case SbxCLASS_PROPERTY: pArray = pProps;	break;
+            case SbxCLASS_METHOD: 	pArray = pMethods;	break;
+            case SbxCLASS_OBJECT: 	pArray = pObjs;		break;
             default:
                 DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
         }
@@ -306,7 +306,7 @@ BOOL SbxObject::Call( const XubString& rName, SbxArray* pParam )
     return FALSE;
 }
 
-SbxProperty* SbxObject::GetDfltProperty()
+SbxProperty* SbxObject::GetDfltProperty() 
 {
     if ( !pDfltProp && aDfltPropName.Len() )
     {
@@ -319,7 +319,7 @@ SbxProperty* SbxObject::GetDfltProperty()
 void SbxObject::SetDfltProperty( const XubString& rName )
 {
     if ( rName != aDfltPropName )
-        pDfltProp = NULL;
+        pDfltProp = NULL; 
     aDfltPropName = rName;
     SetModified( TRUE );
 }
@@ -349,9 +349,9 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, USHORT& nArrayIdx )
     if( pVar ) switch( pVar->GetClass() )
     {
         case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY: pArray = pProps;    break;
-        case SbxCLASS_METHOD:   pArray = pMethods;  break;
-        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+        case SbxCLASS_PROPERTY: pArray = pProps;	break;
+        case SbxCLASS_METHOD: 	pArray = pMethods;	break;
+        case SbxCLASS_OBJECT: 	pArray = pObjs;		break;
         default:
             DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
     }
@@ -384,9 +384,9 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
     switch( ct )
     {
         case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY: pArray = pProps;    break;
-        case SbxCLASS_METHOD:   pArray = pMethods;  break;
-        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+        case SbxCLASS_PROPERTY: pArray = pProps;	break;
+        case SbxCLASS_METHOD: 	pArray = pMethods;	break;
+        case SbxCLASS_OBJECT: 	pArray = pObjs;		break;
         default:
             DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
     }
@@ -552,9 +552,9 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         switch( pVar->GetClass() )
         {
             case SbxCLASS_VARIABLE:
-            case SbxCLASS_PROPERTY: pArray = pProps;    break;
-            case SbxCLASS_METHOD:   pArray = pMethods;  break;
-            case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+            case SbxCLASS_PROPERTY: pArray = pProps;	break;
+            case SbxCLASS_METHOD: 	pArray = pMethods;	break;
+            case SbxCLASS_OBJECT: 	pArray = pObjs;		break;
             default:
                 DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
         }
@@ -591,9 +591,9 @@ void SbxObject::VCPtrInsert( SbxVariable* pVar )
         switch( pVar->GetClass() )
         {
             case SbxCLASS_VARIABLE:
-            case SbxCLASS_PROPERTY: pArray = pProps;    break;
-            case SbxCLASS_METHOD:   pArray = pMethods;  break;
-            case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+            case SbxCLASS_PROPERTY: pArray = pProps;	break;
+            case SbxCLASS_METHOD: 	pArray = pMethods;	break;
+            case SbxCLASS_OBJECT: 	pArray = pObjs;		break;
             default:
                 DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
         }
@@ -668,9 +668,9 @@ SbxArray* SbxObject::VCPtrFindVar( SbxVariable* pVar, USHORT& nArrayIdx )
     if( pVar ) switch( pVar->GetClass() )
     {
         case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY: pArray = pProps;    break;
-        case SbxCLASS_METHOD:   pArray = pMethods;  break;
-        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+        case SbxCLASS_PROPERTY: pArray = pProps;	break;
+        case SbxCLASS_METHOD: 	pArray = pMethods;	break;
+        case SbxCLASS_OBJECT: 	pArray = pObjs;		break;
         default:
             DBG_ASSERT( !this, "Ungueltige SBX-Klasse" );
     }
@@ -706,8 +706,8 @@ void SbxObject::SetPos( SbxVariable* pVar, USHORT nPos )
             pArray->Insert( refVar, nPos );
         }
     }
-//  SetModified( TRUE );
-//  Broadcast( SBX_HINT_OBJECTCHANGED );
+//	SetModified( TRUE );
+//	Broadcast( SBX_HINT_OBJECTCHANGED );
 }
 
 static BOOL LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
@@ -1050,7 +1050,7 @@ SbxClassType SbxProperty::GetClass() const
 
 void SbxObject::GarbageCollection( ULONG nObjects )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese statische Methode durchsucht die n"achsten 'nObjects' der zur Zeit
     existierenden <SbxObject>-Instanzen nach zyklischen Referenzen, die sich
@@ -1062,7 +1062,7 @@ void SbxObject::GarbageCollection( ULONG nObjects )
 
 {
     (void)nObjects;
-
+    
     static BOOL bInGarbageCollection = FALSE;
     if ( bInGarbageCollection )
         return;

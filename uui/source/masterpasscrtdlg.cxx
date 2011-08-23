@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@ IMPL_LINK( MasterPasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 MasterPasswordCreateDialog::MasterPasswordCreateDialog
 (
-    Window*                                     pParent,
-    ResMgr*                                     pResMgr
+    Window*										pParent,
+    ResMgr*										pResMgr
 ) :
 
     ModalDialog( pParent, ResId( DLG_UUI_MASTERPASSWORD_CRT, *pResMgr ) ),
@@ -80,8 +80,8 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
 
     aFTMasterPasswordCrt    ( this, ResId( FT_MASTERPASSWORD_CRT, *pResMgr ) ),
     aEDMasterPasswordCrt    ( this, ResId( ED_MASTERPASSWORD_CRT, *pResMgr ) ),
-    aFTMasterPasswordRepeat ( this, ResId( FT_MASTERPASSWORD_REPEAT, *pResMgr ) ),
-    aEDMasterPasswordRepeat ( this, ResId( ED_MASTERPASSWORD_REPEAT, *pResMgr ) ),
+    aFTMasterPasswordRepeat	( this, ResId( FT_MASTERPASSWORD_REPEAT, *pResMgr ) ),
+    aEDMasterPasswordRepeat	( this, ResId( ED_MASTERPASSWORD_REPEAT, *pResMgr ) ),
 
     aFTCautionText          ( this, ResId( FT_CAUTIONTEXT, *pResMgr ) ),
     aFLCautionText          ( this, ResId( FL_CAUTIONTEXT, *pResMgr ) ),
@@ -89,8 +89,8 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
     aFTMasterPasswordWarning ( this, ResId( FT_MASTERPASSWORD_WARNING, *pResMgr ) ),
     aFL ( this, ResId( FL_FIXED_LINE, *pResMgr ) ),
     aOKBtn                  ( this, ResId( BTN_MASTERPASSCRT_OK, *pResMgr ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSCRT_CANCEL, *pResMgr ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSCRT_HELP, *pResMgr ) ),
+    aCancelBtn				( this, ResId( BTN_MASTERPASSCRT_CANCEL, *pResMgr ) ),
+    aHelpBtn				( this, ResId( BTN_MASTERPASSCRT_HELP, *pResMgr ) ),
 
     pResourceMgr            ( pResMgr ),
     nMinLen                 ( 5 )

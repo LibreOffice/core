@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,17 +59,17 @@ DECLARE_LIST( SvXMLAutoStylePoolCache_Impl, OUStringPtr )
 class XMLFamilyData_Impl
 {
 public:
-    SvXMLAutoStylePoolCache_Impl        *pCache;
-    sal_uInt32                          mnFamily;
-    ::rtl::OUString                     maStrFamilyName;
-    UniReference < SvXMLExportPropertyMapper >  mxMapper;
+    SvXMLAutoStylePoolCache_Impl		*pCache;
+    sal_uInt32							mnFamily;
+    ::rtl::OUString						maStrFamilyName;
+    UniReference < SvXMLExportPropertyMapper >	mxMapper;
 
-    SvXMLAutoStylePoolParentsP_Impl*    mpParentList;
-    SvXMLAutoStylePoolNamesP_Impl*      mpNameList;
-    sal_uInt32                          mnCount;
-    sal_uInt32                          mnName;
-    ::rtl::OUString                     maStrPrefix;
-    sal_Bool                            bAsFamily;
+    SvXMLAutoStylePoolParentsP_Impl*	mpParentList;
+    SvXMLAutoStylePoolNamesP_Impl*	    mpNameList;
+    sal_uInt32							mnCount;
+    sal_uInt32							mnName;
+    ::rtl::OUString						maStrPrefix;
+    sal_Bool							bAsFamily;
 
 public:
     XMLFamilyData_Impl( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
@@ -80,7 +80,7 @@ public:
         pCache( 0 ),
         mnFamily( nFamily ), mpParentList( NULL ),
         mpNameList( NULL ), mnCount( 0 ), mnName( 0 )
-
+        
     {}
     ~XMLFamilyData_Impl();
 
@@ -106,9 +106,9 @@ DECLARE_CONTAINER_SORT_DEL( SvXMLAutoStylePoolNamesP_Impl,
 
 class SvXMLAutoStylePoolPropertiesP_Impl
 {
-    ::rtl::OUString                     msName;
-    ::std::vector< XMLPropertyState >   maProperties;
-    sal_uInt32                          mnPos;
+    ::rtl::OUString						msName;
+    ::std::vector< XMLPropertyState >	maProperties;
+    sal_uInt32							mnPos;
 
 public:
 
@@ -135,8 +135,8 @@ DECLARE_LIST( SvXMLAutoStylePoolPropertiesPList_Impl, SvXMLAutoStylePoolProperti
 
 class SvXMLAutoStylePoolParentP_Impl
 {
-    ::rtl::OUString                         msParent;
-    SvXMLAutoStylePoolPropertiesPList_Impl  maPropertiesList;
+    ::rtl::OUString 						msParent;
+    SvXMLAutoStylePoolPropertiesPList_Impl	maPropertiesList;
 
 public:
 
@@ -173,7 +173,7 @@ class SvXMLAutoStylePoolP_Impl
 {
     SvXMLExport& rExport;
 
-    XMLFamilyDataList_Impl      maFamilyList;
+    XMLFamilyDataList_Impl		maFamilyList;
 
 public:
 
@@ -190,9 +190,9 @@ public:
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
         com::sun::star::uno::Sequence<rtl::OUString>& aNames );
 
-//  ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,
-//                       const ::std::vector< XMLPropertyState >& rProperties,
-//                       sal_Bool bCache = sal_False );
+//	::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,
+//		                 const ::std::vector< XMLPropertyState >& rProperties,
+//					  	 sal_Bool bCache = sal_False );
     sal_Bool Add( ::rtl::OUString& rName, sal_Int32 nFamily,
                 const ::rtl::OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
@@ -220,8 +220,8 @@ public:
 
 struct SvXMLAutoStylePoolPExport_Impl
 {
-    const ::rtl::OUString                   *mpParent;
-    const SvXMLAutoStylePoolPropertiesP_Impl    *mpProperties;
+    const ::rtl::OUString					*mpParent;
+    const SvXMLAutoStylePoolPropertiesP_Impl	*mpProperties;
 };
 
 #endif

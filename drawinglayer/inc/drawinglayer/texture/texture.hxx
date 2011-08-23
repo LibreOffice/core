@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,11 +66,11 @@ namespace drawinglayer
         class GeoTexSvxGradient : public GeoTexSvx
         {
         protected:
-            basegfx::ODFGradientInfo            maGradientInfo;
-            basegfx::B2DRange                   maTargetRange;
-            basegfx::BColor                     maStart;
-            basegfx::BColor                     maEnd;
-            double                              mfBorder;
+            basegfx::ODFGradientInfo			maGradientInfo;
+            basegfx::B2DRange					maTargetRange;
+            basegfx::BColor						maStart;
+            basegfx::BColor						maEnd;
+            double								mfBorder;
 
             // helpers
             void impAppendMatrix(::std::vector< basegfx::B2DHomMatrix >& rMatrices, const basegfx::B2DRange& rRange);
@@ -216,11 +216,11 @@ namespace drawinglayer
         class GeoTexSvxHatch : public GeoTexSvx
         {
         protected:
-            basegfx::B2DHomMatrix               maTextureTransform;
-            basegfx::B2DHomMatrix               maBackTextureTransform;
-            double                              mfDistance;
-            double                              mfAngle;
-            sal_uInt32                          mnSteps;
+            basegfx::B2DHomMatrix				maTextureTransform;
+            basegfx::B2DHomMatrix				maBackTextureTransform;
+            double								mfDistance;
+            double								mfAngle;
+            sal_uInt32							mnSteps;
 
         public:
             GeoTexSvxHatch(const basegfx::B2DRange& rTargetRange, double fDistance, double fAngle);
@@ -244,8 +244,8 @@ namespace drawinglayer
         class GeoTexSvxTiled : public GeoTexSvx
         {
         protected:
-            basegfx::B2DPoint                           maTopLeft;
-            basegfx::B2DVector                          maSize;
+            basegfx::B2DPoint							maTopLeft;
+            basegfx::B2DVector							maSize;
 
         public:
             GeoTexSvxTiled(const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@
 #include "AccessibleEmptyEditSource.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
@@ -80,7 +80,7 @@ OUString GetOptionalProperty (
     const OUString& rsPropertyName)
 {
     OUString sValue;
-
+    
     if (rxSet.is())
     {
         const Reference<beans::XPropertySetInfo> xInfo (rxSet->getPropertySetInfo());
@@ -393,7 +393,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 
 
-/** Return a copy of the state set.
+/**	Return a copy of the state set.
     Possible states are:
         ENABLED
         SHOWING
@@ -851,7 +851,7 @@ uno::Sequence<uno::Type> SAL_CALL
     const uno::Type aUnoTunnelType =
         ::getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
     //    const uno::Type aStateSetType =
-    //      ::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
+    //    	::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
 
     // ... and merge them all into one list.
     sal_Int32   nTypeCount (aTypeList.getLength()),
@@ -982,7 +982,7 @@ sal_Int64 SAL_CALL
 {
     sal_Int64 nReturn( 0 );
 
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
+    if(	( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
         nReturn = reinterpret_cast< sal_Int64 >( this );
 
     return( nReturn );
@@ -1012,7 +1012,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
 
 //=====  protected internal  ==================================================
-/// Set this object's name if is different to the current name.
+///	Set this object's name if is different to the current name.
 ::rtl::OUString
     AccessibleShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -1195,7 +1195,7 @@ sal_Int32 SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    //  Use a simple but slow solution for now.  Optimize later.
+    //	Use a simple but slow solution for now.  Optimize later.
 
     sal_Int32 nIndex = m_nIndexInParent;
     if ( -1 == nIndex )

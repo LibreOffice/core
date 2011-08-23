@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,16 +46,16 @@ namespace drawinglayer
         class SdrLineFillShadowTextAttribute : public SdrLineShadowTextAttribute
         {
             // add fill and transGradient attributes
-            SdrFillAttribute            maFill;                     // fill attributes (if used)
-            FillGradientAttribute       maFillFloatTransGradient;   // fill float transparence gradient (if used)
+            SdrFillAttribute			maFill;						// fill attributes (if used)
+            FillGradientAttribute		maFillFloatTransGradient;	// fill float transparence gradient (if used)
 
         public:
             SdrLineFillShadowTextAttribute(
-                const SdrLineAttribute& rLine,
-                const SdrFillAttribute& rFill,
-                const SdrLineStartEndAttribute& rLineStartEnd,
-                const SdrShadowAttribute& rShadow,
-                const FillGradientAttribute& rFillFloatTransGradient,
+                const SdrLineAttribute& rLine, 
+                const SdrFillAttribute& rFill, 
+                const SdrLineStartEndAttribute& rLineStartEnd, 
+                const SdrShadowAttribute& rShadow, 
+                const FillGradientAttribute& rFillFloatTransGradient, 
                 const SdrTextAttribute& rTextAttribute);
             SdrLineFillShadowTextAttribute();
             SdrLineFillShadowTextAttribute(const SdrLineFillShadowTextAttribute& rCandidate);

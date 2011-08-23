@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace sd { namespace colortoolpanel
             ToolPanelFactory::Create,
             ToolPanelFactory::getImplementationName_static,
             ToolPanelFactory::getSupportedServiceNames_static,
-            ::cppu::createSingleComponentFactory, NULL, 0
+            ::cppu::createSingleComponentFactory, NULL, 0 
         },
         { 0, 0, 0, 0, 0, 0 }
     };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ CAutoStyleTag::CAutoStyleTag( const XmlTagAttributes_t& attributes ):
 };
 
 void CAutoStyleTag::startTag()
-{
+{  
 }
 
 void CAutoStyleTag::endTag()
@@ -53,7 +53,7 @@ void CAutoStyleTag::addAttributes(const XmlTagAttributes_t& attributes)
 {
     if ( EMPTY_STYLELOCALE_PAIR == m_CurrentStyleLocalePair )
     {
-        // the style-locale pair should be empty when entering STYLE_STYLE
+        // the style-locale pair should be empty when entering STYLE_STYLE 
         // tag, and otherwise should be STYLE_PROPERTIES.
 
         XmlTagAttributes_t::const_iterator iter = attributes.find(CONTENT_STYLE_STYLE_NAME);
@@ -70,7 +70,7 @@ void CAutoStyleTag::addAttributes(const XmlTagAttributes_t& attributes)
         XmlTagAttributes_t::const_iterator iter_lan_asain = attributes.find(CONTENT_STYLE_PROPERTIES_LANGUAGEASIAN);
         XmlTagAttributes_t::const_iterator iter_con_asain = attributes.find(CONTENT_STYLE_PROPERTIES_COUNTRYASIAN);
 
-        // if style:properties | fo:language or style:language-asian is exist,
+        // if style:properties | fo:language or style:language-asian is exist, 
         // set the locale field, otherwise clear the style-locale pair;
         if ( ( iter_lan!= attributes.end() ) && ( iter_con != attributes.end() ) )
             setLocale( ::std::make_pair( iter_lan->second,iter_con->second ) );

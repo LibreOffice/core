@@ -58,8 +58,8 @@ namespace drawinglayer
     {
         enum HatchStyle
         {
-            HATCHSTYLE_SINGLE,
-            HATCHSTYLE_DOUBLE,
+            HATCHSTYLE_SINGLE, 
+            HATCHSTYLE_DOUBLE, 
             HATCHSTYLE_TRIPLE
         };
     } // end of namespace attribute
@@ -79,10 +79,10 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             FillHatchAttribute(
-                HatchStyle eStyle,
-                double fDistance,
-                double fAngle,
-                const basegfx::BColor& rColor,
+                HatchStyle eStyle, 
+                double fDistance, 
+                double fAngle, 
+                const basegfx::BColor& rColor, 
                 bool bFillBackground);
             FillHatchAttribute();
             FillHatchAttribute(const FillHatchAttribute& rCandidate);

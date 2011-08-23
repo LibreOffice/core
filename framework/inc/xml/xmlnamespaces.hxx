@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ class XMLNamespaces
         XMLNamespaces( const XMLNamespaces& );
         virtual ~XMLNamespaces();
 
-        void addNamespace( const ::rtl::OUString& aName, const ::rtl::OUString& aValue )
-            throw(  ::com::sun::star::xml::sax::SAXException );
+        void addNamespace( const ::rtl::OUString& aName, const ::rtl::OUString& aValue ) 
+            throw(	::com::sun::star::xml::sax::SAXException );
 
-        ::rtl::OUString applyNSToAttributeName( const ::rtl::OUString& ) const
-            throw(  ::com::sun::star::xml::sax::SAXException );
+        ::rtl::OUString applyNSToAttributeName( const ::rtl::OUString& ) const 
+            throw(	::com::sun::star::xml::sax::SAXException );
         ::rtl::OUString applyNSToElementName( const ::rtl::OUString& ) const
-            throw(  ::com::sun::star::xml::sax::SAXException );
-
+            throw(	::com::sun::star::xml::sax::SAXException );
+    
     private:
         typedef ::std::map< ::rtl::OUString, ::rtl::OUString > NamespaceMap;
 
@@ -57,7 +57,7 @@ class XMLNamespaces
             throw( ::com::sun::star::xml::sax::SAXException );
 
         ::rtl::OUString m_aDefaultNamespace;
-        NamespaceMap    m_aNamespaceMap;
+        NamespaceMap	m_aNamespaceMap;
 };
 
 }

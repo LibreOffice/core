@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ namespace drawinglayer
         {
         private:
             /// The ColorModifier to use
-            basegfx::BColorModifier                 maColorModifier;
+            basegfx::BColorModifier					maColorModifier;
 
         public:
             /// constructor
             ModifiedColorPrimitive3D(
-                const Primitive3DSequence& rChildren,
+                const Primitive3DSequence& rChildren, 
                 const basegfx::BColorModifier& rColorModifier);
 
             /// data read access

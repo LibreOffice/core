@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class CKeywordsTag : public ITag
         virtual void addAttributes(const XmlTagAttributes_t& attributes);
         virtual std::wstring getTagContent();
         virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring(); };
-
+        
     private:
         StringList_t m_slKeywords;
         std::wstring m_sCurrentKeyword;

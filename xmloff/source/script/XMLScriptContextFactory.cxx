@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ SvXMLImportContext * XMLScriptContextFactory::CreateContext
  const OUString & /*rApiLanguage*/)
 {
     OUString sURLVal;
-
+    
     sal_Int16 nCount = xAttrList->getLength();
     for (sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
     {
@@ -84,7 +84,7 @@ SvXMLImportContext * XMLScriptContextFactory::CreateContext
     }
 
     Sequence<PropertyValue> aValues(2);
-
+    
     // EventType
     aValues[0].Name = sEventType;
     aValues[0].Value <<= sScript;
@@ -97,6 +97,6 @@ SvXMLImportContext * XMLScriptContextFactory::CreateContext
     rEvents->AddEventValues(rApiEventName, aValues);
 
     // return dummy context
-    return new SvXMLImportContext(rImport, p_nPrefix, rLocalName);
+    return new SvXMLImportContext(rImport, p_nPrefix, rLocalName);    
 }
-
+ 

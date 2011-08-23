@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,36 +59,36 @@ namespace connectivity
         //**************************************************************
         //************ Class: java.sql.Statement
         //**************************************************************
-        class OStatement_Base       :   public comphelper::OBaseMutex,
-                                        public  OStatement_BASE,
-                                        public  ::cppu::OPropertySetHelper,
-                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>,
+        class OStatement_Base		:	public comphelper::OBaseMutex,
+                                        public	OStatement_BASE,
+                                        public	::cppu::OPropertySetHelper,
+                                        public	::comphelper::OPropertyArrayUsageHelper<OStatement_Base>,
                                         public  connectivity::OSubComponent<OStatement_Base, OStatement_BASE>
 
         {
             friend class connectivity::OSubComponent<OStatement_Base, OStatement_BASE>;
             friend class OResultSet;
 
-            ::com::sun::star::sdbc::SQLWarning          m_aLastWarning;
+            ::com::sun::star::sdbc::SQLWarning			m_aLastWarning;
 
         protected:
-            ::std::list< ::rtl::OUString>               m_aBatchList;
+            ::std::list< ::rtl::OUString>				m_aBatchList;
 
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
                                                                         //  for this Statement
 
-            OConnection*                                m_pConnection;// The owning Connection object
-            WpADOCommand                                m_Command;
-            WpADORecordset                              m_RecordSet;
-            OLEVariant                                  m_RecordsAffected;
-            OLEVariant                                  m_Parameters;
-            ::std::vector<connectivity::OTypeInfo>      m_aTypeInfo;    // Hashtable containing an entry
+            OConnection*								m_pConnection;// The owning Connection object
+            WpADOCommand								m_Command;
+            WpADORecordset								m_RecordSet;
+            OLEVariant									m_RecordsAffected;
+            OLEVariant									m_Parameters;
+            ::std::vector<connectivity::OTypeInfo>		m_aTypeInfo;	// Hashtable containing an entry
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
-            sal_Int32                                   m_nMaxRows;
-            sal_Int32                                   m_nFetchSize;
-            LockTypeEnum                                m_eLockType;
-            CursorTypeEnum                              m_eCursorType;
+            sal_Int32									m_nMaxRows;
+            sal_Int32									m_nFetchSize;
+            LockTypeEnum								m_eLockType;
+            CursorTypeEnum								m_eCursorType;
 
             using OStatement_BASE::rBHelper;
         private:
@@ -176,7 +176,7 @@ namespace connectivity
             virtual sal_Bool SAL_CALL getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
-        class OStatement :  public OStatement_Base,
+        class OStatement :	public OStatement_Base,
                             public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
         {

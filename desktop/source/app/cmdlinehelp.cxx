@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 
 namespace desktop
 {
-    // to be able to display the help nicely in a dialog box with propotional font,
+    // to be able to display the help nicely in a dialog box with propotional font, 
     // we need to split it in chunks...
     //  ___HEAD___
     //  LEFT RIGHT

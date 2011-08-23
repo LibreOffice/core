@@ -64,8 +64,8 @@ namespace drawinglayer
         public:
             // constructors/destructor
             Sdr3DLightAttribute(
-                const basegfx::BColor& rColor,
-                const basegfx::B3DVector& rDirection,
+                const basegfx::BColor& rColor, 
+                const basegfx::B3DVector& rDirection, 
                 bool bSpecular);
             Sdr3DLightAttribute(const basegfx::BColor& rColor);
             Sdr3DLightAttribute();

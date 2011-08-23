@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class SVX_DLLPUBLIC GalleryChildWindow : public SfxChildWindow
 public:
                         GalleryChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
                         ~GalleryChildWindow();
-
+                            
                         SFX_DECL_CHILDWINDOW( GalleryChildWindow );
 };
 
@@ -77,38 +77,38 @@ class GalleryBrowser : public SfxDockingWindow
 
 private:
 
-    Size                    maLastSize;
-    GallerySplitter*        mpSplitter;
-    GalleryBrowser1*        mpBrowser1;
-    GalleryBrowser2*        mpBrowser2;
-    Gallery*                mpGallery;
-    long                    mnDummy1;
-    long                    mnDummy2;
-    long                    mnDummy3;
+    Size					maLastSize;
+    GallerySplitter*		mpSplitter;
+    GalleryBrowser1*		mpBrowser1;
+    GalleryBrowser2*		mpBrowser2;
+    Gallery*				mpGallery;
+    long					mnDummy1;
+    long					mnDummy2;
+    long					mnDummy3;
 
     void                    InitSettings();
 
-    virtual BOOL            Close();
-    virtual void            Resize();
-    virtual void            GetFocus();
+    virtual BOOL 			Close();
+    virtual void			Resize();
+    virtual void			GetFocus();
 
                             DECL_LINK( SplitHdl, void* );
 
 protected:
 
-    void                    ThemeSelectionHasChanged();
-
-public:
-
+    void					ThemeSelectionHasChanged();
+                            
+public:						
+                            
                             GalleryBrowser( SfxBindings* pBindings, SfxChildWindow* pCW,
                                             Window* pParent, const ResId& rResId );
                             ~GalleryBrowser();
 
-    INetURLObject           GetURL() const;
-    String                  GetFilterName() const;
-    Graphic                 GetGraphic() const;
-    BOOL                    GetVCDrawModel( FmFormModel& rModel ) const;
-    BOOL                    IsLinkage() const;
+    INetURLObject			GetURL() const;
+    String					GetFilterName() const;
+    Graphic					GetGraphic() const;
+    BOOL					GetVCDrawModel( FmFormModel& rModel ) const;
+    BOOL					IsLinkage() const;
 
     BOOL                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };

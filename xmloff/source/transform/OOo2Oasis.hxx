@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 class XMLTransformerOOoEventMap_Impl;
 
-class OOo2OasisTransformer :
+class OOo2OasisTransformer : 
         public XMLTransformerBase,
         public ::com::sun::star::document::XImporter,
         public ::com::sun::star::document::XFilter
@@ -45,11 +45,11 @@ class OOo2OasisTransformer :
     ::rtl::OUString m_aImplName;
     ::rtl::OUString m_aSubServiceName;
 
-    XMLTransformerActions       *m_aActions[MAX_OOO_ACTIONS];
+    XMLTransformerActions		*m_aActions[MAX_OOO_ACTIONS];
     XMLTransformerOOoEventMap_Impl *m_pEventMap;
 protected:
 
-    virtual XMLTransformerContext *CreateUserDefinedContext(
+    virtual XMLTransformerContext *CreateUserDefinedContext( 
                                       const TransformerAction_Impl& rAction,
                                       const ::rtl::OUString& rQName,
                                          sal_Bool bPersistent=sal_False );
@@ -63,17 +63,17 @@ public:
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
-    // XInterface
+    // XInterface 
 
     // (XInterface methods need to be implemented to disambigouate
     // between those inherited through XMLTransformerBase and
     // the new interfaces).
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        const ::com::sun::star::uno::Type& aType )
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( 
+        const ::com::sun::star::uno::Type& aType ) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL acquire(  ) throw ()
+    virtual void SAL_CALL acquire(  ) throw () 
         { XMLTransformerBase::acquire(); };
 
     virtual void SAL_CALL release(  ) throw ()
@@ -111,4 +111,4 @@ public:
                                             sal_Bool bForm = sal_False );
 };
 
-#endif  //  _XMLOFF_TRANSFORMER_BASE_HXX
+#endif	//  _XMLOFF_TRANSFORMER_BASE_HXX

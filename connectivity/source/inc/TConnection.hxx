@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,30 +48,30 @@ namespace connectivity
                                             > OMetaConnection_BASE;
 
     typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
-
+    
     class OOO_DLLPUBLIC_DBTOOLS OMetaConnection : public OMetaConnection_BASE
     {
     protected:
-        ::osl::Mutex                    m_aMutex;
+        ::osl::Mutex		            m_aMutex;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                                         m_aConnectionInfo;
-        connectivity::OWeakRefArray     m_aStatements;  //  vector containing a list
+        connectivity::OWeakRefArray		m_aStatements;	//	vector containing a list
                                                         //  of all the Statement objects
                                                         //  for this Connection
-        ::rtl::OUString                 m_sURL;
-        rtl_TextEncoding                m_nTextEncoding; // the encoding which is used for all text conversions
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData >
+        ::rtl::OUString		            m_sURL;
+        rtl_TextEncoding	            m_nTextEncoding; // the encoding which is used for all text conversions		
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > 
                                         m_xMetaData;
         SharedResources                 m_aResources;
     public:
-
+        
         static ::dbtools::OPropertyMap& getPropMap();
 
         OMetaConnection();
 
         inline rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
-        inline ::rtl::OUString  getURL() const  { return m_sURL; }
-        inline void             setURL(const ::rtl::OUString& _rsUrl) { m_sURL = _rsUrl; }
+        inline ::rtl::OUString	getURL() const	{ return m_sURL; }
+        inline void				setURL(const ::rtl::OUString& _rsUrl) { m_sURL = _rsUrl; }
         void                    throwGenericSQLException( sal_uInt16 _nErrorResourceId,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xContext  );
         const SharedResources& getResources() const { return m_aResources;}
 
@@ -82,7 +82,7 @@ namespace connectivity
         // OComponentHelper
         virtual void SAL_CALL disposing(void);
 
-        //XUnoTunnel
+        //XUnoTunnel 
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };

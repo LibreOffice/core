@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,12 +149,12 @@ void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults, const
 
 static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
-    static const rtl::OUString  sRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "RotateAngle" ) );
-    static const rtl::OUString  sViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
-    static const rtl::OUString  sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
-    static const rtl::OUString  sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+    static const rtl::OUString	sRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "RotateAngle" ) );
+    static const rtl::OUString	sViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
+    static const rtl::OUString	sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
+    static const rtl::OUString	sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
     static const rtl::OUString  sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
 
     sal_uInt16 nSID = rReq.GetSlot();
@@ -176,7 +176,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             com::sun::star::beans::PropertyValue aPropValue;
             aPropValue.Name = sExtrusion;
             aPropValue.Value <<= sal_True;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
         }
     }
     break;
@@ -210,7 +210,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         com::sun::star::beans::PropertyValue aPropValue;
         aPropValue.Name = sRotateAngle;
         aPropValue.Value <<= aRotateAnglePropPair;
-        rGeometryItem.SetPropertyValue( sExtrusion, aPropValue );
+        rGeometryItem.SetPropertyValue( sExtrusion,	aPropValue );
     }
     break;
 
@@ -220,11 +220,11 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         {
             sal_Int32 nSkew = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_DIRECTION))->GetValue();
 
-            Position3D  aViewPoint( 3472, -3472, 25000 );
-            double      fOriginX = 0.50;
-            double      fOriginY = -0.50;
-            double      fSkewAngle = nSkew;
-            double      fSkew = 50.0;
+            Position3D	aViewPoint( 3472, -3472, 25000 );
+            double		fOriginX = 0.50;
+            double		fOriginY = -0.50;
+            double		fSkewAngle = nSkew;
+            double		fSkew = 50.0;
 
             switch( nSkew )
             {
@@ -275,9 +275,9 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
             aPropValue.Name = sViewPoint;
             aPropValue.Value <<= aViewPoint;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
-
+            
             EnhancedCustomShapeParameterPair aOriginPropPair;
             aOriginPropPair.First.Value <<= fOriginX;
             aOriginPropPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
@@ -285,7 +285,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             aOriginPropPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
             aPropValue.Name = sOrigin;
             aPropValue.Value <<= aOriginPropPair;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             EnhancedCustomShapeParameterPair aSkewPropPair;
             aSkewPropPair.First.Value <<= fSkew;
@@ -307,7 +307,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             com::sun::star::beans::PropertyValue aPropValue;
             aPropValue.Name = sProjectionMode;
             aPropValue.Value <<= eProjectionMode;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
         }
     }
     break;
@@ -326,7 +326,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             com::sun::star::beans::PropertyValue aPropValue;
             aPropValue.Name = sDepth;
             aPropValue.Value <<= aDepthPropPair;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
         }
     }
     break;
@@ -343,7 +343,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             com::sun::star::beans::PropertyValue aPropValue;
             aPropValue.Name = sExtrusionColor;
             aPropValue.Value <<= bAuto ? sal_False : sal_True;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             if( bAuto )
             {
@@ -375,7 +375,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
             switch( nSurface )
             {
-            case 0: // wireframe
+            case 0:	// wireframe
                 eShadeMode = ShadeMode_DRAFT;
                 break;
             case 1: // matte
@@ -393,19 +393,19 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             com::sun::star::beans::PropertyValue aPropValue;
             aPropValue.Name = sShadeMode;
             aPropValue.Value <<= eShadeMode;
-            rGeometryItem.SetPropertyValue( sExtrusion, aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	aPropValue );
 
             aPropValue.Name = sMetal;
             aPropValue.Value <<= bMetal;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             aPropValue.Name = sSpecularity;
             aPropValue.Value <<= fSpecularity;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             aPropValue.Name = sDiffusion;
             aPropValue.Value <<= fDiffusion;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
         }
     }
     break;
@@ -421,7 +421,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_INTENSITY ) == SFX_ITEM_SET)
         {
             sal_Int32 nLevel = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_LIGHTING_INTENSITY))->GetValue();
-
+            
             double fBrightness;
             sal_Bool bHarsh2;
             double fLevel1;
@@ -452,27 +452,27 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             com::sun::star::beans::PropertyValue aPropValue;
             aPropValue.Name = sBrightness;
             aPropValue.Value <<= fBrightness;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             aPropValue.Name = sLightFace;
             aPropValue.Value <<= sal_True;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             aPropValue.Name = sFirstLightHarsh;
             aPropValue.Value <<= sal_True;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             aPropValue.Name = sSecondLightHarsh;
             aPropValue.Value <<= bHarsh2;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             aPropValue.Name = sFirstLightLevel;
             aPropValue.Value <<= fLevel1;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
             aPropValue.Name = sSecondLightLevel;
             aPropValue.Value <<= fLevel2;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
         }
     }
     break;
@@ -484,8 +484,8 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
             if((nDirection >= 0) && (nDirection < 9))
             {
-                const rtl::OUString sFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
-                const rtl::OUString sSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
+                const rtl::OUString	sFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
+                const rtl::OUString	sSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
 
                 const Direction3D * pLighting1Defaults;
                 const Direction3D * pLighting2Defaults;
@@ -495,11 +495,11 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
                 com::sun::star::beans::PropertyValue aPropValue;
                 aPropValue.Name = sFirstLightDirection;
                 aPropValue.Value <<= pLighting1Defaults[nDirection];
-                rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+                rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
 
                 aPropValue.Name = sSecondLightDirection;
                 aPropValue.Value <<= pLighting2Defaults[nDirection];
-                rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+                rGeometryItem.SetPropertyValue( sExtrusion,	 aPropValue );
             }
         }
     }
@@ -521,57 +521,57 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_TILT_DOWN:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_DOWN;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_TILT_UP:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_UP;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_TILT_LEFT:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_LEFT;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_TILT_RIGHT:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_RIGHT;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_DIRECTION:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ORIENTATION;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_PROJECTION:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_PROJECTION;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_DEPTH:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_DEPTH;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_3D_COLOR:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_SURFACE:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_LIGHTING_INTENSITY:
         {
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_BRIGHTNESS;
-        }   // PASSTROUGH
+        }	// PASSTROUGH
         case SID_EXTRUSION_LIGHTING_DIRECTION:
         {
             if ( !nStrResId )
@@ -608,7 +608,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
         break;
 
         case SID_EXTRUSION_DEPTH_DIALOG:
-            if( rReq.GetArgs() &&
+            if( rReq.GetArgs() && 
                 (rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SFX_ITEM_SET) &&
                 (rReq.GetArgs()->GetItemState( SID_ATTR_METRIC ) == SFX_ITEM_SET))
             {
@@ -632,7 +632,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
     if( nSID == SID_EXTRUSION_TOOGLE )
     {
             static USHORT SidArray[] = {
-                SID_EXTRUSION_TILT_DOWN,
+                SID_EXTRUSION_TILT_DOWN, 
                 SID_EXTRUSION_TILT_UP,
                 SID_EXTRUSION_TILT_LEFT,
                 SID_EXTRUSION_TILT_RIGHT,
@@ -658,12 +658,12 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
-    static const rtl::OUString  sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
-    static const rtl::OUString  sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
-    static const rtl::OUString  sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
-
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
+    static const rtl::OUString	sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
+    static const rtl::OUString	sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
+    static const rtl::OUString	sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+    
     com::sun::star::uno::Any* pAny;
 
     double fFinalSkewAngle = -1;
@@ -687,12 +687,12 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
                     continue;
             }
 
-            sal_Bool    bParallel = sal_True;
-            Position3D  aViewPoint( 3472, -3472, 25000 );
-            double      fOriginX = 0.50;
-            double      fOriginY = -0.50;
-            double      fSkewAngle = -135;
-            double      fSkew = 50.0;
+            sal_Bool	bParallel = sal_True;
+            Position3D	aViewPoint( 3472, -3472, 25000 );
+            double		fOriginX = 0.50;
+            double		fOriginY = -0.50;
+            double		fSkewAngle = -135;
+            double		fSkew = 50.0;
 
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
             sal_Int16 nProjectionMode = sal_Int16();
@@ -809,9 +809,9 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
-
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+    
     com::sun::star::uno::Any* pAny;
 
     sal_Int32 nFinalProjection = -1;
@@ -836,7 +836,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
-            sal_Bool    bParallel = sal_True;
+            sal_Bool	bParallel = sal_True;
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
             ProjectionMode eProjectionMode;
             if( pAny && ( *pAny >>= eProjectionMode ) )
@@ -865,12 +865,12 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
-    static const rtl::OUString  sSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
-    static const rtl::OUString  sDiffusion( RTL_CONSTASCII_USTRINGPARAM ( "Diffusion" ) );
-    static const rtl::OUString  sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
-
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
+    static const rtl::OUString	sSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
+    static const rtl::OUString	sDiffusion( RTL_CONSTASCII_USTRINGPARAM ( "Diffusion" ) );
+    static const rtl::OUString	sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
+    
     com::sun::star::uno::Any* pAny;
 
     sal_Int32 nFinalSurface = -1;
@@ -913,7 +913,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
                     nSurface = 3; // metal
                 }
                 else
-                {
+                {	
                     double fSpecularity = 0;
                     pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sSpecularity );
                     if( pAny )
@@ -954,9 +954,9 @@ void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
-
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
+    
     com::sun::star::uno::Any* pAny;
 
     double fFinalDepth = -1;
@@ -1034,9 +1034,9 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
-    static const rtl::OUString  sSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
+    static const rtl::OUString	sSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
 
     const Direction3D * pLighting1Defaults;
     const Direction3D * pLighting2Defaults;
@@ -1115,9 +1115,9 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sBrightness( RTL_CONSTASCII_USTRINGPARAM ( "Brightness" ) );
-
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sBrightness( RTL_CONSTASCII_USTRINGPARAM ( "Brightness" ) );
+    
     com::sun::star::uno::Any* pAny;
 
     int nFinalLevel = -1;
@@ -1183,7 +1183,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
 
     com::sun::star::uno::Any* pAny;
@@ -1253,7 +1253,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
 namespace svx {
 bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
 {
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString	sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@
 
 
 typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > str_pair;
-typedef ::std::map< ::rtl::OUString, str_pair,
+typedef ::std::map< ::rtl::OUString, str_pair, 
     ::std::equal_to< ::rtl::OUString > > strpair_map;
 typedef ::std::vector< str_pair > props_vec;
-typedef ::std::map< ::rtl::OUString, ::std::pair< props_vec, strpair_map >,
-    ::std::equal_to< ::rtl::OUString > > filesets_map;
+typedef ::std::map< ::rtl::OUString, ::std::pair< props_vec, strpair_map >, 
+    ::std::equal_to< ::rtl::OUString > > filesets_map; 
 
 namespace scripting_impl
 {

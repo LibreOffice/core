@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,18 +66,18 @@ private:
         SAVE_ERROR
     };
 
-    AddressList_Impl*   mpToList;
-    AddressList_Impl*   mpCcList;
-    AddressList_Impl*   mpBccList;
-    String              maFromAddress;
-    String              maSubject;
-    MailPriority        mePriority;
+    AddressList_Impl*	mpToList;
+    AddressList_Impl*	mpCcList;
+    AddressList_Impl*	mpBccList;
+    String				maFromAddress;
+    String				maSubject;
+    MailPriority		mePriority;
 
-    sal_Bool            mbLoadDone;
+    sal_Bool			mbLoadDone;
 
-    void                ClearList( AddressList_Impl* pList );
-    void                MakeValueList( AddressList_Impl* pList, String& rValueList );
-    SaveResult          SaveDocumentAsFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const rtl::OUString& rType, rtl::OUString& rFileNamePath );
+    void				ClearList( AddressList_Impl* pList );
+    void				MakeValueList( AddressList_Impl* pList, String& rValueList );
+    SaveResult			SaveDocumentAsFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const rtl::OUString& rType, rtl::OUString& rFileNamePath );
 
     DECL_LINK( DoneHdl, void* );
 
@@ -88,16 +88,16 @@ public:
         SEND_MAIL_CANCELLED,
         SEND_MAIL_ERROR
     };
-
+    
     SfxMailModel_Impl();
     ~SfxMailModel_Impl();
 
-    void                AddAddress( const String& rAddress, AddressRole eRole );
-    void                SetFromAddress( const String& rAddress )    { maFromAddress = rAddress; }
-    void                SetSubject( const String& rSubject )        { maSubject = rSubject; }
-    void                SetPriority( MailPriority ePrio )           { mePriority = ePrio; }
+    void				AddAddress( const String& rAddress, AddressRole eRole );
+    void				SetFromAddress( const String& rAddress )	{ maFromAddress = rAddress; }
+    void				SetSubject( const String& rSubject )		{ maSubject = rSubject; }
+    void				SetPriority( MailPriority ePrio )			{ mePriority = ePrio; }
 
-    SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const rtl::OUString& rType );
+    SendMailResult		Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const rtl::OUString& rType );
 };
 
 BOOL CreateFromAddress_Impl( String& rFrom );

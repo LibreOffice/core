@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace connectivity::sdbcx;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -67,9 +67,9 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
         {
             if(xRow->getString(4) == _rName)
             {
-                sal_Int32 nType             = xRow->getInt(5);
-                ::rtl::OUString sTypeName   = xRow->getString(6);
-                sal_Int32 nPrec             = xRow->getInt(7);
+                sal_Int32 nType				= xRow->getInt(5);
+                ::rtl::OUString sTypeName	= xRow->getString(6);
+                sal_Int32 nPrec				= xRow->getInt(7);
 
                 OColumn* pRet = new OColumn(_rName,
                                             sTypeName,

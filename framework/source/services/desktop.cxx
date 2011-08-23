@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <loadenv/loadenv.hxx>
 
@@ -58,7 +58,7 @@
 #include <classes/fwkresid.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -86,7 +86,7 @@
 #include <com/sun/star/frame/XTerminateListener2.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -102,25 +102,25 @@
 #include <comphelper/extract.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_15                    (   Desktop                                                  ,
                                             OWeakObject                                              ,
@@ -137,7 +137,7 @@ DEFINE_XINTERFACE_15                    (   Desktop                             
                                             DIRECT_INTERFACE( css::frame::XDispatchResultListener   ),
                                             DIRECT_INTERFACE( css::lang::XEventListener             ),
                                             DIRECT_INTERFACE( css::task::XInteractionHandler        ),
-                                            DIRECT_INTERFACE( css::beans::XPropertySet              ),
+                                            DIRECT_INTERFACE( css::beans::XPropertySet				),
                                             DIRECT_INTERFACE( css::frame::XUntitledNumbers          )
                                         )
 
@@ -238,7 +238,7 @@ DEFINE_INIT_SERVICE                     (   Desktop,
     @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
 *//*-*************************************************************************************************************/
 Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
+        //	Init baseclasses first
         //  Attention: Don't change order of initialization!
         //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
         //      We must garant right initialization and a valid value of this to initialize other baseclasses!
@@ -259,7 +259,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   m_eLoadState            ( E_NOTSET                                      )
         ,   m_xLastFrame            (                                               )
         ,   m_aInteractionRequest   (                                               )
-        ,   m_bSuspendQuickstartVeto( sal_False                                     )
+        ,   m_bSuspendQuickstartVeto( sal_False										)
         ,   m_aCommandOptions       (                                               )
         ,   m_sName                 (                                               )
         ,   m_sTitle                (                                               )
@@ -276,15 +276,15 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
 }
 
 /*-************************************************************************************************************//**
-    @short      standard destructor
-    @descr      This one do NOTHING! Use dispose() instaed of this.
+    @short		standard destructor
+    @descr		This one do NOTHING! Use dispose() instaed of this.
 
-    @seealso    method dispose()
+    @seealso	method dispose()
 
-    @param      -
-    @return     -
+    @param		-
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*************************************************************************************************************/
 Desktop::~Desktop()
 {
@@ -300,15 +300,15 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     SYNCHRONIZED_START
         ReadGuard aReadLock( m_aLock );
-
+    
         css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
         css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
         css::uno::Reference< css::frame::XTerminateListener > xSWThreadManager   = m_xSWThreadManager;
         css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
-
+    
         css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
-        ::sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
-
+        ::sal_Bool											  bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
+    
         aReadLock.unlock();
     SYNCHRONIZED_END
 
@@ -362,25 +362,25 @@ sal_Bool SAL_CALL Desktop::terminate()
             xQuickLauncher->queryTermination( aEvent );
             lCalledTerminationListener.push_back( xQuickLauncher );
         }
-
+    
         if ( xSWThreadManager.is() )
         {
             xSWThreadManager->queryTermination( aEvent );
             lCalledTerminationListener.push_back( xSWThreadManager );
         }
-
+        
         if ( xPipeTerminator.is() )
         {
             xPipeTerminator->queryTermination( aEvent );
             lCalledTerminationListener.push_back( xPipeTerminator );
         }
-
+    
         if ( xSfxTerminator.is() )
         {
             xSfxTerminator->queryTermination( aEvent );
             lCalledTerminationListener.push_back( xSfxTerminator );
         }
-
+    
         bTerminate = sal_True;
     }
     catch(const css::frame::TerminationVetoException&)
@@ -401,9 +401,9 @@ sal_Bool SAL_CALL Desktop::terminate()
             aWriteLock.unlock();
             /* UNSAFE AREA ------------------------------------------------------------------------------------- */
         #endif
-
+    
         impl_sendNotifyTerminationEvent();
-
+    
         if(
             ( bAskQuickStart      ) &&
             ( xQuickLauncher.is() )
@@ -411,19 +411,19 @@ sal_Bool SAL_CALL Desktop::terminate()
         {
             xQuickLauncher->notifyTermination( aEvent );
         }
-
+    
         if ( xSWThreadManager.is() )
             xSWThreadManager->notifyTermination( aEvent );
-
+        
         if ( xPipeTerminator.is() )
             xPipeTerminator->notifyTermination( aEvent );
-
+        
         // Must be realy the last listener to be called.
         // Because it shutdown the whole process asynchronous !
         if ( xSfxTerminator.is() )
             xSfxTerminator->notifyTermination( aEvent );
     }
-
+    
     return bTerminate;
 }
 
@@ -438,10 +438,10 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     if ( xInfo.is() )
     {
         ::rtl::OUString sImplementationName = xInfo->getImplementationName();
-
+    
         // SYCNHRONIZED ->
         WriteGuard aWriteLock( m_aLock );
-
+    
         if( sImplementationName.equals(IMPLEMENTATIONNAME_SFXTERMINATOR) )
         {
             m_xSfxTerminator = xListener;
@@ -462,7 +462,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
             m_xSWThreadManager = xListener;
             return;
         }
-
+    
         aWriteLock.unlock();
         // <- SYCNHRONIZED
     }
@@ -481,34 +481,34 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
     if ( xInfo.is() )
     {
         ::rtl::OUString sImplementationName = xInfo->getImplementationName();
-
+    
         // SYCNHRONIZED ->
         WriteGuard aWriteLock( m_aLock );
-
+    
         if( sImplementationName.equals(IMPLEMENTATIONNAME_SFXTERMINATOR) )
         {
             m_xSfxTerminator.clear();
             return;
         }
-
+    
         if( sImplementationName.equals(IMPLEMENTATIONNAME_PIPETERMINATOR) )
         {
             m_xPipeTerminator.clear();
             return;
         }
-
+    
         if( sImplementationName.equals(IMPLEMENTATIONNAME_QUICKLAUNCHER) )
         {
             m_xQuickLauncher.clear();
             return;
         }
-
+    
         if( sImplementationName.equals(IMPLEMENTATIONNAME_SWTHREADMANAGER) )
         {
             m_xSWThreadManager.clear();
             return;
         }
-
+    
         aWriteLock.unlock();
         // <- SYCNHRONIZED
     }
@@ -1187,11 +1187,11 @@ void SAL_CALL Desktop::dispose()
 
     SYNCHRONIZED_START
         WriteGuard aWriteLock( m_aLock );
-
+    
         // Look for multiple calls of this method!
         // If somewhere call dispose() twice - he will be stopped here realy!!!
         TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
+    
         // Now - we are alone and its the first call of this method ...
         // otherwise call before had thrown a DisposedException / hopefully .-)
         // But we dont use the transaction object created before ... we reset it immediatly ...
@@ -1201,12 +1201,12 @@ void SAL_CALL Desktop::dispose()
         // are running within the same thread!) So we would block ourself there if aTransaction
         // will stay registered .-)
         aTransaction.stop();
-
+    
         // Disable this instance for further work.
         // This will wait for all current running transactions ...
         // and reject all new incoming requests!
         m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
-
+    
         aWriteLock.unlock();
     SYNCHRONIZED_END
 
@@ -1459,7 +1459,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     return m_xTitleNumberGenerator->leaseNumber (xComponent);
 }
-
+    
 //-----------------------------------------------------------------------------
 void SAL_CALL Desktop::releaseNumber( ::sal_Int32 nNumber )
     throw (css::lang::IllegalArgumentException,
@@ -1519,8 +1519,8 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    //  Initialize state with FALSE !!!
-    //  (Handle can be invalid)
+    //	Initialize state with FALSE !!!
+    //	(Handle can be invalid)
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
@@ -1817,9 +1817,9 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ) );
     if ( ! pContainer )
         return;
-
+    
     css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
-
+    
     ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
     while ( aIterator.hasMoreElements() )
     {
@@ -1880,9 +1880,9 @@ void Desktop::impl_sendNotifyTerminationEvent()
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ) );
     if ( ! pContainer )
         return;
-
+    
     css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
-
+    
     ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
     while ( aIterator.hasMoreElements() )
     {
@@ -1954,7 +1954,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
                     // Any internal process of this frame disagree with our request.
                     // Safe this state but dont break these loop. Other frames has to be closed!
                     ++nNonClosedFrames;
-
+                
                     // Reactivate controller.
                     // It can happen that XController.suspend() returned true ... but a registered close listener
                     // throwed these veto exception. Then the controller has to be reactivated. Otherwise
@@ -1965,18 +1965,18 @@ void Desktop::impl_sendNotifyTerminationEvent()
                        )
                         xController->suspend(sal_False);
                 }
-
+            
                 // If interface XClosable interface exists and was used ...
                 // it's not allowed to use XComponent->dispose() also !
                 continue;
             }
-
+        
             // XClosable not supported ?
             // Then we have to dispose these frame hardly.
             css::uno::Reference< css::lang::XComponent > xDispose( xFrame, css::uno::UNO_QUERY );
             if ( xDispose.is() )
                 xDispose->dispose();
-
+        
             // Don't remove these frame from our child container!
             // A frame do it by itself inside close()/dispose() method.
         }
@@ -1991,7 +1991,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
 }
 
 //_________________________________________________________________________________________________________________
-//  debug methods
+//	debug methods
 //_________________________________________________________________________________________________________________
 
 /*-----------------------------------------------------------------------------------------------------------------
@@ -2002,35 +2002,35 @@ void Desktop::impl_sendNotifyTerminationEvent()
 #ifdef ENABLE_ASSERTIONS
 
 //*****************************************************************************************************************
-//  We work with valid servicemanager only.
+//	We work with valid servicemanager only.
 sal_Bool Desktop::implcp_ctor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
 {
     return(
-            ( &xFactory     ==  NULL        )   ||
-            ( xFactory.is() ==  sal_False   )
+            ( &xFactory		==	NULL		)	||
+            ( xFactory.is()	==	sal_False	)
           );
 }
 
 //*****************************************************************************************************************
-//  We work with valid listener only.
+//	We work with valid listener only.
 sal_Bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return(
-            ( &xListener        ==  NULL        )   ||
-            ( xListener.is()    ==  sal_False   )
+            ( &xListener		==	NULL		)	||
+            ( xListener.is()	==	sal_False	)
           );
 }
 
 //*****************************************************************************************************************
-//  We work with valid listener only.
+//	We work with valid listener only.
 sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return(
-            ( &xListener        ==  NULL        )   ||
-            ( xListener.is()    ==  sal_False   )
+            ( &xListener		==	NULL		)	||
+            ( xListener.is()	==	sal_False	)
           );
 }
 
-#endif  // #ifdef ENABLE_ASSERTIONS
+#endif	// #ifdef ENABLE_ASSERTIONS
 
-}   // namespace framework
+}	// namespace framework

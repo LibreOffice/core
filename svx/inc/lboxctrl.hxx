@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ class SvxListBoxControl : public SfxToolBoxControl
 {
 protected:
     String                  aActionStr;
-    SvxPopupWindowListBox * pPopupWin;
+    SvxPopupWindowListBox *	pPopupWin;
 
     void    Impl_SetInfo( USHORT nCount );
 
@@ -55,9 +55,9 @@ public:
     SvxListBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     virtual ~SvxListBoxControl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID,
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow* 	CreatePopupWindow();
+    virtual void				StateChanged( USHORT nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };

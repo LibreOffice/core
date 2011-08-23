@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,10 +121,10 @@ namespace drawinglayer
         }
 
         FillHatchPrimitive2D::FillHatchPrimitive2D(
-            const basegfx::B2DRange& rObjectRange,
-            const basegfx::BColor& rBColor,
+            const basegfx::B2DRange& rObjectRange, 
+            const basegfx::BColor& rBColor, 
             const attribute::FillHatchAttribute& rFillHatch)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             maObjectRange(rObjectRange),
             maFillHatch(rFillHatch),
             maBColor(rBColor)
@@ -137,7 +137,7 @@ namespace drawinglayer
             {
                 const FillHatchPrimitive2D& rCompare = (FillHatchPrimitive2D&)rPrimitive;
 
-                return (getObjectRange() == rCompare.getObjectRange()
+                return (getObjectRange() == rCompare.getObjectRange() 
                     && getFillHatch() == rCompare.getFillHatch()
                     && getBColor() == rCompare.getBColor());
             }

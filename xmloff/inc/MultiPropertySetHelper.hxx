@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,11 +51,11 @@ namespace com { namespace sun { namespace star {
  * the supported properties are queried. (method getValues(...)) The
  * values are stored in the helper itself.
  *
- * Finally, each property can be queried for existence
+ * Finally, each property can be queried for existence 
  * (method hasProperty(...)) or its value (method (getValue(...))).
  *
  * After some initial preparation (hasProperties, getValues) the
- * MultiPropertySetHelper can be used similarly to an
+ * MultiPropertySetHelper can be used similarly to an 
  * XPropertySet in that you can query the values in the places where you
  * need them. However, if an XMultiPropertySet is supplied, the queries
  * are more efficient, often significantly so.
@@ -117,13 +117,13 @@ public:
     void getValues( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::beans::XMultiPropertySet> & );
 
-    /**
+    /** 
      * Get values from the XPropertySet. This can be much slower than
      * getValues( const Reference<XMultiPropertySet& ) and hence
-     * should be avoided.
+     * should be avoided. 
      *
      * May only be called after hasProperties() was called for the
-     * appropriate XPropertySetInfo.
+     * appropriate XPropertySetInfo. 
      */
     void getValues( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::beans::XPropertySet> & );
@@ -145,14 +145,14 @@ public:
     inline sal_Bool hasProperty( sal_Int16 nIndex );
 
     /**
-     * Get a value from the XPropertySet on demand.
+     * Get a value from the XPropertySet on demand. 
      *
      * If neither getValues nor getValueOnDemand has been called already
      * after the last call to resetValues, the values are retrieved
      * using getValues. Otherwise the value already retrieved is returned.
      * In case XMultiPropertySet is supported by the XPropertySet and
      * bTryMult is set, the XMultiPropertySet is used to get the values.
-     *
+     * 
      */
     const ::com::sun::star::uno::Any& getValue( sal_Int16 nIndex,
                         const ::com::sun::star::uno::Reference<
@@ -160,14 +160,14 @@ public:
                         sal_Bool bTryMulti = sal_False );
 
     /**
-     * Get a value from the XMultiPropertySet on demand.
+     * Get a value from the XMultiPropertySet on demand. 
      *
      * If neither getValues nor getValueOnDemand has been called already
      * after the last call to resetValues, the values are retrieved
      * using getValues. Otherwise the value already retrieved is returned.
      * In case XMultiPropertySet is supported by the XPropertySet,
      * XMultiPropertySet is used to get the values.
-     *
+     * 
      */
     const ::com::sun::star::uno::Any& getValue( sal_Int16 nIndex,
                         const ::com::sun::star::uno::Reference<
@@ -182,7 +182,7 @@ public:
 const ::com::sun::star::uno::Any& MultiPropertySetHelper::getValue(
     sal_Int16 nValueNo )
 {
-    DBG_ASSERT( pValues != NULL,
+    DBG_ASSERT( pValues != NULL, 
                 "called getValue() without calling getValues() before");
     DBG_ASSERT( pSequenceIndex != NULL,
                 "called getValue() without calling hasProperties() before" );

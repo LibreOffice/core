@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ class XLineEndList;
 class SVX_DLLPUBLIC SvxLineStyleToolBoxControl : public SfxToolBoxControl
 {
 private:
-    XLineStyleItem*     pStyleItem;
-    XLineDashItem*      pDashItem;
+    XLineStyleItem*		pStyleItem;
+    XLineDashItem* 		pDashItem;
 
-    BOOL                bUpdate;
+    BOOL				bUpdate;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -58,10 +58,10 @@ public:
     SvxLineStyleToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxLineStyleToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    void 		        Update( const SfxPoolItem* pState );
+    virtual Window*		CreateItemWindow( Window *pParent );
 };
 
 //========================================================================
@@ -76,9 +76,9 @@ public:
     SvxLineWidthToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxLineWidthToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual Window*		CreateItemWindow( Window *pParent );
 };
 
 //========================================================================
@@ -93,10 +93,10 @@ public:
     SvxLineColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxLineColorToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    void 		        Update( const SfxPoolItem* pState );
+    virtual Window*		CreateItemWindow( Window *pParent );
 };
 
 //========================================================================
@@ -107,27 +107,27 @@ class SvxLineEndWindow : public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
 private:
-    XLineEndList*   pLineEndList;
-    ValueSet        aLineEndSet;
-    USHORT          nCols;
-    USHORT          nLines;
-    ULONG           nLineEndWidth;
-    Size            aBmpSize;
-    BOOL            bPopupMode;
-    bool            mbInResize;
+    XLineEndList*	pLineEndList;
+    ValueSet		aLineEndSet;
+    USHORT			nCols;
+    USHORT			nLines;
+    ULONG 			nLineEndWidth;
+    Size			aBmpSize;
+    BOOL			bPopupMode;
+    bool			mbInResize;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
 
     DECL_LINK( SelectHdl, void * );
-    void            FillValueSet();
-    void            SetSize();
+    void			FillValueSet();
+    void 			SetSize();
     void            implInit();
 
 protected:
-    virtual void    Resizing( Size& rSize );
+    virtual void	Resizing( Size& rSize );
     virtual void    Resize();
-    virtual BOOL    Close();
-    virtual void    PopupModeEnd();
+    virtual BOOL	Close();
+    virtual void	PopupModeEnd();
 
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
@@ -136,18 +136,18 @@ protected:
     virtual void GetFocus (void);
 
 public:
-    SvxLineEndWindow( USHORT nId,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    SvxLineEndWindow( USHORT nId, 
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, 
                       const String& rWndTitle );
-    SvxLineEndWindow( USHORT nId,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    SvxLineEndWindow( USHORT nId, 
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, 
                       Window* pParentWindow,
                       const String& rWndTitle );
     ~SvxLineEndWindow();
 
     void            StartSelection();
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual SfxPopupWindow* Clone() const;
 };
@@ -163,10 +163,10 @@ public:
     SvxLineEndToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxLineEndToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
 };
 
 

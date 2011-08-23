@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <i18npool/mslangid.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>	// helper for factories
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -86,10 +86,10 @@ class DicEvtListenerHelper :
 {
     cppu::OInterfaceContainerHelper         aDicListEvtListeners;
     uno::Sequence< DictionaryEvent >        aCollectDicEvt;
-    uno::Reference< XDictionaryList >       xMyDicList;
+    uno::Reference< XDictionaryList >		xMyDicList;
 
-    INT16                               nCondensedEvt;
-    INT16                               nNumCollectEvtListeners,
+    INT16								nCondensedEvt;
+    INT16								nNumCollectEvtListeners,
                                          nNumVerboseListeners;
 
 public:
@@ -107,27 +107,27 @@ public:
             throw(RuntimeException);
 
     // non-UNO functions
-    void    DisposeAndClear( const EventObject &rEvtObj );
+    void 	DisposeAndClear( const EventObject &rEvtObj );
 
-    BOOL    AddDicListEvtListener(
+    BOOL	AddDicListEvtListener(
                 const uno::Reference< XDictionaryListEventListener >& rxListener,
                 BOOL bReceiveVerbose );
-    BOOL    RemoveDicListEvtListener(
+    BOOL	RemoveDicListEvtListener(
                 const uno::Reference< XDictionaryListEventListener >& rxListener );
-    INT16   BeginCollectEvents();
-    INT16   EndCollectEvents();
-    INT16   FlushEvents();
+    INT16	BeginCollectEvents();
+    INT16	EndCollectEvents();
+    INT16	FlushEvents();
     void    ClearEvents()   { nCondensedEvt = 0; }
 };
 
 
 DicEvtListenerHelper::DicEvtListenerHelper(
         const uno::Reference< XDictionaryList > &rxDicList ) :
-    aDicListEvtListeners    ( GetLinguMutex() ),
-    xMyDicList              ( rxDicList )
+    aDicListEvtListeners	( GetLinguMutex() ),
+    xMyDicList				( rxDicList )
 {
-    nCondensedEvt   = 0;
-    nNumCollectEvtListeners = nNumVerboseListeners  = 0;
+    nCondensedEvt	= 0;
+    nNumCollectEvtListeners = nNumVerboseListeners	= 0;
 }
 
 
@@ -235,7 +235,7 @@ BOOL DicEvtListenerHelper::AddDicListEvtListener(
             BOOL /*bReceiveVerbose*/ )
 {
     DBG_ASSERT( xListener.is(), "empty reference" );
-    INT32   nCount = aDicListEvtListeners.getLength();
+    INT32	nCount = aDicListEvtListeners.getLength();
     return aDicListEvtListeners.addInterface( xListener ) != nCount;
 }
 
@@ -244,7 +244,7 @@ BOOL DicEvtListenerHelper::RemoveDicListEvtListener(
             const uno::Reference< XDictionaryListEventListener >& xListener )
 {
     DBG_ASSERT( xListener.is(), "empty reference" );
-    INT32   nCount = aDicListEvtListeners.getLength();
+    INT32	nCount = aDicListEvtListeners.getLength();
     return aDicListEvtListeners.removeInterface( xListener ) != nCount;
 }
 
@@ -308,8 +308,8 @@ void DicList::MyAppExitListener::AtExit()
 DicList::DicList() :
     aEvtListeners   ( GetLinguMutex() )
 {
-    pDicEvtLstnrHelper  = new DicEvtListenerHelper( this );
-    xDicEvtLstnrHelper  = pDicEvtLstnrHelper;
+    pDicEvtLstnrHelper	= new DicEvtListenerHelper( this );
+    xDicEvtLstnrHelper	= pDicEvtLstnrHelper;
     bDisposing = FALSE;
     bInCreation = FALSE;
 
@@ -341,8 +341,8 @@ void DicList::SearchForDictionaries(
     for (INT32 i = 0;  i < nEntries;  ++i)
     {
         String  aURL( pDirCnt[i] );
-        USHORT  nLang = LANGUAGE_NONE;
-        BOOL    bNeg  = FALSE;
+        USHORT	nLang = LANGUAGE_NONE;
+        BOOL	bNeg  = FALSE;
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
@@ -377,7 +377,7 @@ void DicList::SearchForDictionaries(
             if(aTmp1 == aTmp2)
                 break;
         }
-        if(j >= nCount)     // dictionary not yet in DicList
+        if(j >= nCount)		// dictionary not yet in DicList
         {
             // get decoded dictionary file name
             INetURLObject aURLObj( aURL );
@@ -533,7 +533,7 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
     DBG_ASSERT(!bReceiveVerbose, "lng : not yet supported");
 
     BOOL bRes = FALSE;
-    if (xListener.is()) //! don't add empty references
+    if (xListener.is())	//! don't add empty references
     {
         bRes = pDicEvtLstnrHelper->
                         AddDicListEvtListener( xListener, bReceiveVerbose );
@@ -609,7 +609,7 @@ void SAL_CALL
     if (!bDisposing)
     {
         bDisposing = TRUE;
-        EventObject aEvtObj( (XDictionaryList *) this );
+        EventObject	aEvtObj( (XDictionaryList *) this );
 
         aEvtListeners.disposeAndClear( aEvtObj );
         if (pDicEvtLstnrHelper)
@@ -821,7 +821,7 @@ sal_Bool SAL_CALL DicList_writeInfo(
 }
 
 
-void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
+void * SAL_CALL DicList_getFactory(	const sal_Char * pImplName,
         XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;
@@ -857,18 +857,18 @@ xub_StrLen lcl_GetToken( String &rToken,
     }
     else
     {
-        xub_StrLen  i;
+        xub_StrLen	i;
         for (i = nPos;  i < rText.Len();  ++i)
         {
             if (STRING_NOTFOUND != rDelim.Search( rText.GetChar(i) ))
                 break;
         }
 
-        if (i >= rText.Len())   // delimeter not found
-            rToken  = rText.Copy( nPos );
+        if (i >= rText.Len())	// delimeter not found
+            rToken	= rText.Copy( nPos );
         else
             rToken  = rText.Copy( nPos, sal::static_int_cast< xub_StrLen >((INT32) i - nPos) );
-        nRes    = i + 1;    // continue after found delimeter
+        nRes	= i + 1;	// continue after found delimeter
     }
 
     return nRes;
@@ -888,7 +888,7 @@ static void AddInternal(
         String aDelim( aDummy, osl_getThreadTextEncoding() );
         aDelim.EraseAllChars( '.' );
 
-        String      aToken;
+        String 		aToken;
         xub_StrLen  nPos = 0;
         while (STRING_LEN !=
                     (nPos = lcl_GetToken( aToken, rNew, nPos, aDelim )))
@@ -943,7 +943,7 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
     uno::Reference< io::XInputStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance( 
                 A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
         xStream = xAccess->openFileRead( rFileURL );
     }
@@ -957,7 +957,7 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
         return FALSE;
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
-
+    
     int nDicVersion = ReadDicVersion(pStream, nLng, bNeg);
     if (2 == nDicVersion || nDicVersion >= 5)
         return TRUE;

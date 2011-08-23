@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace connectivity
 {
     namespace kab
     {
-        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper4<	::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable> KabCommonStatement_BASE;
@@ -53,20 +53,20 @@ namespace connectivity
         // Class KabCommonStatement
         // is a base class for the normal statement and for the prepared statement
         //**************************************************************
-        class KabCommonStatement :  public comphelper::OBaseMutex,
-                        public  KabCommonStatement_BASE,
-                        public  ::cppu::OPropertySetHelper,
-                        public  comphelper::OPropertyArrayUsageHelper<KabCommonStatement>
+        class KabCommonStatement :	public comphelper::OBaseMutex,
+                        public	KabCommonStatement_BASE,
+                        public	::cppu::OPropertySetHelper,
+                        public	comphelper::OPropertyArrayUsageHelper<KabCommonStatement>
 
         {
-            ::com::sun::star::sdbc::SQLWarning  m_aLastWarning;
+            ::com::sun::star::sdbc::SQLWarning	m_aLastWarning;
 
         protected:
-            ::std::list< ::rtl::OUString>       m_aBatchList;
-            connectivity::OSQLParser            m_aParser;
-            connectivity::OSQLParseTreeIterator m_aSQLIterator;
-            connectivity::OSQLParseNode*        m_pParseTree;
-            KabConnection*                      m_pConnection;  // The owning Connection object
+            ::std::list< ::rtl::OUString>		m_aBatchList;
+            connectivity::OSQLParser			m_aParser;
+            connectivity::OSQLParseTreeIterator	m_aSQLIterator;
+            connectivity::OSQLParseNode*		m_pParseTree;
+            KabConnection*						m_pConnection;	// The owning Connection object
 
         protected:
             class KabCondition *analyseWhereClause(

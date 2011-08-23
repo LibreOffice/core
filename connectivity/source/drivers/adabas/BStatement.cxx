@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,18 +52,18 @@ OResultSet* OAdabasStatement::createResulSet()
     return new OAdabasResultSet(m_aStatementHandle,this,m_aSelectColumns);
 }
 // -----------------------------------------------------------------------------
-void OAdabasStatement::setUsingBookmarks(sal_Bool /*_bUseBookmark*/)
+void OAdabasStatement::setUsingBookmarks(sal_Bool /*_bUseBookmark*/) 
 {
     ::dbtools::throwFeatureNotImplementedException( "bookmarks", *this );
     // adabas doesn't support bookmarks
 }
 // -----------------------------------------------------------------------------
-void OAdabasStatement::setResultSetConcurrency(sal_Int32 /*_par0*/)
+void OAdabasStatement::setResultSetConcurrency(sal_Int32 /*_par0*/) 
 {
     ::dbtools::throwFeatureNotImplementedException( "PreparedStatement:ResultSetConcurrency", *this );
 }
 // -----------------------------------------------------------------------------
-void OAdabasStatement::setResultSetType(sal_Int32 /*_par0*/)
+void OAdabasStatement::setResultSetType(sal_Int32 /*_par0*/) 
 {
     ::dbtools::throwFeatureNotImplementedException( "PreparedStatement:ResultSetType", *this );
 }

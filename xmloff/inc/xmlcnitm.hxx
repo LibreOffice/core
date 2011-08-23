@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class SvXMLAttrContainerItem_Impl;
 
 class SvXMLAttrContainerItem: public SfxPoolItem
 {
-    SvXMLAttrContainerItem_Impl *pImpl;
+    SvXMLAttrContainerItem_Impl	*pImpl;
 
 public:
     TYPEINFO();
@@ -50,7 +50,7 @@ public:
 
     virtual int operator==( const SfxPoolItem& ) const;
     using SfxPoolItem::Compare;
-    virtual int Compare( const SfxPoolItem &rWith ) const;
+    virtual int	Compare( const SfxPoolItem &rWith ) const;
 
     virtual SfxItemPresentation GetPresentation(
                                 SfxItemPresentation ePresentation,
@@ -61,8 +61,8 @@ public:
 
     virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	BOOL        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	BOOL			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxPoolItem *Clone( SfxItemPool * = 0) const
     { return new SvXMLAttrContainerItem( *this ); }

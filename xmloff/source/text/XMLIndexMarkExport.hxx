@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 class SvXMLExport;
 class XMLTextParagraphExport;
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace beans { class XPropertySet; }
  } } }
 namespace rtl {
@@ -43,9 +43,9 @@ namespace rtl {
 }
 
 
-/**
+/** 
  * This class handles the export of index marks for table of content,
- * alphabetical and user index.
+ * alphabetical and user index. 
  *
  * Marks for bibliography indices are internally modelled as text
  * fields and thus handled in txtparae.cxx
@@ -105,7 +105,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 
-    /// create a numerical ID for this index mark
+    /// create a numerical ID for this index mark 
     /// (represented by its properties)
     void GetID(
         ::rtl::OUStringBuffer& sBuffer,

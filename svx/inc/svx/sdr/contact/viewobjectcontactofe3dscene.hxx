@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ namespace sdr
             // basic constructor.
             ViewObjectContactOfE3dScene(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfE3dScene();
-
-            // process this primitive: Eventually also recursively travel an existing hierarchy,
+            
+            // process this primitive: Eventually also recursively travel an existing hierarchy, 
             // e.g. for group objects, scenes or pages. This method will test geometrical visibility.
             virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
         };

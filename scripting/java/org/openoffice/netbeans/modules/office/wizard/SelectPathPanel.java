@@ -27,14 +27,14 @@ import org.openoffice.idesupport.SVersionRCFile;
  * @author tomaso
  */
 public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel */ {
-
+    
     /** The visual component that displays this panel.
      * If you need to access the component from this class,
      * just use getComponent().
      */
     private SelectPathVisualPanel component;
     private OfficeInstallation office;
-
+    
     /** Create the wizard panel descriptor. */
     public SelectPathPanel() {
         office = OfficeSettings.getDefault().getOfficeDirectory();
@@ -46,7 +46,7 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
             catch (java.io.IOException ioe) {}
         }
     }
-
+    
     // Get the visual component for the panel. In this template, the component
     // is kept separate. This can be more efficient: if the wizard is created
     // but never displayed, or not all panels are displayed, it is better to
@@ -57,14 +57,14 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
         }
         return component;
     }
-
+    
     public HelpCtx getHelp() {
         // Show no Help button for this panel:
         return HelpCtx.DEFAULT_HELP;
         // If you have context help:
         // return new HelpCtx(SelectPathPanel.class);
     }
-
+    
     public boolean isValid() {
         // If it is always OK to press Next or Finish, then:
         return true;
@@ -74,7 +74,7 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
         // fireChangeEvent();
         // and uncomment the complicated stuff below.
     }
-
+    
     // public final void addChangeListener(ChangeListener l) {}
     // public final void removeChangeListener(ChangeListener l) {}
 
@@ -99,7 +99,7 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
             ((ChangeListener)it.next()).stateChanged(ev);
         }
     }
-
+    
     public void setSelectedPath(OfficeInstallation oi) {
         this.office = oi;
         fireChangeEvent();

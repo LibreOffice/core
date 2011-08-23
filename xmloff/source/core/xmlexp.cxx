@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,12 +122,12 @@ const sal_Char s_grddl_xsl[] =
 
 #define LOGFILE_AUTHOR "mb93740"
 
-#define XML_MODEL_SERVICE_WRITER    "com.sun.star.text.TextDocument"
-#define XML_MODEL_SERVICE_CALC      "com.sun.star.sheet.SpreadsheetDocument"
-#define XML_MODEL_SERVICE_DRAW      "com.sun.star.drawing.DrawingDocument"
-#define XML_MODEL_SERVICE_IMPRESS   "com.sun.star.presentation.PresentationDocument"
-#define XML_MODEL_SERVICE_MATH      "com.sun.star.formula.FormulaProperties"
-#define XML_MODEL_SERVICE_CHART     "com.sun.star.chart.ChartDocument"
+#define XML_MODEL_SERVICE_WRITER	"com.sun.star.text.TextDocument"
+#define XML_MODEL_SERVICE_CALC		"com.sun.star.sheet.SpreadsheetDocument"
+#define XML_MODEL_SERVICE_DRAW		"com.sun.star.drawing.DrawingDocument"
+#define XML_MODEL_SERVICE_IMPRESS	"com.sun.star.presentation.PresentationDocument"
+#define XML_MODEL_SERVICE_MATH		"com.sun.star.formula.FormulaProperties"
+#define XML_MODEL_SERVICE_CHART		"com.sun.star.chart.ChartDocument"
 
 #define XML_USEPRETTYPRINTING       "UsePrettyPrinting"
 
@@ -136,9 +136,9 @@ const sal_Char s_grddl_xsl[] =
 struct XMLServiceMapEntry_Impl
 {
     const sal_Char *sModelService;
-    sal_Int32      nModelServiceLen;
+    sal_Int32	   nModelServiceLen;
     const sal_Char *sFilterService;
-    sal_Int32      nFilterServiceLen;
+    sal_Int32	   nFilterServiceLen;
 };
 
 #define SERVICE_MAP_ENTRY( app ) \
@@ -150,7 +150,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( WRITER ),
     SERVICE_MAP_ENTRY( CALC ),
     SERVICE_MAP_ENTRY( IMPRESS ),// Impress supports DrawingDocument, too, so
-    SERVICE_MAP_ENTRY( DRAW ),   // it must appear before Draw
+    SERVICE_MAP_ENTRY( DRAW ),	 // it must appear before Draw
     SERVICE_MAP_ENTRY( MATH ),
     SERVICE_MAP_ENTRY( CHART ),
     { 0, 0, 0, 0 }
@@ -228,11 +228,11 @@ class SvXMLExportEventListener : public cppu::WeakImplHelper1<
                             com::sun::star::lang::XEventListener >
 {
 private:
-    SvXMLExport*    pExport;
+    SvXMLExport*	pExport;
 
 public:
                             SvXMLExportEventListener(SvXMLExport* pExport);
-    virtual                 ~SvXMLExportEventListener();
+    virtual					~SvXMLExportEventListener();
 
                             // XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException);
@@ -276,9 +276,9 @@ public:
     sal_Bool                                            mbSaveBackwardCompatibleODF;
     // <--
 
-    uno::Reference< embed::XStorage >                   mxTargetStorage;
+    uno::Reference< embed::XStorage >					mxTargetStorage;
 
-    SvtSaveOptions                                      maSaveOptions;
+    SvtSaveOptions										maSaveOptions;
 
     /// relative path of stream in package, e.g. "someobject/content.xml"
     ::rtl::OUString mStreamPath;
@@ -475,7 +475,7 @@ void SvXMLExport::_DetermineModelType()
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
-:   mpImpl( new SvXMLExport_Impl ),
+:	mpImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
     mpAttrList( new SvXMLAttributeList ),
@@ -503,8 +503,8 @@ SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-    MapUnit eDfltUnit   )
-:   mpImpl( new SvXMLExport_Impl ),
+    MapUnit eDfltUnit	)
+:	mpImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
     mxHandler( rHandler ),
@@ -540,8 +540,8 @@ SvXMLExport::SvXMLExport(
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
-    sal_Int16 eDfltUnit )
-:   mpImpl( new SvXMLExport_Impl ),
+    sal_Int16 eDfltUnit	)
+:	mpImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
     mxModel( rModel ),
@@ -581,8 +581,8 @@ SvXMLExport::SvXMLExport(
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
     const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
-    sal_Int16 eDfltUnit )
-:   mpImpl( new SvXMLExport_Impl ),
+    sal_Int16 eDfltUnit	)
+:	mpImpl( new SvXMLExport_Impl ),
     // #110680#
     mxServiceFactory(xServiceFactory),
     mxModel( rModel ),
@@ -732,7 +732,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     // <--
 
     // namespaces for user defined attributes
-    Reference< XMultiServiceFactory > xFactory( mxModel,    UNO_QUERY );
+    Reference< XMultiServiceFactory > xFactory( mxModel,	UNO_QUERY );
     if( xFactory.is() )
     {
         try
@@ -1190,7 +1190,7 @@ void SvXMLExport::ImplExportStyles( sal_Bool )
 {
     CheckAttrList();
 
-//  AddAttribute( XML_NAMESPACE_NONE, XML_ID, XML_STYLES_ID );
+//	AddAttribute( XML_NAMESPACE_NONE, XML_ID, XML_STYLES_ID );
     {
         // <style:styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_STYLES,
@@ -1234,7 +1234,7 @@ void SvXMLExport::ImplExportAutoStyles( sal_Bool )
         mxAutoStylePool->RegisterNames( aStyleFamilies, aStyleNames );
     }
 
-//  AddAttributeASCII( XML_NAMESPACE_NONE, XML_ID, XML_AUTO_STYLES_ID );
+//	AddAttributeASCII( XML_NAMESPACE_NONE, XML_ID, XML_AUTO_STYLES_ID );
     {
         // <style:automatic-styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
@@ -1338,7 +1338,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
     if( !mxGraphicResolver.is() || !mxEmbeddedResolver.is() )
     {
-        Reference< XMultiServiceFactory > xFactory( mxModel,    UNO_QUERY );
+        Reference< XMultiServiceFactory > xFactory( mxModel,	UNO_QUERY );
         if( xFactory.is() )
         {
             try
@@ -1423,7 +1423,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     mxHandler->startDocument();
 
     // <?xml version="1.0" encoding="UTF-8"?>
-//  xHandler->processingInstruction( S2U( sXML_xml ), S2U( sXML_xml_pi ) );
+//	xHandler->processingInstruction( S2U( sXML_xml ), S2U( sXML_xml_pi ) );
 
     // <office:document ...>
     CheckAttrList();
@@ -1447,7 +1447,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     {
         const sal_Char* pVersion = 0;
         switch( getDefaultVersion() )
-        {
+        {        
         case SvtSaveOptions::ODFVER_LATEST: pVersion = sXML_1_2; break;
         case SvtSaveOptions::ODFVER_012: pVersion = sXML_1_2; break;
         case SvtSaveOptions::ODFVER_011: pVersion = sXML_1_1; break;
@@ -1501,19 +1501,19 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             }
         }
 
-//      if( (getExportFlags() & EXPORT_NODOCTYPE) == 0 &&
-//          xExtHandler.is() )
-//      {
-//          OUStringBuffer aDocType(
+//		if( (getExportFlags() & EXPORT_NODOCTYPE) == 0 &&
+//			xExtHandler.is() )
+//		{
+//			OUStringBuffer aDocType(
 //               GetXMLToken(XML_XML_DOCTYPE_PREFIX).getLength() +
-//              GetXMLToken(XML_XML_DOCTYPE_SUFFIX).getLength() + 30 );
+//				GetXMLToken(XML_XML_DOCTYPE_SUFFIX).getLength() + 30 );
 //
-//          aDocType.append( GetXMLToken(XML_XML_DOCTYPE_PREFIX) );
-//          aDocType.append( GetNamespaceMap().GetQNameByKey(
-//                         XML_NAMESPACE_OFFICE, GetXMLToken(eRootService) ) );
-//          aDocType.append( GetXMLToken(XML_XML_DOCTYPE_SUFFIX) );
-//          xExtHandler->unknown( aDocType.makeStringAndClear() );
-//      }
+//			aDocType.append( GetXMLToken(XML_XML_DOCTYPE_PREFIX) );
+//			aDocType.append( GetNamespaceMap().GetQNameByKey(
+//						   XML_NAMESPACE_OFFICE, GetXMLToken(eRootService) ) );
+//			aDocType.append( GetXMLToken(XML_XML_DOCTYPE_SUFFIX) );
+//			xExtHandler->unknown( aDocType.makeStringAndClear() );
+//		}
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, eRootService, sal_True, sal_True );
 
@@ -2079,7 +2079,7 @@ OUString SvXMLExport::EncodeStyleName(
     return GetMM100UnitConverter().encodeStyleName( rName, pEncoded );
 }
 
-ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
+ProgressBarHelper*	SvXMLExport::GetProgressBarHelper()
 {
     if (!mpProgressBarHelper)
     {
@@ -2309,7 +2309,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
         //conversion for matching schemes only
         if( xUriRef->getScheme() == mpImpl->msPackageURIScheme )
         {
-            sValue = INetURLObject::GetRelURL( msOrigFileName, sValue,
+            sValue = INetURLObject::GetRelURL( msOrigFileName, sValue, 
                 INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT);
         }
     }

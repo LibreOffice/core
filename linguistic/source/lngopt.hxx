@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 
 #include <functional>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase5.hxx> // helper for implementations
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase5.hxx>	// helper for implementations
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -67,8 +67,8 @@ namespace com { namespace sun { namespace star {
 
 class LinguOptions
 {
-    static SvtLinguOptions     *pData;
-    static vos::ORefCount       aRefCount;  // number of objects of this class
+    static SvtLinguOptions	   *pData;
+    static vos::ORefCount		aRefCount;	// number of objects of this class
 
     //! uses default assignment-operator
 
@@ -81,14 +81,14 @@ public:
     LinguOptions(const LinguOptions &rOpt);
     ~LinguOptions();
 
-    BOOL            SetValue( ::com::sun::star::uno::Any &rOld,
+    BOOL			SetValue( ::com::sun::star::uno::Any &rOld,
                             const ::com::sun::star::uno::Any &rVal, INT32 nWID );
-    void            GetValue( ::com::sun::star::uno::Any &rVal, INT32 nWID ) const;
+    void			GetValue( ::com::sun::star::uno::Any &rVal, INT32 nWID ) const;
 
     static ::rtl::OUString    GetName( INT32 nWID );
 
     const ::com::sun::star::uno::Sequence< rtl::OUString >
-            GetActiveDics() const   { return pData->aActiveDics; }
+            GetActiveDics() const	{ return pData->aActiveDics; }
 
     const ::com::sun::star::uno::Sequence< rtl::OUString >
             GetActiveConvDics() const   { return pData->aActiveConvDics; }
@@ -103,7 +103,7 @@ public:
 // helper function call class
 struct PropHashType_Impl
 {
-    size_t operator()(const INT32 &s) const { return s; }
+    size_t operator()(const INT32 &s) const	{ return s; }
 };
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
@@ -126,19 +126,19 @@ class LinguProps :
         com::sun::star::lang::XServiceInfo
     >
 {
-    ::cppu::OInterfaceContainerHelper           aEvtListeners;
-    OPropertyListenerContainerHelper            aPropListeners;
+    ::cppu::OInterfaceContainerHelper			aEvtListeners;
+    OPropertyListenerContainerHelper			aPropListeners;
 
     SfxItemPropertyMap                          aPropertyMap;
     SvtLinguConfig                              aConfig;
 
-    BOOL                                        bDisposing;
+    BOOL										bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     LinguProps(const LinguProps &);
     LinguProps & operator = (const LinguProps &);
 
-    void    launchEvent( const ::com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
+    void	launchEvent( const ::com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 
 public:
     LinguProps();

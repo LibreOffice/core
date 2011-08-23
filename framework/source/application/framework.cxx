@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_HELPER_OINSTANCEPROVIDER_HXX_
@@ -43,7 +43,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -65,7 +65,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -78,43 +78,43 @@
 #include <vos/process.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl                           ;
-using namespace ::vos                           ;
-using namespace ::comphelper                    ;
-using namespace ::framework                     ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::frame         ;
-using namespace ::com::sun::star::awt           ;
-using namespace ::com::sun::star::beans         ;
-using namespace ::com::sun::star::util          ;
-using namespace ::com::sun::star::connection    ;
-using namespace ::com::sun::star::bridge        ;
+using namespace ::rtl							;
+using namespace ::vos							;
+using namespace ::comphelper					;
+using namespace ::framework						;
+using namespace ::com::sun::star::uno			;
+using namespace ::com::sun::star::lang			;
+using namespace ::com::sun::star::frame			;
+using namespace ::com::sun::star::awt			;
+using namespace ::com::sun::star::beans			;
+using namespace ::com::sun::star::util			;
+using namespace ::com::sun::star::connection	;
+using namespace ::com::sun::star::bridge		;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
-#define APPLICATIONNAME                         "FrameWork"
-#define COMMANDARGUMENT_PLUGIN                  DECLARE_ASCII("-plugin"                 )
-#define NAME_PLUGINBRIDGE                       DECLARE_ASCII("mozilla plugin bridge"   )
-#define PROTOCOL_PLUGINBRIDGE                   DECLARE_ASCII("urp"                     )
+#define	APPLICATIONNAME							"FrameWork"
+#define	COMMANDARGUMENT_PLUGIN					DECLARE_ASCII("-plugin"					)
+#define	NAME_PLUGINBRIDGE						DECLARE_ASCII("mozilla plugin bridge"	)
+#define	PROTOCOL_PLUGINBRIDGE					DECLARE_ASCII("urp"						)
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short      normal application
-    @descr      An instance of these class can be a normal node in frame tree only. The highest level to be allowed is 3!
+    @short		normal application
+    @descr		An instance of these class can be a normal node in frame tree only. The highest level to be allowed is 3!
                 On 1 stand the desktop himself as the only one, on 2 are all tasks present ... and then comes frames only.
                 A frame support influencing of his subtree, find of subframes, activate- and deactivate-mechanism as well as
                 set/get of a frame window, component or controller.
 
-    @implements XInterface
+    @implements	XInterface
                 XTypeProvider
                 XServiceInfo
                 XFramesSupplier
@@ -129,15 +129,15 @@ using namespace ::com::sun::star::bridge        ;
                 XWindowListener
                 XTopWindowListener
                 [ XDebugging, if TEST_TREE is defined! ]
-    @base       OMutexMember
+    @base		OMutexMember
                 OWeakObject
 
-    @devstatus  deprecated
+    @devstatus	deprecated
 *//*-*************************************************************************************************************/
 class FrameWork : public Application
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
@@ -147,36 +147,36 @@ class FrameWork : public Application
         void impl_analyzeCommandArguments();
 
     private:
-        sal_Bool    m_bUsePlugIn    ;
+        sal_Bool	m_bUsePlugIn	;
 
-};  //  class FrameWork
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
+};	//	class FrameWork
 
 //_________________________________________________________________________________________________________________
-//  global variables
+//	definitions
 //_________________________________________________________________________________________________________________
 
-FrameWork   aFrameWork  ;
+//_________________________________________________________________________________________________________________
+//	global variables
+//_________________________________________________________________________________________________________________
+
+FrameWork	aFrameWork	;
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  private methods
+//	private methods
 //*****************************************************************************************************************
 void FrameWork::impl_analyzeCommandArguments()
 {
     // First reset all member variables which present states of incoming arguments!
-    m_bUsePlugIn = sal_False;   // depends from "/plugin"
+    m_bUsePlugIn = sal_False;	// depends from "/plugin"
 
     // Then step over all given arguments and search for supported one.
-    OStartupInfo    aInfo       ;
-    OUString        sArgument   ;
-    sal_uInt32      nCount      = aInfo.getCommandArgCount();
+    OStartupInfo	aInfo		;
+    OUString		sArgument	;
+    sal_uInt32		nCount		= aInfo.getCommandArgCount();
     for ( sal_uInt32 nArgument=0; nArgument<nCount; ++nArgument )
     {
         // If extraction of current argument successfull ...
@@ -193,7 +193,7 @@ void FrameWork::impl_analyzeCommandArguments()
 }
 
 //_________________________________________________________________________________________________________________
-//  main
+//	main
 //_________________________________________________________________________________________________________________
 
 void FrameWork::Main()
@@ -229,17 +229,17 @@ void FrameWork::Main()
 #if 0
         if ( m_bUsePlugIn == sal_True )
         {
-            Reference< XConnection >    xConnection         = new OPipeConnection( xGlobalServiceManager );
-            Reference< XBridgeFactory > xBridgeFactory      ( xGlobalServiceManager->createInstance( SERVICENAME_BRIDGEFACTORY  ), UNO_QUERY );
-            if  (
-                    ( xConnection.is()          == sal_True )   &&
-                    ( xBridgeFactory.is()       == sal_True )
+            Reference< XConnection >	xConnection			= new OPipeConnection( xGlobalServiceManager );
+            Reference< XBridgeFactory >	xBridgeFactory		( xGlobalServiceManager->createInstance( SERVICENAME_BRIDGEFACTORY	), UNO_QUERY );
+            if	(
+                    ( xConnection.is()			== sal_True )	&&
+                    ( xBridgeFactory.is()		== sal_True )
                 )
             {
-                Reference< XBridge > xBridge = xBridgeFactory->createBridge(    NAME_PLUGINBRIDGE                               ,
-                                                                                PROTOCOL_PLUGINBRIDGE                           ,
-                                                                                xConnection                                     ,
-                                                                                new OInstanceProvider( xGlobalServiceManager )  );
+                Reference< XBridge > xBridge = xBridgeFactory->createBridge(	NAME_PLUGINBRIDGE								,
+                                                                                PROTOCOL_PLUGINBRIDGE							,
+                                                                                xConnection										,
+                                                                                new OInstanceProvider( xGlobalServiceManager )	);
             }
             else
             {
@@ -267,7 +267,7 @@ void FrameWork::Main()
             xDispatch->dispatch( aURL, Sequence< PropertyValue >() );
 
             // Use special feature of desktop service and log current tree state in file.
-//          LOG_TREE( xDesktop )
+//			LOG_TREE( xDesktop )
 
             // Build URL ...
             sURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "file://d|/menu.htm" ));
@@ -277,7 +277,7 @@ void FrameWork::Main()
             xDispatch->dispatch( aURL, Sequence< PropertyValue >() );
 
             // Use special feature of desktop service and log current tree state in file.
-//          LOG_TREE( xDesktop )
+//			LOG_TREE( xDesktop )
         }
 
         // Set running-mode for application.

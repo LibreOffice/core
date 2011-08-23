@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,35 +35,35 @@
 class OutlinerUndoBase : public EditUndo
 {
 private:
-    Outliner*   mpOutliner;
+    Outliner*	mpOutliner;
 
 public:
                 OutlinerUndoBase( USHORT nId, Outliner* pOutliner );
 
-    Outliner*   GetOutliner() const { return mpOutliner; }
+    Outliner*	GetOutliner() const { return mpOutliner; }
 };
 
 class OutlinerUndoChangeParaFlags : public OutlinerUndoBase
 {
 private:
-    sal_uInt16      mnPara;
-    sal_uInt16      mnOldFlags;
-    sal_uInt16      mnNewFlags;
-
+    sal_uInt16		mnPara;
+    sal_uInt16		mnOldFlags;
+    sal_uInt16		mnNewFlags;
+    
     void ImplChangeFlags( sal_uInt16 nFlags );
 
 public:
     OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_uInt16 nPara, sal_uInt16 nOldDepth, sal_uInt16 nNewDepth );
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void	Undo();
+    virtual void	Redo();
 };
 
 class OutlinerUndoChangeParaNumberingRestart : public OutlinerUndoBase
 {
 private:
-    sal_uInt16      mnPara;
-
+    sal_uInt16		mnPara;
+    
     struct ParaRestartData
     {
         sal_Int16       mnNumberingStartValue;
@@ -79,24 +79,24 @@ public:
         sal_Int16 nOldNumberingStartValue, sal_Int16 mnNewNumberingStartValue,
         sal_Bool  nOldbParaIsNumberingRestart, sal_Bool nbNewParaIsNumberingRestart );
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void	Undo();
+    virtual void	Redo();
 };
-
+    
 class OutlinerUndoChangeDepth : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
 private:
-    USHORT          mnPara;
-    sal_Int16       mnOldDepth;
-    sal_Int16       mnNewDepth;
+    USHORT 			mnPara;
+    sal_Int16		mnOldDepth;
+    sal_Int16		mnNewDepth;
 
 public:
                     OutlinerUndoChangeDepth( Outliner* pOutliner, USHORT nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth );
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat();
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void 	Repeat();
 };
 
 // Hilfs-Undo: Wenn es fuer eine Aktion keine OutlinerUndoAction gibst, weil
@@ -106,14 +106,14 @@ class OutlinerUndoCheckPara : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
 private:
-    USHORT          mnPara;
+    USHORT 			mnPara;
 
 public:
                     OutlinerUndoCheckPara( Outliner* pOutliner, USHORT nPara );
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat();
+    virtual void	Undo();
+    virtual void	Redo();
+    virtual void 	Repeat();
 };
 
 

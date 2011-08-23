@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ namespace sdr
         {
         protected:
             // second and third position in pixel
-            basegfx::B2DPoint                       maSecondPosition;
-            basegfx::B2DPoint                       maThirdPosition;
+            basegfx::B2DPoint						maSecondPosition;
+            basegfx::B2DPoint						maThirdPosition;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
@@ -49,7 +49,7 @@ namespace sdr
         public:
             OverlayTriangle(
                 const basegfx::B2DPoint& rBasePos,
-                const basegfx::B2DPoint& rSecondPos,
+                const basegfx::B2DPoint& rSecondPos, 
                 const basegfx::B2DPoint& rThirdPos,
                 Color aTriangleColor);
             virtual ~OverlayTriangle();

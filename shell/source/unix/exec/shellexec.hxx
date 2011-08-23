@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #endif
 
 //----------------------------------------------------------
-// class declaration
+// class declaration		
 //----------------------------------------------------------
 
 class ShellExec : public ::cppu::WeakImplHelper2< com::sun::star::system::XSystemShellExecute, com::sun::star::lang::XServiceInfo >
@@ -47,33 +47,33 @@ class ShellExec : public ::cppu::WeakImplHelper2< com::sun::star::system::XSyste
     ::rtl::OString m_aDesktopEnvironment;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
     m_xContext;
-
+    
 public:
     ShellExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
 
     //------------------------------------------------
     // XSystemShellExecute
-    //------------------------------------------------
+    //------------------------------------------------ 
 
-    virtual void SAL_CALL execute( const ::rtl::OUString& aCommand, const ::rtl::OUString& aParameter, sal_Int32 nFlags )
+    virtual void SAL_CALL execute( const ::rtl::OUString& aCommand, const ::rtl::OUString& aParameter, sal_Int32 nFlags ) 
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException, ::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------
-
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    //------------------------------------------------ 
+    
+    virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
-};
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+        throw(::com::sun::star::uno::RuntimeException);    
+}; 
 
 
 // helper function - needed for urltest
 void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL);
 
-#endif
+#endif 

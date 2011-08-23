@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #define _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 
 //#ifndef _REF_HXX
-//#include <tools/ref.hxx>
+//#include <tools/ref.hxx>		
 //#endif
-#include <vos/ref.hxx>
+#include <vos/ref.hxx>		
 #include <tools/stream.hxx>
 #ifndef _VECTOR_
 #include <vector>
@@ -51,17 +51,17 @@ namespace connectivity
         //==================================================================
         // Index Seitenverweis
         //==================================================================
-        //  SV_DECL_REF(ONDXPage); // Basisklasse da weitere Informationen gehalten werden muessen
+        //	SV_DECL_REF(ONDXPage); // Basisklasse da weitere Informationen gehalten werden muessen				
 
         class ONDXPage;
-        typedef vos::ORef<ONDXPage>         ONDXPagePtr_BASE;
-
+        typedef vos::ORef<ONDXPage>			ONDXPagePtr_BASE;
+        
         class ONDXPagePtr : public ONDXPagePtr_BASE //ONDXPageRef
         {
             friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
-            UINT32  nPagePos;       // Position in der Indexdatei
+            UINT32	nPagePos;		// Position in der Indexdatei
 
         public:
             ONDXPagePtr(UINT32 nPos = 0):nPagePos(nPos){}
@@ -74,9 +74,9 @@ namespace connectivity
             UINT32 GetPagePos() const {return nPagePos;}
             BOOL HasPage() const {return nPagePos != 0;}
             sal_Bool Is() const { return isValid(); }
-            void Clear()
-            {
-                unbind();
+            void Clear() 
+            { 
+                unbind();				
             }
         };
 

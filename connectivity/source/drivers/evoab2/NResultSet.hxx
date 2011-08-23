@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,15 +69,15 @@ namespace connectivity
                                 ,public ::comphelper::OPropertyContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>
         {
-
+        
         protected:
 
             OCommonStatement*                                                               m_pStatement;
             OEvoabConnection*                                                               m_pConnection;
-            ::com::sun::star::uno::WeakReferenceHelper                                      m_aStatement;
+            ::com::sun::star::uno::WeakReferenceHelper	                                    m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             ::dbtools::WarningsContainer                                                    m_aWarnings;
-
+            
             bool                                        m_bWasNull;
             // <properties>
             sal_Int32                                   m_nFetchSize;
@@ -87,7 +87,7 @@ namespace connectivity
             // </properties>
 
             // Data & iteration
-            GList    *m_pContacts;
+            GList	 *m_pContacts;
             sal_Int32 m_nIndex;
             sal_Int32 m_nLength;
             EContact *getCur()
@@ -100,22 +100,22 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
+            
             // you can't delete objects of this type
             virtual ~OEvoabResultSet();
         public:
             DECLARE_SERVICE_INFO();
-
+            
             OEvoabResultSet( OCommonStatement *pStmt, OEvoabConnection *pConnection );
             void construct( const QueryData& _rData );
 
             OEvoabConnection * getConnection() { return m_pConnection; }
-
+            
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
                 return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*(OResultSet_BASE*)this);
             }
-
+            
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface

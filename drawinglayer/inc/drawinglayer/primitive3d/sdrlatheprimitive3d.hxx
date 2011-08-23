@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,27 +52,27 @@ namespace drawinglayer
         {
         private:
             /// geometry helper for slices
-            basegfx::B2DPolyPolygon                     maCorrectedPolyPolygon;
-            Slice3DVector                               maSlices;
+            basegfx::B2DPolyPolygon						maCorrectedPolyPolygon;
+            Slice3DVector								maSlices;
 
             /// primitive geometry data
-            basegfx::B2DPolyPolygon                     maPolyPolygon;
-            sal_uInt32                                  mnHorizontalSegments;
-            sal_uInt32                                  mnVerticalSegments;
-            double                                      mfDiagonal;
-            double                                      mfBackScale;
-            double                                      mfRotation;
+            basegfx::B2DPolyPolygon						maPolyPolygon;
+            sal_uInt32									mnHorizontalSegments;
+            sal_uInt32									mnVerticalSegments;
+            double										mfDiagonal;
+            double										mfBackScale;
+            double										mfRotation;
 
             /// decomposition data when ReducedLineGeometry is used, see get3DDecomposition
             geometry::ViewInformation3D*                mpLastRLGViewInformation;
 
             /// bitfield
-            unsigned                                    mbSmoothNormals : 1; // Plane self
-            unsigned                                    mbSmoothHorizontalNormals : 1; // always
-            unsigned                                    mbSmoothLids : 1; // Front/back
-            unsigned                                    mbCharacterMode : 1;
-            unsigned                                    mbCloseFront : 1;
-            unsigned                                    mbCloseBack : 1;
+            unsigned									mbSmoothNormals : 1; // Plane self
+            unsigned									mbSmoothHorizontalNormals : 1; // always
+            unsigned									mbSmoothLids : 1; // Front/back
+            unsigned									mbCharacterMode : 1;
+            unsigned									mbCloseFront : 1;
+            unsigned									mbCloseBack : 1;
 
             /// create slices
             void impCreateSlices();
@@ -83,14 +83,14 @@ namespace drawinglayer
         protected:
             /// local helpers
             void impCreateOutlines(
-                const geometry::ViewInformation3D& rViewInformation,
-                const basegfx::B3DPolygon& rLoopA,
-                const basegfx::B3DPolygon& rLoopB,
+                const geometry::ViewInformation3D& rViewInformation, 
+                const basegfx::B3DPolygon& rLoopA, 
+                const basegfx::B3DPolygon& rLoopB, 
                 basegfx::B3DPolyPolygon& rTarget) const;
-
+            
             bool impHasCutWith(
-                const basegfx::B2DPolygon& rPoly,
-                const basegfx::B2DPoint& rStart,
+                const basegfx::B2DPolygon& rPoly, 
+                const basegfx::B2DPoint& rStart, 
                 const basegfx::B2DPoint& rEnd) const;
 
             /// local decomposition.
@@ -99,21 +99,21 @@ namespace drawinglayer
         public:
             /// constructor
             SdrLathePrimitive3D(
-                const basegfx::B3DHomMatrix& rTransform,
+                const basegfx::B3DHomMatrix& rTransform, 
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
+                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute, 
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 sal_uInt32 nHorizontalSegments,
                 sal_uInt32 nVerticalSegments,
-                double fDiagonal,
+                double fDiagonal, 
                 double fBackScale,
                 double fRotation,
-                bool bSmoothNormals,
+                bool bSmoothNormals, 
                 bool bSmoothHorizontalNormals,
-                bool bSmoothLids,
-                bool bCharacterMode,
-                bool bCloseFront,
+                bool bSmoothLids, 
+                bool bCharacterMode, 
+                bool bCloseFront, 
                 bool bCloseBack);
             virtual ~SdrLathePrimitive3D();
 

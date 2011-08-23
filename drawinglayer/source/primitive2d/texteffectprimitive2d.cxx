@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace drawinglayer
 
             // get the distance of one discrete units from target display. Use between 1.0 and sqrt(2) to
             // have good results on rotated objects, too
-            const basegfx::B2DVector aDistance(rViewInformation.getInverseObjectToViewTransformation() *
+            const basegfx::B2DVector aDistance(rViewInformation.getInverseObjectToViewTransformation() * 
                 basegfx::B2DVector(fDiscreteSize, fDiscreteSize));
             const basegfx::B2DVector aDiagonalDistance(aDistance * (1.0 / 1.44));
 
@@ -113,7 +113,7 @@ namespace drawinglayer
                         // add original, too
                         aRetval[1] = Primitive2DReference(new GroupPrimitive2D(getTextContent()));
                     }
-
+                
                     break;
                 }
                 case TEXTEFFECTSTYLE2D_OUTLINE:
@@ -121,7 +121,7 @@ namespace drawinglayer
                     // create transform primitives in all directions
                     basegfx::B2DHomMatrix aTransform;
                     aRetval.realloc(9);
-
+                    
                     aTransform.set(0, 2, aDistance.getX());
                     aTransform.set(1, 2, 0.0);
                     aRetval[0] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
@@ -170,7 +170,7 @@ namespace drawinglayer
             const basegfx::B2DPoint& rRotationCenter,
             double fDirection,
             TextEffectStyle2D eTextEffectStyle2D)
-        :   BufferedDecompositionPrimitive2D(),
+        :	BufferedDecompositionPrimitive2D(),
             maTextContent(rTextContent),
             maRotationCenter(rRotationCenter),
             mfDirection(fDirection),
@@ -207,7 +207,7 @@ namespace drawinglayer
         }
 
         Primitive2DSequence TextEffectPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
-        {
+        { 
             ::osl::MutexGuard aGuard( m_aMutex );
 
             if(getBuffered2DDecomposition().hasElements())

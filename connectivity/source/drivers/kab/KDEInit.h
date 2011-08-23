@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #define CONNECTIVITY_KAB_KDEINIT_H
 
 // the address book driver's version
-#define KAB_DRIVER_VERSION      "0.2"
-#define KAB_DRIVER_VERSION_MAJOR    0
-#define KAB_DRIVER_VERSION_MINOR    2
+#define KAB_DRIVER_VERSION		"0.2"
+#define KAB_DRIVER_VERSION_MAJOR	0
+#define KAB_DRIVER_VERSION_MINOR	2
 
 // the minimum KDE version which is required at runtime
 #define MIN_KDE_VERSION_MAJOR   3

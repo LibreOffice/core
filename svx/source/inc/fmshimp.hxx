@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,26 +84,26 @@
 #include <vector>
 
 SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16)
-//  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
+//	SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
 DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
 
 // catch databse exceptions if occur
 #define DO_SAFE(statement) try { statement; } catch( const Exception& ) { DBG_ERROR("unhandled exception (I tried to move a cursor (or something like that).)"); }
 
-#define GA_DISABLE_SYNC     1
-#define GA_FORCE_SYNC       2
-#define GA_ENABLE_SYNC      3
-#define GA_SYNC_MASK        3
-#define GA_DISABLE_ROCTRLR  4
-#define GA_ENABLE_ROCTRLR   8
+#define GA_DISABLE_SYNC		1
+#define GA_FORCE_SYNC		2
+#define GA_ENABLE_SYNC		3
+#define GA_SYNC_MASK		3
+#define GA_DISABLE_ROCTRLR	4
+#define GA_ENABLE_ROCTRLR	8
 
 
 // flags for controlling the behaviour when calling loadForms
-#define FORMS_LOAD          0x0000      // default: simply load
-#define FORMS_SYNC          0x0000      // default: do in synchronous
+#define FORMS_LOAD			0x0000		// default: simply load
+#define FORMS_SYNC			0x0000		// default: do in synchronous
 
-#define FORMS_UNLOAD        0x0001      // unload
-#define FORMS_ASYNC         0x0002      // do this async
+#define FORMS_UNLOAD		0x0001		// unload
+#define FORMS_ASYNC			0x0002		// do this async
 
 //==============================================================================
 // a class iterating through all fields of a form which are bound to a field
@@ -122,9 +122,9 @@ class FmFormPage;
 //========================================================================
 struct SAL_DLLPRIVATE FmLoadAction
 {
-    FmFormPage* pPage;
-    ULONG       nEventId;
-    sal_uInt16  nFlags;
+    FmFormPage*	pPage;
+    ULONG		nEventId;
+    sal_uInt16	nFlags;
 
     FmLoadAction( ) : pPage( NULL ), nEventId( 0 ), nFlags( 0 ) { }
     FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, ULONG _nEventId )
@@ -135,7 +135,7 @@ struct SAL_DLLPRIVATE FmLoadAction
 
 //========================================================================
 class SfxViewFrame;
-typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::beans::XPropertyChangeListener
+typedef ::cppu::WeakComponentImplHelper4<	::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener
                                         ,   ::com::sun::star::view::XSelectionChangeListener
                                         ,   ::com::sun::star::form::XFormControllerListener
@@ -157,8 +157,8 @@ namespace svx
 }
 
 //========================================================================
-typedef FmXFormShell_Base_Disambiguation    FmXFormShell_BASE;
-typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
+typedef FmXFormShell_Base_Disambiguation	FmXFormShell_BASE;
+typedef ::utl::ConfigItem					FmXFormShell_CFGBASE;
 
 struct SdrViewEvent;
 class FmFormShell;
@@ -177,29 +177,29 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     friend class SuspendPropertyTracking;
 
     // Timer um verzoegerte Markierung vorzunehmen
-    Timer               m_aMarkTimer;
-    SdrObjArray         m_arrSearchedControls;
+    Timer			    m_aMarkTimer;
+    SdrObjArray			m_arrSearchedControls;
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
-    FmFormArray         m_aSearchForms;
+    FmFormArray			m_aSearchForms;
 
-    SvUShorts   m_arrInvalidSlots;
-    SvBytes     m_arrInvalidSlots_Flags;
+    SvUShorts	m_arrInvalidSlots;
+    SvBytes		m_arrInvalidSlots_Flags;
         // we explicitly switch off the propbrw before leaving the design mode
         // this flag tells us if we have to switch it on again when reentering
 
-    ::osl::Mutex    m_aAsyncSafety;
+    ::osl::Mutex	m_aAsyncSafety;
         // secure the access to our thread related members
-    ::osl::Mutex    m_aInvalidationSafety;
+    ::osl::Mutex	m_aInvalidationSafety;
         // secure the access to all our slot invalidation related members
 
-    ::com::sun::star::form::NavigationBarMode   m_eNavigate;                // Art der Navigation
+    ::com::sun::star::form::NavigationBarMode   m_eNavigate;				// Art der Navigation
 
         // da ich beim Suchen fuer die Behandlung des "gefunden" ein SdrObject markieren will, besorge ich mir vor dem
         // Hochreissen des Suchen-Dialoges alle relevanten Objekte
         // (das Array ist damit auch nur waehrend des Suchvorganges gueltig)
-    SvLongs             m_arrRelativeGridColumn;
+    SvLongs				m_arrRelativeGridColumn;
 
-    ::osl::Mutex    m_aMutex;
+    ::osl::Mutex	m_aMutex;
     ULONG           m_nInvalidationEvent;
     ULONG           m_nActivationEvent;
     ::std::queue< FmLoadAction >
@@ -232,30 +232,30 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
         // und das ist ebenfalls fuer's 'gefunden' : Beim Finden in GridControls brauche ich die Spalte, bekomme aber
         // nur die Nummer des Feldes, die entspricht der Nummer der Spalte + <offset>, wobei der Offset von der Position
         // des GridControls im Formular abhaengt. Also hier eine Umrechnung.
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>         m_xLastGridFound;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>			m_xLastGridFound;
      // the frame we live in
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>              m_xAttachedFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>				m_xAttachedFrame;
     // Administration of external form views (see the SID_FM_VIEW_AS_GRID-slot)
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >                m_xExternalViewController;      // the controller for the external form view
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >                  m_xExternalDisplayedForm;       // the form which the external view is based on
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >                m_xExternalViewController;		// the controller for the external form view
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xExtViewTriggerController;	// the nav controller at the time the external display was triggered
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >                  m_xExternalDisplayedForm;		// the form which the external view is based on
 
     mutable ::svxform::DocumentType
                     m_eDocumentType;        /// the type of document we're living in
-    sal_Int16       m_nLockSlotInvalidation;
-    sal_Bool        m_bHadPropertyBrowserInDesignMode : 1;
+    sal_Int16		m_nLockSlotInvalidation;
+    sal_Bool		m_bHadPropertyBrowserInDesignMode : 1;
 
-    sal_Bool        m_bTrackProperties  : 1;
+    sal_Bool		m_bTrackProperties	: 1;
         // soll ich (bzw. der Owner diese Impl-Klasse) mich um die Aktualisierung des ::com::sun::star::beans::Property-Browsers kuemmern ?
 
-    sal_Bool        m_bUseWizards : 1;
+    sal_Bool		m_bUseWizards : 1;
 
-    sal_Bool        m_bDatabaseBar      : 1;    // Gibt es eine Datenbankleiste
-    sal_Bool        m_bInActivate       : 1;    // Wird ein Controller aktiviert
-    sal_Bool        m_bSetFocus         : 1;    // Darf der Focus umgesetzt werden
-    sal_Bool        m_bFilterMode       : 1;    // Wird gerade ein Filter auf die Controls angesetzt
-    sal_Bool        m_bChangingDesignMode:1;    // sal_True within SetDesignMode
-    sal_Bool        m_bPreparedClose    : 1;    // for the current modification state of the current form
+    sal_Bool		m_bDatabaseBar		: 1;	// Gibt es eine Datenbankleiste
+    sal_Bool		m_bInActivate		: 1;	// Wird ein Controller aktiviert
+    sal_Bool		m_bSetFocus			: 1;	// Darf der Focus umgesetzt werden
+    sal_Bool		m_bFilterMode		: 1;	// Wird gerade ein Filter auf die Controls angesetzt
+    sal_Bool		m_bChangingDesignMode:1;	// sal_True within SetDesignMode
+    sal_Bool		m_bPreparedClose	: 1;	// for the current modification state of the current form
                                                 //  PrepareClose had been called and the user denied to save changes
     sal_Bool        m_bFirstActivation  : 1;    // has the shell ever been activated?
 
@@ -311,8 +311,8 @@ public:
     sal_Bool IsTrackPropertiesEnabled() {return m_bTrackProperties;}
 
     // activation handling
-            void        viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction = sal_False );
-            void        viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController = sal_True );
+            void		viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction = sal_False );
+            void		viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController = sal_True );
 
     // IControllerFeatureInvalidation
     virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures );
@@ -333,18 +333,18 @@ public:
     void ExecuteSearch();               // execute SID_FM_SEARCH
     void CreateExternalView();          // execute SID_FM_VIEW_AS_GRID
 
-    sal_Bool    GetY2KState(sal_uInt16& n);
-    void        SetY2KState(sal_uInt16 n);
+    sal_Bool	GetY2KState(sal_uInt16& n);
+    void	    SetY2KState(sal_uInt16 n);
 
 protected:
     // activation handling
-    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
-    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+    inline	sal_Bool	hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline	void		setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
 
     // form handling
     /// load or unload the forms on a page
-            void        loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour = FORMS_LOAD | FORMS_SYNC );
-            void        smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
+            void		loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour = FORMS_LOAD | FORMS_SYNC );
+            void		smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
 
 
     void startListening();
@@ -420,7 +420,7 @@ public:
 
     sal_Bool hasForms() const {return m_xForms.is() && m_xForms->getCount() != 0;}
     sal_Bool hasDatabaseBar() const {return m_bDatabaseBar;}
-    sal_Bool canNavigate() const    {return m_xNavigationController.is();}
+    sal_Bool canNavigate() const	{return m_xNavigationController.is();}
 
     void ShowSelectionProperties( sal_Bool bShow );
     sal_Bool IsPropBrwOpen() const;
@@ -431,8 +431,8 @@ public:
 
     void SetDesignMode(sal_Bool bDesign);
 
-    sal_Bool    GetWizardUsing() const { return m_bUseWizards; }
-    void        SetWizardUsing(sal_Bool _bUseThem);
+    sal_Bool	GetWizardUsing() const { return m_bUseWizards; }
+    void		SetWizardUsing(sal_Bool _bUseThem);
 
         // Setzen des Filtermodus
     sal_Bool isInFilterMode() const {return m_bFilterMode;}
@@ -472,12 +472,12 @@ public:
 
     // das Setzen des curObject/selObject/curForm erfolgt verzoegert (SetSelectionDelayed), mit den folgenden
     // Funktionen laesst sich das abfragen/erzwingen
-    inline sal_Bool IsSelectionUpdatePending();
-    void            ForceUpdateSelection(sal_Bool bLockInvalidation);
+    inline sal_Bool	IsSelectionUpdatePending();
+    void		    ForceUpdateSelection(sal_Bool bLockInvalidation);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>          getContextDocument() const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>			getContextDocument() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>			getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>		getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
         // if the form belongs to the controller (extern) displaying a grid, the according internal form will
         // be displayed, _xForm else
 
@@ -495,15 +495,15 @@ private:
     void LoopGrids(sal_Int16 nWhat);
 
     // Invalidierung von Slots
-    void    InvalidateSlot( sal_Int16 nId, sal_Bool bWithId );
-    void    UpdateSlot( sal_Int16 nId );
+    void	InvalidateSlot( sal_Int16 nId, sal_Bool bWithId );
+    void	UpdateSlot( sal_Int16 nId );
     // Locking der Invalidierung - wenn der interne Locking-Counter auf 0 geht, werden alle aufgelaufenen Slots
     // (asynchron) invalidiert
-    void    LockSlotInvalidation(sal_Bool bLock);
+    void	LockSlotInvalidation(sal_Bool bLock);
 
     DECL_LINK(OnInvalidateSlots, void*);
 
-    void    CloseExternalFormViewer();
+    void	CloseExternalFormViewer();
         // closes the task-local beamer displaying a grid view for a form
 
     // ConfigItem related stuff
@@ -574,11 +574,11 @@ inline sal_Bool FmXFormShell::IsSelectionUpdatePending()
 
 class SAL_DLLPRIVATE SearchableControlIterator : public ::comphelper::IndexAccessIterator
 {
-    ::rtl::OUString         m_sCurrentValue;
+    ::rtl::OUString			m_sCurrentValue;
         // der aktuelle Wert der ControlSource-::com::sun::star::beans::Property
 
 public:
-    ::rtl::OUString     getCurrentValue() const { return m_sCurrentValue; }
+    ::rtl::OUString		getCurrentValue() const { return m_sCurrentValue; }
 
 public:
     SearchableControlIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint);
@@ -593,9 +593,9 @@ SV_DECL_PTRARR_DEL(StatusForwarderArray, SfxStatusForwarder*, 16, 0)
 class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
 {
 protected:
-    StatusForwarderArray    m_aStatusForwarders;
-    Menu*                   m_pMainMenu;
-    PopupMenu*              m_pConversionMenu;
+    StatusForwarderArray	m_aStatusForwarders;
+    Menu*					m_pMainMenu;
+    PopupMenu*				m_pConversionMenu;
 
 public:
     SVX_DLLPRIVATE ControlConversionMenuController(sal_uInt16 nId, Menu& rMenu, SfxBindings& rBindings);

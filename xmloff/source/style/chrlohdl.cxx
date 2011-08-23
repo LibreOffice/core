@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 // this is a copy of defines in svx/inc/escpitem.hxx
-#define DFLT_ESC_PROP    58
-#define DFLT_ESC_AUTO_SUPER 101
+#define DFLT_ESC_PROP	 58
+#define DFLT_ESC_AUTO_SUPER	101
 #define DFLT_ESC_AUTO_SUB  -101
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ bool XMLCharLanguageHdl::equals( const ::com::sun::star::uno::Any& r1, const ::c
 }
 
 sal_Bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     lang::Locale aLocale;
 
     rValue >>= aLocale;
@@ -78,11 +78,11 @@ sal_Bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& 
         aLocale.Language = rStrImpValue;
 
     rValue <<= aLocale;
-    return sal_True;
+    return sal_True; 
 }
 
 sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
         return sal_False;
@@ -91,7 +91,7 @@ sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
 
     if( !rStrExpValue.getLength() )
         rStrExpValue = GetXMLToken( XML_NONE );
-
+    
     return sal_True;
 }
 
@@ -117,7 +117,7 @@ bool XMLCharCountryHdl::equals( const ::com::sun::star::uno::Any& r1, const ::co
 }
 
 sal_Bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     lang::Locale aLocale;
 
     rValue >>= aLocale;
@@ -126,17 +126,17 @@ sal_Bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& r
         aLocale.Country = rStrImpValue;
 
     rValue <<= aLocale;
-    return sal_True;
+    return sal_True; 
 }
 
 sal_Bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
         return sal_False;
 
     rStrExpValue = aLocale.Country;
-
+    
     if( !rStrExpValue.getLength() )
         rStrExpValue = GetXMLToken( XML_NONE );
 

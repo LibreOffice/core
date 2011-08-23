@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,45 +46,45 @@
 
 namespace ftp {
 
-
+    
     /** Implements a seekable InputStream
      *  working on a buffer.
      */
-
-
+    
+    
     namespace css = com::sun::star;
-
-
+    
+    
     class FTPInputStream
         : public cppu::OWeakObject,
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XSeekable
     {
     public:
-
+        
         /** Defines the storage kind found
          *  on which the inputstream acts.
          */
-
+        
         FTPInputStream(FILE* tmpfl = 0);
-
+    
         ~FTPInputStream();
-
+        
         virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType)
             throw(css::uno::RuntimeException);
-
+        
         virtual void SAL_CALL acquire(void) throw();
-
+        
         virtual void SAL_CALL release(void) throw();
-
+        
         virtual sal_Int32 SAL_CALL
         readBytes(css::uno::Sequence< sal_Int8 >& aData,
-                  sal_Int32 nBytesToRead)
+                  sal_Int32 nBytesToRead) 
             throw( css::io::NotConnectedException,
                    css::io::BufferSizeExceededException,
                    css::io::IOException,
                    css::uno::RuntimeException);
-
+    
         virtual sal_Int32 SAL_CALL
         readSomeBytes(css::uno::Sequence< sal_Int8 >& aData,
                       sal_Int32 nMaxBytesToRead )
@@ -92,52 +92,52 @@ namespace ftp {
                    css::io::BufferSizeExceededException,
                    css::io::IOException,
                    css::uno::RuntimeException);
-
+    
         virtual void SAL_CALL
         skipBytes(sal_Int32 nBytesToSkip)
             throw(css::io::NotConnectedException,
                   css::io::BufferSizeExceededException,
                   css::io::IOException,
                   css::uno::RuntimeException );
-
+        
         virtual sal_Int32 SAL_CALL
         available(void)
             throw(css::io::NotConnectedException,
                   css::io::IOException,
                   css::uno::RuntimeException );
-
+    
         virtual void SAL_CALL
         closeInput(void)
             throw(css::io::NotConnectedException,
                   css::io::IOException,
                   css::uno::RuntimeException);
-
-
+    
+        
         /** XSeekable
          */
-
+        
         virtual void SAL_CALL
         seek(sal_Int64 location)
             throw(css::lang::IllegalArgumentException,
                   css::io::IOException,
                   css::uno::RuntimeException);
-
-
+        
+        
         virtual sal_Int64 SAL_CALL
         getPosition(void)
             throw(css::io::IOException,
                   css::uno::RuntimeException);
-
-
+        
+        
         virtual sal_Int64 SAL_CALL
         getLength(void)
             throw(css::io::IOException,
                   css::uno::RuntimeException);
-
+        
         // additional
-
+        
 //          void append(const void* pBuffer,size_t size,size_t nmemb);
-
+        
     private:
 
         osl::Mutex m_aMutex;
@@ -145,7 +145,7 @@ namespace ftp {
         sal_Int64 m_nLength;
     };
 
-
+    
 }
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ class SvLBoxEntry;
 
 //========================================================================
 // Exchange types
-#define SVX_FM_FIELD_EXCH           String("SvxFormFieldExch",              sizeof("SvxFormFieldExch"))
-#define SVX_FM_CONTROL_EXCH         String("SvxFormExplCtrlExch",           sizeof("SvxFormExplCtrlExch"))
-#define SVX_FM_CONTROLS_AS_PATH     String("SvxFormControlsAsPathExchange", sizeof("SvxFormControlsAsPathExchange"))
-#define SVX_FM_HIDDEN_CONTROLS      String("SvxFormHiddenControlsExchange", sizeof("SvxFormHiddenControlsExchange"))
-#define SVX_FM_FILTER_FIELDS        String("SvxFilterFieldExchange",        sizeof("SvxFilterFieldExchange"))
+#define SVX_FM_FIELD_EXCH			String("SvxFormFieldExch",				sizeof("SvxFormFieldExch"))
+#define SVX_FM_CONTROL_EXCH			String("SvxFormExplCtrlExch",			sizeof("SvxFormExplCtrlExch"))
+#define SVX_FM_CONTROLS_AS_PATH		String("SvxFormControlsAsPathExchange",	sizeof("SvxFormControlsAsPathExchange"))
+#define SVX_FM_HIDDEN_CONTROLS		String("SvxFormHiddenControlsExchange",	sizeof("SvxFormHiddenControlsExchange"))
+#define SVX_FM_FILTER_FIELDS		String("SvxFilterFieldExchange",		sizeof("SvxFilterFieldExchange"))
 
 //========================================================================
 class SvTreeListBox;
@@ -65,9 +65,9 @@ namespace svxform
     class SVX_DLLPUBLIC OLocalExchange : public TransferableHelper
     {
     private:
-        Link                m_aClipboardListener;
-        sal_Bool            m_bDragging         : 1;
-        sal_Bool            m_bClipboardOwner   : 1;
+        Link				m_aClipboardListener;
+        sal_Bool			m_bDragging			: 1;
+        sal_Bool			m_bClipboardOwner	: 1;
 
     public:
         class GrantAccess
@@ -78,29 +78,29 @@ namespace svxform
     public:
         OLocalExchange( );
 
-        sal_Bool    isDragging() const { return m_bDragging; }
-        sal_Bool    isClipboardOwner() const { return m_bClipboardOwner; }
+        sal_Bool	isDragging() const { return m_bDragging; }
+        sal_Bool	isClipboardOwner() const { return m_bClipboardOwner; }
 
-        void        startDrag( Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
-        void        copyToClipboard( Window* _pWindow, const GrantAccess& );
+        void		startDrag( Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
+        void		copyToClipboard( Window* _pWindow, const GrantAccess& );
 
-        void        setClipboardListener( const Link& _rListener ) { m_aClipboardListener = _rListener; }
+        void		setClipboardListener( const Link& _rListener ) { m_aClipboardListener = _rListener; }
 
-        void        clear();
+        void		clear();
 
-        static  sal_Bool    hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId );
+        static	sal_Bool	hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId );
 
     protected:
         // XClipboardOwner
         virtual void SAL_CALL lostOwnership( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& _rxClipboard, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxTrans ) throw(::com::sun::star::uno::RuntimeException);
 
         // TransferableHelper
-        virtual void        DragFinished( sal_Int8 nDropAction );
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void		DragFinished( sal_Int8 nDropAction );
+        virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
     private:
         void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, sal_Int32 nDragPointer = DND_POINTER_NONE, sal_Int32 nDragImage = DND_IMAGE_NONE )
-        {   // don't allow this base class method to be called from outside
+        {	// don't allow this base class method to be called from outside
             TransferableHelper::StartDrag(pWindow, nDragSourceActions, nDragPointer, nDragImage);
         }
     };
@@ -112,24 +112,24 @@ namespace svxform
     class SVX_DLLPUBLIC OLocalExchangeHelper
     {
     protected:
-        Window*             m_pDragSource;
-        OLocalExchange*     m_pTransferable;
+        Window*				m_pDragSource;
+        OLocalExchange*		m_pTransferable;
 
     public:
         OLocalExchangeHelper( Window* _pDragSource );
         virtual ~OLocalExchangeHelper();
 
-        void        prepareDrag( );
+        void		prepareDrag( );
 
-        void        startDrag( sal_Int8 nDragSourceActions );
-        void        copyToClipboard( ) const;
+        void		startDrag( sal_Int8 nDragSourceActions );
+        void		copyToClipboard( ) const;
 
-        inline  sal_Bool    isDragSource() const { return m_pTransferable && m_pTransferable->isDragging(); }
-        inline  sal_Bool    isClipboardOwner() const { return m_pTransferable && m_pTransferable->isClipboardOwner(); }
-        inline  sal_Bool    isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
+        inline	sal_Bool	isDragSource() const { return m_pTransferable && m_pTransferable->isDragging(); }
+        inline	sal_Bool	isClipboardOwner() const { return m_pTransferable && m_pTransferable->isClipboardOwner(); }
+        inline	sal_Bool	isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
         inline  void        clear() { if ( isDataExchangeActive() ) m_pTransferable->clear(); }
 
-        SVX_DLLPRIVATE void     setClipboardListener( const Link& _rListener ) { if ( m_pTransferable ) m_pTransferable->setClipboardListener( _rListener ); }
+        SVX_DLLPRIVATE void		setClipboardListener( const Link& _rListener ) { if ( m_pTransferable ) m_pTransferable->setClipboardListener( _rListener ); }
 
     protected:
         SVX_DLLPRIVATE virtual OLocalExchange* createExchange() const = 0;
@@ -147,33 +147,33 @@ namespace svxform
         typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_uInt32 > > ControlPaths;
 
     private:
-        DataFlavorExVector  m_aCurrentFormats;
+        DataFlavorExVector	m_aCurrentFormats;
 
     protected:
-        ListBoxEntrySet     m_aSelectedEntries;
-        ControlPaths        m_aControlPaths;
+        ListBoxEntrySet	    m_aSelectedEntries;
+        ControlPaths		m_aControlPaths;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                             m_aHiddenControlModels;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                            m_xFormsRoot;       // the root of the forms collection where the entries we represent reside
+                            m_xFormsRoot;		// the root of the forms collection where the entries we represent reside
                                                 // this uniquely identifies the page and the document
 
-        SvLBoxEntry*        m_pFocusEntry;
+        SvLBoxEntry*		m_pFocusEntry;
 
     protected:
         // updates m_aCurrentFormats with all formats we currently could supply
-        void    updateFormats( );
+        void	updateFormats( );
 
     public:
         OControlTransferData( );
-
+    
         // ctor to construct the data from an arbitrary Transferable (usually clipboard data)
         OControlTransferData(
             const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxTransferable
         );
 
-        inline const DataFlavorExVector&    GetDataFlavorExVector() const;
+        inline const DataFlavorExVector&	GetDataFlavorExVector() const;
 
         void addSelectedEntry( SvLBoxEntry* _pEntry );
         void setFocusEntry( SvLBoxEntry* _pFocusEntry );
@@ -205,8 +205,8 @@ namespace svxform
             // (es erfolgt KEINE Ueberpruefung, ob dadurch auch tatsaechlich nur hidden Controls bezeichnet werden, dass muss der
             // Aufrufer sicherstellen)
 
-        SvLBoxEntry*                focused() const { return m_pFocusEntry; }
-        const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
+        SvLBoxEntry*				focused() const { return m_pFocusEntry; }
+        const ListBoxEntrySet&	    selected() const { return m_aSelectedEntries; }
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                                     hiddenControls() const { return m_aHiddenControlModels; }
 
@@ -230,17 +230,17 @@ namespace svxform
         OControlExchange( );
 
     public:
-        static sal_uInt32       getFieldExchangeFormatId( );
-        static sal_uInt32       getControlPathFormatId( );
-        static sal_uInt32       getHiddenControlModelsFormatId( );
+        static sal_uInt32		getFieldExchangeFormatId( );
+        static sal_uInt32		getControlPathFormatId( );
+        static sal_uInt32		getHiddenControlModelsFormatId( );
 
-        inline static sal_Bool  hasFieldExchangeFormat( const DataFlavorExVector& _rFormats );
-        inline static sal_Bool  hasControlPathFormat( const DataFlavorExVector& _rFormats );
-        inline static sal_Bool  hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats );
+        inline static sal_Bool	hasFieldExchangeFormat( const DataFlavorExVector& _rFormats );
+        inline static sal_Bool	hasControlPathFormat( const DataFlavorExVector& _rFormats );
+        inline static sal_Bool	hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats );
 
     protected:
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void        AddSupportedFormats();
+        virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void		AddSupportedFormats();
     };
 
     //====================================================================
@@ -276,7 +276,7 @@ namespace svxform
     }
 
 //........................................................................
-}   // namespace svxform
+}	// namespace svxform
 //........................................................................
 
 #endif

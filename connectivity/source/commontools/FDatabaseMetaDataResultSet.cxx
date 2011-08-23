@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,9 +92,9 @@ ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::construct()
 {
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),           PROPERTY_ID_FETCHSIZE,          0,&m_nFetchSize,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),			PROPERTY_ID_FETCHSIZE,			0,&m_nFetchSize,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),        PROPERTY_ID_RESULTSETTYPE,          PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),      PROPERTY_ID_FETCHDIRECTION,     0,  &m_nFetchDirection, ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),		PROPERTY_ID_FETCHDIRECTION,		0,	&m_nFetchDirection,	::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY), PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
 }
 // -----------------------------------------------------------------------------
@@ -129,7 +129,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aStatement    = NULL;
+    m_aStatement	= NULL;
 m_xMetaData.clear();
     m_aRowsIter = m_aRows.end();
     m_aRows.clear();
@@ -154,7 +154,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) th
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
@@ -876,7 +876,7 @@ namespace
             &cppu::createSingleComponentFactory, 0, 0 },
         { &ParameterSubstitution::create, &ParameterSubstitution::getImplementationName_Static, &ParameterSubstitution::getSupportedServiceNames_Static,
             &cppu::createSingleComponentFactory, 0, 0 },
-        { 0, 0, 0, 0, 0, 0 }
+        { 0, 0, 0, 0, 0, 0 } 
     };
 }
 using ::rtl::OUString;
@@ -910,4 +910,4 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* implNam
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
 }
 
-}   // extern "C"
+}	// extern "C"

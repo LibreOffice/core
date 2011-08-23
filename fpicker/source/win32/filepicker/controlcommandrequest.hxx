@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public:
         m_aControlId( aControlId )
     {
     }
-
+    
     virtual ~CControlCommandRequest( )
     {
     }
@@ -66,8 +66,8 @@ private:
 class CValueControlCommandRequest : public CControlCommandRequest
 {
 public:
-    CValueControlCommandRequest(
-        sal_Int16 aControlId,
+    CValueControlCommandRequest( 
+        sal_Int16 aControlId, 
         sal_Int16 aControlAction ) :
         CControlCommandRequest( aControlId ),
         m_aControlAction( aControlAction )

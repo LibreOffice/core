@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ typedef ::cppu::WeakComponentImplHelper1<
 //==============================================================================
 class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
 {
-    PackageRegistryBackend * getMyBackend() const;
+    PackageRegistryBackend * getMyBackend() const; 
     void processPackage_impl(
         bool registerPackage,
         bool startup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
-
+    
 protected:
     ::rtl::Reference<PackageRegistryBackend> m_myBackend;
     const ::rtl::OUString m_url;
@@ -80,14 +80,14 @@ protected:
     const bool m_bRemoved;
     //Only set if m_bRemoved = true;
     const ::rtl::OUString m_identifier;
-
+    
     void check() const;
     void fireModified();
     virtual void SAL_CALL disposing();
-
+    
     void checkAborted(
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel );
-
+    
     // @@@ to be implemented by specific backend:
     virtual css::beans::Optional< css::beans::Ambiguous<sal_Bool> >
     isRegistered_(
@@ -102,7 +102,7 @@ protected:
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
-
+    
     virtual ~Package();
     Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
              ::rtl::OUString const & url,
@@ -112,9 +112,9 @@ protected:
              xPackageType,
              bool bRemoved,
              ::rtl::OUString const & identifier);
-
+    
 public:
-
+    
     class TypeInfo :
         public ::cppu::WeakImplHelper1<css::deployment::XPackageTypeInfo>
     {
@@ -147,7 +147,7 @@ public:
                                                 sal_Bool smallIcon )
             throw (css::uno::RuntimeException);
     };
-
+    
     // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
     virtual void SAL_CALL addEventListener(
@@ -156,7 +156,7 @@ public:
     virtual void SAL_CALL removeEventListener(
         css::uno::Reference<css::lang::XEventListener> const & xListener )
         throw (css::uno::RuntimeException);
-
+    
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(
         css::uno::Reference<css::util::XModifyListener> const & xListener )
@@ -164,7 +164,7 @@ public:
     virtual void SAL_CALL removeModifyListener(
         css::uno::Reference<css::util::XModifyListener> const & xListener )
         throw (css::uno::RuntimeException);
-
+    
     // XPackage
     virtual css::uno::Reference<css::task::XAbortChannel> SAL_CALL
     createAbortChannel() throw (css::uno::RuntimeException);
@@ -177,21 +177,21 @@ public:
                css::ucb::CommandAbortedException,
                css::uno::RuntimeException);
 
-    virtual ::sal_Int32 SAL_CALL checkPrerequisites(
-        const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
+    virtual ::sal_Int32 SAL_CALL checkPrerequisites( 
+        const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel, 
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
-        sal_Bool noLicenseChecking)
+        sal_Bool noLicenseChecking) 
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException,
-               css::ucb::CommandAbortedException,
+               css::ucb::CommandFailedException, 
+               css::ucb::CommandAbortedException, 
                css::uno::RuntimeException);
 
-    virtual ::sal_Bool SAL_CALL checkDependencies(
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+    virtual ::sal_Bool SAL_CALL checkDependencies( 
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv ) 
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException,
+               css::ucb::CommandFailedException, 
                css::uno::RuntimeException);
 
     virtual void SAL_CALL registerPackage(
@@ -287,7 +287,7 @@ class PackageRegistryBackend
         ::rtl::OUString, css::uno::Reference<css::deployment::XPackage>,
         ::rtl::OUStringHash > t_string2ref;
     t_string2ref m_bound;
-
+    
 protected:
     ::rtl::OUString m_cachePath;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
@@ -305,17 +305,17 @@ protected:
         StrCannotDetectMediaType, RID_STR_CANNOT_DETECT_MEDIA_TYPE> {};
     struct StrUnsupportedMediaType : public ::dp_misc::StaticResourceString<
         StrUnsupportedMediaType, RID_STR_UNSUPPORTED_MEDIA_TYPE> {};
-
+    
     // @@@ to be implemented by specific backend:
     virtual css::uno::Reference<css::deployment::XPackage> bindPackage_(
         ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
         sal_Bool bRemoved, ::rtl::OUString const & identifier,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
-
+    
     void check();
     virtual void SAL_CALL disposing();
-
+    
     virtual ~PackageRegistryBackend();
     PackageRegistryBackend(
         css::uno::Sequence<css::uno::Any> const & args,
@@ -341,26 +341,26 @@ protected:
     */
     static void deleteTempFolder(
         ::rtl::OUString const & folderUrl);
-
+        
 
 public:
     struct StrRegisteringPackage : public ::dp_misc::StaticResourceString<
         StrRegisteringPackage, RID_STR_REGISTERING_PACKAGE> {};
     struct StrRevokingPackage : public ::dp_misc::StaticResourceString<
         StrRevokingPackage, RID_STR_REVOKING_PACKAGE> {};
-
+    
     inline css::uno::Reference<css::uno::XComponentContext> const &
     getComponentContext() const { return m_xComponentContext; }
-
+    
     inline ::rtl::OUString const & getCachePath() const { return m_cachePath; }
     inline bool transientMode() const { return m_cachePath.getLength() == 0; }
 
     inline ::rtl::OUString getContext() const {return m_context; }
-
+    
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
         throw (css::uno::RuntimeException);
-
+    
     // XPackageRegistry
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL bindPackage(
         ::rtl::OUString const & url, ::rtl::OUString const & mediaType,

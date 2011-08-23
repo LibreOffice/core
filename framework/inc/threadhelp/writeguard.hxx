@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/inoncopyable.h>
@@ -40,30 +40,30 @@
 //#endif
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          implement a guard to set write locks
-    @descr          This guard should be used to set a lock for reading AND writing object internal member.
+    @descr			This guard should be used to set a lock for reading AND writing object internal member.
                     We never need a own mutex to safe our internal member access - because
                     a guard is used as function-local member only. There exist no multithreaded access to it realy ...
 
@@ -71,15 +71,15 @@ namespace framework{
                     b) Use interface "IRWLock" of set LockHelper only - because we must support a finer granularity of locking.
                        Interface "IMutex" should be used by easier guard implementations ... like "ResetableGuard"!
 
-    @implements     -
+    @implements		-
     @base           INonCopyable
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 class WriteGuard : private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
@@ -157,7 +157,7 @@ class WriteGuard : private INonCopyable
                                             m_eMode = E_WRITELOCK;
                                         }
                                         break;
-                default:                break; // nothing to do
+                default:                break; // nothing to do                
             }
         }
 
@@ -231,34 +231,34 @@ class WriteGuard : private INonCopyable
         }
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
 
         /*-****************************************************************************************************//**
-            @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+            @short		disable using of these functions!
+            @descr		It's not allowed to use this methods. Different problem can occure otherwise.
                         Thats why we disable it by make it private.
 
-            @seealso    other ctor
+            @seealso	other ctor
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         WriteGuard();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
         IRWLock*    m_pLock ;   /// reference to lock-member of protected object
-        ELockMode   m_eMode ;   /// protection against multiple lock calls without unlock and difference between supported lock modi
+        ELockMode	m_eMode	;	/// protection against multiple lock calls without unlock and difference between supported lock modi
 
-};      //  class WriteGuard
+};		//	class WriteGuard
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#endif	//	#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_

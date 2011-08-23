@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class CSimpleTag : public ITag
         virtual void addCharacters(const std::wstring& characters);
         virtual void addAttributes(const XmlTagAttributes_t& attributes);
         virtual std::wstring getTagContent();
-
+        
         virtual ::std::wstring const getTagAttribute( ::std::wstring  const & attrname );
 
     private:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
     m_pConnection->acquire();
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
     osl_decrementInterlockedCount( &m_refCount );
-    //  allocBuffer();
+    //	allocBuffer();
 }
 
 // -------------------------------------------------------------------------
@@ -108,7 +108,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
     if(m_bFreeHandle)
         m_pConnection->freeStatementHandle(m_aStatementHandle);
 
-    m_aStatement    = NULL;
+    m_aStatement	= NULL;
 m_xMetaData.clear();
     m_pConnection->release();
 }
@@ -136,16 +136,16 @@ void SAL_CALL ODatabaseMetaDataResultSet::release() throw()
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
     return ::comphelper::concatSequences(aTypes.getTypes(),ODatabaseMetaDataResultSet_BASE::getTypes());
 }
 // -----------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32  column)
+sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32	column)
 {
-    sal_Int32   map = column;
+    sal_Int32	map = column;
 
     if (!m_aColMapping.empty())
     {
@@ -229,7 +229,7 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
     {
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TINYINT,m_bWasNull,**this,&nVal,sizeof nVal);
 
-        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
+        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator	aValueRangeIter;
         if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
             return sal_Int8((*aValueRangeIter).second[(sal_Int32)nVal]);
     }
@@ -336,7 +336,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
     {
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nVal,sizeof nVal);
 
-        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
+        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator	aValueRangeIter;
         if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
             return (*aValueRangeIter).second[(sal_Int32)nVal];
     }
@@ -411,7 +411,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     {
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nVal,sizeof nVal);
 
-        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
+        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator	aValueRangeIter;
         if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
             return sal_Int16((*aValueRangeIter).second[(sal_Int32)nVal]);
     }
@@ -670,7 +670,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
-    //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
+    //	m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
     m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     OTools::ThrowException(m_pConnection,m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
@@ -748,11 +748,11 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const throw(SQLException, R
     Sequence< com::sun::star::beans::Property > aProps(5);
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,          ::rtl::OUString);
-    DECL_PROP0(FETCHDIRECTION,      sal_Int32);
-    DECL_PROP0(FETCHSIZE,           sal_Int32);
+    DECL_PROP0(CURSORNAME,			::rtl::OUString);
+    DECL_PROP0(FETCHDIRECTION,		sal_Int32);
+    DECL_PROP0(FETCHSIZE,			sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
-    DECL_PROP0(RESULTSETTYPE,       sal_Int32);
+    DECL_PROP0(RESULTSETTYPE,		sal_Int32);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -825,37 +825,37 @@ void ODatabaseMetaDataResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nH
 void ODatabaseMetaDataResultSet::openTypeInfo() throw(SQLException, RuntimeException)
 {
     TInt2IntMap aMap;
-    aMap[SQL_BIT]               = DataType::BIT;
-    aMap[SQL_TINYINT]           = DataType::TINYINT;
-    aMap[SQL_SMALLINT]          = DataType::SMALLINT;
-    aMap[SQL_INTEGER]           = DataType::INTEGER;
-    aMap[SQL_FLOAT]             = DataType::FLOAT;
-    aMap[SQL_REAL]              = DataType::REAL;
-    aMap[SQL_DOUBLE]            = DataType::DOUBLE;
-    aMap[SQL_BIGINT]            = DataType::BIGINT;
+    aMap[SQL_BIT]				= DataType::BIT;
+    aMap[SQL_TINYINT]			= DataType::TINYINT;
+    aMap[SQL_SMALLINT]			= DataType::SMALLINT;
+    aMap[SQL_INTEGER]			= DataType::INTEGER;
+    aMap[SQL_FLOAT]				= DataType::FLOAT;
+    aMap[SQL_REAL]				= DataType::REAL;
+    aMap[SQL_DOUBLE]			= DataType::DOUBLE;
+    aMap[SQL_BIGINT]			= DataType::BIGINT;
 
-    aMap[SQL_CHAR]              = DataType::CHAR;
-    aMap[SQL_WCHAR]             = DataType::CHAR;
-    aMap[SQL_VARCHAR]           = DataType::VARCHAR;
-    aMap[SQL_WVARCHAR]          = DataType::VARCHAR;
-    aMap[SQL_LONGVARCHAR]       = DataType::LONGVARCHAR;
-    aMap[SQL_WLONGVARCHAR]      = DataType::LONGVARCHAR;
+    aMap[SQL_CHAR]				= DataType::CHAR;
+    aMap[SQL_WCHAR]				= DataType::CHAR;
+    aMap[SQL_VARCHAR]			= DataType::VARCHAR;
+    aMap[SQL_WVARCHAR]			= DataType::VARCHAR;
+    aMap[SQL_LONGVARCHAR]		= DataType::LONGVARCHAR;
+    aMap[SQL_WLONGVARCHAR]		= DataType::LONGVARCHAR;
 
-    aMap[SQL_TYPE_DATE]         = DataType::DATE;
-    aMap[SQL_DATE]              = DataType::DATE;
-    aMap[SQL_TYPE_TIME]         = DataType::TIME;
-    aMap[SQL_TIME]              = DataType::TIME;
-    aMap[SQL_TYPE_TIMESTAMP]    = DataType::TIMESTAMP;
-    aMap[SQL_TIMESTAMP]         = DataType::TIMESTAMP;
+    aMap[SQL_TYPE_DATE]			= DataType::DATE;
+    aMap[SQL_DATE]				= DataType::DATE;
+    aMap[SQL_TYPE_TIME]			= DataType::TIME;
+    aMap[SQL_TIME]				= DataType::TIME;
+    aMap[SQL_TYPE_TIMESTAMP]	= DataType::TIMESTAMP;
+    aMap[SQL_TIMESTAMP]			= DataType::TIMESTAMP;
 
-    aMap[SQL_DECIMAL]           = DataType::DECIMAL;
-    aMap[SQL_NUMERIC]           = DataType::NUMERIC;
+    aMap[SQL_DECIMAL]			= DataType::DECIMAL;
+    aMap[SQL_NUMERIC]			= DataType::NUMERIC;
 
-    aMap[SQL_BINARY]            = DataType::BINARY;
-    aMap[SQL_VARBINARY]         = DataType::VARBINARY;
-    aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
+    aMap[SQL_BINARY]			= DataType::BINARY;
+    aMap[SQL_VARBINARY]			= DataType::VARBINARY;
+    aMap[SQL_LONGVARBINARY]		= DataType::LONGVARBINARY;
 
-    aMap[SQL_GUID]              = DataType::VARBINARY;
+    aMap[SQL_GUID]				= DataType::VARBINARY;
 
 
     m_aValueRange[2] = aMap;
@@ -866,7 +866,7 @@ void ODatabaseMetaDataResultSet::openTypeInfo() throw(SQLException, RuntimeExcep
 //-----------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUString& schemaPattern,
                             const ::rtl::OUString& tableNamePattern,
-                            const Sequence< ::rtl::OUString >& types )  throw(SQLException, RuntimeException)
+                            const Sequence< ::rtl::OUString >& types )	throw(SQLException, RuntimeException)
 {
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
@@ -881,12 +881,12 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
         aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding).getStr();
 
 
-    const char  *pCOL = NULL;
+    const char	*pCOL = NULL;
     const char* pComma = ",";
     const ::rtl::OUString* pBegin = types.getConstArray();
     const ::rtl::OUString* pEnd = pBegin + types.getLength();
@@ -913,7 +913,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
 
 }
 //-----------------------------------------------------------------------------
-void ODatabaseMetaDataResultSet::openTablesTypes( ) throw(SQLException, RuntimeException)
+void ODatabaseMetaDataResultSet::openTablesTypes( )	throw(SQLException, RuntimeException)
 {
     m_bFreeHandle = sal_True;
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
@@ -965,8 +965,8 @@ void ODatabaseMetaDataResultSet::openSchemas() throw(SQLException, RuntimeExcept
     checkColumnCount();
 }
 // -------------------------------------------------------------------------
-void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, const ::rtl::OUString& schema,
-                                        const ::rtl::OUString& table,   const ::rtl::OUString& columnNamePattern )
+void ODatabaseMetaDataResultSet::openColumnPrivileges(	const Any& catalog,	const ::rtl::OUString& schema,
+                                        const ::rtl::OUString& table,	const ::rtl::OUString& columnNamePattern )
                                         throw(SQLException, RuntimeException)
 {
     const ::rtl::OUString *pSchemaPat = NULL;
@@ -982,7 +982,7 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding).getStr(),
                 *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
@@ -998,8 +998,8 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     checkColumnCount();
 }
 // -------------------------------------------------------------------------
-void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             const ::rtl::OUString& schemaPattern,
-                                const ::rtl::OUString& tableNamePattern,    const ::rtl::OUString& columnNamePattern )
+void ODatabaseMetaDataResultSet::openColumns(	const Any& catalog,				const ::rtl::OUString& schemaPattern,
+                                const ::rtl::OUString& tableNamePattern,	const ::rtl::OUString& columnNamePattern )
                                 throw(SQLException, RuntimeException)
 {
     const ::rtl::OUString *pSchemaPat = NULL;
@@ -1014,7 +1014,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding).getStr(),
                 *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
@@ -1028,43 +1028,43 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     TInt2IntMap aMap;
-    aMap[SQL_BIT]               = DataType::BIT;
-    aMap[SQL_TINYINT]           = DataType::TINYINT;
-    aMap[SQL_SMALLINT]          = DataType::SMALLINT;
-    aMap[SQL_INTEGER]           = DataType::INTEGER;
-    aMap[SQL_FLOAT]             = DataType::FLOAT;
-    aMap[SQL_REAL]              = DataType::REAL;
-    aMap[SQL_DOUBLE]            = DataType::DOUBLE;
-    aMap[SQL_BIGINT]            = DataType::BIGINT;
+    aMap[SQL_BIT]				= DataType::BIT;
+    aMap[SQL_TINYINT]			= DataType::TINYINT;
+    aMap[SQL_SMALLINT]			= DataType::SMALLINT;
+    aMap[SQL_INTEGER]			= DataType::INTEGER;
+    aMap[SQL_FLOAT]				= DataType::FLOAT;
+    aMap[SQL_REAL]				= DataType::REAL;
+    aMap[SQL_DOUBLE]			= DataType::DOUBLE;
+    aMap[SQL_BIGINT]			= DataType::BIGINT;
 
-    aMap[SQL_CHAR]              = DataType::CHAR;
-    aMap[SQL_WCHAR]             = DataType::CHAR;
-    aMap[SQL_VARCHAR]           = DataType::VARCHAR;
-    aMap[SQL_WVARCHAR]          = DataType::VARCHAR;
-    aMap[SQL_LONGVARCHAR]       = DataType::LONGVARCHAR;
-    aMap[SQL_WLONGVARCHAR]      = DataType::LONGVARCHAR;
+    aMap[SQL_CHAR]				= DataType::CHAR;
+    aMap[SQL_WCHAR]				= DataType::CHAR;
+    aMap[SQL_VARCHAR]			= DataType::VARCHAR;
+    aMap[SQL_WVARCHAR]			= DataType::VARCHAR;
+    aMap[SQL_LONGVARCHAR]		= DataType::LONGVARCHAR;
+    aMap[SQL_WLONGVARCHAR]		= DataType::LONGVARCHAR;
 
-    aMap[SQL_TYPE_DATE]         = DataType::DATE;
-    aMap[SQL_DATE]              = DataType::DATE;
-    aMap[SQL_TYPE_TIME]         = DataType::TIME;
-    aMap[SQL_TIME]              = DataType::TIME;
-    aMap[SQL_TYPE_TIMESTAMP]    = DataType::TIMESTAMP;
-    aMap[SQL_TIMESTAMP]         = DataType::TIMESTAMP;
+    aMap[SQL_TYPE_DATE]			= DataType::DATE;
+    aMap[SQL_DATE]				= DataType::DATE;
+    aMap[SQL_TYPE_TIME]			= DataType::TIME;
+    aMap[SQL_TIME]				= DataType::TIME;
+    aMap[SQL_TYPE_TIMESTAMP]	= DataType::TIMESTAMP;
+    aMap[SQL_TIMESTAMP]			= DataType::TIMESTAMP;
 
-    aMap[SQL_DECIMAL]           = DataType::DECIMAL;
-    aMap[SQL_NUMERIC]           = DataType::NUMERIC;
+    aMap[SQL_DECIMAL]			= DataType::DECIMAL;
+    aMap[SQL_NUMERIC]			= DataType::NUMERIC;
 
-    aMap[SQL_BINARY]            = DataType::BINARY;
-    aMap[SQL_VARBINARY]         = DataType::VARBINARY;
-    aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
+    aMap[SQL_BINARY]			= DataType::BINARY;
+    aMap[SQL_VARBINARY]			= DataType::VARBINARY;
+    aMap[SQL_LONGVARBINARY]		= DataType::LONGVARBINARY;
 
-    aMap[SQL_GUID]              = DataType::VARBINARY;
+    aMap[SQL_GUID]				= DataType::VARBINARY;
 
     m_aValueRange[5] = aMap;
     checkColumnCount();
 }
 // -------------------------------------------------------------------------
-void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     const ::rtl::OUString& schemaPattern,
+void ODatabaseMetaDataResultSet::openProcedureColumns(	const Any& catalog,		const ::rtl::OUString& schemaPattern,
                                 const ::rtl::OUString& procedureNamePattern,const ::rtl::OUString& columnNamePattern )
                                 throw(SQLException, RuntimeException)
 {
@@ -1080,7 +1080,7 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding).getStr(),
                 *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
@@ -1113,7 +1113,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding).getStr();
 
@@ -1127,7 +1127,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any& catalog, const ::rtl::OUString& schema,
-                                    const ::rtl::OUString& table,sal_Int32 scope,   sal_Bool nullable )
+                                    const ::rtl::OUString& table,sal_Int32 scope, 	sal_Bool nullable )
                                     throw(SQLException, RuntimeException)
 {
     const ::rtl::OUString *pSchemaPat = NULL;
@@ -1142,7 +1142,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding).getStr();
 
@@ -1182,10 +1182,10 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
     if ( catalog2.hasValue() )
         aFKQ = ::rtl::OUStringToOString(comphelper::getString(catalog2),m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = schema && schema->getLength() ? ::rtl::OUStringToOString(*schema,m_nTextEncoding).getStr() : NULL,
                 *pPKN = table   ? (aPKN = ::rtl::OUStringToOString(*table,m_nTextEncoding)).getStr(): NULL,
-                *pFKQ = catalog2.hasValue() && aFKQ.getLength() ? aFKQ.getStr() : NULL,
+                *pFKQ = catalog2.hasValue() && aFKQ.getLength() ? aFKQ.getStr()	: NULL,
                 *pFKO = schema2 && schema2->getLength() ? (aFKO = ::rtl::OUStringToOString(*schema2,m_nTextEncoding)).getStr() : NULL,
                 *pFKN = table2  ? (aFKN = ::rtl::OUStringToOString(*table2,m_nTextEncoding)).getStr() : NULL;
 
@@ -1203,20 +1203,20 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openImportedKeys(const Any& catalog, const ::rtl::OUString& schema,
-                                  const ::rtl::OUString& table) throw(SQLException, RuntimeException)
+                                  const ::rtl::OUString& table)	throw(SQLException, RuntimeException)
 {
 
     openForeignKeys(Any(),NULL,NULL,catalog,!schema.compareToAscii("%") ? &schema : NULL,&table);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openExportedKeys(const Any& catalog, const ::rtl::OUString& schema,
-                                  const ::rtl::OUString& table) throw(SQLException, RuntimeException)
+                                  const ::rtl::OUString& table)	throw(SQLException, RuntimeException)
 {
     openForeignKeys(catalog,!schema.compareToAscii("%") ? &schema : NULL,&table,Any(),NULL,NULL);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl::OUString& schema,
-                                  const ::rtl::OUString& table) throw(SQLException, RuntimeException)
+                                  const ::rtl::OUString& table)	throw(SQLException, RuntimeException)
 {
     const ::rtl::OUString *pSchemaPat = NULL;
 
@@ -1231,7 +1231,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding)).getStr();
 
@@ -1260,7 +1260,7 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const :
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding)).getStr();
 
@@ -1290,7 +1290,7 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
-    const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
+    const char	*pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()	: NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding)).getStr();
 

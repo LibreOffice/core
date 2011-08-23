@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,10 +84,10 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId"))
+:	SvXMLImportContext(rImport, nPrfx, rLocalName)
+,	sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId"))
 ,   mbListContextPushed(false)
-,   rHelper(rHlp)
+,	rHelper(rHlp)
 {
 }
 
@@ -203,8 +203,8 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
         case XML_TOK_FTN_NOTE_CITATION:
         {
             // little hack: we only care for one attribute of the citation
-            //              element. We handle that here, and then return a
-            //              default context.
+            //			  	element. We handle that here, and then return a
+            // 				default context.
             sal_Int16 nLength = xAttrList->getLength();
             for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
             {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,42 +45,42 @@ class SfxPickList : public SfxListener
         PickListEntry( const String& _aName, const String& _aFilter, const String& _aTitle ) :
             aName( _aName ), aFilter( _aFilter ), aTitle( _aTitle ) {}
 
-        String      aName;
-        String      aFilter;
-        String      aTitle;
-        String      aOptions;
+        String		aName;
+        String		aFilter;
+        String		aTitle;
+        String		aOptions;
     };
-
-    static SfxPickList*             pUniqueInstance;
-    static osl::Mutex*              pMutex;
-
-    std::vector< PickListEntry* >   m_aPicklistVector;
-    sal_uInt32                      m_nAllowedMenuSize;
+    
+    static SfxPickList*				pUniqueInstance;
+    static osl::Mutex*				pMutex;
+    
+    std::vector< PickListEntry* >	m_aPicklistVector;
+    sal_uInt32						m_nAllowedMenuSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > m_xStringLength;
 
                             SfxPickList( sal_uInt32 nMenuSize );
                             ~SfxPickList();
 
-    static osl::Mutex*      GetOrCreateMutex();
-
-    void                    CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURL, sal_uInt32 nNo );
-    PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );
-    void                    CreatePickListEntries();
-    void                    RemovePickListEntries();
+    static osl::Mutex*		GetOrCreateMutex();
+    
+    void					CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURL, sal_uInt32 nNo );
+    PickListEntry*			GetPickListEntry( sal_uInt32 nIndex );
+    void					CreatePickListEntries();
+    void					RemovePickListEntries();
 
     public:
-        static SfxPickList* GetOrCreate( const sal_uInt32 nMenuSize );
-        static SfxPickList* Get();
-        static void         Delete();
+        static SfxPickList*	GetOrCreate( const sal_uInt32 nMenuSize );
+        static SfxPickList*	Get();
+        static void			Delete();
 
-        sal_uInt32          GetAllowedMenuSize() { return m_nAllowedMenuSize; }
-        sal_uInt32          GetNumOfEntries() const { return m_aPicklistVector.size(); }
-        void                CreateMenuEntries( Menu* pMenu );
-        void                ExecuteMenuEntry( USHORT nId );
-        void                ExecuteEntry( sal_uInt32 nIndex );
-        String              GetMenuEntryTitle( sal_uInt32 nIndex );
+        sal_uInt32			GetAllowedMenuSize() { return m_nAllowedMenuSize; }
+        sal_uInt32			GetNumOfEntries() const { return m_aPicklistVector.size(); }
+        void				CreateMenuEntries( Menu* pMenu );
+        void				ExecuteMenuEntry( USHORT nId );
+        void				ExecuteEntry( sal_uInt32 nIndex );
+        String				GetMenuEntryTitle( sal_uInt32 nIndex );
 
-        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
 #endif // _SFX_PICKLIST_HXX_

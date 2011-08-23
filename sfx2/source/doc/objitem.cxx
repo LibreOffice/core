@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
     {
         if ( xModel.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel( 
                 xModel, ::com::sun::star::uno::UNO_QUERY );
             if ( xTunnel.is() )
             {
@@ -104,7 +104,7 @@ sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
                 }
             }
         }
-
+        
         pObjSh = 0;
         return TRUE;
     }
@@ -115,7 +115,7 @@ sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
 //=========================================================================
 
 SfxObjectItem::SfxObjectItem( USHORT nWhichId, SfxShell *pSh )
-:   SfxPoolItem( nWhichId ),
+:	SfxPoolItem( nWhichId ),
     _pSh( pSh )
 {}
 

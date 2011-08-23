@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,29 +69,29 @@ namespace connectivity
             friend class connectivity::OSubComponent<OCatalog, OCatalog_BASE>;
         protected:
 
-            ::osl::Mutex        m_aMutex;
+            ::osl::Mutex		m_aMutex;
 
             // this members are deleted when the dtor is called
             // they are hold weak
-            OCollection*        m_pTables;
-            OCollection*        m_pViews;
-            OCollection*        m_pGroups;
-            OCollection*        m_pUsers;
+            OCollection*		m_pTables;
+            OCollection*		m_pViews;
+            OCollection*		m_pGroups;
+            OCollection*		m_pUsers;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
             /** builds the name which should be used to access the object later on in the collection.
                 Will only be called in fillNames.
-                @param  _xRow
+                @param	_xRow
                     The current row from the resultset given to fillNames.
             */
-            virtual ::rtl::OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
+            virtual ::rtl::OUString buildName(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
 
             /** fills a vector with the nescessary names which can be used in combination with the collections.
                 For each row buildName will be called.
-                @param  _xResult
+                @param	_xResult
                     The resultset which should be used to fill the names. Will be disposed after return and set to NULL.
-                @param  _rNames
+                @param	_rNames
                     The vector who will be filled.
             */
             void fillNames(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResult,TStringVector& _rNames);
@@ -104,9 +104,9 @@ namespace connectivity
 
             // refreshTables is called when the method getTables had been called
             // the member m_pTables has to be created
-            virtual void refreshTables()    = 0;
+            virtual void refreshTables()	= 0;
             // refreshViews is called when the method getViews had been called
-            virtual void refreshViews()     = 0;
+            virtual void refreshViews()		= 0;
 
             // the other refresh methods come from base classes IRefreshableGroups and IRefreshableUsers
 
@@ -117,7 +117,7 @@ namespace connectivity
             void SAL_CALL release() throw();
             // XTablesSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
-            // XViewsSupplier
+            // XViewsSupplier									  
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getViews(  ) throw(::com::sun::star::uno::RuntimeException);
             // XUsersSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getUsers(  ) throw(::com::sun::star::uno::RuntimeException);

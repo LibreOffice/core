@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/generic.hxx>
@@ -40,112 +40,112 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XStringMapping.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase2.hxx>
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          -
-    @descr          -
+    @descr			-
 
-    @implements     XInterface
+    @implements		XInterface
                     XTypeProvider
                     XServiceInfo
                     XStringMapping
-    @base           OWeakObject
+    @base			OWeakObject
 
-    @devstatus      deprecated
+    @devstatus		deprecated
 *//*-*************************************************************************************************************/
 
-class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringMapping, css::lang::XServiceInfo>
+class MediaTypeDetectionHelper	:	public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringMapping, css::lang::XServiceInfo>
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      standard ctor
-            @descr      These initialize a new instance of this class with all needed informations for work.
+            @short		standard ctor
+            @descr		These initialize a new instance of this class with all needed informations for work.
 
-            @seealso    -
+            @seealso	-
 
-            @param      "xFactory", reference to factory which has created ouer owner(!). We can use these to create new uno-services.
-            @return     -
+            @param		"xFactory", reference to factory which has created ouer owner(!). We can use these to create new uno-services.
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
          MediaTypeDetectionHelper( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
         /*-****************************************************************************************************//**
-            @short      standard destructor
-            @descr      This method destruct an instance of this class and clear some member.
+            @short		standard destructor
+            @descr		This method destruct an instance of this class and clear some member.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
-        virtual ~MediaTypeDetectionHelper();
+        virtual	~MediaTypeDetectionHelper();
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider, XServiceInfo
+        //	XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
 
         DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------
-        //  XStringMapping
+        //	XStringMapping
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short		-
+            @descr		-
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL mapStrings( css::uno::Sequence< ::rtl::OUString >& seqParameter ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  should be private every time
+    //	variables
+    //	should be private every time
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory; /// reference to global servicemanager
+        css::uno::Reference< css::lang::XMultiServiceFactory >		m_xFactory;	/// reference to global servicemanager
 
 };
 
-}       // namespace framework
+}		// namespace framework
 
-#endif  // #ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
+#endif	// #ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_

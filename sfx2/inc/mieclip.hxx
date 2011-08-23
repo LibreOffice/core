@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class SFX2_DLLPUBLIC MSE40HTMLClipFormatObj
     String sBaseURL;
 
 public:
-    MSE40HTMLClipFormatObj() : pStrm(0)         {}
+    MSE40HTMLClipFormatObj() : pStrm(0) 		{}
     ~MSE40HTMLClipFormatObj();
 
 //JP 31.01.2001: old interfaces
@@ -53,9 +53,9 @@ public:
 //JP 31.01.2001: the new one
     SvStream* IsValid( SvStream& );
 
-    const SvStream* GetStream() const       { return pStrm; }
-          SvStream* GetStream()             { return pStrm; }
-    const String& GetBaseURL() const        { return sBaseURL; }
+    const SvStream* GetStream() const 		{ return pStrm; }
+          SvStream* GetStream()  			{ return pStrm; }
+    const String& GetBaseURL() const		{ return sBaseURL; }
 };
 
 

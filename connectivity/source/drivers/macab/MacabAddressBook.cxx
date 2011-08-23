@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ MacabAddressBook::MacabAddressBook( )
     m_xMacabRecords = NULL;
     m_bRetrievedGroups = sal_False;
 }
-
+        
 // -----------------------------------------------------------------------------
 MacabAddressBook::~MacabAddressBook()
 {
@@ -71,7 +71,7 @@ MacabAddressBook::~MacabAddressBook()
 
     m_bRetrievedGroups = sal_False;
 }
-
+        
 // -----------------------------------------------------------------------------
 /* Get the address book's default table name. This is the table name that
  * refers to the table containing _all_ records in the address book.

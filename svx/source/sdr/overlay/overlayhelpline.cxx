@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace sdr
                     SDRHELPLINE_POINT == getKind() ? drawinglayer::primitive2d::HELPLINESTYLE_POINT :
                         SDRHELPLINE_VERTICAL == getKind() ? drawinglayer::primitive2d::HELPLINESTYLE_VERTICAL :
                             drawinglayer::primitive2d::HELPLINESTYLE_HORIZONTAL);
-
+                
                 const drawinglayer::primitive2d::Primitive2DReference aReference(
                     new drawinglayer::primitive2d::OverlayHelplineStripedPrimitive(
                         getBasePosition(),
@@ -78,11 +78,11 @@ namespace sdr
         OverlayHelplineStriped::OverlayHelplineStriped(
             const basegfx::B2DPoint& rBasePos,
             SdrHelpLineKind eNewKind)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
+        :	OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
             meKind(eNewKind)
         {
         }
-
+        
         OverlayHelplineStriped::~OverlayHelplineStriped()
         {
         }

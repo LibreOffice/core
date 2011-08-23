@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 
 TYPEINIT1( SvxEditSourceHint, TextHint );
 
-SvxEditSourceHint::SvxEditSourceHint( ULONG _nId ) :
+SvxEditSourceHint::SvxEditSourceHint( ULONG _nId ) : 
     TextHint( _nId ),
     mnStart( 0 ),
     mnEnd( 0 )
 {
 }
 
-SvxEditSourceHint::SvxEditSourceHint( ULONG _nId, ULONG nValue, ULONG nStart, ULONG nEnd ) :
+SvxEditSourceHint::SvxEditSourceHint( ULONG _nId, ULONG nValue, ULONG nStart, ULONG nEnd ) : 
     TextHint( _nId, nValue ),
     mnStart( nStart),
     mnEnd( nEnd )
@@ -78,7 +78,7 @@ void SvxEditSourceHint::SetStartValue( ULONG n )
 
 void SvxEditSourceHint::SetEndValue( ULONG n )
 {
-    mnEnd = n;
+    mnEnd = n; 
 }
 
 //------------------------------------------------------------------------
@@ -95,7 +95,7 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
             case EE_NOTIFY_PARAGRAPHINSERTED:
                 return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_PARAINSERTED, aNotify->nParagraph ) );
 
-            case EE_NOTIFY_PARAGRAPHREMOVED:
+            case EE_NOTIFY_PARAGRAPHREMOVED: 
                 return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_PARAREMOVED, aNotify->nParagraph ) );
 
             case EE_NOTIFY_PARAGRAPHSMOVED:
@@ -134,16 +134,16 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
 sal_Bool SvxEditSourceHelper::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, const EditEngine& rEE, USHORT nPara, USHORT nIndex )
 {
     EECharAttribArray aCharAttribs;
-
+    
     rEE.GetCharAttribs( nPara, aCharAttribs );
-
+    
     // find closest index in front of nIndex
     USHORT nAttr, nCurrIndex;
     sal_Int32 nClosestStartIndex;
     for( nAttr=0, nClosestStartIndex=0; nAttr<aCharAttribs.Count(); ++nAttr )
     {
         nCurrIndex = aCharAttribs[nAttr].nStart;
-
+        
         if( nCurrIndex > nIndex )
             break; // aCharAttribs array is sorted in increasing order for nStart values
 

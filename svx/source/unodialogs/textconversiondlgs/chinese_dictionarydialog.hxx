@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ struct DictionaryEntry
     DictionaryEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
                     , sal_Int16 nConversionPropertyType //linguistic2::ConversionPropertyType
                     , sal_Bool bNewEntry = sal_False );
-
+    
     virtual ~DictionaryEntry();
 
     bool operator==( const DictionaryEntry& rE ) const;
@@ -102,7 +102,7 @@ public:
 
     void sortByColumn( USHORT nSortColumnIndex, bool bSortAtoZ );
     USHORT getSortColumn() const;
-
+    
     virtual void Resize();
 
 private:
@@ -135,7 +135,7 @@ public:
     //this method should be called once before calling execute
     void setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
 
-    virtual short   Execute();
+    virtual short	Execute();
 
 private:
     DECL_LINK( DirectionHdl, void* );
@@ -145,7 +145,7 @@ private:
     DECL_LINK( ModifyHdl, void* );
     DECL_LINK( DeleteHdl, void* );
     DECL_LINK( HeaderBarClick, void* );
-
+      
     void updateAfterDirectionChange();
     void updateButtons();
 
@@ -161,33 +161,33 @@ private:
 private:
     sal_Int32   m_nTextConversionOptions; //i18n::TextConversionOption
 
-    RadioButton m_aRB_To_Simplified;
-    RadioButton m_aRB_To_Traditional;
+    RadioButton	m_aRB_To_Simplified;
+    RadioButton	m_aRB_To_Traditional;
 
     CheckBox    m_aCB_Reverse;
 
-    FixedText   m_aFT_Term;
-    Edit        m_aED_Term;
+    FixedText	m_aFT_Term;
+    Edit	    m_aED_Term;
 
-    FixedText   m_aFT_Mapping;
-    Edit        m_aED_Mapping;
+    FixedText	m_aFT_Mapping;
+    Edit	    m_aED_Mapping;
 
-    FixedText   m_aFT_Property;
-    ListBox     m_aLB_Property;
-
+    FixedText	m_aFT_Property;
+    ListBox	    m_aLB_Property;
+    
     HeaderBar*      m_pHeaderBar;
     DictionaryList  m_aCT_DictionaryToSimplified;
     DictionaryList  m_aCT_DictionaryToTraditional;
-
-    PushButton  m_aPB_Add;
-    PushButton  m_aPB_Modify;
-    PushButton  m_aPB_Delete;
+    
+    PushButton	m_aPB_Add;
+    PushButton	m_aPB_Modify;
+    PushButton	m_aPB_Delete;
 
     FixedLine   m_aFL_Bottomline;
 
-    OKButton        m_aBP_OK;
+    OKButton	    m_aBP_OK;
     CancelButton    m_aBP_Cancel;
-    HelpButton      m_aBP_Help;
+    HelpButton		m_aBP_Help;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >              m_xContext;

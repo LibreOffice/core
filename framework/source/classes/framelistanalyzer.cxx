@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "classes/framelistanalyzer.hxx"
 
 //_______________________________________________
-//  my own includes
+//	my own includes
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <targets.h>
@@ -39,29 +39,29 @@
 #include <services.h>
 
 //_______________________________________________
-//  interface includes
+//	interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 //_______________________________________________
-//  includes of other projects
+//	includes of other projects
 #include <unotools/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 //_______________________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 
 //_______________________________________________
-//  non exported const
+//	non exported const
 
 //_______________________________________________
-//  non exported definitions
+//	non exported definitions
 
 //_______________________________________________
-//  declarations
+//	declarations
 
 //_______________________________________________
 

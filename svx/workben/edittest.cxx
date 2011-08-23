@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,59 +96,59 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 
-#define TB_LEFT          1
-#define TB_RIGHT         2
-#define TB_CENTER        3
-#define TB_UNDO          4
-#define TB_REDO          5
-#define TB_FONT1         6
-#define TB_FONT2         7
-#define TB_ITALIC        8
-#define TB_BOLD          9
-#define TB_UNDERLINE    10
-#define TB_BLACK        11
-#define TB_GREEN        12
-#define TB_OPEN         13
-#define TB_SAVE         14
-#define TB_SBL          15
-#define TB_SBSA         16
-#define TB_LR           17
-#define TB_DRAW         18
-#define TB_DEFTAB       19
-#define TB_OPEN2        20
-#define TB_SAVE2        21
-#define TB_STDSEL       33
-#define TB_MOVE         34
-#define TB_PARATTR1     35
-#define TB_ROTATE       38
-#define TB_RED          43
-#define TB_FLAT         46
-#define TB_BINOBJ1      47
-#define TB_BINOBJ3      49
-#define TB_BINOBJ4      50
-#define TB_BINOBJ1b     51
-#define TB_BINOBJ2b     52
-#define TB_ATTRIBS      54
-#define TB_IDLE         55
-#define TB_BLOCK        56
-#define TB_CLONEBIN     57
-#define TB_INSERT       58
-#define TB_PKERN        59
-#define TB_KERN         60
-#define TB_SUPER        61
-#define TB_SUB          62
-#define TB_PRINT        63
-#define TB_FONT         64
-#define TB_COLORS       65
-#define TB_WLM          66
-#define TB_OUTL         67
-#define TB_INSFLD       68
-#define TB_UPDFLD       69
+#define TB_LEFT			 1
+#define TB_RIGHT		 2
+#define TB_CENTER		 3
+#define TB_UNDO			 4
+#define TB_REDO			 5
+#define TB_FONT1		 6
+#define TB_FONT2		 7
+#define TB_ITALIC		 8
+#define TB_BOLD			 9
+#define TB_UNDERLINE	10
+#define TB_BLACK		11
+#define TB_GREEN		12
+#define TB_OPEN			13
+#define TB_SAVE			14
+#define TB_SBL			15
+#define TB_SBSA			16
+#define TB_LR			17
+#define TB_DRAW			18
+#define TB_DEFTAB		19
+#define TB_OPEN2		20
+#define TB_SAVE2		21
+#define TB_STDSEL		33
+#define TB_MOVE			34
+#define TB_PARATTR1		35
+#define TB_ROTATE		38
+#define TB_RED			43
+#define TB_FLAT			46
+#define TB_BINOBJ1		47
+#define TB_BINOBJ3		49
+#define TB_BINOBJ4		50
+#define TB_BINOBJ1b		51
+#define TB_BINOBJ2b		52
+#define TB_ATTRIBS		54
+#define TB_IDLE			55
+#define TB_BLOCK		56
+#define TB_CLONEBIN		57
+#define TB_INSERT		58
+#define TB_PKERN		59
+#define TB_KERN			60
+#define TB_SUPER		61
+#define TB_SUB			62
+#define TB_PRINT		63
+#define TB_FONT			64
+#define TB_COLORS		65
+#define TB_WLM			66
+#define TB_OUTL			67
+#define TB_INSFLD		68
+#define TB_UPDFLD		69
 #define TB_ONLINESPELL  70
-#define TB_REDLINES     71
-#define TB_AUTOCORRECT  72
-#define TB_POLY         73
-#define TB_HYPH         74
+#define TB_REDLINES		71
+#define TB_AUTOCORRECT	72
+#define TB_POLY			73
+#define TB_HYPH			74
 
 // VARS...
 short nRotation = 0;
@@ -196,9 +196,9 @@ class MyEditEngine : public EditEngine
 {
 public:
     MyEditEngine( SfxItemPool* pPool ) : EditEngine( pPool ) { ; }
-    virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
-    virtual void    FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
-    virtual void    FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
+    virtual String	CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void	FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
+    virtual void	FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
 };
 
 XubString __EXPORT MyEditEngine::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
@@ -233,7 +233,7 @@ XubString __EXPORT MyEditEngine::CalcFieldValue( const SvxFieldItem& rField, USH
 
 void __EXPORT MyEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
-    EditEngine::FieldClicked( rField, nPara, nPos );    // Falls URL
+    EditEngine::FieldClicked( rField, nPara, nPos );	// Falls URL
     const SvxFieldData* pField = rField.GetField();
     if ( !pField )
         return;
@@ -260,22 +260,22 @@ void __EXPORT MyEditEngine::FieldSelected( const SvxFieldItem& rField, USHORT nP
 class MyView : public WorkWindow
 {
 private:
-    EditEngine*     pEditEngine;
-    EditView*       pEditView;
+    EditEngine*		pEditEngine;
+    EditView*		pEditView;
 
 public:
                     MyView( Window* pParent, EditEngine* pEditEngine );
                     ~MyView();
 
-    virtual void    Paint( const Rectangle& );
-    virtual void    Resize();
-    virtual void    KeyInput( const KeyEvent& rKeyEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    BOOL            Drop( const DropEvent& rEvt );
-    BOOL            QueryDrop( DropEvent& rEvt );
+    virtual void	Paint( const Rectangle& );
+    virtual void	Resize();
+    virtual void	KeyInput( const KeyEvent& rKeyEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
+    BOOL    		Drop( const DropEvent& rEvt );
+    BOOL    		QueryDrop( DropEvent& rEvt );
 };
 
 MyView::MyView( Window* pParent, EditEngine* pEE ) : WorkWindow( pParent, WinBits( WB_STDWORK ) )
@@ -284,7 +284,7 @@ MyView::MyView( Window* pParent, EditEngine* pEE ) : WorkWindow( pParent, WinBit
     pEditView = new EditView( pEditEngine, this );
     pEditEngine->InsertView( pEditView );
     SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Another View..." ) ) );
-//  EnableDrop();
+//	EnableDrop();
     SetBackgroundBrush( Brush( Color( COL_LIGHTBLUE ) ) );
     Show();
 }
@@ -303,8 +303,8 @@ void __EXPORT MyView::Paint( const Rectangle& rRec )
 void __EXPORT MyView::Resize()
 {
     Size aPaperSz( GetOutputSize() );
-//  aPaperSz.Width() /= 2;
-//  aPaperSz.Height() /= 2;
+//	aPaperSz.Width() /= 2;
+//	aPaperSz.Height() /= 2;
     pEditView->SetOutputArea( Rectangle( Point( 0,0 ), aPaperSz ) );
     pEditView->SetVisArea( Rectangle( Point( 0,0 ), aPaperSz ) );
     Invalidate();
@@ -361,72 +361,72 @@ DECLARE_LIST( ViewList, MyView* );
 class EditViewWindow : public Window
 {
 private:
-    MyEditEngine*           pEditEngine;
-    EditView*               pEditView;
-    Pointer                 aStdPtr;
-    Pointer                 aURLPtr;
-    WorkWindow*             pTmpWindow;
-    ViewList                aViewList;
+    MyEditEngine*			pEditEngine;
+    EditView*				pEditView;
+    Pointer 				aStdPtr;
+    Pointer 				aURLPtr;
+    WorkWindow* 			pTmpWindow;
+    ViewList 				aViewList;
 
-    XubString               aTestStr;
+    XubString 				aTestStr;
 
 
 public:
                     EditViewWindow( Window* pParent );
                     ~EditViewWindow();
 
-    virtual void    Paint( const Rectangle& );
-    virtual void    Resize();
-    virtual void    KeyInput( const KeyEvent& rKeyEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    void            MarkOutputArea();
-    BOOL            Drop( const DropEvent& rEvt );
-    BOOL            QueryDrop( DropEvent& rEvt );
+    virtual void	Paint( const Rectangle& );
+    virtual void	Resize();
+    virtual void	KeyInput( const KeyEvent& rKeyEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
+    void			MarkOutputArea();
+    BOOL    		Drop( const DropEvent& rEvt );
+    BOOL    		QueryDrop( DropEvent& rEvt );
 
-    EditView*       GetEditView()       { return pEditView; }
+    EditView*		GetEditView() 		{ return pEditView; }
 };
 
 class EditMainWindow : public WorkWindow
 {
 private:
-    ToolBox                 aToolBox;
-    ScrollBar               aHScrollBar;
-    ScrollBar               aVScrollBar;
-    EditViewWindow          aViewWin;
-    Printer*                pPrinter;
+    ToolBox 				aToolBox;
+    ScrollBar				aHScrollBar;
+    ScrollBar				aVScrollBar;
+    EditViewWindow			aViewWin;
+    Printer*				pPrinter;
 
-    WorkWindow*             pTmpWindow;
+    WorkWindow* 			pTmpWindow;
 
-    EditTextObject*         pRTFObj;
-    EditTextObject*         pBinObj;
+    EditTextObject*			pRTFObj;
+    EditTextObject*			pBinObj;
 
-    FileDialog*             pFileDialogBox;
-    FileDialog*             pFileDialogBox2;
+    FileDialog*				pFileDialogBox;
+    FileDialog*				pFileDialogBox2;
 
 
 protected:
-    void            SetScrollBars();
-    void            SetScrollBarRanges();
-    void            CreatePolygon();
+    void			SetScrollBars();
+    void			SetScrollBarRanges();
+    void			CreatePolygon();
 
-    virtual void    GetFocus();
+    virtual void	GetFocus();
 
 public:
                     EditMainWindow();
                     ~EditMainWindow();
 
-    virtual void    Resize();
+    virtual void	Resize();
 
     DECL_LINK( TBSelect, ToolBox * );
-    void            UpdateToolBox();
+    void			UpdateToolBox();
 
     DECL_LINK( HScrollHdl, ScrollBar * );
     DECL_LINK( VScrollHdl, ScrollBar * );
     DECL_LINK( ShowStatus, EditStatus * );
-    void            SetTitle();
+    void			SetTitle();
 };
 
 
@@ -604,7 +604,7 @@ void EditMainWindow::UpdateToolBox()
     aToolBox.EnableItem( TB_MOVE, pEditEngine->GetParagraphCount() > 3 );
     aToolBox.CheckItem( TB_ONLINESPELL, nControl & EE_CNTRL_ONLINESPELLING ? TRUE : FALSE );
     aToolBox.CheckItem( TB_AUTOCORRECT, nControl & EE_CNTRL_AUTOCORRECT ? TRUE : FALSE );
-//  aToolBox.CheckItem( TB_HYPH, nControl & EE_CNTRL_HYPHENATE ? TRUE : FALSE );
+//	aToolBox.CheckItem( TB_HYPH, nControl & EE_CNTRL_HYPHENATE ? TRUE : FALSE );
     aToolBox.CheckItem( TB_REDLINES, nControl & EE_CNTRL_NOREDLINES ? FALSE : TRUE );
     aToolBox.CheckItem( TB_STDSEL, pEditView->GetSelectionMode() == EE_SELMODE_STD );
     aToolBox.CheckItem( TB_FLAT, pEditEngine->IsFlatMode() );
@@ -616,11 +616,11 @@ void EditMainWindow::UpdateToolBox()
 
     for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_ITEMS_END; nWhich++)
     {
-//      if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
-//          ;
-//      else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_DONTCARE )
-//          ;
-//      else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
+//		if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
+//			;
+//		else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_DONTCARE )
+//			;
+//		else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
         {
             const SfxPoolItem& rItem = aCurSet.Get( nWhich );
             switch ( nWhich )
@@ -723,20 +723,20 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
     SfxPoolItem* pNewItem = 0;
     switch ( nId )
     {
-        case TB_LEFT:   pNewItem = new SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST );
+        case TB_LEFT:	pNewItem = new SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST );
                         break;
-        case TB_RIGHT:  pNewItem = new SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST );
+        case TB_RIGHT:	pNewItem = new SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST );
                         break;
-        case TB_CENTER: pNewItem = new SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST );
+        case TB_CENTER:	pNewItem = new SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST );
                         break;
-        case TB_BLOCK:  pNewItem = new SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST );
+        case TB_BLOCK:	pNewItem = new SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST );
                         break;
-        case TB_HYPH:   pNewItem = new SfxBoolItem( EE_PARA_HYPHENATE, !bChecked );
+        case TB_HYPH: 	pNewItem = new SfxBoolItem( EE_PARA_HYPHENATE, !bChecked );
                         break;
-        case TB_UNDO:   pEditView->Undo();
+        case TB_UNDO:	pEditView->Undo();
                         pEditView->ShowCursor();
                         break;
-        case TB_REDO:   pEditView->Redo();
+        case TB_REDO:	pEditView->Redo();
                         pEditView->ShowCursor();
                         break;
         case TB_ONLINESPELL: {
@@ -766,14 +766,14 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                             pEditView->GetEditEngine()->SetControlWord( nControl );
                             }
                             break;
-        case TB_STDSEL: if ( bChecked )
+        case TB_STDSEL:	if ( bChecked )
                             pEditView->SetSelectionMode( EE_SELMODE_TXTONLY );
                         else
                             pEditView->SetSelectionMode( EE_SELMODE_STD );
                         break;
-        case TB_FLAT:   pEditEngine->SetFlatMode( !pEditEngine->IsFlatMode() );
+        case TB_FLAT:	pEditEngine->SetFlatMode( !pEditEngine->IsFlatMode() );
                         break;
-        case TB_COLORS: {
+        case TB_COLORS:	{
                             ULONG nControl = pEditView->GetEditEngine()->GetControlWord();
                             if ( bChecked )
                                 nControl = nControl | EE_CNTRL_NOCOLORS;
@@ -781,10 +781,10 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                                 nControl = nControl & ~EE_CNTRL_NOCOLORS;
                             pEditView->GetEditEngine()->SetControlWord( nControl );
                         }
-//                      aViewWin.Invalidate();
+//						aViewWin.Invalidate();
                         pEditView->GetEditEngine()->Draw( pEditView->GetWindow(), pEditView->GetOutputArea(), pEditView->GetVisArea().TopLeft() );
                         break;
-        case TB_OUTL:   {
+        case TB_OUTL:	{
                             ULONG nControl = pEditView->GetEditEngine()->GetControlWord();
                             if ( !bChecked )
                                 nControl = nControl | EE_CNTRL_OUTLINER;
@@ -793,16 +793,16 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                             pEditView->GetEditEngine()->SetControlWord( nControl );
                         }
                         break;
-        case TB_POLY:   {
+        case TB_POLY:	{
                             if ( !bChecked )
                                 CreatePolygon();
                             else
                                 pEditView->GetEditEngine()->ClearPolygon();
                         }
                         break;
-        case TB_IDLE:   pEditEngine->EnableIdleFormatter( !pEditEngine->IsIdleFormatterEnabled() );
+        case TB_IDLE:	pEditEngine->EnableIdleFormatter( !pEditEngine->IsIdleFormatterEnabled() );
                         break;
-        case TB_INSFLD: {
+        case TB_INSFLD:	{
                         static BYTE nFld = 0;
                         if ( nFld > 2 )
                             nFld = 0;
@@ -819,13 +819,13 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                         nFld++;
         }
                         break;
-        case TB_UPDFLD: pEditEngine->UpdateFields();
+        case TB_UPDFLD:	pEditEngine->UpdateFields();
                         break;
-        case TB_INSERT: pEditView->SetInsertMode( !pEditView->IsInsertMode() );
+        case TB_INSERT:	pEditView->SetInsertMode( !pEditView->IsInsertMode() );
                         break;
-        case TB_FONT1:  pNewItem = new SvxFontItem( FAMILY_ROMAN, String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_MS_1252, EE_CHAR_FONTINFO );
+        case TB_FONT1:	pNewItem = new SvxFontItem( FAMILY_ROMAN, String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_MS_1252, EE_CHAR_FONTINFO );
                         break;
-        case TB_FONT2:  pNewItem = new SvxFontItem( FAMILY_SWISS, String( RTL_CONSTASCII_USTRINGPARAM( "Helv" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_MS_1252, EE_CHAR_FONTINFO );
+        case TB_FONT2:	pNewItem = new SvxFontItem( FAMILY_SWISS, String( RTL_CONSTASCII_USTRINGPARAM( "Helv" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_MS_1252, EE_CHAR_FONTINFO );
                         break;
 /*
         case TB_FONT:
@@ -857,49 +857,49 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
         }
         break;
 */
-        case TB_BOLD:   if ( bChecked )
+        case TB_BOLD:	if ( bChecked )
                             pNewItem = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT);
                         else
                             pNewItem = new SvxWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT);
                         break;
-        case TB_ITALIC: if ( bChecked )
+        case TB_ITALIC:	if ( bChecked )
                             pNewItem = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC );
                         else
                             pNewItem = new SvxPostureItem( ITALIC_NORMAL, EE_CHAR_ITALIC );
                         break;
-        case TB_UNDERLINE:  if ( bChecked )
+        case TB_UNDERLINE:	if ( bChecked )
                                 pNewItem = new SvxUnderlineItem( UNDERLINE_NONE, EE_CHAR_UNDERLINE );
                             else
                                 pNewItem = new SvxUnderlineItem( UNDERLINE_SINGLE, EE_CHAR_UNDERLINE );
                         break;
-        case TB_WLM:    pNewItem = new SvxWordLineModeItem( !bChecked, EE_CHAR_WLM );
+        case TB_WLM:	pNewItem = new SvxWordLineModeItem( !bChecked, EE_CHAR_WLM );
                         break;
-        case TB_PKERN:  pNewItem = new SvxAutoKernItem( !bChecked, EE_CHAR_PAIRKERNING );
+        case TB_PKERN:	pNewItem = new SvxAutoKernItem( !bChecked, EE_CHAR_PAIRKERNING );
                         break;
-        case TB_KERN:   if ( bChecked )
+        case TB_KERN:	if ( bChecked )
                                 pNewItem = new SvxKerningItem( 0, EE_CHAR_KERNING );
                             else
                                 pNewItem = new SvxKerningItem( 100, EE_CHAR_KERNING);
                         break;
-        case TB_SUPER:  if ( bChecked )
+        case TB_SUPER:	if ( bChecked )
                                 pNewItem = new SvxEscapementItem( SVX_ESCAPEMENT_OFF, EE_CHAR_ESCAPEMENT);
                             else
-//                              pNewItem = new SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT);
+//								pNewItem = new SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT);
                                 pNewItem = new SvxEscapementItem( 50, 100, EE_CHAR_ESCAPEMENT );
                         break;
-        case TB_SUB:    if ( bChecked )
+        case TB_SUB:	if ( bChecked )
                                 pNewItem = new SvxEscapementItem( SVX_ESCAPEMENT_OFF, EE_CHAR_ESCAPEMENT);
                             else
-//                              pNewItem = new SvxEscapementItem( SVX_ESCAPEMENT_SUBSCRIPT, EE_CHAR_ESCAPEMENT);
+//								pNewItem = new SvxEscapementItem( SVX_ESCAPEMENT_SUBSCRIPT, EE_CHAR_ESCAPEMENT);
                                 pNewItem = new SvxEscapementItem( -50, 100, EE_CHAR_ESCAPEMENT );
                         break;
-        case TB_GREEN:  pNewItem = new SvxColorItem( Color(COL_GREEN), EE_CHAR_COLOR);
+        case TB_GREEN:	pNewItem = new SvxColorItem( Color(COL_GREEN), EE_CHAR_COLOR);
                         break;
-        case TB_RED:    pNewItem = new SvxColorItem( Color(COL_RED), EE_CHAR_COLOR);
+        case TB_RED:	pNewItem = new SvxColorItem( Color(COL_RED), EE_CHAR_COLOR);
                         break;
-        case TB_BLACK:  pNewItem = new SvxColorItem( Color(COL_BLACK), EE_CHAR_COLOR);
+        case TB_BLACK:	pNewItem = new SvxColorItem( Color(COL_BLACK), EE_CHAR_COLOR);
                         break;
-        case TB_SBL:    pNewItem = new SvxLineSpacingItem( 0, EE_PARA_SBL );
+        case TB_SBL:	pNewItem = new SvxLineSpacingItem( 0, EE_PARA_SBL );
                         if ( bChecked )
                         {
                             ((SvxLineSpacingItem*)pNewItem)->SetInterLineSpace( 0 );
@@ -909,14 +909,14 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                             ((SvxLineSpacingItem*)pNewItem)->SetPropLineSpace( 150 );
                         }
                         break;
-        case TB_SBSA:   pNewItem = new SvxULSpaceItem( EE_PARA_ULSPACE );
+        case TB_SBSA:	pNewItem = new SvxULSpaceItem( EE_PARA_ULSPACE );
                         if ( !bChecked )
                         {
                             ((SvxULSpaceItem*)pNewItem)->SetUpper( 400 );
                             ((SvxULSpaceItem*)pNewItem)->SetLower( 400 );
                         }
                         break;
-        case TB_LR:     pNewItem = new SvxLRSpaceItem( EE_PARA_LRSPACE );
+        case TB_LR:		pNewItem = new SvxLRSpaceItem( EE_PARA_LRSPACE );
                         if ( !bChecked )
                         {
                             ((SvxLRSpaceItem*)pNewItem)->SetTxtLeft( 1000 );
@@ -924,7 +924,7 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                             ((SvxLRSpaceItem*)pNewItem)->SetRight( 500 );
                         }
                         break;
-        case TB_DEFTAB: if ( bChecked )
+        case TB_DEFTAB:	if ( bChecked )
                             pEditEngine->SetDefTab( 2000 );
                         else
                             pEditEngine->SetDefTab( 600 );
@@ -1034,10 +1034,10 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
             SvFileStream aStrm( aDirEntry.GetFull(), STREAM_READ );
             delete pBinObj;
             pBinObj = EditTextObject::Create( aStrm );
-//          EditTextObject* pTmpObj = pEditEngine->CreateTextObject( aStrm );
-//          pEditEngine->SetText( *pTmpObj );
-//          pEditView->ShowCursor();
-//          delete pTmpObj;
+//			EditTextObject* pTmpObj = pEditEngine->CreateTextObject( aStrm );
+//			pEditEngine->SetText( *pTmpObj );
+//			pEditView->ShowCursor();
+//			delete pTmpObj;
         }
         break;
         case TB_OPEN:
@@ -1101,9 +1101,9 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                 Rectangle aR( Point( 2000, 4000 ), aSz );
                 pPrinter->DrawRect( aR );
                 // So folgt auf IIISi, 75DPI kein Ausdruck!
-//              pPrinter->SetClipRegion( Region( aR ) );
+//				pPrinter->SetClipRegion( Region( aR ) );
                 pEditEngine->Draw( pPrinter, Point( 2000, 4000 ), nRotation );
-//              pPrinter->SetClipRegion();
+//				pPrinter->SetClipRegion();
                 pPrinter->EndPage();
                 pPrinter->EndJob();
             }
@@ -1115,7 +1115,7 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
             if ( !pFileDialogBox2->Execute() )
                 return FALSE;
             DirEntry aDirEntry( pFileDialogBox2->GetPath() );
-//          DirEntry aDirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\xxx.rtf" ) ) );
+//			DirEntry aDirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\xxx.rtf" ) ) );
             SvFileStream aStrm( aDirEntry.GetFull(), STREAM_WRITE | STREAM_TRUNC );
             Application::EnterWait();
             if ( nId == TB_SAVE )
@@ -1153,7 +1153,7 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
             XubString aDebStr( String( RTL_CONSTASCII_USTRINGPARAM( "Attribute in Selektion:" ) ) );
             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "\nVorlage:" ) );
             XubString aStyle;
-//          pEditView->GetStyleSheet( aStyle, eFam );
+//			pEditView->GetStyleSheet( aStyle, eFam );
             aDebStr += aStyle;
             for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_ITEMS_END; nWhich++)
             {
@@ -1410,9 +1410,9 @@ EditViewWindow::~EditViewWindow()
     // Beim Zerstoeren der Styles am Ende, EditEngine noch nicht kaputt,
     // wird der Handler gerufen, ich zerstore hier aber schon die View!
     pEditEngine->SetStatusEventHdl( Link() );
-//  SvxAutoCorrect* pAutoCorrekt = pEditEngine->GetAutoCorrect();
-//  pEditEngine->SetAutoCorrect( 0 );
-//  delete pAutoCorrekt;
+//	SvxAutoCorrect* pAutoCorrekt = pEditEngine->GetAutoCorrect();
+//	pEditEngine->SetAutoCorrect( 0 );
+//	delete pAutoCorrekt;
     delete pEditEngine;
 }
 
@@ -1420,8 +1420,8 @@ EditViewWindow::EditViewWindow( Window* pParent ) :
                 Window( pParent ), aURLPtr( POINTER_HAND )
 {
     SetBackgroundBrush( Brush( Color( COL_WHITE ) ) );
-    SetMapMode( MAP_100TH_MM );
-//  EnableDrop();
+    SetMapMode( MAP_100TH_MM );	
+//	EnableDrop();
 
     SfxItemPool* pPool = EditEngine::CreatePool();
     Font aFont = GetSettings().GetStyleSettings().GetAppFont();
@@ -1452,20 +1452,20 @@ EditViewWindow::EditViewWindow( Window* pParent ) :
     pEditEngine->SetControlWord( n );
 
     // Test: Autozentrierung
-//  ULONG n = pEditEngine->GetControlWord();
-//  n = n | EE_CNTRL_AUTOPAGESIZE;
-//  pEditEngine->SetControlWord( n );
+//	ULONG n = pEditEngine->GetControlWord();
+//	n = n | EE_CNTRL_AUTOPAGESIZE;
+//	pEditEngine->SetControlWord( n );
 
     // OneLineSpeling
 #ifdef WNT
-//  pEditEngine->CreateSpeller( DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wnti" ) ) ),
-//                              DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wnti" ) ) ) );
-//  pEditEngine->GetSpeller()->SetActualLanguage( LANGUAGE_GERMAN );
-//  pEditEngine->GetSpeller()->SetDefaultLanguage( LANGUAGE_GERMAN );
-//  pEditEngine->GetSpeller()->SetMinTrail( 2 );
+//	pEditEngine->CreateSpeller( DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wnti" ) ) ),
+//								DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wnti" ) ) ) );
+//	pEditEngine->GetSpeller()->SetActualLanguage( LANGUAGE_GERMAN );
+//	pEditEngine->GetSpeller()->SetDefaultLanguage( LANGUAGE_GERMAN );
+//	pEditEngine->GetSpeller()->SetMinTrail( 2 );
 
     // AutoCorrect wird nie zerstoert
-//  pEditEngine->SetAutoCorrect( new SvxAutoCorrect( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\prj\\office\\autotext\\autocorr.dat" ) ) ) );
+//	pEditEngine->SetAutoCorrect( new SvxAutoCorrect( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\prj\\office\\autotext\\autocorr.dat" ) ) ) );
 #endif
 }
 
@@ -1602,7 +1602,7 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
             pEditEngine->SetGlobalCharStretching( nX, nY );
             ((EditMainWindow*)GetParent())->SetTitle();
         }
-        else    // ZeichenAttr
+        else	// ZeichenAttr
         {
             SfxItemSet aAttrs( pEditView->GetAttribs() );
             SfxItemSet aNewAttrs( pEditEngine->GetEmptyItemSet() );
@@ -1631,11 +1631,11 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else if ( ( nCode == KEY_P ) && rKEvt.GetKeyCode().IsMod2() )
     {
-//              ESelection aSel = pEditView->GetSelection();
-//              for ( ULONG n = aSel.nStartPara; n <= aSel.nEndPara; n++ )
-//              {
-//                  InfoBox( 0, pEditEngine->GetText( n ) ).Execute();
-//              }
+//				ESelection aSel = pEditView->GetSelection();
+//				for ( ULONG n = aSel.nStartPara; n <= aSel.nEndPara; n++ )
+//				{
+//					InfoBox( 0, pEditEngine->GetText( n ) ).Execute();
+//				}
         InfoBox( 0, pEditView->GetSelected() ).Execute();
 
     }
@@ -1719,20 +1719,20 @@ void __EXPORT EditViewWindow::MouseMove( const MouseEvent& rMEvt )
         else
             SetPointer( pEditView->GetPointer() );
 
-//      aPos -= pEditView->GetOutputArea().TopLeft();
-//      aPos += pEditView->GetVisArea().TopLeft();
-//      if ( pEditView->GetEditEngine()->IsTextPos( aPos, PixelToLogic( Size( 5, 0 ) ).Width() ) )
-//          SetPointer( pEditView->GetPointer() );
-//      else
-//          SetPointer( Pointer( POINTER_REFHAND ) );
+//		aPos -= pEditView->GetOutputArea().TopLeft();
+//		aPos += pEditView->GetVisArea().TopLeft();
+//		if ( pEditView->GetEditEngine()->IsTextPos( aPos, PixelToLogic( Size( 5, 0 ) ).Width() ) )
+//			SetPointer( pEditView->GetPointer() );
+//		else
+//			SetPointer( Pointer( POINTER_REFHAND ) );
 
     }
     else
         SetPointer( aStdPtr );
 
-//  static long x = 0;
-//  x++;
-//  DBG_ASSERT( x < 1000, String( RTL_CONSTASCII_USTRINGPARAM( "?" ) ) );
+//	static long x = 0;
+//	x++;
+//	DBG_ASSERT( x < 1000, String( RTL_CONSTASCII_USTRINGPARAM( "?" ) ) );
     pEditView->MouseMove( rMEvt );
 }
 
@@ -1780,14 +1780,14 @@ void __EXPORT EditApp::Main()
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xSMgr = createApplicationServiceManager();
     ::comphelper::setProcessServiceFactory( xSMgr );
-
+    
     EditDLL aEditDll;
     SvxGlobalItemData aItemData;
     SvxFieldItem::GetClassManager().SV_CLASS_REGISTER( SvxDateField );
     SvxFieldItem::GetClassManager().SV_CLASS_REGISTER( SvxURLField );
-
+    
     Help::EnableQuickHelp();
-
+    
     EditMainWindow aWindow;
     Execute();
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,21 +40,21 @@ namespace drawinglayer
     namespace attribute
     {
         SdrShadowTextAttribute::SdrShadowTextAttribute(
-            const SdrShadowAttribute& rShadow,
+            const SdrShadowAttribute& rShadow, 
             const SdrTextAttribute& rTextAttribute)
-        :   maShadow(rShadow),
+        :	maShadow(rShadow),
             maTextAttribute(rTextAttribute)
         {
         }
 
         SdrShadowTextAttribute::SdrShadowTextAttribute()
-        :   maShadow(),
+        :	maShadow(),
             maTextAttribute()
         {
         }
 
         SdrShadowTextAttribute::SdrShadowTextAttribute(const SdrShadowTextAttribute& rCandidate)
-        :   maShadow(rCandidate.getShadow()),
+        :	maShadow(rCandidate.getShadow()),
             maTextAttribute(rCandidate.getText())
         {
         }
@@ -69,7 +69,7 @@ namespace drawinglayer
 
         bool SdrShadowTextAttribute::isDefault() const
         {
-            return (getShadow().isDefault()
+            return (getShadow().isDefault() 
                 && getText().isDefault());
         }
 

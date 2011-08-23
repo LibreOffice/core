@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,26 +72,26 @@ enum SvXMLSepTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aColAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_REL_WIDTH,      XML_TOK_COLUMN_WIDTH },
-    { XML_NAMESPACE_FO,     XML_START_INDENT,   XML_TOK_COLUMN_MARGIN_LEFT },
-    { XML_NAMESPACE_FO,     XML_END_INDENT,     XML_TOK_COLUMN_MARGIN_RIGHT },
-    XML_TOKEN_MAP_END
+    { XML_NAMESPACE_STYLE,	XML_REL_WIDTH,		XML_TOK_COLUMN_WIDTH },
+    { XML_NAMESPACE_FO, 	XML_START_INDENT,	XML_TOK_COLUMN_MARGIN_LEFT },
+    { XML_NAMESPACE_FO,		XML_END_INDENT,		XML_TOK_COLUMN_MARGIN_RIGHT },
+    XML_TOKEN_MAP_END 
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aColSepAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_WIDTH,          XML_TOK_COLUMN_SEP_WIDTH },
-    { XML_NAMESPACE_STYLE,  XML_COLOR,          XML_TOK_COLUMN_SEP_COLOR },
-    { XML_NAMESPACE_STYLE,  XML_HEIGHT,         XML_TOK_COLUMN_SEP_HEIGHT },
-    { XML_NAMESPACE_STYLE,  XML_VERTICAL_ALIGN, XML_TOK_COLUMN_SEP_ALIGN },
-    XML_TOKEN_MAP_END
+    { XML_NAMESPACE_STYLE,	XML_WIDTH,			XML_TOK_COLUMN_SEP_WIDTH },
+    { XML_NAMESPACE_STYLE, 	XML_COLOR,			XML_TOK_COLUMN_SEP_COLOR },
+    { XML_NAMESPACE_STYLE, 	XML_HEIGHT,		    XML_TOK_COLUMN_SEP_HEIGHT },
+    { XML_NAMESPACE_STYLE, 	XML_VERTICAL_ALIGN, XML_TOK_COLUMN_SEP_ALIGN },
+    XML_TOKEN_MAP_END 
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Sep_Align_Enum[] =
 {
-    { XML_TOP,          VerticalAlignment_TOP   },
-    { XML_MIDDLE,       VerticalAlignment_MIDDLE },
-    { XML_BOTTOM,       VerticalAlignment_BOTTOM },
+    { XML_TOP,			VerticalAlignment_TOP	},
+    { XML_MIDDLE,		VerticalAlignment_MIDDLE },
+    { XML_BOTTOM,		VerticalAlignment_BOTTOM },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -148,20 +148,20 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
                     OUString sTmp( rValue.copy( 0, nPos ) );
                     if( GetImport().GetMM100UnitConverter().
                                         convertNumber( nVal, sTmp, 0, USHRT_MAX ) )
-                    aColumn.Width = nVal;
+                    aColumn.Width = nVal;		
                 }
             }
             break;
         case XML_TOK_COLUMN_MARGIN_LEFT:
             if( GetImport().GetMM100UnitConverter().
                                         convertMeasure( nVal, rValue ) )
-                aColumn.LeftMargin = nVal;
+                aColumn.LeftMargin = nVal;		
             break;
         case XML_TOK_COLUMN_MARGIN_RIGHT:
 
             if( GetImport().GetMM100UnitConverter().
                                         convertMeasure( nVal, rValue ) )
-                aColumn.RightMargin = nVal;
+                aColumn.RightMargin = nVal;		
             break;
         default:
             break;
@@ -181,7 +181,7 @@ class XMLTextColumnSepContext_Impl: public SvXMLImportContext
     sal_Int32 nColor;
     sal_Int8 nHeight;
     VerticalAlignment eVertAlign;
-
+    
 
 public:
     TYPEINFO();
@@ -231,20 +231,20 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
         case XML_TOK_COLUMN_SEP_WIDTH:
             if( GetImport().GetMM100UnitConverter().
                                 convertMeasure( nVal, rValue ) )
-                nWidth = nVal;
+                nWidth = nVal;		
             break;
         case XML_TOK_COLUMN_SEP_HEIGHT:
             if( GetImport().GetMM100UnitConverter().
                                         convertPercent( nVal, rValue ) &&
                  nVal >=1 && nVal <= 100 )
-                nHeight = (sal_Int8)nVal;
+                nHeight = (sal_Int8)nVal;		
             break;
         case XML_TOK_COLUMN_SEP_COLOR:
             {
                 Color aColor;
                 if( GetImport().GetMM100UnitConverter().
                                             convertColor( aColor, rValue ) )
-                    nColor = (sal_Int32)aColor.GetColor();
+                    nColor = (sal_Int32)aColor.GetColor();		
             }
             break;
         case XML_TOK_COLUMN_SEP_ALIGN:
@@ -267,7 +267,7 @@ XMLTextColumnSepContext_Impl::~XMLTextColumnSepContext_Impl()
 // --------------------------------------------------------------------------
 
 typedef XMLTextColumnContext_Impl *XMLTextColumnContext_ImplPtr;
-SV_DECL_PTRARR( XMLTextColumnsArray_Impl, XMLTextColumnContext_ImplPtr, 5, 5 )
+SV_DECL_PTRARR( XMLTextColumnsArray_Impl, XMLTextColumnContext_ImplPtr,	5, 5 )
 
 TYPEINIT1( XMLTextColumnsContext, XMLElementPropertyContext );
 
@@ -278,21 +278,21 @@ XMLTextColumnsContext::XMLTextColumnsContext(
                                     xAttrList,
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps )
-:   XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps )
-,   sSeparatorLineIsOn(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn"))
-,   sSeparatorLineWidth(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineWidth"))
-,   sSeparatorLineColor(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineColor"))
-,   sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight"))
-,   sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment"))
-,   sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic"))
-,   sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
-,   pColumns( 0 )
-,   pColumnSep( 0 )
-,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
-,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
-,   nCount( 0 )
-,   bAutomatic( sal_False )
-,   nAutomaticDistance( 0 )
+:	XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps )
+,	sSeparatorLineIsOn(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn"))
+,	sSeparatorLineWidth(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineWidth"))
+,	sSeparatorLineColor(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineColor"))
+,	sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight"))
+,	sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment"))
+,	sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic"))
+,	sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
+,	pColumns( 0 )
+,	pColumnSep( 0 )
+,	pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
+,	pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
+,	nCount( 0 )
+,	bAutomatic( sal_False )
+,	nAutomaticDistance( 0 )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int32 nVal;
@@ -362,7 +362,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
 
         pColumns->Insert( pColumn, pColumns->Count() );
         pColumn->AddRef();
-
+        
         pContext = pColumn;
     }
     else if( XML_NAMESPACE_STYLE == nPrefix &&
@@ -372,21 +372,21 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
             new XMLTextColumnSepContext_Impl( GetImport(), nPrefix, rLocalName,
                                            xAttrList, *pColumnSepAttrTokenMap );
         pColumnSep->AddRef();
-
+        
         pContext = pColumnSep;
     }
     else
     {
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
-
+    
     return pContext;
 }
 
 void XMLTextColumnsContext::EndElement( )
 {
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
-    if( !xFactory.is() )
+    if( !xFactory.is() )	
         return;
 
     Reference<XInterface> xIfc = xFactory->createInstance(
@@ -400,7 +400,7 @@ void XMLTextColumnsContext::EndElement( )
         // zero columns = no columns -> 1 column
         xColumns->setColumnCount( 1 );
     }
-    else if( !bAutomatic && pColumns &&
+    else if( !bAutomatic && pColumns && 
              pColumns->Count() == (sal_uInt16)nCount )
     {
         // if we have column descriptions, one per column, and we don't use
@@ -494,7 +494,7 @@ void XMLTextColumnsContext::EndElement( )
             xPropSet->setPropertyValue( sAutomaticDistance, aAny );
         }
     }
-
+    
     aProp.maValue <<= xColumns;
 
     SetInsert( sal_True );

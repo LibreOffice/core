@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ typedef void (*SfxVoidFunc)();
 
 #define SDT_SDT_DOCFACTPRIO     10      // Explorer
 #define SDT_SW_DOCFACTPRIO      20      // Text-Dokument
-#define SDT_SWW_DOCFACTPRIO     21      // Web-Dokument
+#define SDT_SWW_DOCFACTPRIO     21    	// Web-Dokument
 #define SDT_SC_DOCFACTPRIO      30      // Tabellen-Dokument
 #define SDT_SI_DOCFACTPRIO      40      // Impress-Dokument
 #define SDT_SD_DOCFACTPRIO      41      // Draw-Dokument
@@ -70,8 +70,8 @@ typedef void (*SfxVoidFunc)();
 class SFX2_DLLPUBLIC SfxObjectFactory
 {
 private:
-    const char*             pShortName;     // Objekt-Kurzname
-    SfxObjectFactory_Impl*  pImpl;          // Zusatzdaten
+    const char* 			pShortName;		// Objekt-Kurzname
+    SfxObjectFactory_Impl*	pImpl;			// Zusatzdaten
     SfxObjectShellFlags     nFlags;
     SAL_DLLPRIVATE void Construct();
 
@@ -81,17 +81,17 @@ public:
 
     const SvGlobalName& GetClassId() const;
     SfxObjectShellFlags GetFlags() { return nFlags; }
-    const char*     GetShortName() const { return pShortName; }
+    const char* 	GetShortName() const { return pShortName; }
     String          GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
-    String          GetFactoryName() const { return String::CreateFromAscii( pShortName ); }
+    String			GetFactoryName() const { return String::CreateFromAscii( pShortName ); }
     String          GetModuleName() const;
-    void            SetDocumentTypeNameResource( const ResId& rId );
-    String          GetDocumentTypeName() const;
+    void			SetDocumentTypeNameResource( const ResId& rId );
+    String			GetDocumentTypeName() const;
     SfxFilterContainer *GetFilterContainer( BOOL bForceLoad = TRUE) const;
 
     // Views
-    void            RegisterViewFactory(SfxViewFactory &rFactory);
-    USHORT          GetViewFactoryCount() const;
+    void			RegisterViewFactory(SfxViewFactory &rFactory);
+    USHORT			GetViewFactoryCount() const;
     SfxViewFactory& GetViewFactory(USHORT i = 0) const;
 
     /// returns the view factory whose GetViewName delivers the requested logical name
@@ -99,12 +99,12 @@ public:
 
     // Filter
     const SfxFilter* GetTemplateFilter() const;
-    static String   GetStandardTemplate( const String& rServiceName );
-    static void     SetStandardTemplate( const String& rServiceName, const String& rTemplateName );
-    static void     SetSystemTemplate( const String& rServiceName, const String& rTemplateName );
+    static String	GetStandardTemplate( const String& rServiceName );
+    static void		SetStandardTemplate( const String& rServiceName, const String& rTemplateName );
+    static void		SetSystemTemplate( const String& rServiceName, const String& rTemplateName );
 
-    void            SetDocumentServiceName( const rtl::OUString& rServiceName );
-    const rtl::OUString&    GetDocumentServiceName() const;
+    void			SetDocumentServiceName( const rtl::OUString& rServiceName );
+    const rtl::OUString&	GetDocumentServiceName() const;
 
     SfxModule*      GetModule() const;
 
@@ -122,9 +122,9 @@ private:
 
 //=========================================================================
 
-#define SFX_DECL_OBJECTFACTORY()                                            \
-private:                                                                    \
-    static SfxObjectFactory*    pObjectFactory;                             \
+#define SFX_DECL_OBJECTFACTORY()                                       		\
+private:																	\
+    static SfxObjectFactory*	pObjectFactory;								\
 public:                                                                     \
     static SfxObjectFactory&    Factory();                                  \
     virtual SfxObjectFactory&   GetFactory() const { return Factory(); }

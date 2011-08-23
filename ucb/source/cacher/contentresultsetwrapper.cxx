@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init_xRowOrigin()
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xRowOrigin = xOrgig;
+        m_xRowOrigin = xOrgig; 
         OSL_ENSURE( m_xRowOrigin.is(), "interface XRow is required" );
     }
 }
@@ -107,7 +107,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init_xContentAccessOrigin()
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xContentAccessOrigin = xOrgig;
+        m_xContentAccessOrigin = xOrgig; 
         OSL_ENSURE( m_xContentAccessOrigin.is(), "interface XContentAccess is required" );
     }
 }
@@ -126,7 +126,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init_xPropertySetOrigin()
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xPropertySetOrigin = xOrig;
+        m_xPropertySetOrigin = xOrig; 
         OSL_ENSURE( m_xPropertySetOrigin.is(), "interface XPropertySet is required" );
     }
 }
@@ -441,7 +441,7 @@ void SAL_CALL ContentResultSetWrapper
 //--------------------------------------------------------------------------
 // virtual
 void SAL_CALL ContentResultSetWrapper
-    ::addEventListener( const Reference< XEventListener >& Listener )
+    ::addEventListener(	const Reference< XEventListener >& Listener )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
@@ -827,7 +827,7 @@ void SAL_CALL ContentResultSetWrapper
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = sal_False;
-    impl_notifyPropertyChangeListeners( aEvt );
+    impl_notifyPropertyChangeListeners(	aEvt );
 }
 
 //virtual
@@ -846,7 +846,7 @@ void SAL_CALL ContentResultSetWrapper
 }
 
 //--------------------------------------------------------------------------
-// XContentAccess methods.  ( -- position dependent )
+// XContentAccess methods.	( -- position dependent )
 //--------------------------------------------------------------------------
 
 // virtual
@@ -1188,14 +1188,14 @@ Reference< XInterface > SAL_CALL ContentResultSetWrapper
 // XRow methods.
 //-----------------------------------------------------------------
 
-#define XROW_GETXXX( getXXX )                                   \
-impl_EnsureNotDisposed();                                       \
-impl_init_xRowOrigin();                                         \
-if( !m_xRowOrigin.is() )                                        \
-{                                                               \
+#define XROW_GETXXX( getXXX )									\
+impl_EnsureNotDisposed();										\
+impl_init_xRowOrigin();											\
+if( !m_xRowOrigin.is() )										\
+{																\
     OSL_ENSURE( sal_False, "broadcaster was disposed already" );\
-    throw RuntimeException();                                   \
-}                                                               \
+    throw RuntimeException();									\
+}																\
 return m_xRowOrigin->getXXX( columnIndex );
 
 //virtual

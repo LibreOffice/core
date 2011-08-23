@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ DBG_NAME(SfxFrameDescriptor);
 
 struct SfxFrameDescriptor_Impl
 {
-    Wallpaper*  pWallpaper;
-    SfxItemSet* pArgs;
-    BOOL        bEditable;
+    Wallpaper*	pWallpaper;
+    SfxItemSet*	pArgs;
+    BOOL		bEditable;
 
     SfxFrameDescriptor_Impl() : pWallpaper( NULL ), pArgs( NULL ), bEditable( TRUE ) {}
     ~SfxFrameDescriptor_Impl()
@@ -258,7 +258,7 @@ SfxFrameProperties::SfxFrameProperties( const SfxFrameDescriptor *pD )
     bBorderSet = TRUE;
 }
 
-SfxFrameProperties& SfxFrameProperties::operator =(
+SfxFrameProperties&	SfxFrameProperties::operator =(
     const SfxFrameProperties &rProp )
 {
     aURL = rProp.aURL;
@@ -316,11 +316,11 @@ SfxPoolItem* SfxFrameDescriptorItem::Clone( SfxItemPool* ) const
 SfxItemPresentation SfxFrameDescriptorItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
+    XubString& 			rText,
     const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
     return SFX_ITEM_PRESENTATION_NONE;

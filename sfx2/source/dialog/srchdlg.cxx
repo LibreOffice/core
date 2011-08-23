@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ using namespace ::com::sun::star::uno;
 
 namespace sfx2 {
 
-#define USERITEM_NAME       DEFINE_CONST_OUSTRING("UserItem")
-#define MAX_SAVE_COUNT      (USHORT)10
+#define USERITEM_NAME		DEFINE_CONST_OUSTRING("UserItem")
+#define MAX_SAVE_COUNT		(USHORT)10
 
 // ============================================================================
 // SearchDialog
@@ -54,17 +54,17 @@ SearchDialog::SearchDialog( Window* pWindow, const ::rtl::OUString& rConfigName 
 
     ModelessDialog( pWindow, SfxResId( RID_DLG_SEARCH ) ),
 
-    m_aSearchLabel      ( this, SfxResId( FT_SEARCH ) ),
-    m_aSearchEdit       ( this, SfxResId( ED_SEARCH ) ),
-    m_aWholeWordsBox    ( this, SfxResId( CB_WHOLEWORDS ) ),
-    m_aMatchCaseBox     ( this, SfxResId( CB_MATCHCASE ) ),
-    m_aWrapAroundBox    ( this, SfxResId( CB_WRAPAROUND ) ),
-    m_aBackwardsBox     ( this, SfxResId( CB_BACKWARDS ) ),
-    m_aFindBtn          ( this, SfxResId( PB_FIND ) ),
-    m_aCancelBtn        ( this, SfxResId( PB_CANCELFIND ) ),
-    m_sToggleText       (       SfxResId( STR_TOGGLE ) ),
-    m_sConfigName       ( rConfigName ),
-    m_bIsConstructed    ( false )
+    m_aSearchLabel		( this, SfxResId( FT_SEARCH ) ),
+    m_aSearchEdit		( this, SfxResId( ED_SEARCH ) ),
+    m_aWholeWordsBox	( this, SfxResId( CB_WHOLEWORDS ) ),
+    m_aMatchCaseBox		( this, SfxResId( CB_MATCHCASE ) ),
+    m_aWrapAroundBox	( this, SfxResId( CB_WRAPAROUND ) ),
+    m_aBackwardsBox		( this, SfxResId( CB_BACKWARDS ) ),
+    m_aFindBtn			( this, SfxResId( PB_FIND ) ),
+    m_aCancelBtn		( this, SfxResId( PB_CANCELFIND ) ),
+    m_sToggleText		(		SfxResId( STR_TOGGLE ) ),
+    m_sConfigName		( rConfigName ),
+    m_bIsConstructed	( false )
 
 {
     FreeResource();

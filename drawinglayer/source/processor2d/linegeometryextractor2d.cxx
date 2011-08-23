@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace drawinglayer
     namespace processor2d
     {
         LineGeometryExtractor2D::LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation)
-        :   BaseProcessor2D(rViewInformation),
+        :	BaseProcessor2D(rViewInformation),
             maExtractedHairlines(),
             maExtractedLineFills(),
             mbInLineGeometry(false)
@@ -102,8 +102,8 @@ namespace drawinglayer
 
                     // create new transformations for CurrentTransformation and for local ViewInformation2D
                     const geometry::ViewInformation2D aViewInformation2D(
-                        getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
-                        getViewInformation2D().getViewTransformation(),
+                        getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(), 
+                        getViewInformation2D().getViewTransformation(), 
                         getViewInformation2D().getViewport(),
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),

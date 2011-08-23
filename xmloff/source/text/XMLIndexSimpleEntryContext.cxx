@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,16 +58,16 @@ const sal_Char sAPI_CharacterStyleName[] = "CharacterStyleName";
 TYPEINIT1( XMLIndexSimpleEntryContext, SvXMLImportContext);
 
 XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     const OUString& rEntry,
     XMLIndexTemplateContext& rTemplate,
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   rEntryType(rEntry)
-,   bCharStyleNameOK(sal_False)
-,   rTemplateContext(rTemplate)
-,   nValues(1)
+:	SvXMLImportContext(rImport, nPrfx, rLocalName)
+,	rEntryType(rEntry)
+,	bCharStyleNameOK(sal_False)
+,	rTemplateContext(rTemplate)
+,	nValues(1)
 {
 }
 
@@ -84,16 +84,16 @@ void XMLIndexSimpleEntryContext::StartElement(
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                               &sLocalName );
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
              IsXMLToken(sLocalName, XML_STYLE_NAME) )
         {
             sCharStyleName = xAttrList->getValueByIndex(nAttr);
-            OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
+            OUString sDisplayStyleName = GetImport().GetStyleDisplayName( 
                 XML_STYLE_FAMILY_TEXT_TEXT, sCharStyleName );
             // #142494#: Check if style exists
-            const Reference < ::com::sun::star::container::XNameContainer > & rStyles =
+            const Reference < ::com::sun::star::container::XNameContainer > & rStyles = 
                 GetImport().GetTextImport()->GetTextStyles();
             if( rStyles.is() && rStyles->hasByName( sDisplayStyleName ) )
                 bCharStyleNameOK = sal_True;
@@ -107,7 +107,7 @@ void XMLIndexSimpleEntryContext::StartElement(
     {
         nValues++;
     }
-
+        
 }
 
 void XMLIndexSimpleEntryContext::EndElement()
@@ -137,7 +137,7 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
     if (bCharStyleNameOK)
     {
         rValues[1].Name = rTemplateContext.sCharacterStyleName;
-        aAny <<= GetImport().GetStyleDisplayName(
+        aAny <<= GetImport().GetStyleDisplayName( 
                                     XML_STYLE_FAMILY_TEXT_TEXT,
                                     sCharStyleName );
         rValues[1].Value = aAny;

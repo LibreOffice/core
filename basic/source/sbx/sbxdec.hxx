@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 #undef WB_LEFT
 #undef WB_RIGHT
 #include <tools/prewin.h>
-}   // close extern "C" {
+}	// close extern "C" {
 
 #ifndef __MINGW32__
 #include <comutil.h>
 #endif
 #include <oleauto.h>
 
-extern "C" {    // reopen extern "C" {
+extern "C" {	// reopen extern "C" {
 #include <tools/postwin.h>
 
 #endif
@@ -59,9 +59,9 @@ class SbxDecimal
     friend void releaseDecimalPtr( SbxDecimal*& rpDecimal );
 
 #ifdef WIN32
-    DECIMAL     maDec;
+    DECIMAL		maDec;
 #endif
-    INT32       mnRefCount;
+    INT32		mnRefCount;
 
 public:
     SbxDecimal( void );
@@ -85,7 +85,7 @@ public:
     bool setDouble( double val );
     void setInt( int val );
     void setUInt( unsigned int val );
-    bool setString( String* pString );
+    bool setString( ::rtl::OUString* pOUString );
     void setDecimal( SbxDecimal* pDecimal )
     {
 #ifdef WIN32
@@ -106,7 +106,7 @@ public:
     bool getDouble( double& rVal );
     bool getInt( int& rVal );
     bool getUInt( unsigned int& rVal );
-    bool getString( String& rString );
+    bool getString( ::rtl::OUString& rString );
 
     bool operator -= ( const SbxDecimal &r );
     bool operator += ( const SbxDecimal &r );

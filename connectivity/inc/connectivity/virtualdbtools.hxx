@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ namespace connectivity
                                 , ::com::sun::star::uno::RuntimeException ) ) = 0;
 
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet) 
                 const SAL_THROW ( (::com::sun::star::uno::RuntimeException) ) = 0;
 
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
@@ -193,7 +193,7 @@ namespace connectivity
                     const ::rtl::OUString& _rCommand,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
                     ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-                )   SAL_THROW( ( ) ) = 0;
+                )	SAL_THROW( ( ) ) = 0;
 
             virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
                 getFieldNamesByCommandDescriptor(
@@ -201,20 +201,20 @@ namespace connectivity
                     const sal_Int32 _nCommandType,
                     const ::rtl::OUString& _rCommand,
                     ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-                )   SAL_THROW( ( ) ) = 0;
+                )	SAL_THROW( ( ) ) = 0;
 
             /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
-                @param      _rxCursorSet    the property set
+                @param		_rxCursorSet	the property set
             */
             virtual sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
 
             /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
-                @param      _rxCursorSet    the property set
+                @param		_rxCursorSet	the property set
             */
             virtual sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
 
             /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
-                @param      _rxCursorSet    the property set
+                @param		_rxCursorSet	the property set
             */
             virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
 
@@ -240,7 +240,7 @@ namespace connectivity
             /** enumerates all supported char sets
             @return the number of charsets supported
             */
-            virtual sal_Int32   getSupportedTextEncodings(
+            virtual sal_Int32	getSupportedTextEncodings(
                 ::std::vector< rtl_TextEncoding >& /* [out] */ _rEncs
             ) const = 0;
         };
@@ -347,11 +347,11 @@ namespace connectivity
         };
 
     //....................................................................
-    }   //  namespace simple
+    }	//	namespace simple
     //....................................................................
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_VIRTUAL_DBTOOLS_HXX

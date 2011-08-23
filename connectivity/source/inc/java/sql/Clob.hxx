@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _CONNECTIVITY_JAVA_SQL_CLOB_HXX_
-#define _CONNECTIVITY_JAVA_SQL_CLOB_HXX_
+#define	_CONNECTIVITY_JAVA_SQL_CLOB_HXX_
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/XClob.hpp>
@@ -38,7 +38,7 @@ namespace connectivity
     //**************************************************************
     //************ Class: java.sql.SQLWarning
     //**************************************************************
-    class java_sql_Clob :   public java_lang_Object,
+    class java_sql_Clob :	public java_lang_Object,
                             public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XClob>
     {
     protected:

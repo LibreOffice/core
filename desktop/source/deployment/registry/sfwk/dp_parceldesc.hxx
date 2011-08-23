@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ private:
     sal_Int32 skipIndex;
 public:
     ParcelDescDocHandler():m_bIsParsed( false ), skipIndex( 0 ){}
-    ::rtl::OUString getParcelLanguage() { return m_sLang; }
+    ::rtl::OUString getParcelLanguage() { return m_sLang; } 
     bool isParsed() { return m_bIsParsed; }
     // XDocumentHandler
     virtual void SAL_CALL startDocument()

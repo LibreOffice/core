@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ public:
 */
 class XMLNumberNonePropHdl : public XMLPropertyHandler
 {
-    ::rtl::OUString sZeroStr;
-    sal_Int8        nBytes;
+    ::rtl::OUString	sZeroStr;
+    sal_Int8		nBytes;
 public:
     XMLNumberNonePropHdl( sal_Int8 nB = 4 );
     XMLNumberNonePropHdl( enum ::xmloff::token::XMLTokenEnum eZeroString, sal_Int8 nB = 4 );
@@ -93,7 +93,7 @@ public:
 };
 
 /**
-    PropertyHandler for the XML-data-type: XML_TYPE_PERCENT
+    PropertyHandler for the XML-data-type: XML_TYPE_PERCENT 
     that is mapped on a double from 0.0 to 1.0
 */
 class XMLDoublePercentPropHdl : public XMLPropertyHandler
@@ -169,7 +169,7 @@ public:
 /**
     PropertyHandler for the XML-data-type: XML_TYPE_STYLENAME
 */
-class XMLStyleNamePropHdl : public XMLStringPropHdl
+class XMLStyleNamePropHdl : public XMLStringPropHdl 
 {
 public:
     virtual ~XMLStyleNamePropHdl();
@@ -281,7 +281,7 @@ public:
 */
 class XMLNumberWithoutZeroPropHdl : public XMLPropertyHandler
 {
-    sal_Int8        nBytes;
+    sal_Int8		nBytes;
 public:
     XMLNumberWithoutZeroPropHdl( sal_Int8 nB = 4 );
     virtual ~XMLNumberWithoutZeroPropHdl();
@@ -304,4 +304,4 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
+#endif		// _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX

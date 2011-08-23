@@ -20,10 +20,10 @@ import org.openide.util.NbBundle;
  * @author tomaso
  */
 public class InstallationPathDescriptor extends WizardDescriptor {
-
+    
     private final InstallationPathIterator iterator;
     public static final String PROP_INSTALLPATH = "INSTALLPATH";
-
+    
     /** Make a descriptor suited to use InstallationPathIterator.
      * Sets up various wizard properties to follow recommended
      * style guidelines.
@@ -61,12 +61,12 @@ public class InstallationPathDescriptor extends WizardDescriptor {
         }
          */
     }
-
+    
     // Called when user moves forward or backward etc.:
     protected void updateState() {
         super.updateState();
         putProperty("WizardPanel_contentData", iterator.getSteps()); // NOI18N
         putProperty("WizardPanel_contentSelectedIndex", new Integer(iterator.getIndex())); // NOI18N
     }
-
+    
 }

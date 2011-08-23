@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace drawinglayer
         /** GraphicPrimitive2D class
 
             Primitive to hold graphics defined by GraphicObject and GraphicAttr
-            combination. This includes MetaFiles and diverse pixel-oriented graphic
+            combination. This includes MetaFiles and diverse pixel-oriented graphic 
             formats. It even includes animated GIFs, Croppings and other changes
             defined in GraphicAttr.
 
@@ -57,13 +57,13 @@ namespace drawinglayer
         {
         private:
             /// the geometric definition
-            basegfx::B2DHomMatrix                       maTransform;
+            basegfx::B2DHomMatrix						maTransform;
 
             /// the GraphicObject with all it's content possibilities
-            GraphicObject                               maGraphicObject;
+            GraphicObject								maGraphicObject;
 
             /// The GraphicAttr with all it's modification possibilities
-            GraphicAttr                                 maGraphicAttr;
+            GraphicAttr									maGraphicAttr;
 
         protected:
             /// local decomposition
@@ -72,11 +72,11 @@ namespace drawinglayer
         public:
             /// constructor(s)
             GraphicPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
+                const basegfx::B2DHomMatrix& rTransform, 
                 const GraphicObject& rGraphicObject,
                 const GraphicAttr& rGraphicAttr);
             GraphicPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
+                const basegfx::B2DHomMatrix& rTransform, 
                 const GraphicObject& rGraphicObject);
 
             /// data read access

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,11 +99,11 @@ XInputStream_impl::readBytes(
 {
     if( ! m_bIsOpen )
         throw io::IOException();
-
+    
     aData.realloc(nBytesToRead);
     //TODO! translate memory exhaustion (if it were detectable...) into
     // io::BufferSizeExceededException
-
+    
     sal_uInt64 nrc;
     m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc );
 
@@ -200,8 +200,8 @@ XInputStream_impl::getLength(
     throw( io::IOException,
            uno::RuntimeException )
 {
-    osl::FileBase::RC   err;
-    sal_uInt64          uCurrentPos, uEndPos;
+    osl::FileBase::RC	err;
+    sal_uInt64			uCurrentPos, uEndPos;
 
     err = m_aFile.getPos( uCurrentPos );
     if( err != osl::FileBase::E_None )

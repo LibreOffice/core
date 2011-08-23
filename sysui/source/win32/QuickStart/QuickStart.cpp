@@ -14,7 +14,7 @@
 #define TERMINATIONVETO_MESSAGE "SO TerminationVeto"
 #define TERMINATE_MESSAGE       "SO Terminate"
 #define LISTENER_WINDOWCLASS    "SO Listener Class"
-#define KILLTRAY_MESSAGE        "SO KillTray"
+#define KILLTRAY_MESSAGE		"SO KillTray"
 
 static  UINT aTerminationVetoMessage = 0x7FFF;
 static  UINT aTerminateMessage = 0x7FFF;
@@ -24,18 +24,18 @@ static  bool bTerminateVeto = true;
 #define UPDATE_TIMER   1
 
 // Global Variables:
-HINSTANCE hInst;                                // current instance
-TCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
-TCHAR szWindowClass[MAX_LOADSTRING];            // The title bar text
+HINSTANCE hInst;								// current instance
+TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
+TCHAR szWindowClass[MAX_LOADSTRING];			// The title bar text
 
-TCHAR szExitString[MAX_LOADSTRING];
-TCHAR szTooltipString[MAX_LOADSTRING];
+TCHAR szExitString[MAX_LOADSTRING];			    
+TCHAR szTooltipString[MAX_LOADSTRING];			
 
 // Foward declarations of functions included in this code module:
-ATOM                MyRegisterClass(HINSTANCE hInstance);
-BOOL                InitInstance(HINSTANCE, int);
-LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-LRESULT CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+ATOM				MyRegisterClass(HINSTANCE hInstance);
+BOOL				InitInstance(HINSTANCE, int);
+LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
 bool SofficeRuns()
 {
@@ -47,7 +47,7 @@ bool launchSoffice( )
 {
     if ( !SofficeRuns() )
     {
-        // UINT ret = WinExec( "h:\\office60.630b\\program\\swriter.exe -bean", SW_SHOW );
+        // UINT ret = WinExec( "h:\\office60.630b\\program\\swriter.exe -bean", SW_SHOW );  
         char filename[_MAX_PATH + 1];
 
         filename[_MAX_PATH] = 0;
@@ -87,29 +87,29 @@ void NotifyListener( HWND hWnd )
 
     if( !hIconActive )
     {
-        hIconActive = (HICON)LoadImage( GetModuleHandle( NULL ), MAKEINTRESOURCE( ICON_ACTIVE ),
+        hIconActive = (HICON)LoadImage( GetModuleHandle( NULL ), MAKEINTRESOURCE( ICON_ACTIVE ), 
             IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
             LR_DEFAULTCOLOR | LR_SHARED );
 
-/*        hIconInActive = (HICON)LoadImage( GetModuleHandle( NULL ), MAKEINTRESOURCE( ICON_INACTIVE ),
+/*        hIconInActive = (HICON)LoadImage( GetModuleHandle( NULL ), MAKEINTRESOURCE( ICON_INACTIVE ), 
             IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
             LR_DEFAULTCOLOR | LR_SHARED );
             */
     }
 
     NOTIFYICONDATA nid;
-    nid.cbSize = sizeof(NOTIFYICONDATA);
-    nid.hWnd   = hWnd;
-    nid.uID    = IDM_QUICKSTART;
+    nid.cbSize = sizeof(NOTIFYICONDATA); 
+    nid.hWnd   = hWnd; 
+    nid.uID    = IDM_QUICKSTART; 
     nid.szTip[elementsof(nid.szTip) - 1] = 0;
 //    nid.hIcon = bTerminateVeto ? hIconActive : hIconInActive;
-//    strncpy(nid.szTip, bTerminateVeto ? STRING_QUICKSTARTACTIVE : STRING_QUICKSTARTINACTIVE, elementsof(nid.szTip) - 1 );
+//    strncpy(nid.szTip, bTerminateVeto ? STRING_QUICKSTARTACTIVE : STRING_QUICKSTARTINACTIVE, elementsof(nid.szTip) - 1 ); 
     nid.hIcon = hIconActive;
-    strncpy(nid.szTip, szTooltipString, elementsof(nid.szTip) - 1);
-    nid.uFlags = NIF_TIP|NIF_ICON;
+    strncpy(nid.szTip, szTooltipString, elementsof(nid.szTip) - 1); 
+    nid.uFlags = NIF_TIP|NIF_ICON; 
 
     // update systray
-    Shell_NotifyIcon( NIM_MODIFY, &nid );
+    Shell_NotifyIcon( NIM_MODIFY, &nid );	
     //CheckMenuItem( popupMenu, IDM_QUICKSTART, bTerminateVeto ? MF_CHECKED : MF_UNCHECKED );
 
     // notify listener
@@ -129,11 +129,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     {
         if ( 0 == strcmp( __argv[i], "-killtray" ) )
         {
-            HWND    hwndTray = FindWindow( LISTENER_WINDOWCLASS, NULL );
+            HWND	hwndTray = FindWindow( LISTENER_WINDOWCLASS, NULL );
 
             if ( hwndTray )
             {
-                UINT    uMsgKillTray = RegisterWindowMessage( KILLTRAY_MESSAGE );
+                UINT	uMsgKillTray = RegisterWindowMessage( KILLTRAY_MESSAGE );
                 SendMessage( hwndTray, uMsgKillTray, 0, 0 );
             }
 
@@ -160,7 +160,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     MyRegisterClass(hInstance);
 
     // Perform application initialization:
-    if (!InitInstance (hInstance, nCmdShow))
+    if (!InitInstance (hInstance, nCmdShow)) 
     {
         return FALSE;
     }
@@ -168,9 +168,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_QUICKSTART);
 
     // Main message loop:
-    while (GetMessage(&msg, NULL, 0, 0))
+    while (GetMessage(&msg, NULL, 0, 0)) 
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -199,19 +199,19 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEX wcex;
 
-    wcex.cbSize = sizeof(WNDCLASSEX);
+    wcex.cbSize = sizeof(WNDCLASSEX); 
 
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = (WNDPROC)WndProc;
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, (LPCTSTR)IDI_QUICKSTART);
-    wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = NULL;
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
+    wcex.style			= CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc	= (WNDPROC)WndProc;
+    wcex.cbClsExtra		= 0;
+    wcex.cbWndExtra		= 0;
+    wcex.hInstance		= hInstance;
+    wcex.hIcon			= LoadIcon(hInstance, (LPCTSTR)IDI_QUICKSTART);
+    wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszMenuName	= NULL;
+    wcex.lpszClassName	= szWindowClass;
+    wcex.hIconSm		= LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
     return RegisterClassEx(&wcex);
 }
@@ -252,14 +252,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 //  PURPOSE:  Processes messages for the main window.
 //
-//  WM_COMMAND  - process the application menu
-//  WM_PAINT    - Paint the main window
-//  WM_DESTROY  - post a quit message and return
+//  WM_COMMAND	- process the application menu
+//  WM_PAINT	- Paint the main window
+//  WM_DESTROY	- post a quit message and return
 //
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message)
+    switch (message) 
     {
         case WM_CREATE:
         {
@@ -273,62 +273,62 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             // Add my items
             MENUITEMINFO mi;
-            mi.cbSize = sizeof(MENUITEMINFO);
-            mi.fMask=MIIM_TYPE|MIIM_STATE|MIIM_ID;
-            mi.fType=MFT_STRING;
-            mi.fState=MFS_ENABLED|MFS_DEFAULT;
-            mi.wID = IDM_QUICKSTART;
-            mi.hSubMenu=NULL;
-            mi.hbmpChecked=NULL;
-            mi.hbmpUnchecked=NULL;
-            mi.dwItemData=NULL;
-            mi.dwTypeData = "QuickStart";
+            mi.cbSize = sizeof(MENUITEMINFO); 
+            mi.fMask=MIIM_TYPE|MIIM_STATE|MIIM_ID; 
+            mi.fType=MFT_STRING; 
+            mi.fState=MFS_ENABLED|MFS_DEFAULT; 
+            mi.wID = IDM_QUICKSTART; 
+            mi.hSubMenu=NULL; 
+            mi.hbmpChecked=NULL; 
+            mi.hbmpUnchecked=NULL; 
+            mi.dwItemData=NULL; 
+            mi.dwTypeData = "QuickStart"; 
             mi.cch = strlen(mi.dwTypeData);
 //            InsertMenuItem(popupMenu, count++, TRUE, &mi);
 
-            mi.cbSize = sizeof(MENUITEMINFO);
-            mi.fMask=MIIM_TYPE|MIIM_STATE|MIIM_ID;
-            mi.fType=MFT_STRING;
-            mi.fState=MFS_ENABLED;
-            mi.wID = IDM_ABOUT;
-            mi.hSubMenu=NULL;
-            mi.hbmpChecked=NULL;
-            mi.hbmpUnchecked=NULL;
-            mi.dwItemData=NULL;
-            mi.dwTypeData = "Info...";
+            mi.cbSize = sizeof(MENUITEMINFO); 
+            mi.fMask=MIIM_TYPE|MIIM_STATE|MIIM_ID; 
+            mi.fType=MFT_STRING; 
+            mi.fState=MFS_ENABLED; 
+            mi.wID = IDM_ABOUT; 
+            mi.hSubMenu=NULL; 
+            mi.hbmpChecked=NULL; 
+            mi.hbmpUnchecked=NULL; 
+            mi.dwItemData=NULL; 
+            mi.dwTypeData = "Info..."; 
             mi.cch = strlen(mi.dwTypeData);
 //            InsertMenuItem(popupMenu, count++, TRUE, &mi);
 
-            mi.cbSize = sizeof(MENUITEMINFO);
+            mi.cbSize = sizeof(MENUITEMINFO); 
             mi.fMask=MIIM_TYPE;
-            mi.fType=MFT_SEPARATOR;
-            mi.hSubMenu=NULL;
-            mi.hbmpChecked=NULL;
-            mi.hbmpUnchecked=NULL;
-            mi.dwItemData=NULL;
+            mi.fType=MFT_SEPARATOR; 
+            mi.hSubMenu=NULL; 
+            mi.hbmpChecked=NULL; 
+            mi.hbmpUnchecked=NULL; 
+            mi.dwItemData=NULL; 
 //            InsertMenuItem(popupMenu, count++, TRUE, &mi);
 
-            mi.cbSize = sizeof(MENUITEMINFO);
-            mi.fMask=MIIM_TYPE|MIIM_STATE|MIIM_ID;
-            mi.fType=MFT_STRING;
-            mi.fState=MFS_ENABLED;
-            mi.wID = IDM_EXIT;
-            mi.hSubMenu=NULL;
-            mi.hbmpChecked=NULL;
-            mi.hbmpUnchecked=NULL;
-            mi.dwItemData=NULL;
-            mi.dwTypeData = szExitString;
+            mi.cbSize = sizeof(MENUITEMINFO); 
+            mi.fMask=MIIM_TYPE|MIIM_STATE|MIIM_ID; 
+            mi.fType=MFT_STRING; 
+            mi.fState=MFS_ENABLED; 
+            mi.wID = IDM_EXIT; 
+            mi.hSubMenu=NULL; 
+            mi.hbmpChecked=NULL; 
+            mi.hbmpUnchecked=NULL; 
+            mi.dwItemData=NULL; 
+            mi.dwTypeData = szExitString; 
             mi.cch = strlen(mi.dwTypeData);
             InsertMenuItem(popupMenu, count++, TRUE, &mi);
 
             // add taskbar icon
             NOTIFYICONDATA nid;
-            nid.cbSize = sizeof(NOTIFYICONDATA);
-            nid.hWnd   = hWnd;
-            nid.uID    = IDM_QUICKSTART;
-            nid.uFlags = NIF_MESSAGE;
-            nid.uCallbackMessage=MY_TASKBAR_NOTIFICATION;
-            Shell_NotifyIcon(NIM_ADD, &nid);
+            nid.cbSize = sizeof(NOTIFYICONDATA); 
+            nid.hWnd   = hWnd; 
+            nid.uID    = IDM_QUICKSTART; 
+            nid.uFlags = NIF_MESSAGE; 
+            nid.uCallbackMessage=MY_TASKBAR_NOTIFICATION; 
+            Shell_NotifyIcon(NIM_ADD, &nid);	
 
             // and update state
             NotifyListener( hWnd );
@@ -337,7 +337,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SetTimer(hWnd, UPDATE_TIMER, 3000, NULL);
         }
         break;
-
+        
         case MY_TASKBAR_NOTIFICATION: // message from taskbar
             switch(lParam)
             {
@@ -348,13 +348,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     break;
                     */
 
-                case WM_LBUTTONDOWN:
-                case WM_RBUTTONDOWN:
+                case WM_LBUTTONDOWN: 
+                case WM_RBUTTONDOWN: 
                 {
                     POINT pt;
                     GetCursorPos(&pt);
                     SetForegroundWindow( hWnd );
-                    int m = TrackPopupMenuEx(popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
+                    int m = TrackPopupMenuEx(popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON, 
                         pt.x, pt.y, hWnd, NULL);
                     // BUGFIX: See Q135788 (PRB: Menus for Notification Icons Don't Work Correctly)
                     PostMessage(hWnd, NULL, 0, 0);
@@ -390,10 +390,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             // delete taskbar icon
             NOTIFYICONDATA nid;
-            nid.cbSize=sizeof(NOTIFYICONDATA);
-            nid.hWnd = hWnd;
-            nid.uID = IDM_QUICKSTART;
-            Shell_NotifyIcon(NIM_DELETE, &nid);
+            nid.cbSize=sizeof(NOTIFYICONDATA); 
+            nid.hWnd = hWnd; 
+            nid.uID = IDM_QUICKSTART; 
+            Shell_NotifyIcon(NIM_DELETE, &nid);	
 
             PostQuitMessage(0);
             break;
@@ -412,7 +412,7 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM)
                 return TRUE;
 
         case WM_COMMAND:
-            if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+            if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) 
             {
                 EndDialog(hDlg, LOWORD(wParam));
                 return TRUE;

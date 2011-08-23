@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,9 @@ using namespace ::com::sun::star::frame;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   LogoTextStatusbarController             ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   LogoTextStatusbarController     	    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_STATUSBARCONTROLLER         ,
+                                            SERVICENAME_STATUSBARCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_LOGOTEXTSTATUSBARCONTROLLER
                                         )
 
@@ -85,12 +85,12 @@ void SAL_CALL LogoTextStatusbarController::release() throw ()
 {
     svt::StatusbarController::release();
 }
-
-void SAL_CALL LogoTextStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+ 
+void SAL_CALL LogoTextStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) 
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() ); 
+    
     svt::StatusbarController::initialize( aArguments );
 
     if ( m_xParentWindow.is() && m_nID > 0 )
@@ -110,14 +110,14 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     svt::StatusbarController::dispose();
 }
-
+ 
 // XEventListener
 void SAL_CALL LogoTextStatusbarController::disposing( const EventObject& Source )
 throw ( RuntimeException )
 {
     svt::StatusbarController::disposing( Source );
 }
-
+ 
 // XStatusListener
 void SAL_CALL LogoTextStatusbarController::statusChanged( const FeatureStateEvent& )
 throw ( RuntimeException )

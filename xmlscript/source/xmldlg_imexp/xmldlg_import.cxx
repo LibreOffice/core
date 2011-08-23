@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -276,7 +276,7 @@ bool StyleElement::importBorderStyle(
             _border = BORDER_SIMPLE_COLOR;
             _borderColor = toInt32(aValue);
         }
-
+        
         _hasValue |= 0x4;
         importBorderStyle(xProps); // write values
     }
@@ -298,7 +298,7 @@ bool StyleElement::importVisualEffectStyle(
         return false;
     }
     _inited |= 0x40;
-
+    
     OUString aValue;
     if (getStringAttr( &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("look") ),
                        _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
@@ -317,7 +317,7 @@ bool StyleElement::importVisualEffectStyle(
         }
         else
             OSL_ASSERT( 0 );
-
+        
         _hasValue |= 0x40;
         xProps->setPropertyValue( OUSTR("VisualEffect"),
                                   makeAny(_visualEffect) );
@@ -677,7 +677,7 @@ bool StyleElement::importFontStyle(
         &_descr.WordLineMode,
         OUString( RTL_CONSTASCII_USTRINGPARAM("font-wordlinemode") ),
         _xAttributes, _pImport->XMLNS_DIALOGS_UID );
-
+    
     // dialog:font-type "(raster|device|scalable)" #IMPLIED
     if (getStringAttr(
             &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("font-type") ),
@@ -1451,10 +1451,10 @@ void ImportContext::importEvents(
                         }
                     }
                     else if ( descr.ScriptType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Script" ) ) ) )
-                    {
+                    { 
                         // Check if there is a protocol, if not assume
                         // this is an early scripting framework url ( without
-                        // the protocol ) and fix it up!!
+                        // the protocol ) and fix it up!! 
                         if ( descr.ScriptCode.indexOf( ':' ) == -1 )
                         {
                             ::rtl::OUStringBuffer buf;
@@ -1546,7 +1546,7 @@ void ImportContext::importEvents(
                         _pImport->XMLNS_DIALOGS_UID == nUid &&
                         aLocalName.equalsAsciiL(
                             RTL_CONSTASCII_STRINGPARAM("event") ) );
-
+                    
                     if (!getStringAttr( &descr.ListenerType,
                                         OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                       "listener-type") ),
@@ -1617,7 +1617,7 @@ void ImportContext::importDefaults(
     {
     try
     {
-
+        
             _xControlModel->setPropertyValue(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("EnableVisible") ), makeAny( sal_False ) );
     }
@@ -1855,7 +1855,7 @@ Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormats
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
                               "com.sun.star.util.NumberFormatsSupplier") ),
                 xContext ), UNO_QUERY );
-
+        
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (! _xSupplier.is())
         {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@
 
 struct HelpHistoryEntry_Impl
 {
-    String  aURL;
+    String	aURL;
     com::sun::star::uno::Any    aViewData;
 
-    HelpHistoryEntry_Impl( const String& rURL, const com::sun::star::uno::Any& rViewData ) :
+    HelpHistoryEntry_Impl( const String& rURL, const com::sun::star::uno::Any& rViewData ) : 
         aURL( rURL ), aViewData(rViewData) {}
 };
 
@@ -73,28 +73,28 @@ friend class SfxHelpWindow_Impl;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > m_xListener;
 
-    HelpHistoryList_Impl*       m_pHistory;
-    SfxHelpWindow_Impl*         m_pWindow;
-    ULONG                       m_nCurPos;
-    String                      m_aCurrentURL;
+    HelpHistoryList_Impl*		m_pHistory;
+    SfxHelpWindow_Impl*			m_pWindow;
+    ULONG						m_nCurPos;
+    String						m_aCurrentURL;
     com::sun::star::uno::Any    m_aViewData;
 
-    void                        addURL( const String& rURL );
+    void						addURL( const String& rURL );
 
 public:
     HelpInterceptor_Impl();
     ~HelpInterceptor_Impl();
 
-    void                    setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
-    void                    SetStartURL( const String& rURL );
-    String                  GetCurrentURL() const { return m_aCurrentURL; }
+    void 					setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
+    void					SetStartURL( const String& rURL );
+    String					GetCurrentURL() const { return m_aCurrentURL; }
 
 
 
     const com::sun::star::uno::Any&     GetViewData()const {return m_aViewData;}
-
+    
     sal_Bool                HasHistoryPred() const;     // is there a predecessor for the current in the history
-    sal_Bool                HasHistorySucc() const;     // is there a successor for the current in the history
+    sal_Bool				HasHistorySucc() const;		// is there a successor for the current in the history
 
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
@@ -105,24 +105,24 @@ public:
     // XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
                             getSlaveDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlave ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlave ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL
                             getMasterDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMaster ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL	setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMaster ) throw(::com::sun::star::uno::RuntimeException);
 
     // XInterceptorInfo
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
                             getInterceptedURLs(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XDispatch
-    virtual void SAL_CALL   dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL 	dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL 	addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL 	removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
 
     // extras
-    void                    InitWaiter( SfxHelpWindow_Impl* pWindow )
+    void					InitWaiter( SfxHelpWindow_Impl* pWindow )
                                 { m_pWindow = pWindow; }
-    SfxHelpWindow_Impl*     GetHelpWindow() const { return m_pWindow; }
+    SfxHelpWindow_Impl*		GetHelpWindow() const { return m_pWindow; }
 };
 
 // HelpListener_Impl -----------------------------------------------------
@@ -130,20 +130,20 @@ public:
 class HelpListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
 {
 private:
-    HelpInterceptor_Impl*   pInterceptor;
-    Link                    aChangeLink;
-    String                  aFactory;
+    HelpInterceptor_Impl*	pInterceptor;
+    Link					aChangeLink;
+    String					aFactory;
 
 public:
     HelpListener_Impl( HelpInterceptor_Impl* pInter );
 
-    virtual void SAL_CALL   statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+    virtual void SAL_CALL	statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
                                 throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& obj )
+    virtual void SAL_CALL	disposing( const ::com::sun::star::lang::EventObject& obj )
                                 throw( ::com::sun::star::uno::RuntimeException );
 
-    void                    SetChangeHdl( const Link& rLink ) { aChangeLink = rLink; }
-    String                  GetFactory() const { return aFactory; }
+    void					SetChangeHdl( const Link& rLink ) { aChangeLink = rLink; }
+    String					GetFactory() const { return aFactory; }
 };
 // HelpStatusListener_Impl -----------------------------------------------------
 
@@ -162,7 +162,7 @@ public:
 
     virtual void SAL_CALL   statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
                                 throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& obj )
+    virtual void SAL_CALL	disposing( const ::com::sun::star::lang::EventObject& obj )
                                 throw( ::com::sun::star::uno::RuntimeException );
     const ::com::sun::star::frame::FeatureStateEvent&
                             GetStateEvent() const {return aStateEvent;}

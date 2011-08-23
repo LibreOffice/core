@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
     public Integer m_iStorageID = null;
     public XComponentContext m_xComponentContext = null;
 
-    public ScriptContext( XComponentContext xmComponentContext,
+    public ScriptContext( XComponentContext xmComponentContext, 
         XDesktop xDesktop, XModel xModel, XScriptInvocationContext xInvocContext)
     {
         this.m_xDeskTop = xDesktop;
@@ -124,10 +124,10 @@ public class ScriptContext extends PropertySet implements XScriptContext
     }
 
     //----------------------------------------------------------------------
-    /**
+    /** 
         Obtain the document reference on which the script can operate
 
-        @returns
+        @returns 
           XModel interface
     */
     public XModel getDocument()
@@ -140,10 +140,10 @@ public class ScriptContext extends PropertySet implements XScriptContext
         return m_xInvocationContext;
     }
 
-    /**
+    /** 
         Obtain the desktop reference on which the script can operate
 
-        @returns
+        @returns 
           XDesktop interface
     */
     public XDesktop getDesktop()
@@ -151,10 +151,10 @@ public class ScriptContext extends PropertySet implements XScriptContext
         return m_xDeskTop;
     }
 
-    /**
+    /** 
         Obtain the component context which the script can use to create other uno components
 
-        @returns
+        @returns 
           XComponentContext interface
     */
     public XComponentContext getComponentContext()

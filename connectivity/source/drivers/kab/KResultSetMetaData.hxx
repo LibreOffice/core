@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@ namespace connectivity
     namespace kab
     {
         /*
-        **  KabResultSetMetaData
+        **	KabResultSetMetaData
         */
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   KabResultSetMetaData_BASE;
 
         class KabResultSetMetaData : public KabResultSetMetaData_BASE
         {
-            KabConnection*              m_pConnection;
-            ::std::vector<sal_Int32>    m_aKabFields;   // for each selected column, contains the number
+            KabConnection*				m_pConnection;
+            ::std::vector<sal_Int32>	m_aKabFields;	// for each selected column, contains the number
                                                         //  of the corresponding KAddressBook field
 
         protected:

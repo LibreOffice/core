@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,20 +44,20 @@ import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 
 import org.openoffice.idesupport.LocalOffice;
 
-/**
+/** 
  * LocalOfficeImpl represents a connection to the local office.
  *
- * This class is an implementation of LocalOffice ane allows to
- * get access to some scripting framework releated functionality
- * of the locally running office. The office has to be started
- * with options appropriate for establishing local connection.
+ * This class is an implementation of LocalOffice ane allows to 
+ * get access to some scripting framework releated functionality 
+ * of the locally running office. The office has to be started 
+ * with options appropriate for establishing local connection. 
  *
  * @author misha <misha@openoffice.org>
  */
 public final class LocalOfficeImpl
     extends LocalOffice
 {
-    private final static String     STORAGE_MRG_SINGLETON =
+    private final static String     STORAGE_MRG_SINGLETON = 
         "/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager";
 
     private transient String                    mOfficePath;
@@ -74,7 +74,7 @@ public final class LocalOfficeImpl
     /**
      * Connects to the running office.
      *
-     * @param officePath is a platform specific path string
+     * @param officePath is a platform specific path string 
      *   to the office distribution.
      * @param port is a communication port.
      */
@@ -126,10 +126,10 @@ System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
 
     /**
      * Boot straps UNO.
-     *
+     * 
      * The office has to be started with following string:
      * "-accept=socket,host=localhost,port=<PORT>;urp;StarOffice.ServiceManager"
-     *
+     * 
      * @param port is a communication port.
      */
     private void bootstrap(int port)
@@ -139,8 +139,8 @@ System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
         mComponentContext   = Bootstrap.createInitialComponentContext(null);
         XUnoUrlResolver urlresolver = UnoUrlResolver.create(mComponentContext);
         object              = urlresolver.resolve(
-            "uno:socket,host=localhost,port=" +
-            port +
+            "uno:socket,host=localhost,port=" + 
+            port + 
             ";urp;StarOffice.ServiceManager");
         mComponentFactory   = (XMultiComponentFactory)UnoRuntime.queryInterface(
             XMultiComponentFactory.class, object);

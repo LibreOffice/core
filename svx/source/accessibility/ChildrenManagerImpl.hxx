@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
     @see ChildrenManager
 */
 class ChildrenManagerImpl
-    :   public MutexOwner,
+    :	public MutexOwner,
         public cppu::WeakComponentImplHelper2<
             ::com::sun::star::document::XEventListener,
             ::com::sun::star::view::XSelectionChangeListener>,
@@ -130,7 +130,7 @@ public:
     */
     long GetChildCount (void) const throw ();
 
-    /** Return the requested accessible child or throw and
+    /**	Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex
             Index of the requested child.  Call getChildCount for obtaining
@@ -149,11 +149,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
                ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /** Return the requested accessible child.
+    /**	Return the requested accessible child.
         @param aChildDescriptor
             This object contains references to the original shape and its
             associated accessible object.
-        @param  _nIndex
+        @param	_nIndex
             The index which will be used in getAccessibleIndexInParent of the accessible shape.
         @return
             Returns a reference to the requested accessible child.  This
@@ -165,7 +165,7 @@ public:
         GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return the requested accessible child given a shape.  This method
+    /**	Return the requested accessible child given a shape.  This method
         searches the list of descriptors for the one that holds the
         association of the given shape to the requested accessible object
         and returns that.  If no such descriptor is found that is
@@ -204,7 +204,7 @@ public:
         @param xShapeList
             The list of UNO shapes that replaces the old list.
     */
-    void SetShapeList (const ::com::sun::star::uno::Reference<
+    void SetShapeList (const ::com::sun::star::uno::Reference< 
         ::com::sun::star::drawing::XShapes>& xShapeList);
 
     /** Add a accessible shape.  This does not modify the list of UNO shapes
@@ -250,7 +250,7 @@ public:
 
     //=====  lang::XEventListener  ============================================
 
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -282,7 +282,7 @@ public:
         @param pViewForwarder
             The modified view forwarder.  Use this one from now on.
     */
-    virtual void ViewForwarderChanged (ChangeType aChangeType,
+    virtual void ViewForwarderChanged (ChangeType aChangeType, 
         const IAccessibleViewForwarder* pViewForwarder);
 
     //=====  IAccessibleParent  ===============================================
@@ -301,13 +301,13 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException);
+    )	throw (::com::sun::star::uno::RuntimeException);
 
 
 protected:
     /** This list holds the descriptors of all currently visible shapes and
         associated accessible object.
-
+    
         <p>With the descriptors it maintains a mapping of shapes to
         accessible objects.  It acts as a cache in that accessible objects
         are only created on demand and released with every update (where the
@@ -399,7 +399,7 @@ private:
             descriptor is added to this list.
     */
     void CreateListOfVisibleShapes (ChildDescriptorListType& raChildList);
-
+    
     /** From the old list of (former) visible shapes remove those that
         are not member of the new list.  Send appropriate events for every
         such shape.
@@ -411,7 +411,7 @@ private:
             is compared.
     */
     void RemoveNonVisibleChildren (
-        const ChildDescriptorListType& raNewChildList,
+        const ChildDescriptorListType& raNewChildList, 
         ChildDescriptorListType& raOldChildList);
 
     /** Merge the information that is already known about the visible shapes
@@ -443,14 +443,14 @@ private:
         accordingly.  Use this method instead of <member>Update()</member>
         when only a single shape has been added.
     */
-    void AddShape (const ::com::sun::star::uno::Reference<
+    void AddShape (const ::com::sun::star::uno::Reference< 
         ::com::sun::star::drawing::XShape>& xShape);
 
     /** Remove a single shape.  Update all relevant data structures
         accordingly.  Use this method instead of <member>Update()</member>
         when only a single shape has been removed.
     */
-    void RemoveShape (const ::com::sun::star::uno::Reference<
+    void RemoveShape (const ::com::sun::star::uno::Reference< 
         ::com::sun::star::drawing::XShape>& xShape);
 
     /** Add the children manager as dispose listener at the given shape so
@@ -459,14 +459,14 @@ private:
         @param xShape
             Register at this shape as dispose listener.
     */
-    void RegisterAsDisposeListener (const ::com::sun::star::uno::Reference<
+    void RegisterAsDisposeListener (const ::com::sun::star::uno::Reference< 
         ::com::sun::star::drawing::XShape>& xShape);
 
     /** Remove the children manager as dispose listener at the given shape
         @param xShape
             Unregister at this shape as dispose listener.
     */
-    void UnregisterAsDisposeListener (const ::com::sun::star::uno::Reference<
+    void UnregisterAsDisposeListener (const ::com::sun::star::uno::Reference< 
         ::com::sun::star::drawing::XShape>& xShape);
 };
 
@@ -488,19 +488,19 @@ class ChildDescriptor
 public:
     /** Reference to a (partially) visible shape.
     */
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::drawing::XShape> mxShape;
 
     /** The corresponding accessible object.  This reference is initially
         empty and only replaced by a reference to a new object when that is
         requested from the outside.
     */
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::accessibility::XAccessible> mxAccessibleShape;
 
     /** Return a pointer to the implementation object of the accessible
         shape of this descriptor.
-        @return
+        @return 
             The result is NULL if either the UNO reference to the accessible
             shape is empty or it can not be transformed into a pointer to
             the desired class.
@@ -508,11 +508,11 @@ public:
     AccessibleShape* GetAccessibleShape (void) const;
 
     /** set the index _nIndex at the accessible shape
-        @param  _nIndex
+        @param	_nIndex
             The new index in parent.
     */
     void setIndexAtAccessibleShape(sal_Int32 _nIndex);
-
+    
     /** This flag is set during the visibility calculation and indicates
         that at one time in this process an event is sent that informs the
         listners of the creation of a new accessible object.  This flags is
@@ -524,13 +524,13 @@ public:
     /** Create a new descriptor for the specified shape with empty reference
         to accessible object.
     */
-    explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
+    explicit ChildDescriptor (const ::com::sun::star::uno::Reference< 
         ::com::sun::star::drawing::XShape>& xShape);
 
     /** Create a new descriptor for the specified shape with empty reference
         to the original shape.
     */
-    explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
+    explicit ChildDescriptor (const ::com::sun::star::uno::Reference< 
         ::com::sun::star::accessibility::XAccessible>& rxAccessibleShape);
 
     ~ChildDescriptor (void);
@@ -552,7 +552,7 @@ public:
         return (
                 this == &aDescriptor ||
                 (
-                 (mxShape.get() == aDescriptor.mxShape.get() ) &&
+                 (mxShape.get() == aDescriptor.mxShape.get() ) && 
                  (mxShape.is() || mxAccessibleShape.get() == aDescriptor.mxAccessibleShape.get())
                 )
                );

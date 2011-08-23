@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,7 +176,7 @@ public:
 DBG_NAME(FmXPageViewWinRec)
 //------------------------------------------------------------------------
 FmXPageViewWinRec::FmXPageViewWinRec( const ::comphelper::ComponentContext& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
-:   m_xControlContainer( _rWindow.GetControlContainer() ),
+:	m_xControlContainer( _rWindow.GetControlContainer() ),
     m_aContext( _rContext ),
     m_pViewImpl( _pViewImpl ),
     m_pWindow( dynamic_cast< Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
@@ -845,14 +845,14 @@ bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
         OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
 
         // controls which are not focussable
-        if  (   ( FormComponentType::CONTROL != nClassId )
-            &&  ( FormComponentType::IMAGEBUTTON != nClassId )
-            &&  ( FormComponentType::GROUPBOX != nClassId )
-            &&  ( FormComponentType::FIXEDTEXT != nClassId )
-            &&  ( FormComponentType::HIDDENCONTROL != nClassId )
-            &&  ( FormComponentType::IMAGECONTROL != nClassId )
-            &&  ( FormComponentType::SCROLLBAR != nClassId )
-            &&  ( FormComponentType::SPINBUTTON!= nClassId )
+        if	(	( FormComponentType::CONTROL != nClassId )
+            &&	( FormComponentType::IMAGEBUTTON != nClassId )
+            &&	( FormComponentType::GROUPBOX != nClassId )
+            &&	( FormComponentType::FIXEDTEXT != nClassId )
+            &&	( FormComponentType::HIDDENCONTROL != nClassId )
+            &&	( FormComponentType::IMAGECONTROL != nClassId )
+            &&	( FormComponentType::SCROLLBAR != nClassId )
+            &&	( FormComponentType::SPINBUTTON!= nClassId )
             )
         {
             return true;
@@ -1165,9 +1165,9 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     SharedConnection xConnection;
 
     ::rtl::OUString sDataSource = _rColumnDescriptor.getDataSource();
-    _rColumnDescriptor[ daCommand ]     >>= sCommand;
-    _rColumnDescriptor[ daColumnName ]  >>= sFieldName;
-    _rColumnDescriptor[ daCommandType ] >>= nCommandType;
+    _rColumnDescriptor[ daCommand ]		>>= sCommand;
+    _rColumnDescriptor[ daColumnName ]	>>= sFieldName;
+    _rColumnDescriptor[ daCommandType ]	>>= nCommandType;
     {
         Reference< XConnection > xExternalConnection;
         _rColumnDescriptor[ daConnection ]  >>= xExternalConnection;
@@ -1232,9 +1232,9 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     try
     {
         // determine the table/query field which we should create a control for
-        Reference< XPropertySet >   xField;
+        Reference< XPropertySet >	xField;
 
-        Reference< XNameAccess >    xFields = aDBATools.getFieldsByCommandDescriptor(
+        Reference< XNameAccess >	xFields = aDBATools.getFieldsByCommandDescriptor(
             xConnection, nCommandType, sCommand, xKeepFieldsAlive );
 
         if (xFields.is() && xFields->hasByName(sFieldName))
@@ -1361,7 +1361,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         pObjList->InsertObject( pControl );
 
         if ( bDateNTimeField )
-        {   // so far we created a date field only, but we also need a time field
+        {	// so far we created a date field only, but we also need a time field
             pLabel = pControl = NULL;
             if  (   createControlLabelPair( *pOutDev, 0, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
                         String( SVX_RES( RID_STR_POSTFIX_TIME ) ), pLabel, pControl,
@@ -1398,7 +1398,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
     try
     {
         // determine the table/query field which we should create a control for
-        Reference< XNumberFormats > xNumberFormats;
+        Reference< XNumberFormats >	xNumberFormats;
         ::rtl::OUString sLabelPostfix = _rDesc.szName;
 
         ////////////////////////////////////////////////////////////////
@@ -1799,7 +1799,7 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
                     else
                     {
                         if ( pObj->GetObjInventor() == FmFormInventor )
-                        {   // this is a form layer object
+                        {	// this is a form layer object
                             m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), sal_True /* unmark! */ );
                         }
                     }
@@ -1839,7 +1839,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
     if (pPage)
     {
         if (rCurrentList.GetMarkCount())
-        {   // there is a current mark ... hmm. Is it a subset of the mark we remembered in saveMarkList?
+        {	// there is a current mark ... hmm. Is it a subset of the mark we remembered in saveMarkList?
             sal_Bool bMisMatch = sal_False;
 
             // loop through all current marks

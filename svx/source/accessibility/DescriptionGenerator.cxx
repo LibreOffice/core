@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -358,7 +358,7 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
             {
                 ::vos::OGuard aGuard (::Application::GetSolarMutex());
                 String sLocalizedValue;
-                SvxUnogetInternalNameForItem (sal::static_int_cast<sal_Int16>(nWhichId),
+                SvxUnogetInternalNameForItem (sal::static_int_cast<sal_Int16>(nWhichId), 
                                               sValue, sLocalizedValue);
                 msDescription.append (sLocalizedValue);
             }

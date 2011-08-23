@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace connectivity
     {
         OConnectionPool* m_pPool;
     public:
-        OPoolTimer(OConnectionPool* _pPool,const ::vos::TTimeValue& _Time)
+        OPoolTimer(OConnectionPool* _pPool,const ::vos::TTimeValue& _Time) 
             : ::vos::OTimer(_Time)
             ,m_pPool(_pPool)
         {}
@@ -63,16 +63,16 @@ namespace connectivity
     //= OConnectionPool - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
     //==========================================================================
-    typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>  OConnectionPool_Base;
+    typedef	::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>	OConnectionPool_Base;
 
     // typedef for the interanl structure
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPooledConnection> > TPooledConnections;
 
      // contains the currently pooled connections
-    typedef struct
+    typedef struct 
     {
-        TPooledConnections  aConnections;
-        sal_Int32           nALiveCount; // will be decremented everytime a time says to, when will reach zero the pool will be deleted
+        TPooledConnections	aConnections;
+        sal_Int32			nALiveCount; // will be decremented everytime a time says to, when will reach zero the pool will be deleted
     } TConnectionPool;
 
     struct TDigestHolder
@@ -82,20 +82,20 @@ namespace connectivity
         {
             m_pBuffer[0] = 0;
         }
-
+        
     };
 
-    //  typedef TDigestHolder
+    //	typedef TDigestHolder
 
     struct TDigestLess : public ::std::binary_function< TDigestHolder, TDigestHolder, bool>
     {
-        bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
-        {
+        bool operator() (const TDigestHolder& x, const TDigestHolder& y) const 
+        { 
             sal_uInt32 i;
             for(i=0;i < RTL_DIGEST_LENGTH_SHA1 && (x.m_pBuffer[i] >= y.m_pBuffer[i]); ++i)
                 ;
             return i < RTL_DIGEST_LENGTH_SHA1;
-        }
+        }      
     };
 
     typedef ::std::map< TDigestHolder,TConnectionPool,TDigestLess> TConnectionMap;
@@ -112,18 +112,18 @@ namespace connectivity
 
     class OConnectionPool : public OConnectionPool_Base
     {
-        TConnectionMap          m_aPool;                // the pooled connections
-        TActiveConnectionMap    m_aActiveConnections;   // the currently active connections
+        TConnectionMap			m_aPool;				// the pooled connections
+        TActiveConnectionMap	m_aActiveConnections;	// the currently active connections
 
-        ::osl::Mutex            m_aMutex;
-        ::vos::ORef<OPoolTimer> m_xInvalidator;         // invalidates the conntection pool when shot
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >           m_xDriverNode;  // config node entry
-        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory > m_xProxyFactory;
-        sal_Int32               m_nTimeOut;
-        sal_Int32               m_nALiveCount;
-
+        ::osl::Mutex			m_aMutex;
+        ::vos::ORef<OPoolTimer>	m_xInvalidator;			// invalidates the conntection pool when shot
+        
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >				m_xDriver;		// the one and only driver for this connectionpool
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >			m_xDriverNode;	// config node entry
+        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >	m_xProxyFactory;
+        sal_Int32				m_nTimeOut;
+        sal_Int32				m_nALiveCount;
+        
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createNewConnection(const ::rtl::OUString& _rURL,
                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,8 +59,8 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include "linectrl.hrc"
 
-#define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
-#define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
+#define OUTPUT_DRAWMODE_COLOR		(DRAWMODE_DEFAULT)
+#define OUTPUT_DRAWMODE_CONTRAST	(DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -69,8 +69,8 @@ using namespace ::com::sun::star::accessibility;
 
 /*************************************************************************
 |*
-|*  Control zur Darstellung und Auswahl der Eckpunkte (und Mittelpunkt)
-|*  eines Objekts
+|*	Control zur Darstellung und Auswahl der Eckpunkte (und Mittelpunkt)
+|*	eines Objekts
 |*
 \************************************************************************/
 
@@ -87,12 +87,12 @@ SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
 
     Control( pParent, rResId ),
 
-    pAccContext ( NULL ),
+    pAccContext	( NULL ),
     nBorderWidth( nBorder ),
     nRadius     ( nCircle),
     eDefRP      ( eRpt ),
     eCS         ( eStyle ),
-    pBitmap     ( NULL ),
+    pBitmap		( NULL ),
     m_nState    ( 0 ),
     mbCompleteDisable(sal_False)
 {
@@ -136,8 +136,8 @@ void SvxRectCtl::Resize_Impl()
             aPtMM = Point( aSize.Width() / 2, aSize.Height() / 2 );
             aPtRM = Point( aSize.Width() - nBorderWidth, aSize.Height() / 2 );
 
-            aPtLB = Point( 0 + nBorderWidth,    aSize.Height() - nBorderWidth );
-            aPtMB = Point( aSize.Width() / 2,   aSize.Height() - nBorderWidth );
+            aPtLB = Point( 0 + nBorderWidth,	aSize.Height() - nBorderWidth );
+            aPtMB = Point( aSize.Width() / 2,	aSize.Height() - nBorderWidth );
             aPtRB = Point( aSize.Width() - nBorderWidth, aSize.Height() - nBorderWidth );
         break;
 
@@ -150,8 +150,8 @@ void SvxRectCtl::Resize_Impl()
             aPtMM = Point( aSize.Width() / 2, aSize.Height() / 2 );
             aPtRM = Point( aSize.Width() - 3 * nBorderWidth, aSize.Height() / 2 );
 
-            aPtLB = Point( 0 + 3 * nBorderWidth,    aSize.Height() - nBorderWidth );
-            aPtMB = Point( aSize.Width() / 2,   aSize.Height() - nBorderWidth );
+            aPtLB = Point( 0 + 3 * nBorderWidth,	aSize.Height() - nBorderWidth );
+            aPtMB = Point( aSize.Width() / 2,	aSize.Height() - nBorderWidth );
             aPtRB = Point( aSize.Width() - 3 * nBorderWidth, aSize.Height() - nBorderWidth );
         break;
     }
@@ -165,22 +165,22 @@ void SvxRectCtl::InitRectBitmap( void )
     if( pBitmap )
         delete pBitmap;
 
-    const StyleSettings&    rStyles = Application::GetSettings().GetStyleSettings();
+    const StyleSettings&	rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
 
     pBitmap = new Bitmap( SVX_RES( RID_SVXCTRL_RECTBTNS ) );
 
     // set bitmap-colors
-    Color   aColorAry1[7];
-    Color   aColorAry2[7];
-    aColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );  // light-gray
-    aColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );  // yellow
-    aColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );  // white
-    aColorAry1[3] = Color( 0x80, 0x80, 0x80 );  // dark-gray
+    Color	aColorAry1[7];
+    Color	aColorAry2[7];
+    aColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );	// light-gray
+    aColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );	// yellow
+    aColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );	// white
+    aColorAry1[3] = Color( 0x80, 0x80, 0x80 );	// dark-gray
     aColorAry1[4] = Color( 0x00, 0x00, 0x00 );  // black
-    aColorAry1[5] = Color( 0x00, 0xFF, 0x00 );  // green
-    aColorAry1[6] = Color( 0x00, 0x00, 0xFF );  // blue
-    aColorAry2[0] = rStyles.GetDialogColor();       // background
+    aColorAry1[5] = Color( 0x00, 0xFF, 0x00 );	// green
+    aColorAry1[6] = Color( 0x00, 0x00, 0xFF );	// blue
+    aColorAry2[0] = rStyles.GetDialogColor();		// background
     aColorAry2[1] = rStyles.GetWindowColor();
     aColorAry2[2] = rStyles.GetLightColor();
     aColorAry2[3] = rStyles.GetShadowColor();
@@ -189,18 +189,18 @@ void SvxRectCtl::InitRectBitmap( void )
     aColorAry2[6] = rStyles.GetDialogColor();
 
 #ifdef DBG_UTIL
-    static BOOL     bModify = FALSE;
-    BOOL&           rModify = bModify;
+    static BOOL		bModify = FALSE;
+    BOOL&			rModify = bModify;
     if( rModify )
     {
-        static int      n = 0;
-        static UINT8    r = 0xFF;
-        static UINT8    g = 0x00;
-        static UINT8    b = 0xFF;
-        int&            rn = n;
-        UINT8&          rr = r;
-        UINT8&          rg = g;
-        UINT8&          rb = b;
+        static int		n = 0;
+        static UINT8	r = 0xFF;
+        static UINT8	g = 0x00;
+        static UINT8	b = 0xFF;
+        int&			rn = n;
+        UINT8&			rr = r;
+        UINT8&			rg = g;
+        UINT8&			rb = b;
         aColorAry2[ rn ] = Color( rr, rg, rb );
     }
 #endif
@@ -233,15 +233,15 @@ void SvxRectCtl::InitSettings( BOOL bForeground, BOOL bBackground )
     }
 
     delete pBitmap;
-    pBitmap = NULL;     // forces new creating of bitmap
+    pBitmap = NULL;		// forces new creating of bitmap
 
     Invalidate();
 }
 
 /*************************************************************************
 |*
-|*  Das angeklickte Rechteck (3 x 3) wird ermittelt und der Parent (Dialog)
-|*  wird benachrichtigt, dass der Punkt geaendert wurde
+|*	Das angeklickte Rechteck (3 x 3) wird ermittelt und der Parent (Dialog)
+|*	wird benachrichtigt, dass der Punkt geaendert wurde
 |*
 \************************************************************************/
 
@@ -386,13 +386,13 @@ void SvxRectCtl::DataChanged( const DataChangedEvent& rDCEvt )
 
 /*************************************************************************
 |*
-|*  Zeichnet das Control (Rechteck mit 9 Kreisen)
+|*	Zeichnet das Control (Rechteck mit 9 Kreisen)
 |*
 \************************************************************************/
 
 void SvxRectCtl::Paint( const Rectangle& )
 {
-    Point   aPtDiff( PixelToLogic( Point( 1, 1 ) ) );
+    Point	aPtDiff( PixelToLogic( Point( 1, 1 ) ) );
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
 
@@ -467,7 +467,7 @@ void SvxRectCtl::Paint( const Rectangle& )
     BOOL bNoHorz = (m_nState & CS_NOHORZ) != 0;
     BOOL bNoVert = (m_nState & CS_NOVERT) != 0;
 
-    Bitmap&         rBitmap = GetRectBitmap();
+    Bitmap&			rBitmap = GetRectBitmap();
 
     // #103516# CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if(IsCompletelyDisabled())
@@ -508,7 +508,7 @@ void SvxRectCtl::Paint( const Rectangle& )
     {
         if( IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
         {
-            Point       aCenterPt( aPtNew );
+            Point		aCenterPt( aPtNew );
             aCenterPt -= aToCenter;
 
             DrawBitmap( aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap );
@@ -518,7 +518,7 @@ void SvxRectCtl::Paint( const Rectangle& )
 
 /*************************************************************************
 |*
-|*  Konvertiert RECT_POINT in Point
+|*	Konvertiert RECT_POINT in Point
 |*
 \************************************************************************/
 
@@ -583,9 +583,9 @@ void SvxRectCtl::LoseFocus()
 
 Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
 {
-    Point   aPt = PixelToLogic( rPt );
-    long    x;
-    long    y;
+    Point	aPt = PixelToLogic( rPt );
+    long	x;
+    long	y;
 
     if( ( m_nState & CS_NOHORZ ) == 0 )
     {
@@ -617,13 +617,13 @@ Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
 
 /*************************************************************************
 |*
-|*  Konvertiert Point in RECT_POINT
+|*	Konvertiert Point in RECT_POINT
 |*
 \************************************************************************/
 
 RECT_POINT SvxRectCtl::GetRPFromPoint( Point aPt ) const
 {
-    if     ( aPt == aPtLT) return RP_LT;
+    if	   ( aPt == aPtLT) return RP_LT;
     else if( aPt == aPtMT) return RP_MT;
     else if( aPt == aPtRT) return RP_RT;
     else if( aPt == aPtLM) return RP_LM;
@@ -638,7 +638,7 @@ RECT_POINT SvxRectCtl::GetRPFromPoint( Point aPt ) const
 
 /*************************************************************************
 |*
-|*  Bewirkt den Ursprungszustand des Controls
+|*	Bewirkt den Ursprungszustand des Controls
 |*
 \************************************************************************/
 
@@ -651,7 +651,7 @@ void SvxRectCtl::Reset()
 
 /*************************************************************************
 |*
-|*  Gibt den aktuell ausgewaehlten RECT_POINT zur�ck
+|*	Gibt den aktuell ausgewaehlten RECT_POINT zur�ck
 |*
 \************************************************************************/
 
@@ -662,7 +662,7 @@ RECT_POINT SvxRectCtl::GetActualRP() const
 
 /*************************************************************************
 |*
-|*  Gibt den aktuell ausgewaehlten RECT_POINT zur�ck
+|*	Gibt den aktuell ausgewaehlten RECT_POINT zur�ck
 |*
 \************************************************************************/
 
@@ -705,25 +705,25 @@ UINT8 SvxRectCtl::GetNumOfChilds( void ) const
 
 Rectangle SvxRectCtl::CalculateFocusRectangle( void ) const
 {
-    Size        aDstBtnSize( PixelToLogic( Size( 15, 15 ) ) );
+    Size		aDstBtnSize( PixelToLogic( Size( 15, 15 ) ) );
     return Rectangle( aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
 }
 
 Rectangle SvxRectCtl::CalculateFocusRectangle( RECT_POINT eRectPoint ) const
 {
-    Rectangle   aRet;
-    RECT_POINT  eOldRectPoint = GetActualRP();
+    Rectangle	aRet;
+    RECT_POINT	eOldRectPoint = GetActualRP();
 
     if( eOldRectPoint == eRectPoint )
         aRet = CalculateFocusRectangle();
     else
     {
-        SvxRectCtl* pThis = const_cast< SvxRectCtl* >( this );
+        SvxRectCtl*	pThis = const_cast< SvxRectCtl* >( this );
 
-        pThis->SetActualRPWithoutInvalidate( eRectPoint );      // no invalidation because it's only temporary!
+        pThis->SetActualRPWithoutInvalidate( eRectPoint );		// no invalidation because it's only temporary!
         aRet = CalculateFocusRectangle();
 
-        pThis->SetActualRPWithoutInvalidate( eOldRectPoint );   // no invalidation because nothing has changed!
+        pThis->SetActualRPWithoutInvalidate( eOldRectPoint );	// no invalidation because nothing has changed!
     }
 
     return aRet;
@@ -731,11 +731,11 @@ Rectangle SvxRectCtl::CalculateFocusRectangle( RECT_POINT eRectPoint ) const
 
 Reference< XAccessible > SvxRectCtl::CreateAccessible()
 {
-    Window*                     pParent = GetAccessibleParentWindow();
+    Window*						pParent = GetAccessibleParentWindow();
 
     DBG_ASSERT( pParent, "-SvxRectCtl::CreateAccessible(): No Parent!" );
 
-    Reference< XAccessible >    xAccParent  = pParent->GetAccessible();
+    Reference< XAccessible >	xAccParent  = pParent->GetAccessible();
     if( xAccParent.is() )
     {
         pAccContext = new SvxRectCtlAccessibleContext( xAccParent, *this );
@@ -755,9 +755,9 @@ RECT_POINT SvxRectCtl::GetApproxRPFromPixPt( const ::com::sun::star::awt::Point&
 }
 
 // #103516# CompletelyDisabled() added to have a disabled state for SvxRectCtl
-void SvxRectCtl::DoCompletelyDisable(sal_Bool bNew)
-{
-    mbCompleteDisable = bNew;
+void SvxRectCtl::DoCompletelyDisable(sal_Bool bNew) 
+{ 
+    mbCompleteDisable = bNew; 
     Invalidate();
 }
 
@@ -813,13 +813,13 @@ void SvxAngleCtl::Initialize()
 
 /*************************************************************************
 |*
-|*  Zeichnet das (Mini-)Koordinatensystem
+|*	Zeichnet das (Mini-)Koordinatensystem
 |*
 \************************************************************************/
 
 void SvxAngleCtl::Paint( const Rectangle& )
 {
-    SetLineColor( Color( COL_BLACK ) );     // PEN_DOT ???
+    SetLineColor( Color( COL_BLACK ) ); 	// PEN_DOT ???
     DrawLine( aPtLT - Point( 0, 0), aPtRB + Point( 0, 0 ) );
     DrawLine( aPtLB - Point( 0, 0), aPtRT + Point( 0, 0 ) );
 
@@ -869,14 +869,14 @@ void SvxAngleCtl::Paint( const Rectangle& )
 
 /*************************************************************************
 |*
-|*  Control zum Editieren von Bitmaps
+|*	Control zum Editieren von Bitmaps
 |*
 \************************************************************************/
 
 SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, USHORT nNumber ) :
-                        Control     ( pParent, rResId ),
-                        nLines      ( nNumber ),
-                        bPaintable  ( TRUE )
+                        Control		( pParent, rResId ),
+                        nLines		( nNumber ),
+                        bPaintable	( TRUE )
 {
     // SetMapMode( MAP_100TH_MM );
     aRectSize = GetOutputSize();
@@ -892,7 +892,7 @@ SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, USHORT nNumber )
 
 /*************************************************************************
 |*
-|*  Destruktor dealociert dyn. Array
+|*	Destruktor dealociert dyn. Array
 |*
 \************************************************************************/
 
@@ -903,7 +903,7 @@ SvxPixelCtl::~SvxPixelCtl( )
 
 /*************************************************************************
 |*
-|*  Wechselt die Vordergrund- ,bzw. Hintergrundfarbe
+|*	Wechselt die Vordergrund- ,bzw. Hintergrundfarbe
 |*
 \************************************************************************/
 
@@ -917,7 +917,7 @@ void SvxPixelCtl::ChangePixel( USHORT nPixel )
 
 /*************************************************************************
 |*
-|*  Das angeklickte Rechteck wird ermittelt um die Farbe zu wechseln
+|*	Das angeklickte Rechteck wird ermittelt um die Farbe zu wechseln
 |*
 \************************************************************************/
 
@@ -925,7 +925,7 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPt = PixelToLogic( rMEvt.GetPosPixel() );
     Point aPtTl, aPtBr;
-    USHORT  nX, nY;
+    USHORT	nX, nY;
 
     nX = (USHORT) ( aPt.X() * nLines / aRectSize.Width() );
     nY = (USHORT) ( aPt.Y() * nLines / aRectSize.Height() );
@@ -945,14 +945,14 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
 /*************************************************************************
 |*
-|*  Zeichnet das Control (Rechteck mit 9 Kreisen)
+|*	Zeichnet das Control (Rechteck mit 9 Kreisen)
 |*
 \************************************************************************/
 
 void SvxPixelCtl::Paint( const Rectangle& )
 {
-    USHORT  i, j, nTmp;
-    Point   aPtTl, aPtBr;
+    USHORT	i, j, nTmp;
+    Point	aPtTl, aPtBr;
 
     if( bPaintable )
     {
@@ -1023,7 +1023,7 @@ void SvxPixelCtl::SetXBitmap( const XOBitmap& rXBmp )
 
 /*************************************************************************
 |*
-|*  Gibt ein bestimmtes Pixel zurueck
+|*	Gibt ein bestimmtes Pixel zurueck
 |*
 \************************************************************************/
 
@@ -1034,7 +1034,7 @@ USHORT SvxPixelCtl::GetBitmapPixel( const USHORT nPixel )
 
 /*************************************************************************
 |*
-|*  Bewirkt den Ursprungszustand des Controls
+|*	Bewirkt den Ursprungszustand des Controls
 |*
 \************************************************************************/
 
@@ -1047,7 +1047,7 @@ void SvxPixelCtl::Reset()
 
 /*************************************************************************
 |*
-|*  Ctor: BitmapCtl fuer SvxPixelCtl
+|*	Ctor: BitmapCtl fuer SvxPixelCtl
 |*
 \************************************************************************/
 
@@ -1059,7 +1059,7 @@ SvxBitmapCtl::SvxBitmapCtl( Window* /*pParent*/, const Size& rSize )
 
 /*************************************************************************
 |*
-|*  Dtor
+|*	Dtor
 |*
 \************************************************************************/
 
@@ -1069,7 +1069,7 @@ SvxBitmapCtl::~SvxBitmapCtl()
 
 /*************************************************************************
 |*
-|*  BitmapCtl:  Gibt die Bitmap zurueck
+|*	BitmapCtl:	Gibt die Bitmap zurueck
 |*
 \************************************************************************/
 
@@ -1082,7 +1082,7 @@ XOBitmap SvxBitmapCtl::GetXBitmap()
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox mit Farben und Strings
+|*	Fuellt die Listbox mit Farben und Strings
 |*
 \************************************************************************/
 
@@ -1117,7 +1117,7 @@ void ColorLB::Modify( XColorEntry* pEntry, USHORT nPos, Bitmap*  )
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox mit Farben und Strings
+|*	Fuellt die Listbox mit Farben und Strings
 |*
 \************************************************************************/
 
@@ -1137,7 +1137,7 @@ void FillAttrLB::Fill( const XColorTable* pColorTab )
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox (vorlaeufig) mit Strings
+|*	Fuellt die Listbox (vorlaeufig) mit Strings
 |*
 \************************************************************************/
 
@@ -1272,7 +1272,7 @@ void HatchingLB::SelectEntryByList( const XHatchList* pList, const String& rStr,
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox (vorlaeufig) mit Strings
+|*	Fuellt die Listbox (vorlaeufig) mit Strings
 |*
 \************************************************************************/
 
@@ -1296,7 +1296,7 @@ void FillAttrLB::Fill( const XHatchList* pList )
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox (vorlaeufig) mit Strings
+|*	Fuellt die Listbox (vorlaeufig) mit Strings
 |*
 \************************************************************************/
 
@@ -1367,7 +1367,7 @@ void GradientLB::UserDraw( const UserDrawEvent& rUDEvt )
             aGradient.SetStartIntensity( rXGrad.GetStartIntens() );
             aGradient.SetEndIntensity( rXGrad.GetEndIntens() );
             aGradient.SetSteps( 255 );
-
+            
             // #i76307# always paint the preview in LTR, because this is what the document does
             Window* pWin = dynamic_cast<Window*>(pDevice);
             if( pWin && pWin->IsRTLEnabled() && Application::GetSettings().GetLayoutRTL())
@@ -1375,7 +1375,7 @@ void GradientLB::UserDraw( const UserDrawEvent& rUDEvt )
                 long nWidth = pDevice->GetOutputSize().Width();
 
                 pWin->EnableRTL( FALSE );
-
+                
                 Rectangle aMirrorRect( Point( nWidth - aRect.Left() - aRect.GetWidth(), aRect.Top() ),
                                        aRect.GetSize() );
 
@@ -1444,7 +1444,7 @@ void GradientLB::SelectEntryByList( const XGradientList* pList, const String& rS
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox (vorlaeufig) mit Strings
+|*	Fuellt die Listbox (vorlaeufig) mit Strings
 |*
 \************************************************************************/
 
@@ -1468,7 +1468,7 @@ void FillAttrLB::Fill( const XGradientList* pList )
 
 /*************************************************************************
 |*
-|*  Konstruktor von BitmapLB
+|*	Konstruktor von BitmapLB
 |*
 \************************************************************************/
 
@@ -1639,7 +1639,7 @@ void BitmapLB::SelectEntryByList( const XBitmapList* pList, const String& rStr,
 
 /*************************************************************************
 |*
-|*  Konstruktor von FillAttrLB
+|*	Konstruktor von FillAttrLB
 |*
 \************************************************************************/
 
@@ -1730,7 +1730,7 @@ void FillAttrLB::SelectEntryByList( const XBitmapList* pList, const String& rStr
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox (vorlaeufig) mit Strings
+|*	Fuellt die Listbox (vorlaeufig) mit Strings
 |*
 \************************************************************************/
 
@@ -1747,7 +1747,7 @@ void FillTypeLB::Fill()
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox (vorlaeufig) mit Strings
+|*	Fuellt die Listbox (vorlaeufig) mit Strings
 |*
 \************************************************************************/
 
@@ -1846,7 +1846,7 @@ void LineLB::SelectEntryByList( const XDashList* pList, const String& rStr,
 
 /*************************************************************************
 |*
-|*  Fuellt die Listbox (vorlaeufig) mit Strings
+|*	Fuellt die Listbox (vorlaeufig) mit Strings
 |*
 \************************************************************************/
 
@@ -1959,11 +1959,11 @@ void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
 }
 
 SvxPreviewBase::SvxPreviewBase( Window* pParent, const ResId& rResId )
-:   Control( pParent, rResId ),
+:	Control( pParent, rResId ),
     mpModel( new SdrModel() ),
     mpBufferDevice( new VirtualDevice(*this) )
 {
-    //  Draw the control's border as a flat thin black line.
+    //	Draw the control's border as a flat thin black line.
     SetBorderStyle(WINDOW_BORDER_MONO);
     SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
     SetMapMode(MAP_100TH_MM);
@@ -1999,15 +1999,15 @@ void SvxPreviewBase::LocalPostPaint()
     const bool bWasEnabledSrc(mpBufferDevice->IsMapModeEnabled());
     const bool bWasEnabledDst(IsMapModeEnabled());
     const Point aEmptyPoint;
-
+    
     mpBufferDevice->EnableMapMode(false);
     EnableMapMode(false);
-
+    
     DrawOutDev(
-        aEmptyPoint, GetOutputSizePixel(),
-        aEmptyPoint, GetOutputSizePixel(),
+        aEmptyPoint, GetOutputSizePixel(), 
+        aEmptyPoint, GetOutputSizePixel(), 
         *mpBufferDevice);
-
+    
     mpBufferDevice->EnableMapMode(bWasEnabledSrc);
     EnableMapMode(bWasEnabledDst);
 }
@@ -2047,7 +2047,7 @@ void SvxPreviewBase::DataChanged(const DataChangedEvent& rDCEvt)
 *************************************************************************/
 
 SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId )
-:   SvxPreviewBase( pParent, rResId ),
+:	SvxPreviewBase( pParent, rResId ),
     mpLineObjA( 0L ),
     mpLineObjB( 0L ),
     mpLineObjC( 0L ),
@@ -2082,7 +2082,7 @@ SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId )
     aPolygonB.append(aPointB3);
     mpLineObjB = new SdrPathObj(OBJ_PLIN, basegfx::B2DPolyPolygon(aPolygonB));
     mpLineObjB->SetModel(&getModel());
-
+    
     // create DrawObectC
     const basegfx::B2DPoint aPointC1( aPointB3.getX() + nDistance,  aYPosB1);
     const basegfx::B2DPoint aPointC2( aPointC1.getX() + ((nAvailableLength * 1) / 20), aYPosB2 );
@@ -2174,7 +2174,7 @@ void SvxXLinePreview::Paint( const Rectangle& )
 *************************************************************************/
 
 SvxXRectPreview::SvxXRectPreview( Window* pParent, const ResId& rResId )
-:   SvxPreviewBase( pParent, rResId ),
+:	SvxPreviewBase( pParent, rResId ),
     mpRectangleObject(0)
 {
     InitSettings(true, true);
@@ -2219,7 +2219,7 @@ void SvxXRectPreview::Paint( const Rectangle& )
 *************************************************************************/
 
 SvxXShadowPreview::SvxXShadowPreview( Window* pParent, const ResId& rResId )
-:   SvxPreviewBase( pParent, rResId ),
+:	SvxPreviewBase( pParent, rResId ),
     mpRectangleObject(0),
     mpRectangleShadow(0)
 {
@@ -2259,8 +2259,8 @@ void SvxXShadowPreview::SetShadowAttributes(const SfxItemSet& rItemSet)
     mpRectangleShadow->SetMergedItem(XLineStyleItem(XLINE_NONE));
 }
 
-void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
-{
+void SvxXShadowPreview::SetShadowPosition(const Point& rPos) 
+{ 
     Rectangle aObjectPosition(mpRectangleObject->GetSnapRect());
     aObjectPosition.Move(rPos.X(), rPos.Y());
     mpRectangleShadow->SetSnapRect(aObjectPosition);

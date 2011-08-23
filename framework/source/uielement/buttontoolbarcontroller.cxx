@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -199,7 +199,7 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 // XUpdatable
-void SAL_CALL ButtonToolbarController::update()
+void SAL_CALL ButtonToolbarController::update() 
 throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
@@ -208,8 +208,8 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 // XEventListener
-void SAL_CALL ButtonToolbarController::disposing(
-    const com::sun::star::lang::EventObject& Source )
+void SAL_CALL ButtonToolbarController::disposing( 
+    const com::sun::star::lang::EventObject& Source ) 
 throw ( ::com::sun::star::uno::RuntimeException )
 {
     uno::Reference< uno::XInterface > xSource( Source.Source );
@@ -224,7 +224,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
         m_xFrame.clear();
 }
 
-void SAL_CALL ButtonToolbarController::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& )
+void SAL_CALL ButtonToolbarController::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& ) 
 throw ( ::com::sun::star::uno::RuntimeException )
 {
     // do nothing
@@ -233,7 +233,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 }
 
 // XToolbarController
-void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier )
+void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier ) 
 throw (::com::sun::star::uno::RuntimeException)
 {
     uno::Reference< frame::XDispatch >      xDispatch;
@@ -241,25 +241,25 @@ throw (::com::sun::star::uno::RuntimeException)
     uno::Reference< util::XURLTransformer > xURLTransformer;
     rtl::OUString                           aCommandURL;
     ::com::sun::star::util::URL             aTargetURL;
-
+    
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
+        
         if ( m_bDisposed )
             throw DisposedException();
 
-        if ( m_bInitialized &&
+        if ( m_bInitialized && 
              m_xFrame.is() &&
              m_xServiceManager.is() &&
              m_aCommandURL.getLength() )
         {
             if ( !m_xURLTransformer.is() )
             {
-                m_xURLTransformer = uno::Reference< util::XURLTransformer >(
+                m_xURLTransformer = uno::Reference< util::XURLTransformer >( 
                     m_xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
                     uno::UNO_QUERY_THROW );
             }
-
+            
             xFrame          = m_xFrame;
             aCommandURL     = m_aCommandURL;
             xURLTransformer = m_xURLTransformer;
@@ -283,7 +283,7 @@ throw (::com::sun::star::uno::RuntimeException)
             // Provide key modifier information to dispatch function
             aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
             aArgs[0].Value  <<= KeyModifier;
-
+            
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
                 UiEventLogHelper(::rtl::OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
             xDispatch->dispatch( aTargetURL, aArgs );
@@ -291,22 +291,22 @@ throw (::com::sun::star::uno::RuntimeException)
         catch ( DisposedException& )
         {
         }
-    }
+    } 
 }
 
-void SAL_CALL ButtonToolbarController::click()
+void SAL_CALL ButtonToolbarController::click() 
 throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
+    
     if ( m_bDisposed )
         throw DisposedException();
-
+    
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolbar->GetModifier() );
     execute( nKeyModifier );
 }
 
-void SAL_CALL ButtonToolbarController::doubleClick()
+void SAL_CALL ButtonToolbarController::doubleClick() 
 throw (::com::sun::star::uno::RuntimeException)
 {
     // do nothing
@@ -314,22 +314,22 @@ throw (::com::sun::star::uno::RuntimeException)
         throw DisposedException();
 }
 
-uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createPopupWindow()
+uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createPopupWindow() 
 throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_bDisposed )
         throw DisposedException();
-
+    
     return uno::Reference< awt::XWindow >();
 }
 
-uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createItemWindow(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& )
+uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createItemWindow( 
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& ) 
 throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_bDisposed )
         throw DisposedException();
-
+    
     return uno::Reference< awt::XWindow >();
 }
 

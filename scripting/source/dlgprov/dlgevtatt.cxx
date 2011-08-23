@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ namespace dlgprov
   class DialogUnoScriptListenerImpl : public DialogSFScriptListenerImpl
     {
     Reference< awt::XControl > m_xControl;
-        Reference< XInterface > m_xHandler;
+        Reference< XInterface >	m_xHandler;
     Reference< beans::XIntrospectionAccess > m_xIntrospectionAccess;
     bool m_bDialogProviderMode;
 
@@ -100,7 +100,7 @@ namespace dlgprov
             const Reference< awt::XControl >& rxControl,
             const Reference< XInterface >& rxHandler,
             const Reference< beans::XIntrospectionAccess >& rxIntrospectionAccess,
-            bool bDialogProviderMode );     // false: ContainerWindowProvider mode
+            bool bDialogProviderMode );		// false: ContainerWindowProvider mode
 
     };
 
@@ -131,7 +131,7 @@ namespace dlgprov
                 xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= msDialogCodeName;
                 xProps.set( mxListener, UNO_QUERY_THROW );
                 xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ), args[ 0 ] );
-            }
+            } 
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
@@ -321,18 +321,18 @@ namespace dlgprov
         // go over all objects
         const Reference< XInterface >* pObjects = Objects.getConstArray();
         sal_Int32 nObjCount = Objects.getLength();
-        Reference< awt::XControl > xDlgControl( Objects[ nObjCount - 1 ], uno::UNO_QUERY ); // last object is the dialog
+        Reference< awt::XControl > xDlgControl( Objects[ nObjCount - 1 ], uno::UNO_QUERY ); // last object is the dialog	
         rtl::OUString sDialogCodeName;
         if ( xDlgControl.is() )
         {
             Reference< XPropertySet > xProps( xDlgControl->getModel(), UNO_QUERY );
             try
             {
-                xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sDialogCodeName;
+                xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sDialogCodeName;  
             }
             catch( Exception& ){}
         }
-
+    
         for ( sal_Int32 i = 0; i < nObjCount; ++i )
         {
             // We know that we have to do with instances of XControl.
@@ -675,5 +675,5 @@ namespace dlgprov
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace dlgprov
+}	// namespace dlgprov
 //.........................................................................

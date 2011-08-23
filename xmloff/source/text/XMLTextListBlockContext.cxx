@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         const sal_Bool bRestartNumberingAtSubList )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:	SvXMLImportContext( rImport, nPrfx, rLName )
 ,   mrTxtImport( rTxtImp )
 // --> OD 2008-04-22 #refactorlists#
 ,   msListStyleName()

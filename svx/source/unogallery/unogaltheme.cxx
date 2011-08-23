@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,8 +112,8 @@ uno::Sequence< ::rtl::OUString > GalleryTheme::getSupportedServiceNames_Static()
 sal_Bool SAL_CALL GalleryTheme::supportsService( const ::rtl::OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString*              pArray = aSNL.getConstArray();
+    uno::Sequence< ::rtl::OUString >	aSNL( getSupportedServiceNames() );
+    const ::rtl::OUString*				pArray = aSNL.getConstArray();
 
     for( int i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -135,8 +135,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL GalleryTheme::getSupportedServiceNames
 uno::Sequence< uno::Type > SAL_CALL GalleryTheme::getTypes()
     throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type >  aTypes( 5 );
-    uno::Type*                  pTypes = aTypes.getArray();
+    uno::Sequence< uno::Type >	aTypes( 5 );
+    uno::Type* 					pTypes = aTypes.getArray();
 
     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo>*)0);
     *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
@@ -152,8 +152,8 @@ uno::Sequence< uno::Type > SAL_CALL GalleryTheme::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL GalleryTheme::getImplementationId()
     throw(uno::RuntimeException)
 {
-    const vos::OGuard                   aGuard( Application::GetSolarMutex() );
-    static uno::Sequence< sal_Int8 >    aId;
+    const vos::OGuard 					aGuard( Application::GetSolarMutex() );
+    static uno::Sequence< sal_Int8 >	aId;
 
     if( aId.getLength() == 0 )
     {
@@ -198,7 +198,7 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    uno::Any            aRet;
+    uno::Any 			aRet;
 
     if( mpTheme )
     {
@@ -224,7 +224,7 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    ::rtl::OUString     aRet;
+    ::rtl::OUString 	aRet;
 
     if( mpTheme )
         aRet = mpTheme->GetName();
@@ -253,7 +253,7 @@ void SAL_CALL GalleryTheme::update(  )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    sal_Int32           nRet = -1;
+    sal_Int32			nRet = -1;
 
     if( mpTheme )
     {
@@ -286,7 +286,7 @@ void SAL_CALL GalleryTheme::update(  )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    sal_Int32           nRet = -1;
+    sal_Int32 			nRet = -1;
 
     if( mpTheme )
     {
@@ -314,7 +314,7 @@ void SAL_CALL GalleryTheme::update(  )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    sal_Int32           nRet = -1;
+    sal_Int32 			nRet = -1;
 
     if( mpTheme )
     {
@@ -353,7 +353,7 @@ void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
 void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    const GalleryHint&  rGalleryHint = static_cast< const GalleryHint& >( rHint );
+    const GalleryHint& 	rGalleryHint = static_cast< const GalleryHint& >( rHint );
 
     switch( rGalleryHint.GetType() )
     {
@@ -405,7 +405,7 @@ void GalleryTheme::implReleaseItems( GalleryObject* pObj )
 
 // ------------------------------------------------------------------------------
 
-::GalleryTheme* GalleryTheme::implGetTheme() const
+::GalleryTheme*	GalleryTheme::implGetTheme() const
 {
     return mpTheme;
 }
@@ -416,7 +416,7 @@ void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-//  DBG_ASSERT( maItemList.find( &rItem ) == maItemList.end(), "Item already registered" );
+//	DBG_ASSERT( maItemList.find( &rItem ) == maItemList.end(), "Item already registered" );
     maItemList.push_back( &rItem );
 }
 
@@ -426,7 +426,7 @@ void GalleryTheme::implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-//  DBG_ASSERT( maItemList.find( &rItem ) != maItemList.end(), "Item is not registered" );
+//	DBG_ASSERT( maItemList.find( &rItem ) != maItemList.end(), "Item is not registered" );
     maItemList.remove( &rItem );
 }
 

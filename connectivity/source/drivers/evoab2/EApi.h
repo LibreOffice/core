@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ typedef void EContact;
 typedef int EContactField;
 
 EAPI_EXTERN const char      *(*e_contact_field_name)   ( EContactField field_id);
-EAPI_EXTERN gpointer        (*e_contact_get)   (EContact *contact, EContactField field_id);
+EAPI_EXTERN gpointer      	(*e_contact_get)   (EContact *contact, EContactField field_id);
 EAPI_EXTERN gconstpointer  (*e_contact_get_const)   (EContact *contact, EContactField field_id);
 // e-source.h
 typedef void ESource;
@@ -89,14 +89,14 @@ typedef enum {
 typedef void EBook;
 typedef void EBookQuery;
 
-EAPI_EXTERN EBook      *(*e_book_new)       (ESource      *source,
+EAPI_EXTERN EBook      *(*e_book_new) 		(ESource      *source,
                                                 GError      **error);
 
-EAPI_EXTERN gboolean    (*e_book_open)      (EBook       *book,
+EAPI_EXTERN gboolean    (*e_book_open)		(EBook       *book,
                                                  gboolean     only_if_exists,
                                               GError     **error);
 
-EAPI_EXTERN const char *(*e_book_get_uri)   (EBook        *book);
+EAPI_EXTERN const char *(*e_book_get_uri)	(EBook        *book);
 EAPI_EXTERN ESource    *(*e_book_get_source)(EBook        *book);
 
 EAPI_EXTERN gboolean    (*e_book_get_addressbooks)        (ESourceList **addressbook_sources,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,15 @@ class SfxSlotArr_Impl;
 
 class SFX2_DLLPUBLIC SfxSlotPool
 {
-    SfxSlotGroupArr_Impl*       _pGroups;
-    SfxSlotTypeArr_Impl*        _pTypes;
-    SfxSlotPool*                _pParentPool;
-    ResMgr*                     _pResMgr;
-    SfxInterfaceArr_Impl*       _pInterfaces;
-    USHORT                      _nCurGroup;
-    USHORT                      _nCurInterface;
-    USHORT                      _nCurMsg;
-    SfxSlotArr_Impl*            _pUnoSlots;
+    SfxSlotGroupArr_Impl*		_pGroups;
+    SfxSlotTypeArr_Impl*		_pTypes;
+    SfxSlotPool*				_pParentPool;
+    ResMgr*						_pResMgr;
+    SfxInterfaceArr_Impl*		_pInterfaces;
+    USHORT						_nCurGroup;
+    USHORT						_nCurInterface;
+    USHORT						_nCurMsg;
+    SfxSlotArr_Impl*			_pUnoSlots;
 
 private:
     const SfxSlot* SeekSlot( USHORT nObject );
@@ -63,21 +63,21 @@ public:
                         SfxSlotPool( SfxSlotPool* pParent=0, ResMgr* pMgr=0);
                         ~SfxSlotPool();
 
-    void                RegisterInterface( SfxInterface& rFace );
-    void                ReleaseInterface( SfxInterface& rFace );
+    void				RegisterInterface( SfxInterface& rFace );
+    void				ReleaseInterface( SfxInterface& rFace );
     SfxInterface*       FirstInterface();
     SfxInterface*       NextInterface();
 
     static SfxSlotPool& GetSlotPool( SfxViewFrame *pFrame=NULL );
 
-    USHORT              GetGroupCount();
-    String              SeekGroup( USHORT nNo );
-    const SfxSlot*      FirstSlot();
-    const SfxSlot*      NextSlot();
-    const SfxSlot*      GetSlot( USHORT nId );
-    const SfxSlot*      GetUnoSlot( USHORT nId );
-    const SfxSlot*      GetUnoSlot( const String& rUnoName );
-    TypeId              GetSlotType( USHORT nSlotId ) const;
+    USHORT				GetGroupCount();
+    String				SeekGroup( USHORT nNo );
+    const SfxSlot*		FirstSlot();
+    const SfxSlot*		NextSlot();
+    const SfxSlot*		GetSlot( USHORT nId );
+    const SfxSlot*		GetUnoSlot( USHORT nId );
+    const SfxSlot*		GetUnoSlot( const String& rUnoName );
+    TypeId				GetSlotType( USHORT nSlotId ) const;
 };
 
 //--------------------------------------------------------------------

@@ -34,39 +34,26 @@ TARGET=comp
 
 .INCLUDE :  settings.mk
 
-CXXFILES= \
-    sbcomp.cxx   \
-    dim.cxx      \
-    exprtree.cxx \
-    exprnode.cxx \
-    exprgen.cxx  \
-    codegen.cxx	 \
-    io.cxx       \
-    loops.cxx    \
-    parser.cxx   \
-    scanner.cxx  \
-    token.cxx    \
-    symtbl.cxx	 \
-    buffer.cxx
-
 SLOFILES= \
-    $(SLO)$/sbcomp.obj		\
-    $(SLO)$/dim.obj			\
-    $(SLO)$/exprtree.obj		\
-    $(SLO)$/exprnode.obj		\
-    $(SLO)$/exprgen.obj		\
+    $(SLO)$/buffer.obj      \
     $(SLO)$/codegen.obj		\
+    $(SLO)$/dim.obj			\
+    $(SLO)$/exprgen.obj		\
+    $(SLO)$/exprnode.obj	\
+    $(SLO)$/exprtree.obj	\
     $(SLO)$/io.obj			\
     $(SLO)$/loops.obj		\
     $(SLO)$/parser.obj		\
+    $(SLO)$/sbcomp.obj		\
     $(SLO)$/scanner.obj		\
-    $(SLO)$/token.obj		\
     $(SLO)$/symtbl.obj		\
-    $(SLO)$/buffer.obj
+    $(SLO)$/token.obj
 
 EXCEPTIONSFILES= \
-    $(SLO)$/parser.obj \
-    $(SLO)$/exprtree.obj
+    $(SLO)$/codegen.obj     \
+    $(SLO)$/dim.obj         \
+    $(SLO)$/exprtree.obj    \
+    $(SLO)$/parser.obj
 
 # --- Targets --------------------------------------------------------------
 

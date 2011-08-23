@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,38 +52,38 @@ class GalleryTheme;
 
 struct ExchangeData
 {
-    GalleryTheme*   pTheme;
-    String          aEditedTitle;
-    Date            aThemeChangeDate;
-    Time            aThemeChangeTime;
+    GalleryTheme*	pTheme;
+    String			aEditedTitle;
+    Date			aThemeChangeDate;
+    Time			aThemeChangeTime;
 };
 
 enum SgaObjKind
 {
-    SGA_OBJ_NONE = 0,   // Abstraktes Objekt
-    SGA_OBJ_BMP = 1,    // Bitmap-Objekt
-    SGA_OBJ_SOUND = 2,  // Sound-Objekt
-    SGA_OBJ_VIDEO = 3,  // Video-Objekt
-    SGA_OBJ_ANIM = 4,   // Animations-Objekt
-    SGA_OBJ_SVDRAW = 5, // Svdraw-Objekt
-    SGA_OBJ_INET = 6    // Grafik aus dem Internet
+    SGA_OBJ_NONE = 0,	// Abstraktes Objekt
+    SGA_OBJ_BMP	= 1,	// Bitmap-Objekt
+    SGA_OBJ_SOUND =	2,	// Sound-Objekt
+    SGA_OBJ_VIDEO =	3, 	// Video-Objekt
+    SGA_OBJ_ANIM = 4,	// Animations-Objekt
+    SGA_OBJ_SVDRAW = 5,	// Svdraw-Objekt
+    SGA_OBJ_INET = 6	// Grafik aus dem Internet
 };
 
 // -----------
 // - Defines -
 // -----------
 
-#define IV_IMAPINFO             (UINT32('S')*0x00000001+UINT32('D')*0x00000100+UINT32('U')*0x00010000+UINT32('D')*0x01000000)
-#define ID_IMAPINFO             2
+#define IV_IMAPINFO			    (UINT32('S')*0x00000001+UINT32('D')*0x00000100+UINT32('U')*0x00010000+UINT32('D')*0x01000000)
+#define	ID_IMAPINFO			    2
 
-#define USERDATA_HDL()          (LINK(this,SgaUserDataFactory,MakeUserData))
+#define USERDATA_HDL()		    (LINK(this,SgaUserDataFactory,MakeUserData))
 
-#define GAL_RESID( nId )        ResId( nId, *GetGalleryResMgr() )
-#define STREAMBUF_SIZE          16384L
+#define GAL_RESID( nId )	    ResId( nId, *GetGalleryResMgr() )
+#define STREAMBUF_SIZE		    16384L
 
-#define SGA_IMPORT_NONE         0x0000
-#define SGA_IMPORT_FILE         0x0001
-#define SGA_IMPORT_INET         0x0002
+#define	SGA_IMPORT_NONE		    0x0000
+#define	SGA_IMPORT_FILE		    0x0001
+#define	SGA_IMPORT_INET		    0x0002
 
 #define GALLERY_PROGRESS_RANGE  10000
 
@@ -103,18 +103,18 @@ class FmFormModel;
 class ImageMap;
 class Gallery;
 
-SVX_DLLPUBLIC ResMgr*           GetGalleryResMgr();
-USHORT          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, BOOL bShowProgress = FALSE );
-BOOL            GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
-BOOL            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
-SVX_DLLPUBLIC String            GetReducedString( const INetURLObject& rURL, ULONG nMaxLen );
-String          GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
+SVX_DLLPUBLIC ResMgr*			GetGalleryResMgr();
+USHORT			GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, BOOL bShowProgress = FALSE );
+BOOL			GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
+BOOL			CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
+SVX_DLLPUBLIC String			GetReducedString( const INetURLObject& rURL, ULONG nMaxLen );
+String			GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
 
-BOOL            FileExists( const INetURLObject& rURL );
-BOOL            CreateDir(  const INetURLObject& rURL );
-BOOL            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
-BOOL            KillFile( const INetURLObject& rURL );
-BitmapEx        GalleryResGetBitmapEx( sal_uInt32 nId );
+BOOL			FileExists( const INetURLObject& rURL );
+BOOL			CreateDir(  const INetURLObject& rURL );
+BOOL			CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
+BOOL			KillFile( const INetURLObject& rURL );
+BitmapEx		GalleryResGetBitmapEx( sal_uInt32 nId );
 
 
 // ---------------
@@ -123,7 +123,7 @@ BitmapEx        GalleryResGetBitmapEx( sal_uInt32 nId );
 
 class SgaIMapInfo : public SdrObjUserData, public SfxListener
 {
-    ImageMap                aImageMap;
+    ImageMap				aImageMap;
 
 public:
                             SgaIMapInfo() : SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO, 0 ) {};
@@ -132,7 +132,7 @@ public:
                                 SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO, 0 ),
                                 aImageMap( rImageMap ) {};
 
-    virtual                 ~SgaIMapInfo() {};
+    virtual 				~SgaIMapInfo() {};
 
     virtual SdrObjUserData* Clone( SdrObject* ) const
                             {
@@ -141,7 +141,7 @@ public:
                                 return pInfo;
                             }
 
-    const ImageMap&         GetImageMap() const { return aImageMap; }
+    const ImageMap&			GetImageMap() const { return aImageMap; }
 };
 
 // ----------------------
@@ -165,15 +165,15 @@ class GraphicFilter;
 
 class SVX_DLLPUBLIC GalleryProgress
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar > mxProgressBar;
-    GraphicFilter*                                                          mpFilter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar >	mxProgressBar;
+    GraphicFilter*															mpFilter;
 
     public:
 
                                     GalleryProgress( GraphicFilter* pFilter = NULL );
                                     ~GalleryProgress();
 
-    void                            Update( ULONG nVal, ULONG nMaxVal );
+    void							Update( ULONG nVal, ULONG nMaxVal );
 };
 
 // -----------------------
@@ -191,30 +191,30 @@ using TransferableHelper::CopyToClipboard;
 
 private:
 
-    GalleryTheme*                   mpTheme;
-    SgaObjKind                      meObjectKind;
-    sal_uInt32                      mnObjectPos;
+    GalleryTheme*					mpTheme;
+    SgaObjKind						meObjectKind;
+    sal_uInt32						mnObjectPos;
     SotStorageStreamRef             mxModelStream;
-    GraphicObject*                  mpGraphicObject;
-    ImageMap*                       mpImageMap;
-    INetURLObject*                  mpURL;
+    GraphicObject*					mpGraphicObject;
+    ImageMap*						mpImageMap;
+    INetURLObject*					mpURL;
 
 protected:
 
                                     GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos, bool bLazy );
                                     ~GalleryTransferable();
 
-    void                            InitData( bool bLazy );
+    void							InitData( bool bLazy );
 
     // TransferableHelper
-    virtual void                    AddSupportedFormats();
-    virtual sal_Bool                GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual sal_Bool                WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void                    DragFinished( sal_Int8 nDropAction );
-    virtual void                    ObjectReleased();
+    virtual void					AddSupportedFormats();
+    virtual sal_Bool				GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool				WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void					DragFinished( sal_Int8 nDropAction );
+    virtual void					ObjectReleased();
 
-    void                            CopyToClipboard( Window* pWindow );
-    void                            StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
+    void							CopyToClipboard( Window* pWindow );
+    void							StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
                                                sal_Int32 nDragPointer = DND_POINTER_NONE,
                                                sal_Int32 nDragImage = DND_IMAGE_NONE );
 };
@@ -223,14 +223,14 @@ protected:
 // - GalleryHint -
 // ---------------
 
-#define GALLERY_HINT_NONE               0x00000000
-#define GALLERY_HINT_CLOSE_THEME        0x00000001
-#define GALLERY_HINT_THEME_REMOVED      0x00000002
-#define GALLERY_HINT_THEME_RENAMED      0x00000004
-#define GALLERY_HINT_THEME_CREATED      0x00000008
-#define GALLERY_HINT_THEME_UPDATEVIEW   0x00000010
-#define GALLERY_HINT_CLOSE_OBJECT       0x00000020
-#define GALLERY_HINT_OBJECT_REMOVED     0x00000040
+#define GALLERY_HINT_NONE				0x00000000
+#define GALLERY_HINT_CLOSE_THEME		0x00000001
+#define GALLERY_HINT_THEME_REMOVED		0x00000002
+#define GALLERY_HINT_THEME_RENAMED		0x00000004
+#define GALLERY_HINT_THEME_CREATED		0x00000008
+#define GALLERY_HINT_THEME_UPDATEVIEW	0x00000010
+#define GALLERY_HINT_CLOSE_OBJECT		0x00000020
+#define GALLERY_HINT_OBJECT_REMOVED		0x00000040
 
 // -----------------------------------------------------------------------------
 
@@ -238,11 +238,11 @@ class GalleryHint : public SfxHint
 {
 private:
 
-    ULONG           mnType;
-    String          maThemeName;
-    String          maStringData;
-    ULONG           mnData1;
-    ULONG           mnData2;
+    ULONG			mnType;
+    String			maThemeName;
+    String			maStringData;
+    ULONG			mnData1;
+    ULONG			mnData2;
 
 public:
 
@@ -252,11 +252,11 @@ public:
                     GalleryHint( ULONG nType, const String& rThemeName, const String& rStringData, ULONG nData1 = 0UL, ULONG nData2 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ), mnData2( nData2 ) {}
 
-    ULONG           GetType() const { return mnType; }
-    const String&   GetThemeName() const { return maThemeName; }
-    const String&   GetStringData() const { return maStringData; }
-    ULONG           GetData1() const { return mnData1; }
-    ULONG           GetData2() const { return mnData2; }
+    ULONG			GetType() const { return mnType; }
+    const String&	GetThemeName() const { return maThemeName; }
+    const String&	GetStringData() const { return maStringData; }
+    ULONG			GetData1() const { return mnData1; }
+    ULONG			GetData2() const { return mnData2; }
 };
 
     #endif

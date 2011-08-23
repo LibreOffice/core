@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ void FwkTabPage::CreateDialog()
         m_xPage = uno::Reference < awt::XWindow >(
             m_xWinProvider->createContainerWindow(
                 m_sPageURL, rtl::OUString(), xParent, xHandler ), uno::UNO_QUERY );
-
+    
         uno::Reference< awt::XControl > xPageControl( m_xPage, uno::UNO_QUERY );
         if ( xPageControl.is() )
         {
@@ -376,7 +376,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
         m_aTabCtrl.SetPageImage( nIdx, Image( xImage ) );
     if ( bDisabled )
         m_aTabCtrl.EnablePage( nIdx, false );
-
+    
     return pEntry->m_pPage;
 }
 

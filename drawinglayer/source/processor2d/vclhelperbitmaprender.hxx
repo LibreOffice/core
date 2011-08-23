@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,18 +43,18 @@ namespace basegfx { class B2DHomMatrix; }
 namespace drawinglayer
 {
     void RenderBitmapPrimitive2D_GraphicManager(
-        OutputDevice& rOutDev,
-        const BitmapEx& rBitmapEx,
+        OutputDevice& rOutDev, 
+        const BitmapEx& rBitmapEx, 
         const basegfx::B2DHomMatrix& rTransform);
 
     void RenderBitmapPrimitive2D_BitmapEx(
-        OutputDevice& rOutDev,
-        const BitmapEx& rBitmapEx,
+        OutputDevice& rOutDev, 
+        const BitmapEx& rBitmapEx, 
         const basegfx::B2DHomMatrix& rTransform);
 
     void RenderBitmapPrimitive2D_self(
-        OutputDevice& rOutDev,
-        const BitmapEx& rBitmapEx,
+        OutputDevice& rOutDev, 
+        const BitmapEx& rBitmapEx, 
         const basegfx::B2DHomMatrix& rTransform);
 
 } // end of namespace drawinglayer

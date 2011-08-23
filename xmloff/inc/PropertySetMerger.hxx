@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 extern ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
     PropertySetMerger_CreateInstance(
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet1,
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet1, 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet2 ) throw();
-
+ 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <memory>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -49,7 +49,7 @@
 #include <uiconfiguration/imagetype.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -64,7 +64,7 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -79,7 +79,7 @@
 namespace framework
 {
     class ImageManagerImpl;
-    class ImageManager :    private ThreadHelpBase                                        , // Struct for right initalization of mutex member! Must be first of baseclasses.
+    class ImageManager :    private ThreadHelpBase						                  ,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                             public ::cppu::WeakImplHelper2< ::com::sun::star::ui::XImageManager, css::lang::XServiceInfo>
     {
         public:
@@ -119,7 +119,7 @@ namespace framework
 
             // Non-UNO methods
             void setStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::uno::RuntimeException);
-
+    
         private:
             ::std::auto_ptr<ImageManagerImpl> m_pImpl;
    };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,12 @@
 
 #include "app.hrc"
 
-#define ED_DDE_APP             50
-#define ED_DDE_TOPIC           51
-#define ED_DDE_ITEM            52
-#define FT_DDE_APP             53
-#define FT_DDE_TOPIC           54
-#define FT_DDE_ITEM            55
-#define GROUP_DDE_CHG          56
+#define ED_DDE_APP			   50
+#define ED_DDE_TOPIC		   51
+#define ED_DDE_ITEM 		   52
+#define FT_DDE_APP			   53
+#define FT_DDE_TOPIC		   54
+#define FT_DDE_ITEM 		   55
+#define GROUP_DDE_CHG		   56
 
 #endif

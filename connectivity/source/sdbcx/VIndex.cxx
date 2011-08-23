@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,8 +77,8 @@ sal_Bool SAL_CALL OIndex::supportsService( const ::rtl::OUString& _rServiceName 
     return pSupported != pEnd;
 }
 // -------------------------------------------------------------------------
-OIndex::OIndex(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
-                ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
+OIndex::OIndex(sal_Bool _bCase) :	ODescriptor_BASE(m_aMutex)
+                ,	ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
                 ,m_IsUnique(sal_False)
                 ,m_IsPrimaryKeyIndex(sal_False)
                 ,m_IsClustered(sal_False)
@@ -86,12 +86,12 @@ OIndex::OIndex(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
 {
 }
 // -------------------------------------------------------------------------
-OIndex::OIndex( const ::rtl::OUString& _Name,
+OIndex::OIndex(	const ::rtl::OUString& _Name,
                 const ::rtl::OUString& _Catalog,
                 sal_Bool _isUnique,
                 sal_Bool _isPrimaryKeyIndex,
                 sal_Bool _isClustered,
-                sal_Bool _bCase) :  ODescriptor_BASE(m_aMutex)
+                sal_Bool _bCase) :	ODescriptor_BASE(m_aMutex)
                         ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
                         ,m_Catalog(_Catalog)
                         ,m_IsUnique(_isUnique)
@@ -143,10 +143,10 @@ void OIndex::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOG),         PROPERTY_ID_CATALOG,            nAttrib,&m_Catalog,         ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE),            PROPERTY_ID_ISUNIQUE,           nAttrib,&m_IsUnique,            ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISPRIMARYKEYINDEX),PROPERTY_ID_ISPRIMARYKEYINDEX, nAttrib,&m_IsPrimaryKeyIndex,   ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCLUSTERED),     PROPERTY_ID_ISCLUSTERED,        nAttrib,&m_IsClustered,     ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOG),			PROPERTY_ID_CATALOG,			nAttrib,&m_Catalog,			::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE),			PROPERTY_ID_ISUNIQUE,			nAttrib,&m_IsUnique,			::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISPRIMARYKEYINDEX),PROPERTY_ID_ISPRIMARYKEYINDEX,	nAttrib,&m_IsPrimaryKeyIndex,	::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCLUSTERED),		PROPERTY_ID_ISCLUSTERED,		nAttrib,&m_IsClustered,		::getBooleanCppuType());
 }
 // -------------------------------------------------------------------------
 void OIndex::disposing(void)
@@ -166,7 +166,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumn
 
     try
     {
-        if  ( !m_pColumns )
+        if	( !m_pColumns )
             refreshColumns();
     }
     catch( const RuntimeException& )

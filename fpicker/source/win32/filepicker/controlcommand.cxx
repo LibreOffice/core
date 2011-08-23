@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,8 +114,8 @@ sal_Int16 SAL_CALL CControlCommand::getControlId( ) const
 //
 //---------------------------------------------
 
-CValueControlCommand::CValueControlCommand(
-        sal_Int16 aControlId,
+CValueControlCommand::CValueControlCommand(         
+        sal_Int16 aControlId, 
         sal_Int16 aControlAction,
         const ::com::sun::star::uno::Any& aValue ) :
     CControlCommand( aControlId ),
@@ -132,7 +132,7 @@ void SAL_CALL CValueControlCommand::exec( CFilePickerState* aFilePickerState )
 {
     OSL_ENSURE( aFilePickerState, "empty reference" );
 
-    aFilePickerState->setValue(
+    aFilePickerState->setValue( 
         getControlId( ),
         m_aControlAction,
         m_aValue );
@@ -144,14 +144,14 @@ void SAL_CALL CValueControlCommand::exec( CFilePickerState* aFilePickerState )
 
 CControlCommandResult* SAL_CALL CValueControlCommand::handleRequest( CControlCommandRequest* aRequest )
 {
-    CValueControlCommandRequest* value_request =
+    CValueControlCommandRequest* value_request = 
         dynamic_cast< CValueControlCommandRequest* >( aRequest );
 
     CControlCommandResult* result;
     CControlCommand* nextCommand;
 
-    if ( value_request &&
-         (value_request->getControlId( ) == getControlId( )) &&
+    if ( value_request && 
+         (value_request->getControlId( ) == getControlId( )) && 
          (value_request->getControlAction( ) == m_aControlAction) )
     {
         result = new CValueCommandResult( sal_True, m_aValue );
@@ -189,15 +189,15 @@ sal_Int16 SAL_CALL CValueControlCommand::getControlAction( ) const
 {
     return m_aValue;
 }
-
+    
 
 //---------------------------------------------
 //
 //---------------------------------------------
 
-CLabelControlCommand::CLabelControlCommand(
-        sal_Int16 aControlId,
-        const rtl::OUString& aLabel ) :
+CLabelControlCommand::CLabelControlCommand(        
+        sal_Int16 aControlId,         
+        const rtl::OUString& aLabel ) : 
     CControlCommand( aControlId ),
     m_aLabel( aLabel )
 {
@@ -225,10 +225,10 @@ CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCom
     CControlCommandResult* result;
     CControlCommand* nextCommand;
 
-    CValueControlCommandRequest* value_request =
+    CValueControlCommandRequest* value_request = 
         dynamic_cast< CValueControlCommandRequest* >( aRequest );
 
-    if ( !value_request &&
+    if ( !value_request && 
          (aRequest->getControlId( ) == getControlId( )) )
     {
         result = new CLabelCommandResult( sal_True, m_aLabel );
@@ -262,8 +262,8 @@ rtl::OUString SAL_CALL CLabelControlCommand::getLabel( ) const
 //
 //---------------------------------------------
 
-CEnableControlCommand::CEnableControlCommand(
-        sal_Int16 aControlId,
+CEnableControlCommand::CEnableControlCommand(        
+        sal_Int16 aControlId,         
         sal_Bool bEnable ) :
     CControlCommand( aControlId ),
     m_bEnable( bEnable )

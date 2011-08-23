@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 #include <osl/module.h>
 
 // the address book driver's version
-#define MACAB_DRIVER_VERSION        "0.1"
-#define MACAB_DRIVER_VERSION_MAJOR  0
-#define MACAB_DRIVER_VERSION_MINOR  1
+#define MACAB_DRIVER_VERSION		"0.1"
+#define MACAB_DRIVER_VERSION_MAJOR	0
+#define MACAB_DRIVER_VERSION_MINOR	1
 
 namespace connectivity
 {
@@ -130,11 +130,11 @@ namespace connectivity
         class MacabDriver : public MacabDriver_BASE
         {
         protected:
-            ::osl::Mutex                m_aMutex;           // mutex is need to control member access
-            OWeakRefArray               m_xConnections;     // vector containing a list of all the
+            ::osl::Mutex				m_aMutex;			// mutex is need to control member access
+            OWeakRefArray				m_xConnections;		// vector containing a list of all the
                                                             //  MacabConnection objects for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        m_xMSFactory;       // the multi-service factory
+                                        m_xMSFactory;		// the multi-service factory
             MacabImplModule               m_aImplModule;
 
         public:

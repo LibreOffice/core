@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,13 +81,13 @@ public:
     ~SfxFrameWindow_Impl( );
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual long        PreNotify( NotifyEvent& rNEvt );
-    virtual long        Notify( NotifyEvent& rEvt );
+    virtual void		StateChanged( StateChangedType nStateChange );
+    virtual long 		PreNotify( NotifyEvent& rNEvt );
+    virtual long		Notify( NotifyEvent& rEvt );
     virtual void        Resize();
     virtual void        GetFocus();
-    void                DoResize();
-    DECL_LINK(          CloserHdl, void* );
+    void				DoResize();
+    DECL_LINK(			CloserHdl, void* );
 };
 
 SfxFrameWindow_Impl::SfxFrameWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow )

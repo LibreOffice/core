@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,11 +58,11 @@ class CachedContentResultSet
     class CCRS_Cache
     {
     private:
-        com::sun::star::ucb::FetchResult*           m_pResult;
+        com::sun::star::ucb::FetchResult*			m_pResult;
         com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentIdentifierMapping >
                                                     m_xContentIdentifierMapping;
-        com::sun::star::uno::Sequence< sal_Bool >*  m_pMappedReminder;
+        com::sun::star::uno::Sequence< sal_Bool >*	m_pMappedReminder;
 
     private:
         com::sun::star::uno::Any& SAL_CALL
@@ -134,7 +134,7 @@ class CachedContentResultSet
     //my PropertySetInfo
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
                             m_xMyPropertySetInfo;//holds m_pMyPropSetInfo alive
-    CCRS_PropertySetInfo*   m_pMyPropSetInfo;
+    CCRS_PropertySetInfo*	m_pMyPropSetInfo;
 
 
     //
@@ -142,26 +142,26 @@ class CachedContentResultSet
                             m_xContentIdentifierMapping;// can be used for remote optimized ContentAccess
 
     //some Properties and helping variables
-    sal_Int32               m_nRow;
-    sal_Bool                m_bAfterLast; // TRUE, if m_nRow is after final count; can be TRUE without knowing the exact final count
+    sal_Int32				m_nRow;
+    sal_Bool				m_bAfterLast; // TRUE, if m_nRow is after final count; can be TRUE without knowing the exact final count
 
-    sal_Int32               m_nLastAppliedPos;
-    sal_Bool                m_bAfterLastApplied;
+    sal_Int32				m_nLastAppliedPos;
+    sal_Bool				m_bAfterLastApplied;
 
-    sal_Int32               m_nKnownCount; // count we know from the Origin
-    sal_Bool                m_bFinalCount; // TRUE if the Origin has reached final count and we got that count in m_nKnownCount
+    sal_Int32				m_nKnownCount; // count we know from the Origin
+    sal_Bool				m_bFinalCount; // TRUE if the Origin has reached final count and we got that count in m_nKnownCount
 
-    sal_Int32               m_nFetchSize;
-    sal_Int32               m_nFetchDirection;
+    sal_Int32				m_nFetchSize;
+    sal_Int32				m_nFetchDirection;
 
-    sal_Bool                m_bLastReadWasFromCache;
-    sal_Bool                m_bLastCachedReadWasNull;
+    sal_Bool				m_bLastReadWasFromCache;
+    sal_Bool				m_bLastCachedReadWasNull;
 
     //cache:
-    CCRS_Cache              m_aCache;
-    CCRS_Cache              m_aCacheContentIdentifierString;
-    CCRS_Cache              m_aCacheContentIdentifier;
-    CCRS_Cache              m_aCacheContent;
+    CCRS_Cache				m_aCache;
+    CCRS_Cache				m_aCacheContentIdentifierString;
+    CCRS_Cache				m_aCacheContentIdentifier;
+    CCRS_Cache				m_aCacheContent;
 
 
 private:
@@ -482,7 +482,7 @@ class CachedContentResultSetFactory
 {
 protected:
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
+        com::sun::star::lang::XMultiServiceFactory >	m_xSMgr;
 
 public:
 
@@ -513,7 +513,7 @@ public:
             const com::sun::star::uno::Reference<
                 com::sun::star::sdbc::XResultSet > & xSource,
             const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifierMapping > & xMapping )
+                com::sun::star::ucb::XContentIdentifierMapping > & xMapping	)
         throw( com::sun::star::uno::RuntimeException );
 };
 

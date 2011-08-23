@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -257,7 +257,7 @@ void EditView::SetSelection( const ESelection& rESel )
         aNewSelection.Max() = EditPaM( pNode, pNode->Len() );
     }
 
-    pImpEditView->DrawSelection();  // alte Selektion 'weg-zeichnen'
+    pImpEditView->DrawSelection();	// alte Selektion 'weg-zeichnen'
     pImpEditView->SetEditSelection( aNewSelection );
     pImpEditView->DrawSelection();
     sal_Bool bGotoCursor = pImpEditView->DoAutoScroll();
@@ -324,7 +324,7 @@ void EditView::SetWindow( Window* pWin )
     PIMPEE->GetSelEngine().Reset();
 }
 
-Window* EditView::GetWindow() const
+Window*	EditView::GetWindow() const
 {
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->pOutWin;
@@ -460,8 +460,8 @@ void EditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
 // Draw vertraegt die Assertion nicht, spaeter mal aktivieren
-//  DBG_ASSERT( pImpEditView->pEditEngine->HasView( this ), "ShowCursor - View nicht angemeldet!" );
-//  DBG_ASSERT( !GetWindow()->IsInPaint(), "ShowCursor - Why in Paint ?!" );
+//	DBG_ASSERT( pImpEditView->pEditEngine->HasView( this ), "ShowCursor - View nicht angemeldet!" );
+//	DBG_ASSERT( !GetWindow()->IsInPaint(), "ShowCursor - Why in Paint ?!" );
 
     if ( pImpEditView->pEditEngine->HasView( this ) )
     {
@@ -697,7 +697,7 @@ void EditView::UnindentBlock()
     PIMPEE->IndentBlock( this, sal_False );
 }
 
-EESelectionMode EditView::GetSelectionMode() const
+EESelectionMode	EditView::GetSelectionMode() const
 {
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->GetSelectionMode();
@@ -766,7 +766,7 @@ sal_uInt32 EditView::GetControlWord() const
     return pImpEditView->nControl;
 }
 
-EditTextObject* EditView::CreateTextObject()
+EditTextObject*	EditView::CreateTextObject()
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -783,7 +783,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     EditSelection aTextSel( PIMPEE->InsertText( rTextObject, pImpEditView->GetEditSelection() ) );
     PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
 
-    aTextSel.Min() = aTextSel.Max();    // Selektion nicht behalten.
+    aTextSel.Min() = aTextSel.Max();	// Selektion nicht behalten.
     pImpEditView->SetEditSelection( aTextSel );
     PIMPEE->FormatAndUpdate( this );
 }
@@ -798,7 +798,7 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
     EditSelection aTextSel( PIMPEE->InsertText( xDataObj, rBaseURL, pImpEditView->GetEditSelection().Max(), bUseSpecial ) );
     PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
 
-    aTextSel.Min() = aTextSel.Max();    // Selektion nicht behalten.
+    aTextSel.Min() = aTextSel.Max();	// Selektion nicht behalten.
     pImpEditView->SetEditSelection( aTextSel );
     PIMPEE->FormatAndUpdate( this );
 }
@@ -860,7 +860,7 @@ SfxStyleSheet* EditView::GetStyleSheet() const
     {
         SfxStyleSheet* pTmpStyle = PIMPEE->GetStyleSheet( n );
         if ( ( n != nStartPara ) && ( pStyle != pTmpStyle ) )
-            return NULL;    // Nicht eindeutig.
+            return NULL;	// Nicht eindeutig.
         pStyle = pTmpStyle;
     }
     return pStyle;
@@ -897,7 +897,7 @@ void EditView::TransliterateText( sal_Int32 nTransliterationMode )
     EditSelection aNewSel = PIMPEE->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
     if ( aNewSel != aOldSel )
     {
-        pImpEditView->DrawSelection();  // alte Selektion 'weg-zeichnen'
+        pImpEditView->DrawSelection();	// alte Selektion 'weg-zeichnen'
         pImpEditView->SetEditSelection( aNewSel );
         pImpEditView->DrawSelection();
     }
@@ -1138,7 +1138,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             aPopupMenu.InsertSeparator( nWords );
         }
         else
-            aPopupMenu.RemoveItem( MN_AUTOCORR );   // Loeschen?
+            aPopupMenu.RemoveItem( MN_AUTOCORR );	// Loeschen?
 
         SvtLinguConfig aCfg;
         const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -1154,7 +1154,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
             if (xDic.is())
                 xDic->setActive( sal_True );
-
+            
             aDics = xDicList->getDictionaries();
             pDic  = aDics.getConstArray();
             sal_uInt16 nCheckedLanguage = PIMPEE->GetLanguage( aPaM2 );
@@ -1248,7 +1248,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             {
                 // Cursor vor das Wort setzen...
                 EditPaM aCursor = pImpEditView->GetEditSelection().Min();
-                pImpEditView->DrawSelection();  // alte Selektion 'weg-zeichnen'
+                pImpEditView->DrawSelection();	// alte Selektion 'weg-zeichnen'
                 pImpEditView->SetEditSelection( EditSelection( aCursor, aCursor ) );
                 pImpEditView->DrawSelection();
                 // Stuerzt ab, wenn keine SfxApp
@@ -1290,12 +1290,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         {
             DBG_ASSERT(nId - MN_AUTOSTART < aAlt.getLength(), "index out of range");
             String aWord = pAlt[nId - MN_AUTOSTART];
-            SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+            SvxAutoCorrect*	pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
             if ( pAutoCorrect )
                 pAutoCorrect->PutText( aSelected, aWord, PIMPEE->GetLanguage( aPaM2 ) );
             InsertText( aWord );
         }
-        else if ( nId >= MN_ALTSTART )  // Replace
+        else if ( nId >= MN_ALTSTART )	// Replace
         {
             DBG_ASSERT(nId - MN_ALTSTART < aAlt.getLength(), "index out of range");
             String aWord = pAlt[nId - MN_ALTSTART];

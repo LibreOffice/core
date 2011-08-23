@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ private:
                                                     sal_Int32 nNameClash );
 
 public:
-    static sal_Bool             IsDocument( const String& rContent );
-    static sal_Bool             IsFolder( const String& rContent );
-    static sal_Bool             GetTitle( const String& rContent, String& rTitle );
-    static sal_Bool             Kill( const String& rContent );
+    static sal_Bool				IsDocument( const String& rContent );
+    static sal_Bool				IsFolder( const String& rContent );
+    static sal_Bool				GetTitle( const String& rContent, String& rTitle );
+    static sal_Bool				Kill( const String& rContent );
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted = sal_False );
@@ -58,19 +58,19 @@ public:
                                 GetResultSet( const String& rURL );
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetHelpTreeViewContents( const String& rURL );
-    static String               GetActiveHelpString( const String& rURL );
-    static sal_Bool             IsHelpErrorDocument( const String& rURL );
+    static String				GetActiveHelpString( const String& rURL );
+    static sal_Bool				IsHelpErrorDocument( const String& rURL );
 
-    static sal_Bool             CopyTo( const String& rSource, const String& rDest );
+    static sal_Bool				CopyTo( const String& rSource, const String& rDest );
     static sal_Bool             MoveTo( const String& rSource, const String& rDest, sal_Int32 nNameClash = com::sun::star::ucb::NameClash::ERROR );
 
-    static sal_Bool             MakeFolder( const String& rFolder );
-    static ErrCode              QueryDiskSpace( const String& rPath, sal_Int64& rFreeBytes );
-    static ULONG                GetSize( const String& rContent );
+    static sal_Bool				MakeFolder( const String& rFolder );
+    static ErrCode				QueryDiskSpace( const String& rPath, sal_Int64& rFreeBytes );
+    static ULONG				GetSize( const String& rContent );
 
     // please don't use this!
-    static sal_Bool             Exists( const String& rContent );
-    static sal_Bool             Find( const String& rFolder, const String& rName, String& rFile );
+    static sal_Bool				Exists( const String& rContent );
+    static sal_Bool				Find( const String& rFolder, const String& rName, String& rFile );
 };
 
 #endif // #ifndef _SFX_HELPER_HXX

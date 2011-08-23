@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include <objbase.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -92,12 +92,12 @@ namespace // private
     codes and errno values */
 
     struct errentry {
-        unsigned long oscode;   /* OS return value */
-        int errnocode;          /* System V error code */
+        unsigned long oscode;	/* OS return value */
+        int errnocode;			/* System V error code */
     };
 
     struct errentry errtable[] = {
-        {  ERROR_SUCCESS,                osl_File_E_None     },  /* 0 */
+        {  ERROR_SUCCESS,				 osl_File_E_None     },  /* 0 */
         {  ERROR_INVALID_FUNCTION,       osl_File_E_INVAL    },  /* 1 */
         {  ERROR_FILE_NOT_FOUND,         osl_File_E_NOENT    },  /* 2 */
         {  ERROR_PATH_NOT_FOUND,         osl_File_E_NOENT    },  /* 3 */
@@ -184,96 +184,96 @@ namespace // private
             return osl_File_E_INVAL;
     }
 
-    #define MapError( oserror ) _mapError( oserror )
+    #define MapError( oserror )	_mapError( oserror )
 
     #define E_UNKNOWN_EXEC_ERROR -1
 
     //-----------------------------------------
     //-----------------------------------------
-
+    
     bool is_system_path(const OUString& path_or_uri)
     {
         OUString url;
         osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(path_or_uri, url);
         return (rc == osl::FileBase::E_None);
     }
-
+    
     //-----------------------------------------
     // trying to identify a jump mark
-    //-----------------------------------------
-
+    //-----------------------------------------    
+    
     const OUString    JUMP_MARK_HTM  = OUString::createFromAscii(".htm#");
     const OUString    JUMP_MARK_HTML = OUString::createFromAscii(".html#");
     const sal_Unicode HASH_MARK      = (sal_Unicode)'#';
-
+    
     bool has_jump_mark(const OUString& system_path, sal_Int32* jmp_mark_start = NULL)
-    {
+    {        
         sal_Int32 jmp_mark = std::max<int>(
             system_path.lastIndexOf(JUMP_MARK_HTM),
-            system_path.lastIndexOf(JUMP_MARK_HTML));
-
-        if (jmp_mark_start)
+            system_path.lastIndexOf(JUMP_MARK_HTML));        
+        
+        if (jmp_mark_start)       
             *jmp_mark_start = jmp_mark;
-
+       
         return (jmp_mark > -1);
     }
-
+    
     //-----------------------------------------
     //-----------------------------------------
-
+    
     bool is_existing_file(const OUString& file_name)
     {
         OSL_ASSERT(is_system_path(file_name));
-
+        
         bool exist = false;
-
+        
         OUString file_url;
         osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(file_name, file_url);
-
+        
         if (osl::FileBase::E_None == rc)
         {
-            osl::DirectoryItem dir_item;
+            osl::DirectoryItem dir_item;        
             rc = osl::DirectoryItem::get(file_url, dir_item);
             exist = (osl::FileBase::E_None == rc);
         }
-        return exist;
+        return exist;                
     }
-
+    
     //-------------------------------------------------
-    // Jump marks in file urls are illegal.
+    // Jump marks in file urls are illegal. 
     //-------------------------------------------------
 
     void remove_jump_mark(OUString* p_command)
     {
         OSL_PRECOND(p_command, "invalid parameter");
-
+        
         sal_Int32 pos;
         if (has_jump_mark(*p_command, &pos))
         {
             const sal_Unicode* p_jmp_mark = p_command->getStr() + pos;
             while (*p_jmp_mark && (*p_jmp_mark != HASH_MARK))
                 p_jmp_mark++;
-
+                
             *p_command = OUString(p_command->getStr(), p_jmp_mark - p_command->getStr());
         }
     }
-
+     
 } // end namespace
 
 //-----------------------------------------------------------------------------------------
-//
+// 
 //-----------------------------------------------------------------------------------------
 
-CSysShExec::CSysShExec( ) :
+CSysShExec::CSysShExec( ) : 
     WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex )
-{
+{	
     /*
      * As this service is declared thread-affine, it is ensured to be called from a
      * dedicated thread, so initialize COM here.
      *
      * We need COM to be initialized for STA, but osl thread get initialized for MTA.
      * Once this changed, we can remove the uninitialize call.
-     */
+     */    
     CoUninitialize();
     CoInitialize( NULL );
 }
@@ -282,7 +282,7 @@ CSysShExec::CSysShExec( ) :
 //
 //-------------------------------------------------
 
-void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
+void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags ) 
         throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
     // parameter checking
@@ -302,9 +302,9 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         if the given command is a system path (not http or
         other uri schemes) and seems to have a jump mark
         and names no existing file (remeber the jump mark
-        sign '#' is a valid file name character we remove
-        the jump mark, else ShellExecuteEx fails */
-    OUString preprocessed_command(aCommand);
+        sign '#' is a valid file name character we remove 
+        the jump mark, else ShellExecuteEx fails */    
+    OUString preprocessed_command(aCommand);    
     if (is_system_path(preprocessed_command))
     {
         if (has_jump_mark(preprocessed_command) && !is_existing_file(preprocessed_command))
@@ -317,7 +317,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         if (::osl::FileBase::E_None == ::osl::FileBase::getSystemPathFromFileURL(preprocessed_command, aSystemPath))
             preprocessed_command = aSystemPath;
     }
-
+    
     SHELLEXECUTEINFOW sei;
     ZeroMemory(&sei, sizeof( sei));
 
@@ -334,7 +334,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     sal_Bool bRet = ShellExecuteExW(&sei) ? sal_True : sal_False;
 
     if (!bRet && (nFlags & NO_SYSTEM_ERROR_MESSAGE))
-    {
+    {   
         // ShellExecuteEx fails to set an error code
         // we return osl_File_E_INVAL
         sal_Int32 psxErr = GetLastError();
@@ -342,7 +342,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             psxErr = E_UNKNOWN_EXEC_ERROR;
         else
             psxErr = MapError(psxErr);
-
+        
         throw SystemShellExecuteException(
             OUString::createFromAscii("Error executing command"),
             static_cast< XSystemShellExecute* >(this),
@@ -354,17 +354,17 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 // XServiceInfo
 // -------------------------------------------------
 
-OUString SAL_CALL CSysShExec::getImplementationName(  )
+OUString SAL_CALL CSysShExec::getImplementationName(  ) 
     throw( RuntimeException )
 {
     return OUString::createFromAscii( SYSSHEXEC_IMPL_NAME );
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName ) 
     throw( RuntimeException )
 {
     Sequence < OUString > SupportedServicesNames = SysShExec_getSupportedServiceNames();
@@ -377,10 +377,10 @@ sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(	 ) 
     throw( RuntimeException )
 {
     return SysShExec_getSupportedServiceNames();

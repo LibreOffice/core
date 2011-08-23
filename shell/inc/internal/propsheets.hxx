@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef PROPSHEETS_HXX_INCLUDED
 #define PROPSHEETS_HXX_INCLUDED
 
@@ -36,11 +36,11 @@
 #include <shlobj.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 #include <string>
-#include <memory>
+#include <memory> 
 
-class CPropertySheet : public IShellExtInit, public IShellPropSheetExt
+class CPropertySheet : public IShellExtInit, public IShellPropSheetExt  
 {
 public:
     CPropertySheet(long RefCnt = 1);
@@ -51,18 +51,18 @@ public:
     // IUnknown methods
     //-----------------------------
 
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
-
+        
     virtual ULONG STDMETHODCALLTYPE AddRef( void);
-
+        
     virtual ULONG STDMETHODCALLTYPE Release( void);
 
     //-----------------------------
     // IShellExtInit
     //-----------------------------
-
+    
     virtual HRESULT STDMETHODCALLTYPE Initialize(
         LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID);
 
@@ -81,14 +81,14 @@ private:
     static BOOL CALLBACK PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
     static BOOL CALLBACK PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
 
-
+    
     // Helper functions
     void InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE lppsp);
-    void InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE lppsp);
+    void InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE lppsp);	
 
 private:
     long m_RefCnt;
     char m_szFileName[MAX_PATH];
 };
 
-#endif
+#endif 

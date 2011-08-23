@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -254,7 +254,7 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
     Reference< XContentProvider > xProvider = getContentProvider();
     if ( xProvider.is() )
         return xProvider->compareContentIds( Id1, Id2 );
-
+    
     // OSL_ENSURE( sal_False,
     // "UcbContentProviderProxy::compareContentIds - No provider!" );
 
@@ -282,7 +282,7 @@ UcbContentProviderProxy::registerInstance( const OUString& Template,
 
     if ( !m_bRegister )
     {
-//      m_xTargetProvider = 0;
+//		m_xTargetProvider = 0;
         m_aTemplate  = Template;
         m_aArguments = Arguments;
         m_bReplace   = ReplaceExisting;

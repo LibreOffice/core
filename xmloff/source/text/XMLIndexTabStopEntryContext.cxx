@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,11 @@ using ::com::sun::star::xml::sax::XAttributeList;
 TYPEINIT1( XMLIndexTabStopEntryContext, XMLIndexSimpleEntryContext );
 
 XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     XMLIndexTemplateContext& rTemplate,
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
-        XMLIndexSimpleEntryContext(rImport, rTemplate.sTokenTabStop,
+        XMLIndexSimpleEntryContext(rImport, rTemplate.sTokenTabStop, 
                                    rTemplate, nPrfx, rLocalName),
         sLeaderChar(),
         nTabPosition(0),
@@ -82,7 +82,7 @@ void XMLIndexTabStopEntryContext::StartElement(
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                               &sLocalName );
         OUString sAttr = xAttrList->getValueByIndex(nAttr);
         if (XML_NAMESPACE_STYLE == nPrefix)
@@ -141,7 +141,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
 
     // right aligned?
     pValues[nNextEntry].Name = rTemplateContext.sTabStopRightAligned;
-    pValues[nNextEntry].Value.setValue( &bTabRightAligned,
+    pValues[nNextEntry].Value.setValue( &bTabRightAligned, 
                                         ::getBooleanCppuType());
     nNextEntry++;
 
@@ -162,13 +162,13 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
     }
 
     // tab character #i21237#
-     pValues[nNextEntry].Name =
+     pValues[nNextEntry].Name = 
         OUString( RTL_CONSTASCII_USTRINGPARAM("WithTab") );
     pValues[nNextEntry].Value.setValue( &bWithTab,
                                         ::getBooleanCppuType());
-    nNextEntry++;
+    nNextEntry++;  
 
     // check whether we really filled all elements of the sequence
-    DBG_ASSERT( nNextEntry == rValues.getLength(),
+    DBG_ASSERT( nNextEntry == rValues.getLength(), 
                 "length incorrectly precumputed!" );
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 #include "fontworkgallery.hrc"
 #include "svtools/controldims.hrc"
 
-#define WIDTH                       256
-#define HEIGHT                      256
+#define WIDTH 						256
+#define HEIGHT 						256
 
-#define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
+#define MASKCOLOR	MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
 ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
 {
@@ -103,7 +103,7 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
     Zoomable = TRUE ;
 
     Text [ en-US ] = "Fontwork Alignment" ;
-
+    
     String STR_ALIGN_LEFT
     {
         Text [ en-US ] = "~Left Align";
@@ -129,37 +129,37 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
     {
         ImageBitmap = Bitmap { File = "fontworkalignleft_16.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_LEFT_16_H
     {
         ImageBitmap = Bitmap { File = "fontworkalignleft_16_h.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_LEFT_26
     {
         ImageBitmap = Bitmap { File = "fontworkalignleft_26.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_LEFT_26_H
     {
         ImageBitmap = Bitmap { File = "fontworkalignleft_26_h.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_CENTER_16
     {
         ImageBitmap = Bitmap { File = "fontworkaligncentered_16.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_CENTER_16_H
     {
         ImageBitmap = Bitmap { File = "fontworkaligncentered_16_h.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_CENTER_26
     {
         ImageBitmap = Bitmap { File = "fontworkaligncentered_26.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_CENTER_26_H
     {
         ImageBitmap = Bitmap { File = "fontworkaligncentered_26_h.png"; };
@@ -169,42 +169,42 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
     {
         ImageBitmap = Bitmap { File = "fontworkalignright_16.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_RIGHT_16_H
     {
         ImageBitmap = Bitmap { File = "fontworkalignright_16_h.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_RIGHT_26
     {
         ImageBitmap = Bitmap { File = "fontworkalignright_26.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_RIGHT_26_H
     {
         ImageBitmap = Bitmap { File = "fontworkalignright_26_h.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_WORD_16
     {
         ImageBitmap = Bitmap { File = "fontworkalignjustified_16.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_WORD_16_H
     {
         ImageBitmap = Bitmap { File = "fontworkalignjustified_16_h.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_WORD_26
     {
         ImageBitmap = Bitmap { File = "fontworkalignjustified_26.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_WORD_26_H
     {
         ImageBitmap = Bitmap { File = "fontworkalignjustified_26_h.png"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_FONTWORK_ALIGN_STRETCH_16
     {
         ImageBitmap = Bitmap { File = "fontworkalignstretch_16.png"; };
@@ -238,7 +238,7 @@ DockingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
     Zoomable = TRUE ;
 
     Text [ en-US ] = "Fontwork Character Spacing" ;
-
+    
     String STR_CHARS_SPACING_VERY_TIGHT
     {
         Text [ en-US ] = "~Very Tight";

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ using namespace com::sun::star;
 namespace drawinglayer
 {
     bool renderChartPrimitive2D(
-        const primitive2d::ChartPrimitive2D& rChartCandidate,
+        const primitive2d::ChartPrimitive2D& rChartCandidate, 
         OutputDevice& rOutputDevice,
         const geometry::ViewInformation2D& rViewInformation2D)
     {
@@ -55,27 +55,27 @@ namespace drawinglayer
         {
             uno::Reference< lang::XMultiServiceFactory > xFact( rChartCandidate.getChartModel(), uno::UNO_QUERY );
             OSL_ENSURE( xFact.is(), "Chart cannot be painted pretty!\n" );
-
+            
             if( xFact.is() )
             {
                 uno::Reference< lang::XUnoTunnel > xChartRenderer( xFact->createInstance(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartRenderer" ) ) ), uno::UNO_QUERY );
                 OSL_ENSURE( xChartRenderer.is(), "Chart cannot be painted pretty!\n" );
-
+                
                 if( xChartRenderer.is() )
                 {
                     ChartPrettyPainter* pPrettyPainter = reinterpret_cast<ChartPrettyPainter*>(
                         xChartRenderer->getSomething( ChartPrettyPainter::getUnoTunnelId() ));
-
+                
                     if( pPrettyPainter )
                     {
-                        // create logic object range; do NOT use ObjectTransformation for this
-                        // (rViewInformation2D.getObjectTransformation()), only the logic object
+                        // create logic object range; do NOT use ObjectTransformation for this 
+                        // (rViewInformation2D.getObjectTransformation()), only the logic object 
                         // size is wanted
                         basegfx::B2DRange aObjectRange(0.0, 0.0, 1.0, 1.0);
                         aObjectRange.transform(rChartCandidate.getTransformation());
                         const Rectangle aRectangle(
-                                (sal_Int32)aObjectRange.getMinX(), (sal_Int32)aObjectRange.getMinY(),
+                                (sal_Int32)aObjectRange.getMinX(), (sal_Int32)aObjectRange.getMinY(), 
                                 (sal_Int32)aObjectRange.getMaxX(), (sal_Int32)aObjectRange.getMaxY());
 
                         // #i101811#

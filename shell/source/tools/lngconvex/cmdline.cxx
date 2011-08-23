@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ size_t CommandLine::get_arg_count() const
     argument is an argument name the
     function nevertheless returns it.
 
-    @precond    0 <= Index < GetArgumentCount
+    @precond	0 <= Index < GetArgumentCount
 
     @throws std::out_of_range exception
     if the given index is to high
@@ -115,7 +115,7 @@ StringListPtr_t CommandLine::get_arg_names() const
     as the next argument name.
     If an argument value contains spaces use quotes.
 
-    @precond    GetArgumentNames() -> has element ArgumentName
+    @precond	GetArgumentNames() -> has element ArgumentName
 
     @throws std::invalid_argument exception
     if the specified argument could not be
@@ -151,7 +151,7 @@ std::string CommandLine::get_arg(const std::string& ArgumentName) const
 /** Set the prefix used to identify arguments in
     the command line.
 
-    @precond    prefix is not empty
+    @precond	prefix is not empty
 
     @throws std::invalid_argument exception if
     the prefix is empty

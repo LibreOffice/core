@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ namespace connectivity
             friend class OPredicateInterpreter;
             friend class OSQLAnalyzer;
 
-            OCodeList                               m_aCodeList;
-            OFileColumns                            m_orgColumns; // in filecurs this are the filecolumns
-            OSQLAnalyzer*                           m_pAnalyzer;
+            OCodeList								m_aCodeList;
+            OFileColumns							m_orgColumns; // in filecurs this are the filecolumns
+            OSQLAnalyzer*							m_pAnalyzer;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xIndexes;
-            sal_Int32                               m_nParamCounter;
-            sal_Bool                                m_bORCondition;
+            sal_Int32								m_nParamCounter;
+            sal_Bool								m_bORCondition;
         public:
             OPredicateCompiler(OSQLAnalyzer* pAnalyzer);
 
@@ -76,7 +76,7 @@ namespace connectivity
             sal_Bool isClean() const {return m_aCodeList.empty();}
             sal_Bool hasCode() const {return !isClean();}
             sal_Bool hasORCondition() const {return m_bORCondition;}
-            void     setOrigColumns(const OFileColumns& rCols) { m_orgColumns = rCols; }
+            void	 setOrigColumns(const OFileColumns& rCols) { m_orgColumns = rCols; }
             const OFileColumns getOrigColumns() const { return m_orgColumns; }
         protected:
             OOperand* execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -92,27 +92,27 @@ namespace connectivity
         class OPredicateInterpreter :
             public ::vos::OReference
         {
-            OCodeStack          m_aStack;
+            OCodeStack			m_aStack;
             ::vos::ORef<OPredicateCompiler> m_rCompiler;
 
         public:
             OPredicateInterpreter(const ::vos::ORef<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
             virtual ~OPredicateInterpreter();
 
-            sal_Bool    evaluate(OCodeList& rCodeList);
-            void        evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal);
+            sal_Bool	evaluate(OCodeList& rCodeList);
+            void		evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal);
 
-            inline sal_Bool start()
-            {
+            inline sal_Bool start() 
+            { 
                 return evaluate(m_rCompiler->m_aCodeList);
             }
 
-            inline void startSelection(ORowSetValueDecoratorRef& _rVal)
-            {
+            inline void startSelection(ORowSetValueDecoratorRef& _rVal) 
+            { 
                 return evaluateSelection(m_rCompiler->m_aCodeList,_rVal);
             }
 
-
+            
         };
     }
 }

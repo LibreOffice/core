@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace basprov
     // BasicLibraryNodeImpl
     // =============================================================================
 
-    BasicLibraryNodeImpl::BasicLibraryNodeImpl( const Reference< XComponentContext >& rxContext,
+    BasicLibraryNodeImpl::BasicLibraryNodeImpl( const Reference< XComponentContext >& rxContext,         
          const ::rtl::OUString& sScriptingContext, BasicManager* pBasicManager,
         const Reference< script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& sLibName, bool isAppScript )
         :m_xContext( rxContext )
@@ -91,7 +91,7 @@ namespace basprov
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        Sequence< Reference< browse::XBrowseNode > > aChildNodes;
+        Sequence< Reference< browse::XBrowseNode > > aChildNodes; 
 
         if ( m_xLibContainer.is() && m_xLibContainer->hasByName( m_sLibName ) && !m_xLibContainer->isLibraryLoaded( m_sLibName ) )
             m_xLibContainer->loadLibrary( m_sLibName );
@@ -144,5 +144,5 @@ namespace basprov
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace basprov
+}	// namespace basprov
 //.........................................................................

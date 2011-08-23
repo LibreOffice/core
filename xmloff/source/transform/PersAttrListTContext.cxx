@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,8 +77,8 @@ void XMLPersAttrListTContext::AddAttribute(
     pMutableAttrList->AddAttribute( aAttrQName, aAttrValue );
 }
 
-XMLPersAttrListTContext::XMLPersAttrListTContext(
-        XMLTransformerBase& rImp,
+XMLPersAttrListTContext::XMLPersAttrListTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rQName ),
@@ -86,8 +86,8 @@ XMLPersAttrListTContext::XMLPersAttrListTContext(
 {
 }
 
-XMLPersAttrListTContext::XMLPersAttrListTContext(
-        XMLTransformerBase& rImp,
+XMLPersAttrListTContext::XMLPersAttrListTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
@@ -96,26 +96,26 @@ XMLPersAttrListTContext::XMLPersAttrListTContext(
 {
 }
 
-XMLPersAttrListTContext::XMLPersAttrListTContext(
-        XMLTransformerBase& rImp,
+XMLPersAttrListTContext::XMLPersAttrListTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
+    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix, 
                             ::xmloff::token::GetXMLToken( eToken ) ) ),
     m_nActionMap( INVALID_ACTIONS )
 {
 }
 
-XMLPersAttrListTContext::XMLPersAttrListTContext(
-        XMLTransformerBase& rImp,
+XMLPersAttrListTContext::XMLPersAttrListTContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
+    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix, 
                             ::xmloff::token::GetXMLToken( eToken ) ) ),
     m_nActionMap( nActionMap )
 {
@@ -132,11 +132,11 @@ XMLTransformerContext *XMLPersAttrListTContext::CreateChildContext(
         const Reference< XAttributeList >& )
 {
     // ignore all child elements
-    return  new XMLIgnoreTransformerContext( GetTransformer(),
+    return  new XMLIgnoreTransformerContext( GetTransformer(), 
                                              rQName, sal_True, sal_True );
 }
 
-void XMLPersAttrListTContext::StartElement(
+void XMLPersAttrListTContext::StartElement( 
     const Reference< XAttributeList >& rAttrList )
 {
     XMLMutableAttributeList *pMutableAttrList = 0;
@@ -144,7 +144,7 @@ void XMLPersAttrListTContext::StartElement(
     Reference< XAttributeList > xAttrList( rAttrList );
     if( m_nActionMap != INVALID_ACTIONS )
     {
-        pMutableAttrList =
+        pMutableAttrList = 
             GetTransformer().ProcessAttrList( xAttrList, m_nActionMap,
                                                  sal_True );
     }

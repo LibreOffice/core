@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public class EditorScriptContext implements XScriptContext
     private XDesktop m_xDeskTop;
     private XComponentContext  m_xComponentContext;
     private XDesktop m_xCtx;
-    public EditorScriptContext( XComponentContext xmComponentContext,
+    public EditorScriptContext( XComponentContext xmComponentContext, 
         XDesktop xDesktop )
     {
         this.m_xComponentContext = xmComponentContext;
@@ -54,17 +54,17 @@ public class EditorScriptContext implements XScriptContext
     }
 
     //----------------------------------------------------------------------
-    /**
+    /** 
         Obtain the document reference on which the script can operate
 
-        @returns
+        @returns 
           XModel interface
     */
     public XModel getDocument()
     {
         XModel xModel = ( XModel ) UnoRuntime.queryInterface( XModel.class,
              m_xDeskTop.getCurrentComponent() );
-
+ 
         return xModel;
     }
 
@@ -75,10 +75,10 @@ public class EditorScriptContext implements XScriptContext
         return xContext;
     }
 
-    /**
+    /** 
         Obtain the desktop reference on which the script can operate
 
-        @returns
+        @returns 
           XDesktop interface
     */
     public XDesktop getDesktop()
@@ -86,10 +86,10 @@ public class EditorScriptContext implements XScriptContext
         return m_xDeskTop;
     }
 
-    /**
+    /** 
         Obtain the component context which the script can use to create other uno components
 
-        @returns
+        @returns 
           XComponentContext interface
     */
     public XComponentContext getComponentContext()

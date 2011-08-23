@@ -3,7 +3,7 @@
 <filesystem>
     <folder name="Templates">
         <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
-
+        
         <folder name="OfficeScripting">
             <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
             <folder name="Parcel">
@@ -32,7 +32,7 @@
         </folder>
         <attr boolvalue="true" name="Ant/OfficeScripting"/>
         <attr boolvalue="true" name="OfficeScripting/Other"/>
-
+        
     <!-- OpenOfficeDoc FileSystem BEGIN: -->
         <!-- Uncomment to enable writable mounting of Office Documents
         <folder name="Mount">
@@ -58,7 +58,7 @@
         -->
         <!-- OpenOfficeDoc FileSystem END: -->
     </folder>
-
+    
     <folder name="Services">
         <folder name="MIMEResolver">
           <file name="org-netbeans-modules-office-mime-resolver.xml" url="mime-resolver.xml">

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,35 +76,35 @@
 
 //=============================================================================
 
-#define TEMPLATE_SERVICE_NAME               "com.sun.star.frame.DocumentTemplates"
-#define TEMPLATE_IMPLEMENTATION_NAME        "com.sun.star.comp.sfx2.DocumentTemplates"
+#define TEMPLATE_SERVICE_NAME				"com.sun.star.frame.DocumentTemplates"
+#define TEMPLATE_IMPLEMENTATION_NAME		"com.sun.star.comp.sfx2.DocumentTemplates"
 
-#define SERVICENAME_TYPEDETECTION           "com.sun.star.document.TypeDetection"
-#define SERVICENAME_DOCINFO                 "com.sun.star.document.StandaloneDocumentInfo"
+#define SERVICENAME_TYPEDETECTION			"com.sun.star.document.TypeDetection"
+#define SERVICENAME_DOCINFO					"com.sun.star.document.StandaloneDocumentInfo"
 
-#define TEMPLATE_ROOT_URL       "vnd.sun.star.hier:/templates"
-#define TITLE                   "Title"
-#define IS_FOLDER               "IsFolder"
-#define IS_DOCUMENT             "IsDocument"
-#define TARGET_URL              "TargetURL"
-#define TEMPLATE_VERSION        "TemplateComponentVersion"
-#define TEMPLATE_VERSION_VALUE  "2"
-#define TYPE_FOLDER             "application/vnd.sun.star.hier-folder"
-#define TYPE_LINK               "application/vnd.sun.star.hier-link"
-#define TYPE_FSYS_FOLDER        "application/vnd.sun.staroffice.fsys-folder"
-#define TYPE_FSYS_FILE          "application/vnd.sun.staroffice.fsys-file"
+#define TEMPLATE_ROOT_URL		"vnd.sun.star.hier:/templates"
+#define TITLE					"Title"
+#define IS_FOLDER				"IsFolder"
+#define IS_DOCUMENT				"IsDocument"
+#define TARGET_URL				"TargetURL"
+#define TEMPLATE_VERSION		"TemplateComponentVersion"
+#define TEMPLATE_VERSION_VALUE	"2"
+#define TYPE_FOLDER				"application/vnd.sun.star.hier-folder"
+#define TYPE_LINK				"application/vnd.sun.star.hier-link"
+#define TYPE_FSYS_FOLDER		"application/vnd.sun.staroffice.fsys-folder"
+#define TYPE_FSYS_FILE			"application/vnd.sun.staroffice.fsys-file"
 
-#define PROPERTY_DIRLIST        "DirectoryList"
-#define PROPERTY_NEEDSUPDATE    "NeedsUpdate"
-#define PROPERTY_TYPE           "TypeDescription"
+#define PROPERTY_DIRLIST		"DirectoryList"
+#define PROPERTY_NEEDSUPDATE	"NeedsUpdate"
+#define PROPERTY_TYPE			"TypeDescription"
 
-#define TARGET_DIR_URL          "TargetDirURL"
-#define COMMAND_DELETE          "delete"
-#define COMMAND_TRANSFER        "transfer"
+#define TARGET_DIR_URL			"TargetDirURL"
+#define COMMAND_DELETE			"delete"
+#define COMMAND_TRANSFER		"transfer"
 
-#define STANDARD_FOLDER         "standard"
+#define STANDARD_FOLDER			"standard"
 
-#define C_DELIM                 ';'
+#define	C_DELIM					';'
 
 //=============================================================================
 
@@ -184,28 +184,28 @@ class SfxDocTplService_Impl
     uno::Reference< XStandaloneDocumentInfo >        mxInfo;
     uno::Reference< XTypeDetection >                 mxType;
 
-    ::osl::Mutex                maMutex;
-    Sequence< OUString >        maTemplateDirs;
-    OUString                    maRootURL;
-    NameList_Impl               maNames;
-    Locale                      maLocale;
-    Content                     maRootContent;
-    Updater_Impl*               mpUpdater;
-    sal_Bool                    mbIsInitialized : 1;
-    sal_Bool                    mbLocaleSet     : 1;
+    ::osl::Mutex				maMutex;
+    Sequence< OUString >		maTemplateDirs;
+    OUString					maRootURL;
+    NameList_Impl				maNames;
+    Locale						maLocale;
+    Content						maRootContent;
+    Updater_Impl*				mpUpdater;
+    sal_Bool					mbIsInitialized : 1;
+    sal_Bool					mbLocaleSet		: 1;
 
-    SfxURLRelocator_Impl        maRelocator;
+    SfxURLRelocator_Impl		maRelocator;
 
-    void                        init_Impl();
-    void                        getDefaultLocale();
-    void                        getDirList();
-    void                        readFolderList();
+    void						init_Impl();
+    void						getDefaultLocale();
+    void						getDirList();
+    void						readFolderList();
     sal_Bool                    needsUpdate();
-    OUString                    getLongName( const OUString& rShortName );
-    sal_Bool                    setTitleForURL( const OUString& rURL, const OUString& aTitle );
-    sal_Bool                    getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType, sal_Bool& bDocHasTitle );
+    OUString					getLongName( const OUString& rShortName );
+    sal_Bool					setTitleForURL( const OUString& rURL, const OUString& aTitle );
+    sal_Bool					getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType, sal_Bool& bDocHasTitle );
 
-    sal_Bool                    addEntry( Content& rParentFolder,
+    sal_Bool					addEntry( Content& rParentFolder,
                                           const OUString& rTitle,
                                           const OUString& rTargetURL,
                                           const OUString& rType );
@@ -215,29 +215,29 @@ class SfxDocTplService_Impl
                                               sal_Bool  bFsysFolder,
                                               Content   &rNewFolder );
 
-    sal_Bool                    CreateNewUniqueFolderWithPrefix( const ::rtl::OUString& aPath,
+    sal_Bool					CreateNewUniqueFolderWithPrefix( const ::rtl::OUString& aPath,
                                                                 const ::rtl::OUString& aPrefix,
                                                                 ::rtl::OUString& aNewFolderName,
                                                                 ::rtl::OUString& aNewFolderURL,
                                                                 Content& aNewFolder );
-    ::rtl::OUString             CreateNewUniqueFileWithPrefix( const ::rtl::OUString& aPath,
+    ::rtl::OUString				CreateNewUniqueFileWithPrefix( const ::rtl::OUString& aPath,
                                                                 const ::rtl::OUString& aPrefix,
                                                                 const ::rtl::OUString& aExt );
 
     uno::Sequence< beans::StringPair > ReadUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath );
-    sal_Bool                    UpdateUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath,
+    sal_Bool					UpdateUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath,
                                                                   const ::rtl::OUString& aGroupName,
                                                                   const ::rtl::OUString& aNewFolderName );
-    sal_Bool                    ReplaceUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath,
+    sal_Bool					ReplaceUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath,
                                                                   const ::rtl::OUString& aFsysGroupName,
                                                                   const ::rtl::OUString& aOldGroupName,
                                                                   const ::rtl::OUString& aNewGroupName );
-    sal_Bool                    RemoveUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath,
+    sal_Bool					RemoveUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath,
                                                                   const ::rtl::OUString& aGroupName );
-    sal_Bool                    WriteUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath,
+    sal_Bool					WriteUINamesForTemplateDir_Impl( const ::rtl::OUString& aUserPath,
                                                                 const uno::Sequence< beans::StringPair >& aUINames );
 
-    ::rtl::OUString             CreateNewGroupFsys( const ::rtl::OUString& rGroupName, Content& aGroup );
+    ::rtl::OUString				CreateNewGroupFsys( const ::rtl::OUString& rGroupName, Content& aGroup );
 
     sal_Bool                    removeContent( Content& rContent );
     sal_Bool                    removeContent( const OUString& rContentURL );
@@ -280,7 +280,7 @@ public:
     void                        setLocale( const Locale & rLocale );
     Locale                      getLocale();
 
-    sal_Bool                    storeTemplate( const OUString& rGroupName,
+    sal_Bool 					storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
                                                const uno::Reference< XSTORABLE >& rStorable );
 
@@ -617,7 +617,7 @@ sal_Bool SfxDocTplService_Impl::needsUpdate()
     OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_NEEDSUPDATE ) );
     sal_Bool bHasProperty = sal_False;
     sal_Bool bNeedsUpdate = sal_True;
-    Any      aValue;
+    Any		 aValue;
 
     // Get the template dir list
     bHasProperty = getProperty( maRootContent, aPropName, aValue );
@@ -1202,12 +1202,12 @@ void SfxDocTplService_Impl::doUpdate()
     ::osl::MutexGuard aGuard( maMutex );
 
     OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_NEEDSUPDATE ) );
-    Any      aValue;
+    Any		 aValue;
 
     aValue <<= sal_True;
     setProperty( maRootContent, aPropName, aValue );
 
-    GroupList_Impl  aGroupList;
+    GroupList_Impl	aGroupList;
 
     // get the entries from the hierarchy
     createFromContent( aGroupList, maRootContent, sal_True );
@@ -1476,8 +1476,8 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     ::osl::MutexGuard aGuard( maMutex );
 
     // Check, wether or not there is a group with this name
-    Content      aNewGroup;
-    OUString        aNewGroupURL;
+    Content		 aNewGroup;
+    OUString		aNewGroupURL;
     INetURLObject   aNewGroupObj( maRootURL );
 
     aNewGroupObj.insertName( rGroupName, false,
@@ -1497,7 +1497,7 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     // Get the user template path entry ( new group will always
     // be added in the user template path )
     sal_Int32   nIndex;
-    OUString    aUserPath;
+    OUString	aUserPath;
 
     nIndex = maTemplateDirs.getLength();
     if ( nIndex )
@@ -1508,9 +1508,9 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     aUserPath = maTemplateDirs[ nIndex ];
 
     // create a new folder with the given name
-    Content      aNewFolder;
-    OUString        aNewFolderName;
-    OUString        aNewFolderURL;
+    Content		 aNewFolder;
+    OUString		aNewFolderName;
+    OUString		aNewFolderURL;
 
     // the Fsys name instead of GroupName should be used, the groupuinames must be added also
     if ( !CreateNewUniqueFolderWithPrefix( aUserPath,
@@ -1570,15 +1570,15 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
                       INetURLObject::ENCODE_ALL );
 
     // Get the target url
-    Content  aGroup;
-    OUString    aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
+    Content	 aGroup;
+    OUString	aGroupURL = aGroupObj.GetMainURL( INetURLObject::NO_DECODE );
 
     if ( Content::create( aGroupURL, maCmdEnv, aGroup ) )
     {
-        OUString    aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-        Any      aValue;
+        OUString	aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+        Any		 aValue;
 
-        OUString    aGroupTargetURL;
+        OUString	aGroupTargetURL;
         if ( getProperty( aGroup, aPropName, aValue ) )
             aValue >>= aGroupTargetURL;
 
@@ -1691,8 +1691,8 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     OUString aGroupTargetURL;
     // there is no need to check whether target dir url is in target path, since if the target path is changed
     // the target dir url should be already generated new
-    OUString    aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-    Any      aValue;
+    OUString	aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+    Any		 aValue;
     if ( getProperty( aGroup, aPropName, aValue ) )
         aValue >>= aGroupTargetURL;
 
@@ -1774,7 +1774,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     Content         aGroup, aTemplate, aTargetGroup, aTemplateToRemove;
     OUString        aGroupURL, aTemplateURL, aTemplateToRemoveTargetURL;
     INetURLObject   aGroupObj( maRootURL );
-    sal_Bool        bRemoveOldTemplateContent = sal_False;
+    sal_Bool		bRemoveOldTemplateContent = sal_False;
     ::rtl::OUString sDocServiceName;
 
     aGroupObj.insertName( rGroupName, false,
@@ -1785,9 +1785,9 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
         return sal_False;
 
-    ::rtl::OUString aGroupTargetURL;
-    ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-    Any      aValue;
+    ::rtl::OUString	aGroupTargetURL;
+    ::rtl::OUString	aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+    Any		 aValue;
     if ( getProperty( aGroup, aPropName, aValue ) )
         aValue >>= aGroupTargetURL;
 
@@ -1874,7 +1874,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         // find the mediatype and extension
-        uno::Reference< container::XNameAccess > xTypeDetection =
+        uno::Reference< container::XNameAccess > xTypeDetection	=
             mxType.is() ?
                 uno::Reference< container::XNameAccess >( mxType, uno::UNO_QUERY_THROW ) :
                 uno::Reference< container::XNameAccess >(
@@ -1919,7 +1919,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         aStoreArgs[1].Value <<= rTemplateName;
 
         ::rtl::OUString aCurrentDocumentURL = rStorable->getLocation();
-        if( !SfxMedium::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
+        if( !::utl::UCBContentHelper::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
             rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );
         else
             rStorable->store();

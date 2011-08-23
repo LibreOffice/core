@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -258,7 +258,7 @@ namespace svxform
                 {
                     if  (  ( nClassId != FormComponentType::COMMANDBUTTON )
                         && ( nClassId != FormComponentType::RADIOBUTTON )
-                        && ( nClassId != FormComponentType::CHECKBOX    )
+                        && ( nClassId != FormComponentType::CHECKBOX	)
                         && ( nClassId != FormComponentType::GROUPBOX )
                         && ( nClassId != FormComponentType::FIXEDTEXT )
                         && ( nClassId != FormComponentType::SCROLLBAR )
@@ -270,7 +270,7 @@ namespace svxform
                             &&  ( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ) )
                             )
                             // light gray flat border
-                            _rxControlModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( (sal_Int32)0x00C0C0C0 ) );
+                            _rxControlModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( (sal_Int32)0x00C0C0C0 ) ); 
                     }
                 }
                 if ( xPSI->hasPropertyByName( FM_PROP_VISUALEFFECT ) )

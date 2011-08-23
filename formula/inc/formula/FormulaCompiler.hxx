@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ public:
     FormulaCompiler(FormulaTokenArray& _rArr);
     virtual ~FormulaCompiler();
 
-    // SUNWS8 needs a forward declared friend, otherwise members of the outer
+    // SUNWS8 needs a forward declared friend, otherwise members of the outer 
     // class are not accessible.
     class OpCodeMap;
     friend class FormulaCompiler::OpCodeMap;
@@ -121,7 +121,7 @@ public:
             mbEnglish = FormulaGrammar::isEnglish( meGrammar);
         }
         virtual ~OpCodeMap();
-
+        
 
         /// Get the symbol String -> OpCode hash map for finds.
         inline const OpCodeHashMap* getHashMap() const { return mpHashMap; }
@@ -199,7 +199,7 @@ public:
         @return Map for nLanguage. If nLanguage is unknown, a NULL map is returned.
      */
     OpCodeMapPtr GetOpCodeMap( const sal_Int32 nLanguage ) const;
-
+    
     /** Create an internal symbol map from API mapping.
         @param bEnglish
             Use English number parser / formatter instead of native.
@@ -261,7 +261,7 @@ protected:
     virtual void CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromMatrix(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void LocalizeString( String& rName );   // modify rName - input: exact name
+    virtual void LocalizeString( String& rName );	// modify rName - input: exact name
     virtual BOOL IsImportingXML() const;
 
     BOOL   GetToken();
@@ -289,7 +289,7 @@ protected:
     String              aCorrectedSymbol;           // autocorrected Symbol
 
     OpCodeMapPtr        mxSymbols;                  // which symbols are used
-
+    
     FormulaTokenRef     pToken;                     // current token
     FormulaTokenRef     pCurrentFactorToken;        // current factor token (of Factor() method)
     FormulaTokenArray*  pArr;
@@ -303,7 +303,7 @@ protected:
     short               nNumFmt;                    // set during CompileTokenArray()
     USHORT              pc;
 
-    FormulaGrammar::Grammar
+    FormulaGrammar::Grammar  
                         meGrammar;          // The grammar used, language plus convention.
 
     BOOL                bAutoCorrect;               // whether to apply AutoCorrection
@@ -365,7 +365,7 @@ private:
         operator FormulaToken*()
             { return operator->(); }
     };
-
+    
 
     mutable NonConstOpCodeMapPtr  mxSymbolsODFF;                          // ODFF symbols
     mutable NonConstOpCodeMapPtr  mxSymbolsPODF;                          // ODF 1.1 symbols

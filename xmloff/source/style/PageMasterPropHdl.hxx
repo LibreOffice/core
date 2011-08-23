@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,17 +39,17 @@
 class XMLPMPropHdl_PageStyleLayout : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_PageStyleLayout();
+    virtual					~XMLPMPropHdl_PageStyleLayout();
     virtual bool            equals(
                                 const ::com::sun::star::uno::Any& rAny1,
                                 const ::com::sun::star::uno::Any& rAny2
                                 ) const;
-    virtual sal_Bool        importXML(
+    virtual sal_Bool		importXML(
                                 const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
-    virtual sal_Bool        exportXML(
+    virtual sal_Bool		exportXML(
                                 ::rtl::OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
@@ -63,13 +63,13 @@ public:
 class XMLPMPropHdl_NumFormat : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_NumFormat();
-    virtual sal_Bool        importXML(
+    virtual					~XMLPMPropHdl_NumFormat();
+    virtual sal_Bool		importXML(
                                 const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
-    virtual sal_Bool        exportXML(
+    virtual sal_Bool		exportXML(
                                 ::rtl::OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
@@ -83,13 +83,13 @@ public:
 class XMLPMPropHdl_NumLetterSync : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_NumLetterSync();
-    virtual sal_Bool        importXML(
+    virtual					~XMLPMPropHdl_NumLetterSync();
+    virtual sal_Bool		importXML(
                                 const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
-    virtual sal_Bool        exportXML(
+    virtual sal_Bool		exportXML(
                                 ::rtl::OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
@@ -103,13 +103,13 @@ public:
 class XMLPMPropHdl_PaperTrayNumber : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_PaperTrayNumber();
-    virtual sal_Bool        importXML(
+    virtual					~XMLPMPropHdl_PaperTrayNumber();
+    virtual sal_Bool		importXML(
                                 const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
-    virtual sal_Bool        exportXML(
+    virtual sal_Bool		exportXML(
                                 ::rtl::OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
@@ -123,18 +123,18 @@ public:
 class XMLPMPropHdl_Print : public XMLPropertyHandler
 {
 protected:
-    ::rtl::OUString         sAttrValue;
+    ::rtl::OUString			sAttrValue;
 
 public:
                             XMLPMPropHdl_Print( enum ::xmloff::token::XMLTokenEnum eValue );
-    virtual                 ~XMLPMPropHdl_Print();
+    virtual					~XMLPMPropHdl_Print();
 
-    virtual sal_Bool        importXML(
+    virtual sal_Bool		importXML(
                                 const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
-    virtual sal_Bool        exportXML(
+    virtual sal_Bool		exportXML(
                                 ::rtl::OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
@@ -147,13 +147,13 @@ public:
 class XMLPMPropHdl_CenterHorizontal : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_CenterHorizontal();
-    virtual sal_Bool        importXML(
+    virtual					~XMLPMPropHdl_CenterHorizontal();
+    virtual sal_Bool		importXML(
                                 const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
-    virtual sal_Bool        exportXML(
+    virtual sal_Bool		exportXML(
                                 ::rtl::OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
@@ -163,13 +163,13 @@ public:
 class XMLPMPropHdl_CenterVertical : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_CenterVertical();
-    virtual sal_Bool        importXML(
+    virtual					~XMLPMPropHdl_CenterVertical();
+    virtual sal_Bool		importXML(
                                 const ::rtl::OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
-    virtual sal_Bool        exportXML(
+    virtual sal_Bool		exportXML(
                                 ::rtl::OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter

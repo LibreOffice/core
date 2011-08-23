@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -388,7 +388,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
                     mrImportHelper.GetChartFamilyID(), msAutoStyleName );
 
-                XMLPropStyleContext* pPropStyleContext =
+                XMLPropStyleContext* pPropStyleContext = 
                     const_cast< XMLPropStyleContext * >(
                         dynamic_cast< const XMLPropStyleContext * >( pStyle ) );
                 if( pPropStyleContext )
@@ -498,7 +498,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         bCreateInternalDataProvider = true;
     else if( !m_rbHasRangeAtPlotArea )
         bCreateInternalDataProvider = true;
-
+        
     if( bCreateInternalDataProvider && mxNewDoc.is() )
     {
         // we have no complete range => we have own data, so switch the data
@@ -533,7 +533,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
             bool bAdaptWrongPercentScaleValues = false;
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
             {
-                //correct errors from older versions
+                //correct errors from older versions 
 
                 // for NetCharts there were no xAxis exported to older files
                 // so we need to add the x axis here for those old NetChart files
@@ -553,7 +553,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
                     bAdaptXAxisOrientationForOld2DBarCharts = true;
             }
 
-            pContext = new SchXMLAxisContext( mrImportHelper, GetImport(), rLocalName, mxDiagram, maAxes, mrCategoriesAddress,
+            pContext = new SchXMLAxisContext( mrImportHelper, GetImport(), rLocalName, mxDiagram, maAxes, mrCategoriesAddress, 
                                               bAddMissingXAxisForNetCharts, bAdaptWrongPercentScaleValues, bAdaptXAxisOrientationForOld2DBarCharts, m_bAxisPositionAttributeImported );
         }
         break;
@@ -690,7 +690,7 @@ void SchXMLPlotAreaContext::EndElement()
     }
 
     // set changed size and position after properties (esp. 3d)
-
+    
     uno::Reference< chart::XDiagramPositioning > xDiaPos( mxDiagram, uno::UNO_QUERY );
     if( xDiaPos.is())
     {
@@ -714,7 +714,7 @@ void SchXMLPlotAreaContext::EndElement()
 void SchXMLPlotAreaContext::CorrectAxisPositions()
 {
     ::rtl::OUString aODFVersionOfFile( GetImport().GetODFVersion() );
-
+    
     if( ( !aODFVersionOfFile.getLength() || aODFVersionOfFile.equalsAscii("1.0")
         || aODFVersionOfFile.equalsAscii("1.1")
         || ( aODFVersionOfFile.equalsAscii("1.2") && !m_bAxisPositionAttributeImported ) ) )
@@ -735,12 +735,12 @@ void SchXMLPlotAreaContext::CorrectAxisPositions()
                     //Reference< chart2::XAxis > xMajorZAxis = lcl_getAxis( xCooSys, 2, 0 );
                     Reference< chart2::XAxis > xSecondaryXAxis = lcl_getAxis( xCooSys, 0, 1 );
                     Reference< chart2::XAxis > xSecondaryYAxis = lcl_getAxis( xCooSys, 1, 1 );
-
+                    
                     uno::Reference< beans::XPropertySet > xMainXAxisProp( xMainXAxis, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySet > xMainYAxisProp( xMainYAxis, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySet > xSecondaryXAxisProp( xSecondaryXAxis, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySet > xSecondaryYAxisProp( xSecondaryYAxis, uno::UNO_QUERY );
-
+                    
                     if( xMainXAxisProp.is() && xMainYAxisProp.is() )
                     {
                         chart2::ScaleData aMainXScale = xMainXAxis->getScaleData();
@@ -772,7 +772,7 @@ void SchXMLPlotAreaContext::CorrectAxisPositions()
                                 if( xSecondaryYAxisProp.is() )
                                     xSecondaryYAxisProp->setPropertyValue( rtl::OUString::createFromAscii("CrossoverPosition")
                                     , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_END) );
-                            }
+                            }    
                         }
                         else
                         {
@@ -1304,7 +1304,7 @@ void SchXMLAxisContext::CreateAxis()
                     if( mbAddMissingXAxisForNetCharts )
                     {
                         //copy style from y axis to added x axis:
-
+                        
                         uno::Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
                         if( xSuppl.is() )
                         {
@@ -1335,9 +1335,9 @@ void SchXMLAxisContext::CreateAxis()
                     if( mbAdaptXAxisOrientationForOld2DBarCharts && maCurrentAxis.eClass == SCH_XML_AXIS_X )
                     {
                         bool bIs3DChart = false;
-                        if( xDiaProp.is() && ( xDiaProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3DChart )
+                        if( xDiaProp.is() && ( xDiaProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3DChart ) 
                             && !bIs3DChart )
-                        {
+                        {	
                             uno::Reference< chart2::XChartDocument > xChart2Document( GetImport().GetModel(), uno::UNO_QUERY );
                             if( xChart2Document.is() )
                             {
@@ -1538,7 +1538,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
         case XML_TOK_AXIS_GRID:
         {
             sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-            sal_Bool bIsMajor = sal_True;       // default value for class is "major"
+            sal_Bool bIsMajor = sal_True;		// default value for class is "major"
             rtl::OUString sAutoStyleName;
 
             for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -1752,7 +1752,7 @@ bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix
     }
     else
         bReturn = false;
-
+   
     return bReturn;
 }
 
@@ -1789,7 +1789,7 @@ void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-
+    
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );

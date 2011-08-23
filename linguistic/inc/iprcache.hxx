@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 #define _LINGUISTIC_IPRCACHE_HXX_
 
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase2.hxx>	// helper for implementations
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -53,12 +53,12 @@ namespace linguistic
 class Flushable
 {
 public:
-    virtual void    Flush() = 0;
+    virtual void	Flush() = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////
 
-class FlushListener :
+class FlushListener : 
     public cppu::WeakImplHelper2
     <
         ::com::sun::star::linguistic2::XDictionaryListEventListener,
@@ -66,10 +66,10 @@ class FlushListener :
     >
 {
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
+        ::com::sun::star::linguistic2::XDictionaryList >	xDicList;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >             xPropSet;
-    Flushable                                              *pFlushObj;
+        ::com::sun::star::beans::XPropertySet >				xPropSet;
+    Flushable				   							   *pFlushObj;
 
     // don't allow to use copy-constructor and assignment-operator
     FlushListener(const FlushListener &);
@@ -79,11 +79,11 @@ public:
     FlushListener( Flushable *pFO );
     virtual ~FlushListener();
 
-    inline void SetFlushObj( Flushable *pFO)    { pFlushObj = pFO; }
-
+    inline void	SetFlushObj( Flushable *pFO)	{ pFlushObj = pFO; }
+    
     void        SetDicList( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &rDL );
     void        SetPropSet( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &rPS );
-
+    
     //XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -102,7 +102,7 @@ class SpellCache :
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryListEventListener >
                         xFlushLstnr;
-    FlushListener      *pFlushLstnr;
+    FlushListener	   *pFlushLstnr;
 
     typedef std::set< ::rtl::OUString >             WordList_t;
     typedef std::map< LanguageType, WordList_t >    LangWordList_t;
@@ -117,7 +117,7 @@ public:
     virtual ~SpellCache();
 
     // Flushable
-    virtual void    Flush();
+    virtual void	Flush();
 
     void    AddWord( const ::rtl::OUString& rWord, LanguageType nLang );
     bool    CheckWord( const ::rtl::OUString& rWord, LanguageType nLang );
@@ -125,7 +125,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
 #endif
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,26 +37,26 @@ class OutlinerView;
 class EDITENG_DLLPUBLIC SvxDrawOutlinerViewForwarder : public SvxEditViewForwarder
 {
 private:
-    OutlinerView&       mrOutlinerView;
-    Point               maTextShapeTopLeft;
+    OutlinerView&		mrOutlinerView;
+    Point				maTextShapeTopLeft;
 
-    EDITENG_DLLPRIVATE Point                GetTextOffset() const;
+    EDITENG_DLLPRIVATE Point				GetTextOffset() const;
 
 public:
-    explicit            SvxDrawOutlinerViewForwarder( OutlinerView& rOutl );
+    explicit			SvxDrawOutlinerViewForwarder( OutlinerView& rOutl );
                         SvxDrawOutlinerViewForwarder( OutlinerView& rOutl, const Point& rShapePosTopLeft );
-    virtual             ~SvxDrawOutlinerViewForwarder();
+    virtual				~SvxDrawOutlinerViewForwarder();
 
-    virtual BOOL        IsValid() const;
+    virtual BOOL		IsValid() const;
 
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Rectangle	GetVisArea() const;
+    virtual Point		LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point		PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
-    virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
-    virtual sal_Bool    SetSelection( const ESelection& rSelection );
-    virtual sal_Bool    Copy();
-    virtual sal_Bool    Cut();
+    virtual sal_Bool	GetSelection( ESelection& rSelection ) const;
+    virtual sal_Bool	SetSelection( const ESelection& rSelection );
+    virtual sal_Bool	Copy();
+    virtual sal_Bool	Cut();
     virtual sal_Bool    Paste();
 
     /// Set the top, left position of the underlying draw shape, to

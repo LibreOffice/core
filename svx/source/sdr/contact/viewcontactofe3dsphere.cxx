@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfE3dSphere::ViewContactOfE3dSphere(E3dSphereObj& rSphere)
-        :   ViewContactOfE3d(rSphere)
+        :	ViewContactOfE3d(rSphere)
         {
         }
 
@@ -82,7 +82,7 @@ namespace sdr
             // create primitive and add
             const drawinglayer::primitive3d::Primitive3DReference xReference(
                 new drawinglayer::primitive3d::SdrSpherePrimitive3D(
-                    aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute,
+                    aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute, 
                     nHorizontalSegments, nVerticalSegments));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
 

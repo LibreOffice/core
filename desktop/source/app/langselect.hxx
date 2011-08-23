@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public:
         LS_STATUS_CANNOT_DETERMINE_LANGUAGE,
         LS_STATUS_CONFIGURATIONACCESS_BROKEN
     };
-
+    
     static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);
     static rtl::OUString getLanguageString();
     static bool prepareLanguage();

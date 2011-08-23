@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,19 +29,19 @@
 #define __FRAMEWORK_THREADHELP_IGATE_H_
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <osl/time.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -50,12 +50,12 @@ namespace framework{
 class IGate
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
         /*-****************************************************************************************************//**
-            @descr      These functions must be supported by a derived class!
+            @descr		These functions must be supported by a derived class!
                             open()      -open access for all waiting threads
                             close()     -close access for all further coming threads
                             openGap()   -open access for current waiting threads only
@@ -68,6 +68,6 @@ class IGate
 
 };      //  class IGate
 
-}       //  namespace framework
+}		//	namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_THREADHELP_IGATE_H_

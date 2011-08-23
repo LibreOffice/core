@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& 
 {
     OSErr result;
 
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    // check the version of QuickTime installed
+    NSAutoreleasePool* pool	= [[NSAutoreleasePool alloc] init];
+    // check the version of QuickTime installed 
     result = Gestalt(gestaltQuickTime,&mnVersion);
      if ((result == noErr) && (mnVersion >= QT701))
     {
@@ -82,7 +82,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
 {
     bool bRet = false;
     maURL = rURL;
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool* pool	= [[NSAutoreleasePool alloc] init];
     NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
     NSURL* aURL = [NSURL URLWithString:aNSStr ];
 
@@ -90,7 +90,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
 
         mpMovie = [mpMovie initWithURL:aURL error:nil];
         if(mpMovie)
-        {
+        {   
             [mpMovie retain];
             bRet = true;
         }
@@ -106,7 +106,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     throw (uno::RuntimeException)
 {
     uno::Reference< graphic::XGraphic > xRet;
-
+    
     NSImage* pImage = [mpMovie frameImageAtTime: QTMakeTimeWithTimeInterval(fMediaTime)];
     NSData *pBitmap = [pImage TIFFRepresentation];
     long nSize = [pBitmap length];

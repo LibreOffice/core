@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,17 +76,17 @@ double ImpGetDouble( const SbxValues* p )
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
-            {
+            if( !p->pOUString )
+            {	
                 nRes = 0;
                 if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
                     SbxBase::SetError( SbxERR_CONVERSION );
-            }
+            }		
             else
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pString, d, t, NULL ) != SbxERR_OK )
+                if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                 {
                     nRes = 0;
                     if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
@@ -169,7 +169,7 @@ start:
             {
             SbxDecimal* pDec = ImpCreateDecimal( p );
             if( !pDec->setDouble( n ) )
-                SbxBase::SetError( SbxERR_OVERFLOW );
+                SbxBase::SetError( SbxERR_OVERFLOW ); 
             break;
             }
         direct:
@@ -188,9 +188,9 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
-                p->pString = new XubString;
-            ImpCvtNum( (double) n, 14, *p->pString, bCoreString );
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
+            ImpCvtNum( (double) n, 14, *p->pOUString, bCoreString );
             break;
         case SbxOBJECT:
         {

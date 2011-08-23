@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class SvXMLImport;
 class XMLOpacityPropertyHdl : public XMLPropertyHandler
 {
 private:
-    SvXMLImport*    mpImport;
+    SvXMLImport*	mpImport;
 public:
     XMLOpacityPropertyHdl( SvXMLImport* pImport );
     virtual ~XMLOpacityPropertyHdl();
@@ -75,4 +75,4 @@ public:
 };
 
 
-#endif  //  _PROPIMP0_HXX
+#endif	//  _PROPIMP0_HXX

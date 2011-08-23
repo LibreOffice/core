@@ -12,7 +12,7 @@
         <status value="final"/>
         <supported-service>com.sun.star.sdbc.Driver</supported-service>
         <supported-service>com.sun.star.sdbcx.Driver</supported-service>
-        <service-dependency>    ... </service-dependency>
+        <service-dependency>	...	</service-dependency>
     </component-description>
     <project-build-dependency>cppuhelper</project-build-dependency>
     <project-build-dependency>cppu</project-build-dependency>

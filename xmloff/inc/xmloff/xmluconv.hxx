@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,9 +70,9 @@ namespace basegfx
 class XMLOFF_DLLPUBLIC SvXMLTokenEnumerator
 {
 private:
-    const ::rtl::OUString&  maTokenString;
-    sal_Int32               mnNextTokenPos;
-    sal_Unicode             mcSeperator;
+    const ::rtl::OUString&	maTokenString;
+    sal_Int32				mnNextTokenPos;
+    sal_Unicode				mcSeperator;
 
 public:
     SvXMLTokenEnumerator( const ::rtl::OUString& rString, sal_Unicode cSeperator = sal_Unicode(' ') );
@@ -90,12 +90,12 @@ public:
 class XMLOFF_DLLPUBLIC SvXMLUnitConverter
 {
 private:
-    MapUnit meCoreMeasureUnit;
-    MapUnit meXMLMeasureUnit;
+    MapUnit	meCoreMeasureUnit;
+    MapUnit	meXMLMeasureUnit;
     com::sun::star::util::Date aNullDate;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XNumberingTypeInfo > xNumTypeInfo;
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::i18n::XCharacterClassification > xCharClass;
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
@@ -113,8 +113,8 @@ public:
         the default unit for textual measures */
     // #110680#
     // SvXMLUnitConverter( MapUnit eCoreMeasureUnit, MapUnit eXMLMeasureUnit );
-    SvXMLUnitConverter(
-        MapUnit eCoreMeasureUnit,
+    SvXMLUnitConverter( 
+        MapUnit eCoreMeasureUnit, 
         MapUnit eXMLMeasureUnit,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory );
 
@@ -408,15 +408,15 @@ public:
 
     static void clearUndefinedChars(rtl::OUString& rTarget, const rtl::OUString& rSource);
 
-    ::rtl::OUString encodeStyleName( const ::rtl::OUString& rName,
+    ::rtl::OUString encodeStyleName( const ::rtl::OUString& rName, 
                                      sal_Bool *pEncoded=0 ) const;
 
-    /** convert an Any to string (typesafe) */
+    /** convert an Any to string (typesafe) */                                     
     static sal_Bool convertAny(      ::rtl::OUStringBuffer&    sValue,
                                      ::rtl::OUStringBuffer&    sType ,
                                const com::sun::star::uno::Any& aValue);
 
-    /** convert a string to Any (typesafe) */
+    /** convert a string to Any (typesafe) */                                     
     static sal_Bool convertAny(      com::sun::star::uno::Any& aValue,
                                const ::rtl::OUString&          sType ,
                                const ::rtl::OUString&          sValue);
@@ -442,4 +442,4 @@ inline MapUnit SvXMLUnitConverter::getXMLMeasureUnit() const
     return meXMLMeasureUnit;
 }
 
-#endif  //  _XMLOFF_XMLUCONV_HXX
+#endif	//  _XMLOFF_XMLUCONV_HXX

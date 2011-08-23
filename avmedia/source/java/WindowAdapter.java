@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ public class WindowAdapter
     private LinkedList      maMouseMotionListeners = new LinkedList();
     private LinkedList      maPaintListeners = new LinkedList();
     private boolean         mbShift = false, mbMod1 = false, mbMod2 = false;
-
+    
     // -----------------
     // - WindowAdapter -
     // -----------------
@@ -53,7 +53,7 @@ public class WindowAdapter
     }
 
     //----------------------------------------------------------------------------------
-
+    
     public java.awt.Frame getJavaFrame()
     {
         return maFrame;
@@ -64,7 +64,7 @@ public class WindowAdapter
     private short implGetUNOKeyCode( int nJavaKeyCode )
     {
         short nRet = 0;
-
+        
         switch( nJavaKeyCode )
         {
             case( java.awt.event.KeyEvent.VK_NUMPAD0 ):
@@ -346,7 +346,7 @@ public class WindowAdapter
     }
 
     //----------------------------------------------------------------------------------
-
+    
     public void fireDisposingEvent()
     {
         ListIterator aIter = maEventListeners.listIterator( 0 );

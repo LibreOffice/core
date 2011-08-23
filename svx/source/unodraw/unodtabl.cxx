@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class SvxUnoDashTable : public SvxUnoNameItemTable
 {
 public:
     SvxUnoDashTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoDashTable() throw();
+    virtual	~SvxUnoDashTable() throw();
 
     virtual NameOrIndex* createItem() const throw();
 

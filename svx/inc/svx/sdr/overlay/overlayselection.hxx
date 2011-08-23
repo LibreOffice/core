@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,26 +38,26 @@ namespace sdr
     namespace overlay
     {
         // overlay type definition
-        enum OverlayType
-        {
-            OVERLAY_INVERT,
-            OVERLAY_SOLID,
-            OVERLAY_TRANSPARENT
+        enum OverlayType 
+        { 
+            OVERLAY_INVERT, 
+            OVERLAY_SOLID, 
+            OVERLAY_TRANSPARENT 
         };
 
         class SVX_DLLPUBLIC OverlaySelection : public OverlayObject
         {
         protected:
             // type of overlay
-            OverlayType                         meOverlayType;
+            OverlayType							meOverlayType;
 
             // geometry of overlay
-            std::vector< basegfx::B2DRange >    maRanges;
+            std::vector< basegfx::B2DRange >	maRanges;
 
             // Values of last primitive creation. These are checked in getOverlayObjectPrimitive2DSequence
-            // to evtl. get rid of last Primitive2DSequence. This ensures that these values are up-to-date
+            // to evtl. get rid of last Primitive2DSequence. This ensures that these values are up-to-date 
             // and are usable when creating primitives
-            OverlayType                         maLastOverlayType;
+            OverlayType							maLastOverlayType;
             sal_uInt16                          mnLastTransparence;
 
             // bitfield
@@ -68,8 +68,8 @@ namespace sdr
 
         public:
             OverlaySelection(
-                OverlayType eType,
-                const Color& rColor,
+                OverlayType eType, 
+                const Color& rColor, 
                 const std::vector< basegfx::B2DRange >& rRanges,
                 bool bBorder);
             virtual ~OverlaySelection();

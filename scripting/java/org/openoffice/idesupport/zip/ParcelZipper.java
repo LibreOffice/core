@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public class ParcelZipper
 
     private static final FileFilter DEFAULT_FILTER =
         BinaryOnlyFilter.getInstance();
-
+    
     private ParcelZipper() {
     }
 
@@ -66,15 +66,15 @@ public class ParcelZipper
 
     public String zipParcel(File basedir) throws IOException {
         File targetfile, targetdir;
-
+        
         if (basedir.getName().equals(CONTENTS_DIRNAME))
             targetdir = basedir.getParentFile();
         else
             targetdir = basedir;
-
+        
         targetfile = new File(targetdir, targetdir.getName() + "." + PARCEL_EXTENSION);
-
-        return zipParcel(basedir, targetfile, DEFAULT_FILTER);
+        
+        return zipParcel(basedir, targetfile, DEFAULT_FILTER); 
     }
 
     public String zipParcel(File basedir, File targetfile) throws IOException {
@@ -83,32 +83,32 @@ public class ParcelZipper
 
     public String zipParcel(File basedir, FileFilter filter) throws IOException {
         File targetfile, targetdir;
-
+        
         if (basedir.getName().equals(CONTENTS_DIRNAME))
             targetdir = basedir.getParentFile();
         else
             targetdir = basedir;
-
+        
         targetfile = new File(targetdir, targetdir.getName() + "." + PARCEL_EXTENSION);
-
+        
         return zipParcel(basedir, targetfile, filter);
     }
 
     public String zipParcel(File basedir, File targetfile, FileFilter filter)
         throws IOException {
         String realpath, tmppath;
-
+        
         realpath = targetfile.getPath();
         tmppath = realpath + ".tmp";
-
+        
         File tmpfile = new File(tmppath);
         ZipOutputStream out = null;
         try {
             if (tmpfile.exists() == true)
                 tmpfile.delete();
-
-            out = new ZipOutputStream(new FileOutputStream(tmpfile));
-
+            
+            out = new ZipOutputStream(new FileOutputStream(tmpfile));          
+            
             File[] children = basedir.listFiles();
             for (int i = 0; i < children.length; i++)
                 addFileToParcel(children[i], "", out, filter);
@@ -122,18 +122,18 @@ public class ParcelZipper
             if (out != null)
                 out.close();
         }
-
+        
         if (targetfile.exists() == true)
             targetfile.delete();
         tmpfile.renameTo(targetfile);
 
         return targetfile.getAbsolutePath();
     }
-
+    
     private void addFileToParcel(File root, String path, ZipOutputStream out, FileFilter filter)
         throws IOException {
         ZipEntry ze;
-
+        
         if (root.isDirectory() == true) {
             ze = new ZipEntry(/* PARCEL_PREFIX_DIR + */ path + root.getName() + "/");
             out.putNextEntry(ze);
@@ -147,7 +147,7 @@ public class ParcelZipper
             if (filter.validate(root.getName()) == false &&
                 root.getName().equals("parcel-descriptor.xml") == false)
                 return;
-
+        
             ze = new ZipEntry(/* PARCEL_PREFIX_DIR + */ path + root.getName());
             out.putNextEntry(ze);
 
@@ -167,8 +167,8 @@ public class ParcelZipper
             out.closeEntry();
         }
     }
-
-    public boolean isOverwriteNeeded(File parcel, File target)
+    
+    public boolean isOverwriteNeeded(File parcel, File target) 
         throws IOException
     {
         boolean result;
@@ -204,7 +204,7 @@ public class ParcelZipper
         return false;
     }
 
-    private boolean isDocumentOverwriteNeeded(File parcel, File document)
+    private boolean isDocumentOverwriteNeeded(File parcel, File document) 
         throws IOException
     {
         ZipFile documentZip = null;
@@ -231,9 +231,9 @@ public class ParcelZipper
         return result;
     }
 
-    public String deployParcel(File parcel, File target)
+    public String deployParcel(File parcel, File target) 
         throws IOException {
-
+            
         String output = null;
         if (target.isDirectory())
             output = unzipToDirectory(parcel, target);
@@ -246,7 +246,7 @@ public class ParcelZipper
         String result = zipname.substring(0, zipname.lastIndexOf("."));
         return result;
     }
-
+    
     private String unzipToDirectory(File parcel, File targetDirectory)
         throws IOException {
 
@@ -254,7 +254,7 @@ public class ParcelZipper
         File parcelDir = new File(targetDirectory,
             getParcelLanguage(parcel) + File.separator +
             getParcelDirFromParcelZip(parcel.getName()));
-
+        
         if (isDirectoryOverwriteNeeded(parcel, targetDirectory)) {
             if (deleteDir(parcelDir) == false) {
                 throw new IOException("Could not overwrite: " +
@@ -264,7 +264,7 @@ public class ParcelZipper
 
         try {
             in = new ZipInputStream(new FileInputStream(parcel));
-
+        
             File outFile;
             ZipEntry inEntry = in.getNextEntry();
             byte[] bytes = new byte[1024];
@@ -278,7 +278,7 @@ public class ParcelZipper
                 else {
                     if (outFile.getParentFile().exists() != true)
                         outFile.getParentFile().mkdirs();
-
+                
                     FileOutputStream out = null;
                     try {
                         out = new FileOutputStream(outFile);
@@ -299,7 +299,7 @@ public class ParcelZipper
 
         return parcelDir.getAbsolutePath();
     }
-
+    
     private boolean deleteDir(File basedir) {
         if (basedir.isDirectory()) {
             String[] children = basedir.list();
@@ -320,7 +320,7 @@ public class ParcelZipper
         ZipInputStream parcelStream = null;
         ZipOutputStream outStream = null;
         Manifest manifest;
-
+        
         String language = getParcelLanguage(parcel);
 
         if (isDocumentOverwriteNeeded(parcel, targetDocument)) {
@@ -331,7 +331,7 @@ public class ParcelZipper
 
         // first write contents of document to tmpfile
         File tmpfile = new File(targetDocument.getAbsolutePath() + ".tmp");
-
+        
         manifest = addParcelToManifest(targetDocument, parcel);
 
         try {
@@ -339,7 +339,7 @@ public class ParcelZipper
                 new ZipInputStream(new FileInputStream(targetDocument));
             parcelStream = new ZipInputStream(new FileInputStream(parcel));
             outStream = new ZipOutputStream(new FileOutputStream(tmpfile));
-
+        
             copyParcelToZip(parcelStream, outStream, PARCEL_PREFIX_DIR +
                 language + "/" + getParcelDirFromParcelZip(parcel.getName()));
             copyDocumentToZip(documentStream, outStream, manifest);
@@ -360,10 +360,10 @@ public class ParcelZipper
         }
         else
             tmpfile.renameTo(targetDocument);
-
+        
         return targetDocument.getAbsolutePath();
     }
-
+    
     private void copyParcelToZip(ZipInputStream in, ZipOutputStream out,
         String parcelName) throws IOException {
 
@@ -429,7 +429,7 @@ public class ParcelZipper
         ZipInputStream documentStream = null;
         ZipOutputStream outStream = null;
         Manifest manifest = null;
-
+        
         if (!parcelName.startsWith(PARCEL_PREFIX_DIR))
             parcelName = PARCEL_PREFIX_DIR + parcelName;
         manifest = removeParcelFromManifest(document, parcelName);
@@ -442,18 +442,18 @@ public class ParcelZipper
             ZipEntry inEntry;
             byte[] bytes = new byte[1024];
             int len;
-
+    
             documentStream = new ZipInputStream(new FileInputStream(document));
             outStream = new ZipOutputStream(new FileOutputStream(tmpfile));
-
+        
             while ((inEntry = documentStream.getNextEntry()) != null) {
-
+                
                 if(inEntry.getName().startsWith(parcelName))
                     continue;
-
+                
                 outEntry = new ZipEntry(inEntry);
                 outStream.putNextEntry(outEntry);
-
+        
                 if(inEntry.getName().equals("META-INF/manifest.xml") &&
                    manifest != null) {
                     InputStream manifestStream = null;
@@ -471,7 +471,7 @@ public class ParcelZipper
                     while ((len = documentStream.read(bytes)) != -1)
                         outStream.write(bytes, 0, len);
                 }
-
+        
                 outStream.closeEntry();
             }
         }
@@ -493,7 +493,7 @@ public class ParcelZipper
         }
         else
             tmpfile.renameTo(document);
-
+        
         return document.getAbsolutePath();
     }
 
@@ -522,7 +522,7 @@ public class ParcelZipper
         return result;
     }
 
-    private Manifest addParcelToManifest(File document, File parcel)
+    private Manifest addParcelToManifest(File document, File parcel) 
         throws IOException {
 
         ZipFile parcelZip = null;

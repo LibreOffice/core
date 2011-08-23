@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 class XMLMutableAttributeList;
 class XMLTransformerActions;
-class XMLCreateElemTransformerContext : public XMLTransformerContext
+class XMLCreateElemTransformerContext : public XMLTransformerContext 
 {
     sal_uInt16 m_nActionMap;
 
@@ -44,7 +44,7 @@ protected:
 public:
     TYPEINFO();
 
-    XMLCreateElemTransformerContext( XMLTransformerBase& rTransformer,
+    XMLCreateElemTransformerContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nActionMap );
 
@@ -53,5 +53,5 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-#endif  //  _XMLOFF_CREATEELEMCONTEXT_HXX
+#endif	//  _XMLOFF_CREATEELEMCONTEXT_HXX
 

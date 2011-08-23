@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_basic.hxx"
 
 #include "sbcomp.hxx"
-#include <basic/sbx.hxx>        // w.g. ...IMPL_REF(...sbxvariable)
+#include <basic/sbx.hxx>		// w.g. ...IMPL_REF(...sbxvariable)
 #include "expr.hxx"
 
 /***************************************************************************
@@ -46,7 +46,7 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     nParenLevel = 0;
     eCurExpr = t;
     m_eMode = eMode;
-    pNext = NULL;
+    pNext = NULL;	
     pExpr = (t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean();
     if( t != SbSYMBOL )
         pExpr->Optimize();
@@ -127,7 +127,7 @@ static BOOL DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
         if ( tokens.Peek() == ASSIGN )
             return TRUE;
     }
-    return FALSE;
+    return FALSE; 	
 }
 
 // Definition eines neuen Symbols
@@ -263,7 +263,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                     && !pParser->WhiteSpace() );
     if( bObj )
     {
-        bBracket = FALSE;   // Now the bracket for the first term is obsolete
+        bBracket = FALSE;	// Now the bracket for the first term is obsolete
         if( eType == SbxVARIANT )
             eType = SbxOBJECT;
         else
@@ -338,19 +338,10 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                 // damit erwischen wir n% = 5 : print n
                 eType = eDefType;
         }
-        // Funktion?
-        if( pDef->GetProcDef() )
-        {
-            SbiProcDef* pProc = pDef->GetProcDef();
-            if( pPar && pProc->GetLib().Len() )     // DECLARE benutzt?
-                pPar->SetProc( pProc );
-            // Wenn keine Pars, vorerst nichts machen
-            // Pruefung auf Typ-Anzahl waere denkbar
-        }
         // Typcheck bei Variablen:
         // ist explizit im Scanner etwas anderes angegeben?
         // Bei Methoden ist dies OK!
-        if( eType != SbxVARIANT &&          // Variant nimmt alles
+        if( eType != SbxVARIANT &&			// Variant nimmt alles
             eType != pDef->GetType() &&
             !pDef->GetProcDef() )
         {
@@ -444,7 +435,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             bError |= !pPar->IsValid();
             eTok = pParser->Peek();
         }
-
+    
     }
     BOOL bObj = BOOL( ( eTok == DOT || eTok == EXCLAM ) && !pParser->WhiteSpace() );
     if( bObj )
@@ -522,7 +513,7 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
                 pRes = new SbiExprNode( pParser, pRes, eTok, Like() );
             }
             break;
-        case DOT:   // .with
+        case DOT:	// .with
             pRes = Term(); break;
         case NUMBER:
             pParser->Next();
@@ -536,7 +527,7 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
             if( nParenLevel == 0 && m_eMode == EXPRMODE_LPAREN_PENDING && pParser->Peek() == RPAREN )
             {
                 m_eMode = EXPRMODE_EMPTY_PAREN;
-                pRes = new SbiExprNode();   // Dummy node
+                pRes = new SbiExprNode();	// Dummy node
                 pParser->Next();
                 break;
             }
@@ -868,7 +859,6 @@ SbiExprList::SbiExprList( SbiParser* p )
 {
     pParser = p;
     pFirst = NULL;
-    pProc = NULL;
     nExpr  =
     nDim   = 0;
     bError =
@@ -965,7 +955,7 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
         {
             pExpr = new SbiExpression( pParser, 0, SbxEMPTY );
             //if( bConst )
-            //  pParser->Error( SbERR_SYNTAX ), bError = TRUE;
+            //	pParser->Error( SbERR_SYNTAX ), bError = TRUE;
         }
         // Benannte Argumente: entweder .name= oder name:=
         else
@@ -1013,7 +1003,7 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
                 pExpr->SetByVal();
 
             //pExpr = bConst ? new SbiConstExpression( pParser )
-            //              : new SbiExpression( pParser );
+            //				: new SbiExpression( pParser );
             if( !bAssumeArrayMode )
             {
                 if( pParser->Peek() == ASSIGN )
@@ -1025,7 +1015,7 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
                     pParser->Next();
                     pExpr = new SbiExpression( pParser );
                     //if( bConst )
-                    //  pParser->Error( SbERR_SYNTAX ), bError = TRUE;
+                    //	pParser->Error( SbERR_SYNTAX ), bError = TRUE;
                 }
                 pExpr->GetName() = aName;
             }

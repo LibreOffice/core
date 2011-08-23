@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ ResMgr* GetGalleryResMgr()
 BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
 {
     BitmapEx aBmpEx( GAL_RESID( nId ) );
-
+    
     if( !aBmpEx.IsTransparent() )
             aBmpEx = BitmapEx( aBmpEx.GetBitmap(), COL_LIGHTMAGENTA );
 
@@ -116,9 +116,9 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              String& rFilterName, BOOL bShowProgress )
 {
-    USHORT      nRet = SGA_IMPORT_NONE;
-    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
-    String      aFilterName;
+    USHORT		nRet = SGA_IMPORT_NONE;
+    SfxMedium	aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
+    String		aFilterName;
 
     aMedium.DownLoad();
 
@@ -126,9 +126,9 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 
     if( pIStm )
     {
-        GraphicFilter*      pGraphicFilter = GraphicFilter::GetGraphicFilter();
-        GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
-        USHORT              nFormat;
+        GraphicFilter*		pGraphicFilter = GraphicFilter::GetGraphicFilter();
+        GalleryProgress*	pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
+        USHORT				nFormat;
 
         if( !pGraphicFilter->ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
@@ -153,8 +153,8 @@ BOOL GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 
     if( GalleryCodec::IsCoded( rIStm, nVersion ) )
     {
-        SvMemoryStream  aMemStm( 65535, 65535 );
-        GalleryCodec    aCodec( rIStm );
+        SvMemoryStream	aMemStm( 65535, 65535 );
+        GalleryCodec	aCodec( rIStm );
 
         aCodec.Read( aMemStm );
         aMemStm.Seek( 0UL );
@@ -200,8 +200,8 @@ BOOL CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
 
     if ( rModel.GetPageCount() )
     {
-        const SdrPage*      pPage = rModel.GetPage( 0 );
-        const SdrObject*    pObj = pPage->GetObj( 0 );
+        const SdrPage*		pPage = rModel.GetPage( 0 );
+        const SdrObject*	pObj = pPage->GetObj( 0 );
 
         if ( pPage->GetObjCount() == 1 && pObj->ISA( SdrGrafObj ) )
         {
@@ -281,8 +281,8 @@ BOOL FileExists( const INetURLObject& rURL )
     {
         try
         {
-            ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
-            OUString    aTitle;
+            ::ucbhelper::Content		aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
+            OUString	aTitle;
 
             aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
@@ -311,12 +311,12 @@ BOOL CreateDir( const INetURLObject& rURL )
     {
         try
         {
-            uno::Reference< ucb::XCommandEnvironment >  aCmdEnv;
-            INetURLObject                           aNewFolderURL( rURL );
-            INetURLObject                           aParentURL( aNewFolderURL ); aParentURL.removeSegment();
-            ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-            uno::Sequence< OUString >               aProps( 1 );
-            uno::Sequence< uno::Any >               aValues( 1 );
+            uno::Reference< ucb::XCommandEnvironment >	aCmdEnv;
+            INetURLObject							aNewFolderURL( rURL );
+            INetURLObject							aParentURL( aNewFolderURL ); aParentURL.removeSegment();
+            ::ucbhelper::Content					aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+            uno::Sequence< OUString >				aProps( 1 );
+            uno::Sequence< uno::Any >				aValues( 1 );
 
             aProps.getArray()[ 0 ] = OUString::createFromAscii( "Title" );
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
@@ -407,7 +407,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
     if( xMgr.is() )
     {
-        uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
+        uno::Reference< awt::XProgressMonitor >	xMonitor( xMgr->createInstance(
                                                       ::rtl::OUString::createFromAscii( "com.sun.star.awt.XProgressMonitor" ) ),
                                                       uno::UNO_QUERY );
 
@@ -422,9 +422,9 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
                 if( mpFilter )
                 {
                     aProgressText = String( GAL_RESID( RID_SVXSTR_GALLERY_FILTER ) );
-//                  mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
-//                                                                                              // so I am removing this. The gallery progress should
-//                                                                                              // be changed to use the XStatusIndicator instead of XProgressMonitor
+//					mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );		// sj: progress wasn't working up from SO7 at all
+//																								// so I am removing this. The gallery progress should
+//																								// be changed to use the XStatusIndicator instead of XProgressMonitor
                 }
                 else
                     aProgressText = String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) );
@@ -440,8 +440,8 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
 GalleryProgress::~GalleryProgress()
 {
-//  if( mpFilter )
-//      mpFilter->SetUpdatePercentHdl( Link() );
+//	if( mpFilter )
+//		mpFilter->SetUpdatePercentHdl( Link() );
 }
 
 // ------------------------------------------------------------------------
@@ -486,16 +486,16 @@ void GalleryTransferable::InitData( bool bLazy )
                 if( !mpGraphicObject )
                 {
                     Graphic aGraphic;
-
+        
                     if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
                         mpGraphicObject = new GraphicObject( aGraphic );
                 }
-
+            
                 if( !mxModelStream.Is() )
                 {
                     mxModelStream = new SotStorageStream( String() );
                     mxModelStream->SetBufferSize( 16348 );
-
+        
                     if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )
                         mxModelStream.Clear();
                     else
@@ -504,7 +504,7 @@ void GalleryTransferable::InitData( bool bLazy )
             }
         }
         break;
-
+        
         case( SGA_OBJ_ANIM ):
         case( SGA_OBJ_BMP ):
         case( SGA_OBJ_INET ):
@@ -513,15 +513,15 @@ void GalleryTransferable::InitData( bool bLazy )
             if( !mpURL )
             {
                 mpURL = new INetURLObject;
-
+    
                 if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
                     delete mpURL, mpURL = NULL;
             }
-
+            
             if( ( SGA_OBJ_SOUND != meObjectKind ) && !mpGraphicObject )
             {
                 Graphic aGraphic;
-
+    
                 if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
                     mpGraphicObject = new GraphicObject( aGraphic );
             }
@@ -549,11 +549,11 @@ void GalleryTransferable::AddSupportedFormats()
     {
         if( mpURL )
             AddFormat( FORMAT_FILE );
-
+    
         if( mpGraphicObject )
         {
             AddFormat( SOT_FORMATSTR_ID_SVXB );
-
+    
             if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
             {
                 AddFormat( FORMAT_GDIMETAFILE );
@@ -572,8 +572,8 @@ void GalleryTransferable::AddSupportedFormats()
 
 sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
 {
-    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool    bRet = sal_False;
+    sal_uInt32	nFormat = SotExchange::GetFormat( rFlavor );
+    sal_Bool	bRet = sal_False;
 
     InitData( false );
 

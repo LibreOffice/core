@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 #define __FRAMEWORK_MACROS_DEBUG_EVENT_HXX_
 
 //*************************************************************************************************************
-//  special macros for event handling
+//	special macros for event handling
 //*************************************************************************************************************
 
-#ifdef  ENABLE_EVENTDEBUG
+#ifdef	ENABLE_EVENTDEBUG
 
     //_________________________________________________________________________________________________________________
-    //  includes
+    //	includes
     //_________________________________________________________________________________________________________________
 
     #ifndef _RTL_STRBUF_HXX_
@@ -48,8 +48,8 @@
         For follow macros we need a special log file. If user forget to specify anyone, we must do it for him!
     _____________________________________________________________________________________________________________*/
 
-    #ifndef LOGFILE_EVENTDEBUG
-        #define LOGFILE_EVENTDEBUG                                                                                                      \
+    #ifndef	LOGFILE_EVENTDEBUG
+        #define	LOGFILE_EVENTDEBUG																										\
                     "events.log"
     #endif
 
@@ -60,39 +60,39 @@
         ( Use new scope in macro to declare sBuffer more then on time in same "parentscope"! )
     _____________________________________________________________________________________________________________*/
 
-    #define LOG_FRAMEACTIONEVENT( SFRAMETYPE, SFRAMENAME, AFRAMEACTION )                                                                \
-                {                                                                                                                       \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                                                 \
-                    sBuffer.append( "[ "                );                                                                              \
-                    sBuffer.append( SFRAMETYPE          );                                                                              \
-                    sBuffer.append( " ] \""             );                                                                              \
-                    sBuffer.append( U2B( SFRAMENAME )   );                                                                              \
-                    sBuffer.append( "\" send event \""  );                                                                              \
-                    switch( AFRAMEACTION )                                                                                              \
-                    {                                                                                                                   \
-                        case ::com::sun::star::frame::FrameAction_COMPONENT_ATTACHED    :   sBuffer.append("COMPONENT ATTACHED"     );  \
-                                                                                            break;                                      \
-                        case ::com::sun::star::frame::FrameAction_COMPONENT_DETACHING   :   sBuffer.append("COMPONENT DETACHING"    );  \
-                                                                                            break;                                      \
-                        case ::com::sun::star::frame::FrameAction_COMPONENT_REATTACHED  :   sBuffer.append("COMPONENT REATTACHED"   );  \
-                                                                                            break;                                      \
-                        case ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED       :   sBuffer.append("FRAME ACTIVATED"        );  \
-                                                                                            break;                                      \
-                        case ::com::sun::star::frame::FrameAction_FRAME_DEACTIVATING    :   sBuffer.append("FRAME DEACTIVATING"     );  \
-                                                                                            break;                                      \
-                        case ::com::sun::star::frame::FrameAction_CONTEXT_CHANGED       :   sBuffer.append("CONTEXT CHANGED"        );  \
-                                                                                            break;                                      \
-                        case ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED    :   sBuffer.append("FRAME UI ACTIVATED"     );  \
-                                                                                            break;                                      \
-                        case ::com::sun::star::frame::FrameAction_FRAME_UI_DEACTIVATING :   sBuffer.append("FRAME UI DEACTIVATING"  );  \
-                                                                                            break;                                      \
-                        case ::com::sun::star::frame::FrameAction_MAKE_FIXED_SIZE       :   sBuffer.append("MAKE_FIXED_SIZE"        );  \
-                                                                                            break;                                      \
-                        default:    sBuffer.append("... ERROR: invalid FrameAction detected!"   );                                      \
-                                    break;                                                                                              \
-                    }                                                                                                                   \
-                    sBuffer.append( " ... event to listener.\n\n" );                                                                    \
-                    WRITE_LOGFILE( LOGFILE_EVENTDEBUG, sBuffer.makeStringAndClear() )                                                   \
+    #define LOG_FRAMEACTIONEVENT( SFRAMETYPE, SFRAMENAME, AFRAMEACTION )																\
+                {																														\
+                    ::rtl::OStringBuffer sBuffer(1024);																					\
+                    sBuffer.append( "[ "				);																				\
+                    sBuffer.append( SFRAMETYPE			);																				\
+                    sBuffer.append( " ] \""				);																				\
+                    sBuffer.append( U2B( SFRAMENAME )	);																				\
+                    sBuffer.append( "\" send event \""	);																				\
+                    switch( AFRAMEACTION )																								\
+                    {																													\
+                        case ::com::sun::star::frame::FrameAction_COMPONENT_ATTACHED	:	sBuffer.append("COMPONENT ATTACHED"		);	\
+                                                                                            break;										\
+                        case ::com::sun::star::frame::FrameAction_COMPONENT_DETACHING	:	sBuffer.append("COMPONENT DETACHING"	);	\
+                                                                                            break;										\
+                        case ::com::sun::star::frame::FrameAction_COMPONENT_REATTACHED	:	sBuffer.append("COMPONENT REATTACHED"	);	\
+                                                                                            break;										\
+                        case ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED		:	sBuffer.append("FRAME ACTIVATED"		);	\
+                                                                                            break;										\
+                        case ::com::sun::star::frame::FrameAction_FRAME_DEACTIVATING	:	sBuffer.append("FRAME DEACTIVATING"		);	\
+                                                                                            break;										\
+                        case ::com::sun::star::frame::FrameAction_CONTEXT_CHANGED		:	sBuffer.append("CONTEXT CHANGED"		);	\
+                                                                                            break;										\
+                        case ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED	:	sBuffer.append("FRAME UI ACTIVATED"		);	\
+                                                                                            break;										\
+                        case ::com::sun::star::frame::FrameAction_FRAME_UI_DEACTIVATING	:	sBuffer.append("FRAME UI DEACTIVATING"	);	\
+                                                                                            break;										\
+                        case ::com::sun::star::frame::FrameAction_MAKE_FIXED_SIZE		:	sBuffer.append("MAKE_FIXED_SIZE"		);	\
+                                                                                            break;										\
+                        default:	sBuffer.append("... ERROR: invalid FrameAction detected!"	);										\
+                                    break;																								\
+                    }																													\
+                    sBuffer.append( " ... event to listener.\n\n" );																	\
+                    WRITE_LOGFILE( LOGFILE_EVENTDEBUG, sBuffer.makeStringAndClear() )													\
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -102,31 +102,31 @@
         ( Use new scope in macro to declare sBuffer more then on time in same "parentscope"! )
     _____________________________________________________________________________________________________________*/
 
-    #define LOG_DISPOSEEVENT( SFRAMETYPE, SFRAMENAME )                                                                                  \
-                {                                                                                                                       \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                                                 \
-                    sBuffer.append( "[ "                                    );                                                          \
-                    sBuffer.append( SFRAMETYPE                              );                                                          \
-                    sBuffer.append( " ] \""                                 );                                                          \
-                    sBuffer.append( U2B( SFRAMENAME )                       );                                                          \
-                    sBuffer.append( "\" send dispose event to listener.\n\n");                                                          \
-                    WRITE_LOGFILE( LOGFILE_EVENTDEBUG, sBuffer.makeStringAndClear() )                                                   \
+    #define	LOG_DISPOSEEVENT( SFRAMETYPE, SFRAMENAME )																					\
+                {																														\
+                    ::rtl::OStringBuffer sBuffer(1024);																					\
+                    sBuffer.append( "[ "									);															\
+                    sBuffer.append( SFRAMETYPE								);															\
+                    sBuffer.append( " ] \""									);															\
+                    sBuffer.append( U2B( SFRAMENAME )						);															\
+                    sBuffer.append( "\" send dispose event to listener.\n\n");															\
+                    WRITE_LOGFILE( LOGFILE_EVENTDEBUG, sBuffer.makeStringAndClear() )													\
                 }
 
-#else   // #ifdef ENABLE_EVENTDEBUG
+#else	// #ifdef ENABLE_EVENTDEBUG
 
     /*_____________________________________________________________________________________________________________
         If right testmode is'nt set - implements these macros empty!
     _____________________________________________________________________________________________________________*/
 
-    #undef  LOGFILE_EVENTDEBUG
+    #undef	LOGFILE_EVENTDEBUG
     #define LOG_FRAMEACTIONEVENT( SFRAMETYPE, SFRAMENAME, AFRAMEACTION )
-    #define LOG_DISPOSEEVENT( SFRAMETYPE, SFRAMENAME )
+    #define	LOG_DISPOSEEVENT( SFRAMETYPE, SFRAMENAME )
 
-#endif  // #ifdef ENABLE_EVENTDEBUG
+#endif	// #ifdef ENABLE_EVENTDEBUG
 
 //*****************************************************************************************************************
-//  end of file
+//	end of file
 //*****************************************************************************************************************
 
-#endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_EVENT_HXX_
+#endif	// #ifndef __FRAMEWORK_MACROS_DEBUG_EVENT_HXX_

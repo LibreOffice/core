@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,34 +40,34 @@
 namespace chelp {
 
     // forward declaration
-
+    
     class XInputStream_impl
         : public cppu::OWeakObject,
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XSeekable
     {
     public:
-
+        
         XInputStream_impl( const rtl::OUString& aUncPath );
-
+        
         virtual ~XInputStream_impl();
-
+        
         /**
          *  Returns an error code as given by filerror.hxx
          */
-
+        
         bool SAL_CALL CtorSuccess();
-
+        
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException);
-
+        
         virtual void SAL_CALL
         acquire(
             void )
             throw();
-
+        
         virtual void SAL_CALL
         release(
             void )
@@ -134,10 +134,10 @@ namespace chelp {
 
     private:
 
-        bool                                               m_bIsOpen;
+        bool                                               m_bIsOpen;		
         osl::File                                          m_aFile;
     };
-
+    
 
 } // end namespace XInputStream_impl
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,29 +37,29 @@
 class EditNodeIdx : public SvxNodeIdx
 {
 private:
-    ContentNode*        pNode;
-    ImpEditEngine*      pImpEditEngine;
+    ContentNode* 		pNode;
+    ImpEditEngine*		pImpEditEngine;
 
 public:
                         EditNodeIdx( ImpEditEngine* pIEE, ContentNode* pNd = 0)
                             { pImpEditEngine = pIEE; pNode = pNd; }
-    virtual ULONG       GetIdx() const;
+    virtual ULONG		GetIdx() const;
     virtual SvxNodeIdx* Clone() const;
-    ContentNode*        GetNode() { return pNode; }
+    ContentNode*		GetNode() { return pNode; }
 };
 
 class EditPosition : public SvxPosition
 {
 private:
-    EditSelection*  pCurSel;
-    ImpEditEngine*  pImpEditEngine;
+    EditSelection* 	pCurSel;
+    ImpEditEngine*	pImpEditEngine;
 
 public:
                     EditPosition( ImpEditEngine* pIEE, EditSelection* pSel )
                             { pImpEditEngine = pIEE; pCurSel = pSel; }
 
-    virtual ULONG   GetNodeIdx() const;
-    virtual USHORT  GetCntIdx() const;
+    virtual ULONG	GetNodeIdx() const;
+    virtual USHORT	GetCntIdx() const;
 
     // erzeuge von sich selbst eine Kopie
     virtual SvxPosition* Clone() const;
@@ -68,56 +68,56 @@ public:
     virtual SvxNodeIdx* MakeNodeIdx() const;
 };
 
-#define ACTION_INSERTTEXT       1
-#define ACTION_INSERTPARABRK    2
+#define ACTION_INSERTTEXT		1
+#define ACTION_INSERTPARABRK	2
 
 class EditRTFParser : public SvxRTFParser
 {
 private:
-    EditSelection       aCurSel;
-    ImpEditEngine*      pImpEditEngine;
-    CharSet             eDestCharSet;
-    MapMode             aRTFMapMode;
-    MapMode             aEditMapMode;
+    EditSelection		aCurSel;
+    ImpEditEngine*		pImpEditEngine;
+    CharSet				eDestCharSet;
+    MapMode				aRTFMapMode;
+    MapMode				aEditMapMode;
 
-    USHORT              nDefFont;
-    USHORT              nDefTab;
-    USHORT              nDefFontHeight;
-    BYTE                nLastAction;
+    USHORT				nDefFont;
+    USHORT				nDefTab;
+    USHORT				nDefFontHeight;
+    BYTE				nLastAction;
 
 protected:
-    virtual void        InsertPara();
-    virtual void        InsertText();
-    virtual void        MovePos( int bForward = TRUE );
-    virtual void        SetEndPrevPara( SvxNodeIdx*& rpNodePos,
+    virtual void 		InsertPara();
+    virtual void 		InsertText();
+    virtual void		MovePos( int bForward = TRUE );
+    virtual void		SetEndPrevPara( SvxNodeIdx*& rpNodePos,
                                             USHORT& rCntPos );
 
-    virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet );
-    virtual void        NextToken( int nToken );
-    virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet );
-    virtual int         IsEndPara( SvxNodeIdx* pNd, USHORT nCnt ) const;
-    virtual void        CalcValue();
-    void                CreateStyleSheets();
-    SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType* pRTFStyle );
-    SvxRTFStyleType*    FindStyleSheet( const String& rName );
-    void                AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& rEnd );
-    void                ReadField();
-    void                SkipGroup();
+    virtual void 		UnknownAttrToken( int nToken, SfxItemSet* pSet );
+    virtual void 		NextToken( int nToken );
+    virtual	void 		SetAttrInDoc( SvxRTFItemStackType &rSet );
+    virtual int 		IsEndPara( SvxNodeIdx* pNd, USHORT nCnt ) const;
+    virtual void 		CalcValue();
+    void				CreateStyleSheets();
+    SfxStyleSheet*		CreateStyleSheet( SvxRTFStyleType* pRTFStyle );
+    SvxRTFStyleType*	FindStyleSheet( const String& rName );
+    void				AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& rEnd );
+    void				ReadField();
+    void				SkipGroup();
 
 public:
                 EditRTFParser( SvStream& rIn, EditSelection aCurSel, SfxItemPool& rAttrPool, ImpEditEngine* pImpEditEngine );
                 ~EditRTFParser();
 
-    virtual SvParserState   CallParser();
+    virtual SvParserState	CallParser();
 
 
-    void        SetDestCharSet( CharSet eCharSet )  { eDestCharSet = eCharSet; }
-    CharSet     GetDestCharSet() const              { return eDestCharSet; }
+    void		SetDestCharSet( CharSet eCharSet )	{ eDestCharSet = eCharSet; }
+    CharSet		GetDestCharSet() const				{ return eDestCharSet; }
 
-    USHORT      GetDefTab() const                   { return nDefTab; }
-    Font        GetDefFont()                        { return GetFont( nDefFont ); }
+    USHORT		GetDefTab()	const					{ return nDefTab; }
+    Font		GetDefFont() 						{ return GetFont( nDefFont ); }
 
-    EditPaM     GetCurPaM() const                   { return aCurSel.Max(); }
+    EditPaM		GetCurPaM() const					{ return aCurSel.Max(); }
 };
 
 SV_DECL_REF( EditRTFParser )
@@ -125,4 +125,4 @@ SV_IMPL_REF( EditRTFParser );
 
 
 #endif  // !SVX_LIGH
-#endif  //_EERTFPAR_HXX
+#endif	//_EERTFPAR_HXX

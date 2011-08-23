@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,32 +27,32 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
-
+ 
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 #include <stdio.h>
 #include "internal/dbgmacros.hxx"
 
 void DbgAssert(bool /*condition*/, const char* /*message*/)
 {
-
+    
     //if (!condition)
     //{
-    //  char msg[1024];
-    //
-    //  sprintf(msg, "Assertion in file %s at line %d\n%s", __FILE__, __LINE__, message);
+    //	char msg[1024];
+    //	
+    //	sprintf(msg, "Assertion in file %s at line %d\n%s", __FILE__, __LINE__, message);
 
-    //  int nRet = MessageBoxA(
-    //      0,
-    //      msg,
-    //      "Assertion violation",
-    //      MB_ICONEXCLAMATION | MB_ABORTRETRYIGNORE);
+    //	int nRet = MessageBoxA(
+    //		0, 
+    //		msg, 
+    //		"Assertion violation", 
+    //		MB_ICONEXCLAMATION | MB_ABORTRETRYIGNORE);
     //}
-
+    
 }
 

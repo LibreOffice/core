@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,19 +67,19 @@ struct ShapeTypeDescriptor
     rtl::OUString       msServiceName;
     tCreateFunction     maCreateFunction;
     ShapeTypeDescriptor (
-        ShapeTypeId nId, const rtl::OUString& sName, tCreateFunction aFunction)
-    :   mnShapeTypeId (nId),
+        ShapeTypeId	nId, const rtl::OUString& sName, tCreateFunction aFunction)
+    :	mnShapeTypeId (nId),
         msServiceName (sName),
            maCreateFunction (aFunction)
     {}
     ShapeTypeDescriptor (void)
-    :   mnShapeTypeId (-1),
+    :	mnShapeTypeId (-1),
         msServiceName (),
            maCreateFunction (NULL)
     {}
 };
 
-/** @descr
+/**	@descr
         This class is a singleton that has the purpose to transform between
         service names of shapes and associated enum values and to create new
         accessible objects for given shapes.
@@ -171,7 +171,7 @@ public:
     bool AddShapeTypeList (int nDescriptorCount,
         ShapeTypeDescriptor aDescriptorList[]);
 
-    /// get the accessible base name for an object
+    ///	get the accessible base name for an object
     static ::rtl::OUString CreateAccessibleBaseName (
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape)
             throw (::com::sun::star::uno::RuntimeException);

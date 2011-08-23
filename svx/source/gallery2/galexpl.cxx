@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -171,7 +171,7 @@ sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vect
         {
             for( ULONG i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
             {
-                SgaObject*  pObj = pTheme->AcquireObject( i );
+                SgaObject*	pObj = pTheme->AcquireObject( i );
                 if ( pObj )
                 {
                     rtl::OUString aTitle( pObj->GetTitle() );
@@ -203,8 +203,8 @@ BOOL GalleryExplorer::InsertURL( ULONG nThemeId, const String& rURL )
 
 BOOL GalleryExplorer::InsertURL( const String& rThemeName, const String& rURL, const ULONG )
 {
-    Gallery*    pGal = ImplGetGallery();
-    BOOL        bRet = FALSE;
+    Gallery*	pGal = ImplGetGallery();
+    BOOL		bRet = FALSE;
 
     if( pGal )
     {
@@ -235,8 +235,8 @@ BOOL GalleryExplorer::InsertURL( ULONG nThemeId, const String& rURL, const ULONG
 
 ULONG GalleryExplorer::GetObjCount( const String& rThemeName )
 {
-    Gallery*    pGal = ImplGetGallery();
-    ULONG       nRet = 0;
+    Gallery*	pGal = ImplGetGallery();
+    ULONG		nRet = 0;
 
     if( pGal )
     {
@@ -267,8 +267,8 @@ BOOL GalleryExplorer::GetGraphicObj( const String& rThemeName, ULONG nPos,
                                      Graphic* pGraphic, Bitmap* pThumb,
                                      BOOL bProgress )
 {
-    Gallery*    pGal = ImplGetGallery();
-    BOOL        bRet = FALSE;
+    Gallery*	pGal = ImplGetGallery();
+    BOOL		bRet = FALSE;
 
     if( pGal )
     {
@@ -304,8 +304,8 @@ BOOL GalleryExplorer::GetGraphicObj( ULONG nThemeId, ULONG nPos,
 
 BOOL GalleryExplorer::InsertGraphicObj( const String& rThemeName, const Graphic& rGraphic )
 {
-    Gallery*    pGal = ImplGetGallery();
-    BOOL        bRet = FALSE;
+    Gallery*	pGal = ImplGetGallery();
+    BOOL		bRet = FALSE;
 
     if( pGal )
     {
@@ -334,8 +334,8 @@ BOOL GalleryExplorer::InsertGraphicObj( ULONG nThemeId, const Graphic& rGraphic 
 
 ULONG GalleryExplorer::GetSdrObjCount( const String& rThemeName )
 {
-    Gallery*    pGal = ImplGetGallery();
-    ULONG       nRet = 0;
+    Gallery*	pGal = ImplGetGallery();
+    ULONG		nRet = 0;
 
     if( pGal )
     {
@@ -368,8 +368,8 @@ ULONG GalleryExplorer::GetSdrObjCount( ULONG nThemeId  )
 BOOL GalleryExplorer::GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
                                  SdrModel* pModel, Bitmap* pThumb )
 {
-    Gallery*    pGal = ImplGetGallery();
-    BOOL        bRet = FALSE;
+    Gallery*	pGal = ImplGetGallery();
+    BOOL		bRet = FALSE;
 
     if( pGal )
     {
@@ -413,8 +413,8 @@ BOOL GalleryExplorer::GetSdrObj( ULONG nThemeId, ULONG nSdrModelPos,
 
 BOOL GalleryExplorer::InsertSdrObj( const String& rThemeName, FmFormModel& rModel )
 {
-    Gallery*    pGal = ImplGetGallery();
-    BOOL        bRet = FALSE;
+    Gallery*	pGal = ImplGetGallery();
+    BOOL		bRet = FALSE;
 
     if( pGal )
     {
@@ -443,8 +443,8 @@ BOOL GalleryExplorer::InsertSdrObj( ULONG nThemeId, FmFormModel& rModel )
 
 BOOL GalleryExplorer::BeginLocking( const String& rThemeName )
 {
-    Gallery*    pGal = ImplGetGallery();
-    BOOL        bRet = FALSE;
+    Gallery*	pGal = ImplGetGallery();
+    BOOL		bRet = FALSE;
 
     if( pGal )
     {
@@ -472,8 +472,8 @@ BOOL GalleryExplorer::BeginLocking( ULONG nThemeId )
 
 BOOL GalleryExplorer::EndLocking( const String& rThemeName )
 {
-    Gallery*    pGal = ImplGetGallery();
-    BOOL        bRet = FALSE;
+    Gallery*	pGal = ImplGetGallery();
+    BOOL		bRet = FALSE;
 
     if( pGal )
     {

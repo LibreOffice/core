@@ -55,7 +55,7 @@ public:
 
     // XServiceInfo
     DECLARE_XSERVICEINFO
-
+   
     // XComponent
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
 

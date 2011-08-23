@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,10 +77,10 @@ XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImpo
 
 const SvXMLEnumMapEntry aXML_GluePointEnumMap[] =
 {
-    { XML_NONE,         0 },
-    { XML_SEGMENTS,     1 },
-    { XML_NONE,         2 },
-    { XML_RECTANGLE,    3 },
+    { XML_NONE,			0 },
+    { XML_SEGMENTS, 	1 },
+    { XML_NONE,			2 },
+    { XML_RECTANGLE,	3 },
     { XML_TOKEN_INVALID, 0 }
 };
 void GetBool( std::vector< com::sun::star::beans::PropertyValue >& rDest,
@@ -317,11 +317,11 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
         {
             sal_Int32 nStartIndex = nIndex;
 
-            sal_Bool bM = sal_False;    // set if the value is negative
-            sal_Bool bE = sal_False;    // set if a double is including a "E" statement
-            sal_Bool bEM = sal_False;   // set if a double is including a "E-"statement
-            sal_Bool bDot = sal_False;  // set if there is a dot included
-            sal_Bool bEnd = sal_False;  // set for each value that can not be part of a double/integer
+            sal_Bool bM = sal_False;	// set if the value is negative
+            sal_Bool bE = sal_False;	// set if a double is including a "E" statement
+            sal_Bool bEM = sal_False;	// set if a double is including a "E-"statement
+            sal_Bool bDot = sal_False;	// set if there is a dot included
+            sal_Bool bEnd = sal_False;	// set for each value that can not be part of a double/integer
 
             while( ( nIndex < rParaString.getLength() ) && bValid )
             {
@@ -414,14 +414,14 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
         }
     }
     if ( bValid )
-    {   // skipping white spaces
+    {	// skipping white spaces
         while( ( nIndex < rParaString.getLength() ) && rParaString[ nIndex ] == (sal_Unicode)' ' )
             nIndex++;
     }
     return bValid;
 }
 
-void GetPosition3D( std::vector< com::sun::star::beans::PropertyValue >& rDest,                     // e.g. draw:extrusion-viewpoint
+void GetPosition3D( std::vector< com::sun::star::beans::PropertyValue >& rDest,						// e.g. draw:extrusion-viewpoint
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         SvXMLUnitConverter& rUnitConverter )
 {
@@ -435,7 +435,7 @@ void GetPosition3D( std::vector< com::sun::star::beans::PropertyValue >& rDest, 
     }
 }
 
-void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,                 // e.g. draw:glue-point-leaving-directions
+void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,					// e.g. draw:glue-point-leaving-directions
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< double > vDirection;
@@ -468,7 +468,7 @@ void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDe
     }
 }
 
-void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
+void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& rDest,				// e.g. draw:handle-position
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
@@ -482,7 +482,7 @@ void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& 
     }
 }
 
-void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue >& rDest,          // e.g. draw:handle-position
+void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue >& rDest,			// e.g. draw:handle-position
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
@@ -497,7 +497,7 @@ void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue
     }
 }
 
-sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,     // e.g. draw:glue-points
+sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,		// e.g. draw:glue-points
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > vParameter;
@@ -527,7 +527,7 @@ sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::
     return vParameter.size();
 }
 
-void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
+void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,		// e.g. draw:text-areas
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
@@ -559,11 +559,11 @@ void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyV
     }
 }
 
-void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest,                   // e.g. draw:enhanced-path
+void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest,					// e.g. draw:enhanced-path
                         const rtl::OUString& rValue )
 {
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
-    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >      vSegments;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >	vCoordinates;
+    std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >		vSegments;
 
     sal_Int32 nIndex = 0;
     sal_Int32 nParameterCount = 0;
@@ -711,7 +711,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
             case '-' :
             {
                 com::sun::star::drawing::EnhancedCustomShapeParameterPair aPair;
-                if ( GetNextParameter( aPair.First, nIndex, rValue ) &&
+                if ( GetNextParameter( aPair.First, nIndex, rValue ) && 
                         GetNextParameter( aPair.Second, nIndex, rValue ) )
                 {
                     vCoordinates.push_back( aPair );
@@ -778,7 +778,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
     rDest.push_back( aProp );
 }
 
-void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& rDest,               // draw:adjustments
+void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& rDest,				// draw:adjustments
                         const rtl::OUString& rValue )
 {
     std::vector< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
@@ -793,7 +793,7 @@ void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& r
             aAdj.State = beans::PropertyState_DIRECT_VALUE;
         }
         else
-            aAdj.State = beans::PropertyState_DEFAULT_VALUE;    // this should not be, but better than setting nothing
+            aAdj.State = beans::PropertyState_DEFAULT_VALUE;	// this should not be, but better than setting nothing
 
         vAdjustmentValue.push_back( aAdj );
     }
@@ -821,7 +821,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
     sal_Int16 nLength = xAttrList->getLength();
     if ( nLength )
     {
-        sal_Int32               nAttrNumber;
+        sal_Int32				nAttrNumber;
         for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
         {
             rtl::OUString aLocalName;

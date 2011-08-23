@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,21 +30,21 @@
 #include <com/sun/star/uno/Reference.h>
 
 namespace com { namespace sun { namespace star { namespace io {
-    class XInputStream; } } } }
+    class XInputStream; } } } } 
 class SvXMLExport;
 
 class XMLBase64Export
 {
-    SvXMLExport&        rExport;
+    SvXMLExport&		rExport;
 
 protected:
-
+    
     SvXMLExport& GetExport() { return rExport; }
 
 public:
 
     XMLBase64Export( SvXMLExport& rExport );
-
+    
     sal_Bool exportXML( const ::com::sun::star::uno::Reference <
             ::com::sun::star::io::XInputStream > & rIn );
     sal_Bool exportElement( const ::com::sun::star::uno::Reference <

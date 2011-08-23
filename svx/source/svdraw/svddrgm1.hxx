@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class SdrDragStat;
 class SdrDragMovHdl : public SdrDragMethod
 {
 private:
-    bool                    bMirrObjShown;
+    bool					bMirrObjShown;
 
 protected:
     // define nothing, overload to do so
@@ -69,11 +69,11 @@ public:
 class SdrDragRotate : public SdrDragMethod
 {
 private:
-    double                      nSin;
-    double                      nCos;
-    long                        nWink0;
-    long                        nWink;
-    bool                        bRight;
+    double						nSin;
+    double						nCos;
+    long						nWink0;
+    long						nWink;
+    bool    					bRight;
 
 public:
     TYPEINFO();
@@ -84,7 +84,7 @@ public:
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
-
+    
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
@@ -95,14 +95,14 @@ public:
 class SdrDragShear : public SdrDragMethod
 {
 private:
-    Fraction                    aFact;
-    long                        nWink0;
-    long                        nWink;
-    double                      nTan;
-    bool                        bVertical;   // Vertikales verzerren
-    bool                        bResize;     // Shear mit Resize
-    bool                        bUpSideDown; // Beim Shear/Slant gespiegelt
-    bool                        bSlant;
+    Fraction					aFact;
+    long						nWink0;
+    long						nWink;
+    double						nTan;
+    bool    					bVertical;   // Vertikales verzerren
+    bool    					bResize;     // Shear mit Resize
+    bool    					bUpSideDown; // Beim Shear/Slant gespiegelt
+    bool    					bSlant;
 
 public:
     TYPEINFO();
@@ -113,7 +113,7 @@ public:
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
-
+    
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
@@ -124,10 +124,10 @@ public:
 class SdrDragMirror : public SdrDragMethod
 {
 private:
-    Point                       aDif;
-    long                        nWink;
-    bool                        bMirrored;
-    bool                        bSide0;
+    Point						aDif;
+    long						nWink;
+    bool    					bMirrored;
+    bool    					bSide0;
 
     bool ImpCheckSide(const Point& rPnt) const;
 
@@ -140,7 +140,7 @@ public:
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
-
+    
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
@@ -152,10 +152,10 @@ class SdrDragGradient : public SdrDragMethod
 {
 private:
     // Handles to work on
-    SdrHdlGradient*             pIAOHandle;
+    SdrHdlGradient*				pIAOHandle;
 
     // is this for gradient (or for transparence) ?
-    unsigned                    bIsGradient : 1;
+    unsigned					bIsGradient : 1;
 
 public:
     TYPEINFO();
@@ -177,29 +177,29 @@ public:
 class SdrDragCrook : public SdrDragMethod
 {
 private:
-    Rectangle                   aMarkRect;
-    Point                       aMarkCenter;
-    Point                       aCenter;
-    Point                       aStart;
-    Fraction                    aFact;
-    Point                       aRad;
-    bool                        bContortionAllowed;
-    bool                        bNoContortionAllowed;
-    bool                        bContortion;
-    bool                        bResizeAllowed;
-    bool                        bResize;
-    bool                        bRotateAllowed;
-    bool                        bRotate;
-    bool                        bVertical;
-    bool                        bValid;
-    bool                        bLft;
-    bool                        bRgt;
-    bool                        bUpr;
-    bool                        bLwr;
-    bool                        bAtCenter;
-    long                        nWink;
-    long                        nMarkSize;
-    SdrCrookMode                eMode;
+    Rectangle					aMarkRect;
+    Point						aMarkCenter;
+    Point						aCenter;
+    Point						aStart;
+    Fraction					aFact;
+    Point						aRad;
+    bool    					bContortionAllowed;
+    bool    					bNoContortionAllowed;
+    bool    					bContortion;
+    bool    					bResizeAllowed;
+    bool    					bResize;
+    bool    					bRotateAllowed;
+    bool    					bRotate;
+    bool    					bVertical;
+    bool    					bValid;
+    bool    					bLft;
+    bool    					bRgt;
+    bool    					bUpr;
+    bool    					bLwr;
+    bool    					bAtCenter;
+    long						nWink;
+    long						nMarkSize;
+    SdrCrookMode				eMode;
 
     // helpers for applyCurrentTransformationToPolyPolygon
     void _MovAllPoints(basegfx::B2DPolyPolygon& rTarget);
@@ -229,12 +229,12 @@ public:
 class SdrDragDistort : public SdrDragMethod
 {
 private:
-    Rectangle                   aMarkRect;
-    XPolygon                    aDistortedRect;
-    sal_uInt16                  nPolyPt;
-    bool                        bContortionAllowed;
-    bool                        bNoContortionAllowed;
-    bool                        bContortion;
+    Rectangle					aMarkRect;
+    XPolygon					aDistortedRect;
+    sal_uInt16					nPolyPt;
+    bool    					bContortionAllowed;
+    bool    					bNoContortionAllowed;
+    bool    					bContortion;
 
     // helper for applyCurrentTransformationToPolyPolygon
     void _MovAllPoints(basegfx::B2DPolyPolygon& rTarget);

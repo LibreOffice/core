@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -250,10 +250,10 @@ void SfxObjectShell::UpdateTime_Impl(
             secs/3600, (secs%3600)/60, secs%60, 0);
 
     // Initialize some local member! Its neccessary for wollow operations!
-    DateTime    aNow                    ;   // Date and time at current moment
-    Time        n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
-    ULONG       nDays       = 0         ;   // Count of days between now and last editing
-    Time        nAddTime    (0)         ;   // Value to add on aOldTime
+    DateTime	aNow					;	// Date and time at current moment
+    Time		n24Time		(24,0,0,0)	;	// Time-value for 24 hours - see follow calculation
+    ULONG		nDays		= 0			;	// Count of days between now and last editing
+    Time		nAddTime	(0)			;	// Value to add on aOldTime
 
     // Safe impossible cases!
     // User has changed time to the past between last editing and now ... its not possible!!!
@@ -279,9 +279,9 @@ void SfxObjectShell::UpdateTime_Impl(
             // If 1 or up to 31 days between now and last editing - calculate time indirectly.
             // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
             --nDays;
-             nAddTime    =  nDays*n24Time.GetTime() ;
-            nAddTime    +=  n24Time-(const Time&)pImp->nTime        ;
-            nAddTime    +=  aNow                    ;
+             nAddTime	 =	nDays*n24Time.GetTime()	;
+            nAddTime	+=	n24Time-(const Time&)pImp->nTime		;
+            nAddTime	+=	aNow					;
         }
 
         lcl_add(editDuration, nAddTime);
@@ -785,7 +785,7 @@ BOOL SfxObjectShell::Print
             boost::shared_ptr< vcl::PrinterController > pController( pAdaptor );
 
             pAdaptor->StartPage();
-
+            
             pPrinter->SetMapMode(MapMode(MAP_10TH_MM));
             Font aFont( DEFINE_CONST_UNICODE( "Arial" ), Size(0, 64));   // 18pt
             aFont.SetWeight(WEIGHT_BOLD);
@@ -834,7 +834,7 @@ BOOL SfxObjectShell::Print
                 // break text into lines
                 while(nIdx < aStr.Len())
                 {
-                    USHORT  nOld = nIdx;
+                    USHORT	nOld = nIdx;
                     long nTextWidth;
                     nIdx = aStr.Search(cDelim, nStart);
                     nTextWidth = pPrinter->GetTextWidth(aStr, nStart, nIdx-nStart);
@@ -879,7 +879,7 @@ BOOL SfxObjectShell::Print
                 pStyle = pIter->Next();
             }
             pAdaptor->EndPage();
-
+            
             Printer::PrintJob( pController, rPrt.GetJobSetup() );
 
             delete pIter;
@@ -1096,7 +1096,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     // remember date/time of check
                     xDocProps->setTemplateDate(aTemplDate);
                     // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
-//REPLACE                   pInfo->Save(xDocStor);
+//REPLACE					pInfo->Save(xDocStor);
                 }
             }
 /*
@@ -1169,10 +1169,10 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
         xDocProps->setTemplateName( ::rtl::OUString() );
         xDocProps->setTemplateDate( util::DateTime() );
         xDocProps->resetUserData( ::rtl::OUString() );
-
+    
         // TODO/REFACTOR:
         // Title?
-
+    
         if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
         {
             String aFoundName;
@@ -1181,13 +1181,13 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
                 INetURLObject aObj( rFileName );
                 xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
                 xDocProps->setTemplateName( rTemplateName );
-
+    
                 ::DateTime now;
                 xDocProps->setTemplateDate( util::DateTime(
                     now.Get100Sec(), now.GetSec(), now.GetMin(),
                     now.GetHour(), now.GetDay(), now.GetMonth(),
                     now.GetYear() ) );
-
+    
                 SetQueryLoadTemplate( sal_True );
             }
         }

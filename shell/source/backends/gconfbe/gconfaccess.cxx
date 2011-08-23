@@ -57,19 +57,19 @@ GConfClient* getGconfClient()
     {
         /* initialize glib object type library */
         g_type_init();
-
+    
         GError* aError = NULL;
         if (!gconf_init(0, NULL, &aError))
         {
             rtl::OUStringBuffer msg;
             msg.appendAscii("GconfBackend:GconfLayer: Cannot Initialize Gconf connection - " );
             msg.appendAscii(aError->message);
-
-            g_error_free(aError);
+            
+            g_error_free(aError); 
             aError = NULL;
             throw uno::RuntimeException(msg.makeStringAndClear(),NULL);
         }
-
+    
         mClient = gconf_client_get_default();
         if (!mClient)
         {
@@ -93,7 +93,7 @@ GConfClient* getGconfClient()
         int i = 0;
         while( PreloadValuesList[i] != NULL )
             gconf_client_preload( mClient, PreloadValuesList[i++], GCONF_CLIENT_PRELOAD_ONELEVEL, NULL );
-    }
+    } 
 
     return mClient;
 }
@@ -304,7 +304,7 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
                 g_warning( "unexpected type for ignore_hosts" );
         }
             break;
-
+            
         case SETTING_MAILER_PROGRAM:
         {
             rtl::OUString aMailer;
@@ -378,7 +378,7 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
         {
             rtl::OUString aName;
             sal_Int16 nHeight;
-
+                   
             splitFontName (aGconfValue, aName, nHeight);
             if (aValue.nSettingId == SETTING_SOURCEVIEWFONT_NAME)
                 return uno::makeAny( aName );
@@ -405,7 +405,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const Configurati
         {
             GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_PROXY_MODE_KEY, NULL );
 
-            if ( aGconfValue != NULL )
+            if ( aGconfValue != NULL ) 
             {
                 bool bOk = g_strcasecmp( "manual", gconf_value_get_string( aGconfValue ) ) == 0;
                 gconf_value_free( aGconfValue );
@@ -535,7 +535,7 @@ ConfigurationValue const ConfigurationValues[] =
         sal_False,
         SETTING_PROXY_MODE
     },
-
+    
     {
         SETTING_NO_PROXY_FOR,
         "/system/http_proxy/ignore_hosts",

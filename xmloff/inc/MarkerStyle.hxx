@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ public:
     XMLMarkerStyleImport( SvXMLImport& rImport );
     ~XMLMarkerStyleImport();
 
-    sal_Bool importXML(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+    sal_Bool importXML( 
+        const ::com::sun::star::uno::Reference< 
+            ::com::sun::star::xml::sax::XAttributeList >& xAttrList, 
         ::com::sun::star::uno::Any& rValue,
         ::rtl::OUString& rStrName );
 };
@@ -65,8 +65,8 @@ public:
     XMLMarkerStyleExport( SvXMLExport& rExport );
     ~XMLMarkerStyleExport();
 
-    sal_Bool exportXML(
-        const ::rtl::OUString& rStrName,
+    sal_Bool exportXML( 
+        const ::rtl::OUString& rStrName, 
         const ::com::sun::star::uno::Any& rValue );
 };
 

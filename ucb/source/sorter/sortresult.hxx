@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ namespace cppu {
 }
 
 //-----------------------------------------------------------------------------
-struct  SortInfo;
-struct  SortListData;
-class   SRSPropertySetInfo;
-class   PropertyChangeListeners_Impl;
+struct	SortInfo;
+struct	SortListData;
+class	SRSPropertySetInfo;
+class	PropertyChangeListeners_Impl;
 
 //-----------------------------------------------------------------------------
 class SortedEntryList
@@ -67,18 +67,18 @@ public:
                          SortedEntryList(){}
                         ~SortedEntryList(){ Clear(); }
 
-    sal_uInt32          Count() const { return (sal_uInt32) maData.size(); }
+    sal_uInt32			Count() const { return (sal_uInt32) maData.size(); }
 
-    void                Clear();
-    void                Insert( SortListData *pEntry, long nPos );
-    SortListData*       Remove( long nPos );
-    SortListData*       GetData( long nPos );
+    void				Clear();
+    void				Insert( SortListData *pEntry, long nPos );
+    SortListData*		Remove( long nPos );
+    SortListData*		GetData( long nPos );
 
-    long                operator [] ( long nPos ) const;
+    long				operator [] ( long nPos ) const;
 };
 
 //-----------------------------------------------------------------------------
-#define LISTACTION  com::sun::star::ucb::ListAction
+#define LISTACTION	com::sun::star::ucb::ListAction
 
 class EventList
 {
@@ -88,12 +88,12 @@ public:
                      EventList(){}
                     ~EventList(){ Clear(); }
 
-    sal_uInt32      Count() { return (sal_uInt32) maData.size(); }
+    sal_uInt32		Count() { return (sal_uInt32) maData.size(); }
 
-    void            AddEvent( long nType, long nPos, long nCount );
-    void            Insert( LISTACTION *pAction ) { maData.push_back( pAction ); }
-    void            Clear();
-    LISTACTION*     GetAction( long nIndex ) { return maData[ nIndex ]; }
+    void			AddEvent( long nType, long nPos, long nCount );
+    void			Insert( LISTACTION *pAction ) { maData.push_back( pAction ); }
+    void			Clear();
+    LISTACTION*		GetAction( long nIndex ) { return maData[ nIndex ]; }
 };
 
 //-----------------------------------------------------------------------------
@@ -106,33 +106,33 @@ public:
                      SimpleList(){}
                     ~SimpleList(){ Clear(); }
 
-    sal_uInt32      Count() { return (sal_uInt32) maData.size(); }
-    void            Clear() { maData.clear(); }
+    sal_uInt32		Count() { return (sal_uInt32) maData.size(); }
+    void			Clear() { maData.clear(); }
 
-    void            Remove( sal_uInt32 nPos );
-    void            Remove( void* pData );
+    void			Remove( sal_uInt32 nPos );
+    void			Remove( void* pData );
 
-    void            Append( void* pData )
+    void			Append( void* pData )
                         { maData.push_back( pData ); }
-    void            Insert( void* pData, sal_uInt32 nPos );
-    void*           GetObject( sal_uInt32 nPos ) const;
-    void            Replace( void* pData, sal_uInt32 nPos );
+    void			Insert( void* pData, sal_uInt32 nPos );
+    void*			GetObject( sal_uInt32 nPos ) const;
+    void			Replace( void* pData, sal_uInt32 nPos );
 };
 
 //-----------------------------------------------------------------------------
 
-#define PROPERTYCHANGEEVENT     com::sun::star::beans::PropertyChangeEvent
-#define RUNTIME_EXCEPTION       com::sun::star::uno::RuntimeException
-#define REFERENCE               com::sun::star::uno::Reference
-#define SEQUENCE                com::sun::star::uno::Sequence
-#define XEVENTLISTENER          com::sun::star::lang::XEventListener
-#define XRESULTSET              com::sun::star::sdbc::XResultSet
-#define SQLEXCEPTION            com::sun::star::sdbc::SQLException
-#define XRESULTSETMETADATA      com::sun::star::sdbc::XResultSetMetaData
-#define NUMBERED_SORTINGINFO    com::sun::star::ucb::NumberedSortingInfo
-#define XANYCOMPAREFACTORY      com::sun::star::ucb::XAnyCompareFactory
+#define PROPERTYCHANGEEVENT		com::sun::star::beans::PropertyChangeEvent
+#define RUNTIME_EXCEPTION		com::sun::star::uno::RuntimeException
+#define REFERENCE				com::sun::star::uno::Reference
+#define SEQUENCE				com::sun::star::uno::Sequence
+#define XEVENTLISTENER			com::sun::star::lang::XEventListener
+#define XRESULTSET				com::sun::star::sdbc::XResultSet
+#define SQLEXCEPTION			com::sun::star::sdbc::SQLException
+#define XRESULTSETMETADATA		com::sun::star::sdbc::XResultSetMetaData
+#define NUMBERED_SORTINGINFO	com::sun::star::ucb::NumberedSortingInfo
+#define XANYCOMPAREFACTORY		com::sun::star::ucb::XAnyCompareFactory
 
-#define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedResultSet"
+#define RESULTSET_SERVICE_NAME 	"com.sun.star.ucb.SortedResultSet"
 
 //-----------------------------------------------------------------------------
 
@@ -148,68 +148,68 @@ class SortedResultSet:
                 public com::sun::star::sdbc::XResultSetMetaDataSupplier,
                 public com::sun::star::beans::XPropertySet
 {
-    cppu::OInterfaceContainerHelper *mpDisposeEventListeners;
-    PropertyChangeListeners_Impl    *mpPropChangeListeners;
-    PropertyChangeListeners_Impl    *mpVetoChangeListeners;
+    cppu::OInterfaceContainerHelper	*mpDisposeEventListeners;
+    PropertyChangeListeners_Impl	*mpPropChangeListeners;
+    PropertyChangeListeners_Impl	*mpVetoChangeListeners;
 
-    REFERENCE < XRESULTSET >            mxOriginal;
-    REFERENCE < XRESULTSET >            mxOther;
+    REFERENCE < XRESULTSET >			mxOriginal;
+    REFERENCE < XRESULTSET >			mxOther;
 
-    SRSPropertySetInfo* mpPropSetInfo;
-    SortInfo*           mpSortInfo;
-    osl::Mutex          maMutex;
-    SortedEntryList     maS2O;          // maps the sorted entries to the original ones
-    SimpleList          maO2S;          // maps the original Entries to the sorted ones
-    SimpleList          maModList;      // keeps track of modified entries
-    long                mnLastSort;     // index of the last sorted entry;
-    long                mnCurEntry;     // index of the current entry
-    long                mnCount;        // total count of the elements
-    sal_Bool            mbIsCopy;
+    SRSPropertySetInfo*	mpPropSetInfo;
+    SortInfo*			mpSortInfo;
+    osl::Mutex			maMutex;
+    SortedEntryList		maS2O;			// maps the sorted entries to the original ones
+    SimpleList			maO2S;			// maps the original Entries to the sorted ones
+    SimpleList			maModList;		// keeps track of modified entries
+    long				mnLastSort;		// index of the last sorted entry;
+    long				mnCurEntry;		// index of the current entry
+    long				mnCount;		// total count of the elements
+    sal_Bool			mbIsCopy;
 
 
 private:
 
-    long                FindPos( SortListData *pEntry, long nStart, long nEnd )
+    long				FindPos( SortListData *pEntry, long nStart, long nEnd )
                             throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    long                Compare( SortListData *pOne,
+    long				Compare( SortListData *pOne,
                                  SortListData *pTwo )
                             throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    void                BuildSortInfo( REFERENCE< XRESULTSET > aResult,
+    void				BuildSortInfo( REFERENCE< XRESULTSET > aResult,
                                        const SEQUENCE < NUMBERED_SORTINGINFO > &xSortInfo,
                                        const REFERENCE< XANYCOMPAREFACTORY > &xCompFac );
-    long                CompareImpl( REFERENCE < XRESULTSET > xResultOne,
+    long				CompareImpl( REFERENCE < XRESULTSET > xResultOne,
                                      REFERENCE < XRESULTSET > xResultTwo,
                                      long nIndexOne, long nIndexTwo,
                                      SortInfo* pSortInfo )
                             throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    long                CompareImpl( REFERENCE < XRESULTSET > xResultOne,
+    long				CompareImpl( REFERENCE < XRESULTSET > xResultOne,
                                      REFERENCE < XRESULTSET > xResultTwo,
                                      long nIndexOne, long nIndexTwo )
                             throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    void                PropertyChanged( const PROPERTYCHANGEEVENT& rEvt );
+    void				PropertyChanged( const PROPERTYCHANGEEVENT& rEvt );
 
 public:
                         SortedResultSet( REFERENCE< XRESULTSET > aResult );
                         ~SortedResultSet();
 
-    const SortedEntryList*      GetS2OList() const { return &maS2O; }
-    const SimpleList*           GetO2SList() const { return &maO2S; }
-    REFERENCE < XRESULTSET >    GetResultSet() const { return mxOriginal; }
-    SortInfo*                   GetSortInfo() const { return mpSortInfo; }
-    long                        GetCount() const { return mnCount; }
+    const SortedEntryList*		GetS2OList() const { return &maS2O; }
+    const SimpleList*			GetO2SList() const { return &maO2S; }
+    REFERENCE < XRESULTSET >	GetResultSet() const { return mxOriginal; }
+    SortInfo*					GetSortInfo() const { return mpSortInfo; }
+    long						GetCount() const { return mnCount; }
 
-    void                CopyData( SortedResultSet* pSource );
-    void                Initialize( const SEQUENCE < NUMBERED_SORTINGINFO > &xSortInfo,
+    void				CopyData( SortedResultSet* pSource );
+    void				Initialize( const SEQUENCE < NUMBERED_SORTINGINFO > &xSortInfo,
                                     const REFERENCE< XANYCOMPAREFACTORY > &xCompFac );
-    void                CheckProperties( long nOldCount, sal_Bool bWasFinal );
+    void				CheckProperties( long nOldCount, sal_Bool bWasFinal );
 
-    void                InsertNew( long nPos, long nCount );
-    void                SetChanged( long nPos, long nCount );
-    void                Remove( long nPos, long nCount, EventList *pList );
-    void                Move( long nPos, long nCount, long nOffset );
+    void				InsertNew( long nPos, long nCount );
+    void				SetChanged( long nPos, long nCount );
+    void				Remove( long nPos, long nCount, EventList *pList );
+    void				Move( long nPos, long nCount, long nOffset );
 
-    void                ResortModified( EventList* pList );
-    void                ResortNew( EventList* pList );
+    void				ResortModified( EventList* pList );
+    void				ResortNew( EventList* pList );
 
     // XInterface
     XINTERFACE_DECL()

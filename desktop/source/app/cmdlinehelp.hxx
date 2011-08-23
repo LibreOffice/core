@@ -13,11 +13,11 @@ namespace desktop
     public:
         CmdlineHelpDialog ( void );
 
-        FixedText   m_ftHead;
-        FixedText   m_ftLeft;
-        FixedText   m_ftRight;
-        FixedText   m_ftBottom;
-        OKButton    m_btOk;
+        FixedText	m_ftHead;
+        FixedText	m_ftLeft;
+        FixedText	m_ftRight;
+        FixedText	m_ftBottom;
+        OKButton	m_btOk;
     };
 #endif
 }

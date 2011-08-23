@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,13 +104,13 @@ void StructListBox::LoseFocus()
 StructPage::StructPage(Window* pParent):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_STRUCT)),
     //
-    aFtStruct       ( this, ModuleRes( FT_STRUCT ) ),
-    aTlbStruct      ( this, ModuleRes( TLB_STRUCT ) ),
+    aFtStruct		( this, ModuleRes( FT_STRUCT ) ),
+    aTlbStruct		( this, ModuleRes( TLB_STRUCT ) ),
     maImgEnd        ( ModuleRes( BMP_STR_END ) ),
     maImgError      ( ModuleRes( BMP_STR_ERROR ) ),
     maImgEndHC      ( ModuleRes( BMP_STR_END_H ) ),
     maImgErrorHC    ( ModuleRes( BMP_STR_ERROR_H ) ),
-    pSelectedToken  ( NULL )
+    pSelectedToken	( NULL )
 {
     aTlbStruct.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
@@ -161,7 +161,7 @@ String StructPage::GetEntryText(SvLBoxEntry* pEntry) const
     String aString;
     if(pEntry!=NULL)
         aString=aTlbStruct.GetEntryText(pEntry);
-    return  aString;
+    return	aString;
 }
 
 SvLBoxEntry* StructPage::GetParent(SvLBoxEntry* pEntry) const
@@ -194,7 +194,7 @@ IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb )
     {
         if(pTlb==&aTlbStruct)
         {
-            SvLBoxEntry*    pCurEntry=aTlbStruct.GetCurEntry();
+            SvLBoxEntry*	pCurEntry=aTlbStruct.GetCurEntry();
             if(pCurEntry!=NULL)
             {
                 pSelectedToken=(IFormulaToken *)pCurEntry->GetUserData();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,30 +42,30 @@ import org.openoffice.idesupport.OfficeDocument;
  * @author tomaso
  */
 public class ParcelDescriptorDataLoader extends UniFileLoader {
-
+    
     public ParcelDescriptorDataLoader() {
         this("org.openoffice.netbeans.modules.office.loader.ParcelDescriptorDataObject");
     }
-
+    
     // Can be useful for subclasses:
     protected ParcelDescriptorDataLoader(String recognizedObjectClass) {
         super(recognizedObjectClass);
     }
-
+    
     protected String defaultDisplayName() {
         return OfficeDocument.OFFICE_PRODUCT_NAME + " Script Parcel Descriptor";
     }
-
+    
     protected void initialize() {
         super.initialize();
-
+        
         // ExtensionList extensions = new ExtensionList();
         // extensions.addMimeType("text/x-parcel+xml");
         // extensions.addExtension("pml");
         getExtensions().addMimeType("text/x-parcel+xml");
         // setExtensions(extensions);
     }
-
+    
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
             SystemAction.get(OpenAction.class),
@@ -84,7 +84,7 @@ public class ParcelDescriptorDataLoader extends UniFileLoader {
             SystemAction.get(PropertiesAction.class),
         };
     }
-
+    
     protected MultiDataObject createMultiObject(FileObject primaryFile) throws DataObjectExistsException, IOException {
         return new ParcelDescriptorDataObject(primaryFile, this);
     }

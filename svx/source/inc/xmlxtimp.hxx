@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <xmloff/xmlimp.hxx>
 
-namespace rtl { class OUString; }
+namespace rtl {	class OUString; }
 namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Reference; }
     namespace uno { class XInterface; }
@@ -46,7 +46,7 @@ public:
     SvxXMLXTableImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & rTable,
-        com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& xGrfResolver);
+        com::sun::star::uno::Reference<	com::sun::star::document::XGraphicObjectResolver >& xGrfResolver);
 
     virtual ~SvxXMLXTableImport() throw ();
 

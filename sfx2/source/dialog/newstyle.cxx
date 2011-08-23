@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,11 +77,11 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
 
     ModalDialog( pParent, SfxResId( DLG_NEW_STYLE_BY_EXAMPLE ) ),
 
-    aColFL              ( this, SfxResId( FL_COL ) ),
-    aColBox             ( this, SfxResId( LB_COL ) ),
-    aOKBtn              ( this, SfxResId( BT_OK ) ),
-    aCancelBtn          ( this, SfxResId( BT_CANCEL ) ),
-    aQueryOverwriteBox  ( this, SfxResId( MSG_OVERWRITE ) ),
+    aColFL				( this, SfxResId( FL_COL ) ),
+    aColBox				( this, SfxResId( LB_COL ) ),
+    aOKBtn				( this, SfxResId( BT_OK ) ),
+    aCancelBtn			( this, SfxResId( BT_CANCEL ) ),
+    aQueryOverwriteBox	( this, SfxResId( MSG_OVERWRITE ) ),
 
     rPool( rInPool )
 

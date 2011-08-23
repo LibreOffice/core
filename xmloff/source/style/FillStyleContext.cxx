@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ using ::rtl::OUStringBuffer;
 
 TYPEINIT1( XMLGradientStyleContext, SvXMLStyleContext );
 
-XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
+XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx, 
+                                              const OUString& rLName, 
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+:	SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // set Family
-//  SetFamily( XML_STYLE_FAMILY_FILLSTYLE_GRADIENT_ID );
+//	SetFamily( XML_STYLE_FAMILY_FILLSTYLE_GRADIENT_ID );
 
     // start import
     XMLGradientStyleImport aGradientStyle( GetImport() );
@@ -100,10 +100,10 @@ BOOL XMLGradientStyleContext::IsTransient() const
 
 TYPEINIT1( XMLHatchStyleContext, SvXMLStyleContext );
 
-XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
+XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx, 
+                                              const OUString& rLName, 
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+:	SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
     XMLHatchStyleImport aHatchStyle( GetImport() );
@@ -146,10 +146,10 @@ BOOL XMLHatchStyleContext::IsTransient() const
 
 TYPEINIT1( XMLBitmapStyleContext, SvXMLStyleContext );
 
-XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
+XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx, 
+                                              const OUString& rLName, 
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+:	SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
     XMLImageStyle aBitmapStyle;
@@ -227,10 +227,10 @@ BOOL XMLBitmapStyleContext::IsTransient() const
 
 TYPEINIT1( XMLTransGradientStyleContext, SvXMLStyleContext );
 
-XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
+XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx, 
+                                              const OUString& rLName, 
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+:	SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
     XMLTransGradientStyleImport aTransGradientStyle( GetImport() );
@@ -273,10 +273,10 @@ BOOL XMLTransGradientStyleContext::IsTransient() const
 
 TYPEINIT1( XMLMarkerStyleContext, SvXMLStyleContext );
 
-XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
+XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx, 
+                                              const OUString& rLName, 
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+:	SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
     XMLMarkerStyleImport aMarkerStyle( GetImport() );
@@ -319,10 +319,10 @@ BOOL XMLMarkerStyleContext::IsTransient() const
 
 TYPEINIT1( XMLDashStyleContext, SvXMLStyleContext );
 
-XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                          const OUString& rLName,
+XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx, 
+                                          const OUString& rLName, 
                                           const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+:	SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
     XMLDashStyleImport aDashStyle( GetImport() );

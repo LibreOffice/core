@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,18 +79,18 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
 
         if (XML_NAMESPACE_SCRIPT == nPrefix)
         {
-//          if (IsXMLToken(sLocalName, XML_LIBRARY))
-//          {
-//              sLibraryVal = xAttrList->getValueByIndex(nAttr);
-//          }
-//          if (IsXMLToken(sLocalName, XML_LOCATION))
-//          {
-//              sLibraryVal = xAttrList->getValueByIndex(nAttr);
+//			if (IsXMLToken(sLocalName, XML_LIBRARY))
+//			{
+//				sLibraryVal = xAttrList->getValueByIndex(nAttr);
+//			}
+//			if (IsXMLToken(sLocalName, XML_LOCATION))
+//			{
+//				sLibraryVal = xAttrList->getValueByIndex(nAttr);
 //                if ( IsXMLToken( sLibraryVal, XML_APPLICATION ) )
-//                    sLibraryVal =
+//                    sLibraryVal = 
 //                        OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
-//          }
-//          else
+//			}
+//			else 
             if (IsXMLToken(sLocalName, XML_MACRO_NAME))
             {
                 sMacroNameVal = xAttrList->getValueByIndex(nAttr);
@@ -100,8 +100,8 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
         // else: ignore
     }
 
-    const OUString& rApp = GetXMLToken( XML_APPLICATION );
-    const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
+    const OUString& rApp = GetXMLToken( XML_APPLICATION ); 
+    const OUString& rDoc = GetXMLToken( XML_DOCUMENT ); 
     if( sMacroNameVal.getLength() > rApp.getLength()+1 &&
         sMacroNameVal.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
         ':' == sMacroNameVal[rApp.getLength()] )

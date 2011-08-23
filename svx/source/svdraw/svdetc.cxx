@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 OLEObjCache::OLEObjCache()
-:   Container( 0 )
+:	Container( 0 )
 {
     SvtCacheOptions aCacheOptions;
 
@@ -602,7 +602,7 @@ SdrEngineDefaults::SdrEngineDefaults():
     aFontName( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ).GetName() ),
     eFontFamily(FAMILY_ROMAN),
     aFontColor(COL_AUTO),
-    nFontHeight(847),             // 847/100mm = ca. 24 Point
+    nFontHeight(847),			  // 847/100mm = ca. 24 Point
     eMapUnit(MAP_100TH_MM),
     aMapFraction(1,1)
 {
@@ -723,10 +723,10 @@ BOOL SearchOutlinerItems(const SfxItemSet& rSet, BOOL bInklDefaults, BOOL* pbOnl
 USHORT* RemoveWhichRange(const USHORT* pOldWhichTable, USHORT nRangeBeg, USHORT nRangeEnd)
 {
     // insgesamt sind 6 Faelle moeglich (je Range):
-    //         [Beg..End]          zu entfernender Range
-    // [b..e]    [b..e]    [b..e]  Fall 1,3,2: egal, ganz weg, egal  + Ranges
-    // [b........e]  [b........e]  Fall 4,5  : Bereich verkleinern   | in
-    // [b......................e]  Fall 6    : Splitting             + pOldWhichTable
+    //		   [Beg..End]		   zu entfernender Range
+    // [b..e]	 [b..e]    [b..e]  Fall 1,3,2: egal, ganz weg, egal  + Ranges
+    // [b........e]  [b........e]  Fall 4,5  : Bereich verkleinern	 | in
+    // [b......................e]  Fall 6	 : Splitting			 + pOldWhichTable
     USHORT nAnz=0;
     while (pOldWhichTable[nAnz]!=0) nAnz++;
     nAnz++; // nAnz muesste nun in jedem Fall eine ungerade Zahl sein (0 am Ende des Arrays)
@@ -769,7 +769,7 @@ USHORT* RemoveWhichRange(const USHORT* pOldWhichTable, USHORT nRangeBeg, USHORT 
                 nAnz-=2; // Merken: Array hat sich verkleinert
             } break;
             case 4: pNewWhichTable[nNum+1]=nRangeBeg-1; break;
-            case 5: pNewWhichTable[nNum]=nRangeEnd+1;     break;
+            case 5: pNewWhichTable[nNum]=nRangeEnd+1;	  break;
             case 6: {
                 unsigned nTailBytes=(nAnz-(nNum+2))*sizeof(USHORT);
                 memcpy(&pNewWhichTable[nNum+4],&pNewWhichTable[nNum+2],nTailBytes);
@@ -791,16 +791,16 @@ SvdProgressInfo::SvdProgressInfo( Link *_pLink )
 
     pLink = _pLink;
     nSumActionCount = 0;
-    nSumCurAction   = 0;
+    nSumCurAction	= 0;
 
     nObjCount = 0;
     nCurObj   = 0;
 
     nActionCount = 0;
-    nCurAction   = 0;
+    nCurAction	 = 0;
 
     nInsertCount = 0;
-    nCurInsert   = 0;
+    nCurInsert	 = 0;
 }
 
 void SvdProgressInfo::Init( ULONG _nSumActionCount, ULONG _nObjCount )
@@ -846,10 +846,10 @@ void SvdProgressInfo::SetInsertCount( ULONG _nInsertCount )
 BOOL SvdProgressInfo::SetNextObject()
 {
     nActionCount = 0;
-    nCurAction   = 0;
+    nCurAction	 = 0;
 
     nInsertCount = 0;
-    nCurInsert   = 0;
+    nCurInsert	 = 0;
 
     nCurObj++;
     return ReportActions(0);

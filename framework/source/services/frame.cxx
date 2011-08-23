@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <services/frame.hxx>
 #include <dispatch/dispatchprovider.hxx>
@@ -55,7 +55,7 @@
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -85,7 +85,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -113,45 +113,45 @@
 #include <vcl/menu.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 css::uno::WeakReference< css::frame::XFrame > Frame::m_xCloserFrame = css::uno::WeakReference< css::frame::XFrame >();
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_21                (   Frame                                                                   ,
-                                        OWeakObject                                                             ,
-                                        DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
-                                        DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
-                                        DIRECT_INTERFACE(css::frame::XFramesSupplier                            ),
-                                        DIRECT_INTERFACE(css::frame::XFrame                                     ),
-                                        DIRECT_INTERFACE(css::lang::XComponent                                  ),
-                                        DIRECT_INTERFACE(css::task::XStatusIndicatorFactory                     ),
-                                        DIRECT_INTERFACE(css::frame::XDispatchProvider                          ),
-                                        DIRECT_INTERFACE(css::frame::XDispatchInformationProvider               ),
-                                        DIRECT_INTERFACE(css::frame::XDispatchProviderInterception              ),
-                                        DIRECT_INTERFACE(css::beans::XPropertySet                               ),
-                                        DIRECT_INTERFACE(css::beans::XPropertySetInfo                           ),
-                                        DIRECT_INTERFACE(css::awt::XWindowListener                              ),
-                                        DIRECT_INTERFACE(css::awt::XTopWindowListener                           ),
-                                        DIRECT_INTERFACE(css::awt::XFocusListener                               ),
-                                        DERIVED_INTERFACE(css::lang::XEventListener, css::awt::XWindowListener  ),
+                                        OWeakObject																,
+                                        DIRECT_INTERFACE(css::lang::XTypeProvider								),
+                                        DIRECT_INTERFACE(css::lang::XServiceInfo								),
+                                        DIRECT_INTERFACE(css::frame::XFramesSupplier							),
+                                        DIRECT_INTERFACE(css::frame::XFrame										),
+                                        DIRECT_INTERFACE(css::lang::XComponent									),
+                                        DIRECT_INTERFACE(css::task::XStatusIndicatorFactory						),
+                                        DIRECT_INTERFACE(css::frame::XDispatchProvider							),
+                                        DIRECT_INTERFACE(css::frame::XDispatchInformationProvider				),
+                                        DIRECT_INTERFACE(css::frame::XDispatchProviderInterception				),
+                                        DIRECT_INTERFACE(css::beans::XPropertySet								),
+                                        DIRECT_INTERFACE(css::beans::XPropertySetInfo   						),
+                                        DIRECT_INTERFACE(css::awt::XWindowListener								),
+                                        DIRECT_INTERFACE(css::awt::XTopWindowListener							),
+                                        DIRECT_INTERFACE(css::awt::XFocusListener								),
+                                        DERIVED_INTERFACE(css::lang::XEventListener, css::awt::XWindowListener	),
                                         DIRECT_INTERFACE(css::document::XActionLockable                         ),
                                         DIRECT_INTERFACE(css::util::XCloseable                                  ),
                                         DIRECT_INTERFACE(css::util::XCloseBroadcaster                           ),
@@ -161,20 +161,20 @@ DEFINE_XINTERFACE_21                (   Frame                                   
                                     )
 
 DEFINE_XTYPEPROVIDER_20             (   Frame                                                                   ,
-                                        css::lang::XTypeProvider                                                ,
-                                        css::lang::XServiceInfo                                                 ,
-                                        css::frame::XFramesSupplier                                             ,
-                                        css::frame::XFrame                                                      ,
-                                        css::lang::XComponent                                                   ,
-                                        css::task::XStatusIndicatorFactory                                      ,
-                                        css::beans::XPropertySet                                                ,
-                                        css::beans::XPropertySetInfo                                            ,
-                                        css::frame::XDispatchProvider                                           ,
-                                        css::frame::XDispatchInformationProvider                                ,
-                                        css::frame::XDispatchProviderInterception                               ,
-                                        css::awt::XWindowListener                                               ,
-                                        css::awt::XTopWindowListener                                            ,
-                                        css::awt::XFocusListener                                                ,
+                                        css::lang::XTypeProvider												,
+                                        css::lang::XServiceInfo													,
+                                        css::frame::XFramesSupplier												,
+                                        css::frame::XFrame														,
+                                        css::lang::XComponent													,
+                                        css::task::XStatusIndicatorFactory										,
+                                        css::beans::XPropertySet												,
+                                        css::beans::XPropertySetInfo											,
+                                        css::frame::XDispatchProvider											,
+                                        css::frame::XDispatchInformationProvider								,
+                                        css::frame::XDispatchProviderInterception								,
+                                        css::awt::XWindowListener								 				,
+                                        css::awt::XTopWindowListener											,
+                                        css::awt::XFocusListener												,
                                         css::lang::XEventListener                                               ,
                                         css::util::XCloseable                                                   ,
                                         css::util::XCloseBroadcaster                                            ,
@@ -183,9 +183,9 @@ DEFINE_XTYPEPROVIDER_20             (   Frame                                   
                                         css::frame::XTitleChangeBroadcaster
                                     )
 
-DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                                                   ,
+DEFINE_XSERVICEINFO_MULTISERVICE	(	Frame																	,
                                         ::cppu::OWeakObject                                                     ,
-                                        SERVICENAME_FRAME                                                       ,
+                                        SERVICENAME_FRAME														,
                                         IMPLEMENTATIONNAME_FRAME
                                     )
 
@@ -254,8 +254,8 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                     )
 
 /*-****************************************************************************************************//**
-    @short      standard constructor to create instance by factory
-    @descr      This constructor initialize a new instance of this class by valid factory,
+    @short		standard constructor to create instance by factory
+    @descr		This constructor initialize a new instance of this class by valid factory,
                 and will be set valid values on his member and baseclasses.
 
     @attention  a)  Don't use your own reference during an UNO-Service-ctor! There is no guarantee, that you
@@ -268,11 +268,11 @@ DEFINE_INIT_SERVICE                 (   Frame,
 
     @seealso    method DEFINE_INIT_SERVICE()
 
-    @param      "xFactory" is the multi service manager, which create this instance.
+    @param		"xFactory" is the multi service manager, which create this instance.
                 The value must be different from NULL!
-    @return     -
+    @return		-
 
-    @onerror    ASSERT in debug version or nothing in relaese version.
+    @onerror	ASSERT in debug version or nothing in relaese version.
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
         :   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
@@ -282,7 +282,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
                                           &m_aTransactionManager,
                                           sal_False) // FALSE => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
-        //  init member
+        //	init member
         ,   m_xFactory                  ( xFactory                                          )
         ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
         ,   m_xParent                   (                                                   )
@@ -306,15 +306,15 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
 }
 
 /*-****************************************************************************************************//**
-    @short      standard destructor
-    @descr      This one do NOTHING! Use dispose() instaed of this.
+    @short		standard destructor
+    @descr		This one do NOTHING! Use dispose() instaed of this.
 
-    @seealso    method dispose()
+    @seealso	method dispose()
 
-    @param      -
-    @return     -
+    @param		-
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 Frame::~Frame()
 {
@@ -365,17 +365,17 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
 }
 
 /*-****************************************************************************************************//**
-    @short      return access to append or remove childs on desktop
-    @descr      We don't implement these interface directly. We use a helper class to do this.
+    @short		return access to append or remove childs on desktop
+    @descr		We don't implement these interface directly. We use a helper class to do this.
                 If you wish to add or delete childs to/from the container, call these method to get
                 a reference to the helper.
 
-    @seealso    class OFrames
+    @seealso	class OFrames
 
-    @param      -
-    @return     A reference to the helper which answer your queries.
+    @param		-
+    @return		A reference to the helper which answer your queries.
 
-    @onerror    A null reference is returned.
+    @onerror	A null reference is returned.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( css::uno::RuntimeException )
 {
@@ -400,19 +400,19 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( cs
 }
 
 /*-****************************************************************************************************//**
-    @short      get the current active child frame
-    @descr      It must be a frameto. Direct childs of a frame are frames only! No task or desktop is accepted.
+    @short		get the current active child frame
+    @descr		It must be a frameto. Direct childs of a frame are frames only! No task or desktop is accepted.
                 We don't save this information directly in this class. We use ouer container-helper
                 to do that.
 
-    @seealso    class OFrameContainer
-    @seealso    method setActiveFrame()
+    @seealso	class OFrameContainer
+    @seealso	method setActiveFrame()
 
-    @param      -
-    @return     A reference to ouer current active childframe, if anyone exist.
-    @return     A null reference, if nobody is active.
+    @param		-
+    @return		A reference to ouer current active childframe, if anyone exist.
+    @return		A null reference, if nobody is active.
 
-    @onerror    A null reference is returned.
+    @onerror	A null reference is returned.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw( css::uno::RuntimeException )
 {
@@ -429,16 +429,16 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw
 }
 
 /*-****************************************************************************************************//**
-    @short      set the new active direct child frame
-    @descr      It must be a frame to. Direct childs of frame are frames only! No task or desktop is accepted.
+    @short		set the new active direct child frame
+    @descr		It must be a frame to. Direct childs of frame are frames only! No task or desktop is accepted.
                 We don't save this information directly in this class. We use ouer container-helper
                 to do that.
 
-    @seealso    class OFrameContainer
-    @seealso    method getActiveFrame()
+    @seealso	class OFrameContainer
+    @seealso	method getActiveFrame()
 
-    @param      "xFrame", reference to new active child. It must be an already existing child!
-    @return     -
+    @param		"xFrame", reference to new active child. It must be an already existing child!
+    @return		-
 
     @onerror    An assertion is thrown and element is ignored, if given frame is'nt already a child of us.
 *//*-*****************************************************************************************************/
@@ -543,19 +543,19 @@ void lcl_disableLayoutManager(const css::uno::Reference< css::frame::XLayoutMana
 }
 
 /*-****************************************************************************************************//**
-    @short      initialize frame instance
-    @descr      A frame needs a window. This method set a new one ... but should called one times only!
+    @short		initialize frame instance
+    @descr		A frame needs a window. This method set a new one ... but should called one times only!
                 We use this window to listen for window events and forward it to our set component.
                 Its used as parent of component window too.
 
-    @seealso    method getContainerWindow()
-    @seealso    method setComponent()
-    @seealso    member m_xContainerWindow
+    @seealso	method getContainerWindow()
+    @seealso	method setComponent()
+    @seealso	member m_xContainerWindow
 
-    @param      "xWindow", reference to new container window - must be valid!
-    @return     -
+    @param		"xWindow", reference to new container window - must be valid!
+    @return		-
 
-    @onerror    We do nothing.
+    @onerror	We do nothing.
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >& xWindow ) throw( css::uno::RuntimeException )
 {
@@ -637,18 +637,18 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 }
 
 /*-****************************************************************************************************//**
-    @short      returns current set container window
-    @descr      The ContainerWindow property is used as a container for the component
+    @short		returns current set container window
+    @descr		The ContainerWindow property is used as a container for the component
                 in this frame. So this object implements a container interface too.
                 The instantiation of the container window is done by the user of this class.
                 The frame is the owner of its container window.
 
-    @seealso    method initialize()
+    @seealso	method initialize()
 
-    @param      -
-    @return     A reference to current set containerwindow.
+    @param		-
+    @return		A reference to current set containerwindow.
 
-    @onerror    A null reference is returned.
+    @onerror	A null reference is returned.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getContainerWindow() throw( css::uno::RuntimeException )
 {
@@ -663,8 +663,8 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getContainerWindow() th
 }
 
 /*-****************************************************************************************************//**
-    @short      set parent frame
-    @descr      We need a parent to support some functionality! e.g. findFrame()
+    @short		set parent frame
+    @descr		We need a parent to support some functionality! e.g. findFrame()
                 By the way we use the chance to set an internal information about our top state.
                 So we must not check this information during every isTop() call.
                 We are top, if our parent is the desktop instance or we havent any parent.
@@ -695,15 +695,15 @@ void SAL_CALL Frame::setCreator( const css::uno::Reference< css::frame::XFramesS
 }
 
 /*-****************************************************************************************************//**
-    @short      returns current parent frame
-    @descr      The Creator is the parent frame container. If it is NULL, the frame is the uppermost one.
+    @short		returns current parent frame
+    @descr		The Creator is the parent frame container. If it is NULL, the frame is the uppermost one.
 
-    @seealso    method setCreator()
+    @seealso	method setCreator()
 
-    @param      -
-    @return     A reference to current set parent frame container.
+    @param		-
+    @return		A reference to current set parent frame container.
 
-    @onerror    A null reference is returned.
+    @onerror	A null reference is returned.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Frame::getCreator() throw( css::uno::RuntimeException )
 {
@@ -718,15 +718,15 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Frame::getCreator() 
 }
 
 /*-****************************************************************************************************//**
-    @short      returns current set name of frame
-    @descr      This name is used to find target of findFrame() or queryDispatch() calls.
+    @short		returns current set name of frame
+    @descr		This name is used to find target of findFrame() or queryDispatch() calls.
 
-    @seealso    method setName()
+    @seealso	method setName()
 
-    @param      -
-    @return     Current set name of frame.
+    @param		-
+    @return		Current set name of frame.
 
-    @onerror    An empty string is returned.
+    @onerror	An empty string is returned.
 *//*-*****************************************************************************************************/
 ::rtl::OUString SAL_CALL Frame::getName() throw( css::uno::RuntimeException )
 {
@@ -737,18 +737,18 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Frame::getCreator() 
 }
 
 /*-****************************************************************************************************//**
-    @short      set new name for frame
-    @descr      This name is used to find target of findFrame() or queryDispatch() calls.
+    @short		set new name for frame
+    @descr		This name is used to find target of findFrame() or queryDispatch() calls.
 
-    @attention  Special names like "_blank", "_self" aren't allowed ...
+    @attention	Special names like "_blank", "_self" aren't allowed ...
                 "_beamer" or "_menubar" excepts this rule!
 
-    @seealso    method getName()
+    @seealso	method getName()
 
-    @param      "sName", new frame name.
-    @return     -
+    @param		"sName", new frame name.
+    @return		-
 
-    @onerror    We do nothing.
+    @onerror	We do nothing.
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::setName( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException )
 {
@@ -763,8 +763,8 @@ void SAL_CALL Frame::setName( const ::rtl::OUString& sName ) throw( css::uno::Ru
 }
 
 /*-****************************************************************************************************//**
-    @short      search for frames
-    @descr      This method searches for a frame with the specified name.
+    @short		search for frames
+    @descr		This method searches for a frame with the specified name.
                 Frames may contain other frames (e.g. a frameset) and may
                 be contained in other frames. This hierarchie ist searched by
                 this method.
@@ -1054,21 +1054,21 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
 }
 
 /*-****************************************************************************************************//**
-    @short      -
-    @descr      Returns sal_True, if this frame is a "top frame", otherwise sal_False.
+    @short		-
+    @descr		Returns sal_True, if this frame is a "top frame", otherwise sal_False.
                 The "m_bIsFrameTop" member must be set in the ctor or setCreator() method.
                 A top frame is a member of the top frame container or a member of the
                 task frame container. Both containers can create new frames if the findFrame()
                 method of their css::frame::XFrame interface is called with a frame name not yet known.
 
-    @seealso    ctor
-    @seealso    method setCreator()
-    @seealso    method findFrame()
+    @seealso	ctor
+    @seealso	method setCreator()
+    @seealso	method findFrame()
 
-    @param      -
-    @return     true, if is it a top frame ... false otherwise.
+    @param		-
+    @return		true, if is it a top frame ... false otherwise.
 
-    @onerror    No error should occure!
+    @onerror	No error should occure!
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException )
 {
@@ -1085,19 +1085,19 @@ sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException )
 }
 
 /*-****************************************************************************************************//**
-    @short      activate frame in hierarchy
-    @descr      This feature is used to mark active pathes in our frame hierarchy.
+    @short		activate frame in hierarchy
+    @descr		This feature is used to mark active pathes in our frame hierarchy.
                 You can be a listener for this event to react for it ... change some internal states or something else.
 
-    @seealso    method deactivate()
-    @seealso    method isActivate()
-    @seealso    enum EActiveState
-    @seealso    listener mechanism
+    @seealso	method deactivate()
+    @seealso	method isActivate()
+    @seealso	enum EActiveState
+    @seealso	listener mechanism
 
-    @param      -
-    @return     -
+    @param		-
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
 {
@@ -1185,19 +1185,19 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
 }
 
 /*-****************************************************************************************************//**
-    @short      deactivate frame in hierarchy
-    @descr      This feature is used to deactive pathes in our frame hierarchy.
+    @short		deactivate frame in hierarchy
+    @descr		This feature is used to deactive pathes in our frame hierarchy.
                 You can be a listener for this event to react for it ... change some internal states or something else.
 
-    @seealso    method activate()
-    @seealso    method isActivate()
-    @seealso    enum EActiveState
-    @seealso    listener mechanism
+    @seealso	method activate()
+    @seealso	method isActivate()
+    @seealso	enum EActiveState
+    @seealso	listener mechanism
 
-    @param      -
-    @return     -
+    @param		-
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
 {
@@ -1274,17 +1274,17 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
 }
 
 /*-****************************************************************************************************//**
-    @short      returns active state
-    @descr      Call it to get informations about current active state of this frame.
+    @short		returns active state
+    @descr		Call it to get informations about current active state of this frame.
 
-    @seealso    method activate()
-    @seealso    method deactivate()
-    @seealso    enum EActiveState
+    @seealso	method activate()
+    @seealso	method deactivate()
+    @seealso	enum EActiveState
 
-    @param      -
-    @return     true if active, false otherwise.
+    @param		-
+    @return		true if active, false otherwise.
 
-    @onerror    No error should occure.
+    @onerror	No error should occure.
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::isActive() throw( css::uno::RuntimeException )
 {
@@ -1302,15 +1302,15 @@ sal_Bool SAL_CALL Frame::isActive() throw( css::uno::RuntimeException )
 }
 
 /*-****************************************************************************************************//**
-    @short      ???
-    @descr      -
+    @short		???
+    @descr		-
 
-    @seealso    -
+    @seealso	-
 
-    @param      -
-    @return     -
+    @param		-
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException )
 {
@@ -1323,8 +1323,8 @@ void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException )
 }
 
 /*-****************************************************************************************************//**
-    @short      set new component inside the frame
-    @descr      A frame is a container for a component. Use this method to set, change or realease it!
+    @short		set new component inside the frame
+    @descr		A frame is a container for a component. Use this method to set, change or realease it!
                 We accept null references! The xComponentWindow will be a child of our container window
                 and get all window events from us.
 
@@ -1335,8 +1335,8 @@ void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException )
                         (b2) a full featured component which supports window and controller;
                         (b3) or both to NULL if outside code which to forget this component.
 
-    @seealso    method getComponentWindow()
-    @seealso    method getController()
+    @seealso	method getComponentWindow()
+    @seealso	method getController()
 
     @param      xComponentWindow
                     valid reference to new component window which will be a child of internal container window
@@ -1501,8 +1501,8 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
 }
 
 /*-****************************************************************************************************//**
-    @short      returns current set component window
-    @descr      Frames are used to display components. The actual displayed component is
+    @short		returns current set component window
+    @descr		Frames are used to display components. The actual displayed component is
                 held by the m_xComponentWindow property. If the component implements only a
                 XComponent interface, the communication between the frame and the
                 component is very restricted. Better integration is achievable through a
@@ -1511,12 +1511,12 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
                 ResourceDescriptor it has to implement a XModel interface.
                 This frame is the owner of the component window.
 
-    @seealso    method setComponent()
+    @seealso	method setComponent()
 
-    @param      -
+    @param		-
     @return     css::uno::Reference to current set component window.
 
-    @onerror    A null reference is returned.
+    @onerror	A null reference is returned.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() throw( css::uno::RuntimeException )
 {
@@ -1531,8 +1531,8 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() th
 }
 
 /*-****************************************************************************************************//**
-    @short      returns current set controller
-    @descr      Frames are used to display components. The actual displayed component is
+    @short		returns current set controller
+    @descr		Frames are used to display components. The actual displayed component is
                 held by the m_xComponentWindow property. If the component implements only a
                 XComponent interface, the communication between the frame and the
                 component is very restricted. Better integration is achievable through a
@@ -1541,12 +1541,12 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() th
                 ResourceDescriptor it has to implement a XModel interface.
                 This frame is the owner of the component window.
 
-    @seealso    method setComponent()
+    @seealso	method setComponent()
 
-    @param      -
+    @param		-
     @return     css::uno::Reference to current set controller.
 
-    @onerror    A null reference is returned.
+    @onerror	A null reference is returned.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XController > SAL_CALL Frame::getController() throw( css::uno::RuntimeException )
 {
@@ -1562,17 +1562,17 @@ css::uno::Reference< css::frame::XController > SAL_CALL Frame::getController() t
 }
 
 /*-****************************************************************************************************//**
-    @short      add/remove listener for activate/deactivate/contextChanged events
-    @descr      -
+    @short		add/remove listener for activate/deactivate/contextChanged events
+    @descr		-
 
-    @seealso    method activate()
-    @seealso    method deactivate()
-    @seealso    method contextChanged()
+    @seealso	method activate()
+    @seealso	method deactivate()
+    @seealso	method contextChanged()
 
-    @param      "xListener" reference to your listener object
-    @return     -
+    @param		"xListener" reference to your listener object
+    @return		-
 
-    @onerror    Listener is ignored.
+    @onerror	Listener is ignored.
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException )
 {
@@ -1716,7 +1716,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
     @param      xListener
                     reference to your listener object
 
-    @onerror    Listener is ignored.
+    @onerror	Listener is ignored.
 
     @threadsafe yes
     @modified   06.05.2002 10:03, as96863
@@ -1836,23 +1836,23 @@ void Frame::implts_forgetSubFrames()
 }
 
 /*-****************************************************************************************************//**
-    @short      destroy instance
-    @descr      The owner of this object calles the dispose method if the object
+    @short		destroy instance
+    @descr		The owner of this object calles the dispose method if the object
                 should be destroyed. All other objects and components, that are registered
                 as an EventListener are forced to release their references to this object.
                 Furthermore this frame is removed from its parent frame container to release
                 this reference. The reference attributes are disposed and released also.
 
-    @attention  Look for globale description at beginning of file too!
+    @attention	Look for globale description at beginning of file too!
                 (DisposedException, FairRWLock ..., initialize, dispose)
 
-    @seealso    method initialize()
-    @seealso    baseclass FairRWLockBase!
+    @seealso	method initialize()
+    @seealso	baseclass FairRWLockBase!
 
-    @param      -
-    @return     -
+    @param		-
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
 {
@@ -1979,16 +1979,16 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
 }
 
 /*-****************************************************************************************************//**
-    @short      Be a listener for dispose events!
-    @descr      Adds/remove an EventListener to this object. If the dispose method is called on
+    @short		Be a listener for dispose events!
+    @descr		Adds/remove an EventListener to this object. If the dispose method is called on
                 this object, the disposing method of the listener is called.
 
-    @seealso    -
+    @seealso	-
 
-    @param      "xListener" reference to your listener object.
-    @return     -
+    @param		"xListener" reference to your listener object.
+    @return		-
 
-    @onerror    Listener is ignored.
+    @onerror	Listener is ignored.
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException )
 {
@@ -2019,17 +2019,17 @@ void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::
 }
 
 /*-****************************************************************************************************//**
-    @short      create new status indicator
-    @descr      Use returned status indicator to show progresses and some text informations.
+    @short		create new status indicator
+    @descr		Use returned status indicator to show progresses and some text informations.
                 All created objects share the same dialog! Only the last one can show his information.
 
     @seealso    class StatusIndicatorFactory
     @seealso    class StatusIndicator
 
-    @param      -
-    @return     A reference to created object.
+    @param		-
+    @return		A reference to created object.
 
-    @onerror    We return a null reference.
+    @onerror	We return a null reference.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusIndicator() throw( css::uno::RuntimeException )
 {
@@ -2059,22 +2059,22 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
 }
 
 /*-****************************************************************************************************//**
-    @short      search for target to load URL
-    @descr      This method searches for a dispatch for the specified DispatchDescriptor.
+    @short		search for target to load URL
+    @descr		This method searches for a dispatch for the specified DispatchDescriptor.
                 The FrameSearchFlags and the FrameName of the DispatchDescriptor are
                 treated as described for findFrame.
 
-    @seealso    method findFrame()
-    @seealso    method queryDispatches()
-    @seealso    method set/getName()
-    @seealso    class TargetFinder
+    @seealso	method findFrame()
+    @seealso	method queryDispatches()
+    @seealso	method set/getName()
+    @seealso	class TargetFinder
 
-    @param      "aURL"              , URL for loading
-    @param      "sTargetFrameName"  , name of target frame
-    @param      "nSearchFlags"      , additional flags to regulate search if sTargetFrameName isn't clear
+    @param		"aURL"				, URL for loading
+    @param		"sTargetFrameName"	, name of target frame
+    @param		"nSearchFlags"		, additional flags to regulate search if sTargetFrameName isn't clear
     @return     css::uno::Reference to dispatch handler.
 
-    @onerror    A null reference is returned.
+    @onerror	A null reference is returned.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( const css::util::URL&   aURL            ,
                                                                             const ::rtl::OUString&  sTargetFrameName,
@@ -2104,16 +2104,16 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
 }
 
 /*-****************************************************************************************************//**
-    @short      handle more then ones dispatches at same call
+    @short		handle more then ones dispatches at same call
     @descr      Returns a sequence of dispatches. For details see the queryDispatch method.
                 For failed dispatches we return empty items in list!
 
-    @seealso    method queryDispatch()
+    @seealso	method queryDispatch()
 
-    @param      "lDescriptor" list of dispatch arguments for queryDispatch()!
-    @return     List of dispatch references. Some elements can be NULL!
+    @param		"lDescriptor" list of dispatch arguments for queryDispatch()!
+    @return		List of dispatch references. Some elements can be NULL!
 
-    @onerror    An empty list is returned.
+    @onerror	An empty list is returned.
 *//*-*****************************************************************************************************/
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Frame::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException )
 {
@@ -2127,16 +2127,16 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fram
 }
 
 /*-****************************************************************************************************//**
-    @short      register/unregister interceptor for dispatch calls
-    @descr      If you whish to handle some dispatches by himself ... you should be
+    @short		register/unregister interceptor for dispatch calls
+    @descr		If you whish to handle some dispatches by himself ... you should be
                 an interceptor for it. Please see class OInterceptionHelper for further informations.
 
-    @seealso    class OInterceptionHelper
+    @seealso	class OInterceptionHelper
 
-    @param      "xInterceptor", reference to your interceptor implementation.
-    @return     -
+    @param		"xInterceptor", reference to your interceptor implementation.
+    @return		-
 
-    @onerror    Interceptor is ignored.
+    @onerror	Interceptor is ignored.
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException )
 {
@@ -2165,7 +2165,7 @@ void SAL_CALL Frame::releaseDispatchProviderInterceptor( const css::uno::Referen
 }
 
 /*-****************************************************************************************************//**
-    @short      provides information about all possible dispatch functions
+    @short		provides information about all possible dispatch functions
                 inside the currnt frame environment
 *//*-*****************************************************************************************************/
 css::uno::Sequence< sal_Int16 > SAL_CALL Frame::getSupportedCommandGroups()
@@ -2182,17 +2182,17 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigu
 }
 
 /*-****************************************************************************************************//**
-    @short      notifications for window events
-    @descr      We are a listener on our container window to forward it to our component window.
+    @short		notifications for window events
+    @descr		We are a listener on our container window to forward it to our component window.
 
-    @seealso    method setComponent()
-    @seealso    member m_xContainerWindow
-    @seealso    member m_xComponentWindow
+    @seealso	method setComponent()
+    @seealso	member m_xContainerWindow
+    @seealso	member m_xComponentWindow
 
-    @param      "aEvent" describe source of detected event
-    @return     -
+    @param		"aEvent" describe source of detected event
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::windowResized( const css::awt::WindowEvent&
 #if OSL_DEBUG_LEVEL > 0
@@ -2241,18 +2241,18 @@ aEvent
 }
 
 /*-****************************************************************************************************//**
-    @short      notifications for window events
-    @descr      We are a listener on our container window to forward it to our component window ...
+    @short		notifications for window events
+    @descr		We are a listener on our container window to forward it to our component window ...
                 but a XTopWindowListener we are only if we are a top frame!
 
-    @seealso    method setComponent()
-    @seealso    member m_xContainerWindow
-    @seealso    member m_xComponentWindow
+    @seealso	method setComponent()
+    @seealso	member m_xContainerWindow
+    @seealso	member m_xComponentWindow
 
-    @param      "aEvent" describe source of detected event
-    @return     -
+    @param		"aEvent" describe source of detected event
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::windowActivated( const css::lang::EventObject&
 #if OSL_DEBUG_LEVEL > 0
@@ -2453,19 +2453,19 @@ void SAL_CALL Frame::windowHidden( const css::lang::EventObject& ) throw(css::un
 }
 
 /*-****************************************************************************************************//**
-    @short      called by dispose of our windows!
-    @descr      This object is forced to release all references to the interfaces given
+    @short		called by dispose of our windows!
+    @descr		This object is forced to release all references to the interfaces given
                 by the parameter source. We are a listener at our container window and
                 should listen for his diposing.
 
-    @seealso    XWindowListener
-    @seealso    XTopWindowListener
-    @seealso    XFocusListener
+    @seealso	XWindowListener
+    @seealso	XTopWindowListener
+    @seealso	XFocusListener
 
-    @param      -
-    @return     -
+    @param		-
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
 {
@@ -2730,7 +2730,7 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const ::rtl::OUString& /*sPr
     @short      dispose old container window and forget his reference
     @descr      Sometimes we must repair our "modal dialog parent mechanism" too!
 
-    @seealso    -
+    @seealso	-
 
     @param      "xWindow", reference to old container window to dispose it
     @return     An empty reference.
@@ -2751,15 +2751,15 @@ void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow 
 }
 
 /*-****************************************************************************************************//**
-    @short      send frame action event to our listener
-    @descr      This method is threadsafe AND can be called by our dispose method too!
+    @short		send frame action event to our listener
+    @descr		This method is threadsafe AND can be called by our dispose method too!
 
-    @seealso    -
+    @seealso	-
 
-    @param      "aAction", describe the event for sending
-    @return     -
+    @param		"aAction", describe the event for sending
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction )
 {
@@ -2801,17 +2801,17 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
 }
 
 /*-****************************************************************************************************//**
-    @short      helper to resize our component window
-    @descr      A frame contains 2 windows - a container ~ and a component window.
+    @short		helper to resize our component window
+    @descr		A frame contains 2 windows - a container ~ and a component window.
                 This method resize inner component window to full size of outer container window.
                 This method is threadsafe AND can be called by our dispose method too!
 
-    @seealso    -
+    @seealso	-
 
-    @param      -
-    @return     -
+    @param		-
+    @return		-
 
-    @onerror    -
+    @onerror	-
 *//*-*****************************************************************************************************/
 void Frame::implts_resizeComponentWindow()
 {
@@ -3194,7 +3194,7 @@ void Frame::impl_checkMenuCloser()
 }
 
 //_________________________________________________________________________________________________________________
-//  debug methods
+//	debug methods
 //_________________________________________________________________________________________________________________
 
 /*-----------------------------------------------------------------------------------------------------------------
@@ -3208,9 +3208,9 @@ void Frame::impl_checkMenuCloser()
 // We don't accept null pointer or references!
 sal_Bool Frame::implcp_ctor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
 {
-    return  (
-                ( &xFactory     ==  NULL        )   ||
-                ( xFactory.is() ==  sal_False   )
+    return	(
+                ( &xFactory		==	NULL		)	||
+                ( xFactory.is()	==	sal_False	)
             );
 }
 
@@ -3219,7 +3219,7 @@ sal_Bool Frame::implcp_ctor( const css::uno::Reference< css::lang::XMultiService
 // And we accept frames only! No tasks and desktops!
 sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    return  (
+    return	(
                 ( &xFrame                                                                                   ==  NULL        )   ||
                 ( css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is()           ==  sal_True    )
             );
@@ -3228,84 +3228,84 @@ sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XF
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
-    return  (
-                ( &xListener        ==  NULL        )   ||
-                ( xListener.is()    ==  sal_False   )
+    return	(
+                ( &xListener		==	NULL		)	||
+                ( xListener.is()	==	sal_False	)
             );
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
-    return  (
-                ( &xListener        ==  NULL        )   ||
-                ( xListener.is()    ==  sal_False   )
+    return	(
+                ( &xListener		==	NULL		)	||
+                ( xListener.is()	==	sal_False	)
             );
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
-    return  (
-                ( &xListener        ==  NULL        )   ||
-                ( xListener.is()    ==  sal_False   )
+    return	(
+                ( &xListener		==	NULL		)	||
+                ( xListener.is()	==	sal_False	)
             );
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
-    return  (
-                ( &xListener        ==  NULL        )   ||
-                ( xListener.is()    ==  sal_False   )
+    return	(
+                ( &xListener		==	NULL		)	||
+                ( xListener.is()	==	sal_False	)
             );
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_windowResized( const css::awt::WindowEvent& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
+    return	(
+                ( &aEvent				==	NULL		)	||
+                ( aEvent.Source.is()	==	sal_False	)
             );
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_focusGained( const css::awt::FocusEvent& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
+    return	(
+                ( &aEvent				==	NULL		)	||
+                ( aEvent.Source.is()	==	sal_False	)
             );
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_windowActivated( const css::lang::EventObject& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
+    return	(
+                ( &aEvent				==	NULL		)	||
+                ( aEvent.Source.is()	==	sal_False	)
             );
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_windowDeactivated( const css::lang::EventObject& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
+    return	(
+                ( &aEvent				==	NULL		)	||
+                ( aEvent.Source.is()	==	sal_False	)
             );
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
+    return	(
+                ( &aEvent				==	NULL		)	||
+                ( aEvent.Source.is()	==	sal_False	)
             );
 }
 
-#endif  // #ifdef ENABLE_ASSERTIONS
+#endif	// #ifdef ENABLE_ASSERTIONS
 
-}   // namespace framework
+}	// namespace framework

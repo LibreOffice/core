@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ XMLTokenEnum aMetaTokens[] =
 
 TYPEINIT1( XMLMetaTransformerContext, XMLTransformerContext );
 
-XMLMetaTransformerContext::XMLMetaTransformerContext( XMLTransformerBase& rImp,
+XMLMetaTransformerContext::XMLMetaTransformerContext( XMLTransformerBase& rImp, 
                                                 const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
@@ -82,13 +82,13 @@ XMLMetaTransformerContext::~XMLMetaTransformerContext()
 {
 }
 
-XMLTransformerContext *XMLMetaTransformerContext::CreateChildContext(
+XMLTransformerContext *XMLMetaTransformerContext::CreateChildContext( 
             sal_uInt16 /*nPrefix*/,
             const OUString& rLocalName,
             const OUString& rQName,
             const Reference< XAttributeList >& )
 {
-    XMLPersTextContentTContext *pContext =
+    XMLPersTextContentTContext *pContext = 
         new XMLPersTextContentTContext( GetTransformer(), rQName );
     XMLMetaContexts_Impl::value_type aVal( rLocalName, pContext );
     m_aContexts.insert( aVal );
@@ -114,9 +114,9 @@ void XMLMetaTransformerContext::EndElement()
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
                             XML_NAMESPACE_META, GetXMLToken(XML_KEYWORDS ) );
 
-                Reference< XAttributeList > xAttrList =
+                Reference< XAttributeList > xAttrList = 
                     new XMLMutableAttributeList;
-                GetTransformer().GetDocHandler()->startElement( aKeywordsQName,
+                GetTransformer().GetDocHandler()->startElement( aKeywordsQName, 
                                                             xAttrList );
             }
 

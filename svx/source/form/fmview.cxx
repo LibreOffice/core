@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@ void FmFormView::Init()
     // DesignMode vom Model holen
     sal_Bool bInitDesignMode = pFormModel->GetOpenInDesignMode();
     if ( pFormModel->OpenInDesignModeIsDefaulted( ) )
-    {   // this means that nobody ever explicitly set this on the model, and the model has never
+    {	// this means that nobody ever explicitly set this on the model, and the model has never
         // been loaded from a stream.
         // This means this is a newly created document. This means, we want to have it in design
         // mode by default (though a newly created model returns true for GetOpenInDesignMode).
@@ -150,7 +150,7 @@ void FmFormView::Init()
         bInitDesignMode = sal_False;
 
     // dieses wird in der Shell vorgenommen
-    // bDesignMode = !bInitDesignMode;  // erzwingt, dass SetDesignMode ausgefuehrt wird
+    // bDesignMode = !bInitDesignMode;	// erzwingt, dass SetDesignMode ausgefuehrt wird
     SetDesignMode( bInitDesignMode );
 }
 
@@ -250,7 +250,7 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
 
     FmFormModel* pModel = PTR_CAST(FmFormModel, GetModel());
     if (pModel)
-    {   // fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
+    {	// fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
         // Properties mal eben aendern kann (sollte allerdings mit Vorsicht genossen und beim Rueckschalten des Modes
         // auch immer wieder rueckgaegig gemacht werden. Ein Beispiel ist das Setzen der maximalen Text-Laenge durch das
         // FmXEditModel an seinem Control.)
@@ -442,19 +442,19 @@ SdrObject* FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 //------------------------------------------------------------------------
 SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 {
-    ::rtl::OUString sDataSource     = rFieldDesc.GetToken(0,sal_Unicode(11));
-    ::rtl::OUString sObjectName     = rFieldDesc.GetToken(1,sal_Unicode(11));
-    sal_uInt16 nObjectType          = (sal_uInt16)rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
-    ::rtl::OUString sFieldName      = rFieldDesc.GetToken(3,sal_Unicode(11));
+    ::rtl::OUString sDataSource		= rFieldDesc.GetToken(0,sal_Unicode(11));
+    ::rtl::OUString sObjectName		= rFieldDesc.GetToken(1,sal_Unicode(11));
+    sal_uInt16 nObjectType			= (sal_uInt16)rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
+    ::rtl::OUString sFieldName		= rFieldDesc.GetToken(3,sal_Unicode(11));
 
     if (!sFieldName.getLength() || !sObjectName.getLength() || !sDataSource.getLength())
         return NULL;
 
     ODataAccessDescriptor aColumnDescriptor;
     aColumnDescriptor.setDataSource(sDataSource);
-    aColumnDescriptor[ daCommand ]          <<= sObjectName;
-    aColumnDescriptor[ daCommandType ]      <<= nObjectType;
-    aColumnDescriptor[ daColumnName ]       <<= sFieldName;
+    aColumnDescriptor[ daCommand ]			<<= sObjectName;
+    aColumnDescriptor[ daCommandType ]		<<= nObjectType;
+    aColumnDescriptor[ daColumnName ]		<<= sFieldName;
 
     return pImpl->implCreateFieldControl( aColumnDescriptor );
 }
@@ -511,14 +511,14 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
     BOOL bDone = FALSE;
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if  (   IsDesignMode()
-        &&  rKeyCode.GetCode() == KEY_RETURN
+        &&	rKeyCode.GetCode() == KEY_RETURN
         )
     {
         // RETURN alone enters grid controls, for keyboard accessibility
         if  (   pWin
-            &&  !rKeyCode.IsShift()
-            &&  !rKeyCode.IsMod1()
-            &&  !rKeyCode.IsMod2()
+            &&	!rKeyCode.IsShift()
+            &&	!rKeyCode.IsMod1()
+            &&	!rKeyCode.IsMod2()
             )
         {
             FmFormObj* pObj = getMarkedGrid();
@@ -542,8 +542,8 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
         if  (   pFormShell
             &&  pFormShell->GetImpl()
             &&  !rKeyCode.IsShift()
-            &&  !rKeyCode.IsMod1()
-            &&   rKeyCode.IsMod2()
+            &&	!rKeyCode.IsMod1()
+            &&	 rKeyCode.IsMod2()
             )
         {
             pFormShell->GetImpl()->handleShowPropertiesRequest();

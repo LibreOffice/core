@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 {
     protected ParcelFolder parcelFolder;
     private ConfigurePanel configuror = null;
-
+    
     public ParcelFolderSupport(ParcelFolder parcelFolder) {
         this.parcelFolder = parcelFolder;
     }
@@ -125,25 +125,25 @@ public class ParcelFolderSupport implements ParcelFolderCookie
     public void generate() {
         ParcelFolder.ParcelFolderNode node =
             (ParcelFolder.ParcelFolderNode)parcelFolder.getNodeDelegate();
-
+        
         FileObject parcelBase = parcelFolder.getPrimaryFile();
         FileObject contentsBase =
             parcelBase.getFileObject(ParcelZipper.CONTENTS_DIRNAME);
-
+        
         File parcelDir = FileUtil.toFile(parcelBase);
         File contentsDir = FileUtil.toFile(contentsBase);
-
+        
         // The Location property is not displayed so just
         // use the Parcel Recipe directory as the target directory
         File targetDir = FileUtil.toFile(parcelFolder.getPrimaryFile());
         File targetfile = new File(targetDir, File.separator +
             parcelBase.getName() + "." + ParcelZipper.PARCEL_EXTENSION);
-
+        
         boolean proceed = configure();
         if (proceed == false) {
             return;
         }
-
+        
         final OutputWriter out =
             ParcelSupport.getOutputWindowWriter(parcelDir.getName() + " (generating)");
         try {
@@ -151,7 +151,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             ParcelZipper.getParcelZipper().zipParcel(contentsDir, targetfile, node.getFileFilter());
             out.println("\nGENERATION SUCCESSFUL.");
             out.println("\nRight click on the generated parcel to deploy it");
-
+            
             if (targetDir.equals(parcelDir)) {
                 parcelBase.refresh(true);
             }
@@ -167,7 +167,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             }
         }
     }
-
+        
     public boolean configure() {
 
         FileObject primary = parcelFolder.getPrimaryFile();
@@ -177,7 +177,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 
         Vector classpath = getConfigureClasspath();
         classpath.addElement(contents.getAbsolutePath());
-
+        
         try {
             ParcelDescriptor descriptor = getParcelDescriptor();
             if (descriptor == null) {
@@ -200,10 +200,10 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 
         DialogDescriptor dd = new DialogDescriptor(configuror,
             ConfigurePanel.DIALOG_TITLE);
-
+        
         Dialog dialog = TopManager.getDefault().createDialog(dd);
         dialog.show();
-
+        
         if (dd.getValue() == DialogDescriptor.OK_OPTION) {
             try {
                 ParcelDescriptor descriptor = configuror.getConfiguration();
@@ -218,15 +218,15 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         }
         return true;
     }
-
+    
     private Vector getConfigureClasspath() {
         Vector result = new Vector();
-
+        
         String classpath = NbClassPath.createRepositoryPath().getClassPath();
         if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
         {
             // under windows path is enclosed by quotes
-            // e.g. C:\path1;d:\path2 would appear as
+            // e.g. C:\path1;d:\path2 would appear as 
             // "C:\path1;d:\path2" therefore for us
             // we need to remove 1 character at either end of the
             // classpath returned from "createRepositoryPath().getClassPath()"
@@ -240,18 +240,18 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             }
         }
         StringTokenizer tokens = new StringTokenizer(classpath, File.pathSeparator);
-
+        
         while(tokens.hasMoreTokens())
             result.addElement(tokens.nextToken());
-
+        
         OfficeSettings settings = OfficeSettings.getDefault();
         File classesDir = new File(settings.getOfficeDirectory().getPath(
             File.separator + "program" + File.separator + "classes"));
         File[] jarfiles = classesDir.listFiles();
-
+        
         for (int i = 0; i < jarfiles.length; i++)
             result.addElement(jarfiles[i].getAbsolutePath());
-
+        
         return result;
     }
 }

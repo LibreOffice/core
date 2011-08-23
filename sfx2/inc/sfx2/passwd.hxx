@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,31 +39,31 @@
 
 // defines ---------------------------------------------------------------
 
-#define SHOWEXTRAS_NONE     ((USHORT)0x0000)
-#define SHOWEXTRAS_USER     ((USHORT)0x0001)
-#define SHOWEXTRAS_CONFIRM  ((USHORT)0x0002)
-#define SHOWEXTRAS_ALL      ((USHORT)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
+#define SHOWEXTRAS_NONE		((USHORT)0x0000)
+#define SHOWEXTRAS_USER		((USHORT)0x0001)
+#define SHOWEXTRAS_CONFIRM	((USHORT)0x0002)
+#define SHOWEXTRAS_ALL		((USHORT)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
 
 // class SfxPasswordDialog -----------------------------------------------
 
 class SFX2_DLLPUBLIC SfxPasswordDialog : public ModalDialog
 {
 private:
-    FixedText       maUserFT;
-    Edit            maUserED;
-    FixedText       maPasswordFT;
-    Edit            maPasswordED;
-    FixedText       maConfirmFT;
-    Edit            maConfirmED;
+    FixedText		maUserFT;
+    Edit			maUserED;
+    FixedText		maPasswordFT;
+    Edit			maPasswordED;
+    FixedText		maConfirmFT;
+    Edit			maConfirmED;
     FixedLine       maPasswordBox;
 
-    OKButton        maOKBtn;
-    CancelButton    maCancelBtn;
-    HelpButton      maHelpBtn;
+    OKButton		maOKBtn;
+    CancelButton	maCancelBtn;
+    HelpButton		maHelpBtn;
 
-    String          maConfirmStr;
-    USHORT          mnMinLen;
-    USHORT          mnExtras;
+    String			maConfirmStr;
+    USHORT			mnMinLen;
+    USHORT			mnExtras;
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
@@ -72,17 +72,17 @@ private:
 public:
     SfxPasswordDialog( Window* pParent, const String* pGroupText = NULL );
 
-    String          GetUser() const { return maUserED.GetText(); }
-    String          GetPassword() const { return maPasswordED.GetText(); }
-    String          GetConfirm() const { return maConfirmED.GetText(); }
+    String			GetUser() const	{ return maUserED.GetText(); }
+    String			GetPassword() const { return maPasswordED.GetText(); }
+    String			GetConfirm() const { return maConfirmED.GetText(); }
 
-    void            SetMinLen( USHORT Len );
+    void 			SetMinLen( USHORT Len );
     void            SetMaxLen( USHORT Len );
-    void            SetEditHelpId( ULONG nId ) { maPasswordED.SetHelpId( nId ); }
-    void            ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
+    void			SetEditHelpId( ULONG nId ) { maPasswordED.SetHelpId( nId ); }
+    void			ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
     void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
 
-    virtual short   Execute();
+    virtual short	Execute();
 };
 
 #endif // #ifndef _SFX_PASSWD_HXX

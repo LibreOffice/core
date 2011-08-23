@@ -1,7 +1,7 @@
 /*************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,7 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/conditn.hxx"
+#include "osl/file.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/anytostring.hxx"
@@ -79,7 +80,7 @@ struct ExtensionName
 const char s_usingText [] =
 "\n"
 "using: " APP_NAME " add <options> extension-path...\n"
-"       " APP_NAME " validate <options> extension-identifier...\n"
+"       " APP_NAME " validate <options> extension-identifier...\n"    
 "       " APP_NAME " remove <options> extension-identifier...\n"
 "       " APP_NAME " list <options> extension-identifier...\n"
 "       " APP_NAME " reinstall <options>\n"
@@ -206,7 +207,7 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
     {
         const Sequence< Reference<css::bridge::XBridge> >seqBridges = bridgeFac->getExistingBridges();
         for (sal_Int32 i = 0; i < seqBridges.getLength(); i++)
-        {
+        {        
             Reference<css::lang::XComponent> comp(seqBridges[i], UNO_QUERY);
             if (comp.is())
             {
@@ -239,7 +240,7 @@ extern "C" int unopkg_main()
     OUString repository;
     OUString cmdArg;
     ::std::vector<OUString> cmdPackages;
-
+    
     OptionInfo const * info_shared = getOptionInfo(
         s_option_infos, OUSTR("shared") );
     OptionInfo const * info_force = getOptionInfo(
@@ -259,10 +260,10 @@ extern "C" int unopkg_main()
     OptionInfo const * info_suppressLicense = getOptionInfo(
         s_option_infos, OUSTR("suppress-license") );
 
-
+    
     Reference<XComponentContext> xComponentContext;
     Reference<XComponentContext> xLocalComponentContext;
-
+    
     try {
         sal_uInt32 nPos = 0;
         sal_uInt32 nCount = osl_getCommandArgCount();
@@ -277,7 +278,7 @@ extern "C" int unopkg_main()
         }
         //consume all bootstrap variables which may occur before the subcommannd
         while(isBootstrapVariable(&nPos));
-
+       
         if(nPos >= nCount)
             return 0;
         //get the sub command
@@ -288,7 +289,7 @@ extern "C" int unopkg_main()
             RTL_CONSTASCII_STRINGPARAM("add") );
         subcmd_gui = subCommand.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("gui") );
-
+        
         // sun-command options and packages:
         while (nPos < nCount)
         {
@@ -316,7 +317,7 @@ extern "C" int unopkg_main()
                                  OUSTR("\nERROR: unexpected option ") +
                                  cmdArg +
                                  OUSTR("!\n") +
-                                 OUSTR("       Use " APP_NAME " ") +
+                                 OUSTR("       Use " APP_NAME " ") + 
                                  toString(info_help) +
                                  OUSTR(" to print all options.\n"));
                         return 1;
@@ -333,14 +334,14 @@ extern "C" int unopkg_main()
                 }
             }
         }
-
-        if (repository.getLength() == 0)
+        
+        if (repository.getLength() == 0) 
         {
             if (option_shared)
                 repository = OUSTR("shared");
             else if (option_bundled)
-                repository = OUSTR("bundled");
-            else
+                repository = OUSTR("bundled"); 
+            else 
                 repository = OUSTR("user");
         }
         else
@@ -377,18 +378,41 @@ extern "C" int unopkg_main()
             if (e != osl_File_E_None && e != osl_File_E_NOENT)
                 throw Exception(OUSTR("Could not delete ") + extensionUnorc, 0);
         }
+        else if (subCommand.equals(OUSTR("sync")))
+        {
+            //sync is private!!!! Only for bundled extensions!!!
+            //For performance reasons unopkg sync is called during the setup and
+            //creates the registration data for the repository of the bundled
+            //extensions. It is then copied to the user installation during
+            //startup of OOo (userdata/extensions/bundled).  The registration
+            //data is in the brand installation and must be removed when
+            //uninstalling OOo.  We do this here, before UNO is
+            //bootstrapped. Otherwies files could be locked by this process.
+
+            //If there is no folder left in
+            //$BRAND_BASE_DIR/share/extensions
+            //then we can delete the registration data at
+            //$BUNDLED_EXTENSIONS_USER
+            if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
+            {
+                removeFolder(OUSTR("$BUNDLED_EXTENSIONS_USER"));
+                //return otherwise we create the registration data again
+                return 0;
+            }
+            
+        }
 
         xComponentContext = getUNO(
             disposeGuard, option_verbose, option_shared, subcmd_gui,
             xLocalComponentContext );
-
+ 
         Reference<deployment::XExtensionManager> xExtensionManager(
             deployment::ExtensionManager::get( xComponentContext ) );
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
                           option_force, option_verbose) );
-
+        
         //synchronize bundled/shared extensions
         //Do not synchronize when command is "reinstall". This could add types and services to UNO and
         //prevent the deletion of the registry data folder
@@ -430,7 +454,7 @@ extern "C" int unopkg_main()
                             throw;
                         else if (p.is())
                             xExtensionManager->removeExtension(
-                                ::dp_misc::getIdentifier(p), p->getName(),
+                                ::dp_misc::getIdentifier(p), p->getName(), 
                                 repository,
                                 Reference<task::XAbortChannel>(), xCmdEnv );
                     }
@@ -449,20 +473,20 @@ extern "C" int unopkg_main()
             ::comphelper::sequenceToContainer(vecExtUnaccepted,
                     xExtensionManager->getExtensionsWithUnacceptedLicenses(
                         repository, xCmdEnv));
-
+            
             //This vector tells what XPackage  in allExtensions has an
             //unaccepted license.
             std::vector<bool> vecUnaccepted;
             std::vector<Reference<deployment::XPackage> > allExtensions;
             if (cmdPackages.empty())
             {
-                Sequence< Reference<deployment::XPackage> >
+                Sequence< Reference<deployment::XPackage> > 
                     packages = xExtensionManager->getDeployedExtensions(
                         repository, Reference<task::XAbortChannel>(), xCmdEnv );
 
                 ::std::vector<Reference<deployment::XPackage> > vec_packages;
                 ::comphelper::sequenceToContainer(vec_packages, packages);
-
+                
                 //First copy the extensions with the unaccepted license
                 //to vector allExtensions.
                 allExtensions.resize(vecExtUnaccepted.size() + vec_packages.size());
@@ -480,7 +504,7 @@ extern "C" int unopkg_main()
                       ::std::fill_n(vecUnaccepted.begin(),
                                     vecExtUnaccepted.size(), true);
                 ::std::fill_n(i_unaccepted, vec_packages.size(), false);
-
+                
                 dp_misc::writeConsole(
                     OUSTR("All deployed ") + repository + OUSTR(" extensions:\n\n"));
             }
@@ -522,15 +546,15 @@ extern "C" int unopkg_main()
                         allExtensions.push_back(extension);
                         vecUnaccepted.push_back(bUnacceptedLic);
                     }
-
+                        
                     else
                         throw lang::IllegalArgumentException(
                             OUSTR("There is no such extension deployed: ") +
                             cmdPackages[pos],0,-1);
                 }
-
+                
             }
-
+            
             printf_packages(allExtensions, vecUnaccepted, xCmdEnv );
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("validate") ))
@@ -575,7 +599,7 @@ extern "C" int unopkg_main()
         {
             Reference<ui::dialogs::XAsynchronousExecutableDialog> xDialog(
                 deployment::ui::PackageManagerDialog::createAndInstall(
-                    xComponentContext,
+                    xComponentContext, 
                     cmdPackages.size() > 0 ? cmdPackages[0] : OUString() ));
 
             osl::Condition dialogEnded;
@@ -587,34 +611,43 @@ extern "C" int unopkg_main()
             xDialog->startExecuteModal(xListener);
             dialogEnded.wait();
         }
+        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("sync")))
+        {
+            //This sub command may be removed later and is only there to have a
+            //possibility to start extension synching without any output.
+            //This is just here so we do not get an error, because of an unknown
+            //sub-command. We do synching before
+            //the sub-commands are processed.
+            
+        }
         else
         {
             dp_misc::writeConsoleError(
-                OUSTR("\nERROR: unknown sub-command ") +
+                OUSTR("\nERROR: unknown sub-command ") + 
                 subCommand +
-                OUSTR("!\n") +
-                OUSTR("       Use " APP_NAME " ") +
+                OUSTR("!\n") + 
+                OUSTR("       Use " APP_NAME " ") + 
                 toString(info_help) +
                 OUSTR(" to print all options.\n"));
             return 1;
         }
-
+        
         if (option_verbose)
             dp_misc::writeConsole(OUSTR("\n"APP_NAME" done.\n"));
         //Force to release all bridges which connect us to the child processes
         disposeBridges(xLocalComponentContext);
         return 0;
     }
-    catch (ucb::CommandFailedException &e)
+    catch (ucb::CommandFailedException &e) 
     {
         dp_misc::writeConsoleError(e.Message + OUSTR("\n"));
-        bNoOtherErrorMsg = true;
+        bNoOtherErrorMsg = true;    
     }
-    catch (ucb::CommandAbortedException &)
+    catch (ucb::CommandAbortedException &) 
     {
         dp_misc::writeConsoleError("\n"APP_NAME" aborted!\n");
     }
-    catch (deployment::DeploymentException & exc)
+    catch (deployment::DeploymentException & exc) 
     {
         OUString cause;
         if (option_verbose)
@@ -625,7 +658,7 @@ extern "C" int unopkg_main()
         {
             css::uno::Exception e;
             if (exc.Cause >>= e)
-                cause = e.Message;
+                cause = e.Message; 
         }
 
         dp_misc::writeConsoleError(
@@ -634,7 +667,7 @@ extern "C" int unopkg_main()
             dp_misc::writeConsoleError(
                 OUSTR("       Cause: ") + cause + OUSTR("\n"));
     }
-    catch (LockFileException & e)
+    catch (LockFileException & e) 
     {
         if (!subcmd_gui)
             dp_misc::writeConsoleError(e.Message);
@@ -642,10 +675,10 @@ extern "C" int unopkg_main()
     }
     catch (::com::sun::star::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
-
+ 
         dp_misc::writeConsoleError(
-            OUSTR("\nERROR: ") +
-            OUString(option_verbose  ? e.Message + OUSTR("\nException details: \n") +
+            OUSTR("\nERROR: ") +  
+            OUString(option_verbose  ? e.Message + OUSTR("\nException details: \n") + 
             ::comphelper::anyToString(exc) : e.Message) +
             OUSTR("\n"));
     }

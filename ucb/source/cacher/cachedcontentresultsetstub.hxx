@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,17 +48,17 @@ class CachedContentResultSetStub
                 , public com::sun::star::ucb::XFetchProviderForContentAccess
 {
 private:
-    sal_Int32       m_nColumnCount;
-    sal_Bool        m_bColumnCountCached;
+    sal_Int32		m_nColumnCount;
+    sal_Bool		m_bColumnCountCached;
 
     //members to propagate fetchsize and direction:
-    sal_Bool        m_bNeedToPropagateFetchSize;
-    sal_Bool        m_bFirstFetchSizePropagationDone;
-    sal_Int32       m_nLastFetchSize;
-    sal_Bool        m_bLastFetchDirection;
-    const rtl::OUString     m_aPropertyNameForFetchSize;
-    const rtl::OUString     m_aPropertyNameForFetchDirection;
-
+    sal_Bool		m_bNeedToPropagateFetchSize;
+    sal_Bool		m_bFirstFetchSizePropagationDone;
+    sal_Int32		m_nLastFetchSize;
+    sal_Bool		m_bLastFetchDirection;
+    const rtl::OUString		m_aPropertyNameForFetchSize;
+    const rtl::OUString		m_aPropertyNameForFetchDirection;
+    
 
     void SAL_CALL
     impl_getCurrentRowContent(
@@ -101,7 +101,7 @@ public:
                         com::sun::star::sdbc::XResultSet > xOrigin );
 
     virtual ~CachedContentResultSetStub();
-
+    
 
     //-----------------------------------------------------------------
     // XInterface inherited
@@ -126,7 +126,7 @@ public:
     // XServiceInfo
     //-----------------------------------------------------------------
     XSERVICEINFO_NOFACTORY_DECL()
-
+    
     //-----------------------------------------------------------------
     // XFetchProvider
     //-----------------------------------------------------------------
@@ -165,7 +165,7 @@ class CachedContentResultSetStubFactory
 {
 protected:
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
+        com::sun::star::lang::XMultiServiceFactory >	m_xSMgr;
 
 public:
 

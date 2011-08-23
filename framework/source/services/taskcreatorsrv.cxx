@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ const ::rtl::OUString TaskCreatorService::ARGUMENT_POSSIZE                      
 const ::rtl::OUString TaskCreatorService::ARGUMENT_CONTAINERWINDOW               = ::rtl::OUString::createFromAscii("ContainerWindow"               ); // XWindow
 const ::rtl::OUString TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE  = ::rtl::OUString::createFromAscii("SupportPersistentWindowState"  ); // sal_Bool
 const ::rtl::OUString TaskCreatorService::ARGUMENT_ENABLE_TITLEBARUPDATE         = ::rtl::OUString::createFromAscii("EnableTitleBarUpdate"          ); // sal_Bool
-
+    
 //-----------------------------------------------
 DEFINE_XINTERFACE_3(TaskCreatorService                                ,
                     OWeakObject                                       ,
@@ -175,7 +175,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 
         xContainerWindow = implts_createContainerWindow(xParentWindow, aPosSize, bCreateTopWindow);
     }
-
+    
     //------------------->
     // HACK  #125187# + #i53630#
     // Mark all document windows as "special ones", so VCL can bind
@@ -196,27 +196,27 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 
     // create the new frame
     css::uno::Reference< css::frame::XFrame > xFrame = implts_createFrame(xParentFrame, xContainerWindow, sRightName);
-
+    
     // special freature:
     // A special listener will restore pos/size states in case
     // a component was loaded into the frame first time.
     if (bSupportPersistentWindowState)
         implts_establishWindowStateListener(xFrame);
-
+    
     // special feature: On Mac we need tagging the window in case
     // the underlying model was modified.
     // VCL will ignore our calls in case different platform then Mac
     // is used ...
     if (bTopLevelDocumentWindow)
         implts_establishDocModifyListener (xFrame);
-
+    
     // special freature:
     // A special listener will update title bar (text and icon)
     // if component of frame will be changed.
     if (bEnableTitleBarUpdate)
         implts_establishTitleBarUpdate(xFrame);
-
-    // Make it visible directly here ...
+    
+    // Make it visible directly here ... 
     // if its required from outside.
     if (bVisible)
         xContainerWindow->setVisible(bVisible);
@@ -246,7 +246,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE
-
+    
     // get toolkit to create task container window
     css::uno::Reference< css::awt::XToolkit > xToolkit( xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY_THROW);
 
@@ -259,7 +259,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
         else
             xParentWindowPeer = css::uno::Reference< css::awt::XWindowPeer >(xParentWindow, css::uno::UNO_QUERY_THROW);
     }
-
+        
     // describe window properties.
     css::awt::WindowDescriptor aDescriptor;
     if (bTopWindow)
@@ -284,7 +284,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
         aDescriptor.Bounds              =   aPosSize                                        ;
         aDescriptor.WindowAttributes    =   css::awt::VclWindowPeerAttribute::CLIPCHILDREN  ;
     }
-
+    
     // create a new blank container window and get access to parent container to append new created task.
     css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
     css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
@@ -295,7 +295,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
         xPeer->setBackground(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
     else
         xPeer->setBackground(0xffffffff);
-
+    
     return xWindow;
 }
 
@@ -309,7 +309,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE
-
+    
     // create new frame.
     css::uno::Reference< css::frame::XFrame > xNewFrame( xSMGR->createInstance( SERVICENAME_FRAME ), css::uno::UNO_QUERY_THROW );
 

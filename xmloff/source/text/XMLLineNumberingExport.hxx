@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 class SvXMLExport;
 
 /** export <text:linenumbering-configuration> and it's child elements */
-class XMLLineNumberingExport
+class XMLLineNumberingExport 
 {
     const ::rtl::OUString sCharStyleName;
     const ::rtl::OUString sCountEmptyLines;
@@ -51,7 +51,7 @@ class XMLLineNumberingExport
 
     SvXMLExport& rExport;
 
-public:
+public:	
     XMLLineNumberingExport(SvXMLExport& rExp);
 
     void Export();

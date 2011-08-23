@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace xmloff
     class OFormEventsImportContext : public XMLEventsImportContext
     {
     protected:
-        IEventAttacher& m_rEventAttacher;
+        IEventAttacher&	m_rEventAttacher;
 
     public:
         OFormEventsImportContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
@@ -62,15 +62,15 @@ namespace xmloff
     {
     protected:
         DECLARE_STL_MAP(
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >,              // map from
-            ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >,     // map to
-            OPropertySetCompare,                                                                    // compare method
-            MapPropertySet2ScriptSequence);                                                         // class name
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >,				// map from
+            ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >,		// map to
+            OPropertySetCompare,																	// compare method
+            MapPropertySet2ScriptSequence);															// class name
         // usually an event attacher manager will need to collect all script events registered, 'cause
         // the _real_ XEventAttacherManager handles it's events by index, but out indicies are not fixed
         // until _all_ controls have been inserted.
 
-        MapPropertySet2ScriptSequence   m_aEvents;
+        MapPropertySet2ScriptSequence	m_aEvents;
 
     public:
         // IEventAttacherManager
@@ -88,7 +88,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_EVENTIMPORT_HXX_

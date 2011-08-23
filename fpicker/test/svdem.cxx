@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 
 //_________________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________________
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -35,7 +35,7 @@
 #include <osl/file.hxx>
 
 //_________________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________________
 #include <cppuhelper/servicefactory.hxx>
 
@@ -91,10 +91,10 @@ SAL_IMPLEMENT_MAIN()
     Reference< XMultiServiceFactory > xMS;
     xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
-   com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> xMSch;
-   com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xComponentContext;
-           xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
-       xMSch.set(xComponentContext->getServiceManager(), com::sun::star::uno::UNO_QUERY);
+   com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> xMSch;     
+   com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xComponentContext; 
+           xComponentContext = cppu::defaultBootstrap_InitialComponentContext();        
+       xMSch.set(xComponentContext->getServiceManager(), com::sun::star::uno::UNO_QUERY); 
        comphelper::setProcessServiceFactory(xMSch);
 
 //    comphelper::setProcessServiceFactory( xMS);
@@ -113,16 +113,16 @@ class MyWin : public WorkWindow
 public:
                 MyWin( Window* pParent, WinBits nWinStyle );
 
-    void        MouseMove( const MouseEvent& rMEvt );
-    void        MouseButtonDown( const MouseEvent& rMEvt );
-    void        MouseButtonUp( const MouseEvent& rMEvt );
-    void        KeyInput( const KeyEvent& rKEvt );
-    void        KeyUp( const KeyEvent& rKEvt );
-    void        Paint( const Rectangle& rRect );
-    void        Resize();
+    void		MouseMove( const MouseEvent& rMEvt );
+    void		MouseButtonDown( const MouseEvent& rMEvt );
+    void		MouseButtonUp( const MouseEvent& rMEvt );
+    void		KeyInput( const KeyEvent& rKEvt );
+    void		KeyUp( const KeyEvent& rKEvt );
+    void		Paint( const Rectangle& rRect );
+    void		Resize();
 
 private:
-    OKButton    aOKBtn;
+    OKButton	aOKBtn;
 
                     DECL_LINK( Test, PushButton* );
 
@@ -141,7 +141,7 @@ void Main()
 
 // -----------------------------------------------------------------------
 
-MyWin::MyWin( Window* pParent, WinBits nWinStyle )
+MyWin::MyWin( Window* pParent, WinBits nWinStyle ) 
     :WorkWindow( pParent, nWinStyle )
     ,aOKBtn(this)
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,22 +38,22 @@ class EditView;
 class SvxEditEngineViewForwarder : public SvxEditViewForwarder
 {
 private:
-    EditView&           mrView;
+    EditView&			mrView;
 
 public:
                         SvxEditEngineViewForwarder( EditView& rView );
-    virtual             ~SvxEditEngineViewForwarder();
+    virtual				~SvxEditEngineViewForwarder();
 
-    virtual BOOL        IsValid() const;
+    virtual BOOL		IsValid() const;
 
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Rectangle	GetVisArea() const;
+    virtual Point		LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point		PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
-    virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
-    virtual sal_Bool    SetSelection( const ESelection& rSelection );
-    virtual sal_Bool    Copy();
-    virtual sal_Bool    Cut();
+    virtual sal_Bool	GetSelection( ESelection& rSelection ) const;
+    virtual sal_Bool	SetSelection( const ESelection& rSelection );
+    virtual sal_Bool	Copy();
+    virtual sal_Bool	Cut();
     virtual sal_Bool    Paste();
 
 };

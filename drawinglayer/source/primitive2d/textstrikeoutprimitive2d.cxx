@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,13 +86,13 @@ namespace drawinglayer
 
             // get decomposition
             getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
-
+            
             // prepare TextLayouter
             TextLayouterDevice aTextLayouter;
-
+            
             aTextLayouter.setFontAttribute(
-                getFontAttribute(),
-                aScale.getX(),
+                getFontAttribute(), 
+                aScale.getX(), 
                 aScale.getY(),
                 getLocale());
 
@@ -176,7 +176,7 @@ namespace drawinglayer
             basegfx::B2DVector aScale, aTranslate;
             double fRotate, fShearX;
             getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
-
+            
             // set line attribute
             switch(getTextStrikeout())
             {
@@ -238,10 +238,10 @@ namespace drawinglayer
                 aTransform.translate(aTranslate.getX(), aTranslate.getY());
 
                 // add transform primitive
-                appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+                appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, 
                     Primitive2DReference(
                         new TransformPrimitive2D(
-                            aTransform,
+                            aTransform, 
                             xRetval)));
             }
 

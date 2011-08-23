@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ public class _XCommandProcessor {
     public XCommandProcessor oObj;
     public LogWriter log = null;
     private XMultiServiceFactory xMSF = null;
-
+    
     /**
      * Contains the command id returned by <code>createCommandIdentifier()
      * </code>. It is used in <code>abort()</code> test.
@@ -94,7 +94,7 @@ public class _XCommandProcessor {
     public void before(XMultiServiceFactory _xMSF) {
         xMSF = _xMSF;
     }
-
+    
     /**
      * Tests <code>createCommandIdentifier()</code>. Calls it for two times
      * and checks returned values. <p>
@@ -157,7 +157,7 @@ public class _XCommandProcessor {
                     log.println("\t##### " + cmdInfo[i].Name + " - " + cmdInfo[i].Handle + " - " + cmdInfo[i].ArgType.getTypeName());
                     if (cmdInfo[i].Name.equals(commandName)) {
                         found = true;
-//                      break;
+//                	    break;
                     }
                 }
             }
@@ -178,9 +178,9 @@ public class _XCommandProcessor {
                 }
                 found = propCount == 0;
             }
-
+            
             returnVal &= found;
-
+            
             if (!found) {
                 log.println("Command '" + commandName + "' was not executed correctly.");
             }

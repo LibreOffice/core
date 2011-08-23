@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/inoncopyable.h>
@@ -40,31 +40,31 @@
 //#endif
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <sal/types.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          implement a guard for implementing save thread access
-    @descr          These guard has an additional feature to well known one ::osl::Guard.
+    @descr			These guard has an additional feature to well known one ::osl::Guard.
                     You can lock() and unlock() it very often!
                     A set bool flag inside protect this implementation against multiple lock() calls
                     without any unlock()! So the increasing of guarded mutex couldn't be greater then 1 ...
@@ -73,30 +73,30 @@ namespace framework{
                     b) Use interface "IMutex" of set LockHelper only - because we must support an exclusiv locking.
                        Interface "IRWLock" should be used by special guard implementations ... like "ReadGuard" or "WriteGuard"!
 
-    @implements     -
+    @implements		-
     @base           INonCopyable
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 class ResetableGuard : private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
         /*-****************************************************************************************************//**
-            @short      ctors
-            @descr      Use these ctor methods to initialize the guard right.
+            @short		ctors
+            @descr		Use these ctor methods to initialize the guard right.
                         Given lock reference must be valid - otherwise crashes could occure!
 
-            @seealso    -
+            @seealso	-
 
             @param      "pLock", pointer to lock helper of user
             @param      "rLock", reference to lock helper of user
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         inline ResetableGuard( IMutex* pLock )
             :   m_pLock    ( pLock     )
@@ -114,15 +114,15 @@ class ResetableGuard : private INonCopyable
         }
 
         /*-****************************************************************************************************//**
-            @short      dtor
-            @descr      We must release set mutex if programmer forget it ...
+            @short		dtor
+            @descr		We must release set mutex if programmer forget it ...
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         inline ~ResetableGuard()
         {
@@ -130,8 +130,8 @@ class ResetableGuard : private INonCopyable
         }
 
         /*-****************************************************************************************************//**
-            @short      enable/disable the lock
-            @descr      Use this methods to lock or unlock the mutex.
+            @short		enable/disable the lock
+            @descr		Use this methods to lock or unlock the mutex.
                         You can do it so often you wish to do that ...
 
             @attention  We use another member to prevent us against multiple acquire calls of the same guard
@@ -140,12 +140,12 @@ class ResetableGuard : private INonCopyable
                         because nobody use the same guard instance from different threads!
                         It will be a function-local object every time.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         inline void lock()
         {
@@ -167,34 +167,34 @@ class ResetableGuard : private INonCopyable
         }
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
 
         /*-****************************************************************************************************//**
-            @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+            @short		disable using of these functions!
+            @descr		It's not allowed to use this methods. Different problem can occure otherwise.
                         Thats why we disable it by make it private.
 
-            @seealso    other ctor
+            @seealso	other ctor
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
         ResetableGuard();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
         IMutex*         m_pLock     ;   /// pointer to safed lock member of user
-        sal_Bool        m_bLocked   ;   /// protection against multiple lock() calls without unlock()
+        sal_Bool		m_bLocked	;	/// protection against multiple lock() calls without unlock()
 
-};      //  class ResetableGuard
+};		//	class ResetableGuard
 
-}       //  namespace framework
+}		//	namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#endif	//	#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_

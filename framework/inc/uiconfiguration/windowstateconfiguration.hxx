@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <hash_map>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -46,7 +46,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -54,7 +54,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
@@ -80,7 +80,7 @@ namespace framework
 #define WINDOWSTATE_PROPERTY_CONTEXTACTIVE  "ContextActive"
 
 class ConfigurationAccess_Windows;
-class WindowStateConfiguration :  private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class WindowStateConfiguration :  private ThreadHelpBase						,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                                   public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameAccess, css::lang::XServiceInfo>
 {
     public:
@@ -93,26 +93,26 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
         DECLARE_XSERVICEINFO
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) 
             throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+        
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() 
             throw (::com::sun::star::uno::RuntimeException);
-
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+        
+        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) 
             throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+        virtual ::com::sun::star::uno::Type SAL_CALL getElementType() 
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasElements()
+        virtual sal_Bool SAL_CALL hasElements() 
             throw (::com::sun::star::uno::RuntimeException);
 
         typedef ::std::hash_map< ::rtl::OUString,
                                  ::rtl::OUString,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateFileMap;
-
+        
         typedef ::std::hash_map< ::rtl::OUString,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
                                  OUStringHashCode,

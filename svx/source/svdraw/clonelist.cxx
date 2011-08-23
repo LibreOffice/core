@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
         const SdrObjList* pOriginalList = pOriginal->GetSubList();
         SdrObjList* pCloneList = pClone->GetSubList();
 
-        if(pOriginalList && pCloneList
+        if(pOriginalList && pCloneList 
             && pOriginalList->GetObjCount() == pCloneList->GetObjCount())
         {
             for(sal_uInt32 a(0); a < pOriginalList->GetObjCount(); a++)
@@ -75,9 +75,9 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
     }
 }
 
-sal_uInt32 CloneList::Count() const
-{
-    return maOriginalList.Count();
+sal_uInt32 CloneList::Count() const 
+{ 
+    return maOriginalList.Count(); 
 }
 
 const SdrObject* CloneList::GetOriginal(sal_uInt32 nIndex) const

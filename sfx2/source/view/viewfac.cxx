@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
 {
     aDescription.SetRT(aDescrResId.GetRT());
     DBG_CTOR(SfxViewFactory, 0);
-//  SFX_APP()->RegisterViewFactory_Impl(*this);
+//	SFX_APP()->RegisterViewFactory_Impl(*this);
 }
 
 SfxViewFactory::~SfxViewFactory()

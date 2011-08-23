@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@
 using namespace rtl;
 using namespace com::sun::star;
 
-#define SERVICE( className )                                        \
-extern OUString SAL_CALL className##_getImplementationName() throw();   \
+#define SERVICE( className )										\
+extern OUString SAL_CALL className##_getImplementationName() throw();	\
 extern uno::Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw();\
-extern uno::Reference< uno::XInterface > SAL_CALL className##_createInstance(           \
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr )                \
+extern uno::Reference< uno::XInterface > SAL_CALL className##_createInstance(			\
+        const uno::Reference< lang::XMultiServiceFactory > & rSMgr )				\
     throw( uno::Exception )
 
 // impress oasis import

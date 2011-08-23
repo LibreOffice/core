@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@
 class ARR\
 {\
 private:\
-    T*   pData;\
+    T*	 pData;\
     USHORT  nUsed;\
-    BYTE    nGrow;\
+    BYTE	nGrow;\
     BYTE    nUnused;\
 public:\
     ARR( BYTE nInitSize = nI, BYTE nGrowSize = nG );\
@@ -303,10 +303,10 @@ void ARR::Insert( USHORT nPos, const T& rElems, USHORT nLen ) \
      \
     if ( nPos < nUsed ) \
     { \
-        memmove(pData+nPos+nLen-1, pData+nPos-1, sizeof(T) * (nUsed-nPos)); \
+        memmove(pData+nPos+nLen-1, pData+nPos-1, sizeof(T) * (nUsed-nPos));	\
     } \
 \
-    memmove(pData+nPos, &rElems, sizeof(T) * nLen); \
+    memmove(pData+nPos, &rElems, sizeof(T) * nLen);	\
     nUsed = nUsed + nLen; \
     nUnused = sal::static_int_cast< BYTE >(nUnused - nLen); \
 }

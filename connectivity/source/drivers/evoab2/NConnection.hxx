@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include "TConnection.hxx"
 #include <cppuhelper/weakref.hxx>
 #include <osl/module.h>
-#include "EApi.h"
+#include "EApi.h" 
 
 namespace connectivity
 {
@@ -47,21 +47,21 @@ namespace connectivity
 
         namespace SDBCAddress {
             typedef enum {
-                Unknown     = 0,
+                Unknown		= 0,
                 EVO_LOCAL       = 1,
-                EVO_LDAP    = 2,
-                EVO_GWISE   = 3
+                EVO_LDAP	= 2,
+                EVO_GWISE	= 3
             } sdbc_address_type;
         }
-
-        typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
-
+        
+        typedef connectivity::OMetaConnection				OConnection_BASE; // implements basics and text encoding
+        
         class OEvoabConnection  :public OConnection_BASE
                                 ,public connectivity::OSubComponent<OEvoabConnection, OConnection_BASE>
         {
             friend class connectivity::OSubComponent<OEvoabConnection, OConnection_BASE>;
 
-        private:
+        private:	
             const OEvoabDriver&             m_rDriver;
             SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
@@ -79,18 +79,18 @@ namespace connectivity
             inline void         setPassword( rtl::OString aStr ) { m_aPassword = aStr; }
             // own methods
             inline const OEvoabDriver& getDriver() const { return m_rDriver; }
-
+            
             SDBCAddress::sdbc_address_type getSDBCAddressType() const { return m_eSDBCAddressType;}
             void setSDBCAddressType(SDBCAddress::sdbc_address_type _eSDBCAddressType) {m_eSDBCAddressType = _eSDBCAddressType;}
-
+                        
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
             virtual void SAL_CALL release() throw();
-
+            
             // XServiceInfo
             DECLARE_SERVICE_INFO();
-
+            
             // XConnection
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -111,7 +111,7 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTypeMap(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setTypeMap( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
+            
             // XCloseable
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XWarningsSupplier

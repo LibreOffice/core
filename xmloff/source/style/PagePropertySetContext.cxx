@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,8 +123,8 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
 
     case CTF_PM_FTN_LINE_WEIGTH:
 #ifndef SVX_LIGHT
-        pContext = new XMLFootnoteSeparatorImport(
-            GetImport(), nPrefix, rLocalName, rProperties,
+        pContext = new XMLFootnoteSeparatorImport( 
+            GetImport(), nPrefix, rLocalName, rProperties, 
             mxMapper->getPropertySetMapper(), rProp.mnIndex);
 #else
         // create default context to skip content

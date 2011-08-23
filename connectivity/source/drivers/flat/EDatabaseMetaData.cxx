@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace ::comphelper;
 
 using namespace connectivity;
 using namespace connectivity::flat;
-//  using namespace connectivity::file;
+//	using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::container;
 
 
 
-OFlatDatabaseMetaData::OFlatDatabaseMetaData(::connectivity::file::OConnection* _pCon)  :ODatabaseMetaData(_pCon)
+OFlatDatabaseMetaData::OFlatDatabaseMetaData(::connectivity::file::OConnection* _pCon) 	:ODatabaseMetaData(_pCon)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatDatabaseMetaData::OFlatDatabaseMetaData" );
 }
@@ -74,7 +74,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xRef = pResult;
-
+    
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
     {
@@ -185,8 +185,8 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
     ODatabaseMetaDataResultSet::ORow aRow(19);
     aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
-    const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
-    const ::rtl::OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
+    const ::rtl::OUString* pTabBegin	= aTabNames.getConstArray();
+    const ::rtl::OUString* pTabEnd		= pTabBegin + aTabNames.getLength();
     for(;pTabBegin != pTabEnd;++pTabBegin)
     {
         if(match(tableNamePattern,*pTabBegin,'\0'))

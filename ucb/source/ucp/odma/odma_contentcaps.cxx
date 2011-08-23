@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     //           is preferred! In fact you should return a table conatining
     //           even that dynamicly added properties.
 
-//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
+//	osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     //=================================================================
     //
@@ -167,7 +167,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 {
     // @@@ Add additional commands...
 
-//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
+//	osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     //=================================================================
     //

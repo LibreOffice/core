@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,16 +74,16 @@ OSystemParseContext::~OSystemParseContext()
     vos::OGuard aGuard( Application::GetSolarMutex() );
     switch (_eCode)
     {
-        case ERROR_GENERAL:                 aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_ERROR); break;
-        case ERROR_VALUE_NO_LIKE:           aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE); break;
-        case ERROR_FIELD_NO_LIKE:           aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE); break;
-        case ERROR_INVALID_COMPARE:         aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE); break;
-        case ERROR_INVALID_INT_COMPARE:     aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID); break;
-        case ERROR_INVALID_DATE_COMPARE:    aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID); break;
-        case ERROR_INVALID_REAL_COMPARE:    aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID); break;
-        case ERROR_INVALID_TABLE:           aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE); break;
-        case ERROR_INVALID_TABLE_OR_QUERY:  aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY); break;
-        case ERROR_INVALID_COLUMN:          aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_COLUMN); break;
+        case ERROR_GENERAL:					aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_ERROR); break;
+        case ERROR_VALUE_NO_LIKE:			aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE); break;
+        case ERROR_FIELD_NO_LIKE:			aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE); break;
+        case ERROR_INVALID_COMPARE:			aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE); break;
+        case ERROR_INVALID_INT_COMPARE:		aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID); break;
+        case ERROR_INVALID_DATE_COMPARE:	aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID); break;
+        case ERROR_INVALID_REAL_COMPARE:	aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID); break;
+        case ERROR_INVALID_TABLE:			aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE); break;
+        case ERROR_INVALID_TABLE_OR_QUERY:	aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY); break;
+        case ERROR_INVALID_COLUMN:			aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_COLUMN); break;
         case ERROR_INVALID_TABLE_EXIST:     aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS); break;
         case ERROR_INVALID_QUERY_EXIST:     aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS); break;
         case ERROR_NONE: break;
@@ -97,20 +97,20 @@ OSystemParseContext::~OSystemParseContext()
     size_t nIndex = 0;
     switch ( _eKey )
     {
-        case KEY_LIKE:      nIndex = 0; break;
-        case KEY_NOT:       nIndex = 1; break;
-        case KEY_NULL:      nIndex = 2; break;
-        case KEY_TRUE:      nIndex = 3; break;
-        case KEY_FALSE:     nIndex = 4; break;
-        case KEY_IS:        nIndex = 5; break;
-        case KEY_BETWEEN:   nIndex = 6; break;
-        case KEY_OR:        nIndex = 7; break;
-        case KEY_AND:       nIndex = 8; break;
-        case KEY_AVG:       nIndex = 9; break;
-        case KEY_COUNT:     nIndex = 10; break;
-        case KEY_MAX:       nIndex = 11; break;
-        case KEY_MIN:       nIndex = 12; break;
-        case KEY_SUM:       nIndex = 13; break;
+        case KEY_LIKE:		nIndex = 0; break;
+        case KEY_NOT:		nIndex = 1; break;
+        case KEY_NULL:		nIndex = 2; break;
+        case KEY_TRUE:		nIndex = 3; break;
+        case KEY_FALSE:		nIndex = 4; break;
+        case KEY_IS:		nIndex = 5; break;
+        case KEY_BETWEEN:	nIndex = 6; break;
+        case KEY_OR:		nIndex = 7; break;
+        case KEY_AND:		nIndex = 8; break;
+        case KEY_AVG:		nIndex = 9; break;
+        case KEY_COUNT:		nIndex = 10; break;
+        case KEY_MAX:		nIndex = 11; break;
+        case KEY_MIN:		nIndex = 12; break;
+        case KEY_SUM:		nIndex = 13; break;
         case KEY_EVERY:     nIndex = 14; break;
         case KEY_ANY:       nIndex = 15; break;
         case KEY_SOME:      nIndex = 16; break;
@@ -222,7 +222,7 @@ OParseContextClient::OParseContextClient()
 {
     ::osl::MutexGuard aGuard( getSafteyMutex() );
     if ( 1 == osl_incrementInterlockedCount( &getCounter() ) )
-    {   // first instance
+    {	// first instance
         getSharedContext( new OSystemParseContext );
     }
 }

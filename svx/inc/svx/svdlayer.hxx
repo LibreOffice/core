@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@
 
 class SdrModel;
 
-class SVX_DLLPUBLIC SdrLayer
+class SVX_DLLPUBLIC SdrLayer 
 {
 friend class SdrLayerAdmin;
 protected:
     String     aName;
-    String      maTitle;
-    String      maDescription;
+    String		maTitle;
+    String		maDescription;
     SdrModel*  pModel; // zum Broadcasten
     UINT16     nType;  // 0=Userdefined,1=Standardlayer
     SdrLayerID nID;
@@ -130,8 +130,8 @@ public:
           SdrLayer*    GetLayerPerID(USHORT nID)                                     { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(USHORT nID) const;
 
-    void               SetControlLayerName(const String& rNewName) { aControlLayerName=rNewName; }
-    const String&      GetControlLayerName() const                 { return aControlLayerName; }
+    void     	       SetControlLayerName(const String& rNewName) { aControlLayerName=rNewName; }
+    const String& 	   GetControlLayerName() const                 { return aControlLayerName; }
 };
 
 /*

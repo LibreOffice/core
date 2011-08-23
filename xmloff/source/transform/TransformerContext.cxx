@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@ using namespace ::com::sun::star::xml::sax;
 
 TYPEINIT0( XMLTransformerContext );
 
-sal_Bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,
+sal_Bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix, 
                        ::xmloff::token::XMLTokenEnum eToken ) const
 {
     OUString aLocalName;
-    return GetTransformer().GetNamespaceMap().GetKeyByAttrName( m_aQName,
+    return GetTransformer().GetNamespaceMap().GetKeyByAttrName( m_aQName, 
                                               &aLocalName ) == nPrefix &&
            ::xmloff::token::IsXMLToken( aLocalName, eToken );
 }
@@ -62,7 +62,7 @@ sal_Bool XMLTransformerContext::HasNamespace( sal_uInt16 nPrefix ) const
     return GetTransformer().GetNamespaceMap().GetKeyByAttrName( m_aQName ) == nPrefix;
 }
 
-XMLTransformerContext::XMLTransformerContext( XMLTransformerBase& rImp,
+XMLTransformerContext::XMLTransformerContext( XMLTransformerBase& rImp, 
                                                 const OUString& rQName ) :
     m_rTransformer( rImp ),
     m_aQName( rQName ),

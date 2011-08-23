@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -213,7 +213,7 @@ void lcl_insertErrorBarLSequencesToMap(
         for( sal_Int32 nIndex = 0; nIndex < aLSequences.getLength(); ++nIndex )
         {
             // use "0" as data index. This is ok, as it is not used for error bars
-            rInOutMap.insert(
+            rInOutMap.insert( 
                 tSchXMLLSequencesPerIndex::value_type(
                     tSchXMLIndexWithPart( 0, SCH_XML_PART_ERROR_BARS ), aLSequences[ nIndex ] ));
         }
@@ -547,7 +547,7 @@ void SchXMLSeries2Context::EndElement()
                 bCreateXValues = false;//they will be created for the next series
             }
         }
-        if( bCreateXValues )
+        if( bCreateXValues ) 
             aDomainInfos.push_back( aDomainInfo );
     }
     else if( bIsBubbleChart )
@@ -604,7 +604,7 @@ void SchXMLSeries2Context::EndElement()
             mrStyleList.push_back( aStyle );
         }
     }
-
+    
     for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
     {
         DomainInfo aDomainInfo( *aIt );
@@ -697,7 +697,7 @@ void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSer
         , const uno::Reference< frame::XModel >& xChartModel )
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
-
+    
     // iterate over series first and remind propertysets in map
     // new api <-> old api wrapper
     ::std::map< Reference< chart2::XDataSeries >, Reference< beans::XPropertySet > > aSeriesMap;
@@ -705,12 +705,12 @@ void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSer
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )
             continue;
-
+        
         if( !iStyle->m_xOldAPISeries.is() )
             iStyle->m_xOldAPISeries = SchXMLSeriesHelper::createOldAPISeriesPropertySet( iStyle->m_xSeries, xChartModel );
 
         aSeriesMap[iStyle->m_xSeries] = iStyle->m_xOldAPISeries;
-
+        
     }
 
     //initialize m_xOldAPISeries for all other styles also
@@ -961,7 +961,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
     {
         if( iStyle->meType != DataRowPointStyle::DATA_POINT )
             continue;
-
+        
         if( iStyle->m_nPointIndex == -1 )
             continue;
 
@@ -985,7 +985,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 uno::Reference< beans::XPropertySet > xPointProp(
                     SchXMLSeriesHelper::createOldAPIDataPointPropertySet( iStyle->m_xSeries, iStyle->m_nPointIndex + i
                         , uno::Reference< frame::XModel >( rImportHelper.GetChartDocument(), uno::UNO_QUERY ) ) );
-
+                
                 if( !xPointProp.is() )
                     continue;
 
@@ -1043,7 +1043,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                                     OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }
-    }   // styles iterator
+    }	// styles iterator
 }
 
 //static
@@ -1051,7 +1051,7 @@ void SchXMLSeries2Context::switchSeriesLinesOff( ::std::list< DataRowPointStyle 
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
     // iterate over series
-
+    
     for( iStyle = rSeriesStyleList.begin(); iStyle != rSeriesStyleList.end(); iStyle++ )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )

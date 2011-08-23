@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ namespace drawinglayer
         {
         private:
             /// geometry definition
-            basegfx::B2DHomMatrix                           maTransformation;
+            basegfx::B2DHomMatrix							maTransformation;
             double                                          mfStart;
             double                                          mfStop;
 
             /// color (usually red)
-            basegfx::BColor                                 maColor;
+            basegfx::BColor									maColor;
 
         protected:
             /// create local decomposition

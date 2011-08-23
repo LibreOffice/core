@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 namespace drawinglayer
 {
     impBufferDevice::impBufferDevice(
-        OutputDevice& rOutDev,
+        OutputDevice& rOutDev, 
         const basegfx::B2DRange& rRange,
         bool bAddOffsetToMapping)
-    :   mrOutDev(rOutDev),
+    :	mrOutDev(rOutDev),
         maContent(rOutDev),
         mpMask(0L),
         mpAlpha(0L)
@@ -51,7 +51,7 @@ namespace drawinglayer
         basegfx::B2DRange aRangePixel(rRange);
         aRangePixel.transform(rOutDev.GetViewTransformation());
         const Rectangle aRectPixel(
-            (sal_Int32)floor(aRangePixel.getMinX()), (sal_Int32)floor(aRangePixel.getMinY()),
+            (sal_Int32)floor(aRangePixel.getMinX()), (sal_Int32)floor(aRangePixel.getMinY()), 
             (sal_Int32)ceil(aRangePixel.getMaxX()), (sal_Int32)ceil(aRangePixel.getMaxY()));
         const Point aEmptyPoint;
         maDestPixel = Rectangle(aEmptyPoint, rOutDev.GetOutputSizePixel());
@@ -62,7 +62,7 @@ namespace drawinglayer
             maContent.SetOutputSizePixel(maDestPixel.GetSize(), false);
 
             // #i93485# assert when copying from window to VDev is used
-            OSL_ENSURE(rOutDev.GetOutDevType() != OUTDEV_WINDOW,
+            OSL_ENSURE(rOutDev.GetOutDevType() != OUTDEV_WINDOW, 
                 "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
 
             const bool bWasEnabledSrc(rOutDev.IsMapModeEnabled());
@@ -100,7 +100,7 @@ namespace drawinglayer
 
         mrOutDev.EnableMapMode(false);
         maContent.EnableMapMode(false);
-        Bitmap aContent(maContent.GetBitmap(aEmptyPoint, aSizePixel));
+        Bitmap aContent(maContent.GetBitmap(aEmptyPoint, aSizePixel)); 
 
         if(bDoSaveForVisualControl)
         {
@@ -112,19 +112,19 @@ namespace drawinglayer
         {
             mpAlpha->EnableMapMode(false);
             const AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
-
+            
             if(bDoSaveForVisualControl)
             {
                 SvFileStream aNew((const String&)String(ByteString( "c:\\transparence.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
                 aNew << aAlphaMask.GetBitmap();
             }
-
+            
             mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
         }
         else if(mpMask)
         {
             mpMask->EnableMapMode(false);
-            const Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
+            const Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel)); 
 
             if(bDoSaveForVisualControl)
             {
@@ -149,7 +149,7 @@ namespace drawinglayer
     }
 
     VirtualDevice& impBufferDevice::getMask()
-    {
+    { 
         if(!mpMask)
         {
             mpMask = new VirtualDevice(mrOutDev, 1);
@@ -162,8 +162,8 @@ namespace drawinglayer
         return *mpMask;
     }
 
-    VirtualDevice& impBufferDevice::getTransparence()
-    {
+    VirtualDevice& impBufferDevice::getTransparence() 
+    { 
         if(!mpAlpha)
         {
             mpAlpha = new VirtualDevice();

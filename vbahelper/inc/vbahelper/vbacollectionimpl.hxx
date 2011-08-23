@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef OOVBAAPI_VBA_COLLECTION_IMPL_HXX
 #define OOVBAAPI_VBA_COLLECTION_IMPL_HXX
 
@@ -162,12 +162,12 @@ private:
         typename XNamedVec::iterator mIt;
     public:
             XNamedEnumerationHelper( const XNamedVec& sMap ) : mXNamedVec( sMap ), mIt( mXNamedVec.begin() ) {}
-
+    
             virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException)
             {
             return ( mIt != mXNamedVec.end() );
             }
-
+    
             virtual css::uno::Any SAL_CALL nextElement(  ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException)
             {
                     if ( hasMoreElements() )
@@ -184,7 +184,7 @@ public:
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException) { return  Ifc1::static_type(0); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException) { return ( mXNamedVec.size() > 0 ); }
-    // XNameAcess
+    // XNameAcess 
     virtual css::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException)
     {
         if ( !hasByName(aName) )
@@ -200,7 +200,7 @@ public:
 
         for ( ; it != it_end; ++it, ++pString )
         {
-            css::uno::Reference< css::container::XNamed > xName( *it, css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::container::XNamed > xName( *it, css::uno::UNO_QUERY_THROW );	
             *pString = xName->getName();
         }
         return sNames;
@@ -211,7 +211,7 @@ public:
         typename XNamedVec::iterator it_end = mXNamedVec.end();
         for ( ; cachePos != it_end; ++cachePos )
         {
-            css::uno::Reference< css::container::XNamed > xName( *cachePos, css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::container::XNamed > xName( *cachePos, css::uno::UNO_QUERY_THROW );	
             if ( aName.equals( xName->getName() ) )
                 break;
         }
@@ -219,12 +219,12 @@ public:
     }
 
     // XElementAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException) { return mXNamedVec.size(); }
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException) { return mXNamedVec.size(); }	
     virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException )
     {
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
-
+    
         return css::uno::makeAny( mXNamedVec[ Index ] );
 
     }
@@ -248,9 +248,9 @@ protected:
     {
         if ( !m_xNameAccess.is() )
             throw css::uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScVbaCollectionBase string index access not supported by this object") ), css::uno::Reference< css::uno::XInterface >() );
-
-        return createCollectionObject( m_xNameAccess->getByName( sIndex ) );
-    }
+    
+        return createCollectionObject( m_xNameAccess->getByName( sIndex ) );	
+    }		
 
     virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException)
     {
@@ -258,13 +258,13 @@ protected:
             throw css::uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScVbaCollectionBase numeric index access not supported by this object") ), css::uno::Reference< css::uno::XInterface >() );
         if ( nIndex <= 0 )
         {
-            throw  css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "index is 0 or negative" ) ),
+            throw  css::lang::IndexOutOfBoundsException( 
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
+                "index is 0 or negative" ) ), 
                 css::uno::Reference< css::uno::XInterface >() );
         }
         // need to adjust for vba index ( for which first element is 1 )
-        return createCollectionObject( m_xIndexAccess->getByIndex( nIndex - 1 ) );
+        return createCollectionObject( m_xIndexAccess->getByIndex( nIndex - 1 ) );		
     }
 
     virtual void UpdateCollectionIndex( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
@@ -287,7 +287,7 @@ public:
         if ( Index1.getValueTypeClass() != css::uno::TypeClass_STRING )
         {
             sal_Int32 nIndex = 0;
-
+    
             if ( ( Index1 >>= nIndex ) != sal_True )
             {
                 rtl::OUString message;
@@ -296,12 +296,12 @@ public:
                 throw  css::lang::IndexOutOfBoundsException( message,
                     css::uno::Reference< css::uno::XInterface >() );
             }
-            return  getItemByIntIndex( nIndex );
+            return 	getItemByIntIndex( nIndex );
         }
         rtl::OUString aStringSheet;
 
         Index1 >>= aStringSheet;
-        return getItemByStringIndex( aStringSheet );
+        return getItemByStringIndex( aStringSheet );	
     }
     // XDefaultMethod
     ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException)
@@ -310,7 +310,7 @@ public:
         return sName;
     }
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) = 0;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) = 0;	
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) = 0;
@@ -320,7 +320,7 @@ public:
         return ( m_xIndexAccess->getCount() > 0 );
     }
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) = 0;
-
+    
 };
 
 typedef ::cppu::WeakImplHelper1<ov::XCollection> XCollection_InterfacesBASE;

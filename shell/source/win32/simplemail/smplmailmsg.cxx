@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,120 +59,120 @@ CSmplMailMsg::CSmplMailMsg( )
 }
 
 //------------------------------------------------
-//
+// 
 //------------------------------------------------
 
-void SAL_CALL CSmplMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
+void SAL_CALL CSmplMailMsg::setRecipient( const ::rtl::OUString& aRecipient ) 
     throw (RuntimeException)
 {
     m_aRecipient = aRecipient;
 }
 
 //------------------------------------------------
-//
+// 
 //------------------------------------------------
 
-::rtl::OUString SAL_CALL CSmplMailMsg::getRecipient(  )
+::rtl::OUString SAL_CALL CSmplMailMsg::getRecipient(  ) 
     throw (RuntimeException)
 {
     return m_aRecipient;
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
+// 
+//------------------------------------------------ 
 
-void SAL_CALL CSmplMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
+void SAL_CALL CSmplMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient ) 
     throw (RuntimeException)
 {
     m_CcRecipients = aCcRecipient;
 }
 
 //------------------------------------------------
-//
+// 
 //------------------------------------------------
 
-Sequence< OUString > SAL_CALL CSmplMailMsg::getCcRecipient(  )
+Sequence< OUString > SAL_CALL CSmplMailMsg::getCcRecipient(  ) 
     throw (RuntimeException)
 {
     return m_CcRecipients;
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
+// 
+//------------------------------------------------ 
 
-void SAL_CALL CSmplMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
+void SAL_CALL CSmplMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient ) 
     throw (RuntimeException)
 {
     m_BccRecipients = aBccRecipient;
 }
 
 //------------------------------------------------
-//
+// 
 //------------------------------------------------
 
-Sequence< OUString > SAL_CALL CSmplMailMsg::getBccRecipient(  )
+Sequence< OUString > SAL_CALL CSmplMailMsg::getBccRecipient(  ) 
     throw (RuntimeException)
 {
     return m_BccRecipients;
 }
-
+ 
 //------------------------------------------------
-//
-//------------------------------------------------
+// 
+//------------------------------------------------ 
 
-void SAL_CALL CSmplMailMsg::setOriginator( const OUString& aOriginator )
+void SAL_CALL CSmplMailMsg::setOriginator( const OUString& aOriginator ) 
     throw (RuntimeException)
 {
     m_aOriginator = aOriginator;
 }
 
 //------------------------------------------------
-//
+// 
 //------------------------------------------------
 
-OUString SAL_CALL CSmplMailMsg::getOriginator(  )
+OUString SAL_CALL CSmplMailMsg::getOriginator(  ) 
     throw (RuntimeException)
 {
     return m_aOriginator;
 }
-
+    
 //------------------------------------------------
-//
-//------------------------------------------------
+// 
+//------------------------------------------------ 
 
-void SAL_CALL CSmplMailMsg::setSubject( const OUString& aSubject )
+void SAL_CALL CSmplMailMsg::setSubject( const OUString& aSubject ) 
     throw (RuntimeException)
 {
     m_aSubject = aSubject;
 }
 
 //------------------------------------------------
-//
+// 
 //------------------------------------------------
 
-OUString SAL_CALL CSmplMailMsg::getSubject(  )
+OUString SAL_CALL CSmplMailMsg::getSubject(  ) 
     throw (RuntimeException)
 {
     return m_aSubject;
 }
 
 //------------------------------------------------
-//
-//------------------------------------------------
+// 
+//------------------------------------------------ 
 
-void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAttachement )
+void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAttachement ) 
     throw (IllegalArgumentException, RuntimeException)
 {
     m_Attachements = aAttachement;
 }
 
 //------------------------------------------------
-//
+// 
 //------------------------------------------------
 
-Sequence< OUString > SAL_CALL CSmplMailMsg::getAttachement(  )
+Sequence< OUString > SAL_CALL CSmplMailMsg::getAttachement(  ) 
     throw (RuntimeException)
 {
     return m_Attachements;

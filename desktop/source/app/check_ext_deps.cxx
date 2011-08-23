@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
         uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
-            xContext, VCLUnoHelper::GetInterface( NULL ),
+            xContext, VCLUnoHelper::GetInterface( NULL ), 
             licExc.ExtensionName, licExc.Text ) );
         sal_Int16 res = xDialog->execute();
         if ( res == ui::dialogs::ExecutableDialogResults::CANCEL )
@@ -232,7 +232,7 @@ static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContex
 
     uno::Reference< lang::XMultiComponentFactory > xServiceManager( xContext->getServiceManager() );
     if( !xServiceManager.is() )
-        throw uno::RuntimeException(
+        throw uno::RuntimeException( 
             UNISTRING( "impl_showExtensionDialog(): unable to obtain service manager from component context" ), uno::Reference< uno::XInterface > () );
 
     xService = xServiceManager->createInstanceWithContext( sServiceName, xContext );
@@ -333,7 +333,7 @@ static void impl_setNeedsCompatCheck()
                 xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString::createFromAscii("NodePath"),
+        beans::NamedValue v( OUString::createFromAscii("NodePath"), 
                       makeAny( OUString::createFromAscii("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
@@ -386,7 +386,7 @@ static bool impl_needsCompatCheck()
                 xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString::createFromAscii("NodePath"),
+        beans::NamedValue v( OUString::createFromAscii("NodePath"), 
                       makeAny( OUString::createFromAscii("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(

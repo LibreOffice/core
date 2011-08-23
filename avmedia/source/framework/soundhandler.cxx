@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_DISPATCH_SOUNDHANDLER_HXX_
@@ -38,13 +38,13 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -53,21 +53,21 @@
 #include <cppuhelper/factory.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace avmedia{
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
@@ -90,7 +90,7 @@ css::uno::Any SAL_CALL SoundHandler::queryInterface( const css::uno::Type& aType
 {
        /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface.     */
         /* Ask for my own supported interfaces ...*/
-       css::uno::Any aReturn( ::cppu::queryInterface( aType,
+       css::uno::Any aReturn( ::cppu::queryInterface( aType, 
                static_cast< css::lang::XTypeProvider* >(this),
                static_cast< css::lang::XServiceInfo* >(this),
                static_cast< css::frame::XNotifyingDispatch* >(this),
@@ -131,7 +131,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL SoundHandler::getImplementationId() thro
 }
 
 css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( css::uno::RuntimeException )
-{
+{                                                                     
     /* Optimize this method !                                       */
     /* We initialize a static variable only one time.               */
     /* And we don't must use a mutex at every call!                 */
@@ -185,8 +185,8 @@ sal_Bool SAL_CALL SoundHandler::supportsService( const ::rtl::OUString& sService
     /* Get names of all supported servicenames. */
     css::uno::Sequence< ::rtl::OUString >  seqServiceNames =   getSupportedServiceNames();
     const ::rtl::OUString*                 pArray          =   seqServiceNames.getConstArray();
-    sal_Int32                              nCounter        =   0;
-    sal_Int32                              nLength         =   seqServiceNames.getLength();
+    sal_Int32                              nCounter        =   0;                                           
+    sal_Int32                              nLength         =   seqServiceNames.getLength();      
     /* Search for right name in list. */
     while   (
               ( nCounter      <       nLength         )       &&
@@ -273,11 +273,11 @@ void SAL_CALL SoundHandler::impl_initService()
     @threadsafe yes
 *//*-*************************************************************************************************************/
 SoundHandler::SoundHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
+        //	Init baseclasses first
         :   ThreadHelpBase      (          )
         ,   ::cppu::OWeakObject (          )
         // Init member
-    ,   m_bError        ( false    )
+    ,   m_bError		( false    )
         ,   m_xFactory          ( xFactory )
 {
     m_aUpdateTimer.SetTimeoutHdl(LINK(this, SoundHandler, implts_PlayerNotify));
@@ -335,7 +335,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
     // SAFE {
     const ::vos::OGuard aLock( m_aLock );
 
-    {
+    { 
     //close streams otherwise on windows we can't reopen the file in the
     //media player when we pass the url to directx as it'll already be open
         ::comphelper::MediaDescriptor aDescriptor(lDescriptor);

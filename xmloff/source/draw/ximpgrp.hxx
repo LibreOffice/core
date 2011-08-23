@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class SdXMLGroupShapeContext : public SdXMLShapeContext
 protected:
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
         { mxShapes = rNew; }
-
+    
 public:
     TYPEINFO();
 
@@ -56,7 +56,7 @@ public:
         sal_Bool bTemporaryShape);
     virtual ~SdXMLGroupShapeContext();
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext *CreateChildContext( 
         USHORT nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -69,4 +69,4 @@ public:
 };
 
 
-#endif  //  _XIMPGROUP_HXX
+#endif	//  _XIMPGROUP_HXX

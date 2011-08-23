@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ OUser::OUser(sal_Bool _bCase)  : OUser_BASE(m_aMutex)
 {
 }
 // -------------------------------------------------------------------------
-OUser::OUser(const ::rtl::OUString& _Name,sal_Bool _bCase) :    OUser_BASE(m_aMutex)
+OUser::OUser(const ::rtl::OUString& _Name,sal_Bool _bCase) :	OUser_BASE(m_aMutex)
                         ,ODescriptor(OUser_BASE::rBHelper,_bCase)
                         ,m_pGroups(NULL)
 {

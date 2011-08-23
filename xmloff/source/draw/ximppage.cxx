@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -212,11 +212,11 @@ void DrawAnnotationContext::EndElement()
 
 TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
 
-SdXMLGenericPageContext::SdXMLGenericPageContext(
+SdXMLGenericPageContext::SdXMLGenericPageContext( 
     SvXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList>& xAttrList,
-    Reference< drawing::XShapes >& rShapes)
+    Reference< drawing::XShapes >& rShapes) 
 : SvXMLImportContext( rImport, nPrfx, rLocalName )
 , mxShapes( rShapes )
 , mxAnnotationAccess( rShapes, UNO_QUERY )
@@ -344,9 +344,9 @@ void SdXMLGenericPageContext::EndElement()
 
                         if( pStyles )
                         {
-                            const SdXMLNumberFormatImportContext* pSdNumStyle =
+                            const SdXMLNumberFormatImportContext* pSdNumStyle = 
                                 dynamic_cast< const SdXMLNumberFormatImportContext* >( pStyles->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, aDateTimeFormat, sal_True ) );
-
+                        
                             if( pSdNumStyle )
                             {
                                 xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DateTimeFormat") ),
@@ -371,7 +371,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
 {
     // set PageProperties?
     if(rStyleName.getLength())
-    {
+    {	
         try
         {
             const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
@@ -387,7 +387,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                     if(pStyle && pStyle->ISA(XMLPropStyleContext))
                     {
                         XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
-
+                    
                         Reference <beans::XPropertySet> xPropSet1(mxShapes, uno::UNO_QUERY);
                         if(xPropSet1.is())
                         {
@@ -406,9 +406,9 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                                         xBackgroundSet = Reference< beans::XPropertySet >::query(
                                             xServiceFact->createInstance(
                                             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))));
-                                    }
+                                    }					
                                 }
-
+                                
                                 if( xBackgroundSet.is() )
                                     xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xBackgroundSet );
                             }
@@ -489,7 +489,7 @@ void SdXMLGenericPageContext::DeleteAllShapes()
     {
         Reference< drawing::XShape > xShape;
         uno::Any aAny(mxShapes->getByIndex(0L));
-
+        
         aAny >>= xShape;
 
         if(xShape.is())
@@ -623,7 +623,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         {
             if( !aEnumerator.getNextToken(sId) )
                 break;
-
+            
             aShapes[nIndex] = Reference< XShape >( rIdMapper.getReference( sId ), UNO_QUERY );
         }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1213,7 +1213,7 @@ void FormController::disposing(void)
     stopFiltering();
 
     m_pControlBorderManager->restoreAll();
-
+    
     m_aFilterRows.clear();
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1399,12 +1399,12 @@ bool FormController::replaceControl( const Reference< XControl >& _rxExistentCon
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
+  
     Reference< XControl > xDisposeIt( bSuccess ? _rxExistentControl : _rxNewControl );
     ::comphelper::disposeComponent( xDisposeIt );
     return bSuccess;
 }
-
+  
 //------------------------------------------------------------------------------
 void FormController::toggleAutoFields(sal_Bool bAutoFields)
 {
@@ -1574,7 +1574,7 @@ void FormController::modified( const EventObject& _rEvent ) throw( RuntimeExcept
     try
     {
         if ( _rEvent.Source != m_xActiveControl )
-        {   // let this control grab the focus
+        {	// let this control grab the focus
             // (this case may happen if somebody moves the scroll wheel of the mouse over a control
             // which does not have the focus)
             // 85511 - 29.05.2001 - frank.schoenheit@germany.sun.com
@@ -1754,8 +1754,8 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException )
     }
 
     // Immer noch ein und dasselbe Control
-    if  (   ( m_xActiveControl == xControl )
-        &&  ( xControl == m_xCurrentControl )
+    if	(	( m_xActiveControl == xControl )
+        &&	( xControl == m_xCurrentControl )
         )
     {
         DBG_ASSERT(m_xCurrentControl.is(), "Kein CurrentControl selektiert");
@@ -2728,7 +2728,7 @@ void FormController::unload() throw( RuntimeException )
 
     // remove bound field listing again
     removeBoundFieldListener();
-
+    
     if (m_bDBConnection && isListeningForChanges())
         stopListening();
 
@@ -3106,8 +3106,8 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                 UNO_QUERY_THROW );
 
             Reference< XPropertySet > xSet( xForm, UNO_QUERY );
-            ::rtl::OUString sStatement  = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_ACTIVECOMMAND ) );
-            ::rtl::OUString sFilter     = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_FILTER ) );
+            ::rtl::OUString	sStatement	= ::comphelper::getString( xSet->getPropertyValue( FM_PROP_ACTIVECOMMAND ) );
+            ::rtl::OUString sFilter		= ::comphelper::getString( xSet->getPropertyValue( FM_PROP_FILTER ) );
             m_xComposer->setElementaryQuery( sStatement );
             m_xComposer->setFilter( sFilter );
         }
@@ -3133,7 +3133,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
             iter != rFieldInfos.end(); iter++)
         {
-            if ( xQueryColumns->hasByName((*iter).aFieldName) )
+            if ( xQueryColumns->hasByName((*iter).aFieldName) ) 
             {
                 if ( (xQueryColumns->getByName((*iter).aFieldName) >>= (*iter).xField) && (*iter).xField.is() )
                     (*iter).xField->getPropertyValue(FM_PROP_REALNAME) >>= (*iter).aFieldName;
@@ -3411,7 +3411,7 @@ void FormController::stopFiltering()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     if ( !m_bFiltering ) // #104693# OJ
-    {   // nothing to do
+    {	// nothing to do
         return;
     }
 
@@ -4190,7 +4190,7 @@ void SAL_CALL FormController::addStatusListener( const Reference< XStatusListene
     if (_rURL.Complete == FMURL_CONFIRM_DELETION)
     {
         if (_rxListener.is())
-        {   // send an initial statusChanged event
+        {	// send an initial statusChanged event
             FeatureStateEvent aEvent;
             aEvent.FeatureURL = _rURL;
             aEvent.IsEnabled = sal_True;

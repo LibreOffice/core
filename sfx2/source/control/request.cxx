@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,24 +64,24 @@ using namespace ::com::sun::star;
 
 struct SfxRequest_Impl: public SfxListener
 
-/*  [Beschreibung]
+/* 	[Beschreibung]
 
     Implementations-Struktur der Klasse <SfxRequest>.
 */
 
 {
-    SfxRequest*         pAnti;       // Owner wegen sterbendem Pool
-    String              aTarget;     // ggf. von App gesetztes Zielobjekt
-    SfxItemPool*        pPool;       // ItemSet mit diesem Pool bauen
-    SfxPoolItem*        pRetVal;     // R"uckgabewert geh"ort sich selbst
+    SfxRequest*			pAnti;		 // Owner wegen sterbendem Pool
+    String				aTarget;	 // ggf. von App gesetztes Zielobjekt
+    SfxItemPool*        pPool;		 // ItemSet mit diesem Pool bauen
+    SfxPoolItem*		pRetVal;	 // R"uckgabewert geh"ort sich selbst
     SfxShell*           pShell;      // ausgef"uhrt an dieser Shell
-    const SfxSlot*      pSlot;       // ausgef"uhrter Slot
+    const SfxSlot*		pSlot;		 // ausgef"uhrter Slot
     USHORT              nModifier;   // welche Modifier waren gedrueckt?
-    BOOL                bDone;       // "uberhaupt ausgef"uhrt
-    BOOL                bIgnored;    // vom User abgebrochen
-    BOOL                bCancelled;  // nicht mehr zustellen
-    BOOL                bUseTarget;  // aTarget wurde von Applikation gesetzt
-    USHORT              nCallMode;   // Synch/Asynch/API/Record
+    BOOL				bDone;		 // "uberhaupt ausgef"uhrt
+    BOOL				bIgnored;	 // vom User abgebrochen
+    BOOL				bCancelled;	 // nicht mehr zustellen
+    BOOL				bUseTarget;	 // aTarget wurde von Applikation gesetzt
+    USHORT  			nCallMode;   // Synch/Asynch/API/Record
     BOOL                bAllowRecording;
     SfxAllItemSet*      pInternalArgs;
     SfxViewFrame*       pViewFrame;
@@ -101,8 +101,8 @@ struct SfxRequest_Impl: public SfxListener
     ~SfxRequest_Impl() { delete pInternalArgs; }
 
 
-    void                SetPool( SfxItemPool *pNewPool );
-    virtual void        Notify( SfxBroadcaster &rBC, const SfxHint &rHint );
+    void				SetPool( SfxItemPool *pNewPool );
+    virtual void		Notify( SfxBroadcaster &rBC, const SfxHint &rHint );
     void                Record( const uno::Sequence < beans::PropertyValue >& rArgs );
 };
 
@@ -154,7 +154,7 @@ SfxRequest::SfxRequest
 (
     const SfxRequest& rOrig
 )
-:   SfxHint( rOrig ),
+:	SfxHint( rOrig ),
     nSlot(rOrig.nSlot),
     pArgs(rOrig.pArgs? new SfxAllItemSet(*rOrig.pArgs): 0),
     pImp( new SfxRequest_Impl(this) )
@@ -190,7 +190,7 @@ SfxRequest::SfxRequest
 
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit diesem Konstruktor k"onnen Events, die nicht "uber den SfxDispatcher
     gelaufen sind (z.B aus KeyInput() oder Mouse-Events) nachtr"aglich
@@ -199,7 +199,7 @@ SfxRequest::SfxRequest
     eine <Slot-Execute-Methode> als Parameter gegeben wird.
 */
 
-:   nSlot(nSlotId),
+:	nSlot(nSlotId),
     pArgs(0),
     pImp( new SfxRequest_Impl(this) )
 {
@@ -235,14 +235,14 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    USHORT          nSlotId,    // auszuf"uhrende <Slot-Id>
-    SfxCallMode     nMode,      // Synch/API/...
-    SfxItemPool&    rPool       // ggf. f"ur das SfxItemSet f"ur Parameter
+    USHORT 			nSlotId, 	// auszuf"uhrende <Slot-Id>
+    SfxCallMode 	nMode,		// Synch/API/...
+    SfxItemPool&	rPool 		// ggf. f"ur das SfxItemSet f"ur Parameter
 )
 
 // creates a SfxRequest without arguments
 
-:   nSlot(nSlotId),
+:	nSlot(nSlotId),
     pArgs(0),
     pImp( new SfxRequest_Impl(this) )
 {
@@ -260,12 +260,12 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    const SfxSlot* pSlot,   // auszuf"uhrende <Slot-Id>
+    const SfxSlot* pSlot, 	// auszuf"uhrende <Slot-Id>
     const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rArgs,
-    SfxCallMode     nMode,      // Synch/API/...
-    SfxItemPool&    rPool       // ggf. f"ur das SfxItemSet f"ur Parameter
+    SfxCallMode 	nMode,		// Synch/API/...
+    SfxItemPool&	rPool 		// ggf. f"ur das SfxItemSet f"ur Parameter
 )
-:   nSlot(pSlot->GetSlotId()),
+:	nSlot(pSlot->GetSlotId()),
     pArgs(new SfxAllItemSet(rPool)),
     pImp( new SfxRequest_Impl(this) )
 {
@@ -286,14 +286,14 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    USHORT                  nSlotId,
-    USHORT                  nMode,
-    const SfxAllItemSet&    rSfxArgs
+    USHORT 					nSlotId,
+    USHORT					nMode,
+    const SfxAllItemSet&	rSfxArgs
 )
 
 // creates a SfxRequest with arguments
 
-:   nSlot(nSlotId),
+:	nSlot(nSlotId),
     pArgs(new SfxAllItemSet(rSfxArgs)),
     pImp( new SfxRequest_Impl(this) )
 {
@@ -351,7 +351,7 @@ void SfxRequest_Impl::Record
     const uno::Sequence < beans::PropertyValue >& rArgs    // aktuelle Parameter
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Interne Hilfsmethode zum erzeugen einer <SfxMacroStatement>-Instanz,
     welche den bereits ausgef"uhrten SfxRequest wiederholbar beschreibt.
@@ -413,12 +413,12 @@ void SfxRequest_Impl::Record
 void SfxRequest::Record_Impl
 (
     SfxShell& rSh,    // die <SfxShell>, die den Request ausgef"uhrt hat
-    const SfxSlot&  rSlot,  // der <SfxSlot>, der den Request ausgef"uhrt hat
+    const SfxSlot&	rSlot, 	// der <SfxSlot>, der den Request ausgef"uhrt hat
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,  // der Recorder, mit dem aufgezeichnet wird
     SfxViewFrame* pViewFrame
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese interne Methode markiert den SfxRequest als in dem angegebenen
     SfxMakro aufzuzeichnen.
@@ -470,10 +470,10 @@ void SfxRequest::RemoveItem( USHORT nID )
 
 const SfxPoolItem* SfxRequest::GetArg
 (
-    USHORT          nSlotId,    // Slot-Id oder Which-Id des Parameters
-    FASTBOOL        bDeep,      // FALSE: nicht in Parent-ItemSets suchen
-    TypeId          aType       // != 0:  RTTI Pruefung mit Assertion
-)   const
+    USHORT 			nSlotId, 	// Slot-Id oder Which-Id des Parameters
+    FASTBOOL 		bDeep,	 	// FALSE: nicht in Parent-ItemSets suchen
+    TypeId			aType		// != 0:  RTTI Pruefung mit Assertion
+) 	const
 {
     return GetItem( pArgs, nSlotId, bDeep, aType );
 }
@@ -483,12 +483,12 @@ const SfxPoolItem* SfxRequest::GetArg
 const SfxPoolItem* SfxRequest::GetItem
 (
     const SfxItemSet* pArgs,
-    USHORT          nSlotId,    // Slot-Id oder Which-Id des Parameters
-    bool            bDeep,      // false: nicht in Parent-ItemSets suchen
-    TypeId          aType       // != 0:  RTTI Pruefung mit Assertion
+    USHORT 			nSlotId, 	// Slot-Id oder Which-Id des Parameters
+    bool    		bDeep,	 	// false: nicht in Parent-ItemSets suchen
+    TypeId			aType		// != 0:  RTTI Pruefung mit Assertion
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode wird der Zugriff auf einzelne Parameter im
     SfxRequest wesentlich vereinfacht. Insbesondere wird die Typpr"ufung
@@ -569,12 +569,12 @@ const SfxPoolItem* SfxRequest::GetReturnValue() const
 
 void SfxRequest::Done
 (
-    const SfxItemSet&   rSet,   /*  von der Applikation mitgeteilte Parameter,
+    const SfxItemSet&	rSet,   /* 	von der Applikation mitgeteilte Parameter,
                                     die z.B. in einem Dialog vom Benuter
                                     erfragt wurden, ggf. 0 falls keine
                                     Parameter gesetzt wurden */
 
-    FASTBOOL            bKeep   /*  TRUE (default)
+    FASTBOOL 			bKeep	/*  TRUE (default)
                                     'rSet' wird gepeichert und ist "uber
                                     GetArgs() abfragbar
 
@@ -582,7 +582,7 @@ void SfxRequest::Done
                                     'rSet' wird nicht kopiert (schneller) */
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode mu\s in der <Execute-Methode> des <SfxSlot>s gerufen
     werden, der den SfxRequest ausgef"uhrt hat, wenn die Ausf"uhrung
@@ -599,7 +599,7 @@ void SfxRequest::Done
     [Anmerkung]
 
     'Done()' wird z.B. nicht gerufen, wenn ein durch die Funktion gestarteter
-    Dialog vom Benutzer abgebrochen wurde oder das Ausf"uhren aufgrund
+    Dialog vom Benutzer	abgebrochen wurde oder das Ausf"uhren aufgrund
     eines falschen Kontextes (ohne Verwendung separater <SfxShell>s)
     nicht durchgef"uhrt werden konnte. 'Done()' mu\s sehr wohl gerufen
     werden, wenn das Ausf"uhren der Funktion zu einem regul"aren Fehler
@@ -635,7 +635,7 @@ void SfxRequest::Done
 
 
 void SfxRequest::Done( BOOL bRelease )
-//  [<SfxRequest::Done(SfxItemSet&)>]
+//	[<SfxRequest::Done(SfxItemSet&)>]
 {
     Done_Impl( pArgs );
     if( bRelease )
@@ -661,7 +661,7 @@ BOOL SfxRequest::IsCancelled() const
 
 void SfxRequest::Cancel()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Markiert diesen Request als nicht mehr auszufuehren. Wird z.B. gerufen,
     wenn das Ziel (genauer dessen Pool) stirbt.
@@ -678,7 +678,7 @@ void SfxRequest::Cancel()
 
 void SfxRequest::Ignore()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Wird diese Methode anstelle von <SfxRequest::Done()> gerufen, dann
     wird dieser Request nicht recorded.
@@ -701,13 +701,13 @@ void SfxRequest::Ignore()
 
 void SfxRequest::Done_Impl
 (
-    const SfxItemSet*   pSet    /*  von der Applikation mitgeteilte Parameter,
+    const SfxItemSet*	pSet	/* 	von der Applikation mitgeteilte Parameter,
                                     die z.B. in einem Dialog vom Benuter
                                     erfragt wurden, ggf. 0 falls keine
                                     Parameter gesetzt wurden */
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Interne Methode zum als 'done' markieren des SfxRequest und zum Auswerten
     der Parameter in 'pSet' falls aufgezeichnet wird.
@@ -815,7 +815,7 @@ void SfxRequest::Done_Impl
 
 BOOL SfxRequest::IsDone() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode kann abgefragt werden, ob der SfxRequest tats"achlich
     ausgef"uhrt wurde oder nicht. Wurde ein SfxRequest nicht ausgef"uhrt,
@@ -840,7 +840,7 @@ BOOL SfxRequest::IsDone() const
 
 SfxMacro* SfxRequest::GetRecordingMacro()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode kann abgefragt werden, ob und in welchem <SfxMacro>
     die SfxRequests gerade aufgezeichnet werden.
@@ -891,7 +891,7 @@ BOOL SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 
 BOOL SfxRequest::IsAPI() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Liefert TRUE, wenn dieser SfxRequest von einer API (z.B. BASIC)
     erzeugt wurde, sonst FALSE.
@@ -906,7 +906,7 @@ BOOL SfxRequest::IsAPI() const
 
 FASTBOOL SfxRequest::IsRecording() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Liefert TRUE, wenn dieser SfxRequest recorded werden soll, d.h.
     1. zu Zeit ein Makro aufgezeichnet wird
@@ -935,7 +935,7 @@ USHORT SfxRequest::GetModifier() const
 
 void SfxRequest::SetTarget( const String &rTarget )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode kann das zu recordende Zielobjekt umgesetzt werden.
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ struct LinguMutex : public rtl::Static< osl::Mutex, LinguMutex >
 {
 };
 
-osl::Mutex &    GetLinguMutex()
+osl::Mutex &	GetLinguMutex()
 {
     return LinguMutex::get();
 }
@@ -282,7 +282,7 @@ BOOL IsUseDicList( const PropertyValues &rProperties,
             break;
         }
     }
-    if (i >= nLen)  // no temporary value found in 'rProperties'
+    if (i >= nLen)	// no temporary value found in 'rProperties'
     {
         uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
@@ -310,7 +310,7 @@ BOOL IsIgnoreControlChars( const PropertyValues &rProperties,
             break;
         }
     }
-    if (i >= nLen)  // no temporary value found in 'rProperties'
+    if (i >= nLen)	// no temporary value found in 'rProperties'
     {
         uno::Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
@@ -340,7 +340,7 @@ uno::Reference< XDictionaryEntry > SearchDicList(
         const OUString &rWord, INT16 nLanguage,
         BOOL bSearchPosDics, BOOL bSearchSpellEntry )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     uno::Reference< XDictionaryEntry > xEntry;
 
@@ -358,8 +358,8 @@ uno::Reference< XDictionaryEntry > SearchDicList(
     {
         uno::Reference< XDictionary > axDic( pDic[i], UNO_QUERY );
 
-        DictionaryType  eType = axDic->getDictionaryType();
-        INT16           nLang = LocaleToLanguage( axDic->getLocale() );
+        DictionaryType	eType = axDic->getDictionaryType();
+        INT16			nLang = LocaleToLanguage( axDic->getLocale() );
 
         if ( axDic.is() && axDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
@@ -460,7 +460,7 @@ sal_uInt8 AddEntryToDic(
 
 LanguageType LocaleToLanguage( const Locale& rLocale )
 {
-    //  empty Locale -> LANGUAGE_NONE
+    //	empty Locale -> LANGUAGE_NONE
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 
@@ -470,7 +470,7 @@ LanguageType LocaleToLanguage( const Locale& rLocale )
 
 Locale& LanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
-    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
+    if ( eLang != LANGUAGE_NONE	/* &&  eLang != LANGUAGE_SYSTEM */)
         MsLangId::convertLanguageToLocale( eLang, rLocale );
 
     return rLocale;
@@ -561,7 +561,7 @@ static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
                  aHyphenatedWord( rxHyphWord->getHyphenatedWord() );
         INT16   nHyphenationPos     = rxHyphWord->getHyphenationPos();
         /*INT16   nHyphenPos          = rxHyphWord->getHyphenPos()*/;
-        const sal_Unicode *pWord    = aWord.getStr(),
+        const sal_Unicode *pWord	= aWord.getStr(),
                           *pAltWord = aHyphenatedWord.getStr();
 
         // at least char changes directly left or right to the hyphen
@@ -572,7 +572,7 @@ static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
         //! to an extend.)
 
         // find first different char from left
-        sal_Int32   nPosL    = 0,
+        sal_Int32	nPosL    = 0,
                     nAltPosL = 0;
         for (INT16 i = 0 ;  pWord[ nPosL ] == pAltWord[ nAltPosL ];  nPosL++, nAltPosL++, i++)
         {
@@ -585,7 +585,7 @@ static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
         }
 
         // find first different char from right
-        sal_Int32   nPosR    = aWord.getLength() - 1,
+        sal_Int32	nPosR 	 = aWord.getLength() - 1,
                     nAltPosR = aHyphenatedWord.getLength() - 1;
         for ( ;  nPosR >= nPosL  &&  nAltPosR >= nAltPosL
                     &&  pWord[ nPosR ] == pAltWord[ nAltPosR ];
@@ -645,7 +645,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
     uno::Reference< XHyphenatedWord > xRes;
     if (rOrigWord.getLength() && rxHyphWord.is())
     {
-        INT16    nChgPos = 0,
+        INT16 	 nChgPos = 0,
                  nChgLen = 0;
         OUString aRplc;
         BOOL bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
@@ -716,7 +716,7 @@ static CharClass & lcl_GetCharClass()
 
 osl::Mutex & lcl_GetCharClassMutex()
 {
-    static osl::Mutex   aMutex;
+    static osl::Mutex	aMutex;
     return aMutex;
 }
 
@@ -728,7 +728,7 @@ BOOL IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLang
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
     sal_Int32 nFlags = rCC.getStringType( rText, nPos, nLen );
-    return      (nFlags & KCharacterType::UPPER)
+    return 		(nFlags & KCharacterType::UPPER)
             && !(nFlags & KCharacterType::LOWER);
 }
 
@@ -775,7 +775,7 @@ String ToTitle( const String &rText, INT16 nLanguage )
 }
 
 
-sal_Unicode ToLower( const sal_Unicode cChar, INT16 nLanguage )
+sal_Unicode	ToLower( const sal_Unicode cChar, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -785,7 +785,7 @@ sal_Unicode ToLower( const sal_Unicode cChar, INT16 nLanguage )
 }
 
 
-sal_Unicode ToUpper( const sal_Unicode cChar, INT16 nLanguage )
+sal_Unicode	ToUpper( const sal_Unicode cChar, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -974,11 +974,11 @@ void SAL_CALL
     AppExitListener::disposing( const EventObject& rEvtSource )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (xDesktop.is()  &&  rEvtSource.Source == xDesktop)
     {
-        xDesktop = NULL;    //! release reference to desktop
+        xDesktop = NULL;	//! release reference to desktop
     }
 }
 
@@ -987,7 +987,7 @@ void SAL_CALL
     AppExitListener::queryTermination( const EventObject& /*rEvtSource*/ )
         throw(frame::TerminationVetoException, RuntimeException)
 {
-    //MutexGuard    aGuard( GetLinguMutex() );
+    //MutexGuard	aGuard( GetLinguMutex() );
 }
 
 
@@ -995,7 +995,7 @@ void SAL_CALL
     AppExitListener::notifyTermination( const EventObject& rEvtSource )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
 
     if (xDesktop.is()  &&  rEvtSource.Source == xDesktop)
     {
@@ -1005,5 +1005,5 @@ void SAL_CALL
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
