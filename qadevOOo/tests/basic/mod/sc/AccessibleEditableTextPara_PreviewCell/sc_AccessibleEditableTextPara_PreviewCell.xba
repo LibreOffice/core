@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sc_AccessibleEditableTextPara_PreviewCell" script:language="StarBasic">
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' "com::sun::star::accessibility::XAccessibleEventBroadcaster"
+ ' needs the following Global variables:
+
+' "com::sun::star::accessibility::XAccessibleEditableText#optional"
+ ' needs the following Global variables:
+ ' global hasChangeableAttrs as boolean
+
+' "com::sun::star::accessibility::XAccessibleSelection#optional"
+ ' needs the following Global variables:
+ ' Global multiSelection As Boolean
+
+' "com::sun::star::accessibility::XAccessibleText"
+ ' needs the following Global variables:
+Global accText as String
+Global readOnly as Boolean
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' com.sun.star.sc.AccessibleEditableTextPara_PreviewCell
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim xRoot As Object, xDispatcher As Object
+    Dim xController As Object, xCell As Object
+    Dim url As New com.sun.star.util.URL
+    Dim urlTransformer As Object, oWin As Object
+    Dim noProps()
+
+    accText = "ScAccessibleEditableTextPara_PreviewCell"
+    oDoc = utils.createDocument("scalc",cObjectName)
+    xCell = oDoc.getSheets().getByIndex(0).getCellByPosition(0,0)
+    xCell.setFormula(accText)
+
+    xController = oDoc.getCurrentController()
+    urlTransformer = createUNOService("com.sun.star.util.URLTransformer")
+    url.Complete = ".uno:PrintPreview"
+    urlTransformer.parseStrict(url)
+    xDispatcher = xController.queryDispatch(url,"",0)
+    if (NOT isNull(xDispatcher)) then 
+        xDispatcher.dispatch(url, noProps())
+        wait(500)
+        oWin = utils.at_getCurrentWindow(oDoc)
+        xRoot = utils.at_getAccessibleObject(oWin)
+        ' get the  first cell
+        xRoot = utils.at_getAccessibleObjectForRole(xRoot, _
+             com.sun.star.accessibility.AccessibleRole.TABLE_CELL,"Cell A1")
+        ' the the Paragraph
+        oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+             com.sun.star.accessibility.AccessibleRole.PARAGRAPH,"Paragraph 0")
+        utils.at_printAccessibleTree(xRoot)
+        readOnly = true
+    else
+        Out.Log("QueryDispatch FAILED. Cannot switch to Preview mode...")
+        Exit Sub
+    End If
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+Sub fireEvent()
+    Dim dispatcher as Object
+    dispatcher = createUnoService("com.sun.star.frame.DispatchHelper")
+    
+    rem ----------------------------------------------------------------------
+    dispatcher.executeDispatch(oDoc.CurrentController.Frame, ".uno:ZoomIn", "", 0, Array())
+    wait(500)
+    rem ----------------------------------------------------------------------
+    dispatcher.executeDispatch(oDoc.CurrentController.Frame, ".uno:ZoomOut", "", 0, Array())
+end Sub
+</script:module>

@@ -1,0 +1,6 @@
+rb	remotebridges	:	bridges rdbmaker NULL
+rb	remotebridges							usr1	-	all	rb_mkout NULL
+rb	remotebridges\source\bridge				nmake	-	all	rb_iiop NULL
+rb	remotebridges\source\factory			nmake	-	all	rb_factory NULL
+rb	remotebridges\source\unourl_resolver	nmake	-	all	rb_urlresolv NULL
+rb	remotebridges\source\dynamicloader		nmake	-	all	rb_dynloader NULL

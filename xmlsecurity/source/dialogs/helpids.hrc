@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _XMLSEC_HELPIDS_HRC
+#define _XMLSEC_HELPIDS_HRC
+
+// include ---------------------------------------------------------------
+
+#include <svl/solar.hrc>
+
+// Help-Ids --------------------------------------------------------------
+
+#define HID_XMLSEC_TP_MACROSEC              (HID_XMLSECURITY_START +   0)
+#define HID_XMLSEC_TP_SECLEVEL              (HID_XMLSECURITY_START +   1)
+#define HID_XMLSEC_TP_TRUSTSOURCES          (HID_XMLSECURITY_START +   2)
+#define HID_XMLSEC_DLG_CERTVIEWER           (HID_XMLSECURITY_START +   3)
+#define HID_XMLSEC_TP_GENERAL               (HID_XMLSECURITY_START +   4)
+#define HID_XMLSEC_TP_DETAILS               (HID_XMLSECURITY_START +   5)
+#define HID_XMLSEC_TP_CERTPATH              (HID_XMLSECURITY_START +   6)
+#define HID_XMLSEC_DLG_DIGSIG               (HID_XMLSECURITY_START +   7)
+#define HID_XMLSEC_TP_MACROWARN             (HID_XMLSECURITY_START +   8)
+#define HID_XMLSEC_DLG_CERTCHOOSER          (HID_XMLSECURITY_START +   9)
+#define HID_XMLSEC_CTRL_TRUSTSOURCES        (HID_XMLSECURITY_START +  10)
+#define HID_XMLSEC_CTRL_ELEMENTS            (HID_XMLSECURITY_START +  11)
+#define HID_XMLSEC_CTRL_VIEWSIGNATURES      (HID_XMLSECURITY_START +  12)
+#define HID_XMLSEC_CTRL_SIGNATURESDLG       (HID_XMLSECURITY_START +  13)
+#define HID_XMLSEC_CTRL_CHOOSESIGNATURES    (HID_XMLSECURITY_START +  14)
+#define HID_XMLSEC_TREE_SIGNATURESDLG       (HID_XMLSECURITY_START +  15)
+
+// pb: please update ACT_XMLSECURITY_HID_END below, thx.
+
+// -----------------------------------------------------------------------
+// overflow check --------------------------------------------------------
+// -----------------------------------------------------------------------
+
+#define ACT_XMLSECURITY_HID_END     HID_XMLSEC_TREE_SIGNATURESDLG
+
+#if ACT_XMLSECURITY_HID_END > HID_XMLSECURITY_END
+#error helpids overflow in #line, #file
+#endif
+
+#endif // #ifndef _XMLSEC_HELPIDS_HRC
+

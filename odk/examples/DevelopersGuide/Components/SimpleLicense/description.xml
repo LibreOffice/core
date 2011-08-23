@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+        
+    <registration>
+        <simple-license  accept-by="admin" default-license-id="de">
+            <license-text xlink:href="registration/license_de.txt" lang="de" license-id="de" />
+            <license-text xlink:href="registration/license_en_US.txt" lang="en-US" />
+        </simple-license>
+    </registration>
+</description>
+

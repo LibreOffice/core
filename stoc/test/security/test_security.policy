@@ -1,0 +1,37 @@
+/** dbo
+    permissions
+*/
+grant user "dbo"{
+      permission com.sun.star.io.FilePermission "file:///home/dbo/-", ",,read , write ";
+      permission com.sun.star.io.FilePermission "-", "read ,write";
+      permission com.sun.star.connection.SocketPermission "dbo-1:1024-", "listen";
+	permission com.sun.star.security.RuntimePermission "DBO";
+      permission com.sun.star.connection.SocketPermission "dbo-11081:-1023", "resolve";
+      permission com.sun.star.connection.SocketPermission "dbo-11081:18", "listen";
+      permission com.sun.star.connection.SocketPermission "dbo-11081:20-24", "listen";
+      permission com.sun.star.connection.SocketPermission "dbo-11081", "connect";
+      permission com.sun.star.io.FilePermission "file:///usr/local/dbo/*" , "read ";};
+grant user "jbu" {
+permission com.sun.star.security.RuntimePermission "JBU";
+permission com.sun.star.io.FilePermission  "file:///home/jbu/-" ,"read,write,";
+/*jbu resolve*/permission com.sun.star.connection.SocketPermission "jbu-11096","resolve";
+ permission com.sun.star.io.FilePermission "*",",read,write";};	grant user "root"{permission com.sun.star.security.AllPermission;};
+
+// granted to anyone
+ grant
+{
+	// read out this file
+	permission com.sun.star.io.FilePermission "../../test/security/test_security.policy",
+						  "read";
+
+	permission com.sun.star.security.RuntimePermission "DEF";
+	permission com.sun.star.io.FilePermission "file:///usr/bin/*", "read";
+	permission com.sun.star.io.FilePermission "file:///usr/bin/*", "read";
+	permission com.sun.star.io.FilePermission "file:///tmp/-", "read, write";
+	permission com.sun.star.io.FilePermission "file:///etc/profile", "read,,";
+	permission com.sun.star.connection.SocketPermission "127.0.0.1:-1023", "resolve, connect, listen";
+	permission com.sun.star.connection.SocketPermission "localhost:1024-", "accept, connect, listen, resolve,";
+	permission com.sun.star.connection.SocketPermission "*.sun.com:1024-", "resolve";
+ } ;
+
+# eof

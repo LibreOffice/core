@@ -1,0 +1,2 @@
+RegistrationClassName: com.sun.star.wizards.table.CallTableWizard
+UNO-Type-Path: 

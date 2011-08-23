@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="helpid:10104" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Square" toolbar:helpid="helpid:10380" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Rect_Rounded" toolbar:helpid="helpid:10105" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Square_Rounded" toolbar:helpid="helpid:10381" toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:Rect_Unfilled" toolbar:helpid="helpid:10378" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Square_Unfilled" toolbar:helpid="helpid:10382" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Rect_Rounded_Unfilled" toolbar:helpid="helpid:10379" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Square_Rounded_Unfilled" toolbar:helpid="helpid:10383" toolbar:style="radio" />
+</toolbar:toolbar>

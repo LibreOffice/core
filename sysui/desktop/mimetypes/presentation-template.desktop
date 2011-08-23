@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=presentation-template
+Type=MimeType
+Patterns=*.sti
+MimeType=application/vnd.sun.xml.impress.template
+Comment=%PRODUCTNAME Presentation Template

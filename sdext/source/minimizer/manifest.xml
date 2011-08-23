@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.uno-component;type=native"
+                       manifest:full-path="SunPresentationMinimizer.unoSHARED_EXTENSION"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-schema"
+                       manifest:full-path="registry/schema/org/openoffice/Office/extension/SunPresentationMinimizer.xcs"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+                       manifest:full-path="registry/data/org/openoffice/Office/extension/SunPresentationMinimizer.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+                       manifest:full-path="registry/data/org/openoffice/Office/Addons.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+                       manifest:full-path="registry/data/org/openoffice/Office/ProtocolHandler.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.package-bundle-description"
+                       manifest:full-path="help/component.txt"/>
+</manifest:manifest>

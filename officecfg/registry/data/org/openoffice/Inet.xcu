@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
+<oor:component-data oor:name="Inet" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="Settings">
+    <prop oor:name="ooInetNoProxy">
+      <value install:module="macosx" oor:external=
+          "com.sun.star.configuration.backend.MacOSXBackend ooInetNoProxy"/>
+      <value install:module="unixdesktop" oor:external=
+          "com.sun.star.configuration.backend.DesktopBackend ooInetNoProxy"/>
+      <value install:module="wnt" oor:external=
+          "com.sun.star.configuration.backend.WinInetBackend ooInetNoProxy"/>
+    </prop>
+    <prop oor:name="ooInetProxyType">
+      <value>1</value>
+      <value install:module="macosx" oor:external=
+          "com.sun.star.configuration.backend.MacOSXBackend ooInetProxyType"/>
+      <value install:module="unixdesktop" oor:external=
+          "com.sun.star.configuration.backend.DesktopBackend ooInetProxyType"/>
+      <value install:module="wnt" oor:external=
+          "com.sun.star.configuration.backend.WinInetBackend ooInetProxyType"/>
+    </prop>
+    <prop oor:name="ooInetFTPProxyName">
+      <value install:module="macosx" oor:external=
+         "com.sun.star.configuration.backend.MacOSXBackend ooInetFTPProxyName"/>
+      <value install:module="unixdesktop" oor:external=
+        "com.sun.star.configuration.backend.DesktopBackend ooInetFTPProxyName"/>
+      <value install:module="wnt" oor:external=
+        "com.sun.star.configuration.backend.WinInetBackend ooInetFTPProxyName"/>
+    </prop>
+    <prop oor:name="ooInetFTPProxyPort">
+      <value install:module="macosx" oor:external=
+         "com.sun.star.configuration.backend.MacOSXBackend ooInetFTPProxyPort"/>
+      <value install:module="unixdesktop" oor:external=
+        "com.sun.star.configuration.backend.DesktopBackend ooInetFTPProxyPort"/>
+      <value install:module="wnt" oor:external=
+        "com.sun.star.configuration.backend.WinInetBackend ooInetFTPProxyPort"/>
+    </prop>
+    <prop oor:name="ooInetHTTPProxyName">
+      <value install:module="macosx" oor:external=
+        "com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPProxyName"/>
+      <value install:module="unixdesktop" oor:external=
+       "com.sun.star.configuration.backend.DesktopBackend ooInetHTTPProxyName"/>
+      <value install:module="wnt" oor:external=
+       "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPProxyName"/>
+    </prop>
+    <prop oor:name="ooInetHTTPProxyPort">
+      <value install:module="macosx" oor:external=
+        "com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPProxyPort"/>
+      <value install:module="unixdesktop" oor:external=
+       "com.sun.star.configuration.backend.DesktopBackend ooInetHTTPProxyPort"/>
+      <value install:module="wnt" oor:external=
+       "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPProxyPort"/>
+    </prop>
+    <prop oor:name="ooInetHTTPSProxyName">
+      <value install:module="macosx" oor:external=
+       "com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPSProxyName"/>
+      <value install:module="unixdesktop" oor:external=
+      "com.sun.star.configuration.backend.DesktopBackend ooInetHTTPSProxyName"/>
+      <value install:module="wnt" oor:external=
+      "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPSProxyName"/>
+    </prop>
+    <prop oor:name="ooInetHTTPSProxyPort">
+      <value install:module="macosx" oor:external=
+       "com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPSProxyPort"/>
+      <value install:module="unixdesktop" oor:external=
+      "com.sun.star.configuration.backend.DesktopBackend ooInetHTTPSProxyPort"/>
+      <value install:module="wnt" oor:external=
+      "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPSProxyPort"/>
+    </prop>
+  </node>
+  <node oor:name="SearchEngines">
+    <node oor:name="Euroseek" oor:op="replace">
+      <node oor:name="And">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;language=en</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;language=en</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;language=en</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Lycos" oor:op="replace">
+      <node oor:name="And">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.lycos.com/default.asp?loc=searchbox&amp;query=&amp;adv=1&amp;tab=web&amp;wfr=%2B&amp;wfw=&amp;wfq=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;wfr=&amp;wfw=&amp;wfq=&amp;wfr=-&amp;wfw=&amp;wfq=&amp;wfc=3&amp;df0=i&amp;dfq=&amp;df1=e&amp;dfq=&amp;dfc=2&amp;lang=&amp;adf=-2&amp;ca=&amp;submit_button=Submit+Search</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.lycos.com/default.asp?lpv=1&amp;loc=searchhp&amp;tab=web&amp;query=%22</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.lycos.com/default.asp?loc=searchbox&amp;query=&amp;adv=1&amp;tab=web&amp;wfr=&amp;wfw=&amp;wfq=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;wfr=&amp;wfw=&amp;wfq=&amp;wfr=-&amp;wfw=&amp;wfq=&amp;wfc=3&amp;df0=i&amp;dfq=&amp;df1=e&amp;dfq=&amp;dfc=2&amp;lang=&amp;adf=-2&amp;ca=&amp;submit_button=Submit+Search</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="AltaVista" oor:op="replace">
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.altavista.com/web/results/?qbmode=&amp;aqa=&amp;aqp=&amp;aqo=</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;aqn=&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+      </node>
+      <node oor:name="And">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.altavista.com/web/results/?qbmode=&amp;aqa=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;aqp=&amp;aqo=&amp;aqn=&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.altavista.com/web/results?q=%22</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Google" oor:op="replace">
+      <node oor:name="And">
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;btnG=Google+Search</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.google.com/search?hl=en&amp;lr=&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.google.com/search?hl=en&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=%22</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;btnG=Google+Search</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.google.com/search?as_q=&amp;num=10&amp;hl=en&amp;ie=UTF-8&amp;oe=UTF-8&amp;btnG=Google+Search&amp;as_epq=&amp;as_oq=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;as_eq=&amp;lr=&amp;as_ft=i&amp;as_filetype=&amp;as_qdr=all&amp;as_occt=any&amp;as_dt=i&amp;as_sitesearch=&amp;safe=images</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Hotbot" oor:op="replace">
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.hotbot.com/default.asp?prov=HotBot&amp;query=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;ps=&amp;loc=searchbox&amp;tab=web</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="And">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.hotbot.com/adv.asp?prov=HotBot&amp;query=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;ps=&amp;loc=searchbox&amp;tab=web&amp;lang=&amp;dfi=&amp;dfe=&amp;region=&amp;wfc=2&amp;wfr=%2B&amp;wfw=&amp;wfq=&amp;wfr=&amp;wfw=&amp;wfq=&amp;date=0&amp;past=&amp;dateop=after</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.hotbot.com/default.asp?prov=HotBot&amp;query=%22</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;ps=&amp;loc=searchbox&amp;tab=web&amp;wfc=2&amp;wfr=%22&amp;wfr=&amp;wfw=&amp;wfw=&amp;wfq=&amp;wfq=</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Excite" oor:op="replace">
+      <node oor:name="And">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://msxml.excite.com/_1_2Z31TR6046OF684__info.xcite/dog/results?otmpl=dog/webresults.htm&amp;qcat=web&amp;ran=30967&amp;qkw=</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;submit=Search&amp;method=0&amp;dpcollation=1&amp;eng1=About&amp;eng2=askjeeves&amp;eng3=Fast&amp;eng4=FindWhat&amp;eng5=LookSmart&amp;eng6=OpenDirectory&amp;eng7=Overture&amp;eng8=Sprinks&amp;eng9=MetaSearchPicks&amp;eng10=paidinclusion&amp;eng11=Google&amp;eng12=Inktomi&amp;eng13=SearchHippo&amp;eng14=teoma&amp;qk=20&amp;rpe=10&amp;timeout=0&amp;top=1&amp;start=&amp;ver=28494</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://msxml.excite.com/_1_2MDNTR6046U4NZ2__info.xcite/dog/results?otmpl=dog/webresults.htm&amp;qcat=web&amp;qkw=%22</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;qk=20&amp;method=&amp;top=1&amp;start=&amp;ver=4734</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://msxml.excite.com/_1_2V4FTR6046L4NP8__info.xcite/dog/results?otmpl=dog/webresults.htm&amp;qcat=web&amp;ran=30967&amp;qkw=</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;submit=Search&amp;method=1&amp;dpcollation=1&amp;eng1=About&amp;eng2=askjeeves&amp;eng3=Fast&amp;eng4=FindWhat&amp;eng5=LookSmart&amp;eng6=OpenDirectory&amp;eng7=Overture&amp;eng8=Sprinks&amp;eng9=MetaSearchPicks&amp;eng10=paidinclusion&amp;eng11=Google&amp;eng12=Inktomi&amp;eng13=SearchHippo&amp;eng14=teoma&amp;qk=20&amp;rpe=10&amp;timeout=0&amp;top=1&amp;start=&amp;ver=9634</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Yahoo" oor:op="replace">
+      <node oor:name="And">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.yahoo.com/search?x=op&amp;va=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;va_vt=any&amp;vst=0&amp;vd=all&amp;fl=0&amp;ei=ISO-8859-1&amp;vm=p&amp;n=20</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.yahoo.com/search?p=%22</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;fr=fp-top</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.yahoo.com/search?x=op&amp;vo=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;vo_vt=any&amp;vst=0&amp;vd=all&amp;fl=0&amp;ei=ISO-8859-1&amp;vm=p&amp;n=20</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

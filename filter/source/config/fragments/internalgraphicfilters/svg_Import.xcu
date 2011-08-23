@@ -1,0 +1,10 @@
+    <node oor:name="svg_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>svg_Scalable_Vector_Graphics</value></prop>
+        <prop oor:name="FormatName"><value>svgfilter</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">SVG - Scalable Vector Graphics</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

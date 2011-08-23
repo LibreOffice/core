@@ -1,0 +1,2 @@
+RegistrationClassName: com.sun.star.wizards.fax.CallWizard
+UNO-Type-Path: 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parcel language="Java" xmlns:parcel="scripting.dtd">
+    <script language="Java">
+        <locale lang="en">
+            <displayname value="MemoryUtils.MemUsage"/>
+            <description>
+                Text highlighting
+            </description>
+        </locale>
+        <functionname value="MemoryUsage.updateMemoryUsage"/>
+        <logicalname value="MemoryUtils.MemUsage"/>
+        <languagedepprops>
+            <prop name="classpath" value="MemoryUsage.jar"/>
+        </languagedepprops>
+    </script>
+</parcel>

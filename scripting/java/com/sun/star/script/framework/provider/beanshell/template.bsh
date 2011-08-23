@@ -1,0 +1,48 @@
+/*
+    Import standard OpenOffice.org API classes. For more information on
+    these classes and the OpenOffice.org API, see the OpenOffice.org
+    Developers Guide at:
+
+    http://api.openoffice.org/
+*/
+
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
+
+/*
+    Import XScriptContext class. An instance of this class is available
+    to all BeanShell scripts in the global variable "XSCRIPTCONTEXT". This
+    variable can be used to access the document for which this script
+    was invoked.
+
+    Methods available are: 
+
+        XSCRIPTCONTEXT.getDocument() returns XModel
+        XSCRIPTCONTEXT.getInvocationContext() returns XScriptInvocationContext or NULL
+        XSCRIPTCONTEXT.getDesktop() returns XDesktop
+        XSCRIPTCONTEXT.getComponentContext() returns XComponentContext
+
+    For more information on using this class see the scripting
+    developer guides at:
+
+        http://api.openoffice.org/docs/DevelopersGuide/ScriptingFramework/ScriptingFramework.xhtml
+*/
+        
+// Hello World in BeanShell
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextRange;
+
+oDoc = UnoRuntime.queryInterface(XModel.class,XSCRIPTCONTEXT.getInvocationContext());
+if ( oDoc == null )
+  oDoc = XSCRIPTCONTEXT.getDocument();
+
+xTextDoc = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class,oDoc);
+xText = xTextDoc.getText();
+xTextRange = xText.getEnd();
+xTextRange.setString( "Hello World (in BeanShell)" );
+
+// BeanShell OpenOffice.org scripts should always return 0
+return 0;

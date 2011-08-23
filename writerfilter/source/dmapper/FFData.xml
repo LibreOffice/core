@@ -1,0 +1,58 @@
+<model>
+  <class name="FFDataHandler">
+    <parent name="Properties"/>      
+    <typedef name="Pointer_t" type="shared_ptr"/>
+    <typedef name="DropDownEntries_t">
+      <vector type="OUString"/>
+    </typedef>
+    <member name="name" type="OUString"/>
+    <member name="enabled" type="bool"/>
+    <member name="calcOnExit" type="bool"/>
+    <member name="entryMacro" type="OUString"/>
+    <member name="exitMacro" type="OUString"/>
+    <member name="helpTextType" type="sal_uInt32"/>
+    <member name="helpText" type="OUString"/>
+    <member name="statusTextType" type="sal_uInt32"/>
+    <member name="statusText" type="OUString"/>
+    <member name="checkboxHeight" type="sal_uInt32"/>
+    <member name="checkboxAutoHeight" type="bool"/>
+    <member name="checkboxDefault" type="bool"/>
+    <member name="checkboxChecked" type="bool"/>
+    <member name="dropDownResult" type="OUString"/>
+    <member name="dropDownDefault" type="OUString"/>
+    <member name="dropDownEntries" type="DropDownEntries_t"/>
+    <member name="textType" type="sal_uInt32"/>
+    <member name="textMaxLength" type="sal_uInt32"/>
+    <member name="textDefault" type="OUString"/>
+    <member name="textFormat" type="OUString"/>
+    <sprm>
+      <element name="name" action="set" id="NS_ooxml::LN_CT_FFData_name"/>
+      <element name="enabled" action="set" id="NS_ooxml::LN_CT_FFData_enabled"/>
+      <element name="calcOnExit" action="set" id="NS_ooxml::LN_CT_FFData_calcOnExit"/>
+      <element name="entryMacro" action="set" id="NS_ooxml::LN_CT_FFData_entryMacro"/>
+      <element name="exitMacro" action="set" id="NS_ooxml::LN_CT_FFData_exitMacro"/>
+      <element name="helpText" action="resolve" id="NS_ooxml::LN_CT_FFData_helpText"/>
+      <element name="statusText" action="resolve" id="NS_ooxml::LN_CT_FFData_statusText"/>
+      <element name="size" member="checkboxHeight" action="set" id="NS_ooxml::LN_CT_FFCheckBox_size"/>
+      <element name="sizeAuto" member="checkboxAutoHeight" action="set" id="NS_ooxml::LN_CT_FFCheckBox_sizeAuto"/>
+      <element name="default" member="checkboxDefault" action="set" id="NS_ooxml::LN_CT_FFCheckBox_default"/>
+      <element name="checked" member="checkboxChecked" action="set" id="NS_ooxml::LN_CT_FFCheckBox_checked"/>
+      <element name="checkBox" action="resolve" id="NS_ooxml::LN_CT_FFData_checkBox"/>
+      <element name="result" member="dropDownResult" action="set" id="NS_ooxml::LN_CT_FFDDList_result"/>
+      <element name="default" member="dropDownDefault" action="set" id="NS_ooxml::LN_CT_FFDDList_default"/>
+      <element name="listEntry" member="dropDownEntries" action="pushback" id="NS_ooxml::LN_CT_FFDDList_listEntry"/>
+      <element name="ddList" action="resolve" id="NS_ooxml::LN_CT_FFData_ddList"/>
+      <element name="type" member="textType" action="set" id="NS_ooxml::LN_CT_FFTextInput_type"/>
+      <element name="default" member="textDefault" action="set" id="NS_ooxml::LN_CT_FFTextInput_default"/>
+      <element name="maxLength" member="textMaxLength" action="set" id="NS_ooxml::LN_CT_FFTextInput_maxLength"/>
+      <element name="format" member="textFormat" action="set" id="NS_ooxml::LN_CT_FFTextInput_format"/>
+      <element name="textInput" action="resolve" id="NS_ooxml::LN_CT_FFData_textInput"/>
+    </sprm>
+    <attribute>
+      <attribute name="helpText:type" member="helpTextType" id="NS_ooxml::LN_CT_FFHelpText_type"/>
+      <attribute name="helpText:val" member="helpText" id="NS_ooxml::LN_CT_FFHelpText_val"/>
+      <attribute name="statusText:type" member="statusTextType" id="NS_ooxml::LN_CT_FFStatusText_type"/>
+      <attribute name="statusText:val" member="statusText" id="NS_ooxml::LN_CT_FFStatusText_val"/>
+    </attribute>
+  </class>
+</model>

@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XWindow" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+
+'*************************************************************************
+'       Global oXWindow as Object
+'       Global oCtrlShape as Variant (could be NULL)
+
+
+Dim bCB1_windowResized As Boolean
+Dim bCB2_windowResized As Boolean
+Dim bCB1_windowMoved As Boolean
+Dim bCB2_windowMoved As Boolean
+Dim bCB1_windowHidden As Boolean
+Dim bCB2_windowHidden As Boolean
+Dim bCB1_windowShown As Boolean
+Dim bCB2_windowShown As Boolean
+Dim bCB1_disposing As Boolean
+Dim bCB2_disposing As Boolean
+Dim bCB3_focusGained As Boolean
+Dim bCB4_focusGained As Boolean
+Dim bCB3_focusLost As Boolean
+Dim bCB4_focusLost As Boolean
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XWindow
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    If isNull(oXWindow) Then
+		Out.Log("Could not get relation 'oXWindow' !")
+    End If
+    Dim oListener1 As Object, oListener2 As Object
+    Dim oListener3 As Object, oListener4 As Object
+    Dim oListener5 As Object, oListener6 As Object
+    Dim oListener7 As Object, oListener8 As Object
+    Dim oListener9 As Object, oListener10 As Object
+    Dim oListener11 As Object, oListener12 As Object
+    Dim size As Variant, pos As Variant
+    
+    bCB1_windowResized = false
+    bCB2_windowResized = false
+    bCB1_windowMoved = false
+    bCB2_windowMoved = false
+    bCB1_windowHidden = false
+    bCB2_windowHidden = false
+    bCB1_windowShown = false
+    bCB2_windowShown = false
+    bCB1_disposing = false
+    bCB2_disposing = false
+    bCB3_focusGained = false
+    bCB4_focusLost = false
+    bCB3_focusGained = false
+    bCB4_focusLost = false
+
+    Out.Log("create two com.sun.star.awt.XWindowListener")
+    oListener1 = createUNOListener("CB1_", "com.sun.star.awt.XWindowListener")
+    oListener2 = createUNOListener("CB2_", "com.sun.star.awt.XWindowListener")
+    Out.Log("create two  com.sun.star.awt.XFocusListener")
+    oListener3 = createUNOListener("CB3_", "com.sun.star.awt.XFocusListener")
+    oListener4 = createUNOListener("CB4_", "com.sun.star.awt.XFocusListener")
+    Out.Log("create two com.sun.star.awt.XKeyListener")
+    oListener5 = createUNOListener("CB5_", "com.sun.star.awt.XKeyListener")
+    oListener6 = createUNOListener("CB6_", "com.sun.star.awt.XKeyListener")
+    Out.Log("create two com.sun.star.awt.XMouseListener")
+    oListener7 = createUNOListener("CB7_", "com.sun.star.awt.XMouseListener")
+    oListener8 = createUNOListener("CB8_", "com.sun.star.awt.XMouseListener")
+    Out.Log("create two com.sun.star.awt.XMouseMotionListener")
+    oListener9 = createUNOListener("CB9_", "com.sun.star.awt.XMouseMotinListener")
+    oListener10 = createUNOListener("CB10_", "com.sun.star.awt.XMouseMotinListener")
+    Out.Log("create two com.sun.star.awt.XPaintListener")
+    oListener11 = createUNOListener("CB11_", "com.sun.star.awt.XPaintListener")
+    oListener12 = createUNOListener("CB12_", "com.sun.star.awt.XPaintListener")
+
+    Test.StartMethod("setPosSize()")
+    bOK = true
+    oObj.setPosSize(250,250,250,250,com.sun.star.awt.PosSize.POSSIZE)
+    Out.Log("oObj.setPosSize(250,250,250,250,com.sun.star.awt.PosSize.POSSIZE")
+    Test.StartMethod("getPosSize()")
+    Dim vRectangle As Variant
+    vRectangle = oObj.getPosSize()
+    Out.Log("Returned Values: X=" + vRectangle.X + " Y=" + vRectangle.Y _
+           + " WIDTH=" + vRectangle.WIDTH + " HEIGTH=" + vRectangle.HEIGHT
+    bOK = bOK AND vRectangle.X = 250
+    bOK = bOK AND vRectangle.Y = 250
+    bOK = bOK AND vRectangle.Width = 250
+    bOK = bOK AND vRectangle.Height = 250
+    Test.MethodTested("setPosSize()", bOK)
+    Test.MethodTested("getPosSize()", bOK)
+
+    Test.StartMethod("setVisible()")
+    bOK = true
+    oObj.setVisible(false)
+    oObj.setVisible(true)
+    Test.MethodTested("setVisible()", bOK)
+
+    Test.StartMethod("setEnable()")
+    bOK = true
+    oObj.setEnable(false)
+    oObj.setEnable(true)
+    Test.MethodTested("setEnable()", bOK)
+
+    Test.StartMethod("setFocus()")
+    bOK = true
+    oObj.setFocus()
+    oXWindow.setFocus()
+    oObj.setFocus()
+    Test.MethodTested("setFocus()", bOK)
+
+    Test.StartMethod("addWindowListener()")
+    bOK = true
+    oObj.addWindowListener(oListener1)
+    oObj.addWindowListener(oListener2)
+    oObj.setVisible(false)
+    oObj.setVisible(true)
+    if NOT isNull(oCtrlShape) then
+        size = oCtrlShape.Size
+        size.Width = size.Width + 100
+        size.Height = size.Height + 100
+        oCtrlShape.Size = size
+        
+        pos = oCtrlShape.Position
+        pos.X = pos.X + 100
+        pos.Y = pos.Y + 100
+        oCtrlShape.Position = pos
+    else
+        Out.Log("oObj.setPosSize(300,300,300,300,com.sun.star.awt.PosSize.POSSIZE)")
+        oObj.setPosSize(300,300,300,300,com.sun.star.awt.PosSize.POSSIZE)
+    end if
+    wait(1000)
+    bOK = bOK AND bCB1_windowResized AND bCB2_windowResized AND bCB1_windowMoved AND _
+          bCB2_windowMoved AND bCB1_windowHidden AND bCB2_windowHidden AND _
+          bCB1_windowShown AND bCB2_windowShown AND NOT bCB1_disposing AND NOT _
+          bCB2_disposing
+    Test.MethodTested("addWindowListener()", bOK)
+
+    Test.StartMethod("removeWindowListener()")
+    bOK = true
+    bCB1_windowResized = false
+    bCB2_windowResized = false
+    bCB1_windowMoved = false
+    bCB2_windowMoved = false
+    bCB1_windowHidden = false
+    bCB2_windowHidden = false
+    bCB1_windowShown = false
+    bCB2_windowShown = false
+    bCB1_disposing = false
+    bCB2_disposing = false
+    oObj.removeWindowListener(oListener2)
+    oObj.setVisible(false)
+    oObj.setVisible(true)
+    oObj.setVisible(false)
+    oObj.setVisible(true)
+    if NOT isNull(oCtrlShape) then
+        size = oCtrlShape.Size
+        size.Width = size.Width + 100
+        size.Height = size.Height + 100
+        oCtrlShape.Size = size
+        
+        pos = oCtrlShape.Position
+        pos.X = pos.X + 100
+        pos.Y = pos.Y + 100
+        oCtrlShape.Position = pos
+    else
+        Out.Log("oObj.setPosSize(300,300,300,300,com.sun.star.awt.PosSize.POSSIZE)")
+        oObj.setPosSize(301,301,301,301,com.sun.star.awt.PosSize.POSSIZE)
+    end if
+    wait(200)
+    bOK = bOK AND bCB1_windowResized AND NOT bCB2_windowResized AND bCB1_windowMoved AND NOT _
+          bCB2_windowMoved AND bCB1_windowHidden AND NOT bCB2_windowHidden AND _
+          bCB1_windowShown AND NOT bCB2_windowShown AND NOT bCB1_disposing AND NOT _
+          bCB2_disposing
+    oObj.removeWindowListener(oListener1)
+    Test.MethodTested("removeWindowListener()", bOK)
+
+    Test.StartMethod("addFocusListener()")
+    bOK = true
+    oObj.addFocusListener(oListener3)
+    oObj.addFocusListener(oListener4)
+    oObj.setFocus()
+    wait(200)
+    oXWindow.setFocus()
+    wait(200)
+    oObj.setFocus()
+    wait(200)
+    bOK = bOK AND bCB3_focusGained AND bCB4_focusLost AND bCB3_focusGained AND bCB4_focusLost
+    Test.MethodTested("addFocusListener()", bOK)
+
+    Test.StartMethod("removeFocusListener()")
+    bOK = true
+    bCB3_focusGained = false
+    bCB4_focusLost = false
+    bCB3_focusGained = false
+    bCB4_focusLost = false
+    oObj.removeFocusListener(oListener4)
+    oObj.setFocus()
+    wait(200)
+    oXWindow.setFocus()
+    wait(200)
+    oObj.setFocus()
+    wait(200)
+    bOK = bOK AND bCB3_focusGained AND NOT bCB4_focusLost AND bCB3_focusGained AND NOT bCB4_focusLost
+    oObj.removeFocusListener(oListener3)
+    Test.MethodTested("removeFocusListener()", bOK)
+
+'***************************************************************************************
+'* LISTENERS which needs interactions                                                  *
+'***************************************************************************************
+'*
+'* The following listener tests need interactions. That means i.e. a
+'* com.sun.star.awt.XKeyListener needs action from the keyboard. This is not possible in
+'* the automatic API-Testing. To test the listener you can set a breakpoint at the
+'* specific function call. Then do interaction which should call the listener. It must be
+'* pop up a message box.
+'*
+'***************************************************************************************
+
+    Test.StartMethod("addKeyListener()")
+    bOK = true
+    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    oObj.addKeyListener(oListener5)
+    oObj.addKeyListener(oListener6)
+    bOK = bOK AND true
+    Test.MethodTested("addKeyListener()", bOK)
+
+    Test.StartMethod("removeKeyListener()")
+    bOK = true
+    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    oObj.removeKeyListener(oListener5)
+    bOK = bOK AND true
+    oObj.removeKeyListener(oListener6)
+    Test.MethodTested("removeKeyListener()", bOK)
+
+    Test.StartMethod("addMouseListener()")
+    bOK = true
+    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    oObj.addMouseListener(oListener7)
+    oObj.addMouseListener(oListener8)
+    bOK = bOK AND true
+    Test.MethodTested("addMouseListener()", bOK)
+
+    Test.StartMethod("removeMouseListener()")
+    bOK = true
+    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    oObj.removeMouseListener(oListener7)
+    bOK = bOK AND true
+    oObj.removeMouseListener(oListener8)
+    Test.MethodTested("removeMouseListener()", bOK)
+
+    Test.StartMethod("addMouseMotionListener()")
+    bOK = true
+    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    oObj.addMouseMotionListener(oListener9)
+    oObj.addMouseMotionListener(oListener10)
+    bOK = bOK AND true
+    Test.MethodTested("addMouseMotionListener()", bOK)
+
+    Test.StartMethod("removeMouseMotionListener()")
+    bOK = true
+    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    oObj.removeMouseMotionListener(oListener9)
+    bOK = bOK AND true
+    oObj.removeMouseMotionListener(oListener10)
+    Test.MethodTested("removeMouseMotionListener()", bOK)
+
+    Test.StartMethod("addPaintListener()")
+    bOK = true
+    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    oObj.addPaintListener(oListener11)
+    oObj.addPaintListener(oListener12)
+    bOK = bOK AND true
+    Test.MethodTested("addPaintListener()", bOK)
+
+    Test.StartMethod("removePaintListener()")
+    bOK = true
+    Out.Log("Not realy tested! Please see comments in Basic-Source.")
+    oObj.removePaintListener(oListener11)
+    bOK = bOK AND true
+    oObj.removePaintListener(oListener12)
+    Test.MethodTested("removePaintListener()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+' Listener call backs for com.sun.star.awt.XWindowListener
+Sub CB1_windowResized
+    Out.Log("CallBack for Listener1 windowResized was called.")
+    bCB1_windowResized = true
+End Sub
+Sub CB2_windowResized
+    Out.Log("CallBack for Listener2 windowResized was called.")
+    bCB2_windowResized = true
+End Sub
+Sub CB1_windowMoved
+    Out.Log("CallBack for Listener1 windowMoved was called.")
+    bCB1_windowMoved = true
+End Sub
+Sub CB2_windowMoved
+    Out.Log("CallBack for Listener2 windowMoved was called.")
+    bCB2_windowMoved = true
+End Sub
+Sub CB1_windowHidden
+    Out.Log("CallBack for Listener1 windowHidden was called.")
+    bCB1_windowHidden = true
+End Sub
+Sub CB2_windowHidden
+    Out.Log("CallBack for Listener2 windowHidden was called.")
+    bCB2_windowHidden = true
+End Sub
+Sub CB1_windowShown
+    Out.Log("CallBack for Listener1 windowShown was called.")
+    bCB1_windowShown = true
+End Sub
+Sub CB2_windowShown
+    Out.Log("CallBack for Listener2 windowShown was called.")
+    bCB2_windowShown = true
+End Sub
+Sub CB1_disposing
+    Out.Log("CallBack for Listener1 disposing was called")
+    bCB1_disposing = true
+End Sub
+Sub CB2_disposing
+    Out.Log("CallBack for Listener2 disposing was called")
+    bCB2_disposing = true
+End Sub
+
+' Listener call backs for com.sun.star.awt.XFocusListener
+Sub CB3_focusGained
+    Out.Log("CallBack for Listener3 'focusGained' was called")
+    bCB3_focusGained = true
+End Sub
+Sub CB4_focusGained
+    Out.Log("CallBack for Listener4 'focusGained' was called")
+    bCB4_focusGained = true
+End Sub
+Sub CB3_focusLost
+    Out.Log("CallBack for Listener3 'focusLost' was called")
+    bCB3_focusLost = true
+End Sub
+Sub CB4_focusLost
+    Out.Log("CallBack for Listener4 'focusLost' was called")
+    bCB4_focusLost = true
+End Sub
+Sub CB3_disposing
+End Sub
+Sub CB4_disposing
+End Sub
+
+' Listener call backs for com.sun.star.awt.XKeyListener
+' They will never be called beause of no interaction in API-Testing
+Sub CB5_keyPressed
+  MsgBox("CallBack for Listener5 'keyPressed' was called")
+End Sub
+Sub CB6_keyPressed
+  MsgBox("CallBack for Listener6 'keyPressed' was called")
+End Sub
+Sub CB5_keyReleased
+  MsgBox("CallBack for Listener5 'keyReleased' was called")
+End Sub
+Sub CB6_keyReleased
+  MsgBox("CallBack for Listener6 'keyReleased' was called")
+End Sub
+Sub CB5_disposing
+End Sub
+Sub CB6_disposing
+End Sub
+
+
+' Listener call backs for com.sun.star.awt.XMouseListener
+' They will never be called beause of no interaction in API-Testing
+Sub CB7_mousePressed
+  MsgBox("CallBack for Listener7 'mousePressed' was called")
+End Sub
+Sub CB8_mousePressed
+  MsgBox("CallBack for Listener8 'mousePressed' was called")
+End Sub
+Sub CB7_mouseReleased
+  MsgBox("CallBack for Listener8 'mouseReleased' was called")
+End Sub
+Sub CB8_mouseReleased
+  MsgBox("CallBack for Listener8 'mouseReleased' was called")
+End Sub
+Sub CB7_mouseEntered
+  MsgBox("CallBack for Listener7 'mouseEntered' was called")
+End Sub
+Sub CB8_mouseEntered
+  MsgBox("CallBack for Listener8 'mouseEntered' was called")
+End Sub
+Sub CB7_mouseExited
+  MsgBox("CallBack for Listener7 'mouseExited' was called")
+End Sub
+Sub CB8_mouseExited
+  MsgBox("CallBack for Listener8 'mouseExited' was called")
+End Sub
+Sub CB7_disposing
+End Sub
+Sub CB8_disposing
+End Sub
+
+
+' Listener call backs for com.sun.star.awt.XMouseMotionListener
+' They will never be called beause of no interaction in API-Testing
+Sub CB9_mouseDragged
+  MsgBox("CallBack for Listener9 'mouseDragged' was called")
+End Sub
+Sub CB10_mouseDragged
+  MsgBox("CallBack for Listener10 'mouseDragged' was called")
+End Sub
+Sub CB9_mouseMoved
+  MsgBox("CallBack for Listener9 'mouseMoved' was called")
+End Sub
+Sub CB10_mouseMoved
+  MsgBox("CallBack for Listener10 'mouseMoved' was called")
+End Sub
+Sub CB9_disposing
+End Sub
+Sub CB10_disposing
+End Sub
+
+
+' Listener call backs for com.sun.star.awt.XMouseMotionListener
+' They will never be called beause of no interaction in API-Testing
+Sub CB11_windowPaint
+  MsgBox("CallBack for Listener11 'windowPaint' was called")
+End Sub
+Sub CB12_windowPaint
+  MsgBox("CallBack for Listener12 'windowPaint' was called")
+End Sub
+Sub CB11_disposing
+End Sub
+Sub CB12_disposing
+End Sub
+
+</script:module>

@@ -1,0 +1,9 @@
+ovba	oovbaapi	:	offapi solenv NULL
+ovba	oovbaapi                            usr1	-	all	ovba_mkout NULL
+ovba	oovbaapi\genconstidl                nmake	-	all	ovba_genconstidl NULL
+ovba	oovbaapi\ooo\vba\constants          nmake	-	all	ovba_constants  ovba_genconstidl NULL
+ovba	oovbaapi\ooo\vba                    nmake	-	all	ovba_vba NULL
+ovba	oovbaapi\ooo\vba\excel              nmake	-	all	ovba_excel NULL
+ovba	oovbaapi\ooo\vba\word               nmake	-	all	ovba_word NULL
+ovba	oovbaapi\ooo\vba\msforms            nmake	-	all	ovba_msforms NULL
+ovba   oovbaapi\util                             nmake   -   all ovba_util ovba_vba ovba_excel ovba_word ovba_msforms ovba_constants ovba_genconstidl NULL

@@ -1,0 +1,5 @@
+ic	idlc	:	registry NULL
+ic	idlc					usr1	-	all	ic_mkout NULL
+ic	idlc\inc				nmake	-	all	ic_inc NULL
+ic	idlc\source\preproc		nmake	-	all	ic_preproc ic_inc NULL
+ic	idlc\source				nmake	-	all ic_source ic_inc NULL

@@ -1,0 +1,21 @@
+swinter.h:
+
+unsigned char SYSCALL SwDocumentGetIsPrinting( C_Object ObjHdl );
+
+
+swinter.c:
+
+unsigned char SYSCALL SwDocumentGetIsPrinting( C_Object ObjHdl )
+{
+    if( SvIPCIsConnected() )
+    {
+        return (unsigned char) pIPCCallFunction( SvIPCGetClient(), 136598,
+             ObjHdl , 1, NULL );
+    }
+    return 0;
+}
+
+#ifdef _MSC_VER
+#pragma code_seg("swinter2","CODE")
+#endif
+

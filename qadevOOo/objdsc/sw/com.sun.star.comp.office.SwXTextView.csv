@@ -1,0 +1,11 @@
+"SwXTextView";"com::sun::star::view::XViewSettingsSupplier";"getViewSettings()"
+"SwXTextView";"com::sun::star::text::XTextViewCursorSupplier";"getViewCursor()"
+"SwXTextView";"com::sun::star::view::XSelectionSupplier";"select()"
+"SwXTextView";"com::sun::star::view::XSelectionSupplier";"getSelection()"
+"SwXTextView";"com::sun::star::view::XSelectionSupplier";"addSelectionChangeListener()"
+"SwXTextView";"com::sun::star::view::XSelectionSupplier";"removeSelectionChangeListener()"
+"SwXTextView";"com::sun::star::view::XControlAccess#optional";"getControl()"
+"SwXTextView";"com::sun::star::view::XFormLayerAccess#optional";"getFromController()"
+"SwXTextView";"com::sun::star::view::XFormLayerAccess#optional";"isFormDesignMode()"
+"SwXTextView";"com::sun::star::view::XFormLayerAccess#optional";"setFormDesignMode()"
+

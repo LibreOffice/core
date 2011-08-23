@@ -1,0 +1,151 @@
+--- misc/Python-2.6.1/Makefile.pre.in	2010-09-10 05:00:44.000000000 -0500
++++ misc/build/Python-2.6.1/Makefile.pre.in	2010-09-10 05:16:02.000000000 -0500
+@@ -412,7 +412,10 @@
+ 
+ libpython$(VERSION).so: $(LIBRARY_OBJS)
+ 	if test $(INSTSONAME) != $(LDLIBRARY); then \
+-		$(LDSHARED) $(LDFLAGS) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
++		if [ "`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" != "aix" ]; then \
++			SONAME="-Wl,-h$(INSTSONAME)"; \
++		fi; \
++		$(LDSHARED) $(LDFLAGS) $(SONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+ 		$(LN) -f $(INSTSONAME) $@; \
+ 	else\
+ 		$(LDSHARED) $(LDFLAGS) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+@@ -907,6 +907,7 @@
+ 	export PATH; PATH="`pwd`:$$PATH"; \
+ 	export PYTHONPATH; PYTHONPATH="`pwd`/Lib"; \
+ 	export DYLD_FRAMEWORK_PATH; DYLD_FRAMEWORK_PATH="`pwd`"; \
++	export LIBPATH; LIBPATH="`pwd`${LIBPATH:+:$LIBPATH}"; \
+ 	export EXE; EXE="$(BUILDEXE)"; \
+ 	cd $(srcdir)/Lib/$(PLATDIR); ./regen
+ 
+--- misc/Python-2.6.1/Modules/Setup.dist	2010-08-19 07:03:46.000000000 -0500
++++ misc/build/Python-2.6.1/Modules/Setup.dist	2010-08-19 07:04:11.000000000 -0500
+@@ -185,7 +185,7 @@
+ #datetime datetimemodule.c	# date/time type
+ #_bisect _bisectmodule.c	# Bisection algorithms
+ 
+-#unicodedata unicodedata.c    # static Unicode character database
++unicodedata unicodedata.c    # static Unicode character database
+ 
+ # access to ISO C locale support
+ #_locale _localemodule.c  # -lintl
+--- misc/Python-2.6.1/Modules/_ctypes/libffi/fficonfig.py.in	2010-09-11 08:50:58.000000000 -0500
++++ misc/build/Python-2.6.1/Modules/_ctypes/libffi/fficonfig.py.in	2010-09-11 08:51:26.000000000 -0500
+@@ -14,7 +14,7 @@
+     'M32R': ['src/m32r/sysv.S', 'src/m32r/ffi.c'],
+     'M68K': ['src/m68k/ffi.c', 'src/m68k/sysv.S'],
+     'POWERPC': ['src/powerpc/ffi.c', 'src/powerpc/sysv.S', 'src/powerpc/ppc_closure.S', 'src/powerpc/linux64.S', 'src/powerpc/linux64_closure.S'],
+-    'POWERPC_AIX': ['src/powerpc/ffi.c', 'src/powerpc/aix.S', 'src/powerpc/aix_closure.S'],
++    'POWERPC_AIX': ['src/powerpc/ffi_darwin.c', 'src/powerpc/aix.S', 'src/powerpc/aix_closure.S'],
+     'POWERPC_FREEBSD': ['src/powerpc/ffi.c', 'src/powerpc/sysv.S', 'src/powerpc/ppc_closure.S'],
+     'ARM': ['src/arm/sysv.S', 'src/arm/ffi.c'],
+     'LIBFFI_CRIS': ['src/cris/sysv.S', 'src/cris/ffi.c'],
+--- misc/Python-2.6.1/configure.in	2010-09-11 11:06:27.000000000 -0500
++++ misc/build/Python-2.6.1/configure.in	2010-09-11 11:25:42.000000000 -0500
+@@ -415,8 +415,6 @@
+ 		without_gcc=$withval;;
+ 	esac], [
+ 	case $ac_sys_system in
+-	AIX*)   CC=cc_r
+-		without_gcc=;;
+ 	BeOS*)
+ 		case $BE_HOST_CPU in
+ 		ppc)
+@@ -704,10 +702,18 @@
+ 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+           ;;
+-    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*)
++    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|AIX*)
+ 	  LDLIBRARY='libpython$(VERSION).so'
+-	  BLDLIBRARY='-L. -lpython$(VERSION)'
+-	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
++	  case $ac_sys_system in
++	    AIX*)
++	      BLDLIBRARY='-Wl,-brtl -L. -lpython$(VERSION)'
++	      RUNSHARED=LIBPATH=`pwd`:${LIBPATH}
++	      ;;
++	    *)
++	      BLDLIBRARY='-L. -lpython$(VERSION)'
++	      RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
++	      ;;
++	  esac
+ 	  case $ac_sys_system in
+ 	      FreeBSD*)
+ 		SOVERSION=`echo $SOVERSION|cut -d "." -f 1`
+@@ -1607,8 +1613,13 @@
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+ 	AIX*)
+-		BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:Modules/python.exp"
+-		LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		if test "$GCC" = "yes"; then
++			LDSHARED='$(CC) -shared'
++			BLDSHARED='$(CC) -Wl,-brtl -shared'
++		else
++			BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:Modules/python.exp"
++			LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		fi
+ 		;;
+ 	BeOS*)
+ 		BLDSHARED="\$(srcdir)/Modules/ld_so_beos $LDLIBRARY"
+--- misc/Python-2.6.1/configure	2010-09-11 11:06:27.000000000 -0500
++++ misc/build/Python-2.6.1/configure	2010-09-11 11:26:16.000000000 -0500
+@@ -2266,8 +2266,6 @@
+ else
+ 
+ 	case $ac_sys_system in
+-	AIX*)   CC=cc_r
+-		without_gcc=;;
+ 	BeOS*)
+ 		case $BE_HOST_CPU in
+ 		ppc)
+@@ -4106,10 +4104,18 @@
+ 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+           ;;
+-    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*)
++    Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|AIX*)
+ 	  LDLIBRARY='libpython$(VERSION).so'
+-	  BLDLIBRARY='-L. -lpython$(VERSION)'
+-	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
++	  case $ac_sys_system in
++	    AIX*)
++	      BLDLIBRARY='-Wl,-brtl -L. -lpython$(VERSION)'
++	      RUNSHARED=LIBPATH=`pwd`:${LIBPATH}
++	      ;;
++	    *)
++	      BLDLIBRARY='-L. -lpython$(VERSION)'
++	      RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
++	      ;;
++	  esac
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+ 	  ;;
+     hp*|HP*)
+@@ -4525,7 +4531,7 @@
+ 		# debug builds.
+ 		OPT="-g -Wall $STRICT_PROTO"
+ 	    else
+-		OPT="-g $WRAP -O3 -Wall $STRICT_PROTO"
++		OPT="$WRAP -O0 -Wall $STRICT_PROTO"
+ 	    fi
+ 	    ;;
+ 	*)
+@@ -13012,8 +13018,13 @@
+ then
+ 	case $ac_sys_system/$ac_sys_release in
+ 	AIX*)
+-		BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:Modules/python.exp"
+-		LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		if test "$GCC" = "yes"; then
++		  LDSHARED='$(CC) -shared'
++		  BLDSHARED='$(CC) -Wl,-brtl -shared'
++		else
++		  BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:Modules/python.exp"
++		  LDSHARED="\$(BINLIBDEST)/config/ld_so_aix \$(CC) -bI:\$(BINLIBDEST)/config/python.exp"
++		fi
+ 		;;
+ 	BeOS*)
+ 		BLDSHARED="\$(srcdir)/Modules/ld_so_beos $LDLIBRARY"

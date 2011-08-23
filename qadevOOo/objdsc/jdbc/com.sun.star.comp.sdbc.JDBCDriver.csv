@@ -1,0 +1,5 @@
+"JDBCDriver";"com::sun::star::sdbc::XDriver";"connect()"
+"JDBCDriver";"com::sun::star::sdbc::XDriver";"acceptsURL()"
+"JDBCDriver";"com::sun::star::sdbc::XDriver";"getPropertyInfo()"
+"JDBCDriver";"com::sun::star::sdbc::XDriver";"getMajorVersion()"
+"JDBCDriver";"com::sun::star::sdbc::XDriver";"getMinorVersion()"

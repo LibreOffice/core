@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook MathML Module V1.0//EN"
+                  "http://www.oasis-open.org/docbook/xml/mathml/1.0/dbmathml.dtd">
+
+<article id="article">
+<articleinfo>
+<title>Unit Test: mathml.001.xml</title>
+<releaseinfo role="CVS">$Id: mathml.001.xml,v 1.2 2008-07-11 07:51:46 rt Exp $</releaseinfo>
+</articleinfo>
+
+<para>The following equation is in MathML:</para>
+
+<informalequation>
+  <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">
+    <mml:apply><mml:divide/></mml:apply>
+  </mml:math>
+</informalequation>
+
+</article>

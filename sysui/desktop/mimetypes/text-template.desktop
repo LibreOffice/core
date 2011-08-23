@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=text-template
+Type=MimeType
+Patterns=*.stw
+MimeType=application/vnd.sun.xml.writer.template
+Comment=%PRODUCTNAME Text Document Template

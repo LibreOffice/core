@@ -1,0 +1,223 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+EXPECT SUCCESS "attribute.tests 1":
+interface I1 {
+    [attribute] long a;
+};
+
+
+EXPECT SUCCESS "attribute.tests 2":
+interface I1 {
+    [attribute] long a {};
+};
+
+
+EXPECT FAILURE "attribute.tests 3":
+interface I1 {
+    [attribute] long a {
+        get raises ();
+    };
+};
+
+
+EXPECT SUCCESS "attribute.tests 4":
+exception E1 {};
+interface I1 {
+    [attribute] long a {
+        get raises (E1);
+    };
+};
+
+
+EXPECT SUCCESS "attribute.tests 5":
+exception E1 {};
+interface I1 {
+    [attribute] long a {
+        set raises (E1);
+    };
+};
+
+
+EXPECT SUCCESS "attribute.tests 6":
+exception E1 {};
+interface I1 {
+    [attribute] long a {
+        get raises (E1);
+        set raises (E1);
+    };
+};
+
+
+EXPECT SUCCESS "attribute.tests 7":
+exception E1 {};
+interface I1 {
+    [attribute] long a {
+        set raises (E1);
+        get raises (E1);
+    };
+};
+
+
+EXPECT FAILURE "attribute.tests 8":
+exception E1 {};
+interface I1 {
+    [attribute] long a {
+        get raises (E1);
+        get raises (E1);
+    };
+};
+
+
+EXPECT FAILURE "attribute.tests 9":
+exception E1 {};
+interface I1 {
+    void E1();
+    [attribute] long a {
+        get raises (E1);
+    };
+};
+
+
+EXPECT FAILURE "attribute.tests 10":
+exception E1 {};
+interface I1 {
+    [attribute] long E1 {
+        get raises (E1);
+    };
+};
+
+
+EXPECT SUCCESS "attribute.tests 11":
+exception E1 {};
+interface I1 {
+    [attribute] long a {
+        get raises (E1,E1);
+    };
+};
+
+
+EXPECT SUCCESS "attribute.tests 12":
+exception E1 {};
+interface I1 {
+    [attribute, readonly] long a {
+        get raises (E1);
+    };
+};
+
+
+EXPECT FAILURE "attribute.tests 13":
+exception E1 {};
+interface I1 {
+    [attribute, readonly] long a {
+        set raises (E1);
+    };
+};
+
+
+EXPECT FAILURE "attribute.tests 14":
+interface I1 {
+    [] long a;
+};
+
+
+EXPECT SUCCESS "attribute.tests 15":
+interface I1 {
+    [attribute] long a;
+};
+
+
+EXPECT FAILURE "attribute.tests 16":
+interface I1 {
+    [attribute, property] long a;
+};
+
+
+EXPECT FAILURE "attribute.tests 17":
+interface I1 {
+    [attribute, optional] long a;
+};
+
+
+EXPECT FAILURE "attribute.tests 18":
+interface I1 {
+    [attribute, maybevoid] long a;
+};
+
+
+EXPECT FAILURE "attribute.tests 19":
+interface I1 {
+    [attribute, constrained] long a;
+};
+
+
+EXPECT FAILURE "attribute.tests 20":
+interface I1 {
+    [attribute, transient] long a;
+};
+
+
+EXPECT FAILURE "attribute.tests 21":
+interface I1 {
+    [attribute, maybeambigious] long a;
+};
+
+
+EXPECT FAILURE "attribute.tests 22":
+interface I1 {
+    [attribute, maybedefault] long a;
+};
+
+
+EXPECT FAILURE "attribute.tests 23":
+interface I1 {
+    [attribute, removeable] long a;
+};
+
+
+EXPECT SUCCESS "attribute.tests 24":
+interface I1 {
+    [attribute, bound] long a;
+};
+
+
+EXPECT SUCCESS "attribute.tests 25":
+interface I1 {
+    [bound, attribute] long a;
+};
+
+
+EXPECT SUCCESS "attribute.tests 26":
+interface I1 {
+    [attribute, readonly] long a;
+};
+
+
+EXPECT SUCCESS "attribute.tests 27":
+interface I1 {
+    [attribute, bound, readonly] long a;
+};

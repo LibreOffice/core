@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  
+  Copyright 2000, 2010 Oracle and/or its affiliates.
+ 
+  OpenOffice.org - a multi-platform office productivity suite
+ 
+  This file is part of OpenOffice.org.
+ 
+  OpenOffice.org is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 3
+  only, as published by the Free Software Foundation.
+ 
+  OpenOffice.org is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License version 3 for more details
+  (a copy is included in the LICENSE file that accompanied this code).
+ 
+  You should have received a copy of the GNU Lesser General Public License
+  version 3 along with OpenOffice.org.  If not, see
+  <http://www.openoffice.org/license.html>
+  for a copy of the LGPLv3 License.
+
+-->
+
+<grammar
+	xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+
+    xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+>
+<include href="office-strict-schema-1.0-cd-2.rng">
+
+<!-- ==================== -->
+<!-- replaced definitions -->
+<!-- ==================== -->
+
+<!-- list styles contained in graphic styles currently have no name (i36217) -->
+<define name="text-list-style-attr" combine="interleave">
+    <optional>
+		<attribute name="style:name">
+			<ref name="styleName"/>
+		</attribute>
+	</optional>
+</define>
+<define name="text-list-style-attr" combine="interleave">
+    <optional>
+        <attribute name="style:display-name">
+            <ref name="string"/>
+        </attribute>
+    </optional>
+</define>
+<define name="text-list-style-attr" combine="interleave">
+    <optional>
+        <attribute name="text:consecutive-numbering" a:defaultValue="false">
+            <ref name="boolean"/>
+        </attribute>
+    </optional>
+</define>
+
+</include>
+
+<!-- ====================== -->
+<!-- additional definitions -->
+<!-- ====================== -->
+
+<!-- The following definition is obsolete, but required for legacy -->
+<!-- files that have their origin in binary files (i35420).        -->
+<define name="chart-plot-area-attlist" combine="interleave">
+	<optional>
+		<attribute name="chart:table-number-list">
+			<ref name="string"/>
+		</attribute>
+	</optional>
+</define>
+
+<!-- List styles contained in graphic styles currently are -->
+<!-- enabled by the following attribute (i36217).          -->
+<define name="style-paragraph-properties-attlist" combine="interleave">
+	<optional>
+		<attribute name="text:enable-numbering">
+			<ref name="boolean"/>
+		</attribute>
+	</optional>
+</define>
+
+</grammar>

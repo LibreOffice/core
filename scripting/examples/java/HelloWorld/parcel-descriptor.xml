@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parcel language="Java" xmlns:parcel="scripting.dtd">
+    <script language="Java">
+        <locale lang="en">
+            <displayname value="HelloWorld.Java"/>
+            <description>
+                Prints "Helo World". 
+            </description>
+        </locale>
+        <functionname value="HelloWorld.printHW"/>
+        <logicalname value="HelloWorld.printHW"/>
+        <languagedepprops>
+            <prop name="classpath" value="HelloWorld.jar"/>
+        </languagedepprops>
+    </script>
+</parcel>

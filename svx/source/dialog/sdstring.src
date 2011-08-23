@@ -1,0 +1,1291 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ------------------------------------------------------------------
+#include <svx/dialogs.hrc>
+ // pragma -------------------------------------------------------------------
+
+ // Strings fuer die Draw-Dialoge --------------------------------------------
+String RID_SVXSTR_SOLID
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
+    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
+    Text [ en-US ] = "Continuous" ;
+};
+String RID_SVXSTR_GRADIENT
+{
+    Text [ en-US ] = "Gradient" ;
+};
+String RID_SVXSTR_BITMAP
+{
+    Text [ en-US ] = "Bitmap" ;
+};
+String RID_SVXSTR_LINESTYLE
+{
+    Text [ en-US ] = "Line Style" ;
+};
+String RID_SVXSTR_INVISIBLE
+{
+    Text [ en-US ] = "Invisible" ;
+};
+String RID_SVXSTR_COLOR
+{
+    Text [ en-US ] = "Color" ;
+};
+String RID_SVXSTR_HATCH
+{
+    Text [ en-US ] = "Hatching" ;
+};
+String RID_SVXSTR_LINEEND
+{
+    Text [ en-US ] = "Arrowheads" ;
+};
+
+String RID_SVXSTR_CLOSE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
+    /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
+    Text [ en-US ] = "Close" ;
+};
+String RID_SVXSTR_BLACK
+{
+    Text [ en-US ] = "Black" ;
+};
+String RID_SVXSTR_BLUE
+{
+    Text [ en-US ] = "Blue" ;
+};
+String RID_SVXSTR_GREEN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
+    /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
+    Text [ en-US ] = "Green" ;
+};
+String RID_SVXSTR_CYAN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Türkis : T³rkis */
+    /* ### ACHTUNG: Neuer Text in Resource? Türkis : T³rkis */
+    Text [ en-US ] = "Turquoise" ;
+};
+String RID_SVXSTR_RED
+{
+    Text [ en-US ] = "Red" ;
+};
+String RID_SVXSTR_MAGENTA
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Magenta : Violett */
+    Text [ en-US ] = "Magenta" ;
+};
+String RID_SVXSTR_BROWN
+{
+    Text [ en-US ] = "Brown" ;
+};
+String RID_SVXSTR_GREY
+{
+    Text [ en-US ] = "Gray" ;
+};
+String RID_SVXSTR_LIGHTGREY
+{
+    Text [ en-US ] = "Light gray" ;
+};
+String RID_SVXSTR_LIGHTBLUE
+{
+    Text [ en-US ] = "Light blue" ;
+};
+String RID_SVXSTR_LIGHTGREEN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
+    /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
+    Text [ en-US ] = "Light green" ;
+};
+String RID_SVXSTR_LIGHTCYAN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Helltürkis : Hellt³rkis */
+    /* ### ACHTUNG: Neuer Text in Resource? Helltürkis : Hellt³rkis */
+    Text [ en-US ] = "Light cyan" ;
+};
+String RID_SVXSTR_LIGHTRED
+{
+    Text [ en-US ] = "Light red" ;
+};
+String RID_SVXSTR_LIGHTMAGENTA
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hellmagenta : Hellviolett */
+    Text [ en-US ] = "Light magenta" ;
+};
+String RID_SVXSTR_YELLOW
+{
+    Text [ en-US ] = "Yellow" ;
+};
+String RID_SVXSTR_WHITE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
+    /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
+    Text [ en-US ] = "White" ;
+};
+String RID_SVXSTR_BLUEGREY
+{
+    Text [ en-US ] = "Blue gray" ;
+};
+String RID_SVXSTR_ORANGE
+{
+    Text [ en-US ] = "Orange" ;
+};
+String RID_SVXSTR_ARROW
+{
+    Text [ en-US ] = "Arrow" ;
+};
+String RID_SVXSTR_SQUARE
+{
+    Text [ en-US ] = "Square" ;
+};
+String RID_SVXSTR_CIRCLE
+{
+    Text [ en-US ] = "Circle" ;
+};
+String RID_SVXSTR_NONE
+{
+    Text [ en-US ] = "- none -" ;
+};
+String RID_SVXSTR_TRANSPARENCE
+{
+    Text [ en-US ] = "Transparency" ;
+};
+String RID_SVXSTR_CENTERED
+{
+    Text [ en-US ] = "Centered" ;
+};
+String RID_SVXSTR_NOTCENTERED
+{
+    Text [ en-US ] = "Not centered" ;
+};
+String RID_SVXSTR_GRAFMODE_STANDARD
+{
+    Text [ en-US ] = "Default";
+};
+String RID_SVXSTR_GRAFMODE_GREYS
+{
+    Text [ en-US ] = "Grayscale";
+};
+String RID_SVXSTR_GRAFMODE_MONO
+{
+    Text [ en-US ] = "Black/White";
+};
+String RID_SVXSTR_GRAFMODE_WATERMARK
+{
+    Text [ en-US ] = "Watermark";
+};
+String STR_INSERT_VIDEO_EXTFILTER_IVF
+{
+    Text [ en-US ] = "Intel Indeo Video (*.ivf)" ;
+};
+
+String STR_INSERT_VIDEO_EXTFILTER_AVI
+{
+    Text [ en-US ] = "Video for Windows (*.avi)" ;
+};
+
+String STR_INSERT_VIDEO_EXTFILTER_MOV
+{
+    Text [ en-US ] = "QuickTime Movie (*.mov)" ;
+};
+
+String STR_INSERT_VIDEO_EXTFILTER_MPEG
+{
+    Text [ en-US ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)" ;
+};
+
+String STR_EXTFILTER_ALL
+{
+    Text [ en-US ] = "<All>" ;
+};
+
+String STR_INSERT_SOUND_TITLE
+{
+    Text [ en-US ] = "Insert sound" ;
+};
+
+String STR_INSERT_VIDEO_TITLE
+{
+    Text [ en-US ] = "Insert video" ;
+};
+
+
+// BM: some additional standard colors
+
+String RID_SVXSTR_VIOLET
+{
+    Text [ en-US ] = "Violet";
+};
+
+String RID_SVXSTR_BORDEAUX
+{
+    Text [ en-US ] = "Bordeaux";
+};
+
+String RID_SVXSTR_PALE_YELLOW
+{
+    Text [ en-US ] = "Pale yellow";
+};
+
+String RID_SVXSTR_PALE_GREEN
+{
+    Text [ en-US ] = "Pale green";
+};
+
+String RID_SVXSTR_DKVIOLET
+{
+    Text [ en-US ] = "Dark violet";
+};
+
+String RID_SVXSTR_SALMON
+{
+    Text [ en-US ] = "Salmon";
+};
+
+String RID_SVXSTR_SEABLUE
+{
+    Text [ en-US ] = "Sea blue";
+};
+
+String RID_SVXSTR_COLOR_SUN
+{
+    // attention: this is the color string for the Sun Microsystems specific colors !!!
+    Text [ en-US ] = "Sun" ;
+};
+
+String RID_SVXSTR_COLOR_CHART
+{
+    Text [ en-US ] = "Chart" ;
+};
+
+String RID_SVXSTR_TBLAFMT_3D
+{
+    Text [ en-US ] = "3D";
+};
+String RID_SVXSTR_TBLAFMT_BLACK1
+{
+    Text [ en-US ] = "Black 1";
+};
+String RID_SVXSTR_TBLAFMT_BLACK2
+{
+    Text [ en-US ] = "Black 2";
+};
+String RID_SVXSTR_TBLAFMT_BLUE
+{
+    Text [ en-US ] = "Blue";
+};
+String RID_SVXSTR_TBLAFMT_BROWN
+{
+    Text [ en-US ] = "Brown";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY
+{
+    Text [ en-US ] = "Currency";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_3D
+{
+    Text [ en-US ] = "Currency 3D";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
+{
+    Text [ en-US ] = "Currency Gray";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
+{
+    Text [ en-US ] = "Currency Lavender";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
+{
+    Text [ en-US ] = "Currency Turquoise";
+};
+String RID_SVXSTR_TBLAFMT_GRAY
+{
+    Text [ en-US ] = "Gray";
+};
+String RID_SVXSTR_TBLAFMT_GREEN
+{
+    Text [ en-US ] = "Green";
+};
+String RID_SVXSTR_TBLAFMT_LAVENDER
+{
+    Text [ en-US ] = "Lavender";
+};
+String RID_SVXSTR_TBLAFMT_RED
+{
+    Text [ en-US ] = "Red";
+};
+String RID_SVXSTR_TBLAFMT_TURQUOISE
+{
+    Text [ en-US ] = "Turquoise";
+};
+String RID_SVXSTR_TBLAFMT_YELLOW
+{
+    Text [ en-US ] = "Yellow";
+};
+
+String RID_SVXSTR_LINEJOINT_MIDDLE
+{
+    Text [ en-US ] = "Line joint averaged";
+};
+String RID_SVXSTR_LINEJOINT_BEVEL
+{
+    Text [ en-US ] = "Line joint bevel";
+};
+String RID_SVXSTR_LINEJOINT_MITER
+{
+    Text [ en-US ] = "Line joint miter";
+};
+String RID_SVXSTR_LINEJOINT_ROUND
+{
+    Text [ en-US ] = "Line joint round";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standardcolor-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BLACK_DEF
+{
+    Text = "Black" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BLUE_DEF
+{
+    Text = "Blue" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GREEN_DEF
+{
+    Text = "Green" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_CYAN_DEF
+{
+    Text = "Turquoise" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_RED_DEF
+{
+    Text = "Red" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_MAGENTA_DEF
+{
+    Text = "Magenta" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BROWN_DEF
+{
+    Text = "Brown" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GREY_DEF
+{
+    Text = "Gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTGREY_DEF
+{
+    Text = "Light gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTBLUE_DEF
+{
+    Text = "Light blue" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTGREEN_DEF
+{
+    Text = "Light green" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTCYAN_DEF
+{
+    Text = "Light cyan" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTRED_DEF
+{
+    Text = "Light red" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTMAGENTA_DEF
+{
+    Text = "Light magenta" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_YELLOW_DEF
+{
+    Text = "Yellow" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_WHITE_DEF
+{
+    Text = "White" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BLUEGREY_DEF
+{
+    Text = "Blue gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_ORANGE_DEF
+{
+    Text = "Orange" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_VIOLET_DEF
+{
+    Text = "Violet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BORDEAUX_DEF
+{
+    Text = "Bordeaux";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_PALE_YELLOW_DEF
+{
+    Text = "Pale yellow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_PALE_GREEN_DEF
+{
+    Text = "Pale green";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DKVIOLET_DEF
+{
+    Text = "Dark violet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_SALMON_DEF
+{
+    Text = "Salmon";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_SEABLUE_DEF
+{
+    Text = "Sea blue";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_COLOR_SUN_DEF
+{
+    // attention: this is the color string for the Sun Microsystems specific colors !!!
+    Text = "Sun";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_COLOR_CHART_DEF
+{
+    Text = "Chart";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-gradient-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT0_DEF
+{
+    Text = "Gradient";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT1_DEF
+{
+    Text = "Linear blue/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT2_DEF
+{
+    Text = "Linear magenta/green";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT3_DEF
+{
+    Text = "Linear yellow/brown";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT4_DEF
+{
+    Text = "Radial green/black";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT5_DEF
+{
+    Text = "Radial red/yellow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT6_DEF
+{
+    Text = "Rectangular red/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT7_DEF
+{
+    Text = "Square yellow/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT8_DEF
+{
+    Text = "Ellipsoid blue grey/light blue";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT9_DEF
+{
+    Text = "Axial light red/white";
+};
+
+String RID_SVXSTR_GRDT0
+{
+    Text [ en-US ] = "Gradient";
+};
+String RID_SVXSTR_GRDT1
+{
+    Text [ en-US ] = "Linear blue/white";
+};
+String RID_SVXSTR_GRDT2
+{
+    Text [ en-US ] = "Linear magenta/green";
+};
+String RID_SVXSTR_GRDT3
+{
+    Text [ en-US ] = "Linear yellow/brown";
+};
+String RID_SVXSTR_GRDT4
+{
+    Text [ en-US ] = "Radial green/black";
+};
+String RID_SVXSTR_GRDT5
+{
+    Text [ en-US ] = "Radial red/yellow";
+};
+String RID_SVXSTR_GRDT6
+{
+    Text [ en-US ] = "Rectangular red/white";
+};
+String RID_SVXSTR_GRDT7
+{
+    Text [ en-US ] = "Square yellow/white";
+};
+String RID_SVXSTR_GRDT8
+{
+    Text [ en-US ] = "Ellipsoid blue gray/light blue";
+};
+String RID_SVXSTR_GRDT9
+{
+    Text [ en-US ] = "Axial light red/white";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-hatch-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH0_DEF
+{
+    Text = "Black 45 Degrees Wide";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH1_DEF
+{
+    Text = "Black 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH2_DEF
+{
+    Text = "Black -45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH3_DEF
+{
+    Text = "Black 90 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH4_DEF
+{
+    Text = "Red Crossed 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH5_DEF
+{
+    Text = "Red Crossed 0 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH6_DEF
+{
+    Text = "Blue Crossed 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH7_DEF
+{
+    Text = "Blue Crossed 0 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH8_DEF
+{
+    Text = "Blue Triple 90 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH9_DEF
+{
+    Text = "Black 0 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH10_DEF
+{
+    Text = "Hatch";
+};
+
+String RID_SVXSTR_HATCH0
+{
+    Text [ en-US ] = "Black 45 degrees wide";
+};
+String RID_SVXSTR_HATCH1
+{
+    Text [ en-US ] = "Black 45 degrees";
+};
+String RID_SVXSTR_HATCH2
+{
+    Text [ en-US ] = "Black -45 degrees";
+};
+String RID_SVXSTR_HATCH3
+{
+    Text [ en-US ] = "Black 90 degrees";
+};
+String RID_SVXSTR_HATCH4
+{
+    Text [ en-US ] = "Red crossed 45 degrees";
+};
+String RID_SVXSTR_HATCH5
+{
+    Text [ en-US ] = "Red crossed 0 degrees";
+};
+String RID_SVXSTR_HATCH6
+{
+    Text [ en-US ] = "Blue crossed 45 degrees";
+};
+String RID_SVXSTR_HATCH7
+{
+    Text [ en-US ] = "Blue crossed 0 degrees";
+};
+String RID_SVXSTR_HATCH8
+{
+    Text [ en-US ] = "Blue triple 90 degrees";
+};
+String RID_SVXSTR_HATCH9
+{
+    Text [ en-US ] = "Black 0 degrees";
+};
+String RID_SVXSTR_HATCH10
+{
+    Text [ en-US ] = "Hatching" ;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-bitmap-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP0_DEF
+{
+    Text = "Empty";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP1_DEF
+{
+    Text = "Sky";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP2_DEF
+{
+    Text = "Aqua";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP3_DEF
+{
+    Text = "Coarse";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP4_DEF
+{
+    Text = "Space Metal";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP5_DEF
+{
+    Text = "Space";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP6_DEF
+{
+    Text = "Metal";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP7_DEF
+{
+    Text = "Wet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP8_DEF
+{
+    Text = "Marble";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP9_DEF
+{
+    Text = "Linen";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP10_DEF
+{
+    Text = "Stone";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP11_DEF
+{
+    Text = "Pebbles";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP12_DEF
+{
+    Text = "Wall";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP13_DEF
+{
+    Text = "Red Wall";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP14_DEF
+{
+    Text = "Pattern";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP15_DEF
+{
+    Text = "Leaves";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP16_DEF
+{
+    Text = "Lawn Artificial";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP17_DEF
+{
+    Text = "Daisy";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP18_DEF
+{
+    Text = "Orange";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP19_DEF
+{
+    Text = "Fiery";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP20_DEF
+{
+    Text = "Roses";
+};
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP21_DEF
+{
+    Text = "Bitmape";
+};
+
+String RID_SVXSTR_BMP0
+{
+    Text [ en-US ] = "Blank";
+};
+String RID_SVXSTR_BMP1
+{
+    Text [ en-US ] = "Sky";
+};
+String RID_SVXSTR_BMP2
+{
+    Text [ en-US ] = "Water";
+};
+String RID_SVXSTR_BMP3
+{
+    Text [ en-US ] = "Coarse grained";
+};
+String RID_SVXSTR_BMP4
+{
+    Text [ en-US ] = "Mercury";
+};
+String RID_SVXSTR_BMP5
+{
+    Text [ en-US ] = "Space";
+};
+String RID_SVXSTR_BMP6
+{
+    Text [ en-US ] = "Metal";
+};
+String RID_SVXSTR_BMP7
+{
+    Text [ en-US ] = "Droplets";
+};
+String RID_SVXSTR_BMP8
+{
+    Text [ en-US ] = "Marble";
+};
+String RID_SVXSTR_BMP9
+{
+    Text [ en-US ] = "Linen";
+};
+String RID_SVXSTR_BMP10
+{
+    Text [ en-US ] = "Stone";
+};
+String RID_SVXSTR_BMP11
+{
+    Text [ en-US ] = "Gravel";
+};
+String RID_SVXSTR_BMP12
+{
+    Text [ en-US ] = "Wall";
+};
+String RID_SVXSTR_BMP13
+{
+    Text [ en-US ] = "Brownstone";
+};
+String RID_SVXSTR_BMP14
+{
+    Text [ en-US ] = "Netting";
+};
+String RID_SVXSTR_BMP15
+{
+    Text [ en-US ] = "Leaves";
+};
+String RID_SVXSTR_BMP16
+{
+    Text [ en-US ] = "Artificial Turf";
+};
+String RID_SVXSTR_BMP17
+{
+    Text [ en-US ] = "Daisy";
+};
+String RID_SVXSTR_BMP18
+{
+    Text [ en-US ] = "Orange";
+};
+String RID_SVXSTR_BMP19
+{
+    Text [ en-US ] = "Fiery";
+};
+String RID_SVXSTR_BMP20
+{
+    Text [ en-US ] = "Roses";
+};
+
+String RID_SVXSTR_BMP21
+{
+    Text [ en-US ] = "Bitmap";
+};
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-dash-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH0_DEF
+{
+    Text = "Ultrafine Dashed";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH1_DEF
+{
+    Text = "Fine Dashed";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH2_DEF
+{
+    Text = "Ultrafine 2 Dots 3 Dashes";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH3_DEF
+{
+    Text = "Fine Dotted";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH4_DEF
+{
+    Text = "Line with Fine Dots";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH5_DEF
+{
+    Text = "Fine Dashed (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH6_DEF
+{
+    Text = "3 Dashes 3 Dots (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH7_DEF
+{
+    Text = "Ultrafine Dotted (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH8_DEF
+{
+    Text = "Line Style 9";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH9_DEF
+{
+    Text = "2 Dots 1 Dash";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH10_DEF
+{
+    Text = "Dashed (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH11_DEF
+{
+    Text = "Dash";
+};
+
+String RID_SVXSTR_DASH0
+{
+    Text [ en-US ] = "Ultrafine dashed";
+};
+String RID_SVXSTR_DASH1
+{
+    Text [ en-US ] = "Fine dashed";
+};
+String RID_SVXSTR_DASH2
+{
+    Text [ en-US ] = "Ultrafine 2 dots 3 dashes";
+};
+String RID_SVXSTR_DASH3
+{
+    Text [ en-US ] = "Fine dotted";
+};
+String RID_SVXSTR_DASH4
+{
+    Text [ en-US ] = "Line with fine dots";
+};
+String RID_SVXSTR_DASH5
+{
+    Text [ en-US ] = "Fine dashed (variable)";
+};
+String RID_SVXSTR_DASH6
+{
+    Text [ en-US ] = "3 dashes 3 dots (variable)";
+};
+String RID_SVXSTR_DASH7
+{
+    Text [ en-US ] = "Ultrafine dotted (variable)";
+};
+String RID_SVXSTR_DASH8
+{
+    Text [ en-US ] = "Line style 9";
+};
+String RID_SVXSTR_DASH9
+{
+    Text [ en-US ] = "2 dots 1 dash";
+};
+String RID_SVXSTR_DASH10
+{
+    Text [ en-US ] = "Dashed (variable)";
+};
+String RID_SVXSTR_DASH11
+{
+    Text [ en-US ] = "Dashed";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-line-end-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND0_DEF
+{
+    Text = "Arrow concave";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND1_DEF
+{
+    Text = "Square 45";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND2_DEF
+{
+    Text = "Small Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND3_DEF
+{
+    Text = "Dimension Lines";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND4_DEF
+{
+    Text = "Double Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND5_DEF
+{
+    Text = "Rounded short Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND6_DEF
+{
+    Text = "Symmetric Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND7_DEF
+{
+    Text = "Line Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND8_DEF
+{
+    Text = "Rounded large Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND9_DEF
+{
+    Text = "Circle";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND10_DEF
+{
+    Text = "Square";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND11_DEF
+{
+    Text = "Arrow";
+};
+
+String RID_SVXSTR_LEND0
+{
+    Text [ en-US ] = "Arrow concave";
+};
+String RID_SVXSTR_LEND1
+{
+    Text [ en-US ] = "Square 45";
+};
+String RID_SVXSTR_LEND2
+{
+    Text [ en-US ] = "Small arrow";
+};
+String RID_SVXSTR_LEND3
+{
+    Text [ en-US ] = "Dimension lines";
+};
+String RID_SVXSTR_LEND4
+{
+    Text [ en-US ] = "Double Arrow";
+};
+String RID_SVXSTR_LEND5
+{
+    Text [ en-US ] = "Rounded short arrow";
+};
+String RID_SVXSTR_LEND6
+{
+    Text [ en-US ] = "Symmetric arrow";
+};
+String RID_SVXSTR_LEND7
+{
+    Text [ en-US ] = "Line arrow";
+};
+String RID_SVXSTR_LEND8
+{
+    Text [ en-US ] = "Rounded large arrow";
+};
+String RID_SVXSTR_LEND9
+{
+    Text [ en-US ] = "Circle";
+};
+String RID_SVXSTR_LEND10
+{
+    Text [ en-US ] = "Square";
+};
+String RID_SVXSTR_LEND11
+{
+    Text [ en-US ] = "Arrow";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard transparence gradients
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_TRASNGR0_DEF
+{
+    Text = "Transparency";
+};
+
+String RID_SVXSTR_TRASNGR0
+{
+    Text [ en-US ] = "Transparency";
+};
+
+ // ********************************************************************** EOF
+
+ // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
+
+StringArray RID_SVXSTR_FIELDUNIT_TABLE
+{
+    ItemList [ en-US ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Inch" ; FUNIT_INCH ; > ;
+        < "Foot" ; FUNIT_FOOT ; > ;
+        < "Miles" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+        < "Char" ; FUNIT_CHAR ; > ;
+        < "Line" ; FUNIT_LINE ; > ;
+    };
+    };
+
+// unbekannte Zeichenfarbe
+String RID_SVXSTR_COLOR_USER
+{
+    Text [ en-US ] = "User" ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

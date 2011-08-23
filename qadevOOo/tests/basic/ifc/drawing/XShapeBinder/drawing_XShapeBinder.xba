@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="drawing_XShapeBinder" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global oBinderCollection As Object
+
+'*************************************************************************
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.drawing.XShapeBinder
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    ReCreateObj()
+
+    Test.StartMethod("bind()")
+    bOK = true
+    if hasUnoInterfaces(oObj, "com.sun.star.container.XIndexAccess") then
+        nCount = oObj.getCount()
+        Out.Log("" &amp; nCount &amp; " elements in collection")
+        oBind = oObj.bind(oBinderCollection)
+        if (isNULL(oBind)) then Out.Log("bind() returned NULL.")
+        Out.Log("" &amp; oObj.getCount &amp; " elements in collection")
+        bOK = bOK AND (NOT isNull(oBind)) AND (nCount &lt;&gt; oObj.getCount)
+    else
+        oBind = oObj.bind(oBinderCollection)
+        if (isNULL(oBind)) then Out.Log("bind() returned NULL.")
+        bOK = bOK AND NOT isNull(oBind)
+    end if
+    Test.MethodTested("bind()", bOK)
+
+    Test.StartMethod("unbind()")
+    if (NOT bOK) then
+        Out.Log("Can't test unbind() without bind()")
+    else
+        if hasUnoInterfaces( oObj, "com.sun.star.container.XIndexAccess" ) then
+            oObj.unbind(oBind)
+            Out.Log("" &amp; oObj.count &amp; " elements in collection")
+            bOK = bOK AND (nCount &lt;= oObj.getCount)
+            Test.MethodTested("unbind()", bOK)
+        else
+            oObj.unbind(oBind)
+        end if
+    end if
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

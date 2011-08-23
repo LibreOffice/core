@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="text_XText" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global oCollection As Object [optional]
+'       if this relation exists then the method "count" is called for check insert/remove
+'     - Global oInstance As Object
+'       Global aAddons() As Variant [optional]
+'       if this relation exists, then additional methods are called before and after insert/removeTextContent() methods
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.text.XText
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim cText As String
+    Dim oCursor As Object
+    Dim i1 As Integer
+    Dim i2 As Integer
+
+    Test.StartMethod("insertTextContent()")
+    bOK = true
+    cText = ". Zeile : test_XText"
+
+    If IsObject(oCollection) and IsObject(oInstance) Then
+        oCursor = oObj.createTextCursor()
+        oCursor.gotoEnd(false)
+        i1 = count(oCollection)
+        Out.Log("Before inserting we have " + i1 + " elements.")
+    
+'        if isArray(aAddons) then                                    
+'            Out.Log("Calling beforeInsertTextContent() ...")
+'            beforeInsertTextContent()
+'        endif
+
+        oObj.insertTextContent(oCursor, oInstance, false)
+
+'        if isArray(aAddons) then 
+'            Out.Log("Calling afterInsertTextContent() ...")
+'            afterInsertTextContent()
+'        endif
+
+        i2 = count(oCollection)
+        Out.Log("After inserting we have " + i2 + " elements.")
+        bOK = bOK AND i1 = i2 - 1
+        Test.MethodTested("insertTextContent()", bOK)
+
+        Test.StartMethod("removeTextContent()")
+        bOK = true
+        i1 = count(oCollection)
+        Out.Log("Before removing we have " + i1 + " elements.")
+
+'        if (isArray(aAddons)) then 
+'           Out.Log("Calling beforeRemoveTextContent() ...")
+'            beforeRemoveTextContent()
+'        endif
+
+        oObj.removeTextContent(oInstance)
+
+'        if (isArray(aAddons)) then 
+'            Out.Log("Calling afterRemoveTextContent() ...")
+'            afterRemoveTextContent()
+'        endif
+
+        i2 = count(oCollection)
+        Out.Log("After removing we have " + i2 + " elements.")
+        bOK = bOK AND i1 = i2 + 1
+        Test.MethodTested("removeTextContent()", bOK)
+    Else
+        oCursor = oObj.createTextCursor()
+        oCursor.gotoEnd(false)
+        oObj.insertTextContent(oCursor, oInstance, false)
+        Test.MethodTested("insertTextContent()", True)
+        Test.StartMethod("removeTextContent()")
+        oObj.removeTextContent(oInstance)
+        Test.MethodTested("removeTextContent()", True)
+    End If
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Function count(container As Variant) As Integer
+    Dim iAmount As Integer
+    Dim oEnumeration As Object
+
+    if hasUnoInterfaces(container, "com.sun.star.container.XIndexAccess") then
+        iAmount = container.getCount()
+    elseif hasUnoInterfaces(container, "com.sun.star.container.XNameAccess") then
+        iAmount = ubound(container.getElementNames()) + 1
+    elseif hasUnoInterfaces(container, "com.sun.star.container.XEnumerationAccess") then
+        oEnumeration = container.createEnumeration()
+        iAmount = 0
+        while oEnumeration.hasMoreElements()
+            iAmount = iAmount + 1
+            oEnumeration.nextElement()
+        wend
+    end if
+
+    count() = iAmount
+End Function
+</script:module>

@@ -1,0 +1,10 @@
+    <node oor:name="StarOffice XML (Math)" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN ENCRYPTION</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="FileFormatVersion"><value>6200</value></prop>
+        <prop oor:name="Type"><value>math_StarOffice_XML_Math</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.formula.FormulaProperties</value></prop>
+    </node>

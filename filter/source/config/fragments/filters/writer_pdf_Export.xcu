@@ -1,0 +1,13 @@
+    <node oor:name="writer_pdf_Export" oor:op="replace">
+        <prop oor:name="Flags"><value>EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="UIComponent"><value>com.sun.star.comp.PDF.PDFDialog</value></prop>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.PDF.PDFFilter</value></prop>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>pdf_Portable_Document_Format</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+    </node>

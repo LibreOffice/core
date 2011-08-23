@@ -1,0 +1,10 @@
+    <node oor:name="tga_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>tga_Truevision_TARGA</value></prop>
+        <prop oor:name="FormatName"><value>itg</value></prop>
+        <prop oor:name="RealFilterName"><value>TGA - Truevision TARGA</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">TGA - Truevision Targa</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

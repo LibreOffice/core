@@ -1,0 +1,2 @@
+The Presenter Console Extension provides more control over your slide show presentation, such as the ability to see the upcoming slide, the slide notes, and a presentation timer whereas the audience see only the current slide.
+To avoid confusions by displaying a large number of presentation elements, the Presenter Console displays the elements on three different easily changeable views.

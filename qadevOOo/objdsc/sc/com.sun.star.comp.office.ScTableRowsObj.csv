@@ -1,0 +1,7 @@
+"ScTableRowsObj";"com::sun::star::container::XIndexAccess";"getCount()"
+"ScTableRowsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
+"ScTableRowsObj";"com::sun::star::container::XElementAccess";"getElementType()"
+"ScTableRowsObj";"com::sun::star::container::XElementAccess";"hasElements()"
+"ScTableRowsObj";"com::sun::star::table::XTableRows";"insertByIndex()"
+"ScTableRowsObj";"com::sun::star::table::XTableRows";"removeByIndex()"
+"ScTableRowsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

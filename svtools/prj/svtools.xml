@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>svtools</module-name>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBox</name>
+        <description>BrowseBox...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar</name>
+        <description>BrowseBoxHeaderBar...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar</name>
+        <description>BrowseBoxHeaderBar...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell</name>
+        <description>BrowseBoxHeaderCell...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxTable</name>
+        <description>BrowseBoxTable...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxTableCell</name>
+        <description>eBrowseBoxTableCell...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Hans-Peter Burow</author>
+        <name>com.sun.star.comp.svtools.AccessibleTreeListBox</name>
+        <description>specifies accessibility support for a treelistbox.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.AccessibleTreeListBox</supported-service>
+    </component-description>
+    <component-description>
+        <author>Hans-Peter Burow</author>
+        <name>com.sun.star.comp.svtools.AccessibleTreeListBoxEntry</name>
+        <description>specifies accessibility support for a treelistbox entry.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.AccessibleTreeListBoxEntry</supported-service>
+    </component-description>
+    <component-description>
+        <author>Hans-Peter Burow</author>
+        <name>com.sun.star.comp.svtools.AccessibleIconChoiceCtrl</name>
+        <description>specifies accessibility support for an iconchoicecontrol.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.AccessibleIconChoiceControl</supported-service>
+    </component-description>
+    <component-description>
+        <author>Hans-Peter Burow</author>
+        <name>com.sun.star.comp.svtools.AccessibleIconChoiceCtrlEntry</name>
+        <description>specifies accessibility support for an iconchoicecontrol entry.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.AccessibleIconChoiceControlEntry</supported-service>
+    </component-description>
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.svtools.AccessibleTabBar</name>
+        <description>specifies accessibility support for a tabbar.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.awt.AccessibleTabBar</supported-service>
+    </component-description>
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.svtools.AccessibleTabBarPage</name>
+        <description>specifies accessibility support for a tabbar page.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.awt.AccessibleTabBarPage</supported-service>
+    </component-description>
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.svtools.AccessibleTabBarPageList</name>
+        <description>specifies accessibility support for a tabbar page list.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>com.sun.star.awt.AccessibleTabBarPageList</supported-service>
+    </component-description>
+</module-description>

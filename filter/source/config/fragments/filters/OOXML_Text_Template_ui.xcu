@@ -1,0 +1,6 @@
+    <node oor:name="Office Open XML Text Template">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Office Open XML Text Template</value>
+            <value xml:lang="de">Office Open XML Text Vorlage</value>
+        </prop>
+    </node>

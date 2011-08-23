@@ -1,0 +1,14 @@
+# Comment line
+# Syntax:
+# Column 1: Product
+# Column 2: pro or nonpro
+# Column 3: languages, comma separated list
+# Column 4: path to msi database in installation set
+# Separator between columns is one or more than one tabulator
+
+# Examples:
+# OpenOffice	pro		en-US		\\<server>\<path>\msi\OOO300_m6_native_packed-1_en-US.9352\openofficeorg30.msi
+# OpenOffice	pro		en-US,de,es	\\<server>\<path>\msi\OOO300_m6_native_packed-1_en-US_de_es.9352\openofficeorg30.msi
+# OpenOffice	pro		de			\\<server>\<path>\msi\OOO300_m6_native_packed-1_de.9352\openofficeorg30.msi
+# OpenOfficeLanguagePack	pro	es	\\<server>\<path>\msi\OOO300_m6_native_packed-1_es.9352\openofficeorg30.msi
+# URE			pro		en-US		\\<server>\<path>\msi\OOO300_m6_native_packed-1_en-US.9352\ure14.msi

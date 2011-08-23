@@ -1,0 +1,20 @@
+Explorer
+   Workspace
+      Bookmarks
+      Database
+      Macros
+      StarOffice Math
+      StarOffice API
+      ToDo
+      Translations
+          Chinese
+          German
+          English
+          French
+          Italian
+          Dutch
+          Portuguese
+          Swedish
+          Spanish
+   Examples
+      Databases

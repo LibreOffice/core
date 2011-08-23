@@ -1,0 +1,5 @@
+"Dynamic";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
+"Dynamic";"com::sun::star::lang::XServiceInfo";"supportsService()"
+"Dynamic";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
+"Dynamic";"com::sun::star::loader::XImplementationLoader";"activate()"
+"Dynamic";"com::sun::star::loader::XImplementationLoader";"writeRegistryInfo()"

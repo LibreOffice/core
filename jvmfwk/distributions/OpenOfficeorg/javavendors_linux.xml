@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+ <updated>2004-01-30</updated>
+ 
+ <vendorInfos> 
+  <vendor name="Sun Microsystems Inc.">
+    <minVersion>1.5.0</minVersion>
+  </vendor>
+  <vendor name="IBM Corporation">
+    <minVersion>1.5.0</minVersion>
+  </vendor>
+  <vendor name="Blackdown Java-Linux Team">
+    <minVersion>1.5.0</minVersion>
+  </vendor>
+  <vendor name="Free Software Foundation, Inc.">
+    <minVersion>1.5.0</minVersion>
+  </vendor>
+  <vendor name="BEA Systems, Inc.">
+    <minVersion>1.5.0</minVersion>
+  </vendor>
+ </vendorInfos>
+
+ <plugins>
+  <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
+  <library vendor="IBM Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
+  <library vendor="Blackdown Java-Linux Team">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
+  <library vendor="Free Software Foundation, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
+  <library vendor="BEA Systems, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.so</library>
+ </plugins>
+</javaSelection>

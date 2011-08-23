@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+<LC_INFO>
+<Language>
+<LangID>nb</LangID>
+<DefaultName>Norwegian Bokmål</DefaultName>
+</Language>
+<Country>
+<CountryID>NO</CountryID>
+<DefaultName>Norway</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE ref="no_NO"/>
+<LC_FORMAT ref="no_NO" replaceTo="[$kr-414]"/>
+<LC_COLLATION ref="no_NO"/>
+<LC_SEARCH ref="no_NO"/>
+<LC_INDEX ref="no_NO"/>
+<LC_CALENDAR ref="no_NO"/>
+<LC_CURRENCY ref="no_NO"/>
+<LC_TRANSLITERATION ref="no_NO"/>
+<LC_MISC ref="no_NO"/>
+<LC_NumberingLevel ref="no_NO"/>
+<LC_OutLineNumberingLevel ref="no_NO"/>
+</Locale>

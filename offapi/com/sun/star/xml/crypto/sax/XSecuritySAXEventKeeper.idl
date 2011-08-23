@@ -1,0 +1,133 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ 
+//i20156 - new file for xmlsecurity module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_sax_xsecuritysaxeventkeeper_idl_
+#define __com_sun_star_xml_crypto_sax_xsecuritysaxeventkeeper_idl_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.idl>
+
+module com { module sun { module star { module xml { module crypto { module sax {
+
+/**
+ * Represents the undefined security id
+ */
+constants ConstOfSecurityId
+{
+    const long UNDEFINEDSECURITYID = -1;
+};
+
+/**
+ * Defines priority for the element mark's notification.
+ * <p>
+ * The PRI_MINIMUM priority is a value less than any practical
+ * priority value, it is used when compare between different
+ * priority values.
+ * <p>
+ * The PRI_AFTERMODIFY priority represents the notification will be 
+ * sent after any internal modification has finished.
+ * <p>
+ * The PRI_BEFOREMODIFY proirity represents the notification will be
+ * sent before any internal modification happens.
+ * <p>
+ * So an element mark with PRI_BEFOREMODIFY will be handled first,
+ * and one with PRI_AFTERMODIFY will be handled at last.
+ */
+enum ElementMarkPriority
+{
+    MINIMUM = 1,
+    AFTERMODIFY,
+    BEFOREMODIFY
+};
+
+/**
+ * Defines types of element mark.
+ * <p>
+ * the TYPEOFELEMENTMARK type represents a blocker, and the TYPEOFELEMENTCOLLECTOR
+ * type represents a element collector.
+ */
+enum ElementMarkType
+{
+    ELEMENTMARK = 1,
+    ELEMENTCOLLECTOR
+};
+
+/**
+ * Interface of Security SAX Event Keeper.
+ * <p>
+ * This interface is an extension of the XSAXEventKeeper interface,
+ * some security related features are added.
+ */
+interface XSecuritySAXEventKeeper : XSAXEventKeeper
+{
+    /**
+     * Adds a new element collector on the next element in the SAX event
+     * stream.
+     *
+     * @param priority                       the priority of the element collector. See
+     *                                       ConstOfPriority
+     * @param modifyElement                  a flag representing whether the element
+     *                                       collector will modify the content of its 
+     *                                       element after notification
+     * @return                               the keeper id of the new element collector
+     */
+    long addSecurityElementCollector(
+        [in] ElementMarkPriority priority,
+        [in] boolean modifyElement);
+
+    /**
+     * Clones an element collector.
+     *
+     * @param referenceId                    the keeper id of the element collector to
+     *                                       be cloned
+     * @param priority                       the priority of new element collector. See
+     *                                       ConstOfPriority
+     * @return                               the keeper id of the new element collector
+     */
+    long cloneElementCollector(
+        [in] long referenceId,
+        [in] ElementMarkPriority priority);
+    
+    /**
+     * Sets security id for an element mark.
+     *
+     * @param id           the keeper id of the element collector to be set
+     * @param securityId   the security id to be set
+     */
+    void setSecurityId([in] long id, [in] long securityId);
+};
+
+} ; } ; } ; } ; } ; } ;
+
+
+#endif
+
