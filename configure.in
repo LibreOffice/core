@@ -8937,14 +8937,6 @@ PRODUCTNAME=AC_PACKAGE_NAME
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
 
-INSTALLDIRNAME=`echo AC_PACKAGE_NAME | tr [[:upper:]] [[:lower:]]`
-AC_MSG_CHECKING([for install dirname])
-if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes" ; then
-   INSTALLDIRNAME="$with_install_dirname"
-fi
-AC_MSG_RESULT([$INSTALLDIRNAME])
-AC_SUBST(INSTALLDIRNAME)
-
 AC_MSG_CHECKING([for prefix])
 PREFIXDIR="$prefix"
 AC_MSG_RESULT([$PREFIXDIR])
@@ -8969,11 +8961,6 @@ AC_MSG_CHECKING([for doc dir])
 DOCDIR=[$(eval echo $(eval echo $docdir))]
 AC_MSG_RESULT([$DOCDIR])
 AC_SUBST(DOCDIR)
-
-AC_MSG_CHECKING([for install dir])
-INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
-AC_MSG_RESULT([$INSTALLDIR])
-AC_SUBST(INSTALLDIR)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
 if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then
