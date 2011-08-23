@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,10 +131,10 @@ void PresenterPaneBase::disposing (void)
 void PresenterPaneBase::SetTitle (const OUString& rsTitle)
 {
     msTitle = rsTitle;
-
+    
     OSL_ASSERT(mpPresenterController.get()!=NULL);
     OSL_ASSERT(mpPresenterController->GetPaintManager().get()!=NULL);
-
+    
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
@@ -254,7 +254,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
                     static_cast<XWeak*>(this),
                     2);
             }
-
+            
             if ( ! (rArguments[3] >>= msTitle))
             {
                 throw lang::IllegalArgumentException(
@@ -281,13 +281,13 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
             }
 
             CreateWindows(mxParentWindow, bIsWindowVisibleOnCreation);
-
+    
             if (mxBorderWindow.is())
             {
                 mxBorderWindow->addWindowListener(this);
                 mxBorderWindow->addPaintListener(this);
             }
-
+            
             CreateCanvases(mxParentWindow, xParentCanvas);
 
             // Raise new windows.
@@ -398,7 +398,7 @@ void PresenterPaneBase::CreateWindows (
 {
     if (mxPresenterHelper.is() && rxParentWindow.is())
     {
-
+        
         mxBorderWindow = mxPresenterHelper->createWindow(
             rxParentWindow,
             sal_False,
@@ -483,7 +483,7 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
         awt::Rectangle aLocalBorderBox (0,0, aBorderBox.Width, aBorderBox.Height);
 
         PaintBorderBackground(aLocalBorderBox, rUpdateBox);
-
+        
         if (mbHasCallout)
             mxBorderPainter->paintBorderWithCallout(
                 mxPaneId->getResourceURL(),

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,11 +96,11 @@ public:
     ::boost::shared_ptr<PresenterTextView> GetTextViewForTitle (void);
 
     // XInitialization
-
+    
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-
+    
     // XResourceId
 
     virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
@@ -109,9 +109,9 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
-
+    
     // XWindowListener
-
+    
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 

@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sdext.hxx"
 
-#include "pppoptimizerdialog.hxx"
-#include "optimizerdialog.hxx"
+#include "pppoptimizerdialog.hxx" 
+#include "optimizerdialog.hxx" 
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -65,7 +65,7 @@ PPPOptimizerDialog::~PPPOptimizerDialog()
 void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments )
     throw ( Exception, RuntimeException )
 {
-    if( aArguments.getLength() != 1 )
+    if( aArguments.getLength() != 1 ) 
         throw IllegalArgumentException();
 
     aArguments[ 0 ] >>= mxFrame;
@@ -83,13 +83,13 @@ OUString SAL_CALL PPPOptimizerDialog::getImplementationName()
     return PPPOptimizerDialog_getImplementationName();
 }
 
-sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName ) 
     throw ( RuntimeException )
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERVICE_NAME ) );
 }
 
-Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames() 
     throw (RuntimeException)
 {
     return PPPOptimizerDialog_getSupportedServiceNames();
@@ -161,7 +161,7 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                     sBuf.append( rtl::OUString::valueOf( nFileSizeDest >> 10 ) );
                     sBuf.append( rtl::OUString::createFromAscii( "KB." ) );
                     OUString sResult( sBuf.makeStringAndClear() );
-//                  mpOptimizerDialog->showMessageBox( sResult, sResult, sal_False );
+//					mpOptimizerDialog->showMessageBox( sResult, sResult, sal_False );
                 }
                 delete mpOptimizerDialog, mpOptimizerDialog = NULL;
             }
@@ -201,7 +201,7 @@ OUString PPPOptimizerDialog_getImplementationName()
     return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.SunPresentationMinimizerImp" ) );
 }
 
-Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()
+Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames() 
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -209,7 +209,7 @@ Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()
     return aRet;
 }
 
-Reference< XInterface > PPPOptimizerDialog_createInstance( const Reference< XComponentContext > & rSMgr)
+Reference< XInterface > PPPOptimizerDialog_createInstance( const Reference< XComponentContext > & rSMgr) 
     throw( Exception )
 {
     return (cppu::OWeakObject*) new PPPOptimizerDialog( rSMgr );

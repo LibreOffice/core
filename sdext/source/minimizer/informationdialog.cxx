@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
 
-#define DIALOG_WIDTH    240
-#define DIALOG_HEIGHT   80
-#define PAGE_POS_X      35
-#define PAGE_WIDTH      ( DIALOG_WIDTH - PAGE_POS_X ) - 6
+#define DIALOG_WIDTH	240
+#define DIALOG_HEIGHT	80
+#define PAGE_POS_X		35
+#define PAGE_WIDTH		( DIALOG_WIDTH - PAGE_POS_X ) - 6
 
 
 // ---------------------
@@ -78,7 +78,7 @@ rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl:
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( nHeight ),
         Any( rLabel ),
         Any( bMultiLine ),
@@ -90,8 +90,8 @@ rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl:
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     rInformationDialog.insertFixedText( rControlName, aNames, aValues );
     return rControlName;
@@ -109,7 +109,7 @@ rtl::OUString InsertImage( InformationDialog& rInformationDialog, const OUString
         TKGet( TK_ScaleImage ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( sal_Int16( 0 ) ),
         Any( nHeight ),
         Any( rURL ),
@@ -119,8 +119,8 @@ rtl::OUString InsertImage( InformationDialog& rInformationDialog, const OUString
         Any( nWidth ) };
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     rInformationDialog.insertImage( rControlName, aNames, aValues );
     return rControlName;
@@ -140,7 +140,7 @@ rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUStr
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( sal_True ),
         Any( nHeight ),
         Any( rLabel ),
@@ -152,8 +152,8 @@ rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUStr
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     Reference< XCheckBox > xCheckBox( rInformationDialog.insertCheckBox( rControlName, aNames, aValues ) );
     if ( xItemListener.is() )
@@ -175,7 +175,7 @@ rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUStrin
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( sal_True ),
         Any( nHeight ),
         Any( rInformationDialog.getString( nResID ) ),
@@ -189,8 +189,8 @@ rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUStrin
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
     rInformationDialog.insertButton( rControlName, xActionListener, aNames, aValues );
     return rControlName;
@@ -229,7 +229,7 @@ OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
             {
                 OUString aDestMimeType( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
                 Sequence< PropertyValue > aArgs2( 2 );
-                aArgs2[ 0 ].Name = TKGet( TK_MimeType );                // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
+                aArgs2[ 0 ].Name = TKGet( TK_MimeType );				// the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
                 aArgs2[ 0 ].Value <<= aDestMimeType;
                 aArgs2[ 1 ].Name = TKGet( TK_OutputStream );
                 aArgs2[ 1 ].Value <<= xOutputStream;
@@ -260,7 +260,7 @@ void InformationDialog::InitDialog()
         TKGet( TK_Title ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( sal_True ),
         Any( nDialogHeight ),
         Any( sal_True ),
@@ -268,13 +268,13 @@ void InformationDialog::InitDialog()
         Any( sal_Int32( 115 ) ),
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( DIALOG_WIDTH ) ) };
-
+    
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
-    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
+    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues ); 
 
     sal_Int64 nSource = mnSourceSize;
     sal_Int64 nDest   = mnDestSize;
@@ -335,7 +335,7 @@ void InformationDialog::InitDialog()
     if ( k >= 0 )
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener; 
     InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), ImpGetStandardImage( rtl::OUString::createFromAscii( "private:standardimage/query" ) ), 5, 5, 25, 25 );
     InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
     if ( maSaveAsURL.getLength() )
@@ -363,7 +363,7 @@ InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMS
     Reference< XFrame > xFrame( mxController->getFrame() );
     Reference< XWindow > xContainerWindow( xFrame->getContainerWindow() );
     Reference< XWindowPeer > xWindowPeer( xContainerWindow, UNO_QUERY_THROW );
-    createWindowPeer( xWindowPeer );
+    createWindowPeer( xWindowPeer );		
 
     InitDialog();
 }

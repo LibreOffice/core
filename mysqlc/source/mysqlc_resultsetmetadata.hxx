@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -74,49 +74,49 @@ namespace connectivity
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
             { return this; }
 
-            sal_Int32 SAL_CALL getColumnCount()                     throw(SQLException, RuntimeException);
+            sal_Int32 SAL_CALL getColumnCount()						throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isAutoIncrement(sal_Int32 column)     throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isAutoIncrement(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isCaseSensitive(sal_Int32 column)     throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isCaseSensitive(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isSearchable(sal_Int32 column)        throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isSearchable(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isCurrency(sal_Int32 column)          throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isCurrency(sal_Int32 column)			throw(SQLException, RuntimeException);
 
-            sal_Int32 SAL_CALL isNullable(sal_Int32 column)         throw(SQLException, RuntimeException);
+            sal_Int32 SAL_CALL isNullable(sal_Int32 column)			throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isSigned(sal_Int32 column)            throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isSigned(sal_Int32 column)			throw(SQLException, RuntimeException);
 
             sal_Int32 SAL_CALL getColumnDisplaySize(sal_Int32 column)throw(SQLException, RuntimeException);
 
-            OUString SAL_CALL getColumnLabel(sal_Int32 column)      throw(SQLException, RuntimeException);
+            OUString SAL_CALL getColumnLabel(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            OUString SAL_CALL getColumnName(sal_Int32 column)       throw(SQLException, RuntimeException);
+            OUString SAL_CALL getColumnName(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            OUString SAL_CALL getSchemaName(sal_Int32 column)       throw(SQLException, RuntimeException);
+            OUString SAL_CALL getSchemaName(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            sal_Int32 SAL_CALL getPrecision(sal_Int32 column)       throw(SQLException, RuntimeException);
+            sal_Int32 SAL_CALL getPrecision(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            sal_Int32 SAL_CALL getScale(sal_Int32 column)           throw(SQLException, RuntimeException);
+            sal_Int32 SAL_CALL getScale(sal_Int32 column)			throw(SQLException, RuntimeException);
 
-            OUString SAL_CALL getTableName(sal_Int32 column)        throw(SQLException, RuntimeException);
+            OUString SAL_CALL getTableName(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            OUString SAL_CALL getCatalogName(sal_Int32 column)      throw(SQLException, RuntimeException);
+            OUString SAL_CALL getCatalogName(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            sal_Int32 SAL_CALL getColumnType(sal_Int32 column)      throw(SQLException, RuntimeException);
+            sal_Int32 SAL_CALL getColumnType(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            OUString SAL_CALL getColumnTypeName(sal_Int32 column)   throw(SQLException, RuntimeException);
+            OUString SAL_CALL getColumnTypeName(sal_Int32 column) 	throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isReadOnly(sal_Int32 column)          throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isReadOnly(sal_Int32 column)			throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isWritable(sal_Int32 column)          throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isWritable(sal_Int32 column)			throw(SQLException, RuntimeException);
 
             sal_Bool SAL_CALL isDefinitelyWritable(sal_Int32 column)throw(SQLException, RuntimeException);
 
             OUString SAL_CALL getColumnServiceName(sal_Int32 column)throw(SQLException, RuntimeException);
 
-            void checkColumnIndex(sal_Int32 columnIndex)            throw (SQLException, RuntimeException);
+            void checkColumnIndex(sal_Int32 columnIndex)			throw (SQLException, RuntimeException);
         };
     }
 }

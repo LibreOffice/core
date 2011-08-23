@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace rtl { class OUString; }
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace uno {
         class XComponentContext;
     }
@@ -49,15 +49,15 @@ namespace pdfi
                               const com::sun::star::uno::Reference<
                                     com::sun::star::task::XInteractionHandler >& xIHdl,
                               const rtl::OUString&                               rPwd,
-                              const com::sun::star::uno::Reference<
+                              const com::sun::star::uno::Reference< 
                                     com::sun::star::uno::XComponentContext >&    xContext );
-    bool xpdf_ImportFromStream( const com::sun::star::uno::Reference<
+    bool xpdf_ImportFromStream( const com::sun::star::uno::Reference< 
                                       com::sun::star::io::XInputStream >&          xInput,
                                 const ContentSinkSharedPtr&                        rSink,
                                 const com::sun::star::uno::Reference<
                                       com::sun::star::task::XInteractionHandler >& xIHdl,
                                 const rtl::OUString&                               rPwd,
-                                const com::sun::star::uno::Reference<
+                                const com::sun::star::uno::Reference< 
                                       com::sun::star::uno::XComponentContext >&    xContext );
 }
 

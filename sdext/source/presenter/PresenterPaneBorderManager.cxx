@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -220,25 +220,25 @@ PresenterPaneBorderManager::BorderElement
 
         case mnTop | mnLeft:
             return TopLeft;
-
+            
         case mnTop | mnRight:
             return TopRight;
-
+            
         case mnTop | mnHorizontalCenter:
             return Top;
-
+            
         case mnBottom | mnLeft:
             return BottomLeft;
-
+            
         case mnBottom | mnRight:
             return BottomRight;
-
+            
         case mnBottom | mnHorizontalCenter:
             return Bottom;
-
+            
         case mnVerticalCenter | mnLeft:
             return Left;
-
+            
         case mnVerticalCenter | mnRight:
             return Right;
     }
@@ -360,12 +360,12 @@ void SAL_CALL PresenterPaneBorderManager::mouseExited (const css::awt::MouseEven
     mxOuterDragWindow = NULL;
     mxInnerDragWindow = NULL;
 }
-
+    
 
 
 
 //----- XMouseMotionListener --------------------------------------------------
-
+    
 void SAL_CALL PresenterPaneBorderManager::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -408,7 +408,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseMoved (const css::awt::MouseEvent
             case PresenterPaneBorderManager::Bottom:
                 mnPointerType = awt::SystemPointer::WINDOW_SSIZE;
                 break;
-
+                
             case PresenterPaneBorderManager::Content:
             case PresenterPaneBorderManager::Outside:
             default:
@@ -451,7 +451,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
 
     const sal_Int32 nOldRight = aOldBox.X + aOldBox.Width;
     const sal_Int32 nOldBottom = aOldBox.Y + aOldBox.Height;
-
+        
     awt::Rectangle aBox (aOldBox);
     sal_Int32 nRight = aBox.X + aBox.Width;
     sal_Int32 nBottom = aBox.Y + aBox.Height;
@@ -487,7 +487,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
             break;
         default: break;
     }
-
+    
     aBox.Width = nRight - aBox.X;
     aBox.Height = nBottom - aBox.Y;
     if (aBox.Width > 20
