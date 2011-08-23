@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace i18n {
     class XCollator;
 }
 namespace lang {
-    class XMultiServiceFactory;
+    class XMultiServiceFactory; 
 }
 }}}
 
@@ -49,7 +49,7 @@ namespace com {
 namespace sun {
 namespace star {
 namespace accessibility {
-    struct AccessibleEventObject;
+    struct AccessibleEventObject; 
 }
 }}}
 
@@ -64,7 +64,7 @@ namespace unohelper
 ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCollator > VCL_DLLPUBLIC CreateCollator();
 ::rtl::OUString VCL_DLLPUBLIC CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD );
 void VCL_DLLPUBLIC NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
-}}  // namespace vcl::unohelper
+}}	// namespace vcl::unohelper
 
 #endif  // _VCL_UNOHELP_HXX
 

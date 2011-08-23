@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,8 +72,8 @@ public:
     const sal_Unicode*  mpCvtTab;
     const char*         mpSubsFontName;
     sal_Unicode         (*mpCvtFunc)( sal_Unicode );
-    sal_Unicode         RecodeChar( sal_Unicode c ) const;
-    void                RecodeString( String& rStra, xub_StrLen nIndex, xub_StrLen nLen ) const;
+    sal_Unicode			RecodeChar( sal_Unicode c ) const;
+    void				RecodeString( String& rStra, xub_StrLen nIndex, xub_StrLen nLen ) const;
     static const ConvertChar* GetRecodeData( const String& rOrgFontName, const String& rMapFontName );
 };
 

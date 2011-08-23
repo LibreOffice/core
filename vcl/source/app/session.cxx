@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,10 @@ class VCLSession : public cppu::WeakComponentImplHelper1 < XSessionManagerClient
 {
     struct Listener
     {
-        Reference< XSessionManagerListener >        m_xListener;
-        bool                                        m_bInteractionRequested;
-        bool                                        m_bInteractionDone;
-        bool                                        m_bSaveDone;
+        Reference< XSessionManagerListener >		m_xListener;
+        bool										m_bInteractionRequested;
+        bool										m_bInteractionDone;
+        bool										m_bSaveDone;
 
         Listener( const Reference< XSessionManagerListener >& xListener )
                 : m_xListener( xListener ),
@@ -65,13 +65,13 @@ class VCLSession : public cppu::WeakComponentImplHelper1 < XSessionManagerClient
         {}
     };
 
-    std::list< Listener >                           m_aListeners;
-    SalSession*                                     m_pSession;
-    osl::Mutex                                      m_aMutex;
-    bool                                            m_bInteractionRequested;
-    bool                                            m_bInteractionGranted;
-    bool                                            m_bInteractionDone;
-    bool                                            m_bSaveDone;
+    std::list< Listener >							m_aListeners;
+    SalSession*										m_pSession;
+    osl::Mutex										m_aMutex;
+    bool											m_bInteractionRequested;
+    bool											m_bInteractionGranted;
+    bool											m_bInteractionDone;
+    bool											m_bSaveDone;
 
     static void SalSessionEventProc( SalSessionEvent* pEvent );
     static VCLSession* pOneInstance;
@@ -83,7 +83,7 @@ class VCLSession : public cppu::WeakComponentImplHelper1 < XSessionManagerClient
 public:
     VCLSession();
     virtual ~VCLSession();
-
+    
     virtual void SAL_CALL addSessionManagerListener( const Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
     virtual void SAL_CALL removeSessionManagerListener( const Reference< XSessionManagerListener>& xListener ) throw( RuntimeException );
     virtual void SAL_CALL queryInteraction( const Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
@@ -135,7 +135,7 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
         // without session we assume UI is always possible,
         // so it was reqeusted and granted
         m_bInteractionRequested = m_bInteractionGranted = m_pSession ? false : true;
-
+        
         // answer the session manager even if no listeners available anymore
         DBG_ASSERT( ! aListeners.empty(), "saveRequested but no listeners !" );
         if( aListeners.empty() )
@@ -177,7 +177,7 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
     ULONG nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->approveInteraction( bInteractionGranted );
-
+    
     Application::AcquireSolarMutex( nAcquireCount );
 }
 
@@ -247,7 +247,7 @@ void VCLSession::SalSessionEventProc( SalSessionEvent* pEvent )
 void SAL_CALL VCLSession::addSessionManagerListener( const Reference<XSessionManagerListener>& xListener ) throw( RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
-
+    
     m_aListeners.push_back( Listener( xListener ) );
 }
 
@@ -265,7 +265,7 @@ void SAL_CALL VCLSession::removeSessionManagerListener( const Reference<XSession
         }
         else
             ++it;
-    }
+    }    
 }
 
 void SAL_CALL VCLSession::queryInteraction( const Reference<XSessionManagerListener>& xListener ) throw( RuntimeException )
@@ -289,8 +289,8 @@ void SAL_CALL VCLSession::queryInteraction( const Reference<XSessionManagerListe
     {
         if( it->m_xListener == xListener )
         {
-            it->m_bInteractionRequested = true;
-            it->m_bInteractionDone      = false;
+            it->m_bInteractionRequested	= true;
+            it->m_bInteractionDone		= false;
         }
     }
 }
@@ -364,6 +364,6 @@ Reference< XInterface > SAL_CALL vcl_session_createInstance( const Reference< XM
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->xSMClient.is() )
         pSVData->xSMClient = new VCLSession();
-
+    
     return Reference< XInterface >(pSVData->xSMClient, UNO_QUERY );
 }

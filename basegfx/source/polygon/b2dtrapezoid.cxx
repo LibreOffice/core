@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,20 +46,20 @@ namespace basegfx
         // currently, thus the YPositions will be equal. I did not create a special
         // class for this since holdingthe pointers is more effective and also can be
         // used as baseclass for the traversing edges
-
+        
         class TrDeSimpleEdge
         {
         protected:
             // pointers to start and end point
-            const B2DPoint*     mpStart;
-            const B2DPoint*     mpEnd;
+            const B2DPoint*		mpStart;
+            const B2DPoint*		mpEnd;
 
         public:
             // constructor
             TrDeSimpleEdge(
                 const B2DPoint* pStart,
                 const B2DPoint* pEnd)
-            :   mpStart(pStart),
+            :	mpStart(pStart),
                 mpEnd(pEnd)
             {
             }
@@ -75,7 +75,7 @@ namespace basegfx
         typedef ::std::vector< TrDeSimpleEdge > TrDeSimpleEdges;
 
         //////////////////////////////////////////////////////////////////////////////
-        // helper class for holding a traversing edge. It will always have some
+        // helper class for holding a traversing edge. It will always have some 
         // distance in YPos. The slope (in a numerically useful form, see comments) is
         // hold and used in SortValue to allow sorting traversing edges by Y, X and slope
         // (in that order)
@@ -84,7 +84,7 @@ namespace basegfx
         {
         private:
             // the slope in a numerical useful form for sorting
-            sal_uInt32          mnSortValue;
+            sal_uInt32			mnSortValue;
 
         public:
             // convenience data read access
@@ -104,7 +104,7 @@ namespace basegfx
 
                 // convert to sal_uInt32 value
                 const_cast< TrDeEdgeEntry* >(this)->mnSortValue = sal_uInt32(fRadiant);
-
+                
                 return mnSortValue;
             }
 
@@ -113,7 +113,7 @@ namespace basegfx
                 const B2DPoint* pStart,
                 const B2DPoint* pEnd,
                 sal_uInt32 nSortValue = 0)
-            :   TrDeSimpleEdge(pStart, pEnd),
+            :	TrDeSimpleEdge(pStart, pEnd),
                 mnSortValue(nSortValue)
             {
                 // force traversal of deltaY downward
@@ -134,7 +134,7 @@ namespace basegfx
                 if(mpStart != pNewStart)
                 {
                     mpStart = pNewStart;
-
+                    
                     // no horizontal edges allowed, all neeed to traverse vertivally
                     OSL_ENSURE(mpEnd->getY() > mpStart->getY(), "Illegal TrDeEdgeEntry constructed (!)");
                 }
@@ -148,7 +148,7 @@ namespace basegfx
                 if(mpEnd != pNewEnd)
                 {
                     mpEnd = pNewEnd;
-
+                    
                     // no horizontal edges allowed, all neeed to traverse vertivally
                     OSL_ENSURE(mpEnd->getY() > mpStart->getY(), "Illegal TrDeEdgeEntry constructed (!)");
                 }
@@ -162,10 +162,10 @@ namespace basegfx
                     if(fTools::equal(getStart().getX(), rComp.getStart().getX(), fTools::getSmallValue()))
                     {
                         // when start points are equal, use the direction the edge is pointing
-                        // to. That value is created on demand and derived from atan2 in the
+                        // to. That value is created on demand and derived from atan2 in the 
                         // range ]0.0 .. pi[ (without extremas, we always have a deltaY in this
-                        // class) and scaled to sal_uInt32 range for best precision. 0 means no angle,
-                        // while SAL_MAX_UINT32 means pi. Thus, the higher the value, the more left
+                        // class) and scaled to sal_uInt32 range for best precision. 0 means no angle, 
+                        // while SAL_MAX_UINT32 means pi. Thus, the higher the value, the more left 
                         // the edge traverses.
                         return (getSortValue() > rComp.getSortValue());
                     }
@@ -183,11 +183,11 @@ namespace basegfx
             // method for cut support
             B2DPoint getCutPointForGivenY(double fGivenY)
             {
-                // Calculate cut point locally (do not use interpolate) since it is numerically
+                // Calculate cut point locally (do not use interpolate) since it is numerically 
                 // necessary to guarantee the new, equal Y-coordinate
                 const double fFactor((fGivenY - getStart().getY()) / getDeltaY());
                 const double fDeltaXNew(fFactor * getDeltaX());
-
+                
                 return B2DPoint(getStart().getX() + fDeltaXNew, fGivenY);
             }
         };
@@ -211,10 +211,10 @@ namespace basegfx
         {
         private:
             // local data
-            sal_uInt32                  mnInitialEdgeEntryCount;
-            TrDeEdgeEntries             maTrDeEdgeEntries;
-            ::std::vector< B2DPoint >   maPoints;
-            ::std::vector< B2DPoint* >  maNewPoints;
+            sal_uInt32					mnInitialEdgeEntryCount;
+            TrDeEdgeEntries				maTrDeEdgeEntries;
+            ::std::vector< B2DPoint >	maPoints;
+            ::std::vector< B2DPoint* >	maNewPoints;
 
             void addEdgeSorted(
                 TrDeEdgeEntries::iterator aCurrent,
@@ -292,12 +292,12 @@ namespace basegfx
                 {
                     return false;
                 }
-
+                
                 if(aEdgeA.getStart().equal(aEdgeB.getEnd(), fTools::getSmallValue()))
                 {
                     return false;
                 }
-
+                
                 if(aEdgeA.getEnd().equal(aEdgeB.getStart(), fTools::getSmallValue()))
                 {
                     return false;
@@ -378,7 +378,7 @@ namespace basegfx
                     {
                         delete pNewPoint;
                     }
-
+                
                     return bRetval;
                 }
 
@@ -434,7 +434,7 @@ namespace basegfx
                                 {
                                     // cut is in XRange of horizontal edge, potenitally needed cut
                                     B2DPoint* pNewPoint = new B2DPoint(aSplit);
-
+                                    
                                     if(splitEdgeAtGivenPoint(aCompare, *pNewPoint, aCurrent))
                                     {
                                         maNewPoints.push_back(pNewPoint);
@@ -455,7 +455,7 @@ namespace basegfx
         public:
             TrapezoidSubdivider(
                 const B2DPolyPolygon& rSourcePolyPolygon)
-            :   mnInitialEdgeEntryCount(0),
+            :	mnInitialEdgeEntryCount(0),
                 maTrDeEdgeEntries(),
                 maPoints(),
                 maNewPoints()
@@ -506,8 +506,8 @@ namespace basegfx
                     }
 
                     // Moved the edge construction to a 3rd run: doing it in the 2nd run is
-                    // possible(and i used it), but requires a working vector::reserve()
-                    // implementation, else the vector will be reallocated and the pointers
+                    // possible(and i used it), but requires a working vector::reserve() 
+                    // implementation, else the vector will be reallocated and the pointers 
                     // in the edges may be wrong. Security first here.
                     sal_uInt32 nStartIndex(0);
 
@@ -583,7 +583,7 @@ namespace basegfx
                 //
                 // There always must be two edges with the same YStart value: When adding the polygons
                 // in the constructor, there is always a topmost point from which two edges start; when
-                // the topmost is an edge, there is a start and end of this edge from which two edges
+                // the topmost is an edge, there is a start and end of this edge from which two edges 
                 // start. All cases have two edges with same StartY (QED).
                 //
                 // Based on this these edges get corrected when:
@@ -593,7 +593,7 @@ namespace basegfx
                 // - another edge starts inside the thought trapezoid
                 //
                 // All this cases again produce a valid state so that the first two edges have a common
-                // Ystart again. Some cases lead to a restart of the process, some allow consuming the
+                // Ystart again. Some cases lead to a restart of the process, some allow consuming the 
                 // edges and create the intended trapezoid.
                 //
                 // Be careful when doing chages here: It is essential to keep all possible paths
@@ -606,8 +606,8 @@ namespace basegfx
                 {
                     // measuring shows that the relation between edges and created trapezoids is
                     // mostly in the 1:1 range, thus reserve as much trapezoids as edges exist. Do
-                    // not use maTrDeEdgeEntries.size() since that may be a non-constant time
-                    // operation for Lists. Instead, use mnInitialEdgeEntryCount which will contain
+                    // not use maTrDeEdgeEntries.size() since that may be a non-constant time 
+                    // operation for Lists. Instead, use mnInitialEdgeEntryCount which will contain 
                     // the roughly counted adds to the List
                     ro_Result.reserve(ro_Result.size() + mnInitialEdgeEntryCount);
                 }
@@ -634,9 +634,9 @@ namespace basegfx
 
                     if(!fTools::equal(aLeft.getStart().getY(), aRight.getStart().getY(), fTools::getSmallValue()))
                     {
-                        // Should not happen: We have a 2nd edge, but YStart is on another
+                        // Should not happen: We have a 2nd edge, but YStart is on another 
                         // line; consume the single edge to not have an endless loop and start
-                        // next. During development i constantly had breakpoints here, so i am
+                        // next. During development i constantly had breakpoints here, so i am 
                         // sure enough to add an assertion here
                         OSL_ENSURE(false, "Trapeziod decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
@@ -646,7 +646,7 @@ namespace basegfx
                     // aLeft and aRight build a thought trapezoid now. They have a common
                     // start line (same Y for start points). Potentially, one of the edges
                     // is longer than the other. It is only needed to look at the shorter
-                    // length which build the potential trapezoid. To do so, get the end points
+                    // length which build the potential trapezoid. To do so, get the end points 
                     // locally and adapt the evtl. longer one. Use only aLeftEnd and aRightEnd
                     // from here on, not the aLeft.getEnd() or aRight.getEnd() accesses.
                     B2DPoint aLeftEnd(aLeft.getEnd());
@@ -656,7 +656,7 @@ namespace basegfx
                     // needs to be prepared. Also remember which one actually is longer.
                     const bool bEndOnSameLine(fTools::equal(aLeftEnd.getY(), aRightEnd.getY(), fTools::getSmallValue()));
                     bool bLeftIsLonger(false);
-
+                    
                     if(!bEndOnSameLine)
                     {
                         // check which edge is longer and correct accordingly
@@ -698,7 +698,7 @@ namespace basegfx
                             else
                             {
                                 B2DPoint* pNewPoint = new B2DPoint(aRightEnd);
-
+                                
                                 if(splitEdgeAtGivenPoint(aRight, *pNewPoint, aCurrent))
                                 {
                                     maNewPoints.push_back(pNewPoint);
@@ -713,10 +713,10 @@ namespace basegfx
                         // consume both edges and start next run
                         maTrDeEdgeEntries.pop_front();
                         maTrDeEdgeEntries.pop_front();
-
+                        
                         continue;
                     }
-
+                
                     // check if the edges self-intersect. This can only happen when
                     // start and end point are different
                     bool bRangesSet(false);
@@ -742,7 +742,7 @@ namespace basegfx
 
                     // now we need to check if there are intersections with other edges
                     // or if other edges start inside the candidate trapezoid
-                    if(aCurrent != maTrDeEdgeEntries.end()
+                    if(aCurrent != maTrDeEdgeEntries.end() 
                         && fTools::less(aCurrent->getStart().getY(), aLeftEnd.getY()))
                     {
                         // get XRanges of edges
@@ -751,11 +751,11 @@ namespace basegfx
                             aLeftRange = B1DRange(aLeft.getStart().getX(), aLeftEnd.getX());
                             aRightRange = B1DRange(aRight.getStart().getX(), aRightEnd.getX());
                         }
-
+                        
                         // build full XRange for fast check
                         B1DRange aAllRange(aLeftRange);
                         aAllRange.expand(aRightRange);
-
+                    
                         // prepare loop iterator; aCurrent needs to stay unchanged for
                         // eventual sorted insertions of new EdgeNodes. Also prepare stop flag
                         TrDeEdgeEntries::iterator aLoop(aCurrent);
@@ -776,7 +776,7 @@ namespace basegfx
 
                             // get compare XRange
                             const B1DRange aCompareRange(aCompare.getStart().getX(), aCompare.getEnd().getX());
-
+                
                             // use fast range test first
                             if(aAllRange.overlaps(aCompareRange))
                             {
@@ -789,12 +789,12 @@ namespace basegfx
 
                                     // check for start point of aCompare being inside thought
                                     // trapezoid
-                                    if(aCompare.getStart().getX() >= aSplitLeft.getX() &&
+                                    if(aCompare.getStart().getX() >= aSplitLeft.getX() && 
                                         aCompare.getStart().getX() <= aSplitRight.getX())
                                     {
                                         // is inside, correct and restart loop
                                         B2DPoint* pNewLeft = new B2DPoint(aSplitLeft);
-
+                                        
                                         if(splitEdgeAtGivenPoint(aLeft, *pNewLeft, aCurrent))
                                         {
                                             maNewPoints.push_back(pNewLeft);
@@ -803,9 +803,9 @@ namespace basegfx
                                         {
                                             delete pNewLeft;
                                         }
-
+                                        
                                         B2DPoint* pNewRight = new B2DPoint(aSplitRight);
-
+        
                                         if(splitEdgeAtGivenPoint(aRight, *pNewRight, aCurrent))
                                         {
                                             maNewPoints.push_back(pNewRight);
@@ -814,7 +814,7 @@ namespace basegfx
                                         {
                                             delete pNewRight;
                                         }
-
+                                        
                                         bDone = true;
                                     }
                                 }
@@ -824,7 +824,7 @@ namespace basegfx
                                     // test for concrete cut of compare edge with left edge
                                     bDone = testAndCorrectEdgeIntersection(aLeft, aCompare, aCurrent);
                                 }
-
+                                
                                 if(!bDone && aRightRange.overlaps(aCompareRange))
                                 {
                                     // test for concrete cut of compare edge with Right edge
@@ -844,14 +844,14 @@ namespace basegfx
                     }
 
                     // when we get here, the intended trapezoid can be used. It needs to
-                    // be corrected, eventually (if prepared); but this is no reason not to
+                    // be corrected, eventually (if prepared); but this is no reason not to 
                     // use it in the same loop iteration
                     if(!bEndOnSameLine)
                     {
                         if(bLeftIsLonger)
                         {
                             B2DPoint* pNewPoint = new B2DPoint(aLeftEnd);
-
+                            
                             if(splitEdgeAtGivenPoint(aLeft, *pNewPoint, aCurrent))
                             {
                                 maNewPoints.push_back(pNewPoint);
@@ -864,7 +864,7 @@ namespace basegfx
                         else
                         {
                             B2DPoint* pNewPoint = new B2DPoint(aRightEnd);
-
+                            
                             if(splitEdgeAtGivenPoint(aRight, *pNewPoint, aCurrent))
                             {
                                 maNewPoints.push_back(pNewPoint);
@@ -887,7 +887,7 @@ namespace basegfx
                             aLeftEnd.getX(),
                             aRightEnd.getX(),
                             aLeftEnd.getY()));
-
+                    
                     maTrDeEdgeEntries.pop_front();
                     maTrDeEdgeEntries.pop_front();
                 }
@@ -907,7 +907,7 @@ namespace basegfx
         const double& rfBottomXLeft,
         const double& rfBottomXRight,
         const double& rfBottomY)
-    :   mfTopXLeft(rfTopXLeft),
+    :	mfTopXLeft(rfTopXLeft),
         mfTopXRight(rfTopXRight),
         mfTopY(rfTopY),
         mfBottomXLeft(rfBottomXLeft),
@@ -964,9 +964,9 @@ namespace basegfx
         }
 
         void createLineTrapezoidFromEdge(
-            B2DTrapezoidVector& ro_Result,
-            const B2DPoint& rPointA,
-            const B2DPoint& rPointB,
+            B2DTrapezoidVector& ro_Result, 
+            const B2DPoint& rPointA, 
+            const B2DPoint& rPointB, 
             double fLineWidth)
         {
             if(fTools::lessOrEqual(fLineWidth, 0.0))
@@ -1036,14 +1036,14 @@ namespace basegfx
                 aTrDeEdgeEntries.push_back(basegfx::trapezoidhelper::TrDeEdgeEntry(&aEndLow, &aStartLow, 0));
                 aTrDeEdgeEntries.sort();
 
-                // here we know we have exactly four edges, and they do not cut, touch or
+                // here we know we have exactly four edges, and they do not cut, touch or 
                 // intersect. This makes processing much easier. Get the first two as start
                 // edges for the thought trapezoid
                 basegfx::trapezoidhelper::TrDeEdgeEntries::iterator aCurrent(aTrDeEdgeEntries.begin());
                 basegfx::trapezoidhelper::TrDeEdgeEntries::reference aLeft(*aCurrent++);
                 basegfx::trapezoidhelper::TrDeEdgeEntries::reference aRight(*aCurrent++);
                 const bool bEndOnSameLine(fTools::equal(aLeft.getEnd().getY(), aRight.getEnd().getY(), fTools::getSmallValue()));
-
+                
                 if(bEndOnSameLine)
                 {
                     // create two triangle trapezoids
@@ -1070,7 +1070,7 @@ namespace basegfx
                 }
                 else
                 {
-                    // create three trapezoids. Check which edge is longer and
+                    // create three trapezoids. Check which edge is longer and 
                     // correct accordingly
                     const bool bLeftIsLonger(fTools::more(aLeft.getEnd().getY(), aRight.getEnd().getY()));
 
@@ -1080,7 +1080,7 @@ namespace basegfx
                         basegfx::trapezoidhelper::TrDeEdgeEntries::reference aLeft2(*aCurrent++);
                         const B2DPoint aSplitLeft(aLeft.getCutPointForGivenY(aRight.getEnd().getY()));
                         const B2DPoint aSplitRight(aRight2.getCutPointForGivenY(aLeft.getEnd().getY()));
-
+                        
                         ro_Result.push_back(
                             B2DTrapezoid(
                                 aLeft.getStart().getX(),
@@ -1089,7 +1089,7 @@ namespace basegfx
                                 aSplitLeft.getX(),
                                 aRight.getEnd().getX(),
                                 aRight.getEnd().getY()));
-
+                                
                         ro_Result.push_back(
                             B2DTrapezoid(
                                 aSplitLeft.getX(),
@@ -1098,7 +1098,7 @@ namespace basegfx
                                 aLeft2.getStart().getX(),
                                 aSplitRight.getX(),
                                 aLeft2.getStart().getY()));
-
+                                
                         ro_Result.push_back(
                             B2DTrapezoid(
                                 aLeft2.getStart().getX(),
@@ -1147,7 +1147,7 @@ namespace basegfx
         }
 
         void createLineTrapezoidFromB2DPolygon(
-            B2DTrapezoidVector& ro_Result,
+            B2DTrapezoidVector& ro_Result, 
             const B2DPolygon& rPolygon,
             double fLineWidth)
         {
@@ -1161,11 +1161,12 @@ namespace basegfx
 
             if(aSource.areControlPointsUsed())
             {
-                aSource = aSource.getDefaultAdaptiveSubdivision();
+            const double fPrecisionFactor = 0.25;
+                aSource = adaptiveSubdivideByDistance( aSource, fLineWidth * fPrecisionFactor );
             }
 
             const sal_uInt32 nPointCount(aSource.count());
-
+            
             if(!nPointCount)
             {
                 return;
@@ -1180,14 +1181,14 @@ namespace basegfx
             {
                 const sal_uInt32 nNextIndex((a + 1) % nPointCount);
                 const B2DPoint aNext(aSource.getB2DPoint(nNextIndex));
-
+                
                 createLineTrapezoidFromEdge(ro_Result, aCurrent, aNext, fLineWidth);
                 aCurrent = aNext;
             }
         }
 
         void createLineTrapezoidFromB2DPolyPolygon(
-            B2DTrapezoidVector& ro_Result,
+            B2DTrapezoidVector& ro_Result, 
             const B2DPolyPolygon& rPolyPolygon,
             double fLineWidth)
         {
@@ -1205,7 +1206,7 @@ namespace basegfx
             }
 
             const sal_uInt32 nCount(aSource.count());
-
+            
             if(!nCount)
             {
                 return;
@@ -1214,7 +1215,7 @@ namespace basegfx
             for(sal_uInt32 a(0); a < nCount; a++)
             {
                 createLineTrapezoidFromB2DPolygon(
-                    ro_Result,
+                    ro_Result, 
                     aSource.getB2DPolygon(a),
                     fLineWidth);
             }

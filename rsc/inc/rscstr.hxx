@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class RscString : public RscTop
         BOOL    bDflt;  // Ist Default
         RscId   aRefId; // ReferenzName
     };
-    sal_uInt32  nSize;
+    sal_uInt32	nSize;
 public:
                     RscString( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
@@ -54,7 +54,7 @@ public:
                     // Der zulaessige Bereich wird gesetzt
     void            Destroy( const RSCINST & rInst );
     sal_uInt32          Size(){ return nSize; }
-    void            SetToDefault( const RSCINST & rInst )
+    void			SetToDefault( const RSCINST & rInst )
                     {
                         ((RscStringInst*)rInst.pData)->bDflt = TRUE;
                     }
@@ -72,7 +72,7 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, BOOL bExtra );
-    virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    virtual void	WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ class Gradient;
 
 /* Definition of internal::TransparencyGroupActionFactory class */
 
-namespace cppcanvas
-{
+namespace cppcanvas 
+{ 
     namespace internal
     {
         struct OutDevState;
 
-        typedef ::std::auto_ptr< GDIMetaFile >  MtfAutoPtr;
-        typedef ::std::auto_ptr< Gradient >     GradientAutoPtr;
+        typedef ::std::auto_ptr< GDIMetaFile >	MtfAutoPtr;
+        typedef ::std::auto_ptr< Gradient > 	GradientAutoPtr;
 
         /** Transparency group action.
 
@@ -68,8 +68,8 @@ namespace cppcanvas
             text layout) is Canvas-dependent.
          */
         class TransparencyGroupActionFactory
-        {
-        public:
+        { 
+        public: 
             /** Create new transparency group action.
 
                 @param rGroupMtf
@@ -90,14 +90,14 @@ namespace cppcanvas
                 @param nAlpha
                 Alpha value, must be in the range [0,1]
              */
-            static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
-                                                                  const Renderer::Parameters&   rParms,
-                                                                  const ::basegfx::B2DPoint&    rDstPoint,
-                                                                  const ::basegfx::B2DVector&   rDstSize,
-                                                                  double                        nAlpha,
-                                                                  const CanvasSharedPtr&        rCanvas,
-                                                                  const OutDevState&            rState );
-
+            static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&					rGroupMtf,
+                                                                  const Renderer::Parameters& 	rParms,
+                                                                  const ::basegfx::B2DPoint& 	rDstPoint,  
+                                                                  const ::basegfx::B2DVector& 	rDstSize,  
+                                                                  double 						nAlpha,
+                                                                  const CanvasSharedPtr&		rCanvas, 
+                                                                  const OutDevState& 			rState ); 
+            
             /** Create new transparency group action.
 
                 @param rGroupMtf
@@ -119,14 +119,14 @@ namespace cppcanvas
                 Size of the transparency group object, in current
                 state coordinate system.
              */
-            static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
-                                                                  GradientAutoPtr&              rAlphaGradient,
-                                                                  const Renderer::Parameters&   rParms,
-                                                                  const ::basegfx::B2DPoint&    rDstPoint,
-                                                                  const ::basegfx::B2DVector&   rDstSize,
-                                                                  const CanvasSharedPtr&        rCanvas,
-                                                                  const OutDevState&            rState );
-
+            static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&					rGroupMtf,
+                                                                  GradientAutoPtr&				rAlphaGradient,
+                                                                  const Renderer::Parameters&	rParms,
+                                                                  const ::basegfx::B2DPoint& 	rDstPoint,  
+                                                                  const ::basegfx::B2DVector& 	rDstSize,  
+                                                                  const CanvasSharedPtr&		rCanvas, 
+                                                                  const OutDevState& 			rState );
+            
         private:
             // static factory, disable big four
             TransparencyGroupActionFactory();
@@ -134,7 +134,7 @@ namespace cppcanvas
             TransparencyGroupActionFactory(const TransparencyGroupActionFactory&);
             TransparencyGroupActionFactory& operator=( const TransparencyGroupActionFactory& );
         };
-    }
+    } 
 }
 
 #endif /*_CPPCANVAS_TRANSPARENCYGROUPACTION_HXX */

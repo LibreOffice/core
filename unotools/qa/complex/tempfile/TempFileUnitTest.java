@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@ import com.sun.star.uno.UnoRuntime;
 public class TempFileUnitTest extends ComplexTestCase {
     private XMultiServiceFactory m_xMSF = null;
     private XSimpleFileAccess m_xSFA = null;
-
+    
     public String[] getTestMethodNames() {
         return new String[] {
             "ExecuteTest01",
             "ExecuteTest02"};
     }
-
+    
     public String getTestObjectName() {
         return "TempFileUnitTest";
     }
-
+    
     public void before() {
         m_xMSF = (XMultiServiceFactory)param.getMSF();
         if ( m_xMSF == null ) {
@@ -67,17 +67,17 @@ public class TempFileUnitTest extends ComplexTestCase {
             failed ( "Cannot get simple file access!" );
         }
     }
-
+    
     public void after() {
         m_xMSF = null;
         m_xSFA = null;
     }
-
+    
     public void ExecuteTest01() {
         TempFileTest aTest = new Test01( m_xMSF, m_xSFA, log );
         assure( "Test01 failed!", aTest.test() );
     }
-
+    
     public void ExecuteTest02() {
         TempFileTest aTest = new Test02( m_xMSF, m_xSFA, log );
         assure( "Test02 failed!", aTest.test() );

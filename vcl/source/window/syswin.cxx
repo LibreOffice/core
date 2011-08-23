@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -335,7 +335,7 @@ void SystemWindow::EnableSaveBackground( BOOL bSave )
 {
     if( ImplGetSVData()->maWinData.mbNoSaveBackground )
         bSave = false;
-
+    
     Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
@@ -563,7 +563,7 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetState( 0 );
-
+    
     // read maximized pos/size
     aTokenStr = rStr.GetToken( 0, ',', nIndex );
     if ( aTokenStr.Len() )
@@ -677,7 +677,7 @@ void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, lo
         i_nWidth = 50;
     if( i_nHeight < 1 )
         i_nHeight = 50;
-
+    
     // check left border
     bool bMove = false;
     if( io_rX + i_nWidth < aScreenRect.Left() )
@@ -757,7 +757,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         // 91625 - ignore Minimize
         //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
-
+        
         // normalize window positions onto screen
         ImplMoveToScreen( aState.mnX, aState.mnY, aState.mnWidth, aState.mnHeight, pWindow );
         ImplMoveToScreen( aState.mnMaximizedX, aState.mnMaximizedY, aState.mnMaximizedWidth, aState.mnMaximizedHeight, pWindow );
@@ -773,7 +773,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                 BOOL bWrapped = FALSE;
                 while( pWin )
                 {
-                    if( !pWin->ImplIsRealParentPath( this ) &&
+                    if( !pWin->ImplIsRealParentPath( this ) && 
                         pWin->ImplGetWindow()->IsTopWindow() && pWin->mpWindowImpl->mbReallyVisible )
                     {
                         SalFrameGeometry g = pWin->mpWindowImpl->mpFrame->GetGeometry();
@@ -783,7 +783,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                             if( (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.nRight ||
                                 (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.nBottom )
                             {
-                                // displacing would leave screen
+                                // displacing would leave screen 
                                 aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
                                 aState.mnY = displacement;
                                 if( bWrapped ||
@@ -841,10 +841,10 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         if( IsRollUp() )
             RollDown();
 
-        long nX         = rData.GetX();
-        long nY         = rData.GetY();
-        long nWidth     = rData.GetWidth();
-        long nHeight    = rData.GetHeight();
+        long nX			= rData.GetX();
+        long nY			= rData.GetY();
+        long nWidth		= rData.GetWidth();
+        long nHeight	= rData.GetHeight();
         const SalFrameGeometry& rGeom = pWindow->mpWindowImpl->mpFrame->GetGeometry();
         if( nX < 0 )
             nX = 0;
@@ -1022,7 +1022,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
                 }
                 MenuBar::ImplDestroy( pOldMenuBar, bDelete );
                 if( bDelete )
-                    pOldWindow = NULL;  // will be deleted in MenuBar::ImplDestroy,
+                    pOldWindow = NULL;  // will be deleted in MenuBar::ImplDestroy, 
             }
 
         }

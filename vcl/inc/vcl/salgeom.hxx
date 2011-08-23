@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ typedef struct _SalFrameGeometry {
                         nRightDecoration,
                         nBottomDecoration;
     unsigned int        nScreenNumber;
-
+    
     _SalFrameGeometry() :
     nX( 0 ), nY( 0 ), nWidth( 1 ), nHeight( 1 ),
     nLeftDecoration( 0 ), nTopDecoration( 0 ),

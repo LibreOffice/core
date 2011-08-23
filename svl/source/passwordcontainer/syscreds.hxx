@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,16 @@ class SysCredentialsConfigItem : public utl::ConfigItem
         SysCredentialsConfigItem( SysCredentialsConfig * pOwner );
         //virtual ~SysCredentialsConfigItem();
 
-        virtual void Notify(
-            const com::sun::star::uno::Sequence< rtl::OUString > &
+        virtual void Notify( 
+            const com::sun::star::uno::Sequence< rtl::OUString > & 
                 seqPropertyNames );
         virtual void Commit();
 
-        com::sun::star::uno::Sequence< rtl::OUString >
+        com::sun::star::uno::Sequence< rtl::OUString > 
         getSystemCredentialsURLs();
-
-        void setSystemCredentialsURLs(
-            const com::sun::star::uno::Sequence< rtl::OUString > &
+        
+        void setSystemCredentialsURLs( 
+            const com::sun::star::uno::Sequence< rtl::OUString > & 
                 seqURLList );
 
         //bool isSystemCredentialsURL( const rtl::OUString & rURL ) const;

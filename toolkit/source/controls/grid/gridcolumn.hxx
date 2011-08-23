@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
-
+    
     virtual void SAL_CALL setIndex(sal_Int32 _nIndex)throw (::com::sun::star::uno::RuntimeException);
 private:
     void broadcast( broadcast_column_type eType, const GridColumnEvent& aEvent );

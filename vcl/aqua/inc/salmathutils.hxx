@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ struct LRectCoor
 //
 // ------------------------------------------------------------------
 
-// LRectCoorVec is an abreviation for vectors in rectangular
+// LRectCoorVec is an abreviation for vectors in rectangular 
 // coordinates represented as long integers
 
 typedef struct LRectCoor   LRectCoor;
@@ -84,4 +84,4 @@ unsigned long  Euclidian2Norm ( const LRectCoorVector  pVec );
 }
 #endif
 
-#endif  // _SV_SALMATHUTILS_HXX
+#endif	// _SV_SALMATHUTILS_HXX

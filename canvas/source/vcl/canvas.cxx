@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace vclcanvas
 {
     namespace
     {
-        class OutDevHolder : public OutDevProvider,
+        class OutDevHolder : public OutDevProvider, 
             private ::boost::noncopyable
         {
         public:
@@ -66,13 +66,13 @@ namespace vclcanvas
             {}
 
         private:
-            virtual OutputDevice&       getOutDev() { return mrOutDev; }
+            virtual OutputDevice& 		getOutDev() { return mrOutDev; }
             virtual const OutputDevice& getOutDev() const { return mrOutDev; }
 
             // TODO(Q2): Lifetime issue. This _only_ works reliably,
             // if disposing the Canvas correctly disposes all
             // entities which hold this pointer.
-            OutputDevice& mrOutDev;
+            OutputDevice& mrOutDev; 
         };
     }
 
@@ -102,7 +102,7 @@ namespace vclcanvas
         VERBOSE_TRACE( "VCLCanvas::initialize called" );
 
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 6 &&
-                             maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER,
+                             maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER, 
                              "Canvas::initialize: wrong number of arguments, or wrong types" );
 
         sal_Int64 nPtr = 0;
@@ -114,7 +114,7 @@ namespace vclcanvas
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                      "Passed OutDev invalid!")),
                 NULL);
-
+        
         OutDevProviderSharedPtr pOutdevProvider( new OutDevHolder(*pOutDev) );
 
         // setup helper
@@ -147,15 +147,15 @@ namespace vclcanvas
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CANVAS_SERVICE_NAME ) );
     }
 
-    bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
+    bool Canvas::repaint( const GraphicObjectSharedPtr&	rGrf,
                           const rendering::ViewState&   viewState,
                           const rendering::RenderState& renderState,
-                          const ::Point&                rPt,
-                          const ::Size&                 rSz,
-                          const GraphicAttr&            rAttr ) const
+                          const ::Point& 				rPt, 
+                          const ::Size& 				rSz,
+                          const GraphicAttr&			rAttr ) const
     {
         tools::LocalGuard aGuard;
 
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
-    }
+    }    
 }

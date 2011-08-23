@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #define INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include "svtools/svtdllapi.h"
@@ -37,12 +37,12 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//  forward declarations
+//	forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
+    @short			forward declaration to our private date container implementation
+    @descr			We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -51,45 +51,45 @@ class Link;
 class SvtMenuOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          collect informations about menu features
+    @short			collect informations about menu features
     @descr          -
 
-    @implements     -
-    @base           -
+    @implements		-
+    @base			-
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 
 class SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
+            @short		standard constructor and destructor
+            @descr		This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
+            @seealso	member m_nRefCount
+            @seealso	member m_pDataContainer
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
          SvtMenuOptions();
@@ -98,23 +98,23 @@ class SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
         void AddListenerLink( const Link& rLink );
         void RemoveListenerLink( const Link& rLink );
         //---------------------------------------------------------------------------------------------------------
-        //  interface
+        //	interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Menu/..."
+            @short		interface methods to get and set value of config key "org.openoffice.Office.Common/View/Menu/..."
             @descr      These options describe internal states to enable/disable features of installed office.
 
                         IsEntryHidingEnabled()
-                        SetEntryHidingState()   =>  Activate this field for viewing all deactivated menu entries.
+                        SetEntryHidingState()	=>	Activate this field for viewing all deactivated menu entries.
                                                     Menu commands that are normally not necessary are hidden by default.
                                                     Default=false
 
                         IsFollowMouseEnabled()
-                        SetFollowMouseState()   =>  Automatic selection while moving the mouse on a menu.
+                        SetFollowMouseState() 	=>  Automatic selection while moving the mouse on a menu.
                                                     Default=true
 
-            @seealso    configuration package "org.openoffice.Office.Common/View/Menu"
+            @seealso	configuration package "org.openoffice.Office.Common/View/Menu"
         *//*-*****************************************************************************************************/
 
         sal_Bool IsEntryHidingEnabled() const;
@@ -126,29 +126,29 @@ class SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
         void SetMenuIconsState( sal_Int16 bState );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
+            @short		return a reference to a static mutex
+            @descr		These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A reference to a static mutex member.
+            @param		-
+            @return		A reference to a static mutex member.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -161,9 +161,9 @@ class SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtMenuOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32            m_nRefCount         ;   /// internal ref count mechanism
+        static SvtMenuOptions_Impl*	m_pDataContainer	;	/// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32			m_nRefCount			;	/// internal ref count mechanism
 
-};      // class SvtMenuOptions
+};		// class SvtMenuOptions
 
-#endif  // #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+#endif	// #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX

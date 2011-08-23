@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,11 +108,11 @@ public:
     virtual void    SetPosSizePixel( long nX, long nY, long nWidth, long nHeight, USHORT nFlags = WINDOW_POSSIZE_ALL );
     void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
                         { Edit::SetPosSizePixel( rNewPos, rNewSize ); }
-    void            SetDropDownSizePixel( const Size& rNewSize )
+    void			SetDropDownSizePixel( const Size& rNewSize )
     { if( IsDropDownBox() ) SetPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
 
-    Rectangle       GetDropDownPosSizePixel() const;
-    Rectangle       GetListPosSizePixel() const;
+    Rectangle		GetDropDownPosSizePixel() const;
+    Rectangle		GetListPosSizePixel() const;
     // returns empty rectangle in DropDown mode,
     // else it returns the PosSize of the ListBox
 
@@ -138,12 +138,13 @@ public:
 
     USHORT          GetEntryPos( const XubString& rStr ) const;
     USHORT          GetEntryPos( const void* pData ) const;
+    Image           GetEntryImage( USHORT nPos ) const;
     XubString       GetEntry( USHORT nPos ) const;
     USHORT          GetEntryCount() const;
 
     BOOL            IsTravelSelect() const;
     BOOL            IsInDropDown() const;
-    void            ToggleDropDown();
+    void			ToggleDropDown();
 
     long            CalcWindowSizePixel( USHORT nLines ) const;
 
@@ -188,20 +189,20 @@ public:
     void            SetEntryData( USHORT nPos, void* pNewData );
     void*           GetEntryData( USHORT nPos ) const;
 
-    void            SetTopEntry( USHORT nPos );
+    void			SetTopEntry( USHORT nPos );
     void            ShowProminentEntry( USHORT nPos );
-    USHORT          GetTopEntry() const;
+    USHORT			GetTopEntry() const;
 
     void            SetProminentEntryType( ProminentEntry eType );
     ProminentEntry  GetProminentEntryType() const;
 
-    USHORT          GetDisplayLineCount() const;
+    USHORT			GetDisplayLineCount() const;
 
-    USHORT          GetSelectEntryCount() const;
-    USHORT          GetSelectEntryPos( USHORT nSelIndex = 0 ) const;
-    BOOL            IsEntryPosSelected( USHORT nPos ) const;
-    void            SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE );
-    void            SetNoSelection();
+    USHORT			GetSelectEntryCount() const;
+    USHORT			GetSelectEntryPos( USHORT nSelIndex = 0 ) const;
+    BOOL			IsEntryPosSelected( USHORT nPos ) const;
+    void			SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE );
+    void			SetNoSelection();
     Rectangle       GetBoundingRectangle( USHORT nItem ) const;
 
     /** checks whether a certain point lies within the bounds of

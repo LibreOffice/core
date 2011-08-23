@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,11 @@ GObjectImpl::GObjectImpl( uno::Sequence< uno::Any > const & args, uno::Reference
         rtl::OUString sId;
         if ( !( args[ 0 ] >>= sId ) || sId.getLength() == 0 )
             throw lang::IllegalArgumentException();
-        ByteString bsId( sId.getStr(), RTL_TEXTENCODING_UTF8 );
-        mpGObject.reset( new GraphicObject( bsId ) );
+        ByteString bsId( sId.getStr(), RTL_TEXTENCODING_UTF8 ); 
+        mpGObject.reset( new GraphicObject( bsId ) ); 
     }
     else
-       mpGObject.reset( new GraphicObject() );
+       mpGObject.reset( new GraphicObject() ); 
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL GObjectImpl::getGraphic() throw (uno::RuntimeException)

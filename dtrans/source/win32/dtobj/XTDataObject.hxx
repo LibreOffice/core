@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,12 +61,12 @@
       a clipboard client ask for the available formats on the clipboard
       and decides if there is a format he can use
       if there is one, he requests the data in this format
-
-    - This class inherits from IDataObject an so can be placed on the
-      OleClipboard. The class wrapps a transferable object which is the
+      
+    - This class inherits from IDataObject an so can be placed on the 
+      OleClipboard. The class wrapps a transferable object which is the 
       original DataSource
     - DataFlavors offerd by this transferable will be translated into
-      appropriate clipboard formats
+      appropriate clipboard formats 
     - if the transferable contains text data always text and unicodetext
       will be offered or vice versa
     - text data will be automaticaly converted between text und unicode text
@@ -83,7 +83,7 @@ public:
     CXTDataObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& aXTransferable );
     virtual ~CXTDataObject() {}
-
+    
     //-----------------------------------------------------------------
     // ole interface implementation
     //-----------------------------------------------------------------
@@ -106,15 +106,15 @@ public:
 
     operator IDataObject*( );
 
-private:
-    com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
-
+private:	
+    com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;	
+    
     void SAL_CALL renderDataAndSetupStgMedium( const sal_Int8* lpStorage,
-                                               const FORMATETC& fetc,
+                                               const FORMATETC& fetc, 
                                                sal_uInt32 nInitStgSize,
                                                sal_uInt32 nBytesToTransfer,
                                                STGMEDIUM& stgmedium );
-
+    
     void SAL_CALL renderLocaleAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
     void SAL_CALL renderUnicodeAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
     void SAL_CALL renderAnyDataAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
@@ -124,29 +124,29 @@ private:
     void    SAL_CALL renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
     void    SAL_CALL renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
 
-    void SAL_CALL setupStgMedium( const FORMATETC& fetc,
-                                  CStgTransferHelper& stgTransHlp,
+    void SAL_CALL setupStgMedium( const FORMATETC& fetc, 
+                                  CStgTransferHelper& stgTransHlp, 
                                   STGMEDIUM& stgmedium );
-
-    void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;
+    
+    void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;	
     void SAL_CALL invalidateStgMedium( STGMEDIUM& stgmedium ) const;
 
     HRESULT SAL_CALL translateStgExceptionCode( HRESULT hr ) const;
 
     inline void SAL_CALL InitializeFormatEtcContainer( );
 
-private:
-    LONG m_nRefCnt;
+private:	
+    LONG m_nRefCnt;	
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_SrvMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >      m_XTransferable;
-    CFormatEtcContainer                                                                    m_FormatEtcContainer;
+    CFormatEtcContainer																       m_FormatEtcContainer;
     sal_Bool                                                                               m_bFormatEtcContainerInitialized;
-    CDataFormatTranslator                                                                  m_DataFormatTranslator;
-    CFormatRegistrar                                                                       m_FormatRegistrar;
+    CDataFormatTranslator															       m_DataFormatTranslator;
+    CFormatRegistrar																       m_FormatRegistrar;	
 };
 
 //------------------------------------------------------------------------
-//
+// 
 //------------------------------------------------------------------------
 
 class CEnumFormatEtc : public IEnumFORMATETC
@@ -154,22 +154,22 @@ class CEnumFormatEtc : public IEnumFORMATETC
 public:
     CEnumFormatEtc( LPUNKNOWN lpUnkOuter, const CFormatEtcContainer& aFormatEtcContainer );
     virtual ~CEnumFormatEtc() {}
-
-    // IUnknown
+    
+    // IUnknown 
     STDMETHODIMP           QueryInterface( REFIID iid, LPVOID* ppvObject );
     STDMETHODIMP_( ULONG ) AddRef( );
     STDMETHODIMP_( ULONG ) Release( );
 
-    //IEnumFORMATETC
+    //IEnumFORMATETC 
     STDMETHODIMP Next( ULONG nRequested, LPFORMATETC lpDest, ULONG* lpFetched );
     STDMETHODIMP Skip( ULONG celt );
     STDMETHODIMP Reset( );
     STDMETHODIMP Clone( IEnumFORMATETC** ppenum );
 
 private:
-    LONG                m_nRefCnt;
+    LONG	            m_nRefCnt;
     LPUNKNOWN           m_lpUnkOuter;
-    CFormatEtcContainer m_FormatEtcContainer;
+    CFormatEtcContainer m_FormatEtcContainer;    
 };
 
 typedef CEnumFormatEtc *PCEnumFormatEtc;

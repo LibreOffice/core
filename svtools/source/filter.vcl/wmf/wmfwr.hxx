@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,27 +69,27 @@ class WMFWriter
 {
 private:
 
-    BOOL            bStatus;
+    BOOL			bStatus;
 
-    ULONG                   nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
-    FilterConfigItem*       pFilterConfigItem;
+    ULONG					nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    FilterConfigItem*		pFilterConfigItem;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
-    SvStream*               pWMF;
-    VirtualDevice*          pVirDev;
+    SvStream*				pWMF;
+    VirtualDevice*			pVirDev;
     StarSymbolToMSMultiFont *pConvert;
-    MapMode                 aTargetMapMode;
-    Size                    aTargetSize;
-    USHORT                  nTargetDivisor;
+    MapMode					aTargetMapMode;
+    Size					aTargetSize;
+    USHORT					nTargetDivisor;
 
     ULONG nMetafileHeaderPos;
     sal_uInt32 nMaxRecordSize; // in Worten
     ULONG nActRecordPos;
 
     // Aktuelle Attribute im Quell-Metafile:
-    Color     aSrcLineColor;
-    Color     aSrcFillColor;
+    Color	  aSrcLineColor;
+    Color	  aSrcFillColor;
     Color     aSrcTextColor;
     LineInfo  aSrcLineInfo;
     RasterOp  eSrcRasterOp;
@@ -100,18 +100,18 @@ private:
     Region    aSrcClipRegion;
     WMFWriterAttrStackMember * pAttrStack;
 
-    UINT32    eSrcHorTextAlign;
+    UINT32	  eSrcHorTextAlign;
 
     // Aktuelle Attribute im Ziel-Metafile:
-    Color     aDstLineColor;
-    Color     aDstFillColor;
+    Color	  aDstLineColor;
+    Color	  aDstFillColor;
     Color     aDstTextColor;
     LineInfo  aDstLineInfo;
     RasterOp  eDstROP2;
     FontAlign eDstTextAlign;
     Font      aDstFont;
 
-    UINT32    eDstHorTextAlign;
+    UINT32	  eDstHorTextAlign;
 
     BOOL      bDstIsClipping; // ???: derzeit unberuecksichtigt
     Region    aDstClipRegion; // ???: derzeit unberuecksichtigt
@@ -167,7 +167,7 @@ private:
     sal_Bool WMFRecord_Escape_Unicode( const Point& rPoint, const String& rStr, const sal_Int32 * pDXAry );
     void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, const sal_Int32 * pDXAry);
 
-    void TrueExtTextOut(const Point & rPoint, const String & rString,
+    void TrueExtTextOut(const Point & rPoint, const String & rString, 
         const ByteString & rByteString, const sal_Int32 * pDXAry);
     void TrueTextOut(const Point & rPoint, const ByteString& rString);
     void WMFRecord_LineTo(const Point & rPoint);
@@ -211,7 +211,7 @@ private:
     void UpdateHeader();
 
     void WriteEmbeddedEMF( const GDIMetaFile& rMTF );
-    void WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize,
+    void WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, 
                             sal_uInt32 nRemainingSize,
                             sal_uInt32 nTotalSize,
                             sal_uInt32 nRecCounts,

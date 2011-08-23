@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 #include <string.h>
-
+ 
 #include <unistd.h>
 
 #include <sys/stat.h>
@@ -187,7 +187,7 @@ ByteString CppDep::IsIncludeStatement( ByteString aLine )
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "found starting C comment : %s\n", aLine.GetBuffer() );
 #endif
-        aLine.Erase(aLine.Search("/*",0), aLine.Len() - 1);
+        aLine.Erase(aLine.Search("/*",0), aLine.Len() - 1);	
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "cleaned string : %s\n", aLine.GetBuffer() );
 #endif
@@ -197,7 +197,7 @@ ByteString CppDep::IsIncludeStatement( ByteString aLine )
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "found C++ comment : %s\n", aLine.GetBuffer() );
 #endif
-        aLine.Erase(aLine.Search("//",0), aLine.Len() - 1);
+        aLine.Erase(aLine.Search("//",0), aLine.Len() - 1);	
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "cleaned string : %s\n", aLine.GetBuffer() );
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 // =======================================================================
 
 // Maximale Periode
-#define MAX_SYSPERIOD     65533
+#define MAX_SYSPERIOD	  65533
 
 // =======================================================================
 
@@ -117,7 +117,7 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
 
         // Test for MouseLeave
         SalTestMouseLeave();
-
+        
         bool bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
         if ( pSVData->mpSalTimer && ! bRecursive )
         {
@@ -132,7 +132,7 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
                     pSVData->mpSalTimer->CallCallback();
                     pSalData->mbInTimerProc = FALSE;
                     ImplSalYieldMutexRelease();
-
+    
                     // Run the timer in the correct time, if we start this
                     // with a small timeout, because we don't get the mutex
                     if ( pSalData->mnTimerId &&

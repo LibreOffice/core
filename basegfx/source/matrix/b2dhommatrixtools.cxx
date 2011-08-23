@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ namespace basegfx
             if( fTools::equalZero( fmod( fRadiant, F_PI2 ) ) )
             {
                 // determine quadrant
-                const sal_Int32 nQuad(
+                const sal_Int32 nQuad( 
                     (4 + fround( 4/F_2PI*fmod( fRadiant, F_2PI ) )) % 4 );
                 switch( nQuad )
                 {
@@ -219,7 +219,7 @@ namespace basegfx
                             /* Row 1, Column 0 */ fSin * fScaleX,
                             /* Row 1, Column 1 */ fScaleY * fCos,
                             /* Row 1, Column 2 */ fTranslateY);
-
+                        
                         return aRetval;
                     }
                 }
@@ -254,13 +254,13 @@ namespace basegfx
                             /* Row 1, Column 0 */ fSin * fScaleX,
                             /* Row 1, Column 1 */ fScaleY * ((fSin * fShearX) + fCos),
                             /* Row 1, Column 2 */ fTranslateY);
-
+                        
                         return aRetval;
                     }
                 }
             }
         }
-
+        
         B2DHomMatrix createShearXRotateTranslateB2DHomMatrix(
             double fShearX,
             double fRadiant,
@@ -289,7 +289,7 @@ namespace basegfx
                         /* Row 1, Column 0 */ fSin,
                         /* Row 1, Column 1 */ fCos,
                         /* Row 1, Column 2 */ fTranslateY);
-
+                    
                     return aRetval;
                 }
             }
@@ -306,7 +306,7 @@ namespace basegfx
                         /* Row 1, Column 0 */ 0.0,
                         /* Row 1, Column 1 */ 1.0,
                         /* Row 1, Column 2 */ fTranslateY);
-
+                    
                     return aRetval;
                 }
                 else
@@ -324,12 +324,12 @@ namespace basegfx
                         /* Row 1, Column 0 */ fSin,
                         /* Row 1, Column 1 */ (fSin * fShearX) + fCos,
                         /* Row 1, Column 2 */ fTranslateY);
-
+                    
                     return aRetval;
                 }
             }
         }
-
+        
         B2DHomMatrix createScaleTranslateB2DHomMatrix(
             double fScaleX, double fScaleY,
             double fTranslateX, double fTranslateY)
@@ -348,7 +348,7 @@ namespace basegfx
                 {
                     /// no translate, but scale.
                     B2DHomMatrix aRetval;
-
+                    
                     aRetval.set(0, 0, fScaleX);
                     aRetval.set(1, 1, fScaleY);
 
@@ -364,7 +364,7 @@ namespace basegfx
                         /* Row 1, Column 0 */ 0.0,
                         /* Row 1, Column 1 */ fScaleY,
                         /* Row 1, Column 2 */ fTranslateY);
-
+                    
                     return aRetval;
                 }
             }
@@ -375,14 +375,14 @@ namespace basegfx
             double fRadiant)
         {
             B2DHomMatrix aRetval;
-
+            
             if(!fTools::equalZero(fRadiant))
             {
                 double fSin(0.0);
                 double fCos(1.0);
 
                 createSinCosOrthogonal(fSin, fCos, fRadiant);
-
+                
                 aRetval.set3x2(
                     /* Row 0, Column 0 */ fCos,
                     /* Row 0, Column 1 */ -fSin,

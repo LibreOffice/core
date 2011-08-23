@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ SotStorageStream::~SotStorageStream()
 |*    SotStorageStream::SyncSvStream()
 |*
 |*    Beschreibung: Der SvStream wird auf den Zustand des Standard-Streams
-|*                  gesetzt. Der Puffer des SvStreams wird weggeworfen.
+|*	  				gesetzt. Der Puffer des SvStreams wird weggeworfen.
 *************************************************************************/
 void SotStorageStream::SyncSvStream()
 {
@@ -487,12 +487,12 @@ void SotStorage::TestMemberInvariant( BOOL /*bPrint*/ )
 |*    Letzte Aenderung  MM 23.06.94
 |*
 *************************************************************************/
-#define INIT_SotStorage()                   \
+#define INIT_SotStorage()            		\
     : m_pOwnStg( NULL )                       \
     , m_pStorStm( NULL )                      \
-    , m_nError( SVSTREAM_OK )               \
-    , m_bIsRoot( FALSE )                    \
-    , m_bDelStm( FALSE )                        \
+    , m_nError( SVSTREAM_OK )         		\
+    , m_bIsRoot( FALSE )              		\
+    , m_bDelStm( FALSE )						\
     , m_nVersion( SOFFICE_FILEFORMAT_CURRENT )
 
 SotStorage::SotStorage()

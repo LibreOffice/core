@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <breakiterator_ctl.hxx>
 
-#include <string.h> // for memset
+#include <string.h>	// for memset
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -71,7 +71,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::previousCharacters( const OUString& Text,
 {
     if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
         nDone = 0;
-        if (nStartPos > 0) {    // for others to skip cell.
+        if (nStartPos > 0) { 	// for others to skip cell.
         makeIndex(Text, nStartPos);
 
         if (nextCellIndex[nStartPos-1] == 0) // not a CTL character
@@ -81,7 +81,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::previousCharacters( const OUString& Text,
             nCount--; nDone++;
             nStartPos = previousCellIndex[nStartPos - 1];
         }
-        } else
+        } else 
         nStartPos = 0;
     } else { // for BS to delete one char.
         nDone = (nStartPos > nCount) ? nCount : nStartPos;
@@ -91,7 +91,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::previousCharacters( const OUString& Text,
     return nStartPos;
 }
 
-sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text,
+sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text, 
     sal_Int32 nStartPos, const lang::Locale& rLocale,
     sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone)
     throw(RuntimeException)

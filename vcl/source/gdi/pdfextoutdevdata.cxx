@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,31 +69,31 @@ struct PDFExtOutDevDataSync
                     EndGroupGfxLink
     };
 
-    sal_uInt32  nIdx;
-    Action      eAct;
+    sal_uInt32	nIdx;
+    Action		eAct;
 };
 
 struct GlobalSyncData
 {
-    std::deque< PDFExtOutDevDataSync::Action >  mActions;
-    std::deque< MapMode >                       mParaMapModes;
-    std::deque< Rectangle >                     mParaRects;
-    std::deque< sal_Int32 >                     mParaInts;
-    std::deque< sal_uInt32 >                    mParauInts;
-    std::deque< rtl::OUString >                 mParaOUStrings;
-    std::deque< PDFWriter::DestAreaType >       mParaDestAreaTypes;
-    std::deque< PDFNote >                       mParaPDFNotes;
-    std::deque< PDFWriter::PageTransition >     mParaPageTransitions;
+    std::deque< PDFExtOutDevDataSync::Action >	mActions;
+    std::deque< MapMode >						mParaMapModes;
+    std::deque< Rectangle >						mParaRects;
+    std::deque< sal_Int32 >						mParaInts;
+    std::deque< sal_uInt32 >					mParauInts;
+    std::deque< rtl::OUString >					mParaOUStrings;
+    std::deque< PDFWriter::DestAreaType >		mParaDestAreaTypes;
+    std::deque< PDFNote >						mParaPDFNotes;
+    std::deque< PDFWriter::PageTransition >		mParaPageTransitions;
 
     sal_Int32 GetMappedId();
     sal_Int32 GetMappedStructId( sal_Int32 );
 
-    sal_Int32                   mCurId;
-    std::vector< sal_Int32 >    mParaIds;
-    std::vector< sal_Int32 >    mStructIdMap;
+    sal_Int32					mCurId;
+    std::vector< sal_Int32 >	mParaIds;
+    std::vector< sal_Int32 >	mStructIdMap;
 
-    sal_Int32                   mCurrentStructElement;
-    std::vector< sal_Int32 >    mStructParents;
+    sal_Int32					mCurrentStructElement;
+    std::vector< sal_Int32 >	mStructParents;
     GlobalSyncData() :
             mCurId ( 0 ),
             mCurrentStructElement( 0 )
@@ -118,7 +118,7 @@ sal_Int32 GlobalSyncData::GetMappedId()
             nLinkId = mParaIds[ nLinkId ];
         else
             nLinkId = -1;
-
+    
         DBG_ASSERT( nLinkId >= 0, "unmapped id in GlobalSyncData" );
     }
 
@@ -272,19 +272,19 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
 
 struct PageSyncData
 {
-    std::deque< PDFExtOutDevDataSync >              mActions;
-    std::deque< Rectangle >                         mParaRects;
-    std::deque< sal_Int32 >                         mParaInts;
-    std::deque< rtl::OUString >                     mParaOUStrings;
-    std::deque< PDFWriter::StructElement >          mParaStructElements;
-    std::deque< PDFWriter::StructAttribute >        mParaStructAttributes;
-    std::deque< PDFWriter::StructAttributeValue >   mParaStructAttributeValues;
-    std::deque< Graphic >                           mGraphics;
+    std::deque< PDFExtOutDevDataSync >				mActions;
+    std::deque< Rectangle >							mParaRects;
+    std::deque< sal_Int32 >							mParaInts;
+    std::deque< rtl::OUString >						mParaOUStrings;
+    std::deque< PDFWriter::StructElement >			mParaStructElements;
+    std::deque< PDFWriter::StructAttribute >		mParaStructAttributes;
+    std::deque< PDFWriter::StructAttributeValue >	mParaStructAttributeValues;
+    std::deque< Graphic >							mGraphics;
     std::deque< ::boost::shared_ptr< PDFWriter::AnyWidget > >
                                                     mControls;
-    GlobalSyncData*                                 mpGlobalData;
+    GlobalSyncData*									mpGlobalData;
 
-    sal_Bool                                        mbGroupIgnoreGDIMtfActions;
+    sal_Bool										mbGroupIgnoreGDIMtfActions;
 
     PageSyncData( GlobalSyncData* pGlobal ) : mbGroupIgnoreGDIMtfActions ( sal_False ) { mpGlobalData = pGlobal; }
 
@@ -301,7 +301,7 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDa
     if ( pMtf )
         aSync.nIdx = pMtf->GetActionCount();
     else
-        aSync.nIdx = 0x7fffffff;    // sync not possible
+        aSync.nIdx = 0x7fffffff;	// sync not possible
     mActions.push_back( aSync );
 }
 sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData )
@@ -376,7 +376,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
             break;
             case PDFExtOutDevDataSync::BeginGroup :
             {
-                /* first determining if this BeginGroup is starting a GfxLink,
+                /* first determining if this BeginGroup is starting a GfxLink, 
                    by searching for a EndGroup or a EndGroupGfxLink */
                 mbGroupIgnoreGDIMtfActions = sal_False;
                 std::deque< PDFExtOutDevDataSync >::iterator aBeg = mActions.begin();
@@ -426,7 +426,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                 {
                     sal_Bool bClippingNeeded = ( aOutputRect != aVisibleOutputRect ) && !aVisibleOutputRect.IsEmpty();
 
-                    GfxLink   aGfxLink( aGraphic.GetLink() );
+                    GfxLink	  aGfxLink( aGraphic.GetLink() );
                     if ( aGfxLink.GetType() == GFX_LINK_TYPE_NATIVE_JPG )
                     {
                         if ( bClippingNeeded )
@@ -479,17 +479,17 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
 
 TYPEINIT1(PDFExtOutDevData,ExtOutDevData);
 PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
-    mrOutDev                ( rOutDev ),
-    mbTaggedPDF             ( sal_False ),
-    mbExportNotes           ( sal_True ),
-    mbTransitionEffects     ( sal_True ),
+    mrOutDev				( rOutDev ),
+    mbTaggedPDF				( sal_False ),
+    mbExportNotes			( sal_True ),
+    mbTransitionEffects		( sal_True ),
     mbUseLosslessCompression( sal_True ),
-    mbReduceImageResolution ( sal_False ),
+    mbReduceImageResolution	( sal_False ),
     mbExportNDests          ( sal_False ),
-    mnFormsFormat           ( 0 ),
-    mnPage                  ( -1 ),
-    mpPageSyncData          ( NULL ),
-    mpGlobalSyncData        ( new GlobalSyncData() )
+    mnFormsFormat			( 0 ),
+    mnPage					( -1 ),
+    mpPageSyncData			( NULL ),
+    mpGlobalSyncData		( new GlobalSyncData() )
 {
     mpPageSyncData = new PageSyncData( mpGlobalSyncData );
 }
@@ -611,7 +611,7 @@ void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
 //--->i56629
 sal_Int32 PDFExtOutDevData::CreateNamedDest(const String& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
-    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNamedDest );
+    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNamedDest );    
     mpGlobalSyncData->mParaOUStrings.push_back( sDestName );
     mpGlobalSyncData->mParaRects.push_back( rRect );
     mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
@@ -783,10 +783,10 @@ void PDFExtOutDevData::EndGroup()
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndGroup );
 }
-void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
-                                 BYTE               nTransparency,
-                                 const Rectangle&   rOutputRect,
-                                 const Rectangle&   rVisibleOutputRect )
+void PDFExtOutDevData::EndGroup( const Graphic& 	rGraphic,
+                                 BYTE				nTransparency,
+                                 const Rectangle& 	rOutputRect,
+                                 const Rectangle& 	rVisibleOutputRect )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndGroupGfxLink );
     mpPageSyncData->mGraphics.push_back( rGraphic );

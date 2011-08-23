@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 class INetBookmark
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Klasse stellt ein Bookmark dar, welches aus einer URL und
     einem dazuge"horigen Beschreibungstext besteht.
@@ -45,13 +45,13 @@ class INetBookmark
 */
 
 {
-    String          aUrl;
-    String          aDescr;
+    String			aUrl;
+    String			aDescr;
 
 protected:
 
-    void            SetURL( const String& rS )          { aUrl = rS; }
-    void            SetDescription( const String& rS )  { aDescr = rS; }
+    void 			SetURL( const String& rS )			{ aUrl = rS; }
+    void 			SetDescription( const String& rS )	{ aDescr = rS; }
 
 public:
                     INetBookmark( const String &rUrl, const String &rDescr )
@@ -60,8 +60,8 @@ public:
                     INetBookmark()
                     {}
 
-    const String&   GetURL() const          { return aUrl; }
-    const String&   GetDescription() const  { return aDescr; }
+    const String&	GetURL() const 			{ return aUrl; }
+    const String&	GetDescription() const	{ return aDescr; }
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,10 +66,10 @@ namespace comphelper
     {
         OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
-        return  ( _rPoint.X >= 0 )
-            &&  ( _rPoint.Y >= 0 )
-            &&  ( _rPoint.X < aBounds.Width )
-            &&  ( _rPoint.Y < aBounds.Height );
+        return	( _rPoint.X >= 0 )
+            &&	( _rPoint.Y >= 0 )
+            &&	( _rPoint.X < aBounds.Width )
+            &&	( _rPoint.Y < aBounds.Height );
     }
 
     //--------------------------------------------------------------------
@@ -215,7 +215,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 

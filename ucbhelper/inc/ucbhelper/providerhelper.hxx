@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ class UCBHELPER_DLLPUBLIC ContentProviderImplHelper : public cppu::OWeakObject,
 protected:
     osl::Mutex m_aMutex;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >  m_xSMgr;
+            ::com::sun::star::lang::XMultiServiceFactory >	m_xSMgr;
 
 private:
     UCBHELPER_DLLPRIVATE void removeContent( ContentImplHelper* pContent );
@@ -98,8 +98,8 @@ private:
 
 protected:
     /**
-      * This method returns a content with the given id, if it already exists.
-      * Use this method in your "queryContent" implementation to ensure unique
+      *	This method returns a content with the given id, if it already exists.
+      *	Use this method in your "queryContent" implementation to ensure unique
       * objects.
       *
       * @param  Identifier is the content identifier, for that an existing
@@ -112,7 +112,7 @@ protected:
                    ::com::sun::star::ucb::XContentIdentifier >& Identifier );
 
     /**
-      * This method returns a content with the given URL, if it already exists.
+      *	This method returns a content with the given URL, if it already exists.
       *
       * @param  rURL is the URL ( content identifier string ), for that an
       *         existing content object is requested.
@@ -123,21 +123,21 @@ protected:
     queryExistingContent( const ::rtl::OUString& rURL );
 
     /**
-      * This method registers a newly created content instance with the
+      *	This method registers a newly created content instance with the
       * content provider. It should be called directly after creating a new
       * content instance. The provider can reuse a registered instance upon
       * subsedent requests for content instances with an idententifier
-      * of a registered instance.
-      * Note that the provider does not hold a hard reference on the
-      * registered instance. If last external reference is gone, the provider
+      * of a registered instance. 
+      * Note that the provider does not hold a hard reference on the 
+      * registered instance. If last external reference is gone, the provider 
       * will remove the instance from its inventory of known instances.
       * Nothing will happen in case an already registered instance shall
       * be registered more than once.
       *
       * @param  the content instance that is to be registered.
      */
-    void registerNewContent(
-        const com::sun::star::uno::Reference<
+    void registerNewContent( 
+        const com::sun::star::uno::Reference< 
             ::com::sun::star::ucb::XContent > & xContent );
 
 public:
@@ -182,15 +182,15 @@ public:
     //////////////////////////////////////////////////////////////////////
 
     /**
-      * This method returns a content with the requested id.
+      *	This method returns a content with the requested id.
       *
-      * The implementation should:
+      *	The implementation should:
       *
-      * - Check, whether the Identifier is valid ( URL syntax ).
-      * - Use queryExistingContent(...) to determine, whether there exists
-      *   already a content with the given id.
-      * - Return the possibly existing content.Create and return a new
-      *   content, otherwise
+      *	- Check, whether the Identifier is valid ( URL syntax ).
+      *	- Use queryExistingContent(...) to determine, whether there exists
+      *	  already a content with the given id.
+      *	- Return the possibly existing content.Create and return a new
+      *	  content, otherwise
       */
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::ucb::XContent > SAL_CALL
@@ -210,7 +210,7 @@ public:
     //////////////////////////////////////////////////////////////////////
 
     /**
-      * This method returns a mutex, which protects the content list of the
+      *	This method returns a mutex, which protects the content list of the
       * provider. So you can prevent modifications of that list easyly.
       *
       * @return the mutex.
@@ -218,7 +218,7 @@ public:
     osl::Mutex& getContentListMutex() { return m_aMutex; }
 
     /**
-      * This method fills a list with all contents existing at calling time.
+      *	This method fills a list with all contents existing at calling time.
       * Note: You may prevent modifications of the content list at any time
       * by acquiring the content list mutex of the provider.
       *
@@ -227,7 +227,7 @@ public:
     void queryExistingContents( ContentRefList& rContents );
 
     /**
-      * This method returns the propertyset containing the Additional Core
+      *	This method returns the propertyset containing the Additional Core
       * Properties of a content.
       *
       * @param  rKey is the key for the propertyset.
@@ -240,7 +240,7 @@ public:
     getAdditionalPropertySet( const ::rtl::OUString& rKey, sal_Bool bCreate );
 
     /**
-      * This method renames the propertyset containing the Additional Core
+      *	This method renames the propertyset containing the Additional Core
       * Properties of a content.
       *
       * @param  rOldKey is the old key of the propertyset.
@@ -254,7 +254,7 @@ public:
                                           sal_Bool bRecursive );
 
     /**
-      * This method copies the propertyset containing the Additional Core
+      *	This method copies the propertyset containing the Additional Core
       * Properties of a content.
       *
       * @param  rSourceKey is the key of the source propertyset.
@@ -268,7 +268,7 @@ public:
                                         sal_Bool bRecursive );
 
     /**
-      * This method removes the propertyset containing the Additional Core
+      *	This method removes the propertyset containing the Additional Core
       * Properties of a content.
       *
       * @param  rKey is the key of the propertyset.

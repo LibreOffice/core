@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ public:
     int                 GetVersion() const;
 
     sal_uInt32          InitRenderText();
-
+    
 protected:
                         XRenderPeer();
                         ~XRenderPeer();
@@ -291,7 +291,7 @@ inline void XRenderPeer::FreeGlyph( GlyphSet aGS, Glyph nGlyphId ) const
 
 inline void XRenderPeer::CompositeString32( Picture aSrc, Picture aDst,
     GlyphSet aGlyphSet, int nDstX, int nDstY,
-    const unsigned* pText, int nTextLen ) const
+    const unsigned* pText, int nTextLen ) const 
 {
 #ifdef XRENDER_LINK
     XRenderCompositeString32( mpDisplay, PictOpOver, aSrc, aDst, NULL,

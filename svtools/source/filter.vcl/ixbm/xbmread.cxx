@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@
 // -------------
 
 XBMReader::XBMReader( SvStream& rStm ) :
-            rIStm           ( rStm ),
-            pAcc1           ( NULL ),
-            nLastPos        ( rStm.Tell() ),
-            nWidth          ( 0 ),
-            nHeight         ( 0 ),
-            bStatus         ( TRUE )
+            rIStm			( rStm ),
+            pAcc1			( NULL ),
+            nLastPos		( rStm.Tell() ),
+            nWidth			( 0 ),
+            nHeight			( 0 ),
+            bStatus			( TRUE )
 {
     pHexTable = new short[ 256 ];
     maUpperName = String::CreateFromAscii( "SVIXBM", 6 );
@@ -91,7 +91,7 @@ void XBMReader::InitTable()
     pHexTable['e'] = 14;
     pHexTable['f'] = 15;
     pHexTable['x'] = 0;
-    pHexTable[' '] =     -1;
+    pHexTable[' '] =	 -1;
     pHexTable[','] = -1;
     pHexTable['}'] = -1;
     pHexTable['\n'] = -1;
@@ -104,10 +104,10 @@ void XBMReader::InitTable()
 ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
                                  const char* pTok2, const char* pTok3 )
 {
-    ByteString  aRet;
-    long        nPos1;
-    long        nPos2;
-    long        nPos3;
+    ByteString	aRet;
+    long		nPos1;
+    long		nPos2;
+    long		nPos3;
 
     bStatus = FALSE;
 
@@ -152,9 +152,9 @@ ByteString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
 
 long XBMReader::ParseDefine( const sal_Char* pDefine )
 {
-    long    nRet = 0;
-    char*   pTmp = (char*) pDefine;
-    unsigned char   cTmp;
+    long	nRet = 0;
+    char*	pTmp = (char*) pDefine;
+    unsigned char	cTmp;
 
     // bis zum Ende gehen
     pTmp += ( strlen( pDefine ) - 1 );
@@ -201,14 +201,14 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
 
 BOOL XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFormat eFormat )
 {
-    ByteString      aLine;
-    long            nRow = 0;
-    long            nCol = 0;
-    long            nBits = ( eFormat == XBM10 ) ? 16 : 8;
-    long            nBit;
-    USHORT          nValue;
-    USHORT          nDigits;
-    BOOL            bFirstLine = TRUE;
+    ByteString		aLine;
+    long			nRow = 0;
+    long			nCol = 0;
+    long			nBits = ( eFormat == XBM10 ) ? 16 : 8;
+    long			nBit;
+    USHORT			nValue;
+    USHORT			nDigits;
+    BOOL			bFirstLine = TRUE;
 
     while( nRow < nHeight )
     {
@@ -231,16 +231,16 @@ BOOL XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFor
 
             for( USHORT i = 0; ( i < nCount ) && ( nRow < nHeight ); i++ )
             {
-                const ByteString    aToken( aLine.GetToken( i, ',' ) );
+                const ByteString	aToken( aLine.GetToken( i, ',' ) );
                 const xub_StrLen nLen = aToken.Len();
-                BOOL                bProcessed = FALSE;
+                BOOL				bProcessed = FALSE;
 
                 nBit = nDigits = nValue = 0;
 
                 for( xub_StrLen n = 0UL; n < nLen; n++ )
                 {
                     const unsigned char cChar = aToken.GetChar( n );
-                    const short         nTable = pHexTable[ cChar ];
+                    const short			nTable = pHexTable[ cChar ];
 
                     if( isxdigit( cChar ) || !nTable )
                     {
@@ -274,8 +274,8 @@ BOOL XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XBMFor
 
 ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 {
-    ReadState   eReadState;
-    BYTE        cDummy;
+    ReadState	eReadState;
+    BYTE		cDummy;
 
     // sehen, ob wir _alles_ lesen koennen
     rIStm.Seek( STREAM_SEEK_TO_END );
@@ -285,8 +285,8 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     // kehren wir zurueck und warten auf neue Daten
     if ( rIStm.GetError() != ERRCODE_IO_PENDING )
     {
-        ByteString  aLine;
-        int         nValue;
+        ByteString	aLine;
+        int			nValue;
 
         rIStm.Seek( nLastPos );
         bStatus = FALSE;
@@ -374,9 +374,9 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
 BOOL ImportXBM( SvStream& rStm, Graphic& rGraphic )
 {
-    XBMReader*  pXBMReader = (XBMReader*) rGraphic.GetContext();
-    ReadState   eReadState;
-    BOOL        bRet = TRUE;
+    XBMReader*	pXBMReader = (XBMReader*) rGraphic.GetContext();
+    ReadState	eReadState;
+    BOOL		bRet = TRUE;
 
     if( !pXBMReader )
         pXBMReader = new XBMReader( rStm );

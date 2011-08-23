@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ public:
     ImplData();
     ~ImplData();
 
-    ToolBox*        mpBox;
-    Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
+    ToolBox* 		mpBox;
+    Rectangle		maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
 };
 
 FloatingWindow::ImplData::ImplData()
@@ -138,7 +138,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     mpNextFloat             = NULL;
     mpFirstPopupModeWin     = NULL;
     mnPostId                = 0;
-    mnTitle                 = (nStyle & WB_MOVEABLE) ? FLOATWIN_TITLE_NORMAL : FLOATWIN_TITLE_NONE;
+    mnTitle                 = (nStyle & (WB_MOVEABLE | WB_POPUP)) ? FLOATWIN_TITLE_NORMAL : FLOATWIN_TITLE_NONE;
     mnOldTitle              = mnTitle;
     mnPopupModeFlags        = 0;
     mbInPopupMode           = FALSE;
@@ -267,7 +267,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
     BOOL bRTL = Application::GetSettings().GetLayoutRTL();
 
-    Rectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ),
+    Rectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ), 
                         pW->OutputToAbsoluteScreenPixel( normRect.BottomRight() ) );
 
     Rectangle devRectRTL( devRect );
@@ -342,13 +342,13 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                         bBreak = FALSE;
                 }
                 if( bBreak )
-                {
+                {   
                     e1 = devRect.TopLeft();
                     e2 = devRect.BottomLeft();
                     // set non-zero width
                     e2.X()++;
                     // don't clip corners
-                    e1.Y()++;
+                    e1.Y()++;   
                     e2.Y()--;
                 }
                 break;
@@ -366,13 +366,13 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                         bBreak = FALSE;
                 }
                 if( bBreak )
-                {
+                {   
                     e1 = devRect.TopRight();
                     e2 = devRect.BottomRight();
                     // set non-zero width
                     e2.X()++;
                     // don't clip corners
-                    e1.Y()++;
+                    e1.Y()++;   
                     e2.Y()--;
                 }
                 break;
@@ -382,13 +382,13 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if ( aPos.Y() < aScreenRect.Top() )
                     bBreak = FALSE;
                 if( bBreak )
-                {
+                {   
                     e1 = devRect.TopLeft();
                     e2 = devRect.TopRight();
                     // set non-zero height
                     e2.Y()++;
                     // don't clip corners
-                    e1.X()++;
+                    e1.X()++;   
                     e2.X()--;
                 }
                 break;
@@ -397,13 +397,13 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
                     bBreak = FALSE;
                 if( bBreak )
-                {
+                {   
                     e1 = devRect.BottomLeft();
                     e2 = devRect.BottomRight();
                     // set non-zero height
                     e2.Y()++;
                     // don't clip corners
-                    e1.X()++;
+                    e1.X()++;   
                     e2.X()--;
                 }
                 break;
@@ -486,7 +486,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
     else
         aAbsolute = Point( pReference->OutputToAbsoluteScreenPixel(
             pReference->ScreenToOutputPixel(rPos) ) );
-
+    
     do
     {
         // compute the floating window's size in absolute screen coordinates
@@ -502,8 +502,8 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
             return pWin;
         }
 
-        // test, if mouse is in rectangle, (this is typically the rect of the active
-        // toolbox item or similar)
+        // test, if mouse is in rectangle, (this is typically the rect of the active 
+        // toolbox item or similar) 
         // note: maFloatRect is set in FloatingWindow::StartPopupMode() and
         //       is already in absolute device coordinates
         if ( pWin->maFloatRect.IsInside( aAbsolute ) )
@@ -652,6 +652,8 @@ void FloatingWindow::SetTitleType( USHORT nTitle )
             nTitleStyle = BORDERWINDOW_TITLE_SMALL;
         else if ( nTitle == FLOATWIN_TITLE_TEAROFF )
             nTitleStyle = BORDERWINDOW_TITLE_TEAROFF;
+        else if ( nTitle == FLOATWIN_TITLE_POPUP )
+            nTitleStyle = BORDERWINDOW_TITLE_POPUP;
         else // nTitle == FLOATWIN_TITLE_NONE
             nTitleStyle = BORDERWINDOW_TITLE_NONE;
         ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetTitleType( nTitleStyle, aOutSize );
@@ -670,9 +672,11 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     if ( IsRollUp() )
         RollDown();
 
-    // remove title
+    // remove title 
     mnOldTitle = mnTitle;
-    if ( nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF )
+    if ( ( mpWindowImpl->mnStyle & WB_POPUP ) && GetText().Len() )
+        SetTitleType( FLOATWIN_TITLE_POPUP );
+    else if ( nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF )
         SetTitleType( FLOATWIN_TITLE_TEAROFF );
     else
         SetTitleType( FLOATWIN_TITLE_NONE );
@@ -749,15 +753,15 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
     aRect.SetPos( aPos );
 
     nFlags |=
-        FLOATWIN_POPUPMODE_NOFOCUSCLOSE     |
-//        FLOATWIN_POPUPMODE_NOMOUSECLOSE       |
+        FLOATWIN_POPUPMODE_NOFOCUSCLOSE 	|
+//        FLOATWIN_POPUPMODE_NOMOUSECLOSE		|
         FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |
-//        FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE   |   // #105968# floating toolboxes should close when clicked in (parent's) float rect
+//        FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE	|   // #105968# floating toolboxes should close when clicked in (parent's) float rect
         FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE;
-//          |      FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
+//        	|      FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
 /*
- *  FLOATWIN_POPUPMODE_NOKEYCLOSE       |
+ *  FLOATWIN_POPUPMODE_NOKEYCLOSE		|
  *  don't set since it disables closing floaters with escape
  */
 
@@ -791,7 +795,7 @@ void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
     while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat != this )
         pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
 
-
+    
     // Fenster aus der Liste austragen
     pSVData->maWinData.mpFirstFloat = mpNextFloat;
     mpNextFloat = NULL;

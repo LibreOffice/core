@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ namespace svt
 
     namespace
     {
-        typedef ::com::sun::star::uno::WeakReference< XInterface >  InterfaceAdapter;
-        typedef ::std::vector< InterfaceAdapter  >                  InterfaceArray;
+        typedef ::com::sun::star::uno::WeakReference< XInterface >	InterfaceAdapter;
+        typedef ::std::vector< InterfaceAdapter  >					InterfaceArray;
 
         // ----------------------------------------------------------------
         InterfaceArray& getFolderPickerHistory()
@@ -67,7 +67,7 @@ namespace svt
             // first, check which of the objects we hold in s_aHistory can be removed
             {
                 InterfaceArray aCleanedHistory;
-                for (   InterfaceArray::const_iterator aLoop = _rHistory.begin();
+                for	(	InterfaceArray::const_iterator aLoop = _rHistory.begin();
                         aLoop != _rHistory.end();
                         ++aLoop
                     )
@@ -96,7 +96,7 @@ namespace svt
 
             //=============================================================
             // search the first picker which is still alive ...
-            for (   InterfaceArray::const_reverse_iterator aLoop = _rHistory.rbegin();
+            for	(	InterfaceArray::const_reverse_iterator aLoop = _rHistory.rbegin();
                     ( aLoop != _rHistory.rend() ) && !xTopMostAlive.is();
                     ++aLoop
                 )
@@ -133,6 +133,6 @@ namespace svt
     }
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 

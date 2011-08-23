@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ using namespace ::com::sun::star;
 namespace cairocanvas
 {
     CachedBitmap::CachedBitmap( const SurfaceSharedPtr&                     pSurface,
-                                const rendering::ViewState&                 rUsedViewState,
-                                const rendering::RenderState&               rUsedRenderState,
+                                const rendering::ViewState&	  				rUsedViewState,
+                                const rendering::RenderState&	  			rUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
         CachedPrimitiveBase( rUsedViewState, rTarget, true ),
         mpSurface( pSurface ),
@@ -63,10 +63,10 @@ namespace cairocanvas
         CachedPrimitiveBase::disposing();
     }
 
-    ::sal_Int8 CachedBitmap::doRedraw( const rendering::ViewState&                  rNewState,
-                                       const rendering::ViewState&                  /*rOldState*/,
-                                       const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
-                                       bool                                         bSameViewTransform )
+    ::sal_Int8 CachedBitmap::doRedraw( const rendering::ViewState&					rNewState,
+                                       const rendering::ViewState&					/*rOldState*/,
+                                       const uno::Reference< rendering::XCanvas >& 	rTargetCanvas,
+                                       bool											bSameViewTransform )
     {
         ENSURE_OR_THROW( bSameViewTransform,
                           "CachedBitmap::doRedraw(): base called with changed view transform "

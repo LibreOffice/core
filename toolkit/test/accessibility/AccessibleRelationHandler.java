@@ -8,7 +8,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 
 import tools.NameProvider;
 
-class AccessibleRelationHandler
+class AccessibleRelationHandler 
     extends NodeHandler
 {
     public NodeHandler createHandler( XAccessibleContext xContext )
@@ -34,7 +34,7 @@ class AccessibleRelationHandler
             maChildList.setSize( 1 );
     }
 
-    public AccessibleTreeNode createChild( AccessibleTreeNode aParent,
+    public AccessibleTreeNode createChild( AccessibleTreeNode aParent, 
                                            int nIndex )
     {
         XAccessibleRelationSet xRelation = null;
@@ -42,7 +42,7 @@ class AccessibleRelationHandler
 
         if( aParent instanceof AccTreeNode )
         {
-            xRelation =
+            xRelation = 
                 ((AccTreeNode)aParent).getContext().getAccessibleRelationSet();
         }
         if( xRelation == null )
@@ -64,8 +64,8 @@ class AccessibleRelationHandler
                 for( int j = 0; j < aRelation.TargetSet.length; j++ )
                 {
                     Object aTarget = aRelation.TargetSet[j];
-                    XAccessible xAccTarget =
-                        (XAccessible)UnoRuntime.queryInterface(
+                    XAccessible xAccTarget = 
+                        (XAccessible)UnoRuntime.queryInterface( 
                              XAccessible.class, aTarget );
                     if( xAccTarget == null )
                     {
@@ -80,7 +80,7 @@ class AccessibleRelationHandler
                 }
                 aBuffer.delete( aBuffer.length() - 2, aBuffer.length() );
 
-                aVNode.addChild( new StringNode( aBuffer.toString(),
+                aVNode.addChild( new StringNode( aBuffer.toString(), 
                                                  aParent ) );
             }
 

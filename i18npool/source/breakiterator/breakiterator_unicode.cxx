@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator {
             setBreakType(type);
         };
         OOoRuleBasedBreakIterator(UDataMemory* image,
-                UErrorCode &status) :
+                UErrorCode &status) : 
             RuleBasedBreakIterator(image, status) { };
 
 };
@@ -104,7 +104,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
     sal_Int16 breakType = 0;
     switch (rBreakType) {
         case LOAD_CHARACTER_BREAKITERATOR: icuBI=&character; breakType = 3; break;
-        case LOAD_WORD_BREAKITERATOR: icuBI=&word;
+        case LOAD_WORD_BREAKITERATOR: icuBI=&word; 
             switch (rWordType) {
                 case WordType::ANYWORD_IGNOREWHITESPACES: breakType = 0; rule=wordRule = "edit_word"; break;
                 case WordType::DICTIONARY_WORD: breakType = 1; rule=wordRule = "dict_word"; break;
@@ -131,7 +131,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
             OOoRuleBasedBreakIterator *rbi = NULL;
 
             if (breakRules.getLength() > breakType && breakRules[breakType].getLength() > 0) {
-                rbi = new OOoRuleBasedBreakIterator(udata_open("OpenOffice", "brk",
+                rbi = new OOoRuleBasedBreakIterator(udata_open("OpenOffice", "brk", 
                     OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
             } else {
                 status = U_ZERO_ERROR;
@@ -197,7 +197,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         }
     }
 
-    if (newBreak || icuBI->aICUText.compare(UnicodeString(reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength()))) {   // UChar != sal_Unicode in MinGW
+    if (newBreak || icuBI->aICUText.compare(UnicodeString(reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength()))) {	// UChar != sal_Unicode in MinGW
         icuBI->aICUText=UnicodeString(reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength());
         icuBI->aBreakIterator->setText(icuBI->aICUText);
     }
@@ -380,8 +380,8 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
                 Boundary wBoundary = getWordBoundary( Text, nStartPos, rLocale,
                                                 WordType::DICTIONARY_WORD, false);
                 uno::Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
-                aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
-                    wBoundary.endPos - wBoundary.startPos), rLocale,
+                aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos, 
+                    wBoundary.endPos - wBoundary.startPos), rLocale, 
                     (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos), hOptions.aHyphenationOptions);
                 if (aHyphenatedWord.is()) {
                     lbr.rHyphenatedWord = aHyphenatedWord;

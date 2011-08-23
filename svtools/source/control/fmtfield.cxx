@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,35 +75,35 @@ namespace validation
     // the states of our automat.
     enum State
     {
-        START,              // at the very start of the string
-        NUM_START,          // the very start of the number
+        START,				// at the very start of the string
+        NUM_START,			// the very start of the number
 
-        DIGIT_PRE_COMMA,    // some pre-comma digits are read, perhaps including some thousand separators
+        DIGIT_PRE_COMMA,	// some pre-comma digits are read, perhaps including some thousand separators
 
-        DIGIT_POST_COMMA,   // reading digits after the comma
-        EXPONENT_START,     // at the very start of the exponent value
+        DIGIT_POST_COMMA,	// reading digits after the comma
+        EXPONENT_START,		// at the very start of the exponent value
                             //    (means: not including the "e" which denotes the exponent)
-        EXPONENT_DIGIT,     // currently reading the digits of the exponent
+        EXPONENT_DIGIT,		// currently reading the digits of the exponent
 
-        END                 // reached the end of the string
+        END					// reached the end of the string
     };
 
     // a row in the transition table (means the set of states to be reached from a given state)
-    typedef ::std::map< sal_Unicode, State >        StateTransitions;
+    typedef ::std::map< sal_Unicode, State >		StateTransitions;
 
     // a single transition
-    typedef StateTransitions::value_type            Transition;
+    typedef StateTransitions::value_type			Transition;
 
     // the complete transition table
-    typedef ::std::map< State, StateTransitions >   TransitionTable;
+    typedef	::std::map< State, StateTransitions >	TransitionTable;
 
     // the validator class
     class NumberValidator
     {
     private:
-        TransitionTable     m_aTransitions;
-        const sal_Unicode   m_cThSep;
-        const sal_Unicode   m_cDecSep;
+        TransitionTable		m_aTransitions;
+        const sal_Unicode	m_cThSep;
+        const sal_Unicode	m_cDecSep;
 
     public:
         NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep );
@@ -341,25 +341,25 @@ FormattedField::StaticFormatter::~StaticFormatter()
 //==============================================================================
 DBG_NAME(FormattedField);
 
-#define INIT_MEMBERS()              \
-     m_aLastSelection(0,0)          \
-    ,m_dMinValue(0)                 \
-    ,m_dMaxValue(0)                 \
-    ,m_bHasMin(FALSE)               \
-    ,m_bHasMax(FALSE)               \
-    ,m_bStrictFormat(TRUE)          \
-    ,m_bValueDirty(TRUE)            \
-    ,m_bEnableEmptyField(TRUE)      \
-    ,m_bAutoColor(FALSE)            \
+#define INIT_MEMBERS()				\
+     m_aLastSelection(0,0)			\
+    ,m_dMinValue(0)					\
+    ,m_dMaxValue(0)					\
+    ,m_bHasMin(FALSE)				\
+    ,m_bHasMax(FALSE)				\
+    ,m_bStrictFormat(TRUE)			\
+    ,m_bValueDirty(TRUE)			\
+    ,m_bEnableEmptyField(TRUE)		\
+    ,m_bAutoColor(FALSE)			\
     ,m_bEnableNaN(FALSE)            \
-    ,m_dCurrentValue(0)             \
-    ,m_dDefaultValue(0)             \
-    ,m_nFormatKey(0)                \
-    ,m_pFormatter(NULL)             \
-    ,m_dSpinSize(1)                 \
-    ,m_dSpinFirst(-1000000)         \
-    ,m_dSpinLast(1000000)           \
-    ,m_bTreatAsNumber(TRUE)         \
+    ,m_dCurrentValue(0)				\
+    ,m_dDefaultValue(0)				\
+    ,m_nFormatKey(0)				\
+    ,m_pFormatter(NULL)				\
+    ,m_dSpinSize(1)					\
+    ,m_dSpinFirst(-1000000)			\
+    ,m_dSpinLast(1000000)			\
+    ,m_bTreatAsNumber(TRUE)			\
     ,m_pLastOutputColor(NULL)       \
     ,m_bUseInputStringForFormatting(false)
 
@@ -458,22 +458,22 @@ void FormattedField::SetTextFormatted(const XubString& rStr)
     USHORT nNewLen = sFormatted.Len();
     USHORT nCurrentLen = GetText().Len();
     if ((nNewLen > nCurrentLen) && (aNewSel.Max() == nCurrentLen))
-    {   // the new text is longer and the cursor was behind the last char (of the old text)
+    {	// the new text is longer and the cursor was behind the last char (of the old text)
         if (aNewSel.Min() == 0)
-        {   // the whole text was selected -> select the new text on the whole, too
+        {	// the whole text was selected -> select the new text on the whole, too
             aNewSel.Max() = nNewLen;
             if (!nCurrentLen)
-            {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
+            {	// there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
                 ULONG nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
                 if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
-                {   // selection should be from right to left -> swap min and max
+                {	// selection should be from right to left -> swap min and max
                     aNewSel.Min() = aNewSel.Max();
                     aNewSel.Max() = 0;
                 }
             }
         }
         else if (aNewSel.Max() == aNewSel.Min())
-        {   // there was no selection -> set the cursor behind the new last char
+        {	// there was no selection -> set the cursor behind the new last char
             aNewSel.Max() = nNewLen;
             aNewSel.Min() = nNewLen;
         }
@@ -481,7 +481,7 @@ void FormattedField::SetTextFormatted(const XubString& rStr)
     else if (aNewSel.Max() > nNewLen)
         aNewSel.Max() = nNewLen;
     else
-        aNewSel = aSel; // don't use the justified version
+        aNewSel = aSel;	// don't use the justified version
     SpinField::SetText(sFormatted, aNewSel);
     m_bValueDirty = FALSE;
 }
@@ -514,7 +514,7 @@ void FormattedField::SetAutoColor(BOOL _bAutomatic)
 
     m_bAutoColor = _bAutomatic;
     if (m_bAutoColor)
-    {   // if auto color is switched on, adjust the current text color, too
+    {	// if auto color is switched on, adjust the current text color, too
         if (m_pLastOutputColor)
             SetControlForeground(*m_pLastOutputColor);
         else
@@ -573,22 +573,22 @@ void FormattedField::ImplSetTextImpl(const XubString& rNew, Selection* pNewSel)
         USHORT nCurrentLen = GetText().Len();
 
         if ((nNewLen > nCurrentLen) && (aSel.Max() == nCurrentLen))
-        {   // new new text is longer and the cursor is behind the last char
+        {	// new new text is longer and the cursor is behind the last char
             if (aSel.Min() == 0)
-            {   // the whole text was selected -> select the new text on the whole, too
+            {	// the whole text was selected -> select the new text on the whole, too
                 aSel.Max() = nNewLen;
                 if (!nCurrentLen)
-                {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
+                {	// there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
                     ULONG nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
                     if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
-                    {   // selection should be from right to left -> swap min and max
+                    {	// selection should be from right to left -> swap min and max
                         aSel.Min() = aSel.Max();
                         aSel.Max() = 0;
                     }
                 }
             }
             else if (aSel.Max() == aSel.Min())
-            {   // there was no selection -> set the cursor behind the new last char
+            {	// there was no selection -> set the cursor behind the new last char
                 aSel.Max() = nNewLen;
                 aSel.Min() = nNewLen;
             }
@@ -620,7 +620,7 @@ void FormattedField::ImplSetFormatKey(ULONG nFormatKey)
     BOOL bNeedFormatter = (m_pFormatter == NULL) && (nFormatKey != 0);
     if (bNeedFormatter)
     {
-        ImplGetFormatter();     // damit wird ein Standard-Formatter angelegt
+        ImplGetFormatter();		// damit wird ein Standard-Formatter angelegt
 
         m_nFormatKey = nFormatKey;
             // kann sein, dass das in dem Standard-Formatter keinen Sinn macht, aber der nimmt dann ein Default-Format an.
@@ -825,10 +825,10 @@ void FormattedField::Commit()
 
     // do the reformat
     ReFormat();
-
+    
     // did the text change?
     if ( GetText() != sOld )
-    {   // consider the field as modified
+    {	// consider the field as modified
         Modify();
         // but we have the most recent value now
         m_bValueDirty = FALSE;
@@ -1023,7 +1023,7 @@ BOOL FormattedField::ImplGetValue(double& dNewVal)
 
     DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
 
-    sal_uInt32 nFormatKey = m_nFormatKey;   // IsNumberFormat veraendert den FormatKey ...
+    sal_uInt32 nFormatKey = m_nFormatKey;	// IsNumberFormat veraendert den FormatKey ...
 
     if (ImplGetFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
         // damit wir in einem als Text formatierten Feld trotzdem eine Eingabe wie '1,1' erkennen ...

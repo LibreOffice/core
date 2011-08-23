@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,19 +34,19 @@
 
 struct SfxPoolVersion_Impl
 {
-    USHORT          _nVer;
-    USHORT          _nStart, _nEnd;
-    USHORT*         _pMap;
+    USHORT			_nVer;
+    USHORT			_nStart, _nEnd;
+    USHORT* 		_pMap;
 
                     SfxPoolVersion_Impl( USHORT nVer, USHORT nStart, USHORT nEnd,
                                          USHORT *pMap )
-                    :   _nVer( nVer ),
+                    :	_nVer( nVer ),
                         _nStart( nStart ),
                         _nEnd( nEnd ),
                         _pMap( pMap )
                     {}
                     SfxPoolVersion_Impl( const SfxPoolVersion_Impl &rOrig )
-                    :   _nVer( rOrig._nVer ),
+                    :	_nVer( rOrig._nVer ),
                         _nStart( rOrig._nStart ),
                         _nEnd( rOrig._nEnd ),
                         _pMap( rOrig._pMap )
@@ -58,7 +58,7 @@ SV_DECL_PTRARR_DEL( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl*, 0, 2 )
 
 struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
 {
-    USHORT  nFirstFree;
+    USHORT	nFirstFree;
 
     SfxPoolItemArray_Impl (USHORT nInitSize = 0)
         : SfxPoolItemArrayBase_Impl( nInitSize ),
@@ -70,18 +70,18 @@ class SfxStyleSheetIterator;
 
 struct SfxItemPool_Impl
 {
-    SfxBroadcaster                  aBC;
-    SfxPoolItemArray_Impl**         ppPoolItems;
-    SfxPoolVersionArr_Impl          aVersions;
-    USHORT                          nVersion;
-    USHORT                          nLoadingVersion;
-    USHORT                          nInitRefCount; // 1, beim Laden ggf. 2
-    USHORT                          nVerStart, nVerEnd; // WhichRange in Versions
-    USHORT                          nStoringStart, nStoringEnd; // zu speichernder Range
-    BYTE                            nMajorVer, nMinorVer; // Pool selbst
+    SfxBroadcaster					aBC;
+    SfxPoolItemArray_Impl**			ppPoolItems;
+    SfxPoolVersionArr_Impl			aVersions;
+    USHORT							nVersion;
+    USHORT							nLoadingVersion;
+    USHORT							nInitRefCount; // 1, beim Laden ggf. 2
+    USHORT							nVerStart, nVerEnd; // WhichRange in Versions
+    USHORT							nStoringStart, nStoringEnd; // zu speichernder Range
+    BYTE							nMajorVer, nMinorVer; // Pool selbst
     SfxMapUnit                      eDefMetric;
-    FASTBOOL                        bInSetItem;
-    FASTBOOL                        bStreaming; // in Load() bzw. Store()
+    FASTBOOL						bInSetItem;
+    FASTBOOL						bStreaming; // in Load() bzw. Store()
 
     SfxItemPool_Impl( USHORT nStart, USHORT nEnd )
         : ppPoolItems (new SfxPoolItemArray_Impl*[ nEnd - nStart + 1])
@@ -162,33 +162,33 @@ struct SfxItemPool_Impl
         } \
     }
 
-#define SFX_ITEMPOOL_VER_MAJOR          BYTE(2)
-#define SFX_ITEMPOOL_VER_MINOR          BYTE(0)
+#define SFX_ITEMPOOL_VER_MAJOR      	BYTE(2)
+#define SFX_ITEMPOOL_VER_MINOR      	BYTE(0)
 
-#define SFX_ITEMPOOL_TAG_STARTPOOL_4    USHORT(0x1111)
-#define SFX_ITEMPOOL_TAG_STARTPOOL_5    USHORT(0xBBBB)
-#define SFX_ITEMPOOL_TAG_ITEMPOOL       USHORT(0xAAAA)
-#define SFX_ITEMPOOL_TAG_ITEMS          USHORT(0x2222)
-#define SFX_ITEMPOOL_TAG_ITEM           USHORT(0x7777)
-#define SFX_ITEMPOOL_TAG_SIZES          USHORT(0x3333)
-#define SFX_ITEMPOOL_TAG_DEFAULTS       USHORT(0x4444)
-#define SFX_ITEMPOOL_TAG_VERSIONMAP     USHORT(0x5555)
-#define SFX_ITEMPOOL_TAG_HEADER         USHORT(0x6666)
-#define SFX_ITEMPOOL_TAG_ENDPOOL        USHORT(0xEEEE)
-#define SFX_ITEMPOOL_TAG_TRICK4OLD      USHORT(0xFFFF)
+#define SFX_ITEMPOOL_TAG_STARTPOOL_4	USHORT(0x1111)
+#define SFX_ITEMPOOL_TAG_STARTPOOL_5	USHORT(0xBBBB)
+#define SFX_ITEMPOOL_TAG_ITEMPOOL 		USHORT(0xAAAA)
+#define SFX_ITEMPOOL_TAG_ITEMS			USHORT(0x2222)
+#define SFX_ITEMPOOL_TAG_ITEM			USHORT(0x7777)
+#define SFX_ITEMPOOL_TAG_SIZES			USHORT(0x3333)
+#define SFX_ITEMPOOL_TAG_DEFAULTS		USHORT(0x4444)
+#define SFX_ITEMPOOL_TAG_VERSIONMAP 	USHORT(0x5555)
+#define SFX_ITEMPOOL_TAG_HEADER 		USHORT(0x6666)
+#define SFX_ITEMPOOL_TAG_ENDPOOL		USHORT(0xEEEE)
+#define SFX_ITEMPOOL_TAG_TRICK4OLD  	USHORT(0xFFFF)
 
-#define SFX_ITEMPOOL_REC                BYTE(0x01)
-#define SFX_ITEMPOOL_REC_HEADER         BYTE(0x10)
-#define SFX_ITEMPOOL_REC_VERSIONMAP     USHORT(0x0020)
-#define SFX_ITEMPOOL_REC_WHICHIDS       USHORT(0x0030)
-#define SFX_ITEMPOOL_REC_ITEMS          USHORT(0x0040)
-#define SFX_ITEMPOOL_REC_DEFAULTS       USHORT(0x0050)
+#define SFX_ITEMPOOL_REC				BYTE(0x01)
+#define SFX_ITEMPOOL_REC_HEADER 	    BYTE(0x10)
+#define SFX_ITEMPOOL_REC_VERSIONMAP 	USHORT(0x0020)
+#define SFX_ITEMPOOL_REC_WHICHIDS   	USHORT(0x0030)
+#define SFX_ITEMPOOL_REC_ITEMS  		USHORT(0x0040)
+#define SFX_ITEMPOOL_REC_DEFAULTS		USHORT(0x0050)
 
-#define SFX_ITEMSET_REC                 BYTE(0x02)
+#define SFX_ITEMSET_REC					BYTE(0x02)
 
 #define SFX_STYLES_REC                  BYTE(0x03)
-#define SFX_STYLES_REC_HEADER       USHORT(0x0010)
-#define SFX_STYLES_REC_STYLES       USHORT(0x0020)
+#define SFX_STYLES_REC_HEADER		USHORT(0x0010)
+#define SFX_STYLES_REC_STYLES		USHORT(0x0020)
 
 //========================================================================
 

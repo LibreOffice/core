@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ class TranslateLayout : public Application
 {
     ByteString mGid1;
     ByteString mLanguage;
-    ByteString mLocalize;
+    ByteString mLocalize; 
     ByteString mOutput;
     ByteString mProject;
     ByteString mRoot;
@@ -270,7 +270,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
         fprintf(stderr, "error: parsing: %s\n", xmlFile.GetBuffer() );
         return;
     }
-
+    
     layoutXml->Extract();
     insertMarker( layoutXml, xmlFile );
 
@@ -286,7 +286,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
             if ( XMLElement* element = ( *languageMap )[ "en-US" ] )
                 translateElement( element, language, &resData, mergeData );
     }
-
+    
 #ifndef WNT
     ByteString outFile = "/dev/stdout";
 #else

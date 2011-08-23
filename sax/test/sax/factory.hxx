@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@ namespace sax_test {
 Reference< XInterface > SAL_CALL OSaxWriterTest_CreateInstance(
     const Reference< XMultiServiceFactory > & rSMgr ) throw ( Exception );
 OUString    OSaxWriterTest_getServiceName( ) throw();
-OUString    OSaxWriterTest_getImplementationName( ) throw();
+OUString 	OSaxWriterTest_getImplementationName( ) throw();
 Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw();
 }
 #define BUILD_ERROR(expr, Message)\
@@ -51,7 +51,7 @@ Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw();
                        OStringToOUString( str.makeStringAndClear() , RTL_TEXTENCODING_ASCII_US ); \
         }\
         ((void)0)
-
+        
 
 #define WARNING_ASSERT(expr, Message) \
         if( ! (expr) ) { \

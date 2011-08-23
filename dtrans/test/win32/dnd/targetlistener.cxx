@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,28 +45,28 @@ DropTargetListener::~DropTargetListener()
 {
 }
 
-void SAL_CALL DropTargetListener::disposing( const EventObject& Source )
+void SAL_CALL DropTargetListener::disposing( const EventObject& Source ) 
         throw(RuntimeException)
 {
-
+    
 }
 
 
 
-void SAL_CALL DropTargetListener::drop( const DropTargetDropEvent& e )
+void SAL_CALL DropTargetListener::drop( const DropTargetDropEvent& e ) 
     throw(RuntimeException)
 {
-//  e.Context->dropComplete( sal_True);
-//  e.Context->acceptDrop( ACTION_COPY);
+//	e.Context->dropComplete( sal_True);
+//	e.Context->acceptDrop( ACTION_COPY);
     e.Context->rejectDrop();
 
     // if the Transferable contains text, then we send it to the edit window
-//  Sequence<DataFlavor> flavors= e.Transferable->getTransferDataFlavors();
-//  DataFlavor aFlavor;
-//  for( int i=0; i < flavors.getLength(); i++)
-//      aFlavor= flavors[4];
+//	Sequence<DataFlavor> flavors= e.Transferable->getTransferDataFlavors();
+//	DataFlavor aFlavor;
+//	for( int i=0; i < flavors.getLength(); i++)
+//		aFlavor= flavors[4];
 
-    DataFlavor flavor( OUString(OUString::createFromAscii("text/plain;charset=windows-1252")),
+    DataFlavor flavor( OUString(OUString::createFromAscii("text/plain;charset=windows-1252")), 
         OUString(L"Text plain"), getCppuType( ( Sequence<sal_Int8>*)0 ) );
 
     Any anyData= e.Transferable->getTransferData( flavor);
@@ -74,30 +74,30 @@ void SAL_CALL DropTargetListener::drop( const DropTargetDropEvent& e )
     SendMessage( m_hEdit, WM_SETTEXT, 0, (LPARAM) seq.getConstArray() );
 }
 
-void SAL_CALL DropTargetListener::dragEnter( const DropTargetDragEnterEvent& dtde )
+void SAL_CALL DropTargetListener::dragEnter( const DropTargetDragEnterEvent& dtde ) 
      throw(RuntimeException)
 {
     //If one drags something that is not moveable
     if( !(dtde.SourceActions & dtde.DropAction) )
         dtde.Context->acceptDrag( ACTION_COPY);
 
-//  dtde.Context->rejectDrag( );
+//	dtde.Context->rejectDrag( );
 
 }
 
-void SAL_CALL DropTargetListener::dragExit( const DropTargetEvent& dte )
+void SAL_CALL DropTargetListener::dragExit( const DropTargetEvent& dte ) 
      throw(RuntimeException)
 {
 }
 
-void SAL_CALL DropTargetListener::dragOver( const DropTargetDragEvent& dtde )
+void SAL_CALL DropTargetListener::dragOver( const DropTargetDragEvent& dtde ) 
      throw(RuntimeException)
-{
+{	
     if( !(dtde.SourceActions & dtde.DropAction) )
         dtde.Context->acceptDrag( ACTION_COPY);
 }
 
-void SAL_CALL DropTargetListener::dropActionChanged( const DropTargetDragEvent& dtde )
+void SAL_CALL DropTargetListener::dropActionChanged( const DropTargetDragEvent& dtde ) 
     throw(RuntimeException)
 {
 }

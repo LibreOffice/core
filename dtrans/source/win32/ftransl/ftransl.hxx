@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,8 +68,8 @@ struct FormatEntry
     );
 
     com::sun::star::datatransfer::DataFlavor aDataFlavor;
-    rtl::OUString                            aNativeFormatName;
-    sal_Int32                                aStandardFormatId;
+    rtl::OUString							 aNativeFormatName;
+    sal_Int32								 aStandardFormatId;
 };
 
 //------------------------------------------------
@@ -98,7 +98,7 @@ public:
     // XServiceInfo
     //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
         throw(::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
@@ -123,8 +123,8 @@ private:
     com::sun::star::datatransfer::DataFlavor SAL_CALL mkDataFlv( const rtl::OUString& cnttype, const rtl::OUString& hpname, ::com::sun::star::uno::Type dtype );
 
 private:
-    std::vector< FormatEntry >  m_TranslTable;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
+    std::vector< FormatEntry >	m_TranslTable;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_SrvMgr;
 };
 
 

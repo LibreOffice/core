@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,52 +33,52 @@ class TextEngine;
 
 class TextUndoManager : public SfxUndoManager
 {
-    TextEngine*     mpTextEngine;
+    TextEngine*		mpTextEngine;
 
 protected:
 
-    void            UndoRedoStart();
-    void            UndoRedoEnd();
+    void			UndoRedoStart();
+    void			UndoRedoEnd();
 
-    TextView*       GetView() const { return mpTextEngine->GetActiveView(); }
+    TextView*		GetView() const { return mpTextEngine->GetActiveView(); }
 
 public:
                     TextUndoManager( TextEngine* pTextEngine );
                     ~TextUndoManager();
 
     using SfxUndoManager::Undo;
-    virtual BOOL    Undo( USHORT nCount=1 );
+    virtual BOOL	Undo( USHORT nCount=1 );
     using SfxUndoManager::Redo;
-    virtual BOOL    Redo( USHORT nCount=1 );
+    virtual BOOL	Redo( USHORT nCount=1 );
 
 };
 
 class TextUndo : public SfxUndoAction
 {
 private:
-    USHORT              mnId;
-    TextEngine*         mpTextEngine;
+    USHORT 				mnId;
+    TextEngine*			mpTextEngine;
 
 protected:
 
-    TextView*           GetView() const { return mpTextEngine->GetActiveView(); }
-    void                SetSelection( const TextSelection& rSel );
+    TextView*			GetView() const { return mpTextEngine->GetActiveView(); }
+    void				SetSelection( const TextSelection& rSel );
 
-    TextDoc*            GetDoc() const { return mpTextEngine->mpDoc; }
-    TEParaPortions*     GetTEParaPortions() const { return mpTextEngine->mpTEParaPortions; }
+    TextDoc*			GetDoc() const { return mpTextEngine->mpDoc; }
+    TEParaPortions*		GetTEParaPortions() const { return mpTextEngine->mpTEParaPortions; }
 
 public:
                         TYPEINFO();
                         TextUndo( USHORT nId, TextEngine* pTextEngine );
-    virtual             ~TextUndo();
+    virtual 			~TextUndo();
 
-    TextEngine*         GetTextEngine() const   { return mpTextEngine; }
+    TextEngine*			GetTextEngine() const	{ return mpTextEngine; }
 
-    virtual void        Undo()      = 0;
-    virtual void        Redo()      = 0;
+    virtual void		Undo() 		= 0;
+    virtual void		Redo()		= 0;
 
-    virtual XubString   GetComment() const;
-    virtual USHORT      GetId() const;
+    virtual XubString	GetComment() const;
+    virtual USHORT		GetId() const;
 };
 
 #endif // _TEXTUNDO_HXX

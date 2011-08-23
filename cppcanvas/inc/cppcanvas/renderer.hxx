@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,8 +74,8 @@ namespace cppcanvas
 
             @return whether the rendering finished successfully.
          */
-        virtual bool drawSubset( sal_Int32  nStartIndex,
-                                 sal_Int32  nEndIndex ) const = 0;
+        virtual bool drawSubset( sal_Int32	nStartIndex,
+                                 sal_Int32	nEndIndex ) const = 0;
 
         /** Query bounding box of metafile subset
 
@@ -101,24 +101,24 @@ namespace cppcanvas
 
             @return the bounding box of the specified subset
          */
-        virtual ::basegfx::B2DRange getSubsetArea( sal_Int32    nStartIndex,
-                                                   sal_Int32    nEndIndex ) const = 0;
+        virtual ::basegfx::B2DRange getSubsetArea( sal_Int32	nStartIndex,
+                                                   sal_Int32	nEndIndex ) const = 0;
 
         /** Parameters for the Renderer
          */
         struct Parameters
         {
             /// Optionally forces the fill color attribute for all actions
-            ::comphelper::OptionalValue< Color::IntSRGBA >          maFillColor;
+            ::comphelper::OptionalValue< Color::IntSRGBA >			maFillColor;
 
             /// Optionally forces the line color attribute for all actions
-            ::comphelper::OptionalValue< Color::IntSRGBA >          maLineColor;
+            ::comphelper::OptionalValue< Color::IntSRGBA >  		maLineColor;
 
             /// Optionally forces the text color attribute for all actions
-            ::comphelper::OptionalValue< Color::IntSRGBA >          maTextColor;
+            ::comphelper::OptionalValue< Color::IntSRGBA >  		maTextColor;
 
             /// Optionally forces the given fontname for all text actions
-            ::comphelper::OptionalValue< ::rtl::OUString >          maFontName;
+            ::comphelper::OptionalValue< ::rtl::OUString >  		maFontName;
 
             /** Optionally transforms all text output actions with the
                 given matrix (in addition to the overall canvas
@@ -128,16 +128,16 @@ namespace cppcanvas
                 rect coordinate system, i.e. the metafile is assumed
                 to be contained in the unit rect.
              */
-            ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >  maTextTransformation;
+            ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >	maTextTransformation;
 
             /// Optionally forces the given font weight for all text actions
-            ::comphelper::OptionalValue< sal_Int8 >                 maFontWeight;
+            ::comphelper::OptionalValue< sal_Int8 >					maFontWeight;
 
             /// Optionally forces the given font letter form (italics etc.) for all text actions
-            ::comphelper::OptionalValue< sal_Int8 >                 maFontLetterForm;
+            ::comphelper::OptionalValue< sal_Int8 >					maFontLetterForm;
 
             /// Optionally forces underlining for all text actions
-            ::comphelper::OptionalValue< bool >                     maFontUnderline;
+            ::comphelper::OptionalValue< bool >						maFontUnderline;
         };
     };
 

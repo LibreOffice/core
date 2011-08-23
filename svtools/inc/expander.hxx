@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,60 +33,60 @@
 
 enum SvExpanderStateType
 {
-    EST_MIN=1,
-    EST_PLUS=2,
-    EST_MIN_DOWN=3,
-    EST_PLUS_DOWN=4,
-    EST_NONE=5,
-    EST_MIN_DIS=6,
-    EST_PLUS_DIS=7,
-    EST_MIN_DOWN_DIS=8,
+    EST_MIN=1,          
+    EST_PLUS=2,         
+    EST_MIN_DOWN=3,     
+    EST_PLUS_DOWN=4,    
+    EST_NONE=5,         
+    EST_MIN_DIS=6,      
+    EST_PLUS_DIS=7,     
+    EST_MIN_DOWN_DIS=8, 
     EST_PLUS_DOWN_DIS=9
 };
 
 class SvExpander: public Control
 {
 private:
-        Point                   aImagePos;
-        Point                   aTextPos;
-        Image                   aActiveImage;
-        Rectangle               maFocusRect;
-        ImageList               maExpanderImages;
-        BOOL                    mbIsExpanded;
-        BOOL                    mbHasFocusRect;
-        BOOL                    mbIsInMouseDown;
-        Link                    maToggleHdl;
-        SvExpanderStateType eType;
+        Point					aImagePos;
+        Point					aTextPos;
+        Image					aActiveImage;
+        Rectangle				maFocusRect;
+        ImageList				maExpanderImages;
+        BOOL					mbIsExpanded;
+        BOOL					mbHasFocusRect;
+        BOOL					mbIsInMouseDown;
+        Link					maToggleHdl;
+        SvExpanderStateType	eType;
 
 protected:
+        
+        virtual long	PreNotify( NotifyEvent& rNEvt );
+        virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void	MouseMove( const MouseEvent& rMEvt );
+        virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void	Paint( const Rectangle& rRect );
+        virtual void	KeyInput( const KeyEvent& rKEvt );
+        virtual void	KeyUp( const KeyEvent& rKEvt );
 
-        virtual long    PreNotify( NotifyEvent& rNEvt );
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void    MouseMove( const MouseEvent& rMEvt );
-        virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-        virtual void    Paint( const Rectangle& rRect );
-        virtual void    KeyInput( const KeyEvent& rKEvt );
-        virtual void    KeyUp( const KeyEvent& rKEvt );
-
-        virtual void    Click();
-        virtual void    Resize();
+        virtual void	Click();
+        virtual void	Resize();
 
 public:
-        SvExpander( Window* pParent, WinBits nStyle = 0 );
+        SvExpander( Window* pParent, WinBits nStyle = 0 ); 
         SvExpander( Window* pParent, const ResId& rResId );
 
-        BOOL            IsExpanded() {return mbIsExpanded;}
+        BOOL			IsExpanded() {return mbIsExpanded;}
 
-        void            SetToExpanded(BOOL bFlag=TRUE);
+        void			SetToExpanded(BOOL bFlag=TRUE);
 
-        void            SetExpanderImage( SvExpanderStateType eType);
-        Image           GetExpanderImage(SvExpanderStateType eType);
-        Size            GetMinSize() const;
+        void			SetExpanderImage( SvExpanderStateType eType);
+        Image			GetExpanderImage(SvExpanderStateType eType);
+        Size			GetMinSize() const;
 
-        void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
-        const Link&     GetToggleHdl() const { return maToggleHdl; }
+        void			SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
+        const Link& 	GetToggleHdl() const { return maToggleHdl; }
 };
 
 
 
-#endif
+#endif	

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -227,7 +227,7 @@ namespace comphelper
         // So, everything of XSet except insert is implemented empty
         return sal_False;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBag::insert( const Any& _element ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
     {
@@ -246,7 +246,7 @@ namespace comphelper
             )
             throw IllegalTypeException( ::rtl::OUString(), *this );
 
-        m_aDynamicProperties.addVoidProperty( aProperty.Name, aProperty.Type, findFreeHandle(), aProperty.Attributes );
+        m_aDynamicProperties.addVoidProperty( aProperty.Name, aProperty.Type, findFreeHandle(), aProperty.Attributes ); 
 
         // our property info is dirty
         m_pArrayHelper.reset();
@@ -254,7 +254,7 @@ namespace comphelper
         g.clear();
         setModified(sal_True);
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBag::remove( const Any& /*aElement*/ ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
     {
@@ -355,7 +355,7 @@ namespace comphelper
             )
             throw IllegalTypeException( ::rtl::OUString(), *this );
 
-        m_aDynamicProperties.addProperty( _rName, findFreeHandle(), _nAttributes, _rInitialValue );
+        m_aDynamicProperties.addProperty( _rName, findFreeHandle(), _nAttributes, _rInitialValue ); 
 
         // our property info is dirty
         m_pArrayHelper.reset();

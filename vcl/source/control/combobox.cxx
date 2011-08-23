@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,16 +117,16 @@ ComboBox::~ComboBox()
 
 void ComboBox::ImplInitComboBoxData()
 {
-    mpSubEdit           = NULL;
-    mpBtn               = NULL;
-    mpImplLB            = NULL;
-    mpFloatWin          = NULL;
+    mpSubEdit			= NULL;
+    mpBtn				= NULL;
+    mpImplLB			= NULL;
+    mpFloatWin			= NULL;
 
-    mnDDHeight          = 0;
-    mbDDAutoSize        = TRUE;
-    mbSyntheticModify   = FALSE;
-    mbMatchCase         = FALSE;
-    mcMultiSep          = ';';
+    mnDDHeight			= 0;
+    mbDDAutoSize		= TRUE;
+    mbSyntheticModify	= FALSE;
+    mbMatchCase 		= FALSE;
+    mcMultiSep			= ';';
 }
 
 // -----------------------------------------------------------------------
@@ -331,8 +331,8 @@ IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, EMPTYARG )
 
 IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 {
-    Selection           aSel = pEdit->GetSelection();
-    AutocompleteAction  eAction = pEdit->GetAutocompleteAction();
+    Selection			aSel = pEdit->GetSelection();
+    AutocompleteAction	eAction = pEdit->GetAutocompleteAction();
 
     /* If there is no current selection do not auto complete on
        Tab/Shift-Tab since then we would not cycle to the next field.
@@ -340,9 +340,9 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
     if ( aSel.Len() ||
          ((eAction != AUTOCOMPLETE_TABFORWARD) && (eAction != AUTOCOMPLETE_TABBACKWARD)) )
     {
-        XubString   aFullText = pEdit->GetText();
-        XubString   aStartText = aFullText.Copy( 0, (xub_StrLen)aSel.Max() );
-        USHORT      nStart = mpImplLB->GetCurrentPos();
+        XubString	aFullText = pEdit->GetText();
+        XubString	aStartText = aFullText.Copy( 0, (xub_StrLen)aSel.Max() );
+        USHORT		nStart = mpImplLB->GetCurrentPos();
 
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
             nStart = 0;
@@ -355,7 +355,7 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
             bForward = FALSE;
             nStart = nStart ? nStart - 1 : mpImplLB->GetEntryList()->GetEntryCount()-1;
         }
-
+        
         USHORT nPos = LISTBOX_ENTRY_NOTFOUND;
         if( ! mbMatchCase )
         {
@@ -365,7 +365,7 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
                 // Try match case insensitive, but from start
                 nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward, TRUE );
         }
-
+            
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
             // Try match full from current position
             nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, FALSE );
@@ -401,11 +401,11 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
             xub_StrLen nIndex = 0;
             while ( nIndex != STRING_NOTFOUND )
             {
-                xub_StrLen  nPrevIndex = nIndex;
-                XubString   aToken = aText.GetToken( 0, mcMultiSep, nIndex );
-                xub_StrLen  nTokenLen = aToken.Len();
+                xub_StrLen	nPrevIndex = nIndex;
+                XubString	aToken = aText.GetToken( 0, mcMultiSep, nIndex );
+                xub_StrLen	nTokenLen = aToken.Len();
                 aToken.EraseLeadingAndTrailingChars( ' ' );
-                USHORT      nP = mpImplLB->GetEntryList()->FindEntry( aToken );
+                USHORT		nP = mpImplLB->GetEntryList()->FindEntry( aToken );
                 if ( (nP != LISTBOX_ENTRY_NOTFOUND) && (!mpImplLB->GetEntryList()->IsEntryPosSelected( nP )) )
                 {
                     aText.Erase( nPrevIndex, nTokenLen );
@@ -623,8 +623,8 @@ void ComboBox::Resize()
     if( IsDropDownBox() )
     {
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        long    nTop = 0;
-        long    nBottom = aOutSz.Height();
+        long	nTop = 0;
+        long	nBottom = aOutSz.Height();
 
         Window *pBorder = GetWindow( WINDOW_BORDER );
         ImplControlValue aControlValue;
@@ -789,7 +789,7 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
         }
         Resize();
         mpImplLB->Resize(); // Wird nicht durch ComboBox::Resize() gerufen, wenn sich die ImplLB nicht aendert.
-        SetBackground();    // due to a hack in Window::UpdateSettings the background must be reset
+        SetBackground();    // due to a hack in Window::UpdateSettings the background must be reset 
                             // otherwise it will overpaint NWF drawn comboboxes
     }
 }
@@ -811,7 +811,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
             && !IsReadOnly() )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
-        USHORT   nKeyCode = aKeyEvt.GetKeyCode().GetCode();
+        USHORT	 nKeyCode = aKeyEvt.GetKeyCode().GetCode();
         switch( nKeyCode )
         {
             case KEY_UP:
@@ -925,9 +925,9 @@ void ComboBox::ImplUpdateFloatSelection()
     mpImplLB->SetCallSelectionChangedHdl( FALSE );
     if ( !IsMultiSelectionEnabled() )
     {
-        XubString   aSearchStr( mpSubEdit->GetText() );
-        USHORT      nSelect = LISTBOX_ENTRY_NOTFOUND;
-        BOOL        bSelect = TRUE;
+        XubString	aSearchStr( mpSubEdit->GetText() );
+        USHORT		nSelect = LISTBOX_ENTRY_NOTFOUND;
+        BOOL		bSelect = TRUE;
 
         if ( mpImplLB->GetCurrentPos() != LISTBOX_ENTRY_NOTFOUND )
         {
@@ -1009,6 +1009,14 @@ void ComboBox::Clear()
 {
     mpImplLB->Clear();
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(-1) );
+}
+// -----------------------------------------------------------------------
+
+Image ComboBox::GetEntryImage( USHORT nPos ) const
+{
+    if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
+        return mpImplLB->GetEntryList()->GetEntryImage( nPos );
+    return Image();
 }
 
 // -----------------------------------------------------------------------
@@ -1278,9 +1286,9 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, U
         if ( !nLines )
             nLines = 1;
         USHORT nTEntry = IsReallyVisible() ? mpImplLB->GetTopEntry() : 0;
-
+        
         Rectangle aTextRect( aPos, aSize );
-
+        
         aTextRect.Left() += 3*nOnePixel;
         aTextRect.Right() -= 3*nOnePixel;
         aTextRect.Top() += nEditHeight + nOnePixel;
@@ -1296,14 +1304,14 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, U
     }
 
     pDev->Pop();
-
+    
     // Call Edit::Draw after restoring the MapMode...
     if ( IsDropDownBox() )
     {
         mpSubEdit->Draw( pDev, rPos, rSize, nFlags );
         // DD-Button ?
     }
-
+    
 }
 
 // -----------------------------------------------------------------------
@@ -1560,7 +1568,7 @@ long ComboBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
         // point must be either in main list window
         // or in impl window (dropdown case)
         ImplListBoxWindow* pMain = mpImplLB->GetMainWindow();
-
+    
         // convert coordinates to ImplListBoxWindow pixel coordinate space
         Point aConvPoint = LogicToPixel( rPoint );
         aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );

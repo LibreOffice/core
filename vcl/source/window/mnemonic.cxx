@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -344,7 +344,7 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
 //        do
 //        {
 //            c = aKey.GetChar( nIndex );
-//
+//            
 //            nMnemonicIndex = ImplGetMnemonicIndex( c );
 //            if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
 //            {
@@ -353,7 +353,7 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
 //                bChanged = TRUE;
 //                break;
 //            }
-//
+//            
 //            // Search for next word
 //            do
 //            {
@@ -387,7 +387,7 @@ String MnemonicGenerator::EraseAllMnemonicChars( const String& rStr )
     String      aStr = rStr;
     xub_StrLen  nLen = aStr.Len();
     xub_StrLen  i    = 0;
-
+    
     while ( i < nLen )
     {
         if ( aStr.GetChar( i ) == '~' )
@@ -396,8 +396,8 @@ String MnemonicGenerator::EraseAllMnemonicChars( const String& rStr )
             if( i > 0 && (i+2) < nLen )
             {
                 sal_Unicode c = aStr.GetChar(i+1);
-                if( aStr.GetChar( i-1 ) == '(' &&
-                    aStr.GetChar( i+2 ) == ')' &&
+                if( aStr.GetChar( i-1 ) == '(' && 
+                    aStr.GetChar( i+2 ) == ')' && 
                     c >= MNEMONIC_RANGE_2_START && c <= MNEMONIC_RANGE_2_END )
                 {
                     aStr.Erase( i-1, 4 );

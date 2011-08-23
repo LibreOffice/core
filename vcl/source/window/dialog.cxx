@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -638,7 +638,7 @@ BOOL Dialog::ImplStartExecuteModal()
                     "Dialog::StartExecuteModal() - Parent input disabled, use another parent to ensure modality!" );
         DBG_ASSERT( ! pParent->IsInModalMode(),
                     "Dialog::StartExecuteModal() - Parent already modally disabled, use another parent to ensure modality!" );
-
+            
     }
 #endif
 
@@ -664,10 +664,10 @@ BOOL Dialog::ImplStartExecuteModal()
     SetModalInputMode( TRUE );
     mbOldSaveBack = IsSaveBackgroundEnabled();
     EnableSaveBackground();
-
+    
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
-
+    
     Show();
 
     pSVData->maAppData.mnModalMode++;
@@ -691,7 +691,7 @@ short Dialog::Execute()
 
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
-
+    
 #ifdef DBG_UTIL
     ImplDelData aParentDelData;
     Window* pDialogParent = mpDialogParent;
@@ -955,15 +955,15 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULO
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
-
+    
     Wallpaper aWallpaper = GetBackground();
     if ( !aWallpaper.IsBitmap() )
         ImplInitSettings();
-
+    
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetLineColor();
-
+    
     if ( aWallpaper.IsBitmap() )
         pDev->DrawBitmapEx( aPos, aSize, aWallpaper.GetBitmap() );
     else

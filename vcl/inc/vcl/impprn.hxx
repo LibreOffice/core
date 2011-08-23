@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ struct QueuePage;
     normal drawing operations for each printed page to a metafile, then spooling
     the metafiles timer based to a normal printer. The application can act in the meantime
     including changing the original document without influencing the print job.
-
+    
     On some systems (currently Mac/Aqua Cocoa) ImplQPrinter has the additional
     purpose of adapting to the print system: here theprint systems starts a
     job and will not return from that function until it has ended; to do so
@@ -69,7 +69,7 @@ private:
     bool                            mbUserCopy;
     bool                            mbDestroyAllowed;
     bool                            mbDestroyed;
-
+    
     GDIMetaFile                     maCurPageMetaFile;
     long                            mnMaxBmpDPIX;
     long                            mnMaxBmpDPIY;
@@ -77,30 +77,30 @@ private:
     int                             mnCurCopyCount;
 
                 DECL_LINK( ImplPrintHdl, Timer* );
-
+    
                 ~ImplQPrinter();
 
-    void        ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxBmpDPIY );
+    void		ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxBmpDPIY );
 
                 ImplQPrinter( const ImplQPrinter& rPrinter );
     Printer&    operator =( const ImplQPrinter& rPrinter );
-
+    
     void        PrePrintPage( QueuePage* );
     void        PostPrintPage();
 
 public:
 
                 ImplQPrinter( Printer* pParent );
-    void        Destroy();
+    void		Destroy();
 
-    void        StartQueuePrint();
-    void        EndQueuePrint();
-    void        AbortQueuePrint();
-    void        AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobSetup );
+    void		StartQueuePrint();
+    void		EndQueuePrint();
+    void		AbortQueuePrint();
+    void		AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobSetup );
 
-    bool        IsUserCopy() const { return mbUserCopy; }
-    void        SetUserCopy( bool bSet ) { mbUserCopy = bSet; }
-
+    bool		IsUserCopy() const { return mbUserCopy; }
+    void		SetUserCopy( bool bSet ) { mbUserCopy = bSet; }
+    
     /**
     used by pull implementation to emit the next page
     */
@@ -110,31 +110,31 @@ public:
     (that is how often PrintNextPage should be called)
     */
     ULONG       GetPrintPageCount() const;
-
+    
     /**
     used by pull implementation to get ranges of physical pages that
     are to be printed on the same paper. If bIncludeOrientationChanges is true
     then orientation changes will not break a page run; the implementation has
     to rotate the page contents accordingly in that case.
-
+    
     The returned vector contains all pages indices beginning a new medium and additionally
     the index that of the last page+1 (for convenience, so the length of a range
     is always v[i+1] - v[i])
-
+    
     Example: 5 pages, all A4
     return: [0 5]
-
+    
     Example: 6 pages, beginning A4, switching tol A5 on fourth page, back to A4 on fifth page
     return [0 3 4 6]
-
+    
     returns an false in push model (error condition)
     */
     bool GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncludeOrientationChanges ) const;
-
+    
     /**
     get the jobsetup for a page
     */
     ImplJobSetup* GetPageSetup( unsigned int nPage ) const;
 };
 
-#endif  // _SV_IMPPRN_HXX
+#endif	// _SV_IMPPRN_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,23 +65,23 @@ DBG_NAMEEX( OutputDevice )
 // - Defines -
 // -----------
 
-#define OUTDEV_INIT()                       \
-{                                           \
-    if ( !IsDeviceOutputNecessary() )       \
-        return;                             \
+#define OUTDEV_INIT()						\
+{											\
+    if ( !IsDeviceOutputNecessary() )		\
+        return; 							\
                                             \
-    if ( !mpGraphics )                      \
-        if ( !ImplGetGraphics() )           \
-            return;                         \
+    if ( !mpGraphics )						\
+        if ( !ImplGetGraphics() )			\
+            return; 						\
                                             \
-    if ( mbInitClipRegion )                 \
-        ImplInitClipRegion();               \
+    if ( mbInitClipRegion ) 				\
+        ImplInitClipRegion();				\
                                             \
-    if ( mbOutputClipped )                  \
-        return;                             \
+    if ( mbOutputClipped )					\
+        return; 							\
 }
 
-#define TwoRect     SalTwoRect
+#define TwoRect 	SalTwoRect
 
 // -------------
 // - externals -
@@ -116,13 +116,13 @@ ULONG ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
     }
 
     if( ( rTwoRect.mnSrcX < 0 ) || ( rTwoRect.mnSrcX >= rSizePix.Width() ) ||
-        ( rTwoRect.mnSrcY < 0 ) || ( rTwoRect.mnSrcY >= rSizePix.Height() ) ||
+        ( rTwoRect.mnSrcY < 0 ) || ( rTwoRect.mnSrcY >= rSizePix.Height() ) ||	
         ( ( rTwoRect.mnSrcX + rTwoRect.mnSrcWidth ) > rSizePix.Width() ) ||
         ( ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) > rSizePix.Height() ) )
     {
-        const Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
+        const Rectangle	aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ), 
                                      Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
-        Rectangle       aCropRect( aSourceRect );
+        Rectangle		aCropRect( aSourceRect );
 
         aCropRect.Intersection( Rectangle( Point(), rSizePix ) );
 
@@ -130,8 +130,8 @@ ULONG ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
             rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
         else
         {
-            const double    fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
-            const double    fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
+            const double	fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
+            const double	fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
 
             const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
             const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
@@ -156,8 +156,8 @@ ULONG ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
 
 void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoidPosAry )
 {
-    TwoRect*            pPosAry = (TwoRect*)pVoidPosAry;
-    SalGraphics*        pGraphics2;
+    TwoRect*			pPosAry = (TwoRect*)pVoidPosAry;
+    SalGraphics*		pGraphics2;
 
     if ( pPosAry->mnSrcWidth && pPosAry->mnSrcHeight && pPosAry->mnDestWidth && pPosAry->mnDestHeight )
     {
@@ -200,12 +200,12 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
         }
 
         // #102532# Offset only has to be pseudo window offset
-        Rectangle   aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
+        Rectangle	aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
                                  Size( pSrcDev->mnOutWidth, pSrcDev->mnOutHeight ) );
-        Rectangle   aSrcRect( Point( pPosAry->mnSrcX, pPosAry->mnSrcY ),
+        Rectangle	aSrcRect( Point( pPosAry->mnSrcX, pPosAry->mnSrcY ),
                               Size( pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ) );
-        const long  nOldRight = aSrcRect.Right();
-        const long  nOldBottom = aSrcRect.Bottom();
+        const long	nOldRight = aSrcRect.Right();
+        const long	nOldBottom = aSrcRect.Bottom();
 
         if ( !aSrcRect.Intersection( aSrcOutRect ).IsEmpty() )
         {
@@ -230,7 +230,7 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
             if( (GetOutDevType() != OUTDEV_WINDOW) && pGraphics2 && (pGraphics2->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
             {
                 SalTwoRect pPosAry2 = *pPosAry;
-                pGraphics2->mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcDev );
+                pGraphics2->mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcDev ); 
                 mpGraphics->CopyBits( &pPosAry2, pGraphics2, this, pSrcDev );
             }
             else
@@ -269,24 +269,24 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     OUTDEV_INIT();
 
     TwoRect aPosAry;
-    aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    aPosAry.mnSrcWidth	 = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
     aPosAry.mnSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
     aPosAry.mnDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
     aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
     if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
     {
-        aPosAry.mnSrcX       = ImplLogicXToDevicePixel( rSrcPt.X() );
-        aPosAry.mnSrcY       = ImplLogicYToDevicePixel( rSrcPt.Y() );
-        aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
-        aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
+        aPosAry.mnSrcX		 = ImplLogicXToDevicePixel( rSrcPt.X() );
+        aPosAry.mnSrcY		 = ImplLogicYToDevicePixel( rSrcPt.Y() );
+        aPosAry.mnDestX 	 = ImplLogicXToDevicePixel( rDestPt.X() );
+        aPosAry.mnDestY 	 = ImplLogicYToDevicePixel( rDestPt.Y() );
 
-        Rectangle   aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+        Rectangle	aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                  Size( mnOutWidth, mnOutHeight ) );
-        Rectangle   aSrcRect( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
+        Rectangle	aSrcRect( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
                               Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
-        long        nOldRight = aSrcRect.Right();
-        long        nOldBottom = aSrcRect.Bottom();
+        long		nOldRight = aSrcRect.Right();
+        long		nOldBottom = aSrcRect.Bottom();
 
         if ( !aSrcRect.Intersection( aSrcOutRect ).IsEmpty() )
         {
@@ -342,12 +342,12 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     OUTDEV_INIT();
 
     TwoRect aPosAry;
-    aPosAry.mnSrcX       = rOutDev.ImplLogicXToDevicePixel( rSrcPt.X() );
-    aPosAry.mnSrcY       = rOutDev.ImplLogicYToDevicePixel( rSrcPt.Y() );
-    aPosAry.mnSrcWidth   = rOutDev.ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    aPosAry.mnSrcX		 = rOutDev.ImplLogicXToDevicePixel( rSrcPt.X() );
+    aPosAry.mnSrcY		 = rOutDev.ImplLogicYToDevicePixel( rSrcPt.Y() );
+    aPosAry.mnSrcWidth	 = rOutDev.ImplLogicWidthToDevicePixel( rSrcSize.Width() );
     aPosAry.mnSrcHeight  = rOutDev.ImplLogicHeightToDevicePixel( rSrcSize.Height() );
-    aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
-    aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
+    aPosAry.mnDestX 	 = ImplLogicXToDevicePixel( rDestPt.X() );
+    aPosAry.mnDestY 	 = ImplLogicYToDevicePixel( rDestPt.Y() );
     aPosAry.mnDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
     aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
@@ -404,22 +404,22 @@ void OutputDevice::CopyArea( const Point& rDestPt,
     OUTDEV_INIT();
 
     TwoRect aPosAry;
-    aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    aPosAry.mnSrcWidth	 = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
     aPosAry.mnSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
 
     if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight )
     {
-        aPosAry.mnSrcX       = ImplLogicXToDevicePixel( rSrcPt.X() );
-        aPosAry.mnSrcY       = ImplLogicYToDevicePixel( rSrcPt.Y() );
-        aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
-        aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
+        aPosAry.mnSrcX		 = ImplLogicXToDevicePixel( rSrcPt.X() );
+        aPosAry.mnSrcY		 = ImplLogicYToDevicePixel( rSrcPt.Y() );
+        aPosAry.mnDestX 	 = ImplLogicXToDevicePixel( rDestPt.X() );
+        aPosAry.mnDestY 	 = ImplLogicYToDevicePixel( rDestPt.Y() );
 
-        Rectangle   aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+        Rectangle	aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                  Size( mnOutWidth, mnOutHeight ) );
-        Rectangle   aSrcRect( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
+        Rectangle	aSrcRect( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
                               Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
-        long        nOldRight = aSrcRect.Right();
-        long        nOldBottom = aSrcRect.Bottom();
+        long		nOldRight = aSrcRect.Right();
+        long		nOldBottom = aSrcRect.Bottom();
 
         if ( !aSrcRect.Intersection( aSrcOutRect ).IsEmpty() )
         {
@@ -463,9 +463,9 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    BOOL            bOldMap = mbMap;
-    RasterOp        eOldROP = GetRasterOp();
+    GDIMetaFile*	pOldMetaFile = mpMetaFile;
+    BOOL			bOldMap = mbMap;
+    RasterOp		eOldROP = GetRasterOp();
     mpMetaFile = NULL;
     mbMap = FALSE;
     SetRasterOp( ROP_OVERPAINT );
@@ -486,12 +486,12 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
         ImplSelectClipRegion( rRegion );
 
     TwoRect aPosAry;
-    aPosAry.mnSrcX       = rDevPt.X();
-    aPosAry.mnSrcY       = rDevPt.Y();
-    aPosAry.mnSrcWidth   = rDevSize.Width();
+    aPosAry.mnSrcX		 = rDevPt.X();
+    aPosAry.mnSrcY		 = rDevPt.Y();
+    aPosAry.mnSrcWidth	 = rDevSize.Width();
     aPosAry.mnSrcHeight  = rDevSize.Height();
-    aPosAry.mnDestX      = rPt.X();
-    aPosAry.mnDestY      = rPt.Y();
+    aPosAry.mnDestX 	 = rPt.X();
+    aPosAry.mnDestY 	 = rPt.Y();
     aPosAry.mnDestWidth  = rDevSize.Width();
     aPosAry.mnDestHeight = rDevSize.Height();
     ImplDrawOutDevDirect( &rOutDev, &aPosAry );
@@ -591,7 +591,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
         DrawRect( Rectangle( rDestPt, rDestSize ) );
         return;
     }
-    else if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP |
+    else if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP | 
                              DRAWMODE_GRAYBITMAP | DRAWMODE_GHOSTEDBITMAP ) )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP ) )
@@ -661,7 +661,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
         {
             if ( nMirrFlags )
                 aBmp.Mirror( nMirrFlags );
-
+            
             /* #i75264# (corrected with #i81576#)
             * sometimes a bitmap is scaled to a ridiculous size and drawn
             * to a quite normal VDev, so only a very small part of
@@ -691,7 +691,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                         if( aPosAry.mnDestWidth > 3*mnOutWidth && aPosAry.mnSrcWidth )
                         {
                             const double nScaleX = aPosAry.mnDestWidth/double(aPosAry.mnSrcWidth);
-
+    
                             if( aPosAry.mnDestX + aPosAry.mnDestWidth > mnOutWidth )
                             {
                                 aPosAry.mnDestWidth = Max(long(0),mnOutWidth-aPosAry.mnDestX);
@@ -702,14 +702,14 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                 aPosAry.mnSrcX -= sal::static_int_cast<long>(aPosAry.mnDestX / nScaleX);
                                 aPosAry.mnDestX = 0;
                             }
-
+    
                             aPosAry.mnSrcWidth = sal::static_int_cast<long>(aPosAry.mnDestWidth / nScaleX);
                         }
-
+    
                         if( aPosAry.mnDestHeight > 3*mnOutHeight && aPosAry.mnSrcHeight != 0 )
                         {
                             const double nScaleY = aPosAry.mnDestHeight/double(aPosAry.mnSrcHeight);
-
+    
                             if( aPosAry.mnDestY + aPosAry.mnDestHeight > mnOutHeight )
                             {
                                 aPosAry.mnDestHeight = Max(long(0),mnOutHeight-aPosAry.mnDestY);
@@ -720,7 +720,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                 aPosAry.mnSrcY -= sal::static_int_cast<long>(aPosAry.mnDestY / nScaleY);
                                 aPosAry.mnDestY = 0;
                             }
-
+    
                             aPosAry.mnSrcHeight = sal::static_int_cast<long>(aPosAry.mnDestHeight / nScaleY);
                         }
                     }
@@ -802,13 +802,13 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
         DrawRect( Rectangle( rDestPt, rDestSize ) );
         return;
     }
-    else if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP |
+    else if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP | 
                              DRAWMODE_GRAYBITMAP | DRAWMODE_GHOSTEDBITMAP ) )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP ) )
         {
-            Bitmap  aColorBmp( aBmpEx.GetSizePixel(), ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 4 : 1 );
-            BYTE    cCmpVal;
+            Bitmap	aColorBmp( aBmpEx.GetSizePixel(), ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 4 : 1 );
+            BYTE	cCmpVal;
 
             if ( mnDrawMode & DRAWMODE_BLACKBITMAP )
                 cCmpVal = ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 0x80 : 0;
@@ -948,7 +948,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                     aPosAry.mnDestHeight == aPosAry.mnSrcHeight )
                 {
                     // now intersect dest rect with clip region
-                    aClipRegionBounds.Intersection( Rectangle( aPosAry.mnDestX,
+                    aClipRegionBounds.Intersection( Rectangle( aPosAry.mnDestX, 
                                                                aPosAry.mnDestY,
                                                                aPosAry.mnDestX + aPosAry.mnDestWidth - 1,
                                                                aPosAry.mnDestY + aPosAry.mnDestHeight - 1 ) );
@@ -963,7 +963,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                         aPosAry.mnSrcY += aClipRegionBounds.Top() - aPosAry.mnDestY;
                         aPosAry.mnSrcWidth = aClipRegionBounds.GetWidth();
                         aPosAry.mnSrcHeight = aClipRegionBounds.GetHeight();
-
+                        
                         aPosAry.mnDestX = aClipRegionBounds.Left();
                         aPosAry.mnDestY = aClipRegionBounds.Top();
                         aPosAry.mnDestWidth = aClipRegionBounds.GetWidth();
@@ -971,13 +971,13 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                     }
                 }
 
-                mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap(),
-                                        *pMaskBmp->ImplGetSalBitmap(),
+                mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap(), 
+                                        *pMaskBmp->ImplGetSalBitmap(), 
                                         this );
 
                 // #110958# Paint mask to alpha channel. Luckily, the
                 // black and white representation of the mask maps to
-                // the alpha channel
+                // the alpha channel 
 
                 // #i25167# Restrict mask painting to _opaque_ areas
                 // of the mask, otherwise we spoil areas where no
@@ -985,8 +985,8 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                 // enough, this can be achieved by taking the mask as
                 // the transparency mask of itself
                 if( mpAlphaVDev )
-                    mpAlphaVDev->DrawBitmapEx( rDestPt,
-                                               rDestSize,
+                    mpAlphaVDev->DrawBitmapEx( rDestPt, 
+                                               rDestSize, 
                                                BitmapEx( aBmpEx.GetMask(),
                                                          aBmpEx.GetMask() ) );
             }
@@ -1026,8 +1026,8 @@ void OutputDevice::DrawMask( const Point& rDestPt,
         // bitmap content was ever visible. Interestingly
         // enough, this can be achieved by taking the mask as
         // the transparency mask of itself
-        mpAlphaVDev->DrawBitmapEx( rDestPt,
-                                   PixelToLogic( aSizePix ),
+        mpAlphaVDev->DrawBitmapEx( rDestPt, 
+                                   PixelToLogic( aSizePix ), 
                                    BitmapEx( rMask, rMask ) );
     }
 }
@@ -1054,8 +1054,8 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
         // bitmap content was ever visible. Interestingly
         // enough, this can be achieved by taking the mask as
         // the transparency mask of itself
-        mpAlphaVDev->DrawBitmapEx( rDestPt,
-                                   rDestSize,
+        mpAlphaVDev->DrawBitmapEx( rDestPt, 
+                                   rDestSize, 
                                    BitmapEx( rMask, rMask ) );
     }
 }
@@ -1083,9 +1083,9 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
         // bitmap content was ever visible. Interestingly
         // enough, this can be achieved by taking the mask as
         // the transparency mask of itself
-        mpAlphaVDev->DrawBitmapEx( rDestPt,
-                                   rDestSize,
-                                   rSrcPtPixel,
+        mpAlphaVDev->DrawBitmapEx( rDestPt, 
+                                   rDestSize, 
+                                   rSrcPtPixel, 
                                    rSrcSizePixel,
                                    BitmapEx( rMask, rMask ) );
     }
@@ -1176,10 +1176,10 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, USHORT nStyle )
 {
     DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER, "DrawImage(): Images can't be drawn on any mprinter" );
-
+    
     if( !rImage.mpImplData || ImplIsRecordLayout() )
         return;
-
+    
     switch( rImage.mpImplData->meType )
     {
         case IMAGETYPE_BITMAP:
@@ -1193,7 +1193,7 @@ void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, USHORT nSt
             if( !pData->mpImageBitmap )
             {
                 const Size aSize( pData->maBmpEx.GetSizePixel() );
-
+            
                 pData->mpImageBitmap = new ImplImageBmp;
                 pData->mpImageBitmap->Create( pData->maBmpEx, aSize.Width(), aSize.Height(), 1 );
             }
@@ -1221,23 +1221,23 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
             case IMAGETYPE_BITMAP:
                 DrawBitmap( rPos, rSize, *static_cast< Bitmap* >( rImage.mpImplData->mpData ) );
             break;
-
+    
             case IMAGETYPE_IMAGE:
             {
                 ImplImageData* pData = static_cast< ImplImageData* >( rImage.mpImplData->mpData );
-
+    
                 if ( !pData->mpImageBitmap )
                 {
                     const Size aSize( pData->maBmpEx.GetSizePixel() );
-
+                    
                     pData->mpImageBitmap = new ImplImageBmp;
                     pData->mpImageBitmap->Create( pData->maBmpEx, aSize.Width(), aSize.Height(), 1 );
                 }
-
+    
                 pData->mpImageBitmap->Draw( 0, this, rPos, nStyle, &rSize );
             }
             break;
-
+                
             default:
             break;
         }
@@ -1250,18 +1250,18 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    Bitmap  aBmp;
-    long    nX = ImplLogicXToDevicePixel( rSrcPt.X() );
-    long    nY = ImplLogicYToDevicePixel( rSrcPt.Y() );
-    long    nWidth = ImplLogicWidthToDevicePixel( rSize.Width() );
-    long    nHeight = ImplLogicHeightToDevicePixel( rSize.Height() );
+    Bitmap	aBmp;
+    long	nX = ImplLogicXToDevicePixel( rSrcPt.X() );
+    long	nY = ImplLogicYToDevicePixel( rSrcPt.Y() );
+    long	nWidth = ImplLogicWidthToDevicePixel( rSize.Width() );
+    long	nHeight = ImplLogicHeightToDevicePixel( rSize.Height() );
 
     if ( mpGraphics || ( (OutputDevice*) this )->ImplGetGraphics() )
     {
         if ( nWidth && nHeight )
         {
-            Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            BOOL        bClipped = FALSE;
+            Rectangle	aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
+            BOOL		bClipped = FALSE;
 
             // X-Koordinate ausserhalb des Bereichs?
             if ( nX < mnOutOffX )
@@ -1282,7 +1282,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
             // Breite ausserhalb des Bereichs?
             if ( (nWidth + nX) > (mnOutWidth + mnOutOffX) )
             {
-                nWidth  = mnOutOffX + mnOutWidth - nX;
+                nWidth	= mnOutOffX + mnOutWidth - nX;
                 bClipped = TRUE;
             }
 
@@ -1394,9 +1394,9 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
 
         if ( !mbOutputClipped )
         {
-            const long      nX = ImplLogicXToDevicePixel( rPt.X() );
-            const long      nY = ImplLogicYToDevicePixel( rPt.Y() );
-            const SalColor  aSalCol = mpGraphics->GetPixel( nX, nY, this );
+            const long		nX = ImplLogicXToDevicePixel( rPt.X() );
+            const long		nY = ImplLogicYToDevicePixel( rPt.Y() );
+            const SalColor	aSalCol = mpGraphics->GetPixel( nX, nY, this );
             aColor.SetRed( SALCOLOR_RED( aSalCol ) );
             aColor.SetGreen( SALCOLOR_GREEN( aSalCol ) );
             aColor.SetBlue( SALCOLOR_BLUE( aSalCol ) );
@@ -1411,8 +1411,8 @@ Color* OutputDevice::GetPixel( const Polygon& rPts ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    Color*          pColors = NULL;
-    const USHORT    nSize = rPts.GetSize();
+    Color*			pColors = NULL;
+    const USHORT	nSize = rPts.GetSize();
 
     if( nSize )
     {
@@ -1427,9 +1427,9 @@ Color* OutputDevice::GetPixel( const Polygon& rPts ) const
 
                 for( USHORT i = 0; i < nSize; i++ )
                 {
-                    Color&          rCol = pColors[ i ];
-                    const Point&    rPt = rPts[ i ];
-                    const SalColor  aSalCol( mpGraphics->GetPixel( ImplLogicXToDevicePixel( rPt.X() ),
+                    Color&			rCol = pColors[ i ];
+                    const Point&	rPt = rPts[ i ];
+                    const SalColor	aSalCol( mpGraphics->GetPixel( ImplLogicXToDevicePixel( rPt.X() ),
                                                                    ImplLogicYToDevicePixel( rPt.Y() ) , this) );
 
                     rCol.SetRed( SALCOLOR_RED( aSalCol ) );
@@ -1488,7 +1488,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 
     Color aColor( rColor );
 
-    if( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
+    if( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE | 
                        DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
                        DRAWMODE_SETTINGSLINE ) )
     {
@@ -1598,8 +1598,8 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
 {
     if( rColor != COL_TRANSPARENT && ! ImplIsRecordLayout() )
     {
-        const USHORT    nSize = rPts.GetSize();
-        Color*          pColArray = new Color[ nSize ];
+        const USHORT	nSize = rPts.GetSize();
+        Color*			pColArray = new Color[ nSize ];
 
         for( USHORT i = 0; i < nSize; i++ )
             pColArray[ i ] = rColor;
@@ -1627,12 +1627,12 @@ namespace
 // ------------------------------------------------------------------------
 
 Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
-                                         BitmapReadAccess*   pP,
-                                         BitmapReadAccess*   pA,
+                                         BitmapReadAccess*	 pP,
+                                         BitmapReadAccess*	 pA,
                                          const Rectangle&    aDstRect,
-                                         const sal_Int32     nOffY,
-                                         const sal_Int32     nDstHeight,
-                                         const sal_Int32     nOffX,
+                                         const sal_Int32     nOffY, 
+                                         const sal_Int32     nDstHeight, 
+                                         const sal_Int32     nOffX, 
                                          const sal_Int32     nDstWidth,
                                          const long*         pMapX,
                                          const long*         pMapY )
@@ -1648,14 +1648,14 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
     mpAlphaVDev->EnableMapMode(FALSE);
 
     Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
-    BitmapWriteAccess*  pAlphaW = aAlphaBitmap.AcquireWriteAccess();
+    BitmapWriteAccess*	pAlphaW = aAlphaBitmap.AcquireWriteAccess();
 
     if( GetBitCount() <= 8 )
     {
-        Bitmap              aDither( aBmp.GetSizePixel(), 8 );
-        BitmapColor         aIndex( 0 );
-        BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
-        BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
+        Bitmap				aDither( aBmp.GetSizePixel(), 8 );
+        BitmapColor 		aIndex( 0 );
+        BitmapReadAccess*	pB = aBmp.AcquireReadAccess();
+        BitmapWriteAccess*	pW = aDither.AcquireWriteAccess();
 
         if( pB && pP && pA && pW && pAlphaW )
         {
@@ -1666,7 +1666,7 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
 
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
-                    const long  nMapX = pMapX[ nX ];
+                    const long	nMapX = pMapX[ nX ];
                     const ULONG nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aSrcCol = pP->GetColor( nMapY, nMapX );
@@ -1703,12 +1703,12 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
     }
     else
     {
-        BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
+        BitmapWriteAccess*	pB = aBmp.AcquireWriteAccess();
         if( pP && pA && pB )
         {
             for( nY = 0; nY < nDstHeight; nY++ )
             {
-                const long  nMapY = pMapY[ nY ];
+                const long	nMapY = pMapY[ nY ];
 
                 for( nX = 0; nX < nDstWidth; nX++ )
                 {
@@ -1750,13 +1750,13 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
 // ------------------------------------------------------------------------
 
 Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
-                                BitmapReadAccess*   pP,
-                                BitmapReadAccess*   pA,
-                                const sal_Int32     nOffY,
-                                const sal_Int32     nDstHeight,
-                                const sal_Int32     nOffX,
+                                BitmapReadAccess*	pP,
+                                BitmapReadAccess*	pA,
+                                const sal_Int32     nOffY, 
+                                const sal_Int32     nDstHeight, 
+                                const sal_Int32     nOffX, 
                                 const sal_Int32     nDstWidth,
-                                const Rectangle&    aBmpRect,
+                                const Rectangle&    aBmpRect, 
                                 const Size&         aOutSz,
                                 const bool          bHMirr,
                                 const bool          bVMirr,
@@ -1769,10 +1769,10 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
 
     if( GetBitCount() <= 8 )
     {
-        Bitmap              aDither( aBmp.GetSizePixel(), 8 );
-        BitmapColor         aIndex( 0 );
-        BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
-        BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
+        Bitmap				aDither( aBmp.GetSizePixel(), 8 );
+        BitmapColor 		aIndex( 0 );
+        BitmapReadAccess*	pB = aBmp.AcquireReadAccess();
+        BitmapWriteAccess*	pW = aDither.AcquireWriteAccess();
 
         if( pB && pP && pA && pW )
         {
@@ -1783,7 +1783,7 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
 
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
-                    const long  nMapX = pMapX[ nX ];
+                    const long	nMapX = pMapX[ nX ];
                     const ULONG nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aDstCol = pB->GetColor( nY, nX );
@@ -1802,7 +1802,7 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
     }
     else
     {
-        BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
+        BitmapWriteAccess*	pB = aBmp.AcquireWriteAccess();
 
         bool bFastBlend = false;
         if( pP && pA && pB )
@@ -1829,9 +1829,9 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
                     {
                         for( nY = 0; nY < nDstHeight; nY++ )
                         {
-                            const long  nMapY = pMapY[ nY ];
-                            Scanline    pPScan = pP->GetScanline( nMapY );
-                            Scanline    pAScan = pA->GetScanline( nMapY );
+                            const long	nMapY = pMapY[ nY ];
+                            Scanline	pPScan = pP->GetScanline( nMapY );
+                            Scanline	pAScan = pA->GetScanline( nMapY );
 
                             for( nX = 0; nX < nDstWidth; nX++ )
                             {
@@ -1848,14 +1848,14 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
                     {
                         for( nY = 0; nY < nDstHeight; nY++ )
                         {
-                            const long  nMapY = pMapY[ nY ];
-                            Scanline    pPScan = pP->GetScanline( nMapY );
-                            Scanline    pAScan = pA->GetScanline( nMapY );
+                            const long	nMapY = pMapY[ nY ];
+                            Scanline	pPScan = pP->GetScanline( nMapY );
+                            Scanline	pAScan = pA->GetScanline( nMapY );
 
                             for( nX = 0; nX < nDstWidth; nX++ )
                             {
-                                const long  nMapX = pMapX[ nX ];
-                                Scanline    pTmp = pPScan + nMapX * 3;
+                                const long	nMapX = pMapX[ nX ];
+                                Scanline	pTmp = pPScan + nMapX * 3;
 
                                 aDstCol = pB->GetPixel( nY, nX );
                                 pB->SetPixel( nY, nX, aDstCol.Merge( pTmp[ 2 ], pTmp[ 1 ], pTmp[ 0 ],
@@ -1869,13 +1869,13 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
                     {
                         for( nY = 0; nY < nDstHeight; nY++ )
                         {
-                            const long  nMapY = pMapY[ nY ];
-                            Scanline    pPScan = pP->GetScanline( nMapY );
-                            Scanline    pAScan = pA->GetScanline( nMapY );
+                            const long	nMapY = pMapY[ nY ];
+                            Scanline	pPScan = pP->GetScanline( nMapY );
+                            Scanline	pAScan = pA->GetScanline( nMapY );
 
                             for( nX = 0; nX < nDstWidth; nX++ )
                             {
-                                const long  nMapX = pMapX[ nX ];
+                                const long	nMapX = pMapX[ nX ];
                                 Scanline    pTmp = pPScan + nMapX * 3;
 
                                 aDstCol = pB->GetPixel( nY, nX );
@@ -1890,8 +1890,8 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
                 {
                     for( nY = 0; nY < nDstHeight; nY++ )
                     {
-                        const long  nMapY = pMapY[ nY ];
-                        Scanline    pAScan = pA->GetScanline( nMapY );
+                        const long	nMapY = pMapY[ nY ];
+                        Scanline	pAScan = pA->GetScanline( nMapY );
 
                         for( nX = 0; nX < nDstWidth; nX++ )
                         {
@@ -1920,10 +1920,10 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
     const Point aNullPt;
-    Point       aOutPt( LogicToPixel( rDestPt ) );
+    Point		aOutPt( LogicToPixel( rDestPt ) );
     Size        aOutSz( LogicToPixel( rDestSize ) );
-    Rectangle   aDstRect( aNullPt, GetOutputSizePixel() );
-    const BOOL  bHMirr = aOutSz.Width() < 0, bVMirr = aOutSz.Height() < 0;
+    Rectangle	aDstRect( aNullPt, GetOutputSizePixel() );
+    const BOOL	bHMirr = aOutSz.Width() < 0, bVMirr = aOutSz.Height() < 0;
 
     if( OUTDEV_WINDOW == meOutDevType )
     {
@@ -1951,7 +1951,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
         static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
         // #i83087# Naturally, system alpha blending cannot work with
         // separate alpha VDev
-        if( !mpAlphaVDev && !pDisableNative && !bHMirr && !bVMirr )
+        if( !mpAlphaVDev && !pDisableNative && !bHMirr && !bVMirr ) 
         {
             Point aRelPt = aOutPt + Point( mnOutOffX, mnOutOffY );
             SalTwoRect aTR = {
@@ -1969,11 +1969,11 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
 
         Rectangle aBmpRect( aNullPt, rBmp.GetSizePixel() );
         if( !bNativeAlpha
-                &&  !aBmpRect.Intersection( Rectangle( rSrcPtPixel, rSrcSizePixel ) ).IsEmpty() )
+                &&  !aBmpRect.Intersection( Rectangle( rSrcPtPixel, rSrcSizePixel ) ).IsEmpty() ) 
         {
-            GDIMetaFile*    pOldMetaFile = mpMetaFile; mpMetaFile = NULL;
-            const BOOL      bOldMap = mbMap; mbMap = FALSE;
-            Bitmap          aBmp( GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
+            GDIMetaFile*	pOldMetaFile = mpMetaFile; mpMetaFile = NULL;
+            const BOOL		bOldMap = mbMap; mbMap = FALSE;
+            Bitmap			aBmp( GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
 
             // #109044# The generated bitmap need not necessarily be
             // of aDstRect dimensions, it's internally clipped to
@@ -1984,16 +1984,16 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             if( aBmp.ImplGetImpBitmap() )
                 aDstRect.SetSize( aBmp.GetSizePixel() );
 
-            BitmapColor     aDstCol;
-            const long      nSrcWidth = aBmpRect.GetWidth(), nSrcHeight = aBmpRect.GetHeight();
-            const long      nDstWidth = aDstRect.GetWidth(), nDstHeight = aDstRect.GetHeight();
-            const long      nOutWidth = aOutSz.Width(), nOutHeight = aOutSz.Height();
-            const long      nOffX = aDstRect.Left() - aOutPt.X(), nOffY = aDstRect.Top() - aOutPt.Y();
-            long            nX, nOutX, nY, nOutY;
-            long            nMirrOffX = 0;
-            long            nMirrOffY = 0;
-            long*           pMapX = new long[ nDstWidth ];
-            long*           pMapY = new long[ nDstHeight ];
+            BitmapColor 	aDstCol;
+            const long		nSrcWidth = aBmpRect.GetWidth(), nSrcHeight = aBmpRect.GetHeight();
+            const long		nDstWidth = aDstRect.GetWidth(), nDstHeight = aDstRect.GetHeight();
+            const long		nOutWidth = aOutSz.Width(), nOutHeight = aOutSz.Height();
+            const long		nOffX = aDstRect.Left() - aOutPt.X(), nOffY = aDstRect.Top() - aOutPt.Y();
+            long			nX, nOutX, nY, nOutY;
+            long			nMirrOffX = 0;
+            long			nMirrOffY = 0;
+            long*			pMapX = new long[ nDstWidth ];
+            long*			pMapY = new long[ nDstHeight ];
 
             // create horizontal mapping table
             if( bHMirr )
@@ -2006,7 +2006,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                 if( bHMirr )
                     pMapX[ nX ] = nMirrOffX - pMapX[ nX ];
             }
-
+            
             // create vertical mapping table
             if( bVMirr )
                 nMirrOffY = ( aBmpRect.Top() << 1 ) + nSrcHeight - 1;
@@ -2019,11 +2019,11 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                     pMapY[ nY ] = nMirrOffY - pMapY[ nY ];
             }
 
-            BitmapReadAccess*   pP = ( (Bitmap&) rBmp ).AcquireReadAccess();
-            BitmapReadAccess*   pA = ( (AlphaMask&) rAlpha ).AcquireReadAccess();
+            BitmapReadAccess*	pP = ( (Bitmap&) rBmp ).AcquireReadAccess();
+            BitmapReadAccess*	pA = ( (AlphaMask&) rAlpha ).AcquireReadAccess();
 
             DBG_ASSERT( pA->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
-                        pA->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
+                        pA->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK, 
                         "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!" );
 
             // #i38887# reading from screen may sometimes fail
@@ -2056,13 +2056,13 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                 if( mpAlphaVDev )
                     mpAlphaVDev = NULL;
 
-                DrawBitmap( aDstRect.TopLeft(),
+                DrawBitmap( aDstRect.TopLeft(), 
                             aTmp );
 
                 // #110958# Enable alpha VDev again
                 mpAlphaVDev = pOldVDev;
             }
-
+            
             ( (Bitmap&) rBmp ).ReleaseAccess( pP );
             ( (AlphaMask&) rAlpha ).ReleaseAccess( pA );
 
@@ -2080,17 +2080,17 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
                                          const Point& rDestPt, const Size& rDestSize,
                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
-    Point       aPt;
-    Point       aDestPt( LogicToPixel( rDestPt ) );
-    Size        aDestSz( LogicToPixel( rDestSize ) );
-    Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
+    Point		aPt;
+    Point		aDestPt( LogicToPixel( rDestPt ) );
+    Size		aDestSz( LogicToPixel( rDestSize ) );
+    Rectangle	aSrcRect( rSrcPtPixel, rSrcSizePixel );
 
     aSrcRect.Justify();
 
     if( !rBmp.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
     {
-        Bitmap  aPaint( rBmp ), aMask( rMask );
-        ULONG   nMirrFlags = 0UL;
+        Bitmap	aPaint( rBmp ), aMask( rMask );
+        ULONG	nMirrFlags = 0UL;
 
         if( aMask.GetBitCount() > 1 )
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
@@ -2133,11 +2133,11 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         }
 
         // do painting
-        const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-        long            nX, nY, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-        long*           pMapX = new long[ nSrcWidth + 1 ];
-        long*           pMapY = new long[ nSrcHeight + 1 ];
-        const BOOL      bOldMap = mbMap;
+        const long		nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+        long			nX, nY, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        long*			pMapX = new long[ nSrcWidth + 1 ];
+        long*			pMapY = new long[ nSrcHeight + 1 ];
+        const BOOL		bOldMap = mbMap;
 
         mbMap = FALSE;
 
@@ -2147,10 +2147,10 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 
         for( nY = 0L; nY <= nSrcHeight; nY++ )
             pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
-
+    
         // walk through all rectangles of mask
         Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
-        ImplRegionInfo  aInfo;
+        ImplRegionInfo	aInfo;
         BOOL            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
 
         while( bRgnRect )
@@ -2159,7 +2159,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
             const Rectangle aBandRect( Point( nWorkX, nWorkY ), Size( nWorkWidth, nWorkHeight ) );
             const Point     aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
             const Size      aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
-
+            
             aBandBmp.Crop( aBandRect );
             ImplDrawBitmap( aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp, META_BMPSCALEPART_ACTION );
             bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
@@ -2178,17 +2178,17 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
                                   const Point& rDestPt, const Size& rDestSize,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
-    Point       aPt;
-    Point       aDestPt( LogicToPixel( rDestPt ) );
-    Size        aDestSz( LogicToPixel( rDestSize ) );
-    Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
+    Point		aPt;
+    Point		aDestPt( LogicToPixel( rDestPt ) );
+    Size		aDestSz( LogicToPixel( rDestSize ) );
+    Rectangle	aSrcRect( rSrcPtPixel, rSrcSizePixel );
 
     aSrcRect.Justify();
 
     if( !rMask.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
     {
-        Bitmap  aMask( rMask );
-        ULONG   nMirrFlags = 0UL;
+        Bitmap	aMask( rMask );
+        ULONG	nMirrFlags = 0UL;
 
         if( aMask.GetBitCount() > 1 )
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
@@ -2218,12 +2218,12 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
             aMask.Mirror( nMirrFlags );
 
         // do painting
-        const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-        long            nX, nY, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-        long*           pMapX = new long[ nSrcWidth + 1 ];
-        long*           pMapY = new long[ nSrcHeight + 1 ];
+        const long		nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+        long			nX, nY, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        long*			pMapX = new long[ nSrcWidth + 1 ];
+        long*			pMapY = new long[ nSrcHeight + 1 ];
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
-        const BOOL      bOldMap = mbMap;
+        const BOOL		bOldMap = mbMap;
 
         mpMetaFile = NULL;
         mbMap = FALSE;
@@ -2239,10 +2239,10 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
 
         for( nY = 0L; nY <= nSrcHeight; nY++ )
             pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
-
+    
         // walk through all rectangles of mask
         Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
-        ImplRegionInfo  aInfo;
+        ImplRegionInfo	aInfo;
         BOOL            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
 
         while( bRgnRect )

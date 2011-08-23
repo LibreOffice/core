@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ namespace vcl
             sal_IntPtr      m_nFontId;
             int             m_nMagic;
             bool            m_bVertical;
-
+            
             FontIdentifier( const ImplFontData*, bool bVertical );
             FontIdentifier() : m_nFontId(0), m_nMagic(0), m_bVertical( false ) {}
-
+            
             bool operator==( const FontIdentifier& rRight ) const
             {
                 return m_nFontId == rRight.m_nFontId &&
@@ -65,15 +65,15 @@ namespace vcl
             Ucs2UIntMap  m_aGlyphIdToIndex;
         };
         typedef std::map< FontIdentifier, sal_uInt32 > FontToIndexMap;
-
+        
         std::vector< FontData >     m_aFonts;
         FontToIndexMap              m_aFontToIndex;
-
+        
         FontData& getFont( const ImplFontData*, bool bVertical );
         public:
         PDFFontCache() {}
         ~PDFFontCache() {}
-
+        
         sal_Int32 getGlyphWidth( const ImplFontData*, sal_GlyphId, bool bVertical, SalGraphics* );
     };
 }

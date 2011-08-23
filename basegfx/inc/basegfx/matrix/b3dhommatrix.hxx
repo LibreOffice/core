@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ namespace basegfx
         void frustum(double fLeft = -1.0, double fRight = 1.0,
             double fBottom = -1.0, double fTop = 1.0,
             double fNear = 0.001, double fFar = 1.0);
-
+        
         void ortho(double fLeft = -1.0, double fRight = 1.0,
             double fBottom = -1.0, double fTop = 1.0,
             double fNear = 0.0, double fFar = 1.0);
@@ -135,14 +135,14 @@ namespace basegfx
     };
 
     // addition, subtraction
-    inline B3DHomMatrix operator+(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
+    inline B3DHomMatrix	operator+(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
     {
         B3DHomMatrix aSum(rMatA);
         aSum += rMatB;
         return aSum;
     }
 
-    inline B3DHomMatrix operator-(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
+    inline B3DHomMatrix	operator-(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
     {
         B3DHomMatrix aDiv(rMatA);
         aDiv -= rMatB;
@@ -150,21 +150,21 @@ namespace basegfx
     }
 
     // multiplication, division by constant value
-    inline B3DHomMatrix operator*(const B3DHomMatrix& rMat, double fValue)
+    inline B3DHomMatrix	operator*(const B3DHomMatrix& rMat, double fValue)
     {
-        B3DHomMatrix aNew(rMat);
-        aNew *= fValue;
-        return aNew;
+        B3DHomMatrix aNew(rMat); 
+        aNew *= fValue; 
+        return aNew; 
     }
 
-    inline B3DHomMatrix operator/(const B3DHomMatrix& rMat, double fValue)
+    inline B3DHomMatrix	operator/(const B3DHomMatrix& rMat, double fValue)
     {
-        B3DHomMatrix aNew(rMat);
+        B3DHomMatrix aNew(rMat); 
         aNew *= 1.0 / fValue;
-        return aNew;
+        return aNew; 
     }
 
-    inline B3DHomMatrix operator*(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
+    inline B3DHomMatrix	operator*(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
     {
         B3DHomMatrix aMul(rMatB);
         aMul *= rMatA;

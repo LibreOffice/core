@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,37 +147,37 @@ von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 // - FontList -
 // ------------
 
-#define FONTLIST_FONTINFO_NOTFOUND  ((USHORT)0xFFFF)
+#define FONTLIST_FONTINFO_NOTFOUND	((USHORT)0xFFFF)
 
-#define FONTLIST_FONTNAMETYPE_PRINTER           ((USHORT)0x0001)
-#define FONTLIST_FONTNAMETYPE_SCREEN            ((USHORT)0x0002)
-#define FONTLIST_FONTNAMETYPE_SCALABLE          ((USHORT)0x0004)
+#define FONTLIST_FONTNAMETYPE_PRINTER			((USHORT)0x0001)
+#define FONTLIST_FONTNAMETYPE_SCREEN			((USHORT)0x0002)
+#define FONTLIST_FONTNAMETYPE_SCALABLE			((USHORT)0x0004)
 
 class SVT_DLLPUBLIC FontList : private List
 {
 private:
-    XubString               maMapBoth;
-    XubString               maMapPrinterOnly;
-    XubString               maMapScreenOnly;
-    XubString               maMapSizeNotAvailable;
-    XubString               maMapStyleNotAvailable;
-    XubString               maMapNotAvailable;
-    XubString               maLight;
-    XubString               maLightItalic;
-    XubString               maNormal;
-    XubString               maNormalItalic;
-    XubString               maBold;
-    XubString               maBoldItalic;
-    XubString               maBlack;
-    XubString               maBlackItalic;
-    long*                   mpSizeAry;
-    OutputDevice*           mpDev;
-    OutputDevice*           mpDev2;
+    XubString				maMapBoth;
+    XubString				maMapPrinterOnly;
+    XubString				maMapScreenOnly;
+    XubString				maMapSizeNotAvailable;
+    XubString				maMapStyleNotAvailable;
+    XubString				maMapNotAvailable;
+    XubString				maLight;
+    XubString				maLightItalic;
+    XubString				maNormal;
+    XubString				maNormalItalic;
+    XubString				maBold;
+    XubString				maBoldItalic;
+    XubString				maBlack;
+    XubString				maBlackItalic;
+    long*					mpSizeAry;
+    OutputDevice*			mpDev;
+    OutputDevice*			mpDev2;
 
 #ifdef CTRLTOOL_CXX
-    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const XubString& rSearchName, ULONG* pIndex ) const;
-    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const XubString& rStr ) const;
-    SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, BOOL bAll,
+    SVT_DLLPRIVATE ImplFontListNameInfo*	ImplFind( const XubString& rSearchName, ULONG* pIndex ) const;
+    SVT_DLLPRIVATE ImplFontListNameInfo*	ImplFindByName( const XubString& rStr ) const;
+    SVT_DLLPRIVATE void					ImplInsertFonts( OutputDevice* pDev, BOOL bAll,
                                              BOOL bInsertData );
 #endif
 
@@ -188,40 +188,40 @@ public:
                             ~FontList();
 
     FontList*               Clone() const;
-
+    
     OutputDevice*           GetDevice() const { return mpDev; }
-    OutputDevice*           GetDevice2() const { return mpDev2; }
-    XubString               GetFontMapText( const FontInfo& rInfo ) const;
-    USHORT                  GetFontNameType( const XubString& rFontName ) const;
+    OutputDevice*			GetDevice2() const { return mpDev2; }
+    XubString				GetFontMapText( const FontInfo& rInfo ) const;
+    USHORT					GetFontNameType( const XubString& rFontName ) const;
 
-    const XubString&        GetNormalStr() const { return maNormal; }
-    const XubString&        GetItalicStr() const { return maNormalItalic; }
-    const XubString&        GetBoldStr() const { return maBold; }
-    const XubString&        GetBoldItalicStr() const { return maBoldItalic; }
-    const XubString&        GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
-    XubString               GetStyleName( const FontInfo& rInfo ) const;
+    const XubString&		GetNormalStr() const { return maNormal; }
+    const XubString&		GetItalicStr() const { return maNormalItalic; }
+    const XubString&		GetBoldStr() const { return maBold; }
+    const XubString&		GetBoldItalicStr() const { return maBoldItalic; }
+    const XubString&		GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
+    XubString				GetStyleName( const FontInfo& rInfo ) const;
 
-    FontInfo                Get( const XubString& rName,
+    FontInfo				Get( const XubString& rName,
                                  const XubString& rStyleName ) const;
-    FontInfo                Get( const XubString& rName,
+    FontInfo				Get( const XubString& rName,
                                  FontWeight eWeight,
                                  FontItalic eItalic ) const;
 
-    BOOL                    IsAvailable( const XubString& rName ) const;
-    USHORT                  GetFontNameCount() const
+    BOOL					IsAvailable( const XubString& rName ) const;
+    USHORT					GetFontNameCount() const
                                 { return (USHORT)List::Count(); }
-    const FontInfo&         GetFontName( USHORT nFont ) const;
-    USHORT                  GetFontNameType( USHORT nFont ) const;
-    sal_Handle              GetFirstFontInfo( const XubString& rName ) const;
-    sal_Handle              GetNextFontInfo( sal_Handle hFontInfo ) const;
-    const FontInfo&         GetFontInfo( sal_Handle hFontInfo ) const;
+    const FontInfo& 		GetFontName( USHORT nFont ) const;
+    USHORT					GetFontNameType( USHORT nFont ) const;
+    sal_Handle				GetFirstFontInfo( const XubString& rName ) const;
+    sal_Handle				GetNextFontInfo( sal_Handle hFontInfo ) const;
+    const FontInfo& 		GetFontInfo( sal_Handle hFontInfo ) const;
 
-    const long*             GetSizeAry( const FontInfo& rInfo ) const;
-    static const long*      GetStdSizeAry();
+    const long* 			GetSizeAry( const FontInfo& rInfo ) const;
+    static const long*		GetStdSizeAry();
 
 private:
                             FontList( const FontList& );
-    FontList&               operator =( const FontList& );
+    FontList&				operator =( const FontList& );
 };
 
 
@@ -232,20 +232,20 @@ private:
 class SVT_DLLPUBLIC FontSizeNames
 {
 private:
-    struct ImplFSNameItem*  mpArray;
-    ULONG                   mnElem;
+    struct ImplFSNameItem*	mpArray;
+    ULONG					mnElem;
 
 public:
                             FontSizeNames( LanguageType eLanguage /* = LANGUAGE_DONTKNOW */ );
 
-    ULONG                   Count() const { return mnElem; }
-    BOOL                    IsEmpty() const { return !mnElem; }
+    ULONG					Count() const { return mnElem; }
+    BOOL					IsEmpty() const { return !mnElem; }
 
-    long                    Name2Size( const String& ) const;
-    String                  Size2Name( long ) const;
+    long					Name2Size( const String& ) const;
+    String					Size2Name( long ) const;
 
-    String                  GetIndexName( ULONG nIndex ) const;
-    long                    GetIndexSize( ULONG nIndex ) const;
+    String					GetIndexName( ULONG nIndex ) const;
+    long					GetIndexSize( ULONG nIndex ) const;
 };
 
-#endif  // _CTRLTOOL_HXX
+#endif	// _CTRLTOOL_HXX

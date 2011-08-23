@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ public:
     SvtLanguageTable();
     ~SvtLanguageTable();
 
-    const String&   GetString( const LanguageType eType ) const;
-    LanguageType    GetType( const String& rStr ) const;
+    const String&	GetString( const LanguageType eType ) const;
+    LanguageType	GetType( const String& rStr ) const;
 
-    sal_uInt32      GetEntryCount() const;
-    LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
-    static String   GetLanguageString( const LanguageType eType );
+    sal_uInt32		GetEntryCount() const;
+    LanguageType	GetTypeAtIndex( sal_uInt32 nIndex ) const;
+    static String	GetLanguageString( const LanguageType eType );
 };
 
 // Add LRE or RLE embedding characters to the string based on the

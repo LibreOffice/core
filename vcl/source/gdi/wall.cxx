@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,12 +44,12 @@ DBG_NAME( Wallpaper );
 ImplWallpaper::ImplWallpaper() :
     maColor( COL_TRANSPARENT )
 {
-    mnRefCount      = 1;
-    mpBitmap        = NULL;
-    mpCache         = NULL;
-    mpGradient      = NULL;
-    mpRect          = NULL;
-    meStyle         = WALLPAPER_NULL;
+    mnRefCount		= 1;
+    mpBitmap		= NULL;
+    mpCache			= NULL;
+    mpGradient		= NULL;
+    mpRect			= NULL;
+    meStyle 		= WALLPAPER_NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -110,8 +110,8 @@ void ImplWallpaper::ImplReleaseCachedBitmap()
 
 SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
-    UINT16          nTmp16;
+    VersionCompat	aCompat( rIStm, STREAM_READ );
+    UINT16			nTmp16;
 
     delete rImplWallpaper.mpRect;
     rImplWallpaper.mpRect = NULL;
@@ -165,11 +165,11 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 
 SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
-    VersionCompat   aCompat( rOStm, STREAM_WRITE, 3 );
-    BOOL            bRect = ( rImplWallpaper.mpRect != NULL );
-    BOOL            bGrad = ( rImplWallpaper.mpGradient != NULL );
-    BOOL            bBmp = ( rImplWallpaper.mpBitmap != NULL );
-    BOOL            bDummy = FALSE;
+    VersionCompat	aCompat( rOStm, STREAM_WRITE, 3 );
+    BOOL			bRect = ( rImplWallpaper.mpRect != NULL );
+    BOOL			bGrad = ( rImplWallpaper.mpGradient != NULL );
+    BOOL			bBmp = ( rImplWallpaper.mpBitmap != NULL );
+    BOOL			bDummy = FALSE;
 
     // version 1
     rOStm << rImplWallpaper.maColor << (UINT16) rImplWallpaper.meStyle;
@@ -241,9 +241,9 @@ Wallpaper::Wallpaper( const Color& rColor )
 {
     DBG_CTOR( Wallpaper, NULL );
 
-    mpImplWallpaper             = new ImplWallpaper;
-    mpImplWallpaper->maColor    = rColor;
-    mpImplWallpaper->meStyle    = WALLPAPER_TILE;
+    mpImplWallpaper 			= new ImplWallpaper;
+    mpImplWallpaper->maColor	= rColor;
+    mpImplWallpaper->meStyle	= WALLPAPER_TILE;
 }
 
 // -----------------------------------------------------------------------
@@ -252,9 +252,9 @@ Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
 {
     DBG_CTOR( Wallpaper, NULL );
 
-    mpImplWallpaper             = new ImplWallpaper;
-    mpImplWallpaper->mpBitmap   = new BitmapEx( rBmpEx );
-    mpImplWallpaper->meStyle    = WALLPAPER_TILE;
+    mpImplWallpaper 			= new ImplWallpaper;
+    mpImplWallpaper->mpBitmap	= new BitmapEx( rBmpEx );
+    mpImplWallpaper->meStyle	= WALLPAPER_TILE;
 }
 
 // -----------------------------------------------------------------------
@@ -263,9 +263,9 @@ Wallpaper::Wallpaper( const Gradient& rGradient )
 {
     DBG_CTOR( Wallpaper, NULL );
 
-    mpImplWallpaper             = new ImplWallpaper;
+    mpImplWallpaper 			= new ImplWallpaper;
     mpImplWallpaper->mpGradient = new Gradient( rGradient );
-    mpImplWallpaper->meStyle    = WALLPAPER_TILE;
+    mpImplWallpaper->meStyle	= WALLPAPER_TILE;
 }
 
 // -----------------------------------------------------------------------
@@ -300,11 +300,11 @@ void Wallpaper::SetColor( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-const Color& Wallpaper::GetColor() const
-{
+const Color& Wallpaper::GetColor() const 
+{ 
     DBG_CHKTHIS( Wallpaper, NULL );
 
-    return mpImplWallpaper->maColor;
+    return mpImplWallpaper->maColor; 
 }
 
 // -----------------------------------------------------------------------
@@ -325,11 +325,11 @@ void Wallpaper::SetStyle( WallpaperStyle eStyle )
 
 // -----------------------------------------------------------------------
 
-WallpaperStyle Wallpaper::GetStyle() const
-{
+WallpaperStyle Wallpaper::GetStyle() const 
+{ 
     DBG_CHKTHIS( Wallpaper, NULL );
 
-    return mpImplWallpaper->meStyle;
+    return mpImplWallpaper->meStyle; 
 }
 
 // -----------------------------------------------------------------------
@@ -391,11 +391,11 @@ BitmapEx Wallpaper::GetBitmap() const
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::IsBitmap() const
-{
+BOOL Wallpaper::IsBitmap() const 
+{ 
     DBG_CHKTHIS( Wallpaper, NULL );
 
-    return (mpImplWallpaper->mpBitmap != 0);
+    return (mpImplWallpaper->mpBitmap != 0); 
 }
 
 
@@ -449,11 +449,11 @@ Gradient Wallpaper::GetGradient() const
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::IsGradient() const
-{
+BOOL Wallpaper::IsGradient() const 
+{ 
     DBG_CHKTHIS( Wallpaper, NULL );
 
-    return (mpImplWallpaper->mpGradient != 0);
+    return (mpImplWallpaper->mpGradient != 0); 
 }
 
 
@@ -529,11 +529,11 @@ Rectangle Wallpaper::GetRect() const
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::IsRect() const
-{
+BOOL Wallpaper::IsRect() const 
+{ 
     DBG_CHKTHIS( Wallpaper, NULL );
 
-    return (mpImplWallpaper->mpRect != 0);
+    return (mpImplWallpaper->mpRect != 0); 
 }
 
 
@@ -599,7 +599,7 @@ BOOL Wallpaper::operator==( const Wallpaper& rWallpaper ) const
         return TRUE;
 
     if ( ( mpImplWallpaper->meStyle != rWallpaper.mpImplWallpaper->meStyle ) ||
-         ( mpImplWallpaper->maColor != rWallpaper.mpImplWallpaper->maColor ) )
+         ( mpImplWallpaper->maColor	!= rWallpaper.mpImplWallpaper->maColor ) )
         return FALSE;
 
     if ( mpImplWallpaper->mpRect != rWallpaper.mpImplWallpaper->mpRect

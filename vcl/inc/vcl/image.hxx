@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ namespace com { namespace sun { namespace star { namespace graphic { class XGrap
 // - Defines -
 // -----------
 
-#define IMAGE_STDBTN_COLOR          Color( 0xC0, 0xC0, 0xC0 )
-#define IMAGELIST_IMAGE_NOTFOUND    ((USHORT)0xFFFF)
+#define IMAGE_STDBTN_COLOR			Color( 0xC0, 0xC0, 0xC0 )
+#define IMAGELIST_IMAGE_NOTFOUND	((USHORT)0xFFFF)
 
 // -----------------------
 // - ImageColorTransform -
@@ -80,9 +80,9 @@ public:
                     Image( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
                     ~Image();
 
-    Size            GetSizePixel() const;
+    Size			GetSizePixel() const;
 
-    BitmapEx        GetBitmapEx() const;
+    BitmapEx		GetBitmapEx() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
@@ -90,14 +90,14 @@ public:
 
     void            Invert();
 
-    BOOL            operator!() const { return( !mpImplData ? true : false ); }
-    Image&          operator=( const Image& rImage );
-    BOOL            operator==( const Image& rImage ) const;
-    BOOL            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
+    BOOL			operator!() const { return( !mpImplData ? true : false ); }
+    Image&			operator=( const Image& rImage );
+    BOOL			operator==( const Image& rImage ) const;
+    BOOL			operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
 
 private:
 
-    ImplImage*             mpImplData;
+    ImplImage*		       mpImplData;
 
     SAL_DLLPRIVATE void    ImplInit( const BitmapEx& rBmpEx );
 };
@@ -117,53 +117,53 @@ public:
                     ImageList( const ImageList& rImageList );
                     ~ImageList();
 
-    void                Clear();
-    void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
+    void				Clear();
+    void            		InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                    const std::vector< rtl::OUString > &rNameVector );
-    void                    InsertFromHorizontalBitmap( const ResId& rResId,
+    void            		InsertFromHorizontalBitmap( const ResId& rResId,
                                     USHORT       nCount,
                                     const Color *pNonAlphaMaskColor,
                                     const Color *pSearchColors = NULL,
                                     const Color *pReplaceColors = NULL,
                                     ULONG        nColorCount = 0);
-    BitmapEx        GetAsHorizontalStrip() const;
-    USHORT          GetImageCount() const;
-    Size            GetImageSize() const;
+    BitmapEx		GetAsHorizontalStrip() const;
+    USHORT			GetImageCount() const;
+    Size			GetImageSize() const;
 
-    void            AddImage( USHORT nNewId, const Image& rImage );
-    void            AddImage( const ::rtl::OUString& rImageName, const Image& rImage );
+    void			AddImage( USHORT nNewId, const Image& rImage );
+    void			AddImage( const ::rtl::OUString& rImageName, const Image& rImage );
 
-    void            ReplaceImage( USHORT nId, const Image& rImage );
-    void            ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage );
+    void			ReplaceImage( USHORT nId, const Image& rImage );
+    void			ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage );
 
-    void            ReplaceImage( USHORT nId, USHORT nReplaceId );
-    void            ReplaceImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rReplaceName );
+    void			ReplaceImage( USHORT nId, USHORT nReplaceId );
+    void			ReplaceImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rReplaceName );
 
-    void            RemoveImage( USHORT nId );
-    void            RemoveImage( const ::rtl::OUString& rImageName );
+    void			RemoveImage( USHORT nId );
+    void			RemoveImage( const ::rtl::OUString& rImageName );
 
-    Image           GetImage( USHORT nId ) const;
-    Image           GetImage( const ::rtl::OUString& rImageName ) const;
+    Image			GetImage( USHORT nId ) const;
+    Image			GetImage( const ::rtl::OUString& rImageName ) const;
 
-    USHORT          GetImagePos( USHORT nId ) const;
-    bool            HasImageAtPos( USHORT nId ) const;
-    USHORT          GetImagePos( const ::rtl::OUString& rImageName ) const;
+    USHORT			GetImagePos( USHORT nId ) const;
+    bool			HasImageAtPos( USHORT nId ) const;
+    USHORT			GetImagePos( const ::rtl::OUString& rImageName ) const;
 
-    USHORT          GetImageId( USHORT nPos ) const;
-    void            GetImageIds( ::std::vector< USHORT >& rIds ) const;
+    USHORT			GetImageId( USHORT nPos ) const;
+    void			GetImageIds( ::std::vector< USHORT >& rIds ) const;
 
-    ::rtl::OUString GetImageName( USHORT nPos ) const;
-    void            GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const;
+    ::rtl::OUString	GetImageName( USHORT nPos ) const;
+    void			GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const;
 
-    ImageList&      operator=( const ImageList& rImageList );
-    BOOL            operator==( const ImageList& rImageList ) const;
-    BOOL            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
+    ImageList&		operator=( const ImageList& rImageList );
+    BOOL			operator==( const ImageList& rImageList ) const;
+    BOOL			operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
 
 private:
 
-    ImplImageList*  mpImplData;
-    USHORT          mnInitSize;
-    USHORT          mnGrowSize;
+    ImplImageList*	mpImplData;
+    USHORT			mnInitSize;
+    USHORT			mnGrowSize;
 
     SAL_DLLPRIVATE void    ImplInitBitmapEx( const ::rtl::OUString& rUserImageName,
                                              const ::std::vector< ::rtl::OUString >& rImageNames,
@@ -175,4 +175,4 @@ private:
     SAL_DLLPRIVATE void    ImplMakeUnique();
 };
 
-#endif  // _SV_IMAGE_HXX
+#endif	// _SV_IMAGE_HXX

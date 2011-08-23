@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,31 +47,31 @@ namespace vclcanvas
 
         /** Create an XCachedPrimitive for given GraphicObject
          */
-        CachedBitmap( const GraphicObjectSharedPtr&                   rGraphicObject,
-                      const ::Point&                                  rPoint,
+        CachedBitmap( const GraphicObjectSharedPtr& 				  rGraphicObject,
+                      const ::Point&                                  rPoint, 
                       const ::Size&                                   rSize,
                       const GraphicAttr&                              rAttr,
-                      const ::com::sun::star::rendering::ViewState&   rUsedViewState,
+                      const ::com::sun::star::rendering::ViewState&	  rUsedViewState,
                       const ::com::sun::star::rendering::RenderState& rUsedRenderState,
-                      const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::rendering::XCanvas >&   rTarget );
+                      const ::com::sun::star::uno::Reference< 
+                              ::com::sun::star::rendering::XCanvas >&   rTarget	);
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
 
     private:
-        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&  rNewState,
-                                     const ::com::sun::star::rendering::ViewState&  rOldState,
-                                     const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XCanvas >&    rTargetCanvas,
-                                     bool                                           bSameViewTransform );
+        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&	rNewState,
+                                     const ::com::sun::star::rendering::ViewState&	rOldState,
+                                     const ::com::sun::star::uno::Reference< 
+                                         ::com::sun::star::rendering::XCanvas >& 	rTargetCanvas,
+                                     bool											bSameViewTransform );
 
 
-        GraphicObjectSharedPtr                                                      mpGraphicObject;
+        GraphicObjectSharedPtr														mpGraphicObject;
         const ::com::sun::star::rendering::RenderState                              maRenderState;
-        const ::Point                                                               maPoint;
-        const ::Size                                                                maSize;
-        const GraphicAttr                                                           maAttributes;
+        const ::Point								 								maPoint; 
+        const ::Size 																maSize;
+        const GraphicAttr															maAttributes;
     };
 }
 

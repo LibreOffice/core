@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class SVL_DLLPUBLIC SfxRepeatTarget
 {
 public:
                         TYPEINFO();
-    virtual             ~SfxRepeatTarget() = 0;
+    virtual 			~SfxRepeatTarget() = 0;
 };
 
 //====================================================================
@@ -49,23 +49,23 @@ class SVL_DLLPUBLIC SfxUndoAction
 public:
                             TYPEINFO();
                             SfxUndoAction();
-    virtual                 ~SfxUndoAction();
+    virtual 				~SfxUndoAction();
 
     virtual BOOL            IsLinked();
     virtual void            SetLinked( BOOL bIsLinked = TRUE );
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual void            Repeat(SfxRepeatTarget&);
-    virtual BOOL            CanRepeat(SfxRepeatTarget&) const;
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual void			Repeat(SfxRepeatTarget&);
+    virtual BOOL			CanRepeat(SfxRepeatTarget&) const;
 
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual BOOL			Merge( SfxUndoAction *pNextAction );
 
-    virtual UniString           GetComment() const;
-    virtual UniString           GetRepeatComment(SfxRepeatTarget&) const;
-    virtual USHORT          GetId() const;
+    virtual UniString			GetComment() const;
+    virtual UniString			GetRepeatComment(SfxRepeatTarget&) const;
+    virtual USHORT			GetId() const;
 
 private:
-    SfxUndoAction&          operator=( const SfxUndoAction& );    // n.i.!!
+    SfxUndoAction&			operator=( const SfxUndoAction& );	  // n.i.!!
 };
 
 //========================================================================
@@ -79,9 +79,9 @@ SV_DECL_PTRARR( SfxUndoActions, SfxUndoAction*, 20, 8 )
 struct SVL_DLLPUBLIC SfxUndoArray
 {
     SfxUndoActions          aUndoActions;
-    USHORT                  nMaxUndoActions;
-    USHORT                  nCurUndoAction;
-    SfxUndoArray            *pFatherUndoArray;
+    USHORT					nMaxUndoActions;
+    USHORT					nCurUndoAction;
+    SfxUndoArray 			*pFatherUndoArray;
                             SfxUndoArray(USHORT nMax=0):
                                 nMaxUndoActions(nMax), nCurUndoAction(0),
                                 pFatherUndoArray(0) {}
@@ -94,7 +94,7 @@ struct SVL_DLLPUBLIC SfxUndoArray
     really really have to! */
 class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     UndoAction zur Klammerung mehrerer Undos in einer UndoAction.
     Diese Actions werden vom SfxUndoManager verwendet. Dort
@@ -110,23 +110,23 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 
                             SfxListUndoAction( const UniString &rComment,
                                 const UniString rRepeatComment, USHORT Id, SfxUndoArray *pFather);
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual void            Repeat(SfxRepeatTarget&);
-    virtual BOOL            CanRepeat(SfxRepeatTarget&) const;
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual void			Repeat(SfxRepeatTarget&);
+    virtual BOOL			CanRepeat(SfxRepeatTarget&) const;
 
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual BOOL			Merge( SfxUndoAction *pNextAction );
 
-    virtual UniString           GetComment() const;
-    virtual UniString           GetRepeatComment(SfxRepeatTarget&) const;
-    virtual USHORT          GetId() const;
+    virtual UniString			GetComment() const;
+    virtual UniString			GetRepeatComment(SfxRepeatTarget&) const;
+    virtual USHORT			GetId() const;
 
     void SetComment( const UniString& rComment );
 
     private:
 
-    USHORT                  nId;
-    UniString                   aComment, aRepeatComment;
+    USHORT					nId;
+    UniString					aComment, aRepeatComment;
 
 };
 
@@ -136,67 +136,67 @@ class SVL_DLLPUBLIC SfxUndoManager
 {
     friend class SfxLinkUndoAction;
 
-    SfxUndoArray            *pUndoArray;
-    SfxUndoArray            *pActUndoArray;
-    SfxUndoArray            *pFatherUndoArray;
+    SfxUndoArray 			*pUndoArray;
+    SfxUndoArray			*pActUndoArray;
+    SfxUndoArray			*pFatherUndoArray;
 
-    bool                    mbUndoEnabled;
+    bool					mbUndoEnabled;
 public:
                             SfxUndoManager( USHORT nMaxUndoActionCount = 20 );
-    virtual                 ~SfxUndoManager();
+    virtual 				~SfxUndoManager();
 
-    virtual void            SetMaxUndoActionCount( USHORT nMaxUndoActionCount );
-    virtual USHORT          GetMaxUndoActionCount() const;
-    virtual void            Clear();
+    virtual void			SetMaxUndoActionCount( USHORT nMaxUndoActionCount );
+    virtual USHORT			GetMaxUndoActionCount() const;
+    virtual void			Clear();
 
-    virtual void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
+    virtual void			AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
 
-    virtual USHORT          GetUndoActionCount() const;
-    virtual USHORT          GetUndoActionId(USHORT nNo=0) const;
-    virtual UniString       GetUndoActionComment( USHORT nNo=0 ) const;
+    virtual USHORT			GetUndoActionCount() const;
+    virtual USHORT			GetUndoActionId(USHORT nNo=0) const;
+    virtual UniString		GetUndoActionComment( USHORT nNo=0 ) const;
     /** returns the nNo'th undo action from the top */
-    SfxUndoAction*          GetUndoAction( USHORT nNo=0 ) const;
+    SfxUndoAction*			GetUndoAction( USHORT nNo=0 ) const;
 
-    virtual BOOL            Undo( USHORT nCount=1 );
-    virtual void            Undo( SfxUndoAction &rAction );
+    virtual BOOL			Undo( USHORT nCount=1 );
+    virtual void			Undo( SfxUndoAction &rAction );
 
-    virtual USHORT          GetRedoActionCount() const;
-    virtual USHORT          GetRedoActionId(USHORT nNo=0) const;
-    virtual UniString           GetRedoActionComment( USHORT nNo=0 ) const;
+    virtual USHORT			GetRedoActionCount() const;
+    virtual USHORT			GetRedoActionId(USHORT nNo=0) const;
+    virtual UniString			GetRedoActionComment( USHORT nNo=0 ) const;
 
-    virtual BOOL            Redo( USHORT nCount=1 );
-    virtual void            Redo( SfxUndoAction &rAction );
-    virtual void            ClearRedo();
+    virtual BOOL			Redo( USHORT nCount=1 );
+    virtual void			Redo( SfxUndoAction &rAction );
+    virtual	void			ClearRedo();
 
-    virtual USHORT          GetRepeatActionCount() const;
-    virtual UniString           GetRepeatActionComment( SfxRepeatTarget &rTarget, USHORT nNo = 0) const;
-    virtual BOOL            Repeat( SfxRepeatTarget &rTarget, USHORT nFrom=0, USHORT nCount=1 );
-    virtual void            Repeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction );
-    virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo = 0 ) const;
-    virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction ) const;
+    virtual USHORT			GetRepeatActionCount() const;
+    virtual UniString			GetRepeatActionComment( SfxRepeatTarget &rTarget, USHORT nNo = 0) const;
+    virtual BOOL			Repeat( SfxRepeatTarget &rTarget, USHORT nFrom=0, USHORT nCount=1 );
+    virtual void			Repeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction );
+    virtual BOOL			CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo = 0 ) const;
+    virtual BOOL			CanRepeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction ) const;
 
     virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0);
-    virtual void            LeaveListAction();
+    virtual void 			LeaveListAction();
 
     /** clears the redo stack and removes the top undo action */
-    void                    RemoveLastUndoAction();
+    void					RemoveLastUndoAction();
 
     // enables (true) or disables (false) recording of undo actions
     // If undo actions are added while undo is disabled, they are deleted.
     // Disabling undo does not clear the current undo buffer!
-    void                    EnableUndo( bool bEnable );
+    void					EnableUndo( bool bEnable );
 
     // returns true if undo is currently enabled
     // This returns false if undo was disabled using EnableUndo( false ) and
     // also during the runtime of the Undo() and Redo() methods.
-    bool                    IsUndoEnabled() const { return mbUndoEnabled; }
+    bool					IsUndoEnabled() const { return mbUndoEnabled; }
 };
 
 //=========================================================================
 
 class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die SfxLinkUndoAction dient zur Verbindung zweier SfxUndoManager. Die
     im ersten SfxUndoManager eingefuegten SfxUndoAction leiten ihr Undo und Redo
@@ -216,21 +216,21 @@ public:
                             SfxLinkUndoAction(SfxUndoManager *pManager);
                             ~SfxLinkUndoAction();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual BOOL            CanRepeat(SfxRepeatTarget& r) const;
+    virtual void			Undo();
+    virtual void			Redo();
+    virtual BOOL			CanRepeat(SfxRepeatTarget& r) const;
 
-    virtual void            Repeat(SfxRepeatTarget&r);
+    virtual void			Repeat(SfxRepeatTarget&r);
 
-    virtual UniString           GetComment() const;
-    virtual UniString           GetRepeatComment(SfxRepeatTarget&r) const;
-    virtual USHORT          GetId() const;
+    virtual UniString			GetComment() const;
+    virtual UniString			GetRepeatComment(SfxRepeatTarget&r) const;
+    virtual USHORT			GetId() const;
 
-    SfxUndoAction*          GetAction() const { return pAction; }
+    SfxUndoAction*			GetAction() const { return pAction; }
 
 protected:
-    SfxUndoManager          *pUndoManager;
-    SfxUndoAction           *pAction;
+    SfxUndoManager			*pUndoManager;
+    SfxUndoAction			*pAction;
 
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -141,9 +141,9 @@ namespace canvas
             mpImage->unlock();
         }
 
-        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&       color,
+        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&		color,
                        const ::com::sun::star::rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
-                       const ::com::sun::star::geometry::IntegerPoint2D&        pos )
+                       const ::com::sun::star::geometry::IntegerPoint2D&		pos )
         {
             struct ARGBColor
             {
@@ -307,7 +307,7 @@ namespace canvas
         }
 
         void fillB2DPolyPolygon( const ::basegfx::B2DPolyPolygon&   rPolyPolygon,
-                                 const rendering::ViewState&        viewState,
+                                 const rendering::ViewState& 		viewState,
                                  const rendering::RenderState&      renderState )
         {
             mbIsSurfaceDirty = true;
@@ -321,28 +321,28 @@ namespace canvas
         // the XCanvas-render interface
         // ============================
 
-        void drawPoint( const geometry::RealPoint2D&    aPoint,
-                        const rendering::ViewState&     viewState,
-                        const rendering::RenderState&   renderState )
+        void drawPoint( const geometry::RealPoint2D& 	aPoint,
+                        const rendering::ViewState& 	viewState,
+                        const rendering::RenderState& 	renderState )
         {
             mbIsSurfaceDirty = true;
 
             mpImage->drawPoint( aPoint, viewState, renderState );
         }
 
-        void drawLine( const geometry::RealPoint2D&     aStartPoint,
-                       const geometry::RealPoint2D&     aEndPoint,
+        void drawLine( const geometry::RealPoint2D& 	aStartPoint,
+                       const geometry::RealPoint2D& 	aEndPoint,
                        const rendering::ViewState&      viewState,
-                       const rendering::RenderState&    renderState )
+                       const rendering::RenderState& 	renderState	)
         {
             mbIsSurfaceDirty = true;
 
             mpImage->drawLine( aStartPoint, aEndPoint, viewState, renderState );
         }
 
-        void drawBezier( const geometry::RealBezierSegment2D&   aBezierSegment,
+        void drawBezier( const geometry::RealBezierSegment2D&	aBezierSegment,
                          const geometry::RealPoint2D&           aEndPoint,
-                         const rendering::ViewState&            viewState,
+                         const rendering::ViewState& 			viewState,
                          const rendering::RenderState&          renderState )
         {
             mbIsSurfaceDirty = true;
@@ -351,7 +351,7 @@ namespace canvas
         }
 
         ICachedPrimitiveSharedPtr drawPolyPolygon(
-            const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
+            const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
             const rendering::ViewState&                         viewState,
             const rendering::RenderState&                       renderState )
         {
@@ -362,7 +362,7 @@ namespace canvas
         }
 
         ICachedPrimitiveSharedPtr strokePolyPolygon(
-            const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
+            const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
             const rendering::ViewState&                         viewState,
             const rendering::RenderState&                       renderState,
             const rendering::StrokeAttributes&                  strokeAttributes )
@@ -377,7 +377,7 @@ namespace canvas
         }
 
         ICachedPrimitiveSharedPtr strokeTexturedPolyPolygon(
-            const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+            const uno::Reference< rendering::XPolyPolygon2D >& 	 xPolyPolygon,
             const rendering::ViewState&                          viewState,
             const rendering::RenderState&                        renderState,
             const uno::Sequence< rendering::Texture >&           textures,
@@ -400,7 +400,7 @@ namespace canvas
         }
 
         ICachedPrimitiveSharedPtr strokeTextureMappedPolyPolygon(
-            const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+            const uno::Reference< rendering::XPolyPolygon2D >& 	 xPolyPolygon,
             const rendering::ViewState&                          viewState,
             const rendering::RenderState&                        renderState,
             const uno::Sequence< rendering::Texture >&           textures,
@@ -426,7 +426,7 @@ namespace canvas
 
 
         ICachedPrimitiveSharedPtr fillPolyPolygon(
-            const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
+            const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
             const rendering::ViewState&                         viewState,
             const rendering::RenderState&                       renderState )
         {
@@ -439,7 +439,7 @@ namespace canvas
         }
 
         ICachedPrimitiveSharedPtr fillTexturedPolyPolygon(
-            const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+            const uno::Reference< rendering::XPolyPolygon2D >&	 xPolyPolygon,
             const rendering::ViewState&                          viewState,
             const rendering::RenderState&                        renderState,
             const uno::Sequence< rendering::Texture >&           textures,
@@ -461,7 +461,7 @@ namespace canvas
 
 
         ICachedPrimitiveSharedPtr fillTextureMappedPolyPolygon(
-            const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+            const uno::Reference< rendering::XPolyPolygon2D >& 	 xPolyPolygon,
             const rendering::ViewState&                          viewState,
             const rendering::RenderState&                        renderState,
             const uno::Sequence< rendering::Texture >&           textures,
@@ -510,7 +510,7 @@ namespace canvas
         }
 
         ICachedPrimitiveSharedPtr drawBitmapModulated(
-            const uno::Reference< rendering::XBitmap >&     xBitmap,
+            const uno::Reference< rendering::XBitmap >&		xBitmap,
             const rendering::ViewState&                     viewState,
             const rendering::RenderState&                   renderState )
         {
@@ -630,16 +630,16 @@ namespace canvas
     }
 
     void Bitmap::setPixel(
-        const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
+        const ::com::sun::star::uno::Sequence< sal_Int8 >&		color,
         const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-        const ::com::sun::star::geometry::IntegerPoint2D&       pos )
+        const ::com::sun::star::geometry::IntegerPoint2D&		pos )
     {
         mpImpl->setPixel(color,bitmapLayout,pos);
     }
 
     uno::Sequence< sal_Int8 > Bitmap::getPixel(
-        ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-        const ::com::sun::star::geometry::IntegerPoint2D&       pos )
+        ::com::sun::star::rendering::IntegerBitmapLayout&		bitmapLayout,
+        const ::com::sun::star::geometry::IntegerPoint2D&		pos )
     {
         return mpImpl->getPixel(bitmapLayout,pos);
     }
@@ -675,37 +675,37 @@ namespace canvas
 
     void Bitmap::fillB2DPolyPolygon(
             const ::basegfx::B2DPolyPolygon&    rPolyPolygon,
-            const rendering::ViewState&         viewState,
+            const rendering::ViewState& 		viewState,
             const rendering::RenderState&       renderState )
     {
         mpImpl->fillB2DPolyPolygon( rPolyPolygon, viewState, renderState );
     }
 
-    void Bitmap::drawPoint( const geometry::RealPoint2D&    aPoint,
-                            const rendering::ViewState&     viewState,
-                            const rendering::RenderState&   renderState )
+    void Bitmap::drawPoint( const geometry::RealPoint2D& 	aPoint,
+                            const rendering::ViewState& 	viewState,
+                            const rendering::RenderState& 	renderState )
     {
         return mpImpl->drawPoint( aPoint, viewState, renderState );
     }
 
-    void Bitmap::drawLine( const geometry::RealPoint2D&     aStartPoint,
-                           const geometry::RealPoint2D&     aEndPoint,
+    void Bitmap::drawLine( const geometry::RealPoint2D& 	aStartPoint,
+                           const geometry::RealPoint2D& 	aEndPoint,
                            const rendering::ViewState&      viewState,
-                           const rendering::RenderState&    renderState )
+                           const rendering::RenderState& 	renderState	)
     {
         return mpImpl->drawLine( aStartPoint, aEndPoint, viewState, renderState );
     }
 
-    void Bitmap::drawBezier( const geometry::RealBezierSegment2D&   aBezierSegment,
+    void Bitmap::drawBezier( const geometry::RealBezierSegment2D&	aBezierSegment,
                              const geometry::RealPoint2D&           aEndPoint,
-                             const rendering::ViewState&            viewState,
+                             const rendering::ViewState& 			viewState,
                              const rendering::RenderState&          renderState )
     {
         return mpImpl->drawBezier( aBezierSegment, aEndPoint, viewState, renderState );
     }
 
     ICachedPrimitiveSharedPtr Bitmap::drawPolyPolygon(
-        const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
+        const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
         const rendering::ViewState&                         viewState,
         const rendering::RenderState&                       renderState )
     {
@@ -713,7 +713,7 @@ namespace canvas
     }
 
     ICachedPrimitiveSharedPtr Bitmap::strokePolyPolygon(
-        const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
+        const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
         const rendering::ViewState&                         viewState,
         const rendering::RenderState&                       renderState,
         const rendering::StrokeAttributes&                  strokeAttributes )
@@ -722,7 +722,7 @@ namespace canvas
     }
 
     ICachedPrimitiveSharedPtr Bitmap::strokeTexturedPolyPolygon(
-        const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+        const uno::Reference< rendering::XPolyPolygon2D >& 	 xPolyPolygon,
         const rendering::ViewState&                          viewState,
         const rendering::RenderState&                        renderState,
         const uno::Sequence< rendering::Texture >&           textures,
@@ -738,7 +738,7 @@ namespace canvas
     }
 
     ICachedPrimitiveSharedPtr Bitmap::strokeTextureMappedPolyPolygon(
-        const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+        const uno::Reference< rendering::XPolyPolygon2D >& 	 xPolyPolygon,
         const rendering::ViewState&                          viewState,
         const rendering::RenderState&                        renderState,
         const uno::Sequence< rendering::Texture >&           textures,
@@ -757,7 +757,7 @@ namespace canvas
 
 
     ICachedPrimitiveSharedPtr Bitmap::fillPolyPolygon(
-        const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
+        const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
         const rendering::ViewState&                         viewState,
         const rendering::RenderState&                       renderState )
     {
@@ -767,7 +767,7 @@ namespace canvas
     }
 
     ICachedPrimitiveSharedPtr Bitmap::fillTexturedPolyPolygon(
-        const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+        const uno::Reference< rendering::XPolyPolygon2D >&	 xPolyPolygon,
         const rendering::ViewState&                          viewState,
         const rendering::RenderState&                        renderState,
         const uno::Sequence< rendering::Texture >&           textures,
@@ -781,7 +781,7 @@ namespace canvas
     }
 
     ICachedPrimitiveSharedPtr Bitmap::fillTextureMappedPolyPolygon(
-        const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+        const uno::Reference< rendering::XPolyPolygon2D >& 	 xPolyPolygon,
         const rendering::ViewState&                          viewState,
         const rendering::RenderState&                        renderState,
         const uno::Sequence< rendering::Texture >&           textures,
@@ -817,7 +817,7 @@ namespace canvas
     }
 
     ICachedPrimitiveSharedPtr Bitmap::drawBitmapModulated(
-        const uno::Reference< rendering::XBitmap >&     xBitmap,
+        const uno::Reference< rendering::XBitmap >&		xBitmap,
         const rendering::ViewState&                     viewState,
         const rendering::RenderState&                   renderState )
     {

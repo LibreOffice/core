@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,37 +40,37 @@
 namespace psp { class PPDParser; }
 
 namespace padmin {
-
+    
     class PPDImportDialog : public ModalDialog
     {
-        OKButton            m_aOKBtn;
-        CancelButton        m_aCancelBtn;
-        FixedText           m_aPathTxt;
-        ComboBox            m_aPathBox;
-        PushButton          m_aSearchBtn;
-        FixedText           m_aDriverTxt;
-        MultiListBox        m_aDriverLB;
-
-        FixedLine           m_aPathGroup;
-        FixedLine           m_aDriverGroup;
-
-        String              m_aLoadingPPD;
-
+        OKButton			m_aOKBtn;
+        CancelButton		m_aCancelBtn;
+        FixedText			m_aPathTxt;
+        ComboBox			m_aPathBox;
+        PushButton			m_aSearchBtn;
+        FixedText			m_aDriverTxt;
+        MultiListBox		m_aDriverLB;
+        
+        FixedLine			m_aPathGroup;
+        FixedLine			m_aDriverGroup;
+        
+        String				m_aLoadingPPD;
+        
         DECL_LINK( ClickBtnHdl, PushButton* );
         DECL_LINK( SelectHdl, ComboBox* );
         DECL_LINK( ModifyHdl, ComboBox* );
-
+        
         void Import();
-
+        
         std::list< rtl::OUString >  m_aImportedFiles;
     public:
         PPDImportDialog( Window* pParent );
         ~PPDImportDialog();
-
+        
         const std::list< rtl::OUString >& getImportedFiles() const
         { return m_aImportedFiles; }
     };
-
-} // namespace
+    
+} // namespace 
 
 #endif // _NEWPPDLG_HXX

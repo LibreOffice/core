@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-//  ----------------------------------------------------
-//  class StdTabController
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class StdTabController
+//	----------------------------------------------------
 StdTabController::StdTabController()
 {
 }
@@ -60,13 +60,13 @@ StdTabController::~StdTabController()
 }
 
 sal_Bool StdTabController::ImplCreateComponentSequence(
-        Sequence< Reference< XControl > >&              rControls,
-        const Sequence< Reference< XControlModel > >&   rModels,
-        Sequence< Reference< XWindow > >&               rComponents,
-        Sequence< Any>*                                 pTabStops,
+        Sequence< Reference< XControl > >&				rControls,
+        const Sequence< Reference< XControlModel > >&	rModels,
+        Sequence< Reference< XWindow > >&				rComponents,
+        Sequence< Any>*									pTabStops,
         sal_Bool bPeerComponent ) const
 {
-    sal_Bool bOK = sal_True;
+    sal_Bool bOK = sal_True;			
 
     // nur die wirklich geforderten Controls
     sal_Int32 nModels = rModels.getLength();
@@ -93,7 +93,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
 
 
     const Reference< XControl > * pControls = rControls.getConstArray();
-    sal_uInt32 nCtrls = rControls.getLength();
+    sal_uInt32 nCtrls = rControls.getLength(); 
     rComponents.realloc( nCtrls );
     Reference< XWindow > * pComps = rComponents.getArray();
     Any* pTabs = NULL;
@@ -106,22 +106,22 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
     }
 
     for ( sal_uInt32 n = 0; bOK && ( n < nCtrls ); n++ )
-    {
+    {			
         // Zum Model passendes Control suchen
         Reference< XControl >  xCtrl(pControls[n]);
         if ( xCtrl.is() )
         {
             if (bPeerComponent)
-                pComps[n] = Reference< XWindow > (xCtrl->getPeer(), UNO_QUERY);
+                pComps[n] = Reference< XWindow > (xCtrl->getPeer(), UNO_QUERY);							
             else
                 pComps[n] = Reference< XWindow > (xCtrl, UNO_QUERY);
 
             // TabStop-Property
             if ( pTabs )
-            {
+            {					
                 // opt: String fuer TabStop als Konstante
                 static const ::rtl::OUString aTabStopName( ::rtl::OUString::createFromAscii( "Tabstop" ) );
-
+                
                 Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
                 Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
                 if( xInfo->hasPropertyByName( aTabStopName ) )
@@ -146,9 +146,9 @@ void StdTabController::ImplActivateControl( sal_Bool bFirst ) const
     Sequence< Reference< XControl > > aCtrls = xTabController->getControls();
     const Reference< XControl > * pControls = aCtrls.getConstArray();
     sal_uInt32 nCount = aCtrls.getLength();
-
+    
     for ( sal_uInt32 n = bFirst ? 0 : nCount; bFirst ? ( n < nCount ) : n; )
-    {
+    {			
         sal_uInt32 nCtrl = bFirst ? n++ : --n;
         DBG_ASSERT( pControls[nCtrl].is(), "Control nicht im Container!" );
         if ( pControls[nCtrl].is() )
@@ -186,35 +186,35 @@ IMPL_XTYPEPROVIDER_END
 void StdTabController::setModel( const Reference< XTabControllerModel >& Model ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     mxModel = Model;
 }
 
 Reference< XTabControllerModel > StdTabController::getModel(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     return mxModel;
 }
 
 void StdTabController::setContainer( const Reference< XControlContainer >& Container ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     mxControlContainer = Container;
 }
 
 Reference< XControlContainer > StdTabController::getContainer(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     return mxControlContainer;
 }
 
 Sequence< Reference< XControl > > StdTabController::getControls(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     Sequence< Reference< XControl > > aSeq;
 
     if ( mxControlContainer.is() )
@@ -240,7 +240,7 @@ Sequence< Reference< XControl > > StdTabController::getControls(  ) throw(Runtim
 void StdTabController::autoTabOrder(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     DBG_ASSERT( mxControlContainer.is(), "autoTabOrder: No ControlContainer!" );
     if ( !mxControlContainer.is() )
         return;
@@ -250,7 +250,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
 
     // vieleicht erhalte ich hier einen TabController,
     // der schneller die Liste meiner Controls ermittelt
-    Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
+    Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);	
     Sequence< Reference< XControl > > aControls = xTabController->getControls();
 
     // #58317# Es sind ggf. noch nicht alle Controls fuer die Models im Container,
@@ -305,7 +305,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
 void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     // Am Container die Tab-Reihenfolge aktivieren...
 
     Reference< XControl >  xC( mxControlContainer, UNO_QUERY );
@@ -317,7 +317,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 
     // vieleicht erhalte ich hier einen TabController,
     // der schneller die Liste meiner Controls ermittelt
-    Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
+    Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);	
 
     // Flache Liste besorgen...
     Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
@@ -326,7 +326,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 
     // DG: Aus Optimierungsgruenden werden die Controls mittels getControls() geholt,
     // dieses hoert sich zwar wiedersinning an, fuehrt aber im konkreten Fall (Forms) zu sichtbaren
-    // Geschwindigkeitsvorteilen
+    // Geschwindigkeitsvorteilen	
     Sequence< Reference< XControl > > aControls = xTabController->getControls();
 
     // #58317# Es sind ggf. noch nicht alle Controls fuer die Models im Container,
@@ -337,8 +337,8 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
     xVclContainerPeer->setTabOrder( aCompSeq, aTabSeq, mxModel->getGroupControl() );
 
     ::rtl::OUString aName;
-    Sequence< Reference< XControlModel > >  aThisGroupModels;
-    Sequence< Reference< XWindow > >        aControlComponents;
+    Sequence< Reference< XControlModel > >	aThisGroupModels;
+    Sequence< Reference< XWindow > >		aControlComponents;
 
     sal_uInt32 nGroups = mxModel->getGroupCount();
     for ( sal_uInt32 nG = 0; nG < nGroups; nG++ )
@@ -361,14 +361,14 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 void StdTabController::activateFirst(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     ImplActivateControl( sal_True );
 }
 
 void StdTabController::activateLast(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
+    
     ImplActivateControl( sal_False );
 }
 
@@ -411,7 +411,7 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
     if ( !xCtrl.is() && rxCtrlModel.is())
 */
     DBG_ASSERT( rxCtrlModel.is(), "ImplFindControl - welches ?!" );
-
+    
     const Reference< XControl > * pCtrls = rCtrls.getConstArray();
     sal_Int32 nCtrls = rCtrls.getLength();
     for ( sal_Int32 n = 0; n < nCtrls; n++ )

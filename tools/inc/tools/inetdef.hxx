@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,14 +69,14 @@
 #define TOOLS_INETDEF_MOZILLA "Mozilla/3.0"
 
 #define INET_PRODUCTNAME TOOLS_INETDEF_PRODUCT " (" TOOLS_INETDEF_OS ")"
-#define INET_DEF_CALLERNAME TOOLS_INETDEF_MOZILLA " (compatible; "           \
+#define INET_DEF_CALLERNAME TOOLS_INETDEF_MOZILLA " (compatible; "			 \
      TOOLS_INETDEF_PRODUCT "; " TOOLS_INETDEF_OS ")"
 
 //============================================================================
 // The following definitions seem obsolete and might get removed in future.
 
 #define INET_PERS_CERT_HOMEPAGE "http://www.stardivision.de/certs.html"
-#define INET_PERS_CERT_HOMEPAGE_INT                                          \
+#define INET_PERS_CERT_HOMEPAGE_INT											 \
      "http://www.stardivision.de/certs/certs##.html"
     // the above definitions are only used in svx/source/options/optinet2.cxx
 

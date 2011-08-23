@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace vclcanvas
     namespace
     {
         void setupLayoutMode( OutputDevice& rOutDev,
-                              sal_Int8      nTextDirection )
+                              sal_Int8		nTextDirection )	
         {
             // TODO(P3): avoid if already correctly set
             ULONG nLayoutMode;
@@ -288,7 +288,7 @@ namespace vclcanvas
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts,
+    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts, 
                                                  double                                                           nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
@@ -398,10 +398,10 @@ namespace vclcanvas
             // TODO(P2): cache that
             ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
-
+            
             // TODO(F3): ensure correct length and termination for DX
             // array (last entry _must_ contain the overall width)
-
+            
             rOutDev.DrawTextArray( rOutpos,
                                    maText.Text,
                                    aOffsets.get(),
@@ -451,10 +451,10 @@ namespace vclcanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
-                                       const uno::Sequence< double >&   inputOffsets,
-                                       const rendering::ViewState&      viewState,
-                                       const rendering::RenderState&    renderState     ) const
+    void TextLayout::setupTextOffsets( sal_Int32*						outputOffsets,
+                                       const uno::Sequence< double >& 	inputOffsets,
+                                       const rendering::ViewState& 		viewState,
+                                       const rendering::RenderState& 	renderState		) const
     {
         ENSURE_OR_THROW( outputOffsets!=NULL,
                           "TextLayout::setupTextOffsets offsets NULL" );

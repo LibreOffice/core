@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace comphelper
     {
     public:
         typedef Element ValueType;
-
+        
         /** Default-construct the value.
 
             A default-constructed value is not valid. You have to
@@ -140,13 +140,13 @@ namespace comphelper
         bool exportValue( ::com::sun::star::uno::Any& o_rAny )
         {
             o_rAny.clear();
-
+            
             if( isValid() )
             {
                 if( !(o_rAny <<= getValue()) )
                     return false;
             }
-
+            
             return true;
         }
 
@@ -163,14 +163,14 @@ namespace comphelper
         bool importValue( const ::com::sun::star::uno::Any& rAny )
         {
             clearValue();
-
+            
             if( rAny.hasValue() )
             {
                 Element tmp;
-
+                
                 if( !(rAny >>= tmp) )
                     return false;
-
+                
                 setValue( tmp );
             }
 
@@ -178,8 +178,8 @@ namespace comphelper
         }
 
     private:
-        Element     maValue;
-        bool        mbValid;
+        Element		maValue;
+        bool		mbValid;
     };
 
 }

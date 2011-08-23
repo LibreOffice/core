@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _B3D_B3DTRANS_HXX
 
 // Zu verwendender DephRange des Z-Buffers
-#define ZBUFFER_DEPTH_RANGE         ((double)(256L * 256L * 256L))
+#define ZBUFFER_DEPTH_RANGE			((double)(256L * 256L * 256L))
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b3drange.hxx>
@@ -75,68 +75,68 @@ class TOOLS_DLLPUBLIC B3dTransformationSet
 {
 private:
     // Object Matrix Object -> World
-    basegfx::B3DHomMatrix           maObjectTrans;
-    basegfx::B3DHomMatrix           maInvObjectTrans;
+    basegfx::B3DHomMatrix			maObjectTrans;
+    basegfx::B3DHomMatrix			maInvObjectTrans;
 
     // Orientation Matrix
-    basegfx::B3DHomMatrix           maOrientation;
-    basegfx::B3DHomMatrix           maInvOrientation;
+    basegfx::B3DHomMatrix			maOrientation;
+    basegfx::B3DHomMatrix			maInvOrientation;
 
     // Projection Matrix
-    basegfx::B3DHomMatrix           maProjection;
-    basegfx::B3DHomMatrix           maInvProjection;
+    basegfx::B3DHomMatrix			maProjection;
+    basegfx::B3DHomMatrix			maInvProjection;
 
     // Texture Matrices
-    basegfx::B2DHomMatrix           maTexture;
+    basegfx::B2DHomMatrix			maTexture;
 
     // Speziell zum Umwandeln von Punkten Objekt -> Device
-    basegfx::B3DHomMatrix           maObjectToDevice;
+    basegfx::B3DHomMatrix			maObjectToDevice;
 
     // Transponierte Inverse fuer Vectortransformationen
-    basegfx::B3DHomMatrix           maInvTransObjectToEye;
+    basegfx::B3DHomMatrix			maInvTransObjectToEye;
 
     // Transformation World->View
-    basegfx::B3DHomMatrix           maMatFromWorldToView;
-    basegfx::B3DHomMatrix           maInvMatFromWorldToView;
+    basegfx::B3DHomMatrix			maMatFromWorldToView;
+    basegfx::B3DHomMatrix			maInvMatFromWorldToView;
 
     // Parameters for ViewportTransformation
-    basegfx::B3DVector          maScale;
-    basegfx::B3DVector          maTranslate;
+    basegfx::B3DVector			maScale;
+    basegfx::B3DVector			maTranslate;
 
     // ViewPlane DeviceRectangle (vom Benutzer gesetzt)
-    double                          mfLeftBound;
-    double                          mfRightBound;
-    double                          mfBottomBound;
-    double                          mfTopBound;
+    double							mfLeftBound;
+    double							mfRightBound;
+    double							mfBottomBound;
+    double							mfTopBound;
 
     // Near and far clipping planes
-    double                          mfNearBound;
-    double                          mfFarBound;
+    double							mfNearBound;
+    double							mfFarBound;
 
     // Seitenverhaeltnis der 3D Abbildung (Y / X)
     // default ist 1:1 -> 1.0
     // Deaktivieren mit 0.0 als Wert
-    double                          mfRatio;
+    double							mfRatio;
 
     // Der gesetzte Ausgabebereich (in logischen Koordinaten)
     // und der dazugehoerige sichtbare Bereich
-    Rectangle                       maViewportRectangle;
-    Rectangle                       maVisibleRectangle;
+    Rectangle						maViewportRectangle;
+    Rectangle						maVisibleRectangle;
 
     // Die tatsaechlich von CalcViewport gesetzten Abmessungen
     // des sichtbaren Bereichs (in logischen Koordinaten)
-    Rectangle                       maSetBound;
+    Rectangle						maSetBound;
 
     // Methode zur Aufrechterhaltung des Seitenverhaeltnisses
     // default ist Base3DRatioGrow
-    Base3DRatio                     meRatio;
+    Base3DRatio						meRatio;
 
     // Flags
-    unsigned                        mbPerspective               : 1;
-    unsigned                        mbWorldToViewValid          : 1;
-    unsigned                        mbInvTransObjectToEyeValid  : 1;
-    unsigned                        mbObjectToDeviceValid       : 1;
-    unsigned                        mbProjectionValid           : 1;
+    unsigned						mbPerspective				: 1;
+    unsigned						mbWorldToViewValid			: 1;
+    unsigned						mbInvTransObjectToEyeValid	: 1;
+    unsigned						mbObjectToDeviceValid		: 1;
+    unsigned						mbProjectionValid			: 1;
 
 public:
     B3dTransformationSet();
@@ -243,8 +243,8 @@ public:
         double fNear = 0.0, double fFar = 1.0);
     static void Orientation(
         basegfx::B3DHomMatrix& rTarget,
-        basegfx::B3DPoint aVRP = basegfx::B3DPoint(0.0,0.0,1.0),
-        basegfx::B3DVector aVPN = basegfx::B3DVector(0.0,0.0,1.0),
+        basegfx::B3DPoint aVRP = basegfx::B3DPoint(0.0,0.0,1.0), 
+        basegfx::B3DVector aVPN = basegfx::B3DVector(0.0,0.0,1.0), 
         basegfx::B3DVector aVUP = basegfx::B3DVector(0.0,1.0,0.0));
 
 protected:
@@ -273,9 +273,9 @@ protected:
 class TOOLS_DLLPUBLIC B3dViewport : public B3dTransformationSet
 {
 private:
-    basegfx::B3DPoint               aVRP;           // View Reference Point
-    basegfx::B3DVector          aVPN;           // View Plane Normal
-    basegfx::B3DVector          aVUV;           // View Up Vector
+    basegfx::B3DPoint				aVRP;			// View Reference Point
+    basegfx::B3DVector			aVPN;			// View Plane Normal
+    basegfx::B3DVector			aVUV;			// View Up Vector
 
 public:
     B3dViewport();
@@ -289,9 +289,9 @@ public:
         const basegfx::B3DVector& rNewVPN,
         const basegfx::B3DVector& rNewVUV);
 
-    const basegfx::B3DPoint&    GetVRP() const  { return aVRP; }
-    const basegfx::B3DVector&   GetVPN() const  { return aVPN; }
-    const basegfx::B3DVector&   GetVUV() const  { return aVUV; }
+    const basegfx::B3DPoint&	GetVRP() const	{ return aVRP; }
+    const basegfx::B3DVector&	GetVPN() const	{ return aVPN; }
+    const basegfx::B3DVector&	GetVUV() const	{ return aVUV; }
 
 protected:
     void CalcOrientation();
@@ -306,13 +306,13 @@ protected:
 class TOOLS_DLLPUBLIC B3dCamera : public B3dViewport
 {
 private:
-    basegfx::B3DPoint       aPosition;
-    basegfx::B3DPoint       aCorrectedPosition;
-    basegfx::B3DVector  aLookAt;
-    double                  fFocalLength;
-    double                  fBankAngle;
+    basegfx::B3DPoint		aPosition;
+    basegfx::B3DPoint		aCorrectedPosition;
+    basegfx::B3DVector	aLookAt;
+    double					fFocalLength;
+    double					fBankAngle;
 
-    unsigned                bUseFocalLength         : 1;
+    unsigned				bUseFocalLength			: 1;
 
 public:
     B3dCamera(

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ OModule::OModule()
     :m_Module(0)
 {
 }
-
+                        
 OModule::OModule(const rtl::OUString& ustrModuleName, sal_Int32 nRtldMode) : m_Module(0)
 {
     if (ustrModuleName)
@@ -56,11 +56,11 @@ OModule::~OModule()
 sal_Bool OModule::load(const rtl::OUString& ustrModuleName, sal_Int32 nRtldMode)
 {
     VOS_ASSERT(ustrModuleName);
-
+    
     unload();
-
+    
     m_Module = osl_loadModule( ustrModuleName.pData, nRtldMode );
-
+    
     return (m_Module != 0);
 }
 
@@ -74,8 +74,8 @@ void OModule::unload()
 }
 
 sal_Bool OModule::isLoaded()
-{
-    return m_Module != NULL;
+{ 
+    return m_Module != NULL; 
 }
 
 void *OModule::getSymbol(const rtl::OUString& strSymbolName)

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,15 +93,15 @@ namespace basegfx
                 {
                     // add cuts with axis to polygon, including bezier segments
                     // Build edge to cut with. Make it a little big longer than needed for
-                    // numerical stability. We want to cut against the edge seen as endless
+                    // numerical stability. We want to cut against the edge seen as endless 
                     // ray here, but addPointsAtCuts() will limit itself to the
                     // edge's range ]0.0 .. 1.0[.
                     const double fSmallExtension((aCandidateRange.getWidth() + aCandidateRange.getHeight()) * (0.5 * 0.1));
                     const B2DPoint aStart(
-                        bParallelToXAxis ? aCandidateRange.getMinX() - fSmallExtension : fValueOnOtherAxis,
+                        bParallelToXAxis ? aCandidateRange.getMinX() - fSmallExtension : fValueOnOtherAxis, 
                         bParallelToXAxis ? fValueOnOtherAxis : aCandidateRange.getMinY() - fSmallExtension);
                     const B2DPoint aEnd(
-                        bParallelToXAxis ? aCandidateRange.getMaxX() + fSmallExtension : fValueOnOtherAxis,
+                        bParallelToXAxis ? aCandidateRange.getMaxX() + fSmallExtension : fValueOnOtherAxis, 
                         bParallelToXAxis ? fValueOnOtherAxis : aCandidateRange.getMaxY() + fSmallExtension);
                     const B2DPolygon aCandidate(addPointsAtCuts(rCandidate, aStart, aEnd));
                     const sal_uInt32 nPointCount(aCandidate.count());
@@ -248,7 +248,7 @@ namespace basegfx
                 // This needs to be done with the topology knowlegde and is unfurtunately
                 // more expensive, too.
                 const B2DPolygon aClip(createPolygonFromRect(rRange));
-
+                
                 return clipPolygonOnPolyPolygon(rCandidate, B2DPolyPolygon(aClip), bInside, bStroke);
             }
 
@@ -337,10 +337,10 @@ namespace basegfx
             }
             else
             {
-                // for details, see comment in clipPolygonOnRange for the "cutting off
+                // for details, see comment in clipPolygonOnRange for the "cutting off 
                 // the outer parts of filled polygons at parallell lines" explanations
                 const B2DPolygon aClip(createPolygonFromRect(rRange));
-
+                
                 return clipPolyPolygonOnPolyPolygon(rCandidate, B2DPolyPolygon(aClip), bInside, bStroke);
             }
 
@@ -418,7 +418,7 @@ namespace basegfx
         B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
         {
             B2DPolyPolygon aRetval;
-
+            
             if(rCandidate.count() && rClip.count())
             {
                 if(bStroke)
@@ -492,10 +492,10 @@ namespace basegfx
                     // area clipping
                     B2DPolyPolygon aMergePolyPolygonA(rClip);
 
-                    // First solve all polygon-self and polygon-polygon intersections.
-                    // Also get rid of some not-needed polygons (neutral, no area -> when
+                    // First solve all polygon-self and polygon-polygon intersections. 
+                    // Also get rid of some not-needed polygons (neutral, no area -> when 
                     // no intersections, these are tubes).
-                    // Now it is possible to correct the orientations in the cut-free
+                    // Now it is possible to correct the orientations in the cut-free 
                     // polygons to values corresponding to painting the PolyPolygon with
                     // a XOR-WindingRule.
                     aMergePolyPolygonA = solveCrossovers(aMergePolyPolygonA);
@@ -574,28 +574,28 @@ namespace basegfx
         *
         */
         struct scissor_plane {
-            double nx,ny;           // plane normal
-            double d;               // [-] minimum distance from origin
-            sal_uInt32 clipmask;    // clipping mask, e.g. 1000 1000
+            double nx,ny;			// plane normal
+            double d;				// [-] minimum distance from origin
+            sal_uInt32 clipmask;	// clipping mask, e.g. 1000 1000
         };
 
         /*
         *
         * polygon clipping rules  (straight out of Foley and Van Dam)
         * ===========================================================
-        * current   |next       |emit
+        * current	|next		|emit
         * ____________________________________
-        * inside    |inside     |next
-        * inside    |outside    |intersect with clip plane
-        * outside   |outside    |nothing
-        * outside   |inside     |intersect with clip plane follwed by next
+        * inside	|inside		|next
+        * inside	|outside	|intersect with clip plane
+        * outside	|outside	|nothing
+        * outside	|inside		|intersect with clip plane follwed by next
         *
         */
-        sal_uInt32 scissorLineSegment( ::basegfx::B2DPoint           *in_vertex,    // input buffer
-                                       sal_uInt32                     in_count,     // number of verts in input buffer
-                                       ::basegfx::B2DPoint           *out_vertex,   // output buffer
-                                       scissor_plane                 *pPlane,       // scissoring plane
-                                       const ::basegfx::B2DRectangle &rR )          // clipping rectangle
+        sal_uInt32 scissorLineSegment( ::basegfx::B2DPoint			 *in_vertex,	// input buffer
+                                       sal_uInt32					  in_count,		// number of verts in input buffer
+                                       ::basegfx::B2DPoint			 *out_vertex,	// output buffer
+                                       scissor_plane				 *pPlane,		// scissoring plane
+                                       const ::basegfx::B2DRectangle &rR )			// clipping rectangle
         {
             ::basegfx::B2DPoint *curr;
             ::basegfx::B2DPoint *next;
@@ -604,7 +604,7 @@ namespace basegfx
 
             // process all the verts
             for(sal_uInt32 i=0; i<in_count; i++) {
-
+                    
                 // vertices are relative to the coordinate
                 // system defined by the rectangle.
                 curr = &in_vertex[i];
@@ -662,7 +662,7 @@ namespace basegfx
             return out_count;
         }
 
-        B2DPolygon clipTriangleListOnRange( const B2DPolygon& rCandidate,
+        B2DPolygon clipTriangleListOnRange( const B2DPolygon& rCandidate, 
                                             const B2DRange&   rRange )
         {
             B2DPolygon aResult;
@@ -698,13 +698,13 @@ namespace basegfx
                     ////////////////////////////////////////////////////////////////////////
                     ////////////////////////////////////////////////////////////////////////
                     ////////////////////////////////////////////////////////////////////////
-                    //
+                    // 
                     // Upper bound for the maximal number of vertices when intersecting an
                     // axis-aligned rectangle with a triangle in E2
-                    //
+                    // 
                     // The rectangle and the triangle are in general position, and have 4 and 3
                     // vertices, respectively.
-                    //
+                    // 
                     //   Lemma: Since the rectangle is a convex polygon ( see
                     //   http://mathworld.wolfram.com/ConvexPolygon.html for a definition), and
                     //   has no holes, it follows that any straight line will intersect the
@@ -716,7 +716,7 @@ namespace basegfx
                     //   other 'outside') will at utmost add _one_  vertex to the resulting
                     //   intersection polygon (adding two intersection vertices, and removing at
                     //   least one rectangle vertex):
-                    //
+                    // 
                     //         *
                     //     +--+-----------------+
                     //     | *                  |
@@ -725,7 +725,7 @@ namespace basegfx
                     //    *|                    |
                     //   * |                    |
                     //     +--------------------+
-                    //
+                    // 
                     //   Proof: If the straight line intersects the rectangle two
                     //   times, it does so for distinct edges, i.e. the intersection has
                     //   minimally one of the rectangle's vertices on either side of the straight
@@ -733,17 +733,17 @@ namespace basegfx
                     //   minimally _one_ rectangle vertex removed from the resulting clip
                     //   polygon, and therefore, a clip against a half-plane has the net effect
                     //   of adding at utmost _one_ vertex to the resulting clip polygon.
-                    //
+                    // 
                     // Theorem: The intersection of a rectangle and a triangle results in a
                     // polygon with at utmost 7 vertices.
-                    //
+                    // 
                     // Proof: The inside of the triangle can be described as the consecutive
                     // intersection with three half-planes. Together with the lemma above, this
                     // results in at utmost 3 additional vertices added to the already existing 4
                     // rectangle vertices.
-                    //
+                    // 
                     // This upper bound is attained with the following example configuration:
-                    //
+                    // 
                     //                               *
                     //                             ***
                     //                           ** *
@@ -765,7 +765,7 @@ namespace basegfx
                     //     --*6-----5-----
                     //         **  *
                     //           **
-                    //
+                    // 
                     // As we need to scissor all triangles against the
                     // output rectangle we employ an output buffer for the
                     // resulting vertices.  the question is how large this
@@ -800,7 +800,7 @@ namespace basegfx
                     ::basegfx::B2DPoint stack[3];
                     unsigned int clipflag = 0;
 
-                    for(sal_uInt32 nIndex=0; nIndex<nVertexCount; ++nIndex)
+                    for(sal_uInt32 nIndex=0; nIndex<nVertexCount; ++nIndex) 
                     {
                         // rotate stack
                         stack[0] = stack[1];
@@ -810,14 +810,14 @@ namespace basegfx
                         // clipping judgement
                         clipflag |= !(rRange.isInside(stack[2]));
 
-                        if(nIndex > 1)
+                        if(nIndex > 1) 
                         {
                             // consume vertices until a single seperate triangle has been visited.
-                            if(!((nIndex+1)%3))
+                            if(!((nIndex+1)%3)) 
                             {
                                 // if any of the last three vertices was outside
                                 // we need to scissor against the destination rectangle
-                                if(clipflag & 7)
+                                if(clipflag & 7) 
                                 {
                                     ::basegfx::B2DPoint buf0[16];
                                     ::basegfx::B2DPoint buf1[16];
@@ -831,12 +831,12 @@ namespace basegfx
                                     vertex_count = scissorLineSegment(buf0,vertex_count,buf1,&sp[2],rRange);
                                     vertex_count = scissorLineSegment(buf1,vertex_count,buf0,&sp[3],rRange);
 
-                                    if(vertex_count >= 3)
+                                    if(vertex_count >= 3) 
                                     {
                                         // convert triangle fan back to triangle list.
                                         ::basegfx::B2DPoint v0(buf0[0]);
                                         ::basegfx::B2DPoint v1(buf0[1]);
-                                        for(sal_uInt32 i=2; i<vertex_count; ++i)
+                                        for(sal_uInt32 i=2; i<vertex_count; ++i) 
                                         {
                                             ::basegfx::B2DPoint v2(buf0[i]);
                                             aResult.append(v0);
@@ -846,10 +846,10 @@ namespace basegfx
                                         }
                                     }
                                 }
-                                else
+                                else 
                                 {
                                     // the last triangle has not been altered, simply copy to result
-                                    for(sal_uInt32 i=0; i<3; ++i)
+                                    for(sal_uInt32 i=0; i<3; ++i) 
                                         aResult.append(stack[i]);
                                 }
                             }

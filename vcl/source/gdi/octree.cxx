@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -297,7 +297,7 @@ void Octree::GetPalIndex( PNODE pNode )
 InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
 {
-    ULONG*          cdp;
+    ULONG*			cdp;
     BYTE*           crgbp;
     const ULONG     nColorMax = 1 << OCTREE_BITS;
     const ULONG     xsqr = 1 << ( nBits << 1 );
@@ -315,9 +315,9 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
     for( ULONG nIndex = 0; nIndex < nColors; nIndex++ )
     {
         const BitmapColor&  rColor = rPal[ (USHORT) nIndex ];
-        const BYTE          cRed = rColor.GetRed();
-        const BYTE          cGreen = rColor.GetGreen();
-        const BYTE          cBlue = rColor.GetBlue();
+        const BYTE			cRed = rColor.GetRed();
+        const BYTE			cGreen = rColor.GetGreen();
+        const BYTE			cBlue = rColor.GetBlue();
 
         rdist = cRed - x2;
         gdist = cGreen - x2;

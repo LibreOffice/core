@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,28 +60,28 @@ class QueueInfo;
 class SVT_DLLPUBLIC PrinterSetupDialog : public ModalDialog
 {
 private:
-    FixedLine       maFlPrinter;
-    FixedText       maFtName;
-    ListBox         maLbName;
-    PushButton      maBtnProperties;
+    FixedLine		maFlPrinter;
+    FixedText		maFtName;
+    ListBox 		maLbName;
+    PushButton		maBtnProperties;
     PushButton      maBtnOptions;
-    FixedText       maFtStatus;
-    FixedInfo       maFiStatus;
-    FixedText       maFtType;
-    FixedInfo       maFiType;
-    FixedText       maFtLocation;
-    FixedInfo       maFiLocation;
-    FixedText       maFtComment;
-    FixedInfo       maFiComment;
-    FixedLine       maFlSepButton;
-    OKButton        maBtnOK;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
-    AutoTimer       maStatusTimer;
-    Printer*        mpPrinter;
-    Printer*        mpTempPrinter;
+    FixedText		maFtStatus;
+    FixedInfo		maFiStatus;
+    FixedText		maFtType;
+    FixedInfo		maFiType;
+    FixedText		maFtLocation;
+    FixedInfo		maFiLocation;
+    FixedText		maFtComment;
+    FixedInfo		maFiComment;
+    FixedLine		maFlSepButton;
+    OKButton		maBtnOK;
+    CancelButton	maBtnCancel;
+    HelpButton		maBtnHelp;
+    AutoTimer		maStatusTimer;
+    Printer*		mpPrinter;
+    Printer*		mpTempPrinter;
 
-    SVT_DLLPRIVATE void         ImplSetInfo();
+    SVT_DLLPRIVATE void			ImplSetInfo();
 
                     DECL_DLLPRIVATE_LINK( ImplPropertiesHdl, void* );
                     DECL_DLLPRIVATE_LINK( ImplOptionsHdl, void* );
@@ -92,23 +92,23 @@ public:
                     PrinterSetupDialog( Window* pWindow );
                     ~PrinterSetupDialog();
 
-    void            SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
-    Printer*        GetPrinter() const { return mpPrinter; }
+    void			SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
+    Printer*		GetPrinter() const { return mpPrinter; }
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    virtual long	Notify( NotifyEvent& rNEvt );
 
-    virtual short   Execute();
+    virtual short	Execute();
 
-    void                SetOptionsHdl( const Link& rLink );
-    const Link&         GetOptionsHdl() const;
+    void				SetOptionsHdl( const Link& rLink );
+    const Link& 		GetOptionsHdl() const;
 };
 
 // --------------------------------------
 // - Hilfsfunktionen fuer Print-Dialoge -
 // --------------------------------------
 
-#define IMPL_PRINTDLG_STATUS_UPDATE     15000
+#define IMPL_PRINTDLG_STATUS_UPDATE 	15000
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,
                             ListBox* pBox, PushButton* pPropBtn );

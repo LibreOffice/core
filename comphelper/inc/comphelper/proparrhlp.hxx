@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace staruno   = ::com::sun::star::uno;
-    namespace starbeans = ::com::sun::star::beans;
+    namespace staruno	= ::com::sun::star::uno;
+    namespace starbeans	= ::com::sun::star::beans;
 
 
 //==================================================================
 
-template <typename TYPE> struct OPropertyArrayUsageHelperMutex
+template <typename TYPE> struct OPropertyArrayUsageHelperMutex 
     : public rtl::Static< ::osl::Mutex, OPropertyArrayUsageHelperMutex<TYPE> > {};
 
 
@@ -58,13 +58,13 @@ template <class TYPE>
 class OPropertyArrayUsageHelper
 {
 protected:
-    static sal_Int32                        s_nRefCount;
-    static ::cppu::IPropertyArrayHelper*    s_pProps;
+    static sal_Int32						s_nRefCount;
+    static ::cppu::IPropertyArrayHelper*	s_pProps;
 
 public:
     OPropertyArrayUsageHelper();
     virtual ~OPropertyArrayUsageHelper()
-    {   // ARGHHHHHHH ..... would like to implement this after the class
+    {	// ARGHHHHHHH ..... would like to implement this after the class
         // definition (as we do with all other methods) but SUNPRO 5 compiler
         // (linker) doesn't like this
         ::osl::MutexGuard aGuard(OPropertyArrayUsageHelperMutex<TYPE>::get());
@@ -79,7 +79,7 @@ public:
     /** call this in the getInfoHelper method of your derived class. The method returns the array helper of the
         class, which is created if neccessary.
     */
-    ::cppu::IPropertyArrayHelper*   getArrayHelper();
+    ::cppu::IPropertyArrayHelper*	getArrayHelper();
 
 protected:
     /** used to implement the creation of the array helper which is shared amongst all instances of the class.
@@ -89,7 +89,7 @@ protected:
         <BR>
         as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
         assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
-        @return                         an pointer to the newly created array helper. Must not be NULL.
+        @return							an pointer to the newly created array helper. Must not be NULL.
     */
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const = 0;
 };
@@ -105,8 +105,8 @@ protected:
         properties.
         <BR>
         The method gets called with Mutex acquired.
-        @param      _rProps             out parameter to be filled with the property descriptions of your own class
-        @param      _rAggregateProps    out parameter to be filled with the properties of your aggregate.
+        @param		_rProps				out parameter to be filled with the property descriptions of your own class
+        @param		_rAggregateProps	out parameter to be filled with the properties of your aggregate.
     */
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
@@ -131,11 +131,11 @@ protected:
 };
 
 //------------------------------------------------------------------
-template<class TYPE>
-sal_Int32                       OPropertyArrayUsageHelper< TYPE >::s_nRefCount  = 0;
+template<class TYPE> 
+sal_Int32						OPropertyArrayUsageHelper< TYPE >::s_nRefCount	= 0;
 
-template<class TYPE>
-::cppu::IPropertyArrayHelper*   OPropertyArrayUsageHelper< TYPE >::s_pProps = NULL;
+template<class TYPE> 
+::cppu::IPropertyArrayHelper*	OPropertyArrayUsageHelper< TYPE >::s_pProps	= NULL;	
 
 //------------------------------------------------------------------
 template <class TYPE>

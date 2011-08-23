@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@ TYPEINIT1_AUTOFACTORY(SfxStringListItem, SfxPoolItem);
 class SfxImpStringList
 {
 public:
-    USHORT  nRefCount;
-    List    aList;
+    USHORT	nRefCount;
+    List	aList;
 
             SfxImpStringList() { nRefCount = 1; }
             ~SfxImpStringList();
-    void    Sort( BOOL bAscending, List* );
+    void 	Sort( BOOL bAscending, List* );
 };
 
 //------------------------------------------------------------------------
@@ -223,12 +223,12 @@ int SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 
 SfxItemPresentation SfxStringListItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *
-)   const
+)	const
 {
     rText.AssignAscii(RTL_CONSTASCII_STRINGPARAM("(List)"));
     return SFX_ITEM_PRESENTATION_NONE;
@@ -311,7 +311,7 @@ void SfxStringListItem::SetString( const XubString& rStr )
         // String gehoert der Liste
         pImp->aList.Insert( pStr, LIST_APPEND );
 
-        nStart += nLen + 1 ;    // delimiter ueberspringen
+        nStart += nLen + 1 ;	// delimiter ueberspringen
     } while( nDelimPos != STRING_NOTFOUND );
 
     // Kein Leerstring am Ende

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -482,7 +482,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     ByteString aFileNameA( aFilename, osl_getThreadTextEncoding());
     FSysRedirector::DoRedirect( aFilename );
 #endif
-    SetLastError( ERROR_SUCCESS );  // ggf. durch Redirector geaendert!
+    SetLastError( ERROR_SUCCESS );	// ggf. durch Redirector geaendert!
 
     /*
     #ifdef DBG_UTIL

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,10 +70,10 @@ FontIdentificator() {}
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
-
+    
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& ) throw (Exception, RuntimeException);
-
+    
     // XMaterialHolder
     virtual Any SAL_CALL getMaterial() throw(RuntimeException);
 

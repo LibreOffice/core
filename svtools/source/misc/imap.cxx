@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 DBG_NAME( ImageMap )
 
 
-#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).GetNumerator())/(aFracX).GetDenominator();  \
+#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).GetNumerator())/(aFracX).GetDenominator();	\
                                       (aPT).Y()=((aPT).Y()*(aFracY).GetNumerator())/(aFracY).GetDenominator();
 
 
@@ -67,7 +67,7 @@ IMapObject::IMapObject()
 {
 }
 
-IMapObject::IMapObject( const String& rURL, const String& rAltText, const String& rDesc,
+IMapObject::IMapObject( const String& rURL,	const String& rAltText, const String& rDesc,
                         const String& rTarget, const String& rName, BOOL bURLActive )
 : aURL( rURL )
 , aAltText( rAltText )
@@ -100,8 +100,8 @@ UINT16 IMapObject::GetVersion() const
 
 void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
 {
-    IMapCompat*             pCompat;
-    const rtl_TextEncoding  eEncoding = gsl_getSystemTextEncoding();
+    IMapCompat*				pCompat;
+    const rtl_TextEncoding	eEncoding = gsl_getSystemTextEncoding();
 
     rOStm << GetType();
     rOStm << GetVersion();
@@ -125,15 +125,15 @@ void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
 
 /******************************************************************************
 |*
-|*  Binaer-Import
+|* 	Binaer-Import
 |*
 \******************************************************************************/
 
 void IMapObject::Read( SvStream& rIStm, const String& rBaseURL )
 {
-    IMapCompat*         pCompat;
-    rtl_TextEncoding    nTextEncoding;
-    ByteString          aString;
+    IMapCompat*			pCompat;
+    rtl_TextEncoding	nTextEncoding;
+    ByteString			aString;
 
     // Typ und Version ueberlesen wir
     rIStm.SeekRel( 2 );
@@ -215,11 +215,11 @@ IMapRectangleObject::IMapRectangleObject( const Rectangle& rRect,
                                           const String& rURL,
                                           const String& rAltText,
                                           const String& rDesc,
-                                          const String& rTarget,
+                                          const String&	rTarget,
                                           const String& rName,
                                           BOOL bURLActive,
                                           BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
+            IMapObject	( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
 {
     ImpConstruct( rRect, bPixelCoords );
 }
@@ -296,7 +296,7 @@ BOOL IMapRectangleObject::IsHit( const Point& rPoint ) const
 
 Rectangle IMapRectangleObject::GetRectangle( BOOL bPixelCoords ) const
 {
-    Rectangle   aNewRect;
+    Rectangle	aNewRect;
 
     if ( bPixelCoords )
         aNewRect = Application::GetDefaultDevice()->LogicToPixel( aRect, MapMode( MAP_100TH_MM ) );
@@ -315,8 +315,8 @@ Rectangle IMapRectangleObject::GetRectangle( BOOL bPixelCoords ) const
 
 void IMapRectangleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
 {
-    Point   aTL( aRect.TopLeft() );
-    Point   aBR( aRect.BottomRight() );
+    Point	aTL( aRect.TopLeft() );
+    Point	aBR( aRect.BottomRight() );
 
     if ( rFracX.GetDenominator() && rFracY.GetDenominator() )
     {
@@ -352,7 +352,7 @@ IMapCircleObject::IMapCircleObject( const Point& rCenter, ULONG nCircleRadius,
                                     const String& rName,
                                     BOOL bURLActive,
                                     BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
+            IMapObject	( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
 {
     ImpConstruct( rCenter, nCircleRadius, bPixelCoords );
 }
@@ -368,7 +368,7 @@ void IMapCircleObject::ImpConstruct( const Point& rCenter, ULONG nRad, BOOL bPix
 {
     if ( bPixel )
     {
-        MapMode aMap100( MAP_100TH_MM );
+        MapMode	aMap100( MAP_100TH_MM );
 
         aCenter = Application::GetDefaultDevice()->PixelToLogic( rCenter, aMap100 );
         nRadius = Application::GetDefaultDevice()->PixelToLogic( Size( nRad, 0 ), aMap100 ).Width();
@@ -433,8 +433,8 @@ UINT16 IMapCircleObject::GetType() const
 
 BOOL IMapCircleObject::IsHit( const Point& rPoint ) const
 {
-    const Point aPoint( aCenter - rPoint );
-    BOOL        bRet = FALSE;
+    const Point	aPoint( aCenter - rPoint );
+    BOOL		bRet = FALSE;
 
     if ( (ULONG) sqrt( (double) aPoint.X() * aPoint.X() +
                        aPoint.Y() * aPoint.Y() ) <= nRadius )
@@ -546,8 +546,8 @@ IMapPolygonObject::IMapPolygonObject( const Polygon& rPoly,
                                       const String& rName,
                                       BOOL bURLActive,
                                       BOOL bPixelCoords ) :
-            IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive ),
-            bEllipse    ( FALSE )
+            IMapObject	( rURL, rAltText, rDesc, rTarget, rName, bURLActive ),
+            bEllipse	( FALSE )
 {
     ImpConstruct( rPoly, bPixelCoords );
 }
@@ -577,8 +577,8 @@ void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, BOOL bPixel )
 void IMapPolygonObject::WriteIMapObject( SvStream& rOStm ) const
 {
     rOStm << aPoly;
-    rOStm << bEllipse;  // >= Version 2
-    rOStm << aEllipse;  // >= Version 2
+    rOStm << bEllipse;	// >= Version 2
+    rOStm << aEllipse;	// >= Version 2
 }
 
 
@@ -633,7 +633,7 @@ BOOL IMapPolygonObject::IsHit( const Point& rPoint ) const
 
 Polygon IMapPolygonObject::GetPolygon( BOOL bPixelCoords ) const
 {
-    Polygon aNewPoly;
+    Polygon	aNewPoly;
 
     if ( bPixelCoords )
         aNewPoly = Application::GetDefaultDevice()->LogicToPixel( aPoly, MapMode( MAP_100TH_MM ) );
@@ -684,8 +684,8 @@ void IMapPolygonObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
 
     if ( bEllipse )
     {
-        Point   aTL( aEllipse.TopLeft() );
-        Point   aBR( aEllipse.BottomRight() );
+        Point	aTL( aEllipse.TopLeft() );
+        Point	aBR( aEllipse.BottomRight() );
 
         if ( rFracX.GetDenominator() && rFracY.GetDenominator() )
         {
@@ -710,10 +710,10 @@ BOOL IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
 
     if ( IMapObject::IsEqual( rEqObj ) )
     {
-        const Polygon&  rEqPoly = rEqObj.aPoly;
-        const USHORT    nCount = aPoly.GetSize();
-        const USHORT    nEqCount = rEqPoly.GetSize();
-        BOOL            bDifferent = FALSE;
+        const Polygon&	rEqPoly = rEqObj.aPoly;
+        const USHORT	nCount = aPoly.GetSize();
+        const USHORT	nEqCount = rEqPoly.GetSize();
+        BOOL			bDifferent = FALSE;
 
         if ( nCount == nEqCount )
         {
@@ -747,7 +747,7 @@ BOOL IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
 \******************************************************************************/
 
 ImageMap::ImageMap( const String& rName ) :
-            aName   ( rName )
+            aName	( rName )
 {
 }
 
@@ -876,9 +876,9 @@ ImageMap& ImageMap::operator=( const ImageMap& rImageMap )
 
 BOOL ImageMap::operator==( const ImageMap& rImageMap )
 {
-    const USHORT    nCount = (USHORT) maList.Count();
-    const USHORT    nEqCount = rImageMap.GetIMapObjectCount();
-    BOOL            bRet = FALSE;
+    const USHORT	nCount = (USHORT) maList.Count();
+    const USHORT	nEqCount = rImageMap.GetIMapObjectCount();
+    BOOL			bRet = FALSE;
 
     if ( nCount == nEqCount )
     {
@@ -1029,8 +1029,8 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
 
 Rectangle ImageMap::GetBoundRect() const
 {
-    Rectangle   aBoundRect;
-    ULONG       nCount = maList.Count();
+    Rectangle	aBoundRect;
+    ULONG		nCount = maList.Count();
 
     for ( ULONG i = 0; i < nCount; i++ )
         aBoundRect.Union( ( (IMapObject*) maList.GetObject( i ) )->GetBoundRect() );
@@ -1083,7 +1083,7 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 void ImageMap::ImpWriteImageMap( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapObject* pObj;
-    USHORT      nCount = (USHORT) maList.Count();
+    USHORT		nCount = (USHORT) maList.Count();
 
     for ( USHORT i = 0; i < nCount; i++ )
     {
@@ -1150,12 +1150,12 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, USHORT nCount, const String& rB
 
 void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
 {
-    IMapCompat*             pCompat;
+    IMapCompat*				pCompat;
     String                  aImageName( GetName() );
-    String                  aDummy;
-    USHORT                  nOldFormat = rOStm.GetNumberFormatInt();
+    String					aDummy;
+    USHORT					nOldFormat = rOStm.GetNumberFormatInt();
     UINT16                  nCount = (UINT16) GetIMapObjectCount();
-    const rtl_TextEncoding  eEncoding = gsl_getSystemTextEncoding();
+    const rtl_TextEncoding	eEncoding = gsl_getSystemTextEncoding();
 
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -1187,10 +1187,10 @@ void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
 
 void ImageMap::Read( SvStream& rIStm, const String& rBaseURL )
 {
-    ByteString  aString;
-    char        cMagic[6];
-    USHORT      nOldFormat = rIStm.GetNumberFormatInt();
-    UINT16      nCount;
+    ByteString	aString;
+    char		cMagic[6];
+    USHORT		nOldFormat = rIStm.GetNumberFormatInt();
+    UINT16		nCount;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rIStm.Read( cMagic, sizeof( cMagic ) );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,34 +46,34 @@ InputSequenceChecker_th::~InputSequenceChecker_th()
 
 /* Table for Thai Cell Manipulation */
 sal_Char _TAC_celltype_inputcheck[17][17] = {
-/* Cn */ /*  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   A,   B,   C,   D,   E,   F       */
-/* Cn-1 00 */{  'X', 'A', 'A', 'A', 'A', 'A', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* 10 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* 20 */{  'X', 'A', 'A', 'A', 'A', 'S', 'A', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C' },
-     /* 30 */{  'X', 'S', 'A', 'S', 'S', 'S', 'S', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* 40 */{  'X', 'A', 'A', 'A', 'A', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* 50 */{  'X', 'A', 'A', 'A', 'A', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* 60 */{  'X', 'A', 'A', 'A', 'S', 'A', 'S', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* 70 */{  'X', 'A', 'A', 'A', 'A', 'S', 'A', 'R', 'R', 'R', 'C', 'C', 'R', 'R', 'R', 'R', 'R' },
-     /* 80 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* 90 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* A0 */{  'X', 'A', 'A', 'A', 'A', 'A', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* B0 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* C0 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* D0 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
-     /* E0 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'C', 'R', 'R', 'R', 'R', 'R' },
-     /* F0 */{  'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'R', 'R', 'R', 'R', 'R', 'R' },
+/* Cn */ /*	 0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   A,   B,   C,   D,   E,   F	    */
+/* Cn-1 00 */{	'X', 'A', 'A', 'A', 'A', 'A', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* 10 */{	'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* 20 */{	'X', 'A', 'A', 'A', 'A', 'S', 'A', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C' },
+     /*	30 */{	'X', 'S', 'A', 'S', 'S', 'S', 'S', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* 40 */{	'X', 'A', 'A', 'A', 'A', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* 50 */{	'X', 'A', 'A', 'A', 'A', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* 60 */{	'X', 'A', 'A', 'A', 'S', 'A', 'S', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* 70 */{	'X', 'A', 'A', 'A', 'A', 'S', 'A', 'R', 'R', 'R', 'C', 'C', 'R', 'R', 'R', 'R', 'R' },
+     /* 80 */{	'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* 90 */{	'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* A0 */{	'X', 'A', 'A', 'A', 'A', 'A', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* B0 */{	'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* C0 */{	'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* D0 */{	'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' },
+     /* E0 */{	'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'C', 'R', 'R', 'R', 'R', 'R' },
+     /* F0 */{	'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'R', 'R', 'R', 'R', 'R', 'R' },
          { 'X', 'A', 'A', 'A', 'S', 'S', 'A', 'R', 'R', 'R', 'C', 'R', 'C', 'R', 'R', 'R', 'R' }
 };
 
 sal_Bool _TAC_Composible[3][5] = {
-        /*  'A',    'C',        'S',        'R',        'X'   */
-/* Mode 0 */    {sal_True,  sal_True,   sal_True,   sal_True,   sal_True}, // PASSTHROUGH = 0
-/* Mode 1 */    {sal_True,  sal_True,   sal_True,   sal_False,      sal_True}, // BASIC = 1
-/* Mode 2 */    {sal_True,  sal_True,   sal_False,      sal_False,      sal_True}  // STRICT = 2
+        /*  'A',	'C',		'S',		'R',		'X'   */
+/* Mode 0 */    {sal_True,	sal_True,	sal_True,	sal_True,	sal_True}, // PASSTHROUGH = 0
+/* Mode 1 */    {sal_True,	sal_True,	sal_True,	sal_False,  	sal_True}, // BASIC = 1
+/* Mode 2 */    {sal_True,	sal_True,	sal_False,  	sal_False,  	sal_True}  // STRICT = 2
 };
 
-static sal_Bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputCheckMode)
+static sal_Bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputCheckMode) 
 {
     sal_Int16  composible_class;
     switch (_TAC_celltype_inputcheck[getCharType(ch1)][getCharType(ch2)]) {
@@ -87,18 +87,18 @@ static sal_Bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 input
     return (_TAC_Composible[inputCheckMode][composible_class]);
 }
 
-sal_Bool SAL_CALL
+sal_Bool SAL_CALL 
 InputSequenceChecker_th::checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
     sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(com::sun::star::uno::RuntimeException)
 {
     return check(Text[nStartPos], inputChar, inputCheckMode);
 }
 
-sal_Int32 SAL_CALL
-InputSequenceChecker_th::correctInputSequence(OUString& Text,
+sal_Int32 SAL_CALL 
+InputSequenceChecker_th::correctInputSequence(OUString& Text, 
                                             sal_Int32       nStartPos,
-                                            sal_Unicode     inputChar,
-                                            sal_Int16       inputCheckMode)
+                                            sal_Unicode     inputChar, 
+                                            sal_Int16       inputCheckMode) 
   throw(com::sun::star::uno::RuntimeException)
 {
 /* 9 rules for input sequence correction, see issue i42661 for detail,
@@ -127,10 +127,10 @@ http://www.openoffice.org/issues/show_bug.cgi?id=42661
     else if (nStartPos > 0 && getCharType(Text[nStartPos-1]) == CT_CONS) {
         sal_uInt16 t1=getCharType(Text[nStartPos]), t2=getCharType(inputChar);
         if ( (CT_ABV(t1) && CT_ABV(t2)) || // 1.
-                (t1==CT_TONE && t2==CT_TONE) )// 2.
+                (t1==CT_TONE && t2==CT_TONE) )// 2. 
             Text = Text.replaceAt(nStartPos, 1, OUString(inputChar));
-        else if ( (t1==CT_TONE && CT_ABV(t2)) ||  // 5.
-                (t1==CT_FV1 && t2==CT_TONE) ||  // 6.
+        else if ( (t1==CT_TONE && CT_ABV(t2)) ||  // 5. 
+                (t1==CT_FV1 && t2==CT_TONE) ||  // 6. 
                 (Text[nStartPos]==0x0E4C && CT_ABV1(t2)) ) // 8.
             Text = Text.replaceAt(nStartPos++, 0, OUString(inputChar));
         else
@@ -139,8 +139,8 @@ http://www.openoffice.org/issues/show_bug.cgi?id=42661
         sal_uInt16 t1=getCharType(Text[nStartPos-1]), t2=getCharType(Text[nStartPos]), t3=getCharType(inputChar);
         if (CT_ABV(t1) && t2==CT_TONE && t3==CT_TONE) // 3.
             Text = Text.replaceAt(nStartPos, 1, OUString(inputChar));
-        else if ( (CT_ABV(t1) && t2==CT_TONE && CT_ABV(t3)) || // 4.
-                (t1==CT_TONE && t2==CT_FV1 && t3==CT_TONE) || // 7.
+        else if ( (CT_ABV(t1) && t2==CT_TONE && CT_ABV(t3)) || // 4. 
+                (t1==CT_TONE && t2==CT_FV1 && t3==CT_TONE) || // 7. 
                 (CT_ABV1(t1) && Text[nStartPos]==0x0E4C && CT_ABV1(t3)) ) // 9.
             Text = Text.replaceAt(nStartPos-1, 1, OUString(inputChar));
         else

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,8 +116,8 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&              /*rDevice*/,
-        const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
+        const uno::Reference< rendering::XGraphicDevice >& 				/*rDevice*/,
+        const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&	points )
     {
         if( !mpDevice )
             return uno::Reference< rendering::XLinePolyPolygon2D >(); // we're disposed
@@ -128,8 +128,8 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&                      /*rDevice*/,
-        const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
+        const uno::Reference< rendering::XGraphicDevice >& 						/*rDevice*/,
+        const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&	points )
     {
         if( !mpDevice )
             return uno::Reference< rendering::XBezierPolyPolygon2D >(); // we're disposed
@@ -140,8 +140,8 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
+        const geometry::IntegerSize2D& 						size )
     {
         if( !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
@@ -156,15 +156,15 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
-        const geometry::IntegerSize2D&                      /*size*/ )
+        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
+        const geometry::IntegerSize2D& 						/*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
+        const geometry::IntegerSize2D& 						size )
     {
         if( !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
@@ -179,8 +179,8 @@ namespace dxcanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
-        const geometry::IntegerSize2D&                      /*size*/ )
+        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
+        const geometry::IntegerSize2D& 						/*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
@@ -216,18 +216,18 @@ namespace dxcanvas
         return uno::Any();
     }
 
-    namespace
-    {
+    namespace 
+    { 
         struct DeviceColorSpace: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
-                                                            DeviceColorSpace>
+                                                            DeviceColorSpace> 
         {
             uno::Reference<rendering::XColorSpace> operator()()
             {
                 return vcl::unotools::createStandardColorSpace();
             }
-        };
+        }; 
     }
-
+    
     uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
     {
         // always the same

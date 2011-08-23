@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ void vos::threadWorkerFunction_impl(void * pthis)
     // call Handler-Function of OThread-derived class
     pThis->run();
 
-    // if not already terminating, by a kill do normal shutdown
+    // if not already terminating, by a kill do normal shutdown 
     if (! pThis->m_bTerminating)
     {
         pThis->m_bTerminating = sal_True;
 
-        pThis->onTerminated();      // could e.g. delete this
+        pThis->onTerminated();		// could e.g. delete this
     }
 }
 
@@ -53,62 +53,62 @@ void vos::threadWorkerFunction_impl(void * pthis)
 // Thread class
 //
 
-VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OThread, vos),
-                        VOS_NAMESPACE(OThread, vos),
+VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OThread, vos), 
+                        VOS_NAMESPACE(OThread, vos), 
                         VOS_NAMESPACE(OObject, vos), 0);
 
-OThread::OThread()
+OThread::OThread() 
 {
     m_hThread      = 0;
     m_bTerminating = sal_False;
     m_aCondition   = osl_createCondition();
 }
 
-OThread::~OThread()
+OThread::~OThread() 
 {
     if (m_hThread != 0)
     {
         osl_destroyThread(m_hThread);
     }
-
+    
     osl_destroyCondition( m_aCondition );
 }
 
-sal_Bool OThread::create()
+sal_Bool OThread::create() 
 {
-    VOS_ASSERT(m_hThread == 0); // only one running thread per instance
+    VOS_ASSERT(m_hThread == 0);	// only one running thread per instance
 
     m_hThread = osl_createSuspendedThread(
         threadWorkerFunction_impl, (void*)this);
     if (m_hThread)
-        osl_resumeThread(m_hThread);
+        osl_resumeThread(m_hThread);							             
 
     return m_hThread != 0;
 }
 
-sal_Bool OThread::createSuspended()
+sal_Bool OThread::createSuspended() 
 {
-    VOS_ASSERT(m_hThread == 0); // only one running thread per instance
+    VOS_ASSERT(m_hThread == 0);	// only one running thread per instance
 
     m_hThread= osl_createSuspendedThread(threadWorkerFunction_impl, (void*)this);
     return m_hThread != 0;
 }
 
-void OThread::suspend()
+void OThread::suspend() 
 {
-    VOS_ASSERT(m_hThread != 0); // use only on running thread
+    VOS_ASSERT(m_hThread != 0);	// use only on running thread
 
     osl_suspendThread(m_hThread);
 }
 
-void OThread::resume()
+void OThread::resume() 
 {
-    VOS_ASSERT(m_hThread != 0); // use only on running thread
+    VOS_ASSERT(m_hThread != 0);	// use only on running thread
 
     osl_resumeThread(m_hThread);
 }
 
-sal_Bool OThread::isRunning()
+sal_Bool OThread::isRunning() 
 {
     return m_hThread != 0 && osl_isThreadRunning(m_hThread);
 }
@@ -123,7 +123,7 @@ OThread::TThreadIdentifier OThread::getCurrentIdentifier()
     return (TThreadIdentifier)osl_getThreadIdentifier(0);
 }
 
-void OThread::join()
+void OThread::join() 
 {
     if (m_hThread) {
         VOS_ASSERT(getCurrentIdentifier() != getIdentifier());
@@ -131,25 +131,25 @@ void OThread::join()
     }
 }
 
-OThread::TThreadSleep OThread::sleep(const TimeValue& Delay)
+OThread::TThreadSleep OThread::sleep(const TimeValue& Delay) 
 {
     TThreadSleep eRet;
-
+    
     switch( osl_waitCondition( m_aCondition, &Delay ) )
     {
     case osl_cond_result_ok:
         eRet = TSleep_Normal;
         break;
-
+        
     case osl_cond_result_timeout:
         eRet = TSleep_Cancel;
-        break;
-
+        break;   
+     
     default:
         eRet = TSleep_Error;
         break;
     }
-
+    
     return eRet;
 }
 
@@ -157,13 +157,13 @@ void OThread::wait(const TimeValue& Delay) {
     osl_waitThread(&Delay);
 }
 
-sal_Bool OThread::awake()
+sal_Bool OThread::awake() 
 {
     osl_setCondition( m_aCondition );
     return osl_resetCondition( m_aCondition );
 }
 
-void OThread::terminate()
+void OThread::terminate() 
 {
     osl_terminateThread(m_hThread);
 }
@@ -172,9 +172,9 @@ sal_Bool OThread::schedule() {
     return osl_scheduleThread(m_hThread);
 }
 
-void OThread::kill()
+void OThread::kill() 
 {
-    if (osl_isThreadRunning(m_hThread))
+    if (osl_isThreadRunning(m_hThread)) 
     {
         // flag we are shutting down
         m_bTerminating = sal_True;
@@ -191,16 +191,16 @@ void OThread::setPriority(OThread::TThreadPriority Priority)
 
 OThread::TThreadPriority OThread::getPriority()
 {
-    return  (TThreadPriority)osl_getThreadPriority(m_hThread);
+    return 	(TThreadPriority)osl_getThreadPriority(m_hThread);
 }
 
 
-void OThread::yield()
-{
+void OThread::yield() 
+{ 
     osl_yieldThread();
 }
 
-void OThread::onTerminated()
+void OThread::onTerminated() 
 {
 }
 
@@ -209,8 +209,8 @@ void OThread::onTerminated()
 // ThreadData class
 //
 
-VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OThreadData, vos),
-                        VOS_NAMESPACE(OThreadData, vos),
+VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OThreadData, vos), 
+                        VOS_NAMESPACE(OThreadData, vos), 
                         VOS_NAMESPACE(OObject, vos), 0);
 
 OThreadData::OThreadData( oslThreadKeyCallbackFunction pCallback )

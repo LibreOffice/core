@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ namespace basegfx
 
     namespace tools
     {
-        /** define for deciding one of X,Y,Z directions
+        /**	define for deciding one of X,Y,Z directions
         */
         enum B3DOrientation
         {
-            B3DORIENTATION_X,       // X-Axis
-            B3DORIENTATION_Y,       // Y-Axis
-            B3DORIENTATION_Z        // Z-Axis
+            B3DORIENTATION_X,		// X-Axis
+            B3DORIENTATION_Y,		// Y-Axis
+            B3DORIENTATION_Z		// Z-Axis
         };
 
         // Clip given 3D polygon against a plane orthogonal to X,Y or Z axis. The plane is defined using the

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ namespace basegfx
         {
             const double fOne(1.0);
             const double fTempM(
-                rMat.get(3, 0) * mnX +
-                rMat.get(3, 1) * mnY +
-                rMat.get(3, 2) * mnZ +
+                rMat.get(3, 0) * mnX + 
+                rMat.get(3, 1) * mnY + 
+                rMat.get(3, 2) * mnZ + 
                 rMat.get(3, 3));
 
             if(!fTools::equalZero(fTempM) && !fTools::equal(fOne, fTempM))

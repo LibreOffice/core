@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -203,25 +203,25 @@ void FontStyleMenu::Fill( const XubString& rName, const FontList* pList )
     sal_Handle hFontInfo = pList->GetFirstFontInfo( rName );
     if ( hFontInfo )
     {
-        XubString   aStyleText;
-        USHORT      nPos = 0;
-        USHORT      nId = FONTSTYLEMENU_FIRSTID;
-        FontWeight  eLastWeight = WEIGHT_DONTKNOW;
-        FontItalic  eLastItalic = ITALIC_NONE;
-        FontWidth   eLastWidth = WIDTH_DONTKNOW;
-        BOOL        bNormal = FALSE;
-        BOOL        bItalic = FALSE;
-        BOOL        bBold = FALSE;
-        BOOL        bBoldItalic = FALSE;
-        BOOL        bInsert = FALSE;
-        FontInfo    aInfo;
+        XubString	aStyleText;
+        USHORT		nPos = 0;
+        USHORT		nId = FONTSTYLEMENU_FIRSTID;
+        FontWeight	eLastWeight = WEIGHT_DONTKNOW;
+        FontItalic	eLastItalic = ITALIC_NONE;
+        FontWidth	eLastWidth = WIDTH_DONTKNOW;
+        BOOL		bNormal = FALSE;
+        BOOL		bItalic = FALSE;
+        BOOL		bBold = FALSE;
+        BOOL		bBoldItalic = FALSE;
+        BOOL		bInsert = FALSE;
+        FontInfo	aInfo;
         while ( hFontInfo )
         {
             aInfo = pList->GetFontInfo( hFontInfo );
 
-            FontWeight  eWeight = aInfo.GetWeight();
-            FontItalic  eItalic = aInfo.GetItalic();
-            FontWidth   eWidth = aInfo.GetWidthType();
+            FontWeight	eWeight = aInfo.GetWeight();
+            FontItalic	eItalic = aInfo.GetItalic();
+            FontWidth	eWidth = aInfo.GetWidthType();
             // Only if the attributes are different, we insert the
             // Font to avoid double Entries in different languages
             if ( (eWeight != eLastWeight) || (eItalic != eLastItalic) ||
@@ -330,7 +330,7 @@ void FontStyleMenu::Fill( const XubString& rName, const FontList* pList )
     else
     {
         // Wenn Font nicht, dann Standard-Styles einfuegen
-        InsertItem( FONTSTYLEMENU_FIRSTID,   pList->GetNormalStr(),
+        InsertItem( FONTSTYLEMENU_FIRSTID,	 pList->GetNormalStr(),
                     MIB_RADIOCHECK | MIB_AUTOCHECK, 0 );
         InsertItem( FONTSTYLEMENU_FIRSTID+1, pList->GetItalicStr(),
                     MIB_RADIOCHECK | MIB_AUTOCHECK, 0 );
@@ -447,8 +447,8 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
             ULONG nCount = aFontSizeNames.Count();
             for( ULONG i = 0; i < nCount; i++ )
             {
-                String  aSizeName = aFontSizeNames.GetIndexName( i );
-                long    nSize = aFontSizeNames.GetIndexSize( i );
+                String	aSizeName = aFontSizeNames.GetIndexName( i );
+                long	nSize = aFontSizeNames.GetIndexSize( i );
                 mpHeightAry[nPos] = nSize;
                 nPos++; // Id is nPos+1
                 InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
@@ -493,9 +493,9 @@ void FontSizeMenu::SetCurHeight( long nHeight )
     mnCurHeight = nHeight;
 
     // check menue item
-    XubString   aHeight = Application::GetSettings().GetUILocaleI18nHelper().GetNum( nHeight, 1, TRUE, FALSE  );
-    USHORT      nChecked = 0;
-    USHORT      nItemCount = GetItemCount();
+    XubString	aHeight = Application::GetSettings().GetUILocaleI18nHelper().GetNum( nHeight, 1, TRUE, FALSE  );
+    USHORT		nChecked = 0;
+    USHORT		nItemCount = GetItemCount();
     for( USHORT i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = GetItemId( i );

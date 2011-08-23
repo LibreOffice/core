@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 /** This method eliminates elements below main diagonal in the given
-    matrix by gaussian elimination.
+    matrix by gaussian elimination. 
 
     @param matrix
     The matrix to operate on. Last column is the result vector (right
@@ -46,14 +46,14 @@
 
     @return true, if elimination succeeded.
  */
-template <class Matrix, typename BaseType>
-bool eliminate(     Matrix&         matrix,
-                    int             rows,
-                    int             cols,
-                    const BaseType& minPivot    )
+template <class Matrix, typename BaseType> 
+bool eliminate( 	Matrix&			matrix,
+                    int				rows,
+                    int				cols,
+                    const BaseType& minPivot	)
 {
-    BaseType    temp;
-    int         max, i, j, k;   /* *must* be signed, when looping like: j>=0 ! */
+    BaseType	temp;
+    int			max, i, j, k;	/* *must* be signed, when looping like: j>=0 ! */
 
     /* eliminate below main diagonal */
     for(i=0; i<cols-1; ++i)
@@ -61,12 +61,12 @@ bool eliminate(     Matrix&         matrix,
         /* find best pivot */
         max = i;
         for(j=i+1; j<rows; ++j)
-            if( fabs(matrix[ j*cols + i ]) > fabs(matrix[ max*cols + i ]) )
+            if( fabs(matrix[ j*cols + i ]) > fabs(matrix[ max*cols + i ]) ) 
                 max = j;
 
         /* check pivot value */
         if( fabs(matrix[ max*cols + i ]) < minPivot )
-            return false;   /* pivot too small! */
+            return false;	/* pivot too small! */
 
         /* interchange rows 'max' and 'i' */
         for(k=0; k<cols; ++k)
@@ -75,11 +75,11 @@ bool eliminate(     Matrix&         matrix,
             matrix[ i*cols + k ] = matrix[ max*cols + k ];
             matrix[ max*cols + k ] = temp;
         }
-
+        
         /* eliminate column */
         for(j=i+1; j<rows; ++j)
             for(k=cols-1; k>=i; --k)
-                matrix[ j*cols + k ] -= matrix[ i*cols + k ] *
+                matrix[ j*cols + k ] -= matrix[ i*cols + k ] * 
                     matrix[ j*cols + i ] / matrix[ i*cols + i ];
     }
 
@@ -108,14 +108,14 @@ bool eliminate(     Matrix&         matrix,
     @return true, if back substitution was possible (i.e. no division
     by zero occured).
  */
-template <class Matrix, class Vector, typename BaseType>
-bool substitute(    const Matrix&   matrix,
-                    int             rows,
-                    int             cols,
-                    Vector&         result  )
+template <class Matrix, class Vector, typename BaseType> 
+bool substitute(	const Matrix&	matrix,
+                    int				rows,
+                    int				cols,
+                    Vector&			result	)
 {
-    BaseType    temp;
-    int         j,k;    /* *must* be signed, when looping like: j>=0 ! */
+    BaseType	temp;
+    int			j,k;	/* *must* be signed, when looping like: j>=0 ! */
 
     /* substitute backwards */
     for(j=rows-1; j>=0; --j)
@@ -125,7 +125,7 @@ bool substitute(    const Matrix&   matrix,
             temp += matrix[ j*cols + k ] * result[k];
 
         if( matrix[ j*cols + j ] == 0.0 )
-            return false;   /* imminent division by zero! */
+            return false;	/* imminent division by zero! */
 
         result[j] = (matrix[ j*cols + cols-1 ] - temp) / matrix[ j*cols + j ];
     }
@@ -158,12 +158,12 @@ bool substitute(    const Matrix&   matrix,
 
     @return true, if elimination succeeded.
  */
-template <class Matrix, class Vector, typename BaseType>
-bool solve( Matrix&     matrix,
-            int         rows,
-            int         cols,
-            Vector&     result,
-            BaseType    minPivot    )
+template <class Matrix, class Vector, typename BaseType> 
+bool solve(	Matrix&		matrix,
+            int			rows,
+            int			cols,
+            Vector&		result,
+            BaseType	minPivot	)
 {
     if( eliminate<Matrix,BaseType>(matrix, rows, cols, minPivot) )
         return substitute<Matrix,Vector,BaseType>(matrix, rows, cols, result);

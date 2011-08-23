@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -210,9 +210,9 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn )
 // - WizardDialog-Types -
 // ----------------------
 
-#define WIZARDDIALOG_BUTTON_STDOFFSET_X         6
+#define WIZARDDIALOG_BUTTON_STDOFFSET_X 	    6
 #define WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X    3
-#define WIZARDDIALOG_BUTTON_STDOFFSETLEFT_X     -10
+#define WIZARDDIALOG_BUTTON_STDOFFSETLEFT_X 	-10
 
 // ----------------
 // - WizardDialog -
@@ -221,18 +221,18 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn )
 class SVT_DLLPUBLIC WizardDialog : public ModalDialog
 {
 private:
-    Size                maPageSize;
-    ImplWizPageData*    mpFirstPage;
-    ImplWizButtonData*  mpFirstBtn;
-    FixedLine*          mpFixedLine;
-    TabPage*            mpCurTabPage;
-    PushButton*         mpPrevBtn;
-    PushButton*         mpNextBtn;
-    Window*             mpViewWindow;
-    USHORT              mnCurLevel;
-    WindowAlign         meViewAlign;
-    Link                maActivateHdl;
-    Link                maDeactivateHdl;
+    Size				maPageSize;
+    ImplWizPageData*	mpFirstPage;
+    ImplWizButtonData*	mpFirstBtn;
+    FixedLine*			mpFixedLine;
+    TabPage*			mpCurTabPage;
+    PushButton* 		mpPrevBtn;
+    PushButton* 		mpNextBtn;
+    Window* 			mpViewWindow;
+    USHORT				mnCurLevel;
+    WindowAlign 		meViewAlign;
+    Link				maActivateHdl;
+    Link				maDeactivateHdl;
     sal_Int16           mnLeftAlignCount;
     bool                mbEmptyViewMargin;
 
@@ -252,12 +252,12 @@ protected:
 
 #ifdef _SVT_WIZDLG_CXX
 private:
-    SVT_DLLPRIVATE void             ImplInitData();
-    SVT_DLLPRIVATE void             ImplCalcSize( Size& rSize );
-    SVT_DLLPRIVATE void             ImplPosCtrls();
-    SVT_DLLPRIVATE void             ImplPosTabPage();
-    SVT_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
-    SVT_DLLPRIVATE TabPage*         ImplGetPage( USHORT nLevel ) const;
+    SVT_DLLPRIVATE void				ImplInitData();
+    SVT_DLLPRIVATE void				ImplCalcSize( Size& rSize );
+    SVT_DLLPRIVATE void				ImplPosCtrls();
+    SVT_DLLPRIVATE void				ImplPosTabPage();
+    SVT_DLLPRIVATE void				ImplShowTabPage( TabPage* pPage );
+    SVT_DLLPRIVATE TabPage*			ImplGetPage( USHORT nLevel ) const;
 #endif
 
 public:
@@ -265,47 +265,47 @@ public:
                         WizardDialog( Window* pParent, const ResId& rResId );
                         ~WizardDialog();
 
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual void		Resize();
+    virtual void		StateChanged( StateChangedType nStateChange );
+    virtual long		Notify( NotifyEvent& rNEvt );
 
-    virtual void        ActivatePage();
-    virtual long        DeactivatePage();
+    virtual void		ActivatePage();
+    virtual long		DeactivatePage();
 
-    BOOL                ShowPrevPage();
-    BOOL                ShowNextPage();
-    BOOL                ShowPage( USHORT nLevel );
-    BOOL                Finnish( long nResult = 0 );
-    USHORT              GetCurLevel() const { return mnCurLevel; }
+    BOOL				ShowPrevPage();
+    BOOL				ShowNextPage();
+    BOOL				ShowPage( USHORT nLevel );
+    BOOL				Finnish( long nResult = 0 );
+    USHORT				GetCurLevel() const { return mnCurLevel; }
 
-    void                AddPage( TabPage* pPage );
-    void                RemovePage( TabPage* pPage );
-    void                SetPage( USHORT nLevel, TabPage* pPage );
-    TabPage*            GetPage( USHORT nLevel ) const;
+    void				AddPage( TabPage* pPage );
+    void				RemovePage( TabPage* pPage );
+    void				SetPage( USHORT nLevel, TabPage* pPage );
+    TabPage*			GetPage( USHORT nLevel ) const;
 
-    void                AddButton( Button* pButton, long nOffset = 0 );
-    void                RemoveButton( Button* pButton );
+    void				AddButton( Button* pButton, long nOffset = 0 );
+    void				RemoveButton( Button* pButton );
 
-    void                SetPrevButton( PushButton* pButton ) { mpPrevBtn = pButton; }
-    PushButton*         GetPrevButton() const { return mpPrevBtn; }
-    void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
-    PushButton*         GetNextButton() const { return mpNextBtn; }
+    void				SetPrevButton( PushButton* pButton ) { mpPrevBtn = pButton; }
+    PushButton* 		GetPrevButton() const { return mpPrevBtn; }
+    void				SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
+    PushButton* 		GetNextButton() const { return mpNextBtn; }
 
-    void                ShowButtonFixedLine( BOOL bVisible );
-    BOOL                IsButtonFixedLineVisible();
+    void				ShowButtonFixedLine( BOOL bVisible );
+    BOOL				IsButtonFixedLineVisible();
 
-    void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
-    Window*             GetViewWindow() const { return mpViewWindow; }
-    void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
-    WindowAlign         GetViewAlign() const { return meViewAlign; }
+    void				SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
+    Window* 			GetViewWindow() const { return mpViewWindow; }
+    void				SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
+    WindowAlign 		GetViewAlign() const { return meViewAlign; }
 
-    void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
-    const Size&         GetPageSizePixel() const { return maPageSize; }
+    void				SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
+    const Size& 		GetPageSizePixel() const { return maPageSize; }
 
-    void                SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }
-    const Link&         GetActivatePageHdl() const { return maActivateHdl; }
-    void                SetDeactivatePageHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
-    const Link&         GetDeactivatePageHdl() const { return maDeactivateHdl; }
+    void				SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }
+    const Link& 		GetActivatePageHdl() const { return maActivateHdl; }
+    void				SetDeactivatePageHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
+    const Link& 		GetDeactivatePageHdl() const { return maDeactivateHdl; }
 };
 
-#endif  // _SVT_WIZDLG_HXX
+#endif	// _SVT_WIZDLG_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@
 #define TEST_DYNAMICMENUOPTIONS
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/dynamicmenuoptions.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -50,7 +50,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -80,23 +80,23 @@
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl                       ;
+using namespace ::rtl						;
 using namespace ::osl                       ;
-using namespace ::comphelper                ;
-using namespace ::com::sun::star::uno       ;
+using namespace ::comphelper				;
+using namespace ::com::sun::star::uno		;
 using namespace ::com::sun::star::lang      ;
 using namespace ::com::sun::star::beans     ;
 using namespace ::com::sun::star::registry  ;
 
 //_________________________________________________________________________________________________________________
-//  defines
+//	defines
 //_________________________________________________________________________________________________________________
 
 #define ASCII( STEXT )                      OUString( RTL_CONSTASCII_USTRINGPARAM( STEXT ))
@@ -105,7 +105,7 @@ using namespace ::com::sun::star::registry  ;
 #define SERVICENAME_NESTEDREGISTRY          OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.NestedRegistry" ))
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 class TestApplication : public Application
@@ -133,16 +133,16 @@ class TestApplication : public Application
     //*************************************************************************************************************
     private:
 
-};  //  class TestApplication
+};	//	class TestApplication
 
 //_________________________________________________________________________________________________________________
-//  global variables
+//	global variables
 //_________________________________________________________________________________________________________________
 
-TestApplication aTestApplication ;
+TestApplication	aTestApplication ;
 
 //_________________________________________________________________________________________________________________
-//  main
+//	main
 //_________________________________________________________________________________________________________________
 
 void TestApplication::Main()
@@ -164,7 +164,7 @@ void TestApplication::Main()
         impl_testDynamicMenuOptions();
     #endif
 
-//  Execute();
+//	Execute();
     OSL_ENSURE( sal_False, "Test was successful!\n" );
 }
 

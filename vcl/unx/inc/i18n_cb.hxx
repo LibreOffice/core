@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@ int  CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data);
 void PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data);
 int  PreeditStartCallback( XIC ic, XPointer client_data, XPointer call_data);
 void PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data);
-void PreeditDrawCallback ( XIC ic, XPointer client_data,
+void PreeditDrawCallback ( XIC ic, XPointer client_data, 
                            XIMPreeditDrawCallbackStruct *call_data );
-void PreeditCaretCallback( XIC ic, XPointer client_data,
+void PreeditCaretCallback( XIC ic, XPointer client_data, 
                            XIMPreeditCaretCallbackStruct *call_data );
 void GetPreeditSpotLocation(XIC ic, XPointer client_data);
 
-// private hook to prevent from sending further edit events
+// private hook to prevent from sending further edit events 
 void PreeditCancelCallback( XPointer client_data );
 
 void StatusStartCallback (XIC ic, XPointer client_data, XPointer call_data);
 void StatusDoneCallback  (XIC ic, XPointer client_data, XPointer call_data);
-void StatusDrawCallback  (XIC ic, XPointer client_data,
+void StatusDrawCallback  (XIC ic, XPointer client_data, 
             XIMStatusDrawCallbackStruct *call_data);
 void SwitchIMCallback (XIC ix, XPointer client_data, XPointer call_data );
 
@@ -84,10 +84,10 @@ typedef enum {
 } preedit_status_t;
 
 typedef struct {
-    SalFrame*               pFrame;
-    Bool                    bIsMultilingual;
-    preedit_status_t        eState;
-    preedit_text_t          aText;
+    SalFrame*			    pFrame;
+    Bool		   	    	bIsMultilingual;
+    preedit_status_t 	    eState;
+    preedit_text_t 		    aText;
     SalExtTextInputEvent    aInputEv;
     std::vector< USHORT >   aInputFlags;
 } preedit_data_t;

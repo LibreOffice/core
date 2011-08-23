@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT
 {
     if( ! ImplGetResMgr() )
         return FALSE;
-
+    
     USHORT nIconSizeOffset;
 
     if( iconSize >= 48 )
@@ -70,7 +70,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT
     aRect.mnDestX = 0; aRect.mnDestY = 0;
     aRect.mnDestWidth = iconSize; aRect.mnDestHeight = iconSize;
 
-    X11SalBitmap *pBitmap = static_cast < X11SalBitmap * >
+    X11SalBitmap *pBitmap = static_cast < X11SalBitmap * > 
         (aIcon.ImplGetBitmapImpBitmap()->ImplGetSalBitmap());
 
     icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
@@ -89,7 +89,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT
 
     if( TRANSPARENT_BITMAP == aIcon.GetTransparentType() )
     {
-        icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
+        icon_mask = XCreatePixmap( pDisplay->GetDisplay(), 
                                    pDisplay->GetRootWindow( pDisplay->GetDefaultScreenNumber() ),
                                    iconSize, iconSize, 1);
 
@@ -103,13 +103,13 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT
         Bitmap aMask = aIcon.GetMask();
         aMask.Invert();
 
-        X11SalBitmap *pMask = static_cast < X11SalBitmap * >
+        X11SalBitmap *pMask = static_cast < X11SalBitmap * > 
             (aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
 
         pMask->ImplDraw(icon_mask, nScreen, 1, aRect, aMonoGC);
         XFreeGC( pDisplay->GetDisplay(), aMonoGC );
     }
-
+    
     return TRUE;
 }
 

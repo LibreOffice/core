@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 inline BOOL SelectionEngine::ShouldDeselect( BOOL bModifierKey1 ) const
 {
-//  return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
+//	return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
     return eSelMode != MULTIPLE_SELECTION || !bModifierKey1;
 }
 
@@ -202,7 +202,7 @@ BOOL SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     nFlags &= (~SELENG_CMDEVT);
     if ( !pFunctionSet || !pWin )
         return FALSE;
-    const bool bRightClickCursorPositioning =
+    const bool bRightClickCursorPositioning = 
             rMEvt.IsRight() && rMEvt.GetClicks() == 1 && !IsInSelection();
     if ( (rMEvt.GetClicks() > 1 || rMEvt.IsRight()) && !bRightClickCursorPositioning )
         return FALSE;
@@ -218,8 +218,15 @@ BOOL SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     Point aPos = rMEvt.GetPosPixel();
     aLastMove = rMEvt;
 
-    pWin->CaptureMouse();
-    nFlags |= SELENG_IN_SEL;
+    if( !rMEvt.IsRight() )
+    {
+        pWin->CaptureMouse();
+        nFlags |= SELENG_IN_SEL;
+    }
+    else
+    {
+        nModifier = 0;
+    }
 
     switch ( nModifier )
     {
@@ -327,7 +334,7 @@ BOOL SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 |*
 *************************************************************************/
 
-BOOL SelectionEngine::SelMouseButtonUp( const MouseEvent& /* rMEvt */ )
+BOOL SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 {
     aWTimer.Stop();
     //DbgOut("Up");
@@ -336,7 +343,11 @@ BOOL SelectionEngine::SelMouseButtonUp( const MouseEvent& /* rMEvt */ )
         nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
         return FALSE;
     }
-    pWin->ReleaseMouse();
+
+    if( !rMEvt.IsRight() )
+    {
+       pWin->ReleaseMouse();
+    }
 
     if( (nFlags & SELENG_WAIT_UPEVT) && !(nFlags & SELENG_CMDEVT) &&
         eSelMode != SINGLE_SELECTION)

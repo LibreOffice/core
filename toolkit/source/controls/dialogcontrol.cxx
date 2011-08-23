@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -183,7 +183,7 @@ public:
 struct CloneControlModel : public ::std::unary_function< UnoControlDialogModel::UnoControlModelHolder, void >
 {
 private:
-    UnoControlDialogModel::UnoControlModelHolderList&   m_rTargetList;
+    UnoControlDialogModel::UnoControlModelHolderList&	m_rTargetList;
 
 public:
     CloneControlModel( UnoControlDialogModel::UnoControlModelHolderList& _rTargetList )
@@ -218,19 +218,19 @@ public:
 
 // ----------------------------------------------------------------------------
 static void lcl_throwIllegalArgumentException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{	// throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw IllegalArgumentException();
 }
 
 // ----------------------------------------------------------------------------
 static void lcl_throwNoSuchElementException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{	// throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw NoSuchElementException();
 }
 
 // ----------------------------------------------------------------------------
 static void lcl_throwElementExistException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{	// throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw ElementExistException();
 }
 
@@ -248,20 +248,20 @@ static const ::rtl::OUString& getStepPropertyName( )
     return s_sStepProperty;
 }
 
-//  ----------------------------------------------------
-//  class UnoControlDialogModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlDialogModel
+//	----------------------------------------------------
 UnoControlDialogModel::UnoControlDialogModel()
     :maContainerListeners( *this )
     ,maChangeListeners ( GetMutex() )
     ,mbGroupsUpToDate( sal_False )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
-//  ImplRegisterProperty( BASEPROPERTY_BORDER );
+//	ImplRegisterProperty( BASEPROPERTY_BORDER );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
-//  ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+//	ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_TITLE );
@@ -365,9 +365,9 @@ void SAL_CALL UnoControlDialogModel::dispose(  ) throw(RuntimeException)
     ::std::vector< Reference< XControlModel > > aChildModels( maModels.size() );
 
     ::std::transform(
-        maModels.begin(), maModels.end(),               // source range
-        aChildModels.begin(),                           // target location
-        ::std::select1st< UnoControlModelHolder >( )    // operation to apply -> select the XControlModel part
+        maModels.begin(), maModels.end(),				// source range
+        aChildModels.begin(),							// target location
+        ::std::select1st< UnoControlModelHolder >( )	// operation to apply -> select the XControlModel part
     );
 
     // now dispose
@@ -600,9 +600,9 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getElementNames() throw(Runti
     Sequence< ::rtl::OUString > aNames( maModels.size() );
 
     ::std::transform(
-        maModels.begin(), maModels.end(),               // source range
-        aNames.getArray(),                              // target range
-        ::std::select2nd< UnoControlModelHolder >()     // operator to apply: select the second element (the name)
+        maModels.begin(), maModels.end(),				// source range
+        aNames.getArray(),								// target range
+        ::std::select2nd< UnoControlModelHolder >()		// operator to apply: select the second element (the name)
     );
 
     return aNames;
@@ -769,7 +769,7 @@ Sequence< Reference< XControlModel > > SAL_CALL UnoControlDialogModel::getContro
 
         // has it?
         if ( xPSI.is() && xPSI->hasPropertyByName( getTabIndexPropertyName() ) )
-        {   // yes
+        {	// yes
             sal_Int32 nTabIndex = -1;
             xControlProps->getPropertyValue( getTabIndexPropertyName() ) >>= nTabIndex;
 
@@ -891,8 +891,8 @@ void UnoControlDialogModel::implNotifyTabModelChange( const ::rtl::OUString& _rA
     // the changes event
     ChangesEvent aEvent;
     aEvent.Source = *this;
-    aEvent.Base <<= aEvent.Source;  // the "base of the changes root" is also ourself
-    aEvent.Changes.realloc( 1 );    // exactly one change
+    aEvent.Base <<= aEvent.Source;	// the "base of the changes root" is also ourself
+    aEvent.Changes.realloc( 1 );	// exactly one change
     aEvent.Changes[ 0 ].Accessor <<= _rAccessor;
 
 
@@ -928,11 +928,11 @@ void UnoControlDialogModel::implUpdateGroupStructure()
     // in extreme we have as much groups as controls
     maGroups.reserve( aControlModels.getLength() );
 
-    GroupingMachineState eState = eLookingForGroup;     // the current state of our machine
-    Reference< XServiceInfo > xModelSI;                 // for checking for a radion button
-    AllGroups::iterator aCurrentGroup = maGroups.end(); // the group which we're currently building
-    sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
-    sal_Bool    bIsRadioButton;                         // is it a radio button?
+    GroupingMachineState eState = eLookingForGroup;		// the current state of our machine
+    Reference< XServiceInfo > xModelSI;					// for checking for a radion button
+    AllGroups::iterator aCurrentGroup = maGroups.end();	// the group which we're currently building
+    sal_Int32	nCurrentGroupStep = -1;					// the step which all controls of the current group belong to
+    sal_Bool	bIsRadioButton;							// is it a radio button?
 
 #if OSL_DEBUG_LEVEL > 1
     ::std::vector< ::rtl::OUString > aCurrentGroupLabels;
@@ -978,7 +978,7 @@ void UnoControlDialogModel::implUpdateGroupStructure()
             case eExpandingGroup:
             {
                 if ( !bIsRadioButton )
-                {   // no radio button -> the group is done
+                {	// no radio button -> the group is done
                     aCurrentGroup = maGroups.end();
                     eState = eLookingForGroup;
 #if OSL_DEBUG_LEVEL > 1
@@ -989,8 +989,8 @@ void UnoControlDialogModel::implUpdateGroupStructure()
 
                 // it is a radio button - is it on the proper page?
                 const sal_Int32 nThisModelStep = lcl_getDialogStep( *pControlModels );
-                if  (   ( nThisModelStep == nCurrentGroupStep ) // the current button is on the same dialog page
-                    ||  ( 0 == nThisModelStep )                 // the current button appears on all pages
+                if	(	( nThisModelStep == nCurrentGroupStep )	// the current button is on the same dialog page
+                    ||	( 0 == nThisModelStep )					// the current button appears on all pages
                     )
                 {
                     // -> it belongs to the same group
@@ -1455,7 +1455,7 @@ void UnoDialogControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
         }
 
         sal_Int16 nH = aFM.Ascent + aFM.Descent;
-        sal_Int16 nW = nH/2;    // calculate avarage width?!
+        sal_Int16 nW = nH/2;	// calculate avarage width?!
 
         nX *= nW;
         nX /= 4;
@@ -1523,9 +1523,9 @@ sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
     // destroy the old tab controller, if existent
     if ( mxTabController.is() )
     {
-        mxTabController->setModel( NULL );                  // just to be sure, should not be necessary
+        mxTabController->setModel( NULL );					// just to be sure, should not be necessary
         removeTabController( mxTabController );
-        ::comphelper::disposeComponent( mxTabController );  // just to be sure, should not be necessary
+        ::comphelper::disposeComponent( mxTabController );	// just to be sure, should not be necessary
         mxTabController.clear();
     }
 
@@ -1960,7 +1960,7 @@ void UnoDialogControl::ImplUpdateResourceResolver()
                 &&  ( xStringResourceResolver == xCurrStringResourceResolver )
                 )
             {
-                Reference< XMultiPropertySet >  xMultiPropSet( xPropertySet, UNO_QUERY );
+                Reference< XMultiPropertySet >	xMultiPropSet( xPropertySet, UNO_QUERY );
                 Reference< XPropertiesChangeListener > xListener( xPropertySet, UNO_QUERY );
                 xMultiPropSet->firePropertiesChangeEvent( aPropNames, xListener );
             }
@@ -1977,7 +1977,7 @@ void UnoDialogControl::ImplUpdateResourceResolver()
     Reference< XPropertySet > xPropertySet( getModel(), UNO_QUERY );
     if ( xPropertySet.is() )
     {
-        Reference< XMultiPropertySet >  xMultiPropSet( xPropertySet, UNO_QUERY );
+        Reference< XMultiPropertySet >	xMultiPropSet( xPropertySet, UNO_QUERY );
         Reference< XPropertiesChangeListener > xListener( xPropertySet, UNO_QUERY );
         xMultiPropSet->firePropertiesChangeEvent( lcl_getLanguageDependentProperties(), xListener );
     }
@@ -2097,9 +2097,9 @@ throw (RuntimeException)
     ImplUpdateResourceResolver();
 }
 
-//  ----------------------------------------------------
-//  Helper Method to convert relative url to physical location
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	Helper Method to convert relative url to physical location
+//	----------------------------------------------------
 
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace vcl
     };
 
 /** Error codes for most functions */
-    enum TTCRErrCodes {
+    enum TTCRErrCodes {                     
         TTCR_OK = 0,                        /**< no error                                               */
         TTCR_ZEROGLYPHS = 1,                /**< At least one glyph should be defined                   */
         TTCR_UNKNOWN = 2,                   /**< Unknown TrueType table                                 */
@@ -212,7 +212,7 @@ namespace vcl
  *  Table manipulation functions
  *
  *------------------------------------------------------------------------------*/
-
+ 
 
 /**
  * Add a character/glyph pair to a cmap table
@@ -242,7 +242,7 @@ namespace vcl
  */
     void nameAdd(TrueTypeTable *, NameRecord *nr);
 
-} // namespace
+} // namespace                  
 
 
 extern "C"

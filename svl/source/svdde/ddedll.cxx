@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #ifdef WIN
 
 
-#include <sysdep.hxx>   // included svwin.h
+#include <sysdep.hxx>	// included svwin.h
 
 // Statische DLL-Verwaltungs-Variablen
 static HINSTANCE hDLLInst = 0;      // HANDLE der DLL

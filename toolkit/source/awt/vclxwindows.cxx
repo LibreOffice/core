@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -206,9 +206,9 @@ namespace toolkit
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXGraphicControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXGraphicControl
+//	----------------------------------------------------
 
 void VCLXGraphicControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -336,8 +336,8 @@ void VCLXGraphicControl::setProperty( const ::rtl::OUString& PropertyName, const
 }
 
 //--------------------------------------------------------------------
-//  class VCLXButton
-//  ----------------------------------------------------
+//	class VCLXButton
+//	----------------------------------------------------
 
 void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -621,9 +621,9 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXImageControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXImageControl
+//	----------------------------------------------------
 
 void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -752,9 +752,9 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
     return aProp;
 }
 
-//  ----------------------------------------------------
-//  class VCLXCheckBox
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXCheckBox
+//	----------------------------------------------------
 
 
 void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
@@ -1055,9 +1055,9 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXRadioButton
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXRadioButton
+//	----------------------------------------------------
 void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1345,9 +1345,9 @@ void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
     return maActionListeners.getElements()[0];
 }
 
-//  ----------------------------------------------------
-//  class VCLXSpinField
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXSpinField
+//	----------------------------------------------------
 void VCLXSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -1480,9 +1480,9 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXListBox
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXListBox
+//	----------------------------------------------------
 void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -2174,7 +2174,7 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw 
             uno::UNO_QUERY
         );
     }
-
+    
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Sequence< beans::Pair< ::rtl::OUString, ::rtl::OUString > > aItems = xItemList->getAllItems();
@@ -2195,9 +2195,9 @@ void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent ) throw (Runti
     VCLXWindow::disposing( i_rEvent );
 }
 
-//  ----------------------------------------------------
-//  class VCLXMessageBox
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXMessageBox
+//	----------------------------------------------------
 
 void VCLXMessageBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -2280,9 +2280,9 @@ sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeExceptio
     return ::com::sun::star::awt::Size( 250, 100 );
 }
 
-//  ----------------------------------------------------
-//  class VCLXDialog
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXDialog
+//	----------------------------------------------------
 void VCLXDialog::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     VCLXTopWindow::ImplGetPropertyIds( rIds );
@@ -2363,15 +2363,23 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
         Dialog* pDlg = (Dialog*) GetWindow();
         Window* pParent = pDlg->GetWindow( WINDOW_PARENTOVERLAP );
         Window* pOldParent = NULL;
+        Window* pSetParent = NULL;
         if ( pParent && !pParent->IsReallyVisible() )
         {
             pOldParent = pDlg->GetParent();
             Window* pFrame = pDlg->GetWindow( WINDOW_FRAME );
             if( pFrame != pDlg )
+            {
                 pDlg->SetParent( pFrame );
+                pSetParent = pFrame;
+            }
         }
+
         nRet = pDlg->Execute();
-        if ( pOldParent )
+
+        // set the parent back only in case no new parent was set from outside
+        // in other words, revert only own changes
+        if ( pOldParent && pDlg->GetParent() == pSetParent )
             pDlg->SetParent( pOldParent );
     }
     return nRet;
@@ -2459,9 +2467,9 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXTabPage
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXTabPage
+//	----------------------------------------------------
 VCLXTabPage::VCLXTabPage()
 {
 }
@@ -2555,9 +2563,9 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
-//  ----------------------------------------------------
+//	----------------------------------------------------
 //  class VCLXFixedHyperlink
-//  ----------------------------------------------------
+//	----------------------------------------------------
 VCLXFixedHyperlink::VCLXFixedHyperlink() :
 
     maActionListeners( *this )
@@ -2990,9 +2998,9 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     return VCLUnoHelper::ConvertToAWTSize( aAdjustedSize );
 }
 
-//  ----------------------------------------------------
-//  class VCLXScrollBar
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXScrollBar
+//	----------------------------------------------------
 void VCLXScrollBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
@@ -3468,34 +3476,34 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXEdit
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXEdit
+//	----------------------------------------------------
 
 void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
-                     BASEPROPERTY_ALIGN,
-                     BASEPROPERTY_BACKGROUNDCOLOR,
-                     BASEPROPERTY_BORDER,
-                     BASEPROPERTY_BORDERCOLOR,
-                     BASEPROPERTY_DEFAULTCONTROL,
-                     BASEPROPERTY_ECHOCHAR,
-                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ALIGN, 
+                     BASEPROPERTY_BACKGROUNDCOLOR, 
+                     BASEPROPERTY_BORDER, 
+                     BASEPROPERTY_BORDERCOLOR, 
+                     BASEPROPERTY_DEFAULTCONTROL, 
+                     BASEPROPERTY_ECHOCHAR, 
+                     BASEPROPERTY_ENABLED, 
                      BASEPROPERTY_ENABLEVISIBLE,
-                     BASEPROPERTY_FONTDESCRIPTOR,
-                     BASEPROPERTY_HARDLINEBREAKS,
-                     BASEPROPERTY_HELPTEXT,
-                     BASEPROPERTY_HELPURL,
-                     BASEPROPERTY_HSCROLL,
-                     BASEPROPERTY_LINE_END_FORMAT,
-                     BASEPROPERTY_MAXTEXTLEN,
-                     BASEPROPERTY_MULTILINE,
-                     BASEPROPERTY_PRINTABLE,
-                     BASEPROPERTY_READONLY,
-                     BASEPROPERTY_TABSTOP,
-                     BASEPROPERTY_TEXT,
-                     BASEPROPERTY_VSCROLL,
+                     BASEPROPERTY_FONTDESCRIPTOR, 
+                     BASEPROPERTY_HARDLINEBREAKS, 
+                     BASEPROPERTY_HELPTEXT, 
+                     BASEPROPERTY_HELPURL, 
+                     BASEPROPERTY_HSCROLL, 
+                     BASEPROPERTY_LINE_END_FORMAT, 
+                     BASEPROPERTY_MAXTEXTLEN, 
+                     BASEPROPERTY_MULTILINE, 
+                     BASEPROPERTY_PRINTABLE, 
+                     BASEPROPERTY_READONLY, 
+                     BASEPROPERTY_TABSTOP, 
+                     BASEPROPERTY_TEXT, 
+                     BASEPROPERTY_VSCROLL, 
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_PAINTTRANSPARENT,
                      BASEPROPERTY_AUTOHSCROLL,
@@ -3846,9 +3854,9 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-//  ----------------------------------------------------
-//  class VCLXComboBox
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXComboBox
+//	----------------------------------------------------
 
 void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -3895,20 +3903,6 @@ VCLXComboBox::~VCLXComboBox()
     OSL_TRACE ("%s", __FUNCTION__);
 #endif
 }
-
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXComboBox::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XComboBox*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXEdit::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXComboBox )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XComboBox>* ) NULL ),
-    VCLXEdit::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()
 {
@@ -3973,8 +3967,12 @@ void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStr
         for ( sal_uInt16 n = 0; n < aItems.getLength(); n++ )
         {
             pBox->InsertEntry( aItems.getConstArray()[n], nP );
-            if ( (sal_uInt16)nPos < 0xFFFF )    // Nicht wenn 0xFFFF, weil LIST_APPEND
-                nP++;
+            if ( nP == 0xFFFF )
+            {
+                OSL_ENSURE( false, "VCLXComboBox::addItems: too many entries!" );
+                // skip remaining entries, list cannot hold them, anyway
+                break;
+            }
         }
     }
 }
@@ -4078,14 +4076,8 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
                 ::com::sun::star::uno::Sequence< ::rtl::OUString> aItems;
                 if ( Value >>= aItems )
                 {
-                    sal_Bool bUpdate = pComboBox->IsUpdateMode();
-                    pComboBox->SetUpdateMode( sal_False );
                     pComboBox->Clear();
-                    const ::rtl::OUString* pStrings = aItems.getConstArray();
-                    sal_Int32 nItems = aItems.getLength();
-                    for ( sal_Int32 n = 0; n < nItems; n++ )
-                        pComboBox->InsertEntry( pStrings[n], LISTBOX_APPEND );
-                    pComboBox->SetUpdateMode( bUpdate );
+                    addItems( aItems, 0 );
                 }
             }
             break;
@@ -4182,7 +4174,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
-//              aEvent.ActionCommand = ...;
+//				aEvent.ActionCommand = ...;
                 maActionListeners.actionPerformed( aEvent );
             }
             break;
@@ -4255,10 +4247,108 @@ void VCLXComboBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) thr
         nLines = nL;
     }
 }
+void SAL_CALL VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
 
-//  ----------------------------------------------------
-//  class VCLXFormattedSpinField
-//  ----------------------------------------------------
+    ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemInserted: no ComboBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= sal_Int32( pComboBox->GetEntryCount() ) ),
+        "VCLXComboBox::listItemInserted: illegal (inconsistent) item position!" );
+    pComboBox->InsertEntry(
+        i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString(),
+        i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
+        i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXComboBox::listItemRemoved( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemRemoved: no ComboBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pComboBox->GetEntryCount() ) ),
+        "VCLXComboBox::listItemRemoved: illegal (inconsistent) item position!" );
+
+    pComboBox->RemoveEntry( i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemModified: no ComboBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pComboBox->GetEntryCount() ) ),
+        "VCLXComboBox::listItemModified: illegal (inconsistent) item position!" );
+
+    // VCL's ComboBox does not support changing an entry's text or image, so remove and re-insert
+
+    const ::rtl::OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString( pComboBox->GetEntry( i_rEvent.ItemPosition ) );
+    const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pComboBox->GetEntryImage( i_rEvent.ItemPosition  ) );
+
+    pComboBox->RemoveEntry( i_rEvent.ItemPosition );
+    pComboBox->InsertEntry( sNewText, aNewImage, i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemModified: no ComboBox?!" );
+
+    pComboBox->Clear();
+
+    (void)i_rEvent;
+}
+
+void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemModified: no ComboBox?!" );
+
+    pComboBox->Clear();
+
+    uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+    // bool localize = xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) );
+    uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
+    if ( xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ) )
+    {
+        xStringResourceResolver.set(
+            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ),
+            uno::UNO_QUERY
+        );
+    }
+    
+
+    Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
+    uno::Sequence< beans::Pair< ::rtl::OUString, ::rtl::OUString > > aItems = xItemList->getAllItems();
+    for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
+    {
+        ::rtl::OUString aLocalizationKey( aItems[i].First );
+        if ( xStringResourceResolver.is() && aLocalizationKey.getLength() != 0 && aLocalizationKey[0] == '&' )
+        {
+            aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
+        }
+        pComboBox->InsertEntry( aLocalizationKey, lcl_getImageFromURL( aItems[i].Second ) );
+    }
+}
+void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    // just disambiguate
+    VCLXEdit::disposing( i_rEvent );
+}
+
+//	----------------------------------------------------
+//	class VCLXFormattedSpinField
+//	----------------------------------------------------
 void VCLXFormattedSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     // Interestingly in the UnoControl API this is
@@ -4361,9 +4451,9 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXDateField
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXDateField
+//	----------------------------------------------------
 
 void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -4705,9 +4795,9 @@ sal_Bool VCLXDateField::isStrictFormat() throw(::com::sun::star::uno::RuntimeExc
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXTimeField
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXTimeField
+//	----------------------------------------------------
 
 void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5008,9 +5098,9 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
     return aProp;
 }
 
-//  ----------------------------------------------------
-//  class VCLXNumericField
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXNumericField
+//	----------------------------------------------------
 
 void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5601,9 +5691,9 @@ void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXCurrencyField
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXCurrencyField
+//	----------------------------------------------------
 
 void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -5957,9 +6047,9 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
     return aProp;
 }
 
-//  ----------------------------------------------------
-//  class VCLXPatternField
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXPatternField
+//	----------------------------------------------------
 
 void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -6020,7 +6110,7 @@ void VCLXPatternField::setMasks( const ::rtl::OUString& EditMask, const ::rtl::O
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
     {
-        pPatternField->SetMask( ByteString( UniString( EditMask ), RTL_TEXTENCODING_ASCII_US ), LiteralMask );
+        pPatternField->SetMask(	ByteString( UniString( EditMask ), RTL_TEXTENCODING_ASCII_US ), LiteralMask );
     }
 }
 
@@ -6131,9 +6221,9 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
     return aProp;
 }
 
-//  ----------------------------------------------------
-//  class VCLXToolBox
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXToolBox
+//	----------------------------------------------------
 VCLXToolBox::VCLXToolBox()
 {
 }

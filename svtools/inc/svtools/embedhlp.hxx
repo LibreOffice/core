@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,18 +104,18 @@ namespace svt
 
         ::rtl::OUString GetPersistName() const;
         sal_Int64       GetViewAspect() const;
-        void            SetViewAspect( sal_Int64 nAspect );
+        void			SetViewAspect( sal_Int64 nAspect );
         Graphic*        GetGraphic( ::rtl::OUString* pMediaType=0 ) const;
 
         // the original size of the object ( size of the icon for iconified object )
         // no conversion is done if no target mode is provided
-        Size            GetSize( MapMode* pTargetMapMode = NULL ) const;
+        Size			GetSize( MapMode* pTargetMapMode = NULL ) const;
 
         // the following method tries to get the HC graphic if it is possible, otherwise returns NULL
         Graphic*        GetHCGraphic() const;
 
         void            SetGraphic( const Graphic& rGraphic, const ::rtl::OUString& rMediaType );
-        void            SetGraphicStream(
+        void			SetGraphicStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInGrStream,
                             const ::rtl::OUString& rMediaType );
 
@@ -131,8 +131,8 @@ namespace svt
 
         // #i104867#
         // Provides a graphic version number for the fetchable Graphic during this object's lifetime. Internally,
-        // that number is incremented at each change of the Graphic. This mechanism is needed to identify if a
-        // remembered Graphic (e.g. primitives) has changed compared to the current one, but without actively
+        // that number is incremented at each change of the Graphic. This mechanism is needed to identify if a 
+        // remembered Graphic (e.g. primitives) has changed compared to the current one, but without actively 
         // fetching the Graphic what would be too expensive e.g. for charts
         sal_uInt32 getGraphicVersion() const;
         void            SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM );//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method

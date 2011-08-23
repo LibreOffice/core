@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const struct timeval noyield__ = { 0, 0 };
-static const struct timeval yield__   = { 0, 10000 };
+static const struct timeval yield__	  = { 0, 10000 };
 
 static const char* XRequest[] = {
     // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...
@@ -239,7 +239,7 @@ int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 }
 
 int X11SalData::XIOErrorHdl( Display * )
-{
+{                                
     /*  #106197# hack: until a real shutdown procedure exists
      *  _exit ASAP
      */
@@ -268,14 +268,14 @@ int X11SalData::XIOErrorHdl( Display * )
 
 X11SalData::X11SalData()
 {
-    bNoExceptions_  = !!getenv( "SAL_NOSEGV" );
+    bNoExceptions_	= !!getenv( "SAL_NOSEGV" );
 
-    pXLib_          = NULL;
-    m_pSalDisplay   = NULL;
-    m_pInstance     = NULL;
-    m_pPlugin       = NULL;
+    pXLib_			= NULL;
+    m_pSalDisplay	= NULL;
+    m_pInstance		= NULL;
+    m_pPlugin		= NULL;
 
-    hMainThread_    = pthread_self();
+    hMainThread_	= pthread_self();
     osl_getLocalHostname( &maLocalHostName.pData );
 }
 
@@ -287,9 +287,9 @@ X11SalData::~X11SalData()
 void X11SalData::DeleteDisplay()
 {
     delete m_pSalDisplay;
-    m_pSalDisplay   = NULL;
+    m_pSalDisplay	= NULL;
     delete pXLib_;
-    pXLib_      = NULL;
+    pXLib_		= NULL;
 }
 
 void X11SalData::Init()
@@ -310,11 +310,11 @@ void X11SalData::deInitNWF( void )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalXLib::SalXLib()
 {
-    m_aTimeout.tv_sec       = 0;
-    m_aTimeout.tv_usec      = 0;
-    m_nTimeoutMS            = 0;
+    m_aTimeout.tv_sec 		= 0;
+    m_aTimeout.tv_usec		= 0;
+    m_nTimeoutMS 			= 0;
 
-    nFDs_                   = 0;
+    nFDs_					= 0;
     FD_ZERO( &aReadFDS_ );
     FD_ZERO( &aExceptionFDS_ );
 
@@ -353,8 +353,8 @@ SalXLib::SalXLib()
         nFDs_ = m_pTimeoutFDS[0] + 1;
     }
 
-    m_bHaveSystemChildFrames        = false;
-    m_aOrigXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    m_bHaveSystemChildFrames		= false;
+    m_aOrigXIOErrorHandler = XSetIOErrorHandler	( (XIOErrorHandler)X11SalData::XIOErrorHdl );
     PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
 }
 
@@ -363,7 +363,7 @@ SalXLib::~SalXLib()
     // close 'wakeup' pipe.
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
-
+    
     PopXErrorLevel();
     XSetIOErrorHandler (m_aOrigXIOErrorHandler);
 }
@@ -400,7 +400,7 @@ void SalXLib::Init()
      *  o  $DISPLAY environment variable
      *  o  default display
      */
-
+    
     Display *pDisp = NULL;
 
     // is there a -display command line parameter?
@@ -408,7 +408,7 @@ void SalXLib::Init()
     sal_uInt32 nParams = aCommandLine.getCommandArgCount();
     rtl::OUString aParam;
     rtl::OString aDisplay;
-    for (USHORT i=0; i<nParams; i++)
+    for (USHORT i=0; i<nParams; i++) 
     {
         aCommandLine.getCommandArg(i, aParam);
         if (aParam.equalsAscii("-display"))
@@ -421,8 +421,8 @@ void SalXLib::Init()
             {
                 /*
                  * if a -display switch was used, we need
-                 * to set the environment accoringly since
-                 * the clipboard build another connection
+                 * to set the environment accoringly since 
+                 * the clipboard build another connection 
                  * to the xserver using $DISPLAY
                  */
                 const char envpre[] = "DISPLAY=";
@@ -434,7 +434,7 @@ void SalXLib::Init()
         }
     }
 
-    if (!pDisp && !aDisplay.getLength())
+    if (!pDisp && !aDisplay.getLength()) 
     {
         // Open $DISPLAY or default...
         char *pDisplay = getenv("DISPLAY");
@@ -453,9 +453,9 @@ void SalXLib::Init()
                                             aProgramSystemPath,
                                             osl_getThreadTextEncoding() );
         std::fprintf( stderr, "%s X11 error: Can't open display: %s\n",
-                aProgramName.getStr(), aDisplay.getStr());
-        std::fprintf( stderr, "   Set DISPLAY environment variable, use -display option\n");
-        std::fprintf( stderr, "   or check permissions of your X-Server\n");
+                aProgramName.getStr(), aDisplay.getStr()); 
+        std::fprintf( stderr, "   Set DISPLAY environment variable, use -display option\n"); 
+        std::fprintf( stderr, "   or check permissions of your X-Server\n"); 
         std::fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
         std::fflush( stderr );
         exit(0);
@@ -523,7 +523,7 @@ static void PrintXError( Display *pDisplay, XErrorEvent *pEvent )
         std::fprintf( stderr, "These errors are reported asynchronously,\n");
         std::fprintf( stderr, "set environment variable SAL_SYNCHRONIZE to 1 to help debugging\n");
     }
-
+    
     std::fflush( stdout );
     std::fflush( stderr );
 }
@@ -567,13 +567,13 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
         oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
         switch (eToDo)
         {
-            case osl_Signal_ActIgnore       :
+            case osl_Signal_ActIgnore		:
                 return;
-            case osl_Signal_ActAbortApp     :
+            case osl_Signal_ActAbortApp 	:
                 abort();
-            case osl_Signal_ActKillApp      :
+            case osl_Signal_ActKillApp		:
                 exit(0);
-            case osl_Signal_ActCallNextHdl  :
+            case osl_Signal_ActCallNextHdl	:
                 break;
             default :
                 break;
@@ -586,16 +586,16 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 
 struct YieldEntry
 {
-    YieldEntry* next;       // pointer to next entry
-    int         fd;         // file descriptor for reading
-    void*           data;       // data for predicate and callback
-    YieldFunc       pending;    // predicate (determins pending events)
-    YieldFunc       queued;     // read and queue up events
-    YieldFunc       handle;     // handle pending events
+    YieldEntry* next;		// pointer to next entry
+    int 		fd; 		// file descriptor for reading
+    void*			data;		// data for predicate and callback
+    YieldFunc		pending;	// predicate (determins pending events)
+    YieldFunc		queued; 	// read and queue up events
+    YieldFunc		handle; 	// handle pending events
 
-    inline int  HasPendingEvent()   const { return pending( fd, data ); }
-    inline int  IsEventQueued()     const { return queued( fd, data ); }
-    inline void HandleNextEvent()   const { handle( fd, data ); }
+    inline int	HasPendingEvent()	const { return pending( fd, data ); }
+    inline int	IsEventQueued() 	const { return queued( fd, data ); }
+    inline void HandleNextEvent()	const { handle( fd, data ); }
 };
 
 #define MAX_NUM_DESCRIPTORS 128
@@ -603,18 +603,18 @@ struct YieldEntry
 static YieldEntry yieldTable[ MAX_NUM_DESCRIPTORS ];
 
 void SalXLib::Insert( int nFD, void* data,
-                      YieldFunc     pending,
-                      YieldFunc     queued,
-                      YieldFunc     handle )
+                      YieldFunc 	pending,
+                      YieldFunc 	queued,
+                      YieldFunc 	handle )
 {
     DBG_ASSERT( nFD, "can not insert stdin descriptor" );
     DBG_ASSERT( !yieldTable[nFD].fd, "SalXLib::Insert fd twice" );
 
-    yieldTable[nFD].fd      = nFD;
-    yieldTable[nFD].data    = data;
+    yieldTable[nFD].fd		= nFD;
+    yieldTable[nFD].data	= data;
     yieldTable[nFD].pending = pending;
-    yieldTable[nFD].queued  = queued;
-    yieldTable[nFD].handle  = handle;
+    yieldTable[nFD].queued	= queued;
+    yieldTable[nFD].handle	= handle;
 
     FD_SET( nFD, &aReadFDS_ );
     FD_SET( nFD, &aExceptionFDS_ );
@@ -689,7 +689,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 // #63862# da jetzt alle user-events ueber die interne
                 // queue kommen, wird die Kontrolle analog zum select
                 // gesteuerten Zweig einmal bei bWait abgegeben
-
+                
                 /* #i9277# do not reschedule since performance gets down the
                    the drain under heavy load
                 YieldMutexReleaser aReleaser;
@@ -866,6 +866,6 @@ rtl::OString X11SalData::getFrameResName( SalExtStyle nStyle )
     aBuf.append( getFrameResName() );
     if( (nStyle & SAL_FRAME_EXT_STYLE_DOCUMENT) )
         aBuf.append( ".DocumentWindow" );
-
+    
     return aBuf.makeStringAndClear();
 }

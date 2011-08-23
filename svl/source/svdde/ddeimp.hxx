@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,10 +140,10 @@ public:
 
 struct DdeDataImp
 {
-    HDDEDATA        hData;
-    LPBYTE          pData;
-    long            nData;
-    ULONG           nFmt;
+    HDDEDATA		hData;
+    LPBYTE			pData;
+    long			nData;
+    ULONG 			nFmt;
 };
 
 class DdeConnections;
@@ -151,20 +151,20 @@ class DdeServices;
 
 struct DdeInstData
 {
-    USHORT          nRefCount;
-    DdeConnections* pConnections;
+    USHORT			nRefCount;
+    DdeConnections*	pConnections;
     // Server
-    long            hCurConvSvr;
-    ULONG           hDdeInstSvr;
-    short           nInstanceSvr;
-    DdeServices*    pServicesSvr;
+    long 			hCurConvSvr;
+    ULONG			hDdeInstSvr;
+    short			nInstanceSvr;
+    DdeServices*	pServicesSvr;
     // Client
-    ULONG           hDdeInstCli;
-    short           nInstanceCli;
+    ULONG			hDdeInstCli;
+    short			nInstanceCli;
 };
 
 #ifndef SHL_SVDDE
-#define SHL_SVDDE   SHL_SHL2
+#define SHL_SVDDE	SHL_SHL2
 #endif
 
 inline DdeInstData* ImpGetInstData()

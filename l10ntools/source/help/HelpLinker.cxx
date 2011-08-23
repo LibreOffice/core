@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,15 +50,15 @@
 class IndexerPreProcessor
 {
 private:
-    std::string             m_aModuleName;
-    fs::path                m_fsIndexBaseDir;
-    fs::path                m_fsCaptionFilesDirName;
-    fs::path                m_fsContentFilesDirName;
+    std::string				m_aModuleName;
+    fs::path				m_fsIndexBaseDir;
+    fs::path				m_fsCaptionFilesDirName;
+    fs::path				m_fsContentFilesDirName;
 
-    xsltStylesheetPtr       m_xsltStylesheetPtrCaption;
-    xsltStylesheetPtr       m_xsltStylesheetPtrContent;
+    xsltStylesheetPtr		m_xsltStylesheetPtrCaption;
+    xsltStylesheetPtr		m_xsltStylesheetPtrContent;
 
-public:
+public: 
     IndexerPreProcessor( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
          const fs::path& idxCaptionStylesheet, const fs::path& idxContentStylesheet );
     ~IndexerPreProcessor();
@@ -245,9 +245,9 @@ class HelpLinker
 {
 public:
     void main(std::vector<std::string> &args,
-//      std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
-              std::string* pExtensionPath = NULL,
-              std::string* pDestination = NULL,
+//		std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
+              std::string* pExtensionPath = NULL, 
+              std::string* pDestination = NULL, 
               const rtl::OUString* pOfficeHelpPath = NULL )
 
             throw( HelpProcessingException );
@@ -283,7 +283,7 @@ private:
     void initIndexerPreProcessor();
     void link() throw( HelpProcessingException );
     void addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishid,
-        const std::string& fileB, const std::string& anchorB,
+        const std::string& fileB, const std::string& anchorB, 
         const std::string& jarfileB, const std::string& titleB );
 #if 0
     /**
@@ -305,7 +305,7 @@ namespace URLEncoder
     {
         const char *good = "!$&'()*+,-.=@_";
         static const char hex[17] = "0123456789ABCDEF";
-
+    
         std::string result;
         for (size_t i=0; i < rIn.length(); ++i)
         {
@@ -353,7 +353,7 @@ void HelpLinker::addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishi
     dataB[i++] = static_cast<unsigned char>(fileLen);
     for (size_t j = 0; j < fileB.length(); ++j)
         dataB[i++] = fileB[j];
-    if (!anchorB.empty())
+    if (!anchorB.empty()) 
     {
         dataB[i++] = '#';
         for (size_t j = 0; j < anchorB.length(); ++j)
@@ -393,7 +393,7 @@ void HelpLinker::initIndexerPreProcessor()
 }
 
 /**
-*
+* 
 */
 void HelpLinker::link() throw( HelpProcessingException )
 {
@@ -434,7 +434,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 #ifndef DBHELP_ONLY
     fs::path helpTextFileName(indexDirParentName / (mod + ".ht"));
     db_create(&helpText,0,0);
-    helpText->open(helpText, NULL, helpTextFileName.native_file_string().c_str(), NULL, DB_BTREE,
+    helpText->open(helpText, NULL, helpTextFileName.native_file_string().c_str(), NULL, DB_BTREE, 
         DB_CREATE | DB_TRUNCATE, 0644);
 #endif
 
@@ -446,7 +446,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 #ifndef DBHELP_ONLY
     fs::path dbBaseFileName(indexDirParentName / (mod + ".db"));
     db_create(&dbBase,0,0);
-    dbBase->open(dbBase, NULL, dbBaseFileName.native_file_string().c_str(), NULL, DB_BTREE,
+    dbBase->open(dbBase, NULL, dbBaseFileName.native_file_string().c_str(), NULL, DB_BTREE, 
         DB_CREATE | DB_TRUNCATE, 0644);
 #endif
 
@@ -458,7 +458,7 @@ void HelpLinker::link() throw( HelpProcessingException )
     DB* keyWord(0);
     fs::path keyWordFileName(indexDirParentName / (mod + ".key"));
     db_create(&keyWord,0,0);
-    keyWord->open(keyWord, NULL, keyWordFileName.native_file_string().c_str(), NULL, DB_BTREE,
+    keyWord->open(keyWord, NULL, keyWordFileName.native_file_string().c_str(), NULL, DB_BTREE, 
         DB_CREATE | DB_TRUNCATE, 0644);
 #endif
 
@@ -491,7 +491,7 @@ void HelpLinker::link() throw( HelpProcessingException )
     if( !bExtensionMode )
     {
 #ifndef OS2 // YD @TODO@ crashes libc runtime :-(
-        std::cout << "Making " << outputFile.native_file_string() <<
+        std::cout << "Making " << outputFile.native_file_string() << 
             " from " << helpFiles.size() << " input files" << std::endl;
 #endif
     }
@@ -505,7 +505,7 @@ void HelpLinker::link() throw( HelpProcessingException )
             std::cout << ".";
             std::cout.flush();
         }
-
+         
         // process one file
         // streamTable contains the streams in the hzip file
         StreamTable streamTable;
@@ -537,8 +537,8 @@ void HelpLinker::link() throw( HelpProcessingException )
             langsourceRoot.append('/' + lang + '/');
             xhpFile = fs::path(xhpFileName, fs::native);
         }
-
-        HelpCompiler hc( streamTable, xhpFile, langsourceRoot,
+         
+        HelpCompiler hc( streamTable, xhpFile, langsourceRoot, 
             embeddStylesheet, module, lang, bExtensionMode );
 
         HCDBG(std::cerr << "before compile of " << xhpFileName << std::endl);
@@ -548,7 +548,7 @@ void HelpLinker::link() throw( HelpProcessingException )
         if (!success && !bExtensionMode)
         {
             std::stringstream aStrStream;
-            aStrStream <<
+            aStrStream << 
                 "\nERROR: compiling help particle '"
                     << xhpFileName
                     << "' for language '"
@@ -627,13 +627,13 @@ void HelpLinker::link() throw( HelpProcessingException )
                 // std::cerr << hzipFileName << std::endl;
                 const LinkedList& ll = enumer->second;
                 LinkedList::const_iterator aOtherEnd = ll.end();
-                for (LinkedList::const_iterator llIter = ll.begin();
+                for (LinkedList::const_iterator llIter = ll.begin(); 
                     llIter != aOtherEnd; ++llIter)
                 {
                         helpKeyword.insert(*llIter, totalId);
                 }
             }
-
+                
         }
 
         // and last the helptexts
@@ -686,7 +686,7 @@ void HelpLinker::link() throw( HelpProcessingException )
             if (document)
             {
                 std::string temp = module;
-                std::transform (temp.begin(), temp.end(), temp.begin(), tolower);
+                std::transform (temp.begin(), temp.end(), temp.begin(), tolower); 
                 m_pIndexerPreProcessor->processDocument(document, URLEncoder::encode(documentPath) );
             }
         }
@@ -695,7 +695,7 @@ void HelpLinker::link() throw( HelpProcessingException )
     if( !bExtensionMode )
         std::cout << std::endl;
 
-    }   // try
+    }	// try
     catch( HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases
@@ -758,7 +758,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 
 
 void HelpLinker::main( std::vector<std::string> &args,
-                       std::string* pExtensionPath, std::string* pDestination,
+                       std::string* pExtensionPath, std::string* pDestination,  
                        const rtl::OUString* pOfficeHelpPath )
     throw( HelpProcessingException )
 {
@@ -799,7 +799,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         if (args[i].compare("-src") == 0)
         {
             ++i;
-            if (i >= args.size())
+            if (i >= args.size()) 
             {
                 std::stringstream aStrStream;
                 aStrStream << "sourceroot missing" << std::endl;
@@ -809,7 +809,7 @@ void HelpLinker::main( std::vector<std::string> &args,
             if( !bExtensionMode )
                 sourceRoot = fs::path(args[i], fs::native);
         }
-        else if (args[i].compare("-sty") == 0)
+        else if (args[i].compare("-sty") == 0) 
         {
             ++i;
             if (i >= args.size())
@@ -820,11 +820,11 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
 
             embeddStylesheet = fs::path(args[i], fs::native);
-        }
-        else if (args[i].compare("-zipdir") == 0)
+        } 
+        else if (args[i].compare("-zipdir") == 0) 
         {
             ++i;
-            if (i >= args.size())
+            if (i >= args.size()) 
             {
                 std::stringstream aStrStream;
                 aStrStream << "idxtemp missing" << std::endl;
@@ -832,11 +832,11 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
 
             zipdir = fs::path(args[i], fs::native);
-        }
-        else if (args[i].compare("-idxcaption") == 0)
+        } 
+        else if (args[i].compare("-idxcaption") == 0) 
         {
             ++i;
-            if (i >= args.size())
+            if (i >= args.size()) 
             {
                 std::stringstream aStrStream;
                 aStrStream << "idxcaption stylesheet missing" << std::endl;
@@ -844,11 +844,11 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
 
             idxCaptionStylesheet = fs::path(args[i], fs::native);
-        }
-        else if (args[i].compare("-idxcontent") == 0)
+        } 
+        else if (args[i].compare("-idxcontent") == 0) 
         {
             ++i;
-            if (i >= args.size())
+            if (i >= args.size()) 
             {
                 std::stringstream aStrStream;
                 aStrStream << "idxcontent stylesheet missing" << std::endl;
@@ -868,8 +868,8 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
 
             outputFile = fs::path(args[i], fs::native);
-        }
-        else if (args[i].compare("-mod") == 0)
+        } 
+        else if (args[i].compare("-mod") == 0) 
         {
             ++i;
             if (i >= args.size())
@@ -880,7 +880,7 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
 
             module = args[i];
-        }
+        } 
         else if (args[i].compare("-lang") == 0)
         {
             ++i;
@@ -892,7 +892,7 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
 
             lang = args[i];
-        }
+        } 
         else if (args[i].compare("-hid") == 0)
         {
             ++i;
@@ -904,7 +904,7 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
 
             hid = args[i];
-        }
+        } 
         else if (args[i].compare("-add") == 0)
         {
             std::string addFile, addFileUnderPath;
@@ -928,7 +928,7 @@ void HelpLinker::main( std::vector<std::string> &args,
             if (!addFileUnderPath.empty() && !addFile.empty())
                 additionalFiles[addFileUnderPath] = addFile;
         }
-        else
+        else 
             helpFiles.push_back(args[i]);
         ++i;
     }
@@ -1054,7 +1054,7 @@ extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
     GpXMLParsingException = pException;
 
     // Reset error handler
-    xmlSetStructuredErrorFunc( NULL, NULL );
+    xmlSetStructuredErrorFunc( NULL, NULL ); 
 }
 
 HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpProcessingException& e )
@@ -1115,7 +1115,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     std::string aStdStrDestination = pDestination;
 
     // Set error handler
-    xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
+    xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction ); 
     try
     {
         HelpLinker* pHelpLinker = new HelpLinker();
@@ -1137,7 +1137,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         bSuccess = false;
     }
     // Reset error handler
-    xmlSetStructuredErrorFunc( NULL, NULL );
+    xmlSetStructuredErrorFunc( NULL, NULL ); 
 
     // i83624: Tree files
     ::rtl::OUString aTreeFileURL = aExtensionLanguageRoot;
@@ -1146,7 +1146,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
     osl::FileStatus aFileStatus( FileStatusMask_FileSize );
     if( rcGet == osl::FileBase::E_None &&
-        aTreeFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
+        aTreeFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None && 
         aFileStatus.isValid( FileStatusMask_FileSize ) )
     {
         sal_uInt64 ret, len = aFileStatus.getFileSize();
@@ -1169,7 +1169,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
             bSuccess = false;
         }
 
-        XML_ParserFree( parser );
+        XML_ParserFree( parser );		
         delete[] s;
     }
 

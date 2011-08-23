@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace com { namespace sun { namespace star { namespace geometry
+namespace com { namespace sun { namespace star { namespace geometry 
 {
     struct RealSize2D;
     struct IntegerSize2D;
@@ -60,7 +60,7 @@ namespace com { namespace sun { namespace star { namespace geometry
     struct Matrix2D;
 } } } }
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering 
 {
     struct RenderState;
     struct ViewState;
@@ -70,14 +70,14 @@ namespace com { namespace sun { namespace star { namespace rendering
     class  XIntegerBitmapColorSpace;
     class  XPolyPolygon2D;
 
-    bool operator==( const RenderState& rLHS,
+    bool operator==( const RenderState&	rLHS,
                      const RenderState& rRHS );
-
+    
     bool operator==( const ViewState& rLHS,
-                     const ViewState& rRHS );
+                     const ViewState& rRHS );    
 } } } }
 
-namespace com { namespace sun { namespace star { namespace awt
+namespace com { namespace sun { namespace star { namespace awt 
 {
     struct Rectangle;
     class  XWindow2;
@@ -159,65 +159,65 @@ namespace canvas
         // View- and RenderState utilities
         // ===================================================================
 
-        ::com::sun::star::rendering::RenderState&
-            initRenderState( ::com::sun::star::rendering::RenderState&                      renderState );
+        ::com::sun::star::rendering::RenderState& 
+            initRenderState( ::com::sun::star::rendering::RenderState&						renderState );
 
+        ::com::sun::star::rendering::ViewState& 
+            initViewState( ::com::sun::star::rendering::ViewState&							viewState );
+
+        ::basegfx::B2DHomMatrix& 
+            getViewStateTransform( ::basegfx::B2DHomMatrix&									transform,
+                                   const ::com::sun::star::rendering::ViewState&			viewState );
+        
         ::com::sun::star::rendering::ViewState&
-            initViewState( ::com::sun::star::rendering::ViewState&                          viewState );
+            setViewStateTransform( ::com::sun::star::rendering::ViewState& 					viewState,
+                                   const ::basegfx::B2DHomMatrix&							transform );
+        
+        ::basegfx::B2DHomMatrix& 
+            getRenderStateTransform( ::basegfx::B2DHomMatrix&								transform,
+                                     const ::com::sun::star::rendering::RenderState&		renderState );
+        
+        ::com::sun::star::rendering::RenderState& 
+            setRenderStateTransform( ::com::sun::star::rendering::RenderState& 				renderState,
+                                     const ::basegfx::B2DHomMatrix&							transform );
+        
+        ::com::sun::star::rendering::ViewState& 
+            appendToViewState( ::com::sun::star::rendering::ViewState&						viewState,
+                               const ::basegfx::B2DHomMatrix&								transform );
+        
+        ::com::sun::star::rendering::RenderState& 
+            appendToRenderState( ::com::sun::star::rendering::RenderState&					renderState,
+                                 const ::basegfx::B2DHomMatrix&								transform );
+        
+        ::com::sun::star::rendering::ViewState& 
+            prependToViewState( ::com::sun::star::rendering::ViewState&						viewState,
+                                const ::basegfx::B2DHomMatrix&								transform );
+        
+        ::com::sun::star::rendering::RenderState& 
+            prependToRenderState( ::com::sun::star::rendering::RenderState&					renderState,
+                                  const ::basegfx::B2DHomMatrix&							transform );
 
-        ::basegfx::B2DHomMatrix&
-            getViewStateTransform( ::basegfx::B2DHomMatrix&                                 transform,
-                                   const ::com::sun::star::rendering::ViewState&            viewState );
+        ::basegfx::B2DHomMatrix& 
+            mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&							transform,
+                                         const ::com::sun::star::rendering::ViewState&		viewState,
+                                         const ::com::sun::star::rendering::RenderState&	renderState );
 
-        ::com::sun::star::rendering::ViewState&
-            setViewStateTransform( ::com::sun::star::rendering::ViewState&                  viewState,
-                                   const ::basegfx::B2DHomMatrix&                           transform );
-
-        ::basegfx::B2DHomMatrix&
-            getRenderStateTransform( ::basegfx::B2DHomMatrix&                               transform,
-                                     const ::com::sun::star::rendering::RenderState&        renderState );
-
-        ::com::sun::star::rendering::RenderState&
-            setRenderStateTransform( ::com::sun::star::rendering::RenderState&              renderState,
-                                     const ::basegfx::B2DHomMatrix&                         transform );
-
-        ::com::sun::star::rendering::ViewState&
-            appendToViewState( ::com::sun::star::rendering::ViewState&                      viewState,
-                               const ::basegfx::B2DHomMatrix&                               transform );
-
-        ::com::sun::star::rendering::RenderState&
-            appendToRenderState( ::com::sun::star::rendering::RenderState&                  renderState,
-                                 const ::basegfx::B2DHomMatrix&                             transform );
-
-        ::com::sun::star::rendering::ViewState&
-            prependToViewState( ::com::sun::star::rendering::ViewState&                     viewState,
-                                const ::basegfx::B2DHomMatrix&                              transform );
-
-        ::com::sun::star::rendering::RenderState&
-            prependToRenderState( ::com::sun::star::rendering::RenderState&                 renderState,
-                                  const ::basegfx::B2DHomMatrix&                            transform );
-
-        ::basegfx::B2DHomMatrix&
-            mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&                           transform,
-                                         const ::com::sun::star::rendering::ViewState&      viewState,
-                                         const ::com::sun::star::rendering::RenderState&    renderState );
-
-        ::com::sun::star::rendering::ViewState&
-            mergeViewAndRenderState( ::com::sun::star::rendering::ViewState&                resultViewState,
-                                     const ::com::sun::star::rendering::ViewState&          viewState,
-                                     const ::com::sun::star::rendering::RenderState&        renderState,
-                                     const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XCanvas >&            xCanvas );
+        ::com::sun::star::rendering::ViewState& 
+            mergeViewAndRenderState( ::com::sun::star::rendering::ViewState&				resultViewState,
+                                     const ::com::sun::star::rendering::ViewState&			viewState,
+                                     const ::com::sun::star::rendering::RenderState&		renderState,
+                                     const ::com::sun::star::uno::Reference< 
+                                         ::com::sun::star::rendering::XCanvas >& 			xCanvas );
 
 
         // Matrix utilities
         // ===================================================================
 
-        ::com::sun::star::geometry::AffineMatrix2D&
-            setIdentityAffineMatrix2D( ::com::sun::star::geometry::AffineMatrix2D&  matrix );
+        ::com::sun::star::geometry::AffineMatrix2D& 
+            setIdentityAffineMatrix2D( ::com::sun::star::geometry::AffineMatrix2D&	matrix );
 
-        ::com::sun::star::geometry::Matrix2D&
-            setIdentityMatrix2D( ::com::sun::star::geometry::Matrix2D&              matrix );
+        ::com::sun::star::geometry::Matrix2D& 
+            setIdentityMatrix2D( ::com::sun::star::geometry::Matrix2D&			    matrix );
 
 
         // Special utilities
@@ -242,9 +242,9 @@ namespace canvas
 
             @return a reference to the resulting rectangle
          */
-        ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&            o_Rect,
-                                                        const ::basegfx::B2DRange&      i_Rect,
-                                                        const ::basegfx::B2DHomMatrix&  i_Transformation );
+        ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&			o_Rect,
+                                                        const ::basegfx::B2DRange&		i_Rect,
+                                                        const ::basegfx::B2DHomMatrix&	i_Transformation );
 
         /** Calc a transform that maps one rectangle on top of
             another.
@@ -282,11 +282,11 @@ namespace canvas
 
             @see calcTransformedRectBounds()
         */
-        ::basegfx::B2DHomMatrix& calcRectToRectTransform( ::basegfx::B2DHomMatrix&          o_transform,
-                                                          const ::basegfx::B2DRange&        i_destRect,
-                                                          const ::basegfx::B2DRange&        i_srcRect,
-                                                          const ::basegfx::B2DHomMatrix&    i_transformation );
-
+        ::basegfx::B2DHomMatrix& calcRectToRectTransform( ::basegfx::B2DHomMatrix&			o_transform,
+                                                          const ::basegfx::B2DRange&		i_destRect,
+                                                          const ::basegfx::B2DRange&		i_srcRect,
+                                                          const ::basegfx::B2DHomMatrix&	i_transformation );
+        
         /** Calc a transform that maps the upper, left corner of a
              rectangle to the origin.
 
@@ -314,10 +314,10 @@ namespace canvas
             @see calcRectToRectTransform()
             @see calcTransformedRectBounds()
         */
-        ::basegfx::B2DHomMatrix& calcRectToOriginTransform( ::basegfx::B2DHomMatrix&        o_transform,
-                                                            const ::basegfx::B2DRange&      i_srcRect,
-                                                            const ::basegfx::B2DHomMatrix&  i_transformation );
-
+        ::basegfx::B2DHomMatrix& calcRectToOriginTransform( ::basegfx::B2DHomMatrix&		o_transform,
+                                                            const ::basegfx::B2DRange&		i_srcRect,
+                                                            const ::basegfx::B2DHomMatrix&	i_transformation );
+        
         /** Check whether a given rectangle is within another
             transformed rectangle.
 
@@ -338,9 +338,9 @@ namespace canvas
             @param rTransformation
             This transformation is applied to rTransformRect
          */
-        bool isInside( const ::basegfx::B2DRange&       rContainedRect,
-                       const ::basegfx::B2DRange&       rTransformRect,
-                       const ::basegfx::B2DHomMatrix&   rTransformation );
+        bool isInside( const ::basegfx::B2DRange& 		rContainedRect,
+                       const ::basegfx::B2DRange& 		rTransformRect, 
+                       const ::basegfx::B2DHomMatrix&	rTransformation );
 
         /** Clip a scroll to the given bound rect
 
@@ -416,14 +416,14 @@ namespace canvas
         ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
 
         /** Retrieve various internal properties of the actual canvas implementation.
-
+            
             This method retrieves a bunch of internal, implementation-
             and platform-dependent values from the canvas
             implementation. Among them are for example operating
             system window handles. The actual layout and content of
             the returned sequence is dependent on the component
             implementation, undocumented and subject to change.
-
+            
             @param i_rxCanvas
             Input parameter, the canvas representation for which the device information
             is to be retrieveds
@@ -433,7 +433,7 @@ namespace canvas
 
             @return A reference to the resulting sequence of parameters
         */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& getDeviceInfo(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& getDeviceInfo( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >& i_rxCanvas,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& o_rxParams );
 
@@ -449,7 +449,7 @@ namespace canvas
             Use this method for dead-simple bitmap implementations,
             that map all their formats to 8888 RGBA color.
          */
-        ::com::sun::star::rendering::IntegerBitmapLayout getStdMemoryLayout(
+        ::com::sun::star::rendering::IntegerBitmapLayout getStdMemoryLayout( 
             const ::com::sun::star::geometry::IntegerSize2D& rBitmapSize );
 
         /// Convert standard 8888 RGBA color to vcl color
@@ -474,14 +474,14 @@ namespace canvas
             typedef ::std::numeric_limits< Source > SourceLimits;
             typedef ::std::numeric_limits< Target > TargetLimits;
 
-            if( ( arg<0 && !TargetLimits::is_signed) ||                     // loosing the sign here
-                ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
-                ( arg>TargetLimits::max() ) )                               // overflow will happen
+            if( ( arg<0 && !TargetLimits::is_signed) || 					// loosing the sign here
+                ( SourceLimits::is_signed && arg<TargetLimits::min()) ||	// underflow will happen
+                ( arg>TargetLimits::max() ) ) 					            // overflow will happen
             {
 #if defined(VERBOSE) && defined(DBG_UTIL)
                 OSL_TRACE("numeric_cast detected data loss");
 #endif
-                throw ::com::sun::star::uno::RuntimeException(
+                throw ::com::sun::star::uno::RuntimeException( 
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "numeric_cast detected data loss" )),
                     NULL );
             }
@@ -489,7 +489,7 @@ namespace canvas
             return static_cast<Target>(arg);
         }
 
-        ::com::sun::star::awt::Rectangle getAbsoluteWindowRect(
+        ::com::sun::star::awt::Rectangle getAbsoluteWindowRect( 
             const ::com::sun::star::awt::Rectangle&                                    rRect,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2 >& xWin  );
 
@@ -505,7 +505,7 @@ namespace canvas
            for smooth gradient color differences
          */
         int calcGradientStepCount( ::basegfx::B2DHomMatrix&                        rTotalTransform,
-                                   const ::com::sun::star::rendering::ViewState&   viewState,
+                                   const ::com::sun::star::rendering::ViewState&   viewState, 
                                    const ::com::sun::star::rendering::RenderState& renderState,
                                    const ::com::sun::star::rendering::Texture&     texture,
                                    int                                             nColorSteps );
@@ -527,8 +527,8 @@ namespace canvas
         public:
             struct MapEntry
             {
-                const char*     maKey;
-                ValueType       maValue;
+                const char*		maKey;
+                ValueType		maValue;
             };
 
             /** Create a ValueMap for the given array of MapEntries.
@@ -548,18 +548,18 @@ namespace canvas
                 or not. When bCaseSensitive is false, all MapEntry strings
                 must be lowercase!
             */
-            ValueMap( const MapEntry*   pMap,
-                      ::std::size_t     nEntries,
-                      bool              bCaseSensitive ) :
+            ValueMap( const MapEntry* 	pMap,
+                      ::std::size_t		nEntries,
+                      bool				bCaseSensitive ) :
                 mpMap( pMap ),
                 mnEntries( nEntries ),
                 mbCaseSensitive( bCaseSensitive )
             {
-#ifdef DBG_UTIL
+#ifdef DBG_UTIL                
                 // Ensure that map entries are sorted (and all lowercase, if this
                 // map is case insensitive)
                 const ::rtl::OString aStr( pMap->maKey );
-                if( !mbCaseSensitive &&
+                if( !mbCaseSensitive && 
                     aStr != aStr.toAsciiLowerCase() )
                 {
                     OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
@@ -580,9 +580,9 @@ namespace canvas
                             OSL_ENSURE( false,
                                         "ValueMap::ValueMap(): Map is not sorted" );
                         }
-
+                        
                         const ::rtl::OString aStr2( pMap[1].maKey );
-                        if( !mbCaseSensitive &&
+                        if( !mbCaseSensitive && 
                             aStr2 != aStr2.toAsciiLowerCase() )
                         {
                             OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
@@ -609,21 +609,21 @@ namespace canvas
                 @return true, if a matching entry was found.
             */
             bool lookup( const ::rtl::OUString& rName,
-                         ValueType&             o_rResult ) const
+                         ValueType&				o_rResult ) const
             {
                 // rName is required to contain only ASCII characters.
                 // TODO(Q1): Enforce this at upper layers
                 ::rtl::OString aKey( ::rtl::OUStringToOString( mbCaseSensitive ? rName : rName.toAsciiLowerCase(),
                                                                RTL_TEXTENCODING_ASCII_US ) );
-                MapEntry aSearchKey =
-                    {
-                        aKey.getStr(),
+                MapEntry aSearchKey = 
+                    { 
+                        aKey.getStr(), 
                         ValueType()
                     };
 
                 const MapEntry* pRes;
                 const MapEntry* pEnd = mpMap+mnEntries;
-                if( (pRes=::std::lower_bound( mpMap,
+                if( (pRes=::std::lower_bound( mpMap, 
                                               pEnd,
                                               aSearchKey,
                                               &mapComparator )) != pEnd )
@@ -649,10 +649,10 @@ namespace canvas
                 return strcmp( rLHS.maKey,
                                rRHS.maKey ) < 0;
             }
-
-            const MapEntry*     mpMap;
-            ::std::size_t       mnEntries;
-            bool                mbCaseSensitive;
+            
+            const MapEntry* 	mpMap;
+            ::std::size_t		mnEntries;
+            bool				mbCaseSensitive;
         };
     }
 }

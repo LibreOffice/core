@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 
-#include <tools/gen.hxx>    // Size
-#include <tools/link.hxx>   // Size
+#include <tools/gen.hxx>	// Size
+#include <tools/link.hxx>	// Size
 
 class Window;
 class VCLXWindow;
@@ -54,13 +54,13 @@ class AccessibleStateSetHelper;
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleComponent
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleComponent
+//	----------------------------------------------------
 
-typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
+typedef ::comphelper::OAccessibleExtendedComponentHelper	AccessibleExtendedComponentHelper_BASE;
 
-typedef ::cppu::ImplHelper1<
+typedef ::cppu::ImplHelper1< 
     ::com::sun::star::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
 
 class VCLExternalSolarLock;
@@ -72,30 +72,30 @@ class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> mxWindow;
-    VCLXWindow*                         mpVCLXindow;
+    VCLXWindow* 						mpVCLXindow;
 
-    ULONG                           nDummy1;
-    ULONG                           nDummy2;
-    void*                           pDummy1;
-    VCLExternalSolarLock*           m_pSolarLock;
+    ULONG							nDummy1;
+    ULONG							nDummy2;
+    void*							pDummy1;
+    VCLExternalSolarLock*			m_pSolarLock;
 
 protected:
      DECL_LINK( WindowEventListener, VclSimpleEvent* );
      DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 
-    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void    FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
-    virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void	ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void	ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void	FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
+    virtual void	FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent );
-
+    
 public:
     VCLXAccessibleComponent( VCLXWindow* pVCLXindow );
     ~VCLXAccessibleComponent();
 
     VCLXWindow*    GetVCLXWindow() const { return mpVCLXindow; }
-    Window*        GetWindow() const;
+    Window* 	   GetWindow() const;
 
     virtual void SAL_CALL disposing();
 
@@ -112,24 +112,24 @@ public:
     // ::com::sun::star::accessibility::XAccessibleContext
     sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(	) throw (::com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL getAccessibleIndexInParent(	) throw (::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getAccessibleDescription(	) throw (::com::sun::star::uno::RuntimeException);
     ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(	) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::lang::Locale SAL_CALL getLocale(	) throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::accessibility::XAccessibleComponent
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(	) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::accessibility::XAccessibleExtendedComponent
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -138,7 +138,7 @@ protected:
     ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    /** we may be reparented (if external components use OAccessibleImplementationAccess base class),
+    /**	we may be reparented (if external components use OAccessibleImplementationAccess base class),
         so this method here returns the parent in the VCL world, in opposite to the parent
         an external component gave us
     @precond

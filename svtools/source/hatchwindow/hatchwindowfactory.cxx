@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
         // OHatchWindowFactory registration
 
         xNewKey = xRegistryKey->createKey (
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
             OHatchWindowFactory::impl_staticGetImplementationName() +
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
 
@@ -137,7 +137,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
         // ODocumentCloser registration
 
         xNewKey = xRegistryKey->createKey (
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
             ODocumentCloser::impl_staticGetImplementationName() +
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
 

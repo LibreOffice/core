@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,11 +67,11 @@ typedef std::vector<unsigned char> ByteVector;
 ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID nFontId )
 :   ImplFontData( rDFA, 0 )
 ,   mnFontId( nFontId )
-,   mpCharMap( NULL )
-,   mbOs2Read( false )
-,   mbHasOs2Table( false )
-,   mbCmapEncodingRead( false )
-,   mbHasCJKSupport( false )
+,	mpCharMap( NULL )
+,	mbOs2Read( false )
+,	mbHasOs2Table( false )
+,	mbCmapEncodingRead( false )
+,	mbHasCJKSupport( false )
 {}
 
 // -----------------------------------------------------------------------
@@ -259,7 +259,7 @@ bool ImplMacFontData::HasCJKSupport( void ) const
 
     return mbHasCJKSupport;
 }
-
+        
 // =======================================================================
 
 AquaSalGraphics::AquaSalGraphics()
@@ -346,24 +346,24 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
     // #i100617# read DPI only once; there is some kind of weird caching going on
     // if the main screen changes
     // FIXME: this is really unfortunate and needs to be investigated
-
+    
     SalData* pSalData = GetSalData();
     if( pSalData->mnDPIX == 0 || pSalData->mnDPIY == 0 )
     {
         NSScreen* pScreen = nil;
-
+        
         /* #i91301#
         many woes went into the try to have different resolutions
         on different screens. The result of these trials is that OOo is not ready
         for that yet, vcl and applications would need to be adapted.
-
+        
         Unfortunately this is not possible in the 3.0 timeframe.
         So let's stay with one resolution for all Windows and VirtualDevices
         which is the resolution of the main screen
-
+        
         This of course also means that measurements are exact only on the main screen.
         For activating different resolutions again just comment out the two lines below.
-
+        
         if( pWin )
         pScreen = [pWin screen];
         */
@@ -373,7 +373,7 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
             if( pScreens )
                 pScreen = [pScreens objectAtIndex: 0];
         }
-
+        
         mnRealDPIX = mnRealDPIY = 96;
         if( pScreen )
         {
@@ -404,7 +404,7 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
         {
             DBG_ERROR( "no screen found" );
         }
-
+        
         // #i107076# maintaining size-WYSIWYG-ness causes many problems for
         //           low-DPI, high-DPI or for mis-reporting devices
         //           => it is better to limit the calculation result then
@@ -437,7 +437,7 @@ void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
     rDPIX = static_cast<long>(mfFakeDPIScale * mnRealDPIX);
     rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
-}
+} 
 
 void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 {
@@ -447,7 +447,7 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
     mnRealDPIX = rGraphics.mnRealDPIX;
     mnRealDPIY = rGraphics.mnRealDPIY;
     mfFakeDPIScale = rGraphics.mfFakeDPIScale;
-}
+} 
 
 // -----------------------------------------------------------------------
 
@@ -509,9 +509,9 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
             bPendingCurve |= rPolygon.isPrevControlPointUsed( nClosedIdx );
         }
 
-        if( !bPendingCurve )    // line segment
+        if( !bPendingCurve )	// line segment
             CGPathAddLineToPoint( xPath, pTransform, aPoint.getX(), aPoint.getY() );
-        else                        // cubic bezier segment
+        else						// cubic bezier segment
         {
             basegfx::B2DPoint aCP1 = rPolygon.getNextControlPoint( nPrevIdx );
             basegfx::B2DPoint aCP2 = rPolygon.getPrevControlPoint( nClosedIdx );
@@ -612,7 +612,7 @@ void AquaSalGraphics::SetLineColor()
     maLineColor.SetAlpha( 0.0 );   // transparent
     if( CheckContext() )
         CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
-}
+} 
 
 // -----------------------------------------------------------------------
 
@@ -639,7 +639,7 @@ void AquaSalGraphics::SetFillColor( SalColor nSalColor )
     maFillColor = RGBAColor( nSalColor );
     if( CheckContext() )
         CGContextSetFillColor( mrContext, maFillColor.AsArray() );
-}
+} 
 
 // -----------------------------------------------------------------------
 
@@ -657,7 +657,7 @@ void AquaSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     if( ! mbPrinter )
         SetLineColor( ImplGetROPSalColor( nROPColor ) );
-}
+} 
 
 // -----------------------------------------------------------------------
 
@@ -688,13 +688,13 @@ void AquaSalGraphics::drawPixel( long nX, long nY )
 {
     // draw pixel with current line color
     ImplDrawPixel( nX, nY, maLineColor );
-}
+} 
 
 void AquaSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
     const RGBAColor aPixelColor( nSalColor );
     ImplDrawPixel( nX, nY, aPixelColor );
-}
+} 
 
 // -----------------------------------------------------------------------
 
@@ -706,7 +706,7 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
         drawPixel( nX1, nY1 );
         return;
     }
-
+    
     if( !CheckContext() )
         return;
 
@@ -733,10 +733,10 @@ void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
          aRect.size.width    -= 1;
          aRect.size.height -= 1;
      }
-
+     
      if( IsBrushVisible() )
          CGContextFillRect( mrContext, aRect );
-
+    
      if( IsPenVisible() )
          CGContextStrokeRect( mrContext, aRect );
 
@@ -784,9 +784,9 @@ void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
     long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
     getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
-
+    
     float fX, fY;
-
+    
     CGContextBeginPath( mrContext );
     alignLinePoint( pPtAry, fX, fY );
     CGContextMoveToPoint( mrContext, fX, fY );
@@ -798,7 +798,7 @@ void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
     }
     CGContextDrawPath( mrContext, kCGPathStroke );
 
-    RefreshRect( nX, nY, nWidth, nHeight );
+    RefreshRect( nX, nY, nWidth, nHeight );        
 }
 
 // -----------------------------------------------------------------------
@@ -824,7 +824,7 @@ void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
         return;
 
     CGContextBeginPath( mrContext );
-
+    
     if( IsPenVisible() )
     {
         float fX, fY;
@@ -846,7 +846,7 @@ void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
     }
 
     CGContextDrawPath( mrContext, eMode );
-    RefreshRect( nX, nY, nWidth, nHeight );
+    RefreshRect( nX, nY, nWidth, nHeight );        
 }
 
 // -----------------------------------------------------------------------
@@ -931,11 +931,11 @@ void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, P
             }
         }
     }
-
+    
     CGContextDrawPath( mrContext, eMode );
-
+        
     RefreshRect( leftX, topY, maxWidth, maxHeight );
-}
+} 
 
 // -----------------------------------------------------------------------
 
@@ -969,16 +969,16 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
         CGContextSaveGState( mrContext );
         CGContextBeginPath( mrContext );
         CGContextAddPath( mrContext, xPath );
-
+    
         // draw path with antialiased polygon
         CGContextSetShouldAntialias( mrContext, true );
-        CGContextSetAlpha( mrContext, 1.0 - fTransparency );
+        CGContextSetAlpha( mrContext, 1.0 - fTransparency ); 
         CGContextDrawPath( mrContext, kCGPathEOFillStroke );
         CGContextRestoreGState( mrContext );
-
+    
         // mark modified rectangle as updated
         RefreshRect( aRefreshRect );
-    }
+    }        
 
     CGPathRelease( xPath );
 
@@ -1011,11 +1011,11 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
     switch( eLineJoin ) {
-        case ::basegfx::B2DLINEJOIN_NONE:       aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
-        case ::basegfx::B2DLINEJOIN_MIDDLE:     aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
-        case ::basegfx::B2DLINEJOIN_BEVEL:      aCGLineJoin = kCGLineJoinBevel; break;
-        case ::basegfx::B2DLINEJOIN_MITER:      aCGLineJoin = kCGLineJoinMiter; break;
-        case ::basegfx::B2DLINEJOIN_ROUND:      aCGLineJoin = kCGLineJoinRound; break;
+        case ::basegfx::B2DLINEJOIN_NONE:		aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
+        case ::basegfx::B2DLINEJOIN_MIDDLE:		aCGLineJoin = /*TODO?*/kCGLineJoinMiter; break;
+        case ::basegfx::B2DLINEJOIN_BEVEL:		aCGLineJoin = kCGLineJoinBevel; break;
+        case ::basegfx::B2DLINEJOIN_MITER:		aCGLineJoin = kCGLineJoinMiter; break;
+        case ::basegfx::B2DLINEJOIN_ROUND:		aCGLineJoin = kCGLineJoinRound; break;
     }
 
     // setup poly-polygon path
@@ -1027,21 +1027,21 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
     // #i97317# workaround for Quartz having problems with drawing small polygons
     if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
 #endif
-    {
+    {	
         // use the path to prepare the graphics context
         CGContextSaveGState( mrContext );
         CGContextAddPath( mrContext, xPath );
         // draw path with antialiased line
         CGContextSetShouldAntialias( mrContext, true );
-        CGContextSetAlpha( mrContext, 1.0 - fTransparency );
+        CGContextSetAlpha( mrContext, 1.0 - fTransparency ); 
         CGContextSetLineJoin( mrContext, aCGLineJoin );
         CGContextSetLineWidth( mrContext, rLineWidths.getX() );
         CGContextDrawPath( mrContext, kCGPathStroke );
         CGContextRestoreGState( mrContext );
-
+        
         // mark modified rectangle as updated
         RefreshRect( aRefreshRect );
-    }
+    }        
 
     CGPathRelease( xPath );
 
@@ -1114,7 +1114,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
         (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth) ) // workaround a Quartz crasher
     {
         // in XOR mode the drawing context is redirected to the XOR mask
-        // if source and target are identical then copyBits() paints onto the target context though
+        // if source and target are identical then copyBits() paints onto the target context though 
         CGContextRef xCopyContext = mrContext;
         if( mpXorEmulation && mpXorEmulation->IsEnabled() )
             if( pSrcGraphics == this )
@@ -1183,7 +1183,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
     // drawing a layer onto its own context causes trouble on OSX => copy it first
     // TODO: is it possible to get rid of this unneeded copy more often?
     //       e.g. on OSX>=10.5 only this situation causes problems:
-    //          mnBitmapDepth && (aDstPoint.x + pSrc->mnWidth) > mnWidth
+    //			mnBitmapDepth && (aDstPoint.x + pSrc->mnWidth) > mnWidth
     CGLayerRef xSrcLayer = mxLayer;
     // TODO: if( mnBitmapDepth > 0 )
     {
@@ -1353,7 +1353,7 @@ void AquaSalGraphics::Pattern50Fill()
                                                       CGAffineTransformIdentity, 4, 4,
                                                       kCGPatternTilingConstantSpacing,
                                                       false, &aCallback );
-
+        
     CGContextSetFillColorSpace( mrContext, GetSalData()->mxP50Space );
     CGContextSetFillPattern( mrContext, GetSalData()->mxP50Pattern, aFillCol );
     CGContextFillPath( mrContext );
@@ -1417,7 +1417,7 @@ void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert 
             CGContextSetBlendMode(mrContext, kCGBlendModeDifference);
             Pattern50Fill();
         }
-        else // just invert
+        else // just invert                   
         {
             CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
             CGContextSetRGBFillColor( mrContext, 1.0, 1.0, 1.0, 1.0 );
@@ -1447,7 +1447,7 @@ BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
 
     // NOTE: flip drawing, else the nsimage would be drawn upside down
     CGContextSaveGState( mrContext );
-//  CGContextTranslateCTM( mrContext, 0, +mnHeight );
+//	CGContextTranslateCTM( mrContext, 0, +mnHeight );
     CGContextScaleCTM( mrContext, +1, -1 );
     nY = /*mnHeight*/ - (nY + nHeight);
 
@@ -1504,10 +1504,10 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 {
     if( !CheckContext() )
         return true;
-
+        
     // save the current state
     CGContextSaveGState( mrContext );
-    CGContextSetAlpha( mrContext, (100-nTransparency) * (1.0/100) );
+    CGContextSetAlpha( mrContext, (100-nTransparency) * (1.0/100) ); 
 
     CGRect aRect = {{nX,nY},{nWidth-1,nHeight-1}};
     if( IsPenVisible() )
@@ -1552,7 +1552,7 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // get the ATSU font metrics (in point units)
     // of the font that has eventually been size-limited
 
-    ATSUFontID fontId;
+    ATSUFontID fontId; 	 
     OSStatus err = ATSUGetAttribute( maATSUStyle, kATSUFontTag, sizeof(ATSUFontID), &fontId, 0 );
     DBG_ASSERT( (err==noErr), "AquaSalGraphics::GetFontMetric() : could not get font id\n");
 
@@ -1641,12 +1641,12 @@ static bool AddLocalTempFontDirs( void )
     bFirst = false;
 
     // add private font files found in brand and base layer
-
+    
     rtl::OUString aBrandStr( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) );
     rtl_bootstrap_expandMacros( &aBrandStr.pData );
     rtl::OUString aBrandSysPath;
     OSL_VERIFY( osl_getSystemPathFromFileURL( aBrandStr.pData, &aBrandSysPath.pData ) == osl_File_E_None );
-
+    
     rtl::OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
     aBrandFontDir.append( rtl::OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
     aBrandFontDir.append( "/share/fonts/truetype/" );
@@ -1656,7 +1656,7 @@ static bool AddLocalTempFontDirs( void )
     rtl_bootstrap_expandMacros( &aBaseStr.pData );
     rtl::OUString aBaseSysPath;
     OSL_VERIFY( osl_getSystemPathFromFileURL( aBaseStr.pData, &aBaseSysPath.pData ) == osl_File_E_None );
-
+    
     rtl::OStringBuffer aBaseFontDir( aBaseSysPath.getLength()*2 );
     aBaseFontDir.append( rtl::OUStringToOString( aBaseSysPath, RTL_TEXTENCODING_UTF8 ) );
     aBaseFontDir.append( "/share/fonts/truetype/" );
@@ -1670,11 +1670,11 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     DBG_ASSERT( pFontList, "AquaSalGraphics::GetDevFontList(NULL) !");
 
     AddLocalTempFontDirs();
-
-    // The idea is to cache the list of system fonts once it has been generated.
-    // SalData seems to be a good place for this caching. However we have to
-    // carefully make the access to the font list thread-safe. If we register
-    // a font-change event handler to update the font list in case fonts have
+ 
+    // The idea is to cache the list of system fonts once it has been generated. 
+    // SalData seems to be a good place for this caching. However we have to 
+    // carefully make the access to the font list thread-safe. If we register 
+    // a font-change event handler to update the font list in case fonts have 
     // changed on the system we have to lock access to the list. The right
     // way to do that is the solar mutex since GetDevFontList is protected
     // through it as should be all event handlers
@@ -1713,7 +1713,7 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 #else
     FSSpec aFontFSSpec;
     eStatus = ::FSGetCatalogInfo( &aNewRef, kFSCatInfoNone,
-        NULL, NULL, &aFontFSSpec, NULL );
+        NULL, NULL,	&aFontFSSpec, NULL );
     if( eStatus != noErr )
         return false;
 
@@ -1779,7 +1779,7 @@ BOOL AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& r
     aGgoData.mpPolyPoly = &rPolyPoly;
     rPolyPoly.clear();
 
-    ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback when CWS pdffix02 is integrated
+    ATSUStyle rATSUStyle = maATSUStyle;	// TODO: handle glyph fallback when CWS pdffix02 is integrated
     OSStatus eGgoStatus = noErr;
     OSStatus eStatus = ATSUGlyphGetCubicPaths( rATSUStyle, nGlyphId,
         GgoMoveToProc, GgoLineToProc, GgoCurveToProc, GgoClosePathProc,
@@ -1803,13 +1803,13 @@ long AquaSalGraphics::GetGraphicsWidth() const
     {
         w = mnWidth;
     }
-
+    
     if( w == 0 )
     {
         if( mbWindow && mpFrame )
             w = mpFrame->maGeometry.nWidth;
     }
-
+    
     return w;
 }
 
@@ -1817,7 +1817,7 @@ long AquaSalGraphics::GetGraphicsWidth() const
 
 BOOL AquaSalGraphics::GetGlyphBoundRect( long nGlyphId, Rectangle& rRect )
 {
-    ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
+    ATSUStyle rATSUStyle = maATSUStyle;	// TODO: handle glyph fallback
     GlyphID aGlyphId = nGlyphId;
     ATSGlyphScreenMetrics aGlyphMetrics;
     OSStatus eStatus = ATSUGlyphGetScreenMetrics( rATSUStyle,
@@ -1888,7 +1888,7 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     mbNonAntialiasedText = pReqFont->mbNonAntialiased;
     UInt32 nStyleRenderingOptions = kATSStyleNoOptions;
     if( pReqFont->mbNonAntialiased )
-        nStyleRenderingOptions |= kATSStyleNoAntiAliasing;
+        nStyleRenderingOptions |= kATSStyleNoAntiAliasing; 
 
     // set horizontal/vertical mode
     ATSUVerticalCharacterType aVerticalCharacterType = kATSUStronglyHorizontal;
@@ -1911,21 +1911,21 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
         kATSUVerticalCharacterTag
     };
 
-    const ByteCount aValueSize[] =
+    const ByteCount aValueSize[] = 
     {
         sizeof(ATSUFontID),
         sizeof(fFixedSize),
-        sizeof(bFakeBold),
+        sizeof(bFakeBold), 
         sizeof(bFakeItalic),
         sizeof(nStyleRenderingOptions),
         sizeof(aVerticalCharacterType)
     };
-
-    const ATSUAttributeValuePtr aValue[] =
+ 
+    const ATSUAttributeValuePtr aValue[] = 
     {
         &nFontID,
         &fFixedSize,
-        &bFakeBold,
+        &bFakeBold, 
         &bFakeItalic,
         &nStyleRenderingOptions,
         &aVerticalCharacterType
@@ -1989,7 +1989,7 @@ ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 
     return mpMacFontData->GetImplFontCharMap();
 }
-
+    
 // -----------------------------------------------------------------------
 
 // fake a SFNT font directory entry for a font table
@@ -2003,8 +2003,8 @@ static void FakeDirEntry( FourCharCode eFCC, ByteCount nOfs, ByteCount nLen,
     rpDest[ 2] = (char)(eFCC >>  8);
     rpDest[ 3] = (char)(eFCC >>  0);
     // TODO: get entry checksum and write it
-    //      not too important since the subsetter doesn't care currently
-    //      for( pData+nOfs ... pData+nOfs+nLen )
+    // 		not too important since the subsetter doesn't care currently
+    // 		for( pData+nOfs ... pData+nOfs+nLen )
     // write entry offset
     rpDest[ 8] = (char)(nOfs >> 24);
     rpDest[ 9] = (char)(nOfs >> 16);
@@ -2042,34 +2042,34 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     }
 
     // get font table availability and size in bytes
-    ByteCount nHeadLen  = 0;
+    ByteCount nHeadLen	= 0;
     eStatus = ATSFontGetTable( rFont, GetTag("head"), 0, 0, NULL, &nHeadLen);
     if( (eStatus != noErr) || (nHeadLen <= 0) )
         return false;
-    ByteCount nMaxpLen  = 0;
+    ByteCount nMaxpLen	= 0;
     eStatus = ATSFontGetTable( rFont, GetTag("maxp"), 0, 0, NULL, &nMaxpLen);
     if( (eStatus != noErr) || (nMaxpLen <= 0) )
         return false;
-    ByteCount nCmapLen  = 0;
+    ByteCount nCmapLen	= 0;
     eStatus = ATSFontGetTable( rFont, GetTag("cmap"), 0, 0, NULL, &nCmapLen);
     if( (eStatus != noErr) || (nCmapLen <= 0) )
         return false;
-    ByteCount nNameLen  = 0;
+    ByteCount nNameLen	= 0;
     eStatus = ATSFontGetTable( rFont, GetTag("name"), 0, 0, NULL, &nNameLen);
     if( (eStatus != noErr) || (nNameLen <= 0) )
         return false;
-    ByteCount nHheaLen  = 0;
+    ByteCount nHheaLen	= 0;
     eStatus = ATSFontGetTable( rFont, GetTag("hhea"), 0, 0, NULL, &nHheaLen);
     if( (eStatus != noErr) || (nHheaLen <= 0) )
         return false;
-    ByteCount nHmtxLen  = 0;
+    ByteCount nHmtxLen	= 0;
     eStatus = ATSFontGetTable( rFont, GetTag("hmtx"), 0, 0, NULL, &nHmtxLen);
     if( (eStatus != noErr) || (nHmtxLen <= 0) )
         return false;
 
     // get the glyph outline tables
-    ByteCount nLocaLen  = 0;
-    ByteCount nGlyfLen  = 0;
+    ByteCount nLocaLen	= 0;
+    ByteCount nGlyfLen	= 0;
     if( (eStatus != noErr) || (nCffLen <= 0) )
     {
         eStatus = ATSFontGetTable( rFont, GetTag("loca"), 0, 0, NULL, &nLocaLen);
@@ -2081,13 +2081,13 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     }
 
     ByteCount nPrepLen=0, nCvtLen=0, nFpgmLen=0;
-    if( nGlyfLen )  // TODO: reduce PDF size by making hint subsetting optional
+    if( nGlyfLen )	// TODO: reduce PDF size by making hint subsetting optional
     {
         eStatus = ATSFontGetTable( rFont, GetTag("prep"), 0, 0, NULL, &nPrepLen);
         eStatus = ATSFontGetTable( rFont, GetTag("cvt "), 0, 0, NULL, &nCvtLen);
         eStatus = ATSFontGetTable( rFont, GetTag("fpgm"), 0, 0, NULL, &nFpgmLen);
     }
-
+    
     // prepare a byte buffer for a fake font
     int nTableCount = 7;
     nTableCount += (nPrepLen>0) + (nCvtLen>0) + (nFpgmLen>0) + (nGlyfLen>0);
@@ -2107,11 +2107,11 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     {
         int nLog2 = 0;
         while( (nTableCount >> nLog2) > 1 ) ++nLog2;
-        rBuffer[ 1] = 1;                        // Win-TTF style scaler
-        rBuffer[ 5] = nTableCount;              // table count
-        rBuffer[ 7] = nLog2*16;                 // searchRange
-        rBuffer[ 9] = nLog2;                    // entrySelector
-        rBuffer[11] = (nTableCount-nLog2)*16;   // rangeShift
+        rBuffer[ 1] = 1;						// Win-TTF style scaler
+        rBuffer[ 5] = nTableCount;				// table count
+        rBuffer[ 7] = nLog2*16;					// searchRange
+        rBuffer[ 9] = nLog2;					// entrySelector
+        rBuffer[11] = (nTableCount-nLog2)*16;	// rangeShift
     }
 
     // get font table raw data and update the fake directory entries
@@ -2219,17 +2219,17 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ::GetTTGlobalFontInfo( pSftFont, &aTTInfo );
     rInfo.m_nFontType   = FontSubsetInfo::SFNT_TTF;
     rInfo.m_aPSName     = String( aTTInfo.psname, RTL_TEXTENCODING_UTF8 );
-    rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
+    rInfo.m_aFontBBox	= Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
-    rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
-    rInfo.m_nAscent     = +aTTInfo.winAscent;
+    rInfo.m_nCapHeight	= aTTInfo.yMax; // Well ...
+    rInfo.m_nAscent	    = +aTTInfo.winAscent;
     rInfo.m_nDescent    = -aTTInfo.winDescent;
     // mac fonts usually do not have an OS2-table
     // => get valid ascent/descent values from other tables
     if( !rInfo.m_nAscent )
-        rInfo.m_nAscent = +aTTInfo.typoAscender;
+        rInfo.m_nAscent	= +aTTInfo.typoAscender;
     if( !rInfo.m_nAscent )
-        rInfo.m_nAscent = +aTTInfo.ascender;
+        rInfo.m_nAscent	= +aTTInfo.ascender;
     if( !rInfo.m_nDescent )
         rInfo.m_nDescent = +aTTInfo.typoDescender;
     if( !rInfo.m_nDescent )
@@ -2287,9 +2287,9 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         ::GetTTSimpleGlyphMetrics( pSftFont, aShortIDs, nGlyphCount, bVertical );
     if( !pGlyphMetrics )
         return FALSE;
-    sal_uInt16 nNotDefAdv       = pGlyphMetrics[0].adv;
-    pGlyphMetrics[0].adv        = pGlyphMetrics[nNotDef].adv;
-    pGlyphMetrics[nNotDef].adv  = nNotDefAdv;
+    sal_uInt16 nNotDefAdv   	= pGlyphMetrics[0].adv;
+    pGlyphMetrics[0].adv    	= pGlyphMetrics[nNotDef].adv;
+    pGlyphMetrics[nNotDef].adv	= nNotDefAdv;
     for( int i = 0; i < nOrigCount; ++i )
         pGlyphWidths[i] = pGlyphMetrics[i].adv;
     free( pGlyphMetrics );
@@ -2378,7 +2378,7 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
 #else
         DBG_ERROR("not implemented for non-subsettable fonts!\n");
 #endif
-    }
+    }    
 }
 
 // -----------------------------------------------------------------------
@@ -2391,7 +2391,7 @@ const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
 
 // -----------------------------------------------------------------------
 
-const void* AquaSalGraphics::GetEmbedFontData( const ImplFontData* pFontData,
+const void*	AquaSalGraphics::GetEmbedFontData( const ImplFontData* pFontData,
                               const sal_Ucs* pUnicodes,
                               sal_Int32* pWidths,
                               FontSubsetInfo& rInfo,
@@ -2405,7 +2405,7 @@ const void* AquaSalGraphics::GetEmbedFontData( const ImplFontData* pFontData,
 void AquaSalGraphics::FreeEmbedFontData( const void* pData, long nDataLen )
 {
     // TODO: implementing this only makes sense when the implementation of
-    //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
+    //		AquaSalGraphics::GetEmbedFontData() returns non-NULL
     DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
 }
 
@@ -2418,7 +2418,7 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
     aSysFontData.nSize = sizeof( SystemFontData );
 
     // NOTE: Native ATSU font fallbacks are used, not the VCL fallbacks.
-    ATSUFontID fontId;
+    ATSUFontID fontId; 	 
     err = ATSUGetAttribute( maATSUStyle, kATSUFontTag, sizeof(fontId), &fontId, 0 );
     if (err) fontId = 0;
     aSysFontData.aATSUFontID = (void *) fontId;
@@ -2427,8 +2427,8 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
     err = ATSUGetAttribute( maATSUStyle, kATSUQDBoldfaceTag, sizeof(bFbold), &bFbold, 0 );
     if (err) bFbold = FALSE;
     aSysFontData.bFakeBold = (bool) bFbold;
-
-    Boolean bFItalic;
+    
+    Boolean bFItalic;    
     err = ATSUGetAttribute( maATSUStyle, kATSUQDItalicTag, sizeof(bFItalic), &bFItalic, 0 );
     if (err) bFItalic = FALSE;
     aSysFontData.bFakeItalic = (bool) bFItalic;
@@ -2463,7 +2463,7 @@ void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
     // return early if XOR mode remains unchanged
     if( mbPrinter )
         return;
-
+    
     if( ! bSet && mnXorMode == 2 )
     {
         CGContextSetBlendMode( mrContext, kCGBlendModeNormal );
@@ -2521,14 +2521,14 @@ void AquaSalGraphics::ApplyXorContext()
 // ======================================================================
 
 XorEmulation::XorEmulation()
-:   mxTargetLayer( NULL )
-,   mxTargetContext( NULL )
-,   mxMaskContext( NULL )
-,   mxTempContext( NULL )
-,   mpMaskBuffer( NULL )
-,   mpTempBuffer( NULL )
-,   mnBufferLongs( 0 )
-,   mbIsEnabled( false )
+:	mxTargetLayer( NULL )
+,	mxTargetContext( NULL )
+,	mxMaskContext( NULL )
+,	mxTempContext( NULL )
+,	mpMaskBuffer( NULL )
+,	mpTempBuffer( NULL )
+,	mnBufferLongs( 0 )
+,	mbIsEnabled( false )
 {}
 
 // ----------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,7 +177,7 @@ struct ImplSVAppData
     ImeStatusWindowMode meShowImeStatusWindow;
 
                             DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
-
+                           
 };
 
 
@@ -239,7 +239,7 @@ struct ImplSVWinData
     USHORT                  mnTrackFlags;       // tracking flags
     USHORT                  mnAutoScrollFlags;  // auto scroll flags
     BOOL                    mbNoDeactivate;     // TRUE: keine Deactivate durchfuehren
-    BOOL                    mbNoSaveFocus;      // TRUE: menues must not save/restore focus
+    BOOL					mbNoSaveFocus;		// TRUE: menues must not save/restore focus
     BOOL                    mbNoSaveBackground; // TRUE: save background is unnecessary or even less performant
 };
 
@@ -335,9 +335,9 @@ struct ImplSVData
     ULONG                   mnThreadCount;      // is VCL MultiThread enabled
     ImplConfigData*         mpFirstConfigData;  // Zeiger auf ersten Config-Block
     ImplTimerData*          mpFirstTimerData;   // list of all running timers
-    SalTimer*               mpSalTimer;         // interface to sal event loop/timers
-    SalI18NImeStatus*       mpImeStatus;        // interface to ime status window
-    SalSystem*              mpSalSystem;        // SalSystem interface
+    SalTimer*				mpSalTimer;			// interface to sal event loop/timers
+    SalI18NImeStatus*		mpImeStatus;		// interface to ime status window
+    SalSystem*				mpSalSystem;		// SalSystem interface
     ResMgr*                 mpResMgr;           // SV-Resource-Manager
     ULONG                   mnTimerPeriod;      // current timer period
     ULONG                   mnTimerUpdate;      // TimerCallbackProcs on stack
@@ -355,12 +355,12 @@ struct ImplSVData
     BOOL                    mbIsTestTool;
 
     vos::OThread::TThreadIdentifier                     mnMainThreadId;
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::awt::XDisplayConnection >     mxDisplayConnection;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxAccessBridge;
     com::sun::star::uno::Reference< com::sun::star::frame::XSessionManagerClient > xSMClient;
-    ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
+    ::vcl::SettingsConfigItem*			mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
 };
 
@@ -399,9 +399,9 @@ bool ImplInitAccessBridge( BOOL bAllowCancel, BOOL &rCancelled );
 
 // Empty-SV-String
 
-inline const String& ImplGetSVEmptyStr()
+inline const String& ImplGetSVEmptyStr() 
     { return String::EmptyString(); }
-inline const ByteString& ImplGetSVEmptyByteStr()
+inline const ByteString& ImplGetSVEmptyByteStr() 
     { return ByteString::EmptyString(); }
 
 // -----------------------------------------------------------------------

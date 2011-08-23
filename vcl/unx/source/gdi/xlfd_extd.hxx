@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,18 +61,18 @@ class ExtendedXlfd : public ImplDevFontAttributes
 {
     public:
                              ExtendedXlfd( bool bScalable );
-        virtual             ~ExtendedXlfd();
-        virtual bool        AddEncoding( const Xlfd* );
-        bool                HasEncoding( rtl_TextEncoding ) const;
-        int                 GetEncodingIdx( rtl_TextEncoding nEncoding ) const;
-        unsigned short      NumEncodings() const
+        virtual				~ExtendedXlfd();
+        virtual bool 		AddEncoding( const Xlfd* );
+        bool				HasEncoding( rtl_TextEncoding ) const;
+        int 				GetEncodingIdx( rtl_TextEncoding nEncoding ) const;
+        unsigned short  	NumEncodings() const
                                     { return mnEncodings; }
         virtual int             GetPixelSize() const
                                     { return 0; }
-        virtual void        ToString( ByteString &rString,
+        virtual void		ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                        rtl_TextEncoding nEncoding ) const ;
-        virtual void        ToString( ByteString &rString,
+        virtual void 		ToString( ByteString &rString,
                                       unsigned short nPixelSize,
                                      char* pMatricsString,
                                        rtl_TextEncoding nEncoding  ) const;
@@ -92,28 +92,28 @@ class ExtendedXlfd : public ImplDevFontAttributes
         int                 GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 
     protected:
-        AttributeProvider*  mpFactory;
+        AttributeProvider*	mpFactory;
 
     public:
-        unsigned short      mnFoundry;
-        unsigned short      mnFamily;
-        unsigned short      mnWeight;
-        unsigned short      mnSlant;
-        unsigned short      mnSetwidth;
+        unsigned short		mnFoundry;
+        unsigned short		mnFamily;
+        unsigned short		mnWeight;
+        unsigned short		mnSlant;
+        unsigned short		mnSetwidth;
         bool                mbScalable;
 
     protected:
-        unsigned short      mnEncodings;
-        unsigned short      mnEncCapacity;
+        unsigned short  	mnEncodings;
+        unsigned short  	mnEncCapacity;
         struct EncodingInfo {
-            unsigned char       mcSpacing;
-            unsigned short      mnResolutionX;
-            unsigned short      mnResolutionY;
-            unsigned short      mnAddstyle;
-            unsigned short      mnCharset;
-            rtl_TextEncoding    mnEncoding;
+            unsigned char		mcSpacing;
+            unsigned short		mnResolutionX;
+            unsigned short		mnResolutionY;
+            unsigned short		mnAddstyle;
+            unsigned short		mnCharset;
+            rtl_TextEncoding	mnEncoding;
 
-            EncodingInfo&       operator= ( const Xlfd *pXlfd );
+            EncodingInfo& 		operator= ( const Xlfd *pXlfd );
         } *mpEncodingInfo;
 };
 
@@ -123,11 +123,11 @@ class ScalableBitmapXlfd : public ExtendedXlfd {
 
     public:
                             ScalableBitmapXlfd();
-        virtual             ~ScalableBitmapXlfd();
-        virtual void        ToString( ByteString &rString,
+        virtual				~ScalableBitmapXlfd();
+        virtual void 		ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                     rtl_TextEncoding nEncoding ) const;
-        virtual void        ToString( ByteString &rString,
+        virtual void 		ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                     char* pMatricsString,
                                     rtl_TextEncoding nEncoding ) const;
@@ -144,22 +144,22 @@ class BitmapXlfd : public ExtendedXlfd {
     public:
                             BitmapXlfd();
                             ~BitmapXlfd();
-        bool                AddEncoding( const Xlfd* );
-        virtual int     GetPixelSize() const
+        bool 				AddEncoding( const Xlfd* );
+        virtual int		GetPixelSize() const
                                     { return mnPixelSize; }
-        virtual void        ToString( ByteString &rString,
+        virtual void	 	ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                     rtl_TextEncoding nEncoding ) const;
-        virtual void        ToString( ByteString &rString,
+        virtual void 		ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                     char* pMatricsString,
                                     rtl_TextEncoding nEncoding ) const;
         virtual ImplFontData* GetImplFontData() const ;
     protected:
 
-        unsigned short      mnPixelSize;
-        unsigned short      mnPointSize;
-        unsigned short      mnAverageWidth;
+        unsigned short		mnPixelSize;
+        unsigned short		mnPointSize;
+        unsigned short		mnAverageWidth;
 };
 
 // class to handle true scalable fonts
@@ -170,12 +170,12 @@ class ScalableXlfd : public ExtendedXlfd {
 
     public:
                             ScalableXlfd();
-        virtual             ~ScalableXlfd();
-        virtual void        ToString( ByteString &rString,
+        virtual				~ScalableXlfd();
+        virtual void 		ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                     rtl_TextEncoding nEncoding ) const;
 
-        virtual void        ToString( ByteString &rString,
+        virtual void 		ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                     char* pMatricsString,
                                     rtl_TextEncoding  nEncoding ) const;
@@ -189,11 +189,11 @@ class XlfdStorage {
     public:
                             XlfdStorage();
 
-        void                Dispose();
-        void                Reset();
+        void				Dispose();
+        void				Reset();
 
-        void                Add( const ExtendedXlfd *pXlfd );
-        void                Add( const XlfdStorage *pXlfd );
+        void				Add( const ExtendedXlfd *pXlfd );
+        void				Add( const XlfdStorage *pXlfd );
         void                AnnounceFonts( ImplDevFontList* ) const;
 
     protected:
@@ -208,7 +208,7 @@ class BitmapXlfdStorage : public XlfdStorage {
 
     public:
 
-        void                AddBitmapFont( const Xlfd *pXlfd );
+        void				AddBitmapFont( const Xlfd *pXlfd );
 };
 
 
@@ -218,17 +218,17 @@ class VirtualXlfd : public ExtendedXlfd
 {
     private:
 
-        int                 GetFontQuality (unsigned short nFamily);
+        int					GetFontQuality (unsigned short nFamily);
 
     public:
                              VirtualXlfd();
-        virtual             ~VirtualXlfd();
-        virtual bool        AddEncoding( const Xlfd* );
-        void                FilterInterfaceFont (const Xlfd *pXlfd);
-        virtual void        ToString( ByteString &rString,
+        virtual				~VirtualXlfd();
+        virtual bool 		AddEncoding( const Xlfd* );
+        void 				FilterInterfaceFont (const Xlfd *pXlfd);
+        virtual void		ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                        rtl_TextEncoding nEncoding ) const ;
-        virtual void        ToString( ByteString &rString,
+        virtual void 		ToString( ByteString &rString,
                                       unsigned short nPixelSize,
                                      char* pMatricsString,
                                        rtl_TextEncoding nEncoding  ) const;
@@ -236,15 +236,15 @@ class VirtualXlfd : public ExtendedXlfd
         virtual ImplFontData* GetImplFontData() const ;
     protected:
 
-        unsigned short      mnExtCapacity;
+        unsigned short  	mnExtCapacity;
         struct ExtEncodingInfo {
-            unsigned short      mnFoundry;
-            unsigned short      mnFamily;
-            unsigned short      mnWeight;
-            unsigned short      mnSlant;
-            unsigned short      mnSetwidth;
+            unsigned short		mnFoundry;
+            unsigned short		mnFamily;
+            unsigned short		mnWeight;
+            unsigned short		mnSlant;
+            unsigned short		mnSetwidth;
 
-            ExtEncodingInfo&    operator= ( const Xlfd *pXlfd );
+            ExtEncodingInfo&	operator= ( const Xlfd *pXlfd );
         } *mpExtEncodingInfo;
 
     friend class ExtEncodingInfo;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace rtl
     class OUString;
 }
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering 
 {
     class  XCanvasFont;
 } } } }
@@ -60,22 +60,22 @@ namespace cppcanvas
         class ImplFont : public Font
         {
         public:
-            ImplFont( const ::com::sun::star::uno::Reference<
+            ImplFont( const ::com::sun::star::uno::Reference< 
                           ::com::sun::star::rendering::XCanvas >& rCanvas,
-                      const ::rtl::OUString& rFontName,
+                      const ::rtl::OUString& rFontName, 
                       const double& rCellSize );
 
             virtual ~ImplFont();
 
             virtual ::rtl::OUString getName() const;
-            virtual double          getCellSize() const;
+            virtual double 			getCellSize() const;
 
-            virtual ::com::sun::star::uno::Reference<
+            virtual ::com::sun::star::uno::Reference< 
                 ::com::sun::star::rendering::XCanvasFont > getUNOFont() const;
 
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >        mxCanvas;
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >    mxFont;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >		mxCanvas;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >	mxFont;
         };
     }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,7 +159,7 @@ void SAL_CALL UNOMemoryStream::seek( sal_Int64 location ) throw (IllegalArgument
 {
     if( (location < 0) || (location > SAL_MAX_INT32) )
         throw IllegalArgumentException( OUString(RTL_CONSTASCII_USTRINGPARAM("this implementation does not support more than 2GB!")), Reference< XInterface >(static_cast<OWeakObject*>(this)), 0 );
-
+ 
     // seek operation should be able to resize the stream
     if ( location > static_cast< sal_Int64 >( maData.size() ) )
         maData.resize( static_cast< sal_Int32 >( location ) );

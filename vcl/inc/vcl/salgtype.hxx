@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 // ------------
 
 typedef UINT32 SalColor;
-#define MAKE_SALCOLOR( r, g, b )    ((SalColor)(((UINT32)((UINT8)(b))))|(((UINT32)((UINT8)(g)))<<8)|(((UINT32)((UINT8)(r)))<<16))
-#define SALCOLOR_RED( n )           ((UINT8)((n)>>16))
-#define SALCOLOR_GREEN( n )         ((UINT8)(((UINT16)(n)) >> 8))
-#define SALCOLOR_BLUE( n )          ((UINT8)(n))
-#define SALCOLOR_NONE           (~(SalColor)0)
+#define MAKE_SALCOLOR( r, g, b )	((SalColor)(((UINT32)((UINT8)(b))))|(((UINT32)((UINT8)(g)))<<8)|(((UINT32)((UINT8)(r)))<<16))
+#define SALCOLOR_RED( n )			((UINT8)((n)>>16))
+#define SALCOLOR_GREEN( n ) 		((UINT8)(((UINT16)(n)) >> 8))
+#define SALCOLOR_BLUE( n )			((UINT8)(n))
+#define SALCOLOR_NONE			(~(SalColor)0)
 // ------------
 // - SalPoint -
 // ------------
@@ -47,8 +47,8 @@ typedef UINT32 SalColor;
 // must equal to class Point
 struct SalPoint
 {
-    long        mnX;
-    long        mnY;
+    long		mnX;
+    long		mnY;
 };
 
 typedef const SalPoint*   PCONSTSALPOINT;
@@ -59,14 +59,14 @@ typedef const SalPoint*   PCONSTSALPOINT;
 
 struct SalTwoRect
 {
-    long        mnSrcX;
-    long        mnSrcY;
-    long        mnSrcWidth;
-    long        mnSrcHeight;
-    long        mnDestX;
-    long        mnDestY;
-    long        mnDestWidth;
-    long        mnDestHeight;
+    long		mnSrcX;
+    long		mnSrcY;
+    long		mnSrcWidth;
+    long		mnSrcHeight;
+    long		mnDestX;
+    long		mnDestY;
+    long		mnDestWidth;
+    long		mnDestHeight;
 };
 
 // ---------------
@@ -74,17 +74,17 @@ struct SalTwoRect
 // ---------------
 
 typedef USHORT SalROPColor;
-#define SAL_ROP_0                   ((SalROPColor)0)
-#define SAL_ROP_1                   ((SalROPColor)1)
-#define SAL_ROP_INVERT              ((SalROPColor)2)
+#define SAL_ROP_0					((SalROPColor)0)
+#define SAL_ROP_1					((SalROPColor)1)
+#define SAL_ROP_INVERT				((SalROPColor)2)
 
 // -------------
 // - SalInvert -
 // -------------
 
 typedef USHORT SalInvert;
-#define SAL_INVERT_HIGHLIGHT        ((SalInvert)0x0001)
-#define SAL_INVERT_50               ((SalInvert)0x0002)
-#define SAL_INVERT_TRACKFRAME       ((SalInvert)0x0004)
+#define SAL_INVERT_HIGHLIGHT		((SalInvert)0x0001)
+#define SAL_INVERT_50				((SalInvert)0x0002)
+#define SAL_INVERT_TRACKFRAME		((SalInvert)0x0004)
 
 #endif // _SV_SALGTYPE_HXX

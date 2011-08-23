@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,10 @@ public:
         CharClass*              pCharClass;
 
                                     SvtSysLocale_Impl();
-    virtual                         ~SvtSysLocale_Impl();
+    virtual                     	~SvtSysLocale_Impl();
 
-    CharClass*                      GetCharClass();
-    virtual void                    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    CharClass*                  	GetCharClass();
+    virtual void 					ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 };
 
 // -----------------------------------------------------------------------
@@ -69,7 +69,7 @@ SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
     pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aSysLocaleOptions.GetRealLocale() );
 
     // listen for further changes
-    aSysLocaleOptions.AddListener( this );
+    aSysLocaleOptions.AddListener( this );  
 }
 
 
@@ -195,7 +195,7 @@ rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()
     const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding(
             gsl_getSystemTextEncoding() );
     if ( !pCharSet )
-    {
+    {   
         // If the system locale is unknown to us, e.g. LC_ALL=xx, match the UI
         // language if possible.
         ::com::sun::star::lang::Locale aLocale( SvtSysLocale().GetUILocale() );

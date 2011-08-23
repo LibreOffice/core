@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +38,14 @@ namespace o3tl
 {
     namespace detail
     {
-        template<typename ValueType, class Container> class simple_pool_impl :
+        template<typename ValueType, class Container> class simple_pool_impl : 
             public Container
         {
             typedef typename Container::value_type value_type;
             std::ptrdiff_t mnFirstFreeIndex;
 
         public:
-            simple_pool_impl() :
+            simple_pool_impl() : 
                 mnFirstFreeIndex(-1)
             {}
 
@@ -102,7 +102,7 @@ namespace o3tl
                 {}
 
                 ValueType      value;
-                std::ptrdiff_t nextFree;
+                std::ptrdiff_t nextFree; 
             };
         };
     }
@@ -123,8 +123,8 @@ myPool[nIdx] = myVal;
 myPool.free(nIdx);
         </pre>
      */
-    template<typename ValueType> struct vector_pool :
-        public detail::simple_pool_impl<ValueType,
+    template<typename ValueType> struct vector_pool : 
+        public detail::simple_pool_impl<ValueType, 
                                        std::vector<typename detail::struct_from_value<ValueType>::type > >
     {};
 }

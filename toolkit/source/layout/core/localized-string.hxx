@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace layoutimpl
 namespace css = ::com::sun::star;
 
 // FIXME: misuse XFixedText interface for simple string
-class LocalizedString : public css::awt::XFixedText
+class LocalizedString :	public css::awt::XFixedText
                       , public VCLXWindow
 {
 public:
@@ -54,7 +54,7 @@ public:
     ::rtl::OUString SAL_CALL getText()
         throw(css::uno::RuntimeException);
     void SAL_CALL setAlignment( sal_Int16 )
-        throw(css::uno::RuntimeException) { }
+        throw(css::uno::RuntimeException) { } 
     sal_Int16 SAL_CALL getAlignment()
         throw(css::uno::RuntimeException) { return 0; }
 

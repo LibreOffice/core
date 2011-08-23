@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
             // also emit state-changed:focused event under the same condition.
             {
                 AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
-                if( !wrapper_obj->mpText && wrapper_obj->mpContext )
+                if( wrapper_obj && !wrapper_obj->mpText && wrapper_obj->mpContext )
                 {
                     uno::Any any = wrapper_obj->mpContext->queryInterface( accessibility::XAccessibleText::static_type(NULL) );
                     if ( typelib_TypeClass_INTERFACE == any.pType->eTypeClass &&

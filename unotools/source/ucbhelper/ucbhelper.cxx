@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -871,6 +871,55 @@ sal_Bool UCBContentHelper::IsSubPath( const ::rtl::OUString& rPath, const ::rtl:
 
     return bResult;
 }
+
+// -----------------------------------------------------------------------
+sal_Bool UCBContentHelper::EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OUString& aSecondURL )
+{
+    sal_Bool bResult = sal_False;
+
+    if ( aFirstURL.getLength() && aSecondURL.getLength() )
+    {
+        INetURLObject aFirst( aFirstURL );
+        INetURLObject aSecond( aSecondURL );
+
+        if ( aFirst.GetProtocol() != INET_PROT_NOT_VALID && aSecond.GetProtocol() != INET_PROT_NOT_VALID )
+        {
+            try
+            {
+                ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
+                if ( !pBroker )
+                    throw uno::RuntimeException();
+
+                uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory > xIdFac
+                    = pBroker->getContentIdentifierFactoryInterface();
+                if ( !xIdFac.is() )
+                    throw uno::RuntimeException();
+
+                uno::Reference< ::com::sun::star::ucb::XContentIdentifier > xIdFirst
+                    = xIdFac->createContentIdentifier( aFirst.GetMainURL( INetURLObject::NO_DECODE ) );
+                uno::Reference< ::com::sun::star::ucb::XContentIdentifier > xIdSecond
+                    = xIdFac->createContentIdentifier( aSecond.GetMainURL( INetURLObject::NO_DECODE ) );
+
+                if ( xIdFirst.is() && xIdSecond.is() )
+                {
+                    uno::Reference< ::com::sun::star::ucb::XContentProvider > xProvider =
+                                                            pBroker->getContentProviderInterface();
+                    if ( !xProvider.is() )
+                        throw uno::RuntimeException();
+                    bResult = !xProvider->compareContentIds( xIdFirst, xIdSecond );
+                }
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Can't compare URL's, treat as different!\n" );
+            }
+        }
+    }
+
+    return bResult;
+}
+
+
 
 } // namespace utl
 

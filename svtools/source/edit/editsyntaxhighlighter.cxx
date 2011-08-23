@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 #include "../../inc/txtattr.hxx"
 
 
-MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle,
+MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle, 
     HighlighterLanguage aLanguage): MultiLineEdit(pParent,nWinStyle), mbDoBracketHilight(true)
 {
     EnableUpdateData(300);
     aHighlighter.initialize( aLanguage );
 }
 
-MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, const ResId& rResId ,
+MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, const ResId& rResId , 
     HighlighterLanguage aLanguage): MultiLineEdit(pParent,rResId), mbDoBracketHilight(true)
 {
     EnableUpdateData(300);
@@ -61,7 +61,7 @@ bool MultiLineEditSyntaxHighlight::IsBracketHilight()
 {
     return mbDoBracketHilight;
 }
-
+        
 void MultiLineEditSyntaxHighlight::SetText(const String& rNewText)
 {
     MultiLineEdit::SetText(rNewText);
@@ -78,8 +78,8 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(USHORT aKey)
 
     switch (aKey)
     {
-        case '\'':  // no break
-        case '"':
+        case '\'':	// no break
+        case '"': 
         {
             aChar = aKey;
             break;
@@ -110,7 +110,7 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(USHORT aKey)
 
             String aLine( GetTextEngine()->GetText( aPara ) );
             for (USHORT i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (USHORT)(aLine.Len()-1); i>0; --i)
-            {
+            {	
                 if (aLine.GetChar(i)==aChar)
                 {
                     if (!aCount)
@@ -148,14 +148,14 @@ Color MultiLineEditSyntaxHighlight::GetColorValue(TokenTypes aToken)
         {
             switch (aToken)
             {
-                case TT_IDENTIFIER: aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor; break;
-                case TT_NUMBER:     aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLNUMBER).nColor; break;
-                case TT_STRING:     aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLSTRING).nColor; break;
-                case TT_OPERATOR:   aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor; break;
-                case TT_KEYWORDS:   aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor; break;
+                case TT_IDENTIFIER:	aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor; break;
+                case TT_NUMBER:		aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLNUMBER).nColor; break;
+                case TT_STRING:		aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLSTRING).nColor; break;
+                case TT_OPERATOR:	aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor; break;
+                case TT_KEYWORDS:	aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor; break;
                 case TT_PARAMETER:  aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLPARAMETER).nColor; break;
-                case TT_COMMENT:    aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor; break;
-                default:            aColor = Color(0,0,0);
+                case TT_COMMENT:	aColor = (ColorData)m_aColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor; break;
+                default:			aColor = Color(0,0,0);
             }
             break;
         }
@@ -163,14 +163,14 @@ Color MultiLineEditSyntaxHighlight::GetColorValue(TokenTypes aToken)
         {
             switch (aToken)
             {
-                case TT_IDENTIFIER: aColor = Color(255,0,0); break;
-                case TT_COMMENT:    aColor = Color(0,0,45); break;
-                case TT_NUMBER:     aColor = Color(204,102,204); break;
-                case TT_STRING:     aColor = Color(0,255,45); break;
-                case TT_OPERATOR:   aColor = Color(0,0,100); break;
-                case TT_KEYWORDS:   aColor = Color(0,0,255); break;
-                case TT_ERROR :     aColor = Color(0,255,255); break;
-                default:            aColor = Color(0,0,0);
+                case TT_IDENTIFIER:	aColor = Color(255,0,0); break;
+                case TT_COMMENT:	aColor = Color(0,0,45); break;
+                case TT_NUMBER:		aColor = Color(204,102,204); break;
+                case TT_STRING:		aColor = Color(0,255,45); break;
+                case TT_OPERATOR:	aColor = Color(0,0,100); break;
+                case TT_KEYWORDS:	aColor = Color(0,0,255); break;
+                case TT_ERROR :		aColor = Color(0,255,255); break;
+                default:			aColor = Color(0,0,0);
             }
             break;
         }
@@ -189,7 +189,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     {
         String aLine( GetTextEngine()->GetText( nLine ) );
         Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
-
+            
         GetTextEngine()->RemoveAttribs( nLine, TRUE );
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );

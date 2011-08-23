@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,8 +78,8 @@ namespace nullcanvas
             @param bShowSpriteBounds
             When true, little debug bound rects for sprites are shown
          */
-        void init( const ::com::sun::star::geometry::RealSize2D&    rSpriteSize,
-                   const SpriteCanvasRef&                           rSpriteCanvas );
+        void init( const ::com::sun::star::geometry::RealSize2D&	rSpriteSize,
+                   const SpriteCanvasRef&							rSpriteCanvas );
 
         void disposing();
 
@@ -91,13 +91,13 @@ namespace nullcanvas
             dirty or not. If texture was updated, set to false
          */
         void redraw( bool& io_bSurfaceDirty ) const;
-
+        
     private:
-        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
+        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( 
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const;
 
 
-        SpriteCanvasRef             mpSpriteCanvas;
+        SpriteCanvasRef				mpSpriteCanvas;
         mutable bool                mbTextureDirty;  // when true, texture needs update
     };
 }

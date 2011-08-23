@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,4 +49,4 @@ void SetSalColor( const SalColor& rColor, float* pQuartzColor );
 
 // ------------------------------------------------------------------
 
-#endif  // _SV_SALCOLORUTILS_HXX
+#endif	// _SV_SALCOLORUTILS_HXX

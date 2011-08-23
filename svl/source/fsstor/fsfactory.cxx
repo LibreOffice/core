@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,12 +82,12 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
     if ( !aTempURL.getLength() )
         throw uno::RuntimeException(); // TODO: can not create tempfile
 
-    ::ucbhelper::Content aResultContent(
+    ::ucbhelper::Content aResultContent( 
         aTempURL, uno::Reference< ucb::XCommandEnvironment >() );
 
-    return uno::Reference< uno::XInterface >(
-        static_cast< OWeakObject* >(
-            new FSStorage(  aResultContent,
+    return uno::Reference< uno::XInterface >( 
+        static_cast< OWeakObject* >( 
+            new FSStorage(	aResultContent,
                             embed::ElementModes::READWRITE,
                             uno::Sequence< beans::PropertyValue >(),
                             m_xFactory ) ),
@@ -147,7 +147,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     // retrieve mediadescriptor and set storage properties
     uno::Sequence< beans::PropertyValue > aDescr;
     uno::Sequence< beans::PropertyValue > aPropsToSet;
-
+    
     if ( nArgNum >= 3 )
     {
         if( aArguments[2] >>= aDescr )
@@ -191,14 +191,14 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     else if ( !::utl::UCBContentHelper::IsFolder( aURL ) )
         throw io::IOException(); // there is no such folder
 
-    ::ucbhelper::Content aResultContent(
+    ::ucbhelper::Content aResultContent( 
         aURL, uno::Reference< ucb::XCommandEnvironment >() );
 
     // create storage based on source
-    return uno::Reference< uno::XInterface >(
-        static_cast< OWeakObject* >( new FSStorage( aResultContent,
-                                                    nStorageMode,
-                                                    aPropsToSet,
+    return uno::Reference< uno::XInterface >( 
+        static_cast< OWeakObject* >( new FSStorage( aResultContent, 
+                                                    nStorageMode, 
+                                                    aPropsToSet, 
                                                     m_xFactory ) ),
         uno::UNO_QUERY );
 }
@@ -250,7 +250,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
 
         uno::Reference< registry::XRegistryKey > xNewKey;
         xNewKey = xRegistryKey->createKey(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + 
             FSStorageFactory::impl_staticGetImplementationName() +
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES")));
 

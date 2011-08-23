@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ inline IUrlFilter::~IUrlFilter() {}
 struct FilterMatch : public ::std::unary_function< bool, WildCard >
 {
 private:
-    const String&   m_rCompareString;
+    const String&	m_rCompareString;
 public:
     FilterMatch( const String& _rCompareString ) : m_rCompareString( _rCompareString ) { }
 

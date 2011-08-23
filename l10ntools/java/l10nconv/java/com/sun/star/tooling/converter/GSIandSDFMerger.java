@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 /*
  * Created on 2005
- *  by Christian Schmidt
+ *	by Christian Schmidt
  */
 package com.sun.star.tooling.converter;
 
@@ -37,15 +37,15 @@ import java.util.Map;
 
 /**
  * Merge GSIFiles back to to the original (!) SDFFile
- *
- *
+ * 
+ * 
  * @author Christian Schmidt 2005
  *
  */
 public class GSIandSDFMerger extends SDFReader {
-
+    
     int lineCounter=0;
-
+    
     GSIReader gsiReader;
 
     private Map temp=new HashMap();
@@ -59,11 +59,11 @@ public class GSIandSDFMerger extends SDFReader {
     private int count;
     /**
      * Merge the GSIFile back to the original(!) SDFFile
-     *
+     * 
      * @param source the file to read from
      * @param sourceLanguage the source language in the source file
      * @param targetLanguage the target language in the source file
-     * @param charset   the charset of the files
+     * @param charset   the charset of the files 
      * @throws java.io.IOException
      * @throws Exception
      */
@@ -77,7 +77,7 @@ public class GSIandSDFMerger extends SDFReader {
         gsiReader=new GSIReader(source,sourceLanguage,targetLanguage,charset);
 
     }
-
+    
     /* (non-Javadoc)
      * @see com.sun.star.tooling.converter.DataReader#getData()
      */
@@ -90,15 +90,15 @@ public class GSIandSDFMerger extends SDFReader {
             OutputHandler.out("Blocks merged :         "+this.lineCounter);
         }
         return temp;
-
+        
     }
-
+    
     /**
      * Read each block of the GSIFile and check whether there is a matching
-     * block in the SDFFile. Match depends on the BlockNr and BlockId.
-     *
+     * block in the SDFFile. Match depends on the BlockNr and BlockId.  
+     * 
      * @return A Map that contains the source language content
-     *          and  the target language content.
+     *          and  the target language content. 
      * @throws IOException
      * @throws ConverterException
      */
@@ -107,7 +107,7 @@ public class GSIandSDFMerger extends SDFReader {
 
         try {
             //System.out.println("Start...");
-
+            
             if (dontLoadGSI||(gsiBlock=gsiReader.getGSIData())!=null){
                 dontLoadGSI=false;
                 //check if we must update this block
@@ -115,14 +115,14 @@ public class GSIandSDFMerger extends SDFReader {
                 if((sdfBlock = super.getData())!=null){
 
                     if(((String)sdfBlock.get("BlockNr")).equals((String)gsiBlock.get("BlockNr"))){
-
+                          
                         gsiBlock.remove(EMPTY);
                          //if the target language string is empty this may be caused by an error in the source sdf File
                          //I don't want to overwrite a possibly correct translation with an empty string
                          // so remove the target part from the gsiBlock
                         Map mp=(Map)gsiBlock.get(gsiReader.targetLanguage);
                         if (mp.size()!=0&&!((String)mp.get("TargetText")).equals("")){
-
+                            
                              // target language part in this gsiBlock
 //                             if(((String)mp.get("TargetText")).equals("")){
 //                                 gsiBlock.remove(targetLanguage);
@@ -131,16 +131,16 @@ public class GSIandSDFMerger extends SDFReader {
                              lineCounter++;
                              Map helpMap = (Map)gsiBlock.get(super.targetLanguage);//"ja"
                              sdfBlock.putAll(helpMap);
-                             skip=false;
+                             skip=false; 
                         }else{
                             //no target language part in this gsiBlock
                              skip=true;
 //
 //                             return null;
-                         }
+                         } 
                     }else{
 //                        skip=true;
-//
+//                        
 //                    // we cant match this gsi block to the current sdf block
                       // try matching the next sdf block with this gsi line
                        dontLoadGSI=true;
@@ -148,17 +148,17 @@ public class GSIandSDFMerger extends SDFReader {
                 }
                 return sdfBlock;
             }
-
+            
         } catch (IOException e) {
-
+            
             e.printStackTrace();
         }
         return null;
     }
+    
 
 
-
-
-
+   
+   
 
 }

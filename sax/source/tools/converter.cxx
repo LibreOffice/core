@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 #define XML_NULLDATE "NullDate"
 
 /** convert string to measure using optional min and max values*/
-bool Converter::convertMeasure( sal_Int32& rValue,
+bool Converter::convertMeasure(	sal_Int32& rValue,
                                 const OUString& rString,
                                 sal_Int16 nTargetUnit /* = MeasureUnit::MM_100TH */,
                                 sal_Int32 nMin /* = SAL_MIN_INT32 */,
@@ -307,16 +307,16 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
             OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,"output unit not supported for twip values" );
         case MeasureUnit::MM:
             // 0.01mm = 0.57twip (exactly)
-            nMul = 25400;   // 25.4 * 1000
-            nDiv = 1440;    // 72 * 20;
+            nMul = 25400;	// 25.4 * 1000
+            nDiv = 1440;	// 72 * 20;
             nFac = 100;
             psUnit = gpsMM;
             break;
 
         case MeasureUnit::CM:
             // 0.001cm = 0.57twip (exactly)
-            nMul = 25400;   // 2.54 * 10000
-            nDiv = 1440;    // 72 * 20;
+            nMul = 25400;	// 2.54 * 10000
+            nDiv = 1440;	// 72 * 20;
             nFac = 1000;
             psUnit = gpsCM;
             break;
@@ -335,7 +335,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
                         "output unit not supported for twip values" );
             // 0.0001in = 0.144twip (exactly)
             nMul = 100000;
-            nDiv = 1440;    // 72 * 20;
+            nDiv = 1440;	// 72 * 20;
             nFac = 10000;
             psUnit = gpsINCH;
             break;
@@ -372,7 +372,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
             case MeasureUnit::CM:
                 // 0.001mm = 1 mm/100 (exactly)
                 nMul = 10;
-                nDiv = 1;   // 72 * 20;
+                nDiv = 1;	// 72 * 20;
                 nFac = 10*nFac2;
                 psUnit = gpsCM;
                 break;
@@ -572,7 +572,7 @@ void Converter::convertNumber( OUStringBuffer& rBuffer, sal_Int32 nNumber )
 }
 
 /** convert string to number with optional min and max values */
-bool Converter::convertNumber(  sal_Int32& rValue,
+bool Converter::convertNumber(	sal_Int32& rValue,
                                 const OUString& rString,
                                 sal_Int32 nMin, sal_Int32 nMax )
 {
@@ -1650,7 +1650,7 @@ const
 
 const
   sal_uInt8 aBase64DecodeTable[]  =
-    {                                            62,255,255,255, 63, // 43-47
+    {											 62,255,255,255, 63, // 43-47
 //                                                +               /
 
      52, 53, 54, 55, 56, 57, 58, 59, 60, 61,255,255,255,  0,255,255, // 48-63
@@ -1824,9 +1824,9 @@ void Converter::clearUndefinedChars(rtl::OUString& rTarget, const rtl::OUString&
     {
         sal_Unicode cChar = rSource[i];
         if (!(cChar < 0x0020) ||
-            (cChar == 0x0009) ||        // TAB
-            (cChar == 0x000A) ||        // LF
-            (cChar == 0x000D))          // legal character
+            (cChar == 0x0009) ||		// TAB
+            (cChar == 0x000A) ||		// LF
+            (cChar == 0x000D))			// legal character
             sBuffer.append(cChar);
     }
     rTarget = sBuffer.makeStringAndClear();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,16 +57,16 @@ using namespace com::sun::star::uno;
 
 DECLARE_LIST( UniStringList, UniString* )
 
-#define STD_BTN_WIDTH   80
-#define STD_BTN_HEIGHT  26
+#define STD_BTN_WIDTH	80
+#define STD_BTN_HEIGHT	26
 
 #ifndef UNX
-    #define ALLFILES                "*.*"
+    #define ALLFILES				"*.*"
 #else
-    #define ALLFILES                "*"
+    #define ALLFILES				"*"
 #endif
-//      #define STD_BTN_WIDTH   90
-//      #define STD_BTN_HEIGHT  35
+//		#define STD_BTN_WIDTH	90
+//		#define STD_BTN_HEIGHT	35
 
 #define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, nHelpId ) \
     p = new ControlClass( GetPathDialog(), WinBits( nBits ) ); \
@@ -86,8 +86,8 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        KeyEvent aKeyEvt    = *rNEvt.GetKeyEvent();
-        sal_Unicode  cCharCode  = aKeyEvt.GetCharCode();
+        KeyEvent aKeyEvt	= *rNEvt.GetKeyEvent();
+        sal_Unicode  cCharCode	= aKeyEvt.GetCharCode();
 
         if ( IsPrintable ( cCharCode ) )
         {
@@ -134,7 +134,7 @@ ImpPathDialog::ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreat
 
     pDlg->SetHelpId( HID_FILEDLG_PATHDLG );
 
-    lang::Locale aLocale = Application::GetSettings().GetLocale();
+    lang::Locale aLocale = Application::GetSettings().GetLocale(); 
     xCollator = ::vcl::unohelper::CreateCollator();
     if( xCollator.is() )
         xCollator->loadDefaultCollator( aLocale, 1 );
@@ -153,9 +153,9 @@ ImpPathDialog::~ImpPathDialog()
     delete pOkBtn;
     delete pCancelBtn;
     delete pNewDirBtn;
-#   if defined(UNX) || defined(OS2)
+#	if defined(UNX) || defined(OS2)
     delete pHomeBtn;
-#   endif
+#	endif
 }
 
 void ImpPathDialog::InitControls()
@@ -518,7 +518,7 @@ BOOL ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
             aQueryTxt.SearchAndReplaceAscii( "%s", rDirEntry.GetFull() );
             QueryBox aQuery( GetPathDialog(),
                              WB_YES_NO | WB_DEF_YES,
-                             aQueryTxt  );
+                             aQueryTxt	);
             if( aQuery.Execute() == RET_YES )
                 rDirEntry.MakeDir();
             else
@@ -546,9 +546,9 @@ void ImpPathDialog::PreExecute()
     UpdateEntries( TRUE );
 
     // Zusaetzliche Buttons anordnen
-    Point   aPos;
-    Size    aSize;
-    long    nDY;
+    Point	aPos;
+    Size	aSize;
+    long	nDY;
     if( pLoadBtn )
     {
         aPos  = pLoadBtn->GetPosPixel();
@@ -631,7 +631,7 @@ void ImpPathDialog::PreExecute()
         for( i = 0; i < nCount; ++i )
         {
             DirEntry& rEntry = aDir[i];
-            UniString aStr    = rEntry.GetFull( FSYS_STYLE_HOST, FALSE );
+            UniString aStr	  = rEntry.GetFull( FSYS_STYLE_HOST, FALSE );
 
             UniString aVolume = rEntry.GetVolume() ;
             aStr.ToUpperAscii();
@@ -914,9 +914,9 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
         else
         {
             UniString aFilterListMask = aFilterList.GetObject( nCurPos )->aMask;
-//                      if( aFilterListMask.Search( ';' ) == STRING_NOTFOUND ) // kein ; in der Maske
-//                              aMask = WildCard( aFilterListMask, '\0' );
-//                      else // ; muss beruecksichtigt werden
+//						if( aFilterListMask.Search( ';' ) == STRING_NOTFOUND ) // kein ; in der Maske
+//								aMask = WildCard( aFilterListMask, '\0' );
+//						else // ; muss beruecksichtigt werden
                 aMask = WildCard( aFilterListMask, ';' );
         }
 
@@ -1018,7 +1018,7 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
     WildCard aTmpMask( aWildCard, ';' );
     if ( nEntries )
     {
-        UniStringList   aSortDirList;
+        UniStringList	aSortDirList;
         for ( USHORT n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
@@ -1149,7 +1149,7 @@ void ImpFileDialog::SetPath( UniString const & rPath )
 
     // Falls der Pfad eine Wildcard oder einen Filenamen enthaelt
     // -> abschneiden und merken
-    if( FileStat( aFile ).GetKind() & (FSYS_KIND_FILE | FSYS_KIND_WILD)     || !aFile.Exists() )
+    if( FileStat( aFile ).GetKind() & (FSYS_KIND_FILE | FSYS_KIND_WILD) 	|| !aFile.Exists() )
     {
         aMask = aFile.CutName();
 
@@ -1243,7 +1243,7 @@ void ImpFileDialog::PreExecute()
 {
     // ListBoxen erst unmittelbar vor Execute fuellen
     // (damit vor Execute der Pfad umgesetzt werden kann, ohne das immer die
-    //  Listboxen sofort upgedatet werden)
+    //	Listboxen sofort upgedatet werden)
 
     GetFileDialog()->EnterWait();
 

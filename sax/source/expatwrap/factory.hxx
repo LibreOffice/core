@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,6 @@ Reference< XInterface > SAL_CALL SaxWriter_CreateInstance(
     const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception);
 OUString SaxWriter_getServiceName() throw();
 OUString SaxWriter_getImplementationName() throw();
-Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw();
+Sequence< OUString > 	SaxWriter_getSupportedServiceNames(void) throw();
 }
 

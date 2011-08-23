@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
         FrameStatusListener( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
         virtual ~FrameStatusListener();
-
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getFrameInterface() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceManager() const;
-
+        
         void updateStatus( const rtl::OUString aCommandURL );
-
+        
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const rtl::OUString& aCommandURL );
         void removeStatusListener( const rtl::OUString& aCommandURL );
@@ -79,22 +79,22 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
+        
         // XEventListener
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-
+        
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) = 0;
 
         // XFrameActionListener
         virtual void SAL_CALL frameAction( const com::sun::star::frame::FrameActionEvent& Action ) throw ( ::com::sun::star::uno::RuntimeException );
-
+    
     protected:
         struct Listener
         {
             Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
                 aURL( rURL ), xDispatch( rDispatch ) {}
-
+            
             ::com::sun::star::util::URL aURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
@@ -103,7 +103,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
                                  com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
                                  ::rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > URLToDispatchMap;
-
+        
         sal_Bool                                                                            m_bInitialized : 1,
                                                                                             m_bDisposed : 1;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;

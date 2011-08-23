@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,32 +47,32 @@
 
 
 
-#define VIEWMODE_ICON   0x0001  // Text unter Bitmap
-#define VIEWMODE_NAME   0x0002  // Text rechts neben Bitmap
-#define VIEWMODE_TEXT   0x0004  // Text ohne Bitmap
+#define VIEWMODE_ICON 	0x0001	// Text unter Bitmap
+#define VIEWMODE_NAME 	0x0002  // Text rechts neben Bitmap
+#define VIEWMODE_TEXT 	0x0004  // Text ohne Bitmap
 
 #define DD_SCROLL_PIXEL 10
 
 // alle Angaben in Pixel
 
-#define ICONVIEW_OFFS_BMP_STRING    3
+#define ICONVIEW_OFFS_BMP_STRING	3
 
 // fuer das Bounding-Rectangle
-#define LROFFS_BOUND                2
-#define TBOFFS_BOUND                2
+#define LROFFS_BOUND				2
+#define TBOFFS_BOUND				2
 
 // fuer das Focus-Rectangle um Icons
-#define LROFFS_ICON                 2
-#define TBOFFS_ICON                 2
+#define LROFFS_ICON					2
+#define TBOFFS_ICON					2
 
-#define NAMEVIEW_OFFS_BMP_STRING    3
+#define NAMEVIEW_OFFS_BMP_STRING	3
 
 // Abstaende von Fensterraendern
-#define LROFFS_WINBORDER            4
-#define TBOFFS_WINBORDER            4
+#define LROFFS_WINBORDER			4
+#define TBOFFS_WINBORDER			4
 
 // Breitenoffset Highlight-Rect bei Text
-#define LROFFS_TEXT                 2
+#define LROFFS_TEXT					2
 
 
 #define ICNVIEWDATA(xPtr) (SvIcnVwDataEntry*)(pView->GetViewDataEntry(xPtr))
@@ -646,62 +646,62 @@ void DrawText( OutputDevice* pDev, const Rectangle& rRect,
 
 class ImpIcnCursor
 {
-    SvImpIconView*  pView;
-    SvPtrarr*       pColumns;
-    SvPtrarr*       pRows;
-    BOOL*           pGridMap;
-    long            nGridDX, nGridDY;
-    long            nGridCols, nGridRows;
-    long            nCols;
-    long            nRows;
-    short           nDeltaWidth;
-    short           nDeltaHeight;
-    SvLBoxEntry*    pCurEntry;
-    void            SetDeltas();
-    void            ImplCreate();
-    void            Create() {  if( !pColumns ) ImplCreate(); }
+    SvImpIconView*	pView;
+    SvPtrarr* 		pColumns;
+    SvPtrarr* 		pRows;
+    BOOL*			pGridMap;
+    long			nGridDX, nGridDY;
+    long			nGridCols, nGridRows;
+    long			nCols;
+    long			nRows;
+    short 			nDeltaWidth;
+    short 			nDeltaHeight;
+    SvLBoxEntry* 	pCurEntry;
+    void 			SetDeltas();
+    void 			ImplCreate();
+    void 			Create() {	if( !pColumns )	ImplCreate(); }
 
-    USHORT          GetSortListPos( SvPtrarr* pList, long nValue, int bVertical);
-    SvLBoxEntry*    SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,USHORT nPref,
+    USHORT 			GetSortListPos( SvPtrarr* pList, long nValue, int bVertical);
+    SvLBoxEntry* 	SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,USHORT nPref,
                         BOOL bDown, BOOL bSimple );
-    SvLBoxEntry*    SearchRow(USHORT nRow,USHORT nRight,USHORT nLeft,USHORT nPref,
+    SvLBoxEntry* 	SearchRow(USHORT nRow,USHORT nRight,USHORT nLeft,USHORT nPref,
                         BOOL bRight, BOOL bSimple );
 
-    void            ExpandGrid();
-    void            CreateGridMap();
+    void			ExpandGrid();
+    void			CreateGridMap();
     // Rueckgabe FALSE: Eintrag liegt nicht in der GridMap. rGridx,y werden
     // dann an nGridCols, nGridRows geclippt
-    BOOL            GetGrid( const Point& rDocPos, USHORT& rGridX, USHORT& rGridY ) const;
-    void            SetGridUsed( USHORT nDX, USHORT nDY, BOOL bUsed )
+    BOOL	 		GetGrid( const Point& rDocPos, USHORT& rGridX, USHORT& rGridY ) const;
+    void			SetGridUsed( USHORT nDX, USHORT nDY, BOOL bUsed )
                     {
                         pGridMap[ (nDY * nGridCols) + nDX ] = bUsed;
                     }
-    BOOL            IsGridUsed( USHORT nDX, USHORT nDY )
+    BOOL			IsGridUsed( USHORT nDX, USHORT nDY )
                     {
                         return pGridMap[ (nDY * nGridCols) + nDX ];
                     }
 public:
                     ImpIcnCursor( SvImpIconView* pOwner );
                     ~ImpIcnCursor();
-    void            Clear( BOOL bGridToo = TRUE );
+    void 			Clear( BOOL bGridToo = TRUE );
 
     // fuer Cursortravelling usw.
-    SvLBoxEntry*    GoLeftRight( SvLBoxEntry*, BOOL bRight );
-    SvLBoxEntry*    GoUpDown( SvLBoxEntry*, BOOL bDown );
+    SvLBoxEntry* 	GoLeftRight( SvLBoxEntry*, BOOL bRight );
+    SvLBoxEntry* 	GoUpDown( SvLBoxEntry*, BOOL bDown );
 
     // Rueckgaebe: FALSE == Das leere Rect steht hinter dem letzten
     // Eintrag; d.h. beim naechsten Einfuegen ergibt sich das naechste
     // leere Rechteck durch Addition. Hinweis: Das Rechteck kann dann
     // ausserhalb des View-Space liegen
-    BOOL            FindEmptyGridRect( Rectangle& rRect );
+    BOOL			FindEmptyGridRect( Rectangle& rRect );
 
     // Erzeugt fuer jede Zeile (Hoehe=nGridDY) eine nach BoundRect.Left()
     // sortierte Liste der Eintraege, die in ihr stehen. Eine Liste kann
     // leer sein. Die Listen gehen in das Eigentum des Rufenden ueber und
     // muessen mit DestroyGridAdjustData geloescht werden
-    void            CreateGridAjustData( SvPtrarr& pLists, SvLBoxEntry* pRow=0);
-    static void     DestroyGridAdjustData( SvPtrarr& rLists );
-    void            SetGridUsed( const Rectangle&, BOOL bUsed = TRUE );
+    void			CreateGridAjustData( SvPtrarr& pLists, SvLBoxEntry* pRow=0);
+    static void 	DestroyGridAdjustData( SvPtrarr& rLists );
+    void			SetGridUsed( const Rectangle&, BOOL bUsed = TRUE );
 };
 
 
@@ -879,7 +879,7 @@ void SvImpIconView::EntryInserted( SvLBoxEntry* pEntry )
         StopEditTimer();
         DBG_ASSERT(pZOrderList->GetPos(pEntry)==0xffff,"EntryInserted:ZOrder?");
         pZOrderList->Insert( pEntry, pZOrderList->Count() );
-        if( nFlags & F_GRIDMODE )
+        if( nFlags & F_GRIDMODE	)
             pImpCursor->Clear( FALSE );
         else
             pImpCursor->Clear( TRUE );
@@ -1047,7 +1047,7 @@ void SvImpIconView::EntrySelected( SvLBoxEntry* pEntry, BOOL bSelect )
 void SvImpIconView::SetNextEntryPos(const Point& rPos)
 {
     aPrevBoundRect.SetPos( rPos );
-    aPrevBoundRect.Right() = LONG_MAX;  // dont know
+    aPrevBoundRect.Right() = LONG_MAX;	// dont know
 }
 
 Point SvImpIconView::FindNextEntryPos( const Size& rBoundSize )
@@ -2095,8 +2095,8 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, const Point& rPos,
 
     SvLBoxString* pStringItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
 
-    BOOL bSelected  = pViewData->IsSelected();
-    BOOL bCursored  = pViewData->IsCursored();
+    BOOL bSelected	= pViewData->IsSelected();
+    BOOL bCursored	= pViewData->IsCursored();
 
     Font aTempFont( pOut->GetFont() );
     // waehrend D&D nicht die Fontfarbe wechseln, da sonst auch die
@@ -2419,7 +2419,7 @@ Rectangle SvImpIconView::CalcTextRect( SvLBoxEntry* pEntry,
 
     Rectangle aRect( aPos, aTextSize );
 // KNALLT BEIM D&D, WENN GECLIPPT WIRD (In DrawText von Thomas)
-//  ClipAtVirtOutRect( aRect );
+//	ClipAtVirtOutRect( aRect );
     return aRect;
 }
 
@@ -2500,7 +2500,7 @@ Size SvImpIconView::CalcBoundingSize( SvLBoxEntry* pEntry,
 
 void SvImpIconView::RecalcAllBoundingRects()
 {
-    nMaxBoundHeight = 0;
+    nMaxBoundHeight	= 0;
     pZOrderList->Remove(0, pZOrderList->Count() );
     SvLBoxEntry* pEntry = pModel->FirstChild( pCurParent );
     while( pEntry )
@@ -2515,7 +2515,7 @@ void SvImpIconView::RecalcAllBoundingRects()
 
 void SvImpIconView::RecalcAllBoundingRectsSmart()
 {
-    nMaxBoundHeight = 0;
+    nMaxBoundHeight	= 0;
     pZOrderList->Remove(0, pZOrderList->Count() );
     SvLBoxEntry* pEntry = pModel->FirstChild( pCurParent );
     while( pEntry )
@@ -2920,7 +2920,7 @@ void SvImpIconView::MakeVisible( const Rectangle& rRect, BOOL bScrBar )
 
     Rectangle aOutputArea( aOrigin, aOutputSize );
     if( aOutputArea.IsInside( aRect ) )
-        return; // ist schon sichtbar
+        return;	// ist schon sichtbar
 
     long nDy;
     if( aRect.Top() < aOutputArea.Top() )
@@ -3042,22 +3042,22 @@ void SvImpIconView::DeselectAllBut( SvLBoxEntry* pThisEntryNot )
     }
 }
 
-#define ICN_ROWS    50
-#define ICN_COLS    30
+#define ICN_ROWS	50
+#define ICN_COLS	30
 
 ImpIcnCursor::ImpIcnCursor( SvImpIconView* pOwner )
 {
-    pView       = pOwner;
-    pColumns    = 0;
-    pRows       = 0;
-    pCurEntry   = 0;
+    pView 		= pOwner;
+    pColumns	= 0;
+    pRows 		= 0;
+    pCurEntry 	= 0;
     nDeltaWidth = 0;
     nDeltaHeight= 0;
-    nCols       = 0;
-    nRows       = 0;
-    nGridCols   = 0;
-    nGridRows   = 0;
-    pGridMap    = 0;
+    nCols		= 0;
+    nRows		= 0;
+    nGridCols	= 0;
+    nGridRows	= 0;
+    pGridMap	= 0;
 }
 
 ImpIcnCursor::~ImpIcnCursor()
@@ -3590,7 +3590,7 @@ BOOL ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
 
             //XXX
             //if( nRow + 5 > nGridRows )
-            //  ExpandGrid();
+            //	ExpandGrid();
             DBG_ASSERT(pGridMap[nCur],"SetGridUsed failed");
             return TRUE;
         }

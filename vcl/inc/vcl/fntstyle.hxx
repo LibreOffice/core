@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ enum FontRelief { RELIEF_NONE, RELIEF_EMBOSSED, RELIEF_ENGRAVED, FontRelief_FORC
 // --------------
 
 typedef BYTE FontKerning;
-#define KERNING_FONTSPECIFIC        ((FontKerning)0x01)
-#define KERNING_ASIAN               ((FontKerning)0x02)
+#define KERNING_FONTSPECIFIC		((FontKerning)0x01)
+#define KERNING_ASIAN				((FontKerning)0x02)
 
-#endif  // _VCL_FNTSTYLE_HXX
+#endif	// _VCL_FNTSTYLE_HXX

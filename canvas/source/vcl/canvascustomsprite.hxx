@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace vclcanvas
     typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XCustomSprite,
                                                ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
+                                                ::com::sun::star::lang::XServiceInfo >	CanvasCustomSpriteBase_Base;
     /** Mixin Sprite
 
         Have to mixin the Sprite interface before deriving from
@@ -82,10 +82,10 @@ namespace vclcanvas
     };
 
     typedef ::canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
-                                              SpriteHelper,
-                                              CanvasHelper,
+                                              SpriteHelper, 
+                                              CanvasHelper, 
                                               tools::LocalGuard,
-                                              ::cppu::OWeakObject >                     CanvasCustomSpriteBaseT;
+                                              ::cppu::OWeakObject > 					CanvasCustomSpriteBaseT;
 
     /* Definition of CanvasCustomSprite class */
 
@@ -106,7 +106,7 @@ namespace vclcanvas
         //                                    Classname           Base doing refcount          Base implementing the XComponent interface
         //                                          |                    |                         |
         //                                          V                    V                         V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase );
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase ); 
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
@@ -124,7 +124,7 @@ namespace vclcanvas
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
                               const ::com::sun::star::rendering::ViewState&   viewState,
                               const ::com::sun::star::rendering::RenderState& renderState,
-                              const ::Point&                                  rPt,
+                              const ::Point&                                  rPt, 
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const;
     };

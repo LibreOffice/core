@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,26 +37,26 @@ import share.LogWriter;
 public class Test01 {
     XMultiServiceFactory m_xMSF = null;
     TestHelper m_aTestHelper = null;
-
+    
     public Test01 ( XMultiServiceFactory xMSF, LogWriter aLogWriter )
     {
         m_xMSF = xMSF;
         m_aTestHelper = new TestHelper (aLogWriter, "Test01: ");
     }
 
-
+    
     public boolean test () {
         try {
             final int nBytesCnt = 20;
-
+            
             //create SequenceOutputStream
-            Object oSequenceOutputStream = m_xMSF.createInstance (
+            Object oSequenceOutputStream = m_xMSF.createInstance ( 
                     "com.sun.star.io.SequenceOutputStream" );
-            XSequenceOutputStream xSeqOutStream =
-                    (XSequenceOutputStream) UnoRuntime.queryInterface (
+            XSequenceOutputStream xSeqOutStream = 
+                    (XSequenceOutputStream) UnoRuntime.queryInterface ( 
                     XSequenceOutputStream.class, oSequenceOutputStream );
             m_aTestHelper.Message ( "SequenceOutputStream created." );
-
+            
             //write something to the stream
             byte pBytesOriginal[] = new byte [nBytesCnt];
             Random oRandom = new Random();
@@ -64,27 +64,27 @@ public class Test01 {
             xSeqOutStream.writeBytes (pBytesOriginal);
             byte pBytesWritten[] = xSeqOutStream.getWrittenBytes ();
             m_aTestHelper.Message ( "SeuenceOutputStream filled." );
-
+            
             //create SequenceInputstream
             Object pArgs[] = new Object[1];
             pArgs[0] = pBytesWritten;
             Object oSequenceInputStream = m_xMSF.createInstanceWithArguments (
                     "com.sun.star.io.SequenceInputStream", pArgs );
-            XSeekableInputStream xSeekableInStream =
-                    (XSeekableInputStream)UnoRuntime.queryInterface (
+            XSeekableInputStream xSeekableInStream = 
+                    (XSeekableInputStream)UnoRuntime.queryInterface ( 
                     XSeekableInputStream.class, oSequenceInputStream );
             m_aTestHelper.Message ( "SequenceInputStream created." );
-
+            
             //read from the stream
             byte pBytesRead[][] = new byte [1][nBytesCnt];
             xSeekableInStream.readBytes ( pBytesRead, pBytesRead[0].length + 1 );
             m_aTestHelper.Message ( "Read from SequenceInputStream." );
-
+            
             //close the streams
             xSeqOutStream.closeOutput ();
             xSeekableInStream.closeInput ();
             m_aTestHelper.Message ( "Both streams closed." );
-
+            
             //compare the original, written and read arrys
             for ( int i = 0; i < nBytesCnt; ++i ) {
                 if ( pBytesOriginal[i] != pBytesWritten[i] ) {

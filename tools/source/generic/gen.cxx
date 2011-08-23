@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ SvStream& operator>>( SvStream& rIStream, Pair& rPair )
 
     if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cId;
-        unsigned char   cAry[8];
-        int             i;
-        int             i1;
-        int             i2;
-        UINT32          nNum;
+        unsigned char	cId;
+        unsigned char	cAry[8];
+        int 			i;
+        int 			i1;
+        int 			i2;
+        UINT32			nNum;
 
         rIStream >> cId;
         i1 = (cId & 0x70) >> 4;
@@ -91,9 +91,9 @@ SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
 
     if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cAry[9];
-        int             i = 1;
-        UINT32          nNum;
+        unsigned char	cAry[9];
+        int 			i = 1;
+        UINT32			nNum;
 
         cAry[0] = 0;
 
@@ -394,15 +394,15 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
 
     if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cIdAry[2];
-        unsigned char   cAry[16];
-        int             i;
-        int             iLast;
-        int             i1;
-        int             i2;
-        int             i3;
-        int             i4;
-        UINT32          nNum;
+        unsigned char	cIdAry[2];
+        unsigned char	cAry[16];
+        int 			i;
+        int 			iLast;
+        int 			i1;
+        int 			i2;
+        int 			i3;
+        int 			i4;
+        UINT32			nNum;
 
         rIStream.Read( cIdAry, 2 );
         i1 = (cIdAry[0] & 0x70) >> 4;
@@ -479,9 +479,9 @@ SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
 
     if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cAry[18];
-        int             i = 2;
-        UINT32          nNum;
+        unsigned char	cAry[18];
+        int 			i = 2;
+        UINT32			nNum;
 
         cAry[0] = 0;
         cAry[1] = 0;

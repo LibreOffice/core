@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ BOOL GenericInformation::InsertSubInfo( GenericInformation *pInfo )
 }
 
 /*****************************************************************************/
-BOOL GenericInformation::InsertSubInfo( const ByteString &rPathKey, const ByteString &rValue,
+BOOL GenericInformation::InsertSubInfo( const ByteString &rPathKey,	const ByteString &rValue,
                     BOOL bSearchByPath, BOOL bNewPath )
 /*****************************************************************************/
 {
@@ -167,7 +167,7 @@ GenericInformationList::~GenericInformationList()
 {
     // delete all Informations stored in this List
     // ### GH: Hier werden dann wohl etwa die H�lfte der Eintr�ge gel�scht
-/*  for ( ULONG i = 0; i < Count(); i++ ) {
+/*	for ( ULONG i = 0; i < Count(); i++ ) {
         GetObject( i )->ListDeleted();
         delete GetObject( i );
         Remove( i );*/
@@ -292,7 +292,7 @@ ULONG GenericInformationList::InsertSorted( GenericInformation *pInfo,
         if ( sCandidate.ToUpperAscii() == sKey ) {
             // key allready exists in list
             if ( bOverwrite )
-                Replace( pInfo, ULONG(0));  // ### Laut NF scheint hier ein Memory Leak zu sein
+                Replace( pInfo, ULONG(0));	// ### Laut NF scheint hier ein Memory Leak zu sein
             return 0;
         }
         else if ( sCandidate > sKey ) {
@@ -312,7 +312,7 @@ ULONG GenericInformationList::InsertSorted( GenericInformation *pInfo,
     if ( sCandidate.ToUpperAscii() == sKey ) {
         // key allready exists in list
         if ( bOverwrite )
-            Replace( pInfo, nActPos );  // ### Laut NF scheint hier ein Memory Leak zu sein
+            Replace( pInfo, nActPos );	// ### Laut NF scheint hier ein Memory Leak zu sein
         return nActPos;
     }
 
@@ -387,7 +387,7 @@ void GenericInformationList::RemoveInfo( GenericInformation *pInfo,
     Remove( pInfo );
     if ( bDelete )
         delete pInfo;
-/*  if ( Count() == 0 && pOwner )   // Leere Listen entfernen;
+/*	if ( Count() == 0 && pOwner )	// Leere Listen entfernen;
     {
         SetOwner( NULL );
         delete this;
@@ -397,7 +397,7 @@ void GenericInformationList::RemoveInfo( GenericInformation *pInfo,
 GenericInformation* GenericInformationList::SetOwner( GenericInformation *pNewOwner )
 {
     GenericInformation *pOldOwner = pOwner;
-    if ( pOwner )   // bei parent austragen;
+    if ( pOwner )	// bei parent austragen;
         pOwner->SetSubList( NULL );
     if ( pNewOwner )
         pNewOwner->SetSubList( this );

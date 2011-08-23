@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
         throw NotConnectedException();
     }
     if( ! m_bStarted ) {
-        nMaxToRead = Max( 512 , nMaxToRead );   // it should be possible to find the encoding attribute
+        nMaxToRead = Max( 512 , nMaxToRead );  	// it should be possible to find the encoding attribute
                                                  // within the first 512 bytes == 128 chars in UCS-4
     }
 
@@ -104,7 +104,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
                 m_pText2Unicode->canContinue() && m_pUnicode2Text->canContinue() ) {
 
                 Sequence<sal_Unicode> seqUnicode = m_pText2Unicode->convert( seq );
-                seq = m_pUnicode2Text->convert( seqUnicode.getConstArray(), seqUnicode.getLength() );
+                seq = m_pUnicode2Text->convert(	seqUnicode.getConstArray(),	seqUnicode.getLength() );
             }
 
             if( ! m_bStarted )
@@ -172,7 +172,7 @@ void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
                                 &( seq.getArray()[nStop+1]) ,
                                 seq.getLength() - nStop -1);
                 seq.realloc( seq.getLength() - ( nStop+1 - nFound ) );
-//              str = String( (char * ) seq.getArray() , seq.getLen() );
+//				str = String( (char * ) seq.getArray() , seq.getLen() );
             }
         }
     }
@@ -302,7 +302,7 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
 
         m_sEncoding = "utf-16";
     }
-    else if( 0xEF == pSource[0] &&
+    else if( 0xEF == pSource[0] && 
              0xBB == pSource[1] &&
              0xBF == pSource[2] )
     {
@@ -383,7 +383,7 @@ void Text2UnicodeConverter::init( rtl_TextEncoding encoding )
     m_bCanContinue = sal_True;
     m_bInitialized = sal_True;
 
-    m_convText2Unicode  = rtl_createTextToUnicodeConverter(encoding);
+    m_convText2Unicode 	= rtl_createTextToUnicodeConverter(encoding);
     m_contextText2Unicode = rtl_createTextToUnicodeContext( m_convText2Unicode );
     m_rtlEncoding = encoding;
 }
@@ -392,13 +392,13 @@ void Text2UnicodeConverter::init( rtl_TextEncoding encoding )
 Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &seqText )
 {
     sal_uInt32 uiInfo;
-    sal_Size nSrcCvtBytes   = 0;
-    sal_Size nTargetCount   = 0;
+    sal_Size nSrcCvtBytes 	= 0;
+    sal_Size nTargetCount 	= 0;
     sal_Size nSourceCount   = 0;
 
     // the whole source size
-    sal_Int32   nSourceSize = seqText.getLength() + m_seqSource.getLength();
-    Sequence<sal_Unicode>   seqUnicode ( nSourceSize );
+    sal_Int32 	nSourceSize = seqText.getLength() + m_seqSource.getLength();
+    Sequence<sal_Unicode> 	seqUnicode ( nSourceSize );
 
     const sal_Int8 *pbSource = seqText.getConstArray();
     sal_Int8 *pbTempMem = 0;
@@ -417,7 +417,7 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
     while( sal_True ) {
 
         /* All invalid characters are transformed to the unicode undefined char */
-        nTargetCount +=     rtl_convertTextToUnicode(
+        nTargetCount += 	rtl_convertTextToUnicode(
                                     m_convText2Unicode,
                                     m_contextText2Unicode,
                                     ( const sal_Char * ) &( pbSource[nSourceCount] ),
@@ -512,7 +512,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
     // which most often used as the target.
     sal_Int32 nSeqSize =  nSourceSize * 3;
 
-    Sequence<sal_Int8>  seqText( nSeqSize );
+    Sequence<sal_Int8> 	seqText( nSeqSize );
     sal_Char *pTarget = (sal_Char *) seqText.getArray();
     while( sal_True ) {
 
@@ -561,7 +561,7 @@ void Unicode2TextConverter::init( rtl_TextEncoding encoding )
     m_bCanContinue = sal_True;
     m_bInitialized = sal_True;
 
-    m_convUnicode2Text  = rtl_createUnicodeToTextConverter( encoding );
+    m_convUnicode2Text 	= rtl_createUnicodeToTextConverter( encoding );
     m_contextUnicode2Text = rtl_createUnicodeToTextContext( m_convUnicode2Text );
     m_rtlEncoding = encoding;
 };

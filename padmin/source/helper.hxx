@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,14 +54,14 @@ namespace padmin
 {
 class DelMultiListBox : public MultiListBox
 {
-    Link            m_aDelPressedLink;
+    Link			m_aDelPressedLink;
 public:
     DelMultiListBox( Window* pParent, const ResId& rResId ) :
             MultiListBox( pParent, rResId ) {}
     ~DelMultiListBox() {}
-
+    
     virtual long Notify( NotifyEvent& rEvent );
-
+    
     Link setDelPressedLink( const Link& rLink )
     {
         Link aOldLink( m_aDelPressedLink );
@@ -73,14 +73,14 @@ public:
 
 class DelListBox : public ListBox
 {
-    Link            m_aDelPressedLink;
+    Link			m_aDelPressedLink;
 public:
     DelListBox( Window* pParent, const ResId& rResId ) :
                 ListBox( pParent, rResId ) {}
     ~DelListBox() {}
-
+    
     virtual long Notify( NotifyEvent& rEvent );
-
+    
     Link setDelPressedLink( const Link& rLink )
     {
         Link aOldLink( m_aDelPressedLink );
@@ -97,13 +97,13 @@ private:
     CancelButton m_aCancelButton;
     FixedText    m_aFixedText;
     Edit         m_aEdit;
-    ComboBox     m_aComboBox;
-
+    ComboBox	 m_aComboBox;
+    
     String&      m_rReturnValue;
-    bool         m_bUseEdit;
-
+    bool		 m_bUseEdit;
+    
     DECL_LINK( ClickBtnHdl, Button* );
-
+    
 public:
     QueryString( Window*, String &, String &, const ::std::list< String >& rChoices = ::std::list<String>() );
     // parent window, Query text, initial value

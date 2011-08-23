@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ enum type {
     UltraExpanded = 9
 };
 }
-
+    
 namespace pitch
 {
 enum type {
@@ -109,13 +109,13 @@ enum type {
 namespace family
 {
 enum type {
-    Unknown = 0,
-    Decorative = 1,
+    Unknown = 0, 
+    Decorative = 1, 
     Modern = 2,
-    Roman = 3,
-    Script = 4,
-    Swiss = 5,
-    System = 6
+    Roman = 3, 
+    Script = 4, 
+    Swiss = 5, 
+    System = 6 
 };
 }
 
@@ -129,12 +129,12 @@ enum type {
 };
 }
 
-namespace fcstatus
+namespace fcstatus 
 {
-enum type {
+enum type { 
     istrue,
     isunset,
-    isfalse
+    isfalse 
 };
 }
 
@@ -150,19 +150,19 @@ enum type {
 
 struct FastPrintFontInfo
 {
-    fontID                              m_nID; // FontID
-    fonttype::type                      m_eType;
-
+    fontID                  			m_nID; // FontID
+    fonttype::type          			m_eType;
+        
     // font attributes
-    rtl::OUString                       m_aFamilyName;
+    rtl::OUString         				m_aFamilyName;
     rtl::OUString                       m_aStyleName;
-    std::list< rtl::OUString >          m_aAliases;
-    family::type                        m_eFamilyStyle;
-    italic::type                        m_eItalic;
-    width::type                         m_eWidth;
-    weight::type                        m_eWeight;
-    pitch::type                         m_ePitch;
-    rtl_TextEncoding                    m_aEncoding;
+    std::list< rtl::OUString >			m_aAliases;
+    family::type            			m_eFamilyStyle;
+    italic::type            			m_eItalic;
+    width::type             			m_eWidth;
+    weight::type            			m_eWeight;
+    pitch::type             			m_ePitch;
+    rtl_TextEncoding        			m_aEncoding;
     bool                                m_bSubsettable;
     bool                                m_bEmbeddable;
 
@@ -180,10 +180,10 @@ struct FastPrintFontInfo
 
 struct PrintFontInfo : public FastPrintFontInfo
 {
-    int                                     m_nAscend;
-    int                                     m_nDescend;
-    int                                     m_nLeading;
-    int                                     m_nWidth;
+    int                     				m_nAscend;
+    int                     				m_nDescend;
+    int                     				m_nLeading;
+    int                     				m_nWidth;
 
     PrintFontInfo() :
             FastPrintFontInfo(),
@@ -256,20 +256,20 @@ class VCL_DLLPUBLIC PrintFontManager
         bool                                        m_bKernPairsQueried;
         std::list< KernPair >                     m_aXKernPairs;
         std::list< KernPair >                     m_aYKernPairs;
-        std::hash_map< sal_Unicode, bool >      m_bVerticalSubstitutions;
+        std::hash_map< sal_Unicode, bool >		m_bVerticalSubstitutions;
 
         PrintFontMetrics() : m_bKernPairsQueried( false ) {}
-
+        
         bool isEmpty() const { return m_aMetrics.empty(); }
     };
 
     struct PrintFont
     {
         fonttype::type                              m_eType;
-
+            
         // font attributes
         int                                         m_nFamilyName;  // atom
-        std::list< int >                            m_aAliases;
+        std::list< int >							m_aAliases;
         int                                         m_nPSName;      // atom
         rtl::OUString                               m_aStyleName;
         italic::type                                m_eItalic;
@@ -277,22 +277,22 @@ class VCL_DLLPUBLIC PrintFontManager
         weight::type                                m_eWeight;
         pitch::type                                 m_ePitch;
         rtl_TextEncoding                            m_aEncoding;
-        bool                                        m_bFontEncodingOnly; // set if font should be only accessed by builtin encoding
+        bool										m_bFontEncodingOnly; // set if font should be only accessed by builtin encoding
         CharacterMetric                             m_aGlobalMetricX;
         CharacterMetric                             m_aGlobalMetricY;
         PrintFontMetrics*                           m_pMetrics;
         int                                         m_nAscend;
         int                                         m_nDescend;
         int                                         m_nLeading;
-        int                                         m_nXMin; // font bounding box
-        int                                         m_nYMin;
-        int                                         m_nXMax;
-        int                                         m_nYMax;
-        bool                                        m_bHaveVerticalSubstitutedGlyphs;
+        int											m_nXMin; // font bounding box
+        int											m_nYMin;
+        int											m_nXMax;
+        int											m_nYMax;
+        bool										m_bHaveVerticalSubstitutedGlyphs;
         bool                                        m_bUserOverride;
 
-        std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
-        std::map< sal_Unicode, rtl::OString >       m_aNonEncoded;
+        std::map< sal_Unicode, sal_Int32 >			m_aEncodingVector;
+        std::map< sal_Unicode, rtl::OString >		m_aNonEncoded;
 
         PrintFont( fonttype::type eType );
         virtual ~PrintFont();
@@ -318,11 +318,11 @@ class VCL_DLLPUBLIC PrintFontManager
 
     struct TrueTypeFontFile : public PrintFont
     {
-        int                     m_nDirectory;       // atom containing system dependent path
+        int					    m_nDirectory;       // atom containing system dependent path
         rtl::OString          m_aFontFile;        // relative to directory
         rtl::OString          m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
         int                     m_nCollectionEntry; // -1 for regular fonts, 0 to ... for fonts stemming from collections
-        unsigned int           m_nTypeFlags;        // copyright bits and PS-OpenType flag
+        unsigned int           m_nTypeFlags;		// copyright bits and PS-OpenType flag
 
         TrueTypeFontFile();
         virtual ~TrueTypeFontFile();
@@ -341,25 +341,25 @@ class VCL_DLLPUBLIC PrintFontManager
 
     struct XLFDEntry
     {
-        static const int MaskFoundry    = 1;
-        static const int MaskFamily     = 2;
-        static const int MaskAddStyle   = 4;
-        static const int MaskItalic     = 8;
-        static const int MaskWeight     = 16;
-        static const int MaskWidth      = 32;
-        static const int MaskPitch      = 64;
-        static const int MaskEncoding   = 128;
+        static const int MaskFoundry	= 1;
+        static const int MaskFamily		= 2;
+        static const int MaskAddStyle	= 4;
+        static const int MaskItalic		= 8;
+        static const int MaskWeight		= 16;
+        static const int MaskWidth		= 32;
+        static const int MaskPitch		= 64;
+        static const int MaskEncoding	= 128;
 
-        int                 nMask; // contains a bit set for every valid member
+        int					nMask; // contains a bit set for every valid member
 
-        rtl::OString        aFoundry;
-        rtl::OString        aFamily;
-        rtl::OString        aAddStyle;
-        italic::type        eItalic;
-        weight::type        eWeight;
-        width::type         eWidth;
-        pitch::type         ePitch;
-        rtl_TextEncoding    aEncoding;
+        rtl::OString		aFoundry;
+        rtl::OString		aFamily;
+        rtl::OString		aAddStyle;
+        italic::type		eItalic;
+        weight::type		eWeight;
+        width::type			eWidth;
+        pitch::type			ePitch;
+        rtl_TextEncoding	aEncoding;
 
         XLFDEntry() { nMask = 0; }
 
@@ -374,7 +374,7 @@ class VCL_DLLPUBLIC PrintFontManager
     std::hash_map< int, family::type >        m_aFamilyTypes;
     std::list< rtl::OUString >              m_aPrinterDrivers;
     std::list< rtl::OString >               m_aFontDirectories;
-    std::list< int >                            m_aPrivateFontDirectories;
+    std::list< int >							m_aPrivateFontDirectories;
     std::map< struct XLFDEntry, std::list< struct XLFDEntry > >
     m_aXLFD_Aliases;
     utl::MultiAtomProvider*                   m_pAtoms;
@@ -391,14 +391,14 @@ class VCL_DLLPUBLIC PrintFontManager
         m_aAdobenameToUnicode;
     std::hash_multimap< sal_Unicode, rtl::OString >
         m_aUnicodeToAdobename;
-    std::hash_multimap< sal_Unicode, sal_uInt8 >    m_aUnicodeToAdobecode;
-    std::hash_multimap< sal_uInt8, sal_Unicode >    m_aAdobecodeToUnicode;
+    std::hash_multimap< sal_Unicode, sal_uInt8 >	m_aUnicodeToAdobecode;
+    std::hash_multimap< sal_uInt8, sal_Unicode >	m_aAdobecodeToUnicode;
 
     mutable FontCache*                                                        m_pFontCache;
     bool m_bFontconfigSuccess;
 
     mutable std::vector< fontID >               m_aOverrideFonts;
-
+        
     rtl::OString getAfmFile( PrintFont* pFont ) const;
     rtl::OString getFontFile( PrintFont* pFont ) const;
 
@@ -446,18 +446,18 @@ class VCL_DLLPUBLIC PrintFontManager
 
     since fontconfig is asked for font substitutes before OOo will check for font availability
     and fontconfig will happily substitute fonts it doesn't know (e.g. "Arial Narrow" -> "DejaVu Sans Book"!)
-    it becomes necessary to tell the library about all the hidden font treasures
-
+    it becomes necessary to tell the library about all the hidden font treasures 
+ 
     @returns
     true if libfontconfig accepted the directory
     false else (e.g. no libfontconfig found)
     */
     bool addFontconfigDir(const rtl::OString& rDirectory);
-
+    
     static bool parseXLFD( const rtl::OString& rXLFD, XLFDEntry& rEntry );
     void parseXLFD_appendAliases( const std::list< rtl::OString >& rXLFDs, std::list< XLFDEntry >& rEntries ) const;
     void initFontsAlias();
-
+    
     bool readOverrideMetrics();
 
     PrintFontManager();
@@ -465,17 +465,17 @@ class VCL_DLLPUBLIC PrintFontManager
 public:
     static PrintFontManager& get(); // one instance only
 
-    int addFontFile( const rtl::OString& rFileName, int nFaceNum );
+    int addFontFile( const rtl::OString& rFileName, int nFaceNum ); 
 
     void initialize();
 
     // returns the number of managed fonts
     int getFontCount() const { return m_aFonts.size(); }
-
+    
     // caution: the getFontList* methods can change the font list on demand
     // depending on the pParser argument. That is getFontCount() may
     // return a larger value after getFontList()
-
+    
     // returns the ids of all managed fonts. on pParser != NULL
     // all fonttype::Builtin type fonts are not listed
     // which do not occur in the PPD of pParser
@@ -502,7 +502,7 @@ public:
 
     // get a specific fonts family name aliases
     void getFontFamilyAliases( fontID nFontID ) const;
-
+        
     // get a specific fonts type
     fonttype::type getFontType( fontID nFontID ) const
     {
@@ -732,8 +732,8 @@ public:
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
     bool getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*), ImplFontOptions& rResult ) const;
 
-    rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
-        const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,
+    rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes, 
+        const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight, 
         width::type& rWidth, pitch::type& rPitch) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 

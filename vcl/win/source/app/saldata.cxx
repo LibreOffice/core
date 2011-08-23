@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,9 +91,9 @@ UniString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen )
 
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 {
-    int         nRet;
-    wchar_t     c1;
-    char       c2;
+    int 		nRet;
+    wchar_t 	c1;
+    char	   c2;
     do
     {
         // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln

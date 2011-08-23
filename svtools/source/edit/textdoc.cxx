@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,8 +161,8 @@ TextCharAttrib* TextCharAttribList::FindNextAttrib( USHORT nWhich, USHORT nFromP
     for ( USHORT nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib* pAttr = GetObject( nAttr );
-        if ( ( pAttr->GetStart() >= nFromPos ) &&
-             ( pAttr->GetEnd() <= nMaxPos ) &&
+        if ( ( pAttr->GetStart() >= nFromPos ) && 
+             ( pAttr->GetEnd() <= nMaxPos ) && 
              ( pAttr->Which() == nWhich ) )
             return pAttr;
     }
@@ -280,7 +280,7 @@ void TextNode::ExpandAttribs( USHORT nIndex, USHORT nNew )
                 // Wenn spaeter doch Ueberpruefung:
                 //   Spezialfall: Start == 0; AbsLen == 1, nNew = 1 => Expand, weil durch Absatzumbruch!
                 // Start <= nIndex, End >= nIndex => Start=End=nIndex!
-//              if ( pAttrib->GetStart() == nIndex )
+//				if ( pAttrib->GetStart() == nIndex )
                     pAttrib->Expand( nNew );
             }
             // 1: Attribut startet davor, geht bis Index...
@@ -307,7 +307,7 @@ void TextNode::ExpandAttribs( USHORT nIndex, USHORT nNew )
                 if ( nIndex == 0 )
                 {
                     pAttrib->Expand( nNew );
-//                  bResort = TRUE;     // es gibt ja keine Features mehr...
+//					bResort = TRUE;		// es gibt ja keine Features mehr...
                 }
                 else
                     pAttrib->MoveForward( nNew );
@@ -352,17 +352,17 @@ void TextNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted )
                 // Spezialfall: Attrubt deckt genau den Bereich ab
                 // => als leeres Attribut behalten.
                 if ( ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
-                    pAttrib->GetEnd() = nIndex; // leer
+                    pAttrib->GetEnd() = nIndex;	// leer
                 else
                     bDelAttr = TRUE;
             }
             // 2. Attribut beginnt davor, endet drinnen oder dahinter...
             else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
             {
-                if ( pAttrib->GetEnd() <= nEndChanges ) // endet drinnen
+                if ( pAttrib->GetEnd() <= nEndChanges )	// endet drinnen
                     pAttrib->GetEnd() = nIndex;
                 else
-                    pAttrib->Collaps( nDeleted );       // endet dahinter
+                    pAttrib->Collaps( nDeleted );		// endet dahinter
             }
             // 3. Attribut beginnt drinnen, endet dahinter...
             else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() > nEndChanges ) )
@@ -499,7 +499,7 @@ void TextNode::Append( const TextNode& rNode )
                         pTmpAttrib->GetEnd() =
                             pTmpAttrib->GetEnd() + pAttrib->GetLen();
                         bMelted = TRUE;
-                        break;  // es kann nur eins von der Sorte an der Stelle geben
+                        break;	// es kann nur eins von der Sorte an der Stelle geben
                     }
                 }
             }
@@ -763,9 +763,9 @@ BOOL TextDoc::RemoveAttribs( TextNode* pNode, USHORT nStart, USHORT nEnd, TextCh
                 bChanged = TRUE;
                 if ( pAttr->GetEnd() > nEnd )
                 {
-                    pAttr->GetStart() = nEnd;   // dann faengt es dahinter an
+                    pAttr->GetStart() = nEnd;	// dann faengt es dahinter an
                     rpStarting = pAttr;
-                    break;  // es kann kein weiteres Attrib hier liegen
+                    break;	// es kann kein weiteres Attrib hier liegen
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
@@ -780,7 +780,7 @@ BOOL TextDoc::RemoveAttribs( TextNode* pNode, USHORT nStart, USHORT nEnd, TextCh
                 bChanged = TRUE;
                 if ( ( pAttr->GetStart() < nStart ) && !pAttr->IsFeature() )
                 {
-                    pAttr->GetEnd() = nStart;   // dann hoert es hier auf
+                    pAttr->GetEnd() = nStart;	// dann hoert es hier auf
                     rpEnding = pAttr;
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
@@ -797,23 +797,23 @@ BOOL TextDoc::RemoveAttribs( TextNode* pNode, USHORT nStart, USHORT nEnd, TextCh
                 {
                     pAttr->GetStart() = nEnd;
                     rpStarting = pAttr;
-                    break;  // es kann weitere Attribute geben!
+                    break;	// es kann weitere Attribute geben!
                 }
                 else if ( pAttr->GetEnd() == nEnd )
                 {
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
-                    break;  // es kann weitere Attribute geben!
+                    break;	// es kann weitere Attribute geben!
                 }
                 else // Attribut muss gesplittet werden...
                 {
                     USHORT nOldEnd = pAttr->GetEnd();
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
-//                  ULONG nSavePos = pNode->GetCharAttribs().GetStartList().GetCurPos();
+//					ULONG nSavePos = pNode->GetCharAttribs().GetStartList().GetCurPos();
                     InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
-//                  pNode->GetCharAttribs().GetStartList().Seek( nSavePos );
-                    break;  // es kann weitere Attribute geben!
+//					pNode->GetCharAttribs().GetStartList().Seek( nSavePos );
+                    break;	// es kann weitere Attribute geben!
                 }
             }
         }
@@ -839,17 +839,17 @@ void TextDoc::InsertAttrib( const SfxPoolItem& rPoolItem, TextNode* pNode, USHOR
     // schon an der Stelle existiert!
 
     // pruefen, ob neues Attrib oder einfach nur Ende eines Attribs...
-//  const SfxPoolItem& rDefItem = pNode->GetContentAttribs().GetItem( rPoolItem.Which() );
-//  BOOL bCreateAttrib = ( rDefItem != rPoolItem );
+//	const SfxPoolItem& rDefItem = pNode->GetContentAttribs().GetItem( rPoolItem.Which() );
+//	BOOL bCreateAttrib = ( rDefItem != rPoolItem );
 
     // Durch den Verlust der Exclude-Liste geht es nicht mehr, dass ich
     // kein neues Attribut benoetige und nur das alte nicht expandiere...
-//  if ( !bCreateAttrib )
+//	if ( !bCreateAttrib )
     {
         // => Wenn schon Default-Item, dann wenigstens nur dann einstellen,
         // wenn davor wirklich ein entsprechendes Attribut.
-//      if ( pNode->GetCharAttribs().FindAttrib( rPoolItem.Which(), nStart ) )
-//          bCreateAttrib = TRUE;
+//		if ( pNode->GetCharAttribs().FindAttrib( rPoolItem.Which(), nStart ) )
+//			bCreateAttrib = TRUE;
         // Aber kleiner Trost:
         // Die wenigsten schreiben, aendern das Attr, schreiben, und
         // stellen dann wieder das Default-Attr ein.
@@ -859,21 +859,21 @@ void TextDoc::InsertAttrib( const SfxPoolItem& rPoolItem, TextNode* pNode, USHOR
     // Die Uberlegung, einfach das andere Attribut nicht zu expandieren, war
     // sowieso falsch, da das DefAttr aus einer Vorlage kommen kann,
     // die irgendwann verschwindet!
-//  if ( bCreateAttrib )
-//  {
+//	if ( bCreateAttrib )
+//	{
         TextCharAttrib* pAttrib = MakeCharAttrib( *pCurPool, rPoolItem, nStart, nEnd );
         DBG_ASSERT( pAttrib, "MakeCharAttrib fehlgeschlagen!" );
         pNode->GetCharAttribs().InsertAttrib( pAttrib );
-//  }
-//  else
-//  {
-//      TextCharAttrib* pTmpAttrib =
-//          pNode->GetCharAttribs().FindAnyAttrib( rPoolItem.Which() );
-//      if ( pTmpAttrib )   // sonst benoetige ich es sowieso nicht....
-//      {
-//          aExcludeList.Insert( pTmpAttrib->GetItem() );
-//      }
-//  }
+//	}
+//	else
+//	{
+//		TextCharAttrib* pTmpAttrib =
+//			pNode->GetCharAttribs().FindAnyAttrib( rPoolItem.Which() );
+//		if ( pTmpAttrib ) 	// sonst benoetige ich es sowieso nicht....
+//		{
+//			aExcludeList.Insert( pTmpAttrib->GetItem() );
+//		}
+//	}
 }
 
 #pragma SEG_FUNCDEF(editdoc_40)
@@ -899,7 +899,7 @@ void TextDoc::InsertAttrib( TextNode* pNode, USHORT nStart, USHORT nEnd, const S
         pAttr = pNode->GetCharAttribs().FindAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
-            if ( pAttr->IsInside( nStart ) )    // splitten
+            if ( pAttr->IsInside( nStart ) )	// splitten
             {
                 // ???????????????????????????????
                 // eigentlich noch pruefen, ob wirklich splittet, oder return !
@@ -948,15 +948,15 @@ void TextDoc::FindAttribs( TextNode* pNode, USHORT nStartPos, USHORT nEndPos, Sf
             // Attribut endet hier, ist leer
             else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() == nStartPos ) )
             {
-//              if ( aExcludeList.FindAttrib( pAttr->GetItem()->Which() ) )
+//				if ( aExcludeList.FindAttrib( pAttr->GetItem()->Which() ) )
                     pItem = pAttr->GetItem();
-//              else if ( pNode->Len() == 0 )   // Sonderfall
-//                  pItem = pAttr->GetItem();
+//				else if ( pNode->Len() == 0 )	// Sonderfall
+//					pItem = pAttr->GetItem();
             }
             // Attribut beginnt hier
             else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
             {
-                if ( nStartPos == 0 )   // Sonderfall
+                if ( nStartPos == 0 ) 	// Sonderfall
                     pItem = pAttr->GetItem();
             }
 
@@ -980,7 +980,7 @@ void TextDoc::FindAttribs( TextNode* pNode, USHORT nStartPos, USHORT nEndPos, Sf
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
         }
     }
-    else    // Selektion
+    else	// Selektion
     {
         while ( pAttr && ( pAttr->GetStart() < nEndPos) )
         {
@@ -1014,7 +1014,7 @@ void TextDoc::FindAttribs( TextNode* pNode, USHORT nStartPos, USHORT nEndPos, Sf
                 //  Ist falsch, wenn das gleiche Attribut sofort wieder
                 //  eingestellt wird!
                 //  => Sollte am besten nicht vorkommen, also gleich beim
-                //      Setzen von Attributen richtig machen!
+                //  	Setzen von Attributen richtig machen!
                 // --------------------------------------------------
                 rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 
-//  ----------------------------------------------------
-//  class ScriptTypeDetector
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class ScriptTypeDetector
+//	----------------------------------------------------
 class ScriptTypeDetector : public cppu::WeakImplHelper2
 <
     ::com::sun::star::i18n::XScriptTypeDetector,

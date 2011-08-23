@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/scopeguard.hxx> 
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -61,23 +61,23 @@ namespace nullcanvas
 
         CanvasHelper::init( rSize, rDevice, bHasAlpha );
     }
-
+    
     void SpriteCanvasHelper::disposing()
     {
         mpRedrawManager = NULL;
 
         // forward to base
-        CanvasHelper::disposing();
+        CanvasHelper::disposing();        
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation(
+    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation( 
         const uno::Reference< rendering::XAnimation >& /*animation*/ )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps(
-        const uno::Sequence< uno::Reference< rendering::XBitmap > >& /*animationBitmaps*/,
+    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps( 
+        const uno::Sequence< uno::Reference< rendering::XBitmap > >& /*animationBitmaps*/, 
         sal_Int8                                                     /*interpolationMode*/ )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
@@ -88,8 +88,8 @@ namespace nullcanvas
         if( !mpRedrawManager )
             return uno::Reference< rendering::XCustomSprite >(); // we're disposed
 
-        return uno::Reference< rendering::XCustomSprite >(
-            new CanvasCustomSprite( spriteSize,
+        return uno::Reference< rendering::XCustomSprite >( 
+            new CanvasCustomSprite( spriteSize, 
                                     mpDevice ) );
     }
 
@@ -111,21 +111,21 @@ namespace nullcanvas
         // TODO
     }
 
-    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange&                       /*rMoveStart*/,
-                                           const ::basegfx::B2DRange&                       /*rMoveEnd*/,
+    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange& 						/*rMoveStart*/, 
+                                           const ::basegfx::B2DRange& 						/*rMoveEnd*/,
                                            const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
     {
         // TODO
     }
-
+    
     void SpriteCanvasHelper::opaqueUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
     {
         // TODO
     }
-
+    
     void SpriteCanvasHelper::genericUpdate( const ::canvas::SpriteRedrawManager::UpdateArea& /*rUpdateArea*/ )
     {
         // TODO
     }
-
+    
 }

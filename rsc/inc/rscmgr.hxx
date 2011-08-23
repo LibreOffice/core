@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ class RscMgr : public RscClass {
         void Create(){ aRefId.Create(); bDflt = TRUE; }
         void Destroy(){ aRefId.Destroy(); }
     };
-    ERRTYPE         IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep = 0 );
+    ERRTYPE			IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep = 0 );
 public:
                     RscMgr( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
 
-    void            SetToDefault( const RSCINST & rInst );
+    void			SetToDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst );
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
@@ -71,7 +71,7 @@ public:
                                     RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteCxx( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, const RscId & rId );
-    BOOL            IsConsistent( const RSCINST & rInst,
+    BOOL    		IsConsistent( const RSCINST & rInst,
                                   RscInconsList * pList = NULL );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );

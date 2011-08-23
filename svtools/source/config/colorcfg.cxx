@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,10 +63,10 @@ namespace svtools
 static const sal_Char cColor[] = "/Color";
 static const sal_Char cColorSchemes[] = "ColorSchemes/";
 sal_Int32            nColorRefCount_Impl = 0;
-namespace
+namespace 
 {
-    struct ColorMutex_Impl
-        : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {};
+    struct ColorMutex_Impl 
+        : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {}; 
 }
 
 ColorConfig_Impl*    ColorConfig::m_pImpl = NULL;
@@ -134,7 +134,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/AppBackground")   ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/ObjectBoundaries"),sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/TableBoundaries") ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/FontColor")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/FontColor")		,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/Links")           ,sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/Anchor")          ,sal_False },
@@ -494,7 +494,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0x000000, // SQLOPERATOR
         0x0000E6, // SQLKEYWORD
         0x259D9D, // SQLPARAMTER
-        0x969696,// SQLCOMMENT
+        0x969696,// SQLCOMMENT 
     };
     Color aRet;
     switch(eEntry)
@@ -509,7 +509,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         case SPELL :
         case DRAWDRAWING :
-        case SMARTTAGS :
+        case SMARTTAGS :            
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                 aRet = rStyleSettings.GetHighContrastMode() ?
@@ -519,7 +519,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         case DRAWFILL            :
                 aRet = /*rStyleSettings.GetHighContrastMode() ?
-                    rStyleSettings.OutlineMode??? : */  aAutoColors[eEntry];
+                    rStyleSettings.OutlineMode??? : */	aAutoColors[eEntry];
         break;
 
         case FONTCOLOR :

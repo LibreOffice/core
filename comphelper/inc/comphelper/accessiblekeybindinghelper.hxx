@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ namespace comphelper
     // OAccessibleKeyBindingHelper
     //==============================================================================
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::accessibility::XAccessibleKeyBinding
-                                    >   OAccessibleKeyBindingHelper_Base;
+    typedef	::cppu::WeakImplHelper1 <	::com::sun::star::accessibility::XAccessibleKeyBinding
+                                    >	OAccessibleKeyBindingHelper_Base;
 
     /** a helper class for implementing an accessible keybinding
      */
@@ -56,11 +56,11 @@ namespace comphelper
     {
     private:
         typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke > > KeyBindings;
-
-        KeyBindings     m_aKeyBindings;
+        
+        KeyBindings		m_aKeyBindings;
 
     protected:
-        ::osl::Mutex    m_aMutex;
+        ::osl::Mutex	m_aMutex;
 
         virtual ~OAccessibleKeyBindingHelper();
 
@@ -77,7 +77,7 @@ namespace comphelper
     };
 
 //..............................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //..............................................................................
 
 #endif // COMPHELPER_ACCESSIBLE_KEYBINDING_HELPER_HXX

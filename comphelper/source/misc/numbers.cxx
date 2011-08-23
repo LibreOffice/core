@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ namespace comphelper
 {
 //.........................................................................
 
-namespace starbeans = ::com::sun::star::beans;
-namespace starlang  = ::com::sun::star::lang;
+namespace starbeans	= ::com::sun::star::beans;
+namespace starlang	= ::com::sun::star::lang;
 
 //------------------------------------------------------------------------------
 sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
@@ -145,6 +145,6 @@ Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, 
 }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,8 +87,8 @@ BmpTransporter::BmpTransporter( const Sequence<sal_Int8>& rBmp ) :
     if( pData[0] == 'B' || pData[1] == 'M' )
     {
         pData = pData+14;
-        m_aSize.Width   = readLE32( pData+4 );
-        m_aSize.Height  = readLE32( pData+8 );
+        m_aSize.Width	= readLE32( pData+4 );
+        m_aSize.Height	= readLE32( pData+8 );
     }
     else
         m_aSize.Width = m_aSize.Height = 0;
@@ -407,17 +407,17 @@ PixmapHolder::PixmapHolder( Display* pDisplay ) :
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "PixmapHolder reverting to default visual\n" );
 #endif
-        Visual* pVisual     = DefaultVisual( m_pDisplay, DefaultScreen( m_pDisplay ) );
-        m_aInfo.screen      = DefaultScreen( m_pDisplay );
-        m_aInfo.visual      = pVisual;
-        m_aInfo.visualid    = pVisual->visualid;
-        m_aInfo.c_class     = pVisual->c_class;
-        m_aInfo.red_mask    = pVisual->red_mask;
-        m_aInfo.green_mask  = pVisual->green_mask;
-        m_aInfo.blue_mask   = pVisual->blue_mask;
-        m_aInfo.depth       = DefaultDepth( m_pDisplay, m_aInfo.screen );
+        Visual* pVisual		= DefaultVisual( m_pDisplay, DefaultScreen( m_pDisplay ) );
+        m_aInfo.screen		= DefaultScreen( m_pDisplay );
+        m_aInfo.visual		= pVisual;
+        m_aInfo.visualid	= pVisual->visualid;
+        m_aInfo.c_class		= pVisual->c_class;
+        m_aInfo.red_mask	= pVisual->red_mask;
+        m_aInfo.green_mask	= pVisual->green_mask;
+        m_aInfo.blue_mask	= pVisual->blue_mask;
+        m_aInfo.depth		= DefaultDepth( m_pDisplay, m_aInfo.screen );
     }
-    m_aColormap         = DefaultColormap( m_pDisplay, m_aInfo.screen );
+    m_aColormap			= DefaultColormap( m_pDisplay, m_aInfo.screen );
 #if OSL_DEBUG_LEVEL > 1
     static const char* pClasses[] =
         { "StaticGray", "GrayScale", "StaticColor", "PseudoColor", "TrueColor", "DirectColor" };
@@ -476,17 +476,17 @@ void PixmapHolder::setBitmapDataPalette( const sal_uInt8* pData, XImage* pImage 
     XColor aPalette[256];
 
     sal_uInt32 nColors = readLE32( pData+32 );
-    sal_uInt32 nWidth   = readLE32( pData+4 );
-    sal_uInt32 nHeight  = readLE32( pData+8 );
+    sal_uInt32 nWidth	= readLE32( pData+4 );
+    sal_uInt32 nHeight	= readLE32( pData+8 );
     sal_uInt16 nDepth = readLE16( pData+14 );
 
     for( sal_uInt16 i = 0 ; i < nColors; i++ )
     {
         if( m_aInfo.c_class != TrueColor )
         {
-            aPalette[i].red     = ((unsigned short)pData[42 + i*4]) << 8 | ((unsigned short)pData[42 + i*4]);
-            aPalette[i].green   = ((unsigned short)pData[41 + i*4]) << 8 | ((unsigned short)pData[41 + i*4]);
-            aPalette[i].blue    = ((unsigned short)pData[40 + i*4]) << 8 | ((unsigned short)pData[40 + i*4]);
+            aPalette[i].red		= ((unsigned short)pData[42 + i*4]) << 8 | ((unsigned short)pData[42 + i*4]);
+            aPalette[i].green	= ((unsigned short)pData[41 + i*4]) << 8 | ((unsigned short)pData[41 + i*4]);
+            aPalette[i].blue	= ((unsigned short)pData[40 + i*4]) << 8 | ((unsigned short)pData[40 + i*4]);
             XAllocColor( m_pDisplay, m_aColormap, aPalette+i );
         }
         else
@@ -550,10 +550,10 @@ void PixmapHolder::setBitmapDataTCDither( const sal_uInt8* pData, XImage* pImage
             for( int b = 0; b < 6; b++ )
             {
                 int i = r*36+g*6+b;
-                aPalette[i].red     = r == 5 ? 0xffff : r*10922;
-                aPalette[i].green   = g == 5 ? 0xffff : g*10922;
-                aPalette[i].blue    = b == 5 ? 0xffff : b*10922;
-                aPalette[i].pixel   = 0;
+                aPalette[i].red		= r == 5 ? 0xffff : r*10922;
+                aPalette[i].green	= g == 5 ? 0xffff : g*10922;
+                aPalette[i].blue	= b == 5 ? 0xffff : b*10922;
+                aPalette[i].pixel	= 0;
                 if( ! XAllocColor( m_pDisplay, m_aColormap, aPalette+i ) )
                     nNonAllocs++;
             }
@@ -579,8 +579,8 @@ void PixmapHolder::setBitmapDataTCDither( const sal_uInt8* pData, XImage* pImage
         }
     }
 
-    sal_uInt32 nWidth   = readLE32( pData+4 );
-    sal_uInt32 nHeight  = readLE32( pData+8 );
+    sal_uInt32 nWidth	= readLE32( pData+4 );
+    sal_uInt32 nHeight	= readLE32( pData+8 );
 
     const sal_uInt8* pBMData = pData + readLE32( pData );
     sal_uInt32 nScanlineSize = nWidth*3;
@@ -608,8 +608,8 @@ void PixmapHolder::setBitmapDataTCDither( const sal_uInt8* pData, XImage* pImage
 
 void PixmapHolder::setBitmapDataTC( const sal_uInt8* pData, XImage* pImage )
 {
-    sal_uInt32 nWidth   = readLE32( pData+4 );
-    sal_uInt32 nHeight  = readLE32( pData+8 );
+    sal_uInt32 nWidth	= readLE32( pData+4 );
+    sal_uInt32 nHeight	= readLE32( pData+8 );
 
     const sal_uInt8* pBMData = pData + readLE32( pData );
     sal_uInt32 nScanlineSize = nWidth*3;
@@ -663,9 +663,9 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
     if( readLE32( pData + 16 ) != 0 )
         return None;
 
-    sal_uInt32 nWidth   = readLE32( pData+4 );
-    sal_uInt32 nHeight  = readLE32( pData+8 );
-
+    sal_uInt32 nWidth	= readLE32( pData+4 );
+    sal_uInt32 nHeight	= readLE32( pData+8 );
+    
     if( m_aPixmap != None )
         XFreePixmap( m_pDisplay, m_aPixmap ), m_aPixmap = None;
     if( m_aBitmap != None )
@@ -678,25 +678,25 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
     if( m_aPixmap != None )
     {
         XImage aImage;
-        aImage.width            = (int)nWidth;
-        aImage.height           = (int)nHeight;
-        aImage.xoffset          = 0;
-        aImage.format           = ZPixmap;
-        aImage.data             = NULL;
-        aImage.byte_order       = ImageByteOrder( m_pDisplay );
-        aImage.bitmap_unit      = BitmapUnit( m_pDisplay );
-        aImage.bitmap_bit_order = BitmapBitOrder( m_pDisplay );
-        aImage.bitmap_pad       = BitmapPad( m_pDisplay );
-        aImage.depth            = m_aInfo.depth;
-        aImage.red_mask         = m_aInfo.red_mask;
-        aImage.green_mask       = m_aInfo.green_mask;
-        aImage.blue_mask        = m_aInfo.blue_mask;
-        aImage.bytes_per_line   = 0; // filled in by XInitImage
+        aImage.width			= (int)nWidth;
+        aImage.height			= (int)nHeight;
+        aImage.xoffset			= 0;
+        aImage.format			= ZPixmap;
+        aImage.data				= NULL;
+        aImage.byte_order		= ImageByteOrder( m_pDisplay );
+        aImage.bitmap_unit		= BitmapUnit( m_pDisplay );
+        aImage.bitmap_bit_order	= BitmapBitOrder( m_pDisplay );
+        aImage.bitmap_pad		= BitmapPad( m_pDisplay );
+        aImage.depth			= m_aInfo.depth;
+        aImage.red_mask			= m_aInfo.red_mask;
+        aImage.green_mask		= m_aInfo.green_mask;
+        aImage.blue_mask		= m_aInfo.blue_mask;
+        aImage.bytes_per_line	= 0; // filled in by XInitImage
         if( m_aInfo.depth <= 8 )
             aImage.bits_per_pixel = m_aInfo.depth;
         else
             aImage.bits_per_pixel = 8*((m_aInfo.depth+7)/8);
-        aImage.obdata           = NULL;
+        aImage.obdata			= NULL;
 
         XInitImage( &aImage );
         aImage.data = (char*)rtl_allocateMemory( nHeight*aImage.bytes_per_line );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,17 +77,17 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if ( !mpVirDev )
     {
         // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
-        throw ::com::sun::star::uno::RuntimeException(
+        throw ::com::sun::star::uno::RuntimeException( 
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not create system bitmap!" ) ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
         //GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
     }
 
-    mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );
-    mnOutWidth      = nDX;
-    mnOutHeight     = nDY;
-    mbScreenComp    = TRUE;
-    mnAlphaDepth    = -1;
+    mnBitCount		= ( nBitCount ? nBitCount : pOutDev->GetBitCount() );
+    mnOutWidth		= nDX;
+    mnOutHeight 	= nDY;
+    mbScreenComp	= TRUE;
+    mnAlphaDepth	= -1;
 
     // #i59315# init vdev size from system object, when passed a
     // SystemGraphicsData. Otherwise, output size will always
@@ -103,17 +103,17 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     else if ( pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
         mbScreenComp = ((VirtualDevice*)pOutDev)->mbScreenComp;
 
-    meOutDevType    = OUTDEV_VIRDEV;
-    mbDevOutput     = TRUE;
-    mpFontList      = pSVData->maGDIData.mpScreenFontList;
-    mpFontCache     = pSVData->maGDIData.mpScreenFontCache;
-    mnDPIX          = pOutDev->mnDPIX;
-    mnDPIY          = pOutDev->mnDPIY;
-    maFont          = pOutDev->maFont;
+    meOutDevType	= OUTDEV_VIRDEV;
+    mbDevOutput 	= TRUE;
+    mpFontList		= pSVData->maGDIData.mpScreenFontList;
+    mpFontCache 	= pSVData->maGDIData.mpScreenFontCache;
+    mnDPIX			= pOutDev->mnDPIX;
+    mnDPIY			= pOutDev->mnDPIY;
+    maFont			= pOutDev->maFont;
 
     if( maTextColor != pOutDev->maTextColor )
     {
-        maTextColor = pOutDev->maTextColor;
+        maTextColor	= pOutDev->maTextColor;
         mbInitTextColor = true;
     }
 
@@ -236,15 +236,15 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
 
         if ( bRet )
         {
-            mnOutWidth  = rNewSize.Width();
+            mnOutWidth	= rNewSize.Width();
             mnOutHeight = rNewSize.Height();
             Erase();
         }
     }
     else
     {
-        SalVirtualDevice*   pNewVirDev;
-        ImplSVData*         pSVData = ImplGetSVData();
+        SalVirtualDevice*	pNewVirDev;
+        ImplSVData* 		pSVData = ImplGetSVData();
 
         // we need a graphics
         if ( !mpGraphics )
@@ -270,12 +270,12 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
                     nHeight = mnOutHeight;
                 else
                     nHeight = nNewHeight;
-                aPosAry.mnSrcX       = 0;
-                aPosAry.mnSrcY       = 0;
-                aPosAry.mnSrcWidth   = nWidth;
+                aPosAry.mnSrcX		 = 0;
+                aPosAry.mnSrcY		 = 0;
+                aPosAry.mnSrcWidth	 = nWidth;
                 aPosAry.mnSrcHeight  = nHeight;
-                aPosAry.mnDestX      = 0;
-                aPosAry.mnDestY      = 0;
+                aPosAry.mnDestX 	 = 0;
+                aPosAry.mnDestY 	 = 0;
                 aPosAry.mnDestWidth  = nWidth;
                 aPosAry.mnDestHeight = nHeight;
 
@@ -284,7 +284,7 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
                 ImplReleaseGraphics();
                 pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
                 mpVirDev = pNewVirDev;
-                mnOutWidth  = rNewSize.Width();
+                mnOutWidth	= rNewSize.Width();
                 mnOutHeight = rNewSize.Height();
                 bRet = TRUE;
             }
@@ -303,11 +303,11 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
 
 // -----------------------------------------------------------------------
 
-// #i32109#: Fill opaque areas correctly (without relying on
+// #i32109#: Fill opaque areas correctly (without relying on 
 // fill/linecolor state)
 void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
 {
-    // Set line and fill color to black (->opaque),
+    // Set line and fill color to black (->opaque), 
     // fill rect with that (linecolor, too, because of
     // those pesky missing pixel problems)
     Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
@@ -442,7 +442,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
 void VirtualDevice::Compat_ZeroExtleadBug()
 {
-    meRefDevMode = (BYTE)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
+    meRefDevMode = (BYTE)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD; 
 }
 
 // -----------------------------------------------------------------------

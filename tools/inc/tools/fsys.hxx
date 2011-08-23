@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,58 +53,58 @@ struct FileCopier_Impl;
 class SvFileStream;
 class BigInt;
 
-#define FSYS_BUFSIZE                1024
-#define FSYS_SHORTNAME_DELIMITER    '@'
+#define FSYS_BUFSIZE				1024
+#define FSYS_SHORTNAME_DELIMITER	'@'
 
 // FSysAccess
 typedef int FSysAccess;
-#define FSYS_ACCESS_FORCED          1
-#define FSYS_ACCESS_FLOPPY          FSYS_ACCESS_FORCED
-#define FSYS_ACCESS_CACHED          2
+#define FSYS_ACCESS_FORCED			1
+#define FSYS_ACCESS_FLOPPY			FSYS_ACCESS_FORCED
+#define FSYS_ACCESS_CACHED			2
 
 // DirEntryKind
 typedef int DirEntryKind;
-#define FSYS_KIND_NONE              ((DirEntryKind)     0)
-#define FSYS_KIND_UNKNOWN           FSYS_KIND_NONE
-#define FSYS_KIND_FILE              ((DirEntryKind)     1)
-#define FSYS_KIND_DIR               ((DirEntryKind)     2)
-#define FSYS_KIND_DEV               ((DirEntryKind)     4)
-#define FSYS_KIND_BLOCK             ((DirEntryKind)     8)
-#define FSYS_KIND_CHAR              ((DirEntryKind)    16)
-#define FSYS_KIND_WILD              ((DirEntryKind)    32)
-#define FSYS_KIND_BLOCK_REMOTE      ((DirEntryKind)    64)  //TPF: fuer RFS
-#define FSYS_KIND_REMOVEABLE        ((DirEntryKind)   128)
-#define FSYS_KIND_FIXED             ((DirEntryKind)   256)
-#define FSYS_KIND_REMOTE            ((DirEntryKind)   512)
-#define FSYS_KIND_RAM               ((DirEntryKind)  1024)
-#define FSYS_KIND_CDROM             ((DirEntryKind)  2048)
-#define FSYS_KIND_ALL               ((DirEntryKind)  4095)
-#define FSYS_KIND_VISIBLE           ((DirEntryKind)  4096)
+#define FSYS_KIND_NONE				((DirEntryKind) 	0)
+#define FSYS_KIND_UNKNOWN			FSYS_KIND_NONE
+#define FSYS_KIND_FILE				((DirEntryKind) 	1)
+#define FSYS_KIND_DIR				((DirEntryKind) 	2)
+#define FSYS_KIND_DEV				((DirEntryKind) 	4)
+#define FSYS_KIND_BLOCK 			((DirEntryKind) 	8)
+#define FSYS_KIND_CHAR				((DirEntryKind)    16)
+#define FSYS_KIND_WILD				((DirEntryKind)    32)
+#define FSYS_KIND_BLOCK_REMOTE		((DirEntryKind)    64)	//TPF: fuer RFS
+#define FSYS_KIND_REMOVEABLE		((DirEntryKind)   128)
+#define FSYS_KIND_FIXED 			((DirEntryKind)   256)
+#define FSYS_KIND_REMOTE			((DirEntryKind)   512)
+#define FSYS_KIND_RAM				((DirEntryKind)  1024)
+#define FSYS_KIND_CDROM 			((DirEntryKind)  2048)
+#define FSYS_KIND_ALL				((DirEntryKind)  4095)
+#define FSYS_KIND_VISIBLE			((DirEntryKind)  4096)
 
 // FSysSort
 typedef int FSysSort;
-#define FSYS_SORT_NONE              ((FSysSort)   0)
-#define FSYS_SORT_SIZE              ((FSysSort)   1)
-#define FSYS_SORT_CREATED           ((FSysSort)   2)
-#define FSYS_SORT_MODIFYED          ((FSysSort)   4)
-#define FSYS_SORT_ACCESSED          ((FSysSort)   8)
-#define FSYS_SORT_ASCENDING         ((FSysSort)  16)
-#define FSYS_SORT_DESCENDING        ((FSysSort)  32)
-#define FSYS_SORT_EXT               ((FSysSort)  64)
-#define FSYS_SORT_NAME              ((FSysSort) 128)
-#define FSYS_SORT_KIND              ((FSysSort) 256)
-#define FSYS_SORT_CREATOR           ((FSysSort) 512)
-#define FSYS_SORT_END               ((FSysSort)1024)
+#define FSYS_SORT_NONE				((FSysSort)   0)
+#define FSYS_SORT_SIZE				((FSysSort)   1)
+#define FSYS_SORT_CREATED			((FSysSort)   2)
+#define FSYS_SORT_MODIFYED			((FSysSort)   4)
+#define FSYS_SORT_ACCESSED			((FSysSort)   8)
+#define FSYS_SORT_ASCENDING 		((FSysSort)  16)
+#define FSYS_SORT_DESCENDING		((FSysSort)  32)
+#define FSYS_SORT_EXT				((FSysSort)  64)
+#define FSYS_SORT_NAME				((FSysSort) 128)
+#define FSYS_SORT_KIND				((FSysSort) 256)
+#define FSYS_SORT_CREATOR			((FSysSort) 512)
+#define FSYS_SORT_END				((FSysSort)1024)
 
 // DirEntryFlag
 enum DirEntryFlag
 {
     FSYS_FLAG_NORMAL,
-    FSYS_FLAG_VOLUME,                      // Dir( FSYS_FLAG_VOLUME ) und GetDevice()
-    FSYS_FLAG_ABSROOT,                     // z.B. "a:\" oder "\"
-    FSYS_FLAG_RELROOT,                     // z.B. "a:", "a:." oder "."
+    FSYS_FLAG_VOLUME,					   // Dir( FSYS_FLAG_VOLUME ) und GetDevice()
+    FSYS_FLAG_ABSROOT,					   // z.B. "a:\" oder "\"
+    FSYS_FLAG_RELROOT,					   // z.B. "a:", "a:." oder "."
     FSYS_FLAG_CURRENT = FSYS_FLAG_RELROOT, // Synonym fuer FSYS_FLAG_RELROOT
-    FSYS_FLAG_PARENT,                      // z.B. ".."
+    FSYS_FLAG_PARENT,					   // z.B. ".."
     FSYS_FLAG_INVALID
 };
 
@@ -131,20 +131,20 @@ enum FSysPathStyle
 
 // FSysAction
 typedef int FSysAction;
-#define FSYS_ACTION_COPYFILE        0x01    // not only create hardlink
-#define FSYS_ACTION_RECURSIVE       0x02    // deep through dircetory structure
-#define FSYS_ACTION_USERECYCLEBIN   0x04    // move to recycle bin
-#define FSYS_ACTION_MOVE            0x08    // delete after copy (=> move)
-#define FSYS_ACTION_CONTINUE        0x10    // continue on error
-#define FSYS_ACTION_KEEP_EXISTING   0x20    // do not overwrite objects in
+#define FSYS_ACTION_COPYFILE		0x01	// not only create hardlink
+#define FSYS_ACTION_RECURSIVE		0x02	// deep through dircetory structure
+#define FSYS_ACTION_USERECYCLEBIN	0x04	// move to recycle bin
+#define FSYS_ACTION_MOVE			0x08	// delete after copy (=> move)
+#define FSYS_ACTION_CONTINUE		0x10	// continue on error
+#define FSYS_ACTION_KEEP_EXISTING	0x20	// do not overwrite objects in
                                             // target folder in case of name
                                             // clashes
-#define FSYS_ACTION_STANDARD        0
+#define FSYS_ACTION_STANDARD		0
 
 // Fuer RFS
-#define RFS_IDENTIFIER  "-rfs-"
-#define RFS_LOWER       "-rfs-"
-#define RFS_UPPER       "-RFS-"
+#define RFS_IDENTIFIER	"-rfs-"
+#define RFS_LOWER		"-rfs-"
+#define RFS_UPPER		"-RFS-"
 
 typedef ULONG FSysError;
 
@@ -182,65 +182,65 @@ String FSys2Gui( const String& rStr );
 struct dirent;
 class TOOLS_DLLPUBLIC FileStat
 {
-    friend class    CORmFSys;
-    friend class    Dir;
-    friend struct   DirReader_Impl;
-    friend void     ImpInitFileStat( FileStat&, dirent* );
+    friend class	CORmFSys;
+    friend class	Dir;
+    friend struct	DirReader_Impl;
+    friend void 	ImpInitFileStat( FileStat&, dirent* );
 
-    ULONG           nError;
-    DirEntryKind    nKindFlags;
-    ULONG           nSize;
-    String          aCreator;
-    String          aType;
-    Date            aDateCreated;
-    Time            aTimeCreated;
-    Date            aDateModified;
-    Time            aTimeModified;
-    Date            aDateAccessed;
-    Time            aTimeAccessed;
+    ULONG			nError;
+    DirEntryKind	nKindFlags;
+    ULONG			nSize;
+    String			aCreator;
+    String			aType;
+    Date			aDateCreated;
+    Time			aTimeCreated;
+    Date			aDateModified;
+    Time			aTimeModified;
+    Date			aDateAccessed;
+    Time			aTimeAccessed;
 private:
-    TOOLS_DLLPRIVATE void           ImpInit( void* );
+    TOOLS_DLLPRIVATE void			ImpInit( void* );
 
 protected:
                     // Implementation
-                    FileStat( const void *pInfo,      // CInfoPBRec
+                    FileStat( const void *pInfo,	  // CInfoPBRec
                               const void *pVolInfo ); // ParamBlockRec
 
 public:
                     FileStat();
                     FileStat( const DirEntry& rDirEntry,
                               FSysAccess nAccess = FSYS_ACCESS_FLOPPY );
-    BOOL            Update( const DirEntry& rDirEntry,
+    BOOL			Update( const DirEntry& rDirEntry,
                               BOOL bForceAccess = TRUE );
 
-    ULONG           GetError() const { return ERRCODE_TOERROR(nError); }
-    ULONG           GetErrorCode() const { return nError; }
+    ULONG			GetError() const { return ERRCODE_TOERROR(nError); }
+    ULONG			GetErrorCode() const { return nError; }
 
-    ULONG           GetSize() const { return nSize; }
+    ULONG			GetSize() const { return nSize; }
 
-    DirEntryKind    GetKind() const { return nKindFlags; }
-    BOOL            IsKind( DirEntryKind nKind ) const;
+    DirEntryKind	GetKind() const { return nKindFlags; }
+    BOOL			IsKind( DirEntryKind nKind ) const;
 
-    String          GetType() const { return aType; }
-    String          GetCreator() const { return aCreator; }
+    String			GetType() const { return aType; }
+    String			GetCreator() const { return aCreator; }
 
-    Date            DateCreated() const  { return aDateCreated;  }
-    Time            TimeCreated() const  { return aTimeCreated;  }
-    Date            DateModified() const { return aDateModified; }
-    Time            TimeModified() const { return aTimeModified; }
-    Date            DateAccessed() const { return aDateAccessed; }
-    Time            TimeAccessed() const { return aTimeAccessed; }
-    BOOL            IsYounger( const FileStat& rIsOlder ) const;
+    Date			DateCreated() const  { return aDateCreated;  }
+    Time			TimeCreated() const  { return aTimeCreated;  }
+    Date			DateModified() const { return aDateModified; }
+    Time			TimeModified() const { return aTimeModified; }
+    Date			DateAccessed() const { return aDateAccessed; }
+    Time			TimeAccessed() const { return aTimeAccessed; }
+    BOOL			IsYounger( const FileStat& rIsOlder ) const;
 
 #define TF_FSYS_READONLY_FLAG
-    static ULONG    SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO = TRUE );
-    static BOOL     GetReadOnlyFlag( const DirEntry &rEntry );
-    static BOOL     HasReadOnlyFlag();
+    static ULONG	SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO = TRUE );
+    static BOOL 	GetReadOnlyFlag( const DirEntry &rEntry );
+    static BOOL 	HasReadOnlyFlag();
 
-    static ErrCode  QueryDiskSpace( const String &rPath,
+    static ErrCode	QueryDiskSpace( const String &rPath,
                                     BigInt &rFreeBytes, BigInt &rTotalBytes );
 
-    static void     SetDateTime( const String& rFileName,
+    static void 	SetDateTime( const String& rFileName,
                                  const DateTime& rNewDateTime );
 };
 
@@ -258,15 +258,15 @@ friend struct DirReader_Impl;
 friend class FileCopier;
 
 #ifdef FEAT_FSYS_DOUBLESPEED
-    FileStat*           pStat;      // optional
+    FileStat*			pStat;		// optional
 #endif
-    ByteString          aName;
-    DirEntry*           pParent;
-    ULONG               nError;
-    DirEntryFlag        eFlag;
+    ByteString			aName;
+    DirEntry*			pParent;
+    ULONG				nError;
+    DirEntryFlag		eFlag;
 
 private:
-    TOOLS_DLLPRIVATE            DirEntry( const ByteString& rInitName,
+    TOOLS_DLLPRIVATE 			DirEntry( const ByteString& rInitName,
                                   DirEntryFlag aDirFlag,
                                   FSysPathStyle eStyle );
 
@@ -276,34 +276,34 @@ private:
     friend class FileStat;
     friend const char* ImpCheckDirEntry( const void* p );
 
-    TOOLS_DLLPRIVATE FSysError          ImpParseName( const ByteString& rIntiName,
+    TOOLS_DLLPRIVATE FSysError			ImpParseName( const ByteString& rIntiName,
                                       FSysPathStyle eParser );
-    TOOLS_DLLPRIVATE FSysError          ImpParseOs2Name( const ByteString& rPfad,
+    TOOLS_DLLPRIVATE FSysError			ImpParseOs2Name( const ByteString& rPfad,
                                          FSysPathStyle eStyle );
-    TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
+    TOOLS_DLLPRIVATE FSysError			ImpParseUnixName( const ByteString& rPfad,
                                           FSysPathStyle eStyle );
-    TOOLS_DLLPRIVATE USHORT             ImpTryUrl( DirEntryStack& rStack, const String& rPfad, FSysPathStyle eStyle );
-    TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
-    TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
-    TOOLS_DLLPRIVATE DirEntry*          ImpGetPreTopPtr();
-    TOOLS_DLLPRIVATE BOOL               ImpToRel( String aStart );
+    TOOLS_DLLPRIVATE USHORT				ImpTryUrl( DirEntryStack& rStack, const String& rPfad, FSysPathStyle eStyle );
+    TOOLS_DLLPRIVATE const DirEntry* 	ImpGetTopPtr() const;
+    TOOLS_DLLPRIVATE DirEntry*			ImpGetTopPtr();
+    TOOLS_DLLPRIVATE DirEntry*			ImpGetPreTopPtr();
+    TOOLS_DLLPRIVATE BOOL				ImpToRel( String aStart );
 
 protected:
-    void                ImpTrim( FSysPathStyle eStyle );
-    const ByteString&   ImpTheName() const;
-    DirEntryFlag        ImpTheFlag() const { return eFlag; };
-    DirEntry*           ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize = TRUE );
-    DirEntry*           ImpGetParent() { return pParent; }
+    void				ImpTrim( FSysPathStyle eStyle );
+    const ByteString&	ImpTheName() const;
+    DirEntryFlag		ImpTheFlag() const { return eFlag; };
+    DirEntry*			ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize = TRUE );
+    DirEntry*			ImpGetParent() { return pParent; }
 #ifdef FEAT_FSYS_DOUBLESPEED
-    FileStat*           ImpGetStat() const { return pStat; }
-    void                ImpSetStat( FileStat *p ) { pStat = p; }
+    FileStat*			ImpGetStat() const { return pStat; }
+    void				ImpSetStat( FileStat *p ) { pStat = p; }
 #endif
 
 //#endif
 
 protected:
-    void                SetError( ULONG nErr ) { nError = nErr; }
-    DirEntry*           GetParent() { return pParent; }
+    void				SetError( ULONG nErr ) { nError = nErr; }
+    DirEntry*			GetParent() { return pParent; }
 public:
                         DirEntry( DirEntryFlag aDirFlag = FSYS_FLAG_CURRENT );
                         DirEntry( const DirEntry& rEntry );
@@ -313,65 +313,65 @@ public:
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
                         ~DirEntry();
 
-    BOOL                IsLongNameOnFAT() const;
-    BOOL                IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
+    BOOL				IsLongNameOnFAT() const;
+    BOOL				IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
 
-    ULONG               GetError() const { return nError; }
-    BOOL                IsValid() const;
-    DirEntryFlag        GetFlag() const { return eFlag; };
+    ULONG				GetError() const { return nError; }
+    BOOL				IsValid() const;
+    DirEntryFlag		GetFlag() const { return eFlag; };
 
-    void                SetExtension( const String& rExt, char cSep = '.' );
-    String              GetExtension( char cSep = '.' ) const;
-    String              CutExtension( char cSep = '.' );
-    void                SetName( const String& rName, FSysPathStyle eFormatter = FSYS_STYLE_HOST );
+    void				SetExtension( const String& rExt, char cSep = '.' );
+    String				GetExtension( char cSep = '.' ) const;
+    String				CutExtension( char cSep = '.' );
+    void				SetName( const String& rName, FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     inline const String GetNameDirect() const { return String(aName, osl_getThreadTextEncoding()); }
-    String              GetName( FSysPathStyle eFormatter = FSYS_STYLE_HOST ) const;
-    String              CutName( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    void                SetBase( const String& rBase, char cSep = '.' );
-    String              GetBase(char cSep = '.' ) const;
-    DirEntry            GetPath() const;
-    DirEntry            GetDevice() const;
-    String              GetVolume() const;
-    String              GetFull( FSysPathStyle eFormatter = FSYS_STYLE_HOST,
+    String				GetName( FSysPathStyle eFormatter = FSYS_STYLE_HOST ) const;
+    String				CutName( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
+    void				SetBase( const String& rBase, char cSep = '.' );
+    String				GetBase(char cSep = '.' ) const;
+    DirEntry			GetPath() const;
+    DirEntry			GetDevice() const;
+    String				GetVolume() const;
+    String				GetFull( FSysPathStyle eFormatter = FSYS_STYLE_HOST,
                                  BOOL bWithDelimiter = FALSE,
                                  USHORT nMaxChars = STRING_MAXLEN ) const;
 
-    DirEntry            TempName( DirEntryKind = FSYS_KIND_NONE ) const;
+    DirEntry			TempName( DirEntryKind = FSYS_KIND_NONE ) const;
     static const DirEntry& SetTempNameBase( const String &rBaseName );
-    BOOL                MakeShortName( const String& rLongName,
+    BOOL				MakeShortName( const String& rLongName,
                                        DirEntryKind eCreateKind = FSYS_KIND_NONE,
                                        BOOL bUseTilde = TRUE,
                                        FSysPathStyle eStyle = FSYS_STYLE_DETECT );
 
-    bool                IsAbs() const;
-    BOOL                ToAbs();
-    BOOL                Find( const String& rPfad, char cDelim = 0 );
-    BOOL                ToRel();
-    BOOL                ToRel( const DirEntry& rRefDir );
-    USHORT              CutRelParents();
+    bool				IsAbs() const;
+    BOOL				ToAbs();
+    BOOL				Find( const String& rPfad, char cDelim = 0 );
+    BOOL				ToRel();
+    BOOL				ToRel( const DirEntry& rRefDir );
+    USHORT				CutRelParents();
 
-    BOOL                SetCWD( BOOL bSloppy = FALSE ) const;
-    BOOL                MakeDir( BOOL bSloppy = FALSE ) const;
-    BOOL                Exists( FSysAccess nAccess = FSYS_ACCESS_FLOPPY ) const;
-    BOOL                First();
+    BOOL				SetCWD( BOOL bSloppy = FALSE ) const;
+    BOOL				MakeDir( BOOL bSloppy = FALSE ) const;
+    BOOL				Exists( FSysAccess nAccess = FSYS_ACCESS_FLOPPY ) const;
+    BOOL				First();
 
-    USHORT              Level() const;
-    const DirEntry&     operator []( USHORT nParentLevel ) const;
-    BOOL                Contains( const DirEntry &rSubEntry ) const;
+    USHORT				Level() const;
+    const DirEntry& 	operator []( USHORT nParentLevel ) const;
+    BOOL				Contains( const DirEntry &rSubEntry ) const;
 
-    FSysError           CopyTo( const DirEntry& rDestDir,
+    FSysError			CopyTo( const DirEntry& rDestDir,
                                 FSysAction nActions = FSYS_ACTION_STANDARD ) const;
-    FSysError           MoveTo( const DirEntry& rDestDir ) const;
-    FSysError           Kill( FSysAction nActions = FSYS_ACTION_STANDARD ) const;
+    FSysError			MoveTo( const DirEntry& rDestDir ) const;
+    FSysError			Kill( FSysAction nActions = FSYS_ACTION_STANDARD ) const;
 
-    DirEntry&           operator =( const DirEntry& rOrigDir );
-    DirEntry            operator +( const DirEntry& rSubDir ) const;
-    DirEntry&           operator +=( const DirEntry& rSubDir );
-    BOOL                operator ==( const DirEntry& rAnotherDir ) const;
-    BOOL                operator !=( const DirEntry& rAnotherDir ) const
+    DirEntry&			operator =( const DirEntry& rOrigDir );
+    DirEntry			operator +( const DirEntry& rSubDir ) const;
+    DirEntry&			operator +=( const DirEntry& rSubDir );
+    BOOL				operator ==( const DirEntry& rAnotherDir ) const;
+    BOOL				operator !=( const DirEntry& rAnotherDir ) const
                             { return !(DirEntry::operator==( rAnotherDir )); }
 
-    StringCompare       NameCompare( const DirEntry &rWith ) const;
+    StringCompare		NameCompare( const DirEntry &rWith ) const;
     inline StringCompare NameCompareDirect( const DirEntry &rWith ) const
                         {
 #ifdef UNX
@@ -381,13 +381,13 @@ public:
 #endif
                         }
 
-    static String       GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    static USHORT       GetMaxNameLen( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
+    static String		GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
+    static String		GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
+    static USHORT		GetMaxNameLen( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static FSysPathStyle GetPathStyle( const String &rDevice );
-    static String       ConvertNameToSystem( const String & rName );
-    static String       ConvertSystemToName( const String & rName );
-    static BOOL         IsRFSAvailable();
+    static String		ConvertNameToSystem( const String & rName );
+    static String		ConvertSystemToName( const String & rName );
+    static BOOL 		IsRFSAvailable();
 };
 
 // --------------
@@ -396,21 +396,21 @@ public:
 
 class TOOLS_DLLPUBLIC FileCopier
 {
-    DirEntry            aSource;
-    DirEntry            aTarget;
-    ULONG               nBytesTotal;
-    ULONG               nBytesCopied;
-    Link                aProgressLink;
-    USHORT              nBlockSize;
-    FileCopier_Impl*    pImp;
+    DirEntry			aSource;
+    DirEntry			aTarget;
+    ULONG				nBytesTotal;
+    ULONG				nBytesCopied;
+    Link				aProgressLink;
+    USHORT				nBlockSize;
+    FileCopier_Impl*	pImp;
 
 private:
-    TOOLS_DLLPRIVATE FSysError          DoCopy_Impl(
+    TOOLS_DLLPRIVATE FSysError			DoCopy_Impl(
         const DirEntry &rSource, const DirEntry &rTarget );
 
 protected:
-    virtual BOOL        Progress();
-    virtual ErrCode     Error( ErrCode eErr,
+    virtual BOOL		Progress();
+    virtual ErrCode 	Error( ErrCode eErr,
                                const DirEntry *pSource, const DirEntry *pTarget );
 
 public:
@@ -420,31 +420,31 @@ public:
                         FileCopier( const FileCopier &rCopier );
                         virtual ~FileCopier();
 
-    FileCopier&         operator = ( const FileCopier &rCopier );
+    FileCopier& 		operator = ( const FileCopier &rCopier );
 
-    void                SetBlockSize( USHORT nBytes ) { nBlockSize = nBytes; }
-    USHORT              GetBlockSize() const { return nBlockSize; }
+    void				SetBlockSize( USHORT nBytes ) { nBlockSize = nBytes; }
+    USHORT				GetBlockSize() const { return nBlockSize; }
 
-    ULONG               GetBytesTotal() const { return nBytesTotal; }
-    ULONG               GetBytesCopied() const { return nBytesCopied; }
+    ULONG				GetBytesTotal() const { return nBytesTotal; }
+    ULONG				GetBytesCopied() const { return nBytesCopied; }
 
-    void                SetSource( const DirEntry &rSource ) { aSource = rSource; }
-    void                SetTarget( const DirEntry &rTarget ) { aTarget = rTarget; }
-    const DirEntry&     GetSource() const { return aSource; }
-    const DirEntry&     GetTarget() const { return aTarget; }
+    void				SetSource( const DirEntry &rSource ) { aSource = rSource; }
+    void				SetTarget( const DirEntry &rTarget ) { aTarget = rTarget; }
+    const DirEntry& 	GetSource() const { return aSource; }
+    const DirEntry& 	GetTarget() const { return aTarget; }
 
-    FSysError           Execute( FSysAction nActions = FSYS_ACTION_STANDARD );
-    FSysError           ExecuteExact( FSysAction nActions = FSYS_ACTION_STANDARD,
-                                                                 FSysExact  eExact = FSYS_NOTEXACT);
+    FSysError			Execute( FSysAction nActions = FSYS_ACTION_STANDARD );
+    FSysError			ExecuteExact( FSysAction nActions = FSYS_ACTION_STANDARD,
+                                                                 FSysExact	eExact = FSYS_NOTEXACT);
 
-    const DirEntry*     GetErrorSource() const;
-    const DirEntry*     GetErrorTarget() const;
-    ErrCode             GetError() const;
+    const DirEntry* 	GetErrorSource() const;
+    const DirEntry* 	GetErrorTarget() const;
+    ErrCode 			GetError() const;
 
-    void                SetProgressHdl( const Link& rLink ) { aProgressLink = rLink; }
-    const Link&         GetProgressHdl() const { return aProgressLink; }
-    void                SetErrorHdl( const Link& rLink );
-    const Link&         GetErrorHdl() const;
+    void				SetProgressHdl( const Link& rLink ) { aProgressLink = rLink; }
+    const Link& 		GetProgressHdl() const { return aProgressLink; }
+    void				SetErrorHdl( const Link& rLink );
+    const Link& 		GetErrorHdl() const;
 };
 
 // -------
@@ -457,29 +457,29 @@ class TOOLS_DLLPUBLIC Dir : public DirEntry
 friend struct DirReader_Impl;
 friend class CORmFSys;
 
-    DirReader_Impl* pReader;        // systemabhaengig
-    DirEntryList*   pLst;
-    FSysSortList*   pSortLst;       // NULL, wenn kein Sort gefordert
-    FileStatList*   pStatLst;       // NULL, wenn keine Stat's benoetigt
-    WildCard        aNameMask;
+    DirReader_Impl* pReader;		// systemabhaengig
+    DirEntryList*	pLst;
+    FSysSortList*	pSortLst;		// NULL, wenn kein Sort gefordert
+    FileStatList*	pStatLst;		// NULL, wenn keine Stat's benoetigt
+    WildCard		aNameMask;
     DirEntryKind eAttrMask;
 
 private:
-    TOOLS_DLLPRIVATE            Dir( const Dir& );          // not allowed
-    TOOLS_DLLPRIVATE Dir&           operator=( const Dir& );    // not allowed
+    TOOLS_DLLPRIVATE			Dir( const Dir& );			// not allowed
+    TOOLS_DLLPRIVATE Dir&			operator=( const Dir& );	// not allowed
 
 #ifdef _DIR_CXX
-    TOOLS_DLLPRIVATE FSysError      ImpSetSort( std::va_list pArgs, FSysSort nSort );
-    TOOLS_DLLPRIVATE void           Construct( DirEntryKind nKind = FSYS_KIND_DIR|FSYS_KIND_FILE );
+    TOOLS_DLLPRIVATE FSysError		ImpSetSort( std::va_list pArgs, FSysSort nSort );
+    TOOLS_DLLPRIVATE void			Construct( DirEntryKind nKind = FSYS_KIND_DIR|FSYS_KIND_FILE );
 #endif
 
 #ifndef _TOOLS_HXX
 protected:
-    BOOL            ImpInsertPointReached( const DirEntry& rIsSmaller,
+    BOOL			ImpInsertPointReached( const DirEntry& rIsSmaller,
                                            const FileStat& rNewStat,
                                            ULONG nCurPos,
                                            ULONG nSortIndex ) const;
-    void            ImpSortedInsert( const DirEntry *pNewEntry,
+    void			ImpSortedInsert( const DirEntry *pNewEntry,
                                      const FileStat *pNewStat );
 #endif
 
@@ -494,15 +494,15 @@ public:
 
     const WildCard& GetNameMask() const { return aNameMask; }
 
-    FSysError       SetSort( FSysSort nSort, ... );
+    FSysError		SetSort( FSysSort nSort, ... );
 
-    void            Reset();
-    USHORT          Scan( USHORT nCount = 5 );
-    USHORT          Count( BOOL bUpdated = TRUE ) const;
-    BOOL            Update();
+    void			Reset();
+    USHORT			Scan( USHORT nCount = 5 );
+    USHORT			Count( BOOL bUpdated = TRUE ) const;
+    BOOL			Update();
 
-    Dir&            operator +=( const Dir& rDir );
-    DirEntry&       operator []( USHORT nIndex ) const;
+    Dir&			operator +=( const Dir& rDir );
+    DirEntry&		operator []( USHORT nIndex ) const;
 };
 
 // we don't need this stuff for bootstraping
@@ -519,8 +519,8 @@ public:
 
 class FSysRedirector
 {
-    static FSysRedirector*  _pRedirector;
-    static BOOL             _bEnabled;
+    static FSysRedirector*	_pRedirector;
+    static BOOL 			_bEnabled;
 
 public:
     /** This method must called with the one and only instance of the
@@ -528,7 +528,7 @@ public:
 
         <P>It must be called with 0 when the instance is destroyed.
      */
-    static void             Register( FSysRedirector *pRedirector );
+    static void 			Register( FSysRedirector *pRedirector );
 
     //-----------------------------------------------------------------------
     /** This method returns the currently registererd instance of
@@ -536,7 +536,7 @@ public:
 
         <P>If no redirector is registered, it returns 0.
      */
-    static FSysRedirector*  Redirector();
+    static FSysRedirector*	Redirector();
 
     //-----------------------------------------------------------------------
     /** This method is to be used to redirect a file system path.
@@ -556,7 +556,7 @@ public:
                 TRUE, if the path is redirected
                 FALSE, if the path is not redirected (unchanged)
      */
-    static void             DoRedirect( String &rPath );
+    static void 			DoRedirect( String &rPath );
 };
 
 #endif // BOOTSTRP

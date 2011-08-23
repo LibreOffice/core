@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@
 #include <tools/link.hxx>
 
 // -----------------------------------------------------------------------
-#define HTMLCFG_UNKNOWN_TAGS            0x01
-//#define HTMLCFG_STYLE_SHEETS          0x02
-//#define HTMLCFG_NETSCAPE3             0x04
-#define HTMLCFG_STAR_BASIC              0x08
-#define HTMLCFG_LOCAL_GRF               0x10
-#define HTMLCFG_PRINT_LAYOUT_EXTENSION  0x20
-#define HTMLCFG_IGNORE_FONT_FAMILY      0x40
-#define HTMLCFG_IS_BASIC_WARNING        0x80
+#define HTMLCFG_UNKNOWN_TAGS 			0x01
+//#define HTMLCFG_STYLE_SHEETS 			0x02
+//#define HTMLCFG_NETSCAPE3    			0x04
+#define HTMLCFG_STAR_BASIC   			0x08
+#define HTMLCFG_LOCAL_GRF   			0x10
+#define HTMLCFG_PRINT_LAYOUT_EXTENSION 	0x20
+#define HTMLCFG_IGNORE_FONT_FAMILY	 	0x40
+#define HTMLCFG_IS_BASIC_WARNING		0x80
 #define HTMLCFG_NUMBERS_ENGLISH_US      0x100
 
 using namespace utl;
@@ -61,10 +61,10 @@ DECLARE_LIST( LinkList, Link * )
 struct HtmlOptions_Impl
 {
     LinkList    aList;
-    sal_Int32   nFlags;
-    sal_Int32   nExportMode;
-    sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
-    sal_Int32   eEncoding;
+    sal_Int32 	nFlags;
+    sal_Int32 	nExportMode;
+    sal_Int32 	aFontSizeArr[HTML_FONT_COUNT];
+    sal_Int32 	eEncoding;
     sal_Bool    bIsEncodingDefault;
 
     HtmlOptions_Impl() :
@@ -93,21 +93,21 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
     {
         static const char* aPropNames[] =
         {
-            "Import/UnknownTag",                    //  0
-            "Import/FontSetting",                   //  1
-            "Import/FontSize/Size_1",               //  2
-            "Import/FontSize/Size_2",               //  3
-            "Import/FontSize/Size_3",               //  4
-            "Import/FontSize/Size_4",               //  5
-            "Import/FontSize/Size_5",               //  6
-            "Import/FontSize/Size_6",               //  7
-            "Import/FontSize/Size_7",               //  8
-            "Export/Browser",                       //  9
-            "Export/Basic",                         //  0
-            "Export/PrintLayout",                   // 11
-            "Export/LocalGraphic",                  // 12
-            "Export/Warning",                       // 13
-            "Export/Encoding",                      // 14
+            "Import/UnknownTag",					//  0
+            "Import/FontSetting",					//  1
+            "Import/FontSize/Size_1",				//  2
+            "Import/FontSize/Size_2",				//  3
+            "Import/FontSize/Size_3",				//  4
+            "Import/FontSize/Size_4",				//  5
+            "Import/FontSize/Size_5",				//  6
+            "Import/FontSize/Size_6",				//  7
+            "Import/FontSize/Size_7",				//  8
+            "Export/Browser",						//  9
+            "Export/Basic",							//  0
+            "Export/PrintLayout",					// 11
+            "Export/LocalGraphic",					// 12
+            "Export/Warning",    					// 13
+            "Export/Encoding",  					// 14
             "Import/NumbersEnglishUS"               // 15
         };
         const int nCount = sizeof(aPropNames) / sizeof(aPropNames[0]);
@@ -164,17 +164,17 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                     case  9://"Export/Browser",
                         {
                             sal_Int32 nExpMode = 0;
-//                          pValues[nProp] >>= pImp->nExportMode;
+//							pValues[nProp] >>= pImp->nExportMode;
                             pValues[nProp] >>= nExpMode;
                             switch( nExpMode )
                             {
-                                case 0:     nExpMode = HTML_CFG_HTML32;     break;
-                                case 1:     nExpMode = HTML_CFG_MSIE_40;    break;
-//                              case 2:     nExpMode = HTML_CFG_NS30;       break;  depricated
-                                case 3:     nExpMode = HTML_CFG_WRITER;     break;
-                                case 4:     nExpMode = HTML_CFG_NS40;       break;
-                                case 5:     nExpMode = HTML_CFG_MSIE_40_OLD;break;
-                                default:    nExpMode = HTML_CFG_NS40;       break;
+                                case 0:		nExpMode = HTML_CFG_HTML32;		break;
+                                case 1:		nExpMode = HTML_CFG_MSIE_40;	break;
+//								case 2:		nExpMode = HTML_CFG_NS30;		break;	depricated
+                                case 3:		nExpMode = HTML_CFG_WRITER;		break;
+                                case 4:		nExpMode = HTML_CFG_NS40;		break;
+                                case 5:		nExpMode = HTML_CFG_MSIE_40_OLD;break;
+                                default:	nExpMode = HTML_CFG_NS40;		break;
                             }
 
                             pImp->nExportMode = nExpMode;
@@ -212,15 +212,15 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
 }
 
 // -----------------------------------------------------------------------
-void    SvxHtmlOptions::Commit()
+void	SvxHtmlOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
 
-//  const OUString* pNames = aNames.getConstArray();
+//	const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-//  const Type& rType = ::getBooleanCppuType();
+//	const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Bool bSet = sal_False;
@@ -235,19 +235,19 @@ void    SvxHtmlOptions::Commit()
             case  6: pValues[nProp] <<= pImp->aFontSizeArr[4];break;//"Import/FontSize/Size_5",
             case  7: pValues[nProp] <<= pImp->aFontSizeArr[5];break;//"Import/FontSize/Size_6",
             case  8: pValues[nProp] <<= pImp->aFontSizeArr[6];break;//"Import/FontSize/Size_7",
-            case  9:                //"Export/Browser",
+            case  9:				//"Export/Browser",
                 {
                     sal_Int32 nExpMode = pImp->nExportMode;
 
                     switch( nExpMode )
                     {
-                        case HTML_CFG_HTML32:       nExpMode = 0;   break;
-                        case HTML_CFG_MSIE_40:      nExpMode = 1;   break;
-//                      case HTML_CFG_NS30:         nExpMode = 2;   break;  depricated
-                        case HTML_CFG_WRITER:       nExpMode = 3;   break;
-                        case HTML_CFG_NS40:         nExpMode = 4;   break;
-                        case HTML_CFG_MSIE_40_OLD:  nExpMode = 5;   break;
-                        default:                    nExpMode = 4;   break;  // NS40
+                        case HTML_CFG_HTML32:		nExpMode = 0;	break;
+                        case HTML_CFG_MSIE_40:		nExpMode = 1;	break;
+//						case HTML_CFG_NS30:			nExpMode = 2;	break;	depricated
+                        case HTML_CFG_WRITER:		nExpMode = 3;	break;
+                        case HTML_CFG_NS40:			nExpMode = 4;	break;
+                        case HTML_CFG_MSIE_40_OLD:	nExpMode = 5;	break;
+                        default:					nExpMode = 4;	break;	// NS40
                     }
 
                     pValues[nProp] <<= nExpMode;
@@ -300,7 +300,7 @@ void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString 
 }
 
 // -----------------------------------------------------------------------
-USHORT  SvxHtmlOptions::GetFontSize(USHORT nPos) const
+USHORT 	SvxHtmlOptions::GetFontSize(USHORT nPos) const
 {
     if(nPos < HTML_FONT_COUNT)
         return (USHORT)pImp->aFontSizeArr[nPos];
@@ -341,7 +341,7 @@ void SvxHtmlOptions::SetImportUnknown(BOOL bSet)
 // -----------------------------------------------------------------------
 
 
-USHORT  SvxHtmlOptions::GetExportMode() const
+USHORT 	SvxHtmlOptions::GetExportMode() const
 {
     return (USHORT)pImp->nExportMode;
 }
@@ -403,7 +403,7 @@ void SvxHtmlOptions::SetSaveGraphicsLocal(BOOL bSet)
 
 --------------------------------------------------*/
 
-BOOL    SvxHtmlOptions::IsPrintLayoutExtension() const
+BOOL 	SvxHtmlOptions::IsPrintLayoutExtension() const
 {
     BOOL bRet = 0 != (pImp->nFlags & HTMLCFG_PRINT_LAYOUT_EXTENSION);
     switch( pImp->nExportMode )
@@ -420,7 +420,7 @@ BOOL    SvxHtmlOptions::IsPrintLayoutExtension() const
 /*-----------------10/21/97 08:34am-----------------
 
 --------------------------------------------------*/
-void    SvxHtmlOptions::SetPrintLayoutExtension(BOOL bSet)
+void	SvxHtmlOptions::SetPrintLayoutExtension(BOOL bSet)
 {
     if(bSet)
         pImp->nFlags |=  HTMLCFG_PRINT_LAYOUT_EXTENSION;

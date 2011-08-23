@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <cppcanvas/polypolygon.hxx>
 #include <canvasgraphichelper.hxx>
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering 
 {
     struct RealPoint2D;
 } } } }
@@ -57,40 +57,40 @@ namespace cppcanvas
         {
         public:
             ImplPolyPolygon( const CanvasSharedPtr& rParentCanvas,
-                             const ::com::sun::star::uno::Reference<
+                             const ::com::sun::star::uno::Reference< 
                                  ::com::sun::star::rendering::XPolyPolygon2D >& rPolyPoly );
 
             virtual ~ImplPolyPolygon();
 
-            virtual void            addPolygon( const ::basegfx::B2DPolygon& rPoly );
-            virtual void            addPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly );
+            virtual void 			addPolygon( const ::basegfx::B2DPolygon& rPoly );
+            virtual void 			addPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly );
 
-            virtual void            setRGBAFillColor( Color::IntSRGBA );
-            virtual void            setRGBALineColor( Color::IntSRGBA );
-            virtual Color::IntSRGBA getRGBAFillColor() const;
-            virtual Color::IntSRGBA getRGBALineColor() const;
+            virtual void			setRGBAFillColor( Color::IntSRGBA );
+            virtual void			setRGBALineColor( Color::IntSRGBA );
+            virtual Color::IntSRGBA	getRGBAFillColor() const;
+            virtual Color::IntSRGBA	getRGBALineColor() const;
 
-            virtual void            setStrokeWidth( const double& rStrokeWidth );
-            virtual double          getStrokeWidth() const;
+            virtual void 			setStrokeWidth( const double& rStrokeWidth );
+            virtual double 			getStrokeWidth() const;
 
-            virtual bool            draw() const;
+            virtual bool 			draw() const;
 
-            virtual ::com::sun::star::uno::Reference<
+            virtual ::com::sun::star::uno::Reference< 
                 ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const;
 
         private:
             // default: disabled copy/assignment
             ImplPolyPolygon(const ImplPolyPolygon&);
             ImplPolyPolygon& operator= ( const ImplPolyPolygon& );
+        
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D > 	mxPolyPoly;
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >   mxPolyPoly;
+            ::com::sun::star::rendering::StrokeAttributes											maStrokeAttributes;
 
-            ::com::sun::star::rendering::StrokeAttributes                                           maStrokeAttributes;
-
-            ::com::sun::star::uno::Sequence< double >                                                       maFillColor;
-            ::com::sun::star::uno::Sequence< double >                                                       maStrokeColor;
-            bool                                                                                            mbFillColorSet;
-            bool                                                                                            mbStrokeColorSet;
+            ::com::sun::star::uno::Sequence< double > 														maFillColor;
+            ::com::sun::star::uno::Sequence< double > 														maStrokeColor;
+            bool																							mbFillColorSet;
+            bool																							mbStrokeColorSet;
         };
 
     }

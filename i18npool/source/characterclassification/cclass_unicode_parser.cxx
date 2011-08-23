@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 
-#include <string.h>     // memcpy()
+#include <string.h>		// memcpy()
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -46,25 +46,25 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_ILLEGAL       = 0x00000000;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR          = 0x00000001;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_BOOL = 0x00000002;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_WORD = 0x00000004;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_VALUE    = 0x00000008;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_STRING   = 0x00000010;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_ILLEGAL		= 0x00000000;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR			= 0x00000001;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_BOOL	= 0x00000002;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_WORD	= 0x00000004;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_VALUE	= 0x00000008;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_STRING	= 0x00000010;
 const UPT_FLAG_TYPE cclass_Unicode::TOKEN_CHAR_DONTCARE= 0x00000020;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_BOOL          = 0x00000040;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_WORD          = 0x00000080;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_WORD_SEP      = 0x00000100;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE     = 0x00000200;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_SEP = 0x00000400;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_EXP = 0x00000800;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_SIGN    = 0x00001000;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_EXP_VALUE   = 0x00002000;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_DIGIT   = 0x00004000;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_NAME_SEP      = 0x20000000;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_STRING_SEP    = 0x40000000;
-const UPT_FLAG_TYPE cclass_Unicode::TOKEN_EXCLUDED      = 0x80000000;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_BOOL			= 0x00000040;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_WORD			= 0x00000080;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_WORD_SEP		= 0x00000100;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE		= 0x00000200;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_SEP	= 0x00000400;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_EXP	= 0x00000800;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_SIGN	= 0x00001000;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_EXP_VALUE	= 0x00002000;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_VALUE_DIGIT	= 0x00004000;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_NAME_SEP		= 0x20000000;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_STRING_SEP	= 0x40000000;
+const UPT_FLAG_TYPE cclass_Unicode::TOKEN_EXCLUDED		= 0x80000000;
 
 #define TOKEN_DIGIT_FLAGS (TOKEN_CHAR_VALUE | TOKEN_VALUE | TOKEN_VALUE_EXP | TOKEN_VALUE_EXP_VALUE | TOKEN_VALUE_DIGIT)
 
@@ -75,7 +75,7 @@ const UPT_FLAG_TYPE cclass_Unicode::pDefaultParserTable[ nDefCnt ] =
 {
 // (...) == Calc formula compiler specific, commented out and modified
 
-    /* \0 */    TOKEN_EXCLUDED,
+    /* \0 */	TOKEN_EXCLUDED,
                 TOKEN_ILLEGAL,
                 TOKEN_ILLEGAL,
                 TOKEN_ILLEGAL,
@@ -84,18 +84,9 @@ const UPT_FLAG_TYPE cclass_Unicode::pDefaultParserTable[ nDefCnt ] =
                 TOKEN_ILLEGAL,
                 TOKEN_ILLEGAL,
                 TOKEN_ILLEGAL,
-    /*  9 \t */ TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,     // (TOKEN_ILLEGAL)
+    /*  9 \t */	TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,		// (TOKEN_ILLEGAL)
                 TOKEN_ILLEGAL,
-    /* 11 \v */ TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,     // (TOKEN_ILLEGAL)
-                TOKEN_ILLEGAL,
-                TOKEN_ILLEGAL,
-                TOKEN_ILLEGAL,
-                TOKEN_ILLEGAL,
-                TOKEN_ILLEGAL,
-                TOKEN_ILLEGAL,
-                TOKEN_ILLEGAL,
-                TOKEN_ILLEGAL,
-                TOKEN_ILLEGAL,
+    /* 11 \v */	TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,		// (TOKEN_ILLEGAL)
                 TOKEN_ILLEGAL,
                 TOKEN_ILLEGAL,
                 TOKEN_ILLEGAL,
@@ -107,111 +98,120 @@ const UPT_FLAG_TYPE cclass_Unicode::pDefaultParserTable[ nDefCnt ] =
                 TOKEN_ILLEGAL,
                 TOKEN_ILLEGAL,
                 TOKEN_ILLEGAL,
-    /*  32   */ TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  33 ! */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  34 " */ TOKEN_CHAR_STRING | TOKEN_STRING_SEP,
-    /*  35 # */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_WORD_SEP)
-    /*  36 $ */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_CHAR_WORD | TOKEN_WORD)
-    /*  37 % */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_VALUE)
-    /*  38 & */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  39 ' */ TOKEN_NAME_SEP,
-    /*  40 ( */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  41 ) */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  42 * */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  43 + */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP | TOKEN_VALUE_EXP | TOKEN_VALUE_SIGN,
-    /*  44 , */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_CHAR_VALUE | TOKEN_VALUE)
-    /*  45 - */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP | TOKEN_VALUE_EXP | TOKEN_VALUE_SIGN,
-    /*  46 . */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_WORD | TOKEN_CHAR_VALUE | TOKEN_VALUE)
-    /*  47 / */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+                TOKEN_ILLEGAL,
+                TOKEN_ILLEGAL,
+                TOKEN_ILLEGAL,
+                TOKEN_ILLEGAL,
+                TOKEN_ILLEGAL,
+                TOKEN_ILLEGAL,
+                TOKEN_ILLEGAL,
+                TOKEN_ILLEGAL,
+                TOKEN_ILLEGAL,
+    /*  32   */	TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  33 ! */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  34 " */	TOKEN_CHAR_STRING | TOKEN_STRING_SEP,
+    /*  35 # */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_WORD_SEP)
+    /*  36 $ */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_CHAR_WORD | TOKEN_WORD)
+    /*  37 % */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_VALUE)
+    /*  38 & */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  39 ' */	TOKEN_NAME_SEP,
+    /*  40 ( */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  41 ) */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  42 * */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  43 + */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP | TOKEN_VALUE_EXP | TOKEN_VALUE_SIGN,
+    /*  44 , */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_CHAR_VALUE | TOKEN_VALUE)
+    /*  45 - */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP | TOKEN_VALUE_EXP | TOKEN_VALUE_SIGN,
+    /*  46 . */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_WORD | TOKEN_CHAR_VALUE | TOKEN_VALUE)
+    /*  47 / */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
     //for ( i = 48; i < 58; i++ )
-    /*  48 0 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  49 1 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  50 2 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  51 3 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  52 4 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  53 5 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  54 6 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  55 7 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  56 8 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  57 9 */ TOKEN_DIGIT_FLAGS | TOKEN_WORD,
-    /*  58 : */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_WORD)
-    /*  59 ; */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  60 < */ TOKEN_CHAR_BOOL | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  61 = */ TOKEN_CHAR | TOKEN_BOOL | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  62 > */ TOKEN_CHAR_BOOL | TOKEN_BOOL | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  63 ? */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_CHAR_WORD | TOKEN_WORD)
-    /*  64 @ */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
+    /*  48 0 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  49 1 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  50 2 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  51 3 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  52 4 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  53 5 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  54 6 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  55 7 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  56 8 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  57 9 */	TOKEN_DIGIT_FLAGS | TOKEN_WORD,
+    /*  58 : */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_WORD)
+    /*  59 ; */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  60 < */	TOKEN_CHAR_BOOL | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  61 = */	TOKEN_CHAR | TOKEN_BOOL | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  62 > */	TOKEN_CHAR_BOOL | TOKEN_BOOL | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  63 ? */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_CHAR_WORD | TOKEN_WORD)
+    /*  64 @ */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
     //for ( i = 65; i < 91; i++ )
-    /*  65 A */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  66 B */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  67 C */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  68 D */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  69 E */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  70 F */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  71 G */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  72 H */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  73 I */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  74 J */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  75 K */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  76 L */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  77 M */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  78 N */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  79 O */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  80 P */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  81 Q */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  82 R */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  83 S */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  84 T */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  85 U */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  86 V */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  87 W */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  88 X */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  89 Y */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  90 Z */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  91 [ */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
-    /*  92 \ */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
-    /*  93 ] */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
-    /*  94 ^ */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
-    /*  95 _ */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  96 ` */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
+    /*  65 A */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  66 B */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  67 C */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  68 D */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  69 E */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  70 F */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  71 G */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  72 H */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  73 I */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  74 J */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  75 K */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  76 L */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  77 M */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  78 N */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  79 O */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  80 P */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  81 Q */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  82 R */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  83 S */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  84 T */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  85 U */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  86 V */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  87 W */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  88 X */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  89 Y */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  90 Z */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  91 [ */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
+    /*  92 \ */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
+    /*  93 ] */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
+    /*  94 ^ */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,
+    /*  95 _ */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  96 ` */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
     //for ( i = 97; i < 123; i++ )
-    /*  97 a */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  98 b */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /*  99 c */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 100 d */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 101 e */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 102 f */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 103 g */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 104 h */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 105 i */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 106 j */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 107 k */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 108 l */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 109 m */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 110 n */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 111 o */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 112 p */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 113 q */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 114 r */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 115 s */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 116 t */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 117 u */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 118 v */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 119 w */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 120 x */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 121 y */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 122 z */ TOKEN_CHAR_WORD | TOKEN_WORD,
-    /* 123 { */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
-    /* 124 | */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
-    /* 125 } */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
-    /* 126 ~ */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,  // (TOKEN_ILLEGAL // UNUSED)
-    /* 127   */ TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP   // (TOKEN_ILLEGAL // UNUSED)
+    /*  97 a */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  98 b */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /*  99 c */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 100 d */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 101 e */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 102 f */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 103 g */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 104 h */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 105 i */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 106 j */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 107 k */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 108 l */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 109 m */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 110 n */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 111 o */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 112 p */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 113 q */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 114 r */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 115 s */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 116 t */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 117 u */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 118 v */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 119 w */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 120 x */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 121 y */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 122 z */	TOKEN_CHAR_WORD | TOKEN_WORD,
+    /* 123 { */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
+    /* 124 | */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
+    /* 125 } */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
+    /* 126 ~ */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP,	// (TOKEN_ILLEGAL // UNUSED)
+    /* 127   */	TOKEN_CHAR | TOKEN_WORD_SEP | TOKEN_VALUE_SEP	// (TOKEN_ILLEGAL // UNUSED)
 };
 
 
 const sal_Int32 cclass_Unicode::pParseTokensType[ nDefCnt ] =
 {
-    /* \0 */    KParseTokens::ASC_OTHER,
+    /* \0 */	KParseTokens::ASC_OTHER,
                 KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
@@ -220,18 +220,9 @@ const sal_Int32 cclass_Unicode::pParseTokensType[ nDefCnt ] =
                 KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
-    /*  9 \t */ KParseTokens::ASC_CONTROL,
+    /*  9 \t */	KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
-    /* 11 \v */ KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
-                KParseTokens::ASC_CONTROL,
+    /* 11 \v */	KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
@@ -243,105 +234,114 @@ const sal_Int32 cclass_Unicode::pParseTokensType[ nDefCnt ] =
                 KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
                 KParseTokens::ASC_CONTROL,
-    /*  32   */ KParseTokens::ASC_OTHER,
-    /*  33 ! */ KParseTokens::ASC_OTHER,
-    /*  34 " */ KParseTokens::ASC_OTHER,
-    /*  35 # */ KParseTokens::ASC_OTHER,
-    /*  36 $ */ KParseTokens::ASC_DOLLAR,
-    /*  37 % */ KParseTokens::ASC_OTHER,
-    /*  38 & */ KParseTokens::ASC_OTHER,
-    /*  39 ' */ KParseTokens::ASC_OTHER,
-    /*  40 ( */ KParseTokens::ASC_OTHER,
-    /*  41 ) */ KParseTokens::ASC_OTHER,
-    /*  42 * */ KParseTokens::ASC_OTHER,
-    /*  43 + */ KParseTokens::ASC_OTHER,
-    /*  44 , */ KParseTokens::ASC_OTHER,
-    /*  45 - */ KParseTokens::ASC_OTHER,
-    /*  46 . */ KParseTokens::ASC_DOT,
-    /*  47 / */ KParseTokens::ASC_OTHER,
+                KParseTokens::ASC_CONTROL,
+                KParseTokens::ASC_CONTROL,
+                KParseTokens::ASC_CONTROL,
+                KParseTokens::ASC_CONTROL,
+                KParseTokens::ASC_CONTROL,
+                KParseTokens::ASC_CONTROL,
+                KParseTokens::ASC_CONTROL,
+                KParseTokens::ASC_CONTROL,
+                KParseTokens::ASC_CONTROL,
+    /*  32   */	KParseTokens::ASC_OTHER,
+    /*  33 ! */	KParseTokens::ASC_OTHER,
+    /*  34 " */	KParseTokens::ASC_OTHER,
+    /*  35 # */	KParseTokens::ASC_OTHER,
+    /*  36 $ */	KParseTokens::ASC_DOLLAR,
+    /*  37 % */	KParseTokens::ASC_OTHER,
+    /*  38 & */	KParseTokens::ASC_OTHER,
+    /*  39 ' */	KParseTokens::ASC_OTHER,
+    /*  40 ( */	KParseTokens::ASC_OTHER,
+    /*  41 ) */	KParseTokens::ASC_OTHER,
+    /*  42 * */	KParseTokens::ASC_OTHER,
+    /*  43 + */	KParseTokens::ASC_OTHER,
+    /*  44 , */	KParseTokens::ASC_OTHER,
+    /*  45 - */	KParseTokens::ASC_OTHER,
+    /*  46 . */	KParseTokens::ASC_DOT,
+    /*  47 / */	KParseTokens::ASC_OTHER,
     //for ( i = 48; i < 58; i++ )
-    /*  48 0 */ KParseTokens::ASC_DIGIT,
-    /*  49 1 */ KParseTokens::ASC_DIGIT,
-    /*  50 2 */ KParseTokens::ASC_DIGIT,
-    /*  51 3 */ KParseTokens::ASC_DIGIT,
-    /*  52 4 */ KParseTokens::ASC_DIGIT,
-    /*  53 5 */ KParseTokens::ASC_DIGIT,
-    /*  54 6 */ KParseTokens::ASC_DIGIT,
-    /*  55 7 */ KParseTokens::ASC_DIGIT,
-    /*  56 8 */ KParseTokens::ASC_DIGIT,
-    /*  57 9 */ KParseTokens::ASC_DIGIT,
-    /*  58 : */ KParseTokens::ASC_COLON,
-    /*  59 ; */ KParseTokens::ASC_OTHER,
-    /*  60 < */ KParseTokens::ASC_OTHER,
-    /*  61 = */ KParseTokens::ASC_OTHER,
-    /*  62 > */ KParseTokens::ASC_OTHER,
-    /*  63 ? */ KParseTokens::ASC_OTHER,
-    /*  64 @ */ KParseTokens::ASC_OTHER,
+    /*  48 0 */	KParseTokens::ASC_DIGIT,
+    /*  49 1 */	KParseTokens::ASC_DIGIT,
+    /*  50 2 */	KParseTokens::ASC_DIGIT,
+    /*  51 3 */	KParseTokens::ASC_DIGIT,
+    /*  52 4 */	KParseTokens::ASC_DIGIT,
+    /*  53 5 */	KParseTokens::ASC_DIGIT,
+    /*  54 6 */	KParseTokens::ASC_DIGIT,
+    /*  55 7 */	KParseTokens::ASC_DIGIT,
+    /*  56 8 */	KParseTokens::ASC_DIGIT,
+    /*  57 9 */	KParseTokens::ASC_DIGIT,
+    /*  58 : */	KParseTokens::ASC_COLON,
+    /*  59 ; */	KParseTokens::ASC_OTHER,
+    /*  60 < */	KParseTokens::ASC_OTHER,
+    /*  61 = */	KParseTokens::ASC_OTHER,
+    /*  62 > */	KParseTokens::ASC_OTHER,
+    /*  63 ? */	KParseTokens::ASC_OTHER,
+    /*  64 @ */	KParseTokens::ASC_OTHER,
     //for ( i = 65; i < 91; i++ )
-    /*  65 A */ KParseTokens::ASC_UPALPHA,
-    /*  66 B */ KParseTokens::ASC_UPALPHA,
-    /*  67 C */ KParseTokens::ASC_UPALPHA,
-    /*  68 D */ KParseTokens::ASC_UPALPHA,
-    /*  69 E */ KParseTokens::ASC_UPALPHA,
-    /*  70 F */ KParseTokens::ASC_UPALPHA,
-    /*  71 G */ KParseTokens::ASC_UPALPHA,
-    /*  72 H */ KParseTokens::ASC_UPALPHA,
-    /*  73 I */ KParseTokens::ASC_UPALPHA,
-    /*  74 J */ KParseTokens::ASC_UPALPHA,
-    /*  75 K */ KParseTokens::ASC_UPALPHA,
-    /*  76 L */ KParseTokens::ASC_UPALPHA,
-    /*  77 M */ KParseTokens::ASC_UPALPHA,
-    /*  78 N */ KParseTokens::ASC_UPALPHA,
-    /*  79 O */ KParseTokens::ASC_UPALPHA,
-    /*  80 P */ KParseTokens::ASC_UPALPHA,
-    /*  81 Q */ KParseTokens::ASC_UPALPHA,
-    /*  82 R */ KParseTokens::ASC_UPALPHA,
-    /*  83 S */ KParseTokens::ASC_UPALPHA,
-    /*  84 T */ KParseTokens::ASC_UPALPHA,
-    /*  85 U */ KParseTokens::ASC_UPALPHA,
-    /*  86 V */ KParseTokens::ASC_UPALPHA,
-    /*  87 W */ KParseTokens::ASC_UPALPHA,
-    /*  88 X */ KParseTokens::ASC_UPALPHA,
-    /*  89 Y */ KParseTokens::ASC_UPALPHA,
-    /*  90 Z */ KParseTokens::ASC_UPALPHA,
-    /*  91 [ */ KParseTokens::ASC_OTHER,
-    /*  92 \ */ KParseTokens::ASC_OTHER,
-    /*  93 ] */ KParseTokens::ASC_OTHER,
-    /*  94 ^ */ KParseTokens::ASC_OTHER,
-    /*  95 _ */ KParseTokens::ASC_UNDERSCORE,
-    /*  96 ` */ KParseTokens::ASC_OTHER,
+    /*  65 A */	KParseTokens::ASC_UPALPHA,
+    /*  66 B */	KParseTokens::ASC_UPALPHA,
+    /*  67 C */	KParseTokens::ASC_UPALPHA,
+    /*  68 D */	KParseTokens::ASC_UPALPHA,
+    /*  69 E */	KParseTokens::ASC_UPALPHA,
+    /*  70 F */	KParseTokens::ASC_UPALPHA,
+    /*  71 G */	KParseTokens::ASC_UPALPHA,
+    /*  72 H */	KParseTokens::ASC_UPALPHA,
+    /*  73 I */	KParseTokens::ASC_UPALPHA,
+    /*  74 J */	KParseTokens::ASC_UPALPHA,
+    /*  75 K */	KParseTokens::ASC_UPALPHA,
+    /*  76 L */	KParseTokens::ASC_UPALPHA,
+    /*  77 M */	KParseTokens::ASC_UPALPHA,
+    /*  78 N */	KParseTokens::ASC_UPALPHA,
+    /*  79 O */	KParseTokens::ASC_UPALPHA,
+    /*  80 P */	KParseTokens::ASC_UPALPHA,
+    /*  81 Q */	KParseTokens::ASC_UPALPHA,
+    /*  82 R */	KParseTokens::ASC_UPALPHA,
+    /*  83 S */	KParseTokens::ASC_UPALPHA,
+    /*  84 T */	KParseTokens::ASC_UPALPHA,
+    /*  85 U */	KParseTokens::ASC_UPALPHA,
+    /*  86 V */	KParseTokens::ASC_UPALPHA,
+    /*  87 W */	KParseTokens::ASC_UPALPHA,
+    /*  88 X */	KParseTokens::ASC_UPALPHA,
+    /*  89 Y */	KParseTokens::ASC_UPALPHA,
+    /*  90 Z */	KParseTokens::ASC_UPALPHA,
+    /*  91 [ */	KParseTokens::ASC_OTHER,
+    /*  92 \ */	KParseTokens::ASC_OTHER,
+    /*  93 ] */	KParseTokens::ASC_OTHER,
+    /*  94 ^ */	KParseTokens::ASC_OTHER,
+    /*  95 _ */	KParseTokens::ASC_UNDERSCORE,
+    /*  96 ` */	KParseTokens::ASC_OTHER,
     //for ( i = 97; i < 123; i++ )
-    /*  97 a */ KParseTokens::ASC_LOALPHA,
-    /*  98 b */ KParseTokens::ASC_LOALPHA,
-    /*  99 c */ KParseTokens::ASC_LOALPHA,
-    /* 100 d */ KParseTokens::ASC_LOALPHA,
-    /* 101 e */ KParseTokens::ASC_LOALPHA,
-    /* 102 f */ KParseTokens::ASC_LOALPHA,
-    /* 103 g */ KParseTokens::ASC_LOALPHA,
-    /* 104 h */ KParseTokens::ASC_LOALPHA,
-    /* 105 i */ KParseTokens::ASC_LOALPHA,
-    /* 106 j */ KParseTokens::ASC_LOALPHA,
-    /* 107 k */ KParseTokens::ASC_LOALPHA,
-    /* 108 l */ KParseTokens::ASC_LOALPHA,
-    /* 109 m */ KParseTokens::ASC_LOALPHA,
-    /* 110 n */ KParseTokens::ASC_LOALPHA,
-    /* 111 o */ KParseTokens::ASC_LOALPHA,
-    /* 112 p */ KParseTokens::ASC_LOALPHA,
-    /* 113 q */ KParseTokens::ASC_LOALPHA,
-    /* 114 r */ KParseTokens::ASC_LOALPHA,
-    /* 115 s */ KParseTokens::ASC_LOALPHA,
-    /* 116 t */ KParseTokens::ASC_LOALPHA,
-    /* 117 u */ KParseTokens::ASC_LOALPHA,
-    /* 118 v */ KParseTokens::ASC_LOALPHA,
-    /* 119 w */ KParseTokens::ASC_LOALPHA,
-    /* 120 x */ KParseTokens::ASC_LOALPHA,
-    /* 121 y */ KParseTokens::ASC_LOALPHA,
-    /* 122 z */ KParseTokens::ASC_LOALPHA,
-    /* 123 { */ KParseTokens::ASC_OTHER,
-    /* 124 | */ KParseTokens::ASC_OTHER,
-    /* 125 } */ KParseTokens::ASC_OTHER,
-    /* 126 ~ */ KParseTokens::ASC_OTHER,
-    /* 127   */ KParseTokens::ASC_OTHER
+    /*  97 a */	KParseTokens::ASC_LOALPHA,
+    /*  98 b */	KParseTokens::ASC_LOALPHA,
+    /*  99 c */	KParseTokens::ASC_LOALPHA,
+    /* 100 d */	KParseTokens::ASC_LOALPHA,
+    /* 101 e */	KParseTokens::ASC_LOALPHA,
+    /* 102 f */	KParseTokens::ASC_LOALPHA,
+    /* 103 g */	KParseTokens::ASC_LOALPHA,
+    /* 104 h */	KParseTokens::ASC_LOALPHA,
+    /* 105 i */	KParseTokens::ASC_LOALPHA,
+    /* 106 j */	KParseTokens::ASC_LOALPHA,
+    /* 107 k */	KParseTokens::ASC_LOALPHA,
+    /* 108 l */	KParseTokens::ASC_LOALPHA,
+    /* 109 m */	KParseTokens::ASC_LOALPHA,
+    /* 110 n */	KParseTokens::ASC_LOALPHA,
+    /* 111 o */	KParseTokens::ASC_LOALPHA,
+    /* 112 p */	KParseTokens::ASC_LOALPHA,
+    /* 113 q */	KParseTokens::ASC_LOALPHA,
+    /* 114 r */	KParseTokens::ASC_LOALPHA,
+    /* 115 s */	KParseTokens::ASC_LOALPHA,
+    /* 116 t */	KParseTokens::ASC_LOALPHA,
+    /* 117 u */	KParseTokens::ASC_LOALPHA,
+    /* 118 v */	KParseTokens::ASC_LOALPHA,
+    /* 119 w */	KParseTokens::ASC_LOALPHA,
+    /* 120 x */	KParseTokens::ASC_LOALPHA,
+    /* 121 y */	KParseTokens::ASC_LOALPHA,
+    /* 122 z */	KParseTokens::ASC_LOALPHA,
+    /* 123 { */	KParseTokens::ASC_OTHER,
+    /* 124 | */	KParseTokens::ASC_OTHER,
+    /* 125 } */	KParseTokens::ASC_OTHER,
+    /* 126 ~ */	KParseTokens::ASC_OTHER,
+    /* 127   */	KParseTokens::ASC_OTHER
 };
 
 
@@ -490,58 +490,58 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
 
         if ( !(nStartTypes & ASC_UPALPHA) )
             for ( i = 65; i < 91; i++ )
-                pTable[i] &= ~TOKEN_CHAR_WORD;  // not allowed as start character
+                pTable[i] &= ~TOKEN_CHAR_WORD;	// not allowed as start character
         if ( !(nContTypes & ASC_UPALPHA) )
             for ( i = 65; i < 91; i++ )
-                pTable[i] &= ~TOKEN_WORD;       // not allowed as cont character
+                pTable[i] &= ~TOKEN_WORD;		// not allowed as cont character
 
         if ( !(nStartTypes & ASC_LOALPHA) )
             for ( i = 97; i < 123; i++ )
-                pTable[i] &= ~TOKEN_CHAR_WORD;  // not allowed as start character
+                pTable[i] &= ~TOKEN_CHAR_WORD;	// not allowed as start character
         if ( !(nContTypes & ASC_LOALPHA) )
             for ( i = 97; i < 123; i++ )
-                pTable[i] &= ~TOKEN_WORD;       // not allowed as cont character
+                pTable[i] &= ~TOKEN_WORD;		// not allowed as cont character
 
         if ( nStartTypes & ASC_DIGIT )
             for ( i = 48; i < 58; i++ )
-                pTable[i] |= TOKEN_CHAR_WORD;   // allowed as start character
+                pTable[i] |= TOKEN_CHAR_WORD;	// allowed as start character
         if ( !(nContTypes & ASC_DIGIT) )
             for ( i = 48; i < 58; i++ )
-                pTable[i] &= ~TOKEN_WORD;       // not allowed as cont character
+                pTable[i] &= ~TOKEN_WORD;		// not allowed as cont character
 
         if ( !(nStartTypes & ASC_UNDERSCORE) )
-            pTable[95] &= ~TOKEN_CHAR_WORD;     // not allowed as start character
+            pTable[95] &= ~TOKEN_CHAR_WORD;		// not allowed as start character
         if ( !(nContTypes & ASC_UNDERSCORE) )
-            pTable[95] &= ~TOKEN_WORD;          // not allowed as cont character
+            pTable[95] &= ~TOKEN_WORD;			// not allowed as cont character
 
         if ( nStartTypes & ASC_DOLLAR )
-            pTable[36] |= TOKEN_CHAR_WORD;      // allowed as start character
+            pTable[36] |= TOKEN_CHAR_WORD;		// allowed as start character
         if ( nContTypes & ASC_DOLLAR )
-            pTable[36] |= TOKEN_WORD;           // allowed as cont character
+            pTable[36] |= TOKEN_WORD;			// allowed as cont character
 
         if ( nStartTypes & ASC_DOT )
-            pTable[46] |= TOKEN_CHAR_WORD;      // allowed as start character
+            pTable[46] |= TOKEN_CHAR_WORD;		// allowed as start character
         if ( nContTypes & ASC_DOT )
-            pTable[46] |= TOKEN_WORD;           // allowed as cont character
+            pTable[46] |= TOKEN_WORD;			// allowed as cont character
 
         if ( nStartTypes & ASC_COLON )
-            pTable[58] |= TOKEN_CHAR_WORD;      // allowed as start character
+            pTable[58] |= TOKEN_CHAR_WORD;		// allowed as start character
         if ( nContTypes & ASC_COLON )
-            pTable[58] |= TOKEN_WORD;           // allowed as cont character
+            pTable[58] |= TOKEN_WORD;			// allowed as cont character
 
         if ( nStartTypes & ASC_CONTROL )
             for ( i = 1; i < 32; i++ )
-                pTable[i] |= TOKEN_CHAR_WORD;   // allowed as start character
+                pTable[i] |= TOKEN_CHAR_WORD;	// allowed as start character
         if ( nContTypes & ASC_CONTROL )
             for ( i = 1; i < 32; i++ )
-                pTable[i] |= TOKEN_WORD;        // allowed as cont character
+                pTable[i] |= TOKEN_WORD;		// allowed as cont character
 
         if ( nStartTypes & ASC_ANY_BUT_CONTROL )
             for ( i = 32; i < nDefCnt; i++ )
-                pTable[i] |= TOKEN_CHAR_WORD;   // allowed as start character
+                pTable[i] |= TOKEN_CHAR_WORD;	// allowed as start character
         if ( nContTypes & ASC_ANY_BUT_CONTROL )
             for ( i = 32; i < nDefCnt; i++ )
-                pTable[i] |= TOKEN_WORD;        // allowed as cont character
+                pTable[i] |= TOKEN_WORD;		// allowed as cont character
 
     }
 
@@ -738,7 +738,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
         if ( nMask & TOKEN_EXCLUDED )
             eState = ssBounce;
         if ( bMightBeWord )
-        {   // only relevant for ssGetValue fall back
+        {	// only relevant for ssGetValue fall back
             if ( eState == ssGetChar || eState == ssRewindFromValue ||
                     eState == ssIgnoreLeadingInRewind )
                 bMightBeWord = ((nMask & TOKEN_CHAR_WORD) != 0);
@@ -755,7 +755,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             {
                 if ( (nMask & TOKEN_CHAR_VALUE) && eState != ssRewindFromValue
                         && eState != ssIgnoreLeadingInRewind )
-                {   //! must be first, may fall back to ssGetWord via bMightBeWord
+                {	//! must be first, may fall back to ssGetWord via bMightBeWord
                     eState = ssGetValue;
                     if ( nMask & TOKEN_VALUE_DIGIT )
                     {
@@ -783,14 +783,14 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     eState = ssGetWordFirstChar;
                     bQuote = true;
                     pSym++;
-                    nParseTokensType = 0;   // will be taken of first real character
+                    nParseTokensType = 0;	// will be taken of first real character
                     r.TokenType = KParseType::SINGLE_QUOTE_NAME;
                 }
                 else if ( nMask & TOKEN_CHAR_STRING )
                 {
                     eState = ssGetString;
                     pSym++;
-                    nParseTokensType = 0;   // will be taken of first real character
+                    nParseTokensType = 0;	// will be taken of first real character
                     r.TokenType = KParseType::DOUBLE_QUOTE_STRING;
                 }
                 else if ( nMask & TOKEN_CHAR_DONTCARE )
@@ -801,7 +801,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                             eState = ssIgnoreLeadingInRewind;
                         r.LeadingWhiteSpace++;
                         pSym++;
-                        nParseTokensType = 0;   // wait until real character
+                        nParseTokensType = 0;	// wait until real character
                         bMightBeWord = true;
                     }
                     else
@@ -813,12 +813,12 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     r.TokenType = KParseType::BOOLEAN;
                 }
                 else if ( nMask & TOKEN_CHAR )
-                {   //! must be last
+                {	//! must be last
                     eState = ssStop;
                     r.TokenType = KParseType::ONE_SINGLE_CHAR;
                 }
                 else
-                    eState = ssBounce;      // not known
+                    eState = ssBounce;		// not known
             }
             break;
             case ssGetValue :
@@ -846,9 +846,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     UPT_FLAG_TYPE nNext = getFlags( pTextStart, pSrc - pTextStart );
                     if ( nNext & TOKEN_VALUE_EXP )
-                        ;   // keep it going
+                        ;	// keep it going
                     else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
-                    {   // might be a numerical name (1.2efg)
+                    {	// might be a numerical name (1.2efg)
                         eState = ssGetWord;
                         r.TokenType = KParseType::IDENTNAME;
                     }
@@ -861,9 +861,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     {
                         UPT_FLAG_TYPE nNext = getFlags( pTextStart, pSrc - pTextStart );
                         if ( nNext & TOKEN_VALUE_EXP_VALUE )
-                            ;   // keep it going
+                            ;	// keep it going
                         else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
-                        {   // might be a numerical name (1.2e+fg)
+                        {	// might be a numerical name (1.2e+fg)
                             eState = ssGetWord;
                             r.TokenType = KParseType::IDENTNAME;
                         }
@@ -871,7 +871,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                             eState = ssStopBack;
                     }
                     else if ( bMightBeWord )
-                    {   // might be a numerical name (1.2+fg)
+                    {	// might be a numerical name (1.2+fg)
                         eState = ssGetWord;
                         r.TokenType = KParseType::IDENTNAME;
                     }
@@ -879,7 +879,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                         eState = ssStopBack;
                 }
                 else if ( bMightBeWord && (nMask & TOKEN_WORD) )
-                {   // might be a numerical name (1995.A1)
+                {	// might be a numerical name (1995.A1)
                     eState = ssGetWord;
                     r.TokenType = KParseType::IDENTNAME;
                 }
@@ -893,13 +893,13 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             case ssGetWord :
             {
                 if ( nMask & TOKEN_WORD )
-                    ;   // keep it going
+                    ;	// keep it going
                 else if ( nMask & TOKEN_NAME_SEP )
                 {
                     if ( bQuote )
                     {
                         if ( cLast == '\\' )
-                        {   // escaped
+                        {	// escaped
                             aSymbol += OUString( pSym, pSrc - pSym - 2 );
                             aSymbol += OUString( &c, 1);
                         }
@@ -914,7 +914,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                         eState = ssStopBack;
                 }
                 else if ( bQuote )
-                    ;   // keep it going
+                    ;	// keep it going
                 else
                     eState = ssStopBack;
             }
@@ -924,13 +924,13 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 if ( nMask & TOKEN_STRING_SEP )
                 {
                     if ( cLast == '\\' )
-                    {   // escaped
+                    {	// escaped
                         aSymbol += OUString( pSym, pSrc - pSym - 2 );
                         aSymbol += OUString( &c, 1);
                     }
                     else if ( c == *pSrc &&
                             !(nContTypes & KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING) )
-                    {   // "" => literal " escaped
+                    {	// "" => literal " escaped
                         aSymbol += OUString( pSym, pSrc - pSym );
                         pSrc++;
                     }
@@ -946,7 +946,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             case ssGetBool :
             {
                 if ( (nMask & TOKEN_BOOL) )
-                    eState = ssStop;    // maximum 2: <, >, <>, <=, >=
+                    eState = ssStop;	// maximum 2: <, >, <>, <=, >=
                 else
                     eState = ssStopBack;
             }
@@ -976,9 +976,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             {
                 if ( (r.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
                         && (nTokenType & KParseType::IDENTNAME) && bMightBeWord )
-                    ;   // keep a number that might be a word
+                    ;	// keep a number that might be a word
                 else if ( r.LeadingWhiteSpace == (pSrc - pTextStart) )
-                    ;   // keep ignored white space
+                    ;	// keep ignored white space
                 else if ( !r.TokenType && eState == ssGetValue && (nMask & TOKEN_VALUE_SEP) )
                     ;   // keep uncertain value
                 else
@@ -990,7 +990,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 eState = ssStopBack;
             }
             if ( eState == ssStopBack )
-            {   // put back
+            {	// put back
                 pSrc--;
                 bMightBeWord = bMightBeWordLast;
                 eState = ssStop;
@@ -1056,7 +1056,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     else if ( r.TokenType & (KParseType::SINGLE_QUOTE_NAME | KParseType::DOUBLE_QUOTE_STRING) )
     {
         if ( pSym < pSrc )
-        {   //! open quote
+        {	//! open quote
             aSymbol += OUString( pSym, pSrc - pSym );
             r.TokenType |= KParseType::MISSING_QUOTE;
         }

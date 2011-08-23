@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ namespace svt { namespace table
 
         /** returns the row, which contains the input point*/
 
-        ColPos  GetCurrentRow (const Point& rPoint);
+        ColPos	GetCurrentRow (const Point& rPoint);
 
         /** retrieves the current column
 
@@ -157,11 +157,11 @@ namespace svt { namespace table
         {
             return GoTo( GetCurrentColumn(), _nRow );
         }
-    SVT_DLLPRIVATE virtual void Resize();
+    SVT_DLLPRIVATE virtual void	Resize();
     virtual void    Select();
-    SVT_DLLPRIVATE void     SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const            { return m_aSelectHdl; }
-
+    SVT_DLLPRIVATE void		SetSelectHdl( const Link& rLink )	{ m_aSelectHdl = rLink; }
+    const Link& 	GetSelectHdl() const			{ return m_aSelectHdl; }
+        
     /**invalidates the table if table has been changed e.g. new row added
     */
     void InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved);
@@ -177,9 +177,9 @@ namespace svt { namespace table
         // Window overridables
         virtual void        GetFocus();
         virtual void        LoseFocus();
-        virtual void        KeyInput( const KeyEvent& rKEvt );
+        virtual void        KeyInput( const KeyEvent& rKEvt );  
         virtual void        StateChanged( StateChangedType i_nStateChange );
-
+    
     /** Creates and returns the accessible object of the whole GridControl. */
     SVT_DLLPRIVATE virtual XACC CreateAccessible();
     SVT_DLLPRIVATE virtual XACC CreateAccessibleControl( sal_Int32 _nIndex );
@@ -193,12 +193,12 @@ namespace svt { namespace table
     virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void GrabFocus();
     virtual XACC GetAccessible( BOOL bCreate = TRUE );
-    virtual Window* GetAccessibleParentWindow() const;
-    virtual Window* GetWindowInstance();
+    virtual Window*	GetAccessibleParentWindow() const;
+    virtual Window*	GetWindowInstance();
     virtual sal_Int32 GetAccessibleControlCount() const;
     virtual sal_Bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint );
-    virtual long GetRowCount() const;
-    virtual long GetColumnCount() const;
+    virtual	long GetRowCount() const;
+    virtual	long GetColumnCount() const;
     virtual sal_Bool HasRowHeader() const;
     virtual sal_Int32 GetSelectedRowCount() const;
     virtual bool IsRowSelected( long _nRow ) const;
@@ -208,10 +208,10 @@ namespace svt { namespace table
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
     virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const;
-    virtual ::rtl::OUString GetRowDescription( sal_Int32 _nRow ) const;
+    virtual ::rtl::OUString	GetRowDescription( sal_Int32 _nRow ) const;
     virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const;
-    virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const;
-    virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const;
+    virtual ::rtl::OUString	GetColumnDescription( sal_uInt16 _nColumnPos ) const;
+    virtual ::rtl::OUString	GetColumnName( sal_Int32 _nIndex ) const;
     virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
     virtual sal_Bool HasRowHeader();
     virtual sal_Bool HasColHeader();

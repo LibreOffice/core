@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@
 
 // =======================================================================
 
-#define FORMAT_LONGCURRENCY      4
+#define FORMAT_LONGCURRENCY 	 4
 
 // =======================================================================
 
 static BigInt ImplPower10( USHORT n )
 {
     USHORT i;
-    BigInt   nValue = 1;
+    BigInt	 nValue = 1;
 
     for ( i=0; i < n; i++ )
         nValue *= 10;
@@ -83,7 +83,7 @@ static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const
     if ( !aInteger.IsZero() )
     {
         aFraction += aTmp;
-        aTmp       = 1000000000L;
+        aTmp	   = 1000000000L;
     }
     if ( rNumber.IsNeg() )
         aFraction *= -1;
@@ -123,7 +123,7 @@ static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
     else
     {
         sal_Unicode cChar = rKEvt.GetCharCode();
-        USHORT      nGroup = rKEvt.GetKeyCode().GetGroup();
+        USHORT		nGroup = rKEvt.GetKeyCode().GetGroup();
 
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC) ||
@@ -143,12 +143,12 @@ static BOOL ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
                                  USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                  BOOL bCurrency = FALSE )
 {
-    XubString   aStr = rStr;
-    XubString   aStr1;
-    XubString   aStr2;
-    USHORT      nDecPos;
-    BOOL        bNegative = FALSE;
-    xub_StrLen  i;
+    XubString	aStr = rStr;
+    XubString	aStr1;
+    XubString	aStr2;
+    USHORT		nDecPos;
+    BOOL		bNegative = FALSE;
+    xub_StrLen	i;
 
     // Reaktion auf leeren String
     if ( !rStr.Len() )
@@ -315,7 +315,7 @@ BOOL ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
             }
         }
 
-        rOutStr = ImplGetCurr( rLocaleDataWrapper, nTempVal, nDecDigits, rFormatter.GetCurrencySymbol(), rFormatter.IsUseThousandSep() );
+        rOutStr = ImplGetCurr( rLocaleDataWrapper, nTempVal, nDecDigits, rFormatter.GetCurrencySymbol(), rFormatter.IsUseThousandSep() ); 
         return TRUE;
     }
 }
@@ -325,14 +325,14 @@ BOOL ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
 
 void LongCurrencyFormatter::ImpInit()
 {
-    mnFieldValue        = 0;
-    mnLastValue         = 0;
-    mnMin               = 0;
-    mnMax               = 0x7FFFFFFF;
-    mnMax              *= 0x7FFFFFFF;
-    mnCorrectedValue    = 0;
+    mnFieldValue		= 0;
+    mnLastValue 		= 0;
+    mnMin				= 0;
+    mnMax				= 0x7FFFFFFF;
+    mnMax			   *= 0x7FFFFFFF;
+    mnCorrectedValue	= 0;
     mnDecimalDigits     = 0;
-    mnType              = FORMAT_LONGCURRENCY;
+    mnType				= FORMAT_LONGCURRENCY;
     mbThousandSep       = TRUE;
     SetDecimalDigits( 0 );
 }
@@ -350,23 +350,23 @@ void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
 {
     ImpInit();
 
-    ResMgr*     pMgr = rResId.GetResMgr();
+    ResMgr* 	pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        ULONG       nMask = pMgr->ReadLong();
-
+        ULONG		nMask = pMgr->ReadLong();
+    
         if ( NUMERICFORMATTER_MIN & nMask )
             mnMin = pMgr->ReadLong();
-
+    
         if ( NUMERICFORMATTER_MAX & nMask )
             mnMax = pMgr->ReadLong();
-
+    
         if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
             SetStrictFormat(  (BOOL)pMgr->ReadShort() );
-
+    
         if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
             SetDecimalDigits( pMgr->ReadShort() );
-
+    
         if ( NUMERICFORMATTER_VALUE & nMask )
         {
             mnFieldValue = pMgr->ReadLong();
@@ -516,11 +516,11 @@ void LongCurrencyFormatter::SetUseThousandSep( BOOL b )
 
 void LongCurrencyFormatter::SetDecimalDigits( USHORT nDigits )
 {
-//  DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
+//	DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
 
     if ( nDigits > 9 )
         nDigits = 9;
-
+    
     mnDecimalDigits = nDigits;
     ReformatAll();
 }
@@ -601,9 +601,9 @@ LongCurrencyField::LongCurrencyField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
     SetField( this );
-    mnSpinSize   = 1;
-    mnFirst      = mnMin;
-    mnLast       = mnMax;
+    mnSpinSize	 = 1;
+    mnFirst 	 = mnMin;
+    mnLast		 = mnMax;
 
     Reformat();
 }
@@ -618,9 +618,9 @@ LongCurrencyField::LongCurrencyField( Window* pParent, const ResId& rResId ) :
     SpinField::ImplInit( pParent, nStyle );
 
     SetField( this );
-    mnSpinSize   = 1;
-    mnFirst      = mnMin;
-    mnLast       = mnMax;
+    mnSpinSize	 = 1;
+    mnFirst 	 = mnMin;
+    mnLast		 = mnMax;
 
     Reformat();
 

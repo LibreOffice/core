@@ -9,7 +9,7 @@ import javax.swing.JScrollBar;
 
 
 /** A message area displays text in a scrollable text widget.  It is a
-    singleton.  Other objects can access it directly to display messages.
+    singleton.  Other objects can access it directly to display messages. 
 */
 public class MessageArea
     extends JScrollPane

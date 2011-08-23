@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ extern "C"
 
 //==================================================================================================
 
-void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName,
+void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, 
                                                      uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -61,7 +61,7 @@ sal_Bool SAL_CALL component_writeInfo(void * /*pServiceManager*/, void * pRegist
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                     OUString::createFromAscii("/" CLIPBOARDMANAGER_IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
+                        
             const Sequence< OUString > & rSNL = ClipboardManager_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
             sal_Int32 nPos;
@@ -70,12 +70,12 @@ sal_Bool SAL_CALL component_writeInfo(void * /*pServiceManager*/, void * pRegist
 
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
                 OUString::createFromAscii("/" GENERIC_CLIPBOARD_IMPLEMENTATION_NAME "/UNO/SERVICES" ) );
-
+                        
             const Sequence< OUString > & rSNL2 = GenericClipboard_getSupportedServiceNames();
             pArray = rSNL2.getConstArray();
             for ( nPos = rSNL2.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
-
+            
             return sal_True;
         }
         catch (InvalidRegistryException &)
@@ -90,15 +90,15 @@ sal_Bool SAL_CALL component_writeInfo(void * /*pServiceManager*/, void * pRegist
 //==================================================================================================
 
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName,
-    void * pServiceManager,
+    const sal_Char * pImplName, 
+    void * pServiceManager, 
     void * /*pRegistryKey*/
 )
 {
     void * pRet = 0;
-
+        
     if (pServiceManager)
-    {
+    { 
         Reference< XSingleServiceFactory > xFactory;
 
         if (rtl_str_compare( pImplName, CLIPBOARDMANAGER_IMPLEMENTATION_NAME ) == 0)
@@ -106,7 +106,7 @@ void * SAL_CALL component_getFactory(
             xFactory = createOneInstanceFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
-                ClipboardManager_createInstance,
+                ClipboardManager_createInstance, 
                 ClipboardManager_getSupportedServiceNames() );
         }
         else if (rtl_str_compare( pImplName, GENERIC_CLIPBOARD_IMPLEMENTATION_NAME ) == 0)
@@ -114,7 +114,7 @@ void * SAL_CALL component_getFactory(
             xFactory = createSingleFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
-                GenericClipboard_createInstance,
+                GenericClipboard_createInstance, 
                 GenericClipboard_getSupportedServiceNames() );
         }
 
@@ -124,7 +124,7 @@ void * SAL_CALL component_getFactory(
             pRet = xFactory.get();
         }
     }
-
+        
     return pRet;
 }
 

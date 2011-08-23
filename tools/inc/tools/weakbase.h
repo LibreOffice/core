@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@ namespace tools
 template <class reference_type>
 struct WeakConnection
 {
-    sal_Int32   mnRefCount;
-    reference_type* mpReference;
+    sal_Int32	mnRefCount;
+    reference_type*	mpReference;
 
     WeakConnection( reference_type* pReference ) : mnRefCount( 0 ), mpReference( pReference ) {};
     void acquire() { mnRefCount++; }
@@ -114,13 +114,13 @@ public:
     inline sal_Bool operator== (const WeakReference<reference_type> & handle) const;
 
     /** only needed for using this class with stl containers */
-    inline sal_Bool operator!= (const WeakReference<reference_type> & handle) const;
+    inline sal_Bool	operator!= (const WeakReference<reference_type> & handle) const;
 
     /** only needed for using this class with stl containers */
-    inline sal_Bool operator< (const WeakReference<reference_type> & handle) const;
+    inline sal_Bool	operator< (const WeakReference<reference_type> & handle) const;
 
     /** only needed for using this class with stl containers */
-    inline sal_Bool operator> (const WeakReference<reference_type> & handle) const;
+    inline sal_Bool	operator> (const WeakReference<reference_type> & handle) const;
 
     /** the assignment operator */
     inline WeakReference<reference_type>& operator= (const WeakReference<reference_type> & handle);

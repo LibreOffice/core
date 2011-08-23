@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ namespace basegfx
     namespace tools
     {
         /** If the rotation angle is an approximate multiple of pi/2,
-            force fSin/fCos to -1/0/1, to maintain orthogonality (which
-            might also be advantageous for the other cases, but: for
-            multiples of pi/2, the exact values _can_ be attained. It
-            would be largely unintuitive, if a 180 degrees rotation
-            would introduce slight roundoff errors, instead of exactly
+            force fSin/fCos to -1/0/1, to maintain orthogonality (which 
+            might also be advantageous for the other cases, but: for 
+            multiples of pi/2, the exact values _can_ be attained. It 
+            would be largely unintuitive, if a 180 degrees rotation 
+            would introduce slight roundoff errors, instead of exactly 
             mirroring the coordinate system)
          */
         void createSinCosOrthogonal(double& o_rSin, double& rCos, double fRadiant);
@@ -163,12 +163,12 @@ namespace basegfx
             }
 
             // data access
-            B2DHomMatrix getB2DHomMatrix() const
+            B2DHomMatrix getB2DHomMatrix() const 
             {
                 return createScaleShearXRotateTranslateB2DHomMatrix(
                     maScale, mfShearX, mfRotate, maTranslate);
             }
-
+            
             const B2DVector& getScale() const { return maScale; }
             const B2DVector& getTranslate() const { return maTranslate; }
             double getRotate() const { return mfRotate; }

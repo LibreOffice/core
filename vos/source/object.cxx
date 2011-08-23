@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ OClassInfo::OClassInfo(const sal_Char *pClassName, sal_Int32 ObjectSize,
 {
     m_pClassName  = pClassName;
     m_nObjectSize = ObjectSize;
-    m_wSchema     = Schema;
+    m_wSchema     = Schema;			
 
     m_pfnCreateObject = fnCreateObject;
 
@@ -141,7 +141,7 @@ const OClassInfo* OClassInfo::getClassInfo(const sal_Char* pClassName)
     VOS_ASSERT(pClassName != NULL);
 
     const OClassInfo* pClass = &VOS_CLASSINFO(VOS_NAMESPACE(OObject, vos));
-
+    
     while (pClass != NULL)
     {
         if (strcmp(pClassName, pClass->m_pClassName) == 0)
@@ -158,7 +158,7 @@ VOS_CLASSINIT::VOS_CLASSINIT(register OClassInfo* pNewClass)
     VOS_ASSERT(pNewClass != NULL);
 
     OClassInfo* pClassRoot = (OClassInfo*)&VOS_CLASSINFO(VOS_NAMESPACE(OObject, vos));
-
+    
     pNewClass->m_pNextClass = pClassRoot->m_pNextClass;
 
     pClassRoot->m_pNextClass = pNewClass;

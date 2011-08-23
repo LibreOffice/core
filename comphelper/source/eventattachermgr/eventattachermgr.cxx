@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <deque>
 
-#if defined( OS2 ) || defined( UNX )
+#if defined( OS2 ) || defined( UNX ) 
 #include <wchar.h>
 #endif
 #include <osl/mutex.hxx>
@@ -75,9 +75,9 @@ namespace comphelper
 //-----------------------------------------------------------------------------
 struct AttachedObject_Impl
 {
-    Reference< XInterface >                 xTarget;
+    Reference< XInterface >					xTarget;
     Sequence< Reference< XEventListener > > aAttachedListenerSeq;
-    Any                                     aHelper;
+    Any             	         			aHelper;
 
     bool    operator<( const AttachedObject_Impl & ) const;
     bool    operator==( const AttachedObject_Impl & ) const;
@@ -130,14 +130,14 @@ class ImplEventAttacherManager
     ::std::deque< AttacherIndex_Impl >  aIndex;
     Mutex aLock;
     // Container fuer die ScriptListener
-    OInterfaceContainerHelper           aScriptListeners;
+    OInterfaceContainerHelper   		aScriptListeners;
     // EventAttacher-Instanz
-    Reference< XEventAttacher >         xAttacher;
-    Reference< XMultiServiceFactory >   mxSMgr;
-    Reference< XIdlReflection >         mxCoreReflection;
-    Reference< XIntrospection >         mxIntrospection;
-    Reference< XTypeConverter >         xConverter;
-    sal_Int16                           nVersion;
+    Reference< XEventAttacher >			xAttacher;
+    Reference< XMultiServiceFactory > 	mxSMgr;
+    Reference< XIdlReflection > 		mxCoreReflection;
+    Reference< XIntrospection > 		mxIntrospection;
+    Reference< XTypeConverter > 		xConverter;
+    sal_Int16							nVersion;
 public:
     ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
                               const Reference< XMultiServiceFactory > rSMgr );
@@ -173,7 +173,7 @@ public:
     virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) throw( IOException, RuntimeException );
 
 private:
-    Reference< XIdlReflection > getReflection() throw( Exception );
+    Reference< XIdlReflection >	getReflection() throw( Exception );
 
     /** checks if <arg>_nIndex</arg> is a valid index, throws an <type>IllegalArgumentException</type> if not
     @param _nIndex
@@ -192,11 +192,11 @@ private:
 // nur einzelne Events an einen allgemeinen AllListener weiterleitet
 class AttacherAllListener_Impl : public WeakImplHelper1< XAllListener >
 {
-    ImplEventAttacherManager*           mpManager;
+    ImplEventAttacherManager*   		mpManager;
     Reference< XEventAttacherManager >  xManager;
-    OUString                            aScriptType;
-    OUString                            aScriptCode;
-    sal_Int16                           nVersion;
+    OUString        		           	aScriptType;
+    OUString    	        	        aScriptCode;
+    sal_Int16	                	   	nVersion;
 
     void convertToEventReturn( Any & rRet, const Type & rRetType )
         throw( CannotConvertException );
@@ -275,10 +275,10 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
             case TypeClass_FLOAT:           rRet <<= float(0);  break;
             case TypeClass_DOUBLE:          rRet <<= double(0.0);  break;
             case TypeClass_BYTE:            rRet <<= sal_uInt8(0);      break;
-            case TypeClass_SHORT:           rRet <<= sal_Int16( 0 );    break;
-            case TypeClass_LONG:            rRet <<= sal_Int32( 0 );    break;
-            case TypeClass_UNSIGNED_SHORT:  rRet <<= sal_uInt16( 0 );   break;
-            case TypeClass_UNSIGNED_LONG:   rRet <<= sal_uInt32( 0 );   break;
+            case TypeClass_SHORT:			rRet <<= sal_Int16( 0 );	break;
+            case TypeClass_LONG:			rRet <<= sal_Int32( 0 );	break;
+            case TypeClass_UNSIGNED_SHORT:	rRet <<= sal_uInt16( 0 );	break;
+            case TypeClass_UNSIGNED_LONG:	rRet <<= sal_uInt32( 0 );	break;
 
             default:
                 OSL_ASSERT(false);
@@ -351,13 +351,13 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                     break;
 
                     // none zero number -> return
-                case TypeClass_FLOAT:           if( *((float*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_DOUBLE:          if( *((double*)aRet.getValue()) )   return aRet; break;
-                case TypeClass_BYTE:            if( *((sal_uInt8*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_SHORT:           if( *((sal_Int16*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_LONG:            if( *((sal_Int32*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_UNSIGNED_SHORT:  if( *((sal_uInt16*)aRet.getValue()) )   return aRet; break;
-                case TypeClass_UNSIGNED_LONG:   if( *((sal_uInt32*)aRet.getValue()) )   return aRet; break;
+                case TypeClass_FLOAT:           if( *((float*)aRet.getValue()) ) 	return aRet; break;
+                case TypeClass_DOUBLE:          if( *((double*)aRet.getValue()) )  	return aRet; break;
+                case TypeClass_BYTE:            if( *((sal_uInt8*)aRet.getValue()) )	return aRet; break;
+                case TypeClass_SHORT:           if( *((sal_Int16*)aRet.getValue()) )	return aRet; break;
+                case TypeClass_LONG:            if( *((sal_Int32*)aRet.getValue()) )   	return aRet; break;
+                case TypeClass_UNSIGNED_SHORT:  if( *((sal_uInt16*)aRet.getValue()) )  	return aRet; break;
+                case TypeClass_UNSIGNED_LONG:   if( *((sal_uInt32*)aRet.getValue()) )  	return aRet; break;
 
                 default:
                     OSL_ASSERT(false);
@@ -528,7 +528,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
     throw( IllegalArgumentException, RuntimeException )
 {
     Guard< Mutex > aGuard( aLock );
-
+    
     // Index pruefen und Array anpassen
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
@@ -638,12 +638,12 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     Sequence< ScriptEventDescriptor >& rEventList = (*aIt).aEventList;
 
             ScriptEventDescriptor* pEventList = rEventList.getArray();
-    const   ScriptEventDescriptor* pEventListEnd = pEventList + rEventList.getLength();
+    const	ScriptEventDescriptor* pEventListEnd = pEventList + rEventList.getLength();
     for( ; pEventList < pEventListEnd; ++pEventList )
     {
-        if  (   (aLstType               == pEventList->ListenerType )
-            &&  (EventMethod            == pEventList->EventMethod      )
-            &&  (ToRemoveListenerParam  == pEventList->AddListenerParam)
+        if	(	(aLstType				== pEventList->ListenerType	)
+            &&	(EventMethod            == pEventList->EventMethod		)
+            &&	(ToRemoveListenerParam  == pEventList->AddListenerParam)
             )
         {
             ScriptEventDescriptor* pMoveTo = pEventList;

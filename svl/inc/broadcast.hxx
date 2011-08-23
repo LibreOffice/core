@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,23 +43,23 @@ friend class SvtListenerBase;
 friend class SvtListenerIter;
     SvtListenerBase* pRoot;
 
-    const SvtBroadcaster&   operator=(const SvtBroadcaster &); // verboten
+    const SvtBroadcaster&	operator=(const SvtBroadcaster &); // verboten
 
 protected:
-    void                    Forward( SvtBroadcaster& rBC,
+    void					Forward( SvtBroadcaster& rBC,
                                      const SfxHint& rHint );
-    virtual void            ListenersGone();
+    virtual void			ListenersGone();
 
 public:
                             TYPEINFO();
 
                             SvtBroadcaster();
                             SvtBroadcaster( const SvtBroadcaster &rBC );
-    virtual                 ~SvtBroadcaster();
+    virtual 				~SvtBroadcaster();
 
-    void                    Broadcast( const SfxHint &rHint );
+    void					Broadcast( const SfxHint &rHint );
 
-    BOOL                    HasListeners() const { return 0 != pRoot; }
+    BOOL					HasListeners() const { return 0 != pRoot; }
 };
 
 

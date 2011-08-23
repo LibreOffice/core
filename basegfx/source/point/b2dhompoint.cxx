@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 
 namespace basegfx
 {
-    bool B2DHomPoint::implIsHomogenized() const
-    {
+    bool B2DHomPoint::implIsHomogenized() const 
+    { 
         const double fOne(1.0);
-        return ::basegfx::fTools::equal(fOne, mfW);
+        return ::basegfx::fTools::equal(fOne, mfW); 
     }
 
     void B2DHomPoint::implHomogenize()
@@ -60,15 +60,15 @@ namespace basegfx
     }
 
     double B2DHomPoint::getX() const
-    {
+    { 
         implTestAndHomogenize();
-        return maTuple.getX();
+        return maTuple.getX(); 
     }
 
     double B2DHomPoint::getY() const
-    {
+    { 
         implTestAndHomogenize();
-        return maTuple.getY();
+        return maTuple.getY(); 
     }
 
     void B2DHomPoint::setX(double fX)
@@ -81,8 +81,8 @@ namespace basegfx
         maTuple.setY(implIsHomogenized() ? fY : fY * mfW );
     }
 
-    B2DHomPoint& B2DHomPoint::operator+=( const B2DHomPoint& rPnt )
-    {
+    B2DHomPoint& B2DHomPoint::operator+=( const B2DHomPoint& rPnt ) 
+    { 
         maTuple.setX(getX() * rPnt.mfW + rPnt.getX() * mfW);
         maTuple.setY(getY() * rPnt.mfW + rPnt.getY() * mfW);
         mfW = mfW * rPnt.mfW;
@@ -90,8 +90,8 @@ namespace basegfx
         return *this;
     }
 
-    B2DHomPoint& B2DHomPoint::operator-=( const B2DHomPoint& rPnt )
-    {
+    B2DHomPoint& B2DHomPoint::operator-=( const B2DHomPoint& rPnt ) 
+    { 
         maTuple.setX(getX() * rPnt.mfW - rPnt.getX() * mfW);
         maTuple.setY(getY() * rPnt.mfW - rPnt.getY() * mfW);
         mfW = mfW * rPnt.mfW;
@@ -99,14 +99,14 @@ namespace basegfx
         return *this;
     }
 
-    B2DHomPoint& B2DHomPoint::operator*=(double t)
-    {
+    B2DHomPoint& B2DHomPoint::operator*=(double t) 
+    { 
         if(!::basegfx::fTools::equalZero(t))
         {
             mfW /= t;
         }
 
-        return *this;
+        return *this; 
     }
 
     B2DHomPoint& B2DHomPoint::operator*=( const B2DHomMatrix& rMat )
@@ -129,130 +129,130 @@ namespace basegfx
         return *this;
     }
 
-    B2DHomPoint& B2DHomPoint::operator/=(double t)
-    {
+    B2DHomPoint& B2DHomPoint::operator/=(double t) 
+    { 
         mfW *= t;
-        return *this;
+        return *this; 
     }
 
     B2DHomPoint& B2DHomPoint::operator-(void)
-    {
+    {	
         mfW = -mfW;
         return *this;
     }
 
-    bool B2DHomPoint::operator==( const B2DHomPoint& rPnt ) const
-    {
+    bool B2DHomPoint::operator==( const B2DHomPoint& rPnt ) const 
+    { 
         implTestAndHomogenize();
         return (maTuple == rPnt.maTuple);
     }
 
-    bool B2DHomPoint::operator!=( const B2DHomPoint& rPnt ) const
-    {
+    bool B2DHomPoint::operator!=( const B2DHomPoint& rPnt ) const 
+    { 
         implTestAndHomogenize();
         return (maTuple != rPnt.maTuple);
     }
 
-    B2DHomPoint& B2DHomPoint::operator=( const B2DHomPoint& rPnt )
-    {
+    B2DHomPoint& B2DHomPoint::operator=( const B2DHomPoint& rPnt ) 
+    { 
         maTuple = rPnt.maTuple;
         mfW = rPnt.mfW;
-        return *this;
+        return *this; 
     }
 
-    B2DHomPoint minimum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
-    {
+    B2DHomPoint minimum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB) 
+    { 
         B2DHomPoint aMin(
             (rVecB.getX() < rVecA.getX()) ? rVecB.getX() : rVecA.getX(),
-            (rVecB.getY() < rVecA.getY()) ? rVecB.getY() : rVecA.getY());
+            (rVecB.getY() < rVecA.getY()) ? rVecB.getY() : rVecA.getY()); 
         return aMin;
     }
 
-    B2DHomPoint maximum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
-    {
+    B2DHomPoint maximum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB) 
+    { 
         B2DHomPoint aMax(
             (rVecB.getX() > rVecA.getX()) ? rVecB.getX() : rVecA.getX(),
-            (rVecB.getY() > rVecA.getY()) ? rVecB.getY() : rVecA.getY());
+            (rVecB.getY() > rVecA.getY()) ? rVecB.getY() : rVecA.getY()); 
         return aMax;
     }
-    B2DHomPoint absolute(const B2DHomPoint& rVec)
-    {
+    B2DHomPoint absolute(const B2DHomPoint& rVec) 
+    { 
         B2DHomPoint aAbs(
             (0.0 > rVec.getX()) ? -rVec.getX() : rVec.getX(),
-            (0.0 > rVec.getY()) ? -rVec.getY() : rVec.getY());
+            (0.0 > rVec.getY()) ? -rVec.getY() : rVec.getY()); 
         return aAbs;
     }
 
-    B2DHomPoint interpolate(B2DHomPoint& rOld1, B2DHomPoint& rOld2, double t)
-    {
+    B2DHomPoint interpolate(B2DHomPoint& rOld1, B2DHomPoint& rOld2, double t) 
+    { 
         B2DHomPoint aInt(
             ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
-            ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY());
+            ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY()); 
         return aInt;
     }
 
-    B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2)
-    {
+    B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2) 
+    { 
         B2DHomPoint aAvg(
             (rOld1.getX() + rOld2.getX()) * 0.5,
-            (rOld1.getY() + rOld2.getY()) * 0.5);
+            (rOld1.getY() + rOld2.getY()) * 0.5); 
         return aAvg;
     }
-
+    
     B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2, B2DHomPoint& rOld3)
-    {
+    { 
         B2DHomPoint aAvg(
             (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0));
+            (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0)); 
         return aAvg;
     }
 
     B2DHomPoint operator+(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
-    {
-        B2DHomPoint aSum(rVecA);
-        aSum += rVecB;
-        return aSum;
+    { 
+        B2DHomPoint aSum(rVecA); 
+        aSum += rVecB; 
+        return aSum; 
     }
 
     B2DHomPoint operator-(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
-    {
-        B2DHomPoint aSub(rVecA);
-        aSub -= rVecB;
-        return aSub;
+    { 
+        B2DHomPoint aSub(rVecA); 
+        aSub -= rVecB; 
+        return aSub; 
     }
 
     B2DHomPoint operator*(const B2DHomPoint& rVec, double t)
-    {
-        B2DHomPoint aNew(rVec);
-        aNew *= t;
-        return aNew;
+    { 
+        B2DHomPoint aNew(rVec); 
+        aNew *= t; 
+        return aNew; 
     }
 
     B2DHomPoint operator*(double t, const B2DHomPoint& rVec)
-    {
-        B2DHomPoint aNew(rVec);
-        aNew *= t;
-        return aNew;
+    { 
+        B2DHomPoint aNew(rVec); 
+        aNew *= t; 
+        return aNew; 
     }
 
     B2DHomPoint operator*( const B2DHomMatrix& rMat, const B2DHomPoint& rPoint )
     {
-        B2DHomPoint aNew(rPoint);
+        B2DHomPoint aNew(rPoint); 
         return aNew*=rMat;
     }
 
     B2DHomPoint operator/(const B2DHomPoint& rVec, double t)
-    {
-        B2DHomPoint aNew(rVec);
-        aNew /= t;
-        return aNew;
+    { 
+        B2DHomPoint aNew(rVec); 
+        aNew /= t; 
+        return aNew; 
     }
 
     B2DHomPoint operator/(double t, const B2DHomPoint& rVec)
     {
-        B2DHomPoint aNew(rVec);
-        aNew /= t;
-        return aNew;
+        B2DHomPoint aNew(rVec); 
+        aNew /= t; 
+        return aNew; 
     }
 } // end of namespace basegfx
 

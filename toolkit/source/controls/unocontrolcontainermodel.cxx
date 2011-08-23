@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 
-//  ----------------------------------------------------
-//  class UnoControlContainerModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlContainerModel
+//	----------------------------------------------------
 UnoControlContainerModel::UnoControlContainerModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -74,11 +74,11 @@ UnoControlContainerModel::UnoControlContainerModel()
 ::cppu::IPropertyArrayHelper& UnoControlContainerModel::getInfoHelper()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((UnoControlContainerModel*)this)->GetMutex() );
-
+    
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        ::com::sun::star::uno::Sequence<sal_Int32>  aIDs = ImplGetPropertyIds();
+        ::com::sun::star::uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;

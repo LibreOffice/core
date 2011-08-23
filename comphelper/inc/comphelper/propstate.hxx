@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,9 +74,9 @@ namespace comphelper
             getPropertyDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // access via handle
-        virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
-        virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle);
-        virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+        virtual ::com::sun::star::beans::PropertyState	getPropertyStateByHandle(sal_Int32 nHandle);
+        virtual void									setPropertyToDefaultByHandle(sal_Int32 nHandle);
+        virtual ::com::sun::star::uno::Any				getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
     protected:
         virtual ~OPropertyStateHelper();
@@ -105,7 +105,7 @@ namespace comphelper
     };
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_PROPERTY_STATE_HXX_

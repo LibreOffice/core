@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,51 +34,51 @@
 class BiNode
 {
 protected:
-    BiNode*     pLeft;    // left subtree
-    BiNode*     pRight;   // right subtree
+    BiNode* 	pLeft;	  // left subtree
+    BiNode* 	pRight;   // right subtree
 
 public:
 
                          // Wandelt eine doppelt verkettete Liste in
                          // einen binaeren Baum um
-            BiNode *    ChangeDLListBTree( BiNode * pList );
+            BiNode *	ChangeDLListBTree( BiNode * pList );
 
                         BiNode();
-    virtual             ~BiNode();
+    virtual 			~BiNode();
 
 
                         // Wandelt einen binaeren Baum in eine doppelt
                         // verkettete Liste um
                         BiNode* ChangeBTreeDLList();
 
-            BiNode *    Left() const { return pLeft  ; };
-            BiNode *    Right() const{ return pRight ; };
-            void        EnumNodes( Link aLink ) const;
+            BiNode *	Left() const { return pLeft  ; };
+            BiNode *	Right() const{ return pRight ; };
+            void		EnumNodes( Link aLink ) const;
 };
 
 /*************************************************************************/
 class NameNode : public BiNode
 {
-    void                SubOrderTree( NameNode * pOrderNode );
+    void				SubOrderTree( NameNode * pOrderNode );
 
 protected:
                         // pCmp ist Zeiger auf Namen
-            NameNode*   Search( const void * pCmp ) const;
+            NameNode*	Search( const void * pCmp ) const;
 
 public:
-            NameNode*   Left() const { return (NameNode *)pLeft  ; };
-            NameNode*   Right() const{ return (NameNode *)pRight ; };
-            NameNode*   Search( const NameNode * pName ) const;
+            NameNode*	Left() const { return (NameNode *)pLeft  ; };
+            NameNode*	Right() const{ return (NameNode *)pRight ; };
+            NameNode*	Search( const NameNode * pName ) const;
                         // insert a new node in the b-tree
-            BOOL        Insert( NameNode * pTN, sal_uInt32 * nDepth );
-            BOOL        Insert( NameNode* pTN );
-    virtual COMPARE     Compare( const NameNode * ) const;
-    virtual COMPARE     Compare( const void * ) const;
-            NameNode*   SearchParent( const NameNode * ) const;
+            BOOL		Insert( NameNode * pTN, sal_uInt32 * nDepth );
+            BOOL		Insert( NameNode* pTN );
+    virtual COMPARE 	Compare( const NameNode * ) const;
+    virtual COMPARE 	Compare( const void * ) const;
+            NameNode*	SearchParent( const NameNode * ) const;
                         // return ist neue Root
-            NameNode*   Remove( NameNode * );
-            void        OrderTree();
-            BOOL        IsOrderTree() const;
+            NameNode*	Remove( NameNode * );
+            void		OrderTree();
+            BOOL		IsOrderTree() const;
 
 };
 
@@ -92,8 +92,8 @@ protected:
 
 public:
 
-    IdNode*         Search( sal_uInt32 nTypName ) const;
-    virtual sal_uInt32  GetId() const;
+    IdNode* 		Search( sal_uInt32 nTypName ) const;
+    virtual sal_uInt32	GetId() const;
 };
 
 /*************************************************************************/
@@ -105,14 +105,14 @@ class StringNode : public NameNode
 protected:
     using NameNode::Search;
 
-    ByteString      aName;
+    ByteString		aName;
 
 public:
                     StringNode(){};
                     StringNode( const ByteString & rStr ) { aName = rStr; }
 
-    StringNode*     Search( const char * ) const;
-    ByteString      GetName() const { return aName; }
+    StringNode* 	Search( const char * ) const;
+    ByteString		GetName() const { return aName; }
 };
 
 #endif // _RSCTREE_HXX

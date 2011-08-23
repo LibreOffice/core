@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,16 +40,16 @@ static HMODULE mhMod = ImplGetModule();
 
 // =======================================================================
 
-APIRET APIENTRY DosQueryModFromEIP (HMODULE *phMod, ULONG *pObjNum,
-          ULONG BuffLen, PCHAR pBuff, ULONG *pOffset, ULONG Address);
+APIRET APIENTRY DosQueryModFromEIP (HMODULE *phMod, ULONG *pObjNum, 
+          ULONG BuffLen, PCHAR pBuff, ULONG *pOffset, ULONG Address); 
 
 HMODULE ImplGetModule(void)
 {
-    HMODULE hMod;
-    ULONG   ObjNum;
-    CHAR    Buff[2*_MAX_PATH];
-    ULONG   Offset;
-    APIRET  rc;
+    HMODULE	hMod;
+    ULONG	ObjNum;
+    CHAR	Buff[2*_MAX_PATH];
+    ULONG	Offset;
+    APIRET	rc;
 
     // get module handle (and name)
     rc = DosQueryModFromEIP( &hMod, &ObjNum, sizeof( Buff), Buff, &Offset, (ULONG)ImplGetModule);

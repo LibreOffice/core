@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,7 +127,7 @@ namespace comphelper
     {
         return m_sImplementationName;
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL LegacySingletonFactory::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
     {
@@ -136,7 +136,7 @@ namespace comphelper
         const ::rtl::OUString* pEnd = aServices.getConstArray() + aServices.getLength();
         return ::std::find( pStart, pEnd, _rServiceName ) != pEnd;
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL LegacySingletonFactory::getSupportedServiceNames(  ) throw (RuntimeException)
     {
@@ -164,7 +164,7 @@ namespace comphelper
 
         return m_xTheInstance;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL LegacySingletonFactory::createInstanceWithArgumentsAndContext( const Sequence< Any >& _rArguments, const Reference< XComponentContext >& _rxContext ) throw (Exception, RuntimeException)
     {

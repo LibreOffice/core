@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -527,7 +527,7 @@ namespace comphelper
     {
         Reference<XMultiServiceFactory> sm = getProcessServiceFactory();
 
-        // getting the Core Uno proxy object
+        // getting the Core Uno proxy object 
         // It will call disposing and make sure we clear all our references
         {
             Reference<XTerminateListener> xCore(
@@ -586,7 +586,7 @@ namespace comphelper
             m_Active = false;
     }
 
-    // private static UiEventsLogger_Impl
+    // private static UiEventsLogger_Impl 
     bool UiEventsLogger_Impl::shouldActivate()
     {
         return getEnabledFromCfg() && getEnabledFromCoreController();

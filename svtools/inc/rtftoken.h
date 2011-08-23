@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,31 +36,31 @@ class String;
 int GetRTFToken( const String& rSearch );
 
 enum RTF_TOKEN_RANGES {
-    RTF_NOGROUP                     = 0x0100,
-    RTF_DOCFMT                      = 0x0200,
-    RTF_SECTFMT                     = 0x0300,
-    RTF_PARFMT                      = 0x0400,
-    RTF_TABSTOPDEF                  = 0x0500,
-    RTF_BRDRDEF                     = 0x0600,
-    RTF_CHRFMT                      = 0x0700,
-    RTF_SPECCHAR                    = 0x0800,
-    RTF_APOCTL                      = 0x0900,
-    RTF_SHADINGDEF                  = 0x0A00,
-    // free                         = 0x0B00,
-    RTF_DRAWOBJECTS                 = 0x0C00,
-    RTF_OBJECTS                     = 0x0D00,
-    RTF_NUMBULLETS                  = 0x0E00,
+    RTF_NOGROUP						= 0x0100,
+    RTF_DOCFMT						= 0x0200,
+    RTF_SECTFMT						= 0x0300,
+    RTF_PARFMT						= 0x0400,
+    RTF_TABSTOPDEF					= 0x0500,
+    RTF_BRDRDEF						= 0x0600,
+    RTF_CHRFMT						= 0x0700,
+    RTF_SPECCHAR					= 0x0800,
+    RTF_APOCTL						= 0x0900,
+    RTF_SHADINGDEF					= 0x0A00,
+    // free 						= 0x0B00,
+    RTF_DRAWOBJECTS 				= 0x0C00,
+    RTF_OBJECTS						= 0x0D00,
+    RTF_NUMBULLETS					= 0x0E00,
 
     // !!! kann hinein verodert werden (Border/Background) !!!!
-    RTF_TABLEDEF                    = 0x1000,
+    RTF_TABLEDEF					= 0x1000,
 
     // !!! kann hinein verodert werden (Border/Tab) !!!!
-    RTF_SWGDEFS                     = 0x4000
+    RTF_SWGDEFS						= 0x4000
 };
 
 enum RTF_TOKEN_IDS {
 
-    RTF_TEXTTOKEN                       = RTF_NOGROUP,
+    RTF_TEXTTOKEN						= RTF_NOGROUP,
     RTF_SINGLECHAR,
     RTF_UNKNOWNCONTROL,
     RTF_UNKNOWNDATA,
@@ -153,7 +153,7 @@ enum RTF_TOKEN_IDS {
     RTF_BKMKSTART,
     RTF_BKMKEND,
 
-    RTF_PICT,                           // Bitmaps
+    RTF_PICT,							// Bitmaps
     RTF_PICW,
     RTF_PICH,
     RTF_WBMBITSPIXEL,
@@ -187,7 +187,7 @@ enum RTF_TOKEN_IDS {
     RTF_BLIPUID,
     RTF_BLIPUPI,
 
-    RTF_FIELD,                      // Felder
+    RTF_FIELD,						// Felder
     RTF_FLDDIRTY,
     RTF_FLDEDIT,
     RTF_FLDLOCK,
@@ -243,13 +243,13 @@ enum RTF_TOKEN_IDS {
     RTF_TCN,
     RTF_XEF,
 
-    RTF_UD,                 // Unicode
+    RTF_UD,		 			// Unicode
     RTF_UPR,
     RTF_U,
     RTF_UC,
     RTF_ANSICPG,
 
-    RTF_FFEXITMCR,          // Form Fields
+    RTF_FFEXITMCR,		 	// Form Fields
     RTF_FFENTRYMCR,
     RTF_FFDEFTEXT,
     RTF_FFFORMAT,
@@ -275,7 +275,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_DEFTAB          = RTF_DOCFMT,
+    RTF_DEFTAB			= RTF_DOCFMT,
     RTF_HYPHHOTZ,
     RTF_LINESTART,
     RTF_FRACWIDTH,
@@ -443,7 +443,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_SECTD               = RTF_SECTFMT,
+    RTF_SECTD				= RTF_SECTFMT,
     RTF_ENDNHERE,
     RTF_BINFSXN,
     RTF_BINSXN,
@@ -529,7 +529,7 @@ enum RTF_TOKEN_IDS {
     RTF_SECTSPECIFYL,
 
     // Swg-Header/Footer-Tokens
-    RTF_HEADER_YB   = (RTF_SECTFMT|RTF_SWGDEFS),
+    RTF_HEADER_YB	= (RTF_SECTFMT|RTF_SWGDEFS),
     RTF_HEADER_XL,
     RTF_HEADER_XR,
     RTF_FOOTER_YT,
@@ -542,7 +542,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_PARD                = RTF_PARFMT,
+    RTF_PARD 				= RTF_PARFMT,
     RTF_S,
     RTF_INTBL,
     RTF_KEEP,
@@ -625,7 +625,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_TX                  = RTF_TABSTOPDEF,
+    RTF_TX					= RTF_TABSTOPDEF,
     RTF_TB,
     RTF_TQL,
     RTF_TQR,
@@ -642,7 +642,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_BRDRT       = RTF_BRDRDEF,
+    RTF_BRDRT		= RTF_BRDRDEF,
     RTF_BRDRB,
     RTF_BRDRL,
     RTF_BRDRR,
@@ -662,7 +662,7 @@ enum RTF_TOKEN_IDS {
     RTF_BRDRFRAME,
 
     // Swg-Border-Tokens
-    RTF_BRDBOX          = (RTF_BRDRDEF|RTF_SWGDEFS),
+    RTF_BRDBOX			= (RTF_BRDRDEF|RTF_SWGDEFS),
     RTF_BRDLINE_COL,
     RTF_BRDLINE_IN,
     RTF_BRDLINE_OUT,
@@ -670,7 +670,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_PLAIN       = RTF_CHRFMT,
+    RTF_PLAIN		= RTF_CHRFMT,
     RTF_B,
     RTF_CAPS,
     RTF_DN,
@@ -800,7 +800,7 @@ enum RTF_TOKEN_IDS {
     RTF_HORZVERT,
 
     // Swg-Border-Tokens
-    RTF_SWG_ESCPROP     = (RTF_CHRFMT|RTF_SWGDEFS),
+    RTF_SWG_ESCPROP 	= (RTF_CHRFMT|RTF_SWGDEFS),
     RTF_HYPHEN,
     RTF_HYPHLEAD,
     RTF_HYPHTRAIL,
@@ -809,7 +809,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_CHDATE              = RTF_SPECCHAR,
+    RTF_CHDATE				= RTF_SPECCHAR,
     RTF_CHDATEL,
     RTF_CHDATEA,
     RTF_CHTIME,
@@ -908,7 +908,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_SHADING     = RTF_SHADINGDEF,
+    RTF_SHADING 	= RTF_SHADINGDEF,
     RTF_CFPAT,
     RTF_CBPAT,
     RTF_BGHORIZ,
@@ -926,7 +926,7 @@ enum RTF_TOKEN_IDS {
 
 /*  */
 
-    RTF_TROWD           = RTF_TABLEDEF,
+    RTF_TROWD			= RTF_TABLEDEF,
     RTF_TRGAPH,
     RTF_TRLEFT,
     RTF_TRRH,
@@ -1260,9 +1260,9 @@ enum RTF_TOKEN_IDS {
 // shapes
     RTF_SHP, RTF_SN, RTF_SV
 /*
-    RTF_SHPLEFT,
-    RTF_SHPTOP,
-    RTF_SHPBOTTOM,
+    RTF_SHPLEFT, 
+    RTF_SHPTOP, 
+    RTF_SHPBOTTOM, 
     RTF_SHPRIGHT
 */
 

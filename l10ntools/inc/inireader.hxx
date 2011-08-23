@@ -21,14 +21,14 @@ typedef std::hash_map< string, stringmap* > INImap;
 class INIreader
 {
     private:
-        UErrorCode section_status;
-        UErrorCode parameter_status;
+        UErrorCode section_status;  
+        UErrorCode parameter_status; 
         RegexMatcher* section_match;
         RegexMatcher* parameter_match;
 
-    public:
+    public: 
         INIreader(): section_status   ( U_ZERO_ERROR ) ,
-                     parameter_status ( U_ZERO_ERROR )
+                     parameter_status ( U_ZERO_ERROR ) 
         {
                      section_match   = new RegexMatcher   ( "^\\s*\\[([a-zA-Z0-9]*)\\].*" , 0 , section_status );
                      parameter_match = new RegexMatcher   ( "^\\s*([a-zA-Z0-9]*)\\s*=\\s*([a-zA-Z0-9 ]*).*" , 0 , parameter_status ) ;
@@ -38,9 +38,9 @@ class INIreader
             delete section_match;
             delete parameter_match;
         }
-        // open "filename", fill hash_map with sections / paramaters
+        // open "filename", fill hash_map with sections / paramaters 
         bool read( INImap& myMap , string& filename );
-
+       
     private:
         bool is_section( string& line , string& section_str );
         bool is_parameter( string& line , string& parameter_key , string& parameter_value );

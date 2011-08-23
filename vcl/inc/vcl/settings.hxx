@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -338,7 +338,7 @@ class ImplStyleData
 private:
     ULONG                           mnRefCount;
 
-    void*                           mpStyleData_NotUsedYet;
+    void*							mpStyleData_NotUsedYet;
 
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
@@ -511,19 +511,19 @@ private:
 #define STYLE_TABCONTROL_SINGLELINE ((USHORT)0x0001)
 #define STYLE_TABCONTROL_COLOR      ((USHORT)0x0002)
 
-#define STYLE_TOOLBAR_ICONSIZE_UNKNOWN      ((ULONG)0)
-#define STYLE_TOOLBAR_ICONSIZE_SMALL        ((ULONG)1)
-#define STYLE_TOOLBAR_ICONSIZE_LARGE        ((ULONG)2)
+#define STYLE_TOOLBAR_ICONSIZE_UNKNOWN		((ULONG)0)
+#define STYLE_TOOLBAR_ICONSIZE_SMALL		((ULONG)1)
+#define STYLE_TOOLBAR_ICONSIZE_LARGE		((ULONG)2)
 
-#define STYLE_SYMBOLS_AUTO          ((ULONG)0)
-#define STYLE_SYMBOLS_DEFAULT       ((ULONG)1)
-#define STYLE_SYMBOLS_HICONTRAST    ((ULONG)2)
-#define STYLE_SYMBOLS_INDUSTRIAL    ((ULONG)3)
-#define STYLE_SYMBOLS_CRYSTAL       ((ULONG)4)
+#define STYLE_SYMBOLS_AUTO			((ULONG)0)
+#define STYLE_SYMBOLS_DEFAULT		((ULONG)1)
+#define STYLE_SYMBOLS_HICONTRAST	((ULONG)2)
+#define STYLE_SYMBOLS_INDUSTRIAL	((ULONG)3)
+#define STYLE_SYMBOLS_CRYSTAL		((ULONG)4)
 #define STYLE_SYMBOLS_TANGO         ((ULONG)5)
 #define STYLE_SYMBOLS_OXYGEN        ((ULONG)6)
-#define STYLE_SYMBOLS_CLASSIC       ((ULONG)7)
-#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)8)
+#define STYLE_SYMBOLS_CLASSIC		((ULONG)7)
+#define STYLE_SYMBOLS_THEMES_MAX	((ULONG)8)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((ULONG)0xFFFFFFFF)
 
@@ -729,30 +729,30 @@ public:
     const Color&                    GetInactiveTabColor() const
                                         { return mpData->maInactiveTabColor; }
 
-    void                            SetHighContrastMode( BOOL bHighContrast )
+    void							SetHighContrastMode( BOOL bHighContrast )
                                         { CopyData(); mpData->mnHighContrast = bHighContrast; }
-    BOOL                            GetHighContrastMode() const
+    BOOL							GetHighContrastMode() const
                                         { return (BOOL) mpData->mnHighContrast; }
-    BOOL                            IsHighContrastBlackAndWhite() const;
-    void                            SetUseSystemUIFonts( BOOL bUseSystemUIFonts )
+    BOOL							IsHighContrastBlackAndWhite() const;
+    void							SetUseSystemUIFonts( BOOL bUseSystemUIFonts )
                                         { CopyData(); mpData->mnUseSystemUIFonts = bUseSystemUIFonts; }
-    BOOL                            GetUseSystemUIFonts() const
+    BOOL							GetUseSystemUIFonts() const
                                         { return (BOOL) mpData->mnUseSystemUIFonts; }
-    void                            SetUseFlatBorders( BOOL bUseFlatBorders )
+    void							SetUseFlatBorders( BOOL bUseFlatBorders )
                                         { CopyData(); mpData->mnUseFlatBorders = bUseFlatBorders; }
-    BOOL                            GetUseFlatBorders() const
+    BOOL							GetUseFlatBorders() const
                                         { return (BOOL) mpData->mnUseFlatBorders; }
-    void                            SetUseFlatMenues( BOOL bUseFlatMenues )
+    void							SetUseFlatMenues( BOOL bUseFlatMenues )
                                         { CopyData(); mpData->mnUseFlatMenues = bUseFlatMenues; }
-    BOOL                            GetUseFlatMenues() const
+    BOOL							GetUseFlatMenues() const
                                         { return (BOOL) mpData->mnUseFlatMenues; }
-    void                            SetUseImagesInMenus( BOOL bUseImagesInMenus )
+    void							SetUseImagesInMenus( BOOL bUseImagesInMenus )
                                         { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus; }
-    BOOL                            GetUseImagesInMenus() const
+    BOOL							GetUseImagesInMenus() const
                                         { return (BOOL) mpData->mnUseImagesInMenus; }
-    void                            SetSkipDisabledInMenus( BOOL bSkipDisabledInMenus )
+    void							SetSkipDisabledInMenus( BOOL bSkipDisabledInMenus )
                                         { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
-    BOOL                            GetSkipDisabledInMenus() const
+    BOOL							GetSkipDisabledInMenus() const
                                         { return (BOOL) mpData->mnSkipDisabledInMenus; }
 
     void                            SetCairoFontOptions( const void *pOptions )
@@ -927,9 +927,9 @@ public:
                                         { CopyData(); mpData->mnOptions = nOptions; }
     ULONG                           GetOptions() const
                                         { return mpData->mnOptions; }
-    void                            SetAutoMnemonic( BOOL bAutoMnemonic )
+    void							SetAutoMnemonic( BOOL bAutoMnemonic )
                                         { CopyData(); mpData->mnAutoMnemonic = (USHORT)bAutoMnemonic; }
-    BOOL                            GetAutoMnemonic() const
+    BOOL							GetAutoMnemonic() const
                                         { return mpData->mnAutoMnemonic ? TRUE : FALSE; }
 
     void                            SetFontColor( const Color& rColor )
@@ -937,34 +937,34 @@ public:
     const Color&                    GetFontColor() const
                                         { return mpData->maFontColor; }
 
-    void                            SetToolbarIconSize( ULONG nSize )
+    void							SetToolbarIconSize( ULONG nSize )
                                         { CopyData(); mpData->mnToolbarIconSize = nSize; }
-    ULONG                           GetToolbarIconSize() const
+    ULONG							GetToolbarIconSize() const
                                         { return mpData->mnToolbarIconSize; }
 
-    void                            SetSymbolsStyle( ULONG nStyle )
+    void							SetSymbolsStyle( ULONG nStyle )
                                         { CopyData(); mpData->mnSymbolsStyle = nStyle; }
-    ULONG                           GetSymbolsStyle() const
+    ULONG							GetSymbolsStyle() const
                                         { return mpData->mnSymbolsStyle; }
 
-    void                            SetPreferredSymbolsStyle( ULONG nStyle )
+    void							SetPreferredSymbolsStyle( ULONG nStyle )
                                         { CopyData(); mpData->mnPreferredSymbolsStyle = nStyle; }
-    void                            SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
-    ULONG                           GetPreferredSymbolsStyle() const
+    void							SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
+    ULONG							GetPreferredSymbolsStyle() const
                                         { return mpData->mnPreferredSymbolsStyle; }
-    // check whether the symbols style is supported (icons are installed)
-    bool                            CheckSymbolStyle( ULONG nStyle ) const;
+    // check whether the symbols style is supported (icons are installed)									
+    bool							CheckSymbolStyle( ULONG nStyle ) const;
     ULONG                           GetAutoSymbolsStyle() const;
 
-    ULONG                           GetCurrentSymbolsStyle() const;
+    ULONG							GetCurrentSymbolsStyle() const;
 
-    void                            SetSymbolsStyleName( const ::rtl::OUString &rName )
+    void							SetSymbolsStyleName( const ::rtl::OUString &rName )
                                         { return SetSymbolsStyle( ImplNameToSymbolsStyle( rName ) ); }
-    ::rtl::OUString                 GetSymbolsStyleName() const
+    ::rtl::OUString					GetSymbolsStyleName() const
                                         { return ImplSymbolsStyleToName( GetSymbolsStyle() ); }
-    ::rtl::OUString                 GetCurrentSymbolsStyleName() const
+    ::rtl::OUString					GetCurrentSymbolsStyleName() const
                                         { return ImplSymbolsStyleToName( GetCurrentSymbolsStyle() ); }
-
+                                        
     const Wallpaper&                GetWorkspaceGradient() const
                                         { return mpData->maWorkspaceGradient; }
     void                            SetWorkspaceGradient( const Wallpaper& rWall )
@@ -983,8 +983,8 @@ public:
                                         { return !(*this == rSet); }
 
 protected:
-    ::rtl::OUString                 ImplSymbolsStyleToName( ULONG nStyle ) const;
-    ULONG                           ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const;
+    ::rtl::OUString					ImplSymbolsStyleToName( ULONG nStyle ) const;
+    ULONG							ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const;
 };
 
 // ----------------
@@ -1021,12 +1021,12 @@ public:
                                     MiscSettings( const MiscSettings& rSet );
                                     ~MiscSettings();
 
-    void                            SetEnableATToolSupport( BOOL bEnable );
-    BOOL                            GetEnableATToolSupport() const;
-    void                            SetDisablePrinting( BOOL bEnable );
-    BOOL                            GetDisablePrinting() const;
-    void                            SetEnableLocalizedDecimalSep( BOOL bEnable );
-    BOOL                            GetEnableLocalizedDecimalSep() const;
+    void							SetEnableATToolSupport( BOOL bEnable );
+    BOOL							GetEnableATToolSupport() const;
+    void							SetDisablePrinting( BOOL bEnable );
+    BOOL							GetDisablePrinting() const;
+    void							SetEnableLocalizedDecimalSep( BOOL bEnable );
+    BOOL							GetEnableLocalizedDecimalSep() const;
     const MiscSettings&             operator =( const MiscSettings& rSet );
 
     BOOL                            operator ==( const MiscSettings& rSet ) const;
@@ -1146,7 +1146,7 @@ public:
 class LocaleConfigurationListener;
 class ImplAllSettingsData
 {
-    friend class    AllSettings;
+    friend class	AllSettings;
 
                     ImplAllSettingsData();
                     ImplAllSettingsData( const ImplAllSettingsData& rData );
@@ -1173,8 +1173,8 @@ private:
     CollatorWrapper*                        mpUICollatorWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
-    LocaleConfigurationListener*            mpLocaleCfgListener;
-    SvtSysLocale                            maSysLocale;
+    LocaleConfigurationListener*			mpLocaleCfgListener;
+    SvtSysLocale							maSysLocale;
 };
 
 // ---------------
@@ -1198,7 +1198,7 @@ private:
                                      SETTINGS_SOUND | SETTINGS_NOTIFICATION |\
                                      SETTINGS_HELP |\
                                      SETTINGS_LOCALE | SETTINGS_UILOCALE )
-#define SETTINGS_IN_UPDATE_SETTINGS ((ULONG)0x00000800)   // this flag indicates that the data changed event was created
+#define SETTINGS_IN_UPDATE_SETTINGS ((ULONG)0x00000800)	  // this flag indicates that the data changed event was created
                                                           // in Windows::UpdateSettings probably because of a global
                                                           // settings changed
 
@@ -1291,8 +1291,8 @@ public:
     BOOL                                    operator ==( const AllSettings& rSet ) const;
     BOOL                                    operator !=( const AllSettings& rSet ) const
                                                 { return !(*this == rSet); }
-    static void                             LocaleSettingsChanged( sal_uInt32 nHint );
-    SvtSysLocale&                           GetSysLocale() { return mpData->maSysLocale; }
+    static void								LocaleSettingsChanged( sal_uInt32 nHint );
+    SvtSysLocale&							GetSysLocale() { return mpData->maSysLocale; }
 };
 
 #endif // _SV_SETTINGS_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ static uno::Reference< lang::XSingleServiceFactory > get_factory( char const *se
 }
 
 #define GET_FACTORY(x) get_factory( #x )
-
+    
 void LayoutTest::LoadFile( const OUString &aTestFile )
 {
     fprintf( stderr, "TEST: layout instance\n" );
@@ -220,7 +220,7 @@ void LayoutTest::ParseCommandLine()
 
     if ( mFiles.size() <= 0 )
         mFiles.push_back( OUString::createFromAscii( "layout.xml" ) );
-}
+}    
 
 void LayoutTest::RunEditor()
 {
@@ -312,7 +312,7 @@ void LayoutTest::RunFiles()
     for ( std::list< OUString >::iterator  i = mFiles.begin(); i != mFiles.end(); i++ )
         LoadFile( *i );
     fprintf( stderr, "TEST: executing\n" );
-    Execute();
+    Execute(); 
     fprintf( stderr, "TEST: done executing\n" );
 }
 

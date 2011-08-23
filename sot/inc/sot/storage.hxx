@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@
 #endif
 #include "sot/sotdllapi.h"
 
-#define STORAGE_FAILIFTHERE     0x02
-#define STORAGE_TRANSACTED      0x04
-#define STORAGE_PRIORITY        0x08
-#define STORAGE_DELETEONRELEASE 0x10
-#define STORAGE_CONVERT         0x20
+#define STORAGE_FAILIFTHERE		0x02
+#define STORAGE_TRANSACTED		0x04
+#define STORAGE_PRIORITY		0x08
+#define STORAGE_DELETEONRELEASE	0x10
+#define STORAGE_CONVERT			0x20
 #define STORAGE_UNPACKED_MODE   0x40
 #define STORAGE_DISKSPANNED_MODE   0x80
 #define STORAGE_CREATE_UNPACKED 0x44
@@ -86,14 +86,14 @@ public:
                         SO2_DECL_INVARIANT()
 
     using SvStream::SyncSvStream;
-    virtual void        SyncSvStream();
-    void                SyncSysStream() { SvStream::SyncSysStream(); }
+    virtual void 		SyncSvStream();
+    void 				SyncSysStream() { SvStream::SyncSysStream(); }
 
     virtual void        ResetError();
 
     virtual void        SetSize( ULONG nNewSize );
-    UINT32              GetSize() const;
-    BOOL                CopyTo( SotStorageStream * pDestStm );
+    UINT32				GetSize() const;
+    BOOL				CopyTo( SotStorageStream * pDestStm );
     virtual BOOL        Commit();
     virtual BOOL        Revert();
     BOOL                SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
@@ -130,11 +130,11 @@ friend class ::binfilter::SvStorage;
     BOOL        m_bIsRoot:1,  // z.B.: File-Storage
                 m_bDelStm:1;
     ByteString  m_aKey;           // aKey.Len != 0  -> Verschluesselung
-    long        m_nVersion;
+    long 		m_nVersion;
 
 protected:
                         ~SotStorage();
-   void                 CreateStorage( BOOL bUCBStorage, StreamMode, StorageMode );
+   void 				CreateStorage( BOOL bUCBStorage, StreamMode, StorageMode );
 public:
                         SotStorage( const String &,
                                    StreamMode = STREAM_STD_READWRITE,
@@ -154,7 +154,7 @@ public:
                         SO2_DECL_INVARIANT()
 
     SvMemoryStream *    CreateMemoryStream();
-    const SvStream *    GetSvStream();
+    const SvStream *	GetSvStream();
 
     static BOOL         IsStorageFile( const String & rFileName );
     static BOOL         IsStorageFile( SvStream* pStream );
@@ -166,11 +166,11 @@ public:
     void                SetKey( const ByteString& rKey );
     const ByteString &  GetKey() const { return m_aKey; }
 
-    void                SetVersion( long nVers )
+    void				SetVersion( long nVers )
                         {
                             m_nVersion = nVers;
                         }
-    long                GetVersion() const
+    long				GetVersion() const
                         {
                             return m_nVersion;
                         }
@@ -186,7 +186,7 @@ public:
 
     BOOL                IsRoot() const              { return m_bIsRoot; }
     void                SignAsRoot( BOOL b = TRUE ) { m_bIsRoot = b; }
-    void                SetDeleteStream( BOOL bDelete ) { m_bDelStm = bDelete; }
+    void				SetDeleteStream( BOOL bDelete ) { m_bDelStm = bDelete; }
 
                         // eigener Datenbereich
     virtual void        SetClass( const SvGlobalName & rClass,
@@ -216,10 +216,10 @@ public:
     SotStorageStream *  OpenEncryptedSotStream( const String & rEleName, const ByteString& rKey,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = 0 );
-    SotStorage *        OpenSotStorage( const String & rEleName,
+    SotStorage *		OpenSotStorage( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = STORAGE_TRANSACTED );
-    SotStorage *        OpenUCBStorage( const String & rEleName,
+    SotStorage *		OpenUCBStorage( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = STORAGE_TRANSACTED );
     SotStorage *        OpenOLEStorage( const String & rEleName,
@@ -239,23 +239,23 @@ public:
     virtual BOOL        MoveTo( const String & rEleName, SotStorage * pDest,
                                 const String & rNewName );
 
-    SvStream*           GetTargetSvStream() const;
+    SvStream*			GetTargetSvStream() const;
     BOOL                SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
     BOOL                GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
-    BOOL                IsOLEStorage() const;
+    BOOL				IsOLEStorage() const;
     static BOOL         IsOLEStorage( const String & rFileName );
     static BOOL         IsOLEStorage( SvStream* pStream );
 
     // this is temporary HACK, _MUST_ be removed before release
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
                         GetUNOAPIDuplicate( const String& rEleName, sal_Int32 nUNOStorageMode );
-    void                RemoveUNOStorageHolder( UNOStorageHolder* pHolder );
+    void				RemoveUNOStorageHolder( UNOStorageHolder* pHolder );
 
     static SotStorage*  OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
                                     const String& rEleName, StreamMode = STREAM_STD_READWRITE );
     static sal_Int32    GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
-    static sal_Int32    GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
+    static sal_Int32	GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
 };
 
 #ifndef SOT_DECL_SOTSTORAGE_DEFINED

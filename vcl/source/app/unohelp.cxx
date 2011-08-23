@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,13 +61,13 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
+#define DOSTRING( x )			   			#x
+#define STRING( x )				   			DOSTRING( x )
 
 struct VCLRegServiceInfo
 {
-    const sal_Char*     pLibName;
-    sal_Bool            bHasSUPD;
+    const sal_Char*		pLibName;
+    sal_Bool			bHasSUPD;
 };
 
 static VCLRegServiceInfo aVCLComponentsArray[] =
@@ -110,7 +110,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
             pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
             uno::Reference < registry::XImplementationRegistration > xReg(
                 pSVData->maAppData.mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )), uno::UNO_QUERY );
-
+    
             if( xReg.is() )
             {
                 sal_Int32 nCompCount = 0;
@@ -237,6 +237,6 @@ void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::com::sun::star:
             if ( nType == ::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
                 xExtToolkit->fireFocusLost( rEventObject.Source );
         }
-
+        
     }
 }

@@ -4,7 +4,7 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ sub makenumber
         $h = int( $h / $order );
     }
     die "makenumber failed because number is too big (this cannot be so this is a strange error)" if $h > 0;
-
+    
     return reverse $result;
 }
 
@@ -130,7 +130,7 @@ sub makekidstr
 {
     $kid = shift;
     $str = shift;
-
+    
     if ( $str ne "" )
     {
         # special handling for strings starting with font descriptions like {&Tahoma8} (win system integration)
@@ -171,7 +171,7 @@ sub get_options {
     while ($arg = shift @ARGV) {
         $arg =~ /^-dbimport$/  and $dbimport = 1 and next;
         $arg =~ /^-help$/  and $help = 1 and next; #show help
-
+        
         if ( !$has_infile )
         {
             $infile = $arg;

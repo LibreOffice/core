@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,9 +35,9 @@ enum SfxSymbolsSize
     SFX_SYMBOLS_SIZE_AUTO
 };
 
-#define SFX_TOOLBOX_CHANGESYMBOLSET     0x0001
-#define SFX_TOOLBOX_CHANGEOUTSTYLE      0x0002
-#define SFX_TOOLBOX_CHANGEBUTTONTYPE    0x0004
+#define SFX_TOOLBOX_CHANGESYMBOLSET		0x0001
+#define SFX_TOOLBOX_CHANGEOUTSTYLE  	0x0002
+#define SFX_TOOLBOX_CHANGEBUTTONTYPE	0x0004
 
 #endif // _SVTOOLS_IMGDEF_HXX
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace comphelper
         friend class OSelectionChangeMultiplexer;
 
         OSelectionChangeMultiplexer*    m_pAdapter;
-        ::osl::Mutex&                   m_rMutex;
+        ::osl::Mutex&				    m_rMutex;
 
     public:
         OSelectionChangeListener(::osl::Mutex& _rMutex)
@@ -77,14 +77,14 @@ namespace comphelper
     //= OSelectionChangeMultiplexer
     //==================================================================
     /// multiplexer for selection changes
-    class COMPHELPER_DLLPUBLIC OSelectionChangeMultiplexer  :public cppu::WeakImplHelper1< ::com::sun::star::view::XSelectionChangeListener>
+    class COMPHELPER_DLLPUBLIC OSelectionChangeMultiplexer	:public cppu::WeakImplHelper1< ::com::sun::star::view::XSelectionChangeListener>
     {
         friend class OSelectionChangeListener;
-         ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier>  m_xSet;
-        OSelectionChangeListener*                   m_pListener;
-        sal_Int32                                   m_nLockCount;
-        sal_Bool                                    m_bListening        : 1;
-        sal_Bool                                    m_bAutoSetRelease   : 1;
+         ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier>	m_xSet;
+        OSelectionChangeListener*					m_pListener;
+        sal_Int32									m_nLockCount;
+        sal_Bool									m_bListening		: 1;
+        sal_Bool									m_bAutoSetRelease	: 1;
 
         OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&);
         OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&);
@@ -100,17 +100,17 @@ namespace comphelper
         virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
         /// incremental lock
-        void        lock();
+        void		lock();
         /// incremental unlock
-        void        unlock();
+        void		unlock();
         /// get the lock count
-        sal_Int32   locked() const { return m_nLockCount; }
+        sal_Int32	locked() const { return m_nLockCount; }
 
         void dispose();
     };
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // INCLUDED_COMPHELPER_SELECTION_MULTIPLEX_HXX

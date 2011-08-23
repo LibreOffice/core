@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@ inline ::com::sun::star::uno::Sequence<T> makeSequence( T const& element )
     p[n_] = BOOST_PP_CAT(element, n_);
 
 /** The following preprocessor repetitions generate functions like
-
+    
     <pre>
         template <typename T>
         inline ::com::sun::star::uno::Sequence<T> makeSequence(
             T const& element0, T const& element1, ... );
     </pre>
-
+    
     which make a sequence out of the passed elements.
-
+    
     The maximum number of elements can be set by defining
     COMPHELPER_MAKESEQUENCE_MAX_ARGS; its default is 12.
 */

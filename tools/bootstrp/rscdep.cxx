@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 #include "cppdep.hxx"
 
-#if defined WNT
+#if defined WNT 
 #if !defined HAVE_GETOPT
 #define __STDC__ 1
 #define __GNU_LIBRARY__
@@ -59,12 +59,12 @@ class RscHrcDep : public CppDep
 {
 public:
                     RscHrcDep();
-    virtual         ~RscHrcDep();
+    virtual			~RscHrcDep();
 
-    virtual void    Execute();
+    virtual void 	Execute();
 };
 
-RscHrcDep::RscHrcDep()  :
+RscHrcDep::RscHrcDep()	:
     CppDep()
 {
 }
@@ -91,11 +91,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     BOOL bSource = FALSE;
     ByteString aRespArg;
 //  who needs anything but '/' ?
-//  String aDelim = String(DirEntry::GetAccessDelimiter());
+//	String aDelim = String(DirEntry::GetAccessDelimiter());
     String aDelim = '/';
 
     RscHrcDep *pDep = new RscHrcDep;
-
+    
     pOutputFileName[0] = 0;
     pSrsFileName[0] = 0;
 
@@ -219,9 +219,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 
     DirEntry aEntry(".");
     aEntry.ToAbs();
-//  String aCwd = aEntry.GetName();
+//	String aCwd = aEntry.GetName();
     String aCwd(pFileNamePrefix, gsl_getSystemTextEncoding());
-/*  USHORT nPos;
+/*	USHORT nPos;
 #ifndef UNX
     while ( (nPos = aCwd.Search('\\') != STRING_NOTFOUND  ))
 #else
@@ -259,7 +259,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         {
             if (!bSource )
             {
-                aString += ByteString(" " );
+                aString += ByteString("	" );
                 aString += ByteString( argv[optind]);
                 pDep->AddSource( argv[optind++]);
             }

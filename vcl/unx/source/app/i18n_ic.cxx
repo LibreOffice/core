@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,15 +58,15 @@ using namespace vcl;
 static void sendEmptyCommit( SalFrame* pFrame )
 {
     vcl::DeletionListener aDel( pFrame );
-
+    
     SalExtTextInputEvent aEmptyEv;
-    aEmptyEv.mnTime             = 0;
-    aEmptyEv.mpTextAttr         = 0;
-    aEmptyEv.maText             = String();
-    aEmptyEv.mnCursorPos        = 0;
-    aEmptyEv.mnCursorFlags      = 0;
-    aEmptyEv.mnDeltaStart       = 0;
-    aEmptyEv.mbOnlyCursor       = False;
+    aEmptyEv.mnTime 			= 0;
+    aEmptyEv.mpTextAttr 		= 0;
+    aEmptyEv.maText 		    = String();
+    aEmptyEv.mnCursorPos 		= 0;
+    aEmptyEv.mnCursorFlags 	    = 0;
+    aEmptyEv.mnDeltaStart 	    = 0;
+    aEmptyEv.mbOnlyCursor 	    = False;
     pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEmptyEv );
     if( ! aDel.isDeleted() )
         pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
@@ -685,10 +685,10 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
     if ( mbUseable && (maContext != NULL)  )
     {
         maClientData.pFrame = pFocusFrame;
-
-        const SystemEnvData* pEnv   = pFocusFrame->GetSystemData();
-        XLIB_Window  aClientWindow  = pEnv->aShellWindow;
-        XLIB_Window  aFocusWindow   = pEnv->aWindow;
+        
+        const SystemEnvData* pEnv	= pFocusFrame->GetSystemData();
+        XLIB_Window  aClientWindow	= pEnv->aShellWindow;
+        XLIB_Window  aFocusWindow	= pEnv->aWindow;
 
         XSetICValues( maContext,
                       XNFocusWindow,       aFocusWindow,
@@ -701,7 +701,7 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
             // begin preedit again
             GetX11SalData()->GetDisplay()->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
         }
-
+        
         XSetICFocus( maContext );
     }
 }

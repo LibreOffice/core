@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ double ElapsedTime::getSystemTime()
     // TEMP!!!
     // Awaiting corresponding functionality in OSL
     //
-
+    
     // is there a performance counter available?
     static bool bTimeSetupDone( false );
     static bool bPerfTimerAvailable( false );
@@ -77,7 +77,7 @@ double ElapsedTime::getSystemTime()
     // current sys time and nInitialCount exceeds IEEE double's
     // mantissa, time will start to run jerky.
     static LONGLONG nInitialCount;
-
+    
     if( !bTimeSetupDone )
     {
         if( QueryPerformanceFrequency(
@@ -90,7 +90,7 @@ double ElapsedTime::getSystemTime()
         }
         bTimeSetupDone = true;
     }
-
+    
     if( bPerfTimerAvailable )
     {
         LONGLONG nCurrCount;
@@ -111,7 +111,7 @@ double ElapsedTime::getSystemTime()
 // TODO(Q2): is 0 okay for the failure case here?
 double ElapsedTime::getSystemTime()
 {
-    TimeValue aTimeVal;
+    TimeValue aTimeVal;   
     if( osl_getSystemTime( &aTimeVal ) )
         return ((aTimeVal.Nanosec * 10e-10) + aTimeVal.Seconds);
     else
@@ -183,7 +183,7 @@ double ElapsedTime::getElapsedTimeImpl() const
 {
     if (m_bInHoldMode || m_bInPauseMode)
         return m_fFrozenTime;
-
+    
     return getCurrentTime() - m_fStartTime;
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ enum ColorConfigEntry
     APPBACKGROUND       ,
     OBJECTBOUNDARIES    ,
     TABLEBOUNDARIES     ,
-    FONTCOLOR           ,
+    FONTCOLOR			,
     LINKS               ,
     LINKSVISITED        ,
     ANCHOR              ,
@@ -144,8 +144,8 @@ public:
     sal_Bool                    IsModified()const{return m_bModified;}
     void                        Commit();
 
-    void                        DisableBroadcast();
-    void                        EnableBroadcast();
+    void						DisableBroadcast();
+    void						EnableBroadcast();
 };
 }//namespace svtools
 #endif

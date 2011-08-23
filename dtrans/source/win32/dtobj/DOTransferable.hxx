@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,25 +63,25 @@ public:
     // XTransferable
     //------------------------------------------------------------------------
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+    virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) 
         throw( ::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) 
         throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+    
+    virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) 
         throw( ::com::sun::star::uno::RuntimeException );
     //------------------------------------------------------------------------
     // XSystemTransferable
     //------------------------------------------------------------------------
     virtual ::com::sun::star::uno::Any SAL_CALL getData( const com::sun::star::uno::Sequence<sal_Int8>& aProcessId  ) throw
     (::com::sun::star::uno::RuntimeException);
-
+    
 
 private:
     // should be created only by CDTransObjFactory
-    explicit CDOTransferable(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager,
+    explicit CDOTransferable( 
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager, 
         IDataObjectPtr rDataObject );
 
     //------------------------------------------------------------------------
@@ -89,38 +89,38 @@ private:
     //------------------------------------------------------------------------
 
     void SAL_CALL initFlavorList( );
-
-    void SAL_CALL addSupportedFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
+    
+    void SAL_CALL addSupportedFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );	
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc );
 
     ByteSequence_t SAL_CALL getClipboardData( CFormatEtc& aFormatEtc );
     rtl::OUString  SAL_CALL synthesizeUnicodeText( );
 
-    void SAL_CALL clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );
-
+    void SAL_CALL clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );	
+    
     ::com::sun::star::uno::Any SAL_CALL byteStreamToAny( ByteSequence_t& aByteStream, const com::sun::star::uno::Type& aRequestedDataType );
-    rtl::OUString              SAL_CALL byteStreamToOUString( ByteSequence_t& aByteStream );
-
+    rtl::OUString              SAL_CALL byteStreamToOUString( ByteSequence_t& aByteStream );	
+    
     LCID SAL_CALL getLocaleFromClipboard( );
 
     sal_Bool SAL_CALL compareDataFlavors( const com::sun::star::datatransfer::DataFlavor& lhs,
                                           const com::sun::star::datatransfer::DataFlavor& rhs );
 
-    sal_Bool SAL_CALL cmpFullMediaType( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xLhs,
+    sal_Bool SAL_CALL cmpFullMediaType( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xLhs, 
                                         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xRhs ) const;
 
-    sal_Bool SAL_CALL cmpAllContentTypeParameter( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xLhs,
+    sal_Bool SAL_CALL cmpAllContentTypeParameter( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xLhs, 
                                         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xRhs ) const;
 
 private:
-    IDataObjectPtr                                                                          m_rDataObject;
-    com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor >               m_FlavorList;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
-    CDataFormatTranslator                                                                   m_DataFormatTranslator;
+    IDataObjectPtr																			m_rDataObject;
+    com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor >				m_FlavorList;	
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_SrvMgr;
+    CDataFormatTranslator																	m_DataFormatTranslator;
     com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentTypeFactory > m_rXMimeCntFactory;
-    ::osl::Mutex                                                                            m_aMutex;
-    sal_Bool                                                                                m_bUnicodeRegistered;
-    CLIPFORMAT                                                                              m_TxtFormatOnClipboard;
+    ::osl::Mutex																			m_aMutex;
+    sal_Bool																				m_bUnicodeRegistered;
+    CLIPFORMAT																				m_TxtFormatOnClipboard;
 
 // non supported operations
 private:

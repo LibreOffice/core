@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ SvTabListBox::SvTabListBox( Window* pParent, WinBits nBits )
     pTabList = 0;
     nTabCount = 0;
     pViewParent = 0;
-    SetHighlightRange();    // ueber volle Breite selektieren
+    SetHighlightRange();	// ueber volle Breite selektieren
 }
 
 SvTabListBox::SvTabListBox( Window* pParent, const ResId& rResId )
@@ -233,7 +233,7 @@ SvLBoxEntry* SvTabListBox::InsertEntryToColumn(const XubString& rStr,SvLBoxEntry
 }
 
 SvLBoxEntry* SvTabListBox::InsertEntryToColumn( const XubString& rStr,
-    const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
+    const Image& rExpandedEntryBmp,	const Image& rCollapsedEntryBmp,
     SvLBoxEntry* pParent,ULONG nPos,USHORT nCol, void* pUser )
 {
     XubString aStr;
@@ -583,9 +583,9 @@ SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 
     SvTabListBox( pParent, nWinStyle ),
 
-    m_bFirstPaint   ( TRUE ),
+    m_bFirstPaint	( TRUE ),
     m_pImpl         ( new ::svt::SvHeaderTabListBoxImpl ),
-    m_pAccessible   ( NULL )
+    m_pAccessible	( NULL )
 {
 }
 
@@ -595,9 +595,9 @@ SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, const ResId& rResId ) :
 
     SvTabListBox( pParent, rResId ),
 
-    m_bFirstPaint   ( TRUE ),
+    m_bFirstPaint	( TRUE ),
     m_pImpl         ( new ::svt::SvHeaderTabListBoxImpl ),
-    m_pAccessible   ( NULL )
+    m_pAccessible	( NULL )
 {
 }
 
@@ -1021,7 +1021,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     if ( m_aAccessibleChildren.empty() )
     {
         const sal_uInt16 nColumnCount = GetColumnCount();
-        sal_Int32 nCount = AreChildrenTransient() ?
+        sal_Int32 nCount = AreChildrenTransient() ? 
                 nColumnCount : ( GetRowCount() + 1 ) * nColumnCount;
         m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
     }

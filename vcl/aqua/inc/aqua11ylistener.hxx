@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef _AQUA11YLISTENER_HXX_
 #define _AQUA11YLISTENER_HXX_
 
@@ -40,7 +40,7 @@
 // - AquaA11yEventListener -
 // -------------------------
 
-class AquaA11yEventListener :
+class AquaA11yEventListener :  
     public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleEventListener >
 {
 
@@ -49,13 +49,13 @@ public:
     virtual ~AquaA11yEventListener();
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
+    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) 
         throw( ::com::sun::star::uno::RuntimeException );
-
+        
 private:
     const id m_wrapperObject;
     const sal_Int16 m_role;

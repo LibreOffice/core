@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ sal_Bool SAL_CALL LayoutFactory::supportsService( const ::rtl::OUString& Service
     for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
         if ( ServiceName.compareTo( aSeq[i] ) == 0 )
             return sal_True;
-
+    
     return sal_False;
 }
 

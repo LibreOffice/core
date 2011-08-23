@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace utl
 
 //=========================================================================
 // to shorten some lines ...
-typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  TypeSequence;
+typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	TypeSequence;
 
 // compare to Sequences of Types
 struct TypeSequenceLess : public ::std::binary_function<TypeSequence, TypeSequence, bool>
@@ -77,14 +77,14 @@ public:
 };
 
 // declare the map
-DECLARE_STL_MAP (   TypeSequence,
+DECLARE_STL_MAP	(	TypeSequence,
                     ::cppu::OImplementationId,
                     TypeSequenceLess,
                     MapType2Id
                 );
 
 //.........................................................................
-}   // namespace utl
+}	// namespace utl
 //.........................................................................
 
 //=========================================================================
@@ -106,39 +106,39 @@ DECLARE_STL_MAP (   TypeSequence,
     cleared. The less classes use it, the earlier map entries which may have
     been reused will be cleared.
 */
-#define DECLARE_IMPLEMENTATIONID_HELPER(_namespace, classname)      \
-namespace _namespace {                                              \
-class classname                                                     \
-{                                                                   \
-    friend class classname##Ref;                                \
+#define DECLARE_IMPLEMENTATIONID_HELPER(_namespace, classname)		\
+namespace _namespace {												\
+class classname														\
+{																	\
+    friend class classname##Ref;								\
                                                                     \
-    static sal_Int32    s_nReferenced;                              \
-    static void*        s_pMap;                                     \
+    static sal_Int32	s_nReferenced;								\
+    static void*		s_pMap;										\
                                                                     \
-    static ::osl::Mutex s_aMutex;                                   \
+    static ::osl::Mutex	s_aMutex;									\
                                                                     \
-public:                                                             \
-    static void acquire();                                          \
-    static void release();                                          \
+public:																\
+    static void acquire();											\
+    static void release();											\
                                                                     \
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getImplementationId( \
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >& _rTypes); \
+    static ::com::sun::star::uno::Sequence< sal_Int8 > getImplementationId(	\
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >& _rTypes);	\
                                                                     \
-private:                                                            \
-    static void implCreateMap();                                    \
+private:															\
+    static void implCreateMap();									\
                                                                     \
-    classname() { }                                                 \
-};                                                                  \
+    classname() { }													\
+};																	\
                                                                     \
-/*=======================================================================*/ \
-class classname##Ref                                                \
-{                                                                   \
-public:                                                             \
-    classname##Ref() { classname::acquire(); }  \
-    ~classname##Ref() { classname::release(); } \
-};                                                                  \
+/*=======================================================================*/	\
+class classname##Ref												\
+{																	\
+public:																\
+    classname##Ref() { classname::acquire(); }	\
+    ~classname##Ref() { classname::release(); }	\
+};																	\
                                                                     \
-}   /* _namespace */                                                \
+}	/* _namespace */												\
                                                                     \
 
 /*************************************************************************
@@ -147,62 +147,62 @@ public:                                                             \
 
 /** implement an id helper
 */
-#define IMPLEMENT_IMPLEMENTATIONID_HELPER(_namespace, classname)        \
-namespace _namespace {  \
+#define IMPLEMENT_IMPLEMENTATIONID_HELPER(_namespace, classname)		\
+namespace _namespace {	\
     \
-/*=======================================================================*/ \
+/*=======================================================================*/	\
     \
-sal_Int32       classname::s_nReferenced(0);    \
-void*           classname::s_pMap = NULL;   \
-::osl::Mutex    classname::s_aMutex;    \
+sal_Int32		classname::s_nReferenced(0);	\
+void*			classname::s_pMap = NULL;	\
+::osl::Mutex	classname::s_aMutex;	\
     \
-/*-----------------------------------------------------------------------*/ \
-void classname::acquire()   \
-{   \
-    ::osl::MutexGuard aGuard(s_aMutex); \
-    ++s_nReferenced;    \
-}   \
+/*-----------------------------------------------------------------------*/	\
+void classname::acquire()	\
+{	\
+    ::osl::MutexGuard aGuard(s_aMutex);	\
+    ++s_nReferenced;	\
+}	\
     \
-/*-----------------------------------------------------------------------*/ \
-void classname::release()   \
-{   \
-    ::osl::MutexGuard aGuard(s_aMutex); \
-    if (!--s_nReferenced)   \
-    {   \
-        delete static_cast< ::utl::MapType2Id *>( s_pMap ); \
-        s_pMap = NULL;  \
-    }   \
-}   \
+/*-----------------------------------------------------------------------*/	\
+void classname::release()	\
+{	\
+    ::osl::MutexGuard aGuard(s_aMutex);	\
+    if (!--s_nReferenced)	\
+    {	\
+        delete static_cast< ::utl::MapType2Id *>( s_pMap );	\
+        s_pMap = NULL;	\
+    }	\
+}	\
     \
-/*-----------------------------------------------------------------------*/ \
-::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId( \
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >& _rTypes)  \
-{   \
-    ::osl::MutexGuard aGuard(s_aMutex); \
-    DBG_ASSERT(s_nReferenced,   \
-        "classname::getImplementationId : you need to hold a reference to this class in order to use it !");    \
-        /* give the calling class a member of type classname##Ref and all is fine .... */   \
+/*-----------------------------------------------------------------------*/	\
+::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId(	\
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >& _rTypes)	\
+{	\
+    ::osl::MutexGuard aGuard(s_aMutex);	\
+    DBG_ASSERT(s_nReferenced,	\
+        "classname::getImplementationId : you need to hold a reference to this class in order to use it !");	\
+        /* give the calling class a member of type classname##Ref and all is fine .... */	\
     \
-    implCreateMap();    \
+    implCreateMap();	\
     \
-    ::utl::MapType2Id* pMap = static_cast< ::utl::MapType2Id *>(s_pMap);    \
+    ::utl::MapType2Id* pMap = static_cast< ::utl::MapType2Id *>(s_pMap);	\
     \
-    ::cppu::OImplementationId& rId = (*pMap)[_rTypes];  \
-    /* this will create an entry for the given type sequence, if neccessary */  \
+    ::cppu::OImplementationId& rId = (*pMap)[_rTypes];	\
+    /* this will create an entry for the given type sequence, if neccessary */	\
     \
-    return rId.getImplementationId();   \
-}   \
+    return rId.getImplementationId();	\
+}	\
     \
-/*-----------------------------------------------------------------------*/ \
-void classname::implCreateMap() \
-{   \
-    if (s_pMap) \
-        return; \
-    s_pMap = new ::utl::MapType2Id();   \
-}   \
+/*-----------------------------------------------------------------------*/	\
+void classname::implCreateMap()	\
+{	\
+    if (s_pMap)	\
+        return;	\
+    s_pMap = new ::utl::MapType2Id();	\
+}	\
     \
     \
-}   /* _namespace */    \
+}	/* _namespace */	\
     \
 
 

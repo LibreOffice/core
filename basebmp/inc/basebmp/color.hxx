@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace basebmp
 class Color
 {
 private:
-    sal_uInt32          mnColor;
+    sal_uInt32			mnColor;
 
 public:
     typedef sal_uInt32  value_type;
@@ -54,7 +54,7 @@ public:
     void setBlue( sal_uInt8 nBlue ) { mnColor &= ~0x000000FFUL; mnColor |= nBlue; }
 
     void setGrey( sal_uInt8 nGreyVal ) { mnColor = (sal_uInt32)nGreyVal << 16 | (sal_uInt32)nGreyVal << 8 | nGreyVal; }
-
+    
     sal_uInt8 getRed() const   { return 0xFF & (sal_uInt8)(mnColor >> 16); }
     sal_uInt8 getGreen() const { return 0xFF & (sal_uInt8)(mnColor >> 8); }
     sal_uInt8 getBlue() const  { return 0xFF & (sal_uInt8)mnColor; }

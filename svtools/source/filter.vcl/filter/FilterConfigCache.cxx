@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@
 // #define TOKEN_INDEX_FOR_HASDIALOG      2
 
 using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory
-using namespace ::com::sun::star::container     ;   // XNameAccess
-using namespace ::com::sun::star::uno           ;   // Reference
-using namespace ::com::sun::star::beans         ;   // PropertyValue
+using namespace ::com::sun::star::container		;	// XNameAccess
+using namespace ::com::sun::star::uno			;	// Reference
+using namespace ::com::sun::star::beans			;	// PropertyValue
 using namespace ::utl                           ;   // getProcessServiceFactory();
-using namespace ::rtl                           ;
+using namespace ::rtl							;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
 {
@@ -312,9 +312,9 @@ void FilterConfigCache::ImplInitSmart()
     const char** pPtr;
     for ( pPtr = InternalFilterListForSvxLight; *pPtr; pPtr++ )
     {
-        FilterConfigCacheEntry  aEntry;
+        FilterConfigCacheEntry	aEntry;
 
-        OUString    sExtension( OUString::createFromAscii( *pPtr++ ) );
+        OUString	sExtension( OUString::createFromAscii( *pPtr++ ) );
 
         aEntry.lExtensionList.realloc( 1 );
         aEntry.lExtensionList[ 0 ] = sExtension;
@@ -325,7 +325,7 @@ void FilterConfigCache::ImplInitSmart()
         ByteString sFlags( *pPtr++ );
         aEntry.nFlags = sFlags.ToInt32();
 
-        OUString    sUserData( OUString::createFromAscii( *pPtr ) );
+        OUString	sUserData( OUString::createFromAscii( *pPtr ) );
         aEntry.CreateFilterName( sUserData );
 
         if ( aEntry.nFlags & 1 )

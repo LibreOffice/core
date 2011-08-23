@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 // =======================================================================
 
-#define MAX_TIMER_PERIOD    ((ULONG)0xFFFFFFFF)
+#define MAX_TIMER_PERIOD	((ULONG)0xFFFFFFFF)
 
 // ---------------------
 // - TimeManager-Types -
@@ -51,20 +51,20 @@
 
 struct ImplTimerData
 {
-    ImplTimerData*  mpNext;         // Pointer to the next Instance
-    Timer*          mpSVTimer;      // Pointer to SV Timer instance
-    ULONG           mnUpdateTime;   // Last Update Time
-    ULONG           mnTimerUpdate;  // TimerCallbackProcs on stack
-    BOOL            mbDelete;       // Wurde Timer waehren Update() geloescht
-    BOOL            mbInTimeout;    // Befinden wir uns im Timeout-Handler
+    ImplTimerData*	mpNext; 		// Pointer to the next Instance
+    Timer*			mpSVTimer;		// Pointer to SV Timer instance
+    ULONG			mnUpdateTime;	// Last Update Time
+    ULONG			mnTimerUpdate;	// TimerCallbackProcs on stack
+    BOOL			mbDelete;		// Wurde Timer waehren Update() geloescht
+    BOOL			mbInTimeout;	// Befinden wir uns im Timeout-Handler
 };
 
 // =======================================================================
 
 void Timer::ImplDeInitTimer()
 {
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplTimerData*  pTimerData = pSVData->mpFirstTimerData;
+    ImplSVData* 	pSVData = ImplGetSVData();
+    ImplTimerData*	pTimerData = pSVData->mpFirstTimerData;
 
     if ( pTimerData )
     {
@@ -81,8 +81,8 @@ void Timer::ImplDeInitTimer()
         }
         while ( pTimerData );
 
-        pSVData->mpFirstTimerData   = NULL;
-        pSVData->mnTimerPeriod      = 0;
+        pSVData->mpFirstTimerData	= NULL;
+        pSVData->mnTimerPeriod		= 0;
         delete pSVData->mpSalTimer;
         pSVData->mpSalTimer = NULL;
     }
@@ -106,12 +106,12 @@ static void ImplStartTimer( ImplSVData* pSVData, ULONG nMS )
 
 void Timer::ImplTimerCallbackProc()
 {
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplTimerData*  pTimerData;
-    ImplTimerData*  pPrevTimerData;
-    ULONG           nMinPeriod = MAX_TIMER_PERIOD;
-    ULONG           nDeltaTime;
-    ULONG           nTime = Time::GetSystemTicks();
+    ImplSVData* 	pSVData = ImplGetSVData();
+    ImplTimerData*	pTimerData;
+    ImplTimerData*	pPrevTimerData;
+    ULONG			nMinPeriod = MAX_TIMER_PERIOD;
+    ULONG			nDeltaTime;
+    ULONG			nTime = Time::GetSystemTicks();
 
     if ( pSVData->mbNoCallTimer )
         return;
@@ -221,21 +221,21 @@ void Timer::ImplTimerCallbackProc()
 
 Timer::Timer()
 {
-    mpTimerData     = NULL;
-    mnTimeout       = 1;
-    mbAuto          = FALSE;
-    mbActive        = FALSE;
+    mpTimerData 	= NULL;
+    mnTimeout		= 1;
+    mbAuto			= FALSE;
+    mbActive		= FALSE;
 }
 
 // -----------------------------------------------------------------------
 
 Timer::Timer( const Timer& rTimer )
 {
-    mpTimerData     = NULL;
-    mnTimeout       = rTimer.mnTimeout;
-    mbAuto          = FALSE;
-    mbActive        = FALSE;
-    maTimeoutHdl    = rTimer.maTimeoutHdl;
+    mpTimerData 	= NULL;
+    mnTimeout		= rTimer.mnTimeout;
+    mbAuto			= FALSE;
+    mbActive		= FALSE;
+    maTimeoutHdl	= rTimer.maTimeoutHdl;
 
     if ( rTimer.IsActive() )
         Start();
@@ -294,12 +294,12 @@ void Timer::Start()
         }
 
         // insert timer and start
-        mpTimerData                 = new ImplTimerData;
-        mpTimerData->mpSVTimer      = this;
-        mpTimerData->mnUpdateTime   = Time::GetSystemTicks();
-        mpTimerData->mnTimerUpdate  = pSVData->mnTimerUpdate;
-        mpTimerData->mbDelete       = FALSE;
-        mpTimerData->mbInTimeout    = FALSE;
+        mpTimerData 				= new ImplTimerData;
+        mpTimerData->mpSVTimer		= this;
+        mpTimerData->mnUpdateTime	= Time::GetSystemTicks();
+        mpTimerData->mnTimerUpdate	= pSVData->mnTimerUpdate;
+        mpTimerData->mbDelete		= FALSE;
+        mpTimerData->mbInTimeout	= FALSE;
 
         // !!!!! Wegen SFX hinten einordnen !!!!!
         ImplTimerData* pPrev = NULL;
@@ -324,9 +324,9 @@ void Timer::Start()
     }
     else
     {
-        mpTimerData->mnUpdateTime    = Time::GetSystemTicks();
-        mpTimerData->mnTimerUpdate   = pSVData->mnTimerUpdate;
-        mpTimerData->mbDelete        = FALSE;
+        mpTimerData->mnUpdateTime	 = Time::GetSystemTicks();
+        mpTimerData->mnTimerUpdate	 = pSVData->mnTimerUpdate;
+        mpTimerData->mbDelete		 = FALSE;
     }
 }
 
@@ -347,9 +347,9 @@ Timer& Timer::operator=( const Timer& rTimer )
     if ( IsActive() )
         Stop();
 
-    mbActive        = FALSE;
-    mnTimeout       = rTimer.mnTimeout;
-    maTimeoutHdl    = rTimer.maTimeoutHdl;
+    mbActive		= FALSE;
+    mnTimeout		= rTimer.mnTimeout;
+    maTimeoutHdl	= rTimer.maTimeoutHdl;
 
     if ( rTimer.IsActive() )
         Start();

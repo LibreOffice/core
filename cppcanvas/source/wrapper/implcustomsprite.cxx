@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ namespace cppcanvas
 {
     namespace internal
     {
-        ImplCustomSprite::ImplCustomSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
-                                            const uno::Reference< rendering::XCustomSprite >&       rSprite,
-                                            const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
-            ImplSprite( rParentCanvas,
+        ImplCustomSprite::ImplCustomSprite( const uno::Reference< rendering::XSpriteCanvas >& 		rParentCanvas,
+                                            const uno::Reference< rendering::XCustomSprite >& 		rSprite,
+                                            const ImplSpriteCanvas::TransformationArbiterSharedPtr&	rTransformArbiter ) :
+            ImplSprite( rParentCanvas, 
                         uno::Reference< rendering::XSprite >(rSprite,
                                                              uno::UNO_QUERY),
                         rTransformArbiter ),

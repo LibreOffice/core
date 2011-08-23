@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -292,7 +292,7 @@
  * NINCLUDE     The number of directories that may be specified
  *              on a per-system basis, or by the -I option.
  * BLK_NEST     The number of nested #if's permitted.
- * NFWORK       FileNameWorkBuffer (added by erAck, was NWORK)
+ * NFWORK		FileNameWorkBuffer (added by erAck, was NWORK)
  */
 
 #ifndef IDMAX
@@ -312,7 +312,7 @@
  da wir bald 10 Sprachen haben werden gleich ordentlich reingehauen.. */
 #define NWORK                   128000
 #define NBUFF                   NWORK
-#define NFWORK                  1024
+#define NFWORK					1024
 #define NEXP                    128
 #define NINCLUDE        100
 #define NPARMWORK               (NWORK * 2)
@@ -321,7 +321,7 @@
 
 #ifndef ALERT
 #ifdef EBCDIC
-#define ALERT                   '\057'
+#define ALERT					'\057'
 #else
 #define ALERT                   '\007'          /* '\a' is "Bell"       */
 #endif

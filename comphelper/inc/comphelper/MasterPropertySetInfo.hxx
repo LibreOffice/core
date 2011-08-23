@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,25 +44,25 @@ namespace comphelper
         PropertyDataHash maMap;
         com::sun::star::uno::Sequence < com::sun::star::beans::Property > maProperties;
     public:
-        MasterPropertySetInfo()
+        MasterPropertySetInfo() 
             throw();
-        MasterPropertySetInfo( PropertyInfo * pMap )
+        MasterPropertySetInfo( PropertyInfo * pMap ) 
             throw();
-        virtual ~MasterPropertySetInfo()
+        virtual ~MasterPropertySetInfo() 
             throw();
         void add( PropertyInfo* pMap, sal_Int32 nCount = -1, sal_uInt8 nMapId = 0 )
             throw();
         void add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
             throw();
-        void remove( const rtl::OUString& aName )
+        void remove( const rtl::OUString& aName ) 
             throw();
 
         // XPropertySetInfo
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties()
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() 
             throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName )
+        virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName ) 
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name )
+        virtual sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name ) 
             throw(::com::sun::star::uno::RuntimeException);
     };
 }

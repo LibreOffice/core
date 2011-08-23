@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -356,13 +356,13 @@ Bitmap Window::SnapShot() const
 void Window::ShowFocus( const Rectangle& rRect )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
+    
     if( mpWindowImpl->mbInShowFocus )
         return;
     mpWindowImpl->mbInShowFocus = TRUE;
 
     ImplWinData* pWinData = ImplGetWinData();
-
+    
     // native themeing suggest not to use focus rects
     if( ! ( mpWindowImpl->mbUseNativeFocus &&
             IsNativeWidgetEnabled() ) )
@@ -376,10 +376,10 @@ void Window::ShowFocus( const Rectangle& rRect )
                     mpWindowImpl->mbInShowFocus = FALSE;
                     return;
                 }
-
+    
                 ImplInvertFocus( *(pWinData->mpFocusRect) );
             }
-
+    
             ImplInvertFocus( rRect );
         }
         if ( !pWinData->mpFocusRect )
@@ -405,7 +405,7 @@ void Window::ShowFocus( const Rectangle& rRect )
 void Window::HideFocus()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
+    
     if( mpWindowImpl->mbInHideFocus )
         return;
     mpWindowImpl->mbInHideFocus = TRUE;
@@ -1227,9 +1227,9 @@ BOOL Window::HandleScrollCommand( const CommandEvent& rCmd,
                         nLines = pData->GetNotchDelta() * (long)nScrollLines;
                     if ( nLines )
                     {
-                        ImplHandleScroll( NULL,
-                                          0L,
-                                          pData->IsHorz() ? pHScrl : pVScrl,
+                        ImplHandleScroll( NULL, 
+                                          0L, 
+                                          pData->IsHorz() ? pHScrl : pVScrl, 
                                           nLines );
                         bRet = TRUE;
                     }
@@ -1309,7 +1309,7 @@ void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
     }
 }
 
-// support for docking
+// support for docking 
 // this is currently handled in ImplDockingWindowWrapper
 /*
 void Window::ImplSetFloatingMode( BOOL bFloatMode )
@@ -1444,14 +1444,14 @@ Window* Window::ImplGetTopmostFrameWindow()
 
 // making these Methods out of line to be able to change them lateron without complete rebuild
 // TODO: Set the SmartId in here and remove mpWindowImpl->mnHelpId
-void Window::SetHelpId( ULONG nHelpId )
-{
-    SetSmartHelpId(SmartId(nHelpId));
+void Window::SetHelpId( ULONG nHelpId ) 
+{ 
+    SetSmartHelpId(SmartId(nHelpId)); 
 }
 
-ULONG Window::GetHelpId() const
-{
-    return mpWindowImpl->mnHelpId;
+ULONG Window::GetHelpId() const 
+{ 
+    return mpWindowImpl->mnHelpId; 
 }
 
 void Window::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
@@ -1466,7 +1466,7 @@ void Window::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
     // if we have a SmartId (eather from earlier call or just created) fill with new values
     if ( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mpSmartHelpId )
         ImplGetWinData()->mpSmartHelpId->UpdateId( aId, aMode );
-
+    
     if ( (aMode == SMART_SET_NUM) || (aMode == SMART_SET_ALL) || ( (aMode == SMART_SET_SMART) && aId.HasNumeric() ) )
     {
         mpWindowImpl->mnHelpId = aId.GetNum();
@@ -1509,7 +1509,7 @@ void Window::SetSmartUniqueId( const SmartId& aId, SmartIdUpdateMode aMode )
     // if we have a SmartId (eather from earlier call or just created) fill with new values
     if ( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mpSmartUniqueId )
         ImplGetWinData()->mpSmartUniqueId->UpdateId( aId, aMode );
-
+    
     if ( (aMode == SMART_SET_NUM) || (aMode == SMART_SET_ALL) || ( (aMode == SMART_SET_SMART) && aId.HasNumeric() ) )
         mpWindowImpl->mnUniqId = aId.GetNum();
 }
@@ -1823,210 +1823,210 @@ BOOL Window::IsControlFont() const
 }
 
 Color Window::GetControlForeground() const
-{
-    return mpWindowImpl->maControlForeground;
+{ 
+    return mpWindowImpl->maControlForeground; 
 }
 
-BOOL Window::IsControlForeground() const
-{
-    return mpWindowImpl->mbControlForeground;
+BOOL Window::IsControlForeground() const 
+{ 
+    return mpWindowImpl->mbControlForeground; 
 }
 
-Color Window::GetControlBackground() const
-{
-    return mpWindowImpl->maControlBackground;
+Color Window::GetControlBackground() const 
+{ 
+    return mpWindowImpl->maControlBackground; 
 }
 
-BOOL Window::IsControlBackground() const
-{
-    return mpWindowImpl->mbControlBackground;
+BOOL Window::IsControlBackground() const 
+{ 
+    return mpWindowImpl->mbControlBackground; 
 }
 
-BOOL Window::IsInPaint() const
-{
-    return mpWindowImpl->mbInPaint;
+BOOL Window::IsInPaint() const 
+{ 
+    return mpWindowImpl->mbInPaint; 
 }
 
-Window* Window::GetParent() const
-{
-    return mpWindowImpl->mpRealParent;
+Window* Window::GetParent() const 
+{ 
+    return mpWindowImpl->mpRealParent; 
 }
 
-BOOL Window::IsVisible() const
-{
-    return mpWindowImpl->mbVisible;
+BOOL Window::IsVisible() const 
+{ 
+    return mpWindowImpl->mbVisible; 
 }
 
-BOOL Window::IsReallyVisible() const
-{
-    return mpWindowImpl->mbReallyVisible;
+BOOL Window::IsReallyVisible() const 
+{ 
+    return mpWindowImpl->mbReallyVisible; 
 }
 
-BOOL Window::IsParentPathVisible() const
-{
-    return mpWindowImpl->mbReallyVisible;
+BOOL Window::IsParentPathVisible() const 
+{ 
+    return mpWindowImpl->mbReallyVisible; 
 }
 
-BOOL Window::IsReallyShown() const
-{
-    return mpWindowImpl->mbReallyShown;
+BOOL Window::IsReallyShown() const 
+{ 
+    return mpWindowImpl->mbReallyShown; 
 }
 
-BOOL Window::IsInInitShow() const
-{
-    return mpWindowImpl->mbInInitShow;
+BOOL Window::IsInInitShow() const 
+{ 
+    return mpWindowImpl->mbInInitShow; 
 }
 
-BOOL Window::IsEnabled() const
-{
-    return !mpWindowImpl->mbDisabled;
+BOOL Window::IsEnabled() const 
+{ 
+    return !mpWindowImpl->mbDisabled; 
 }
 
-BOOL Window::IsInputEnabled() const
-{
-    return !mpWindowImpl->mbInputDisabled;
+BOOL Window::IsInputEnabled() const 
+{ 
+    return !mpWindowImpl->mbInputDisabled; 
 }
 
-BOOL Window::IsAlwaysEnableInput() const
-{
-    return mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled;
+BOOL Window::IsAlwaysEnableInput() const 
+{ 
+    return mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled; 
 }
 
-BOOL Window::IsAlwaysDisableInput() const
-{
-    return mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled;
+BOOL Window::IsAlwaysDisableInput() const 
+{ 
+    return mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled; 
 }
 
-USHORT Window::GetActivateMode() const
-{
-    return mpWindowImpl->mnActivateMode;
+USHORT Window::GetActivateMode() const 
+{ 
+    return mpWindowImpl->mnActivateMode; 
 
 }
 
-BOOL Window::IsAlwaysOnTopEnabled() const
-{
-    return mpWindowImpl->mbAlwaysOnTop;
+BOOL Window::IsAlwaysOnTopEnabled() const 
+{ 
+    return mpWindowImpl->mbAlwaysOnTop; 
 }
 
-BOOL Window::IsDefaultPos() const
-{
-    return mpWindowImpl->mbDefPos;
+BOOL Window::IsDefaultPos() const 
+{ 
+    return mpWindowImpl->mbDefPos; 
 }
 
-BOOL Window::IsDefaultSize() const
-{
-    return mpWindowImpl->mbDefSize;
+BOOL Window::IsDefaultSize() const 
+{ 
+    return mpWindowImpl->mbDefSize; 
 }
 
-void Window::EnablePaint( BOOL bEnable )
-{
-    mpWindowImpl->mbPaintDisabled = !bEnable;
+void Window::EnablePaint( BOOL bEnable ) 
+{ 
+    mpWindowImpl->mbPaintDisabled = !bEnable; 
 }
 
-BOOL Window::IsPaintEnabled() const
-{
-    return !mpWindowImpl->mbPaintDisabled;
+BOOL Window::IsPaintEnabled() const 
+{ 
+    return !mpWindowImpl->mbPaintDisabled; 
 }
 
-BOOL Window::IsUpdateMode() const
-{
-    return !mpWindowImpl->mbNoUpdate;
+BOOL Window::IsUpdateMode() const 
+{ 
+    return !mpWindowImpl->mbNoUpdate; 
 }
 
-void Window::SetParentUpdateMode( BOOL bUpdate )
-{
-    mpWindowImpl->mbNoParentUpdate = !bUpdate;
+void Window::SetParentUpdateMode( BOOL bUpdate ) 
+{ 
+    mpWindowImpl->mbNoParentUpdate = !bUpdate; 
 }
 
-BOOL Window::IsParentUpdateMode() const
-{
-    return !mpWindowImpl->mbNoParentUpdate;
+BOOL Window::IsParentUpdateMode() const 
+{ 
+    return !mpWindowImpl->mbNoParentUpdate; 
 }
 
-BOOL Window::IsActive() const
-{
-    return mpWindowImpl->mbActive;
+BOOL Window::IsActive() const 
+{ 
+    return mpWindowImpl->mbActive; 
 }
 
-USHORT Window::GetGetFocusFlags() const
-{
-    return mpWindowImpl->mnGetFocusFlags;
+USHORT Window::GetGetFocusFlags() const 
+{ 
+    return mpWindowImpl->mnGetFocusFlags; 
 }
 
-BOOL Window::IsCompoundControl() const
-{
-    return mpWindowImpl->mbCompoundControl;
+BOOL Window::IsCompoundControl() const 
+{ 
+    return mpWindowImpl->mbCompoundControl; 
 }
 
-BOOL Window::HasCompoundControlFocus() const
-{
-    return mpWindowImpl->mbCompoundControlHasFocus;
+BOOL Window::HasCompoundControlFocus() const 
+{ 
+    return mpWindowImpl->mbCompoundControlHasFocus; 
 }
 
-BOOL Window::IsChildPointerOverwrite() const
+BOOL Window::IsChildPointerOverwrite() const 
 {
-    return mpWindowImpl->mbChildPtrOverwrite;
+    return mpWindowImpl->mbChildPtrOverwrite; 
 }
 
-BOOL Window::IsPointerVisible() const
-{
-    return !mpWindowImpl->mbNoPtrVisible;
+BOOL Window::IsPointerVisible() const 
+{ 
+    return !mpWindowImpl->mbNoPtrVisible; 
 }
 
-BOOL Window::IsWait() const
-{
-    return (mpWindowImpl->mnWaitCount != 0);
+BOOL Window::IsWait() const 
+{ 
+    return (mpWindowImpl->mnWaitCount != 0); 
 }
 
-Cursor* Window::GetCursor() const
-{
-    return mpWindowImpl->mpCursor;
+Cursor* Window::GetCursor() const 
+{ 
+    return mpWindowImpl->mpCursor; 
 }
 
-const Fraction& Window::GetZoom() const
-{
-    return mpWindowImpl->maZoom;
+const Fraction& Window::GetZoom() const 
+{ 
+    return mpWindowImpl->maZoom; 
 }
 
-BOOL Window::IsZoom() const
-{
-    return mpWindowImpl->maZoom.GetNumerator() != mpWindowImpl->maZoom.GetDenominator();
+BOOL Window::IsZoom() const 
+{ 
+    return mpWindowImpl->maZoom.GetNumerator() != mpWindowImpl->maZoom.GetDenominator(); 
 }
 
-void Window::SetHelpText( const XubString& rHelpText )
-{
+void Window::SetHelpText( const XubString& rHelpText ) 
+{ 
     mpWindowImpl->maHelpText = rHelpText;
     mpWindowImpl->mbHelpTextDynamic = TRUE;
 }
 
-void Window::SetQuickHelpText( const XubString& rHelpText )
-{
-    mpWindowImpl->maQuickHelpText = rHelpText;
+void Window::SetQuickHelpText( const XubString& rHelpText ) 
+{ 
+    mpWindowImpl->maQuickHelpText = rHelpText; 
 }
 
-const XubString& Window::GetQuickHelpText() const
-{
-    return mpWindowImpl->maQuickHelpText;
+const XubString& Window::GetQuickHelpText() const 
+{ 
+    return mpWindowImpl->maQuickHelpText; 
 }
 
-void Window::SetData( void* pNewData )
-{
-    mpWindowImpl->mpUserData = pNewData;
+void Window::SetData( void* pNewData ) 
+{ 
+    mpWindowImpl->mpUserData = pNewData; 
 }
 
-void* Window::GetData() const
-{
-    return mpWindowImpl->mpUserData;
+void* Window::GetData() const 
+{ 
+    return mpWindowImpl->mpUserData; 
 }
 
-BOOL Window::IsCreatedWithToolkit() const
-{
-    return mpWindowImpl->mbCreatedWithToolkit;
+BOOL Window::IsCreatedWithToolkit() const 
+{ 
+    return mpWindowImpl->mbCreatedWithToolkit; 
 }
 
-void Window::SetCreatedWithToolkit( BOOL b )
-{
-    mpWindowImpl->mbCreatedWithToolkit = b;
+void Window::SetCreatedWithToolkit( BOOL b ) 
+{ 
+    mpWindowImpl->mbCreatedWithToolkit = b; 
 
 }
 const Pointer& Window::GetPointer() const

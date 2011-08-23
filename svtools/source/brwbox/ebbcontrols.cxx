@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,7 +188,7 @@ namespace svt
                         if (nPos >= GetEntryCount())
                             nPos = GetEntryCount() - 1;
                         SelectEntryPos(sal::static_int_cast< USHORT >(nPos));
-                        Select();   // for calling Modify
+                        Select();	// for calling Modify
                         return 1;
                     }
                     else if (GetParent()->PreNotify(rNEvt))
@@ -449,13 +449,13 @@ namespace svt
             {
                 Selection aSel = m_pEditImplementation->GetSelection();
                 bResult = !aSel && aSel.Max() == m_pEditImplementation->GetText( LINEEND_LF ).Len();
-            }   break;
+            }	break;
             case KEY_HOME:
             case KEY_LEFT:
             {
                 Selection aSel = m_pEditImplementation->GetSelection();
                 bResult = !aSel && aSel.Min() == 0;
-            }   break;
+            }	break;
             default:
                 bResult = sal_True;
         }
@@ -506,13 +506,13 @@ namespace svt
             {
                 Selection aSel = GetSpinWindow().GetSelection();
                 bResult = !aSel && aSel.Max() == GetSpinWindow().GetText().Len();
-            }   break;
+            }	break;
             case KEY_HOME:
             case KEY_LEFT:
             {
                 Selection aSel = GetSpinWindow().GetSelection();
                 bResult = !aSel && aSel.Min() == 0;
-            }   break;
+            }	break;
             default:
                 bResult = sal_True;
         }
@@ -622,7 +622,7 @@ namespace svt
     }
 
 // .......................................................................
-}   // namespace svt
+}	// namespace svt
 // .......................................................................
 
 

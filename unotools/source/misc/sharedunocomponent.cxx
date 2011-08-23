@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ namespace utl
         CloseableComponentImpl( const Reference< XInterface >& _rxComponent );
 
         /** closes the component
-
+        
             @nofail
         */
         void    nf_closeComponent();
@@ -194,7 +194,7 @@ namespace utl
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::queryClosing: where did this come from?" );
         throw CloseVetoException();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject&
     #ifdef DBG_UTIL

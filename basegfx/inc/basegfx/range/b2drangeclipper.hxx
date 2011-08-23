@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ namespace basegfx
     namespace tools
     {
         /** Extract poly-polygon w/o self-intersections from poly-range
-
+            
             Similar to the solveCrossovers(const B2DPolyPolygon&)
             method, this one calculates a self-intersection-free
             poly-polygon with the same topology, and encoding
             inside/outsidedness via polygon orientation and layering.
          */
-        B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges,
+        B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges, 
                                        const std::vector<B2VectorOrientation>& rOrientations);
     }
 }

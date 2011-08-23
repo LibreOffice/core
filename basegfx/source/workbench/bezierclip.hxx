@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ struct Point2D
 
 struct Bezier
 {
-    Point2D p0;
-    Point2D p1;
-    Point2D p2;
-    Point2D p3;
+    Point2D	p0;
+    Point2D	p1;
+    Point2D	p2;
+    Point2D	p3;
 
-    Point2D&        operator[]( int i ) { return reinterpret_cast<Point2D*>(this)[i]; }
-    const Point2D&  operator[]( int i ) const { return reinterpret_cast<const Point2D*>(this)[i]; }
+    Point2D& 		operator[]( int i ) { return reinterpret_cast<Point2D*>(this)[i]; }
+    const Point2D& 	operator[]( int i ) const { return reinterpret_cast<const Point2D*>(this)[i]; }
 };
 
 struct FatLine

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ public:
 
     sal_Bool equalTo(staruno::Sequence<sal_Int8> const& rIdentifier) throw()
     {
-        return  rIdentifier.getLength() == sizeof(tunnelId) &&
+        return	rIdentifier.getLength() == sizeof(tunnelId) &&
                 rtl_compareMemory(tunnelId, rIdentifier.getConstArray(), sizeof(tunnelId)) == 0;
     }
 

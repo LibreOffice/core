@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,45 +41,45 @@
 #include "basebmp/bitmapdevice.hxx"
 
 // --------------
-// - SalBitmap  -
+// - SalBitmap	-
 // --------------
 
-struct  BitmapBuffer;
-class   BitmapColor;
-class   BitmapPalette;
-class   AquaSalVirtualDevice;
-class   AquaSalGraphics;
+struct	BitmapBuffer;
+class	BitmapColor;
+class	BitmapPalette;
+class	AquaSalVirtualDevice;
+class	AquaSalGraphics;
 
 class AquaSalBitmap : public SalBitmap
 {
 public:
-    CGContextRef                    mxGraphicContext;
-    mutable CGImageRef              mxCachedImage;
-    BitmapPalette                   maPalette;
-    basebmp::RawMemorySharedArray   maUserBuffer;
-    basebmp::RawMemorySharedArray   maContextBuffer;
-    sal_uInt16                      mnBits;
-    int                             mnWidth;
-    int                             mnHeight;
-    sal_uInt32                      mnBytesPerRow;
+    CGContextRef					mxGraphicContext;
+    mutable CGImageRef				mxCachedImage;
+    BitmapPalette					maPalette;
+    basebmp::RawMemorySharedArray	maUserBuffer;
+    basebmp::RawMemorySharedArray	maContextBuffer;
+    sal_uInt16						mnBits;
+    int								mnWidth;
+    int								mnHeight;
+    sal_uInt32						mnBytesPerRow;
 
 public:
     AquaSalBitmap();
     virtual ~AquaSalBitmap();
-
+    
 public:
-
+       
     // SalBitmap methods
     bool            Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
     bool            Create( const SalBitmap& rSalBmp );
     bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics );
     bool            Create( const SalBitmap& rSalBmp, USHORT nNewBitCount );
-
+    
     void            Destroy();
-
+    
     Size            GetSize() const;
     USHORT          GetBitCount() const;
-
+    
     BitmapBuffer   *AcquireBuffer( bool bReadOnly );
     void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
 
@@ -87,21 +87,21 @@ public:
 
 private:
     // quartz helper
-    bool            CreateContext();
+    bool			CreateContext();
     void            DestroyContext();
-    bool            AllocateUserData();
+    bool			AllocateUserData();
 
-    void            ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
+    void			ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight, 
                                        sal_uInt16 nDestBits, sal_uInt32 nDestBytesPerRow, const BitmapPalette& rDestPalette, sal_uInt8* pDestData,
                                        sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow, const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData );
 
 public:
-    bool            Create( CGLayerRef xLayer, int nBitCount, int nX, int nY, int nWidth, int nHeight, bool bMirrorVert = true );
+    bool			Create( CGLayerRef xLayer, int nBitCount, int nX, int nY, int nWidth, int nHeight, bool bMirrorVert = true );
 
 public:
-    CGImageRef      CreateWithMask( const AquaSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;
-    CGImageRef      CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const;
-    CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const;
+    CGImageRef		CreateWithMask( const AquaSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;
+    CGImageRef		CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const;
+    CGImageRef		CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const;
 };
 
 #endif // _SV_SALBMP_HXX

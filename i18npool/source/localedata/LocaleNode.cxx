@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -258,7 +258,7 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
                 pParameterName);
     }
     // write empty data if error
-    of.writeParameter( pParameterName, aVal);
+    of.writeParameter( pParameterName, aVal); 
     sal_Int32 nLen = aVal.getLength();
     if (nLen < nMinLen)
     {
@@ -293,7 +293,7 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
         ++nError;
         fprintf( stderr, "Error: node %s not found.\n", pNodeName);
         // write empty data if error
-        of.writeParameter( pParameterName, aVal);
+        of.writeParameter( pParameterName, aVal); 
     }
     return aVal;
 }
@@ -493,7 +493,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     if (aDoubleQuoteStart == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
                 "DoubleQuotationStart equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
-    /* TODO: should equalness of single and double quotes be an error? Would
+    /* TODO: should equalness of single and double quotes be an error? Would 
      * need to adapt quite some locales' data. */
     if (aQuoteStart == aDoubleQuoteStart)
         fprintf( stderr, "Warning: %s\n",
@@ -569,7 +569,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         OUString aUsage;
         OUString aType;
         OUString aFormatIndex;
-        //      currNode -> print();
+        //		currNode -> print();
         const Attr *  currNodeAttr = currNode->getAttr();
         //printf ("getLen() = %d\n", currNode->getAttr()->getLength());
 
@@ -651,11 +651,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 // Currency formats should be something like [C]###0;-[C]###0
                 // and not parenthesized [C]###0;([C]###0) if not en_US.
                 case cssi::NumberFormatIndex::CURRENCY_1000INT :
-                case cssi::NumberFormatIndex::CURRENCY_1000INT_RED :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2 :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_RED :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_CCC :
-                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_DASHED :
+                case cssi::NumberFormatIndex::CURRENCY_1000INT_RED :  
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2 :  
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_RED :  
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_CCC :  
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_DASHED :  
                     if (strcmp( of.getLocale(), "en_US") != 0)
                     {
                         OUString aCode( n->getValue());
@@ -1269,10 +1269,10 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         } else {
             for(j = 0; j < nbOfDays[i]; j++) {
                 of.writeAsciiString("\tdayID");
-                of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                of.writeInt(i);	of.writeInt(j);	of.writeAsciiString(",\n");
                 of.writeAsciiString("\tdayDefaultAbbrvName");
-                of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-                of.writeAsciiString("\tdayDefaultFullName");of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                of.writeInt(i);	of.writeInt(j);	of.writeAsciiString(",\n");
+                of.writeAsciiString("\tdayDefaultFullName");of.writeInt(i);	of.writeInt(j);	of.writeAsciiString(",\n");
             }
         }
         if (nbOfMonths[i] == 0) {
@@ -1294,13 +1294,13 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             of.writeInt(i); of.writeAsciiString(",\n");
         } else {
             for(j = 0; j < nbOfEras[i]; j++) {
-                of.writeAsciiString("\teraID"); of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                of.writeAsciiString("\teraID");	of.writeInt(i);	of.writeInt(j);	of.writeAsciiString(",\n");
                 of.writeAsciiString("\teraDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
                 of.writeAsciiString("\teraDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
             }
         }
-        of.writeAsciiString("\tstartDayOfWeek");of.writeInt(i); of.writeAsciiString(",\n");
-        of.writeAsciiString("\tminimalDaysInFirstWeek");of.writeInt(i); of.writeAsciiString(",\n");
+        of.writeAsciiString("\tstartDayOfWeek");of.writeInt(i);	of.writeAsciiString(",\n");
+        of.writeAsciiString("\tminimalDaysInFirstWeek");of.writeInt(i);	of.writeAsciiString(",\n");
     }
 
     of.writeAsciiString("};\n\n");
@@ -1365,7 +1365,7 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
         of.writeParameter("currencySymbol", str, nbOfCurrencies);
         str = calNode -> findNode ("BankSymbol") -> getValue();
         of.writeParameter("bankSymbol", str, nbOfCurrencies);
-        // BankSymbol currently must be ISO 4217. May change later if
+        // BankSymbol currently must be ISO 4217. May change later if 
         // application always uses CurrencyID instead of BankSymbol.
         if (!bLegacy && !isIso4217(str))
             incError( "BankSymbol is not ISO 4217");

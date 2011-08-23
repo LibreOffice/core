@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ public:
       * @param rPassword contains a password, if available (for instance from
       *        a previous try).
       * @param rAccount contains an account, if applicable.
-      * @param bAllowPersistentStoring specifies if the credentials should
+      * @param bAllowPersistentStoring specifies if the credentials should 
       *        be stored in the passowrd container persistently
       * @param bAllowUseSystemCredntials specifies if requesting client is
       *        able to obtain and use system credentials for authentication
@@ -178,7 +178,7 @@ public:
       * @param eAccountType specifies whether an account is applicable and
                modifiable.
       * @param rAccount contains an account, if applicable.
-      * @param bAllowPersistentStoring specifies if the credentials should
+      * @param bAllowPersistentStoring specifies if the credentials should 
       *        be stored in the passowrd container persistently
       * @param bAllowUseSystemCredntials specifies if requesting client is
       *        able to obtain and use system credentials for authentication

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include <stg.hxx>
 
 
-class OLESimpleStorage  : public ::cppu::WeakImplHelper3
+class OLESimpleStorage	: public ::cppu::WeakImplHelper3
     < ::com::sun::star::embed::XOLESimpleStorage
                 , ::com::sun::star::lang::XInitialization
                 , ::com::sun::star::lang::XServiceInfo >
@@ -64,7 +64,7 @@ class OLESimpleStorage  : public ::cppu::WeakImplHelper3
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
     sal_Bool m_bNoTemporaryCopy;
-
+    
     void UpdateOriginal_Impl();
 
     static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream )
@@ -87,7 +87,7 @@ public:
 
 
     //____________________________________________________________________________________________________
-    //  XInitialization
+    //	XInitialization
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
@@ -95,7 +95,7 @@ public:
                 ::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
-    //  XNameContainer
+    //	XNameContainer
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
@@ -133,7 +133,7 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XComponent
+    //	XComponent
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL dispose()
@@ -148,7 +148,7 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XTransactedObject
+    //	XTransactedObject
     //____________________________________________________________________________________________________
 
     virtual void SAL_CALL commit()
@@ -162,7 +162,7 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XClassifiedObject
+    //	XClassifiedObject
     //____________________________________________________________________________________________________
 
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getClassID()
@@ -177,7 +177,7 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
-    //  XServiceInfo
+    //	XServiceInfo
     //____________________________________________________________________________________________________
 
     virtual ::rtl::OUString SAL_CALL getImplementationName()

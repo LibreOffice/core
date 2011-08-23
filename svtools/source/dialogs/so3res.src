@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #include "sores.hxx"
 #define __RSC
 #include "soerr.hxx"
-#define S_MAX   0x7fff
+#define S_MAX	0x7fff
 Resource RID_SO_ERROR_HANDLER
 {
     String ERRCODE_SO_GENERALERROR&S_MAX
@@ -178,9 +178,9 @@ Resource RID_SO_ERROR_HANDLER
         Text [ en-US ] = "The specified file could not be opened." ;
     };
     /*
-    String  & S_MAX
+    String	& S_MAX
     {
-        Text          = "";
+        Text		  = "";
     };
 */
 };

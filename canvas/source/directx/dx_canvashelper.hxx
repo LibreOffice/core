@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ namespace dxcanvas
             Output offset in pixel
          */
         void setTarget( const GraphicsProviderSharedPtr& rTarget,
-                        const ::basegfx::B2ISize&        rOutputOffset );
+                        const ::basegfx::B2ISize& 		 rOutputOffset );
 
 
         // CanvasHelper functionality
@@ -95,131 +95,131 @@ namespace dxcanvas
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
         void clear();
-        void drawPoint( const ::com::sun::star::rendering::XCanvas*     pCanvas,
-                        const ::com::sun::star::geometry::RealPoint2D&  aPoint,
-                        const ::com::sun::star::rendering::ViewState&   viewState,
+        void drawPoint( const ::com::sun::star::rendering::XCanvas* 	pCanvas, 
+                        const ::com::sun::star::geometry::RealPoint2D& 	aPoint, 
+                        const ::com::sun::star::rendering::ViewState& 	viewState, 
                         const ::com::sun::star::rendering::RenderState& renderState );
-        void drawLine( const ::com::sun::star::rendering::XCanvas*      pCanvas,
-                       const ::com::sun::star::geometry::RealPoint2D&   aStartPoint,
-                       const ::com::sun::star::geometry::RealPoint2D&   aEndPoint,
-                       const ::com::sun::star::rendering::ViewState&    viewState,
-                       const ::com::sun::star::rendering::RenderState&  renderState );
-        void drawBezier( const ::com::sun::star::rendering::XCanvas*            pCanvas,
-                         const ::com::sun::star::geometry::RealBezierSegment2D& aBezierSegment,
-                         const ::com::sun::star::geometry::RealPoint2D&         aEndPoint,
-                         const ::com::sun::star::rendering::ViewState&          viewState,
-                         const ::com::sun::star::rendering::RenderState&        renderState );
+        void drawLine( const ::com::sun::star::rendering::XCanvas* 		pCanvas,
+                       const ::com::sun::star::geometry::RealPoint2D& 	aStartPoint,
+                       const ::com::sun::star::geometry::RealPoint2D& 	aEndPoint,
+                       const ::com::sun::star::rendering::ViewState& 	viewState,
+                       const ::com::sun::star::rendering::RenderState& 	renderState	);
+        void drawBezier( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
+                         const ::com::sun::star::geometry::RealBezierSegment2D&	aBezierSegment,
+                         const ::com::sun::star::geometry::RealPoint2D& 		aEndPoint,
+                         const ::com::sun::star::rendering::ViewState& 			viewState,
+                         const ::com::sun::star::rendering::RenderState& 		renderState );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            drawPolyPolygon( const ::com::sun::star::rendering::XCanvas*            pCanvas,
+            drawPolyPolygon( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
                              const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                             const ::com::sun::star::rendering::ViewState&          viewState,
-                             const ::com::sun::star::rendering::RenderState&        renderState );
+                                     ::com::sun::star::rendering::XPolyPolygon2D >&	xPolyPolygon,
+                             const ::com::sun::star::rendering::ViewState& 			viewState,
+                             const ::com::sun::star::rendering::RenderState& 		renderState );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            strokePolyPolygon( const ::com::sun::star::rendering::XCanvas*          pCanvas,
+            strokePolyPolygon( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
                                const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                               const ::com::sun::star::rendering::ViewState&        viewState,
-                               const ::com::sun::star::rendering::RenderState&      renderState,
+                                       ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                               const ::com::sun::star::rendering::ViewState& 		viewState,
+                               const ::com::sun::star::rendering::RenderState& 		renderState,
                                const ::com::sun::star::rendering::StrokeAttributes& strokeAttributes );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            strokeTexturedPolyPolygon( const ::com::sun::star::rendering::XCanvas*          pCanvas,
+            strokeTexturedPolyPolygon( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
                                        const ::com::sun::star::uno::Reference<
-                                               ::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                       const ::com::sun::star::rendering::ViewState&        viewState,
-                                       const ::com::sun::star::rendering::RenderState&      renderState,
+                                               ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                                       const ::com::sun::star::rendering::ViewState& 		viewState,
+                                       const ::com::sun::star::rendering::RenderState& 		renderState,
                                        const ::com::sun::star::uno::Sequence<
-                                               ::com::sun::star::rendering::Texture >&      textures,
+                                               ::com::sun::star::rendering::Texture >& 		textures,
                                        const ::com::sun::star::rendering::StrokeAttributes& strokeAttributes );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            strokeTextureMappedPolyPolygon( const ::com::sun::star::rendering::XCanvas*             pCanvas,
+            strokeTextureMappedPolyPolygon( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
                                             const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                            const ::com::sun::star::rendering::ViewState&           viewState,
-                                            const ::com::sun::star::rendering::RenderState&         renderState,
+                                                    ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                                            const ::com::sun::star::rendering::ViewState& 			viewState,
+                                            const ::com::sun::star::rendering::RenderState& 		renderState,
                                             const ::com::sun::star::uno::Sequence<
-                                                    ::com::sun::star::rendering::Texture >&         textures,
+                                                    ::com::sun::star::rendering::Texture >& 		textures,
                                             const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::geometry::XMapping2D >&       xMapping,
-                                            const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes );
+                                                    ::com::sun::star::geometry::XMapping2D >& 		xMapping,
+                                            const ::com::sun::star::rendering::StrokeAttributes& 	strokeAttributes );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
-            queryStrokeShapes( const ::com::sun::star::rendering::XCanvas*          pCanvas,
+            queryStrokeShapes( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
                                const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                               const ::com::sun::star::rendering::ViewState&        viewState,
-                               const ::com::sun::star::rendering::RenderState&      renderState,
+                                       ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                               const ::com::sun::star::rendering::ViewState& 		viewState,
+                               const ::com::sun::star::rendering::RenderState& 		renderState,
                                const ::com::sun::star::rendering::StrokeAttributes& strokeAttributes );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            fillPolyPolygon( const ::com::sun::star::rendering::XCanvas*            pCanvas,
+            fillPolyPolygon( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
                              const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::rendering::XPolyPolygon2D >&     xPolyPolygon,
-                             const ::com::sun::star::rendering::ViewState&          viewState,
-                             const ::com::sun::star::rendering::RenderState&        renderState );
+                                     ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                             const ::com::sun::star::rendering::ViewState& 			viewState,
+                             const ::com::sun::star::rendering::RenderState& 		renderState );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            fillTexturedPolyPolygon( const ::com::sun::star::rendering::XCanvas*            pCanvas,
+            fillTexturedPolyPolygon( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
                                      const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::rendering::XPolyPolygon2D >&     xPolyPolygon,
-                                     const ::com::sun::star::rendering::ViewState&          viewState,
-                                     const ::com::sun::star::rendering::RenderState&        renderState,
+                                             ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                                     const ::com::sun::star::rendering::ViewState& 			viewState,
+                                     const ::com::sun::star::rendering::RenderState& 		renderState,
                                      const ::com::sun::star::uno::Sequence<
-                                             ::com::sun::star::rendering::Texture >&        textures );
+                                             ::com::sun::star::rendering::Texture >& 		textures );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            fillTextureMappedPolyPolygon( const ::com::sun::star::rendering::XCanvas*           pCanvas,
+            fillTextureMappedPolyPolygon( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
                                           const ::com::sun::star::uno::Reference<
-                                                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                          const ::com::sun::star::rendering::ViewState&         viewState,
-                                          const ::com::sun::star::rendering::RenderState&       renderState,
+                                                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                                          const ::com::sun::star::rendering::ViewState& 		viewState,
+                                          const ::com::sun::star::rendering::RenderState& 		renderState,
                                           const ::com::sun::star::uno::Sequence<
-                                                  ::com::sun::star::rendering::Texture >&       textures,
+                                                  ::com::sun::star::rendering::Texture >& 		textures,
                                           const ::com::sun::star::uno::Reference<
-                                                  ::com::sun::star::geometry::XMapping2D >&         xMapping );
+                                                  ::com::sun::star::geometry::XMapping2D >& 		xMapping );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont > SAL_CALL
-            createFont( const ::com::sun::star::rendering::XCanvas*             pCanvas,
-                        const ::com::sun::star::rendering::FontRequest&         fontRequest,
+            createFont( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
+                        const ::com::sun::star::rendering::FontRequest& 		fontRequest,
                         const ::com::sun::star::uno::Sequence<
-                                ::com::sun::star::beans::PropertyValue >&       extraFontProperties,
-                        const ::com::sun::star::geometry::Matrix2D&             fontMatrix );
+                                ::com::sun::star::beans::PropertyValue >& 		extraFontProperties,
+                        const ::com::sun::star::geometry::Matrix2D& 			fontMatrix );
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::FontInfo >
-            queryAvailableFonts( const ::com::sun::star::rendering::XCanvas*        pCanvas,
-                                 const ::com::sun::star::rendering::FontInfo&       aFilter,
+            queryAvailableFonts( const ::com::sun::star::rendering::XCanvas* 		pCanvas,
+                                 const ::com::sun::star::rendering::FontInfo& 		aFilter,
                                  const ::com::sun::star::uno::Sequence<
-                                         ::com::sun::star::beans::PropertyValue >&  aFontProperties );
+                                         ::com::sun::star::beans::PropertyValue >& 	aFontProperties );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            drawText( const ::com::sun::star::rendering::XCanvas*           pCanvas,
-                      const ::com::sun::star::rendering::StringContext&     text,
+            drawText( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
+                      const ::com::sun::star::rendering::StringContext& 	text,
                       const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::rendering::XCanvasFont >&   xFont,
-                      const ::com::sun::star::rendering::ViewState&         viewState,
-                      const ::com::sun::star::rendering::RenderState&       renderState,
-                      sal_Int8                                              textDirection );
+                              ::com::sun::star::rendering::XCanvasFont >& 	xFont,
+                      const ::com::sun::star::rendering::ViewState& 		viewState,
+                      const ::com::sun::star::rendering::RenderState& 		renderState,
+                      sal_Int8 												textDirection );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            drawTextLayout( const ::com::sun::star::rendering::XCanvas*     pCanvas,
+            drawTextLayout( const ::com::sun::star::rendering::XCanvas* 	pCanvas,
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::rendering::XTextLayout >& layoutetText,
-                            const ::com::sun::star::rendering::ViewState&   viewState,
+                            const ::com::sun::star::rendering::ViewState& 	viewState,
                             const ::com::sun::star::rendering::RenderState& renderState );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            drawBitmap( const ::com::sun::star::rendering::XCanvas*     pCanvas,
+            drawBitmap( const ::com::sun::star::rendering::XCanvas* 	pCanvas,
                         const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::rendering::XBitmap >& xBitmap,
-                        const ::com::sun::star::rendering::ViewState&   viewState,
+                        const ::com::sun::star::rendering::ViewState& 	viewState,
                         const ::com::sun::star::rendering::RenderState& renderState );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            drawBitmapModulated( const ::com::sun::star::rendering::XCanvas*        pCanvas,
+            drawBitmapModulated( const ::com::sun::star::rendering::XCanvas* 		pCanvas,
                                  const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XBitmap >&        xBitmap,
-                                 const ::com::sun::star::rendering::ViewState&      viewState,
-                                 const ::com::sun::star::rendering::RenderState&    renderState );
+                                         ::com::sun::star::rendering::XBitmap >&		xBitmap,
+                                 const ::com::sun::star::rendering::ViewState& 		viewState,
+                                 const ::com::sun::star::rendering::RenderState& 	renderState );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >
             getDevice();
 
         // Flush drawing queue to screen
-        void                    flush() const;
+        void					flush() const;
 
         /** Called from XCanvas base classes, to notify that content
             is _about_ to change
@@ -228,7 +228,7 @@ namespace dxcanvas
 
     protected:
         /// Refcounted global GDI+ state container
-        GDIPlusUserSharedPtr            mpGdiPlusUser;
+        GDIPlusUserSharedPtr			mpGdiPlusUser;
 
         /** Phyical output device
 
@@ -244,13 +244,13 @@ namespace dxcanvas
 
         // returns transparency of color
         void setupGraphicsState( GraphicsSharedPtr&                              rGraphics,
-                                 const ::com::sun::star::rendering::ViewState&   viewState,
+                                 const ::com::sun::star::rendering::ViewState& 	 viewState, 
                                  const ::com::sun::star::rendering::RenderState& renderState );
 
-        Gdiplus::CompositingMode    calcCompositingMode( sal_Int8 nMode );
+        Gdiplus::CompositingMode 	calcCompositingMode( sal_Int8 nMode );
 
         /// Current (transformation-independent) output buffer offset
-        ::basegfx::B2ISize              maOutputOffset;
+        ::basegfx::B2ISize				maOutputOffset;
     };
 }
 

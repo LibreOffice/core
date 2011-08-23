@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ class OInstanceLocker : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::
     OLockListener* m_pLockListener;
 
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
-
+    
     sal_Bool m_bDisposed;
     sal_Bool m_bInitialized;
 
@@ -72,7 +72,7 @@ public:
     static ::rtl::OUString SAL_CALL getImplementationName_static();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        Create(
+        Create( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
 // XComponent
@@ -106,7 +106,7 @@ class OLockListener : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XC
     sal_Int32 m_nMode;
 
 public:
-    OLockListener(  const ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XComponent >& xWrapper,
+    OLockListener(	const ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XComponent >& xWrapper,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInstance,
                     sal_Int32 nMode,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XActionsApproval > xApproval );

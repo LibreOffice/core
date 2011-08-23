@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,24 +28,24 @@
 #ifndef _LISTMACR_HXX
 #define _LISTMACR_HXX
 
-#define DECL_DEST_LIST( TmpListType, ListType, PointerType )    \
-DECLARE_LIST(TmpListType, PointerType)                          \
-class ListType : public TmpListType                             \
-{                                                               \
-public:                                                         \
+#define DECL_DEST_LIST( TmpListType, ListType, PointerType )	\
+DECLARE_LIST(TmpListType, PointerType)							\
+class ListType : public TmpListType								\
+{                                                           	\
+public:															\
     void ClearAndDelete()                                       \
-    {                                                           \
-        while ( Count()) {                                      \
-            PointerType pTmp = GetObject(( ULONG ) 0 );         \
-            delete pTmp;                                        \
-            Remove(( ULONG ) 0 );                               \
-        }                                                       \
-    }                                                           \
-    ~ListType()                                                 \
-    {                                                           \
-        ClearAndDelete();                                       \
-    }                                                           \
-};                                                              \
+    {                                                       	\
+        while ( Count()) {                                  	\
+            PointerType pTmp = GetObject(( ULONG ) 0 );     	\
+            delete pTmp;                                    	\
+            Remove(( ULONG ) 0 );                           	\
+        }                                                   	\
+    }                                                       	\
+    ~ListType()                                             	\
+    {                                                       	\
+        ClearAndDelete();										\
+    }                                                   		\
+};																\
 
 #endif
 

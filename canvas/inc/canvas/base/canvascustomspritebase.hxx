@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,16 +78,16 @@ namespace canvas
         @see CanvasCustomSpriteHelper for further contractual
         requirements towards the SpriteHelper type, and some examples.
      */
-    template< class Base,
-              class SpriteHelper,
-              class CanvasHelper,
-              class Mutex=::osl::MutexGuard,
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class CanvasCustomSpriteBase :
+    template< class Base, 
+              class SpriteHelper, 
+              class CanvasHelper, 
+              class Mutex=::osl::MutexGuard, 
+              class UnambiguousBase=::com::sun::star::uno::XInterface > class CanvasCustomSpriteBase : 
         public IntegerBitmapBase< Base, CanvasHelper, Mutex, UnambiguousBase >
     {
     public:
-        typedef IntegerBitmapBase< Base, CanvasHelper, Mutex, UnambiguousBase > BaseType;
-        typedef SpriteHelper                                                    SpriteHelperType;
+        typedef IntegerBitmapBase< Base, CanvasHelper, Mutex, UnambiguousBase >	BaseType;
+        typedef SpriteHelper													SpriteHelperType;
 
         CanvasCustomSpriteBase() :
             maSpriteHelper()
@@ -123,16 +123,16 @@ namespace canvas
             return BaseType::clear();
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >& xBitmap,
-                        const ::com::sun::star::rendering::ViewState&                                   viewState,
-                        const ::com::sun::star::rendering::RenderState&                                 renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL 	
+            drawBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >& xBitmap, 
+                        const ::com::sun::star::rendering::ViewState& 									viewState, 
+                        const ::com::sun::star::rendering::RenderState& 								renderState ) throw (::com::sun::star::lang::IllegalArgumentException, 
                                                                                                                              ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyArgs(xBitmap, viewState, renderState,
+            tools::verifyArgs(xBitmap, viewState, renderState, 
                               BOOST_CURRENT_FUNCTION,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
-
+        
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.checkDrawBitmap( this, xBitmap, viewState, renderState );
@@ -151,22 +151,22 @@ namespace canvas
         // functionality provided at the baseclass.
 
         // XSprite
-        virtual void SAL_CALL setAlpha( double alpha ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual void SAL_CALL setAlpha( double alpha ) throw (::com::sun::star::lang::IllegalArgumentException, 
                                                               ::com::sun::star::uno::RuntimeException)
         {
             tools::verifyRange( alpha, 0.0, 1.0 );
-
+            
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.setAlpha( this, alpha );
         }
 
-        virtual void SAL_CALL move( const ::com::sun::star::geometry::RealPoint2D&  aNewPos,
-                                    const ::com::sun::star::rendering::ViewState&   viewState,
-                                    const ::com::sun::star::rendering::RenderState& renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual void SAL_CALL move( const ::com::sun::star::geometry::RealPoint2D& 	aNewPos, 
+                                    const ::com::sun::star::rendering::ViewState& 	viewState, 
+                                    const ::com::sun::star::rendering::RenderState& renderState ) throw (::com::sun::star::lang::IllegalArgumentException, 
                                                                                                          ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyArgs(aNewPos, viewState, renderState,
+            tools::verifyArgs(aNewPos, viewState, renderState, 
                               BOOST_CURRENT_FUNCTION,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
@@ -175,10 +175,10 @@ namespace canvas
             maSpriteHelper.move( this, aNewPos, viewState, renderState );
         }
 
-        virtual void SAL_CALL transform( const ::com::sun::star::geometry::AffineMatrix2D& aTransformation ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual void SAL_CALL transform( const ::com::sun::star::geometry::AffineMatrix2D& aTransformation ) throw (::com::sun::star::lang::IllegalArgumentException, 
                                                                                                                     ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyArgs(aTransformation,
+            tools::verifyArgs(aTransformation, 
                               BOOST_CURRENT_FUNCTION,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
@@ -218,7 +218,7 @@ namespace canvas
         }
 
         // XCustomSprite
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > SAL_CALL
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > SAL_CALL 
             getContentCanvas() throw (::com::sun::star::uno::RuntimeException)
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );

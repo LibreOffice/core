@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ halfwidthToFullwidth::halfwidthToFullwidth()
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH";
 }
 
-OUString SAL_CALL
+OUString SAL_CALL 
 halfwidthToFullwidth::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
@@ -65,7 +65,7 @@ halfwidthToFullwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode SAL_CALL 
 halfwidthToFullwidth::transliterateChar2Char( sal_Unicode inChar)
   throw(RuntimeException, MultipleCharsOutputException)
 {
@@ -81,7 +81,7 @@ halfwidthKatakanaToFullwidthKatakana::halfwidthKatakanaToFullwidthKatakana()
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTHKATAKANA_FULLWIDTHKATAKANA";
 }
 
-OUString SAL_CALL
+OUString SAL_CALL 
 halfwidthKatakanaToFullwidthKatakana::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
@@ -95,7 +95,7 @@ halfwidthKatakanaToFullwidthKatakana::transliterate( const OUString& inStr, sal_
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode SAL_CALL 
 halfwidthKatakanaToFullwidthKatakana::transliterateChar2Char( sal_Unicode inChar)
   throw(RuntimeException, MultipleCharsOutputException)
 {
@@ -111,7 +111,7 @@ halfwidthToFullwidthLikeJIS::halfwidthToFullwidthLikeJIS()
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH_LIKE_JIS";
 }
 
-OUString SAL_CALL
+OUString SAL_CALL 
 halfwidthToFullwidthLikeJIS::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
@@ -125,7 +125,7 @@ halfwidthToFullwidthLikeJIS::transliterate( const OUString& inStr, sal_Int32 sta
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset, WIDTHFOLDNIG_DONT_USE_COMBINED_VU );
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode SAL_CALL 
 halfwidthToFullwidthLikeJIS::transliterateChar2Char( sal_Unicode inChar)
   throw(RuntimeException, MultipleCharsOutputException)
 {

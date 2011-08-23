@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,6 @@
  ************************************************************************/
 #define nullcurs_width 4
 #define nullcurs_height 4
-#define nullcurs_x_hot 2
+#define nullcurs_x_hot 2 
 #define nullcurs_y_hot 2
 static char nullcurs_bits[] = { 0x00, 0x00 };

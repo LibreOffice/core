@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,33 +45,33 @@ class SVT_DLLPUBLIC SvtURLBox : public ComboBox
 {
 friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
-    Link                            aOpenHdl;
-    String                          aBaseURL;
-    String                          aPlaceHolder;
-    SvtMatchContext_Impl*           pCtx;
-    SvtURLBox_Impl*                 pImp;
-    INetProtocol                    eSmartProtocol;
-    BOOL                            bAutoCompleteMode   : 1;
-    BOOL                            bOnlyDirectories    : 1;
-    BOOL                            bModified           : 1;
+    Link							aOpenHdl;
+    String							aBaseURL;
+    String							aPlaceHolder;
+    SvtMatchContext_Impl*			pCtx;
+    SvtURLBox_Impl*					pImp;
+    INetProtocol					eSmartProtocol;
+    BOOL            				bAutoCompleteMode   : 1;
+    BOOL							bOnlyDirectories    : 1;
+    BOOL							bModified           : 1;
     BOOL                            bTryAutoComplete    : 1;
-    BOOL                            bCtrlClick          : 1;
-    BOOL                            bHistoryDisabled    : 1;
-    BOOL                            bNoSelection        : 1;
+    BOOL							bCtrlClick          : 1;
+    BOOL							bHistoryDisabled    : 1;
+    BOOL							bNoSelection        : 1;
     BOOL                            bIsAutoCompleteEnabled : 1;
 
-    SVT_DLLPRIVATE BOOL                         ProcessKey( const KeyCode& rCode );
-    SVT_DLLPRIVATE void                         TryAutoComplete( BOOL bForce );
+    SVT_DLLPRIVATE BOOL            				ProcessKey( const KeyCode& rCode );
+    SVT_DLLPRIVATE void            				TryAutoComplete( BOOL bForce );
     SVT_DLLPRIVATE void                            UpdatePicklistForSmartProtocol_Impl();
     DECL_DLLPRIVATE_LINK(                      AutoCompleteHdl_Impl, void* );
     using Window::ImplInit;
     SVT_DLLPRIVATE void                            ImplInit();
 
 protected:
-    virtual long                    Notify( NotifyEvent& rNEvt );
-    virtual void                    Select();
-    virtual void                    Modify();
-    virtual long                    PreNotify( NotifyEvent& rNEvt );
+    virtual long					Notify( NotifyEvent& rNEvt );
+    virtual void					Select();
+    virtual void					Modify();
+    virtual long					PreNotify( NotifyEvent& rNEvt );
 
 public:
                                     SvtURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID );
@@ -79,24 +79,24 @@ public:
                                     SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart = INET_PROT_NOT_VALID );
                                     ~SvtURLBox();
 
-    void                            SetBaseURL( const String& rURL );
-    const String&                   GetBaseURL() const { return aBaseURL; }
-    void                            SetOpenHdl( const Link& rLink ) { aOpenHdl = rLink; }
-    const Link&                     GetOpenHdl() const { return aOpenHdl; }
-    void                            SetOnlyDirectories( BOOL bDir = TRUE );
-    void                            SetNoURLSelection( BOOL bSet = TRUE );
-    INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
+    void							SetBaseURL( const String& rURL );
+    const String&					GetBaseURL() const { return aBaseURL; }
+    void							SetOpenHdl( const Link& rLink ) { aOpenHdl = rLink; }
+    const Link& 					GetOpenHdl() const { return aOpenHdl; }
+    void							SetOnlyDirectories( BOOL bDir = TRUE );
+    void							SetNoURLSelection( BOOL bSet = TRUE );
+    INetProtocol					GetSmartProtocol() const { return eSmartProtocol; }
     void                            SetSmartProtocol( INetProtocol eProt );
     BOOL                            IsCtrlOpen()
                                         { return bCtrlClick; }
     String                          GetURL();
-    void                            DisableHistory();
+    void							DisableHistory();
 
-    void                            UpdatePickList( );
+    void							UpdatePickList( );
 
     static String                   ParseSmart( String aText, String aBaseURL, String aWorkDir );
 
-    void                            SetFilter(const String& _sFilter);
+    void							SetFilter(const String& _sFilter);
     void                            SetUrlFilter( const IUrlFilter* _pFilter );
     const IUrlFilter*               GetUrlFilter( ) const;
 

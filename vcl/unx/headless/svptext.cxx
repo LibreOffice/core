@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ SvpGlyphCache& SvpGlyphCache::GetInstance()
 {
     static SvpGlyphPeer aSvpGlyphPeer;
     static SvpGlyphCache aGC( aSvpGlyphPeer );
-    return aGC;
+    return aGC; 
 }
 
 // ===========================================================================
@@ -161,7 +161,7 @@ void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, int /*nGly
     if( rGlyphData.ExtDataRef().mpData != Format::NONE )
     {
         // release the glyph related resources
-        DBG_ASSERT( (rGlyphData.ExtDataRef().meInfo <= Format::MAX), "SVP::RG() invalid alpha format" );
+        DBG_ASSERT( (rGlyphData.ExtDataRef().meInfo <= Format::MAX), "SVP::RG() invalid alpha format" ); 
         SvpGcpHelper* pGcpHelper = (SvpGcpHelper*)rGlyphData.ExtDataRef().mpData;
         delete[] pGcpHelper->maRawBitmap.mpBits;
         delete pGcpHelper;

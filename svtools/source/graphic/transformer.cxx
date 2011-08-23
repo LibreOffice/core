@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_Int32 nColorFrom, sal_Int
 }
 
 // XGraphicTransformer
-uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
+uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange( 
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
         throw ( lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -102,8 +102,8 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
 
     if ( aGraphic.GetType() == GRAPHIC_BITMAP )
     {
-        BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
-        Bitmap      aBitmap( aBitmapEx.GetBitmap() );
+        BitmapEx	aBitmapEx( aGraphic.GetBitmapEx() );
+        Bitmap		aBitmap( aBitmapEx.GetBitmap() );
 
         if ( aBitmapEx.IsAlpha() )
         {

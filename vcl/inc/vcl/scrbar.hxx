@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,19 +78,19 @@ private:
 
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
     using Window::ImplInit;
-    SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void         ImplUpdateRects( BOOL bUpdate = TRUE );
-    SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
-    SAL_DLLPRIVATE long         ImplCalcThumbPosPix( long nPos );
-    SAL_DLLPRIVATE void         ImplCalc( BOOL bUpdate = TRUE );
-    SAL_DLLPRIVATE void         ImplDraw( USHORT nDrawFlags, OutputDevice* pOutDev  );
+    SAL_DLLPRIVATE void			ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void			ImplInitStyle( WinBits nStyle );
+    SAL_DLLPRIVATE void			ImplLoadRes( const ResId& rResId );
+    SAL_DLLPRIVATE void			ImplUpdateRects( BOOL bUpdate = TRUE );
+    SAL_DLLPRIVATE long			ImplCalcThumbPos( long nPixPos );
+    SAL_DLLPRIVATE long			ImplCalcThumbPosPix( long nPos );
+    SAL_DLLPRIVATE void			ImplCalc( BOOL bUpdate = TRUE );
+    SAL_DLLPRIVATE void			ImplDraw( USHORT nDrawFlags, OutputDevice* pOutDev  );
     using Window::ImplScroll;
-    SAL_DLLPRIVATE long         ImplScroll( long nNewPos, BOOL bCallEndScroll );
-    SAL_DLLPRIVATE long         ImplDoAction( BOOL bCallEndScroll );
-    SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, BOOL bCallAction = TRUE );
-    SAL_DLLPRIVATE void         ImplInvert();
+    SAL_DLLPRIVATE long			ImplScroll( long nNewPos, BOOL bCallEndScroll );
+    SAL_DLLPRIVATE long			ImplDoAction( BOOL bCallEndScroll );
+    SAL_DLLPRIVATE void			ImplDoMouseAction( const Point& rPos, BOOL bCallAction = TRUE );
+    SAL_DLLPRIVATE void			ImplInvert();
     SAL_DLLPRIVATE BOOL         ImplDrawNative( USHORT nDrawFlags );
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, Timer* );

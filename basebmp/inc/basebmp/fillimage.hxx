@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@ namespace basebmp
 {
 
 template< class DestIterator, class DestAccessor, typename T >
-void fillImage( DestIterator begin,
-                DestIterator end,
+void fillImage( DestIterator begin, 
+                DestIterator end, 
                 DestAccessor ad,
                 T            fillVal )
 {
@@ -49,9 +49,9 @@ void fillImage( DestIterator begin,
             rowIter( begin.rowIterator() );
         const typename vigra::IteratorTraits<DestIterator>::row_iterator
             rowEnd( rowIter + width );
-
-        // TODO(P2): Provide specialized span fill methods on the
-        // iterator/accessor
+        
+        // TODO(P2): Provide specialized span fill methods on the       
+        // iterator/accessor        
         while( rowIter != rowEnd )
             ad.set(fillVal, rowIter++);
     }

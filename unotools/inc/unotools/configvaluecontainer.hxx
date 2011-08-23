@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@ namespace utl
 {
 //.........................................................................
 
-#define CVC_READONLY_ACCESS     0x0000
-#define CVC_UPDATE_ACCESS       0x0001
+#define CVC_READONLY_ACCESS		0x0000
+#define CVC_UPDATE_ACCESS		0x0001
 
-#define CVC_LAZY_UPDATE         0x0000
-#define CVC_IMMEDIATE_UPDATE    0x0002
+#define CVC_LAZY_UPDATE			0x0000
+#define CVC_IMMEDIATE_UPDATE	0x0002
 
     struct OConfigurationValueContainerImpl;
     struct NodeValueAccessor;
@@ -148,7 +148,7 @@ namespace utl
             @param _rValueType
                 is the type of your accessort. This type must be supported by the configuration.
         */
-        void    registerExchangeLocation(
+        void	registerExchangeLocation(
             const sal_Char* _pRelativePathAscii,
             void* _pContainer,
             const ::com::sun::star::uno::Type& _rValueType
@@ -164,7 +164,7 @@ namespace utl
             @param _pContainer
                 points to the Any you want to hold the value
         */
-        void    registerNullValueExchangeLocation(
+        void	registerNullValueExchangeLocation(
             const sal_Char* _pRelativePathAscii,
             ::com::sun::star::uno::Any* _pContainer
         );
@@ -180,7 +180,7 @@ namespace utl
 
             @see write
         */
-        void    read( );
+        void	read( );
 
         /** updates the configuration data
 
@@ -199,7 +199,7 @@ namespace utl
             @see read
             @see commit
         */
-        void    write( sal_Bool _bCommit = sal_True );
+        void	write( sal_Bool _bCommit = sal_True );
 
         /** commits any changes done
 
@@ -214,7 +214,7 @@ namespace utl
                 If <FALSE/>, only the current values in the config nodes (as present since the last call to
                 <method>write</method>) are committed.
         */
-        void    commit( sal_Bool _bWrite = sal_True );
+        void	commit( sal_Bool _bWrite = sal_True );
 
     private:
         /// implements the ctors
@@ -225,11 +225,11 @@ namespace utl
         );
 
         /// registers a value container
-        void    implRegisterExchangeLocation( const NodeValueAccessor& _rAccessor );
+        void	implRegisterExchangeLocation( const NodeValueAccessor& _rAccessor );
     };
 
 //.........................................................................
-}   // namespace utl
+}	// namespace utl
 //.........................................................................
 
 #endif // UNOTOOLS_CONFIGVALUECONTAINER_HXX

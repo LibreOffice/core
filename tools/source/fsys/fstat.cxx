@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@
 *************************************************************************/
 
 FileStat::FileStat()
-:   // don't use Default-Ctors!
+:	// don't use Default-Ctors!
     aDateCreated( ULONG(0) ),
     aTimeCreated( ULONG(0) ),
     aDateModified( ULONG(0) ),
@@ -78,7 +78,7 @@ FileStat::FileStat()
 *************************************************************************/
 
 FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
-:   // don't use Default-Ctors!
+:	// don't use Default-Ctors!
     aDateCreated( ULONG(0) ),
     aTimeCreated( ULONG(0) ),
     aDateModified( ULONG(0) ),
@@ -287,7 +287,7 @@ ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO )
 |*
 |*    FileStat::SetDateTime
 |*
-|*    Ersterstellung    PB  27.06.97
+|*    Ersterstellung	PB  27.06.97
 |*    Letzte Aenderung
 |*
 *************************************************************************/
@@ -319,28 +319,28 @@ void FileStat::SetDateTime( const String& rFileName,
 
         if ( nDiff > 0 )
         {
-            aNewTime += aDiff;                  // Stundenkorrektur
+            aNewTime += aDiff;					// Stundenkorrektur
 
             // bei "Uberlauf korrigieren
             if ( aNewTime >= Time( 24, 0 ) )
                 aNewTime -= Time( 24, 0 );
 
             // Tages"uberlauf?
-            if ( aOldTime == Time( 0, 0 ) ||    // 00:00 -> 01:00
-                 aNewTime < aOldTime )          // 23:00 -> 00:00 | 01:00 ...
+            if ( aOldTime == Time( 0, 0 ) ||	// 00:00 -> 01:00
+                 aNewTime < aOldTime ) 			// 23:00 -> 00:00 | 01:00 ...
                 aNewDate++;
         }
         else if ( nDiff < 0 )
         {
-            aNewTime -= aDiff;                  // Stundenkorrektur
+            aNewTime -= aDiff;					// Stundenkorrektur
 
             // negative Zeit (-1:00) korrigieren: 23:00
             if (aNewTime < Time( 0, 0 ) )
                 aNewTime += Time( 24, 0 );
 
             // Tagesunterlauf ?
-            if ( aOldTime == Time( 0, 0 ) ||    // 00:00 -> 23:00
-                 aNewTime > aOldTime )          // 01:00 -> 23:00 | 22:00 ...
+            if ( aOldTime == Time( 0, 0 ) ||	// 00:00 -> 23:00
+                 aNewTime > aOldTime )			// 01:00 -> 23:00 | 22:00 ...
                 aNewDate--;
         }
     }
@@ -371,10 +371,10 @@ void FileStat::SetDateTime( const String& rFileName,
     // open file
     ULONG nAction = FILE_EXISTED;
     HFILE hFile = 0;
-    ULONG nFlags = OPEN_FLAGS_WRITE_THROUGH |
-                   OPEN_FLAGS_FAIL_ON_ERROR | OPEN_FLAGS_NO_CACHE   |
-                   OPEN_FLAGS_RANDOM        | OPEN_FLAGS_NOINHERIT  |
-                   OPEN_SHARE_DENYNONE      | OPEN_ACCESS_READWRITE;
+    ULONG nFlags = OPEN_FLAGS_WRITE_THROUGH	|
+                   OPEN_FLAGS_FAIL_ON_ERROR	| OPEN_FLAGS_NO_CACHE	|
+                   OPEN_FLAGS_RANDOM		| OPEN_FLAGS_NOINHERIT	|
+                   OPEN_SHARE_DENYNONE		| OPEN_ACCESS_READWRITE;
 
     APIRET nRet = DosOpen((PSZ)aFileName.GetBuffer(), &hFile, (PULONG)&nAction,
                           0/*size*/, FILE_NORMAL,

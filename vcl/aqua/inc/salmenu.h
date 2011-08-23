@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public: // for OOStatusView
     };
 private:
     std::vector< MenuBarButtonEntry >   maButtons;
-
+    
     MenuBarButtonEntry* findButtonItem( USHORT i_nItemId );
     void releaseButtonEntry( MenuBarButtonEntry& i_rEntry );
     static void statusLayout();
@@ -85,14 +85,14 @@ public:
 
     int getItemIndexByPos( USHORT nPos ) const;
     const AquaSalFrame* getFrame() const;
-
+    
     void setMainMenu();
     static void unsetMainMenu();
     static void setDefaultMenu();
     static void enableMainMenu( bool bEnable );
     static void addFallbackMenuItem( NSMenuItem* NewItem );
     static void removeFallbackMenuItem( NSMenuItem* pOldItem );
-
+    
     const std::vector< MenuBarButtonEntry >& getButtons() const { return maButtons; }
 
     bool                    mbMenuBar;          // true - Menubar, false - Menu
@@ -100,9 +100,9 @@ public:
     Menu*                   mpVCLMenu;          // the corresponding vcl Menu object
     const AquaSalFrame*     mpFrame;            // the frame to dispatch the menu events to
     AquaSalMenu*            mpParentSalMenu;    // the parent menu that contains us (and perhaps has a frame)
-
+    
     static const AquaSalMenu* pCurrentMenuBar;
-
+    
 };
 
 class AquaSalMenuItem : public SalMenuItem

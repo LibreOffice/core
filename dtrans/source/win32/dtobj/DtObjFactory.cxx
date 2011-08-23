@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,6 +69,6 @@ Reference< XTransferable > SAL_CALL CDTransObjFactory::createTransferableFromDat
     pTransf->initFlavorList();
     pTransf->release();
 
-    return refDOTransf;
+    return refDOTransf;	
 }
 

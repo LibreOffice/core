@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,7 +121,7 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( st
 
 #ifdef DBG_UTIL
     m_pFile->getPos(nCurrentPos);
-//  volatile int dummy = 0;                      // to take a look at last changes ;-)
+//  volatile int dummy = 0;						 // to take a look at last changes ;-)
 #endif
 }
 

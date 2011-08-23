@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ TYPEINIT1(SfxItemSetHint, SfxHint);
 
 SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Dieser Ctor "ubernimmt das als Parameter "ubergeben <SfxItemSet>,
     das im Dtor gel"oscht wird.
 */
 
-:   _pItemSet( pItemSet )
+:	_pItemSet( pItemSet )
 {
 }
 
@@ -56,12 +56,12 @@ SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
 
 SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Dieser Ctor kopiert das als Parameter "ubergeben <SfxItemSet>.
 */
 
-:   _pItemSet( rItemSet.Clone() )
+:	_pItemSet( rItemSet.Clone() )
 {
 }
 

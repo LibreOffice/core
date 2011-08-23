@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,11 +51,11 @@ DBG_NAME( Container )
 
 /*************************************************************************
 |*
-|*    DbgCheckCBlock()
+|*	  DbgCheckCBlock()
 |*
-|*    Beschreibung      Pruefung eines CBlock fuer Debug-Utilities
-|*    Ersterstellung    MI 30.01.92
-|*    Letzte Aenderung  TH 24.01.96
+|*	  Beschreibung		Pruefung eines CBlock fuer Debug-Utilities
+|*	  Ersterstellung	MI 30.01.92
+|*	  Letzte Aenderung	TH 24.01.96
 |*
 *************************************************************************/
 
@@ -76,11 +76,11 @@ const char* CBlock::DbgCheckCBlock( const void* pBlock )
 
 /*************************************************************************
 |*
-|*    CBlock::CBlock()
+|*	  CBlock::CBlock()
 |*
-|*    Beschreibung      Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Construktor des Verwaltungsblocks
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -88,10 +88,10 @@ CBlock::CBlock( USHORT nInitSize, CBlock* _pPrev, CBlock* _pNext )
 {
     DBG_CTOR( CBlock, DbgCheckCBlock );
 
-    pPrev   = _pPrev;
-    pNext   = _pNext;
-    nSize   = nInitSize;
-    nCount  = 0;
+    pPrev	= _pPrev;
+    pNext	= _pNext;
+    nSize	= nInitSize;
+    nCount	= 0;
 
     // Datenpuffer anlegen
     pNodes = new PVOID[nSize];
@@ -99,11 +99,11 @@ CBlock::CBlock( USHORT nInitSize, CBlock* _pPrev, CBlock* _pNext )
 
 /*************************************************************************
 |*
-|*    CBlock::CBlock()
+|*	  CBlock::CBlock()
 |*
-|*    Beschreibung      Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Construktor des Verwaltungsblocks
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -112,10 +112,10 @@ CBlock::CBlock( USHORT _nSize, CBlock* _pPrev )
     DBG_CTOR( CBlock, DbgCheckCBlock );
     DBG_ASSERT( _nSize, "CBlock::CBlock(): nSize == 0" );
 
-    pPrev   = _pPrev;
-    pNext   = NULL;
-    nSize   = _nSize;
-    nCount  = _nSize;
+    pPrev	= _pPrev;
+    pNext	= NULL;
+    nSize	= _nSize;
+    nCount	= _nSize;
 
     // Datenpuffer anlegen und initialisieren
     pNodes = new PVOID[nSize];
@@ -124,11 +124,11 @@ CBlock::CBlock( USHORT _nSize, CBlock* _pPrev )
 
 /*************************************************************************
 |*
-|*    CBlock::CBlock()
+|*	  CBlock::CBlock()
 |*
-|*    Beschreibung      Copy-Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Copy-Construktor des Verwaltungsblocks
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -137,10 +137,10 @@ CBlock::CBlock( const CBlock& r, CBlock* _pPrev )
     DBG_CTOR( CBlock, DbgCheckCBlock );
     DBG_CHKOBJ( &r, CBlock, DbgCheckCBlock );
 
-    pPrev   = _pPrev;
-    pNext   = NULL;
-    nSize   = r.nSize;
-    nCount  = r.nCount;
+    pPrev	= _pPrev;
+    pNext	= NULL;
+    nSize	= r.nSize;
+    nCount	= r.nCount;
 
     // Datenpuffer anlegen und Daten kopieren
     pNodes = new PVOID[nSize];
@@ -149,11 +149,11 @@ CBlock::CBlock( const CBlock& r, CBlock* _pPrev )
 
 /*************************************************************************
 |*
-|*    CBlock::~CBlock()
+|*	  CBlock::~CBlock()
 |*
-|*    Beschreibung      Destruktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Destruktor des Verwaltungsblocks
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -167,11 +167,11 @@ inline CBlock::~CBlock()
 
 /*************************************************************************
 |*
-|*    CBlock::Insert()
+|*	  CBlock::Insert()
 |*
-|*    Beschreibung      Fuegt einen Pointer ein
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Fuegt einen Pointer ein
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -223,11 +223,11 @@ void CBlock::Insert( void* p, USHORT nIndex, USHORT nReSize )
 
 /*************************************************************************
 |*
-|*    CBlock::Split()
+|*	  CBlock::Split()
 |*
-|*    Beschreibung      Fuegt einen Pointer ein und splittet den Block
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Fuegt einen Pointer ein und splittet den Block
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -235,8 +235,8 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
 {
     DBG_CHKTHIS( CBlock, DbgCheckCBlock );
 
-    USHORT  nNewSize;
-    USHORT  nMiddle;
+    USHORT	nNewSize;
+    USHORT	nMiddle;
     CBlock* pNewBlock;
 
     nMiddle = nCount/2;
@@ -360,11 +360,11 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
 
 /*************************************************************************
 |*
-|*    CBlock::Remove()
+|*	  CBlock::Remove()
 |*
-|*    Beschreibung      Entfernt einen Pointer
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Entfernt einen Pointer
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -419,11 +419,11 @@ void* CBlock::Remove( USHORT nIndex, USHORT nReSize )
 
 /*************************************************************************
 |*
-|*    CBlock::Replace()
+|*	  CBlock::Replace()
 |*
-|*    Beschreibung      Ersetzt einen Pointer
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Ersetzt einen Pointer
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -439,12 +439,12 @@ inline void* CBlock::Replace( void* p, USHORT nIndex )
 
 /*************************************************************************
 |*
-|*    CBlock::GetObjectPtr()
+|*	  CBlock::GetObjectPtr()
 |*
-|*    Beschreibung      Gibt einen Pointer auf den Pointer aus dem Block
-|*                      zurueck
-|*    Ersterstellung    TH 26.01.93
-|*    Letzte Aenderung  TH 26.01.93
+|*	  Beschreibung		Gibt einen Pointer auf den Pointer aus dem Block
+|*						zurueck
+|*	  Ersterstellung	TH 26.01.93
+|*	  Letzte Aenderung	TH 26.01.93
 |*
 *************************************************************************/
 
@@ -457,11 +457,11 @@ inline void** CBlock::GetObjectPtr( USHORT nIndex )
 
 /*************************************************************************
 |*
-|*    CBlock::SetSize()
+|*	  CBlock::SetSize()
 |*
-|*    Beschreibung      Aendert die Groesse des Blocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Aendert die Groesse des Blocks
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -499,11 +499,11 @@ void CBlock::SetSize( USHORT nNewSize )
 
 /*************************************************************************
 |*
-|*    DbgCheckContainer()
+|*	  DbgCheckContainer()
 |*
-|*    Beschreibung      Pruefung eines Container fuer Debug-Utilities
-|*    Ersterstellung    MI 30.01.92
-|*    Letzte Aenderung  TH 24.01.96
+|*	  Beschreibung		Pruefung eines Container fuer Debug-Utilities
+|*	  Ersterstellung	MI 30.01.92
+|*	  Letzte Aenderung	TH 24.01.96
 |*
 *************************************************************************/
 
@@ -521,18 +521,18 @@ const char* Container::DbgCheckContainer( const void* pCont )
 
 /*************************************************************************
 |*
-|*    ImpCopyContainer()
+|*	  ImpCopyContainer()
 |*
-|*    Beschreibung      Kopiert alle Daten des Containers
-|*    Ersterstellung    TH 24.01.96
-|*    Letzte Aenderung  TH 24.01.96
+|*	  Beschreibung		Kopiert alle Daten des Containers
+|*	  Ersterstellung	TH 24.01.96
+|*	  Letzte Aenderung	TH 24.01.96
 |*
 *************************************************************************/
 
 void Container::ImpCopyContainer( const Container* pCont2 )
 {
     // Werte vom uebergebenen Container uebernehmen
-    nCount     = pCont2->nCount;
+    nCount	   = pCont2->nCount;
     nCurIndex  = pCont2->nCurIndex;
     nInitSize  = pCont2->nInitSize;
     nReSize    = pCont2->nReSize;
@@ -574,18 +574,18 @@ void Container::ImpCopyContainer( const Container* pCont2 )
     else
     {
         pFirstBlock = NULL;
-        pLastBlock  = NULL;
-        pCurBlock   = NULL;
+        pLastBlock	= NULL;
+        pCurBlock	= NULL;
     }
 }
 
 /*************************************************************************
 |*
-|*    Container::Container()
+|*	  Container::Container()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -638,19 +638,19 @@ Container::Container( USHORT _nBlockSize, USHORT _nInitSize, USHORT _nReSize )
 
     // Werte initialisieren
     pFirstBlock = NULL;
-    pLastBlock  = NULL;
-    pCurBlock   = NULL;
-    nCount      = 0;
-    nCurIndex   = 0;
+    pLastBlock	= NULL;
+    pCurBlock	= NULL;
+    nCount		= 0;
+    nCurIndex	= 0;
 }
 
 /*************************************************************************
 |*
-|*    Container::Container()
+|*	  Container::Container()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -658,7 +658,7 @@ Container::Container( ULONG nSize )
 {
     DBG_CTOR( Container, DbgCheckContainer );
 
-    nCount     = nSize;
+    nCount	   = nSize;
     nCurIndex  = 0;
     nBlockSize = CONTAINER_MAXBLOCKSIZE;
     nInitSize  = 1;
@@ -667,8 +667,8 @@ Container::Container( ULONG nSize )
     if ( !nSize )
     {
         pFirstBlock = NULL;
-        pLastBlock  = NULL;
-        pCurBlock   = NULL;
+        pLastBlock	= NULL;
+        pCurBlock	= NULL;
     }
     else
     {
@@ -706,11 +706,11 @@ Container::Container( ULONG nSize )
 
 /*************************************************************************
 |*
-|*    Container::Container()
+|*	  Container::Container()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -724,11 +724,11 @@ Container::Container( const Container& r )
 
 /*************************************************************************
 |*
-|*    Container::~Container()
+|*	  Container::~Container()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -748,11 +748,11 @@ Container::~Container()
 
 /*************************************************************************
 |*
-|*    Container::ImpInsert()
+|*	  Container::ImpInsert()
 |*
-|*    Beschreibung      Interne Methode zum Einfuegen eines Pointers
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  DV 01.07.97
+|*	  Beschreibung		Interne Methode zum Einfuegen eines Pointers
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	DV 01.07.97
 |*
 *************************************************************************/
 
@@ -765,8 +765,8 @@ void Container::ImpInsert( void* p, CBlock* pBlock, USHORT nIndex )
         if ( !pBlock )
         {
             pFirstBlock = new CBlock( nInitSize, NULL, NULL );
-            pLastBlock  = pFirstBlock;
-            pCurBlock   = pFirstBlock;
+            pLastBlock	= pFirstBlock;
+            pCurBlock	= pFirstBlock;
         }
         pFirstBlock->Insert( p, nIndex, nReSize );
     }
@@ -833,11 +833,11 @@ void Container::ImpInsert( void* p, CBlock* pBlock, USHORT nIndex )
 
 /*************************************************************************
 |*
-|*    Container::Insert()
+|*	  Container::Insert()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -848,11 +848,11 @@ void Container::Insert( void* p )
 
 /*************************************************************************
 |*
-|*    Container::Insert()
+|*	  Container::Insert()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -872,7 +872,7 @@ void Container::Insert( void* p, ULONG nIndex )
         while ( pTemp->Count() < nIndex )
         {
             nIndex -= pTemp->Count();
-            pTemp   = pTemp->GetNextBlock();
+            pTemp	= pTemp->GetNextBlock();
         }
 
         ImpInsert( p, pTemp, (USHORT)nIndex );
@@ -881,11 +881,11 @@ void Container::Insert( void* p, ULONG nIndex )
 
 /*************************************************************************
 |*
-|*    Container::Insert()
+|*	  Container::Insert()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -898,11 +898,11 @@ void Container::Insert( void* pNew, void* pOld )
 
 /*************************************************************************
 |*
-|*    Container::ImpRemove()
+|*	  Container::ImpRemove()
 |*
-|*    Beschreibung      Interne Methode zum Entfernen eines Pointers
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		Interne Methode zum Entfernen eines Pointers
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -975,11 +975,11 @@ void* Container::ImpRemove( CBlock* pBlock, USHORT nIndex )
 
 /*************************************************************************
 |*
-|*    Container::Remove()
+|*	  Container::Remove()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -994,11 +994,11 @@ void* Container::Remove()
 
 /*************************************************************************
 |*
-|*    Container::Remove()
+|*	  Container::Remove()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1014,7 +1014,7 @@ void* Container::Remove( ULONG nIndex )
         while ( pTemp->Count() <= nIndex )
         {
             nIndex -= pTemp->Count();
-            pTemp   = pTemp->GetNextBlock();
+            pTemp	= pTemp->GetNextBlock();
         }
 
         return ImpRemove( pTemp, (USHORT)nIndex );
@@ -1023,11 +1023,11 @@ void* Container::Remove( ULONG nIndex )
 
 /*************************************************************************
 |*
-|*    Container::Replace()
+|*	  Container::Replace()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1043,11 +1043,11 @@ void* Container::Replace( void* p )
 
 /*************************************************************************
 |*
-|*    Container::Replace()
+|*	  Container::Replace()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1065,7 +1065,7 @@ void* Container::Replace( void* p, ULONG nIndex )
         while ( pTemp->Count() <= nIndex )
         {
             nIndex -= pTemp->Count();
-            pTemp   = pTemp->GetNextBlock();
+            pTemp	= pTemp->GetNextBlock();
         }
 
         return pTemp->Replace( p, (USHORT)nIndex );
@@ -1074,11 +1074,11 @@ void* Container::Replace( void* p, ULONG nIndex )
 
 /*************************************************************************
 |*
-|*    Container::SetSize()
+|*	  Container::SetSize()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1092,7 +1092,7 @@ void Container::SetSize( ULONG nNewSize )
         if ( nNewSize != nCount )
         {
             CBlock* pTemp;
-            ULONG   nTemp;
+            ULONG	nTemp;
 
             // Wird verkleinert
             if ( nNewSize < nCount )
@@ -1106,7 +1106,7 @@ void Container::SetSize( ULONG nNewSize )
                 }
 
                 // Alle folgenden Bloecke loeschen
-                BOOL    bLast = FALSE;
+                BOOL	bLast = FALSE;
                 CBlock* pDelNext;
                 CBlock* pDelBlock = pTemp->GetNextBlock();
                 while ( pDelBlock )
@@ -1218,11 +1218,11 @@ void Container::SetSize( ULONG nNewSize )
 
 /*************************************************************************
 |*
-|*    Container::Clear()
+|*	  Container::Clear()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1241,19 +1241,19 @@ void Container::Clear()
 
     // Werte zuruecksetzen
     pFirstBlock = NULL;
-    pLastBlock  = NULL;
-    pCurBlock   = NULL;
-    nCount      = 0;
-    nCurIndex   = 0;
+    pLastBlock	= NULL;
+    pCurBlock	= NULL;
+    nCount		= 0;
+    nCurIndex	= 0;
 }
 
 /*************************************************************************
 |*
-|*    Container::GetCurObject()
+|*	  Container::GetCurObject()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1270,11 +1270,11 @@ void* Container::GetCurObject() const
 
 /*************************************************************************
 |*
-|*    Container::GetCurPos()
+|*	  Container::GetCurPos()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1289,7 +1289,7 @@ ULONG Container::GetCurPos() const
     {
         // Block suchen
         CBlock* pTemp = pFirstBlock;
-        ULONG   nTemp = 0;
+        ULONG	nTemp = 0;
         while ( pTemp != pCurBlock )
         {
             nTemp += pTemp->Count();
@@ -1302,11 +1302,11 @@ ULONG Container::GetCurPos() const
 
 /*************************************************************************
 |*
-|*    Container::GetObjectPtr()
+|*	  Container::GetObjectPtr()
 |*
-|*    Beschreibung      Interne Methode fuer Referenz-Container
-|*    Ersterstellung    TH 26.01.93
-|*    Letzte Aenderung  TH 26.01.93
+|*	  Beschreibung		Interne Methode fuer Referenz-Container
+|*	  Ersterstellung	TH 26.01.93
+|*	  Letzte Aenderung	TH 26.01.93
 |*
 *************************************************************************/
 
@@ -1324,7 +1324,7 @@ void** Container::GetObjectPtr( ULONG nIndex )
         while ( pTemp->Count() <= nIndex )
         {
             nIndex -= pTemp->Count();
-            pTemp   = pTemp->GetNextBlock();
+            pTemp	= pTemp->GetNextBlock();
         }
 
         // Item innerhalb des gefundenen Blocks zurueckgeben
@@ -1334,11 +1334,11 @@ void** Container::GetObjectPtr( ULONG nIndex )
 
 /*************************************************************************
 |*
-|*    Container::GetObject()
+|*	  Container::GetObject()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1356,7 +1356,7 @@ void* Container::GetObject( ULONG nIndex ) const
         while ( pTemp->Count() <= nIndex )
         {
             nIndex -= pTemp->Count();
-            pTemp   = pTemp->GetNextBlock();
+            pTemp	= pTemp->GetNextBlock();
         }
 
         // Item innerhalb des gefundenen Blocks zurueckgeben
@@ -1366,11 +1366,11 @@ void* Container::GetObject( ULONG nIndex ) const
 
 /*************************************************************************
 |*
-|*    Container::GetPos()
+|*	  Container::GetPos()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1378,11 +1378,11 @@ ULONG Container::GetPos( const void* p ) const
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
-    void**  pNodes;
+    void**	pNodes;
     CBlock* pTemp;
-    ULONG   nTemp;
-    USHORT  nBlockCount;
-    USHORT  i;
+    ULONG	nTemp;
+    USHORT	nBlockCount;
+    USHORT	i;
 
     // Block suchen
     pTemp = pFirstBlock;
@@ -1408,11 +1408,11 @@ ULONG Container::GetPos( const void* p ) const
 
 /*************************************************************************
 |*
-|*    Container::GetPos()
+|*	  Container::GetPos()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 14.09.94
-|*    Letzte Aenderung  TH 14.09.94
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 14.09.94
+|*	  Letzte Aenderung	TH 14.09.94
 |*
 *************************************************************************/
 
@@ -1426,13 +1426,13 @@ ULONG Container::GetPos( const void* p, ULONG nStartIndex,
         return CONTAINER_ENTRY_NOTFOUND;
     else
     {
-        void**  pNodes;
-        USHORT  nBlockCount;
-        USHORT  i;
+        void**	pNodes;
+        USHORT	nBlockCount;
+        USHORT	i;
 
         // Block suchen
         CBlock* pTemp = pFirstBlock;
-        ULONG   nTemp = 0;
+        ULONG	nTemp = 0;
         while ( nTemp+pTemp->Count() <= nStartIndex )
         {
             nTemp += pTemp->Count();
@@ -1503,11 +1503,11 @@ ULONG Container::GetPos( const void* p, ULONG nStartIndex,
 
 /*************************************************************************
 |*
-|*    Container::Seek()
+|*	  Container::Seek()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1525,7 +1525,7 @@ void* Container::Seek( ULONG nIndex )
         while ( pTemp->Count() <= nIndex )
         {
             nIndex -= pTemp->Count();
-            pTemp   = pTemp->GetNextBlock();
+            pTemp	= pTemp->GetNextBlock();
         }
 
         // Item innerhalb des gefundenen Blocks zurueckgeben
@@ -1537,11 +1537,11 @@ void* Container::Seek( ULONG nIndex )
 
 /*************************************************************************
 |*
-|*    Container::First()
+|*	  Container::First()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1563,11 +1563,11 @@ void* Container::First()
 
 /*************************************************************************
 |*
-|*    Container::Last()
+|*	  Container::Last()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1589,11 +1589,11 @@ void* Container::Last()
 
 /*************************************************************************
 |*
-|*    Container::Next()
+|*	  Container::Next()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1621,11 +1621,11 @@ void* Container::Next()
 
 /*************************************************************************
 |*
-|*    Container::Prev()
+|*	  Container::Prev()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1653,11 +1653,11 @@ void* Container::Prev()
 
 /*************************************************************************
 |*
-|*    Container::operator =()
+|*	  Container::operator =()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1681,11 +1681,11 @@ Container& Container::operator =( const Container& r )
 
 /*************************************************************************
 |*
-|*    Container::operator ==()
+|*	  Container::operator ==()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
+|*	  Beschreibung		CONTNR.SDW
+|*	  Ersterstellung	TH 17.09.91
+|*	  Letzte Aenderung	TH 17.09.91
 |*
 *************************************************************************/
 

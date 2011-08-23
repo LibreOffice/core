@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,17 +92,17 @@ namespace vcl {
 
 class XIMStatusWindow : public StatusWindow
 {
-    FixedText               m_aStatusText;
-    SalFrame*               m_pLastParent;
-    Size                    m_aWindowSize;
+    FixedText				m_aStatusText;
+    SalFrame*				m_pLastParent;
+    Size					m_aWindowSize;
     bool                    m_bAnchoredAtRight;
         // true if the right edge (instead of the left edge) should stay at a
         // fixed position when re-sizing the window
 
     // for delayed showing
-    bool                    m_bDelayedShow;
-    I18NStatus::ShowReason  m_eDelayedReason;
-    ULONG                   m_nDelayedEvent;
+    bool					m_bDelayedShow;
+    I18NStatus::ShowReason	m_eDelayedReason;
+    ULONG					m_nDelayedEvent;
     // for toggling
     bool                    m_bOn;
 
@@ -207,7 +207,7 @@ Point XIMStatusWindow::updatePosition()
     if( checkLastParent() )
     {
         const SystemEnvData* pParentEnvData = m_pLastParent->GetSystemData();
-
+        
         SalExtTextInputPosEvent aPosEvent;
         m_pLastParent->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
         int x, y;
@@ -318,9 +318,9 @@ namespace vcl {
 
 class IIIMPStatusWindow : public StatusWindow
 {
-    MenuButton              m_aStatusBtn;
-    PopupMenu               m_aMenu;
-    SalFrame*               m_pResetFocus;
+    MenuButton				m_aStatusBtn;
+    PopupMenu				m_aMenu;
+    SalFrame*				m_pResetFocus;
     bool                    m_bShow;
     bool                    m_bOn;
 
@@ -613,7 +613,7 @@ void I18NStatus::setStatusText( const String& rText )
         String aText( pBuffer );
         m_pStatusWindow->setText( aText );
         m_pStatusWindow->setPosition( m_pParent );
-
+        
         bool bVisible = true;
         if( m_pParent )
         {
@@ -624,7 +624,7 @@ void I18NStatus::setStatusText( const String& rText )
                 bVisible = false;
             }
         }
-
+        
         m_pStatusWindow->show( bVisible, contextmap );
     }
 }
@@ -655,8 +655,8 @@ void I18NStatus::clearChoices()
 void I18NStatus::addChoice( const String& rChoice, void* pData )
 {
     ChoiceData aData;
-    aData.pData     = pData;
-    aData.aString   = rChoice;
+    aData.pData		= pData;
+    aData.aString	= rChoice;
     m_aChoices.push_back( aData );
 }
 

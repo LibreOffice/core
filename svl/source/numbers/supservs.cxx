@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::util;
 using namespace ::vos;
 using namespace ::utl;
 
-#define PERSISTENT_SERVICE_NAME     ::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier");
+#define PERSISTENT_SERVICE_NAME		::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier");
 
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -95,7 +95,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
         // maybe you already called a method which needed the formatter
         // you should use XMultiServiceFactory::createInstanceWithArguments to avoid that
     if (m_pOwnFormatter)
-    {   // !!! this is only a emergency handling, normally this should not occur !!!
+    {	// !!! this is only a emergency handling, normally this should not occur !!!
         delete m_pOwnFormatter;
         m_pOwnFormatter = NULL;
         SetNumberFormatter(m_pOwnFormatter);

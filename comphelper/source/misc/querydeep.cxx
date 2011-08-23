@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,8 +59,8 @@ sal_Bool comphelper::isDerivedFrom(
         // now ask in cppu (aka typelib)
         ::typelib_TypeDescription *pBaseTD = 0, *pTD = 0;
 
-        rBaseType.  getDescription(&pBaseTD);
-        rType.      getDescription(&pTD);
+        rBaseType.	getDescription(&pBaseTD);
+        rType.		getDescription(&pTD);
 
         // interfaces are assignable to a base
         bRet = ::typelib_typedescription_isAssignableFrom(pBaseTD, pTD);

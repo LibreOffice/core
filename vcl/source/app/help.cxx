@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,15 +40,15 @@
 
 // =======================================================================
 
-#define HELPWINSTYLE_QUICK      0
-#define HELPWINSTYLE_BALLOON    1
+#define HELPWINSTYLE_QUICK		0
+#define HELPWINSTYLE_BALLOON	1
 
-#define HELPTEXTMARGIN_QUICK    3
-#define HELPTEXTMARGIN_BALLOON  6
+#define HELPTEXTMARGIN_QUICK	3
+#define HELPTEXTMARGIN_BALLOON	6
 
-#define HELPDELAY_NORMAL        1
-#define HELPDELAY_SHORT         2
-#define HELPDELAY_NONE          3
+#define HELPDELAY_NORMAL		1
+#define HELPDELAY_SHORT 		2
+#define HELPDELAY_NONE			3
 
 // =======================================================================
 
@@ -124,8 +124,8 @@ BOOL Help::StartContextHelp()
         Window* pWindow = pSVData->maWinData.mpFocusWin;
         if ( pWindow )
         {
-            Point       aMousePos = pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() );
-            HelpEvent   aHelpEvent( aMousePos, HELPMODE_CONTEXT );
+            Point		aMousePos = pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() );
+            HelpEvent	aHelpEvent( aMousePos, HELPMODE_CONTEXT );
             pWindow->RequestHelp( aHelpEvent );
             return TRUE;
         }
@@ -321,7 +321,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
     mnHelpWinStyle = nHelpWinStyle;
     mnStyle = nStyle;
 //  on windows this will raise the application window, because help windows are system windows now
-//  EnableAlwaysOnTop();
+//	EnableAlwaysOnTop();
     EnableSaveBackground();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -396,9 +396,9 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
     }
     else // HELPWINSTYLE_BALLOON
     {
-        Point       aTmpPoint;
-        USHORT      nCharsInLine = 35 + ((maHelpText.Len()/100)*5);
-        XubString   aXXX;
+        Point		aTmpPoint;
+        USHORT		nCharsInLine = 35 + ((maHelpText.Len()/100)*5);
+        XubString	aXXX;
         aXXX.Fill( nCharsInLine, 'x' );   // Durchschnittliche Breite, damit nicht jedes Fenster anders.
         long nWidth = GetTextWidth( aXXX );
         Size aTmpSize( nWidth, 0x7FFFFFFF );
@@ -634,7 +634,7 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         ULONG nCurTime = Time::GetSystemTicks();
         if( (nCurTime - pSVData->maHelpData.mnLastHelpHideTime) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
             nDelayMode = HELPDELAY_NONE;
-
+        
         DBG_ASSERT( !pHelpWin, "Noch ein HelpWin ?!" );
         pHelpWin = new HelpTextWindow( pParent, rHelpText, nHelpWinStyle, nStyle );
         pSVData->maHelpData.mpHelpWin = pHelpWin;
@@ -642,7 +642,7 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         if ( pHelpArea )
             pHelpWin->SetHelpArea( *pHelpArea );
 
-        //  positioning
+        //	positioning
         Size aSz = pHelpWin->CalcOutSize();
         pHelpWin->SetOutputSizePixel( aSz );
         ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, pHelpArea );
@@ -680,9 +680,9 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
 void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle,
                            const Point& rPos, const Rectangle* pHelpArea )
 {
-    Point       aPos = rPos;
-    Size        aSz = pHelpWin->GetSizePixel();
-    Rectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
+    Point		aPos = rPos;
+    Size		aSz = pHelpWin->GetSizePixel();
+    Rectangle	aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
     aPos = pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( aPos );
     // get mouse screen coords
     Point mPos( pHelpWin->GetParent()->ImplGetFrameWindow()->GetPointerPosPixel() );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KD
 static SalInstance* tryInstance( const OUString& rModuleBase )
 {
     SalInstance* pInst = NULL;
-
+    
     OUStringBuffer aModName( 128 );
     aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
     aModName.append( rModuleBase );
@@ -80,7 +80,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
         {
             pInst = aProc( aMod );
 #if OSL_DEBUG_LEVEL > 1
-            std::fprintf( stderr, "sal plugin %s produced instance %p\n",
+            std::fprintf( stderr, "sal plugin %s produced instance %p\n", 
                      OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr(),
                      pInst );
 #endif
@@ -89,9 +89,9 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                 pCloseModule = aMod;
 
                 /*
-                 * Recent GTK+ versions load their modules with RTLD_LOCAL, so we can
-                 * not access the 'gnome_accessibility_module_shutdown' anymore.
-                 * So make sure libgtk+ & co are still mapped into memory when
+                 * Recent GTK+ versions load their modules with RTLD_LOCAL, so we can 
+                 * not access the 'gnome_accessibility_module_shutdown' anymore. 
+                 * So make sure libgtk+ & co are still mapped into memory when 
                  * atk-bridge's atexit handler gets called.
                  */
                 if( rModuleBase.equalsAscii("gtk") )
@@ -106,7 +106,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                 {
                     pCloseModule = NULL;
                 }
-
+                
                 GetSalData()->m_pPlugin = aMod;
             }
             else
@@ -126,7 +126,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     else
         std::fprintf( stderr, "could not load shared object %s\n",
                  OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
+#endif  
 
     return pInst;
 }
@@ -141,7 +141,7 @@ static const rtl::OUString& get_desktop_environment()
         aModName.appendAscii( SAL_DLLPOSTFIX );
         aModName.appendAscii( SAL_DLLEXTENSION );
         OUString aModule = aModName.makeStringAndClear();
-
+    
         oslModule aMod = osl_loadModuleRelative(
             reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
             SAL_LOADMODULE_DEFAULT );
@@ -163,12 +163,12 @@ static SalInstance* autodetect_plugin()
     {
         "kde4", "kde", "gtk", "gen", 0
     };
-
+    
     static const char* pStandardFallbackList[] =
     {
         "gtk", "gen", 0
     };
-
+    
     static const char* pHeadlessFallbackList[] =
     {
         "svp", 0
@@ -177,7 +177,7 @@ static SalInstance* autodetect_plugin()
     const rtl::OUString& desktop( get_desktop_environment() );
     const char ** pList = pStandardFallbackList;
     int nListEntry = 0;
-
+    
     // no server at all: dummy plugin
     if ( desktop.equalsAscii( desktop_strings[DESKTOP_NONE] ) )
         pList = pHeadlessFallbackList;
@@ -190,12 +190,12 @@ static SalInstance* autodetect_plugin()
     }
     else if( desktop.equalsAscii( desktop_strings[DESKTOP_KDE4] ) )
         pList = pKDEFallbackList;
-
+    
     SalInstance* pInst = NULL;
     while( pList[nListEntry] && pInst == NULL )
     {
-        rtl::OUString aTry( rtl::OUString::createFromAscii( pList[nListEntry] ) );
-        pInst = tryInstance( aTry );
+        rtl::OUString aTry( rtl::OUString::createFromAscii( pList[nListEntry] ) ); 
+        pInst = tryInstance( aTry );        
         #if OSL_DEBUG_LEVEL > 1
         if( pInst )
             std::fprintf( stderr, "plugin autodetection: %s\n", pList[nListEntry] );
@@ -221,7 +221,7 @@ static SalInstance* check_headless_plugin()
 
 SalInstance *CreateSalInstance()
 {
-    SalInstance*    pInst = NULL;
+    SalInstance*	pInst = NULL;
 
     static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
 
@@ -229,13 +229,15 @@ SalInstance *CreateSalInstance()
         pInst = check_headless_plugin();
     else
         pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
-
+    
     if( ! pInst )
         pInst = autodetect_plugin();
+    
+    // fallback, try everything
+    const char* pPlugin[] = { "gtk", "kde", "gen", 0 };
 
-    // fallback to gen
-    if( ! pInst )
-        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "gen" ) ) );
+    for ( int i = 0; !pInst && pPlugin[ i ]; ++i )
+        pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
 
     if( ! pInst )
     {
@@ -245,7 +247,7 @@ SalInstance *CreateSalInstance()
 
     // acquire SolarMutex
     pInst->AcquireYieldMutex( 1 );
-
+    
     return pInst;
 }
 

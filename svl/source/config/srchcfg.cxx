@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,9 +104,9 @@ SvxSearchConfig::SvxSearchConfig(sal_Bool bEnableNotify) :
     pImpl(new SvxSearchConfig_Impl)
 {
     if(bEnableNotify)
-    {
+    {        
         //request notifications from the node
-        Sequence<OUString> aEnable(1);
+        Sequence<OUString> aEnable(1); 
         EnableNotification(aEnable);
     }
     Load();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,8 +107,8 @@ namespace comphelper
     //= OAccessibleExtendedComponentHelper
     //=====================================================================
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleExtendedComponent
-                                >   OAccessibleExtendedComponentHelper_Base;
+    typedef	::cppu::ImplHelper1	<	::com::sun::star::accessibility::XAccessibleExtendedComponent
+                                >	OAccessibleExtendedComponentHelper_Base;
 
     /** a helper class for implementing an AccessibleContext which at the same time
         supports an XAccessibleExtendedComponent interface.
@@ -136,7 +136,7 @@ namespace comphelper
     };
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // COMPHELPER_ACCESSIBLE_COMPONENT_HELPER_HXX

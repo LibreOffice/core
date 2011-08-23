@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -412,7 +412,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       pPreeditData->aInputEv.mnCursorPos = call_data->caret;
       pPreeditData->aInputEv.maText = String (pPreeditData->aText.pUnicodeBuffer,
                                 pPreeditData->aText.nLength);
-    pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
+    pPreeditData->aInputEv.mnCursorFlags 	= 0; // default: make cursor visible
       pPreeditData->aInputEv.mnDeltaStart = 0; // call_data->chg_first;
       pPreeditData->aInputEv.mbOnlyCursor = False;
 
@@ -537,13 +537,13 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
     {
         if( pPreeditData->pFrame )
         {
-            pPreeditData->aInputEv.mnTime           = 0;
-            pPreeditData->aInputEv.mpTextAttr       = 0;
-            pPreeditData->aInputEv.mnCursorPos      = cbtext->length;
-            pPreeditData->aInputEv.maText           = UniString(p_unicode_data, cbtext->length);
-            pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
-            pPreeditData->aInputEv.mnDeltaStart     = 0;
-            pPreeditData->aInputEv.mbOnlyCursor     = False;
+            pPreeditData->aInputEv.mnTime 			= 0;
+            pPreeditData->aInputEv.mpTextAttr 		= 0;
+            pPreeditData->aInputEv.mnCursorPos 		= cbtext->length;
+            pPreeditData->aInputEv.maText 			= UniString(p_unicode_data, cbtext->length);
+            pPreeditData->aInputEv.mnCursorFlags 	= 0; // default: make cursor visible
+            pPreeditData->aInputEv.mnDeltaStart 	= 0;
+            pPreeditData->aInputEv.mbOnlyCursor 	= False;
 
             pPreeditData->pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pPreeditData->aInputEv);
             pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );

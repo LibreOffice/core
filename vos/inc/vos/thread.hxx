@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,11 @@
 #ifndef _VOS_THREAD_HXX_
 #define _VOS_THREAD_HXX_
 
-#   include <vos/types.hxx>
-#   include <vos/object.hxx>
-#   include <osl/thread.h>
-#   include <osl/conditn.h>
-#   include <vos/runnable.hxx>
+#	include <vos/types.hxx>
+#	include <vos/object.hxx>
+#	include <osl/thread.h>
+#	include <osl/conditn.h>
+#	include <vos/runnable.hxx>
 
 #include <osl/time.h>
 
@@ -58,7 +58,7 @@ class OThread : public NAMESPACE_VOS(IRunnable),
 {
 
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OThread, vos));
-
+    
     oslCondition m_aCondition;
 
 public:
@@ -74,22 +74,22 @@ public:
         TPriority_Unknown     = osl_Thread_PriorityUnknown
     };
 
-    /**
+    /** 
     */
-    enum TThreadSleep
-    {
+    enum TThreadSleep 
+    {   
         TSleep_Normal,
         TSleep_Cancel,
         TSleep_Pending,
         TSleep_Active,
         TSleep_Error,
-        TSleep_Unknown
+        TSleep_Unknown	
     };
 
     typedef oslThreadIdentifier TThreadIdentifier;
 
-    /// Constructor
-    OThread();
+    /// Constructor 
+    OThread();              
 
     /// Destructor kills thread if neccessary
     virtual ~OThread();
@@ -124,7 +124,7 @@ public:
     /// Check if thread is running.
     sal_Bool SAL_CALL isRunning();
 
-    /** Change thread priority.
+    /** Change thread priority. 
         The valid priority levels are:
     <ul>
         <li>ThreadPriorityHighest,
@@ -136,7 +136,7 @@ public:
     */
     void SAL_CALL setPriority(TThreadPriority Priority);
 
-    /** Query thread priority.
+    /** Query thread priority. 
         Valid return values are:
     <ul>
         <li>ThreadPriorityHighest,
@@ -158,9 +158,9 @@ public:
     */
     TThreadSleep SAL_CALL sleep(const TimeValue& Delay);
 
-    /** Awake the sleeping thread.
-        @returns False if at least one of the handles is invalid
-        or the thread is not sleeping.
+    /** Awake the sleeping thread. 
+        @returns False if at least one of the handles is invalid 
+        or the thread is not sleeping. 
     */
     sal_Bool SAL_CALL awake();
 
@@ -171,7 +171,7 @@ public:
     */
     static void SAL_CALL wait(const TimeValue& Delay);
 
-    /** Reschedules threads.
+    /** Reschedules threads. 
         Call within your loop if you
         want other threads offer some processing time.
         This method is static, so it might be used by the
@@ -191,7 +191,7 @@ protected:
     */
     virtual sal_Bool SAL_CALL schedule();
 
-    /** Called when run() is done.
+    /** Called when run() is done. 
         You might want to override it to do some cleanup.
     */
     virtual void SAL_CALL onTerminated();
@@ -208,10 +208,10 @@ class OThreadData : public NAMESPACE_VOS(OObject)
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OThreadData, vos));
 
 public:
-    /// Create a thread specific local data key
-    OThreadData( oslThreadKeyCallbackFunction = 0 );
+    /// Create a thread specific local data key 
+    OThreadData( oslThreadKeyCallbackFunction = 0 );              
 
-    /// Destroy a thread specific local data key
+    /// Destroy a thread specific local data key 
     virtual ~OThreadData();
 
     /** Set the data associated with the data key.
@@ -220,7 +220,7 @@ public:
     sal_Bool SAL_CALL setData(void *pData);
 
     /** Get the data associated with the data key.
-        @returns The data asscoitaed with the data key or
+        @returns The data asscoitaed with the data key or 
         NULL if no data was set
     */
     void* SAL_CALL getData();

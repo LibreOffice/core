@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace comphelper
     //************************************************************
     //  OIdPropertyArrayUsageHelper
     //************************************************************
-    template <typename TYPE> struct OIdPropertyArrayUsageHelperMutex
+    template <typename TYPE> struct OIdPropertyArrayUsageHelperMutex 
             : public rtl::Static< ::osl::Mutex, OIdPropertyArrayUsageHelperMutex<TYPE> > {};
 
     typedef std::map< sal_Int32, ::cppu::IPropertyArrayHelper*, std::less< sal_Int32 > > OIdPropertyArrayMap;
@@ -50,8 +50,8 @@ namespace comphelper
     class OIdPropertyArrayUsageHelper
     {
     protected:
-        static sal_Int32                        s_nRefCount;
-        static OIdPropertyArrayMap*             s_pMap;
+        static sal_Int32						s_nRefCount;
+        static OIdPropertyArrayMap*				s_pMap;
 
     public:
         OIdPropertyArrayUsageHelper();
@@ -82,17 +82,17 @@ namespace comphelper
             <BR>
             as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
             assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
-            @return                         an pointer to the newly created array helper. Must not be NULL.
+            @return							an pointer to the newly created array helper. Must not be NULL.
         */
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const = 0;
     };
 
     //------------------------------------------------------------------
     template<class TYPE>
-    sal_Int32                       OIdPropertyArrayUsageHelper< TYPE >::s_nRefCount    = 0;
+    sal_Int32						OIdPropertyArrayUsageHelper< TYPE >::s_nRefCount	= 0;
 
     template<class TYPE>
-    OIdPropertyArrayMap*            OIdPropertyArrayUsageHelper< TYPE >::s_pMap = NULL;
+    OIdPropertyArrayMap*			OIdPropertyArrayUsageHelper< TYPE >::s_pMap	= NULL;
 
     //------------------------------------------------------------------
     template <class TYPE>

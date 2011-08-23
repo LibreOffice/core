@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
         throw uno::RuntimeException();
 
     m_xStorage->copyToStorage( xTempStorage );
-
+    
     uno::Reference< lang::XComponent > xComp( xTempStorage, uno::UNO_QUERY );
     if ( !xComp.is() )
         throw uno::RuntimeException();
@@ -156,7 +156,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
     uno::Any aMediaType;
     if ( rTempStorage->GetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType ) )
         m_rSotStorage->SetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType );
-
+    
     m_rSotStorage->Commit();
 }
 
@@ -185,7 +185,7 @@ void SAL_CALL UNOStorageHolder::disposing( const lang::EventObject& /*Source*/ )
 
     if ( m_rSotStorage.Is() )
         m_rSotStorage = NULL;
-
+    
     if ( m_pParentStorage )
     {
         SotStorage* pTmp = m_pParentStorage;

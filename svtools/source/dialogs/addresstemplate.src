@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "controldims.hrc"
 #endif
 
-#define FIELD_ROW_HEIGHT    17
+#define FIELD_ROW_HEIGHT	17
 
 ModalDialog DLG_ADDRESSBOOKSOURCE
 {
@@ -111,22 +111,22 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Size = MAP_APPFONT ( 288 , 5 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
     };
 
-#define DECLARE_FIELD( row, column )    \
-        FixedText FT_FIELD_BASE + row * 2 + column  \
-        {   \
-            SVLook = TRUE ; \
+#define DECLARE_FIELD( row, column )	\
+        FixedText FT_FIELD_BASE + row * 2 + column	\
+        {	\
+            SVLook = TRUE ;	\
             Pos = MAP_APPFONT ( 3 + column * 134, RSC_SP_CTRL_GROUP_Y + 2 + row * FIELD_ROW_HEIGHT ) ;   \
             Size = MAP_APPFONT ( 79 , 10 ) ; \
-            Group = TRUE;   \
-        };  \
-        ListBox LB_FIELD_BASE + row * 2 + column    \
-        {   \
-            SVLook = TRUE;  \
+            Group = TRUE;	\
+        };	\
+        ListBox LB_FIELD_BASE + row * 2 + column	\
+        {	\
+            SVLook = TRUE;	\
             Pos = MAP_APPFONT ( 89 + column * 134, RSC_SP_CTRL_GROUP_Y + row * FIELD_ROW_HEIGHT ) ;  \
-            Size = MAP_APPFONT ( 42 , 14 ) ;    \
-            Border = TRUE;  \
-            DropDown = TRUE;    \
-            TabStop = TRUE;  \
+            Size = MAP_APPFONT ( 42 , 14 ) ;	\
+            Border = TRUE;	\
+            DropDown = TRUE;	\
+            TabStop = TRUE;	 \
         }
 
 #if FIELD_PAIRS_VISIBLE > 0

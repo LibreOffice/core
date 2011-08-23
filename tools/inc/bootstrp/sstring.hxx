@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,10 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 
-#define NOT_THERE       LIST_ENTRY_NOTFOUND
+#define NOT_THERE		LIST_ENTRY_NOTFOUND
 
-#define  SStringList SUniStringList
-#define  StringList UniStringList
+#define  SStringList SUniStringList 
+#define  StringList UniStringList 
 
 DECLARE_LIST( ByteStringList, ByteString* )
 DECLARE_LIST( UniStringList, UniString* )
@@ -52,17 +52,17 @@ public:
                 ~SByteStringList();
 
                 // neuen ByteString in Liste einfuegen
-    ULONG       PutString( ByteString* );
-    ByteString*     RemoveString( const ByteString& rName );
+    ULONG		PutString( ByteString* );
+    ByteString* 	RemoveString( const ByteString& rName );
 
                 // Position des ByteString in Liste, wenn nicht enthalten, dann
                 // return = NOT_THERE
-    ULONG       IsString( ByteString* );
+    ULONG		IsString( ByteString* );
 
                 // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
                 // Liste enthalten
-    ULONG       GetPrevString( ByteString* );
-    void        CleanUp();
+    ULONG		GetPrevString( ByteString* );
+    void		CleanUp();
 
     SByteStringList& operator<<  ( SvStream& rStream );
     SByteStringList& operator>>  ( SvStream& rStream );
@@ -79,27 +79,27 @@ public:
                 ~SUniStringList();
 
                 // neuen UniString in Liste einfuegen
-    ULONG       PutString( UniString* );
-    UniString*  RemoveString( const UniString& rName );
+    ULONG		PutString( UniString* );
+    UniString* 	RemoveString( const UniString& rName );
 
                 // Position des UniString in Liste, wenn nicht enthalten, dann
                 // return = NOT_THERE
-    ULONG       IsString( UniString* );
+    ULONG		IsString( UniString* );
 
                 // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
                 // Liste enthalten
-    ULONG       GetPrevString( UniString* );
+    ULONG		GetPrevString( UniString* );
 };
 
 class Text
 {
 protected:
-    String      aString;
+    String		aString;
 
 public:
                 Text( char* pChar );
                 Text( String &rStr ) { aString = rStr; }
-    void        Stderr();
+    void		Stderr();
 };
 
 #endif

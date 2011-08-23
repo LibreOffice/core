@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 namespace canvas
 {
     /* Definition of the SpriteSurface interface */
-
+    
     /** Canvas surface containing sprites
 
         Every canvas surface that contains sprites must implement this
@@ -53,20 +53,20 @@ namespace canvas
         virtual void hideSprite( const Sprite::Reference& rSprite ) = 0;
 
         /// Sprites should call this from XSprite::move()
-        virtual void moveSprite( const Sprite::Reference&       rSprite,
-                                 const ::basegfx::B2DPoint&     rOldPos,
-                                 const ::basegfx::B2DPoint&     rNewPos,
-                                 const ::basegfx::B2DVector&    rSpriteSize ) = 0;
+        virtual void moveSprite( const Sprite::Reference&		rSprite, 
+                                 const ::basegfx::B2DPoint& 	rOldPos,
+                                 const ::basegfx::B2DPoint&		rNewPos,
+                                 const ::basegfx::B2DVector& 	rSpriteSize ) = 0;
 
         /** Sprites should call this when some part of the content has
-            changed.
+            changed. 
 
             That includes show/hide, i.e. for show, both showSprite()
             and updateSprite() must be called.
         */
-        virtual void updateSprite( const Sprite::Reference&     rSprite,
-                                   const ::basegfx::B2DPoint&   rPos,
-                                   const ::basegfx::B2DRange&   rUpdateArea ) = 0;
+        virtual void updateSprite( const Sprite::Reference& 	rSprite, 
+                                   const ::basegfx::B2DPoint& 	rPos,
+                                   const ::basegfx::B2DRange&	rUpdateArea ) = 0;
     };
 }
 

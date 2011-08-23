@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,50 +44,50 @@
 class SVT_DLLPUBLIC SvColorDialog : public ModalDialog
 {
 private:
-    ColorMixingControl  maColMixCtrl;
-    PushButton      maBtn1;
-    PushButton      maBtn2;
-    //PushButton        maBtn3;
-    //PushButton        maBtn4;
-    //FixedText     maFtRGB;
-    SvColorControl  maCtlColor;
+    ColorMixingControl	maColMixCtrl;
+    PushButton		maBtn1;
+    PushButton		maBtn2;
+    //PushButton		maBtn3;
+    //PushButton		maBtn4;
+    //FixedText		maFtRGB;
+    SvColorControl	maCtlColor;
 
     // CMYK controls.
-    FixedText       maFtCyan;
-    MetricField     maNumCyan;
-    FixedText       maFtMagenta;
-    MetricField     maNumMagenta;
-    FixedText       maFtYellow;
-    MetricField     maNumYellow;
-    FixedText       maFtKey;
-    MetricField     maNumKey;
+    FixedText		maFtCyan;
+    MetricField		maNumCyan;
+    FixedText		maFtMagenta;
+    MetricField		maNumMagenta;
+    FixedText		maFtYellow;
+    MetricField		maNumYellow;
+    FixedText		maFtKey;
+    MetricField		maNumKey;
 
     // RGB controls.
-    FixedText       maFtRed;
-    NumericField    maNumRed;
-    FixedText       maFtGreen;
-    NumericField    maNumGreen;
-    FixedText       maFtBlue;
-    NumericField    maNumBlue;
+    FixedText		maFtRed;
+    NumericField	maNumRed;
+    FixedText		maFtGreen;
+    NumericField	maNumGreen;
+    FixedText		maFtBlue;
+    NumericField	maNumBlue;
 
     // HSL controls.
-    FixedText       maFtHue;
-    NumericField    maNumHue;
-    FixedText       maFtSaturation;
-    NumericField    maNumSaturation;
-    FixedText       maFtLuminance;
-    NumericField    maNumLuminance;
+    FixedText		maFtHue;
+    NumericField	maNumHue;
+    FixedText		maFtSaturation;
+    NumericField	maNumSaturation;
+    FixedText		maFtLuminance;
+    NumericField	maNumLuminance;
 
-    ColorPreviewControl maCtlPreview;
-    ColorPreviewControl maCtlPreviewOld;
+    ColorPreviewControl	maCtlPreview;
+    ColorPreviewControl	maCtlPreviewOld;
 
-    OKButton        maBtnOK;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
+    OKButton		maBtnOK;
+    CancelButton	maBtnCancel;
+    HelpButton		maBtnHelp;
 
-    Color           maColor;
+    Color			maColor;
 
-    SVT_DLLPRIVATE void         Initialize();
+    SVT_DLLPRIVATE void			Initialize();
 
     DECL_DLLPRIVATE_LINK( ColorModifyHdl, void * );
     DECL_DLLPRIVATE_LINK( ClickBtnHdl, void * );
@@ -98,10 +98,10 @@ public:
                     SvColorDialog( Window* pParent );
                     ~SvColorDialog();
 
-    void            SetColor( const Color& rColor );
-    const Color&    GetColor() const;
+    void			SetColor( const Color& rColor );
+    const Color&	GetColor() const;
 
-    virtual short   Execute();
+    virtual short	Execute();
 };
 
 #endif  // _SV_COLRDLG_HXX

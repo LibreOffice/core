@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,28 +34,28 @@
 #include <toolkit/helper/servicenames.hxx>
 
 
-//  ----------------------------------------------------
-//  class ::com::sun::star::awt::UnoControlContainerModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class ::com::sun::star::awt::UnoControlContainerModel
+//	----------------------------------------------------
 class UnoControlContainerModel : public UnoControlModel
 {
-protected:
-    ::com::sun::star::uno::Any                                                      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   getPropertySetInfo() const;
-    ::cppu::IPropertyArrayHelper&                                                   SAL_CALL getInfoHelper();
+protected:	
+    ::com::sun::star::uno::Any														ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > 	getPropertySetInfo() const;
+    ::cppu::IPropertyArrayHelper&													SAL_CALL getInfoHelper();
 
 public:
                         UnoControlContainerModel();
                         UnoControlContainerModel( const UnoControlContainerModel& rModel ) : UnoControlModel( rModel ) {;}
-
-    UnoControlModel*    Clone() const { return new UnoControlContainerModel( *this ); }
+                        
+    UnoControlModel*	Clone() const { return new UnoControlContainerModel( *this ); }
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
-
+    
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlContainerModel, UnoControlModel, szServiceName2_UnoControlContainerModel )
 };

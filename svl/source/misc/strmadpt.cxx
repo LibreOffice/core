@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -279,7 +279,7 @@ uno::Any SAL_CALL SvLockBytesInputStream::queryInterface(uno::Type const &
 
 //============================================================================
 // virtual
-void SAL_CALL SvLockBytesInputStream::acquire() throw ()
+void SAL_CALL SvLockBytesInputStream::acquire()	throw ()
 {
     OWeakObject::acquire();
 }
@@ -804,10 +804,10 @@ USHORT SvOutputStream::IsA() const
 bool SvDataPipe_Impl::remove(Page * pPage)
 {
     if (
-        pPage != m_pFirstPage ||
+        pPage != m_pFirstPage || 
         m_pReadPage == m_pFirstPage ||
         (
-         !m_aMarks.empty() &&
+         !m_aMarks.empty() && 
          *m_aMarks.begin() < m_pFirstPage->m_nOffset + m_nPageSize
         )
        )

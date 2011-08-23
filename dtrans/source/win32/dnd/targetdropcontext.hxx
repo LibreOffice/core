@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,21 +52,21 @@ public:
     ~TargetDropContext();
 
 
-    // XDropTargetDragContext
-    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation )
+    // XDropTargetDragContext 
+    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation ) 
         throw( RuntimeException);
-    virtual void SAL_CALL rejectDrop(  )
+    virtual void SAL_CALL rejectDrop(  ) 
         throw( RuntimeException);
 
-
-/*  virtual Sequence< DataFlavor > SAL_CALL getCurrentDataFlavors(  )
+    
+/*	virtual Sequence< DataFlavor > SAL_CALL getCurrentDataFlavors(  )
         throw( RuntimeException);
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& df )
+    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& df ) 
         throw( RuntimeException);
 */
 
     // XDropTargetDropContext (inherits XDropTargetDragContext)
-    virtual void SAL_CALL dropComplete( sal_Bool success )
+    virtual void SAL_CALL dropComplete( sal_Bool success ) 
         throw(  RuntimeException);
 };
 #endif
