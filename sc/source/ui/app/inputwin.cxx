@@ -835,8 +835,8 @@ void ScInputBarGroup::Resize()
     }
     SetSizePixel(aSize);
 
-    aButton.SetPosPixel(Point(aSize.Width()-4*LEFT_OFFSET,0));
-    aScrollBar.SetPosPixel(Point(aSize.Width()-2*LEFT_OFFSET,0));
+    aScrollBar.SetPosPixel(Point(aSize.Width()-4*LEFT_OFFSET,0));
+    aButton.SetPosPixel(Point(aSize.Width()-2*LEFT_OFFSET,0));
 
     Invalidate();
     aMultiTextWnd.Resize();
@@ -902,7 +902,7 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, pBtn )
         pParent->SetMultiLineStatus(false);
     }
     pParent->Resize();
-    pParent->CalcWindowSizePixel(); // TODO: changed from RecalcItems(). check if this does the same thing.
+    //pParent->CalcWindowSizePixel(); // TODO: changed from RecalcItems(). check if this does the same thing.
     return 0;
 }
 
@@ -934,8 +934,8 @@ void ScMultiTextWnd::Paint( const Rectangle& rRec )
 {
     // We always use edit engine to draw text at all times.
     if (!pEditEngine)
-        //InitEditEngine(SfxObjectShell::Current());
-        StartEditEngine();
+        InitEditEngine(SfxObjectShell::Current());
+        //StartEditEngine();
 
     if (pEditView)
     {
@@ -979,6 +979,8 @@ void ScMultiTextWnd::Resize()
             pEditView->SetOutputArea(
                 PixelToLogic(Rectangle(aPos1, aPos2)));
 
+           pEditEngine->SetPaperSize( PixelToLogic(Size(aOutputSize.Width() - 2*LEFT_OFFSET, 10000 ) ));
+
         }
 
     }
@@ -998,6 +1000,8 @@ void ScMultiTextWnd::Resize()
 
             pEditView->SetOutputArea(
                 PixelToLogic(Rectangle(aPos1, aPos2)));
+
+            pEditEngine->SetPaperSize( PixelToLogic(Size(aOutputSize.Width() - 2*LEFT_OFFSET, 10000 ) ));
         }
     }
     SetSizePixel(aTextBoxSize);
@@ -1084,9 +1088,9 @@ void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
 
     Size barSize=GetSizePixel();
     barSize.Width() -= (2*nTextStartPos-4);
-    printf("bar size width %ld",barSize.Width());
+    printf("bar size width %ld\n",barSize.Width());
     pEditEngine->SetUpdateMode( false );
-    pEditEngine->SetPaperSize( PixelToLogic(Size(994-4*LEFT_OFFSET,10000)) );
+    pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
     pEditEngine->SetWordDelimiters(
                     ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
 
