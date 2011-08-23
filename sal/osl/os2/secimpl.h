@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <osl/security.h>
 
-#define PASSWD_BUFFER_SIZE 1024     /* recommended, see 'man getpwnam_r' */
+#define PASSWD_BUFFER_SIZE 1024		/* recommended, see 'man getpwnam_r' */
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,6 +47,6 @@ typedef struct _oslSecurityImpl {
 }
 #endif
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

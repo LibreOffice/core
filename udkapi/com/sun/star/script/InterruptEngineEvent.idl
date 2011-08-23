@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,52 +24,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_InterruptEngineEvent_idl__
-#define __com_sun_star_script_InterruptEngineEvent_idl__
-
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-#ifndef __com_sun_star_script_InterruptReason_idl__
-#include <com/sun/star/script/InterruptReason.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module script {
-
-//=============================================================================
+#ifndef __com_sun_star_script_InterruptEngineEvent_idl__ 
+#define __com_sun_star_script_InterruptEngineEvent_idl__ 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_script_InterruptReason_idl__ 
+#include <com/sun/star/script/InterruptReason.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
 /** describes an interrupt which occurs in the scripting engine.
     @deprecated
  */
 published struct InterruptEngineEvent: com::sun::star::lang::EventObject
-{
-    //-------------------------------------------------------------------------
-    /** fully qualified name to address the module or function affected by the event that
-        took place.
-
-        <p>If the module or function can't be addressed by name (for example, in case
+{ 
+    //------------------------------------------------------------------------- 
+    /** fully qualified name to address the module or function affected by the event that 
+        took place. 
+        
+        <p>If the module or function can't be addressed by name (for example, in case 
         that a runtime-generated eval-module is executed), this string is empty.</p>
      */
-    string Name;
-
-    //-------------------------------------------------------------------------
-    /** source code of the Module affected by the event that took place.
-
-        <p>If the source can
-        be accessed using the ModuleName, or if the source is unknown (executing compiled
+    string Name; 
+ 
+    //------------------------------------------------------------------------- 
+    /** source code of the Module affected by the event that took place. 
+        
+        <p>If the source can 
+        be accessed using the ModuleName, or if the source is unknown (executing compiled 
         code), this string can be empty.</p>
      */
-    string SourceCode;
-
-    //-------------------------------------------------------------------------
+    string SourceCode; 
+ 
+    //------------------------------------------------------------------------- 
     /** contains the first line in the module's source code that is affected
         by the event that took place.
-
-
-
+        
+        
+        
         <p>If "name" addresses a function, all line and column values
         are nevertheless given relative to the module's source. If
         source code is not available, this value addresses a binary
@@ -78,41 +78,41 @@ published struct InterruptEngineEvent: com::sun::star::lang::EventObject
         @see XLibraryAccess::getModuleCode
         @see XLibraryAccess::getFunctionCode
      */
-    long StartLine;
-
-    //-------------------------------------------------------------------------
+    long StartLine; 
+ 
+    //------------------------------------------------------------------------- 
     /** contains the first column in the "StartLine" that is affected by the
         event that took place.
      */
-    long StartColumn;
-
-    //-------------------------------------------------------------------------
+    long StartColumn; 
+ 
+    //------------------------------------------------------------------------- 
     /** contains the last line in the module's source code that is affected
         by the event that took place.
      */
-    long EndLine;
-
-    //-------------------------------------------------------------------------
-    /** contains the first column in the "EndLine" which is NOT affected by
+    long EndLine; 
+ 
+    //------------------------------------------------------------------------- 
+    /** contains the first column in the "EndLine" which is NOT affected by 
         the event that took place.
      */
-    long EndColumn;
-
-    //-------------------------------------------------------------------------
-    /** error message.
+    long EndColumn; 
+ 
+    //------------------------------------------------------------------------- 
+    /** error message. 
         <p>Only valid if Reason is RuntimeError or CompileError.</p>
      */
-    string ErrorMessage;
-
-    //-------------------------------------------------------------------------
+    string ErrorMessage; 
+ 
+    //------------------------------------------------------------------------- 
     /** contains the interrupt reason.
      */
-    com::sun::star::script::InterruptReason Reason;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    com::sun::star::script::InterruptReason Reason; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

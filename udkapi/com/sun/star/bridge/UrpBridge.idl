@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,26 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_bridge_Urp_idl__
-#define __com_sun_star_bridge_Urp_idl__
+#ifndef __com_sun_star_bridge_Urp_idl__ 
+#define __com_sun_star_bridge_Urp_idl__ 
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
+#ifndef __com_sun_star_lang_XInitialization_idl__ 
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
+#endif 
 
-#ifndef __com_sun_star_lang_XComponent_idl__
+#ifndef __com_sun_star_lang_XComponent_idl__ 
 #include <com/sun/star/lang/XComponent.idl>
-#endif
+#endif 
 
-#ifndef __com_sun_star_bridge_XBridge_idl__
+#ifndef __com_sun_star_bridge_XBridge_idl__ 
 #include <com/sun/star/bridge/XBridge.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module bridge {
-
-//=============================================================================
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module bridge {  
+ 
+//============================================================================= 
 /** Concrete service of the meta service Bridge for the urp protocol.
 
     <p>This bridge works with the urp protocol.
@@ -51,20 +51,20 @@
    @see com.sun.star.bridge.Bridge
  */
 published service UrpBridge
-{
+{ 
     /** This interface allows to initialize the bridge service with the necessary
         arguments. The sequence&lt;any&gt; must have 4 members.
-
+    
         <ol>
             <li> String: The unique name of the bridge or an empty string</li>
             <li> String: urp</li>
             <li> XConnection: The bidirectional connection, the bridge should work on</li>
-            <li> XInstanceProvider:
+            <li> XInstanceProvider: 
                 The instance provider, that shall be called to access the initial object.</li>
         </ol>
      */
     interface com::sun::star::lang::XInitialization;
-
+    
     /** The main interface of the service.
      */
     interface com::sun::star::bridge::XBridge;
@@ -73,8 +73,8 @@ published service UrpBridge
      */
     interface com::sun::star::lang::XComponent;
 
-};
-//=============================================================================
-
-}; }; }; };
-#endif
+}; 
+//============================================================================= 
+ 
+}; }; }; };  
+#endif 

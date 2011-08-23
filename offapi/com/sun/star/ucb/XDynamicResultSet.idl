@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ module com { module sun { module star { module ucb {
     about changes on a <type>ContentResultSet</type> and have an
     listener-controlled update from one version to the next version. Two
     <type>ContentResultSet</type> implementations were given to the listener in
-    the first notification as interface
+    the first notification as interface 
     <type scope="com::sun::star::sdbc">XResultSet</type>.
     </p>
 
@@ -88,7 +88,7 @@ module com { module sun { module star { module ucb {
     <p>
     The calling of <member>XDynamicResultSetListener::notify</member> has
     to happen in an own thread, because it could take a longer time and any
-    actions til the listener returns the call. So don't block the notify-causing
+    actions	til the listener returns the call. So don't block the notify-causing
     action.
     </p>
 
@@ -110,10 +110,10 @@ module com { module sun { module star { module ucb {
     </p>
 
     <ol>
-    <li> The listener is allowed to access the new
+    <li> The listener is allowed to access the new 
          <type>ContentResultSet</type>. The new one is first assigned in the
          WELCOME-event and than the ResultSets are always swapped.</li>
-    <li> The listener is not allowed to access the old
+    <li> The listener is not allowed to access the old 
          <type>ContentResultSet</type>.</li>
     </ol>
 */
@@ -124,13 +124,13 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
     /** Call this, if you don't care about any changes.
 
         @returns
-        an <type scope="com::sun::star::sdbc">XResultSet</type> that is
+        an <type scope="com::sun::star::sdbc">XResultSet</type> that is 
         implemented as <type>ContentResultSet</type>. Its content will never
         change.
 
         @trows ListenerAlreadySetException
         if someone already has registered as listener via
-        <member>XDynamicResultSet::setListener</member> or if someone has
+        <member>XDynamicResultSet::setListener</member>	or if someone has
         established a connection to a <type>CachedDynamicResultSet</type>
         via <member>XDynamicResultSet::connectToCache</member>.
     */
@@ -138,7 +138,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
         raises( com::sun::star::ucb::ListenerAlreadySetException );
 
     //-------------------------------------------------------------------------
-    /** Call this, if you want to get notifications about changes.
+    /**	Call this, if you want to get notifications about changes.
 
         <p>The implementor has to call
         <member scope="com::sun::star::lang">XComponent::addEventListener</member>
@@ -152,7 +152,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
         @throws ListenerAlreadySetException
         if this method is called more than once during the life of the
         implementation object or if this method is called if someone already
-        has fetched the <type>ContentResultSet</type> via
+        has	fetched the <type>ContentResultSet</type> via
         <member>XDynamicResultSet::getStaticResultSet</member>.
 
     */
@@ -160,7 +160,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
         raises( com::sun::star::ucb::ListenerAlreadySetException );
 
     //-------------------------------------------------------------------------
-    /** Connects this to a <type>CachedDynamicResultSet</type> for optimized
+    /**	Connects this to a <type>CachedDynamicResultSet</type> for optimized
         remote data transport.
 
         <p>This method creates a <type>CachedDynamicResultSetStub</type>
@@ -189,7 +189,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
                 , com::sun::star::ucb::ServiceNotFoundException );
 
     //-------------------------------------------------------------------------
-    /** Using this method you can get information, whether the offered
+    /**	Using this method you can get information, whether the offered
         <type>ContentResultSet</type>s are sorted or filtered etc correctly as
         demanded during the creation of the <type>XDynamicResultSet</type>.
 

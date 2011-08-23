@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ void UnsafeBridge::v_enter(void)
 
     ++ m_count;
 }
-
+    
 void UnsafeBridge::v_leave(void)
 {
     OSL_ASSERT(m_count > 0);

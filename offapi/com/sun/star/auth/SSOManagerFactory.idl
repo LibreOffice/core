@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ module com { module sun { module star { module auth {
         <LI>On the initiator side, use the previously created context to process
             security tokens received from the acceptor side and to create
             security tokens to send to the acceptor side. On the acceptor side,
-            use the previously created context to process security tokens
+            use the previously created context to process security tokens 
             received from the initiator side and to create security tokens to
             send to the initiator side.</LI>
     </UL>

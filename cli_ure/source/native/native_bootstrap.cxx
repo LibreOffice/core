@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace cli_ure {
     WCHAR * resolveLink(WCHAR * path);
 }
 
-#define INSTALL_PATH L"Software\\OpenOffice.org\\UNO\\InstallPath"
+#define INSTALL_PATH L"Software\\LibreOffice\\UNO\\InstallPath"
 #define BASIS_LINK L"\\basis-link"
 #define URE_LINK L"\\ure-link"
 #define URE_BIN L"\\bin"
@@ -143,7 +143,7 @@ WCHAR * getInstallPath()
 
     DWORD  cChars = GetEnvironmentVariable(UNO_PATH, NULL, 0);
     if (cChars > 0)
-    {
+    {	
         szInstallPath = new WCHAR[cChars];
         cChars = GetEnvironmentVariable(UNO_PATH, szInstallPath, cChars);
         //If PATH is not set then it is no error
@@ -187,10 +187,10 @@ WCHAR* getUnoPath()
         szLinkPath[0] = L'\0';
         lstrcat(szLinkPath, szInstallPath);
         lstrcat(szLinkPath, BASIS_LINK);
-
+                
         //get the path to the actual Basis folder
         if (cli_ure::resolveLink(szLinkPath))
-        {
+        {   
             //build the path to the ure-link file
             int sizeUrePath = lstrlen(szLinkPath) + lstrlen(URE_LINK) + 1;
             if (sizeUrePath < MAX_PATH)
@@ -208,7 +208,7 @@ WCHAR* getUnoPath()
                  szUreBin[0] = L'\0';
                 lstrcat(szUreBin, szUrePath);
                  lstrcat(szUreBin, URE_BIN);
-            }
+            }     
         }
     }
 #if OSL_DEBUG_LEVEL >=2
@@ -240,7 +240,7 @@ void extendPath(LPCWSTR szUreBinPath)
     WCHAR * sEnvPath = NULL;
     DWORD  cChars = GetEnvironmentVariable(L"PATH", sEnvPath, 0);
     if (cChars > 0)
-    {
+    {	
         sEnvPath = new WCHAR[cChars];
         cChars = GetEnvironmentVariable(L"PATH", sEnvPath, cChars);
         //If PATH is not set then it is no error
@@ -261,7 +261,7 @@ void extendPath(LPCWSTR szUreBinPath)
         lstrcat(sNewPath, sEnvPath);
     }
     BOOL bSet = SetEnvironmentVariable(L"PATH", sNewPath);
-
+    
     delete[] sEnvPath;
     delete[] sNewPath;
 }
@@ -285,14 +285,14 @@ HMODULE loadFromPath(LPCWSTR sLibName)
     lstrcat(szFullPath, sLibName);
     HMODULE handle = LoadLibraryEx(szFullPath, NULL,
         LOAD_WITH_ALTERED_SEARCH_PATH);
-
+    
     delete[] szFullPath;
     delete[] szUreBinPath;
     return handle;
 }
 
 /*Hook for delayed loading of libraries which this library is linked with.
-    This is a failure hook. That is, it is only called when the loading of
+    This is a failure hook. That is, it is only called when the loading of 
     a library failed. It will be called when loading of cppuhelper failed.
     Because we extend the PATH to the URE/bin folder while this function is
     executed (see extendPath), all other libraries are found.
@@ -343,24 +343,24 @@ namespace util
 public __sealed __gc class Bootstrap
 {
     inline Bootstrap() {}
-
+    
 public:
-
+    
     /** Bootstraps the initial component context from a native UNO installation.
-
+        
         @see cppuhelper/bootstrap.hxx:defaultBootstrap_InitialComponentContext()
     */
     static ::unoidl::com::sun::star::uno::XComponentContext *
         defaultBootstrap_InitialComponentContext();
-
+    
     /** Bootstraps the initial component context from a native UNO installation.
-
+        
         @param ini_file
                a file URL of an ini file, e.g. uno.ini/unorc. (The ini file must
                reside next to the cppuhelper library)
         @param bootstrap_parameters
                bootstrap parameters (maybe null)
-
+               
         @see cppuhelper/bootstrap.hxx:defaultBootstrap_InitialComponentContext()
     */
     static ::unoidl::com::sun::star::uno::XComponentContext *
@@ -394,11 +394,11 @@ Bootstrap::defaultBootstrap_InitialComponentContext(
             OUString value(
                 String_to_ustring( __try_cast< ::System::String * >(
                                        bootstrap_parameters->get_Value() ) ) );
-
+            
             ::rtl::Bootstrap::set( key, value );
         }
     }
-
+    
     // bootstrap native uno
     Reference< XComponentContext > xContext;
     if (0 == ini_file)
@@ -410,7 +410,7 @@ Bootstrap::defaultBootstrap_InitialComponentContext(
         xContext = ::cppu::defaultBootstrap_InitialComponentContext(
             String_to_ustring( __try_cast< ::System::String * >( ini_file ) ) );
     }
-
+    
     return __try_cast< ::unoidl::com::sun::star::uno::XComponentContext * >(
         to_cli( xContext ) );
 }
@@ -427,7 +427,7 @@ Bootstrap::defaultBootstrap_InitialComponentContext()
     Reference<XComponentContext> xContext = ::cppu::bootstrap();
     return __try_cast< ::unoidl::com::sun::star::uno::XComponentContext * >(
         to_cli( xContext ) );
-
+        
 }
 
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescriptio
 typedef struct _uno_Interface uno_Interface;
 
 namespace com
-{
+{     
 namespace sun
-{
+{     
 namespace star
-{
+{     
 namespace uno
 {
 
@@ -57,7 +57,7 @@ namespace uno
 class Mapping
 {
     uno_Mapping * _pMapping;
-
+    
 public:
     // these are here to force memory de/allocation to sal lib.
     /** @internal */
@@ -72,30 +72,30 @@ public:
     /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
-
+    
     /** Holds a mapping from the specified source to the specified destination by environment
         type names.
-
-        @param rFrom        type name of source environment
-        @param rTo          type name of destination environment
-        @param rAddPurpose  additional purpose
+        
+        @param rFrom		type name of source environment
+        @param rTo			type name of destination environment
+        @param rAddPurpose	additional purpose
     */
     inline Mapping(
         const ::rtl::OUString & rFrom, const ::rtl::OUString & rTo,
         const ::rtl::OUString & rAddPurpose = ::rtl::OUString() )
         SAL_THROW( () );
-
+    
     /** Holds a mapping from the specified source to the specified destination.
-
-        @param pFrom        source environment
-        @param pTo          destination environment
-        @param rAddPurpose  additional purpose
+        
+        @param pFrom		source environment
+        @param pTo			destination environment
+        @param rAddPurpose	additional purpose
     */
     inline Mapping(
         uno_Environment * pFrom, uno_Environment * pTo,
         const ::rtl::OUString & rAddPurpose = ::rtl::OUString() )
         SAL_THROW( () );
-
+    
     /** Holds a mapping from the specified source to the specified destination
         environment.
 
@@ -108,100 +108,100 @@ public:
         SAL_THROW( () );
 
     /** Constructor.
-
+        
         @param pMapping another mapping
     */
     inline Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
-
+    
     /** Copy constructor.
-
+        
         @param rMapping another mapping
     */
     inline Mapping( const Mapping & rMapping ) SAL_THROW( () );
-
+    
     /** Destructor.
     */
     inline ~Mapping() SAL_THROW( () );
-
+    
     /** Sets a given mapping.
-
+        
         @param pMapping another mapping
         @return this mapping
     */
     inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping ) SAL_THROW( () );
     /** Sets a given mapping.
-
+        
         @param rMapping another mapping
         @return this mapping
     */
     inline Mapping & SAL_CALL operator = ( const Mapping & rMapping ) SAL_THROW( () )
         { return operator = ( rMapping._pMapping ); }
-
+    
     /** Provides a pointer to the C mapping. The returned mapping is NOT acquired!
-
+        
         @return UNacquired C mapping
     */
     inline uno_Mapping * SAL_CALL get() const SAL_THROW( () )
         { return _pMapping; }
-
+    
     /** Tests if a mapping is set.
-
+        
         @return true if a mapping is set
     */
     inline sal_Bool SAL_CALL is() const SAL_THROW( () )
         { return (_pMapping != 0); }
-
+    
     /** Releases a set mapping.
     */
     inline void SAL_CALL clear() SAL_THROW( () );
-
+    
     /** Maps an interface from one environment to another.
-
-        @param pInterface       source interface
-        @param pTypeDescr       type description of interface
-        @return                 mapped interface
+        
+        @param pInterface		source interface
+        @param pTypeDescr		type description of interface
+        @return					mapped interface
     */
     inline void * SAL_CALL mapInterface( void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const SAL_THROW( () );
     /** Maps an interface from one environment to another.
-
-        @param pInterface       source interface
-        @param pTypeDescr       type description of interface
-        @return                 mapped interface
+        
+        @param pInterface		source interface
+        @param pTypeDescr		type description of interface
+        @return					mapped interface
     */
     inline void * SAL_CALL mapInterface( void * pInterface, typelib_TypeDescription * pTypeDescr ) const SAL_THROW( () )
         { return mapInterface( pInterface, (typelib_InterfaceTypeDescription *)pTypeDescr ); }
-
+    
     /** Maps an interface from one environment to another.
-
-        @param pInterface       source interface
-        @param rType            type of interface
-        @return                 mapped interface
+        
+        @param pInterface		source interface
+        @param rType			type of interface
+        @return					mapped interface
     */
     inline void * SAL_CALL mapInterface(
         void * pInterface, const ::com::sun::star::uno::Type & rType ) const SAL_THROW( () );
-
+    
     /** Maps an interface from one environment to another.
-
-        @param ppOut            inout mapped interface
-        @param pInterface       source interface
-        @param pTypeDescr       type description of interface
+        
+        @param ppOut			inout mapped interface
+        @param pInterface		source interface
+        @param pTypeDescr		type description of interface
     */
     inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr ) const SAL_THROW( () )
         { (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, pTypeDescr ); }
     /** Maps an interface from one environment to another.
-
-        @param ppOut            inout mapped interface
-        @param pInterface       source interface
-        @param pTypeDescr       type description of interface
+        
+        @param ppOut			inout mapped interface
+        @param pInterface		source interface
+        @param pTypeDescr		type description of interface
     */
     inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_TypeDescription * pTypeDescr ) const SAL_THROW( () )
         { (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, (typelib_InterfaceTypeDescription *)pTypeDescr ); }
-
+    
     /** Maps an interface from one environment to another.
-
-        @param ppOut            inout mapped interface
-        @param pInterface       source interface
-        @param rType            type of interface to be mapped
+        
+        @param ppOut			inout mapped interface
+        @param pInterface		source interface
+        @param rType			type of interface to be mapped
      */
     inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, const ::com::sun::star::uno::Type & rType ) const SAL_THROW( () );
 };
@@ -304,7 +304,7 @@ inline void * Mapping::mapInterface(
     (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
 
     Maps an binary C UNO interface to be used in the currently used compiler environment.
-
+    
     @tplparam C interface type
     @param ppRet inout returned interface pointer
     @param pUnoI binary C UNO interface
@@ -327,7 +327,7 @@ inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_TH
     (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
 
     Maps an UNO interface of the currently used compiler environment to binary C UNO.
-
+    
     @tplparam C interface type
     @param ppRet inout returned interface pointer
     @param x interface reference

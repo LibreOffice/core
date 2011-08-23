@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,43 +24,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XModifyListener_idl__
-#define __com_sun_star_util_XModifyListener_idl__
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module util {
-
-//=============================================================================
-
+#ifndef __com_sun_star_util_XModifyListener_idl__ 
+#define __com_sun_star_util_XModifyListener_idl__ 
+ 
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
+#include <com/sun/star/lang/XEventListener.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module util {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to receive events when a model object changes.
  */
 published interface XModifyListener: com::sun::star::lang::XEventListener
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** is called when something changes in the object.
-
-        <p>Due to such an event, it may be necessary to update views or
+        
+        <p>Due to such an event, it may be necessary to update views or 
         controllers.  </p>
 
         <p>The source of the event may be the content of the object to
         which the listener is registered.</p>
      */
-    void modified( [in] com::sun::star::lang::EventObject aEvent );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void modified( [in] com::sun::star::lang::EventObject aEvent ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

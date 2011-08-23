@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,33 +24,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_container_XHierarchicalNameReplace_idl__
-#define __com_sun_star_container_XHierarchicalNameReplace_idl__
+#ifndef __com_sun_star_container_XHierarchicalNameReplace_idl__ 
+#define __com_sun_star_container_XHierarchicalNameReplace_idl__ 
 
-#ifndef __com_sun_star_container_XHierarchicalNameAccess_idl__
-#include <com/sun/star/container/XHierarchicalNameAccess.idl>
-#endif
+#ifndef __com_sun_star_container_XHierarchicalNameAccess_idl__ 
+#include <com/sun/star/container/XHierarchicalNameAccess.idl> 
+#endif 
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
-#include <com/sun/star/container/ElementExistException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_ElementExistException_idl__ 
+#include <com/sun/star/container/ElementExistException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
+#include <com/sun/star/lang/WrappedTargetException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
+#include <com/sun/star/container/NoSuchElementException.idl> 
+#endif 
+ 
 
 //=============================================================================
 
-module com {  module sun {  module star {  module container {
+module com {  module sun {  module star {  module container {  
 
 //=============================================================================
 
@@ -62,20 +62,20 @@ published interface XHierarchicalNameReplace : com::sun::star::container::XHiera
 
     /** replaces the element at the specified name.
      */
-    void replaceByHierarchicalName( [in] string aName,
-             [in] any aElement )
-            raises( com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::container::NoSuchElementException,
-                    com::sun::star::lang::WrappedTargetException );
+    void replaceByHierarchicalName( [in] string aName, 
+             [in] any aElement ) 
+            raises( com::sun::star::lang::IllegalArgumentException, 
+                    com::sun::star::container::NoSuchElementException, 
+                    com::sun::star::lang::WrappedTargetException ); 
 };
 
 
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
 #endif
 

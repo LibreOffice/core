@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,19 +60,19 @@ typedef enum {
 } MessageType;
 
 typedef struct {
-    MessageType       m_Type;
+    MessageType		  m_Type;
     oslDescriptorFlag m_Flags;
     oslDescriptorType m_Data;
-    HANDLE            m_Value;
+    HANDLE			  m_Value;
 } Message;
 
 typedef struct {
-    HPIPE   m_hPipe;
+    HPIPE	m_hPipe;
 } Pipe;
 
 typedef struct _oslSocketCallbackArg {
-    HANDLE  m_socket;
-    Pipe*   m_pipe;
+    HANDLE	m_socket;
+    Pipe*	m_pipe;
 } oslSocketCallbackArg;
 
 /* process termination queue */
@@ -116,7 +116,7 @@ static sal_Bool InitSessionTerm( void )
 /**********************************************
  osl_executeProcess_WithRedirectedIO
  *********************************************/
-
+ 
 oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                                             rtl_uString *ustrImageName,
                                             rtl_uString *ustrArguments[],
@@ -127,9 +127,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                                             rtl_uString *ustrEnvironment[],
                                             sal_uInt32   nEnvironmentVars,
                                             oslProcess *pProcess,
-                                            oslFileHandle   *pInputWrite,
-                                            oslFileHandle   *pOutputRead,
-                                            oslFileHandle   *pErrorRead
+                                            oslFileHandle	*pInputWrite,
+                                            oslFileHandle	*pOutputRead,
+                                            oslFileHandle	*pErrorRead
                                             )
 {
 
@@ -138,7 +138,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     sal_Char** pArguments=0;
     sal_Char** pEnvironment=0;
     unsigned int index;
-
+    
     char szImagePath[PATH_MAX] = "";
     char szWorkDir[PATH_MAX] = "";
 
@@ -196,10 +196,10 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         pEnvironment[index+1]=0;
     }
 
-    int     rc, pid;
-    int     saveOutput = -1, saveInput = -1, saveError = -1;
-    int     stdOutput[2] = { -1, -1 }, stdInput[2] = { -1, -1 }, stdError[2] = { -1, -1 };
-    FILE    *i, *o, *e;
+    int		rc, pid;
+    int		saveOutput = -1, saveInput = -1, saveError = -1;
+    int		stdOutput[2] = { -1, -1 }, stdInput[2] = { -1, -1 }, stdError[2] = { -1, -1 };
+    FILE	*i, *o, *e;
 
     if (pInputWrite)
         pipe( stdInput);
@@ -244,10 +244,10 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     if ( pInputWrite )
         *(pInputWrite) = osl_createFileHandleFromFD( stdInput[1] );
-
+        
     if ( pOutputRead )
         *(pOutputRead) = osl_createFileHandleFromFD( stdOutput[0] );
-
+        
     if ( pErrorRead )
         *(pErrorRead) = osl_createFileHandleFromFD( stdError[0] );
 
@@ -289,7 +289,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 /**********************************************
  osl_executeProcess
  *********************************************/
-
+ 
 oslProcessError SAL_CALL osl_executeProcess(
                                             rtl_uString *ustrImageName,
                                             rtl_uString *ustrArguments[],
@@ -321,7 +321,7 @@ oslProcessError SAL_CALL osl_executeProcess(
 /**********************************************
  osl_psz_executeProcess
  *********************************************/
-
+ 
 oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
                                                 oslProcessOption Options,
@@ -329,23 +329,23 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszDirectory,
                                                 sal_Char *pszEnvironments[],
                                                 oslProcess *pProcess,
-                                                oslFileHandle   *pInputWrite,
-                                                oslFileHandle   *pOutputRead,
-                                                oslFileHandle   *pErrorRead
+                                                oslFileHandle	*pInputWrite,
+                                                oslFileHandle	*pOutputRead,
+                                                oslFileHandle	*pErrorRead
                                                 )
 {
-    ULONG ulSessID  = 0;          /* Session ID returned          */
+    ULONG ulSessID	= 0;		  /* Session ID returned		  */
     PID pidProcess;
     APIRET rc;
     sal_Char* pStr;
-    sal_Char*        args;
-    sal_Char*        envs;
+    sal_Char*		 args;
+    sal_Char*		 envs;
     int i;
     int n = 1;
     oslProcessImpl* pProcImpl;
     ULONG nAppType, nOwnAppType;
     ULONG nCurrentDisk, nDriveMap, nBufSize;
-       int   first = 0;
+       int	 first = 0;
     sal_Char path[ _MAX_PATH ];
     sal_Char currentDir[ _MAX_PATH ];
     sal_Char ownfilename[ _MAX_PATH ];
@@ -397,7 +397,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         CHAR    szName[CCHMAXPATH];
         PPIB    ppib;
         PTIB    ptib;
-        APIRET  rc;
+        APIRET	rc;
         rc = DosGetInfoBlocks(&ptib, &ppib);
         rc = DosQueryModuleName(ppib->pib_hmte, sizeof(szName), szName);
         DosQueryAppType( (PCSZ)szName, &nOwnAppType );
@@ -409,7 +409,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
     /* start in same session if possible and detached flag not set */
     if( ((nAppType & 0x00000007) == (nOwnAppType & 0x00000007))
-/*      && ((Options & osl_Process_DETACHED) == 0) */ )
+/*	    && ((Options & osl_Process_DETACHED) == 0) */ )
     {
         CHAR szbuf[CCHMAXPATH];
 
@@ -451,7 +451,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         // existing enviroment size
         n = 0;
         p = environ;
-        while( *p)
+        while( *p) 
         {
             int l = strlen( *p);
             n += l + 1;
@@ -480,7 +480,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         }
         // add existing vars
         p = environ;
-        while( *p)
+        while( *p) 
         {
             memcpy(pStr, *p, strlen( *p ) );
             pStr += strlen( *p );
@@ -564,7 +564,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         /* OS/2 Application ? */
         if(nAppType & 0x00000007)
         {
-
+        
             /* inherit options from parent */
             SData.InheritOpt = SSF_INHERTOPT_PARENT;
 
@@ -608,8 +608,8 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
             SData.TermQ = (BYTE*) SessionTermQueueName;
         }
 
-        SData.FgBg  = SSF_FGBG_FORE;      /* start session in foreground  */
-        SData.TraceOpt = SSF_TRACEOPT_NONE;   /* No trace                */
+        SData.FgBg	= SSF_FGBG_FORE;	  /* start session in foreground  */
+        SData.TraceOpt = SSF_TRACEOPT_NONE;	  /* No trace				 */
 
         SData.PgmTitle = NULL;
         SData.PgmInputs = (BYTE*)args;
@@ -632,7 +632,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         if( rc == ERROR_SMG_START_IN_BACKGROUND )
             rc = NO_ERROR;
 
-
+    
         if(envs)
             _tfree(envs);
         if(args)
@@ -692,17 +692,17 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 {
-    HANDLE        hProcess;
+    HANDLE		  hProcess;
     oslProcessImpl* pProcImpl;
 
     /* check, if given PID is a valid process */
     if (FALSE)
     {
         pProcImpl = (oslProcessImpl*)malloc(sizeof(oslProcessImpl));
-/*
+/*		
         pProcImpl->pProcess = pidProcess;
         pProcImpl->nSessionID = ulSessID;
-*/
+*/		
     }
     else
         pProcImpl = NULL;
@@ -734,7 +734,7 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
     {
         RESULTCODES resultCode;
         PID pidEnded;
-
+            
         rc = DosWaitChild( DCWA_PROCESS, DCWW_WAIT, &resultCode,
                 &pidEnded, pProcImpl->pProcess );
 
@@ -891,7 +891,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     if (! pInfo || (pInfo->Size != sizeof(oslProcessInfo)))
         return osl_Process_E_Unknown;
 
-    pInfo->Fields = 0;
+    pInfo->Fields = 0;		
 
     if (Fields & osl_Process_IDENTIFIER)
     {
@@ -905,14 +905,14 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
         }
         else
             pInfo->Ident = ((oslProcessImpl*)Process)->pProcess;
-
-        pInfo->Fields |= osl_Process_IDENTIFIER;
+            
+        pInfo->Fields |= osl_Process_IDENTIFIER;		
     }
 
     if (Fields & osl_Process_EXITCODE)
     {
         oslProcessImpl* pProcImpl = (oslProcessImpl*) Process;
-
+        
         if( pProcImpl->bResultCodeValid )
         {
             pInfo->Code = pProcImpl->nResultCode;
@@ -926,7 +926,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
             {
                 RESULTCODES resultCode;
                 PID pidEnded;
-
+                    
                 rc = DosWaitChild( DCWA_PROCESS, DCWW_WAIT, &resultCode,
                         &pidEnded, pProcImpl->pProcess );
 
@@ -973,8 +973,8 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
                         break;
                     }
                 }
-            }
-        }
+            } 
+        } 
     }
 
     if (Fields & osl_Process_HEAPUSAGE)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 typedef struct _oslSignalHandlerImpl
 {
     oslSignalHandlerFunction      Handler;
-    void*                         pData;
+    void*			        	  pData;
     struct _oslSignalHandlerImpl* pNext;
 } oslSignalHandlerImpl;
 
-static sal_Bool               bErrorReportingEnabled = sal_True;
-static sal_Bool               bInitSignal = sal_False;
-static oslMutex               SignalListMutex;
+static sal_Bool				  bErrorReportingEnabled = sal_True;
+static sal_Bool  			  bInitSignal = sal_False;
+static oslMutex 			  SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
 
 /*static*//* ULONG _Export APIENTRY SignalHandlerFunction(PEXCEPTIONREPORTRECORD pERepRec,
@@ -91,13 +91,13 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 }
 
 /*****************************************************************************/
-/* SignalHandlerFunction    */
+/* SignalHandlerFunction	*/
 /*****************************************************************************/
 /*static*/ ULONG __declspec(dllexport) APIENTRY SignalHandlerFunction(PEXCEPTIONREPORTRECORD pERepRec,
                                             PEXCEPTIONREGISTRATIONRECORD pERegRec,
                                             PCONTEXTRECORD pConRec, PVOID pReserved)
 {
-    oslSignalInfo    Info;
+    oslSignalInfo	 Info;
 
     Info.UserSignal = pERepRec->ExceptionNum;
     Info.UserData   = NULL;
@@ -112,9 +112,9 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
             Info.Signal = osl_Signal_IntegerDivideByZero;
             break;
 
-        case XCPT_BREAKPOINT:
+        case XCPT_BREAKPOINT: 
             Info.Signal = osl_Signal_DebugBreak;
-            break;
+            break; 
 
         default:
             Info.Signal = osl_Signal_System;

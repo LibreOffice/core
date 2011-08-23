@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,10 +110,10 @@ rtl_cache_init (void);
 
 /** RTL_CACHE_HASH_INDEX()
  */
-#define RTL_CACHE_HASH_INDEX_IMPL(a, s, q, m) \
+#define	RTL_CACHE_HASH_INDEX_IMPL(a, s, q, m) \
      ((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m))
-
-#define RTL_CACHE_HASH_INDEX(cache, addr) \
+ 
+#define	RTL_CACHE_HASH_INDEX(cache, addr) \
     RTL_CACHE_HASH_INDEX_IMPL((addr), (cache)->m_hash_shift, (cache)->m_type_shift, ((cache)->m_hash_size - 1))
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ import com.sun.star.registry.XRegistryKey;
  * It is useful for <code>Thread</code> communication
  * in one Process.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2008-04-11 11:09:30 $
- * @author      Kay Ramme
+ * @version 	$Revision: 1.3 $ $ $Date: 2008-04-11 11:09:30 $
+ * @author 	    Kay Ramme
  * @see         com.sun.star.connections.XConnection
  * @see         com.sun.star.loader.JavaLoader
  * @since       UDK1.0
@@ -70,8 +70,8 @@ public class PipedConnection implements XConnection {
      * @param   regKey       the registryKey
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                          XMultiServiceFactory multiFactory,
+    public static XSingleServiceFactory __getServiceFactory(String implName, 
+                                                          XMultiServiceFactory multiFactory, 
                                                           XRegistryKey regKey)
     {
         XSingleServiceFactory xSingleServiceFactory = null;
@@ -79,12 +79,12 @@ public class PipedConnection implements XConnection {
         if (implName.equals(PipedConnection.class.getName()) )
             xSingleServiceFactory = FactoryHelper.getServiceFactory(PipedConnection.class,
                                                                     __serviceName,
-                                                                    multiFactory,
+                                                                    multiFactory, 
                                                                     regKey);
-
+        
         return xSingleServiceFactory;
     }
-
+    
     /**
      * Writes the service information into the given registry key.
      * This method is called by the <code>JavaLoader</code>
@@ -104,14 +104,14 @@ public class PipedConnection implements XConnection {
      */
     protected static final int __waitTime = 10000;
 
-    protected byte             _buffer[] = new byte[4096];
-    protected int              _in,
+    protected byte			   _buffer[] = new byte[4096];
+    protected int			   _in, 
                                _out;
-    protected boolean          _closed;
+    protected boolean		   _closed;
     protected PipedConnection  _otherSide;
 
     /**
-     * Constructs a new <code>PipedConnection</code>, sees if there
+     * Constructs a new <code>PipedConnection</code>, sees if there 
      * is an other side, which it should be connected to.
      * <p>
      * @param    args   Another side could be in index 0.
@@ -121,7 +121,7 @@ public class PipedConnection implements XConnection {
 
         _otherSide = (args.length == 1) ? (PipedConnection)args[0] : null;
         if(_otherSide != null) {
-            if(_otherSide == this)
+            if(_otherSide == this) 
                 throw new RuntimeException("can not connect to myself");
 
             _otherSide._otherSide = this;
@@ -129,7 +129,7 @@ public class PipedConnection implements XConnection {
     }
 
     /**
-     * This is a private method, used to cummunicate
+     * This is a private method, used to cummunicate 
      * internal in the pipe.
      */
     private synchronized void receive(byte aData[]) throws com.sun.star.io.IOException {
@@ -166,7 +166,7 @@ public class PipedConnection implements XConnection {
                 else {
                     bytes = Math.min(aData.length - bytesWritten, _buffer.length - _out - 1);
                 }
-
+                
                 System.arraycopy(aData, bytesWritten, _buffer, _out, bytes);
             }
 
@@ -262,7 +262,7 @@ public class PipedConnection implements XConnection {
     public synchronized void close() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         if(!_closed) {
             _closed = true;
-
+            
             _otherSide.close();
 
             notify();

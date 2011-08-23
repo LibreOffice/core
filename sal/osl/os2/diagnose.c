@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ void SAL_CALL osl_trace__yd_os2(const sal_Char* lpszFormat, ...)
     {
         return;
     }
-
+    
     va_start(args, lpszFormat);
 
     nBuf = vsprintf(szBuffer, lpszFormat, args);

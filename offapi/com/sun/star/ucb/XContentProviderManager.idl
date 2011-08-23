@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,11 +67,11 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
 
         <p>This may be <NULL/>, in which case a later
         <member>XContentProvider::queryContent</member> with an
-        <type>XContentIdentifier</type> that matches the <var>Scheme</var>
+        <type>XContentIdentifier</type>	that matches the <var>Scheme</var>
         will simply return <NULL/>. These "dummy" content providers are useful
         in combination with other content providers that are registered on a
-        wildcard URL template: For example, imagine that you want to route all
-        http URLs to a HTTP content provider, but want to block all URLs for
+        wildcard URL template: For example,	imagine that you want to route all
+        http URLs to a HTTP content	provider, but want to block all URLs for
         the server <code>www.dont.go</code>. One solution would be to register
         the HTTP content provider on the <var>Scheme</var> <code>http</code>,
         and to register a "dummy" (i.e., <NULL/>) content provider on the
@@ -104,19 +104,19 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
         </ul>
 
         <p>A <code>&lt;scheme&gt:</code> matches any URL of exactly the given
-        scheme (ignoring case), keeping the extension from URL schemes to URL
-        templates backwards compatible.  The <code>&lt;simple&gt:</code>
-        regexps match any URL starting with a given string literal, followed
+        scheme (ignoring case),	keeping the extension from URL schemes to URL
+        templates backwards	compatible.  The <code>&lt;simple&gt:</code>
+        regexps match any URL starting with a given	string literal, followed
         by arbitrary characters (<code>&lt;simple-prefix&gt:</code>), or
         by arbitrary characters that start with one of '/', '?', or '#', if any
         (<code>&lt;simple-authority&gt:</code>), or by arbitrary characters not
         including any of '/', '?', or '#', followed by a given string literal,
-        followed by arbitrary characters that start with one of '/', '?', or
+        followed by	arbitrary characters that start with one of '/', '?', or
         '#', if any. The comparision of string literals is done ignoring the
         case of ASCII letters.  The <code>&lt;translation&gt:</code> regexps
         match the same URLs as their <code>&lt;simple&gt:</code> counterparts,
         but they also describe how a (local) URL is mapped to another (remote)
-        URL.  This mapping is only relevant for methods of the
+        URL.  This mapping is only relevant for	methods of the
         <type>RemoteAccessContentProvider</type>'s
           <type>XParameterizedContentProvider</type> interface; in all other
         cases, <code>&lt;translation&gt:</code> regexps have the same semantics
@@ -124,7 +124,7 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
 
         @param ReplaceExisting
         <TRUE/>: replace the provider possibly registered for the given URL
-        template. The replaced provider will not be deregistered automatically!
+        template. The replaced provider will not be	deregistered automatically!
         If the superseding provider gets deregistered, the superseded one will
         become active again.
         <p><FALSE/>: do not register, if another provider is already registered

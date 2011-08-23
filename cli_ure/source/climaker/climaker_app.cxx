@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ static OptionInfo const * get_option_info(
           ++pos )
     {
         OptionInfo const & option_info = s_option_infos[ pos ];
-
+        
         if (opt.getLength() > 0)
         {
             if (opt.equalsAsciiL(
@@ -162,14 +162,14 @@ static bool is_option(
     OSL_ASSERT( option_info != 0 );
     if (osl_getCommandArgCount() <= *pIndex)
         return false;
-
+    
     OUString arg;
     osl_getCommandArg( *pIndex, &arg.pData );
     sal_Int32 len = arg.getLength();
-
+    
     if (len < 2 || arg[ 0 ] != '-')
         return false;
-
+    
     if (len == 2 && arg[ 1 ] == option_info->m_short_option)
     {
         ++(*pIndex);
@@ -273,7 +273,7 @@ Reference< registry::XSimpleRegistry > open_registries(
             OUSTR("no registries given!"),
             Reference< XInterface >() );
     }
-
+    
     Reference< registry::XSimpleRegistry > xSimReg;
     for ( size_t nPos = registries.size(); nPos--; )
     {
@@ -288,7 +288,7 @@ Reference< registry::XSimpleRegistry > open_registries(
                 OUSTR("invalid registry: ") + registries[ nPos ],
                 Reference< XInterface >() );
         }
-
+        
         if (xSimReg.is()) // nest?
         {
             Reference< registry::XSimpleRegistry > xNested(
@@ -308,7 +308,7 @@ Reference< registry::XSimpleRegistry > open_registries(
             xSimReg = xReg;
         }
     }
-
+    
     return xSimReg;
 }
 
@@ -325,12 +325,12 @@ SAL_IMPLEMENT_MAIN()
         printf( s_usingText );
         return 0;
     }
-
+    
     int ret = 0;
     Reference< XComponentContext > xContext;
-
+    
     try
-    {
+    {    
         OptionInfo const * info_help =
             get_option_info( OUSTR("help") );
         OptionInfo const * info_verbose =
@@ -359,7 +359,7 @@ SAL_IMPLEMENT_MAIN()
             get_option_info( OUSTR("assembly-copyright") );
         OptionInfo const * info_trademark =
             get_option_info( OUSTR("assembly-trademark") );
-
+        
         OUString output;
         vector< OUString > mandatory_registries;
         vector< OUString > extra_registries;
@@ -367,7 +367,7 @@ SAL_IMPLEMENT_MAIN()
         vector< OUString > explicit_types;
         OUString version, product, description, company, copyright, trademark,
             keyfile, delaySign;
-
+        
         OUString cmd_arg;
         for ( sal_uInt32 nPos = 0; nPos < nCount; )
         {
@@ -462,7 +462,7 @@ SAL_IMPLEMENT_MAIN()
                 }
             }
         }
-
+        
         // bootstrap uno
         xContext = ::cppu::bootstrap_InitialComponentContext(
             Reference< registry::XSimpleRegistry >() );
@@ -471,7 +471,7 @@ SAL_IMPLEMENT_MAIN()
                 OUSTR("/singletons/com.sun.star.reflection."
                       "theTypeDescriptionManager") ),
             UNO_QUERY_THROW );
-
+        
         // get rdb tdprovider factory
         Reference< lang::XSingleComponentFactory > xTDprov_factory(
             ::cppu::loadSharedLibComponentFactory(
@@ -487,7 +487,7 @@ SAL_IMPLEMENT_MAIN()
                       "bootstrap.uno" SAL_DLLEXTENSION "!"),
                 Reference< XInterface >() );
         }
-
+        
         // create registry td provider for mandatory registry files
         Any arg( makeAny( open_registries( mandatory_registries, xContext ) ) );
         Reference< XInterface > xTD_provider(
@@ -507,7 +507,7 @@ SAL_IMPLEMENT_MAIN()
             xSet->insert( provider );
             OSL_ASSERT( xSet->has( provider ) );
         }
-
+        
         if (0 == output.getLength()) // no output file specified
         {
             // if only one rdb has been given, then take rdb name
@@ -575,13 +575,13 @@ SAL_IMPLEMENT_MAIN()
         assembly_name->set_Name( name );
         if (kp != NULL)
             assembly_name->set_KeyPair(kp);
-
+        
         if (version.getLength() != 0)
         {
             assembly_name->set_Version(
                 new ::System::Version( ustring_to_String( version ) ) );
         }
-
+        
         // app domain
         ::System::AppDomain * current_appdomain =
               ::System::AppDomain::get_CurrentDomain();
@@ -644,7 +644,7 @@ SAL_IMPLEMENT_MAIN()
                     __typeof (AssemblyTrademarkAttribute)->GetConstructor(
                         params ), args ) );
         }
-
+        
         // load extra assemblies
         Assembly * assemblies __gc [] =
             new Assembly * __gc [ extra_assemblies.size() ];
@@ -653,7 +653,7 @@ SAL_IMPLEMENT_MAIN()
             assemblies[ pos ] = Assembly::LoadFrom(
                 ustring_to_String( extra_assemblies[ pos ] ) );
         }
-
+        
         // type emitter
         TypeEmitter * type_emitter = new TypeEmitter(
             assembly_builder->DefineDynamicModule( output_file ), assemblies );
@@ -662,7 +662,7 @@ SAL_IMPLEMENT_MAIN()
               new ::System::ResolveEventHandler(
                   type_emitter, &TypeEmitter::type_resolve );
         current_appdomain->add_TypeResolve( type_resolver );
-
+        
         // and emit types to it
         if (explicit_types.empty())
         {
@@ -691,7 +691,7 @@ SAL_IMPLEMENT_MAIN()
             }
         }
         type_emitter->Dispose();
-
+        
         if (g_verbose)
         {
             ::System::Console::Write(
@@ -727,7 +727,7 @@ SAL_IMPLEMENT_MAIN()
             msg.getStr() );
         ret = 1;
     }
-
+    
     try
     {
         Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
@@ -745,7 +745,7 @@ SAL_IMPLEMENT_MAIN()
             msg.getStr() );
         ret = 1;
     }
-
+    
     return ret;
 }
 

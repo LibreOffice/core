@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,7 +159,7 @@ void callVirtualMethod(
         *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
 namespace {
-//=======================================================================
+//======================================================================= 
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
@@ -177,7 +177,7 @@ static void cpp_call(
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
-
+    
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
     if (pReturnTypeDescr)
@@ -212,7 +212,7 @@ static void cpp_call(
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
 
     sal_Int32 nTempIndizes   = 0;
-
+    
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
@@ -224,7 +224,7 @@ static void cpp_call(
 //            uno_copyAndConvertData( pCppArgs[nPos] = pStack, pUnoArgs[nPos],
             uno_copyAndConvertData( pCppArgs[nPos] = alloca(8), pUnoArgs[nPos],
                 pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
-
+            
             switch (pParamTypeDescr->eTypeClass)
             {
             case typelib_TypeClass_HYPER:
@@ -279,7 +279,7 @@ static void cpp_call(
                 uno_copyAndConvertData(
                     pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
-
+                
                 pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
@@ -299,7 +299,7 @@ static void cpp_call(
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
             pCppReturn, pReturnTypeDescr->eTypeClass,
-            pStackStart,
+            pStackStart, 
             (pStack - pStackStart));
 
         // NO exception occured...
@@ -310,7 +310,7 @@ static void cpp_call(
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-
+            
             if (pParams[nIndex].bIn)
             {
                 if (pParams[nIndex].bOut) // inout
@@ -327,7 +327,7 @@ static void cpp_call(
             }
             // destroy temp cpp param => cpp: every param was constructed
             uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
-
+            
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return value
@@ -351,7 +351,7 @@ static void cpp_call(
             uno_destructData( pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], cpp_release );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
-
+        
         // return type
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
@@ -377,12 +377,12 @@ void unoInterfaceProxyDispatch(
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
-
+        
         VtableSlot aVtableSlot(
             getVtableSlot(
             reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>
               (pMemberDescr)));
-
+        
         if (pReturn)
         {
             // dependent dispatch
@@ -405,7 +405,7 @@ void unoInterfaceProxyDispatch(
             OUString aVoidName( RTL_CONSTASCII_USTRINGPARAM("void") );
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
-
+            
             // dependent dispatch
             aVtableSlot.index += 1;
             cpp_call(
@@ -413,10 +413,10 @@ void unoInterfaceProxyDispatch(
                 pReturnTypeRef,
                 1, &aParam,
                 pReturn, pArgs, ppException );
-
+            
             typelib_typedescriptionreference_release( pReturnTypeRef );
         }
-
+        
         break;
     }
     case typelib_TypeClass_INTERFACE_METHOD:
@@ -451,7 +451,7 @@ void unoInterfaceProxyDispatch(
                 (*pThis->getBridge()->getUnoEnv()->getRegisteredInterface)(
                     pThis->getBridge()->getUnoEnv(),
                     (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
-
+            
                 if (pInterface)
                 {
                     ::uno_any_construct(
@@ -481,7 +481,7 @@ void unoInterfaceProxyDispatch(
         ::com::sun::star::uno::RuntimeException aExc(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
-
+        
         Type const & rExcType = ::getCppuType( &aExc );
         // binary identical null reference
         ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );

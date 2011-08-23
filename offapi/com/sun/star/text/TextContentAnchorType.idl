@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,75 +24,75 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_TextContentAnchorType_idl__
-#define __com_sun_star_text_TextContentAnchorType_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+#ifndef __com_sun_star_text_TextContentAnchorType_idl__ 
+#define __com_sun_star_text_TextContentAnchorType_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module text { 
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: enum com::sun::star::text::TextContentAnchorType
 /** specify how the text content is attached to its
     surrounding text.
  */
 published enum TextContentAnchorType
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AT_PARAGRAPH
     /** The anchor of the object is set at the top left position of the paragraph.
      */
-    AT_PARAGRAPH,
-
-    //-------------------------------------------------------------------------
-
+    AT_PARAGRAPH, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AS_CHARACTER
     /** The object is anchored instead of a character.
-
-
-
+        
+        
+        
         <p>The size of the object influences the height of the text line.</p>
      */
-    AS_CHARACTER,
-
-    //-------------------------------------------------------------------------
-
+    AS_CHARACTER, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AT_PAGE
     /** The object is anchored to the page.
-
-
-
+        
+        
+        
         <p>The position does not change if the content of the document is changed.</p>
      */
-    AT_PAGE,
-
-    //-------------------------------------------------------------------------
-
+    AT_PAGE, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AT_FRAME
     /** The object is anchored to a text frame.
      */
-    AT_FRAME,
-
-    //-------------------------------------------------------------------------
-
+    AT_FRAME, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::text::TextContentAnchorType::AT_CHARACTER
     /** The object is anchored to a character.
-
-
-
+        
+        
+        
         <p>The position of the object changes if the position of this
         character is changed.
         </p>
      */
-    AT_CHARACTER
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    AT_CHARACTER 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 

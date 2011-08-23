@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_setup_WindowsRegistryAction_idl__
-#define __com_sun_star_setup_WindowsRegistryAction_idl__
-
-#ifndef __com_sun_star_setup_BaseAction_idl__
-#include <com/sun/star/setup/BaseAction.idl>
-#endif
-
-module com {  module sun {  module star {  module setup {
-
+#ifndef __com_sun_star_setup_WindowsRegistryAction_idl__ 
+#define __com_sun_star_setup_WindowsRegistryAction_idl__ 
+ 
+#ifndef __com_sun_star_setup_BaseAction_idl__ 
+#include <com/sun/star/setup/BaseAction.idl> 
+#endif 
+ 
+module com {  module sun {  module star {  module setup { 
+     
 /// @deprecated
 published struct WindowsRegistryAction: BaseAction
-{
+{ 
     // DocMerge: empty anyway
-    string          strKey;
-
+    string			strKey; 
+        
     // DocMerge: empty anyway
-    string          strSubkey;
-
+    string			strSubkey; 
+        
     // DocMerge: empty anyway
-    string          strName;
-
+    string			strName; 
+        
     // DocMerge: empty anyway
-    string          strValue;
-
+    string			strValue; 
+ 
     // DocMerge: empty anyway
-    boolean         bCreate;
-
+    boolean			bCreate; 
+        
     // DocMerge: empty anyway
-    boolean         bHexValue;
-
+    boolean 		bHexValue; 
+        
     // DocMerge: empty anyway
-    boolean         bDeleteAll;
-    };
-}; }; }; };
-
-#endif
+    boolean			bDeleteAll; 
+    }; 
+}; }; }; }; 
+ 
+#endif 

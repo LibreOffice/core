@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,16 +25,16 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_awt_XExtendedToolkit_idl__
-#define __com_sun_star_awt_XExtendedToolkit_idl__
+#ifndef __com_sun_star_awt_XExtendedToolkit_idl__ 
+#define __com_sun_star_awt_XExtendedToolkit_idl__ 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
-#ifndef __com_sun_star_awt_XTopWindow_idl__
-#include <com/sun/star/awt/XTopWindow.idl>
-#endif
+#ifndef __com_sun_star_awt_XTopWindow_idl__ 
+#include <com/sun/star/awt/XTopWindow.idl> 
+#endif 
 
 #ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
@@ -53,12 +53,12 @@
 #endif
 
 
-//=============================================================================
+//============================================================================= 
 
 module com {  module sun {  module star {  module awt {
 
 //=============================================================================
-
+    
 /** The <type>XExtendedToolkit</type> is an extension of the <type
     scope="::com::sun::star::awt">XToolkit</type> interface.  It basically
     provides access to three event broadcasters which are used for instance
@@ -67,7 +67,7 @@ module com {  module sun {  module star {  module awt {
 
     <p>The first event broadcaster lets you keep track of the open top-level
     windows (frames).  To get the set of currently open top-level window use
-    the <member>XExtendedToolkit::getTopWindowCount</member> and
+    the <member>XExtendedToolkit::getTopWindowCount</member> and 
     <member>XExtendedToolkit::getTopWindow</member> methods.</p>
 
     <p>The second event broadcaster informs its listeners of key events.
@@ -81,13 +81,13 @@ module com {  module sun {  module star {  module awt {
     @deprecated
         This interface was only implemented in an intermediate developer
         release anyway.
-
+        
     @since OOo 1.1.2
 */
 published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** This function returns the number of currently existing top-level
         windows.
         @return
@@ -98,7 +98,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     long getTopWindowCount ();
 
     //-------------------------------------------------------------------------
-
+    
     /** Return a reference to the specified top-level window.  Note that the
         number of top-level windows may change between a call to
         <member>getTopWindowCount()</member> and successive calls to this
@@ -115,8 +115,8 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     ::com::sun::star::awt::XTopWindow getTopWindow ([in] long nIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** Return the currently active top-level window, i.e. which has
         currently the input focus.
         @return
@@ -138,10 +138,10 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
             twice.)
     */
     [oneway] void addTopWindowListener (
-        [in] ::com::sun::star::awt::XTopWindowListener xListener);
+        [in] ::com::sun::star::awt::XTopWindowListener xListener); 
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** Remove the specified listener from the list of listeners.
         @param xListener
             If the reference is empty then nothing will be changed.  If the
@@ -151,8 +151,8 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void removeTopWindowListener (
         [in] ::com::sun::star::awt::XTopWindowListener xListener);
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** Add a new listener that is called on <type
         scope="::com::sun::star::awt">KeyEvent</type>s.  Every listener is
         given the opportunity to consume the event, i.e. prevent the not yet
@@ -166,7 +166,7 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void addKeyHandler (
         [in] ::com::sun::star::awt::XKeyHandler xHandler);
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** Remove the specified listener from the list of listeners.
         @param xHandler
@@ -175,10 +175,10 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
             will be removed.
     */
     [oneway] void removeKeyHandler (
-        [in] ::com::sun::star::awt::XKeyHandler xHandler);
+        [in] ::com::sun::star::awt::XKeyHandler xHandler); 
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** Add a new listener that is called on <type
         scope="::com::sun::star::awt">FocusEvent</type>s.  Use this focus
         broadcaster to keep track of the object that currently has the input
@@ -192,8 +192,8 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     [oneway] void addFocusListener (
         [in] ::com::sun::star::awt::XFocusListener xListener);
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** Remove the specified listener from the list of listeners.
         @param xListener
             If the reference is empty then nothing will be changed.  If the
@@ -201,20 +201,20 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
             will be removed.
     */
     [oneway] void removeFocusListener (
-        [in] ::com::sun::star::awt::XFocusListener xListener);
+        [in] ::com::sun::star::awt::XFocusListener xListener); 
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** Broadcasts the a focusGained on all registered focus listeners
         @param source
             The object that has gained the input focus. It should implement
             <type scope="com::sun::star::accessibility">XAccessible</type>.
     */
     [oneway] void fireFocusGained (
-        [in] ::com::sun::star::uno::XInterface source);
+        [in] ::com::sun::star::uno::XInterface source); 
 
-    //-------------------------------------------------------------------------
-
+    //------------------------------------------------------------------------- 
+    
     /** Broadcasts the a focusGained on all registered focus listeners
         @param source
             The object that has lost the input focus. It should implement
@@ -222,9 +222,9 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     */
     [oneway] void fireFocusLost (
         [in] ::com::sun::star::uno::XInterface source);
-
-};
-
+    
+}; 
+ 
 }; }; }; };
-
-#endif
+ 
+#endif 

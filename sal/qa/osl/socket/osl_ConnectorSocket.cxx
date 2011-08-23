@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
 
     .IF "$(GUI)" == "WNT"
-    SHL1STDLIBS +=  $(SOLARLIBDIR)$/cppunit.lib
+    SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
     SHL1STDLIBS +=  ws2_32.lib
     .ENDIF
 
@@ -104,8 +104,8 @@ namespace osl_ConnectorSocket
 
     /** testing the method:
         ConnectorSocket(oslAddrFamily Family = osl_Socket_FamilyInet,
-                        oslProtocol Protocol = osl_Socket_ProtocolIp,
-                        oslSocketType   Type = osl_Socket_TypeStream);
+                        oslProtocol	Protocol = osl_Socket_ProtocolIp,
+                        oslSocketType	Type = osl_Socket_TypeStream);
     */
 
     class ctors : public CppUnit::TestFixture
@@ -144,13 +144,13 @@ namespace osl_ConnectorSocket
             pTimeout  = ( TimeValue* )malloc( sizeof( TimeValue ) );
             pTimeout->Seconds = 3;
             pTimeout->Nanosec = 0;
-        //  sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
+        //	sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
         }
 
         void tearDown( )
         {
             free( pTimeout );
-        //  sHandle = NULL;
+        //	sHandle = NULL;
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }

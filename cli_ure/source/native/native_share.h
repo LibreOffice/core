@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ inline ::System::Object * to_cli(
             ::com::sun::star::uno::Reference<
               ::com::sun::star::uno::XInterface >() );
     }
-
+    
     intptr_t intptr =
         reinterpret_cast< intptr_t >(
             mapping.mapInterface( x.get(), ::getCppuType( &x ) ) );
@@ -95,7 +95,7 @@ inline void to_uno(
             ::com::sun::star::uno::Reference<
               ::com::sun::star::uno::XInterface >() );
     }
-
+    
     ::System::Runtime::InteropServices::GCHandle handle(
         ::System::Runtime::InteropServices::GCHandle::Alloc( x ) );
     T * ret = 0;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,11 +64,11 @@ interface XKeyAlteration
             the table to be altered
         @param key
             the key to be dropped
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    void dropKey([in] com::sun::star::beans::XPropertySet table,[in] com::sun::star::beans::XPropertySet key)
-        raises ( com::sun::star::sdbc::SQLException);
+    void dropKey([in] com::sun::star::beans::XPropertySet table,[in] com::sun::star::beans::XPropertySet key) 
+        raises ( com::sun::star::sdbc::SQLException); 
 
     /** creates a new object using the given descriptor and appends it
         to the related container.
@@ -80,10 +80,10 @@ interface XKeyAlteration
             the table to be altered
         @param descriptor
             the descriptor which should be serve to append a new object
-        @throws com::sun::star::sdbc::SQLException
+        @throws com::sun::star::sdbc::SQLException 
             if a database access error occurs.
      */
-    void addKey([in] com::sun::star::beans::XPropertySet table,[in]com::sun::star::beans::XPropertySet descriptor)
+    void addKey([in] com::sun::star::beans::XPropertySet table,[in]com::sun::star::beans::XPropertySet descriptor) 
         raises (com::sun::star::sdbc::SQLException);
 
 

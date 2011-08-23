@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 #ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #define __com_sun_star_accessibility_XAccessibleComponent_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_awt_XFocusListener_idl__
 #include <com/sun/star/awt/XFocusListener.idl>
 #endif
@@ -103,19 +103,19 @@ module com { module sun { module star { module accessibility {
 published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 {
     /** Tests whether the specified point lies within this object's bounds.
-
+    
         <p>The test point's coordinates are defined relative to the
         coordinate system of the object.  That means that when the object is
         an opaque rectangle then both the points (0,0) and (with-1,height-1)
         would yield a <TRUE/> value.</p>
-
+        
         @param point
             Coordinates of the point to test.  The origin of the coordinate
             system is the upper left corner of the object's bounding box as
             returned by the <method>getBounds</method>.  The scale of the
             coordinate system is identical to that of the screen coordinate
             system.
-
+            
         @return
             Returns <TRUE/> if the point lies within or on the object's bounding
             box and <FALSE/> otherwise.
@@ -123,7 +123,7 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
     boolean containsPoint ([in] ::com::sun::star::awt::Point aPoint);
 
     /** Returns the Accessible child that is rendered under the given point.
-
+    
         <p>The test point's coordinates are defined relative to the
         coordinate system of the object.  That means that when the object is
         an opaque rectangle then both the points (0,0) and (with-1,height-1)
@@ -135,7 +135,7 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             corner of the object's bounding box as returned by the
             <method>getBounds</method>.  The scale of the coordinate
             system is identical to that of the screen coordinate system.
-
+            
         @return
             If there is one child which is rendered so that its bounding box
             contains the test point then a reference to that object is
@@ -147,14 +147,14 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
     XAccessible  getAccessibleAtPoint ([in] ::com::sun::star::awt::Point aPoint);
 
     /** Returns the bounding box of this object.
-
+    
         <p>The returned bounding box has the form of a rectangle.  Its
         coordinates are relative to the object's parent coordinate system.
         Note that the two methods <method>getLocation</methodmber> and
         <method>getSize</method> return the same information.  With method
         <method>getLocationOnScreen</method> you can get the bound box
         position in screen coordinates.</p>
-
+        
         @return
             The coordinates of the returned rectangle are relative to this
             object's parent or relative to the screen on which this object
@@ -166,10 +166,10 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 
     /** Returns the location of the upper left corner of the object's
         bounding box relative to the parent.</p>
-
+    
         <p>The coordinates of the bounding box are given relative to the
         parent's coordinate system.</p>
-
+        
         @return
             The coordinates of the returned position are relative to this
             object's parent or relative to the screen on which this object
@@ -180,30 +180,30 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 
     /** Returns the location of the upper left corner of the object's
         bounding box in screen coordinates.
-
+        
         <p>This method returns the same point as does the method
         <method>getLocation</method>.  The difference is that the
         coordinates are absolute screen coordinates of the screen to which
         the object is rendered instead of being relative to the object's
         parent.</p>
-
+        
         @return
             The coordinates of the returned position are relative to the
             screen on which this object is rendered.  If the object is not
             on any screen the returned position is (0,0).
     */
     ::com::sun::star::awt::Point getLocationOnScreen ();
-
+    
     /** Returns the size of this object's bounding box.
-
+    
         @return
             The returned size is the size of this object or empty if it is
             not rendered on any screen.
     */
     ::com::sun::star::awt::Size getSize();
-
+    
     /** Grabs the focus to this object.
-
+    
         <p>If this object can not accept the focus,
         i.e. <method>isFocusTraversable</method> returns <FALSE/> for this
         object then nothing happens.  Otherwise the object will attempt to
@@ -214,23 +214,23 @@ published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
     [oneway] void grabFocus ();
 
     /** Returns the foreground color of this object.
-
+    
         @return
             The returned color is the foreground color of this object or, if
             that is not supported, the default foreground color.
-    */
+    */ 
     ::com::sun::star::util::Color getForeground ();
 
     /** Returns the background color of this object.
-
+    
         @return
             The returned color is the background color of this object or, if
             that is not supported, the default background color.
-    */
+    */ 
     ::com::sun::star::util::Color getBackground ();
 
 };
-
+          
 }; }; }; };
 
 #endif

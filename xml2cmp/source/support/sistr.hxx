@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class  Simstr
                      Simstr(                       // Creates Simstr out of a copy of the described bytes within 'anyBytes'.
                                                    // Adds a '\0' at the end.
                            const char *   anybytes,
-                           int            firstBytesPos,
+                           int			  firstBytesPos,
                            int            nrOfBytes);
       virtual        ~Simstr();
                      Simstr(
@@ -50,7 +50,7 @@ class  Simstr
                      operator const char*() const;
 
       // diverse utility functions
-      const char *   str() const                { return sz; }
+      const char *   str() const				{ return sz; }
       char *         s();   // CAUTION!!!          // Only use when a function needs a 'char*' but
                                                    //   still will NOT MODIFY THE STRING!
                                                    //   Typecasts to 'const char*' are performed automatically.
@@ -89,7 +89,7 @@ class  Simstr
       void           remove(
                              int            pos,
                            int            anzahl = 1);
-      void           remove_trailing_blanks();
+      void			 remove_trailing_blanks();
 
          // search functions
       int            pos_first(
@@ -137,7 +137,7 @@ bool  operator>=(const char * str, const Simstr & S);
 
 inline char *
 Simstr::s()                            { return sz; }
-inline int
+inline int 
 Simstr::l() const                      { return len; }
 inline
 Simstr::operator const char*() const   { return sz; }
@@ -145,6 +145,6 @@ inline bool
 Simstr::is_empty() const               { return len == 0; }
 
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

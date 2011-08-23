@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,16 @@ extern "C" {
 /*****************************************************************************/
 /* oslSocketImpl */
 /*****************************************************************************/
-#define OSL_SOCKET_FLAGS_NONBLOCKING    0x0001
+#define OSL_SOCKET_FLAGS_NONBLOCKING	0x0001
 
 typedef void* (SAL_CALL * oslCloseCallback) (void*);
 
 struct oslSocketImpl {
     oslInterlockedCount m_nRefCount;
-    SOCKET              m_Socket;
-    int                 m_Flags;
-    oslCloseCallback    m_CloseCallback;
-    void*               m_CallbackArg;
+    SOCKET				m_Socket;
+    int					m_Flags;
+    oslCloseCallback	m_CloseCallback;
+    void*				m_CallbackArg;
 };
 
 struct oslSocketAddrImpl
@@ -56,7 +56,7 @@ struct oslSocketAddrImpl
     struct sockaddr m_sockaddr;
     oslInterlockedCount m_nRefCount;
 };
-
+    
 oslSocket __osl_createSocketImpl(SOCKET Socket);
 void __osl_destroySocketImpl(oslSocket pImpl);
 
@@ -104,7 +104,7 @@ static sal_Bool __osl_attemptSocketDialupImpl (void);
 }
 #endif
 
-#endif
+#endif 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

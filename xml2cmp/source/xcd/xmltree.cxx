@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,15 +56,15 @@ char  C_sAttr_xl_role[] = "xlink:role";
 char  C_sAttr_xl_title[] = "xlink:title";
 char  C_sAttr_xmlns[] = "xmlns:xlink";
 char  C_sAttr_xl_type[] = "xlink:type";
-char  C_sCompDescrListTitle[] = "Component Descriptions";
+char  C_sCompDescrListTitle[] = "Component Descriptions"; 
 
 
-FreeChoiceElement * Create_ModuleDescrOptional_Element(
+FreeChoiceElement *	Create_ModuleDescrOptional_Element(
                         MultipleTextElement * &
                                             o_rTypes,
                         MultipleTextElement * &
                                             o_rServiceDependencies );
-FreeChoiceElement * Create_CompDescrOptional_Element(
+FreeChoiceElement *	Create_CompDescrOptional_Element(
                         MultipleTextElement * &
                                             o_rTypes,
                         MultipleTextElement * &
@@ -73,7 +73,7 @@ FreeChoiceElement * Create_CompDescrOptional_Element(
 
 
 ModuleDescription::ModuleDescription()
-    :   SequenceElement(C_sMODULEDESCRIPTION),
+    :	SequenceElement(C_sMODULEDESCRIPTION),
         pModuleName(0),
         pCdList(0),
         pTypes(0),
@@ -113,7 +113,7 @@ ModuleDescription::Get_ServiceDependencies( List< const MultipleTextElement * > 
 }
 
 ComponentDescription::ComponentDescription()
-    :   SequenceElement(C_sCOMPONENTDESCRIPTION,1),
+    :	SequenceElement(C_sCOMPONENTDESCRIPTION,1),
         pComponentName(0),
         pSupportedServices(0),
         pTypes(0),
@@ -132,7 +132,7 @@ ComponentDescription::ComponentDescription()
 }
 
 CompDescrList::CompDescrList()
-    :   ListElement(C_sCOMPONENTDESCRIPTION, 0)
+    :	ListElement(C_sCOMPONENTDESCRIPTION, 0)
 {
 }
 
@@ -184,7 +184,7 @@ CompDescrList::Get_ServiceDependencies( List< const MultipleTextElement * > & o_
 }
 
 MdName::MdName()
-    :   SglTextElement(C_sModuleName, lt_html, false)
+    :	SglTextElement(C_sModuleName, lt_html, false)
 {
 }
 
@@ -195,7 +195,7 @@ MdName::Write2Html( HtmlCreator & io_rHC ) const
 }
 
 CdName::CdName()
-    :   SglTextElement(C_sName, lt_html, true)
+    :	SglTextElement(C_sName, lt_html, true)
 {
 }
 
@@ -206,7 +206,7 @@ CdName::Write2Html( HtmlCreator & io_rHC ) const
 }
 
 SupportedService::SupportedService()
-    :   MultipleTextElement(C_sSupportedService, lt_idl, true)
+    :	MultipleTextElement(C_sSupportedService, lt_idl, true)
 {
 }
 

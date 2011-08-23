@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ using namespace ::com::sun::star::container;
 namespace remotebridges_factory
 {
     rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
+    
     struct hashOUString
     {
         size_t operator()(const OUString & s) const
@@ -83,13 +83,13 @@ namespace remotebridges_factory
                 return s1 == s2;
             }
     };
-
+    
     typedef ::std::hash_map
     <
     OUString,
     WeakReference< XBridge >,
     hashOUString,
-    equalOUString
+    equalOUString	
     > BridgeHashMap;
 
 
@@ -98,9 +98,9 @@ namespace remotebridges_factory
     OUString,
     OUString,
     hashOUString,
-    equalOUString
+    equalOUString	
     > ServiceHashMap;
-
+    
     class OBridgeFactory :
         public MyMutex,
         public OComponentHelper,
@@ -110,14 +110,14 @@ namespace remotebridges_factory
     public:
         OBridgeFactory( const Reference < XComponentContext > &rCtx );
         ~OBridgeFactory();
-
+        
     public: // XInterface
-        ::com::sun::star::uno::Any      SAL_CALL
+        ::com::sun::star::uno::Any     	SAL_CALL
             queryInterface( const ::com::sun::star::uno::Type & aType ) throw(RuntimeException);
 
-        void        SAL_CALL acquire() throw()
+        void 		SAL_CALL acquire() throw()
             { OComponentHelper::acquire(); }
-        void        SAL_CALL release() throw()
+        void 		SAL_CALL release() throw()
             { OComponentHelper::release(); }
 
     public:
@@ -133,7 +133,7 @@ namespace remotebridges_factory
             getBridge( const ::rtl::OUString& sName )
               throw(::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::bridge::XBridge > > SAL_CALL
-              getExistingBridges(  ) throw(::com::sun::star::uno::RuntimeException);
+              getExistingBridges(  ) throw(::com::sun::star::uno::RuntimeException);		
 
     public: //XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
@@ -149,11 +149,11 @@ namespace remotebridges_factory
     public:
         static OUString getImplementationNameStatic(  ) SAL_THROW( () );
         static Sequence< OUString >  getSupportedServiceNamesStatic() SAL_THROW( () );
-
+        
     private:
         void init();
         OUString getServiceNameForProtocol( const OUString &sProtocol );
-
+        
     private:
         Reference < XMultiComponentFactory > m_rSMgr;
         Reference < XComponentContext > m_rCtx;
@@ -176,7 +176,7 @@ namespace remotebridges_factory
     {
         g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
-
+    
     void OBridgeFactory::init()
     {
         MutexGuard guard( m_mutexInit );
@@ -245,7 +245,7 @@ namespace remotebridges_factory
         }
         return sService;
     }
-
+    
     Any OBridgeFactory::queryInterface( const Type &aType ) throw(RuntimeException)
     {
         Any a = ::cppu::queryInterface(
@@ -255,7 +255,7 @@ namespace remotebridges_factory
         {
             return a;
         }
-
+        
         return OComponentHelper::queryInterface( aType );
 
     }
@@ -275,7 +275,7 @@ namespace remotebridges_factory
             m_rSMgr->createInstanceWithContext(sService, m_rCtx );
         Reference < XInitialization > rInit(rXInterface, UNO_QUERY );
         Reference < XBridge > rBridge( rInit , UNO_QUERY );
-
+        
         if( rInit.is() && rBridge.is() )
         {
             Sequence < Any > seqAny( 4 );
@@ -309,7 +309,7 @@ namespace remotebridges_factory
         BridgeHashMap::iterator ii = m_mapBridge.find( sName );
 
         Reference < XBridge > rBridge;
-
+        
         if( ii != m_mapBridge.end() )
         {
             rBridge = (*ii).second;
@@ -348,7 +348,7 @@ namespace remotebridges_factory
         Sequence < Reference < XBridge > > seq( nCount );
         if( nCount )
         {
-
+            
             for( sal_Int32 i = 0;
                  i < nCount ;
                  i ++ )
@@ -379,7 +379,7 @@ namespace remotebridges_factory
         }
         return (*pCollection).getTypes();
     }
-
+    
     Sequence< sal_Int8 > SAL_CALL OBridgeFactory::getImplementationId(  ) throw( RuntimeException)
     {
         static OImplementationId *pId = 0;
@@ -409,7 +409,7 @@ namespace remotebridges_factory
         }
         return *pName;
     }
-
+    
     Sequence< OUString > OBridgeFactory::getSupportedServiceNamesStatic()
     {
         static Sequence < OUString > *pNames = 0;
@@ -430,7 +430,7 @@ namespace remotebridges_factory
     {
         return getImplementationNameStatic();
     }
-
+    
     sal_Bool SAL_CALL OBridgeFactory::supportsService( const OUString& ServiceName ) throw(RuntimeException)
     {
         Sequence< OUString > seq = getSupportedServiceNamesStatic();
@@ -445,13 +445,13 @@ namespace remotebridges_factory
         }
         return bReturn;
     }
-
+    
     Sequence< OUString > SAL_CALL OBridgeFactory::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNamesStatic();
     }
-
-
+    
+    
     Reference< XInterface > SAL_CALL CreateInstance(Reference< XComponentContext > const & xContext)
     {
         return Reference < XInterface > ( *new OBridgeFactory( xContext ) );
@@ -461,7 +461,7 @@ namespace remotebridges_factory
 using namespace remotebridges_factory;
 static ImplementationEntry g_entries[] =
 {
-    {   CreateInstance, OBridgeFactory::getImplementationNameStatic,
+    {	CreateInstance, OBridgeFactory::getImplementationNameStatic,
         OBridgeFactory::getSupportedServiceNamesStatic, createSingleComponentFactory ,
         &g_moduleCount.modCnt , 0
     },
@@ -474,7 +474,7 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 {
     return g_moduleCount.canUnload( &g_moduleCount , pTime );
 }
-
+    
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -230,7 +230,7 @@ void Bridge::map_to_uno(
     OSL_ASSERT(
         !out_param ||
         (1 == jni->GetArrayLength( (jarray) java_data.l )) );
-
+    
     switch (type->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
@@ -486,7 +486,7 @@ void Bridge::map_to_uno(
 
         JLocalAutoRef jo_type( jni );
         JLocalAutoRef jo_wrapped_holder( jni );
-
+        
         if (JNI_FALSE != jni->IsInstanceOf(
                 java_data.l, m_jni_info->m_class_Any ))
         {
@@ -534,7 +534,7 @@ void Bridge::map_to_uno(
         jni.ensure_no_exception();
         OUString type_name(
             jstring_to_oustring( jni, (jstring) jo_type_name.get() ) );
-
+        
         ::com::sun::star::uno::TypeDescription value_td( type_name );
         if (! value_td.is())
         {
@@ -725,7 +725,7 @@ void Bridge::map_to_uno(
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
-
+        
         *(jint *) uno_data = jni->GetIntField(
             java_data.l, m_jni_info->m_field_Enum_m_value );
         break;
@@ -1029,7 +1029,7 @@ void Bridge::map_to_uno(
 
         auto_ptr< rtl_mem > seq;
         sal_Int32 nElements = jni->GetArrayLength( (jarray) java_data.l );
-
+        
         switch (element_type->eTypeClass)
         {
         case typelib_TypeClass_CHAR:
@@ -1869,7 +1869,7 @@ void Bridge::map_to_java(
             OUStringToOString( type_name, RTL_TEXTENCODING_JAVA_UTF8 ) );
         JLocalAutoRef jo_enum_class(
             jni, find_class( jni, class_name.getStr() ) );
-
+        
         JLocalAutoRef jo_enum( jni );
         if (in_param)
         {
@@ -2354,7 +2354,7 @@ void Bridge::map_to_java(
                     element_type_name, RTL_TEXTENCODING_JAVA_UTF8 ) );
             JLocalAutoRef jo_enum_class(
                 jni, find_class( jni, class_name.getStr() ) );
-
+            
             jo_ar.reset(
                 jni->NewObjectArray(
                     nElements, (jclass) jo_enum_class.get(), 0 ) );
@@ -2394,7 +2394,7 @@ void Bridge::map_to_java(
         {
             JNI_type_info const * element_info =
                 m_jni_info->get_type_info( jni, element_type );
-
+            
             jo_ar.reset(
                 jni->NewObjectArray( nElements, element_info->m_class, 0 ) );
             jni.ensure_no_exception();
@@ -2427,7 +2427,7 @@ void Bridge::map_to_java(
             OString class_name( buf.makeStringAndClear() );
             JLocalAutoRef jo_seq_class(
                 jni, find_class( jni, class_name.getStr() ) );
-
+            
             jo_ar.reset(
                 jni->NewObjectArray(
                     nElements, (jclass) jo_seq_class.get(), 0 ) );
@@ -2456,7 +2456,7 @@ void Bridge::map_to_java(
             JNI_interface_type_info const * iface_info =
                 static_cast< JNI_interface_type_info const * >(
                     m_jni_info->get_type_info( jni, element_type ) );
-
+            
             jo_ar.reset(
                 jni->NewObjectArray( nElements, iface_info->m_class, 0 ) );
             jni.ensure_no_exception();

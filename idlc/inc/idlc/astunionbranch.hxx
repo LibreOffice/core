@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ public:
     AstUnionLabel* getLabel()
         { return m_pLabel; }
 private:
-    AstUnionLabel*  m_pLabel;
+    AstUnionLabel* 	m_pLabel;
 };
 
 #endif // _IDLC_ASTUNIONBRANCH_HXX_

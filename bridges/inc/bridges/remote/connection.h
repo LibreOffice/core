@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,16 +35,16 @@
 struct remote_Connection
 {
     void ( SAL_CALL * acquire ) ( remote_Connection *);
-
+    
     void ( SAL_CALL * release ) ( remote_Connection *);
-
+    
     /**
       reads nSize bytes from the connection. This method blocks, until
       all bytes are available or an error occurs.
       @return Number of bytes read.
               If the return value is less than nSize, an unrecoverable
               i/o error has occured or the connection was closed.
-
+                          
      */
     sal_Int32 (SAL_CALL * read)(remote_Connection *, sal_Int8 *pDest, sal_Int32 nSize );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #endif
 
 
-class SAL_DLLPRIVATE TestEnv : public cppu::Enterable
+class SAL_DLLPRIVATE TestEnv : public cppu::Enterable 
 {
     int m_inCount;
 
@@ -96,7 +96,7 @@ void TestEnv::v_enter(void)
 {
     ++ m_inCount;
 }
-
+    
 void TestEnv::v_leave(void)
 {
     -- m_inCount;

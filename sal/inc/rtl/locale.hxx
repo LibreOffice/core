@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -237,14 +237,14 @@ public:
         return pData == obj.pData;
     }
 
-    rtl_Locale *    getData() const { return pData; }
+    rtl_Locale *	getData() const { return pData; }
 
 private:
     /**
          Must be the first member in this class. OUString access this member with
          *(rtl_Locale **)&locale.
      */
-    rtl_Locale *    pData;
+    rtl_Locale *	pData;
 
     OLocale()
         : pData(rtl_locale_getDefault()) {}

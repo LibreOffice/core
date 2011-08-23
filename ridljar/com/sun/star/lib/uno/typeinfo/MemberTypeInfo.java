@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ public class MemberTypeInfo extends TypeInfo
     int m_index;
     private final Type m_unoType; // @since UDK 3.2
     private final int m_typeParameterIndex; // @since UDK 3.2
-
+    
     /**
        Create a member type info with a UNO type that cannot unambiguously be
        represented as a Java&nbsp;1.2 type.

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
-
+ 
 #include <hash_map>
 #include <list>
 #include <set>
@@ -208,15 +208,15 @@ static sal_Int32 nCacheSize = 256;
  */
 struct TypeDescriptor_Init_Impl
 {
-    //sal_Bool          bDesctructorCalled;
+    //sal_Bool			bDesctructorCalled;
     // all type description references
-    WeakMap_Impl *              pWeakMap;
+    WeakMap_Impl *				pWeakMap;
     // all type description callbacks
-    CallbackSet_Impl *          pCallbacks;
+    CallbackSet_Impl *			pCallbacks;
     // A cache to hold descriptions
-    TypeDescriptionList_Impl *  pCache;
+    TypeDescriptionList_Impl *	pCache;
     // The mutex to guard all type library accesses
-    Mutex *                     pMutex;
+    Mutex *						pMutex;
 
     inline Mutex & getMutex() SAL_THROW( () );
 
@@ -224,16 +224,16 @@ struct TypeDescriptor_Init_Impl
 
 #if OSL_DEBUG_LEVEL > 1
     // only for debugging
-    sal_Int32           nTypeDescriptionCount;
-    sal_Int32           nCompoundTypeDescriptionCount;
-    sal_Int32           nUnionTypeDescriptionCount;
-    sal_Int32           nIndirectTypeDescriptionCount;
-    sal_Int32           nArrayTypeDescriptionCount;
-    sal_Int32           nEnumTypeDescriptionCount;
-    sal_Int32           nInterfaceMethodTypeDescriptionCount;
-    sal_Int32           nInterfaceAttributeTypeDescriptionCount;
-    sal_Int32           nInterfaceTypeDescriptionCount;
-    sal_Int32           nTypeDescriptionReferenceCount;
+    sal_Int32			nTypeDescriptionCount;
+    sal_Int32			nCompoundTypeDescriptionCount;
+    sal_Int32			nUnionTypeDescriptionCount;
+    sal_Int32			nIndirectTypeDescriptionCount;
+    sal_Int32			nArrayTypeDescriptionCount;
+    sal_Int32			nEnumTypeDescriptionCount;
+    sal_Int32			nInterfaceMethodTypeDescriptionCount;
+    sal_Int32			nInterfaceAttributeTypeDescriptionCount;
+    sal_Int32			nInterfaceTypeDescriptionCount;
+    sal_Int32			nTypeDescriptionReferenceCount;
 #endif
     ~TypeDescriptor_Init_Impl() SAL_THROW( () );
 };
@@ -340,15 +340,15 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         pWeakMap = 0;
     }
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ASSERT( nTypeDescriptionCount == 0 );
-    OSL_ASSERT( nCompoundTypeDescriptionCount == 0 );
-    OSL_ASSERT( nUnionTypeDescriptionCount == 0 );
-    OSL_ASSERT( nIndirectTypeDescriptionCount == 0 );
-    OSL_ASSERT( nArrayTypeDescriptionCount == 0 );
-    OSL_ASSERT( nEnumTypeDescriptionCount == 0 );
-    OSL_ASSERT( nInterfaceMethodTypeDescriptionCount == 0 );
-    OSL_ASSERT( nInterfaceAttributeTypeDescriptionCount == 0 );
-    OSL_ASSERT( nInterfaceTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nCompoundTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nUnionTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nIndirectTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nArrayTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nEnumTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nInterfaceMethodTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nInterfaceAttributeTypeDescriptionCount == 0 );
+    OSL_ASSERT(	nInterfaceTypeDescriptionCount == 0 );
     OSL_ASSERT( nTypeDescriptionReferenceCount == 0 );
 
     OSL_ASSERT( !pCallbacks || pCallbacks->empty() );
@@ -376,7 +376,7 @@ extern "C" void SAL_CALL typelib_typedescription_registerCallback(
 {
     // todo mt safe: guard is no solution, can not acquire while calling callback!
     TypeDescriptor_Init_Impl &rInit = Init::get();
-//      OslGuard aGuard( rInit.getMutex() );
+//  	OslGuard aGuard( rInit.getMutex() );
     if( !rInit.pCallbacks )
         rInit.pCallbacks = new CallbackSet_Impl;
     rInit.pCallbacks->push_back( CallbackEntry( pContext, pCallback ) );
@@ -391,7 +391,7 @@ extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
     if( rInit.pCallbacks )
     {
         // todo mt safe: guard is no solution, can not acquire while calling callback!
-//          OslGuard aGuard( rInit.getMutex() );
+//  		OslGuard aGuard( rInit.getMutex() );
         CallbackEntry aEntry( pContext, pCallback );
         CallbackSet_Impl::iterator iPos( rInit.pCallbacks->begin() );
         while (!(iPos == rInit.pCallbacks->end()))
@@ -700,9 +700,9 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
                 &Init::get().nEnumTypeDescriptionCount );
 #endif
             pTmp->nDefaultEnumValue = 0;
-            pTmp->nEnumValues       = 0;
-            pTmp->ppEnumNames       = 0;
-            pTmp->pEnumValues       = 0;
+            pTmp->nEnumValues		= 0;
+            pTmp->ppEnumNames		= 0;
+            pTmp->pEnumValues		= 0;
         }
         break;
 
@@ -1010,13 +1010,13 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
     typelib_EnumTypeDescription * pEnum = (typelib_EnumTypeDescription *)*ppRet;
 
     pEnum->nDefaultEnumValue = nDefaultValue;
-    pEnum->nEnumValues       = nEnumValues;
-    pEnum->ppEnumNames       = new rtl_uString * [ nEnumValues ];
+    pEnum->nEnumValues		 = nEnumValues;
+    pEnum->ppEnumNames		 = new rtl_uString * [ nEnumValues ];
     for ( sal_Int32 nPos = nEnumValues; nPos--; )
     {
         rtl_uString_acquire( pEnum->ppEnumNames[nPos] = ppEnumNames[nPos] );
     }
-    pEnum->pEnumValues      = new sal_Int32[ nEnumValues ];
+    pEnum->pEnumValues		= new sal_Int32[ nEnumValues ];
     ::memcpy( pEnum->pEnumValues, pEnumValues, nEnumValues * sizeof(sal_Int32) );
 
     (*ppRet)->pWeakRef = (typelib_TypeDescriptionReference *)*ppRet;
@@ -2572,17 +2572,17 @@ extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
 static sal_Bool s_aAssignableFromTab[11][11] =
 {
                          /* from CH,BO,BY,SH,US,LO,UL,HY,UH,FL,DO */
-/* TypeClass_CHAR */            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_BOOLEAN */         { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_BYTE */            { 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_SHORT */           { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_UNSIGNED_SHORT */  { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-/* TypeClass_LONG */            { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-/* TypeClass_UNSIGNED_LONG */   { 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-/* TypeClass_HYPER */           { 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-/* TypeClass_UNSIGNED_HYPER */  { 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-/* TypeClass_FLOAT */           { 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0 },
-/* TypeClass_DOUBLE */          { 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1 }
+/* TypeClass_CHAR */			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_BOOLEAN */			{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_BYTE */			{ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_SHORT */			{ 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_UNSIGNED_SHORT */	{ 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+/* TypeClass_LONG */			{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+/* TypeClass_UNSIGNED_LONG */	{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+/* TypeClass_HYPER */			{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+/* TypeClass_UNSIGNED_HYPER */	{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+/* TypeClass_FLOAT */			{ 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0 },
+/* TypeClass_DOUBLE */			{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1 }
 };
 
 //##################################################################################################
@@ -2594,7 +2594,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     if (pAssignable && pFrom)
     {
         typelib_TypeClass eAssignable = pAssignable->eTypeClass;
-        typelib_TypeClass eFrom       = pFrom->eTypeClass;
+        typelib_TypeClass eFrom		  = pFrom->eTypeClass;
 
         if (eAssignable == typelib_TypeClass_ANY) // anything can be assigned to an any .)
             return sal_True;

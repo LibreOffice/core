@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,53 +24,53 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_TextureProjectionMode_idl__
-#define __com_sun_star_drawing_TextureProjectionMode_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_TextureProjectionMode_idl__ 
+#define __com_sun_star_drawing_TextureProjectionMode_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: enum com::sun::star::drawing::TextureProjectionMode
-/** defines how the texture is mapped to the object.
-
-
-
+/** defines how the texture is mapped to the object. 
+    
+    
+    
     <p>It can be set independently for X and Y texture directions.</p>
  */
 published enum TextureProjectionMode
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::TextureProjectionMode::OBJECTSPECIFIC
-    /** This value specifies that the standard object projection method is
+    /** This value specifies that the standard object projection method is 
         used.
      */
-    OBJECTSPECIFIC,
-
-    //-------------------------------------------------------------------------
-
+    OBJECTSPECIFIC, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::TextureProjectionMode::PARALLEL
-    /** This value specifies a flat parallel projection in the specified
+    /** This value specifies a flat parallel projection in the specified 
         degree of freedom (X or Y).
      */
-    PARALLEL,
-
-    //-------------------------------------------------------------------------
-
+    PARALLEL, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::drawing::TextureProjectionMode::SPHERE
     /** This value forces projection to wrapping in X and/or Y.
      */
-    SPHERE
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    SPHERE 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

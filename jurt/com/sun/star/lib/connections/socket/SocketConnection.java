@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>SocketConnector</code> and the <code>SocketAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2008-04-11 11:14:31 $
- * @author      Kay Ramme
+ * @version 	$Revision: 1.6 $ $ $Date: 2008-04-11 11:14:31 $
+ * @author 	    Kay Ramme
  * @see         com.sun.star.comp.connections.SocketAcceptor
  * @see         com.sun.star.comp.connections.SocketConnector
  * @see         com.sun.star.connections.XConnection
@@ -118,7 +118,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
             xStreamListener.closed();
         }
     }
-
+    
     private void notifyListeners_error(com.sun.star.uno.Exception exception) {
         Enumeration elements = _listeners.elements();
         while(elements.hasMoreElements()) {

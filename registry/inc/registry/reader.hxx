@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -178,7 +178,7 @@ public:
         }
         return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
-
+    
     /**
        Returns the type class of this type reader.
 
@@ -295,7 +295,7 @@ public:
         }
         return rtl::OUString(s, SAL_NO_ACQUIRE);
     }
-
+    
     /**
        Returns the flags of a field of this type reader.
 

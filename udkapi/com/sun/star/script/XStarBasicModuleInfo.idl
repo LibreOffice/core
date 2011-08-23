@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,47 +24,47 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_XStarBasicModuleInfo_idl__
-#define __com_sun_star_script_XStarBasicModuleInfo_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module script {
-
-//=============================================================================
-
+#ifndef __com_sun_star_script_XStarBasicModuleInfo_idl__ 
+#define __com_sun_star_script_XStarBasicModuleInfo_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+  
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
+ 
 /** Script Module containing some scripting code in a certain scripting language
     @deprecated
  */
 published interface XStarBasicModuleInfo: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** returns the name of the module
      */
     string getName();
-
-    //-------------------------------------------------------------------------
+ 
+    //------------------------------------------------------------------------- 
     /** returns the type of the script language as string, for example, "StarBasic" or "JavaScript".
      */
     string getLanguage();
-
-    //-------------------------------------------------------------------------
-    /** returns the script source code as string.
-
+ 
+    //------------------------------------------------------------------------- 
+    /** returns the script source code as string. 
+        
         <p>The code has to correspond with the language
         defined by Language.</p>
      */
     string getSource();
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

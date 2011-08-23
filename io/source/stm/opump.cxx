@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,17 +63,17 @@ using namespace com::sun::star::io;
 #include "factreg.hxx"
 
 namespace io_stm {
-
+    
     class Pump : public WeakImplHelper5<
           XActiveDataSource, XActiveDataSink, XActiveDataControl, XConnectable, XServiceInfo >
     {
-        Mutex                                   m_aMutex;
-        oslThread                               m_aThread;
+        Mutex									m_aMutex;
+        oslThread								m_aThread;
 
-        Reference< XConnectable >               m_xPred;
-        Reference< XConnectable >               m_xSucc;
-        Reference< XInputStream >               m_xInput;
-        Reference< XOutputStream >              m_xOutput;
+        Reference< XConnectable >				m_xPred;
+        Reference< XConnectable >				m_xSucc;
+        Reference< XInputStream >				m_xInput;
+        Reference< XOutputStream >				m_xOutput;
         OInterfaceContainerHelper               m_cnt;
         sal_Bool                                m_closeFired;
 
@@ -85,31 +85,31 @@ namespace io_stm {
         void fireStarted();
         void fireTerminated();
         void fireError( const Any &a );
-
+            
     public:
         Pump();
         virtual ~Pump();
-
+        
         // XActiveDataSource
         virtual void SAL_CALL setOutputStream( const Reference< ::com::sun::star::io::XOutputStream >& xOutput ) throw();
         virtual Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream() throw();
-
+        
         // XActiveDataSink
         virtual void SAL_CALL setInputStream( const Reference< ::com::sun::star::io::XInputStream >& xStream ) throw();
         virtual Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream() throw();
-
+        
         // XActiveDataControl
         virtual void SAL_CALL addListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw();
         virtual void SAL_CALL removeListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw();
         virtual void SAL_CALL start() throw( RuntimeException );
         virtual void SAL_CALL terminate() throw();
-
+        
         // XConnectable
         virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPred ) throw();
         virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw();
         virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSucc ) throw();
         virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw();
-
+        
     public: // XServiceInfo
         virtual OUString    SAL_CALL getImplementationName() throw(  );
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
@@ -122,7 +122,7 @@ Pump::Pump() : m_aThread( 0 ),
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
-
+    
 Pump::~Pump()
 {
     // exit gracefully
@@ -226,7 +226,7 @@ void Pump::close()
         MutexGuard guard( m_aMutex );
         rInput = m_xInput;
         m_xInput.clear();
-
+        
         rOutput = m_xOutput;
         m_xOutput.clear();
         m_xSucc.clear();
@@ -240,7 +240,7 @@ void Pump::close()
         }
         catch( Exception & )
         {
-            // go down calm
+            // go down calm 
         }
     }
     if( rOutput.is() )
@@ -276,7 +276,7 @@ void Pump::run()
                 rInput = m_xInput;
                 rOutput = m_xOutput;
             }
-
+            
             if( ! rInput.is() )
             {
                 NotConnectedException exception(

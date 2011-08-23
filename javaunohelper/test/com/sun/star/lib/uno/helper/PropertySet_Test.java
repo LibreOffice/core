@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,18 +49,18 @@ import java.util.Arrays;
 
 public class PropertySet_Test
 {
-
+    
     /** Creates a new instance of PropertySet_Test */
     public PropertySet_Test()
     {
     }
-
+    
     public boolean convertPropertyValue()
     {
         System.out.println("PropertySet.convertPropertyValue");
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
         r[i++]= cl.test_convertPropertyValue();
@@ -82,7 +82,7 @@ public class PropertySet_Test
         System.out.println("PropertySet.setValueNoBroadcast");
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             r[i++]= cl.test_setPropertyValueNoBroadcast();
@@ -104,7 +104,7 @@ public class PropertySet_Test
         System.out.println("PropertySet.setPropertyValue");
         boolean[] r= new boolean[150];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             cl.resetPropertyMembers();
@@ -166,7 +166,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropTypeA", value);
             ret= cl.getPropertyValue("PropTypeA");
             r[i++]= ((Type) ret).equals(value);
-
+            
             // test protected,package,private members
             value= new Boolean(true);
             cl.setPropertyValue("PropBoolB", value);
@@ -175,7 +175,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropBoolC", value);
             ret= cl.getPropertyValue("PropBoolC");
             r[i++]= ((Boolean) ret).equals((Boolean) value);
-
+            
             try{
                 cl.setPropertyValue("PropBoolD", value);
                 i++;
@@ -184,7 +184,7 @@ public class PropertySet_Test
                 r[i++]= true;
             }
             cl.resetPropertyMembers();
-
+            
             value= new Boolean(true);
             cl.setPropertyValue("PropObjectA", value);
             ret= cl.getPropertyValue("PropObjectA");
@@ -240,8 +240,8 @@ public class PropertySet_Test
             cl.setPropertyValue("PropObjectA", new Any( new Type(byte.class), new Byte((byte)1)));
             ret= cl.getPropertyValue("PropObjectA");
             r[i++]= ((Byte) ret).byteValue() == 1;
-
-           cl.resetPropertyMembers();
+            
+           cl.resetPropertyMembers();           
             value= new Boolean(true);
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
@@ -295,7 +295,7 @@ public class PropertySet_Test
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
 
-            cl.resetPropertyMembers();
+            cl.resetPropertyMembers();           
             value= new Any(new Type(boolean.class), new Boolean(true));
             cl.setPropertyValue("PropBoolA", value);
             ret= cl.getPropertyValue("PropBoolA");
@@ -348,9 +348,9 @@ public class PropertySet_Test
             cl.setPropertyValue("PropTypeA", value);
             ret= cl.getPropertyValue("PropTypeA");
             r[i++]= ret instanceof Type && util.anyEquals(value, ret);
+            
 
-
-            cl.resetPropertyMembers();
+            cl.resetPropertyMembers();           
             value= new Any(new Type(boolean.class), new Boolean(true));
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
@@ -403,8 +403,8 @@ public class PropertySet_Test
             cl.setPropertyValue("PropAnyA", value);
             ret= cl.getPropertyValue("PropAnyA");
             r[i++]= ret instanceof Any && util.anyEquals(value, ret);
-
-
+            
+            
             // ------------------------------------------------------------------------------
             cl.resetPropertyMembers();
             value= new Boolean(true);
@@ -439,10 +439,10 @@ public class PropertySet_Test
             cl.setPropertyValue("PropDoubleClass",value);
             ret= cl.getPropertyValue("PropDoubleClass");
             r[i++]= ((Double) ret).equals((Double) value);
-
+            
             cl.resetPropertyMembers();
-
-            cl.resetPropertyMembers();
+                        
+            cl.resetPropertyMembers();           
             value= new Any(new Type(boolean.class), new Boolean(true));
             cl.setPropertyValue("PropBoolClass", value);
             ret= cl.getPropertyValue("PropBoolClass");
@@ -477,7 +477,7 @@ public class PropertySet_Test
             r[i++]= ret instanceof Double && util.anyEquals(value, ret);
             value= new Any(new Type(String.class), new String("string"));
 
-
+            
 
             // PropertyAttribute.READONLY
             cl.propBoolA.Attributes= PropertyAttribute.READONLY;
@@ -489,13 +489,13 @@ public class PropertySet_Test
                 r[i++]= true;
             }
             cl.propBoolA.Attributes= 0;
-
+            
             // MAYBEVOID
             cl.resetPropertyMembers();
             // first MAYBEVOID not set
-
+            
             //primitive members: must not work
-
+            
             cl.boolPropA= false;
             try {
                 cl.setPropertyValue("PropBoolA", null); i++;
@@ -514,7 +514,7 @@ public class PropertySet_Test
                 r[i++]= true;
             }
             cl.propBoolA.Attributes= 0;
-
+            
             cl.propBoolClass.Attributes= PropertyAttribute.MAYBEVOID;
             cl.boolClassProp= null;
             cl.setPropertyValue("PropBoolClass", null);
@@ -522,7 +522,7 @@ public class PropertySet_Test
             // the returned value must be a void any
             Object objAny= cl.getPropertyValue("PropBoolClass");
             r[i++]= util.isVoidAny( objAny);
-
+            
             cl.boolClassProp= new Boolean(true);
             cl.setPropertyValue("PropBoolClass", null);
             r[i++]= cl.boolClassProp == null;
@@ -534,7 +534,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropXWeakA", null);
             r[i++]= util.isVoidAny(cl.getPropertyValue("PropXWeakA"));
             cl.propXWeakA.Attributes= 0;
-
+            
             cl.anyPropA= null;
             try{
                 cl.setPropertyValue("PropAnyA", null); i++;
@@ -543,17 +543,17 @@ public class PropertySet_Test
             }
             cl.anyPropA= null;
             cl.propAnyA.Attributes= PropertyAttribute.MAYBEVOID;
-
+            
             Type _t= new Type(Object.class);
             cl.setPropertyValue("PropAnyA", null);
             r[i++]= cl.anyPropA.getType().equals(new Type(void.class)) &&
                     cl.anyPropA.getObject() == null;
-
+            
             cl.anyPropA= new Any(new Type(byte.class),new Byte((byte) 111));
             cl.setPropertyValue("PropAnyA", null);
             r[i++]= cl.anyPropA.getType().equals(new Type(byte.class)) &&
                     cl.anyPropA.getObject() == null;
-
+            
             cl.anyPropA= null;
             try{
                 cl.setPropertyValue("PropAnyA", new Object()); i++;
@@ -561,7 +561,7 @@ public class PropertySet_Test
             {
                 r[i++]= true;
             }
-
+            
             cl.propObjectA.Attributes= 0;
             try{
                 cl.setPropertyValue("PropObjectA", null); i++;
@@ -575,19 +575,19 @@ public class PropertySet_Test
             {
                 r[i++]= true;
             }
-
+            
             cl.propObjectA.Attributes= PropertyAttribute.MAYBEVOID;
             cl.propObjectA= null;
             cl.setPropertyValue("PropObjectA", null);
             r[i++]= cl.propObjectA == null;
-
+            
             cl.propObjectA= null;
             cl.setPropertyValue("PropObjectA", new Any( new Type(byte.class), null));
             r[i++]= cl.propObjectA == null;
-
-
-            //
-
+            
+            
+            // 
+            
         }catch(java.lang.Exception e){
             i++;
         }
@@ -604,7 +604,7 @@ public class PropertySet_Test
     public boolean addPropertyChangeListener()
     {
         System.out.println("PropertySet.addPropertyChangeListener,\n" +
-                            "PropertySet.removePropertChangeListener," +
+                            "PropertySet.removePropertChangeListener," + 
                             "PropertySet.addVetoableChangeListener, \n" +
                             "PropertySet.removeVetoableChangeListener" +
                             "Notification of listeners");
@@ -623,7 +623,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropByteA", val2);
             r[i++]= li.nChangeCalled == 1 && li.nVetoCalled == 0;
             r[i++]= li.evt.OldValue.equals(val1) && li.evt.NewValue.equals(val2) && li.evt.Source == cl;
-
+            
             li.reset();
             Listener li2= new Listener();
             cl.addPropertyChangeListener("PropByteA", li2);
@@ -631,9 +631,9 @@ public class PropertySet_Test
             cl.setPropertyValue("PropByteA", val3);
             r[i++]= li.nChangeCalled == 1 && li.nVetoCalled == 0
                     && li2.nChangeCalled == 1 && li2.nVetoCalled == 0;
-            r[i++]= li.evt.OldValue.equals(val2) && li.evt.NewValue.equals(val3) && li.evt.Source == cl
+            r[i++]= li.evt.OldValue.equals(val2) && li.evt.NewValue.equals(val3) && li.evt.Source == cl 
                     && li2.evt.OldValue.equals(val2) && li2.evt.NewValue.equals(val3) && li2.evt.Source == cl ;
-
+            
             li.reset();
             li2.reset();
             Listener li3= new Listener();
@@ -643,8 +643,8 @@ public class PropertySet_Test
             r[i++]= li.nChangeCalled == 1 && li.nVetoCalled == 0
                     && li2.nChangeCalled == 1 && li2.nVetoCalled == 0
                     &&  li3.nChangeCalled == 1 && li3.nVetoCalled == 0;
-            r[i++]= li.evt.OldValue.equals(val3) && li.evt.NewValue.equals(val1) && li.evt.Source == cl;
-            r[i++]= li2.evt.OldValue.equals(val3) && li2.evt.NewValue.equals(val1) && li2.evt.Source == cl;
+            r[i++]= li.evt.OldValue.equals(val3) && li.evt.NewValue.equals(val1) && li.evt.Source == cl; 
+            r[i++]= li2.evt.OldValue.equals(val3) && li2.evt.NewValue.equals(val1) && li2.evt.Source == cl; 
             r[i++]= li3.evt.OldValue.equals(val3) && li3.evt.NewValue.equals(val1) && li3.evt.Source == cl ;
 
             li.reset();
@@ -663,7 +663,7 @@ public class PropertySet_Test
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 0
                     && li2.nChangeCalled == 0 && li2.nVetoCalled == 0
                     &&  li3.nChangeCalled == 1 && li3.nVetoCalled == 0;
-
+            
             cl.removePropertyChangeListener("", li3);
             li.reset();
             li2.reset();
@@ -686,7 +686,7 @@ public class PropertySet_Test
             {
                 r[i++]= true;
             }
-
+            
             //Vetoable tests
             cl= new TestClass();
             li.reset();
@@ -703,7 +703,7 @@ public class PropertySet_Test
             cl.setPropertyValue("PropByteA", val2);
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 1;
             r[i++]= li.evt.OldValue.equals(val1) && li.evt.NewValue.equals(val2) && li.evt.Source == cl;
-
+            
             li.reset();
             li2.reset();
             li3.reset();
@@ -712,9 +712,9 @@ public class PropertySet_Test
             cl.setPropertyValue("PropByteA", val3);
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 1
                     && li2.nChangeCalled == 0 && li2.nVetoCalled == 1;
-            r[i++]= li.evt.OldValue.equals(val2) && li.evt.NewValue.equals(val3) && li.evt.Source == cl
+            r[i++]= li.evt.OldValue.equals(val2) && li.evt.NewValue.equals(val3) && li.evt.Source == cl 
                     && li2.evt.OldValue.equals(val2) && li2.evt.NewValue.equals(val3) && li2.evt.Source == cl ;
-
+            
             li.reset();
             li2.reset();
             li3.reset();
@@ -724,8 +724,8 @@ public class PropertySet_Test
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 1
                     && li2.nChangeCalled == 0 && li2.nVetoCalled == 1
                     &&  li3.nChangeCalled == 0 && li3.nVetoCalled == 1;
-            r[i++]= li.evt.OldValue.equals(val3) && li.evt.NewValue.equals(val1) && li.evt.Source == cl;
-            r[i++]= li2.evt.OldValue.equals(val3) && li2.evt.NewValue.equals(val1) && li2.evt.Source == cl;
+            r[i++]= li.evt.OldValue.equals(val3) && li.evt.NewValue.equals(val1) && li.evt.Source == cl; 
+            r[i++]= li2.evt.OldValue.equals(val3) && li2.evt.NewValue.equals(val1) && li2.evt.Source == cl; 
             r[i++]= li3.evt.OldValue.equals(val3) && li3.evt.NewValue.equals(val1) && li3.evt.Source == cl ;
 
             li.reset();
@@ -759,7 +759,7 @@ public class PropertySet_Test
             r[i++]= li.nChangeCalled == 0 && li.nVetoCalled == 0
                     && li2.nChangeCalled == 0 && li2.nVetoCalled == 0
                     &&  li3.nChangeCalled == 0 && li3.nVetoCalled == 1;
-
+            
             cl.removeVetoableChangeListener("", li3);
             li.reset();
             li2.reset();
@@ -801,7 +801,7 @@ public class PropertySet_Test
         System.out.println("PropertySet.getPropertySetInfo");
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             XPropertySetInfo info= cl.getPropertySetInfo();
@@ -822,7 +822,7 @@ public class PropertySet_Test
                 if ( !bFound)
                     r[i++]= false;
             }
-
+            
             for (int j= 0; j < arRegProps.length; j++)
             {
                 Property prop= info.getPropertyByName(arRegProps[j].Name);
@@ -831,13 +831,13 @@ public class PropertySet_Test
                 if (! info.hasPropertyByName(arRegProps[j].Name))
                     r[i++]= false;
             }
-
-
+                
+            
         }catch(java.lang.Exception e){
             System.out.println(e.getMessage());
             i++;
         }
-
+        
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -853,7 +853,7 @@ public class PropertySet_Test
         System.out.println("PropertySet.setFastPropertyValue");
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             cl.setFastPropertyValue(5, new Integer(111));
@@ -868,7 +868,7 @@ public class PropertySet_Test
             System.out.println(e.getMessage());
             i++;
         }
-
+        
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -884,7 +884,7 @@ public class PropertySet_Test
         System.out.println("PropertySet.setFastPropertyValue");
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             cl.setFastPropertyValue(5, new Integer(111));
@@ -894,7 +894,7 @@ public class PropertySet_Test
             System.out.println(e.getMessage());
             i++;
         }
-
+        
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
@@ -910,7 +910,7 @@ public class PropertySet_Test
         System.out.println("PropertySet.setPropertyValues");
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             cl.setPropertyValues(new String[0], new Object[0]);
@@ -921,7 +921,7 @@ public class PropertySet_Test
             Object[] values= new Object[]{aChar, aInt, aByte};
             cl.setPropertyValues(arNames, values);
             r[i++]= cl.charPropA == 'A' && cl.intClassProp.intValue() == 111 && ((Byte)cl.objectPropA).byteValue() == 11;
-
+            
             arNames= new String[] {"blabla","PropIntClass","PropObjectA"};
             cl.resetPropertyMembers();
             cl.setPropertyValues(arNames, values);
@@ -945,15 +945,15 @@ public class PropertySet_Test
         System.out.println("PropertySet.getPropertyValues");
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             cl.charPropA= 'A';
             cl.intClassProp= new Integer(111);
             cl.objectPropA= new Byte((byte)11);
             Object[] values= cl.getPropertyValues(new String[] {"PropCharA","PropIntClass","PropObjectA"});
-
-            r[i++]= ((Character) values[0]).charValue() == 'A' && ((Integer) values[1]).intValue() == 111
+            
+            r[i++]= ((Character) values[0]).charValue() == 'A' && ((Integer) values[1]).intValue() == 111 
                         && ((Byte) values[2]).byteValue() == 11;
         }catch(java.lang.Exception e){
             System.out.println(e.getMessage());
@@ -973,12 +973,12 @@ public class PropertySet_Test
     // The property names in the first argument are ignored.
     public boolean addPropertiesChangeListener()
     {
-        System.out.println("PropertySet.addPropertiesChangeListener\n" +
+        System.out.println("PropertySet.addPropertiesChangeListener\n" +    
                             "PropertySet.removePropertiesChangeListener\n" +
                             "notification of such listeners");
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             Listener li1= new Listener();
@@ -989,7 +989,7 @@ public class PropertySet_Test
             cl.propCharA.Attributes= PropertyAttribute.BOUND;
             cl.setPropertyValue("PropCharA", new Character('C'));
             r[i++]= li1.nPropertiesChange == 1;
-
+            
             PropertyChangeEvent evt= li1.arEvt[0];
             r[i++]= evt.PropertyName.equals("PropCharA") && ((Character)evt.OldValue).charValue() == 'B'
                     && ((Character) evt.NewValue).charValue() == 'C';
@@ -1013,10 +1013,10 @@ public class PropertySet_Test
 
     public boolean firePropertiesChangeEvent()
     {
-        System.out.println("PropertySet.firePropertiesChangeEvent");
+        System.out.println("PropertySet.firePropertiesChangeEvent");    
         boolean[] r= new boolean[50];
         int i= 0;
-
+        
         TestClass cl= new TestClass();
         try {
             Listener li1= new Listener();
@@ -1025,10 +1025,10 @@ public class PropertySet_Test
             cl.firePropertiesChangeEvent(new String[]{"PropCharA","PropIntClass"},  li1);
             r[i++]= li1.nPropertiesChange == 1;
             PropertyChangeEvent[] arEvt= li1.arEvt;
-            r[i++]= arEvt[0].PropertyName.equals("PropCharA")
+            r[i++]= arEvt[0].PropertyName.equals("PropCharA") 
                     && ((Character) arEvt[0].OldValue).charValue() == 'A'
                     && ((Character) arEvt[0].NewValue).charValue() == 'A';
-            r[i++]= arEvt[1].PropertyName.equals("PropIntClass")
+            r[i++]= arEvt[1].PropertyName.equals("PropIntClass") 
                     && ((Integer) arEvt[1].OldValue).intValue() == 111
                     && ((Integer) arEvt[1].NewValue).intValue() == 111;
         }catch(java.lang.Exception e){
@@ -1044,7 +1044,7 @@ public class PropertySet_Test
             System.out.println("Ok");
         return bOk;
     }
-
+    
     public boolean registerProperty1()
     {
         TestClass2 cl= new TestClass2();
@@ -1087,7 +1087,7 @@ public class PropertySet_Test
     public static void main(String[] args)
     {
         test();
-    }
+    }   
 }
 
 class TestClass extends PropertySet
@@ -1122,20 +1122,20 @@ class TestClass extends PropertySet
     public XInterface xInterfacePropA;
     public Property propXWeakA= new Property("PropXWeakA", 13, new Type(Any.class), (short) 0);
     public XWeak xWeakPropA;
-    public Property propEnum =
+    public Property propEnum = 
         new Property("PropEnum", 14, new Type("com.sun.star.beans.PropertyState", TypeClass.ENUM), (short)0);
     public com.sun.star.beans.PropertyState enumPropertyState = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
     // Test private, protected, package access, Anys as arguments and members, members whith a value
 
     public Property propBoolB= new Property("PropBoolB", 101, new Type(Boolean.TYPE), (short) 0);
     protected boolean boolPropB;
-
+    
     public Property propBoolC= new Property("PropBoolC", 201, new Type(Boolean.TYPE), (short) 0);
     boolean boolPropC;
 
-    public Property propBoolD= new Property("PropBoolD", 301, new Type(Boolean.TYPE), (short) 0);
+    public Property propBoolD= new Property("PropBoolD", 301, new Type(Boolean.TYPE), (short) 0); 
     private boolean boolPropD;
-
+    
     public Property propBoolClass= new Property("PropBoolClass", 1001, new Type(Boolean.class), (short) 0);
     public Boolean boolClassProp;
     public Property propCharClass= new Property("PropCharClass", 1002, new Type(Character.class), (short) 0);
@@ -1153,10 +1153,10 @@ class TestClass extends PropertySet
     public Property propDoubleClass= new Property("PropDoubleClass", 1008, new Type(Double.class), (short) 0);
     public Double doubleClassProp;
 
-
+    
     public TestClass()
     {
-
+        
         super();
 //        When adding properties then modify the getRegisteredProperties method
         //registerProperty(String name, int handle, Type type, short attributes, String memberName)
@@ -1188,17 +1188,17 @@ class TestClass extends PropertySet
         registerProperty(propFloatClass, "floatClassProp");
         registerProperty(propDoubleClass, "doubleClassProp");
     }
-
+    
     /** When adding properties then modify the getRegisteredProperties method
      */
     public Property[] getRegisteredProperties()
     {
         return new Property[] {
                     propBoolA, propCharA, propByteA, propShortA,
-                    propIntA, propLongA, propFloatA, propDoubleA,
-                    propStringA, propArrayByteA, propTypeA, propObjectA,
-                    propAnyA, propXInterfaceA, propXWeakA, propEnum, propBoolB,
-                    propBoolC, propBoolD, propBoolClass, propCharClass,
+                    propIntA, propLongA, propFloatA, propDoubleA, 
+                    propStringA, propArrayByteA, propTypeA, propObjectA, 
+                    propAnyA, propXInterfaceA, propXWeakA, propEnum, propBoolB, 
+                    propBoolC, propBoolD, propBoolClass, propCharClass, 
                     propByteClass, propShortClass, propIntClass, propLongClass,
                     propFloatClass, propDoubleClass
         };
@@ -1208,11 +1208,11 @@ class TestClass extends PropertySet
     {
         boolean[] r= new boolean[150];
         int i= 0;
-
+    
         resetPropertyMembers();
         Object[] outOldVal= new Object[1];
         Object[] outNewVal= new Object[1];
-
+        
         Object value= new Boolean(true);
         try
         {
@@ -1279,11 +1279,11 @@ class TestClass extends PropertySet
             r[i++]= outNewVal[0] instanceof XInterface && outNewVal[0].equals(value);
             r[i++]= convertPropertyValue(propXWeakA, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof XWeak && outNewVal[0].equals(value);
-
+            
             value = com.sun.star.beans.PropertyState.DIRECT_VALUE;
             r[i++]= convertPropertyValue(propEnum, outNewVal, outOldVal, value);
             r[i++]= outNewVal[0] instanceof com.sun.star.uno.Enum && outNewVal[0].equals(value);
-
+            
             // Any arguments ------------------------------------------------------------------
             value= new Any( new Type(Integer.class),new Integer(111));
             r[i++]= convertPropertyValue(propIntA, outNewVal, outOldVal, value);
@@ -1480,13 +1480,13 @@ class TestClass2 extends PropertySet
     public char charA;
     protected char charB;
     char charC;
-
+    
     int intMemberA;
-
+    
     public Character charClassA;
     protected Character charClassB;
     Character charClassC;
-
+    
     boolean test_registerProperty1()
     {
         System.out.println("registerProperty Test 1");
@@ -1496,7 +1496,7 @@ class TestClass2 extends PropertySet
         registerProperty("PropChar", new Type(char.class), (short) 0, "PropChar");
         registerProperty("PropInt", new Type(int.class), (short) 0, "PropInt");
         registerProperty("PropString", new Type(String.class), (short) 0, "PropString");
-
+        
         XPropertySetInfo info= getPropertySetInfo();
         Property[] props= info.getProperties();
         for (int j= 0; j < props.length; j++)
@@ -1524,7 +1524,7 @@ class TestClass2 extends PropertySet
             System.out.println("Ok");
         return bOk;
     }
-
+    
     boolean test_registerProperty2()
     {
         System.out.println("registerProperty Test 2");
@@ -1536,7 +1536,7 @@ class TestClass2 extends PropertySet
         registerProperty("charC", "charC", (short) 0);
         registerProperty("charClassB", "charClassB", PropertyAttribute.MAYBEVOID);
         registerProperty("IntProp", "intMemberA", (short) 0);
-
+        
         XPropertySetInfo info= getPropertySetInfo();
         Property[] props= info.getProperties();
         for (int j= 0; j < props.length; j++)
@@ -1590,7 +1590,7 @@ class TestClass2 extends PropertySet
 
 }
 
-class util
+class util 
 {
     // An Object is considered an Any with TypeClass.VOID and no value.
     static boolean anyEquals(Object val1, Object val2)
@@ -1642,7 +1642,7 @@ class util
     }
 }
 
-class Listener implements XPropertyChangeListener, XVetoableChangeListener,
+class Listener implements XPropertyChangeListener, XVetoableChangeListener, 
 XPropertiesChangeListener
 {
     int nChangeCalled;
@@ -1667,12 +1667,12 @@ XPropertiesChangeListener
          if (bVeto)
              throw new PropertyVetoException();
     }
-
+    
     public void disposing( /*IN*/EventObject Source )
     {
         nDisposingCalled++;
     }
-
+    
     public void reset()
     {
         nChangeCalled= 0;
@@ -1689,5 +1689,5 @@ XPropertiesChangeListener
         nPropertiesChange++;
         arEvt= propertyChangeEvent;
     }
-
+    
 }

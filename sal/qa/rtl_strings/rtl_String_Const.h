@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -208,11 +208,11 @@ static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
  static sal_Unicode aUStr4[kTestStr4Len+1];
  static sal_Unicode aUStr5[kTestStr5Len+1];
  static sal_Unicode aUStr6[kTestStr6Len+1];
- static sal_Unicode aUStr7[kTestStr7Len+1];
+ static sal_Unicode aUStr7[kTestStr7Len+1]; 
  static sal_Unicode aUStr8[kTestStr8Len+1];
  static sal_Unicode aUStr9[kTestStr9Len+1];
  static sal_Unicode aUStr10[kTestStr10Len+1];
- static sal_Unicode aUStr11[kTestStr11Len+1];
+ static sal_Unicode aUStr11[kTestStr11Len+1]; 
  static sal_Unicode aUStr12[kTestStr12Len+1];
  static sal_Unicode aUStr13[kTestStr13Len+1];
  static sal_Unicode aUStr14[kTestStr14Len+1];
@@ -230,7 +230,7 @@ static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
  static sal_Unicode aUStr26[kTestStr26Len+1];
  static sal_Unicode aUStr27[kTestStr27Len+1];
  static sal_Unicode aUStr28[kTestStr28Len+1];
- static sal_Unicode aUStr29[kTestStr29Len+1];
+ static sal_Unicode aUStr29[kTestStr29Len+1]; 
  static sal_Unicode aUStr30[kTestStr30Len+1];
  static sal_Unicode aUStr31[kTestStr31Len+1];
  static sal_Unicode aUStr32[kTestStr32Len+1];
@@ -262,33 +262,33 @@ static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
 // static sal_Unicode aUStr58[kTestStr58Len+1]={40,3,5,7,9,11,13,15,115,117,110,SAL_MIN_INT16 /*-32768*/};
  static sal_Unicode aUStr1PlusUStr6[kTestStr1Len + kTestStr6Len + 1];
 
-// we are already in "C"
+// we are already in "C" 
 
 static sal_Bool SAL_CALL test_ini_uString()
 {
 
     sal_Bool iniResult= sal_True;
-
+    
     iniResult &=AStringToUStringNCopy( aUStr1, kTestStr1, kTestStr1Len );
-
+    
     iniResult &=AStringToUStringNCopy( aUStr2, kTestStr2, kTestStr2Len );
-
+    
     iniResult &=AStringToUStringNCopy( aUStr3, kTestStr3, kTestStr3Len );
-
+    
     iniResult &=AStringToUStringNCopy( aUStr4, kTestStr4, kTestStr4Len );
-
+    
     iniResult &=AStringToUStringNCopy( aUStr5, kTestStr5, kTestStr5Len );
-
+    
     iniResult &=AStringToUStringNCopy( aUStr6, kTestStr6, kTestStr6Len );
-
+    
         iniResult &=AStringToUStringNCopy( aUStr7, kTestStr7, kTestStr7Len );
 
         iniResult &=AStringToUStringNCopy( aUStr8, kTestStr8, kTestStr8Len );
 
     iniResult &=AStringToUStringNCopy( aUStr9, kTestStr9, kTestStr9Len );
-
+    
     iniResult &=AStringToUStringNCopy( aUStr10, kTestStr10, kTestStr10Len );
-
+    
     iniResult &=AStringToUStringNCopy( aUStr11, kTestStr11, kTestStr11Len );
 
         iniResult &=AStringToUStringNCopy( aUStr12, kTestStr12, kTestStr12Len );
@@ -310,13 +310,13 @@ static sal_Bool SAL_CALL test_ini_uString()
         iniResult &=AStringToUStringNCopy( aUStr20, kTestStr20, kTestStr20Len );
 
         iniResult &=AStringToUStringNCopy( aUStr21, kTestStr21, kTestStr21Len );
-
+     
     iniResult &=AStringToUStringNCopy( aUStr22, kTestStr22, kTestStr22Len );
 
     iniResult &=AStringToUStringNCopy( aUStr23, kTestStr23, kTestStr23Len );
 
     iniResult &=AStringToUStringNCopy( aUStr1PlusUStr6, kTestStr1PlusStr6, kTestStr1PlusStr6Len );
-
+    
         iniResult &=AStringToUStringNCopy( aUStr24, kTestStr24, kTestStr24Len );
 
         iniResult &=AStringToUStringNCopy( aUStr25, kTestStr25, kTestStr25Len );
@@ -387,9 +387,9 @@ static sal_Bool SAL_CALL test_ini_uString()
 
         //iniResult &=AStringToUStringNCopy( aUStr58, kTestStr58, kTestStr58Len );
     return iniResult;
-
+    
 }
-
+ 
 
 
 
@@ -400,7 +400,7 @@ static const sal_Int32 uTestStr4Len  = 16;
 static const sal_Int32 uTestStr5Len  = 16;
 static const sal_Int32 uTestStr9Len  = 32;
 static const sal_Int32 uTestStr22Len = 32;
-
+ 
 
 
 //------------------------------------------------------------------------
@@ -649,13 +649,13 @@ static const sal_Char *kBase36MaxNumsStr[kBase36MaxNumsCount] =
 //------------------------------------------------------------------------
 static const sal_Int32 nDoubleCount=24;
 // static const sal_Char *inputDouble[nDoubleCount] =
-//  {
+// 	{
 //             "3","3.1","3.1415","3.1415926535","3.141592653589793",
 //             "3.1415926535897932","3.14159265358979323","+3.1",
 //             "3.141592653589793238462643","9.1096e-31","2.997925e8","6.241e18","5.381e+18",
 //             "1.7e-309","6.5822e-16","1.7e+307","2.2e30","03.1"," 3.1","-3.1",
 //             "-0.0","0.0","","1.00e308"
-//  };
+// 	};
 static const double   expValDouble[nDoubleCount]=
     {
             3.0,3.1,3.1415,3.1415926535,3.141592653589793,

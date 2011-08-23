@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,11 @@
 
 //=============================================================================
 
-module com { module sun { module star { module ucb {
+module com { module sun { module star { module ucb { 
 
 //=============================================================================
 /**  a listener for events related to <type>XContent</type>s.
-
+    
     @version  1.0
     @author   Kai Sommerfeld
     @see      XContent
@@ -50,7 +50,7 @@ published interface XContentEventListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** gets called whenever a content wishes to notify changes.
-
+        
         @param evt
         the event.
     */
@@ -60,6 +60,6 @@ published interface XContentEventListener: com::sun::star::lang::XEventListener
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

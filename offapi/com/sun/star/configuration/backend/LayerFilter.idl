@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ module com { module sun { module star { module configuration { module backend {
 /**
   provides a filtered version of a configuration data <type>Layer</type>.
 
-  <p> A layer filter wraps a source <type>XLayer</type> object and
+  <p> A layer filter wraps a source <type>XLayer</type> object and 
      provides access to a filtered version of its data.
-     The data read from the filter usually is produced from the source data
+     The data read from the filter usually is produced from the source data 
      by adding and removing elements or modifying values.
   </p>
 
@@ -63,7 +63,7 @@ published service LayerFilter
     /**
       provides read access to the filtered contents.
 
-      <p> Method <member>XLayer::readData</member> will render a filtered version
+      <p> Method <member>XLayer::readData</member> will render a filtered version 
          of the data produced by the same method of the source object.
      </p>
       */
@@ -73,11 +73,11 @@ published service LayerFilter
 
     /**
       provides a means to set the source data for the filter.
-
+      
       <p> Call <method scope="com::sun::star::lang">XInitialization::initialize</method>()
          with a single argument of type <type scope="com::sun::star::beans">NamedValue</type>,
          where <member scope="com::sun::star::beans">NamedValue::Name</member> is <code>"Source"</code>
-         and <member scope="com::sun::star::beans">NamedValue::Value</member>
+         and <member scope="com::sun::star::beans">NamedValue::Value</member> 
          is an object implementing <type>XLayer</type>.
      </p>
       */

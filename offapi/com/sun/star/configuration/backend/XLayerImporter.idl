@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,19 +29,19 @@
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XBackend_idl__
 #include <com/sun/star/configuration/backend/XBackend.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
 #endif
@@ -52,19 +52,19 @@
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #endif
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
+//============================================================================= 
 
 /** allows importing a layer into a <type>Backend</type>
-
+  
   @since OOo 1.1.2
 */
-published interface XLayerImporter : ::com::sun::star::uno::XInterface
+published interface XLayerImporter : ::com::sun::star::uno::XInterface 
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** gets the target backend for importing.
 
@@ -75,7 +75,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
     */
     XBackend getTargetBackend();
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** sets the target backend for importing.
 
@@ -89,7 +89,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
     void setTargetBackend([in] XBackend aBackend)
         raises (com::sun::star::lang::NullPointerException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** Imports the layer given into the backend.
 
@@ -103,9 +103,9 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             if the layer passed is invalid
-
+        
         @throws com::sun::star::lang::IllegalArgumentException
-            if the layer passed is for a component
+            if the layer passed is for a component 
             that doesn't exist in the backend
 
         @throws com::sun::star::lang::WrappedTargetException
@@ -119,7 +119,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NullPointerException,
                 com::sun::star::lang::WrappedTargetException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /** Imports the layer given into the backend for a given entity.
 
@@ -136,9 +136,9 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             if the layer passed is invalid
-
+        
         @throws com::sun::star::lang::IllegalArgumentException
-            if the layer passed is for a component
+            if the layer passed is for a component 
             that doesn't exist in the backend
             or if the entity doesn't exist in the backend.
 
@@ -153,11 +153,11 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::NullPointerException,
                 com::sun::star::lang::WrappedTargetException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 } ;
 
-//=============================================================================
+//============================================================================= 
 
-} ; } ; } ; } ; } ;
+} ; } ; } ; } ; } ; 
 
-#endif
+#endif 

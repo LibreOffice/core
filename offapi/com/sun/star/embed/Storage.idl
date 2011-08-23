@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,35 +28,35 @@
 #ifndef __com_sun_star_embed_Storage_idl__
 #define __com_sun_star_embed_Storage_idl__
 
-#ifndef __com_sun_star_embed_BaseStorage_idl__
+#ifndef __com_sun_star_embed_BaseStorage_idl__ 
 #include <com/sun/star/embed/BaseStorage.idl>
 #endif
 
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
+#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__ 
 #include <com/sun/star/embed/XEncryptionProtectedSource.idl>
 #endif
 
-#ifndef __com_sun_star_embed_XTransactedObject_idl__
+#ifndef __com_sun_star_embed_XTransactedObject_idl__ 
 #include <com/sun/star/embed/XTransactedObject.idl>
 #endif
 
-#ifndef __com_sun_star_embed_XTransactionBroadcaster_idl__
+#ifndef __com_sun_star_embed_XTransactionBroadcaster_idl__ 
 #include <com/sun/star/embed/XTransactionBroadcaster.idl>
 #endif
 
-#ifndef __com_sun_star_util_XModifiable_idl__
+#ifndef __com_sun_star_util_XModifiable_idl__ 
 #include <com/sun/star/util/XModifiable.idl>
 #endif
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
+#ifndef __com_sun_star_container_XNameAccess_idl__ 
 #include <com/sun/star/container/XNameAccess.idl>
 #endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__
+#ifndef __com_sun_star_lang_XComponent_idl__ 
 #include <com/sun/star/lang/XComponent.idl>
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
@@ -232,7 +232,7 @@ published service Storage
                         the requested substorage. The latest commited version
                         of child storage will be used. So in case the child
                         storage was not commited after it was changed, the
-                        changes will not appear in the new created storage.
+                        changes will not appear in the new created storage. 
                         </p>
 
                         <p>
@@ -253,7 +253,7 @@ published service Storage
                 to retrieve it.
             </dd>
         </dl>
-
+                
      */
     service BaseStorage;
 
@@ -278,7 +278,7 @@ published service Storage
 
     // -----------------------------------------------------------------------
     /** allows to set password to a root storage.
-
+    
         <p>
         This interface can be supported by a storage to allow to set
         a common storage password. This password is used as default password

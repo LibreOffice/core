@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 
 namespace osl
-{
+{     
 
     class Condition
     {
@@ -96,26 +96,26 @@ namespace osl
         oslCondition condition;
 
         /** The underlying oslCondition has no reference count.
-
+        
         Since the underlying oslCondition is not a reference counted object, copy
         constructed Condition may work on an already destructed oslCondition object.
-
+        
         */
         Condition(const Condition&);
-
+        
         /** The underlying oslCondition has no reference count.
-
+        
         When destructed, the Condition object destroys the undelying oslCondition,
         which might cause severe problems in case it's a temporary object.
-
+         
         */
         Condition(oslCondition condition);
-
+        
         /** This assignment operator is private for the same reason as
             the copy constructor.
         */
         Condition& operator= (const Condition&);
-
+        
         /** This assignment operator is private for the same reason as
             the constructor taking a oslCondition argument.
         */
@@ -125,6 +125,6 @@ namespace osl
 }
 
 #endif  /* __cplusplus */
-#endif  /* _OSL_CONDITN_HXX_ */
+#endif	/* _OSL_CONDITN_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

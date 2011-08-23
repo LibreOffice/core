@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,54 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_Deferrability_idl__
-#define __com_sun_star_sdbc_Deferrability_idl__
-
- module com {  module sun {  module star {  module sdbc {
-
-
+#ifndef __com_sun_star_sdbc_Deferrability_idl__ 
+#define __com_sun_star_sdbc_Deferrability_idl__ 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ 
 /** indicates the Deferrability of key constraints.
  */
 published constants Deferrability
-{
-
-    /** A possible value for the column <code>DEFERRABILITY</code>
-             in the
-             <code>XResultSet</code> objects returned by the methods
-             <code>getImportedKeys</code>,  <code>getExportedKeys</code>,
-             and <code>getCrossReference</code>.
+{ 
+     
+    /** A possible value for the column <code>DEFERRABILITY</code> 
+             in the 
+             <code>XResultSet</code> objects returned by the methods 
+             <code>getImportedKeys</code>,  <code>getExportedKeys</code>, 
+             and <code>getCrossReference</code>. 
              <P>Indicates deferrability.  See SQL-92 for a definition.
-
-<!-- JRH: This and next two comments are identical. Is something missing?
+     
+<!-- JRH: This and next two comments are identical. Is something missing? 
             INITIALLY_DEFERRED, INITIALLY_IMMEDIATE, and NONE?              -->
 */
-    const long INITIALLY_DEFERRED  = 5;
-    //-------------------------------------------------------------------------
-
-    /** A possible value for the column <code>DEFERRABILITY</code>
-             in the
-             <code>XResultSet</code> objects returned by the methods
-             <code>getImportedKeys</code>,  <code>getExportedKeys</code>,
-             and <code>getCrossReference</code>.
+    const long INITIALLY_DEFERRED  = 5; 
+    //------------------------------------------------------------------------- 
+     
+    /** A possible value for the column <code>DEFERRABILITY</code> 
+             in the 
+             <code>XResultSet</code> objects returned by the methods 
+             <code>getImportedKeys</code>,  <code>getExportedKeys</code>, 
+             and <code>getCrossReference</code>. 
              <P>Indicates deferrability.  See SQL-92 for a definition.
      */
-    const long INITIALLY_IMMEDIATE  = 6;
-    //-------------------------------------------------------------------------
-
-    /** A possible value for the column <code>DEFERRABILITY</code>
-             in the
-             <code>XResultSet</code> objects returned by the methods
-             <code>getImportedKeys</code>,  <code>getExportedKeys</code>,
-             and <code>getCrossReference</code>.
+    const long INITIALLY_IMMEDIATE  = 6; 
+    //------------------------------------------------------------------------- 
+     
+    /** A possible value for the column <code>DEFERRABILITY</code> 
+             in the 
+             <code>XResultSet</code> objects returned by the methods 
+             <code>getImportedKeys</code>,  <code>getExportedKeys</code>, 
+             and <code>getCrossReference</code>. 
              <P>Indicates deferrability.  See SQL-92 for a definition.
      */
-    const long NONE         = 7;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    const long NONE  		= 7; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

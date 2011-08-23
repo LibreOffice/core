@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 namespace bridges_urp
 {
     struct urp_BridgeImpl;
-
+    
       typedef void
         ( SAL_CALL * urp_extractOidCallback )( remote_Interface *pRemoteI, rtl_uString **ppOid );
 
@@ -50,11 +50,11 @@ namespace bridges_urp
                    urp_extractOidCallback callback = 0
               );
         ~Marshal( );
-
+        
         inline sal_Bool pack( void *pSource , typelib_TypeDescription *pType );
 
         sal_Bool packRecursive( void *pSource, typelib_TypeDescription *pType );
-
+        
         void packTid( const ::rtl::ByteSequence &id, sal_Bool bIgnoreCache = sal_False );
         void packOid( const ::rtl::OUString &oid );
         void packType( void *pSource );
@@ -80,25 +80,25 @@ namespace bridges_urp
         // a new marshalling session is started invalidating
         // the previous bufer
         inline void restart();
-
+        
         // is only valid, after finish has been called.
         // valid until destructed.
         inline sal_Int8 *getBuffer();
-
+        
         // is only valid, after finish has been called.
         // valid until destructed.
         inline sal_Int32 getSize();
-
+        
         inline sal_Int32 getPos()
             { return m_pos - m_base; }
-
+    
         inline sal_Bool isSystemLittleEndian()
             { return g_bMarshalSystemIsLittleEndian; }
-
+        
     private:
         inline void ensureAdditionalMem( sal_Int32 nMemToAdd );
         sal_Int32 m_nBufferSize;
-        sal_Int8 *m_base;
+        sal_Int8 *m_base;		
         sal_Int8 *m_pos;
         struct urp_BridgeImpl *m_pBridgeImpl;
         urp_extractOidCallback m_callback;

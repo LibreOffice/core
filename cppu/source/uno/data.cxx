@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -361,7 +361,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 
 #if defined(INTEL) \
     && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OS2) || \
-    defined(OPENBSD)) || defined(MACOSX) \
+	defined(OPENBSD)) || defined(MACOSX) \
         || defined(__SUNPRO_CC) && defined(SOLARIS))
 #define MAX_ALIGNMENT_4
 #endif
@@ -375,7 +375,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 
 #if OSL_DEBUG_LEVEL > 1
 #if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OPENBSD)) && \
-    (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
+	(defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
 #define BINTEST_VERIFYSIZE( s, n ) \
     fprintf( stderr, "> sizeof(" #s ") = %d; __alignof__ (" #s ") = %d\n", sizeof(s), __alignof__ (s) ); \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
@@ -434,23 +434,23 @@ struct E
 
 struct M
 {
-    sal_Int32   n;
-    sal_Int16   o;
+    sal_Int32	n;
+    sal_Int16	o;
 };
 
 struct N : public M
 {
-    sal_Int16   p CPPU_GCC3_ALIGN( M );
+    sal_Int16	p CPPU_GCC3_ALIGN( M );
 };
 struct N2
 {
     M m;
-    sal_Int16   p;
+    sal_Int16	p;
 };
 
 struct O : public M
 {
-    double  p;
+    double	p;
     sal_Int16 q;
 };
 struct O2 : public O
@@ -460,7 +460,7 @@ struct O2 : public O
 
 struct P : public N
 {
-    double  p2;
+    double	p2;
 };
 
 struct empty
@@ -473,8 +473,8 @@ struct second : public empty
 
 struct AlignSize_Impl
 {
-    sal_Int16   nInt16;
-    double      dDouble;
+    sal_Int16	nInt16;
+    double		dDouble;
 };
 
 struct Char1
@@ -608,9 +608,9 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
 }
 
 #ifdef SAL_W32
-#   pragma pack(pop)
+#	pragma pack(pop)
 #elif defined(SAL_OS2)
-#   pragma pack()
+#	pragma pack()
 #endif
 
 static BinaryCompatible_Impl aTest;

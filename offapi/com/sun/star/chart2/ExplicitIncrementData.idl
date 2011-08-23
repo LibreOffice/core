@@ -38,7 +38,7 @@ struct ExplicitIncrementData
     <p><member>PostEquidistant</member> rules whether the <member>Distance</member>
     is meant to be a value before or after scaling.</p>
     */
-    double      Distance;
+    double		Distance;
 
     /**
     <member>PostEquidistant</member> rules whether the member <member>Distance</member>
@@ -50,7 +50,7 @@ struct ExplicitIncrementData
     If <member>PostEquidistant</member> equals <FALSE/> <member>Distance</member>
     is given in values before <type>XScaling</type> is applied.</p>
     */
-    boolean     PostEquidistant;
+    boolean		PostEquidistant;
 
     /** The <member>BaseValue</member> gives a starting point on the scale
     to which all further main tickmarks are relatively positioned.
@@ -68,7 +68,7 @@ struct ExplicitIncrementData
     And setting BaseValue to 2, -2, 4, -4 etc. in this example
     leads to the same result as BaseValue=0.</p>
     */
-    double      BaseValue;
+    double		BaseValue;
 
     /** <member>SubIncrements</member> describes the positioning of further
     sub tickmarks on the scale of an axis.

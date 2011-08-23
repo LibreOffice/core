@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ interface XBindableValue : com::sun::star::uno::XInterface
             if the new binding (provided it's not <NULL/>) supports only types
             which are incompatible with the types of the bindable component.
      */
-    void    setValueBinding( [in] XValueBinding aBinding )
+    void    setValueBinding( [in] XValueBinding aBinding ) 
                 raises ( IncompatibleTypesException );
 
     /** retrieves the external instance which currently controls the value of the

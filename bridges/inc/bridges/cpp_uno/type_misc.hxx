@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ inline bool cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr ) SAL_
 {
     switch (pTypeDescr->eTypeClass)
     {
-//      case typelib_TypeClass_TYPEDEF:
+//  	case typelib_TypeClass_TYPEDEF:
     case typelib_TypeClass_SEQUENCE:
     {
         switch (((typelib_IndirectTypeDescription *)pTypeDescr)->pType->eTypeClass)
@@ -78,7 +78,7 @@ inline bool cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr ) SAL_
             case typelib_TypeClass_UNION: // might relate to interface
             case typelib_TypeClass_ANY: // might relate to interface
                 return true;
-//              case typelib_TypeClass_TYPEDEF:
+//  			case typelib_TypeClass_TYPEDEF:
             case typelib_TypeClass_SEQUENCE:
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:

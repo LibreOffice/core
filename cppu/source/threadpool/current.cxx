@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
         if (0 == s_type_XCurrentContext)
         {
             OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XCurrentContext") );
-            typelib_InterfaceTypeDescription * pTD = 0;
+            typelib_InterfaceTypeDescription * pTD = 0;            
             typelib_TypeDescriptionReference * pMembers[1] = { 0 };
             OUString sMethodName0(
                 RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XCurrentContext::getValueByName") );
@@ -81,10 +81,10 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
                 * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ),
                 1,
                 pMembers );
-
+            
             typelib_typedescription_register( (typelib_TypeDescription**)&pTD );
             typelib_typedescriptionreference_release( pMembers[0] );
-
+            
             typelib_InterfaceMethodTypeDescription * pMethod = 0;
             typelib_Parameter_Init aParameters[1];
             OUString sParamName0( RTL_CONSTASCII_USTRINGPARAM("Name") );
@@ -121,13 +121,13 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 //==================================================================================================
 class ThreadKey
 {
-    sal_Bool     _bInit;
+    sal_Bool	 _bInit;
     oslThreadKey _hThreadKey;
     oslThreadKeyCallbackFunction _pCallback;
-
+    
 public:
     inline oslThreadKey getThreadKey() SAL_THROW( () );
-
+    
     inline ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW( () );
     inline ~ThreadKey() SAL_THROW( () );
 };
@@ -186,7 +186,7 @@ IdContainer * getIdContainer() SAL_THROW( () )
 {
     static ThreadKey s_key( delete_IdContainer );
     oslThreadKey aKey = s_key.getThreadKey();
-
+    
     IdContainer * pId = reinterpret_cast< IdContainer * >( ::osl_getThreadKeyData( aKey ) );
     if (! pId)
     {
@@ -209,7 +209,7 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
 {
     IdContainer * pId = getIdContainer();
     OSL_ASSERT( pId );
-
+    
     // free old one
     if (pId->pCurrentContext)
     {
@@ -221,7 +221,7 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
 
         pId->pCurrentContext = 0;
     }
-
+    
     if (pCurrentContext)
     {
         uno_Environment * pEnv = 0;
@@ -256,7 +256,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
 {
     IdContainer * pId = getIdContainer();
     OSL_ASSERT( pId );
-
+    
     Environment target_env;
 
     // release inout parameter
@@ -274,11 +274,11 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
 
         *ppCurrentContext = 0;
     }
-
+    
     // case: null-ref
     if (0 == pId->pCurrentContext)
         return sal_True;
-
+    
     if (! target_env.is())
     {
         target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
@@ -286,7 +286,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
         if (! target_env.is())
             return sal_False;
     }
-
+    
     Mapping mapping((uno_Environment *) pId->pCurrentContextEnv, target_env.get());
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())

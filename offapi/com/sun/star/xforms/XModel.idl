@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_xforms_XModel_idl__
-#define __com_sun_star_xforms_XModel_idl__
+#ifndef __com_sun_star_xforms_XModel_idl__ 
+#define __com_sun_star_xforms_XModel_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_container_XIndexAccess_idl__ 
+#include <com/sun/star/container/XSet.idl> 
+#endif 
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
+#ifndef __com_sun_star_xforms_XDataTypeRepository_idl__ 
+#include <com/sun/star/xforms/XDataTypeRepository.idl> 
+#endif 
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
-#include <com/sun/star/container/XSet.idl>
-#endif
-
-#ifndef __com_sun_star_xforms_XDataTypeRepository_idl__
-#include <com/sun/star/xforms/XDataTypeRepository.idl>
-#endif
-
-#ifndef __com_sun_star_xml_dom_XDocument_idl__
-#include <com/sun/star/xml/dom/XDocument.idl>
-#endif
+#ifndef __com_sun_star_xml_dom_XDocument_idl__ 
+#include <com/sun/star/xml/dom/XDocument.idl> 
+#endif 
 
 #ifndef __com_sun_star_util_VetoException_idl__
 #include <com/sun/star/util/VetoException.idl>
@@ -59,18 +59,18 @@
 #include <com/sun/star/task/XInteractionHandler.idl>
 #endif
 
-//=============================================================================
-
-module com {  module sun {  module star {  module xforms {
-
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module xforms {  
+ 
 interface XSubmission;
 
-//=============================================================================
-
+//============================================================================= 
+ 
 /** represent an XForms model
  */
 interface XModel
-{
+{ 
     /** get the XForms model ID */
     string getID();
 
@@ -148,7 +148,7 @@ interface XModel
     // instances
     //
 
-    /** gets container containing all instances;
+    /** gets container containing all instances; 
 
         <p>The elements of the set are arrays of <type scope="com::sun::star::beans">PropertyValue</type>s,
         containing the ID, the URL, and the instance itself.</p>
@@ -166,7 +166,7 @@ interface XModel
 
     //
     // bindings
-    //
+    // 
 
     /** create a binding element for this model
 
@@ -201,7 +201,7 @@ interface XModel
     //
 
     /** create a submission element for this model
-
+        
         <p>The returned submission element still needs to be inserted into the submission container.</p>
 
         @see getSubmissions
@@ -226,13 +226,13 @@ interface XModel
     /** get container containing all submissions; also supports XNameAccess
     */
     com::sun::star::container::XSet getSubmissions();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

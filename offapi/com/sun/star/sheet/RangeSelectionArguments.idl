@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,49 +24,49 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sheet_RangeSelectionArguments_idl__
-#define __com_sun_star_sheet_RangeSelectionArguments_idl__
-
-//=============================================================================
-
- module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
+#ifndef __com_sun_star_sheet_RangeSelectionArguments_idl__ 
+#define __com_sun_star_sheet_RangeSelectionArguments_idl__ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module sheet {  
+ 
+//============================================================================= 
+ 
 /** contains the arguments for starting the range selection.
 
     @see com::sun::star::sheet::XRangeSelection
  */
 published service RangeSelectionArguments
-{
+{ 
     /** contains the initial value for the range descriptor.
      */
-    [property] string InitialValue;
+    [property] string InitialValue; 
 
     /** contains a title for the operation.
      */
-    [property] string Title;
+    [property] string Title; 
 
     /** specifies if the range selection is finished when the
         mouse button is released, after selecting cells.
      */
-    [property] boolean CloseOnMouseRelease;
-
+    [property] boolean CloseOnMouseRelease; 
+    
     /** specifies if the range selection is limited to a single
         cell only.
 
-        <p>If <TRUE/>, the selection is restricted to a
-        single cell.  If <FALSE/>, multiple adjoining cells can be
+        <p>If <TRUE/>, the selection is restricted to a 
+        single cell.  If <FALSE/>, multiple adjoining cells can be 
         selected.  The default value is <FALSE/>.</p>
 
     @since OOo 2.0.3
      */
     [optional, property] boolean SingleCellMode;
-};
-
-//=============================================================================
-
-}; }; }; };
-
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
 #endif
 

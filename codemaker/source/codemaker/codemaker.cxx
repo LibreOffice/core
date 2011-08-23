@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
             throw CannotDumpException(
                 errorMsg(rtl::OString(
                     RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                    type));
+                    type));	
             //TODO
         }
         *rank += n;
@@ -114,7 +114,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                 throw CannotDumpException(
                     errorMsg(rtl::OString(
                         RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                        type));
+                        type));	
                 //TODO
             }
         default:
@@ -140,7 +140,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                     throw CannotDumpException(
                         errorMsg(rtl::OString(
                             RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                            type));
+                            type));	
                     //TODO
                 }
                 return sort;
@@ -154,7 +154,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                     throw CannotDumpException(
                         errorMsg(rtl::OString(
                             RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                            type));
+                            type));	
                     //TODO
                 }
                 checkNoTypeArguments(*arguments);
@@ -179,7 +179,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                 throw CannotDumpException(
                     errorMsg(rtl::OString(
                         RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                        type));
+                        type));	
                 //TODO
             }
         }

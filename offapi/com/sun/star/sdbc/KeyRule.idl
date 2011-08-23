@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,169 +24,169 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_KeyRule_idl__
-#define __com_sun_star_sdbc_KeyRule_idl__
-
- module com {  module sun {  module star {  module sdbc {
-
-
+#ifndef __com_sun_star_sdbc_KeyRule_idl__ 
+#define __com_sun_star_sdbc_KeyRule_idl__ 
+ 
+ module com {  module sun {  module star {  module sdbc { 
+ 
+ 
 /** determines the rules for foreign key constraints.
  */
 published constants KeyRule
-{
-
+{ 
+     
     /** a possible value for the column's
             <code>UPDATE_RULE</code>
             and
             <code>DELETE_RULE</code>
-            in the
+            in the 
             <type scope="com::sun::star::sdbc">XResultSet</type>
-             objects returned by the methods
+             objects returned by the methods 
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
-             ,
+             , 
              and
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
-             .
+             . 
              <P>
-             For the column
+             For the column 
              <code>UPDATE_RULE</code>
              ,
-             it indicates that
-             when the primary key is updated, the foreign key (imported key)
-             is changed to agree with it.
+             it indicates that 
+             when the primary key is updated, the foreign key (imported key) 
+             is changed to agree with it. 
              </P>
              <P>
-             For the column
+             For the column 
              <code>DELETE_RULE</code>
-            ,
-             it indicates that
-             when the primary key is deleted, rows that imported that key
+            , 
+             it indicates that 
+             when the primary key is deleted, rows that imported that key 
              are deleted.
              </P>
      */
-    const long CASCADE  = 0;
-    //-------------------------------------------------------------------------
-
-    /** a possible value for the column's
+    const long CASCADE	= 0; 
+    //------------------------------------------------------------------------- 
+     
+    /** a possible value for the column's 
              <code>UPDATE_RULE</code>
              and
              <code>DELETE_RULE</code>
-            in the
+            in the 
              <type scope="com::sun::star::sdbc">XResultSet</type>
-             objects returned by the methods
+             objects returned by the methods 
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
-             ,
+             , 
              and
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
              .
              <P>
              For the column
              <code>UPDATE_RULE</code>
-            , it indicates that
-             a primary key may not be updated if it has been imported by
-             another table as a foreign key.
+            , it indicates that 
+             a primary key may not be updated if it has been imported by 
+             another table as a foreign key. 
              </P>
              <P>
              For the column
              <code>DELETE_RULE</code>
-            , it indicates that
-             a primary key may not be deleted if it has been imported by
+            , it indicates that 
+             a primary key may not be deleted if it has been imported by 
              another table as a foreign key.
              </P>
      */
-    const long RESTRICT = 1;
-    //-------------------------------------------------------------------------
-
+    const long RESTRICT = 1; 
+    //------------------------------------------------------------------------- 
+     
     /** a possible value for the column's
              <code>UPDATE_RULE</code>
              and
              <code>DELETE_RULE</code>
-            in the
+            in the 
              <type scope="com::sun::star::sdbc">XResultSet</type>
-              objects returned by the methods
+              objects returned by the methods 
             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
              ,
              and
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
-             .
+             . 
              <P>
              For the columns
              <code>UPDATE_RULE</code>
              and
              <code>DELETE_RULE</code>
-            ,
-             it indicates that
-             when the primary key is updated or deleted, the foreign key (imported key)
+            , 
+             it indicates that 
+             when the primary key is updated or deleted, the foreign key (imported key) 
              is changed to <code>NULL</code>.
              </P>
      */
-    const long SET_NULL  = 2;
-    //-------------------------------------------------------------------------
-
+    const long SET_NULL  = 2; 
+    //------------------------------------------------------------------------- 
+     
     /** a possible value for the column's
             <code>UPDATE_RULE</code>
              and
              <code>DELETE_RULE</code>
-             in the
+             in the 
              <type scope="com::sun::star::sdbc">XResultSet</type>
-             objects returned by the methods
+             objects returned by the methods 
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
              ,
-             and
+             and 
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
-             .
+             . 
              <P>
              For the columns
              <code>UPDATE_RULE</code>
              and
              <code>DELETE_RULE</code>
-            ,
+            , 
              it indicates that if the primary key has been imported, it cannot be updated or deleted.
              </P>
      */
-    const long NO_ACTION = 3;
-    //-------------------------------------------------------------------------
-
+    const long NO_ACTION = 3; 
+    //------------------------------------------------------------------------- 
+     
     /** a possible value for the column's
             <code>UPDATE_RULE</code>
              and
              <code>DELETE_RULE</code>
-            in the
+            in the 
              <type scope="com::sun::star::sdbc">XResultSet</type>
-             objects returned by the methods
+             objects returned by the methods 
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
              ,
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
-             ,
+             , 
              and
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
-             .
+             . 
              <P>
              For the columns
              <code>UPDATE_RULE</code>
              and
              <code>DELETE_RULE</code>
-            ,
-             it indicates that
-             if the primary key is updated or deleted, the foreign key (imported key)
+            , 
+             it indicates that 
+             if the primary key is updated or deleted, the foreign key (imported key) 
              is set to the default value.
              </P>
      */
-    const long SET_DEFAULT  = 4;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    const long SET_DEFAULT  = 4; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,54 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_FormButtonType_idl__
-#define __com_sun_star_form_FormButtonType_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module form {
-
-//=============================================================================
-
+#ifndef __com_sun_star_form_FormButtonType_idl__ 
+#define __com_sun_star_form_FormButtonType_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  
+ 
+//============================================================================= 
+ 
 /** specifies the action to execute when a button is pressed.
     @see com::sun::star::form::component::CommandButton
  */
 published enum FormButtonType
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** requires the button to act like a common push button, means no special action is triggered.
      */
-    PUSH,
-
-    //-------------------------------------------------------------------------
-
+    PUSH, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** When the button is clicked, it performs a submit on its containing form.
      */
-    SUBMIT,
-
-    //-------------------------------------------------------------------------
-
+    SUBMIT, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** When the button is clicked, it performs a reset on its containing form.
      */
-    RESET,
-
-    //-------------------------------------------------------------------------
-
+    RESET, 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** When the button is clicked, an URL set for the button is opened.
         @see com::sun::star::form::component::CommandButton::TargetURL
         @see com::sun::star::form::component::CommandButton::TargetFrame
      */
-    URL
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    URL 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,16 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_ChartAxisMarks_idl__
-#define __com_sun_star_chart_ChartAxisMarks_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module chart {
-
-//=============================================================================
-
+#ifndef __com_sun_star_chart_ChartAxisMarks_idl__ 
+#define __com_sun_star_chart_ChartAxisMarks_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module chart {  
+ 
+//============================================================================= 
+ 
 /** With these constants you can specify how the tick-marks of an axis
     are displayed.
 
@@ -42,29 +42,29 @@
     extend in both directions.</p>
  */
 published constants ChartAxisMarks
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** Do not display any marks.
      */
-    const long NONE = 0;
-
-    //-------------------------------------------------------------------------
-
+    const long NONE = 0; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** Display marks that point into the diagram area.
      */
-    const long INNER = 1;
-
-    //-------------------------------------------------------------------------
-
+    const long INNER = 1; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** Display marks that point out of the diagram area.
      */
-    const long OUTER = 2;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    const long OUTER = 2; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
