@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,39 +26,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=cppuhelper
-TARGET=cppu_unourl
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-ENABLE_EXCEPTIONS=TRUE
-VISIBILITY_HIDDEN=TRUE
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :  settings.mk
+endif
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-.IF "$(OS)" == "IOS"
-CFLAGSCXX += -DCPPUNIT_PLUGIN_EXPORTED_NAME=cppunitTest_$(TARGET)
-.ENDIF
-
-SHL1OBJS=  \
-    $(SLO)$/cppu_unourl.obj
-SHL1TARGET= cppu_unourl
-SHL1STDLIBS=\
-    $(CPPUHELPERLIB) \
-    $(SALLIB) \
-    $(CPPULIB) \
-    $(CPPUNITLIB)
-SHL1IMPLIB= i$(SHL1TARGET)
-DEF1NAME    =$(SHL1TARGET)
-SHL1USE_EXPORTS = name
-
-SLOFILES = $(SHL1OBJS)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
+# vim: set noet sw=4 ts=4:

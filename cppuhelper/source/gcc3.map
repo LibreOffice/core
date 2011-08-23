@@ -1,6 +1,7 @@
 UDK_3_0_0 {
     global:
-GetVersionInfo;
+    _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+
 _ZN3com3sun4star3uno19WeakReferenceHelperC1ERKNS2_9ReferenceINS2_10XInterfaceEEE;
 _ZN3com3sun4star3uno19WeakReferenceHelperC1ERKS3_;
 _ZN3com3sun4star3uno19WeakReferenceHelperC2ERKNS2_9ReferenceINS2_10XInterfaceEEE;
@@ -406,3 +407,9 @@ global:
         _ZN4cppu19OPropertySetHelper232enableChangeListenerNotificationEh;
         _ZThn*_N4cppu19OPropertySetHelper232enableChangeListenerNotificationEh;
 } UDK_3.7;
+
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+    global:
+    _ZGVNSt7num_put*; _ZNSt7num_put*;
+};
