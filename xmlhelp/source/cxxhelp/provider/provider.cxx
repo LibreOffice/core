@@ -347,7 +347,7 @@ void ContentProvider::init()
         setupextension );
 
     uno::Sequence< rtl::OUString > aImagesZipPaths( 2 );
-    xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );
+    xHierAccess = getHierAccess( sProvider,	 "org.openoffice.Office.Common" );
 
     rtl::OUString aPath( getKey( xHierAccess, "Path/Current/UserConfig" ) );
     subst( aPath );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ public class SysnetRegistryHelper {
             }
 
             // This is only used for testing
-            stclientPath = System.getProperty(SVCTAG_STCLIENT_CMD);
+            stclientPath = System.getProperty(SVCTAG_STCLIENT_CMD);         
             if (stclientPath != null) {
                 return stclientPath;
             }
@@ -115,8 +115,8 @@ public class SysnetRegistryHelper {
             //    SvcTagClient
             //
             // On Windows, the JAVA_HOME and TEST_DIR path could contain
-            // space e.g. c:\Program Files\Java\jdk1.6.0_05\bin\java.
-            // The SVCTAG_STCLIENT_CMD must be set with a list of
+            // space e.g. c:\Program Files\Java\jdk1.6.0_05\bin\java. 
+            // The SVCTAG_STCLIENT_CMD must be set with a list of 
             // space-separated parameters.  If a parameter contains spaces,
             // it must be quoted with '"'.
 
@@ -134,7 +134,7 @@ public class SysnetRegistryHelper {
                 for (j = i+1; j < len; j++) {
                     if (cmd.charAt(j) == separator) {
                         break;
-                    }
+                    } 
                 }
 
                 if (i == j-1) {
@@ -158,7 +158,7 @@ public class SysnetRegistryHelper {
                     System.out.println(s);
                 }
             }
-        } else {
+        } else { 
             command.add(getSTclient());
         }
         return command;
@@ -167,7 +167,7 @@ public class SysnetRegistryHelper {
     // Returns null if the service tag record not found;
     // or throw UnauthorizedAccessException or IOException
     // based on the exitValue.
-    private static ServiceTag checkReturnError(int exitValue,
+    private static ServiceTag checkReturnError(int exitValue, 
                                                String output,
                                                ServiceTag st) throws IOException {
         switch (exitValue) {
@@ -176,15 +176,15 @@ public class SysnetRegistryHelper {
             case ST_ERR_NOT_AUTH:
                 if (st != null) {
                     throw new UnauthorizedAccessException(
-                        "Not authorized to access " + st.getInstanceURN() +
+                        "Not authorized to access " + st.getInstanceURN() + 
                         " installer_uid=" + st.getInstallerUID());
                 } else  {
                     throw new UnauthorizedAccessException(
-                        "Not authorized:" + output);
+                        "Not authorized:" + output); 
                 }
-            default:
+            default: 
                 throw new IOException("stclient exits with error" +
-                     " (" + exitValue + ")\n" + output);
+                     " (" + exitValue + ")\n" + output); 
         }
     }
 
@@ -280,9 +280,9 @@ public class SysnetRegistryHelper {
 
     /**
      * Returns the urn of this registry.
-     *
+     * 
      * @return a {@code String} for the urn of this registry.
-     *
+     * 
      * @throws java.io.IOException if an I/O error occurs in this operation.
      */
     // Once JDK makes this method available, we'll deprecate this method

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#include <avmedia/mediatoolbox.hxx>
-#include <avmedia/mediaitem.hxx>
+#include <avmedia/mediatoolbox.hxx> 
+#include <avmedia/mediaitem.hxx> 
 #include "mediacontrol.hxx"
 
 #include <sfx2/app.hxx>
@@ -47,16 +47,16 @@ namespace avmedia
 class MediaToolBoxControl_Impl : public MediaControl
 {
 public:
-
+    
                             MediaToolBoxControl_Impl( Window& rParent, MediaToolBoxControl& rControl );
                             ~MediaToolBoxControl_Impl();
 
-    void                    update();
-    void                    execute( const MediaItem& rItem );
-
+    void 					update();
+    void  					execute( const MediaItem& rItem );
+    
 private:
 
-    MediaToolBoxControl*    mpToolBoxControl;
+    MediaToolBoxControl*	mpToolBoxControl;
 };
 
 // ---------------------------------------------------------------------
@@ -114,9 +114,9 @@ void MediaToolBoxControl::StateChanged( USHORT /* nSID */, SfxItemState eState, 
 
 {
     MediaToolBoxControl_Impl* pCtrl = static_cast< MediaToolBoxControl_Impl* >( GetToolBox().GetItemWindow( GetId() ) );
-
+    
     DBG_ASSERT( pCtrl, "MediaToolBoxControl::StateChanged: media control not found" );
-
+    
     if( eState == SFX_ITEM_DISABLED )
     {
         pCtrl->Enable( false, false );
@@ -126,11 +126,11 @@ void MediaToolBoxControl::StateChanged( USHORT /* nSID */, SfxItemState eState, 
         pCtrl->setState( aEmptyMediaItem );
     }
     else
-    {
+    {   
         pCtrl->Enable( true, false );
 
         const MediaItem* pMediaItem = PTR_CAST( MediaItem, pState );
-
+        
         if( pMediaItem && ( SFX_ITEM_AVAILABLE == eState ) )
             pCtrl->setState( *pMediaItem );
     }
@@ -154,15 +154,15 @@ void MediaToolBoxControl::implUpdateMediaControl()
 
 void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
 {
-    MediaItem                               aExecItem( SID_AVMEDIA_TOOLBOX );
-    uno::Sequence< beans::PropertyValue >   aArgs( 1 );
-    uno::Any                                aAny;
-
+    MediaItem 								aExecItem( SID_AVMEDIA_TOOLBOX );
+    uno::Sequence< beans::PropertyValue > 	aArgs( 1 );
+    uno::Any								aAny;
+    
     aExecItem.merge( rItem );
     aExecItem.QueryValue( aAny );
     aArgs[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AVMediaToolBox" ) );
     aArgs[ 0 ].Value = aAny;
-
+        
     Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AVMediaToolBox" ) ), aArgs );
 }
 

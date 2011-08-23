@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,15 +64,15 @@ const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 {
     static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
     {
-        { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
-        { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
-        { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE   },
-        { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW      },
-        { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
-        { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
-        { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
-        { XML_NAMESPACE_DRAW,  XML_OPACITY,     XML_TOK_BGIMG_OPACITY   },
-        XML_TOKEN_MAP_END
+        { XML_NAMESPACE_XLINK, XML_HREF, 		XML_TOK_BGIMG_HREF		},
+        { XML_NAMESPACE_XLINK, XML_TYPE, 		XML_TOK_BGIMG_TYPE		},
+        { XML_NAMESPACE_XLINK, XML_ACTUATE,	    XML_TOK_BGIMG_ACTUATE	},
+        { XML_NAMESPACE_XLINK, XML_SHOW, 		XML_TOK_BGIMG_SHOW 		},
+        { XML_NAMESPACE_STYLE, XML_POSITION, 	XML_TOK_BGIMG_POSITION	},
+        { XML_NAMESPACE_STYLE, XML_REPEAT, 	    XML_TOK_BGIMG_REPEAT	},
+        { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER	},
+        { XML_NAMESPACE_DRAW,  XML_OPACITY,		XML_TOK_BGIMG_OPACITY	},
+        XML_TOKEN_MAP_END 
     };
     return aBGImgAttributesAttrTokenMap;
 }
@@ -81,16 +81,16 @@ const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 
 SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
-    { XML_LEFT,         GraphicLocation_LEFT_MIDDLE },
-    { XML_RIGHT,        GraphicLocation_RIGHT_MIDDLE    },
-    { XML_TOKEN_INVALID,                    0           }
+    { XML_LEFT, 		GraphicLocation_LEFT_MIDDLE	},
+    { XML_RIGHT,		GraphicLocation_RIGHT_MIDDLE	},
+    { XML_TOKEN_INVALID,					0			}
 };
 
 SvXMLEnumMapEntry psXML_BrushVertPos[] =
 {
-    { XML_TOP,          GraphicLocation_MIDDLE_TOP  },
-    { XML_BOTTOM,       GraphicLocation_MIDDLE_BOTTOM   },
-    { XML_TOKEN_INVALID,                    0           }
+    { XML_TOP,			GraphicLocation_MIDDLE_TOP	},
+    { XML_BOTTOM,		GraphicLocation_MIDDLE_BOTTOM	},
+    { XML_TOKEN_INVALID,					0			}
 };
 
 void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,
@@ -298,10 +298,10 @@ void XMLBackgroundImageContext::ProcessAttrs(
                 sal_uInt16 nPos = GraphicLocation_NONE;
                 static SvXMLEnumMapEntry psXML_BrushRepeat[] =
                 {
-                    { XML_BACKGROUND_REPEAT,        GraphicLocation_TILED   },
-                    { XML_BACKGROUND_NO_REPEAT,     GraphicLocation_MIDDLE_MIDDLE       },
-                    { XML_BACKGROUND_STRETCH,       GraphicLocation_AREA    },
-                    { XML_TOKEN_INVALID,            0           }
+                    { XML_BACKGROUND_REPEAT,		GraphicLocation_TILED	},
+                    { XML_BACKGROUND_NO_REPEAT, 	GraphicLocation_MIDDLE_MIDDLE		},
+                    { XML_BACKGROUND_STRETCH,		GraphicLocation_AREA	},
+                    { XML_TOKEN_INVALID,			0			}
                 };
                 if( SvXMLUnitConverter::convertEnum( nPos, rValue,
                                                 psXML_BrushRepeat ) )
@@ -330,7 +330,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
             break;
         }
     }
-
+    
 }
 
 XMLBackgroundImageContext::XMLBackgroundImageContext(

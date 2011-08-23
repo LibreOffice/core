@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ class SfxBindings;
 
 enum SfxInterfaceId
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Id f"ur die <SfxInterface>s, damit wird "uber ein Array an der
     <SfxApplication> ein quasi-statischer Zugriff auf die Interfaces
@@ -109,27 +109,27 @@ enum SfxInterfaceId
     SFX_INTERFACE_SFXHELP_DOCSH,
     SFX_INTERFACE_SFXHELP_VIEWSH,
     SFX_INTERFACE_SFXTASK,
-    SFX_INTERFACE_OFA_START         =  100,
-    SFX_INTERFACE_OFA_END           =  100,
-    SFX_INTERFACE_SC_START          =  150,
-    SFX_INTERFACE_SC_END            =  199,
-    SFX_INTERFACE_SD_START          =  200,
-    SFX_INTERFACE_SD_END            =  249,
-    SFX_INTERFACE_SW_START          =  250,
-    SFX_INTERFACE_SW_END            =  299,
-    SFX_INTERFACE_SIM_START         =  300,
-    SFX_INTERFACE_SIM_END           =  319,
-    SFX_INTERFACE_SCH_START         =  320,
-    SFX_INTERFACE_SCH_END           =  339,
-    SFX_INTERFACE_SMA_START         =  340,
-    SFX_INTERFACE_SMA_END           =  359,
-    SFX_INTERFACE_SBA_START         =  360,
-    SFX_INTERFACE_SBA_END           =  399,
-    SFX_INTERFACE_IDE_START         =  400,
-    SFX_INTERFACE_IDE_END           =  409,
+    SFX_INTERFACE_OFA_START			=  100,
+    SFX_INTERFACE_OFA_END			=  100,
+    SFX_INTERFACE_SC_START			=  150,
+    SFX_INTERFACE_SC_END			=  199,
+    SFX_INTERFACE_SD_START			=  200,
+    SFX_INTERFACE_SD_END			=  249,
+    SFX_INTERFACE_SW_START			=  250,
+    SFX_INTERFACE_SW_END			=  299,
+    SFX_INTERFACE_SIM_START   		=  300,
+    SFX_INTERFACE_SIM_END		    =  319,
+    SFX_INTERFACE_SCH_START		    =  320,
+    SFX_INTERFACE_SCH_END   	    =  339,
+    SFX_INTERFACE_SMA_START   		=  340,
+    SFX_INTERFACE_SMA_END   		=  359,
+    SFX_INTERFACE_SBA_START   		=  360,
+    SFX_INTERFACE_SBA_END   		=  399,
+    SFX_INTERFACE_IDE_START   		=  400,
+    SFX_INTERFACE_IDE_END   		=  409,
     //-falls die noch einer braucht
-    SFX_INTERFACE_APP               =  SFX_INTERFACE_SW_START,
-    SFX_INTERFACE_LIB               =  450
+    SFX_INTERFACE_APP				=  SFX_INTERFACE_SW_START,
+    SFX_INTERFACE_LIB				=  450
 };
 
 //TODO/CLEANUP: replace by UNO constant
@@ -142,7 +142,7 @@ typedef void (*SfxStateFunc)(SfxShell *, SfxItemSet &rSet);
 
 class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Klasse SfxShell ist Basisklasse f"ur alle Schichten, die
     Funktionalit"at Form von <Slot>s bereitstellen wollen.
@@ -161,13 +161,13 @@ class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 {
     friend class SfxObjectItem;
 
-    SfxShell_Impl*              pImp;
-    SfxItemPool*                pPool;
-    SfxUndoManager*             pUndoMgr;
+    SfxShell_Impl*				pImp;
+    SfxItemPool*				pPool;
+    SfxUndoManager* 			pUndoMgr;
 
 private:
                                 SfxShell( const SfxShell & ); // n.i.
-    SfxShell&                   operator = ( const SfxShell & ); // n.i.
+    SfxShell&					operator = ( const SfxShell & ); // n.i.
 
 protected:
                                 SfxShell();
@@ -184,7 +184,7 @@ public:
                                 TYPEINFO();
     virtual                     ~SfxShell();
 
-    SfxBroadcaster*             GetBroadcaster();
+    SfxBroadcaster*				GetBroadcaster();
 
     // TODO/CLEANUP: still needed?!
     virtual SvGlobalName        GetGlobalName() const;
@@ -192,10 +192,10 @@ public:
     virtual SfxInterface*       GetInterface() const;
     static SfxInterface*        GetStaticInterface() { return 0; }
 
-    void                        SetName( const String &rName );
-    const String&               GetName() const;
+    void						SetName( const String &rName );
+    const String&   			GetName() const;
 
-    SfxViewShell*               GetViewShell() const;
+    SfxViewShell*				GetViewShell() const;
 
     void                        CallExec( SfxExecFunc pFunc, SfxRequest &rReq )
                                 { (*pFunc)(this, rReq); }
@@ -207,49 +207,49 @@ public:
 
     const SfxPoolItem*          GetSlotState( USHORT nSlotId, const SfxInterface *pIF = 0, SfxItemSet *pStateSet = 0 );
     const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = 0 );
-    const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, BOOL bAsync );
+    const SfxPoolItem*			ExecuteSlot( SfxRequest &rReq, BOOL bAsync );
     ULONG                       ExecuteSlot( USHORT nSlot, USHORT nMemberId, SbxVariable& rRet, SbxBase* pArgs = 0 );
 
     inline SfxItemPool&         GetPool() const;
-    inline void                 SetPool( SfxItemPool *pNewPool ) ;
+    inline void					SetPool( SfxItemPool *pNewPool ) ;
 
     virtual SfxUndoManager*     GetUndoManager();
-    void                        SetUndoManager( SfxUndoManager *pNewUndoMgr );
+    void						SetUndoManager( SfxUndoManager *pNewUndoMgr );
 
-    SfxRepeatTarget*            GetRepeatTarget() const;
-    void                        SetRepeatTarget( SfxRepeatTarget *pTarget );
+    SfxRepeatTarget*			GetRepeatTarget() const;
+    void					    SetRepeatTarget( SfxRepeatTarget *pTarget );
 
     virtual void                Invalidate(USHORT nId = 0);
 
-    BOOL                        IsActive() const;
+    BOOL						IsActive() const;
     virtual void                Activate(BOOL bMDI);
     virtual void                Deactivate(BOOL bMDI);
-    virtual void                ParentActivate();
-    virtual void                ParentDeactivate();
+    virtual void           		ParentActivate();
+    virtual	void           		ParentDeactivate();
 
-    SfxDispatcher*              GetDispatcher() const;
-    SfxViewFrame*               GetFrame() const;
-    ResMgr*                     GetResMgr() const;
-    virtual sal_Bool            HasUIFeature( sal_uInt32 nFeature );
-    void                        UIFeatureChanged();
+    SfxDispatcher*				GetDispatcher() const;
+    SfxViewFrame*				GetFrame() const;
+    ResMgr* 					GetResMgr() const;
+    virtual	sal_Bool			HasUIFeature( sal_uInt32 nFeature );
+    void						UIFeatureChanged();
 
     // Items
-    const SfxPoolItem*          GetItem( USHORT nSlotId ) const;
-    void                        PutItem( const SfxPoolItem& rItem );
-    void                        RemoveItem( USHORT nSlotId );
+    const SfxPoolItem*			GetItem( USHORT nSlotId ) const;
+    void						PutItem( const SfxPoolItem& rItem );
+    void						RemoveItem( USHORT nSlotId );
 
     // TODO/CLEANUP: still needed?!
     void SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs);
     const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbs() const;
-    void                        VerbExec (SfxRequest&);
-    void                        VerbState (SfxItemSet&);
+    void						VerbExec (SfxRequest&);
+    void						VerbState (SfxItemSet&);
     SAL_DLLPRIVATE const SfxSlot* GetVerbSlot_Impl(USHORT nId) const;
 
-    void                        SetHelpId(ULONG nId);
-    ULONG                       GetHelpId() const;
-    virtual SfxObjectShell*     GetObjectShell();
-    void                        SetDisableFlags( ULONG nFlags );
-    ULONG                       GetDisableFlags() const;
+    void						SetHelpId(ULONG nId);
+    ULONG						GetHelpId() const;
+    virtual	SfxObjectShell*		GetObjectShell();
+    void						SetDisableFlags( ULONG nFlags );
+    ULONG						GetDisableFlags() const;
 
     virtual SfxItemSet*         CreateItemSet( USHORT nId );
     virtual void                ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
@@ -282,7 +282,7 @@ SfxItemPool& SfxShell::GetPool() const
 //-------------------------------------------------------------------
 inline void SfxShell::SetPool
 (
-    SfxItemPool*    pNewPool    // Pointer auf den neuen Pool oder 0
+    SfxItemPool*	pNewPool	// Pointer auf den neuen Pool oder 0
 )
 
 /*  [Beschreibung]
@@ -308,10 +308,10 @@ inline void SfxShell::SetPool
 
 #define SFX_SLOTMAP_ARG(ShellClass) static SfxSlot __FAR_DATA a##ShellClass##Slots_Impl[] =
 
-#define SFX_DECL_INTERFACE(nId)                                             \
+#define SFX_DECL_INTERFACE(nId) 											\
             static SfxInterface*                pInterface;                 \
         private:                                                            \
-            static void                         InitInterface_Impl();       \
+            static void 						InitInterface_Impl();		\
         public:                                                             \
             static const SfxFormalArgument*     pSfxFormalArgs_Impl;        \
             static SfxInterface*                GetStaticInterface();       \
@@ -350,21 +350,21 @@ inline void SfxShell::SetPool
                                                                             \
     void Class::InitInterface_Impl()
 
-#define SFX_POSITION_MASK               0x000F
-#define SFX_VISIBILITY_MASK             0xFFF0
-#define SFX_VISIBILITY_UNVISIBLE        0x0000  // nie sichtbar
+#define SFX_POSITION_MASK				0x000F
+#define SFX_VISIBILITY_MASK 			0xFFF0
+#define SFX_VISIBILITY_UNVISIBLE		0x0000	// nie sichtbar
 #define SFX_VISIBILITY_PLUGSERVER       0x0010
 #define SFX_VISIBILITY_PLUGCLIENT       0x0020
-#define SFX_VISIBILITY_VIEWER           0x0040
+#define SFX_VISIBILITY_VIEWER	        0x0040
                                                 // noch 1 sind frei!
-#define SFX_VISIBILITY_RECORDING        0x0200
-#define SFX_VISIBILITY_READONLYDOC      0x0400
-#define SFX_VISIBILITY_DESKTOP          0x0800
-#define SFX_VISIBILITY_STANDARD         0x1000
-#define SFX_VISIBILITY_FULLSCREEN       0x2000
-#define SFX_VISIBILITY_CLIENT           0x4000
-#define SFX_VISIBILITY_SERVER           0x8000
-#define SFX_VISIBILITY_NOCONTEXT        0xFFFF  // immer sichtbar
+#define SFX_VISIBILITY_RECORDING		0x0200
+#define SFX_VISIBILITY_READONLYDOC		0x0400
+#define SFX_VISIBILITY_DESKTOP    		0x0800
+#define SFX_VISIBILITY_STANDARD 		0x1000
+#define SFX_VISIBILITY_FULLSCREEN		0x2000
+#define SFX_VISIBILITY_CLIENT			0x4000
+#define SFX_VISIBILITY_SERVER			0x8000
+#define SFX_VISIBILITY_NOCONTEXT		0xFFFF	// immer sichtbar
 
 #define SFX_OBJECTBAR_REGISTRATION(nPos,rResId) \
         GetStaticInterface()->RegisterObjectBar( nPos, rResId )

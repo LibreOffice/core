@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,14 +47,14 @@ namespace sdr
     namespace contact
     {
         ViewContactOfSdrObjCustomShape::ViewContactOfSdrObjCustomShape(SdrObjCustomShape& rCustomShape)
-        :   ViewContactOfTextObj(rCustomShape)
+        :	ViewContactOfTextObj(rCustomShape)
         {
         }
 
         ViewContactOfSdrObjCustomShape::~ViewContactOfSdrObjCustomShape()
         {
         }
-
+    
         basegfx::B2DRange ViewContactOfSdrObjCustomShape::getCorrectedTextBoundRect() const
         {
             const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
@@ -71,7 +71,7 @@ namespace sdr
                 // only correct when rotation and/or shear is used
                 if(rGeoStat.nShearWink || rGeoStat.nDrehWink )
                 {
-                    // text range needs to be corrected by
+                    // text range needs to be corrected by 
                     // aObjectRange.getCenter() - aRotObjectRange.getCenter() since it's
                     // defined differenly by using rotation around object center. Start
                     // with positive part
@@ -118,8 +118,8 @@ namespace sdr
             // a TextPath FontworkGallery object
             const drawinglayer::attribute::SdrShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrShadowTextAttribute(
-                    rItemSet,
-                    GetCustomShapeObj().getText(0),
+                    rItemSet, 
+                    GetCustomShapeObj().getText(0), 
                     GetCustomShapeObj().IsTextPath()));
             drawinglayer::primitive2d::Primitive2DSequence xGroup;
             bool bHasText(!aAttribute.getText().isDefault());
@@ -131,7 +131,7 @@ namespace sdr
             if(pSdrObjRepresentation)
             {
                 SdrObjListIter aIterator(*pSdrObjRepresentation);
-
+                
                 while(aIterator.IsMore())
                 {
                     SdrObject& rCandidate = *aIterator.Next();
@@ -175,7 +175,7 @@ namespace sdr
                         {
                             // move relative to unrotated object range
                             aTextBoxMatrix.translate(
-                                aTextRange.getMinX() - aObjectRange.getMinimum().getX(),
+                                aTextRange.getMinX() - aObjectRange.getMinimum().getX(), 
                                 aTextRange.getMinY() - aObjectRange.getMinimum().getY());
                         }
 
@@ -214,22 +214,22 @@ namespace sdr
                 // create primitive
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
-                        aAttribute,
-                        xGroup,
-                        aTextBoxMatrix,
+                        aAttribute, 
+                        xGroup, 
+                        aTextBoxMatrix, 
                         bWordWrap,
                         b3DShape,
-                        false));        // #SJ# New parameter to force to clipped BlockText for SC
+                        false));		// #SJ# New parameter to force to clipped BlockText for SC
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
 
             // always append an invisible outline for the cases where no visible content exists
             const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
             const basegfx::B2DRange aObjectRange(
-                aObjectBound.Left(), aObjectBound.Top(),
+                aObjectBound.Left(), aObjectBound.Top(), 
                 aObjectBound.Right(), aObjectBound.Bottom());
 
-            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, 
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                     false, aObjectRange));
 

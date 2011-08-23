@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,9 +56,9 @@
 #include "../../../source/inc/exithelper.hxx"
 #include "../extendloaderenvironment.hxx"
 
-#define PIPE_PREFIX                 TEXT("\\\\.\\pipe\\OSL_PIPE_")
-#define PIPE_POSTFIX                TEXT("_SingleOfficeIPC_")
-#define PIPE_TERMINATION_SEQUENCE   "InternalIPC::ProcessingDone"
+#define PIPE_PREFIX					TEXT("\\\\.\\pipe\\OSL_PIPE_")
+#define	PIPE_POSTFIX				TEXT("_SingleOfficeIPC_")
+#define PIPE_TERMINATION_SEQUENCE	"InternalIPC::ProcessingDone"
 
 BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
 {
@@ -128,7 +128,7 @@ BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
 
 //---------------------------------------------------------------------------
 
-static LPTSTR   *GetCommandArgs( int *pArgc )
+static LPTSTR	*GetCommandArgs( int *pArgc )
 {
 #ifdef UNICODE
     return CommandLineToArgvW( GetCommandLineW(), pArgc );
@@ -181,10 +181,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR, int )
 int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 #endif
 {
-    TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
+    TCHAR				szTargetFileName[MAX_PATH] = TEXT("");
     TCHAR               szIniDirectory[MAX_PATH];
-    TCHAR               szPerfTuneIniFile[MAX_PATH] = TEXT("");
-    STARTUPINFO         aStartupInfo;
+    TCHAR				szPerfTuneIniFile[MAX_PATH] = TEXT("");
+    STARTUPINFO			aStartupInfo;
 
     desktop_win32::extendLoaderEnvironment(szTargetFileName, szIniDirectory);
 
@@ -194,10 +194,10 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     GetStartupInfo( &aStartupInfo );
     // Get image path with same name but with .bin extension
 
-    TCHAR               szModuleFileName[MAX_PATH];
+    TCHAR				szModuleFileName[MAX_PATH];
 
     GetModuleFileName( NULL, szModuleFileName, MAX_PATH );
-    _TCHAR  *lpLastSlash = _tcsrchr( szModuleFileName, '\\' );
+    _TCHAR	*lpLastSlash = _tcsrchr( szModuleFileName, '\\' );
     if ( lpLastSlash )
     {
         size_t len = lpLastSlash - szModuleFileName + 1;
@@ -208,10 +208,10 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
 
-    DWORD   dwExitCode = (DWORD)-1;
+    DWORD	dwExitCode = (DWORD)-1;
 
-    BOOL    fSuccess = FALSE;
-    LPTSTR  lpCommandLine = NULL;
+    BOOL	fSuccess = FALSE;
+    LPTSTR	lpCommandLine = NULL;
     int argc = 0;
     LPTSTR * argv = NULL;
     bool bFirst = true;
@@ -223,7 +223,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     do
     {
-        TCHAR   szKey[32];
+        TCHAR	szKey[32];
 
         GetPrivateProfileString(
             TEXT("PerformanceTuning"),
@@ -236,25 +236,25 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
         if ( 0 == _tcscmp( szKey, TEXT("1") ) )
         {
-            HANDLE  hProcessToken;
+            HANDLE	hProcessToken;
 
             if ( OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hProcessToken ) )
             {
-                TCHAR   szPipeName[4096];
+                TCHAR	szPipeName[4096];
 
 
-                DWORD   dwTokenLength = 0;
+                DWORD	dwTokenLength = 0;
 
 
                 fSuccess = GetTokenInformation( hProcessToken, TokenUser, NULL, dwTokenLength, &dwTokenLength );
 
-                PVOID   pTokenInfo = _alloca(dwTokenLength);
+                PVOID	pTokenInfo = _alloca(dwTokenLength);
                 fSuccess = GetTokenInformation( hProcessToken, TokenUser, pTokenInfo, dwTokenLength, &dwTokenLength );
                 CloseHandle( hProcessToken );
 
                 PSID pSid = ((PTOKEN_USER)pTokenInfo)->User.Sid;
-                LPTSTR  szUserIdent = NULL;
-                TCHAR   szSUPD[11] = TEXT("0");
+                LPTSTR	szUserIdent = NULL;
+                TCHAR	szSUPD[11] = TEXT("0");
 
                 fSuccess = ConvertSidToStringSid( pSid, &szUserIdent );
 
@@ -265,20 +265,20 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
                 LocalFree( szUserIdent );
 
-                HANDLE  hPipe = CreateFile(
+                HANDLE	hPipe = CreateFile(
                                     szPipeName,
-                                    GENERIC_READ|GENERIC_WRITE,
+                                    GENERIC_READ|GENERIC_WRITE, 
                                     FILE_SHARE_READ | FILE_SHARE_WRITE,
                                     NULL,
-                                    OPEN_EXISTING,
-                                    FILE_ATTRIBUTE_NORMAL,
+                                    OPEN_EXISTING, 
+                                    FILE_ATTRIBUTE_NORMAL, 
                                     NULL);
 
                 if ( INVALID_HANDLE_VALUE != hPipe )
                 {
-                    DWORD   dwBytesWritten;
-                    int argc = 0;
-                    LPWSTR  *argv = CommandLineToArgvW( GetCommandLine(), &argc );
+                    DWORD	dwBytesWritten;
+                    int	argc = 0;
+                    LPWSTR	*argv = CommandLineToArgvW( GetCommandLine(), &argc );
 
                     fSuccess = WriteFile( hPipe, RTL_CONSTASCII_STRINGPARAM("InternalIPC::Arguments"), &dwBytesWritten, NULL );
                     if (fSuccess) {
@@ -300,8 +300,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                         fSuccess = WriteFile(  hPipe, "", 1, &dwBytesWritten, NULL );
                         if ( fSuccess )
                         {
-                            DWORD   dwBytesRead = 0;
-                            char    *pBuffer = (char *)_alloca( sizeof(PIPE_TERMINATION_SEQUENCE) );
+                            DWORD	dwBytesRead = 0;
+                            char	*pBuffer = (char *)_alloca( sizeof(PIPE_TERMINATION_SEQUENCE) );
                             fSuccess = ReadFile( hPipe, pBuffer, sizeof(PIPE_TERMINATION_SEQUENCE) - 1, &dwBytesRead, NULL );
                             if ( fSuccess )
                             {
@@ -353,7 +353,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         desktop_win32::commandLineAppend(p, MY_STRING(L"\""));
         bFirst = false;
 
-        TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
+        TCHAR	szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
         BOOL    bHeadlessMode( FALSE );
 
         {
@@ -362,8 +362,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             // mode as self-destruction of the soffice.bin process can lead to
             // certain side-effects (log-off can result in data-loss, ".lock" is not deleted.
             // See 138244 for more information.
-            int     argc;
-            LPTSTR  *argv = GetCommandArgs( &argc );
+            int		argc;
+            LPTSTR	*argv = GetCommandArgs( &argc );
 
             if ( argc > 1 )
             {
@@ -376,12 +376,12 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 }
             }
         }
-
+        
         if ( _ltot( (long)GetCurrentProcessId(),szParentProcessId, 10 ) && bHeadlessMode )
             SetEnvironmentVariable( TEXT("ATTACHED_PARENT_PROCESSID"), szParentProcessId );
 
-        PROCESS_INFORMATION aProcessInfo;
-
+        PROCESS_INFORMATION	aProcessInfo;
+        
         fSuccess = CreateProcess(
             szTargetFileName,
             lpCommandLine,
@@ -396,7 +396,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
         if ( fSuccess )
         {
-            DWORD   dwWaitResult;
+            DWORD	dwWaitResult;
 
             do
             {
@@ -407,7 +407,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
                 if (  WAIT_OBJECT_0 + 1 == dwWaitResult )
                 {
-                    MSG msg;
+                    MSG	msg;
 
                     PeekMessage( &msg, NULL, 0, 0, PM_REMOVE );
                 }

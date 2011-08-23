@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@
 // odbcstub definiert die in den Quellen benutzten NSQL...-Methoden
 // als indirekte Funktionsaufrufe.
 // odbcimp zieht sich selbst preos2, odbc und postos2 an.
-//  #include "odbc3imp.hxx"
+//	#include "odbc3imp.hxx"
 
 #else
 
@@ -107,7 +107,7 @@
 #define SQL_FETCH_PRIOR SQL_FETCH_PREV
 #define SQL_NO_TOTAL (-4)
 
-//  #include "odbc3defs.hxx"
+//	#include "odbc3defs.hxx"
 
 #endif
 
@@ -142,10 +142,10 @@
             // definiert.
 
 #define SDB_ODBC_CHAR UCHAR
-#define SQL_WCHAR           (-8)
-#define SQL_WVARCHAR        (-9)
-#define SQL_WLONGVARCHAR    (-10)
-#define SQL_C_WCHAR         SQL_WCHAR
+#define SQL_WCHAR		 	(-8)
+#define SQL_WVARCHAR	 	(-9)
+#define SQL_WLONGVARCHAR 	(-10)
+#define SQL_C_WCHAR			SQL_WCHAR
 
 
 #endif // UNX
@@ -153,22 +153,22 @@
 //--------------------------------------------------------------------------
 
 #ifndef SQL_WCHAR
-#define SQL_WCHAR           (-8)
+#define SQL_WCHAR		 	(-8)
 #endif
 #ifndef SQL_WVARCHAR
-#define SQL_WVARCHAR        (-9)
+#define SQL_WVARCHAR	 	(-9)
 #endif
 #ifndef SQL_WLONGVARCHAR
-#define SQL_WLONGVARCHAR    (-10)
+#define SQL_WLONGVARCHAR 	(-10)
 #endif
 #ifndef SQL_C_WCHAR
-#define SQL_C_WCHAR         SQL_WCHAR
+#define SQL_C_WCHAR			SQL_WCHAR
 #endif
 
 #ifdef UNICODE
-#define SQL_C_TCHAR     SQL_C_WCHAR
+#define SQL_C_TCHAR		SQL_C_WCHAR
 #else
-#define SQL_C_TCHAR     SQL_C_CHAR
+#define SQL_C_TCHAR		SQL_C_CHAR
 #endif
 
 #endif // _CONNECTIVITY_OFUNCTIONDEFS_HXX_

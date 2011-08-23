@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ namespace dbtools
 
     // calculates the default numberformat for a given datatype and a give language
     // @param  _nDataType @see com.sun.star.sdbc.DataType
-    // @param _nScale       can be zero
+    // @param _nScale		can be zero
     OOO_DLLPUBLIC_DBTOOLS
     sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
                                      sal_Int32 _nScale,
@@ -160,7 +160,7 @@ namespace dbtools
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
         sal_Bool _bSetAsActiveConnection
-    )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
+    )	SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
                     , ::com::sun::star::lang::WrappedTargetException
                     , ::com::sun::star::uno::RuntimeException ) );
 
@@ -191,7 +191,7 @@ namespace dbtools
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
         bool _bUseAutoConnectionDisposer
-    )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
+    )	SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
                     , ::com::sun::star::lang::WrappedTargetException
                     , ::com::sun::star::uno::RuntimeException ) );
 
@@ -283,7 +283,7 @@ namespace dbtools
             const ::rtl::OUString& _rCommand,
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
             SQLExceptionInfo* _pErrorInfo = NULL
-        )   SAL_THROW( ( ) );
+        )	SAL_THROW( ( ) );
 
 
     /** get fields for a result set given by a "command descriptor"
@@ -319,7 +319,7 @@ namespace dbtools
             const sal_Int32 _nCommandType,
             const ::rtl::OUString& _rCommand,
             SQLExceptionInfo* _pErrorInfo = NULL
-        )   SAL_THROW( ( ) );
+        )	SAL_THROW( ( ) );
 
 
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
@@ -328,7 +328,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::sdb::SQLContext prependContextInfo(const ::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails );
 
     OOO_DLLPUBLIC_DBTOOLS
-    ::com::sun::star::sdbc::SQLException prependErrorInfo(
+    ::com::sun::star::sdbc::SQLException prependErrorInfo( 
         const ::com::sun::star::sdbc::SQLException& _rChainedException,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::rtl::OUString& _rAdditionalError,
@@ -376,13 +376,13 @@ namespace dbtools
             <TRUE/> otherwise
     */
     OOO_DLLPUBLIC_DBTOOLS
-    bool    getDataSourceSetting(
+    bool    getDataSourceSetting( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
         const sal_Char* _pAsciiSettingsName,
         ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
     );
     OOO_DLLPUBLIC_DBTOOLS
-    bool    getDataSourceSetting(
+    bool    getDataSourceSetting( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
         const ::rtl::OUString& _sSettingsName,
         ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
@@ -402,23 +402,23 @@ namespace dbtools
                                     ,EComposeRule _eComposeRule);
 
     /** split a fully qualified table name (including catalog and schema, if appliable) into it's component parts.
-        @param  _rxConnMetaData     meta data describing the connection where you got the table name from
-        @param  _rQualifiedName     fully qualified table name
-        @param  _rCatalog           (out parameter) upon return, contains the catalog name
-        @param  _rSchema            (out parameter) upon return, contains the schema name
-        @param  _rName              (out parameter) upon return, contains the table name
-        @param  _eComposeRule       where do you need the name for
+        @param	_rxConnMetaData		meta data describing the connection where you got the table name from
+        @param	_rQualifiedName		fully qualified table name
+        @param	_rCatalog			(out parameter) upon return, contains the catalog name
+        @param	_rSchema			(out parameter) upon return, contains the schema name
+        @param	_rName				(out parameter) upon return, contains the table name
+        @param	_eComposeRule		where do you need the name for
     */
     OOO_DLLPUBLIC_DBTOOLS void qualifiedNameComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
         const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName,EComposeRule _eComposeRule);
 
     /** calculate a NumberFormatsSupplier for use with an given connection
-        @param      _rxConn         the connection for which the formatter is requested
-        @param      _bAllowDefault  if the connection (and related components, such as it's parent) cannot supply
+        @param		_rxConn			the connection for which the formatter is requested
+        @param		_bAllowDefault	if the connection (and related components, such as it's parent) cannot supply
                                     a formatter, we can ask the DatabaseEnvironment for a default one. This parameter
                                     states if this is allowed.
-        @param      _rxFactory      required (only of _bAllowDefault is sal_True) for creating the DatabaseEnvironment.
-        @return     the formatter all object related to the given connection should work with.
+        @param		_rxFactory		required (only of _bAllowDefault is sal_True) for creating the DatabaseEnvironment.
+        @return		the formatter all object related to the given connection should work with.
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
@@ -463,9 +463,9 @@ namespace dbtools
     );
 
     /** transfer and translate properties between two FormComponents
-        @param      _rxOld      the source property set
-        @param      _rxNew      the destination property set
-        @param      _rLocale    the locale for converting number related properties
+        @param		_rxOld		the source property set
+        @param		_rxNew		the destination property set
+        @param		_rLocale	the locale for converting number related properties
     */
     OOO_DLLPUBLIC_DBTOOLS void TransferFormComponentProperties(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxOld,
@@ -474,22 +474,22 @@ namespace dbtools
         );
 
     /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
-        @param      _rxCursorSet    the property set
+        @param		_rxCursorSet	the property set
     */
     OOO_DLLPUBLIC_DBTOOLS sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
     /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
-        @param      _rxCursorSet    the property set
+        @param		_rxCursorSet	the property set
     */
     OOO_DLLPUBLIC_DBTOOLS sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
     /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
-        @param      _rxCursorSet    the property set
+        @param		_rxCursorSet	the property set
     */
     OOO_DLLPUBLIC_DBTOOLS sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
 
     //----------------------------------------------------------------------------------
     /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString composeTableName( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
+    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString composeTableName(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
                             const ::rtl::OUString& _rCatalog,
                             const ::rtl::OUString& _rSchema,
                             const ::rtl::OUString& _rName,
@@ -519,9 +519,9 @@ namespace dbtools
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable );
     //----------------------------------------------------------------------------------
     /** compose the table name out of the property set which must support the properties from the service <member scope= "com::sun::star::sdbcx">table</member>
-        @param  _xMetaData
+        @param	_xMetaData
             The metadata from the connection.
-        @param  _xTable
+        @param	_xTable
             The table.
     */
     OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString composeTableName(
@@ -540,11 +540,11 @@ namespace dbtools
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     /** search for a name that is NOT in the NameAcces
-        @param  _rxContainer
+        @param	_rxContainer
             the NameAccess container to search in
-        @param  _rBaseName
+        @param	_rBaseName
             the base name that should be used to create the new name
-        @param  _bStartWithNumber
+        @param	_bStartWithNumber
             When <TRUE/> the name ends with number even when the name itself doesn't occur in the collection.
         @return
             A name which doesn't exist in the collection.
@@ -563,8 +563,8 @@ namespace dbtools
     );
 
     /** create a name which is a valid SQL 92 identifier name
-        @param      _rName          the string which should be converted
-        @param      _rSpecials      @see com.sun.star.sdbc.XDatabaseMetaData.getExtraNameCharacters
+        @param		_rName			the string which should be converted
+        @param		_rSpecials		@see com.sun.star.sdbc.XDatabaseMetaData.getExtraNameCharacters
 
         @see isValidSQLName
     */
@@ -572,15 +572,15 @@ namespace dbtools
 
     /** checks whether the given name is a valid SQL name
 
-        @param      _rName          the string which should be converted
-        @param      _rSpecials      @see com.sun.star.sdbc.XDatabaseMetaData.getExtraNameCharacters
+        @param		_rName			the string which should be converted
+        @param		_rSpecials		@see com.sun.star.sdbc.XDatabaseMetaData.getExtraNameCharacters
 
         @see convertName2SQLName
     */
     OOO_DLLPUBLIC_DBTOOLS sal_Bool isValidSQLName( const ::rtl::OUString& _rName, const ::rtl::OUString& _rSpecials );
 
     OOO_DLLPUBLIC_DBTOOLS
-    void showError( const SQLExceptionInfo& _rInfo,
+    void showError(	const SQLExceptionInfo& _rInfo,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
@@ -597,47 +597,47 @@ namespace dbtools
             <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
     */
     OOO_DLLPUBLIC_DBTOOLS
-    sal_Bool implUpdateObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >& _rxUpdatedObject,
+    sal_Bool implUpdateObject(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >& _rxUpdatedObject,
                                 const sal_Int32 _nColumnIndex,
-                                const ::com::sun::star::uno::Any& _rValue)  SAL_THROW   (   (   ::com::sun::star::sdbc::SQLException,   ::com::sun::star::uno::RuntimeException)    );
+                                const ::com::sun::star::uno::Any& _rValue)	SAL_THROW	(	(	::com::sun::star::sdbc::SQLException,	::com::sun::star::uno::RuntimeException)	);
 
 
 
     /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement
-        @param _xConnection     the connection must be able to create <type scope="com::sun::star::sdb">SingleSelectQueryComposer</type>s
-        @param _xPreparedStmt   the prepared statement where the parameters could be set when needed
+        @param _xConnection		the connection must be able to create <type scope="com::sun::star::sdb">SingleSelectQueryComposer</type>s
+        @param _xPreparedStmt	the prepared statement where the parameters could be set when needed
         @param _aParametersSet  contains which parameters have to asked for and which already have set.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    void askForParameters(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xComposer,
+    void askForParameters(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xComposer,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler,
                             const ::std::bit_vector& _aParametersSet = ::std::bit_vector());
 
     /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
-        @param  _xParams        the parameters where to set the value
-        @param  parameterIndex  the index of the parameter, 1 based
-        @param  x               the value to set
-        @param  sqlType         the corresponding sql type @see com::sun::star::sdbc::DataType
-        @param  scale           the scale of the sql type can be 0
+        @param	_xParams		the parameters where to set the value
+        @param	parameterIndex	the index of the parameter, 1 based
+        @param	x				the value to set
+        @param	sqlType			the corresponding sql type @see com::sun::star::sdbc::DataType
+        @param	scale			the scale of the sql type can be 0
     */
     OOO_DLLPUBLIC_DBTOOLS
-    void setObjectWithInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
+    void setObjectWithInfo(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
                             sal_Int32 parameterIndex,
                             const ::com::sun::star::uno::Any& x,
                             sal_Int32 sqlType,
                             sal_Int32 scale=0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
-        @param  _xParams        the parameters where to set the value
-        @param  parameterIndex  the index of the parameter, 1 based
-        @param  x               the value to set
-        @param  sqlType         the corresponding sql type @see com::sun::star::sdbc::DataType
-        @param  scale           the scale of the sql type can be 0
+        @param	_xParams		the parameters where to set the value
+        @param	parameterIndex	the index of the parameter, 1 based
+        @param	x				the value to set
+        @param	sqlType			the corresponding sql type @see com::sun::star::sdbc::DataType
+        @param	scale			the scale of the sql type can be 0
     */
     OOO_DLLPUBLIC_DBTOOLS
-    void setObjectWithInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
+    void setObjectWithInfo(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
                             sal_Int32 parameterIndex,
                             const ::connectivity::ORowSetValue& x,
                             sal_Int32 sqlType,
@@ -657,88 +657,88 @@ namespace dbtools
             <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
     */
     OOO_DLLPUBLIC_DBTOOLS
-    sal_Bool implSetObject( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _rxParameters,
+    sal_Bool implSetObject(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _rxParameters,
                             const sal_Int32 _nColumnIndex,
                             const ::com::sun::star::uno::Any& _rValue) SAL_THROW ( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
 
     /** creates the standard sql create table statement without the key part.
-        @param  descriptor
+        @param	descriptor
             The descriptor of the new table.
-        @param  _xConnection
+        @param	_xConnection
             The connection.
         @param  _bAddScale
             The scale will also be added when the value is 0.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createStandardCreateStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
+    ::rtl::OUString createStandardCreateStatement(	const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                                     ISQLStatementHelper* _pHelper,
                                                     const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates the standard sql statement for the key part of a create table statement.
-        @param  descriptor
+        @param	descriptor
             The descriptor of the new table.
-        @param  _xConnection
+        @param	_xConnection
             The connection.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createStandardKeyStatement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
+    ::rtl::OUString createStandardKeyStatement(	const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
     /** creates the standard sql statement for the column part of a create table statement.
         @param  _pHelper
             Allow to add special SQL constructs.
-        @param  descriptor
+        @param	descriptor
             The descriptor of the column.
-        @param  _xConnection
+        @param	_xConnection
             The connection.
         @param  _pHelper
             Allow to add special SQL constructs.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+    ::rtl::OUString createStandardColumnPart(	const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
                                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                                                 ,ISQLStatementHelper* _pHelper = NULL
                                                 ,const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates a SQL CREATE TABLE statement
-
-        @param  descriptor
+        
+        @param	descriptor
             The descriptor of the new table.
-        @param  _xConnection
+        @param	_xConnection
             The connection.
         @param  _pHelper
             Allow to add special SQL constructs.
         @param  _sCreatePattern
-
+            
         @return
             The CREATE TABLE statement.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+    ::rtl::OUString createSqlCreateTableStatement(	const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
                                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                                                     ,ISQLStatementHelper* _pHelper = NULL
                                                     ,const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates a SDBC column with the help of getColumns.
-        @param  _xTable
+        @param	_xTable
             The table.
-        @param  _rName
+        @param	_rName
             The name of the column.
-        @param  _bCase
+        @param	_bCase
             Is the column case sensitive.
-        @param  _bQueryForInfo
+        @param	_bQueryForInfo
             If <TRUE/> the autoincrement and currency field will be read from the meta data, otherwise the following parameters will be used instead
-        @param  _bIsAutoIncrement
+        @param	_bIsAutoIncrement
             <TRUE/> if the column is an autoincrement.
-        @param  _bIsCurrency
+        @param	_bIsCurrency
             <TRUE/> if the column is a currency field.
-        @param  _nDataType
+        @param	_nDataType
             The data type of the column.
     */
     OOO_DLLPUBLIC_DBTOOLS
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
-            createSDBCXColumn(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
+            createSDBCXColumn(	const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                 const ::rtl::OUString& _rName,
                                 sal_Bool _bCase,
@@ -748,11 +748,11 @@ namespace dbtools
                                 sal_Int32 _nDataType = com::sun::star::sdbc::DataType::OTHER);
 
     /** tries to locate the corresponding DataDefinitionSupplier for the given url and connection
-        @param  _rsUrl
+        @param	_rsUrl
             The URL used to connect to the database.
-        @param  _xConnection
+        @param	_xConnection
             The connection used to find the correct driver.
-        @param  _rxFactory
+        @param	_rxFactory
             Used to create the drivermanager.
         @return
             The datadefintion object.
@@ -763,13 +763,13 @@ namespace dbtools
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     /** returns the table privileges to the given parameters
-        @param  _xMetaData
+        @param	_xMetaData
             The meta data.
-        @param  _sCatalog
+        @param	_sCatalog
             contains the catalog name
-        @param  _sSchema
+        @param	_sSchema
             contains the schema name
-        @param  _sTable
+        @param	_sTable
             contains the table name
     */
     OOO_DLLPUBLIC_DBTOOLS
@@ -783,17 +783,17 @@ namespace dbtools
     typedef ::std::multimap< ::rtl::OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
     /** collects the information about auto increment, currency and data type for the given column name.
         The column must be quoted, * is also valid.
-        @param  _xConnection
+        @param	_xConnection
             The connection.
-        @param  _sComposedTableName
+        @param	_sComposedTableName
             The quoted table name. ccc.sss.ttt
-        @param  _sName
+        @param	_sName
             The name of the column, or *
-        @param  _rInfo
+        @param	_rInfo
             The information about the column(s).
     */
     OOO_DLLPUBLIC_DBTOOLS
-    void collectColumnInformation(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+    void collectColumnInformation(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                     const ::rtl::OUString& _sComposedTableName,
                                     const ::rtl::OUString& _rName,
                                     ColumnInformationMap& _rInfo);
@@ -819,7 +819,7 @@ namespace dbtools
         );
 
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 #endif // _CONNECTIVITY_DBTOOLS_HXX_

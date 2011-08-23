@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@
 #include <rtl/ustring.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -137,7 +137,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
         {
             return ::std::find(begin(), end(), sElement);
         }
-
+        
         const_iterator findConst( const ::rtl::OUString& sElement ) const
         {
             return ::std::find(begin(), end(), sElement);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace sdr
         protected:
             // the owner of this ViewContact. Set from constructor and not
             // to be changed in any way.
-            sdr::MasterPageDescriptor&                      mrMasterPageDescriptor;
+            sdr::MasterPageDescriptor&						mrMasterPageDescriptor;
 
             // Create a Object-Specific ViewObjectContact
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);

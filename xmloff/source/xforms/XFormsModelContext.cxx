@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ static SvXMLTokenMapEntry aChildren[] =
 };
 
 
-XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
+XFormsModelContext::XFormsModelContext( SvXMLImport& rImport, 
                                         USHORT nPrefix,
                                         const OUString& rLocalName ) :
     TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
@@ -97,8 +97,8 @@ Reference<XPropertySet> XFormsModelContext::getModel()
 }
 
 
-void XFormsModelContext::HandleAttribute(
-    sal_uInt16 nToken,
+void XFormsModelContext::HandleAttribute( 
+    sal_uInt16 nToken, 
     const OUString& rValue )
 {
     switch( nToken )
@@ -113,9 +113,9 @@ void XFormsModelContext::HandleAttribute(
         DBG_ERROR( "this should not happen" );
         break;
     }
-}
+}        
 
-SvXMLImportContext* XFormsModelContext::HandleChild(
+SvXMLImportContext* XFormsModelContext::HandleChild( 
     sal_uInt16 nToken,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -130,17 +130,17 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
                                               mxModel );
         break;
     case XML_BIND:
-        pContext = new XFormsBindContext( GetImport(), nPrefix, rLocalName,
+        pContext = new XFormsBindContext( GetImport(), nPrefix, rLocalName, 
                                           mxModel );
         break;
     case XML_SUBMISSION:
-        pContext = new XFormsSubmissionContext( GetImport(), nPrefix,
+        pContext = new XFormsSubmissionContext( GetImport(), nPrefix, 
                                                 rLocalName, mxModel );
         break;
     case XML_SCHEMA:
-        pContext = new SchemaContext(
+        pContext = new SchemaContext( 
             GetImport(), nPrefix, rLocalName,
-            Reference<com::sun::star::xforms::XModel>( mxModel,
+            Reference<com::sun::star::xforms::XModel>( mxModel, 
                                                        UNO_QUERY_THROW )
                 ->getDataTypeRepository() );
         break;

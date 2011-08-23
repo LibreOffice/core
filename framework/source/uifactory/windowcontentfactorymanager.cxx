@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <uifactory/windowcontentfactorymanager.hxx>
 #include <uifactory/uielementfactorymanager.hxx>
@@ -38,7 +38,7 @@
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -51,7 +51,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
@@ -59,25 +59,25 @@
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
-//
+// 
 
 using namespace ::com::sun::star;
 
 //_________________________________________________________________________________________________________________
-//  Namespace
+//	Namespace
 //_________________________________________________________________________________________________________________
-//
+// 
 
 namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowContentFactoryManager                     ,
-                                            ::cppu::OWeakObject                             ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowContentFactoryManager				        ,
+                                            ::cppu::OWeakObject							    ,
                                             SERVICENAME_WINDOWCONTENTFACTORYMANAGER         ,
                                             IMPLEMENTATIONNAME_WINDOWCONTENTFACTORYMANAGER
                                         )
@@ -97,7 +97,7 @@ WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< 
 WindowContentFactoryManager::~WindowContentFactoryManager()
 {
     ResetableGuard aLock( m_aLock );
-
+    
     // reduce reference count
     m_pConfigAccess->release();
 }
@@ -132,8 +132,8 @@ void WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( const rtl::OU
 }
 
 // XSingleComponentFactory
-uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createInstanceWithContext(
-    const uno::Reference< uno::XComponentContext >& /*xContext*/ )
+uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createInstanceWithContext( 
+    const uno::Reference< uno::XComponentContext >& /*xContext*/ ) 
 throw (uno::Exception, uno::RuntimeException)
 {
 /*
@@ -141,10 +141,10 @@ throw (uno::Exception, uno::RuntimeException)
        code to get a handle to the dialog model.
 
     uno::Reference< lang::XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), uno::UNO_QUERY );
-
+    
     const ::rtl::OUString sToolkitService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit"));
     uno::Reference< awt::XToolkit > xToolkit( xServiceManager->createInstance( sToolkitService ), uno::UNO_QUERY_THROW );
-
+    
     const ::rtl::OUString sDialogModelService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlDialogModel"));
     uno::Reference< awt::XControlModel > xDialogModel( xServiceManager->createInstance( sDialogModelService ), uno::UNO_QUERY_THROW );
 
@@ -156,7 +156,7 @@ throw (uno::Exception, uno::RuntimeException)
     uno::Reference< awt::XControl > xDialogControl( xServiceManager->createInstance( sDialogService ), uno::UNO_QUERY_THROW );
 
     xDialogControl->setModel( xDialogModel );
-
+  
     uno::Reference< awt::XWindowPeer > xWindowParentPeer( xToolkit->getDesktopWindow(), uno::UNO_QUERY );
     xDialogControl->createPeer( xToolkit, xWindowParentPeer );
     uno::Reference< uno::XInterface > xWindow( xDialogControl->getPeer(), uno::UNO_QUERY );
@@ -165,8 +165,8 @@ throw (uno::Exception, uno::RuntimeException)
     return xWindow;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createInstanceWithArgumentsAndContext(
-    const uno::Sequence< uno::Any >& Arguments, const uno::Reference< uno::XComponentContext >& Context )
+uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createInstanceWithArgumentsAndContext( 
+    const uno::Sequence< uno::Any >& Arguments, const uno::Reference< uno::XComponentContext >& Context ) 
 throw (uno::Exception, uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xWindow;
@@ -186,13 +186,13 @@ throw (uno::Exception, uno::RuntimeException)
     }
 
     uno::Reference< frame::XModuleManager > xModuleManager;
-    // SAFE
+    // SAFE    
     {
         ResetableGuard aLock( m_aLock );
         xModuleManager = m_xModuleManager;
     }
     // UNSAFE
-
+    
     // Determine the module identifier
     ::rtl::OUString aType;
     ::rtl::OUString aName;
@@ -207,16 +207,16 @@ throw (uno::Exception, uno::RuntimeException)
     }
 
     RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
-    if ( aType.getLength() > 0 &&
-         aName.getLength() > 0 &&
+    if ( aType.getLength() > 0 && 
+         aName.getLength() > 0 && 
          aModuleId.getLength() > 0 )
     {
         ::rtl::OUString                   aImplementationName;
         uno::Reference< uno::XInterface > xHolder( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
-
+        
         // Detetmine the implementation name of the window content factory dependent on the
         // module identifier, user interface element type and name
-        // SAFE
+        // SAFE    
         ResetableGuard aLock( m_aLock );
 
         if ( !m_bConfigRead )
@@ -234,7 +234,7 @@ throw (uno::Exception, uno::RuntimeException)
             uno::Reference< lang::XMultiServiceFactory > xServiceManager( Context->getServiceManager(), uno::UNO_QUERY );
             if ( xServiceManager.is() )
             {
-                uno::Reference< lang::XSingleComponentFactory > xFactory(
+                uno::Reference< lang::XSingleComponentFactory > xFactory( 
                     xServiceManager->createInstance( aImplementationName ), uno::UNO_QUERY );
                 if ( xFactory.is() )
                 {
@@ -253,7 +253,7 @@ throw (uno::Exception, uno::RuntimeException)
             }
         }
     }
-
+    
     // UNSAFE
     if ( !xWindow.is())
     {

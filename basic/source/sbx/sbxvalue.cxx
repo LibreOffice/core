@@ -196,7 +196,7 @@ int matherr( struct _exception* p )
 #else
         case _OVERFLOW: SbxBase::SetError( SbxERR_OVERFLOW ); break;
 #endif
-        default:        SbxBase::SetError( SbxERR_NOTIMP ); break;
+        default:		SbxBase::SetError( SbxERR_NOTIMP ); break;
     }
     return TRUE;
 }
@@ -224,22 +224,22 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
     if( p )
     switch( t & 0x0FFF )
     {
-        case SbxINTEGER:    n |= SbxBYREF; aData.pInteger = (INT16*) p; break;
-        case SbxULONG64:    n |= SbxBYREF; aData.pULong64 = (SbxUINT64*) p; break;
+        case SbxINTEGER:	n |= SbxBYREF; aData.pInteger = (INT16*) p; break;
+        case SbxULONG64:	n |= SbxBYREF; aData.pULong64 = (SbxUINT64*) p; break;
         case SbxLONG64:
-        case SbxCURRENCY:   n |= SbxBYREF; aData.pLong64 = (SbxINT64*) p; break;
-        case SbxLONG:       n |= SbxBYREF; aData.pLong = (INT32*) p; break;
-        case SbxSINGLE:     n |= SbxBYREF; aData.pSingle = (float*) p; break;
+        case SbxCURRENCY:	n |= SbxBYREF; aData.pLong64 = (SbxINT64*) p; break;
+        case SbxLONG:		n |= SbxBYREF; aData.pLong = (INT32*) p; break;
+        case SbxSINGLE:		n |= SbxBYREF; aData.pSingle = (float*) p; break;
         case SbxDATE:
-        case SbxDOUBLE:     n |= SbxBYREF; aData.pDouble = (double*) p; break;
-        case SbxSTRING:     n |= SbxBYREF; aData.pOUString = (::rtl::OUString*) p; break;
+        case SbxDOUBLE:		n |= SbxBYREF; aData.pDouble = (double*) p; break;
+        case SbxSTRING:		n |= SbxBYREF; aData.pOUString = (::rtl::OUString*) p; break;
         case SbxERROR:
         case SbxUSHORT:
-        case SbxBOOL:       n |= SbxBYREF; aData.pUShort = (UINT16*) p; break;
-        case SbxULONG:      n |= SbxBYREF; aData.pULong = (UINT32*) p; break;
-        case SbxCHAR:       n |= SbxBYREF; aData.pChar = (xub_Unicode*) p; break;
-        case SbxBYTE:       n |= SbxBYREF; aData.pByte = (BYTE*) p; break;
-        case SbxINT:        n |= SbxBYREF; aData.pInt = (int*) p; break;
+        case SbxBOOL:		n |= SbxBYREF; aData.pUShort = (UINT16*) p; break;
+        case SbxULONG:		n |= SbxBYREF; aData.pULong = (UINT32*) p; break;
+        case SbxCHAR:		n |= SbxBYREF; aData.pChar = (xub_Unicode*) p; break;
+        case SbxBYTE:		n |= SbxBYREF; aData.pByte = (BYTE*) p; break;
+        case SbxINT:		n |= SbxBYREF; aData.pInt = (int*) p; break;
         case SbxOBJECT:
             aData.pObj = (SbxBase*) p;
             if( p )
@@ -526,29 +526,29 @@ BOOL SbxValue::Get( SbxValues& rRes ) const
             {
                 case SbxEMPTY:
                 case SbxVOID:
-                case SbxNULL:    break;
+                case SbxNULL:	 break;
                 case SbxVARIANT: rRes = p->aData; break;
                 case SbxINTEGER: rRes.nInteger = ImpGetInteger( &p->aData ); break;
-                case SbxLONG:    rRes.nLong = ImpGetLong( &p->aData ); break;
-                case SbxSALINT64:   rRes.nInt64 = ImpGetInt64( &p->aData ); break;
-                case SbxSALUINT64:  rRes.uInt64 = ImpGetUInt64( &p->aData ); break;
-                case SbxSINGLE:  rRes.nSingle = ImpGetSingle( &p->aData ); break;
-                case SbxDOUBLE:  rRes.nDouble = ImpGetDouble( &p->aData ); break;
+                case SbxLONG:	 rRes.nLong = ImpGetLong( &p->aData ); break;
+                case SbxSALINT64:	rRes.nInt64 = ImpGetInt64( &p->aData ); break;
+                case SbxSALUINT64:	rRes.uInt64 = ImpGetUInt64( &p->aData ); break;
+                case SbxSINGLE:	 rRes.nSingle = ImpGetSingle( &p->aData ); break;
+                case SbxDOUBLE:	 rRes.nDouble = ImpGetDouble( &p->aData ); break;
                 case SbxCURRENCY:rRes.nLong64 = ImpGetCurrency( &p->aData ); break;
                 case SbxDECIMAL: rRes.pDecimal = ImpGetDecimal( &p->aData ); break;
-                case SbxDATE:    rRes.nDouble = ImpGetDate( &p->aData ); break;
+                case SbxDATE:	 rRes.nDouble = ImpGetDate( &p->aData ); break;
                 case SbxBOOL:
                     rRes.nUShort = sal::static_int_cast< UINT16 >(
                         ImpGetBool( &p->aData ) );
                     break;
-                case SbxCHAR:    rRes.nChar = ImpGetChar( &p->aData ); break;
-                case SbxBYTE:    rRes.nByte = ImpGetByte( &p->aData ); break;
-                case SbxUSHORT:  rRes.nUShort = ImpGetUShort( &p->aData ); break;
-                case SbxULONG:   rRes.nULong = ImpGetULong( &p->aData ); break;
+                case SbxCHAR:	 rRes.nChar = ImpGetChar( &p->aData ); break;
+                case SbxBYTE:	 rRes.nByte = ImpGetByte( &p->aData ); break;
+                case SbxUSHORT:	 rRes.nUShort = ImpGetUShort( &p->aData ); break;
+                case SbxULONG:	 rRes.nULong = ImpGetULong( &p->aData ); break;
                 case SbxLPSTR:
-                case SbxSTRING:  p->aPic = ImpGetString( &p->aData );
+                case SbxSTRING:	 p->aPic = ImpGetString( &p->aData );
                                  rRes.pOUString = &p->aPic; break;
-                case SbxCoreSTRING: p->aPic = ImpGetCoreString( &p->aData );
+                case SbxCoreSTRING:	p->aPic = ImpGetCoreString( &p->aData );
                                     rRes.pOUString = &p->aPic; break;
                 case SbxINT:
 #if SAL_TYPES_SIZEOFINT == 2
@@ -704,7 +704,7 @@ BOOL SbxValue::Put( const SbxValues& rVal )
         // the real values
         SbxValue* p = this;
         if( rVal.eType != SbxOBJECT )
-            p = TheRealValue( FALSE );  // #55226 Don't allow an error here
+            p = TheRealValue( FALSE );	// #55226 Don't allow an error here
         if( p )
         {
             if( !p->CanWrite() )
@@ -714,23 +714,23 @@ BOOL SbxValue::Put( const SbxValues& rVal )
             {
                 case SbxEMPTY:
                 case SbxVOID:
-                case SbxNULL:       break;
-                case SbxINTEGER:    ImpPutInteger( &p->aData, rVal.nInteger ); break;
-                case SbxLONG:       ImpPutLong( &p->aData, rVal.nLong ); break;
-                case SbxSALINT64:   ImpPutInt64( &p->aData, rVal.nInt64 ); break;
-                case SbxSALUINT64:  ImpPutUInt64( &p->aData, rVal.uInt64 ); break;
-                case SbxSINGLE:     ImpPutSingle( &p->aData, rVal.nSingle ); break;
-                case SbxDOUBLE:     ImpPutDouble( &p->aData, rVal.nDouble ); break;
-                case SbxCURRENCY:   ImpPutCurrency( &p->aData, rVal.nLong64 ); break;
-                case SbxDECIMAL:    ImpPutDecimal( &p->aData, rVal.pDecimal ); break;
-                case SbxDATE:       ImpPutDate( &p->aData, rVal.nDouble ); break;
-                case SbxBOOL:       ImpPutBool( &p->aData, rVal.nInteger ); break;
-                case SbxCHAR:       ImpPutChar( &p->aData, rVal.nChar ); break;
-                case SbxBYTE:       ImpPutByte( &p->aData, rVal.nByte ); break;
-                case SbxUSHORT:     ImpPutUShort( &p->aData, rVal.nUShort ); break;
-                case SbxULONG:      ImpPutULong( &p->aData, rVal.nULong ); break;
+                case SbxNULL:		break;
+                case SbxINTEGER:	ImpPutInteger( &p->aData, rVal.nInteger ); break;
+                case SbxLONG:		ImpPutLong( &p->aData, rVal.nLong ); break;
+                case SbxSALINT64:	ImpPutInt64( &p->aData, rVal.nInt64 ); break;
+                case SbxSALUINT64:	ImpPutUInt64( &p->aData, rVal.uInt64 ); break;
+                case SbxSINGLE:		ImpPutSingle( &p->aData, rVal.nSingle ); break;
+                case SbxDOUBLE:		ImpPutDouble( &p->aData, rVal.nDouble ); break;
+                case SbxCURRENCY:	ImpPutCurrency( &p->aData, rVal.nLong64 ); break;
+                case SbxDECIMAL:	ImpPutDecimal( &p->aData, rVal.pDecimal ); break;
+                case SbxDATE:		ImpPutDate( &p->aData, rVal.nDouble ); break;
+                case SbxBOOL:		ImpPutBool( &p->aData, rVal.nInteger ); break;
+                case SbxCHAR:		ImpPutChar( &p->aData, rVal.nChar ); break;
+                case SbxBYTE:		ImpPutByte( &p->aData, rVal.nByte ); break;
+                case SbxUSHORT:		ImpPutUShort( &p->aData, rVal.nUShort ); break;
+                case SbxULONG:		ImpPutULong( &p->aData, rVal.nULong ); break;
                 case SbxLPSTR:
-                case SbxSTRING:     ImpPutString( &p->aData, rVal.pOUString ); break;
+                case SbxSTRING:		ImpPutString( &p->aData, rVal.pOUString ); break;
                 case SbxINT:
 #if SAL_TYPES_SIZEOFINT == 2
                     ImpPutInteger( &p->aData, (INT16) rVal.nInt );
@@ -1181,7 +1181,7 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 SetError( SbxERR_CONVERSION );
         }
         else if( eOpType == SbxSTRING && rOp.IsFixed() )
-        {   // Numeric: there is no String allowed on the right side
+        {	// Numeric: there is no String allowed on the right side
             SetError( SbxERR_CONVERSION );
         }
         else if( ( eOp >= SbxIDIV && eOp <= SbxNOT ) || eOp == SbxMOD )
@@ -1193,8 +1193,8 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                     || GetType() == SbxCURRENCY
                     || GetType() == SbxULONG )
                     aL.eType = aR.eType = GetType();
-//              else if( GetType() == SbxDouble || GetType() == SbxSingle )
-//                  aL.eType = aR.eType = SbxLONG64;
+//				else if( GetType() == SbxDouble || GetType() == SbxSingle )
+//					aL.eType = aR.eType = SbxLONG64;
                 else if ( bVBAInterop && eOpType == SbxBOOL )
                     aL.eType = aR.eType = SbxBOOL;
                 else
@@ -1204,9 +1204,9 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                      || GetType() == SbxULONG64 || eOpType == SbxULONG64
                      || GetType() == SbxLONG64 || eOpType == SbxLONG64 )
                 aL.eType = aR.eType = SbxLONG64;
-//          else if( GetType() == SbxDouble || rOP.GetType() == SbxDouble
-//                   || GetType() == SbxSingle || rOP.GetType() == SbxSingle )
-//              aL.eType = aR.eType = SbxLONG64;
+//			else if( GetType() == SbxDouble || rOP.GetType() == SbxDouble
+//			         || GetType() == SbxSingle || rOP.GetType() == SbxSingle )
+//				aL.eType = aR.eType = SbxLONG64;
             else
                 aL.eType = aR.eType = SbxLONG;
 
@@ -1406,7 +1406,7 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
         }
         else
 Lbl_OpIsDouble:
-        {   // other operators
+        {	// other operators
             aL.eType = aR.eType = SbxDOUBLE;
             if( rOp.Get( aR ) )
             {
@@ -1519,7 +1519,7 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
             }
         }
         // From 1995-12-19: If SbxSINGLE participate, then convert to SINGLE,
-        //              elsewise it shows a numeric error
+        //				elsewise it shows a numeric error
         else if( GetType() == SbxSINGLE || rOp.GetType() == SbxSINGLE )
         {
             aL.eType = aR.eType = SbxSINGLE;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::security;
 #include "secmacrowarnings.hrc"
 
 #ifdef _MSC_VER
-#pragma warning (disable : 4355)    // 4355: this used in initializer-list
+#pragma warning (disable : 4355)	// 4355: this used in initializer-list
 #endif
 
 using namespace ::com::sun::star;
@@ -57,15 +57,15 @@ namespace
 {
     String GetContentPart( const String& _rRawString, const String& _rPartId )
     {
-        String      s;
+        String		s;
 
-        xub_StrLen  nContStart = _rRawString.Search( _rPartId );
+        xub_StrLen	nContStart = _rRawString.Search( _rPartId );
         if( nContStart != STRING_NOTFOUND )
         {
             nContStart = nContStart + _rPartId.Len();
-            ++nContStart;                   // now it's start of content, directly after Id
+            ++nContStart;					// now it's start of content, directly after Id
 
-            xub_StrLen  nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
+            xub_StrLen	nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
 
             s = String( _rRawString, nContStart, nContEnd - nContStart );
         }
@@ -76,23 +76,23 @@ namespace
 
 
 MacroWarning::MacroWarning( Window* _pParent, bool _bWithSignatures, ResMgr& rResMgr )
-    :ModalDialog            ( _pParent, ResId( RID_XMLSECDLG_MACROWARN, rResMgr ) )
-    ,mpInfos                ( NULL )
-    ,maSymbolImg            ( this, ResId( IMG_SYMBOL, rResMgr ) )
-    ,maDocNameFI            ( this, ResId( FI_DOCNAME, rResMgr ) )
-    ,maDescr1aFI            ( this, ResId( FI_DESCR1A, rResMgr ) )
-    ,maDescr1bFI            ( this, ResId( FI_DESCR1B, rResMgr ) )
-    ,maSignsFI              ( this, ResId( FI_SIGNS, rResMgr ) )
-    ,maViewSignsBtn         ( this, ResId( PB_VIEWSIGNS, rResMgr ) )
-    ,maDescr2FI             ( this, ResId( FI_DESCR2, rResMgr ) )
-    ,maAlwaysTrustCB        ( this, ResId( CB_ALWAYSTRUST, rResMgr ) )
-    ,maBottomSepFL          ( this, ResId( FL_BOTTOM_SEP, rResMgr ) )
-    ,maEnableBtn            ( this, ResId( PB_ENABLE, rResMgr ) )
-    ,maDisableBtn           ( this, ResId( PB_DISABLE, rResMgr ) )
-    ,maHelpBtn              ( this, ResId( BTN_HELP, rResMgr ) )
-    ,mbSignedMode           ( true )
+    :ModalDialog			( _pParent, ResId( RID_XMLSECDLG_MACROWARN, rResMgr ) )
+    ,mpInfos				( NULL )
+    ,maSymbolImg			( this, ResId( IMG_SYMBOL, rResMgr ) )
+    ,maDocNameFI			( this, ResId( FI_DOCNAME, rResMgr ) )
+    ,maDescr1aFI			( this, ResId( FI_DESCR1A, rResMgr ) )
+    ,maDescr1bFI			( this, ResId( FI_DESCR1B, rResMgr ) )
+    ,maSignsFI				( this, ResId( FI_SIGNS, rResMgr ) )
+    ,maViewSignsBtn			( this, ResId( PB_VIEWSIGNS, rResMgr ) )
+    ,maDescr2FI				( this, ResId( FI_DESCR2, rResMgr ) )
+    ,maAlwaysTrustCB		( this, ResId( CB_ALWAYSTRUST, rResMgr ) )
+    ,maBottomSepFL			( this, ResId( FL_BOTTOM_SEP, rResMgr ) )
+    ,maEnableBtn			( this, ResId( PB_ENABLE, rResMgr ) )
+    ,maDisableBtn			( this, ResId( PB_DISABLE, rResMgr ) )
+    ,maHelpBtn				( this, ResId( BTN_HELP, rResMgr ) )
+    ,mbSignedMode			( true )
     ,mbShowSignatures       ( _bWithSignatures )
-    ,mnActSecLevel          ( 0 )
+    ,mnActSecLevel			( 0 )
 {
     FreeResource();
 
@@ -140,7 +140,7 @@ IMPL_LINK( MacroWarning, ViewSignsBtnHdl, void*, EMPTYARG )
 IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
 {
     if( mbSignedMode && maAlwaysTrustCB.IsChecked() )
-    {   // insert path into trusted path list
+    {	// insert path into trusted path list
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[0] = uno::makeAny( maODFVersion );
         uno::Reference< security::XDocumentDigitalSignatures > xD(
@@ -153,7 +153,7 @@ IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
             {
                 DBG_ASSERT( mpInfos, "-MacroWarning::EnableBtnHdl(): no infos, search in nirvana..." );
 
-                sal_Int32   nCnt = mpInfos->getLength();
+                sal_Int32	nCnt = mpInfos->getLength();
                 for( sal_Int32 i = 0 ; i < nCnt ; ++i )
                     xD->addAuthorToTrustedSources( (*mpInfos)[ i ].Signer );
             }
@@ -346,12 +346,12 @@ void MacroWarning::SetStorage( const cssu::Reference < css::embed::XStorage >& r
 {
     mxStore = rxStore;
     maODFVersion = aODFVersion;
-    sal_Int32   nCnt = rInfos.getLength();
+    sal_Int32	nCnt = rInfos.getLength();
     if( mxStore.is() && nCnt > 0 )
     {
         mpInfos = &rInfos;
-        String      aCN_Id( String::CreateFromAscii( "CN" ) );
-        String      s;
+        String		aCN_Id( String::CreateFromAscii( "CN" ) );
+        String		s;
         s = GetContentPart( rInfos[ 0 ].Signer->getSubjectName(), aCN_Id );
 
         for( sal_Int32 i = 1 ; i < nCnt ; ++i )
@@ -370,8 +370,8 @@ void MacroWarning::SetCertificate( const cssu::Reference< css::security::XCertif
     mxCert = _rxCert;
     if( mxCert.is() )
     {
-        String  aCN_Id( String::CreateFromAscii( "CN" ) );
-        String  s;
+        String	aCN_Id( String::CreateFromAscii( "CN" ) );
+        String	s;
         s = GetContentPart( mxCert->getSubjectName(), aCN_Id );
         maSignsFI.SetText( s );
         maViewSignsBtn.Enable();

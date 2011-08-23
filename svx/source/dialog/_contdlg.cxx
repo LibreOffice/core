@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sot/factory.hxx>
 #include <tools/shl.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <vcl/salbtype.hxx>		// FRound
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -97,7 +97,7 @@ SFX_IMPL_FLOATINGWINDOW( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
 SvxContourDlgItem::SvxContourDlgItem( USHORT _nId, SvxSuperContourDlg& rContourDlg, SfxBindings& rBindings ) :
             SfxControllerItem   ( _nId, rBindings ),
-            rDlg                ( rContourDlg )
+            rDlg				( rContourDlg )
 {
 }
 
@@ -193,19 +193,19 @@ PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                                               const Rectangle* pRect,
                                               const ULONG nFlags )
 {
-    Bitmap  aBmp;
-    ULONG   nContourFlags = XOUTBMP_CONTOUR_HORZ;
+    Bitmap	aBmp;
+    ULONG	nContourFlags = XOUTBMP_CONTOUR_HORZ;
 
     if ( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
         if( rGraphic.IsAnimated() )
         {
-            VirtualDevice       aVDev;
-            MapMode             aTransMap;
-            PolyPolygon         aAnimPolyPoly;
-            const Animation     aAnim( rGraphic.GetAnimation() );
-            const Size&         rSizePix = aAnim.GetDisplaySizePixel();
-            const USHORT        nCount = aAnim.Count();
+            VirtualDevice		aVDev;
+            MapMode				aTransMap;
+            PolyPolygon			aAnimPolyPoly;
+            const Animation		aAnim( rGraphic.GetAnimation() );
+            const Size&			rSizePix = aAnim.GetDisplaySizePixel();
+            const USHORT		nCount = aAnim.Count();
 
             if ( aVDev.SetOutputSizePixel( rSizePix ) )
             {
@@ -241,8 +241,8 @@ PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     else if( rGraphic.GetType() != GRAPHIC_NONE )
     {
         const Graphic   aTmpGrf( rGraphic.GetGDIMetaFile().GetMonochromeMtf( Color( COL_BLACK ) ) );
-        VirtualDevice   aVDev;
-        Size            aSizePix( aVDev.LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
+        VirtualDevice	aVDev;
+        Size			aSizePix( aVDev.LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
 
         if( aSizePix.Width() && aSizePix.Height() && ( aSizePix.Width() > 512 || aSizePix.Height() > 512 ) )
         {
@@ -282,15 +282,15 @@ void SvxContourDlg::ScaleContour( PolyPolygon& rContour, const Graphic& rGraphic
 {
     DBG_ASSERT( rGraphic.GetType() != GRAPHIC_NONE, "Graphic is not valid!" );
 
-    OutputDevice*   pOutDev = Application::GetDefaultDevice();
-    const MapMode   aDispMap( eUnit );
-    const MapMode   aGrfMap( rGraphic.GetPrefMapMode() );
-    const Size      aGrfSize( rGraphic.GetPrefSize() );
-    double          fScaleX;
-    double          fScaleY;
-    Size            aOrgSize;
-    Point           aNewPoint;
-    BOOL            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+    OutputDevice*	pOutDev = Application::GetDefaultDevice();
+    const MapMode	aDispMap( eUnit );
+    const MapMode	aGrfMap( rGraphic.GetPrefMapMode() );
+    const Size		aGrfSize( rGraphic.GetPrefSize() );
+    double			fScaleX;
+    double			fScaleY;
+    Size			aOrgSize;
+    Point			aNewPoint;
+    BOOL			bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
 
     if ( bPixelMap )
         aOrgSize = pOutDev->PixelToLogic( aGrfSize, aDispMap );
@@ -392,13 +392,13 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
         aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
         aTbx1               ( this, ResId( TBX1, *rResId.GetResMgr() ) ),
         aMtfTolerance       ( this, ResId( MTF_TOLERANCE, *rResId.GetResMgr() ) ),
-        aContourWnd         ( this, ResId( CTL_CONTOUR, *rResId.GetResMgr() ) ),
+        aContourWnd			( this, ResId( CTL_CONTOUR, *rResId.GetResMgr() ) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         nGrfChanged         ( 0UL ),
         bExecState          ( FALSE ),
-        bGraphicLinked      ( FALSE ),
-        maImageList         ( SVX_RES( CD_IMAPDLG ) ),
-        maImageListH        ( SVX_RES( CDH_IMAPDLG ) )
+        bGraphicLinked		( FALSE ),
+        maImageList			( SVX_RES( CD_IMAPDLG ) ),
+        maImageListH		( SVX_RES( CDH_IMAPDLG ) )
 {
     ApplyImageList();
 
@@ -413,8 +413,8 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
     aContourWnd.SetPipetteClickHdl( LINK( this, SvxSuperContourDlg, PipetteClickHdl ) );
     aContourWnd.SetWorkplaceClickHdl( LINK( this, SvxSuperContourDlg, WorkplaceClickHdl ) );
 
-    const Size      aTbxSize( aTbx1.CalcWindowSizePixel() );
-    Point           aPos( aTbx1.GetPosPixel() );
+    const Size	    aTbxSize( aTbx1.CalcWindowSizePixel() );
+    Point		    aPos( aTbx1.GetPosPixel() );
       SvtMiscOptions  aMiscOptions;
 
     aMiscOptions.AddListenerLink( LINK( this, SvxSuperContourDlg, MiscHdl ) );
@@ -499,9 +499,9 @@ BOOL SvxSuperContourDlg::Close()
 
     if ( aTbx1.IsItemEnabled( TBI_APPLY ) )
     {
-        QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
+        QueryBox	aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
                            String( CONT_RESID( STR_CONTOURDLG_MODIFY ) ) );
-        const long  nRet = aQBox.Execute();
+        const long	nRet = aQBox.Execute();
 
         if ( nRet == RET_YES )
         {
@@ -554,11 +554,11 @@ void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 {
     DBG_ASSERT(  aContourWnd.GetGraphic().GetType() != GRAPHIC_NONE, "Graphic must've been set first!" );
 
-    PolyPolygon     aPolyPoly( rPolyPoly );
-    const MapMode   aMap100( MAP_100TH_MM );
-    const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
-    OutputDevice*   pOutDev = Application::GetDefaultDevice();
-    BOOL            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+    PolyPolygon		aPolyPoly( rPolyPoly );
+    const MapMode	aMap100( MAP_100TH_MM );
+    const MapMode	aGrfMap( aGraphic.GetPrefMapMode() );
+    OutputDevice*	pOutDev = Application::GetDefaultDevice();
+    BOOL			bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
 
     for ( USHORT j = 0, nPolyCount = aPolyPoly.Count(); j < nPolyCount; j++ )
     {
@@ -588,14 +588,14 @@ void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 
 PolyPolygon SvxSuperContourDlg::GetPolyPolygon( BOOL bRescaleToGraphic )
 {
-    PolyPolygon aRetPolyPoly( aContourWnd.GetPolyPolygon() );
+    PolyPolygon	aRetPolyPoly( aContourWnd.GetPolyPolygon() );
 
     if ( bRescaleToGraphic )
     {
-        const MapMode   aMap100( MAP_100TH_MM );
-        const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
-        OutputDevice*   pOutDev = Application::GetDefaultDevice();
-        BOOL            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+        const MapMode	aMap100( MAP_100TH_MM );
+        const MapMode	aGrfMap( aGraphic.GetPrefMapMode() );
+        OutputDevice*	pOutDev = Application::GetDefaultDevice();
+        BOOL			bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
 
         for ( USHORT j = 0, nPolyCount = aRetPolyPoly.Count(); j < nPolyCount; j++ )
         {
@@ -687,21 +687,21 @@ void SvxSuperContourDlg::ReducePoints( const long nTol )
 
     if ( aPolyPoly.Count() )
     {
-        const MapMode   aMapMode( MAP_100TH_MM );
-        const long      nTol2 = nTol * nTol;
-        Polygon&        rPoly = aPolyPoly[ 0 ];
-        OutputDevice*   pOutDev = Application::GetDefaultDevice();
-        Point           aPtPix;
-        const USHORT    nSize = rPoly.GetSize();
-        USHORT          nCounter = 0;
+        const MapMode	aMapMode( MAP_100TH_MM );
+        const long		nTol2 = nTol * nTol;
+        Polygon&		rPoly = aPolyPoly[ 0 ];
+        OutputDevice*	pOutDev = Application::GetDefaultDevice();
+        Point			aPtPix;
+        const USHORT	nSize = rPoly.GetSize();
+        USHORT			nCounter = 0;
 
         if ( nSize )
             aPtPix = pOutDev->LogicToPixel( rPoly[ 0 ], aMapMode );
 
         for( USHORT i = 1; i < nSize; i++ )
         {
-            const Point&    rNewPt = rPoly[ i ];
-            const Point     aNewPtPix( pOutDev->LogicToPixel( rNewPt, aMapMode ) );
+            const Point&	rNewPt = rPoly[ i ];
+            const Point		aNewPtPix( pOutDev->LogicToPixel( rNewPt, aMapMode ) );
 
             const long nDistX = aNewPtPix.X() - aPtPix.X();
             const long nDistY = aNewPtPix.Y() - aPtPix.Y();
@@ -950,9 +950,9 @@ IMPL_LINK( SvxSuperContourDlg, CreateHdl, Timer*, EMPTYARG )
 {
     aCreateTimer.Stop();
 
-    const Rectangle aWorkRect = aContourWnd.LogicToPixel( aContourWnd.GetWorkRect(), MapMode( MAP_100TH_MM ) );
-    const Graphic&  rGraphic = aContourWnd.GetGraphic();
-    const BOOL      bValid = aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom();
+    const Rectangle	aWorkRect = aContourWnd.LogicToPixel( aContourWnd.GetWorkRect(), MapMode( MAP_100TH_MM ) );
+    const Graphic&	rGraphic = aContourWnd.GetGraphic();
+    const BOOL		bValid = aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom();
 
     EnterWait();
     SetPolyPolygon( CreateAutoContour( rGraphic, bValid ? &aWorkRect : NULL ) );
@@ -970,14 +970,14 @@ IMPL_LINK( SvxSuperContourDlg, CreateHdl, Timer*, EMPTYARG )
 
 IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
 {
-    const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
-    const SdrView*      pView = pWnd->GetSdrView();
-    const BOOL          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
-    const BOOL          bDrawEnabled = !( bPolyEdit && aTbx1.IsItemChecked( TBI_POLYEDIT ) );
-    const BOOL          bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
-    const BOOL          bWorkplace = aTbx1.IsItemChecked( TBI_WORKPLACE );
-    const BOOL          bDontHide = !( bPipette || bWorkplace );
-    const BOOL          bBitmap = pWnd->GetGraphic().GetType() == GRAPHIC_BITMAP;
+    const SdrObject*	pObj = pWnd->GetSelectedSdrObject();
+    const SdrView*		pView = pWnd->GetSdrView();
+    const BOOL			bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
+    const BOOL			bDrawEnabled = !( bPolyEdit && aTbx1.IsItemChecked( TBI_POLYEDIT ) );
+    const BOOL			bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
+    const BOOL			bWorkplace = aTbx1.IsItemChecked( TBI_WORKPLACE );
+    const BOOL			bDontHide = !( bPipette || bWorkplace );
+    const BOOL			bBitmap = pWnd->GetGraphic().GetType() == GRAPHIC_BITMAP;
 
     aTbx1.EnableItem( TBI_APPLY, bDontHide && bExecState && pWnd->IsChanged() );
 
@@ -1038,8 +1038,8 @@ IMPL_LINK( SvxSuperContourDlg, PipetteHdl, ContourWindow*, pWnd )
     const Color& rOldLineColor = aStbStatus.GetLineColor();
     const Color& rOldFillColor = aStbStatus.GetFillColor();
 
-    Rectangle       aRect( aStbStatus.GetItemRect( 4 ) );
-    const Color&    rColor = pWnd->GetPipetteColor();
+    Rectangle		aRect( aStbStatus.GetItemRect( 4 ) );
+    const Color&	rColor = pWnd->GetPipetteColor();
 
     aStbStatus.SetLineColor( rColor );
     aStbStatus.SetFillColor( rColor );
@@ -1068,15 +1068,15 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 {
     if ( pWnd->IsClickValid() )
     {
-        Bitmap          aMask;
-        const Color&    rColor = pWnd->GetPipetteColor();
+        Bitmap			aMask;
+        const Color&	rColor = pWnd->GetPipetteColor();
 
         EnterWait();
 
         if( aGraphic.GetType() == GRAPHIC_BITMAP )
         {
-            Bitmap      aBmp( aGraphic.GetBitmap() );
-            const long  nTol = static_cast<long>(aMtfTolerance.GetValue() * 255L / 100L);
+            Bitmap		aBmp( aGraphic.GetBitmap() );
+            const long	nTol = static_cast<long>(aMtfTolerance.GetValue() * 255L / 100L);
 
             aMask = aBmp.CreateMask( rColor, nTol );
 
@@ -1085,8 +1085,8 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 
             if( !!aMask )
             {
-                QueryBox    aQBox( this, WB_YES_NO | WB_DEF_YES, String( CONT_RESID( STR_CONTOURDLG_NEWPIPETTE ) ) );
-                BOOL        bNewContour;
+                QueryBox	aQBox( this, WB_YES_NO | WB_DEF_YES, String( CONT_RESID( STR_CONTOURDLG_NEWPIPETTE ) ) );
+                BOOL		bNewContour;
 
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;

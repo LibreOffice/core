@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,18 +78,18 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         sal_Bool bOverwrite )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE )
-,   sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
-,   sPageStyleLayout( RTL_CONSTASCII_USTRINGPARAM( "PageStyleLayout" ) )
-,   sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
-,   bInsertHeader( sal_False )
-,   bInsertFooter( sal_False )
-,   bInsertHeaderLeft( sal_False )
-,   bInsertFooterLeft( sal_False )
-,   bHeaderInserted( sal_False )
-,   bFooterInserted( sal_False )
-,   bHeaderLeftInserted( sal_False )
-,   bFooterLeftInserted( sal_False )
+:	SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE )
+,	sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
+,	sPageStyleLayout( RTL_CONSTASCII_USTRINGPARAM( "PageStyleLayout" ) )
+,	sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+,	bInsertHeader( sal_False )
+,	bInsertFooter( sal_False )
+,	bInsertHeaderLeft( sal_False )
+,	bInsertFooterLeft( sal_False )
+,	bHeaderInserted( sal_False )
+,	bFooterInserted( sal_False )
+,	bHeaderLeftInserted( sal_False )
+,	bFooterLeftInserted( sal_False )
 {
     OUString sName, sDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -97,7 +97,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,	&aLocalName );
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
             if( IsXMLToken( aLocalName, XML_NAME ) )
@@ -169,7 +169,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     {
         Reference < XMultiPropertyStates > xMultiStates( xPropSet,
                                                          UNO_QUERY );
-        OSL_ENSURE( xMultiStates.is(),
+        OSL_ENSURE( xMultiStates.is(), 
                     "text page style does not support multi property set" );
         if( xMultiStates.is() )
             xMultiStates->setAllPropertiesToDefault();
@@ -277,7 +277,7 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
             OUString sDisplayFollow(
                 GetImport().GetStyleDisplayName(
                         XML_STYLE_FAMILY_MASTER_PAGE, sFollow ) );
-            if( !sDisplayFollow.getLength() ||
+            if( !sDisplayFollow.getLength() || 
                 !xPageStyles->hasByName( sDisplayFollow ) )
                 sDisplayFollow = xStyle->getName();
 

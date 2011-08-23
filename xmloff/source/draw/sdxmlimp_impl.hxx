@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -201,52 +201,52 @@ class SdXMLImport: public SvXMLImport
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxPageLayouts;
 
     // contexts for Style and AutoStyle import
-    SdXMLMasterStylesContext*   mpMasterStylesContext;
+    SdXMLMasterStylesContext*	mpMasterStylesContext;
 
     // token map lists
-    SvXMLTokenMap*              mpDocElemTokenMap;
-    SvXMLTokenMap*              mpBodyElemTokenMap;
-    SvXMLTokenMap*              mpStylesElemTokenMap;
-    SvXMLTokenMap*              mpAutoStylesElemTokenMap;
-    SvXMLTokenMap*              mpMasterPageElemTokenMap;
-    SvXMLTokenMap*              mpMasterPageAttrTokenMap;
-    SvXMLTokenMap*              mpPageMasterAttrTokenMap;
-    SvXMLTokenMap*              mpPageMasterStyleAttrTokenMap;
-    SvXMLTokenMap*              mpDocStyleAttrTokenMap;
-    SvXMLTokenMap*              mpDocStyleElemTokenMap;
-    SvXMLTokenMap*              mpDrawPageAttrTokenMap;
-    SvXMLTokenMap*              mpDrawPageElemTokenMap;
-    SvXMLTokenMap*              mpPresentationPlaceholderAttrTokenMap;
+    SvXMLTokenMap*				mpDocElemTokenMap;
+    SvXMLTokenMap*				mpBodyElemTokenMap;
+    SvXMLTokenMap*				mpStylesElemTokenMap;
+    SvXMLTokenMap*				mpAutoStylesElemTokenMap;
+    SvXMLTokenMap*				mpMasterPageElemTokenMap;
+    SvXMLTokenMap*				mpMasterPageAttrTokenMap;
+    SvXMLTokenMap*				mpPageMasterAttrTokenMap;
+    SvXMLTokenMap*				mpPageMasterStyleAttrTokenMap;
+    SvXMLTokenMap*				mpDocStyleAttrTokenMap;
+    SvXMLTokenMap*				mpDocStyleElemTokenMap;
+    SvXMLTokenMap*				mpDrawPageAttrTokenMap;
+    SvXMLTokenMap*				mpDrawPageElemTokenMap;
+    SvXMLTokenMap*				mpPresentationPlaceholderAttrTokenMap;
 
-    sal_uInt16                  mnStyleFamilyMask;
+    sal_uInt16					mnStyleFamilyMask;
 
-    sal_Int32                   mnNewPageCount;
-    sal_Int32                   mnNewMasterPageCount;
+    sal_Int32					mnNewPageCount;
+    sal_Int32					mnNewMasterPageCount;
 
-    sal_Bool                    mbIsDraw;
-    sal_Bool                    mbLoadDoc;
-    sal_Bool                    mbPreview;
+    sal_Bool					mbIsDraw;
+    sal_Bool					mbLoadDoc;
+    sal_Bool					mbPreview;
 
-    DrawPageIdMap               maDrawPageIds;
+    DrawPageIdMap				maDrawPageIds;
 
-    ::rtl::OUString             msPageLayouts;
-    ::rtl::OUString             msPreview;
+    ::rtl::OUString				msPageLayouts;
+    ::rtl::OUString				msPreview;
 
-    HeaderFooterDeclMap         maHeaderDeclsMap;
-    HeaderFooterDeclMap         maFooterDeclsMap;
-    DateTimeDeclMap             maDateTimeDeclsMap;
+    HeaderFooterDeclMap			maHeaderDeclsMap;
+    HeaderFooterDeclMap			maFooterDeclsMap;
+    DateTimeDeclMap				maDateTimeDeclsMap;
 
 protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
-      const rtl::OUString& rLocalName,
+      const rtl::OUString& rLocalName, 
       const com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
 public:
     // #110680#
-    SdXMLImport(
+    SdXMLImport( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_Bool bIsDraw, sal_uInt16 nImportFlags = IMPORT_ALL );
     ~SdXMLImport() throw ();
@@ -277,14 +277,14 @@ public:
     SvXMLImportContext* CreateMasterStylesContext(const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     SvXMLImportContext *CreateFontDeclsContext(const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const ::com::sun::star::uno::Reference<	::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     // Styles and AutoStyles contexts
     const SdXMLMasterStylesContext* GetMasterStylesContext() const { return mpMasterStylesContext; }
 
     sal_uInt16 GetStyleFamilyMask() const { return mnStyleFamilyMask; }
     sal_Bool IsStylesOnlyMode() const { return !mbLoadDoc; }
-
+                                            
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
     const SvXMLTokenMap& GetStylesElemTokenMap();
@@ -337,6 +337,6 @@ public:
 
 };
 
-#endif  //  _SDXMLIMP_HXX
+#endif	//  _SDXMLIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

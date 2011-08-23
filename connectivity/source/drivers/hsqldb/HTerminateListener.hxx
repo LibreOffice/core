@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace connectivity
     namespace hsqldb
     {
         class ODriverDelegator;
-        class OConnectionController : public ::cppu::WeakImplHelper1<
+        class OConnectionController : public ::cppu::WeakImplHelper1< 
                                                     ::com::sun::star::frame::XTerminateListener >
         {
             ODriverDelegator* m_pDriver;
@@ -60,7 +60,7 @@ namespace connectivity
         };
     }
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 #endif // CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
 

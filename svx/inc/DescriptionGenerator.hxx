@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 namespace accessibility {
 
-/** This class creates description strings for shapes.
+/** This class creates description strings for shapes.  
     <p>Initialized with a given shape additional calls to the
     <member>addProperty</member> method will build a descriptive string that
     starts with a general shape description and the shapes style.  Appended
@@ -107,9 +107,9 @@ public:
             This which id is used to localize the property value.  If it is
             not known a value of -1 signals to use a default representation.
     */
-    void AddProperty (const ::rtl::OUString& sPropertyName,
-        PropertyType aType,
-        const ::rtl::OUString& sLocalizedName=::rtl::OUString(),
+    void AddProperty (const ::rtl::OUString& sPropertyName, 
+        PropertyType aType, 
+        const ::rtl::OUString& sLocalizedName=::rtl::OUString(), 
         long nWhichId=-1);
 
     /** Add the given property name and its associated value to the
@@ -129,8 +129,8 @@ public:
             This which id is used to localize the property value.  If it is
             not known a value of -1 signals to use a default representation.
     */
-    void AddProperty (const ::rtl::OUString& sPropertyName,
-        PropertyType aType,
+    void AddProperty (const ::rtl::OUString& sPropertyName, 
+        PropertyType aType, 
         sal_Int32 nResourceId,
         long nWhichId=-1);
 

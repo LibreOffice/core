@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,14 +62,14 @@ namespace connectivity
                                                 ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
-    //  typedef ORefVector<ORowSetValue>    ORow;
-    //  typedef ORefVector<ORow>            ORows;
+    //	typedef ORefVector<ORowSetValue>	ORow;
+    //	typedef ORefVector<ORow>			ORows;
 
     class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSet :
                                         public comphelper::OBaseMutex,
-                                        public  ODatabaseMetaDataResultSet_BASE,
-                                        public  ::comphelper::OPropertyContainer,
-                                        public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
+                                        public	ODatabaseMetaDataResultSet_BASE,
+                                        public	::comphelper::OPropertyContainer,
+                                        public	::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
     {
 
     public:
@@ -115,28 +115,28 @@ namespace connectivity
         };
 
     private:
-        ORowSetValue                    m_aEmptyValue;
+        ORowSetValue					m_aEmptyValue;
         ::com::sun::star::uno::WeakReferenceHelper    m_aStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-        sal_Int32                       m_nColPos;
+        sal_Int32						m_nColPos;
 
-        sal_Int32                       m_nFetchSize;
-        sal_Int32                       m_nResultSetType;
-        sal_Int32                       m_nFetchDirection;
-        sal_Int32                       m_nResultSetConcurrency;
+        sal_Int32						m_nFetchSize;
+        sal_Int32						m_nResultSetType;
+        sal_Int32						m_nFetchDirection;
+        sal_Int32						m_nResultSetConcurrency;
 
         void construct();
         void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
         void setType(MetaDataResultSetType _eType);
 
     protected:
-        ORows                           m_aRows;
-        ORows::iterator                 m_aRowsIter;
-        sal_Bool                        m_bBOF;
+        ORows							m_aRows;
+        ORows::iterator					m_aRowsIter;
+        sal_Bool						m_bBOF;
         sal_Bool                        m_bEOF;
 
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex);
-
+        
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
         // OPropertySetHelper
@@ -145,8 +145,8 @@ namespace connectivity
         virtual ~ODatabaseMetaDataResultSet();
     public:
 
-        virtual void    SAL_CALL acquire() throw();
-        virtual void    SAL_CALL release() throw();
+        virtual void	SAL_CALL acquire() throw();
+        virtual void	SAL_CALL release() throw();
 
         /// default construction
         ODatabaseMetaDataResultSet();
@@ -156,7 +156,7 @@ namespace connectivity
         void setRows(const ORows& _rRows);
 
         // XServiceInfo
-
+        
         static ::rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -245,8 +245,8 @@ namespace connectivity
         void setBestRowIdentifierMap();
         void setVersionColumnsMap();
     public:
-        // some methods to get already defined ORowSetValues
-        // this increase the reuse of ORowSetValues
+        // some methods to get already defined ORowSetValues 
+        // this increase the reuse of ORowSetValues 
         /// return an empty ORowSetValueDecorator
         static ORowSetValueDecoratorRef getEmptyValue();
         /// return an ORowSetValueDecorator with 0 as value

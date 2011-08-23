@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
         }
         break;
 
-    // If we want to do StarMath/StarSymbol font conversion, then we'll
+    // If we want to do StarMath/StarSymbol font conversion, then we'll 
     // want these special items to be treated just like regular ones...
     // For the Writer, we'll catch and convert them in _FillPropertySet;
     // the other apps probably don't care. For the other apps, we just
@@ -120,12 +120,12 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
     case CTF_FONTFAMILYNAME_CJK:
     case CTF_FONTFAMILYNAME_CTL:
         bRet = getPropertySetMapper()->importXML( rValue, rProperty,
-                                                  rUnitConverter );
+                                                  rUnitConverter );			
         break;
 
     case CTF_TEXT_DISPLAY:
         bRet = getPropertySetMapper()->importXML( rValue, rProperty,
-                                                  rUnitConverter );
+                                                  rUnitConverter );			
         if( SvXMLImport::OOo_2x == GetImport().getGeneratorVersion() )
         {
             sal_Bool bHidden;
@@ -329,52 +329,52 @@ void XMLTextImportPropertyMapper::finished(
 
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ) )
         {
-        case CTF_FONTFAMILYNAME:    pFontFamilyName = property; break;
-        case CTF_FONTSTYLENAME: pFontStyleName = property;  break;
-        case CTF_FONTFAMILY:    pFontFamily = property; break;
-        case CTF_FONTPITCH: pFontPitch = property;  break;
-        case CTF_FONTCHARSET:   pFontCharSet = property;    break;
+        case CTF_FONTFAMILYNAME:	pFontFamilyName = property;	break;
+        case CTF_FONTSTYLENAME:	pFontStyleName = property;	break;
+        case CTF_FONTFAMILY:	pFontFamily = property;	break;
+        case CTF_FONTPITCH:	pFontPitch = property;	break;
+        case CTF_FONTCHARSET:	pFontCharSet = property;	break;
+                                
+        case CTF_FONTFAMILYNAME_CJK:	pFontFamilyNameCJK = property;	break;
+        case CTF_FONTSTYLENAME_CJK:	pFontStyleNameCJK = property;	break;
+        case CTF_FONTFAMILY_CJK:	pFontFamilyCJK = property;	break;
+        case CTF_FONTPITCH_CJK:	pFontPitchCJK = property;	break;
+        case CTF_FONTCHARSET_CJK:	pFontCharSetCJK = property;	break;
 
-        case CTF_FONTFAMILYNAME_CJK:    pFontFamilyNameCJK = property;  break;
-        case CTF_FONTSTYLENAME_CJK: pFontStyleNameCJK = property;   break;
-        case CTF_FONTFAMILY_CJK:    pFontFamilyCJK = property;  break;
-        case CTF_FONTPITCH_CJK: pFontPitchCJK = property;   break;
-        case CTF_FONTCHARSET_CJK:   pFontCharSetCJK = property; break;
+        case CTF_FONTFAMILYNAME_CTL:	pFontFamilyNameCTL = property;	break;
+        case CTF_FONTSTYLENAME_CTL:	pFontStyleNameCTL = property;	break;
+        case CTF_FONTFAMILY_CTL:	pFontFamilyCTL = property;	break;
+        case CTF_FONTPITCH_CTL:	pFontPitchCTL = property;	break;
+        case CTF_FONTCHARSET_CTL:	pFontCharSetCTL = property;	break;
 
-        case CTF_FONTFAMILYNAME_CTL:    pFontFamilyNameCTL = property;  break;
-        case CTF_FONTSTYLENAME_CTL: pFontStyleNameCTL = property;   break;
-        case CTF_FONTFAMILY_CTL:    pFontFamilyCTL = property;  break;
-        case CTF_FONTPITCH_CTL: pFontPitchCTL = property;   break;
-        case CTF_FONTCHARSET_CTL:   pFontCharSetCTL = property; break;
+        case CTF_ALLBORDERDISTANCE:		pAllBorderDistance = property; break;
+        case CTF_LEFTBORDERDISTANCE:	pBorderDistances[XML_LINE_LEFT] = property; break;
+        case CTF_RIGHTBORDERDISTANCE:	pBorderDistances[XML_LINE_RIGHT] = property; break;
+        case CTF_TOPBORDERDISTANCE:		pBorderDistances[XML_LINE_TOP] = property; break;
+        case CTF_BOTTOMBORDERDISTANCE:	pBorderDistances[XML_LINE_BOTTOM] = property; break;
+        case CTF_ALLBORDER:				pAllBorder = property; break;
+        case CTF_LEFTBORDER:			pBorders[XML_LINE_LEFT] = property; break;
+        case CTF_RIGHTBORDER:			pBorders[XML_LINE_RIGHT] = property; break;
+        case CTF_TOPBORDER:				pBorders[XML_LINE_TOP] = property; break;
+        case CTF_BOTTOMBORDER:			pBorders[XML_LINE_BOTTOM] = property; break;
 
-        case CTF_ALLBORDERDISTANCE:     pAllBorderDistance = property; break;
-        case CTF_LEFTBORDERDISTANCE:    pBorderDistances[XML_LINE_LEFT] = property; break;
-        case CTF_RIGHTBORDERDISTANCE:   pBorderDistances[XML_LINE_RIGHT] = property; break;
-        case CTF_TOPBORDERDISTANCE:     pBorderDistances[XML_LINE_TOP] = property; break;
-        case CTF_BOTTOMBORDERDISTANCE:  pBorderDistances[XML_LINE_BOTTOM] = property; break;
-        case CTF_ALLBORDER:             pAllBorder = property; break;
-        case CTF_LEFTBORDER:            pBorders[XML_LINE_LEFT] = property; break;
-        case CTF_RIGHTBORDER:           pBorders[XML_LINE_RIGHT] = property; break;
-        case CTF_TOPBORDER:             pBorders[XML_LINE_TOP] = property; break;
-        case CTF_BOTTOMBORDER:          pBorders[XML_LINE_BOTTOM] = property; break;
-
-        case CTF_ALLBORDERWIDTH:        pAllBorderWidth = property; break;
-        case CTF_LEFTBORDERWIDTH:       pBorderWidths[XML_LINE_LEFT] = property; break;
-        case CTF_RIGHTBORDERWIDTH:      pBorderWidths[XML_LINE_RIGHT] = property; break;
-        case CTF_TOPBORDERWIDTH:        pBorderWidths[XML_LINE_TOP] = property; break;
-        case CTF_BOTTOMBORDERWIDTH:     pBorderWidths[XML_LINE_BOTTOM] = property; break;
-        case CTF_ANCHORTYPE:            pAnchorType = property; break;
-        case CTF_VERTICALPOS:           pVertOrient = property; break;
-        case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsChar = property; break;
+        case CTF_ALLBORDERWIDTH:		pAllBorderWidth = property; break;
+        case CTF_LEFTBORDERWIDTH:		pBorderWidths[XML_LINE_LEFT] = property; break;
+        case CTF_RIGHTBORDERWIDTH:		pBorderWidths[XML_LINE_RIGHT] = property; break;
+        case CTF_TOPBORDERWIDTH:		pBorderWidths[XML_LINE_TOP] = property; break;
+        case CTF_BOTTOMBORDERWIDTH:		pBorderWidths[XML_LINE_BOTTOM] = property; break;
+        case CTF_ANCHORTYPE:			pAnchorType = property; break;
+        case CTF_VERTICALPOS:  			pVertOrient = property; break;
+        case CTF_VERTICALREL_ASCHAR: 	pVertOrientRelAsChar = property; break;
 
         case CTF_FRAMEHEIGHT_MIN_ABS:
         case CTF_FRAMEHEIGHT_MIN_REL:
-//      case CTF_SYNCHEIGHT_MIN:
+//		case CTF_SYNCHEIGHT_MIN:
                                         bHasAnyMinHeight = sal_True;
                                         // no break here!
         case CTF_FRAMEHEIGHT_ABS:
         case CTF_FRAMEHEIGHT_REL:
-//      case CTF_SYNCHEIGHT:
+//		case CTF_SYNCHEIGHT:
                                         bHasAnyHeight = sal_True; break;
         case CTF_FRAMEWIDTH_MIN_ABS:
         case CTF_FRAMEWIDTH_MIN_REL:
@@ -575,7 +575,7 @@ void XMLTextImportPropertyMapper::finished(
 
 
     // insert newly created properties. This inavlidates all iterators!
-    // Most of the pXXX variables in this method are iterators and will be
+    // Most of the pXXX variables in this method are iterators and will be 
     // invalidated!!!
 
     if( pNewFontStyleName )
@@ -701,7 +701,7 @@ void XMLTextImportPropertyMapper::finished(
             sal_Int32 nCount = getPropertySetMapper()->GetEntryCount();
             for( sal_Int32 j=0; j < nCount; j++ )
             {
-                if( CTF_FRAMEWIDTH_TYPE  == getPropertySetMapper()
+                if( CTF_FRAMEWIDTH_TYPE	 == getPropertySetMapper()
                         ->GetEntryContextId( j ) )
                 {
                     const_cast < XMLTextImportPropertyMapper * > ( this )
@@ -722,7 +722,7 @@ void XMLTextImportPropertyMapper::finished(
 
     // DO NOT USE ITERATORS/POINTERS INTO THE rProperties-VECTOR AFTER
     // THIS LINE.  All iterators into the rProperties-vector, especially all
-    // pXXX-type variables set in the first switch statement of this method,
+    // pXXX-type variables set in the first switch statement of this method, 
     // may have been invalidated by the above push_back() calls!
 }
 

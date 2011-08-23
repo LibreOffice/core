@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,12 +157,12 @@ Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeExce
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexAccess           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XIndexReplace          >*)NULL ) ,
-                        ::getCppuType(( const Reference< XServiceInfo           >*)NULL ) ,
-                        ::getCppuType(( const Reference< XTypeProvider          >*)NULL ) ) ;
+                        ::getCppuType(( const Reference< XMultiServiceFactory	>*)NULL ) ,
+                        ::getCppuType(( const Reference< XIndexContainer		>*)NULL ) ,
+                        ::getCppuType(( const Reference< XIndexAccess			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XIndexReplace			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XServiceInfo			>*)NULL ) ,
+                        ::getCppuType(( const Reference< XTypeProvider			>*)NULL ) ) ;
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;

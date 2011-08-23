@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp> 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
@@ -60,7 +60,7 @@ namespace accessibility
         /// Create accessible object for given parent
         AccessibleImageBullet ( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rParent );
 
-        virtual ~AccessibleImageBullet  ();
+        virtual ~AccessibleImageBullet	();
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface (const ::com::sun::star::uno::Type & rType) throw (::com::sun::star::uno::RuntimeException);
@@ -106,7 +106,7 @@ namespace accessibility
         virtual ::rtl::OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
 
         /** Set the current index in the accessibility parent
-
+           
             @attention This method does not lock the SolarMutex,
             leaving that to the calling code. This is because only
             there potential deadlock situations can be resolved. Thus,
@@ -115,7 +115,7 @@ namespace accessibility
         void SetIndexInParent( sal_Int32 nIndex );
 
         /** Get the current index in the accessibility parent
-
+           
             @attention This method does not lock the SolarMutex,
             leaving that to the calling code. This is because only
             there potential deadlock situations can be resolved. Thus,
@@ -124,7 +124,7 @@ namespace accessibility
         sal_Int32 GetIndexInParent() const;
 
         /** Set the edit engine offset
-
+           
             @attention This method does not lock the SolarMutex,
             leaving that to the calling code. This is because only
             there potential deadlock situations can be resolved. Thus,
@@ -133,7 +133,7 @@ namespace accessibility
         void SetEEOffset( const Point& rOffset );
 
         /** Set the EditEngine offset
-
+           
             @attention This method does not lock the SolarMutex,
             leaving that to the calling code. This is because only
             there potential deadlock situations can be resolved. Thus,
@@ -142,13 +142,13 @@ namespace accessibility
         void SetEditSource( SvxEditSource* pEditSource );
 
         /** Dispose this object
-
+           
             Notifies and deregisters the listeners, drops all references.
          */
         void Dispose();
 
         /** Set the current paragraph number
-
+           
             @attention This method does not lock the SolarMutex,
             leaving that to the calling code. This is because only
             there potential deadlock situations can be resolved. Thus,
@@ -157,7 +157,7 @@ namespace accessibility
         void SetParagraphIndex( sal_Int32 nIndex );
 
         /** Query the current paragraph number (0 - nParas-1)
-
+           
             @attention This method does not lock the SolarMutex,
             leaving that to the calling code. This is because only
             there potential deadlock situations can be resolved. Thus,
@@ -186,31 +186,31 @@ namespace accessibility
 
         int getNotifierClientId() const;
 
-        /** Query the SvxTextForwarder for EditEngine access.
-
+        /** Query the SvxTextForwarder for EditEngine access. 
+           
             @attention This method does not lock the SolarMutex,
             leaving that to the calling code. This is because only
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxTextForwarder&   GetTextForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxTextForwarder&	GetTextForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
-        /** Query the SvxViewForwarder for EditEngine access.
-
+        /** Query the SvxViewForwarder for EditEngine access. 
+           
             @attention This method does not lock the SolarMutex,
             leaving that to the calling code. This is because only
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxViewForwarder&   GetViewForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxViewForwarder&	GetViewForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         const Point& GetEEOffset() const;
 
         // the paragraph index in the edit engine (guarded by solar mutex)
-        sal_Int32   mnParagraphIndex;
+        sal_Int32	mnParagraphIndex;
 
         // our current index in the parent (guarded by solar mutex)
-        sal_Int32   mnIndexInParent;
+        sal_Int32	mnIndexInParent;
 
         // the current edit source (guarded by solar mutex)
         SvxEditSource* mpEditSource;
@@ -221,7 +221,7 @@ namespace accessibility
         // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
-        mutable osl::Mutex  maMutex;
+        mutable osl::Mutex	maMutex;
 
         /// The shape we're the accessible for (unguarded)
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxParent;

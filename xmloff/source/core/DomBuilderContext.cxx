@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,16 +69,16 @@ using rtl::OUString;
 // helper functions; implemented below
 Reference<XNode> lcl_createDomInstance();
 Reference<XNode> lcl_createElement( SvXMLImport& rImport,
-                                    USHORT nPrefix,
+                                    USHORT nPrefix, 
                                     const OUString rLocalName,
                                     Reference<XNode> xParent);
 
 
-DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
+DomBuilderContext::DomBuilderContext( SvXMLImport& rImport, 
                                       USHORT nPrefix,
                                       const OUString& rLocalName ) :
     SvXMLImportContext( rImport, nPrefix, rLocalName ),
-    mxNode( lcl_createElement( rImport, nPrefix, rLocalName,
+    mxNode( lcl_createElement( rImport, nPrefix, rLocalName, 
                                lcl_createDomInstance() ) )
 {
     DBG_ASSERT( mxNode.is(), "empty XNode not allowed" );
@@ -86,7 +86,7 @@ DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
     DBG_ASSERT( mxNode->getNodeType() == NodeType_ELEMENT_NODE, "need element" );
 }
 
-DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
+DomBuilderContext::DomBuilderContext( SvXMLImport& rImport, 
                                       USHORT nPrefix,
                                       const OUString& rLocalName,
                                       Reference<XNode>& xParent ) :
@@ -114,7 +114,7 @@ Reference<XNode> DomBuilderContext::getNode()
 }
 
 
-SvXMLImportContext* DomBuilderContext::CreateChildContext(
+SvXMLImportContext* DomBuilderContext::CreateChildContext( 
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
@@ -124,7 +124,7 @@ SvXMLImportContext* DomBuilderContext::CreateChildContext(
 }
 
 
-void DomBuilderContext::StartElement(
+void DomBuilderContext::StartElement( 
     const Reference<XAttributeList>& xAttrList )
 {
     DBG_ASSERT( mxNode.is(), "empty XNode not allowed" );
@@ -140,8 +140,8 @@ void DomBuilderContext::StartElement(
 
         // namespace handling: determine namespace & namespace keykey
         OUString sNamespace;
-        sal_uInt16 nNamespaceKey =
-            GetImport().GetNamespaceMap()._GetKeyByAttrName(
+        sal_uInt16 nNamespaceKey = 
+            GetImport().GetNamespaceMap()._GetKeyByAttrName( 
                 rName, NULL, NULL, &sNamespace );
 
         // create attribute node and set value
@@ -162,7 +162,7 @@ void DomBuilderContext::StartElement(
                 Sequence<OUString> aSeq(2);
                 aSeq[0] = rName;
                 aSeq[1] = rValue;
-                GetImport().SetError(
+                GetImport().SetError( 
                     XMLERROR_FLAG_WARNING | XMLERROR_NAMESPACE_TROUBLE, aSeq );
             }
             break;
@@ -188,8 +188,8 @@ void DomBuilderContext::Characters( const OUString& rCharacters )
     // Characters(..) calls, the DOM model would still see only one child.)
 
     // create text node and append to parent
-    Reference<XNode> xNew(
-        mxNode->getOwnerDocument()->createTextNode( rCharacters ),
+    Reference<XNode> xNew( 
+        mxNode->getOwnerDocument()->createTextNode( rCharacters ), 
         UNO_QUERY_THROW );
     mxNode->appendChild( xNew );
 }
@@ -207,15 +207,15 @@ Reference<XNode> lcl_createDomInstance()
     DBG_ASSERT( xFactory.is(), "can't get service factory" );
 
     Reference<XDocumentBuilder> xBuilder(
-        xFactory->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( sDocumentBuilder ) ) ),
+        xFactory->createInstance( 
+            OUString( RTL_CONSTASCII_USTRINGPARAM( sDocumentBuilder ) ) ), 
         UNO_QUERY_THROW );
 
     return Reference<XNode>( xBuilder->newDocument(), UNO_QUERY_THROW );
 }
 
 Reference<XNode> lcl_createElement( SvXMLImport& rImport,
-                                    USHORT nPrefix,
+                                    USHORT nPrefix, 
                                     const OUString rLocalName,
                                     Reference<XNode> xParent)
 {
@@ -242,7 +242,7 @@ Reference<XNode> lcl_createElement( SvXMLImport& rImport,
         {
             Sequence<OUString> aSeq(1);
             aSeq[0] = rLocalName;
-            rImport.SetError(
+            rImport.SetError( 
                 XMLERROR_FLAG_WARNING | XMLERROR_NAMESPACE_TROUBLE, aSeq );
         }
         break;
@@ -252,14 +252,14 @@ Reference<XNode> lcl_createElement( SvXMLImport& rImport,
         // this is a bug, since this will fail for multiple prefixes used for
         // the same namespace.
         xElement = xDocument->createElementNS(
-            rImport.GetNamespaceMap().GetNameByKey( nPrefix ),
+            rImport.GetNamespaceMap().GetNameByKey( nPrefix ), 
             rImport.GetNamespaceMap().GetQNameByKey( nPrefix, rLocalName ) );
         break;
     }
     DBG_ASSERT( xElement.is(), "can't create element" );
 
     // add new element to parent and return
-    Reference<XNode> xNode( xElement, UNO_QUERY_THROW );
+    Reference<XNode> xNode( xElement, UNO_QUERY_THROW ); 
     xParent->appendChild( xNode );
     return xNode;
 }

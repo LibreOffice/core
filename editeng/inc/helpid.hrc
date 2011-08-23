@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@
 // Overrun check ---------------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END     (HID_EDIT_START+28)
+#define ACT_SVX_HID_END		(HID_EDIT_START+28)
 #if ACT_SVX_HID_END > HID_EDIT_END
 #error Resource-Ueberlauf in #line, #file
 #endif

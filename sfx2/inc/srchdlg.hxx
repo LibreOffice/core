@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,49 +45,49 @@ namespace sfx2 {
 class SearchDialog : public ModelessDialog
 {
 private:
-    FixedText           m_aSearchLabel;
-    ComboBox            m_aSearchEdit;
-    CheckBox            m_aWholeWordsBox;
-    CheckBox            m_aMatchCaseBox;
-    CheckBox            m_aWrapAroundBox;
-    CheckBox            m_aBackwardsBox;
-    PushButton          m_aFindBtn;
-    CancelButton        m_aCancelBtn;
+    FixedText			m_aSearchLabel;
+    ComboBox			m_aSearchEdit;
+    CheckBox			m_aWholeWordsBox;
+    CheckBox			m_aMatchCaseBox;
+    CheckBox			m_aWrapAroundBox;
+    CheckBox			m_aBackwardsBox;
+    PushButton			m_aFindBtn;
+    CancelButton		m_aCancelBtn;
 
-    Link                m_aFindHdl;
-    Link                m_aCloseHdl;
+    Link				m_aFindHdl;
+    Link				m_aCloseHdl;
 
-    String              m_sToggleText;
-    ::rtl::OUString     m_sConfigName;
-    ByteString          m_sWinState;
+    String				m_sToggleText;
+    ::rtl::OUString		m_sConfigName;
+    ByteString			m_sWinState;
 
-    bool                m_bIsConstructed;
+    bool				m_bIsConstructed;
 
-    void                LoadConfig();
-    void                SaveConfig();
+    void				LoadConfig();
+    void				SaveConfig();
 
-    DECL_LINK(          FindHdl, PushButton* );
-    DECL_LINK(          ToggleHdl, CheckBox* );
+    DECL_LINK(			FindHdl, PushButton* );
+    DECL_LINK(			ToggleHdl, CheckBox* );
 
 public:
     SearchDialog( Window* pWindow, const ::rtl::OUString& rConfigName );
     ~SearchDialog();
 
-    inline void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
-    inline void         SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }
+    inline void			SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
+    inline void			SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }
 
-    inline String       GetSearchText() const { return m_aSearchEdit.GetText(); }
-    inline void         SetSearchText( const String& _rText ) { m_aSearchEdit.SetText( _rText ); }
-    inline bool         IsOnlyWholeWords() const { return ( m_aWholeWordsBox.IsChecked() != FALSE ); }
-    inline bool         IsMarchCase() const { return ( m_aMatchCaseBox.IsChecked() != FALSE ); }
-    inline bool         IsWrapAround() const { return ( m_aWrapAroundBox.IsChecked() != FALSE ); }
-    inline bool         IsSearchBackwards() const { return ( m_aBackwardsBox.IsChecked() != FALSE ); }
+    inline String		GetSearchText() const { return m_aSearchEdit.GetText(); }
+    inline void			SetSearchText( const String& _rText ) { m_aSearchEdit.SetText( _rText ); }
+    inline bool			IsOnlyWholeWords() const { return ( m_aWholeWordsBox.IsChecked() != FALSE ); }
+    inline bool			IsMarchCase() const { return ( m_aMatchCaseBox.IsChecked() != FALSE ); }
+    inline bool			IsWrapAround() const { return ( m_aWrapAroundBox.IsChecked() != FALSE ); }
+    inline bool			IsSearchBackwards() const { return ( m_aBackwardsBox.IsChecked() != FALSE ); }
 
-    void                SetFocusOnEdit();
+    void				SetFocusOnEdit();
 
-    virtual BOOL        Close();
-    virtual void        Move();
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual BOOL		Close();
+    virtual void		Move();
+    virtual void		StateChanged( StateChangedType nStateChange );
 };
 
 // ============================================================================

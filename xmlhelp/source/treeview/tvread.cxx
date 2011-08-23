@@ -509,7 +509,7 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
         ! configData.system.getLength() )
         return;
 
-    sal_uInt64  ret,len = 0;
+    sal_uInt64 	ret,len = 0;
     int j = configData.vFileURL.size();
 
     TVDom tvDom;
@@ -1063,7 +1063,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
 
     if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
     {
-        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
+        m_eState = SHARED_EXTENSIONS;		// Later: SHARED_MODULE
     }
     else
     {

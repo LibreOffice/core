@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,20 +30,20 @@
 #define __FRAMEWORK_COMMANDS_H_
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/generic.hxx>
 #include <rtl/ustring.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 /*-************************************************************************************************************//**
-    @short          These values describe some command line arguments of our office.
+    @short			These values describe some command line arguments of our office.
                     We need it e.g. to detect running mode of it - plugin, headless ...
 *//*-*************************************************************************************************************/
 
@@ -51,8 +51,8 @@ namespace framework{
 #define COMMAND_HEADLESS  DECLARE_ASCII("-headless"   ) /// office runs in headless mode for scripting
 #define COMMAND_INVISIBLE DECLARE_ASCII("-invisible"  ) /// office runs in invisible mode which supress splash screen and first empry document
 #define COMMAND_SERVER    DECLARE_ASCII("-server"     ) /// office runs as server
-}       //  namespace framework
+}		//	namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_TARGETS_H_
+#endif	//	#ifndef __FRAMEWORK_TARGETS_H_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

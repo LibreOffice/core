@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,22 +67,22 @@ using com::sun::star::form::submission::XSubmission;
 using com::sun::star::form::submission::XSubmissionSupplier;
 using rtl::OUString;
 
-SvXMLImportContext* createXFormsModelContext(
-    SvXMLImport& rImport,
+SvXMLImportContext* createXFormsModelContext( 
+    SvXMLImport& rImport, 
     USHORT nPrefix,
     const rtl::OUString& rLocalName )
 {
     return new XFormsModelContext( rImport, nPrefix, rLocalName );
 }
 
-void bindXFormsValueBinding(
+void bindXFormsValueBinding( 
     Reference<XModel> xModel,
     pair<Reference<XPropertySet>,OUString> aPair )
 {
-    Reference<XBindableValue> xBindable(
-        aPair.first,
+    Reference<XBindableValue> xBindable( 
+        aPair.first, 
         UNO_QUERY );
-    Reference<XValueBinding> xBinding(
+    Reference<XValueBinding> xBinding( 
         lcl_findXFormsBinding( xModel, aPair.second ),
         UNO_QUERY );
 
@@ -100,14 +100,14 @@ void bindXFormsValueBinding(
     }
 }
 
-void bindXFormsListBinding(
+void bindXFormsListBinding( 
     Reference<XModel> xModel,
     ::pair<Reference<XPropertySet>,OUString> aPair )
 {
-    Reference<XListEntrySink> xListEntrySink(
-        aPair.first,
+    Reference<XListEntrySink> xListEntrySink( 
+        aPair.first, 
         UNO_QUERY );
-    Reference<XListEntrySource> xListEntrySource(
+    Reference<XListEntrySource> xListEntrySource( 
         lcl_findXFormsBinding( xModel, aPair.second ),
         UNO_QUERY );
 
@@ -125,12 +125,12 @@ void bindXFormsListBinding(
     }
 }
 
-void bindXFormsSubmission(
+void bindXFormsSubmission( 
     Reference<XModel> xModel,
     pair<Reference<XPropertySet>,OUString> aPair )
 {
     Reference<XSubmissionSupplier> xSubmissionSupp( aPair.first, UNO_QUERY );
-    Reference<XSubmission> xSubmission(
+    Reference<XSubmission> xSubmission( 
         lcl_findXFormsSubmission( xModel, aPair.second ),
         UNO_QUERY );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 namespace connectivity
 {
-
+    
     //**************************************************************
     //************ Class: java.io.InputStream
     //**************************************************************
@@ -46,7 +46,7 @@ namespace connectivity
         static jclass theClass;
         virtual ~java_io_InputStream();
     public:
-        virtual jclass getMyClass() const;
+        virtual jclass getMyClass() const;		
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_io_InputStream( JNIEnv * pEnv, jobject myObj );
         // XInputStream

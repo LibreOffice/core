@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,12 +64,12 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION },
-    { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE },
-    { XML_NAMESPACE_STYLE, XML_CHAR,         XML_TOK_TABSTOP_CHAR },
+    { XML_NAMESPACE_STYLE, XML_POSITION,	 XML_TOK_TABSTOP_POSITION },
+    { XML_NAMESPACE_STYLE, XML_TYPE,	  	 XML_TOK_TABSTOP_TYPE },
+    { XML_NAMESPACE_STYLE, XML_CHAR,	  	 XML_TOK_TABSTOP_CHAR },
     { XML_NAMESPACE_STYLE, XML_LEADER_TEXT,  XML_TOK_TABSTOP_LEADER_TEXT },
     { XML_NAMESPACE_STYLE, XML_LEADER_STYLE,  XML_TOK_TABSTOP_LEADER_STYLE },
-    XML_TOKEN_MAP_END
+    XML_TOKEN_MAP_END 
 };
 
 // ---
@@ -77,7 +77,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 class SvxXMLTabStopContext_Impl : public SvXMLImportContext
 {
 private:
-     style::TabStop aTabStop;
+     style::TabStop	aTabStop;
 
 public:
     TYPEINFO();
@@ -190,7 +190,7 @@ SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
 
 
 typedef SvxXMLTabStopContext_Impl *SvxXMLTabStopContext_Impl_ImplPtr;
-SV_DECL_PTRARR( SvxXMLTabStopArray_Impl, SvxXMLTabStopContext_Impl_ImplPtr, 20, 5 )
+SV_DECL_PTRARR( SvxXMLTabStopArray_Impl, SvxXMLTabStopContext_Impl_ImplPtr,	20, 5 )
 
 
 // ---
@@ -244,22 +244,22 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
 
         mpTabStops->Insert( pTabStopContext, mpTabStops->Count() );
         pTabStopContext->AddRef();
-
+        
         pContext = pTabStopContext;
     }
     else
     {
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
-
+    
     return pContext;
 }
 
 void SvxXMLTabStopImportContext::EndElement( )
-{
+{	
     sal_uInt16 nCount = mpTabStops ? mpTabStops->Count() : 0;
     uno::Sequence< style::TabStop> aSeq( nCount );
-
+        
     if( mpTabStops )
     {
         sal_uInt16 nNewCount = 0;

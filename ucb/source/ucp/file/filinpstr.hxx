@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 namespace fileaccess {
 
     // forward declaration
-
+    
     class shell;
 
 
@@ -53,15 +53,15 @@ namespace fileaccess {
           public com::sun::star::io::XSeekable
     {
     public:
-
+        
         XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock );
-
+        
         virtual ~XInputStream_impl();
-
+        
         /**
          *  Returns an error code as given by filerror.hxx
          */
-
+        
         sal_Int32 SAL_CALL CtorSuccess();
         sal_Int32 SAL_CALL getMinorError();
 
@@ -69,17 +69,17 @@ namespace fileaccess {
         // XTypeProvider
 
         XTYPEPROVIDER_DECL()
-
+        
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException);
-
+        
         virtual void SAL_CALL
         acquire(
             void )
             throw();
-
+        
         virtual void SAL_CALL
         release(
             void )
@@ -145,9 +145,9 @@ namespace fileaccess {
                    com::sun::star::uno::RuntimeException );
 
     private:
-
+        
         shell*                                             m_pMyShell;
-        com::sun::star::uno::Reference<
+        com::sun::star::uno::Reference< 
         com::sun::star::ucb::XContentProvider >            m_xProvider;
         sal_Bool                                           m_nIsOpen;
 
@@ -158,7 +158,7 @@ namespace fileaccess {
         sal_Int32                                          m_nErrorCode;
         sal_Int32                                          m_nMinorErrorCode;
     };
-
+    
 
 } // end namespace XInputStream_impl
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,18 +94,18 @@
 #define DOCPROPSNUM 17
 
 // flags that specify requested operation
-#define EXPORT_REQUESTED            1
-#define PDFEXPORT_REQUESTED         2
-#define PDFDIRECTEXPORT_REQUESTED   4
-#define WIDEEXPORT_REQUESTED        8
-#define SAVE_REQUESTED              16
-#define SAVEAS_REQUESTED            32
+#define EXPORT_REQUESTED 			1
+#define PDFEXPORT_REQUESTED			2
+#define PDFDIRECTEXPORT_REQUESTED	4
+#define WIDEEXPORT_REQUESTED		8
+#define SAVE_REQUESTED				16
+#define SAVEAS_REQUESTED			32
 
 // possible statuses of save operation
-#define STATUS_NO_ACTION            0
-#define STATUS_SAVE                 1
-#define STATUS_SAVEAS               2
-#define STATUS_SAVEAS_STANDARDNAME  3
+#define STATUS_NO_ACTION			0
+#define STATUS_SAVE					1
+#define STATUS_SAVEAS				2
+#define STATUS_SAVEAS_STANDARDNAME	3
 
 const ::rtl::OUString aFilterNameString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
 const ::rtl::OUString aFilterOptionsString(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));
@@ -194,7 +194,7 @@ public:
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY_THROW );
-            m_xDocumentSettings.set(
+            m_xDocumentSettings.set( 
                 xDocSettingsSupplier->createInstance(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ),
                 uno::UNO_QUERY_THROW );
@@ -1002,7 +1002,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     ::rtl::OUString aFilterName = aStringTypeFN;
-
+    
     // the following two arguments can not be converted in MediaDescriptor,
     // so they should be removed from the ItemSet after retrieving
     SFX_ITEMSET_ARG( pDialogParams, pRecommendReadOnly, SfxBoolItem, SID_RECOMMENDREADONLY, sal_False );
@@ -1494,7 +1494,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         if ( aStdDirIter != aModelData.GetMediaDescr().end() )
             aStdDirIter->second >>= sStandardDir;
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  aBlackList;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >	aBlackList;
 
         ::comphelper::SequenceAsHashMap::const_iterator aBlackListIter =
             aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BlackList")) );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( XMLProcAttrTransformerContext, XMLTransformerContext );
 
-XMLProcAttrTransformerContext::XMLProcAttrTransformerContext(
-        XMLTransformerBase& rImp,
+XMLProcAttrTransformerContext::XMLProcAttrTransformerContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
@@ -52,14 +52,14 @@ XMLProcAttrTransformerContext::XMLProcAttrTransformerContext(
 {
 }
 
-XMLProcAttrTransformerContext::XMLProcAttrTransformerContext(
-        XMLTransformerBase& rImp,
+XMLProcAttrTransformerContext::XMLProcAttrTransformerContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
+    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix, 
                             ::xmloff::token::GetXMLToken( eToken ) ) ),
     m_nActionMap( nActionMap )
 {
@@ -69,7 +69,7 @@ XMLProcAttrTransformerContext::~XMLProcAttrTransformerContext()
 {
 }
 
-void XMLProcAttrTransformerContext::StartElement(
+void XMLProcAttrTransformerContext::StartElement( 
         const Reference< XAttributeList >& rAttrList )
 {
     Reference< XAttributeList > xAttrList( rAttrList );

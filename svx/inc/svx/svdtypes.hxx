@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,15 +51,15 @@ enum SdrCreateCmd {SDRCREATE_NEXTPOINT,     // Naechster Polygonpunkt, Kreissegm
                    SDRCREATE_NEXTOBJECT,    // Naechstes Polygon im PolyPolygon
                    SDRCREATE_FORCEEND};     // Ende erzwungen
 
-enum SdrDragMode
+enum SdrDragMode 
 {
-    SDRDRAG_MOVE,       // Verschieben
-    SDRDRAG_RESIZE,     // Groesse aendern
-    SDRDRAG_ROTATE,     // Drehen
-    SDRDRAG_MIRROR,     // Spiegeln
-    SDRDRAG_SHEAR,      // Schraegstellen
-    SDRDRAG_CROOK,      // Kreisfoermig verbiegen
-    SDRDRAG_DISTORT,    // Freies verzerren (Rect in beliebiges Viereck transformieren)
+    SDRDRAG_MOVE,		// Verschieben
+    SDRDRAG_RESIZE,		// Groesse aendern
+    SDRDRAG_ROTATE,		// Drehen
+    SDRDRAG_MIRROR,		// Spiegeln
+    SDRDRAG_SHEAR,		// Schraegstellen
+    SDRDRAG_CROOK,		// Kreisfoermig verbiegen
+    SDRDRAG_DISTORT,	// Freies verzerren (Rect in beliebiges Viereck transformieren)
 
     // new modes for interactive transparence and gradient tools
     SDRDRAG_TRANSPARENCE,

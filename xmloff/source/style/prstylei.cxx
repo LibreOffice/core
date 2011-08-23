@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,10 +84,10 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
         sal_Bool bDefault )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
-,   msIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
-,   msFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
-,   mxStyles( &rStyles )
+:	SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
+,	msIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
+,	msFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+,	mxStyles( &rStyles )
 {
 }
 
@@ -203,7 +203,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         {
             Sequence< PropertyValue > aValues;
             xImpPrMap->FillPropertySequence( maProperties, aValues );
-
+            
             sal_Int32 nLen = aValues.getLength();
             if( nLen )
             {
@@ -222,7 +222,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                     pProps->Name = rtl::OUString::createFromAscii("ParaConditionalStyleName");
                     pProps->Value <<= sParent;
                 }
-
+                
                 Reference < XAutoStyle > xAutoStyle = xAutoFamily->insertStyle( aValues );
                 if( xAutoStyle.is() )
                 {
@@ -363,7 +363,7 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
         if( sParent.getLength() && !xFamilies->hasByName( sParent ) )
             sParent = OUString();
 
-        if( sParent != mxStyle->getParentStyle() )
+        if(	sParent != mxStyle->getParentStyle() )
         {
             // this may except if setting the parent style forms a
             // circle in the style depencies; especially if the parent

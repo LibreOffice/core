@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,11 +68,11 @@ class BackendImpl : public t_helper
     class PackageImpl : public ::dp_registry::backend::Package
     {
         BackendImpl * getMyBackend() const;
-
+        
         const OUString m_scriptURL;
         const OUString m_dialogURL;
         OUString m_dialogName;
-
+        
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
@@ -84,7 +84,7 @@ class BackendImpl : public t_helper
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv );
-
+        
     public:
         PackageImpl(
             ::rtl::Reference<BackendImpl> const & myBackend,
@@ -94,21 +94,21 @@ class BackendImpl : public t_helper
             bool bRemoved, OUString const & identifier);
     };
     friend class PackageImpl;
-
+    
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         sal_Bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
-
+    
     void addDataToDb(OUString const & url);
     void deleteDataFromDb(OUString const & url);
     bool isRegisteredInDb(OUString const & url);
 
-
+    
 
 //     Reference< ucb::XSimpleFileAccess > getFileAccess( void );
-//  Reference< ucb::XSimpleFileAccess > m_xSFA;
+// 	Reference< ucb::XSimpleFileAccess > m_xSFA;
 
     const Reference<deployment::XPackageTypeInfo> m_xBasicLibTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xDialogLibTypeInfo;
@@ -117,10 +117,10 @@ class BackendImpl : public t_helper
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
-
+    
     // XUpdatable
     virtual void SAL_CALL update() throw (RuntimeException);
-
+    
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
@@ -175,7 +175,7 @@ BackendImpl::BackendImpl(
 {
     m_typeInfos[ 0 ] = m_xBasicLibTypeInfo;
     m_typeInfos[ 1 ] = m_xDialogLibTypeInfo;
-
+    
     OSL_ASSERT( ! transientMode() );
 
     if (!transientMode())
@@ -183,7 +183,7 @@ BackendImpl::BackendImpl(
         OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
         m_backendDb.reset(
             new ScriptBackendDb(getComponentContext(), dbFile));
-    }
+    }    
 
 }
 void BackendImpl::addDataToDb(OUString const & url)
@@ -252,7 +252,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 StrCannotDetectMediaType::get() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
-
+    
     String type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
@@ -264,7 +264,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     0, dialogURL, xCmdEnv, false /* no throw */ )) {
                 dialogURL = OUString();
             }
-
+            
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.basic-library"))
             {
                 OUString scriptURL( makeURL( url, OUSTR("script.xlb")));
@@ -272,8 +272,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                         0, scriptURL, xCmdEnv, false /* no throw */ )) {
                     scriptURL = OUString();
                 }
-
-                return new PackageImpl(
+                
+                return new PackageImpl( 
                     this, url, xCmdEnv, scriptURL,
                     dialogURL, bRemoved, identifier);
             }
@@ -300,12 +300,12 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
-    {
+    {    
         //May throw a DisposedException
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+            OUSTR("Failed to get the BackendImpl"), 
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
@@ -380,7 +380,7 @@ void BackendImpl::PackageImpl::processPackage_(
         //user repository. That is, the script of the newly added user extension does
         //not work anymore. Therefore we must check if the currently active
         //script comes in fact from the currently processed extension.
-
+        
         if (bRegistered)
         {
             //we also prevent and live deployment at startup
@@ -392,20 +392,20 @@ void BackendImpl::PackageImpl::processPackage_(
                     if (sScriptUrl.equals(m_scriptURL))
                         xScriptLibs->removeLibrary(m_name);
                 }
-
+                    
                 if (bDialog && xDialogLibs.is() && xDialogLibs->hasByName(m_dialogName))
                 {
                     const OUString sDialogUrl = xDialogLibs->getOriginalLibraryLinkURL(m_dialogName);
                     if (sDialogUrl.equals(m_dialogURL))
                         xDialogLibs->removeLibrary(m_dialogName);
                 }
-            }
+            }            
             getMyBackend()->deleteDataFromDb(getURL());
             return;
         }
     }
     if (bRegistered)
-        return;     // Already registered
+        return;		// Already registered
 
     // Update LibraryContainer
     bool bScriptSuccess = false;
@@ -447,7 +447,7 @@ void BackendImpl::PackageImpl::processPackage_(
         }
 
 
-        if (bDialog && xDialogLibs.is())
+        if (bDialog && xDialogLibs.is()) 
         {
             bool bCanAdd = true;
             if (xDialogLibs->hasByName(m_dialogName))
@@ -466,7 +466,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 else
                 {
                     bCanAdd = false;
-                }
+                }            
             }
 
             if (bCanAdd)
@@ -476,7 +476,7 @@ void BackendImpl::PackageImpl::processPackage_(
             }
         }
     }
-    bool bSuccess = bScript || bDialog;     // Something must have happened
+    bool bSuccess = bScript || bDialog;		// Something must have happened
     if( bRunning && !startup)
         if( (bScript && !bScriptSuccess) || (bDialog && !bDialogSuccess) )
             bSuccess = false;

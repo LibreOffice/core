@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -245,7 +245,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // add some breathing space for the images
     maButtonImageSize.Width() += 12;
     maButtonImageSize.Height() += 12;
-
+    
 }
 
 
@@ -286,12 +286,12 @@ void BackingWindow::prepareRecentFileMenu()
         mpRecentMenu = new PopupMenu();
     mpRecentMenu->Clear();
     maRecentFiles.clear();
-
+    
     // get recent file list and dispatch arguments
     Sequence< Sequence< PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( ePICKLIST ) );
 
     sal_Int32 nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
-
+        
     if( ( nPickListMenuItems > 0 ) )
     {
         maRecentFiles.reserve( nPickListMenuItems );
@@ -299,11 +299,11 @@ void BackingWindow::prepareRecentFileMenu()
         {
             Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
             rtl::OUString aURL, aFilter, aFilterOpt, aTitle;
-
+            
             for ( sal_Int32 j = 0; j < rPickListEntry.getLength(); j++ )
             {
                 const Any& a = rPickListEntry[j].Value;
-
+                
                 if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
                     a >>= aURL;
                 else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
@@ -330,7 +330,7 @@ void BackingWindow::prepareRecentFileMenu()
             nArgs--;
             rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
             rArgsList[nArgs].Value = makeAny( aFilter );
-
+            
             if( aFilterOpt.getLength() )
             {
                 nArgs--;
@@ -346,20 +346,20 @@ void BackingWindow::prepareRecentFileMenu()
             nArgs--;
             rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
             rArgsList[nArgs].Value = makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ) ) );
-
+            
             // and finally create an entry in the popupmenu
-            rtl::OUString   aMenuTitle;
-            INetURLObject   aURLObj( aURL );
-
+            rtl::OUString	aMenuTitle;
+            INetURLObject	aURLObj( aURL );
+            
             if ( aURLObj.GetProtocol() == INET_PROT_FILE )
             {
                 // Do handle file URL differently => convert it to a system
                 // path and abbreviate it with a special function:
                 String aFileSystemPath( aURLObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
-
-                rtl::OUString   aSystemPath( aFileSystemPath );
-                rtl::OUString   aCompactedSystemPath;
-
+                
+                rtl::OUString	aSystemPath( aFileSystemPath );
+                rtl::OUString	aCompactedSystemPath;
+                
                 oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
                 if ( !nError )
                     aMenuTitle = String( aCompactedSystemPath );
@@ -404,9 +404,9 @@ void BackingWindow::initBackground()
         maWelcomeTextColor = maLabelTextColor = Color( COL_WHITE );
     else if( mnLayoutStyle == 1 )
         maWelcomeTextColor = maLabelTextColor = Color( COL_BLACK );
-    else
+    else 
         maWelcomeTextColor = maLabelTextColor = Color( 0x26, 0x35, 0x42 );
-
+    
     Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
     // select image set
@@ -461,7 +461,7 @@ void BackingWindow::initBackground()
     loadImage( FwkResId( BMP_BACKING_FORMULA ), maMathButton );
     loadImage( FwkResId( BMP_BACKING_OPENFILE ), maOpenButton );
     loadImage( FwkResId( BMP_BACKING_OPENTEMPLATE ), maTemplateButton );
-
+    
     maOpenButton.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     maOpenButton.SetSelectHdl( LINK( this, BackingWindow, SelectHdl ) );
     maOpenButton.SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
@@ -524,7 +524,7 @@ void BackingWindow::initControls()
 
     if( mnLayoutStyle == 1 )
     {
-        maWelcome.Show();
+        maWelcome.Show();        
         maProduct.Show();
     }
 
@@ -535,7 +535,7 @@ void BackingWindow::initControls()
     maTextFont.SetWeight( WEIGHT_NORMAL );
 
     // collect the URLs of the entries in the File/New menu
-    SvtModuleOptions    aModuleOptions;
+    SvtModuleOptions	aModuleOptions;
     std::set< rtl::OUString > aFileNewAppsAvailable;
     SvtDynamicMenuOptions aOpt;
     Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
@@ -595,19 +595,19 @@ void BackingWindow::initControls()
                   maMathButton, aMnemns );
 
     nYPos += 3*maButtonImageSize.Height() / 2;
-
+    
     layoutButton( NULL, 0, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
                   maOpenButton, aMnemns, maOpenString );
     layoutButton( NULL, 1, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
-                  maTemplateButton, aMnemns, maTemplateString );
+                  maTemplateButton, aMnemns, maTemplateString );    
     nYPos += 10;
 
     DBG_ASSERT( nYPos < maControlRect.GetHeight(), "misformatting !" );
     if( mnColumnWidth[0] + mnColumnWidth[1] + mnBtnPos + 20 > maControlRect.GetWidth() )
         maControlRect.Right() = maControlRect.Left() + mnColumnWidth[0] + mnColumnWidth[1] + mnBtnPos + 20;
-
+    
     mnTextColumnWidth[0] = mnColumnWidth[0];
     mnTextColumnWidth[1] = mnColumnWidth[1];
 
@@ -649,7 +649,7 @@ void BackingWindow::initControls()
         maBackgroundMiddle = BitmapEx();
 
     Resize();
-
+    
     maWriterButton.GrabFocus();
 }
 
@@ -688,7 +688,7 @@ void BackingWindow::layoutButton(
     String aText( i_rStr.Len() ? i_rStr : SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
     i_rMnemns.CreateMnemonic( aText );
     i_rBtn.SetText( aText );
-
+    
     long nTextWidth = i_rBtn.GetTextWidth( i_rBtn.GetText() );
 
     nTextWidth += maButtonImageSize.Width() + 8; // add some fuzz to be on the safe side
@@ -811,7 +811,7 @@ long BackingWindow::Notify( NotifyEvent& rNEvt )
                 else if( maDBButton.HasFocus() )
                     maMathButton.GrabFocus();
                 else if( maMathButton.HasFocus() )
-                    maTemplateButton.GrabFocus();
+                    maTemplateButton.GrabFocus();                
                 return 1;
             }
         }
@@ -873,7 +873,7 @@ void BackingWindow::Resize()
     nYPos += nPDelta - nDiff;
 
     nYPos += nWDelta/2 - nDiff;
-
+    
     if( mnLayoutStyle != 1 )
         nYPos = maControlRect.Top() + mnBtnTop;
 
@@ -952,7 +952,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                     rtl::OUString sURL;
                     //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
                     Any value( xNameAccess->getByName(rtl::OUString::createFromAscii(pNode)) );
-                    sURL = value.get<rtl::OUString> ();
+                    sURL = value.get<rtl::OUString> ();                    
                     localizeWebserviceURI(sURL);
 
                     Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(

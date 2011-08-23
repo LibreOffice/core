@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,10 +77,10 @@ public:
     TYPEINFO();
 
     XMLIndexBibliographyConfigurationContext(
-        SvXMLImport& rImport,
+        SvXMLImport& rImport, 
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     ~XMLIndexBibliographyConfigurationContext();
@@ -88,15 +88,15 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     virtual void CreateAndInsert( sal_Bool bOverwrite );
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext *CreateChildContext( 
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
     void ProcessAttribute(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -168,7 +168,7 @@ static const char * const components[] =
     , "sax.uno" SAL_DLLEXTENSION
     , "stocservices.uno" SAL_DLLEXTENSION
     , SAL_MODULENAME( "fileacc" )
-    , SAL_MODULENAME( "mcnttype" )          //Clipboard   Ask Oliver Braun
+    , SAL_MODULENAME( "mcnttype" )  		//Clipboard   Ask Oliver Braun
     , "i18npool.uno" SAL_DLLEXTENSION
         // Reading of files in specific encodings like UTF-8 using
         // createUnoService( "com.sun.star.io.TextInputStream" ) and such
@@ -281,7 +281,7 @@ Reference< XMultiServiceFactory > InitializeFac( void )
     // set global factory
     setProcessServiceFactory( xSMgr );
 
-/*  // Create simple ConfigManager
+/*	// Create simple ConfigManager
     Sequence< Any > aConfArgs(3);
     aConfArgs[0] <<= PropertyValue( OUString::createFromAscii("servertype"), 0, makeAny( OUString::createFromAscii("local") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
     aConfArgs[1] <<= PropertyValue( OUString::createFromAscii("sourcepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
@@ -293,7 +293,7 @@ Reference< XMultiServiceFactory > InitializeFac( void )
 
 
 //  Create unconfigured Ucb:
-/*  Sequence< Any > aArgs(1);
+/*	Sequence< Any > aArgs(1);
     aArgs[1] = makeAny ( xConfProvider );*/
     Sequence< Any > aArgs;
     ::ucb::ContentBroker::initialize( xSMgr, aArgs );
@@ -305,7 +305,7 @@ Reference< XMultiServiceFactory > InitializeFac( void )
     xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
 
 
-/*  Reference< XContentProvider > xPackageProvider
+/*	Reference< XContentProvider > xPackageProvider
         ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.PackageContentProvider" ) ), UNO_QUERY );
     xUcb->registerContentProvider( xPackageProvider, OUString::createFromAscii( "vnd.sun.star.pkg" ), sal_True );
     */
@@ -428,7 +428,7 @@ Reference<XResultSet> TestQuery(Reference< ::com::sun::star::sdbc::XConnection> 
 Reference< ::com::sun::star::sdbc::XConnection> TestConnected
         (Reference< ::com::sun::star::sdbc::XDriver> &pDriver,sal_Int32 choice)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  pConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>	pConnection;
     printf("Begin Connect!\n");
     OUString url;
     Sequence<PropertyValue> aValue;
@@ -671,7 +671,7 @@ int _cdecl main( int argc, char * argv[] )
 
 {
     Reference< XMultiServiceFactory > xMgr = InitializeFac();
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  m_xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>	m_xConnection;
     try
     {
     Reference< ::com::sun::star::sdbc::XDriver>

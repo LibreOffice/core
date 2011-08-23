@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -384,7 +384,7 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
     const OUString* pNames = aServices.getConstArray();
     sal_Int32 nCount = aServices.getLength();
 
-    OUString sFieldName;    // service name postfix of current field
+    OUString sFieldName;	// service name postfix of current field
 
     // search for TextField service name
     while( nCount-- )
@@ -440,8 +440,8 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
 }
 
 enum FieldIdEnum XMLTextFieldExport::MapFieldName(
-    const OUString& sFieldName,             // field (master) name
-    const Reference<XPropertySet> & xPropSet)   // for subtype
+    const OUString& sFieldName,				// field (master) name
+    const Reference<XPropertySet> & xPropSet)	// for subtype
 {
     // we'll proceed in 2 steps:
     // a) map service name to preliminary FIELD_ID
@@ -487,8 +487,8 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
             {
                 switch (GetIntProperty(sPropertySubType, xPropSet))
                 {
-                    case SetVariableType::STRING:   // text field
-                    case SetVariableType::VAR:      // num field
+                    case SetVariableType::STRING:	// text field
+                    case SetVariableType::VAR:		// num field
                         nToken = FIELD_ID_VARIABLE_SET;
                         break;
                     case SetVariableType::SEQUENCE:
@@ -505,8 +505,8 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_VARIABLE_GET:
             switch (GetIntProperty(sPropertySubType, xPropSet))
             {
-                case SetVariableType::STRING:   // text field
-                case SetVariableType::VAR:      // num field
+                case SetVariableType::STRING:	// text field
+                case SetVariableType::VAR:		// num field
                     nToken = FIELD_ID_VARIABLE_GET;
                     break;
                 case SetVariableType::FORMULA:
@@ -656,7 +656,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     {
         // depends on field sub type
         return ( GetIntProperty(sPropertySubType, xPropSet) ==
-                 SetVariableType::STRING                    );
+                 SetVariableType::STRING					);
     }
 
     case FIELD_ID_USER_GET:
@@ -1141,7 +1141,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
                             sEmpty, sEmpty, 0.0, // values not used
-                            sal_False,
+                            sal_False, 
                             bExportValueType,
                             !bCmd,
                             ! GetOptionalBoolProperty(
@@ -1181,7 +1181,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                        bCmd);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
-                            sEmpty, sEmpty, 0.0, // values not used
+                            sEmpty, sEmpty,	0.0, // values not used
                             sal_False, sal_False, !bCmd,
                             ! GetOptionalBoolProperty(
                                  sPropertyIsFixedLanguage,
@@ -1197,9 +1197,9 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_USER_INPUT:
         // user input field: name (from FieldMaster), description
-//      ProcessString(XML_NAME,
-//                    GetStringProperty(sPropertyName,
-//                                      GetMasterPropertySet(rTextField)));
+// 		ProcessString(XML_NAME,
+// 					  GetStringProperty(sPropertyName,
+// 										GetMasterPropertySet(rTextField)));
         ProcessString(XML_NAME,
                       GetStringProperty(sPropertyContent, rPropSet));
         ProcessString(XML_DESCRIPTION,
@@ -1445,7 +1445,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         // export number format if available (happens only for numbers!)
         if (!GetBoolProperty(sPropertyIsDataBaseFormat, rPropSet))
         {
-            ProcessValueAndType(sal_False,  // doesn't happen for text
+            ProcessValueAndType(sal_False,	// doesn't happen for text
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
                                 sEmpty, sEmpty, 0.0, // not used
                                 sal_False, sal_False, sal_True, sal_False);
@@ -1501,10 +1501,10 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_DOCINFO_CUSTOM:
     {
-        ProcessValueAndType(sal_False,  // doesn't happen for text
+        ProcessValueAndType(sal_False,	// doesn't happen for text
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
                                 sEmpty, sEmpty, 0.0, // not used
-                                sal_False, sal_False, sal_True,
+                                sal_False, sal_False, sal_True, 
                                 ! GetOptionalBoolProperty(
                                     sPropertyIsFixedLanguage,
                                     rPropSet, xPropSetInfo, sal_False ));
@@ -1871,10 +1871,10 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     const Reference<XText> & rText )
 {
     // store lists for decl elements
-    vector<OUString>                    aVarName;
-    vector<OUString>                    aUserName;
-    vector<OUString>                    aSeqName;
-    vector<OUString>                    aDdeName;
+    vector<OUString> 					aVarName;
+    vector<OUString>					aUserName;
+    vector<OUString>					aSeqName;
+    vector<OUString>					aDdeName;
 
     // get text fields supplier and field master name access
     Reference<XTextFieldsSupplier> xTextFieldsSupp(GetExport().GetModel(),
@@ -2340,16 +2340,16 @@ void XMLTextFieldExport::ExportMetaField(
 
 /// export all data-style related attributes
 void XMLTextFieldExport::ProcessValueAndType(
-    sal_Bool bIsString,     /// do we process a string or a number?
-    sal_Int32 nFormatKey,   /// format key for NumberFormatter; inv. if string
-    const OUString& sContent,   /// string content; possibly invalid
-    const OUString& sDefault,   /// default string
-    double fValue,          /// float content; possibly invalid
-    sal_Bool bExportValue,  /// export value attribute?
-    sal_Bool bExportValueType,  /// export value-type attribute?
-    sal_Bool bExportStyle,  /// export style-sttribute?
+    sal_Bool bIsString,		/// do we process a string or a number?
+    sal_Int32 nFormatKey,	/// format key for NumberFormatter; inv. if string
+    const OUString& sContent,	/// string content; possibly invalid
+    const OUString& sDefault,	/// default string
+    double fValue,			/// float content; possibly invalid
+    sal_Bool bExportValue,	/// export value attribute?
+    sal_Bool bExportValueType,	/// export value-type attribute?
+    sal_Bool bExportStyle,	/// export style-sttribute?
     sal_Bool bForceSystemLanguage, /// export language attributes?
-    sal_Bool bTimeStyle)    // exporting a time style?
+    sal_Bool bTimeStyle)	// exporting a time style?
 {
     // String or number?
     if (bIsString)
@@ -2692,28 +2692,28 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
 
 SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
 {
-    { XML_ARTICLE,          BibliographyDataType::ARTICLE },
-    { XML_BOOK,             BibliographyDataType::BOOK },
-    { XML_BOOKLET,          BibliographyDataType::BOOKLET },
-    { XML_CONFERENCE,       BibliographyDataType::CONFERENCE },
-    { XML_CUSTOM1,          BibliographyDataType::CUSTOM1 },
-    { XML_CUSTOM2,          BibliographyDataType::CUSTOM2 },
-    { XML_CUSTOM3,          BibliographyDataType::CUSTOM3 },
-    { XML_CUSTOM4,          BibliographyDataType::CUSTOM4 },
-    { XML_CUSTOM5,          BibliographyDataType::CUSTOM5 },
-    { XML_EMAIL,            BibliographyDataType::EMAIL },
-    { XML_INBOOK,           BibliographyDataType::INBOOK },
-    { XML_INCOLLECTION,     BibliographyDataType::INCOLLECTION },
-    { XML_INPROCEEDINGS,    BibliographyDataType::INPROCEEDINGS },
-    { XML_JOURNAL,          BibliographyDataType::JOURNAL },
-    { XML_MANUAL,           BibliographyDataType::MANUAL },
-    { XML_MASTERSTHESIS,    BibliographyDataType::MASTERSTHESIS },
-    { XML_MISC,             BibliographyDataType::MISC },
-    { XML_PHDTHESIS,        BibliographyDataType::PHDTHESIS },
-    { XML_PROCEEDINGS,      BibliographyDataType::PROCEEDINGS },
-    { XML_TECHREPORT,       BibliographyDataType::TECHREPORT },
-    { XML_UNPUBLISHED,      BibliographyDataType::UNPUBLISHED },
-    { XML_WWW,              BibliographyDataType::WWW },
+    { XML_ARTICLE,			BibliographyDataType::ARTICLE },
+    { XML_BOOK,			    BibliographyDataType::BOOK },
+    { XML_BOOKLET,			BibliographyDataType::BOOKLET },
+    { XML_CONFERENCE,		BibliographyDataType::CONFERENCE },
+    { XML_CUSTOM1,			BibliographyDataType::CUSTOM1 },
+    { XML_CUSTOM2,			BibliographyDataType::CUSTOM2 },
+    { XML_CUSTOM3,			BibliographyDataType::CUSTOM3 },
+    { XML_CUSTOM4,			BibliographyDataType::CUSTOM4 },
+    { XML_CUSTOM5,			BibliographyDataType::CUSTOM5 },
+    { XML_EMAIL,			BibliographyDataType::EMAIL },
+    { XML_INBOOK,			BibliographyDataType::INBOOK },
+    { XML_INCOLLECTION,	    BibliographyDataType::INCOLLECTION },
+    { XML_INPROCEEDINGS,	BibliographyDataType::INPROCEEDINGS },
+    { XML_JOURNAL,			BibliographyDataType::JOURNAL },
+    { XML_MANUAL,			BibliographyDataType::MANUAL },
+    { XML_MASTERSTHESIS,	BibliographyDataType::MASTERSTHESIS },
+    { XML_MISC,			    BibliographyDataType::MISC },
+    { XML_PHDTHESIS,		BibliographyDataType::PHDTHESIS },
+    { XML_PROCEEDINGS,		BibliographyDataType::PROCEEDINGS },
+    { XML_TECHREPORT,		BibliographyDataType::TECHREPORT },
+    { XML_UNPUBLISHED,		BibliographyDataType::UNPUBLISHED },
+    { XML_WWW,				BibliographyDataType::WWW },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -2893,7 +2893,7 @@ sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
 
 
 // for XDependentTextFields, get PropertySet of FieldMaster
-Reference<XPropertySet> XMLTextFieldExport::GetMasterPropertySet(
+Reference<XPropertySet>	XMLTextFieldExport::GetMasterPropertySet(
     const Reference<XTextField> & rTextField)
 {
     // name, value => get Property set of TextFieldMaster
@@ -2964,7 +2964,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
 }
 
 
-/// element name for author fields
+/// element name for author	fields
 enum XMLTokenEnum XMLTextFieldExport::MapAuthorFieldName(
     const Reference<XPropertySet> & xPropSet)
 {

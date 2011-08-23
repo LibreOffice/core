@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/filtercache.hxx>
@@ -45,7 +45,7 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -59,23 +59,23 @@
 #include <com/sun/star/util/XFlushable.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -85,7 +85,7 @@ namespace framework{
                 a given URL or handlername. (use service TypeDetection to do that)
                 With a detected type name you can search a registered handler and create it with these factory.
 
-    @implements XInterface
+    @implements	XInterface
                 XTypeProvider
                 XServiceInfo
                 XMultiServiceFactory
@@ -98,43 +98,43 @@ namespace framework{
     @base       ThreadHelpBase
                 OWeakObject
 
-    @devstatus  ready to use
-    @threadsafe yes
+    @devstatus	ready to use
+    @threadsafe	yes
 *//*-*************************************************************************************************************/
 
 class ContentHandlerFactory :   // interfaces
-                        public  css::lang::XTypeProvider            ,
-                        public  css::lang::XServiceInfo             ,
-                        public  css::lang::XMultiServiceFactory     ,
-                        public  css::container::XNameContainer      ,       // => XNameReplace => XNameAccess => XElementAccess
-                        public  css::util::XFlushable               ,
+                        public	css::lang::XTypeProvider			,
+                        public	css::lang::XServiceInfo				,
+                        public	css::lang::XMultiServiceFactory		,
+                        public	css::container::XNameContainer		,		// => XNameReplace => XNameAccess => XElementAccess
+                        public	css::util::XFlushable				,
                         // base classes
                         // Order is neccessary for right initialization of it!
                         private ThreadHelpBase                      ,
                         private TransactionBase                     ,
-                        public  ::cppu::OWeakObject
+                        public	::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
                  ContentHandlerFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~ContentHandlerFactory(                                                                        );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider, XServiceInfo
+        //	XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------------------------------------------------------------------------
-        //  XMultiServiceFactory
+        //	XMultiServiceFactory
         //---------------------------------------------------------------------------------------------------------
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance             ( const ::rtl::OUString&                        sTypeName   ) throw( css::uno::Exception        ,
                                                                                                                                                                      css::uno::RuntimeException );
@@ -143,7 +143,7 @@ class ContentHandlerFactory :   // interfaces
         virtual css::uno::Sequence< ::rtl::OUString >       SAL_CALL getAvailableServiceNames   (                                                           ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XNameContainer
+        //	XNameContainer
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL insertByName( const ::rtl::OUString&  sHandlerName        ,
                                             const css::uno::Any&    aHandlerProperties  ) throw( css::lang::IllegalArgumentException     ,
@@ -155,7 +155,7 @@ class ContentHandlerFactory :   // interfaces
                                                                                                  css::uno::RuntimeException              );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XNameReplace
+        //	XNameReplace
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL replaceByName( const ::rtl::OUString& sHandlerName       ,
                                              const css::uno::Any&   aHandlerProperties ) throw( css::lang::IllegalArgumentException    ,
@@ -164,7 +164,7 @@ class ContentHandlerFactory :   // interfaces
                                                                                                 css::uno::RuntimeException             );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XNameAccess
+        //	XNameAccess
         //---------------------------------------------------------------------------------------------------------
         virtual css::uno::Any                         SAL_CALL getByName      ( const ::rtl::OUString& sName ) throw( css::container::NoSuchElementException ,
                                                                                                                       css::lang::WrappedTargetException      ,
@@ -173,41 +173,41 @@ class ContentHandlerFactory :   // interfaces
         virtual sal_Bool                              SAL_CALL hasByName      ( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException             );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XElementAccess
+        //	XElementAccess
         //---------------------------------------------------------------------------------------------------------
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
         virtual sal_Bool       SAL_CALL hasElements   () throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XFlushable
+        //	XFlushable
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL flush              (                                                                   ) throw ( css::uno::RuntimeException );
         virtual void SAL_CALL addFlushListener   ( const css::uno::Reference< css::util::XFlushListener >& xListener ) throw ( css::uno::RuntimeException );
         virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& xListener ) throw ( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
+    //	protected methods
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
     //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
+    //	debug methods
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
+            @short		debug-method to check incoming parameter of some other mehods of this class
+            @descr		The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
 
-            @seealso    ASSERTs in implementation!
+            @seealso	ASSERTs in implementation!
 
-            @param      references to checking variables
-            @return     sal_False ,on invalid parameter
-            @return     sal_True  ,otherwise
+            @param		references to checking variables
+            @return		sal_False ,on invalid parameter
+            @return		sal_True  ,otherwise
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
     #ifdef ENABLE_ASSERTIONS
@@ -215,28 +215,28 @@ class ContentHandlerFactory :   // interfaces
     private:
 
         static sal_Bool implcp_ContentHandlerFactory        (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory            );
-        static sal_Bool implcp_createInstanceWithArguments  (   const   ::rtl::OUString&                                        sTypeName           ,
-                                                                  const css::uno::Sequence< css::uno::Any >&                    lArguments          );
-        static sal_Bool implcp_getByName                    (   const   ::rtl::OUString&                                        sName               );
-        static sal_Bool implcp_hasByName                    (   const   ::rtl::OUString&                                        sName               );
+        static sal_Bool implcp_createInstanceWithArguments	(	const	::rtl::OUString&										sTypeName			,
+                                                                  const	css::uno::Sequence< css::uno::Any >&					lArguments			);
+        static sal_Bool implcp_getByName					(	const	::rtl::OUString&										sName				);
+        static sal_Bool implcp_hasByName					(	const	::rtl::OUString&										sName				);
         static sal_Bool implcp_removeByName                 (   const   ::rtl::OUString&                                        sHandlerName        );
 
-    #endif  //  #ifdef ENABLE_ASSERTIONS
+    #endif	//	#ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private variables
-    //  (should be private everyway!)
+    //	private variables
+    //	(should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory              ;
+        css::uno::Reference< css::lang::XMultiServiceFactory >		m_xFactory				;
         FilterCache                                                 m_aCache                ;
-//      ::cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer    ;
+//		::cppu::OMultiTypeInterfaceContainerHelper					m_aListenerContainer	;
 
 };      //  class ContentHandlerFactory
 
-}       //  namespace framework
+}		//	namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
 

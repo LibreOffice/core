@@ -1,23 +1,23 @@
 <!--
 
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-
+  
   Copyright 2000, 2010 Oracle and/or its affiliates.
-
+ 
   OpenOffice.org - a multi-platform office productivity suite
-
+ 
   This file is part of OpenOffice.org.
-
+ 
   OpenOffice.org is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License version 3
   only, as published by the Free Software Foundation.
-
+ 
   OpenOffice.org is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU Lesser General Public License version 3 for more details
   (a copy is included in the LICENSE file that accompanied this code).
-
+ 
   You should have received a copy of the GNU Lesser General Public License
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
@@ -33,12 +33,12 @@
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
-    <pathelement location="${solar.jar}/unoil.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/> 
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${out}/class/ScriptFramework.jar"/>
-  </path>
+  </path> 
 
   <!-- ===================== HelloWorld example =========================== -->
   <target name="HelloWorld">
@@ -53,7 +53,7 @@
     <copy file="HelloWorld/parcel-descriptor.xml" todir="${outdir}/HelloWorld"/>
 
     <jar jarfile="${outdir}/HelloWorld/HelloWorld.jar"
-         basedir="${outdir}/HelloWorld"
+         basedir="${outdir}/HelloWorld" 
          includes="**/*.class"
          excludes="${outdir}/HelloWorld/HelloWorld.jar">
     </jar>
@@ -75,7 +75,7 @@
     <copy file="Highlight/parcel-descriptor.xml" todir="${outdir}/Highlight"/>
 
     <jar jarfile="${outdir}/Highlight/Highlight.jar"
-         basedir="${outdir}/Highlight"
+         basedir="${outdir}/Highlight" 
          includes="**/*.class"
          excludes="${outdir}/Highlight/Highlight.jar">
     </jar>
@@ -97,7 +97,7 @@
     <copy file="MemoryUsage/parcel-descriptor.xml" todir="${outdir}/MemoryUsage"/>
 
     <jar jarfile="${outdir}/MemoryUsage/MemoryUsage.jar"
-         basedir="${outdir}/MemoryUsage"
+         basedir="${outdir}/MemoryUsage" 
          includes="**/*.class"
          excludes="${outdir}/MemoryUsage/MemoryUsage.jar">
     </jar>
@@ -135,5 +135,5 @@
 
   <!-- ========================= All In One Build ======================= -->
   <target name="all" depends="HelloWorld,Highlight,MemoryUsage"/>
-
+ 
 </project>

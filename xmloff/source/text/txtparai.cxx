@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -232,7 +232,7 @@ sal_Bool XMLStartReferenceContext_Impl::FindName(
     {
         OUString sLocalName;
         const sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                               &sLocalName );
 
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
@@ -302,12 +302,12 @@ class XMLImpSpanContext_Impl : public SvXMLImportContext
 {
     const OUString sTextFrame;
 
-    XMLHints_Impl&  rHints;
-    XMLStyleHint_Impl   *pHint;
+    XMLHints_Impl&	rHints;
+    XMLStyleHint_Impl	*pHint;
 
-    sal_Bool&       rIgnoreLeadingSpace;
+    sal_Bool&		rIgnoreLeadingSpace;
 
-    sal_uInt8               nStarFontsConvFlags;
+    sal_uInt8				nStarFontsConvFlags;
 
 public:
 
@@ -320,7 +320,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
             sal_Bool& rIgnLeadSpace
-    ,sal_uInt8              nSFConvFlags
+    ,sal_uInt8				nSFConvFlags
                           );
 
     virtual ~XMLImpSpanContext_Impl();
@@ -331,7 +331,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nToken, XMLHints_Impl& rHnts,
             sal_Bool& rIgnLeadSpace
-    ,sal_uInt8              nStarFontsConvFlags = 0
+    ,sal_uInt8				nStarFontsConvFlags = 0
              );
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -343,10 +343,10 @@ public:
 
 class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
 {
-    XMLHints_Impl&  rHints;
-    XMLHyperlinkHint_Impl   *pHint;
+    XMLHints_Impl&	rHints;
+    XMLHyperlinkHint_Impl	*pHint;
 
-    sal_Bool&       rIgnoreLeadingSpace;
+    sal_Bool&		rIgnoreLeadingSpace;
 
 public:
 
@@ -473,9 +473,9 @@ void XMLImpHyperlinkContext_Impl::Characters( const OUString& rChars )
 
 class XMLImpRubyBaseContext_Impl : public SvXMLImportContext
 {
-    XMLHints_Impl&  rHints;
+    XMLHints_Impl&	rHints;
 
-    sal_Bool&       rIgnoreLeadingSpace;
+    sal_Bool&		rIgnoreLeadingSpace;
 
 public:
 
@@ -1574,14 +1574,14 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
         const Reference< xml::sax::XAttributeList > & xAttrList,
         XMLHints_Impl& rHnts,
         sal_Bool& rIgnLeadSpace
-    ,sal_uInt8              nSFConvFlags
+    ,sal_uInt8				nSFConvFlags
                                               )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
-,   sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame"))
-,   rHints( rHnts )
-,   pHint( 0  )
-,   rIgnoreLeadingSpace( rIgnLeadSpace )
-,   nStarFontsConvFlags( nSFConvFlags & (CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH) )
+:	SvXMLImportContext( rImport, nPrfx, rLName )
+,	sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame"))
+,	rHints( rHnts )
+,	pHint( 0  )
+,	rIgnoreLeadingSpace( rIgnLeadSpace )
+,	nStarFontsConvFlags( nSFConvFlags & (CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH) )
 {
     OUString aStyleName;
 
@@ -1621,7 +1621,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         sal_uInt16 nToken,
         XMLHints_Impl& rHints,
         sal_Bool& rIgnoreLeadingSpace
-    ,sal_uInt8              nStarFontsConvFlags
+    ,sal_uInt8				nStarFontsConvFlags
      )
 {
     SvXMLImportContext *pContext = 0;
@@ -2204,7 +2204,7 @@ XMLParaContext::~XMLParaContext()
                 {
                     Reference<beans::XPropertySet> xMark(
                         ((const XMLIndexMarkHint_Impl *)pHint)->GetMark());
-                    Reference<XTextContent> xContent(xMark, UNO_QUERY);
+                    Reference<XTextContent> xContent(xMark,	UNO_QUERY);
                     Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
                     xTxtImport->GetText()->insertTextContent(
                         xRange, xContent, sal_True );

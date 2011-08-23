@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,9 +82,9 @@ struct SfxShell_Impl: public SfxBroadcaster
     SfxViewFrame*               pFrame;     // Frame, falls <UI-aktiv>
     SfxRepeatTarget*            pRepeatTarget;
 //    SbxObjectRef                xParent;
-    BOOL                        bInAppBASIC;
+    BOOL						bInAppBASIC;
     BOOL                        bActive;
-    ULONG                       nDisableFlags;
+    ULONG						nDisableFlags;
     ULONG                       nHelpId;
     svtools::AsynchronLink*     pExecuter;
     svtools::AsynchronLink*     pUpdater;
@@ -140,7 +140,7 @@ SfxShell::SfxShell()
     Daher ist das Anlegen einer SfxShell Instanz sehr billig.
 */
 
-:   pImp(0),
+:	pImp(0),
     pPool(0),
     pUndoMgr(0)
 {
@@ -166,7 +166,7 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     Daher ist das Anlegen einer SfxShell Instanz sehr billig.
 */
 
-:   pImp(0),
+:	pImp(0),
     pPool(0),
     pUndoMgr(0)
 {
@@ -469,7 +469,7 @@ SfxInterface* SfxShell::GetInterface() const
 
 SfxBroadcaster* SfxShell::GetBroadcaster()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Liefert einen SfxBroadcaster f"ur diese SfxShell-Instanz bis die
     Klasse SfxShell von SfxBroadcaster abgeleitet ist.
@@ -897,7 +897,7 @@ const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, BOOL bAsync )
 
 const SfxPoolItem* SfxShell::ExecuteSlot
 (
-    SfxRequest &rReq,           // der weiterzuleitende <SfxRequest>
+    SfxRequest &rReq,			// der weiterzuleitende <SfxRequest>
     const SfxInterface* pIF     // default = 0 bedeutet virtuell besorgen
 )
 
@@ -1278,7 +1278,7 @@ ULONG SfxShell::GetDisableFlags() const
     return pImp->nDisableFlags;
 }
 
-SfxItemSet* SfxShell::CreateItemSet( USHORT )
+SfxItemSet*	SfxShell::CreateItemSet( USHORT )
 {
     return NULL;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@ namespace connectivity
                                                   > ODriver_BASE;
         class ODriver : public ODriver_BASE
         {
-            ::osl::Mutex                            m_aMutex;
+            ::osl::Mutex							m_aMutex;
 
-            connectivity::OWeakRefArray             m_xConnections; //  vector containing a list
+            connectivity::OWeakRefArray				m_xConnections;	//	vector containing a list
                                                         //  of all the Connection objects
                                                         //  for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;

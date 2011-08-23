@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,49 +64,49 @@ namespace {
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
                 case DataType::LONGVARCHAR:
-                    bIsCompatible = (DataType::CHAR         == _eType2)
-                                ||  (DataType::VARCHAR      == _eType2)
-                                ||  (DataType::DECIMAL      == _eType2)
-                                ||  (DataType::NUMERIC      == _eType2)
-                                ||  (DataType::LONGVARCHAR  == _eType2);
+                    bIsCompatible = (DataType::CHAR			== _eType2)
+                                ||	(DataType::VARCHAR		== _eType2)
+                                ||	(DataType::DECIMAL		== _eType2)
+                                ||	(DataType::NUMERIC		== _eType2)
+                                ||	(DataType::LONGVARCHAR	== _eType2);
                     break;
 
                 case DataType::DOUBLE:
                 case DataType::REAL:
-                    bIsCompatible = (DataType::DOUBLE   == _eType2)
-                                ||  (DataType::REAL     == _eType2);
+                    bIsCompatible = (DataType::DOUBLE	== _eType2)
+                                ||	(DataType::REAL		== _eType2);
                     break;
 
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
-                    bIsCompatible = (DataType::BINARY           == _eType2)
-                                ||  (DataType::VARBINARY        == _eType2)
-                                ||  (DataType::LONGVARBINARY    == _eType2);
+                    bIsCompatible = (DataType::BINARY			== _eType2)
+                                ||	(DataType::VARBINARY		== _eType2)
+                                ||	(DataType::LONGVARBINARY	== _eType2);
                     break;
 
                 case DataType::INTEGER:
-                    bIsCompatible = (DataType::SMALLINT == _eType2)
-                                ||  (DataType::TINYINT  == _eType2)
-                                ||  (DataType::BIT      == _eType2)
-                                ||  (DataType::BOOLEAN  == _eType2);
+                    bIsCompatible = (DataType::SMALLINT	== _eType2)
+                                ||	(DataType::TINYINT	== _eType2)
+                                ||	(DataType::BIT		== _eType2)
+                                ||	(DataType::BOOLEAN	== _eType2);
                     break;
                 case DataType::SMALLINT:
-                    bIsCompatible = (DataType::TINYINT  == _eType2)
-                                ||  (DataType::BIT      == _eType2)
-                                ||  (DataType::BOOLEAN  == _eType2);
+                    bIsCompatible = (DataType::TINYINT	== _eType2)
+                                ||	(DataType::BIT		== _eType2)
+                                ||	(DataType::BOOLEAN	== _eType2);
                     break;
                 case DataType::TINYINT:
-                    bIsCompatible = (DataType::BIT      == _eType2)
-                                ||  (DataType::BOOLEAN  == _eType2);
+                    bIsCompatible = (DataType::BIT		== _eType2)
+                                ||	(DataType::BOOLEAN	== _eType2);
                     break;
 
                 case DataType::BLOB:
                 case DataType::CLOB:
                 case DataType::OBJECT:
-                    bIsCompatible = (DataType::BLOB     == _eType2)
-                                ||  (DataType::CLOB     == _eType2)
-                                ||  (DataType::OBJECT   == _eType2);
+                    bIsCompatible = (DataType::BLOB		== _eType2)
+                                ||	(DataType::CLOB		== _eType2)
+                                ||	(DataType::OBJECT	== _eType2);
                     break;
 
                 default:
@@ -127,8 +127,8 @@ namespace tracing
 {
     struct AllocationType
     {
-        const sal_Char* pName;
-        sal_Int32       nAllocatedUnits;
+        const sal_Char*	pName;
+        sal_Int32		nAllocatedUnits;
 
         AllocationType( ) : pName( NULL ), nAllocatedUnits( 0 ) { }
     };
@@ -137,23 +137,23 @@ namespace tracing
     class AllocationTracer
     {
     public:
-        typedef ::std::vector< AllocationType > AllocationState;
-        static AllocationState                  s_aAllocated;
-        static ::osl::Mutex                     s_aMutex;
+        typedef ::std::vector< AllocationType >	AllocationState;
+        static AllocationState					s_aAllocated;
+        static ::osl::Mutex						s_aMutex;
 
     public:
         static void registerUnit( const sal_Char* _pName );
         static void revokeUnit( const sal_Char* _pName );
 
     private:
-        static AllocationState::iterator    getLocation( const sal_Char* _pName );
+        static AllocationState::iterator	getLocation( const sal_Char* _pName );
     };
 
     // =============================================================================
-    AllocationTracer::AllocationState::iterator AllocationTracer::getLocation( const sal_Char* _pName )
+    AllocationTracer::AllocationState::iterator	AllocationTracer::getLocation( const sal_Char* _pName )
     {
         AllocationState::iterator aLookFor = s_aAllocated.begin();
-        for (   ;
+        for	(	;
                 aLookFor != s_aAllocated.end();
                 ++aLookFor
             )
@@ -165,13 +165,13 @@ namespace tracing
         // not found
         s_aAllocated.push_back( AllocationType() );
         aLookFor = s_aAllocated.end(); --aLookFor;
-        aLookFor->pName = _pName;   // note that this assumes that _pName is a constant string ....
+        aLookFor->pName = _pName;	// note that this assumes that _pName is a constant string ....
         return aLookFor;
     }
 
     // =============================================================================
-    AllocationTracer::AllocationState           AllocationTracer::s_aAllocated;
-    ::osl::Mutex                                AllocationTracer::s_aMutex;
+    AllocationTracer::AllocationState			AllocationTracer::s_aAllocated;
+    ::osl::Mutex								AllocationTracer::s_aMutex;
 
     // =============================================================================
     void AllocationTracer::registerUnit( const sal_Char* _pName )
@@ -191,8 +191,8 @@ namespace tracing
         --aPos->nAllocatedUnits;
     }
 
-#define TRACE_ALLOC( type ) tracing::AllocationTracer::registerUnit( #type );
-#define TRACE_FREE( type )  tracing::AllocationTracer::revokeUnit( #type );
+#define TRACE_ALLOC( type )	tracing::AllocationTracer::registerUnit( #type );
+#define TRACE_FREE( type )	tracing::AllocationTracer::revokeUnit( #type );
 }
 #else
 #define TRACE_ALLOC( type )
@@ -373,9 +373,9 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     if ( m_eTypeKind != _rRH.m_eTypeKind || (_rRH.m_bNull && !m_bNull) || m_bSigned != _rRH.m_bSigned)
         free();
 
-    m_bBound    = _rRH.m_bBound;
-    m_eTypeKind = _rRH.m_eTypeKind;
-    m_bSigned   = _rRH.m_bSigned;
+    m_bBound	= _rRH.m_bBound;
+    m_eTypeKind	= _rRH.m_eTypeKind;
+    m_bSigned	= _rRH.m_bSigned;
 
     if(m_bNull && !_rRH.m_bNull)
     {
@@ -392,7 +392,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
             case DataType::BIGINT:
                 if ( _rRH.m_bSigned )
                 {
-                    m_aValue.m_pValue   = new sal_Int64(*(sal_Int64*)_rRH.m_aValue.m_pValue);
+                    m_aValue.m_pValue	= new sal_Int64(*(sal_Int64*)_rRH.m_aValue.m_pValue);
                     TRACE_ALLOC( sal_Int64 )
                 }
                 else
@@ -402,59 +402,59 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 }
                 break;
             case DataType::FLOAT:
-                m_aValue.m_pValue   = new float(*(float*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue	= new float(*(float*)_rRH.m_aValue.m_pValue);
                 TRACE_ALLOC( float )
                 break;
             case DataType::DOUBLE:
             case DataType::REAL:
-                m_aValue.m_pValue   = new double(*(double*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue	= new double(*(double*)_rRH.m_aValue.m_pValue);
                 TRACE_ALLOC( double )
                 break;
             case DataType::DATE:
-                m_aValue.m_pValue   = new Date(*(Date*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue	= new Date(*(Date*)_rRH.m_aValue.m_pValue);
                 TRACE_ALLOC( Date )
                 break;
             case DataType::TIME:
-                m_aValue.m_pValue   = new Time(*(Time*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue	= new Time(*(Time*)_rRH.m_aValue.m_pValue);
                 TRACE_ALLOC( Time )
                 break;
             case DataType::TIMESTAMP:
-                m_aValue.m_pValue   = new DateTime(*(DateTime*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue	= new DateTime(*(DateTime*)_rRH.m_aValue.m_pValue);
                 TRACE_ALLOC( DateTime )
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-                m_aValue.m_pValue   = new Sequence<sal_Int8>(*(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue	= new Sequence<sal_Int8>(*(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue);
                 TRACE_ALLOC( Sequence_sal_Int8 )
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
+                m_aValue.m_bBool	= _rRH.m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
                 if ( _rRH.m_bSigned )
-                    m_aValue.m_nInt8    = _rRH.m_aValue.m_nInt8;
+                    m_aValue.m_nInt8	= _rRH.m_aValue.m_nInt8;
                 else
-                    m_aValue.m_nInt16   = _rRH.m_aValue.m_nInt16;
+                    m_aValue.m_nInt16	= _rRH.m_aValue.m_nInt16;
                 break;
             case DataType::SMALLINT:
                 if ( _rRH.m_bSigned )
-                    m_aValue.m_nInt16   = _rRH.m_aValue.m_nInt16;
+                    m_aValue.m_nInt16	= _rRH.m_aValue.m_nInt16;
                 else
-                    m_aValue.m_nInt32   = _rRH.m_aValue.m_nInt32;
+                    m_aValue.m_nInt32	= _rRH.m_aValue.m_nInt32;
                 break;
             case DataType::INTEGER:
                 if ( _rRH.m_bSigned )
-                    m_aValue.m_nInt32   = _rRH.m_aValue.m_nInt32;
+                    m_aValue.m_nInt32	= _rRH.m_aValue.m_nInt32;
                 else
                 {
-                    m_aValue.m_pValue   = new sal_Int64(*(sal_Int64*)_rRH.m_aValue.m_pValue);
+                    m_aValue.m_pValue	= new sal_Int64(*(sal_Int64*)_rRH.m_aValue.m_pValue);
                     TRACE_ALLOC( sal_Int64 )
                 }
                 break;
             default:
-                m_aValue.m_pValue   = new Any(*(Any*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue	= new Any(*(Any*)_rRH.m_aValue.m_pValue);
                 TRACE_ALLOC( Any )
         }
     }
@@ -498,34 +498,34 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
+                m_aValue.m_bBool	= _rRH.m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
                 if ( _rRH.m_bSigned )
-                    m_aValue.m_nInt8    = _rRH.m_aValue.m_nInt8;
+                    m_aValue.m_nInt8	= _rRH.m_aValue.m_nInt8;
                 else
-                    m_aValue.m_nInt16   = _rRH.m_aValue.m_nInt16;
+                    m_aValue.m_nInt16	= _rRH.m_aValue.m_nInt16;
                 break;
             case DataType::SMALLINT:
                 if ( _rRH.m_bSigned )
-                    m_aValue.m_nInt16   = _rRH.m_aValue.m_nInt16;
+                    m_aValue.m_nInt16	= _rRH.m_aValue.m_nInt16;
                 else
-                    m_aValue.m_nInt32   = _rRH.m_aValue.m_nInt32;
+                    m_aValue.m_nInt32	= _rRH.m_aValue.m_nInt32;
                 break;
             case DataType::INTEGER:
                 if ( _rRH.m_bSigned )
-                    m_aValue.m_nInt32   = _rRH.m_aValue.m_nInt32;
+                    m_aValue.m_nInt32	= _rRH.m_aValue.m_nInt32;
                 else
                     *static_cast<sal_Int64*>(m_aValue.m_pValue) = *(sal_Int64*)_rRH.m_aValue.m_pValue;
                 break;
             default:
-                (*(Any*)m_aValue.m_pValue)  = (*(Any*)_rRH.m_aValue.m_pValue);
+                (*(Any*)m_aValue.m_pValue)	= (*(Any*)_rRH.m_aValue.m_pValue);
         }
     }
 
-    m_bNull     = _rRH.m_bNull;
+    m_bNull		= _rRH.m_bNull;
     // OJ: BUGID: 96277
-    m_eTypeKind = _rRH.m_eTypeKind;
+    m_eTypeKind	= _rRH.m_eTypeKind;
 
     return *this;
 }
@@ -1009,8 +1009,8 @@ Any ORowSetValue::makeAny() const
                 {
                     ::rtl::OUStringBuffer sVal = ::rtl::OUString::createFromAscii("0x");
                     Sequence<sal_Int8> aSeq(getSequence());
-                    const sal_Int8* pBegin  = aSeq.getConstArray();
-                    const sal_Int8* pEnd    = pBegin + aSeq.getLength();
+                    const sal_Int8* pBegin	= aSeq.getConstArray();
+                    const sal_Int8* pEnd	= pBegin + aSeq.getLength();
                     for(;pBegin != pEnd;++pBegin)
                         sVal.append((sal_Int32)*pBegin,16);
                     aRet = sVal.makeStringAndClear();
@@ -1062,7 +1062,7 @@ Any ORowSetValue::makeAny() const
     return aRet;
 }
 // -------------------------------------------------------------------------
-sal_Bool ORowSetValue::getBool()    const
+sal_Bool ORowSetValue::getBool()	const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getBool" );
     sal_Bool bRet = sal_False;
@@ -1091,7 +1091,7 @@ sal_Bool ORowSetValue::getBool()    const
                 // run through
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-
+            
                 bRet = ::rtl::OUString(m_aValue.m_pString).toInt32() != 0;
                 break;
             case DataType::BIGINT:
@@ -1139,7 +1139,7 @@ sal_Bool ORowSetValue::getBool()    const
     return bRet;
 }
 // -------------------------------------------------------------------------
-sal_Int8 ORowSetValue::getInt8()    const
+sal_Int8 ORowSetValue::getInt8()	const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getInt8" );
 
@@ -1212,7 +1212,7 @@ sal_Int8 ORowSetValue::getInt8()    const
     return nRet;
 }
 // -------------------------------------------------------------------------
-sal_Int16 ORowSetValue::getInt16()  const
+sal_Int16 ORowSetValue::getInt16()	const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getInt16" );
 
@@ -1285,7 +1285,7 @@ sal_Int16 ORowSetValue::getInt16()  const
     return nRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 ORowSetValue::getInt32()  const
+sal_Int32 ORowSetValue::getInt32()	const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getInt32" );
     sal_Int32 nRet = 0;
@@ -1358,7 +1358,7 @@ sal_Int32 ORowSetValue::getInt32()  const
     return nRet;
 }
 // -------------------------------------------------------------------------
-sal_Int64 ORowSetValue::getLong()   const
+sal_Int64 ORowSetValue::getLong()	const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getLong" );
     sal_Int64 nRet = 0;
@@ -1431,7 +1431,7 @@ sal_Int64 ORowSetValue::getLong()   const
     return nRet;
 }
 // -------------------------------------------------------------------------
-float ORowSetValue::getFloat()  const
+float ORowSetValue::getFloat()	const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getFloat" );
     float nRet = 0;
@@ -1508,7 +1508,7 @@ float ORowSetValue::getFloat()  const
     return nRet;
 }
 // -------------------------------------------------------------------------
-double ORowSetValue::getDouble()    const
+double ORowSetValue::getDouble()	const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getDouble" );
 
@@ -1681,7 +1681,7 @@ void ORowSetValue::setFromDouble(const double& _rVal,sal_Int32 _nDatatype)
     m_eTypeKind = _nDatatype;
 }
 // -----------------------------------------------------------------------------
-Sequence<sal_Int8>  ORowSetValue::getSequence() const
+Sequence<sal_Int8>	ORowSetValue::getSequence() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getSequence" );
     Sequence<sal_Int8> aSeq;
@@ -1708,13 +1708,13 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                     }
                     if(xStream.is())
                     {
-                        const sal_uInt32    nBytesToRead = 65535;
-                        sal_uInt32          nRead;
+                        const sal_uInt32	nBytesToRead = 65535;
+                        sal_uInt32			nRead;
 
                         do
                         {
                             ::com::sun::star::uno::Sequence< sal_Int8 > aReadSeq;
-
+                            
                             nRead = xStream->readSomeBytes( aReadSeq, nBytesToRead );
 
                             if( nRead )
@@ -1754,7 +1754,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::util::Date ORowSetValue::getDate()        const
+::com::sun::star::util::Date ORowSetValue::getDate()		const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getDate" );
     ::com::sun::star::util::Date aValue;
@@ -1783,9 +1783,9 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::TIMESTAMP:
                 {
                     ::com::sun::star::util::DateTime* pDateTime = static_cast< ::com::sun::star::util::DateTime*>(m_aValue.m_pValue);
-                    aValue.Day      = pDateTime->Day;
-                    aValue.Month    = pDateTime->Month;
-                    aValue.Year     = pDateTime->Year;
+                    aValue.Day		= pDateTime->Day;
+                    aValue.Month	= pDateTime->Month;
+                    aValue.Year		= pDateTime->Year;
                 }
                 break;
             default:
@@ -1799,7 +1799,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
     return aValue;
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::util::Time ORowSetValue::getTime()        const
+::com::sun::star::util::Time ORowSetValue::getTime()		const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getTime" );
     ::com::sun::star::util::Time aValue;
@@ -1824,10 +1824,10 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::TIMESTAMP:
                 {
                     ::com::sun::star::util::DateTime* pDateTime = static_cast< ::com::sun::star::util::DateTime*>(m_aValue.m_pValue);
-                    aValue.HundredthSeconds = pDateTime->HundredthSeconds;
-                    aValue.Seconds          = pDateTime->Seconds;
-                    aValue.Minutes          = pDateTime->Minutes;
-                    aValue.Hours            = pDateTime->Hours;
+                    aValue.HundredthSeconds	= pDateTime->HundredthSeconds;
+                    aValue.Seconds			= pDateTime->Seconds;
+                    aValue.Minutes			= pDateTime->Minutes;
+                    aValue.Hours			= pDateTime->Hours;
                 }
                 break;
             case DataType::TIME:
@@ -1844,7 +1844,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
     return aValue;
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::util::DateTime ORowSetValue::getDateTime()    const
+::com::sun::star::util::DateTime ORowSetValue::getDateTime()	const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getDateTime" );
     ::com::sun::star::util::DateTime aValue;
@@ -1869,18 +1869,18 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::DATE:
                 {
                     ::com::sun::star::util::Date* pDate = static_cast< ::com::sun::star::util::Date*>(m_aValue.m_pValue);
-                    aValue.Day      = pDate->Day;
-                    aValue.Month    = pDate->Month;
-                    aValue.Year     = pDate->Year;
+                    aValue.Day		= pDate->Day;
+                    aValue.Month	= pDate->Month;
+                    aValue.Year		= pDate->Year;
                 }
                 break;
             case DataType::TIME:
                 {
                     ::com::sun::star::util::Time* pTime = static_cast< ::com::sun::star::util::Time*>(m_aValue.m_pValue);
-                    aValue.HundredthSeconds = pTime->HundredthSeconds;
-                    aValue.Seconds          = pTime->Seconds;
-                    aValue.Minutes          = pTime->Minutes;
-                    aValue.Hours            = pTime->Hours;
+                    aValue.HundredthSeconds	= pTime->HundredthSeconds;
+                    aValue.Seconds			= pTime->Seconds;
+                    aValue.Minutes			= pTime->Minutes;
+                    aValue.Hours			= pTime->Hours;
                 }
                 break;
             case DataType::TIMESTAMP:
@@ -1982,9 +1982,9 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const = 0;
         virtual Reference< XInputStream >   getBinaryStream() const = 0;
         virtual Reference< XInputStream >   getCharacterStream() const = 0;
-        virtual Reference< XBlob >          getBlob() const = 0;
-        virtual Reference< XClob >          getClob() const = 0;
-        virtual Any                         getObject() const = 0;
+        virtual Reference< XBlob >   		getBlob() const = 0;
+        virtual Reference< XClob >   		getClob() const = 0;
+        virtual Any					   		getObject() const = 0;
         virtual sal_Bool                    wasNull() const = 0;
 
         virtual ~IValueSource() { }
@@ -2014,9 +2014,9 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const            { return m_xRow->getBytes( m_nPos ); };
         virtual Reference< XInputStream >   getBinaryStream() const     { return m_xRow->getBinaryStream( m_nPos ); };
         virtual Reference< XInputStream >   getCharacterStream() const  { return m_xRow->getCharacterStream( m_nPos ); };
-        virtual Reference< XBlob >          getBlob() const             { return m_xRow->getBlob( m_nPos ); };
-        virtual Reference< XClob >          getClob() const             { return m_xRow->getClob( m_nPos ); };
-        virtual Any                         getObject() const           { return m_xRow->getObject( m_nPos ,NULL); };
+        virtual Reference< XBlob >   		getBlob() const  			{ return m_xRow->getBlob( m_nPos ); };
+        virtual Reference< XClob >   		getClob() const  			{ return m_xRow->getClob( m_nPos ); };
+        virtual Any					   		getObject() const 			{ return m_xRow->getObject( m_nPos ,NULL); };
         virtual sal_Bool                    wasNull() const             { return m_xRow->wasNull( ); };
 
     private:
@@ -2047,8 +2047,8 @@ namespace detail
         virtual Sequence< sal_Int8 >        getBytes() const            { return m_xColumn->getBytes(); };
         virtual Reference< XInputStream >   getBinaryStream() const     { return m_xColumn->getBinaryStream(); };
         virtual Reference< XInputStream >   getCharacterStream() const  { return m_xColumn->getCharacterStream(); };
-        virtual Reference< XBlob >          getBlob() const             { return m_xColumn->getBlob(); };
-        virtual Reference< XClob >          getClob() const             { return m_xColumn->getClob(); };
+        virtual Reference< XBlob >   		getBlob() const				{ return m_xColumn->getBlob(); };
+        virtual Reference< XClob >   		getClob() const 			{ return m_xColumn->getClob(); };
         virtual Any                         getObject() const           { return m_xColumn->getObject( NULL ); };
         virtual sal_Bool                    wasNull() const             { return m_xColumn->wasNull( ); };
 
@@ -2324,7 +2324,7 @@ void ORowSetValue::fill(const Any& _rValue)
                 }
             }
             break;
-
+            
         default:
             OSL_ENSURE(0,"Unknown type");
             break;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace formula
     //==================================================================
     //= ResourceManager
     //==================================================================
-    ::osl::Mutex    ResourceManager::s_aMutex;
-    sal_Int32       ResourceManager::s_nClients = 0;
+    ::osl::Mutex	ResourceManager::s_aMutex;
+    sal_Int32		ResourceManager::s_nClients = 0;
     ResMgr*         ResourceManager::m_pImpl = NULL;
 
     //------------------------------------------------------------------
@@ -97,7 +97,7 @@ namespace formula
             m_pImpl = NULL;
         }
     }
-    ResMgr* ResourceManager::getResManager()
+    ResMgr*	ResourceManager::getResManager()
     {
         ensureImplExists();
         return m_pImpl;

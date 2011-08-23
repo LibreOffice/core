@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( SdXMLGroupShapeContext, SvXMLImportContext );
 
-SdXMLGroupShapeContext::SdXMLGroupShapeContext(
+SdXMLGroupShapeContext::SdXMLGroupShapeContext( 
     SvXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+    sal_Bool bTemporaryShape) 
+:	SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
@@ -68,9 +68,9 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext* pContext = 0L;
-
+    
     // #i68101#
-    if( nPrefix == XML_NAMESPACE_SVG &&
+    if( nPrefix == XML_NAMESPACE_SVG &&	
         (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
         pContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );

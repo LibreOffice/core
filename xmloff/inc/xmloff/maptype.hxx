@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@
 */
 struct XMLPropertyMapEntry
 {
-    const sal_Char* msApiName;      /// Property-Name
+    const sal_Char*	msApiName;		/// Property-Name
     sal_Int32       nApiNameLength; /// length of property name
-    sal_uInt16      mnNameSpace;    /** declares the Namespace in wich this
+    sal_uInt16		mnNameSpace;	/** declares the Namespace in wich this
                                         property exists */
-    enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
-    sal_Int32       mnType;         /** Bit 0..23 : XML-Type of its value
+    enum ::xmloff::token::XMLTokenEnum meXMLName;		/// XML-Name
+    sal_Int32		mnType;			/** Bit 0..23 : XML-Type of its value
                                         Bit 24..31: The flags specifies
                                                     additional rules how
                                                     to im/export the porperty */
-    sal_Int16       mnContextId;    /// User defined id for context filtering
+    sal_Int16		mnContextId;	/// User defined id for context filtering
     SvtSaveOptions::ODFDefaultVersion   mnEarliestODFVersionForExport;// no export when the used ODF version is lower than this
 };
 

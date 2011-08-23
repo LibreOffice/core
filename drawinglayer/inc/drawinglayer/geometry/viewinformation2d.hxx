@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ namespace drawinglayer
         {
         private:
             /// pointer to private implementation class
-            ImpViewInformation2D*                   mpViewInformation2D;
+            ImpViewInformation2D*					mpViewInformation2D;
 
         public:
             /** Constructor: Create a ViewInformation2D
@@ -99,9 +99,9 @@ namespace drawinglayer
                 be preferred and overwrite the given parameter
             */
             ViewInformation2D(
-                const basegfx::B2DHomMatrix& rObjectTransformation,
-                const basegfx::B2DHomMatrix& rViewTransformation,
-                const basegfx::B2DRange& rViewport,
+                const basegfx::B2DHomMatrix& rObjectTransformation, 
+                const basegfx::B2DHomMatrix& rViewTransformation, 
+                const basegfx::B2DRange& rViewport, 
                 const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
                 double fViewTime,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rExtendedParameters);
@@ -109,7 +109,7 @@ namespace drawinglayer
             /** Constructor: Create a ViewInformation2D
 
                 @param rViewParameters
-                A sequence of property values which allows holding any combination of local and various
+                A sequence of property values which allows holding any combination of local and various 
                 other parameters. This constructor is feeded completely with a sequence of PropertyValues
                 which will be parsed to be able to offer the most used ones in a convenient way.
             */
@@ -144,7 +144,7 @@ namespace drawinglayer
             /// On-demand prepared Object to View transformation and it's inerse for convenience
             const basegfx::B2DHomMatrix& getObjectToViewTransformation() const;
             const basegfx::B2DHomMatrix& getInverseObjectToViewTransformation() const;
-
+            
             /// On-demand prepared Viewport in discrete units for convenience
             const basegfx::B2DRange& getDiscreteViewport() const;
 

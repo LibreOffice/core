@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ public class _XContent {
     public XContent oObj = null;
     public LogWriter log = null;
     private ContentListener listener = null;
-
+    
     public boolean _addContentEventListener() {
         listener = new ContentListener();
         oObj.addContentEventListener(listener);
@@ -63,24 +63,24 @@ public class _XContent {
         oObj.removeContentEventListener(listener);
         return true;
     }
-
-
+    
+    
     private class ContentListener implements XContentEventListener {
         private boolean disposed = false;
         private boolean firedEvent = false;
-
+        
         public void reset() {
             disposed = false;
             firedEvent = false;
         }
-
+        
         public void contentEvent(com.sun.star.ucb.ContentEvent contentEvent) {
             firedEvent = true;
         }
-
+        
         public void disposing(com.sun.star.lang.EventObject eventObject) {
             disposed = true;
         }
-
+        
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,11 +108,11 @@ long ScaleMetricValue( long nVal, long nMul, long nDiv )
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(USHORT nWhich, INT32 nIndex)
+|*	  NameOrIndex::NameOrIndex(USHORT nWhich, INT32 nIndex)
 |*
-|*    Beschreibung
-|*    Ersterstellung    14.11.94
-|*    Letzte Aenderung  14.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -124,11 +124,11 @@ NameOrIndex::NameOrIndex(USHORT _nWhich, INT32 nIndex) :
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(USHORT nWhich, const String& rName)
+|*	  NameOrIndex::NameOrIndex(USHORT nWhich, const String& rName)
 |*
-|*    Beschreibung
-|*    Ersterstellung    14.11.94
-|*    Letzte Aenderung  14.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -140,11 +140,11 @@ NameOrIndex::NameOrIndex(USHORT _nWhich, const XubString& rName) :
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(USHORT nWhich, SvStream& rIn)
+|*	  NameOrIndex::NameOrIndex(USHORT nWhich, SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    14.11.94
-|*    Letzte Aenderung  14.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -156,11 +156,11 @@ NameOrIndex::NameOrIndex(USHORT _nWhich, SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex)
+|*	  NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex)
 |*
-|*    Beschreibung
-|*    Ersterstellung    14.11.94
-|*    Letzte Aenderung  14.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -172,11 +172,11 @@ NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex) :
 
 /*************************************************************************
 |*
-|*    int NameOrIndex::operator==(const SfxPoolItem& rItem) const
+|*	  int NameOrIndex::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    14.11.94
-|*    Letzte Aenderung  14.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -188,11 +188,11 @@ int NameOrIndex::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* NameOrIndex::Clone(SfxItemPool* pPool) const
+|*	  SfxPoolItem* NameOrIndex::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    14.11.94
-|*    Letzte Aenderung  14.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -204,11 +204,11 @@ SfxPoolItem* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* NameOrIndex::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* NameOrIndex::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    14.11.94
-|*    Letzte Aenderung  14.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -219,11 +219,11 @@ SfxPoolItem* NameOrIndex::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*    SvStream* NameOrIndex::Store(SvStream& rIn) const
+|*	  SvStream* NameOrIndex::Store(SvStream& rIn) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    14.11.94
-|*    Letzte Aenderung  14.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -369,7 +369,7 @@ TYPEINIT1_AUTOFACTORY(XColorItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(USHORT nWhich, INT32 nIndex, const Color& rTheColor)
+|*	  XColorItem::XColorItem(USHORT nWhich, INT32 nIndex, const Color& rTheColor)
 |*
 \************************************************************************/
 
@@ -381,7 +381,7 @@ XColorItem::XColorItem(USHORT _nWhich, INT32 nIndex, const Color& rTheColor) :
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(USHORT nWhich, const String& rName, const Color& rTheColor)
+|*	  XColorItem::XColorItem(USHORT nWhich, const String& rName, const Color& rTheColor)
 |*
 \************************************************************************/
 
@@ -393,7 +393,7 @@ XColorItem::XColorItem(USHORT _nWhich, const XubString& rName, const Color& rThe
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(const XColorItem& rItem)
+|*	  XColorItem::XColorItem(const XColorItem& rItem)
 |*
 \************************************************************************/
 
@@ -405,7 +405,7 @@ XColorItem::XColorItem(const XColorItem& rItem) :
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(USHORT nWhich, SvStream& rIn)
+|*	  XColorItem::XColorItem(USHORT nWhich, SvStream& rIn)
 |*
 \************************************************************************/
 
@@ -420,7 +420,7 @@ XColorItem::XColorItem(USHORT _nWhich, SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XColorItem::Clone(SfxItemPool* pPool) const
+|*	  XColorItem::Clone(SfxItemPool* pPool) const
 |*
 \************************************************************************/
 
@@ -431,7 +431,7 @@ SfxPoolItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XColorItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XColorItem::operator==(const SfxPoolItem& rItem) const
 |*
 \************************************************************************/
 
@@ -443,7 +443,7 @@ int XColorItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XColorItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XColorItem::Create(SvStream& rIn, USHORT nVer) const
 |*
 \************************************************************************/
 
@@ -454,7 +454,7 @@ SfxPoolItem* XColorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XColorItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XColorItem::Store(SvStream& rOut) const
 |*
 \************************************************************************/
 
@@ -472,7 +472,7 @@ SvStream& XColorItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XColor& XColorItem::GetColorValue(const XColorTable* pTable) const
+|*	  const XColor& XColorItem::GetColorValue(const XColorTable* pTable) const
 |*
 \************************************************************************/
 
@@ -502,7 +502,7 @@ bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMembe
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                           Linienattribute
+//							 Linienattribute
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //---------------------
@@ -512,11 +512,11 @@ TYPEINIT1_AUTOFACTORY(XLineStyleItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle)
+|*	  XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -527,11 +527,11 @@ XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle) :
 
 /*************************************************************************
 |*
-|*    XLineStyleItem::XLineStyleItem(SvStream& rIn)
+|*	  XLineStyleItem::XLineStyleItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -542,11 +542,11 @@ XLineStyleItem::XLineStyleItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineStyleItem::Clone(SfxItemPool* pPool) const
+|*	  XLineStyleItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    09.11.94
-|*    Letzte Aenderung  09.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.94
+|*	  Letzte Aenderung	09.11.94
 |*
 *************************************************************************/
 
@@ -557,11 +557,11 @@ SfxPoolItem* XLineStyleItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -575,10 +575,10 @@ SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XLineStyleItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -646,11 +646,11 @@ USHORT XLineStyleItem::GetValueCount() const
 // ------------
 /*************************************************************************
 |*
-|*    XDash::XDash(XDashStyle, USHORT, ULONG, USHORT, ULONG, ULONG)
+|*	  XDash::XDash(XDashStyle, USHORT, ULONG, USHORT, ULONG, ULONG)
 |*
-|*    Beschreibung
-|*    Ersterstellung    21.11.94
-|*    Letzte Aenderung  21.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	21.11.94
+|*	  Letzte Aenderung	21.11.94
 |*
 *************************************************************************/
 
@@ -667,26 +667,26 @@ XDash::XDash(XDashStyle eTheDash, USHORT nTheDots, ULONG nTheDotLen,
 
 /*************************************************************************
 |*
-|*    int XDash::operator==(const SfxPoolItem& rItem) const
+|*	  int XDash::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    29.11.94
-|*    Letzte Aenderung  29.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	29.11.94
+|*	  Letzte Aenderung	29.11.94
 |*
 *************************************************************************/
 
 bool XDash::operator==(const XDash& rDash) const
 {
-    return ( eDash      == rDash.eDash      &&
-             nDots      == rDash.nDots      &&
-             nDotLen    == rDash.nDotLen    &&
-             nDashes    == rDash.nDashes    &&
-             nDashLen   == rDash.nDashLen   &&
-             nDistance  == rDash.nDistance );
+    return ( eDash		== rDash.eDash		&&
+             nDots		== rDash.nDots		&&
+             nDotLen	== rDash.nDotLen	&&
+             nDashes	== rDash.nDashes	&&
+             nDashLen	== rDash.nDashLen	&&
+             nDistance	== rDash.nDistance );
 }
 
-// XDash is translated into an array of doubles which describe the lengths of the
-// dashes, dots and empty passages. It returns the complete length of the full DashDot
+// XDash is translated into an array of doubles which describe the lengths of the 
+// dashes, dots and empty passages. It returns the complete length of the full DashDot 
 // sequence and fills the given vetor of doubles accordingly (also resizing, so deleting it).
 static double SMALLEST_DASH_WIDTH(26.95);
 double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double fLineWidth) const
@@ -884,11 +884,11 @@ TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(INT32 nIndex, const XDash& rTheDash)
+|*	  XLineDashItem::XLineDashItem(INT32 nIndex, const XDash& rTheDash)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -900,11 +900,11 @@ XLineDashItem::XLineDashItem(INT32 nIndex, const XDash& rTheDash) :
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(const String& rName, const XDash& rTheDash)
+|*	  XLineDashItem::XLineDashItem(const String& rName, const XDash& rTheDash)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -916,11 +916,11 @@ XLineDashItem::XLineDashItem(const XubString& rName, const XDash& rTheDash) :
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(const XLineDashItem& rItem)
+|*	  XLineDashItem::XLineDashItem(const XLineDashItem& rItem)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -932,11 +932,11 @@ XLineDashItem::XLineDashItem(const XLineDashItem& rItem) :
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(SvStream& rIn)
+|*	  XLineDashItem::XLineDashItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -945,8 +945,8 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
 {
     if (!IsIndex())
     {
-        USHORT  nSTemp;
-        UINT32  nLTemp;
+        USHORT	nSTemp;
+        UINT32	nLTemp;
         INT32   nITemp;
 
         rIn >> nITemp; aDash.SetDashStyle((XDashStyle)nITemp);
@@ -961,7 +961,7 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
 //*************************************************************************
 
 XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/, const XDash& rTheDash)
-:   NameOrIndex( XATTR_LINEDASH, -1 ),
+: 	NameOrIndex( XATTR_LINEDASH, -1 ),
     aDash(rTheDash)
 {
 }
@@ -975,11 +975,11 @@ XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/)
 
 /*************************************************************************
 |*
-|*    XLineDashItem::Clone(SfxItemPool* pPool) const
+|*	  XLineDashItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -990,11 +990,11 @@ SfxPoolItem* XLineDashItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XLineDashItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XLineDashItem::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1006,11 +1006,11 @@ int XLineDashItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineDashItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XLineDashItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1021,11 +1021,11 @@ SfxPoolItem* XLineDashItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineDashItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XLineDashItem::Store(SvStream& rOut) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1048,11 +1048,11 @@ SvStream& XLineDashItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XDash& XLineDashItem::GetValue(const XDashTable* pTable) const
+|*	  const XDash& XLineDashItem::GetValue(const XDashTable* pTable) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -1069,10 +1069,10 @@ const XDash& XLineDashItem::GetDashValue(const XDashTable* pTable) const // GetV
 SfxItemPresentation XLineDashItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1115,7 +1115,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId
         case 0:
         {
             uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-
+            
             ::com::sun::star::drawing::LineDash aLineDash;
 
             const XDash& rXD = GetDashValue();
@@ -1135,7 +1135,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId
             rVal = uno::makeAny( aPropSeq );
             break;
         }
-
+    
         case MID_NAME:
         {
             rtl::OUString aApiName;
@@ -1235,7 +1235,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemb
                             bLineDash = true;
                     }
                 }
-
+                
                 SetName( aName );
                 if ( bLineDash )
                 {
@@ -1253,13 +1253,13 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemb
 
                     SetDashValue( aXDash );
                 }
-
+                
                 return true;
             }
 
             return false;
         }
-
+    
         case MID_NAME:
         {
             rtl::OUString aName;
@@ -1314,7 +1314,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemb
             sal_Int16 nVal = sal_Int16();
             if(!(rVal >>= nVal))
                 return false;
-
+            
             XDash aXDash = GetDashValue();
             if ( nMemberId == MID_LINEDASH_DOTS )
                 aXDash.SetDots( nVal );
@@ -1335,7 +1335,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemb
             sal_Int32 nVal = 0;
             if(!(rVal >>= nVal))
                 return false;
-
+            
             XDash aXDash = GetDashValue();
             if ( nMemberId == MID_LINEDASH_DOTLEN )
                 aXDash.SetDotLen( nVal );
@@ -1349,9 +1349,9 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemb
 
             SetDashValue( aXDash );
             break;
-        }
+        }		
     }
-
+    
     return true;
 }
 
@@ -1364,7 +1364,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+        const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                 XATTR_LINEDASH,
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
@@ -1389,11 +1389,11 @@ TYPEINIT1_AUTOFACTORY(XLineWidthItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XLineWidthItem::XLineWidthItem(long nWidth)
+|*	  XLineWidthItem::XLineWidthItem(long nWidth)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -1404,11 +1404,11 @@ XLineWidthItem::XLineWidthItem(long nWidth) :
 
 /*************************************************************************
 |*
-|*    XLineWidthItem::XLineWidthItem(SvStream& rIn)
+|*	  XLineWidthItem::XLineWidthItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1419,11 +1419,11 @@ XLineWidthItem::XLineWidthItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineWidthItem::Clone(SfxItemPool* pPool) const
+|*	  XLineWidthItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1434,11 +1434,11 @@ SfxPoolItem* XLineWidthItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1452,10 +1452,10 @@ SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XLineWidthItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
     XubString&          rText, const IntlWrapper * pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1478,7 +1478,7 @@ bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberI
     sal_Int32 nValue = GetValue();
     if( 0 != (nMemberId&CONVERT_TWIPS) )
         nValue = TWIP_TO_MM100(nValue);
-
+    
     rVal <<= nValue;
     return true;
 }
@@ -1501,11 +1501,11 @@ TYPEINIT1_AUTOFACTORY(XLineColorItem, XColorItem);
 
 /*************************************************************************
 |*
-|*    XLineColorItem::XLineColorItem(INT32 nIndex, const Color& rTheColor)
+|*	  XLineColorItem::XLineColorItem(INT32 nIndex, const Color& rTheColor)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1516,11 +1516,11 @@ XLineColorItem::XLineColorItem(INT32 nIndex, const Color& rTheColor) :
 
 /*************************************************************************
 |*
-|*    XLineColorItem::XLineColorItem(const XubString& rName, const Color& rTheColor)
+|*	  XLineColorItem::XLineColorItem(const XubString& rName, const Color& rTheColor)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1531,11 +1531,11 @@ XLineColorItem::XLineColorItem(const XubString& rName, const Color& rTheColor) :
 
 /*************************************************************************
 |*
-|*    XLineColorItem::XLineColorItem(SvStream& rIn)
+|*	  XLineColorItem::XLineColorItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1546,11 +1546,11 @@ XLineColorItem::XLineColorItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineColorItem::Clone(SfxItemPool* pPool) const
+|*	  XLineColorItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1561,11 +1561,11 @@ SfxPoolItem* XLineColorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineColorItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XLineColorItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1579,10 +1579,10 @@ SfxPoolItem* XLineColorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XLineColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1650,7 +1650,7 @@ namespace
                         const basegfx::B2DVector aControlVectorA(aCandidate.getPrevControlPoint(b));
                         rOut << aControlVectorA.getX();
                         rOut << aControlVectorA.getY();
-
+                        
                         const basegfx::B2DVector aControlVectorB(aCandidate.getNextControlPoint(b));
                         rOut << aControlVectorB.getX();
                         rOut << aControlVectorB.getY();
@@ -1696,7 +1696,7 @@ namespace
                         rIn >> fX;
                         rIn >> fY;
                         aCandidate.setPrevControlPoint(b, basegfx::B2DVector(fX, fY));
-
+                        
                         rIn >> fX;
                         rIn >> fY;
                         aCandidate.setNextControlPoint(b, basegfx::B2DVector(fX, fY));
@@ -1720,59 +1720,59 @@ TYPEINIT1_AUTOFACTORY(XLineStartItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(INT32 nIndex)
+|*	  XLineStartItem::XLineStartItem(INT32 nIndex)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-XLineStartItem::XLineStartItem(INT32 nIndex)
-:   NameOrIndex(XATTR_LINESTART, nIndex)
+XLineStartItem::XLineStartItem(INT32 nIndex) 
+:	NameOrIndex(XATTR_LINESTART, nIndex)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(const XubString& rName,
-|*                                   const basegfx::B2DPolyPolygon& rXPolygon)
+|*	  XLineStartItem::XLineStartItem(const XubString& rName,
+|*									 const basegfx::B2DPolyPolygon& rXPolygon)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
 XLineStartItem::XLineStartItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
-:   NameOrIndex(XATTR_LINESTART, rName),
+:	NameOrIndex(XATTR_LINESTART, rName),
     maPolyPolygon(rPolyPolygon)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
+|*	  XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  17.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
-XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
-:   NameOrIndex(rItem),
+XLineStartItem::XLineStartItem(const XLineStartItem& rItem) 
+:	NameOrIndex(rItem),
     maPolyPolygon(rItem.maPolyPolygon)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(SvStream& rIn)
+|*	  XLineStartItem::XLineStartItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  17.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
@@ -1788,7 +1788,7 @@ XLineStartItem::XLineStartItem(SvStream& rIn) :
 //*************************************************************************
 
 XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
-:   NameOrIndex( XATTR_LINESTART, -1 ),
+: 	NameOrIndex( XATTR_LINESTART, -1 ),
     maPolyPolygon(rPolyPolygon)
 {
 }
@@ -1796,17 +1796,17 @@ XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPol
 //*************************************************************************
 
 XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/)
-:   NameOrIndex(XATTR_LINESTART, -1 )
+:	NameOrIndex(XATTR_LINESTART, -1 )
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartItem::Clone(SfxItemPool* pPool) const
+|*	  XLineStartItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1817,11 +1817,11 @@ SfxPoolItem* XLineStartItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XLineStartItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XLineStartItem::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -1832,11 +1832,11 @@ int XLineStartItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStartItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XLineStartItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1847,11 +1847,11 @@ SfxPoolItem* XLineStartItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStartItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XLineStartItem::Store(SvStream& rOut) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -1869,12 +1869,12 @@ SvStream& XLineStartItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const basegfx::B2DPolyPolygon& XLineStartItem::GetValue(const XLineEndTable* pTable)
-|*                                             const
+|*	  const basegfx::B2DPolyPolygon& XLineStartItem::GetValue(const XLineEndTable* pTable)
+|*											   const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -1895,10 +1895,10 @@ basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue(const XLineEndTable* p
 SfxItemPresentation XLineStartItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2192,59 +2192,59 @@ TYPEINIT1_AUTOFACTORY(XLineEndItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(INT32 nIndex)
+|*	  XLineEndItem::XLineEndItem(INT32 nIndex)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(INT32 nIndex)
-:   NameOrIndex(XATTR_LINEEND, nIndex)
+XLineEndItem::XLineEndItem(INT32 nIndex) 
+:	NameOrIndex(XATTR_LINEEND, nIndex)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(const XubString& rName,
-|*                               const basegfx::B2DPolyPolygon& rXPolygon)
+|*	  XLineEndItem::XLineEndItem(const XubString& rName,
+|*								 const basegfx::B2DPolyPolygon& rXPolygon)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
-:   NameOrIndex(XATTR_LINEEND, rName),
+XLineEndItem::XLineEndItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon) 
+:	NameOrIndex(XATTR_LINEEND, rName),
     maPolyPolygon(rPolyPolygon)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
+|*	  XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
-:   NameOrIndex(rItem),
+XLineEndItem::XLineEndItem(const XLineEndItem& rItem) 
+:	NameOrIndex(rItem),
     maPolyPolygon(rItem.maPolyPolygon)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(SvStream& rIn)
+|*	  XLineEndItem::XLineEndItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  17.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
@@ -2260,7 +2260,7 @@ XLineEndItem::XLineEndItem(SvStream& rIn) :
 //*************************************************************************
 
 XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
-:   NameOrIndex( XATTR_LINEEND, -1 ),
+: 	NameOrIndex( XATTR_LINEEND, -1 ),
     maPolyPolygon(rPolyPolygon)
 {
 }
@@ -2268,17 +2268,17 @@ XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon
 //*************************************************************************
 
 XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/)
-:   NameOrIndex(XATTR_LINEEND, -1 )
+:	NameOrIndex(XATTR_LINEEND, -1 )
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndItem::Clone(SfxItemPool* pPool) const
+|*	  XLineEndItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2289,11 +2289,11 @@ SfxPoolItem* XLineEndItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XLineEndItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XLineEndItem::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  17.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
@@ -2304,11 +2304,11 @@ int XLineEndItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineEndItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XLineEndItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2319,11 +2319,11 @@ SfxPoolItem* XLineEndItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineEndItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XLineEndItem::Store(SvStream& rOut) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  17.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
@@ -2341,11 +2341,11 @@ SvStream& XLineEndItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const basegfx::B2DPolyPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
+|*	  const basegfx::B2DPolyPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -2589,10 +2589,10 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 SfxItemPresentation XLineEndItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2664,11 +2664,11 @@ TYPEINIT1_AUTOFACTORY(XLineStartWidthItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XLineStartWidthItem::XLineStartWidthItem(INT32 nWidth)
+|*	  XLineStartWidthItem::XLineStartWidthItem(INT32 nWidth)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -2679,11 +2679,11 @@ XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
 
 /*************************************************************************
 |*
-|*    XLineStartWidthItem::XLineStartWidthItem(SvStream& rIn)
+|*	  XLineStartWidthItem::XLineStartWidthItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2694,11 +2694,11 @@ XLineStartWidthItem::XLineStartWidthItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineStartWidthItem::Clone(SfxItemPool* pPool) const
+|*	  XLineStartWidthItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2709,12 +2709,12 @@ SfxPoolItem* XLineStartWidthItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, USHORT nVer)
-|*                                              const
+|*	  SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2728,10 +2728,10 @@ SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XLineStartWidthItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
     XubString&          rText, const IntlWrapper * pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2772,11 +2772,11 @@ TYPEINIT1_AUTOFACTORY(XLineEndWidthItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XLineEndWidthItem::XLineEndWidthItem(long nWidth)
+|*	  XLineEndWidthItem::XLineEndWidthItem(long nWidth)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2787,11 +2787,11 @@ XLineEndWidthItem::XLineEndWidthItem(long nWidth) :
 
 /*************************************************************************
 |*
-|*    XLineEndWidthItem::XLineEndWidthItem(SvStream& rIn)
+|*	  XLineEndWidthItem::XLineEndWidthItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2802,11 +2802,11 @@ XLineEndWidthItem::XLineEndWidthItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineEndWidthItem::Clone(SfxItemPool* pPool) const
+|*	  XLineEndWidthItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2817,11 +2817,11 @@ SfxPoolItem* XLineEndWidthItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2835,10 +2835,10 @@ SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XLineEndWidthItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
     XubString&          rText, const IntlWrapper *pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2878,11 +2878,11 @@ TYPEINIT1_AUTOFACTORY(XLineStartCenterItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XLineStartCenterItem::XLineStartCenterItem(BOOL bStartCenter)
+|*	  XLineStartCenterItem::XLineStartCenterItem(BOOL bStartCenter)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2893,11 +2893,11 @@ XLineStartCenterItem::XLineStartCenterItem(BOOL bStartCenter) :
 
 /*************************************************************************
 |*
-|*    XLineStartCenterItem::XLineStartCenterItem(SvStream& rIn)
+|*	  XLineStartCenterItem::XLineStartCenterItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2908,11 +2908,11 @@ XLineStartCenterItem::XLineStartCenterItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineStartCenterItem::Clone(SfxItemPool* pPool) const
+|*	  XLineStartCenterItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2923,12 +2923,12 @@ SfxPoolItem* XLineStartCenterItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, USHORT nVer)
-|*                                              const
+|*	  SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2942,10 +2942,10 @@ SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XLineStartCenterItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2986,11 +2986,11 @@ TYPEINIT1_AUTOFACTORY(XLineEndCenterItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XLineEndCenterItem::XLineEndCenterItem(BOOL bEndCenter)
+|*	  XLineEndCenterItem::XLineEndCenterItem(BOOL bEndCenter)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3001,11 +3001,11 @@ XLineEndCenterItem::XLineEndCenterItem(BOOL bEndCenter) :
 
 /*************************************************************************
 |*
-|*    XLineEndCenterItem::XLineEndCenterItem(SvStream& rIn)
+|*	  XLineEndCenterItem::XLineEndCenterItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3016,11 +3016,11 @@ XLineEndCenterItem::XLineEndCenterItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineEndCenterItem::Clone(SfxItemPool* pPool) const
+|*	  XLineEndCenterItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3031,12 +3031,12 @@ SfxPoolItem* XLineEndCenterItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, USHORT nVer)
-|*                                              const
+|*	  SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3050,10 +3050,10 @@ SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XLineEndCenterItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -3088,7 +3088,7 @@ bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                           Fuellattribute
+//							 Fuellattribute
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // --------------------
@@ -3098,11 +3098,11 @@ TYPEINIT1_AUTOFACTORY(XFillStyleItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle)
+|*	  XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3113,11 +3113,11 @@ XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle) :
 
 /*************************************************************************
 |*
-|*    XFillStyleItem::XFillStyleItem(SvStream& rIn)
+|*	  XFillStyleItem::XFillStyleItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3128,11 +3128,11 @@ XFillStyleItem::XFillStyleItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFillStyleItem::Clone(SfxItemPool* pPool) const
+|*	  XFillStyleItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    09.11.94
-|*    Letzte Aenderung  09.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.94
+|*	  Letzte Aenderung	09.11.94
 |*
 *************************************************************************/
 
@@ -3143,11 +3143,11 @@ SfxPoolItem* XFillStyleItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3161,10 +3161,10 @@ SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XFillStyleItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -3249,11 +3249,11 @@ TYPEINIT1_AUTOFACTORY(XFillColorItem, XColorItem);
 
 /*************************************************************************
 |*
-|*    XFillColorItem::XFillColorItem(INT32 nIndex, const Color& rTheColor)
+|*	  XFillColorItem::XFillColorItem(INT32 nIndex, const Color& rTheColor)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3264,11 +3264,11 @@ XFillColorItem::XFillColorItem(INT32 nIndex, const Color& rTheColor) :
 
 /*************************************************************************
 |*
-|*    XFillColorItem::XFillColorItem(const XubString& rName, const Color& rTheColor)
+|*	  XFillColorItem::XFillColorItem(const XubString& rName, const Color& rTheColor)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3279,11 +3279,11 @@ XFillColorItem::XFillColorItem(const XubString& rName, const Color& rTheColor) :
 
 /*************************************************************************
 |*
-|*    XFillColorItem::XFillColorItem(SvStream& rIn)
+|*	  XFillColorItem::XFillColorItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3294,11 +3294,11 @@ XFillColorItem::XFillColorItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFillColorItem::Clone(SfxItemPool* pPool) const
+|*	  XFillColorItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3309,11 +3309,11 @@ SfxPoolItem* XFillColorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillColorItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFillColorItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3327,10 +3327,10 @@ SfxPoolItem* XFillColorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 SfxItemPresentation XFillColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -3406,10 +3406,10 @@ USHORT XSecondaryFillColorItem::GetVersion( USHORT /*nFileFormatVersion*/ ) cons
 SfxItemPresentation XSecondaryFillColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -3480,26 +3480,26 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
 
 /*************************************************************************
 |*
-|*    int XGradient::operator==(const SfxPoolItem& rItem) const
+|*	  int XGradient::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    29.11.94
-|*    Letzte Aenderung  29.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	29.11.94
+|*	  Letzte Aenderung	29.11.94
 |*
 *************************************************************************/
 
 bool XGradient::operator==(const XGradient& rGradient) const
 {
-    return ( eStyle         == rGradient.eStyle         &&
-             aStartColor    == rGradient.aStartColor    &&
-             aEndColor      == rGradient.aEndColor      &&
-             nAngle         == rGradient.nAngle         &&
-             nBorder        == rGradient.nBorder        &&
-             nOfsX          == rGradient.nOfsX          &&
-             nOfsY          == rGradient.nOfsY          &&
-             nIntensStart   == rGradient.nIntensStart   &&
-             nIntensEnd     == rGradient.nIntensEnd     &&
-             nStepCount     == rGradient.nStepCount );
+    return ( eStyle 		== rGradient.eStyle 		&&
+             aStartColor	== rGradient.aStartColor	&&
+             aEndColor		== rGradient.aEndColor		&&
+             nAngle 		== rGradient.nAngle 		&&
+             nBorder		== rGradient.nBorder		&&
+             nOfsX			== rGradient.nOfsX			&&
+             nOfsY			== rGradient.nOfsY			&&
+             nIntensStart	== rGradient.nIntensStart	&&
+             nIntensEnd		== rGradient.nIntensEnd		&&
+             nStepCount		== rGradient.nStepCount );
 }
 
 
@@ -3510,12 +3510,12 @@ TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(INT32 nIndex,
-|*                                       const XGradient& rTheGradient)
+|*	  XFillGradientItem::XFillGradientItem(INT32 nIndex,
+|*										 const XGradient& rTheGradient)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3528,12 +3528,12 @@ XFillGradientItem::XFillGradientItem(INT32 nIndex,
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(const XubString& rName,
-|*                                       const XGradient& rTheGradient)
+|*	  XFillGradientItem::XFillGradientItem(const XubString& rName,
+|*										 const XGradient& rTheGradient)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3546,11 +3546,11 @@ XFillGradientItem::XFillGradientItem(const XubString& rName,
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem)
+|*	  XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3562,11 +3562,11 @@ XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem) :
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(SvStream& rIn)
+|*	  XFillGradientItem::XFillGradientItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3615,7 +3615,7 @@ XFillGradientItem::XFillGradientItem(SvStream& rIn, USHORT nVer) :
 //*************************************************************************
 
 XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient)
-:   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
+: 	NameOrIndex( XATTR_FILLGRADIENT, -1 ),
     aGradient(rTheGradient)
 {
 }
@@ -3629,11 +3629,11 @@ XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/)
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::Clone(SfxItemPool* pPool) const
+|*	  XFillGradientItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3644,11 +3644,11 @@ SfxPoolItem* XFillGradientItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XFillGradientItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XFillGradientItem::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3660,11 +3660,11 @@ int XFillGradientItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3675,11 +3675,11 @@ SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, USHORT nVer) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillGradientItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XFillGradientItem::Store(SvStream& rOut) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3714,12 +3714,12 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XGradient& XFillGradientItem::GetValue(const XGradientTable* pTable)
-|*                                                                 const
+|*	  const XGradient& XFillGradientItem::GetValue(const XGradientTable* pTable)
+|*																   const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -3734,11 +3734,11 @@ const XGradient& XFillGradientItem::GetGradientValue(const XGradientTable* pTabl
 
 /*************************************************************************
 |*
-|*    USHORT XFillGradientItem::GetVersion() const
+|*	  USHORT XFillGradientItem::GetVersion() const
 |*
-|*    Beschreibung
-|*    Ersterstellung    01.11.95
-|*    Letzte Aenderung  01.11.95
+|*	  Beschreibung
+|*	  Ersterstellung	01.11.95
+|*	  Letzte Aenderung	01.11.95
 |*
 *************************************************************************/
 
@@ -3755,10 +3755,10 @@ USHORT XFillGradientItem::GetVersion( USHORT /*nFileFormatVersion*/) const
 SfxItemPresentation XFillGradientItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -4008,7 +4008,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+        const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                 XATTR_FILLGRADIENT,
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
@@ -4043,8 +4043,8 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
 //------------------------------------------------------------------------
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem( INT32 nIndex, const XGradient& rGradient, BOOL bEnable ) :
-    XFillGradientItem   ( nIndex, rGradient ),
-    bEnabled            ( bEnable )
+    XFillGradientItem	( nIndex, rGradient ),
+    bEnabled			( bEnable )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
@@ -4052,8 +4052,8 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( INT32 nIndex, const XGra
 //------------------------------------------------------------------------
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XubString& rName, const XGradient& rGradient, BOOL bEnable ) :
-    XFillGradientItem   ( rName, rGradient ),
-    bEnabled            ( bEnable )
+    XFillGradientItem	( rName, rGradient ),
+    bEnabled			( bEnable )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
@@ -4061,8 +4061,8 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XubString& rName, c
 //------------------------------------------------------------------------
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem ) :
-    XFillGradientItem   ( rItem ),
-    bEnabled            ( rItem.bEnabled )
+    XFillGradientItem	( rItem ),
+    bEnabled			( rItem.bEnabled )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
@@ -4070,17 +4070,17 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTranspar
 //------------------------------------------------------------------------
 
 //XFillFloatTransparenceItem::XFillFloatTransparenceItem( SvStream& rIn, USHORT nVer ) :
-//  XFillGradientItem   ( rIn, nVer )
+//	XFillGradientItem	( rIn, nVer )
 //{
-//  SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-//  rIn >> bEnabled;
+//	SetWhich( XATTR_FILLFLOATTRANSPARENCE );
+//	rIn >> bEnabled;
 //}
 
 //*************************************************************************
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient, BOOL bEnable )
-:   XFillGradientItem   ( -1, rTheGradient ),
-    bEnabled            ( bEnable )
+: 	XFillGradientItem	( -1, rTheGradient ),
+    bEnabled			( bEnable )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
@@ -4112,24 +4112,24 @@ SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
 
 //SfxPoolItem* XFillFloatTransparenceItem::Create( SvStream& rIn, USHORT nVer ) const
 //{
-//  return( ( 0 == nVer ) ? Clone( NULL ) : new XFillFloatTransparenceItem( rIn, nVer ) );
+//	return( ( 0 == nVer ) ? Clone( NULL ) : new XFillFloatTransparenceItem( rIn, nVer ) );
 //}
 
 //------------------------------------------------------------------------
 
 //SvStream& XFillFloatTransparenceItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 //{
-//  XFillGradientItem::Store( rOut, nItemVersion );
-//  rOut << bEnabled;
-//  return rOut;
+//	XFillGradientItem::Store( rOut, nItemVersion );
+//	rOut << bEnabled;
+//	return rOut;
 //}
 
 //------------------------------------------------------------------------
 
 USHORT XFillFloatTransparenceItem::GetVersion( USHORT nFileFormatVersion ) const
 {
-    // !!! if version number of this object must be increased, please   !!!
-    // !!! increase version number of base class XFillGradientItem      !!!
+    // !!! if version number of this object must be increased, please	!!!
+    // !!! increase version number of base class XFillGradientItem		!!!
     return XFillGradientItem::GetVersion( nFileFormatVersion );
 }
 
@@ -4149,7 +4149,7 @@ bool XFillFloatTransparenceItem::PutValue( const ::com::sun::star::uno::Any& rVa
 
 //------------------------------------------------------------------------
 
-SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(    SfxItemPresentation ePres,
+SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(	SfxItemPresentation ePres,
                                                                     SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
                                                                     XubString& rText,
                                                                     const IntlWrapper * pIntlWrapper ) const
@@ -4159,7 +4159,7 @@ SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(    SfxItemPrese
 
 BOOL XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    return  ((XFillFloatTransparenceItem*)p1)->IsEnabled() == ((XFillFloatTransparenceItem*)p2)->IsEnabled() &&
+    return	((XFillFloatTransparenceItem*)p1)->IsEnabled() == ((XFillFloatTransparenceItem*)p2)->IsEnabled() &&
             ((XFillFloatTransparenceItem*)p1)->GetGradientValue()  == ((XFillFloatTransparenceItem*)p2)->GetGradientValue();
 }
 
@@ -4170,7 +4170,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
     {
         if( pModel )
         {
-            const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+            const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                     XATTR_FILLFLOATTRANSPARENCE,
                                                                     &pModel->GetItemPool(),
                                                                     pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
@@ -4203,11 +4203,11 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
 
 /*************************************************************************
 |*
-|*    XHatch::XHatch(XHatchStyle, const Color&, long, long)
+|*	  XHatch::XHatch(XHatchStyle, const Color&, long, long)
 |*
-|*    Beschreibung
-|*    Ersterstellung    21.11.94
-|*    Letzte Aenderung  21.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	21.11.94
+|*	  Letzte Aenderung	21.11.94
 |*
 *************************************************************************/
 
@@ -4222,20 +4222,20 @@ XHatch::XHatch(const Color& rCol, XHatchStyle eTheStyle, long nTheDistance,
 
 /*************************************************************************
 |*
-|*    int XHatch::operator==(const SfxPoolItem& rItem) const
+|*	  int XHatch::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    29.11.94
-|*    Letzte Aenderung  29.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	29.11.94
+|*	  Letzte Aenderung	29.11.94
 |*
 *************************************************************************/
 
 bool XHatch::operator==(const XHatch& rHatch) const
 {
-    return ( eStyle     == rHatch.eStyle    &&
-             aColor     == rHatch.aColor    &&
-             nDistance  == rHatch.nDistance &&
-             nAngle     == rHatch.nAngle );
+    return ( eStyle 	== rHatch.eStyle	&&
+             aColor 	== rHatch.aColor	&&
+             nDistance	== rHatch.nDistance &&
+             nAngle 	== rHatch.nAngle );
 }
 
 
@@ -4246,12 +4246,12 @@ TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(INT32 nIndex,
-|*                                 const XHatch& rTheHatch)
+|*	  XFillHatchItem::XFillHatchItem(INT32 nIndex,
+|*								   const XHatch& rTheHatch)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -4264,12 +4264,12 @@ XFillHatchItem::XFillHatchItem(INT32 nIndex,
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(const XubString& rName,
-|*                                 const XHatch& rTheHatch)
+|*	  XFillHatchItem::XFillHatchItem(const XubString& rName,
+|*								   const XHatch& rTheHatch)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -4282,11 +4282,11 @@ XFillHatchItem::XFillHatchItem(const XubString& rName,
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem)
+|*	  XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -4298,11 +4298,11 @@ XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem) :
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(SvStream& rIn)
+|*	  XFillHatchItem::XFillHatchItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -4334,7 +4334,7 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
 //*************************************************************************
 
 XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/, const XHatch& rTheHatch)
-:   NameOrIndex( XATTR_FILLHATCH, -1 ),
+: 	NameOrIndex( XATTR_FILLHATCH, -1 ),
     aHatch(rTheHatch)
 {
 }
@@ -4348,11 +4348,11 @@ XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/)
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::Clone(SfxItemPool* pPool) const
+|*	  XFillHatchItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -4363,11 +4363,11 @@ SfxPoolItem* XFillHatchItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XFillHatchItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XFillHatchItem::operator==(const SfxPoolItem& rItem) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -4379,11 +4379,11 @@ int XFillHatchItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -4394,11 +4394,11 @@ SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillHatchItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XFillHatchItem::Store(SvStream& rOut) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  15.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -4424,11 +4424,11 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XHatch& XFillHatchItem::GetValue(const XHatchTable* pTable) const
+|*	  const XHatch& XFillHatchItem::GetValue(const XHatchTable* pTable) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  18.11.94
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -4445,10 +4445,10 @@ const XHatch& XFillHatchItem::GetHatchValue(const XHatchTable* pTable) const // 
 SfxItemPresentation XFillHatchItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -4649,7 +4649,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+        const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                 XATTR_FILLHATCH,
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
@@ -4668,7 +4668,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                          FormText-Attribute
+//							FormText-Attribute
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //-------------------------
@@ -4678,11 +4678,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextStyleItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFormTextStyleItem::XFormTextStyleItem()
+|*	  XFormTextStyleItem::XFormTextStyleItem()
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4693,11 +4693,11 @@ XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
 
 /*************************************************************************
 |*
-|*    XFormTextStyleItem::XFormTextStyleItem(SvStream& rIn)
+|*	  XFormTextStyleItem::XFormTextStyleItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4708,11 +4708,11 @@ XFormTextStyleItem::XFormTextStyleItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextStyleItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextStyleItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4723,11 +4723,11 @@ SfxPoolItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4783,11 +4783,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextAdjustItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFormTextAdjustItem::XFormTextAdjustItem()
+|*	  XFormTextAdjustItem::XFormTextAdjustItem()
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4798,11 +4798,11 @@ XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
 
 /*************************************************************************
 |*
-|*    XFormTextAdjustItem::XFormTextAdjustItem(SvStream& rIn)
+|*	  XFormTextAdjustItem::XFormTextAdjustItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4813,11 +4813,11 @@ XFormTextAdjustItem::XFormTextAdjustItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextAdjustItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextAdjustItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4828,11 +4828,11 @@ SfxPoolItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4888,11 +4888,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextDistanceItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XFormTextDistanceItem::XFormTextDistanceItem()
+|*	  XFormTextDistanceItem::XFormTextDistanceItem()
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4903,11 +4903,11 @@ XFormTextDistanceItem::XFormTextDistanceItem(long nDist) :
 
 /*************************************************************************
 |*
-|*    XFormTextDistanceItem::XFormTextDistanceItem(SvStream& rIn)
+|*	  XFormTextDistanceItem::XFormTextDistanceItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4918,11 +4918,11 @@ XFormTextDistanceItem::XFormTextDistanceItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextDistanceItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextDistanceItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4933,11 +4933,11 @@ SfxPoolItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4953,11 +4953,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextStartItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XFormTextStartItem::XFormTextStartItem(long nStart)
+|*	  XFormTextStartItem::XFormTextStartItem(long nStart)
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4968,11 +4968,11 @@ XFormTextStartItem::XFormTextStartItem(long nStart) :
 
 /*************************************************************************
 |*
-|*    XFormTextStartItem::XFormTextStartItem(SvStream& rIn)
+|*	  XFormTextStartItem::XFormTextStartItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4983,11 +4983,11 @@ XFormTextStartItem::XFormTextStartItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextStartItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextStartItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4998,11 +4998,11 @@ SfxPoolItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    02.02.95 ESO
-|*    Letzte Aenderung  02.02.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -5018,10 +5018,10 @@ TYPEINIT1_AUTOFACTORY(XFormTextMirrorItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFormTextMirrorItem::XFormTextMirrorItem(BOOL bMirror)
+|*	  XFormTextMirrorItem::XFormTextMirrorItem(BOOL bMirror)
 |*
-|*    Ersterstellung    06.02.95 ESO
-|*    Letzte Aenderung  06.02.95 ESO
+|*	  Ersterstellung	06.02.95 ESO
+|*	  Letzte Aenderung	06.02.95 ESO
 |*
 *************************************************************************/
 
@@ -5032,10 +5032,10 @@ XFormTextMirrorItem::XFormTextMirrorItem(BOOL bMirror) :
 
 /*************************************************************************
 |*
-|*    XFormTextMirrorItem::XFormTextMirrorItem(SvStream& rIn)
+|*	  XFormTextMirrorItem::XFormTextMirrorItem(SvStream& rIn)
 |*
-|*    Ersterstellung    06.02.95 ESO
-|*    Letzte Aenderung  06.02.95 ESO
+|*	  Ersterstellung	06.02.95 ESO
+|*	  Letzte Aenderung	06.02.95 ESO
 |*
 *************************************************************************/
 
@@ -5046,10 +5046,10 @@ XFormTextMirrorItem::XFormTextMirrorItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextMirrorItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextMirrorItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Ersterstellung    06.02.95 ESO
-|*    Letzte Aenderung  06.02.95 ESO
+|*	  Ersterstellung	06.02.95 ESO
+|*	  Letzte Aenderung	06.02.95 ESO
 |*
 *************************************************************************/
 
@@ -5060,11 +5060,11 @@ SfxPoolItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, USHORT nVer)
-|*                                              const
+|*	  SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
 |*
-|*    Ersterstellung    06.02.95 ESO
-|*    Letzte Aenderung  06.02.95 ESO
+|*	  Ersterstellung	06.02.95 ESO
+|*	  Letzte Aenderung	06.02.95 ESO
 |*
 *************************************************************************/
 
@@ -5081,10 +5081,10 @@ TYPEINIT1_AUTOFACTORY(XFormTextOutlineItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFormTextOutlineItem::XFormTextOutlineItem()
+|*	  XFormTextOutlineItem::XFormTextOutlineItem()
 |*
-|*    Ersterstellung    27.06.95 ESO
-|*    Letzte Aenderung  27.06.95 ESO
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5095,10 +5095,10 @@ XFormTextOutlineItem::XFormTextOutlineItem(BOOL bOutline) :
 
 /*************************************************************************
 |*
-|*    XFormTextOutlineItem::XFormTextOutlineItem(SvStream& rIn)
+|*	  XFormTextOutlineItem::XFormTextOutlineItem(SvStream& rIn)
 |*
-|*    Ersterstellung    27.06.95 ESO
-|*    Letzte Aenderung  27.06.95 ESO
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5109,10 +5109,10 @@ XFormTextOutlineItem::XFormTextOutlineItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextOutlineItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextOutlineItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Ersterstellung    27.06.95 ESO
-|*    Letzte Aenderung  27.06.95 ESO
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5123,11 +5123,11 @@ SfxPoolItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, USHORT nVer)
-|*                                              const
+|*	  SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
 |*
-|*    Ersterstellung    27.06.95 ESO
-|*    Letzte Aenderung  27.06.95 ESO
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5143,11 +5143,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowItem::XFormTextShadowItem()
+|*	  XFormTextShadowItem::XFormTextShadowItem()
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5159,11 +5159,11 @@ XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowItem::XFormTextShadowItem(SvStream& rIn)
+|*	  XFormTextShadowItem::XFormTextShadowItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5174,11 +5174,11 @@ XFormTextShadowItem::XFormTextShadowItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5189,11 +5189,11 @@ SfxPoolItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5250,11 +5250,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowColorItem, XColorItem);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowColorItem::XFormTextShadowColorItem()
+|*	  XFormTextShadowColorItem::XFormTextShadowColorItem()
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5266,11 +5266,11 @@ XFormTextShadowColorItem::XFormTextShadowColorItem(INT32 nIndex,
 
 /*************************************************************************
 |*
-|*    XFormTextShadowColorItem::XFormTextShadowColorItem(const XubString& rName, const Color& rTheColor)
+|*	  XFormTextShadowColorItem::XFormTextShadowColorItem(const XubString& rName, const Color& rTheColor)
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5282,11 +5282,11 @@ XFormTextShadowColorItem::XFormTextShadowColorItem(const XubString& rName,
 
 /*************************************************************************
 |*
-|*    XFormTextShadowColorItem::XFormTextShadowColorItem(SvStream& rIn)
+|*	  XFormTextShadowColorItem::XFormTextShadowColorItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5297,11 +5297,11 @@ XFormTextShadowColorItem::XFormTextShadowColorItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowColorItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowColorItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5312,11 +5312,11 @@ SfxPoolItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5332,11 +5332,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowXValItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowXValItem::XFormTextShadowXValItem(long)
+|*	  XFormTextShadowXValItem::XFormTextShadowXValItem(long)
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.06.95 ESO
-|*    Letzte Aenderung  28.06.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5347,11 +5347,11 @@ XFormTextShadowXValItem::XFormTextShadowXValItem(long nVal) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowXValItem::XFormTextShadowXValItem(SvStream& rIn)
+|*	  XFormTextShadowXValItem::XFormTextShadowXValItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.06.95 ESO
-|*    Letzte Aenderung  28.06.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5362,11 +5362,11 @@ XFormTextShadowXValItem::XFormTextShadowXValItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowXValItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowXValItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.06.95 ESO
-|*    Letzte Aenderung  28.06.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5377,11 +5377,11 @@ SfxPoolItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.06.95 ESO
-|*    Letzte Aenderung  28.06.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5397,11 +5397,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowYValItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowYValItem::XFormTextShadowYValItem(long)
+|*	  XFormTextShadowYValItem::XFormTextShadowYValItem(long)
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.06.95 ESO
-|*    Letzte Aenderung  28.06.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5412,11 +5412,11 @@ XFormTextShadowYValItem::XFormTextShadowYValItem(long nVal) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowYValItem::XFormTextShadowYValItem(SvStream& rIn)
+|*	  XFormTextShadowYValItem::XFormTextShadowYValItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.06.95 ESO
-|*    Letzte Aenderung  28.06.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5427,11 +5427,11 @@ XFormTextShadowYValItem::XFormTextShadowYValItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowYValItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowYValItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.06.95 ESO
-|*    Letzte Aenderung  28.06.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5442,11 +5442,11 @@ SfxPoolItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    28.06.95 ESO
-|*    Letzte Aenderung  28.06.95 ESO
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5462,11 +5462,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextStdFormItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFormTextStdFormItem::XFormTextStdFormItem()
+|*	  XFormTextStdFormItem::XFormTextStdFormItem()
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5478,11 +5478,11 @@ XFormTextStdFormItem::XFormTextStdFormItem(XFormTextStdForm eFormTextStdForm) :
 
 /*************************************************************************
 |*
-|*    XFormTextStdFormItem::XFormTextStdFormItem(SvStream& rIn)
+|*	  XFormTextStdFormItem::XFormTextStdFormItem(SvStream& rIn)
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5493,11 +5493,11 @@ XFormTextStdFormItem::XFormTextStdFormItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextStdFormItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextStdFormItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5508,11 +5508,11 @@ SfxPoolItem* XFormTextStdFormItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextStdFormItem::Create(SvStream& rIn, USHORT nVer) const
+|*	  SfxPoolItem* XFormTextStdFormItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.06.95
-|*    Letzte Aenderung  27.06.95
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -5569,10 +5569,10 @@ TYPEINIT1_AUTOFACTORY(XFormTextHideFormItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFormTextHideFormItem::XFormTextHideFormItem()
+|*	  XFormTextHideFormItem::XFormTextHideFormItem()
 |*
-|*    Ersterstellung    27.06.95 ESO
-|*    Letzte Aenderung  27.06.95 ESO
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5583,10 +5583,10 @@ XFormTextHideFormItem::XFormTextHideFormItem(BOOL bHide) :
 
 /*************************************************************************
 |*
-|*    XFormTextHideFormItem::XFormTextHideFormItem(SvStream& rIn)
+|*	  XFormTextHideFormItem::XFormTextHideFormItem(SvStream& rIn)
 |*
-|*    Ersterstellung    27.06.95 ESO
-|*    Letzte Aenderung  27.06.95 ESO
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5597,10 +5597,10 @@ XFormTextHideFormItem::XFormTextHideFormItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextHideFormItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextHideFormItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Ersterstellung    27.06.95 ESO
-|*    Letzte Aenderung  27.06.95 ESO
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5611,11 +5611,11 @@ SfxPoolItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, USHORT nVer)
-|*                                              const
+|*	  SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
 |*
-|*    Ersterstellung    27.06.95 ESO
-|*    Letzte Aenderung  27.06.95 ESO
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5627,7 +5627,7 @@ SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                              SetItems
+//								SetItems
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1(XLineAttrSetItem, SfxSetItem);

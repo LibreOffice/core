@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ public:
     SvxEditEngineSource( EditEngine* pEditEngine );
     virtual ~SvxEditEngineSource();
 
-    virtual SvxEditSource*      Clone() const;
-    virtual SvxTextForwarder*   GetTextForwarder();
-    virtual void                UpdateData();
+    virtual SvxEditSource*		Clone() const;
+    virtual SvxTextForwarder*	GetTextForwarder();
+    virtual void				UpdateData();
 
 private:
     SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl );
 
-    SvxEditEngineSourceImpl*    mpImpl;
+    SvxEditEngineSourceImpl*	mpImpl;
 };
 
 #endif

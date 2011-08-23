@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@
 class SvtFileView;
 class SvtFileDialog;
 
-typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >  OUStringList;
+typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >	OUStringList;
 
 //........................................................................
 namespace svt
 {
 //........................................................................
-
+    
 
     //====================================================================
     //= AsyncPickerAction
@@ -86,10 +86,10 @@ namespace svt
                 If smaller than or equal to <arg>_nMinTimeout</arg>, it will be corrected to
                 <arg>_nMinTimeout</arg> + 30000.
         */
-        void execute(
-            const String& _rURL,
-            const String& _rFilter,
-            sal_Int32 _nMinTimeout,
+        void execute( 
+            const String& _rURL, 
+            const String& _rFilter, 
+            sal_Int32 _nMinTimeout, 
             sal_Int32 _nMaxTimeout,
             const OUStringList& rBlackList = OUStringList() );
 

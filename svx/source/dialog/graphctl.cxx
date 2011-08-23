@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,12 +79,12 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
 \************************************************************************/
 
 GraphCtrl::GraphCtrl( Window* pParent, const WinBits nWinBits ) :
-            Control         ( pParent, nWinBits ),
-            aMap100         ( MAP_100TH_MM ),
+            Control			( pParent, nWinBits ),
+            aMap100			( MAP_100TH_MM ),
             eObjKind        ( OBJ_NONE ),
-            nPolyEdit       ( 0 ),
-            bEditMode       ( FALSE ),
-            bSdrMode        ( FALSE ),
+            nPolyEdit		( 0 ),
+            bEditMode		( FALSE ),
+            bSdrMode		( FALSE ),
             mpAccContext    ( NULL ),
             pModel          ( NULL ),
             pView           ( NULL )
@@ -107,11 +107,11 @@ GraphCtrl::GraphCtrl( Window* pParent, const WinBits nWinBits ) :
 \************************************************************************/
 
 GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
-            Control         ( pParent, rResId ),
-            aMap100         ( MAP_100TH_MM ),
+            Control			( pParent, rResId ),
+            aMap100			( MAP_100TH_MM ),
             nWinStyle       ( 0 ),
             eObjKind        ( OBJ_NONE ),
-            nPolyEdit       ( 0 ),
+            nPolyEdit		( 0 ),
             bEditMode       ( FALSE ),
             bSdrMode        ( FALSE ),
             bAnim           ( FALSE ),
@@ -208,7 +208,7 @@ void GraphCtrl::InitSdrModel()
     pView->SetWorkArea( Rectangle( Point(), aGraphSize ) );
     pView->EnableExtendedMouseEventDispatcher( TRUE );
     pView->ShowSdrPage(pView->GetModel()->GetPage(0));
-//  pView->ShowSdrPage(pView->GetModel()->GetPage(0));
+//	pView->ShowSdrPage(pView->GetModel()->GetPage(0));
     pView->SetFrameDragSingles( TRUE );
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
     pView->SetEditMode( TRUE );
@@ -237,7 +237,7 @@ void GraphCtrl::SetGraphic( const Graphic& rGraphic, BOOL bNewModel )
     {
         if ( rGraphic.IsTransparent() )
         {
-            Bitmap  aBmp( rGraphic.GetBitmap() );
+            Bitmap	aBmp( rGraphic.GetBitmap() );
 
             DitherBitmap( aBmp );
             aGraphic = Graphic( BitmapEx( aBmp, rGraphic.GetBitmapEx().GetMask() ) );
@@ -280,12 +280,12 @@ void GraphCtrl::Resize()
 
     if ( aGraphSize.Width() && aGraphSize.Height() )
     {
-        MapMode         aDisplayMap( aMap100 );
+        MapMode			aDisplayMap( aMap100 );
         Point           aNewPos;
-        Size            aNewSize;
-        const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
-        const long      nWidth = aWinSize.Width();
-        const long      nHeight = aWinSize.Height();
+        Size			aNewSize;
+        const Size		aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
+        const long		nWidth = aWinSize.Width();
+        const long		nHeight = aWinSize.Height();
         double          fGrfWH = (double) aGraphSize.Width() / aGraphSize.Height();
         double          fWinWH = (double) nWidth / nHeight;
 
@@ -335,10 +335,10 @@ void GraphCtrl::Paint( const Rectangle& rRect )
         if(bGraphicValid)
         {
             OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
-
+            
             rTarget.SetBackground(GetBackground());
             rTarget.Erase();
-
+            
             aGraphic.Draw(&rTarget, Point(), aGraphSize);
         }
 
@@ -401,7 +401,7 @@ void GraphCtrl::MarkListHasChanged()
 void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aCode( rKEvt.GetKeyCode() );
-    BOOL    bProc = FALSE;
+    BOOL	bProc = FALSE;
 
     switch ( aCode.GetCode() )
     {
@@ -733,8 +733,8 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 
             if ( nPolyEdit )
             {
-                SdrViewEvent    aVEvt;
-                SdrHitKind      eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
+                SdrViewEvent	aVEvt;
+                SdrHitKind		eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
 
                 if ( nPolyEdit == SID_BEZIER_INSERT && eHit == SDRHIT_MARKEDOBJECT )
                     pView->BegInsObjPoint( aLogPt, rMEvt.IsMod1());
@@ -766,7 +766,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 
 void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
 {
-    const Point aLogPos( PixelToLogic( rMEvt.GetPosPixel() ) );
+    const Point	aLogPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( bSdrMode )
     {
@@ -831,7 +831,7 @@ SdrObject* GraphCtrl::GetSelectedSdrObject() const
 
     if ( bSdrMode )
     {
-        const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
+        const SdrMarkList&	rMarkList = pView->GetMarkedObjectList();
 
         if ( rMarkList.GetMarkCount() == 1 )
             pSdrObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -945,7 +945,7 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
 
             // #103856# Disable accessibility if no model/view data available
-            if( pView &&
+            if( pView &&                
                 pModel &&
                 xAccParent.is() )
             {

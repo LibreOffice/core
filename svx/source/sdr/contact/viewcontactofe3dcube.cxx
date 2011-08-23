@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfE3dCube::ViewContactOfE3dCube(E3dCubeObj& rCubeObj)
-        :   ViewContactOfE3d(rCubeObj)
+        :	ViewContactOfE3d(rCubeObj)
         {
         }
 
@@ -96,7 +96,7 @@ namespace sdr
 
             // delete 3D Object Attributes
             delete pSdr3DObjectAttribute;
-
+            
             return xRetval;
         }
     } // end of namespace contact

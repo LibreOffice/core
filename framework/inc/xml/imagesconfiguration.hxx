@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,36 +54,36 @@ struct ImageItemDescriptor
 {
     ImageItemDescriptor() : nIndex( -1 ) {}
 
-    String  aCommandURL;                // URL command to dispatch
-    long    nIndex;                     // index of the bitmap inside the bitmaplist
+    String	aCommandURL;				// URL command to dispatch
+    long	nIndex;						// index of the bitmap inside the bitmaplist
 };
 
 struct ExternalImageItemDescriptor
 {
-    String  aCommandURL;                // URL command to dispatch
-    String  aURL;                       // a URL to an external bitmap
+    String	aCommandURL;				// URL command to dispatch
+    String	aURL;						// a URL to an external bitmap
 };
 
 typedef ImageItemDescriptor* ImageItemDescriptorPtr;
 SV_DECL_PTRARR_DEL( ImageItemListDescriptor, ImageItemDescriptorPtr, 10, 2)
 
 typedef ExternalImageItemDescriptor* ExternalImageItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr, 10, 2)
+SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr, 10, 2) 
 
 struct ImageListItemDescriptor
 {
     ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ),
                                 pImageItemList( 0 ) {}
-
+    
     ~ImageListItemDescriptor() { delete pImageItemList; }
 
-    String                      aURL;               // an URL to a bitmap with several images inside
-    Color                       aMaskColor;         // a color used as transparent
-    String                      aMaskURL;           // an URL to an optional bitmap used as a mask
-    ImageMaskMode                     nMaskMode;            // an enum to describe the current mask mode
-    ImageItemListDescriptor*              pImageItemList;       // an array of ImageItemDescriptors that describes every image
-    String                      aHighContrastURL;       // an URL to an optional high contrast bitmap with serveral images inside
-    String                      aHighContrastMaskURL;   // an URL to an optional high contrast bitmap as a mask
+    String						aURL;				// an URL to a bitmap with several images inside
+    Color						aMaskColor;			// a color used as transparent
+    String						aMaskURL;			// an URL to an optional bitmap used as a mask
+    ImageMaskMode				      nMaskMode;			// an enum to describe the current mask mode
+    ImageItemListDescriptor*              pImageItemList;		// an array	of ImageItemDescriptors that describes every image
+    String						aHighContrastURL;		// an URL to an optional high contrast bitmap with serveral images inside
+    String						aHighContrastMaskURL;	// an URL to an optional high contrast bitmap as a mask
 };
 
 typedef ImageListItemDescriptor* ImageListItemDescriptorPtr;
@@ -95,20 +95,20 @@ struct ImageListsDescriptor
                      pExternalImageList( 0 ) {}
     ~ImageListsDescriptor() { delete pImageList; delete pExternalImageList; }
 
-    ImageListDescriptor*            pImageList;
-    ExternalImageItemListDescriptor*    pExternalImageList;
+    ImageListDescriptor*			pImageList;
+    ExternalImageItemListDescriptor*	pExternalImageList;
 };
 
 class ImagesConfiguration
 {
     public:
         // #110897#
-        static sal_Bool LoadImages(
+        static sal_Bool	LoadImages( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rInStream, ImageListsDescriptor& aItems );
 
         // #110897#
-        static sal_Bool StoreImages(
+        static sal_Bool	StoreImages( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rOutStream, const ImageListsDescriptor& aItems );
 

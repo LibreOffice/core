@@ -50,9 +50,9 @@ using namespace ::com::sun::star::frame;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   SimpleTextStatusbarController           ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   SimpleTextStatusbarController     	    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_STATUSBARCONTROLLER         ,
+                                            SERVICENAME_STATUSBARCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_SIMPLETEXTSTATUSBARCONTROLLER
                                         )
 

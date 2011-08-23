@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,93 +37,93 @@ class InternalEditStatus : public EditStatus
 public:
             InternalEditStatus() { ; }
 
-    void    TurnOnFlags( ULONG nFlags )
+    void	TurnOnFlags( ULONG nFlags )
                 { nControlBits |= nFlags; }
 
-    void    TurnOffFlags( ULONG nFlags )
+    void	TurnOffFlags( ULONG nFlags )
                 { nControlBits &= ~nFlags; }
 
-    void    TurnOnStatusBits( ULONG nBits )
+    void	TurnOnStatusBits( ULONG nBits )
                 { nStatusBits |= nBits; }
 
-    void    TurnOffStatusBits( ULONG nBits )
+    void	TurnOffStatusBits( ULONG nBits )
                 { nStatusBits &= ~nBits; }
 
 
-    BOOL    UseCharAttribs() const
+    BOOL	UseCharAttribs() const
                 { return ( ( nControlBits & EE_CNTRL_USECHARATTRIBS ) != 0 ); }
 
-    BOOL    NotifyCursorMovements() const
+    BOOL	NotifyCursorMovements() const
                 { return ( ( nControlBits & EE_CNTRL_CRSRLEFTPARA ) != 0 ); }
 
-    BOOL    UseIdleFormatter() const
+    BOOL	UseIdleFormatter() const
                 { return ( ( nControlBits & EE_CNTRL_DOIDLEFORMAT) != 0 ); }
 
-    BOOL    AllowPasteSpecial() const
+    BOOL	AllowPasteSpecial() const
                 { return ( ( nControlBits & EE_CNTRL_PASTESPECIAL ) != 0 ); }
 
-    BOOL    DoAutoIndenting() const
+    BOOL	DoAutoIndenting() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOINDENTING ) != 0 ); }
 
-    BOOL    DoUndoAttribs() const
+    BOOL	DoUndoAttribs() const
                 { return ( ( nControlBits & EE_CNTRL_UNDOATTRIBS ) != 0 ); }
 
-    BOOL    OneCharPerLine() const
+    BOOL	OneCharPerLine() const
                 { return ( ( nControlBits & EE_CNTRL_ONECHARPERLINE ) != 0 ); }
 
-    BOOL    IsOutliner() const
+    BOOL	IsOutliner() const
                 { return ( ( nControlBits & EE_CNTRL_OUTLINER ) != 0 ); }
 
-    BOOL    IsOutliner2() const
+    BOOL	IsOutliner2() const
                 { return ( ( nControlBits & EE_CNTRL_OUTLINER2 ) != 0 ); }
 
-    BOOL    IsAnyOutliner() const
+    BOOL	IsAnyOutliner() const
                 { return IsOutliner() || IsOutliner2(); }
 
-    BOOL    DoNotUseColors() const
+    BOOL	DoNotUseColors() const
                 { return ( ( nControlBits & EE_CNTRL_NOCOLORS ) != 0 ); }
 
-    BOOL    AllowBigObjects() const
+    BOOL	AllowBigObjects() const
                 { return ( ( nControlBits & EE_CNTRL_ALLOWBIGOBJS ) != 0 ); }
 
-    BOOL    DoOnlineSpelling() const
+    BOOL	DoOnlineSpelling() const
                 { return ( ( nControlBits & EE_CNTRL_ONLINESPELLING ) != 0 ); }
 
-    BOOL    DoStretch() const
+    BOOL	DoStretch() const
                 { return ( ( nControlBits & EE_CNTRL_STRETCHING ) != 0 ); }
 
-    BOOL    AutoPageSize() const
+    BOOL	AutoPageSize() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZE ) != 0 ); }
-    BOOL    AutoPageWidth() const
+    BOOL	AutoPageWidth() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZEX ) != 0 ); }
-    BOOL    AutoPageHeight() const
+    BOOL	AutoPageHeight() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZEY ) != 0 ); }
 
-    BOOL    MarkFields() const
+    BOOL	MarkFields() const
                 { return ( ( nControlBits & EE_CNTRL_MARKFIELDS ) != 0 ); }
 
-    BOOL    DoRestoreFont() const
+    BOOL	DoRestoreFont() const
                 { return ( ( nControlBits & EE_CNTRL_RESTOREFONT ) != 0 ); }
 
-    BOOL    DoImportRTFStyleSheets() const
+    BOOL	DoImportRTFStyleSheets() const
                 { return ( ( nControlBits & EE_CNTRL_RTFSTYLESHEETS ) != 0 ); }
 
-    BOOL    DoAutoCorrect() const
+    BOOL	DoAutoCorrect() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOCORRECT ) != 0 ); }
 
-    BOOL    DoAutoComplete() const
+    BOOL	DoAutoComplete() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOCOMPLETE ) != 0 ); }
 
-    BOOL    DoTabIndenting() const
+    BOOL	DoTabIndenting() const
                 { return ( ( nControlBits & EE_CNTRL_TABINDENTING ) != 0 ); }
 
-    BOOL    DoFormat100() const
+    BOOL	DoFormat100() const
                 { return ( ( nControlBits & EE_CNTRL_FORMAT100 ) != 0 ); }
-
-    BOOL    ULSpaceSummation() const
+    
+    BOOL	ULSpaceSummation() const
                 { return ( ( nControlBits & EE_CNTRL_ULSPACESUMMATION ) != 0 ); }
-
-    BOOL    ULSpaceFirstParagraph() const
+    
+    BOOL	ULSpaceFirstParagraph() const
                 { return ( ( nControlBits & EE_CNTRL_ULSPACEFIRSTPARA ) != 0 ); }
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,20 +67,20 @@ public:
     FontWorkShapeTypeControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~FontWorkShapeTypeControl();
 
-    virtual void                Select( BOOL bMod1 = FALSE );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual void				Select( BOOL bMod1 = FALSE );
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
+    virtual SfxPopupWindow*		CreatePopupWindow();
 };
 
 //------------------------------------------------------------------------
 
 class FontworkCharacterSpacingDialog : public ModalDialog
 {
-    FixedText           maFLScale;
-    MetricField         maMtrScale;
-    OKButton            maOKButton;
-    CancelButton        maCancelButton;
-    HelpButton          maHelpButton;
+    FixedText			maFLScale;
+    MetricField			maMtrScale;
+    OKButton			maOKButton;
+    CancelButton		maCancelButton;
+    HelpButton			maHelpButton;
 
 public:
     FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale );
@@ -92,30 +92,30 @@ public:
 
 class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 {
-    ValueSet            maCtlFavorites;
-    FixedLine           maFLFavorites;
-    OKButton            maOKButton;
-    CancelButton        maCancelButton;
-    HelpButton          maHelpButton;
+    ValueSet			maCtlFavorites;
+    FixedLine			maFLFavorites;
+    OKButton			maOKButton;
+    CancelButton		maCancelButton;
+    HelpButton			maHelpButton;
 
-    sal_uInt16          mnThemeId;
+    sal_uInt16			mnThemeId;
 
-    SdrView*            mpSdrView;
-    FmFormModel*        mpModel;
+    SdrView*			mpSdrView;
+    FmFormModel*		mpModel;
 
-    String              maStrClickToAddText;
+    String				maStrClickToAddText;
 
     DECL_LINK( DoubleClickFavoriteHdl, void * );
     DECL_LINK( ClickOKHdl, void * );
     DECL_LINK( ClickTextDirectionHdl, ImageButton * );
 
-    SdrObject**         mppSdrObject;
-    SdrModel*           mpDestModel;
+    SdrObject**			mppSdrObject;
+    SdrModel*			mpDestModel;
 
-    void            initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites);
-    void            insertSelectedFontwork();
-    void            changeText( SdrTextObj* pObj );
-    void            fillFavorites( sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites );
+    void			initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites);
+    void			insertSelectedFontwork();
+    void			changeText( SdrTextObj* pObj );
+    void			fillFavorites( sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites );
 
     std::vector< Bitmap * > maFavoritesHorizontal;
 

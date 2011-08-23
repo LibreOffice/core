@@ -2,7 +2,7 @@
     /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //________________________________
-//  my own includes
+//	my own includes
 #include <jobs/jobdata.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -39,21 +39,21 @@
 #include <services.h>
 
 //________________________________
-//  interface includes
+//	interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 //________________________________
-//  includes of other projects
+//	includes of other projects
 #include <tools/wldcrd.hxx>
 #include <unotools/configpathes.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
 //________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 
@@ -82,10 +82,10 @@ const sal_Char* JobData::PROP_MODEL               = "Model"                     
 const sal_Char* JobData::PROP_SERVICE             = "Service"                             ;
 
 //________________________________
-//  non exported definitions
+//	non exported definitions
 
 //________________________________
-//  declarations
+//	declarations
 
 //________________________________
 /**

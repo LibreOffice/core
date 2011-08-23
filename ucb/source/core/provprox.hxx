@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ class UcbContentProviderProxyFactory :
                 public com::sun::star::lang::XServiceInfo,
                 public com::sun::star::ucb::XContentProviderFactory
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    com::sun::star::uno::Reference<	com::sun::star::lang::XMultiServiceFactory >
                                 m_xSMgr;
 
 public:
@@ -98,18 +98,18 @@ class UcbContentProviderProxy :
                 public com::sun::star::ucb::XContentProvider,
                 public com::sun::star::ucb::XParameterizedContentProvider
 {
-    ::osl::Mutex    m_aMutex;
+    ::osl::Mutex 	m_aMutex;
     ::rtl::OUString m_aService;
     ::rtl::OUString m_aTemplate;
     ::rtl::OUString m_aArguments;
-    sal_Bool        m_bReplace;
-    sal_Bool        m_bRegister;
+    sal_Bool		m_bReplace;
+    sal_Bool		m_bRegister;
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    com::sun::star::uno::Reference<	com::sun::star::lang::XMultiServiceFactory >
                                 m_xSMgr;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
+    com::sun::star::uno::Reference<	com::sun::star::ucb::XContentProvider >
                                 m_xProvider;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
+    com::sun::star::uno::Reference<	com::sun::star::ucb::XContentProvider >
                                 m_xTargetProvider;
 
 public:

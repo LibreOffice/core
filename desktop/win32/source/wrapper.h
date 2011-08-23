@@ -10,7 +10,7 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#   include <windows.h>
+#	include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -18,38 +18,38 @@
 
 
 #ifndef _INC_TCHAR
-#   ifdef UNICODE
-#       define _UNICODE
-#   endif
-#   include <tchar.h>
+#	ifdef UNICODE
+#		define _UNICODE
+#	endif
+#	include <tchar.h>
 #endif
 
 #ifdef UNICODE
-#   define Main MainW
-#   define GetArgv( pArgc )         CommandLineToArgvW( GetCommandLine(), pArgc )
-#   define PROCESS_CREATIONFLAGS    CREATE_UNICODE_ENVIRONMENT
+#	define Main	MainW
+#	define GetArgv( pArgc )			CommandLineToArgvW( GetCommandLine(), pArgc )
+#	define PROCESS_CREATIONFLAGS	CREATE_UNICODE_ENVIRONMENT
 #else
-#   define GetArgv( pArgc )         (*pArgc = __argc, __argv)
-#   define PROCESS_CREATIONFLAGS    0
-#   define Main MainA
+#	define GetArgv( pArgc )			(*pArgc = __argc, __argv)
+#	define PROCESS_CREATIONFLAGS	0
+#	define Main	MainA
 #endif
 
-#define BIN_EXT_STR         TEXT(".bin")
-#define PARAM_LIBPATH_STR   TEXT("-libpath=")
-#define PARAM_LOCAL_STR     TEXT("-local")
-#define PARAM_REMOTE_STR    TEXT("-remote")
+#define BIN_EXT_STR			TEXT(".bin")
+#define PARAM_LIBPATH_STR	TEXT("-libpath=")
+#define PARAM_LOCAL_STR		TEXT("-local")
+#define PARAM_REMOTE_STR	TEXT("-remote")
 
 #if defined( REMOTE )
-#define DEFAULT_LIBPATH     TEXT("remote;")
+#define DEFAULT_LIBPATH		TEXT("remote;")
 #elif defined( LOCAL )
-#define DEFAULT_LIBPATH     TEXT("local;")
+#define DEFAULT_LIBPATH		TEXT("local;")
 #endif
 
 extern "C" int Main()
 {
     // Retreive startup info
 
-    STARTUPINFO aStartupInfo;
+    STARTUPINFO	aStartupInfo;
 
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
     aStartupInfo.cb = sizeof( aStartupInfo );
@@ -57,21 +57,21 @@ extern "C" int Main()
 
     // Retrieve command line
 
-    LPTSTR  lpCommandLine = GetCommandLine();
+    LPTSTR	lpCommandLine = GetCommandLine();
 
-    LPTSTR  *ppArguments = NULL;
-    int     nArguments = 0;
+    LPTSTR	*ppArguments = NULL;
+    int		nArguments = 0;
 
     ppArguments = GetArgv( &nArguments );
 
     // Calculate application name
 
 
-    TCHAR   szApplicationName[MAX_PATH];
-    TCHAR   szDrive[MAX_PATH];
-    TCHAR   szDir[MAX_PATH];
-    TCHAR   szFileName[MAX_PATH];
-    TCHAR   szExt[MAX_PATH];
+    TCHAR	szApplicationName[MAX_PATH];
+    TCHAR	szDrive[MAX_PATH];
+    TCHAR	szDir[MAX_PATH];
+    TCHAR	szFileName[MAX_PATH];
+    TCHAR	szExt[MAX_PATH];
 
     GetModuleFileName( NULL, szApplicationName, MAX_PATH );
     _tsplitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
@@ -79,8 +79,8 @@ extern "C" int Main()
 
     // Retreive actual environment
 
-    TCHAR   szBuffer[1024];
-    TCHAR   szPathValue[1024] = TEXT("");
+    TCHAR	szBuffer[1024];
+    TCHAR	szPathValue[1024] = TEXT("");
 
 #ifdef DEFAULT_LIBPATH
     _tmakepath( szPathValue, szDrive, szDir, DEFAULT_LIBPATH, TEXT("") );
@@ -100,7 +100,7 @@ extern "C" int Main()
         }
         else if ( 0 == _tcsncmp( ppArguments[argn], PARAM_LIBPATH_STR, _tcslen(PARAM_LIBPATH_STR) ) )
         {
-            LPTSTR  pFileSpec = NULL;
+            LPTSTR	pFileSpec = NULL;
 
             GetFullPathName( ppArguments[argn] + _tcslen(PARAM_LIBPATH_STR), sizeof(szPathValue) / sizeof(TCHAR), szPathValue, &pFileSpec );
             _tcscat( szPathValue, TEXT(";") );
@@ -112,21 +112,21 @@ extern "C" int Main()
     _tcscat( szPathValue, szBuffer );
     SetEnvironmentVariable( TEXT("PATH"), szPathValue);
 
-    LPVOID  lpEnvironment = GetEnvironmentStrings();
-
+    LPVOID	lpEnvironment = GetEnvironmentStrings();
+    
 
     // Retrieve current directory
 
-    TCHAR               szCurrentDirectory[MAX_PATH];
+    TCHAR				szCurrentDirectory[MAX_PATH];
     GetCurrentDirectory( MAX_PATH, szCurrentDirectory );
 
     // Set the Flags
 
-    DWORD   dwCreationFlags = PROCESS_CREATIONFLAGS;
+    DWORD	dwCreationFlags = PROCESS_CREATIONFLAGS;
 
-    PROCESS_INFORMATION aProcessInfo;
+    PROCESS_INFORMATION	aProcessInfo;
 
-    BOOL    fSuccess = CreateProcess(
+    BOOL	fSuccess = CreateProcess(
         szApplicationName,
         lpCommandLine,
         NULL,
@@ -140,7 +140,7 @@ extern "C" int Main()
 
     if ( fSuccess )
     {
-        DWORD   dwExitCode;
+        DWORD	dwExitCode;
 
         WaitForSingleObject( aProcessInfo.hProcess, INFINITE );
         fSuccess = GetExitCodeProcess( aProcessInfo.hProcess, &dwExitCode );
@@ -148,12 +148,12 @@ extern "C" int Main()
         return dwExitCode;
     }
 
-    DWORD   dwError = GetLastError();
+    DWORD	dwError = GetLastError();
 
     LPVOID lpMsgBuf;
 
-    FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+    FormatMessage( 
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
         FORMAT_MESSAGE_FROM_SYSTEM,
         NULL,
         dwError,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ protected:
     virtual BOOL        Close();
     virtual void        Move();
 
-    SAL_DLLPRIVATE SfxChildWindow* GetChildWindow_Impl()    { return pMgr; }
+    SAL_DLLPRIVATE SfxChildWindow* GetChildWindow_Impl()	{ return pMgr; }
 
 public:
                         SfxDockingWindow( SfxBindings *pBindings,
@@ -92,22 +92,22 @@ public:
 
     void                Initialize (SfxChildWinInfo* pInfo);
     virtual void        FillInfo(SfxChildWinInfo&) const;
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void		StateChanged( StateChangedType nStateChange );
 
     void                SetDockingRects(const Rectangle& rOuter, const Rectangle& rInner)
                             { aInnerRect = rInner; aOuterRect = rOuter; }
-    const Rectangle&    GetInnerRect() const                    { return aInnerRect; }
-    const Rectangle&    GetOuterRect() const                    { return aOuterRect; }
-    SfxBindings&        GetBindings() const                     { return *pBindings; }
-    USHORT              GetType() const                         { return pMgr->GetType(); }
-    SfxChildAlignment   GetAlignment() const                    { return pMgr->GetAlignment(); }
-    void                SetAlignment(SfxChildAlignment eAlign)  { pMgr->SetAlignment(eAlign); }
-    Size                GetFloatingSize() const                 { return aFloatSize; }
-    void                SetFloatingSize(const Size& rSize)      { aFloatSize=rSize; }
+    const Rectangle&    GetInnerRect() const					{ return aInnerRect; }
+    const Rectangle&    GetOuterRect() const					{ return aOuterRect; }
+    SfxBindings&        GetBindings() const						{ return *pBindings; }
+    USHORT              GetType() const							{ return pMgr->GetType(); }
+    SfxChildAlignment   GetAlignment() const					{ return pMgr->GetAlignment(); }
+    void                SetAlignment(SfxChildAlignment eAlign)	{ pMgr->SetAlignment(eAlign); }
+    Size                GetFloatingSize() const					{ return aFloatSize; }
+    void                SetFloatingSize(const Size& rSize)		{ aFloatSize=rSize; }
 
     void                SetMinOutputSizePixel( const Size& rSize );
     Size                GetMinOutputSizePixel() const;
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual long		Notify( NotifyEvent& rNEvt );
     virtual void        FadeIn( BOOL );
     void                AutoShow( BOOL bShow = TRUE );
     DECL_LINK( TimerHdl, Timer* );

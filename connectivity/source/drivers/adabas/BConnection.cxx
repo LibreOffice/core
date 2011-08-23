@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ using namespace ::com::sun::star::lang;
 
 
 //------------------------------------------------------------------------------
-namespace starlang  = ::com::sun::star::lang;
+namespace starlang	= ::com::sun::star::lang;
 // --------------------------------------------------------------------------------
 OAdabasConnection::OAdabasConnection(const SQLHANDLE _pDriverHandle, connectivity::odbc::ODBCDriver*        _pDriver)
                                                  : OConnection_BASE2(_pDriverHandle,_pDriver)
@@ -76,8 +76,8 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
     if(m_aConnectionHandle == SQL_NULL_HANDLE)
         throw SQLException();
 
-    const PropertyValue *pBegin = info.getConstArray();
-    const PropertyValue *pEnd   = pBegin + info.getLength();
+    const PropertyValue *pBegin	= info.getConstArray();
+    const PropertyValue *pEnd	= pBegin + info.getLength();
     ::rtl::OUString sHostName;
 
     sal_Int32 nLen = url.indexOf(':');

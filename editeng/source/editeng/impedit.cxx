@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-#define SCRLRANGE   20      // 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
+#define SCRLRANGE	20		// 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
 
 inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiffX, short nDiffY )
 {
@@ -73,29 +73,29 @@ inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiff
     rPoint = pOutDev->PixelToLogic( rPoint );
 }
 
-//  ----------------------------------------------------------------------
-//  class ImpEditView
-//  ----------------------------------------------------------------------
+//	----------------------------------------------------------------------
+//	class ImpEditView
+//	----------------------------------------------------------------------
 ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
     aOutArea( Point(), pEng->GetPaperSize() )
 {
     pEditView           = pView;
-    pEditEngine         = pEng;
-    pOutWin             = pWindow;
-    pPointer            = NULL;
-    pBackgroundColor    = NULL;
-    nScrollDiffX        = 0;
+    pEditEngine			= pEng;
+    pOutWin 			= pWindow;
+    pPointer			= NULL;
+    pBackgroundColor	= NULL;
+    nScrollDiffX		= 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
-    pCursor             = NULL;
-       pDragAndDropInfo = NULL;
-    bReadOnly           = sal_False;
+    pCursor				= NULL;
+       pDragAndDropInfo	= NULL;
+    bReadOnly			= sal_False;
     bClickedInSelection = sal_False;
-    eSelectionMode      = EE_SELMODE_TXTONLY;
-    eAnchorMode         = ANCHOR_TOP_LEFT;
-    nInvMore            = 1;
-    nTravelXPos         = TRAVEL_X_DONTKNOW;
-    nControl            = EV_CNTRL_AUTOSCROLL | EV_CNTRL_ENABLEPASTE;
+    eSelectionMode		= EE_SELMODE_TXTONLY;
+    eAnchorMode			= ANCHOR_TOP_LEFT;
+    nInvMore			= 1;
+    nTravelXPos			= TRAVEL_X_DONTKNOW;
+    nControl 			= EV_CNTRL_AUTOSCROLL | EV_CNTRL_ENABLEPASTE;
     bActiveDragAndDropListener = FALSE;
 
     aEditSelection.Min() = pEng->pImpEditEngine->GetEditDoc().GetStartPaM();
@@ -408,13 +408,13 @@ Region* ImpEditView::CalcSelectedRegion()
     return pRegion;
 }
 
-void ImpEditView::SetSelectionMode( EESelectionMode eNewMode )
+void ImpEditView::SetSelectionMode( EESelectionMode	eNewMode )
 {
     if ( eSelectionMode != eNewMode )
     {
-        DrawSelection();    // 'Wegmalen' ...
+        DrawSelection();	// 'Wegmalen' ...
         eSelectionMode = eNewMode;
-        DrawSelection();    // und neu zeichnen.
+        DrawSelection();	// und neu zeichnen.
     }
 }
 
@@ -724,7 +724,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
             nDocDiffY = aEditCursor.Bottom() - aTmpVisArea.Bottom();
         }
         else if ( aEditCursor.Top() < aTmpVisArea.Top() )
-        {   // runterscrollen, negativ
+        {	// runterscrollen, negativ
             nDocDiffY = aEditCursor.Top() - aTmpVisArea.Top();
         }
 
@@ -744,7 +744,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
             }
         }
         else if ( aEditCursor.Left() < aTmpVisArea.Left() )
-        {   // rechtsscrollen
+        {	// rechtsscrollen
             // negativ:
             nDocDiffX = aEditCursor.Left() - aTmpVisArea.Left();
             // Darfs ein bischen mehr sein?
@@ -753,7 +753,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
             else
                 nDocDiffX -= aEditCursor.Left();
         }
-        if ( aPaM.GetIndex() == 0 )     // braucht Olli fuer den Outliner
+        if ( aPaM.GetIndex() == 0 ) 	// braucht Olli fuer den Outliner
         {
             // Aber sicherstellen, dass dadurch der Cursor nicht den
             // sichtbaren bereich verlaesst!
@@ -916,7 +916,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
     {
         // GetTextHeight noch optimieren!
         long nDiff = pEditEngine->pImpEditEngine->GetTextHeight() - aNewVisArea.Bottom(); // negativ
-        aNewVisArea.Move( 0, nDiff );   // koennte im neg. Bereich landen...
+        aNewVisArea.Move( 0, nDiff );	// koennte im neg. Bereich landen...
     }
     if ( ( aNewVisArea.Top() < 0 ) && ( nRangeCheck != RGCHK_NONE ) )
         aNewVisArea.Move( 0, -aNewVisArea.Top() );
@@ -934,8 +934,8 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
     }
     if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth( FALSE ) ) )
     {
-        long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( FALSE ) - aNewVisArea.Right();     // negativ
-        aNewVisArea.Move( nDiff, 0 );   // koennte im neg. Bereich landen...
+        long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( FALSE ) - aNewVisArea.Right(); 	// negativ
+        aNewVisArea.Move( nDiff, 0 );	// koennte im neg. Bereich landen...
     }
     if ( ( aNewVisArea.Left() < 0 ) && ( nRangeCheck != RGCHK_NONE ) )
         aNewVisArea.Move( -aNewVisArea.Left(), 0 );
@@ -1071,7 +1071,7 @@ sal_Bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
 
 sal_Bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
-    pEditEngine->pImpEditEngine->CheckIdleFormatter();  // Falls schnelles Tippen und MouseButtonDown
+    pEditEngine->pImpEditEngine->CheckIdleFormatter();	// Falls schnelles Tippen und MouseButtonDown
     if ( pEditEngine->pImpEditEngine->aStatus.NotifyCursorMovements() )
         pEditEngine->pImpEditEngine->aStatus.GetPrevParagraph() = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() );
     nTravelXPos = TRAVEL_X_DONTKNOW;
@@ -1088,7 +1088,7 @@ sal_Bool ImpEditView::MouseMove( const MouseEvent& rMouseEvent )
 
 void ImpEditView::Command( const CommandEvent& rCEvt )
 {
-    pEditEngine->pImpEditEngine->CheckIdleFormatter();  // Falls schnelles Tippen und MouseButtonDown
+    pEditEngine->pImpEditEngine->CheckIdleFormatter();	// Falls schnelles Tippen und MouseButtonDown
     pEditEngine->pImpEditEngine->Command( rCEvt, GetEditViewPtr() );
 }
 
@@ -1112,7 +1112,7 @@ sal_Bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfW
         bIsWrong = rPaM.GetNode()->GetWrongList()->HasWrong( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
         if ( bIsWrong && bMarkIfWrong )
         {
-            DrawSelection();    // alte Selektion 'weg-zeichnen'
+            DrawSelection();	// alte Selektion 'weg-zeichnen'
             SetEditSelection( aSel );
             DrawSelection();
         }
@@ -1137,7 +1137,7 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
         {
             aWord = pEditEngine->pImpEditEngine->GetSelected( GetEditSelection() );
             // Und deselektieren
-            DrawSelection();    // alte Selektion 'weg-zeichnen'
+            DrawSelection();	// alte Selektion 'weg-zeichnen'
             SetEditSelection( EditSelection( aPaM, aPaM ) );
             DrawSelection();
         }
@@ -1491,7 +1491,7 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
             pOutWin->GetCursor()->Hide();
 
         Color aOldFillColor = GetWindow()->GetFillColor();
-        GetWindow()->SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
+        GetWindow()->SetFillColor( Color(4210752) );	// GRAY BRUSH_50, OLDSV, change to DDCursor!
 
         // Hintergrund sichern...
         Rectangle aSaveRec( GetWindow()->LogicToPixel( rRect ) );

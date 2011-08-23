@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ SvxViewLayoutItem::SvxViewLayoutItem
 // -----------------------------------------------------------------------
 
 SvxViewLayoutItem::SvxViewLayoutItem( const SvxViewLayoutItem& rOrig )
-:   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
+:	SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
     mbBookMode( rOrig.IsBookMode() )
 {
 }
@@ -108,7 +108,7 @@ int SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 
     SvxViewLayoutItem& rItem = (SvxViewLayoutItem&)rAttr;
 
-    return ( GetValue() == rItem.GetValue()     &&
+    return ( GetValue() == rItem.GetValue() 	&&
              mbBookMode == rItem.IsBookMode() );
 }
 

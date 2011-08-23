@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
-    m_pHistory  ( NULL ),
-    m_nCurPos   ( 0 )
+    m_pHistory	( NULL ),
+    m_nCurPos	( 0 )
 
 {
 }
@@ -269,7 +269,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                     m_pHistory->GetObject(m_nCurPos)->aViewData = xController->getViewData();
                 }
             }
-
+            
             ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                                     : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
                                                     ? ++m_nCurPos

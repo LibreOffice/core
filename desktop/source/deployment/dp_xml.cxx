@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ void xml_parse(
     Reference<xml::sax::XParser> xParser(
         xContext->getServiceManager()->createInstanceWithContext(
             OUSTR("com.sun.star.xml.sax.Parser"), xContext ), UNO_QUERY_THROW );
-
+    
     // error handler, entity resolver omitted
     xParser->setDocumentHandler( xDocHandler );
     xml::sax::InputSource source;

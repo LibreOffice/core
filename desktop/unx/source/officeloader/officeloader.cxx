@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ using namespace desktop;
 
 SAL_IMPLEMENT_MAIN()
 {
-    oslProcess      process;
-    oslProcessError error;
+    oslProcess		process;
+    oslProcessError	error;
 
-    OUString    sExecutableFile;
-    rtl_uString **pCommandArgs;
-    sal_uInt32  nCommandArgs;
+    OUString	sExecutableFile;
+    rtl_uString	**pCommandArgs;
+    sal_uInt32	nCommandArgs;
 
     osl_getExecutableFile( &sExecutableFile.pData );
 
@@ -62,7 +62,7 @@ SAL_IMPLEMENT_MAIN()
 
     bool bRestart = false;
     bool bFirstRun = true;
-    oslProcessExitCode  exitcode = 255;
+    oslProcessExitCode	exitcode = 255;
 
     do  {
         error = osl_executeProcess(
@@ -79,7 +79,7 @@ SAL_IMPLEMENT_MAIN()
 
         if ( osl_Process_E_None == error )
         {
-            oslProcessInfo  info;
+            oslProcessInfo	info;
 
             info.Size = sizeof(info);
 

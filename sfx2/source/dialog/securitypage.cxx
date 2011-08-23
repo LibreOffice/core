@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,9 +123,9 @@ namespace
 //////////////////////////////////////////////////////////////////////
 
 
-static short lcl_GetPassword(
-    Window *pParent,
-    bool bProtect,
+static short lcl_GetPassword( 
+    Window *pParent, 
+    bool bProtect, 
     /*out*/String &rPassword )
 {
     bool bRes = false;
@@ -175,13 +175,13 @@ struct SfxSecurityPage_Impl
     FixedText           m_aConfirmPasswordToOpenFT;
     Edit                m_aConfirmPasswordToOpenED;
     FixedText           m_aNewPasswordInfoFT;
-
+    
     FixedLine           m_aNewPasswordToModifyFL;
     FixedText           m_aNewPasswordToModifyFT;
     Edit                m_aNewPasswordToModifyED;
     FixedText           m_aConfirmPasswordToModifyFT;
     Edit                m_aConfirmPasswordToModifyED;
-
+    
     FixedLine           m_aOptionsFL;
     CheckBox            m_aOpenReadonlyCB;
     CheckBox            m_aRecordChangesCB;         // for record changes
@@ -202,10 +202,10 @@ struct SfxSecurityPage_Impl
 
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg, const SfxItemSet &rItemSet );
     ~SfxSecurityPage_Impl();
-
+    
     BOOL    FillItemSet_Impl( SfxItemSet & );
     void    Reset_Impl( const SfxItemSet & );
-};
+};    
 
 
 SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const SfxItemSet & ) :
@@ -276,7 +276,7 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const Sfx
     m_aChangeProtectionPB.SetPosPixel( aPos );
 }
 
-
+    
 SfxSecurityPage_Impl::~SfxSecurityPage_Impl()
 {
 }
@@ -285,7 +285,7 @@ SfxSecurityPage_Impl::~SfxSecurityPage_Impl()
 BOOL SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
 {
     bool bModified = false;
-
+    
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
     if (pCurDocShell&& !pCurDocShell->IsReadOnly())
     {
@@ -308,7 +308,7 @@ BOOL SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
             }
 
             // change record protection
-            if (m_bNewPasswordIsValid &&
+            if (m_bNewPasswordIsValid && 
                 bDoChangeProtection != pCurDocShell->HasChangeRecordProtection())
             {
                 DBG_ASSERT( !bDoChangeProtection || bDoRecordChanges,
@@ -327,9 +327,9 @@ BOOL SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
             bModified = true;
         }
     }
-
+    
     return bModified;
-}
+}    
 
 
 void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
@@ -406,10 +406,10 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             m_aChangeProtectionPB.Check( FALSE );
             m_aChangeProtectionPB.Disable();
         }
-    }
+    }    
 
     m_aChangeProtectionPB.SetText( sNewText );
-}
+}    
 
 
 IMPL_LINK( SfxSecurityPage_Impl, RecordChangesCBToggleHdl, void*, EMPTYARG )
@@ -428,7 +428,7 @@ IMPL_LINK( SfxSecurityPage_Impl, RecordChangesCBToggleHdl, void*, EMPTYARG )
                 m_bEndRedliningWarningDone = true;
         }
 
-        const bool bNeedPasssword = !m_bOrigPasswordIsConfirmed
+        const bool bNeedPasssword = !m_bOrigPasswordIsConfirmed 
                 && m_aChangeProtectionPB.GetText() != m_aProtectSTR;
         if (!bAlreadyDone && bNeedPasssword)
         {
@@ -449,7 +449,7 @@ IMPL_LINK( SfxSecurityPage_Impl, RecordChangesCBToggleHdl, void*, EMPTYARG )
             m_aRecordChangesCB.Check( true );     // restore original state
         else
         {
-            // remember required values to change protection and change recording in
+            // remember required values to change protection and change recording in 
             // FillItemSet_Impl later on if password was correct.
             m_bNewPasswordIsValid = true;
             m_aNewPassword = String();
@@ -457,7 +457,7 @@ IMPL_LINK( SfxSecurityPage_Impl, RecordChangesCBToggleHdl, void*, EMPTYARG )
             m_aChangeProtectionPB.SetText( m_aProtectSTR );
         }
     }
-
+    
     return 0;
 }
 
@@ -491,7 +491,7 @@ IMPL_LINK( SfxSecurityPage_Impl, ChangeProtectionPBHdl, void*, EMPTYARG )
     }
     DBG_ASSERT( m_bOrigPasswordIsConfirmed, "ooops... this should not have happened!" );
 
-    // remember required values to change protection and change recording in
+    // remember required values to change protection and change recording in 
     // FillItemSet_Impl later on if password was correct.
     m_bNewPasswordIsValid = true;
     m_aNewPassword = bNewProtection? aPasswordText : String();
@@ -513,7 +513,7 @@ SfxTabPage* SfxSecurityPage::Create( Window * pParent, const SfxItemSet & rItemS
 {
     return new SfxSecurityPage( pParent, rItemSet );
 }
-
+    
 
 SfxSecurityPage::SfxSecurityPage( Window* pParent, const SfxItemSet& rItemSet ) :
     SfxTabPage( pParent, SfxResId( TP_DOCINFOSECURITY ), rItemSet )
@@ -523,7 +523,7 @@ SfxSecurityPage::SfxSecurityPage( Window* pParent, const SfxItemSet& rItemSet ) 
     FreeResource();
 }
 
-
+    
 SfxSecurityPage::~SfxSecurityPage()
 {
 }
@@ -538,14 +538,14 @@ BOOL SfxSecurityPage::FillItemSet( SfxItemSet & rItemSet )
     return bModified;
 }
 
-
+    
 void SfxSecurityPage::Reset( const SfxItemSet & rItemSet )
 {
     DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
     if (m_pImpl.get() != 0)
         m_pImpl->Reset_Impl( rItemSet );
 }
-
+    
 
 //////////////////////////////////////////////////////////////////////
 

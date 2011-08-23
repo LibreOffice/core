@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange
 void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 {
     // TODO: may be needs interaction handler to detect wherether the object state
-    //       can be changed even after errors
+    //		 can be changed even after errors
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
@@ -448,7 +448,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
         sal_Int32 nOldState = m_nObjectState;
-
+        
         if ( m_nTargetState != -1 )
         {
             // means that the object is currently trying to reach the target state

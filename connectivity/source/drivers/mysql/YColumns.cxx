@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OMySQLColumns::OMySQLColumns(   ::cppu::OWeakObject& _rParent
+OMySQLColumns::OMySQLColumns(	::cppu::OWeakObject& _rParent
                                 ,sal_Bool _bCase
                                 ,::osl::Mutex& _rMutex
                                 ,const TStringVector &_rVector
@@ -58,8 +58,8 @@ Reference< XPropertySet > OMySQLColumns::createDescriptor()
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-OMySQLColumn::OMySQLColumn( sal_Bool    _bCase)
-    : connectivity::sdbcx::OColumn( _bCase )
+OMySQLColumn::OMySQLColumn(	sal_Bool	_bCase) 
+    : connectivity::sdbcx::OColumn(	_bCase )
 {
     construct();
 }
@@ -67,17 +67,17 @@ OMySQLColumn::OMySQLColumn( sal_Bool    _bCase)
 void OMySQLColumn::construct()
 {
     m_sAutoIncrement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("auto_increment"));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement, ::getCppuType(&m_sAutoIncrement));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION),PROPERTY_ID_AUTOINCREMENTCREATION,0,&m_sAutoIncrement,	::getCppuType(&m_sAutoIncrement));
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OMySQLColumn::createArrayHelper( sal_Int32 /*_nId*/ ) const
-{
+{																
     return doCreateArrayHelper();
 }
 // -----------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & SAL_CALL OMySQLColumn::getInfoHelper()
-{
-    return *OMySQLColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
+::cppu::IPropertyArrayHelper & SAL_CALL OMySQLColumn::getInfoHelper() 
+{														
+    return *OMySQLColumn_PROP::getArrayHelper(isNew() ? 1 : 0);	
 }
 // -----------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OMySQLColumn::getSupportedServiceNames(  ) throw(RuntimeException)

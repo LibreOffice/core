@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,15 +54,15 @@ SV_IMPL_PTRARR( SfxChildWinContextArr_Impl, SfxChildWinContextFactory* );
 
 struct SfxChildWindow_Impl
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > 			xFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      xListener;
     SfxChildWinFactory* pFact;
-    sal_Bool                bHideNotDelete;
-    sal_Bool                bVisible;
-    sal_Bool                bHideAtToggle;
-    sal_Bool                bWantsFocus;
-    SfxModule*          pContextModule;
-    SfxWorkWindow*      pWorkWin;
+    sal_Bool				bHideNotDelete;
+    sal_Bool				bVisible;
+    sal_Bool				bHideAtToggle;
+    sal_Bool				bWantsFocus;
+    SfxModule*			pContextModule;
+    SfxWorkWindow*		pWorkWin;
 };
 
 // -----------------------------------------------------------------------
@@ -340,7 +340,7 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     DBG_CHKTHIS(SfxChildWindow,0);
 
     SfxChildWinInfo aInfo;
-    aInfo.aPos  = pWindow->GetPosPixel();
+    aInfo.aPos	= pWindow->GetPosPixel();
     aInfo.aSize = pWindow->GetSizePixel();
     if ( pWindow->IsSystemWindow() )
     {
@@ -531,7 +531,7 @@ SfxChildWindowContext::~SfxChildWindowContext()
     delete pWindow;
 }
 
-FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
+FloatingWindow*	SfxChildWindowContext::GetFloatingWindow() const
 {
     Window *pParent = pWindow->GetParent();
     if ( pParent->GetType() == RSC_DOCKINGWINDOW || pParent->GetType() == RSC_TOOLBOX )
@@ -611,11 +611,11 @@ sal_Bool SfxChildWindow::WantsFocus() const
 
 sal_Bool SfxChildWinInfo::GetExtraData_Impl
 (
-    SfxChildAlignment   *pAlign,
-    SfxChildAlignment   *pLastAlign,
-    Size                *pSize,
-    sal_uInt16          *pLine,
-    sal_uInt16          *pPos
+    SfxChildAlignment	*pAlign,
+    SfxChildAlignment	*pLastAlign,
+    Size				*pSize,
+    sal_uInt16			*pLine,
+    sal_uInt16			*pPos
 )   const
 {
     // ung"ultig?
@@ -722,7 +722,7 @@ void SfxChildWindow::Show( USHORT nFlags )
     }
 }
 
-Window* SfxChildWindow::GetContextWindow( SfxModule *pModule ) const
+Window*	SfxChildWindow::GetContextWindow( SfxModule *pModule ) const
 {
     return pModule == pImp->pContextModule && pContext ? pContext->GetWindow(): 0;
 }
@@ -736,7 +736,7 @@ void SfxChildWindow::SetWorkWindow_Impl( SfxWorkWindow* pWin )
 
 //SfxWorkWindow* SfxChildWindow::GetWorkWindow_Impl() const
 //{
-//  return pImp->pWorkWin;
+//	return pImp->pWorkWin;
 //}
 
 void SfxChildWindow::Activate_Impl()
@@ -747,7 +747,7 @@ void SfxChildWindow::Activate_Impl()
 
 void SfxChildWindow::Deactivate_Impl()
 {
-//  pImp->pWorkWin->SetActiveChild_Impl( NULL );
+//	pImp->pWorkWin->SetActiveChild_Impl( NULL );
 }
 
 sal_Bool SfxChildWindow::QueryClose()

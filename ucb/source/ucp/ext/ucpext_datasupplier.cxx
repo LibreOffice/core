@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,10 +80,10 @@ namespace ucb { namespace ucp { namespace ext
     //==================================================================================================================
     struct ResultListEntry
     {
-        ::rtl::OUString                 sId;
+        ::rtl::OUString					sId;
         Reference< XContentIdentifier > xId;
         ::rtl::Reference< Content >     pContent;
-        Reference< XRow >               xRow;
+        Reference< XRow > 			    xRow;
     };
 
     typedef ::std::vector< ResultListEntry >    ResultList;
@@ -94,7 +94,7 @@ namespace ucb { namespace ucp { namespace ext
     struct DataSupplier_Impl
     {
         ::osl::Mutex                                m_aMutex;
-        ResultList                                  m_aResults;
+        ResultList					                m_aResults;
         ::rtl::Reference< Content >                 m_xContent;
         Reference< XMultiServiceFactory >           m_xSMgr;
         sal_Int32                                   m_nOpenMode;

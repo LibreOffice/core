@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ PasswordDialog::PasswordDialog(
     ResMgr * pResMgr,
     rtl::OUString& aDocURL,
     bool bOpenToModify )
-
+    
     :ModalDialog( _pParent, ResId( DLG_UUI_PASSWORD, *pResMgr ) )
     ,aFTPassword( this, ResId( FT_PASSWORD, *pResMgr ))
     ,aEDPassword( this, ResId( ED_PASSWORD, *pResMgr ))
@@ -89,7 +89,7 @@ PasswordDialog::PasswordDialog(
     Rectangle aRect = aFTPassword.GetTextRect( aLabelRect, aFTPassword.GetText() );
 
     long nNewLabelHeight = 0;
-    for( nNewLabelHeight = ( nTextWidth / nLabelWidth + 1 ) * nTextHeight;
+    for( nNewLabelHeight = ( nTextWidth / nLabelWidth + 1 ) * nTextHeight; 
         nNewLabelHeight < aRect.GetHeight();
         nNewLabelHeight += nTextHeight ) {} ;
 

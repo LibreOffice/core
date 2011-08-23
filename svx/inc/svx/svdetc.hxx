@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ class ImpSdrHdcMerk
 {
     ImpColorMerk* pFarbMerk;
     ImpClipMerk*  pClipMerk;
-    Color*        pLineColorMerk;
+    Color*		  pLineColorMerk;
     USHORT        nMode;
 public:
     ImpSdrHdcMerk(const OutputDevice& rOut, USHORT nNewMode=SDRHDC_SAVEALL, bool bAutoMerk = true);
@@ -212,17 +212,17 @@ class Link;
 class SVX_DLLPUBLIC SvdProgressInfo
 {
 private:
-    ULONG nSumActionCount;  // Summe aller Actions
-    ULONG nSumCurAction;    // Summe aller bearbeiteten Actions
+    ULONG nSumActionCount;	// Summe aller Actions
+    ULONG nSumCurAction;	// Summe aller bearbeiteten Actions
 
-    ULONG nActionCount;     // Anzahl der Actions im akt. Obj.
-    ULONG nCurAction;       // Anzahl bearbeiteter Act. im akt. Obj.
+    ULONG nActionCount;		// Anzahl der Actions im akt. Obj.
+    ULONG nCurAction;		// Anzahl bearbeiteter Act. im akt. Obj.
 
-    ULONG nInsertCount;     // Anzahl einzufuegender Act. im akt. Obj.
-    ULONG nCurInsert;       // Anzahl bereits eingefuegter Actions
+    ULONG nInsertCount;		// Anzahl einzufuegender Act. im akt. Obj.
+    ULONG nCurInsert;		// Anzahl bereits eingefuegter Actions
 
-    ULONG nObjCount;        // Anzahl der selektierten Objekte
-    ULONG nCurObj;          // Aktuelles Objekt
+    ULONG nObjCount;		// Anzahl der selektierten Objekte
+    ULONG nCurObj;			// Aktuelles Objekt
 
     Link *pLink;
 
@@ -282,7 +282,7 @@ class AutoTimer;
 
 class OLEObjCache : public Container
 {
-    ULONG               nSize;
+    ULONG				nSize;
     AutoTimer*          pTimer;
 
     void UnloadOnDemand();
@@ -305,14 +305,14 @@ class SVX_DLLPUBLIC SdrGlobalData
     const CharClass*            pCharClass;     // follows always SysLocale
     const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 public:
-    SdrLinkList         aUserMakeObjHdl;
-    SdrLinkList         aUserMakeObjUserDataHdl;
-    SdrOutliner*        pOutliner;
-    SdrEngineDefaults*  pDefaults;
-    ResMgr*             pResMgr;
-    ULONG               nExchangeFormat;
-    OLEObjCache         aOLEObjCache;
-
+    SdrLinkList     	aUserMakeObjHdl;
+    SdrLinkList     	aUserMakeObjUserDataHdl;
+    SdrOutliner*       	pOutliner;
+    SdrEngineDefaults* 	pDefaults;
+    ResMgr*            	pResMgr;
+    ULONG              	nExchangeFormat;
+    OLEObjCache			aOLEObjCache;
+    
 
     const SvtSysLocale*         GetSysLocale();     // follows always locale settings
     const CharClass*            GetCharClass();     // follows always SysLocale
@@ -321,7 +321,7 @@ public:
     SdrGlobalData();
     ~SdrGlobalData();
 
-    OLEObjCache&        GetOLEObjCache() { return aOLEObjCache; }
+    OLEObjCache& 		GetOLEObjCache() { return aOLEObjCache; }
 };
 
 inline SdrGlobalData& GetSdrGlobalData()

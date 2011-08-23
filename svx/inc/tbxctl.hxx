@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ public:
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    virtual void                Select( BOOL bMod1 = FALSE );
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void				Select( BOOL bMod1 = FALSE );
+    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindowType	GetPopupWindowType() const;
 };
 
 #endif

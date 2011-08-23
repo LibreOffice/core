@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "properties.h"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
@@ -54,7 +54,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
@@ -69,7 +69,7 @@
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
 using ::rtl::OUString;
@@ -140,7 +140,7 @@ throw (::com::sun::star::uno::RuntimeException)
 ::sal_Bool SAL_CALL ModuleImageManager::hasImage( ::sal_Int16 nImageType, const ::rtl::OUString& aCommandURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    return m_pImpl->hasImage(nImageType,aCommandURL);
+    return m_pImpl->hasImage(nImageType,aCommandURL);   
 }
 
 Sequence< uno::Reference< XGraphic > > SAL_CALL ModuleImageManager::getImages(
@@ -168,7 +168,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
         ::com::sun::star::uno::RuntimeException)
 {
-    m_pImpl->removeImages(nImageType,aCommandURLSequence);
+    m_pImpl->removeImages(nImageType,aCommandURLSequence);    
 }
 
 void SAL_CALL ModuleImageManager::insertImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
@@ -181,39 +181,39 @@ throw ( ::com::sun::star::container::ElementExistException,
 }
 
 // XUIConfiguration
-void SAL_CALL ModuleImageManager::addConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
+void SAL_CALL ModuleImageManager::addConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) 
 throw (::com::sun::star::uno::RuntimeException)
 {
     m_pImpl->addConfigurationListener(xListener);
 }
 
-void SAL_CALL ModuleImageManager::removeConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
+void SAL_CALL ModuleImageManager::removeConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) 
 throw (::com::sun::star::uno::RuntimeException)
 {
     m_pImpl->removeConfigurationListener(xListener);
 }
 
 // XUIConfigurationPersistence
-void SAL_CALL ModuleImageManager::reload()
-throw ( ::com::sun::star::uno::Exception,
+void SAL_CALL ModuleImageManager::reload() 
+throw ( ::com::sun::star::uno::Exception, 
         ::com::sun::star::uno::RuntimeException )
 {
     m_pImpl->reload();
 }
 
-void SAL_CALL ModuleImageManager::store()
+void SAL_CALL ModuleImageManager::store() 
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     m_pImpl->store();
 }
 
-void SAL_CALL ModuleImageManager::storeToStorage( const uno::Reference< XStorage >& Storage )
+void SAL_CALL ModuleImageManager::storeToStorage( const uno::Reference< XStorage >& Storage ) 
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     m_pImpl->storeToStorage(Storage);
 }
 
-sal_Bool SAL_CALL ModuleImageManager::isModified()
+sal_Bool SAL_CALL ModuleImageManager::isModified() 
 throw (::com::sun::star::uno::RuntimeException)
 {
     return m_pImpl->isModified();

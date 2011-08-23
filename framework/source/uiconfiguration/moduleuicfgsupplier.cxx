@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -45,7 +45,7 @@
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -86,7 +86,7 @@ class RootStorageWrapper :  public ::cppu::WeakImplHelper1< com::sun::star::embe
 };
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_4                    (    ModuleUIConfigurationManagerSupplier                    ,
                                             OWeakObject                                             ,
@@ -97,8 +97,8 @@ DEFINE_XINTERFACE_4                    (    ModuleUIConfigurationManagerSupplier
                                         )
 
 DEFINE_XTYPEPROVIDER_4                  (   ModuleUIConfigurationManagerSupplier                                ,
-                                            css::lang::XTypeProvider                                            ,
-                                            css::lang::XServiceInfo                                             ,
+                                            css::lang::XTypeProvider			                                ,
+                                            css::lang::XServiceInfo				                                ,
                                             css::lang::XComponent                                               ,
                                             ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier
                                         )

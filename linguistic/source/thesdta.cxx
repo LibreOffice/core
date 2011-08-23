@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@ namespace linguistic
 
 ThesaurusMeaning::ThesaurusMeaning(const OUString &rText,
                  const OUString &rLookUpText, INT16 nLookUpLang ) :
-    aText               (rText),
-    aLookUpText         (rLookUpText),
-    nLookUpLanguage     (nLookUpLang)
+    aText				(rText),
+    aLookUpText			(rLookUpText),
+    nLookUpLanguage		(nLookUpLang)
 {
 }
 
@@ -67,7 +67,7 @@ ThesaurusMeaning::~ThesaurusMeaning()
 OUString SAL_CALL
         ThesaurusMeaning::getMeaning() throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    MutexGuard	aGuard( GetLinguMutex() );
     return aText;
 }
 

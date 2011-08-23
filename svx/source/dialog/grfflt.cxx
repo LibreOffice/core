@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,15 @@
 
 ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
 {
-    const Graphic&  rGraphic = rFilterObject.GetGraphic();
-    ULONG           nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
+    const Graphic&	rGraphic = rFilterObject.GetGraphic();
+    ULONG			nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
-        SfxViewFrame*   pViewFrame = SfxViewFrame::Current();
-        SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : NULL;
-        Window*         pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : NULL;
-        Graphic         aGraphic;
+        SfxViewFrame*	pViewFrame = SfxViewFrame::Current();
+        SfxObjectShell*	pShell = pViewFrame ? pViewFrame->GetObjectShell() : NULL;
+        Window*			pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : NULL;
+        Graphic			aGraphic;
 
         switch( rReq.GetSlot() )
         {
@@ -197,7 +197,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             }
             break;
 
-            case( SID_GRFFILTER_EMBOSS  ):
+            case( SID_GRFFILTER_EMBOSS	):
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
@@ -211,7 +211,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             }
             break;
 
-            case( SID_GRFFILTER_POSTER  ):
+            case( SID_GRFFILTER_POSTER	):
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
@@ -225,7 +225,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             }
             break;
 
-            case( SID_GRFFILTER_POPART  ):
+            case( SID_GRFFILTER_POPART	):
             {
                 if( pShell )
                     pShell->SetWaitCursor( TRUE );

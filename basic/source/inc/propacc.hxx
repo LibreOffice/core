@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,35 +37,35 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#define NS_BEANS    ::com::sun::star::beans
-#define NS_LANG     ::com::sun::star::lang
-#define NS_UNO      ::com::sun::star::uno
+#define NS_BEANS	::com::sun::star::beans
+#define NS_LANG		::com::sun::star::lang
+#define NS_UNO		::com::sun::star::uno
 
 typedef NS_BEANS::PropertyValue* SbPropertyValuePtr;
 SV_DECL_PTRARR( SbPropertyValueArr_Impl, SbPropertyValuePtr, 4, 4 )
 
-typedef ::cppu::WeakImplHelper2< NS_BEANS::XPropertySet,
+typedef ::cppu::WeakImplHelper2< NS_BEANS::XPropertySet, 
                                  NS_BEANS::XPropertyAccess > SbPropertyValuesHelper;
 
 
 //==========================================================================
 
-class SbPropertyValues:     public SbPropertyValuesHelper
+class SbPropertyValues: 	public SbPropertyValuesHelper
 {
-    SbPropertyValueArr_Impl _aPropVals;
+    SbPropertyValueArr_Impl	_aPropVals;
     NS_UNO::Reference< ::com::sun::star::beans::XPropertySetInfo > _xInfo;
 
 private:
-    INT32                   GetIndex_Impl( const ::rtl::OUString &rPropName ) const;
+    INT32 					GetIndex_Impl( const ::rtl::OUString &rPropName ) const;
 
 public:
                             SbPropertyValues();
-    virtual                 ~SbPropertyValues();
+    virtual					~SbPropertyValues();
 
     // XPropertySet
-    virtual NS_UNO::Reference< NS_BEANS::XPropertySetInfo > SAL_CALL
+    virtual NS_UNO::Reference< NS_BEANS::XPropertySetInfo > SAL_CALL	
         getPropertySetInfo(void) throw( NS_UNO::RuntimeException );
-    virtual void SAL_CALL   setPropertyValue(
+    virtual void SAL_CALL	setPropertyValue(
                                 const ::rtl::OUString& aPropertyName,
                                 const NS_UNO::Any& aValue)
                                 throw (::com::sun::star::beans::UnknownPropertyException,
@@ -73,23 +73,23 @@ public:
                                 ::com::sun::star::lang::IllegalArgumentException,
                                 ::com::sun::star::lang::WrappedTargetException,
                                 ::com::sun::star::uno::RuntimeException);
-    virtual NS_UNO::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw(  NS_BEANS::UnknownPropertyException,
-                NS_LANG::WrappedTargetException,
+    virtual NS_UNO::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) 
+        throw(	NS_BEANS::UnknownPropertyException, 
+                NS_LANG::WrappedTargetException, 
                 NS_UNO::RuntimeException);
-    virtual void SAL_CALL   addPropertyChangeListener(
+    virtual void SAL_CALL	addPropertyChangeListener(
                                 const ::rtl::OUString& aPropertyName,
                                 const NS_UNO::Reference< NS_BEANS::XPropertyChangeListener >& )
                                 throw ();
-    virtual void SAL_CALL   removePropertyChangeListener(
+    virtual void SAL_CALL	removePropertyChangeListener(
                                 const ::rtl::OUString& aPropertyName,
                                 const NS_UNO::Reference< NS_BEANS::XPropertyChangeListener >& )
                                 throw ();
-    virtual void SAL_CALL   addVetoableChangeListener(
+    virtual void SAL_CALL	addVetoableChangeListener(
                                 const ::rtl::OUString& aPropertyName,
                                 const NS_UNO::Reference< NS_BEANS::XVetoableChangeListener >& )
                                 throw ();
-    virtual void SAL_CALL   removeVetoableChangeListener(
+    virtual void SAL_CALL	removeVetoableChangeListener(
                                 const ::rtl::OUString& aPropertyName,
                                 const NS_UNO::Reference< NS_BEANS::XVetoableChangeListener >& )
                                 throw ();
@@ -125,14 +125,14 @@ public:
         throw ( NS_UNO::RuntimeException );
 };
 
-class SbPropertySetInfo:    public SbPropertySetInfoHelper
+class SbPropertySetInfo: 	public SbPropertySetInfoHelper
 {
     PropertySetInfoImpl aImpl;
 
 public:
                             SbPropertySetInfo();
                             SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals );
-    virtual                 ~SbPropertySetInfo();
+    virtual					~SbPropertySetInfo();
 
     // XPropertySetInfo
     virtual NS_UNO::Sequence< NS_BEANS::Property > SAL_CALL getProperties(void)
@@ -153,11 +153,11 @@ class SbPropertyContainer: public SbPropertyContainerHelper
 
 public:
                             SbPropertyContainer();
-    virtual                 ~SbPropertyContainer();
+    virtual					~SbPropertyContainer();
 
     // XPropertyContainer
-    virtual void SAL_CALL addProperty(  const ::rtl::OUString& Name,
-                                        INT16 Attributes,
+    virtual void SAL_CALL addProperty(	const ::rtl::OUString& Name, 
+                                        INT16 Attributes, 
                                         const NS_UNO::Any& DefaultValue)
         throw(  NS_BEANS::PropertyExistException, NS_BEANS::IllegalTypeException,
                 NS_LANG::IllegalArgumentException, NS_UNO::RuntimeException );

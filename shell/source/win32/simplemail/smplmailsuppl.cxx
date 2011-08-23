@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,42 +53,42 @@ namespace // private
         aRet[0] = OUString::createFromAscii("com.sun.star.sys.shell.SimpleSystemMail");
         return aRet;
     }
-
+    
 } // end private namespace
 
-CSmplMailSuppl::CSmplMailSuppl() :
+CSmplMailSuppl::CSmplMailSuppl() : 
     WeakComponentImplHelper2<XSimpleMailClientSupplier, XServiceInfo>(m_aMutex)
-{
+{	
 }
 
 CSmplMailSuppl::~CSmplMailSuppl()
 {
 }
 
-Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
+Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient() 
     throw (RuntimeException)
 {
-    /* We just try to load the MAPI dll as a test
+    /* We just try to load the MAPI dll as a test 
        if a mail client is available */
     Reference<XSimpleMailClient> xSmplMailClient;
     HMODULE handle = LoadLibrary("mapi32.dll");
-    if ((handle != INVALID_HANDLE_VALUE) && (handle != NULL))
+    if ((handle != INVALID_HANDLE_VALUE) && (handle != NULL))    
     {
         FreeLibrary(handle);
-        xSmplMailClient = Reference<XSimpleMailClient>(new CSmplMailClient());
-    }
-    return xSmplMailClient;
+        xSmplMailClient = Reference<XSimpleMailClient>(new CSmplMailClient());                
+    }    
+    return xSmplMailClient;       
 }
 
 // XServiceInfo
 
-OUString SAL_CALL CSmplMailSuppl::getImplementationName()
+OUString SAL_CALL CSmplMailSuppl::getImplementationName() 
     throw(RuntimeException)
 {
     return OUString::createFromAscii(COMP_IMPL_NAME);
 }
 
-sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
+sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName) 
     throw(RuntimeException)
 {
     Sequence <OUString> SupportedServicesNames = Component_getSupportedServiceNames();
@@ -100,7 +100,7 @@ sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
     return sal_False;
 }
 
-Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()
+Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames() 
     throw(RuntimeException)
 {
     return Component_getSupportedServiceNames();

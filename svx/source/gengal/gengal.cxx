@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,12 +145,12 @@ static void createTheme( rtl::OUString aThemeName,
     pGalTheme->SetDestDir(String(aDestDir));
 
     FileNameList::const_iterator aIter;
-
+    
     for( aIter = rFiles.begin(); aIter != rFiles.end(); aIter++ )
     {
 //  Should/could use:
-//  if ( ! pGalTheme->InsertFileOrDirURL( aURL ) ) {
-//  Requires a load more components ...
+//	if ( ! pGalTheme->InsertFileOrDirURL( aURL ) ) {
+//	Requires a load more components ...
 
         Graphic aGraphic;
         String aFormat;
@@ -186,11 +186,11 @@ static void createTheme( rtl::OUString aThemeName,
             fprintf( stderr, "Failed to create thumbnail for image\n" );
             continue;
         }
-
+        
         if ( ! pGalTheme->InsertObject( aObject ) ) {
             fprintf( stderr, "Failed to insert file or URL\n" );
             continue;
-        }
+        } 
 #endif
     }
 
@@ -201,10 +201,10 @@ static void createTheme( rtl::OUString aThemeName,
 static void PrintHelp()
 {
     fprintf( stdout, "Utility to generate OO.o gallery files\n\n" );
-
+    
     fprintf( stdout, "using: gengal --name <name> --path <dir> [ --destdir <path> ]\n");
     fprintf( stdout, "              [ --number-from <num> ] [ files ... ]\n\n" );
-
+    
     fprintf( stdout, "options:\n");
     fprintf( stdout, " --name <theme>\t\tdefines a name of the created or updated theme.\n");
     fprintf( stdout, " --path <dir>\t\tdefines directory where the gallery files are created\n");

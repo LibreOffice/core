@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,7 +188,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
 
-    TableDesignStyleVector  maDesigns;
+    TableDesignStyleVector	maDesigns;
 };
 
 //------------------------------------------------------------------------
@@ -343,7 +343,7 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getElementNames() throw(RuntimeE
 
 // ----------------------------------------------------------
 
-sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )  throw(RuntimeException)
+sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )	throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -574,7 +574,7 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames() throw(Runtime
 
 // ----------------------------------------------------------
 
-sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName ) throw(RuntimeException)
+sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName )	throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 

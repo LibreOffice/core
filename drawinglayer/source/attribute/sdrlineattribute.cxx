@@ -50,24 +50,24 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // line definitions
-            basegfx::B2DLineJoin                    meJoin;             // B2DLINEJOIN_* defines
-            double                                  mfWidth;            // 1/100th mm, 0.0==hair
-            double                                  mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
-            basegfx::BColor                         maColor;            // color of line
-            ::std::vector< double >                 maDotDashArray;     // array of double which defines the dot-dash pattern
-            double                                  mfFullDotDashLen;   // sum of maDotDashArray (for convenience)
+            basegfx::B2DLineJoin				    meJoin;				// B2DLINEJOIN_* defines
+            double									mfWidth;			// 1/100th mm, 0.0==hair
+            double									mfTransparence;		// [0.0 .. 1.0], 0.0==no transp.
+            basegfx::BColor							maColor;			// color of line
+            ::std::vector< double >					maDotDashArray;		// array of double which defines the dot-dash pattern
+            double									mfFullDotDashLen;	// sum of maDotDashArray (for convenience)
 
             ImpSdrLineAttribute(
-                basegfx::B2DLineJoin eJoin,
-                double fWidth,
-                double fTransparence,
-                const basegfx::BColor& rColor,
-                const ::std::vector< double >& rDotDashArray,
+                basegfx::B2DLineJoin eJoin, 
+                double fWidth, 
+                double fTransparence, 
+                const basegfx::BColor& rColor, 
+                const ::std::vector< double >& rDotDashArray, 
                 double fFullDotDashLen)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 meJoin(eJoin),
                 mfWidth(fWidth),
                 mfTransparence(fTransparence),
@@ -78,7 +78,7 @@ namespace drawinglayer
             }
 
             ImpSdrLineAttribute(const basegfx::BColor& rColor)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 meJoin(basegfx::B2DLINEJOIN_NONE),
                 mfWidth(0.0),
                 mfTransparence(0.0),
@@ -87,7 +87,7 @@ namespace drawinglayer
                 mfFullDotDashLen(0.0)
             {
             }
-
+            
             // data read access
             basegfx::B2DLineJoin getJoin() const { return meJoin; }
             double getWidth() const { return mfWidth; }
@@ -112,11 +112,11 @@ namespace drawinglayer
                 if(!pDefault)
                 {
                     pDefault = new ImpSdrLineAttribute(
-                        basegfx::B2DLINEJOIN_ROUND,
-                        0.0,
-                        0.0,
+                        basegfx::B2DLINEJOIN_ROUND, 
+                        0.0, 
+                        0.0, 
                         basegfx::BColor(),
-                        std::vector< double >(),
+                        std::vector< double >(), 
                         0.0);
 
                     // never delete; start with RefCount 1, not 0
@@ -128,31 +128,31 @@ namespace drawinglayer
         };
 
         SdrLineAttribute::SdrLineAttribute(
-            basegfx::B2DLineJoin eJoin,
-            double fWidth,
-            double fTransparence,
-            const basegfx::BColor& rColor,
-            const ::std::vector< double >& rDotDashArray,
+            basegfx::B2DLineJoin eJoin, 
+            double fWidth, 
+            double fTransparence, 
+            const basegfx::BColor& rColor, 
+            const ::std::vector< double >& rDotDashArray, 
             double fFullDotDashLen)
-        :   mpSdrLineAttribute(new ImpSdrLineAttribute(
+        :	mpSdrLineAttribute(new ImpSdrLineAttribute(
                 eJoin, fWidth, fTransparence, rColor, rDotDashArray, fFullDotDashLen))
         {
         }
 
         SdrLineAttribute::SdrLineAttribute(
             const basegfx::BColor& rColor)
-        :   mpSdrLineAttribute(new ImpSdrLineAttribute(rColor))
+        :	mpSdrLineAttribute(new ImpSdrLineAttribute(rColor))
         {
         }
 
         SdrLineAttribute::SdrLineAttribute()
-        :   mpSdrLineAttribute(ImpSdrLineAttribute::get_global_default())
+        :	mpSdrLineAttribute(ImpSdrLineAttribute::get_global_default())
         {
             mpSdrLineAttribute->mnRefCount++;
         }
 
         SdrLineAttribute::SdrLineAttribute(const SdrLineAttribute& rCandidate)
-        :   mpSdrLineAttribute(rCandidate.mpSdrLineAttribute)
+        :	mpSdrLineAttribute(rCandidate.mpSdrLineAttribute)
         {
             mpSdrLineAttribute->mnRefCount++;
         }
@@ -186,7 +186,7 @@ namespace drawinglayer
                 {
                     delete mpSdrLineAttribute;
                 }
-
+                
                 mpSdrLineAttribute = rCandidate.mpSdrLineAttribute;
                 mpSdrLineAttribute->mnRefCount++;
             }
@@ -209,39 +209,39 @@ namespace drawinglayer
             return (*rCandidate.mpSdrLineAttribute == *mpSdrLineAttribute);
         }
 
-        basegfx::B2DLineJoin SdrLineAttribute::getJoin() const
-        {
-            return mpSdrLineAttribute->getJoin();
+        basegfx::B2DLineJoin SdrLineAttribute::getJoin() const 
+        { 
+            return mpSdrLineAttribute->getJoin(); 
         }
 
-        double SdrLineAttribute::getWidth() const
-        {
-            return mpSdrLineAttribute->getWidth();
+        double SdrLineAttribute::getWidth() const 
+        { 
+            return mpSdrLineAttribute->getWidth(); 
         }
 
-        double SdrLineAttribute::getTransparence() const
-        {
-            return mpSdrLineAttribute->getTransparence();
+        double SdrLineAttribute::getTransparence() const 
+        { 
+            return mpSdrLineAttribute->getTransparence(); 
         }
 
-        const basegfx::BColor& SdrLineAttribute::getColor() const
-        {
-            return mpSdrLineAttribute->getColor();
+        const basegfx::BColor& SdrLineAttribute::getColor() const 
+        { 
+            return mpSdrLineAttribute->getColor(); 
         }
 
-        const ::std::vector< double >& SdrLineAttribute::getDotDashArray() const
-        {
-            return mpSdrLineAttribute->getDotDashArray();
+        const ::std::vector< double >& SdrLineAttribute::getDotDashArray() const 
+        { 
+            return mpSdrLineAttribute->getDotDashArray(); 
         }
 
-        double SdrLineAttribute::getFullDotDashLen() const
-        {
-            return mpSdrLineAttribute->getFullDotDashLen();
+        double SdrLineAttribute::getFullDotDashLen() const 
+        { 
+            return mpSdrLineAttribute->getFullDotDashLen(); 
         }
 
-        bool SdrLineAttribute::isDashed() const
-        {
-            return (0L != getDotDashArray().size());
+        bool SdrLineAttribute::isDashed() const 
+        { 
+            return (0L != getDotDashArray().size()); 
         }
 
     } // end of namespace attribute

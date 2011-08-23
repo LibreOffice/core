@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ import java.lang.Thread;
 
 /**
  * This class opens a given dialog in a separate Thread by dispatching an url
- *
+ * 
  */
 public class DialogThread extends Thread {
     public XComponent m_xDoc = null;
@@ -56,7 +56,7 @@ public class DialogThread extends Thread {
     }
 
     public void run() {
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                            m_xDoc);
 
         XController xController = aModel.getCurrentController();
@@ -64,10 +64,10 @@ public class DialogThread extends Thread {
         //Opening Dialog
         try {
             XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                                  XDispatchProvider.class,
+                                                  XDispatchProvider.class, 
                                                   xController.getFrame());
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
-                                              XURLTransformer.class,
+                                              XURLTransformer.class, 
                                               m_xMSF.createInstance(
                                                       "com.sun.star.util.URLTransformer"));
 
@@ -78,7 +78,7 @@ public class DialogThread extends Thread {
             aParseURL[0].Complete = m_url;
             xParser.parseStrict(aParseURL);
 
-            URL aURL = aParseURL[0];
+            URL aURL = aParseURL[0];            
             XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", com.sun.star.frame.FrameSearchFlag.SELF |
                                     com.sun.star.frame.FrameSearchFlag.CHILDREN);
             PropertyValue[] dispatchArguments = new PropertyValue[0];

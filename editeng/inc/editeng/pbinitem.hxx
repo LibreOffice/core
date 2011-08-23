@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 
 // define ----------------------------------------------------------------
 
-#define PAPERBIN_PRINTER_SETTINGS   ((BYTE)0xFF)
+#define PAPERBIN_PRINTER_SETTINGS	((BYTE)0xFF)
 
 // class SvxPaperBinItem -------------------------------------------------
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Dieses Item beschreibt die Auswahl eines Papierschachts des Drucker.
 */
@@ -56,8 +56,8 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream &, USHORT ) const;
-    virtual SvStream&       Store( SvStream &, USHORT nItemVersion ) const;
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    virtual SvStream&		Store( SvStream &, USHORT nItemVersion ) const;
+    virtual SfxItemPresentation	GetPresentation( SfxItemPresentation ePres,
                                              SfxMapUnit eCoreMetric,
                                              SfxMapUnit ePresMetric,
                                              String &rText, const IntlWrapper * = 0 ) const;

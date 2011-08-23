@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 //=============================================================================
 
-module ooo {  module vba {  module excel {
+module ooo {  module vba {  module excel { 
 
 //=============================================================================
 
@@ -42,14 +42,14 @@ interface XPane;
 interface XWindow : com::sun::star::uno::XInterface
 {
     [attribute] any Caption;
-    [attribute] boolean DisplayGridlines;
-    [attribute] boolean DisplayHeadings;
-    [attribute] boolean DisplayHorizontalScrollBar;
+    [attribute] boolean DisplayGridlines; 
+    [attribute] boolean DisplayHeadings; 
+    [attribute] boolean DisplayHorizontalScrollBar; 
     [attribute] boolean DisplayOutline;
-    [attribute] boolean DisplayVerticalScrollBar;
-    [attribute] boolean DisplayWorkbookTabs;
-    [attribute] boolean FreezePanes;
-    [attribute] boolean Split;
+    [attribute] boolean DisplayVerticalScrollBar; 
+    [attribute] boolean DisplayWorkbookTabs; 
+    [attribute] boolean FreezePanes; 
+    [attribute] boolean Split; 
     [attribute] long SplitColumn;
     [attribute] double SplitHorizontal;
     [attribute] long SplitRow;

@@ -8,8 +8,8 @@
         <description> The  </description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="beta"/>
-        <supported-service>com.sun.star.comp.configuration.backend.LocaleBackend</supported-service>
+        <status value="beta"/>        
+        <supported-service>com.sun.star.comp.configuration.backend.LocaleBackend</supported-service>		
         <service-dependency>...</service-dependency>
         <type>com.sun.star.configuration.backend.XBackendChangesListener</type>
         <type>com.sun.star.configuration.backend.XBackendChangesNotifier</type>

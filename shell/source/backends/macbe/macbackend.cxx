@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -203,7 +203,7 @@ rtl::OUString GetOUString( NSString* pStr )
     int nLen = [pStr length];
     if( nLen == 0 )
         return rtl::OUString();
-
+    
     rtl::OUStringBuffer aBuf( nLen+1 );
     aBuf.setLength( nLen );
     [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
@@ -237,7 +237,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         if( pPaths && [pPaths count] > 0 )
         {
             aDocDir = GetOUString( [pPaths objectAtIndex: 0] );
-
+            
             rtl::OUString aDocURL;
             if( aDocDir.getLength() > 0 &&
                 osl_getFileURLFromSystemPath( aDocDir.pData, &aDocURL.pData ) == osl_File_E_None )

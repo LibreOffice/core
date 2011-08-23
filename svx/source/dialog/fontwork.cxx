@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -220,31 +220,31 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
                                       const ResId& rResId ) :
     SfxDockingWindow( pBindinx, pCW, _pParent, rResId ),
 
-    aFormSet        (this, ResId(VS_FORMS,*rResId.GetResMgr())),
+    aFormSet		(this, ResId(VS_FORMS,*rResId.GetResMgr())),
 
-    aTbxStyle       (this, ResId(TBX_STYLE,*rResId.GetResMgr())),
-    aTbxAdjust      (this, ResId(TBX_ADJUST,*rResId.GetResMgr())),
+    aTbxStyle		(this, ResId(TBX_STYLE,*rResId.GetResMgr())),
+    aTbxAdjust		(this, ResId(TBX_ADJUST,*rResId.GetResMgr())),
 
-    aFbDistance     (this, ResId(FB_DISTANCE,*rResId.GetResMgr())),
+    aFbDistance 	(this, ResId(FB_DISTANCE,*rResId.GetResMgr())),
     aMtrFldDistance (this, ResId(MTR_FLD_DISTANCE,*rResId.GetResMgr())),
-    aFbTextStart    (this, ResId(FB_TEXTSTART,*rResId.GetResMgr())),
+    aFbTextStart	(this, ResId(FB_TEXTSTART,*rResId.GetResMgr())),
     aMtrFldTextStart(this, ResId(MTR_FLD_TEXTSTART,*rResId.GetResMgr())),
 
-    aTbxShadow      (this, ResId(TBX_SHADOW,*rResId.GetResMgr())),
+    aTbxShadow		(this, ResId(TBX_SHADOW,*rResId.GetResMgr())),
 
-    aFbShadowX      (this, ResId(FB_SHADOW_X,*rResId.GetResMgr())),
-    aMtrFldShadowX  (this, ResId(MTR_FLD_SHADOW_X,*rResId.GetResMgr())),
-    aFbShadowY      (this, ResId(FB_SHADOW_Y,*rResId.GetResMgr())),
-    aMtrFldShadowY  (this, ResId(MTR_FLD_SHADOW_Y,*rResId.GetResMgr())),
+    aFbShadowX		(this, ResId(FB_SHADOW_X,*rResId.GetResMgr())),
+    aMtrFldShadowX	(this, ResId(MTR_FLD_SHADOW_X,*rResId.GetResMgr())),
+    aFbShadowY		(this, ResId(FB_SHADOW_Y,*rResId.GetResMgr())),
+    aMtrFldShadowY	(this, ResId(MTR_FLD_SHADOW_Y,*rResId.GetResMgr())),
 
-    aShadowColorLB  (this, ResId(CLB_SHADOW_COLOR,*rResId.GetResMgr())),
+    aShadowColorLB	(this, ResId(CLB_SHADOW_COLOR,*rResId.GetResMgr())),
     rBindings       (*pBindinx),
 
     nLastStyleTbxId(0),
     nLastAdjustTbxId(0),
     nLastShadowTbxId(0),
-    nSaveShadowX    (0),
-    nSaveShadowY    (0),
+    nSaveShadowX	(0),
+    nSaveShadowY	(0),
     nSaveShadowAngle(450),
     nSaveShadowSize (100),
 
@@ -283,8 +283,8 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aTbxShadow.SetSizePixel(aSize);
     aTbxShadow.SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectShadowHdl_Impl) );
 
-//  aFbShadowX.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_XDIST)));
-//  aFbShadowY.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_YDIST)));
+//	aFbShadowX.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_XDIST)));
+//	aFbShadowY.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_YDIST)));
 
     Link aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
     aMtrFldDistance.SetModifyHdl( aLink );
@@ -409,10 +409,10 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
 
         switch ( pItem->GetValue() )
         {
-            case XFT_ROTATE : nId = TBI_STYLE_ROTATE;   break;
-            case XFT_UPRIGHT: nId = TBI_STYLE_UPRIGHT;  break;
-            case XFT_SLANTX : nId = TBI_STYLE_SLANTX;   break;
-            case XFT_SLANTY : nId = TBI_STYLE_SLANTY;   break;
+            case XFT_ROTATE : nId = TBI_STYLE_ROTATE;	break;
+            case XFT_UPRIGHT: nId = TBI_STYLE_UPRIGHT;	break;
+            case XFT_SLANTX : nId = TBI_STYLE_SLANTX;	break;
+            case XFT_SLANTY : nId = TBI_STYLE_SLANTY;	break;
             default: ;//prevent warning
         }
         aTbxStyle.Enable();
@@ -456,14 +456,14 @@ void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
 
         if ( pItem->GetValue() == XFT_LEFT || pItem->GetValue() == XFT_RIGHT )
         {
-            if ( pItem->GetValue() == XFT_LEFT )    nId = TBI_ADJUST_LEFT;
-            else                                    nId = TBI_ADJUST_RIGHT;
+            if ( pItem->GetValue() == XFT_LEFT )	nId = TBI_ADJUST_LEFT;
+            else									nId = TBI_ADJUST_RIGHT;
             aMtrFldTextStart.Enable();
         }
         else
         {
-            if ( pItem->GetValue() == XFT_CENTER )  nId = TBI_ADJUST_CENTER;
-            else                                    nId = TBI_ADJUST_AUTOSIZE;
+            if ( pItem->GetValue() == XFT_CENTER )	nId = TBI_ADJUST_CENTER;
+            else									nId = TBI_ADJUST_AUTOSIZE;
             aMtrFldTextStart.Disable();
         }
 
@@ -711,7 +711,7 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
     {
         // #i19251#
         // INT32 nValue = pItem->GetValue();
-
+        
         // #i19251#
         // The two involved fields/items are used double and contain/give different
         // values regarding to the access method. Thus, here we need to separate the access
@@ -778,10 +778,10 @@ IMPL_LINK( SvxFontWorkDialog, SelectStyleHdl_Impl, void *, EMPTYARG )
 
         switch ( nId )
         {
-            case TBI_STYLE_ROTATE   : eStyle = XFT_ROTATE;  break;
-            case TBI_STYLE_UPRIGHT  : eStyle = XFT_UPRIGHT; break;
-            case TBI_STYLE_SLANTX   : eStyle = XFT_SLANTX;  break;
-            case TBI_STYLE_SLANTY   : eStyle = XFT_SLANTY;  break;
+            case TBI_STYLE_ROTATE	: eStyle = XFT_ROTATE;	break;
+            case TBI_STYLE_UPRIGHT	: eStyle = XFT_UPRIGHT; break;
+            case TBI_STYLE_SLANTX	: eStyle = XFT_SLANTX;	break;
+            case TBI_STYLE_SLANTY	: eStyle = XFT_SLANTY;	break;
         }
         XFormTextStyleItem aItem( eStyle );
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_STYLE, SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -810,9 +810,9 @@ IMPL_LINK( SvxFontWorkDialog, SelectAdjustHdl_Impl, void *, EMPTYARG )
 
         switch ( nId )
         {
-            case TBI_ADJUST_LEFT    : eAdjust = XFT_LEFT;   break;
-            case TBI_ADJUST_CENTER  : eAdjust = XFT_CENTER; break;
-            case TBI_ADJUST_RIGHT   : eAdjust = XFT_RIGHT;  break;
+            case TBI_ADJUST_LEFT	: eAdjust = XFT_LEFT;	break;
+            case TBI_ADJUST_CENTER	: eAdjust = XFT_CENTER; break;
+            case TBI_ADJUST_RIGHT	: eAdjust = XFT_RIGHT;	break;
         }
         XFormTextAdjustItem aItem(eAdjust);
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_ADJUST, SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -856,7 +856,7 @@ IMPL_LINK( SvxFontWorkDialog, SelectShadowHdl_Impl, void *, EMPTYARG )
         }
         nLastShadowTbxId = nId;
 
-        if ( nId == TBI_SHADOW_NORMAL )     eShadow = XFTSHADOW_NORMAL;
+        if ( nId == TBI_SHADOW_NORMAL ) 	eShadow = XFTSHADOW_NORMAL;
         else if ( nId == TBI_SHADOW_SLANT ) eShadow = XFTSHADOW_SLANT;
 
         XFormTextShadowItem aItem(eShadow);
@@ -961,8 +961,8 @@ IMPL_LINK( SvxFontWorkDialog, ColorSelectHdl_Impl, void *, EMPTYARG )
 // Changed by obo. Linux-Compiler can't parse commented lines
     XFormTextShadowColorItem aItem( (const String &) String(),
                                     (const Color &) aShadowColorLB.GetSelectEntryColor() );
-//  XFormTextShadowColorItem aItem( String(),
-//                                  aShadowColorLB.GetSelectEntryColor() );
+//	XFormTextShadowColorItem aItem( String(),
+//								    aShadowColorLB.GetSelectEntryColor() );
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHDWCOLOR, SFX_CALLMODE_RECORD, &aItem, 0L );
     return 0;
 }
@@ -1000,15 +1000,15 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
                                          SdrObject& rOldObj,
                                          XFormTextStdForm eForm)
 {
-    SfxItemSet  aAttr(*rAttr.GetPool(), XATTR_FORMTXTSTYLE,
+    SfxItemSet	aAttr(*rAttr.GetPool(), XATTR_FORMTXTSTYLE,
                                         XATTR_FORMTXTHIDEFORM);
-    SdrObject*  pNewObj = NULL;
-    Rectangle   aRect;
+    SdrObject*	pNewObj = NULL;
+    Rectangle	aRect;
     XFormTextAdjust eAdjust = XFT_AUTOSIZE;
 
-//-/    rOldObj.TakeAttributes(aAttr, TRUE, FALSE);
+//-/	rOldObj.TakeAttributes(aAttr, TRUE, FALSE);
     aAttr.Put(rOldObj.GetMergedItemSet());
-
+    
     const XFormTextStdFormItem& rOldForm = (const XFormTextStdFormItem&)
                                             aAttr.Get(XATTR_FORMTXTSTDFORM);
 
@@ -1057,15 +1057,15 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
                     nEnd = 36000;
                     break;
                 case XFTFORM_LFTCIRC:
-                    nBeg =  9000;
+                    nBeg =	9000;
                     nEnd = 27000;
                     break;
                 case XFTFORM_RGTCIRC:
                     nBeg = 27000;
-                    nEnd =  9000;
+                    nEnd =	9000;
                     break;
                 case XFTFORM_TOPARC:
-                    nBeg =  4500;
+                    nBeg =	4500;
                     nEnd = 13500;
                     break;
                 case XFTFORM_BOTARC:
@@ -1078,7 +1078,7 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
                     break;
                 case XFTFORM_RGTARC:
                     nBeg = 31500;
-                    nEnd =  4500;
+                    nEnd =	4500;
                     break;
             }
             pNewObj = new SdrCircObj(OBJ_CARC, aRect, nBeg, nEnd);
@@ -1271,7 +1271,7 @@ void SvxFontWorkDialog::ApplyImageList()
         aFbShadowX.SetImage( rImgLst.GetImage( TBI_SHADOW_ANGLE ) );
         aFbShadowY.SetImage( rImgLst.GetImage( TBI_SHADOW_SIZE ) );
         break;
-//  case TBI_SHADOW_NORMAL:
+//	case TBI_SHADOW_NORMAL:
     default:
         aFbShadowX.SetImage( rImgLst.GetImage( TBI_SHADOW_XDIST ) );
         aFbShadowY.SetImage( rImgLst.GetImage( TBI_SHADOW_YDIST ) );

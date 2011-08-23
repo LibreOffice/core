@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pObject)
-:   mpScene(0),
+:	mpScene(0),
     mpViewInformation3D(0)
 {
     // Secure old 3D transformation stack before modification
@@ -109,7 +109,7 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
 
             // transform to 2D world coordiantes using scene's 2D transformation
             aSnapRange.transform(rVCScene.getObjectTransformation());
-
+            
             // snap to (old) integer
             const Rectangle aNewSnapRect(
                 sal_Int32(floor(aSnapRange.getMinX())), sal_Int32(floor(aSnapRange.getMinY())),

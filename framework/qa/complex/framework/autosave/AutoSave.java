@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -156,7 +156,7 @@ public class AutoSave extends ComplexTestCase
     /** a test document, which needs some time for saving to simulate concurrent
      *  save operations. */
     private XStorable m_xTestDoc = null;
-
+    
     private XURLTransformer m_xURLParser = null;
 
     //-------------------------------------------

@@ -116,12 +116,12 @@ void SbiRuntime::StepARGTYP( UINT32 nOp1 )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
     else
     {
-        BOOL bByVal = (nOp1 & 0x8000) != 0;         // Ist BYVAL verlangt?
+        BOOL bByVal = (nOp1 & 0x8000) != 0;			// Ist BYVAL verlangt?
         SbxDataType t = (SbxDataType) (nOp1 & 0x7FFF);
-        SbxVariable* pVar = refArgv->Get( refArgv->Count() - 1 );   // letztes Arg
+        SbxVariable* pVar = refArgv->Get( refArgv->Count() - 1 );	// letztes Arg
 
         // BYVAL prüfen
-        if( pVar->GetRefCount() > 2 )       // 2 ist normal für BYVAL
+        if( pVar->GetRefCount() > 2 )		// 2 ist normal für BYVAL
         {
             // Parameter ist eine Referenz
             if( bByVal )
@@ -132,15 +132,15 @@ void SbiRuntime::StepARGTYP( UINT32 nOp1 )
                 refExprStk->Put( pVar, refArgv->Count() - 1 );
             }
             else
-                pVar->SetFlag( SBX_REFERENCE );     // Ref-Flag für DllMgr
+                pVar->SetFlag( SBX_REFERENCE );		// Ref-Flag für DllMgr
         }
         else
         {
             // Parameter ist KEINE Referenz
             if( bByVal )
-                pVar->ResetFlag( SBX_REFERENCE );   // Keine Referenz -> OK
+                pVar->ResetFlag( SBX_REFERENCE );	// Keine Referenz -> OK
             else
-                Error( SbERR_BAD_PARAMETERS );      // Referenz verlangt
+                Error( SbERR_BAD_PARAMETERS );		// Referenz verlangt
         }
 
         if( pVar->GetType() != t )
@@ -572,12 +572,12 @@ void SbiRuntime::StepBASED( UINT32 nOp1 )
 
     // #109275 Check compatiblity mode
     bool bCompatible = ((nOp1 & 0x8000) != 0);
-    USHORT uBase = static_cast<USHORT>(nOp1 & 1);       // Can only be 0 or 1
+    USHORT uBase = static_cast<USHORT>(nOp1 & 1);		// Can only be 0 or 1
     p1->PutInteger( uBase );
     if( !bCompatible )
         x2->Compute( SbxPLUS, *p1 );
-    PushVar( x2 );  // erst die Expr
-    PushVar( p1 );  // dann die Base
+    PushVar( x2 );	// erst die Expr
+    PushVar( p1 );	// dann die Base
 }
 
 

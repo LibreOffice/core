@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
-OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
+OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*	_pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
                          ,m_pDriver(_pDriver)
                          ,m_pDriverHandleCopy(_pDriverHandle)
@@ -161,7 +161,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     {
         ::rtl::OUString sVersion;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,sVersion,*this,getTextEncoding());
-        m_bUseOldDateFormat =  sVersion == ::rtl::OUString::createFromAscii("02.50") || sVersion == ::rtl::OUString::createFromAscii("02.00");
+        m_bUseOldDateFormat	=  sVersion == ::rtl::OUString::createFromAscii("02.50") || sVersion == ::rtl::OUString::createFromAscii("02.00");
     }
     catch(Exception&)
     {
@@ -179,7 +179,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
 SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     m_aConnectionHandle  = SQL_NULL_HANDLE;
-    m_sURL  = url;
+    m_sURL	= url;
     setConnectionInfo(info);
 
     // Connection allozieren
@@ -192,23 +192,23 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     ::rtl::OUString aDSN(RTL_CONSTASCII_USTRINGPARAM("DSN=")), aUID, aPWD, aSysDrvSettings;
     aDSN += url.copy(nLen+1);
 
-    const char* pUser       = "user";
-    const char* pTimeout    = "Timeout";
-    const char* pSilent     = "Silent";
-    const char* pPwd        = "password";
+    const char* pUser		= "user";
+    const char* pTimeout	= "Timeout";
+    const char* pSilent		= "Silent";
+    const char* pPwd		= "password";
     const char* pUseCatalog = "UseCatalog";
-    const char* pSysDrv     = "SystemDriverSettings";
-    const char* pCharSet    = "CharSet";
-    const char* pParaName   = "ParameterNameSubstitution";
-    const char* pPrivName   = "IgnoreDriverPrivileges";
+    const char* pSysDrv		= "SystemDriverSettings";
+    const char* pCharSet	= "CharSet";
+    const char* pParaName	= "ParameterNameSubstitution";
+    const char* pPrivName	= "IgnoreDriverPrivileges";
     const char* pVerColName = "PreventGetVersionColumns";   // #i60273#
-    const char* pRetrieving = "IsAutoRetrievingEnabled";
-    const char* pRetriStmt  = "AutoRetrievingStatement";
+    const char* pRetrieving	= "IsAutoRetrievingEnabled";
+    const char* pRetriStmt	= "AutoRetrievingStatement";
 
     sal_Int32 nTimeout = 20;
     sal_Bool bSilent = sal_True;
-    const PropertyValue *pBegin = info.getConstArray();
-    const PropertyValue *pEnd   = pBegin + info.getLength();
+    const PropertyValue *pBegin	= info.getConstArray();
+    const PropertyValue *pEnd	= pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
         if(!pBegin->Name.compareToAscii(pTimeout))
@@ -497,13 +497,13 @@ void OConnection::buildTypeInfo() throw( SQLException)
     {
         Reference< XRow> xRow(xRs,UNO_QUERY);
         // Information for a single SQL type
-
+        
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         sal_Int32 nCount = xResultSetMetaData->getColumnCount();
         // Loop on the result set until we reach end of file
-        while (xRs->next ())
+        while (xRs->next ()) 
         {
             OTypeInfo aInfo;
             sal_Int32 nPos = 1;
@@ -518,54 +518,54 @@ void OConnection::buildTypeInfo() throw( SQLException)
             }
 
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.aTypeName     = aValue;
+            aInfo.aTypeName		= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.nType         = aValue;
+            aInfo.nType			= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.nPrecision        = aValue;
+            aInfo.nPrecision		= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.aLiteralPrefix    = aValue;
+            aInfo.aLiteralPrefix	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.aLiteralSuffix    = aValue;
+            aInfo.aLiteralSuffix	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.aCreateParams = aValue;
+            aInfo.aCreateParams	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bNullable     = (sal_Int32)aValue == ColumnValue::NULLABLE;
+            aInfo.bNullable		= (sal_Int32)aValue == ColumnValue::NULLABLE;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bCaseSensitive    = (sal_Bool)aValue;
+            aInfo.bCaseSensitive	= (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.nSearchType       = aValue;
+            aInfo.nSearchType		= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bUnsigned     = (sal_Bool)aValue;
+            aInfo.bUnsigned		= (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bCurrency     = (sal_Bool)aValue;
+            aInfo.bCurrency		= (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.bAutoIncrement    = (sal_Bool)aValue;
+            aInfo.bAutoIncrement	= (sal_Bool)aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.aLocalTypeName    = aValue;
+            aInfo.aLocalTypeName	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.nMinimumScale = aValue;
+            aInfo.nMinimumScale	= aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.nMaximumScale = aValue;
+            aInfo.nMaximumScale	= aValue;
             if ( nCount >= 18 )
             {
                 nPos = 18;
                 aValue.fill(nPos,aTypes[nPos],xRow);
-                aInfo.nNumPrecRadix = aValue;
+                aInfo.nNumPrecRadix	= aValue;
             }
 
             // check if values are less than zero like it happens in a oracle jdbc driver
@@ -606,7 +606,7 @@ void OConnection::disposing()
 
     if(!m_bClosed)
         N3SQLDisconnect(m_aConnectionHandle);
-    m_bClosed   = sal_True;
+    m_bClosed	= sal_True;
 
     dispose_ChildImpl();
 }

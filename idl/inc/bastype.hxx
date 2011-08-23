@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,8 +118,8 @@ public:
 /******************** class Svint **********************************/
 class Svint
 {
-    int     nVal;
-    BOOL    bSet;
+    int  	nVal;
+    BOOL	bSet;
 public:
                 Svint() { nVal = bSet = 0; }
                 Svint( int n ) : nVal( n ), bSet( TRUE ) {}
@@ -197,7 +197,7 @@ public:
                     return SvIdentifier::IsSet() || nValue != 0;
                 }
     UINT32      GetValue() const { return nValue; }
-    void        SetValue( UINT32 nVal ) { nValue = nVal; }
+    void		SetValue( UINT32 nVal ) { nValue = nVal; }
 
     friend SvStream& operator << (SvStream &, const SvNumberIdentifier &);
     friend SvStream& operator >> (SvStream &, SvNumberIdentifier &);

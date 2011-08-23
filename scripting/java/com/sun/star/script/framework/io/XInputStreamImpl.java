@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ public class XInputStreamImpl implements XInputStream
     {
         this.is = is;
     }
-
+   
     public int readBytes( /*OUT*/byte[][] aData, /*IN*/int nBytesToRead ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException
     {
         aData[ 0 ] = new byte[ nBytesToRead ];
@@ -47,7 +47,7 @@ public class XInputStreamImpl implements XInputStream
 
         try
         {
-            int bytesRead = 0;
+            int bytesRead = 0; 
             while ( ( bytesRead = is.read( aData[ 0 ], totalBytesRead, nBytesToRead ) ) > 0 && ( totalBytesRead < nBytesToRead ) )
             {
                 totalBytesRead += bytesRead;
@@ -62,7 +62,7 @@ public class XInputStreamImpl implements XInputStream
         {
             throw new com.sun.star.io.BufferSizeExceededException( aie.toString() );
         }
-        return totalBytesRead;
+        return totalBytesRead;   
     }
 
     public int readSomeBytes( /*OUT*/byte[][] aData, /*IN*/int nMaxBytesToRead ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException
@@ -72,7 +72,7 @@ public class XInputStreamImpl implements XInputStream
         if ( availableBytes < nMaxBytesToRead )
         {
             bytesToRead = availableBytes;
-        }
+        } 
         int read =  readBytes( aData, bytesToRead );
         return read;
     }
@@ -80,7 +80,7 @@ public class XInputStreamImpl implements XInputStream
     public void skipBytes( /*IN*/int nBytesToSkip ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.BufferSizeExceededException, com.sun.star.io.IOException
     {
         long bytesSkipped = 0;
-        try
+        try 
         {
             bytesSkipped = is.skip( (long)nBytesToSkip );
         }
@@ -93,7 +93,7 @@ public class XInputStreamImpl implements XInputStream
     public int available(  ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException
     {
         int bytesAvail = 0;
-        try
+        try 
         {
             bytesAvail = is.available();
         }
@@ -106,7 +106,7 @@ public class XInputStreamImpl implements XInputStream
 
     public void closeInput(  ) throws com.sun.star.io.NotConnectedException, com.sun.star.io.IOException
     {
-        try
+        try 
         {
             is.close();
         }

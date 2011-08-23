@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,14 +82,14 @@ namespace sdr
 
         OverlayAnimatedBitmapEx::OverlayAnimatedBitmapEx(
             const basegfx::B2DPoint& rBasePos,
-            const BitmapEx& rBitmapEx1,
-            const BitmapEx& rBitmapEx2,
+            const BitmapEx& rBitmapEx1, 
+            const BitmapEx& rBitmapEx2, 
             sal_uInt32 nBlinkTime,
-            sal_uInt16 nCenX1,
-            sal_uInt16 nCenY1,
-            sal_uInt16 nCenX2,
+            sal_uInt16 nCenX1, 
+            sal_uInt16 nCenY1, 
+            sal_uInt16 nCenX2, 
             sal_uInt16 nCenY2)
-        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_WHITE)),
+        :	OverlayObjectWithBasePosition(rBasePos, Color(COL_WHITE)),
             maBitmapEx1(rBitmapEx1),
             maBitmapEx2(rBitmapEx2),
             mnCenterX1(nCenX1), mnCenterY1(nCenY1),

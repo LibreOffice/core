@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,34 +44,34 @@ class SVX_DLLPUBLIC E3dDefaultAttributes
 {
 private:
     // Compound object
-    Color               aDefaultAmbientColor;
-    BOOL                bDefaultCreateNormals;
-    BOOL                bDefaultCreateTexture;
+    Color				aDefaultAmbientColor;
+    BOOL				bDefaultCreateNormals;
+    BOOL				bDefaultCreateTexture;
 
     // Cube object
-    basegfx::B3DPoint   aDefaultCubePos;
-    basegfx::B3DVector  aDefaultCubeSize;
-    UINT16              nDefaultCubeSideFlags;
-    BOOL                bDefaultCubePosIsCenter;
+    basegfx::B3DPoint	aDefaultCubePos;
+    basegfx::B3DVector	aDefaultCubeSize;
+    UINT16				nDefaultCubeSideFlags;
+    BOOL				bDefaultCubePosIsCenter;
 
     // Sphere object
-    basegfx::B3DPoint   aDefaultSphereCenter;
-    basegfx::B3DVector  aDefaultSphereSize;
+    basegfx::B3DPoint	aDefaultSphereCenter;
+    basegfx::B3DVector	aDefaultSphereSize;
 
     // Lathe object
-    long                nDefaultLatheEndAngle;
-    BOOL                bDefaultLatheSmoothed;
-    BOOL                bDefaultLatheSmoothFrontBack;
-    BOOL                bDefaultLatheCharacterMode;
-    BOOL                bDefaultLatheCloseFront;
-    BOOL                bDefaultLatheCloseBack;
+    long				nDefaultLatheEndAngle;
+    BOOL				bDefaultLatheSmoothed;
+    BOOL				bDefaultLatheSmoothFrontBack;
+    BOOL				bDefaultLatheCharacterMode;
+    BOOL				bDefaultLatheCloseFront;
+    BOOL				bDefaultLatheCloseBack;
 
     // Extrude object
-    BOOL                bDefaultExtrudeSmoothed;
-    BOOL                bDefaultExtrudeSmoothFrontBack;
-    BOOL                bDefaultExtrudeCharacterMode;
-    BOOL                bDefaultExtrudeCloseFront;
-    BOOL                bDefaultExtrudeCloseBack;
+    BOOL				bDefaultExtrudeSmoothed;
+    BOOL				bDefaultExtrudeSmoothFrontBack;
+    BOOL				bDefaultExtrudeCharacterMode;
+    BOOL				bDefaultExtrudeCloseFront;
+    BOOL				bDefaultExtrudeCloseBack;
 
 public:
     // Construktor
@@ -84,7 +84,7 @@ public:
     // Compound object
     const Color& GetDefaultAmbientColor() { return aDefaultAmbientColor; }
     void SetDefaultAmbientColor(const Color& rNew) { aDefaultAmbientColor = rNew; }
-
+    
     BOOL GetDefaultCreateNormals() const { return bDefaultCreateNormals; }
     void SetDefaultCreateNormals(const BOOL bNew) { bDefaultCreateNormals = bNew; }
     BOOL GetDefaultCreateTexture() const { return bDefaultCreateTexture; }
@@ -133,6 +133,6 @@ public:
     void SetDefaultExtrudeCloseBack(const BOOL bNew) { bDefaultExtrudeCloseBack = bNew; }
 };
 
-#endif          // _E3D_DEFLT3D_HXX
+#endif			// _E3D_DEFLT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

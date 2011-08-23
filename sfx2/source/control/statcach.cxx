@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
             eState = SFX_ITEM_AVAILABLE;
             ::com::sun::star::uno::Any aAny = aStatus.State;
 
-            ::com::sun::star::uno::Type pType = aAny.getValueType();
+            ::com::sun::star::uno::Type pType =	aAny.getValueType();
             if ( pType == ::getBooleanCppuType() )
             {
                 sal_Bool bTemp = false;
@@ -203,7 +203,7 @@ void BindDispatch_Impl::Dispatch( uno::Sequence < beans::PropertyValue > aProps,
 
 //--------------------------------------------------------------------
 
-/*  Dieser Konstruktor fuer einen ungueltigen Cache, der sich also
+/*	Dieser Konstruktor fuer einen ungueltigen Cache, der sich also
     bei der ersten Anfrage zun"achst updated.
  */
 
@@ -217,7 +217,7 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     bItemVisible( sal_True )
 {
     DBG_MEMTEST();
-    DBG_CTOR(SfxStateCache, 0);
+    DBG_CTOR(SfxStateCache,	0);
     bCtrlDirty = sal_True;
     bSlotDirty = sal_True;
     bItemDirty = sal_True;
@@ -225,14 +225,14 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
 
 //--------------------------------------------------------------------
 
-/*  Der Destruktor pr"uft per Assertion, ob noch Controller angemeldet
+/*	Der Destruktor pr"uft per Assertion, ob noch Controller angemeldet
     sind.
  */
 
 SfxStateCache::~SfxStateCache()
 {
     DBG_MEMTEST();
-    DBG_DTOR(SfxStateCache, 0);
+    DBG_DTOR(SfxStateCache,	0);
     DBG_ASSERT( pController == 0 && pInternalController == 0, "es sind noch Controller angemeldet" );
     if ( !IsInvalidItem(pLastItem) )
         delete pLastItem;
@@ -362,12 +362,12 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 
 void SfxStateCache::SetState
 (
-    SfxItemState        eState,     // <SfxItemState> von 'pState'
-    const SfxPoolItem*  pState,     // Status des Slots, ggf. 0 oder -1
+    SfxItemState		eState, 	// <SfxItemState> von 'pState'
+    const SfxPoolItem*	pState,		// Status des Slots, ggf. 0 oder -1
     BOOL bMaybeDirty
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode verteilt die Status auf alle an dieser SID gebundenen
     <SfxControllerItem>s. Ist der Wert derselbe wie zuvor und wurde in-
@@ -386,8 +386,8 @@ void SfxStateCache::SetState
 
 void SfxStateCache::SetVisibleState( BOOL bShow )
 {
-    SfxItemState        eState( SFX_ITEM_AVAILABLE );
-    const SfxPoolItem*  pState( NULL );
+    SfxItemState		eState( SFX_ITEM_AVAILABLE );
+    const SfxPoolItem*	pState( NULL );
     sal_Bool            bNotify( sal_False );
     sal_Bool            bDeleteItem( sal_False );
 
@@ -434,8 +434,8 @@ void SfxStateCache::SetVisibleState( BOOL bShow )
 
 void SfxStateCache::SetState_Impl
 (
-    SfxItemState        eState,     // <SfxItemState> von 'pState'
-    const SfxPoolItem*  pState,     // Status des Slots, ggf. 0 oder -1
+    SfxItemState		eState, 	// <SfxItemState> von 'pState'
+    const SfxPoolItem*	pState,		// Status des Slots, ggf. 0 oder -1
     BOOL bMaybeDirty
 )
 {
@@ -449,8 +449,8 @@ void SfxStateCache::SetState_Impl
         return;
 
     DBG_ASSERT( bMaybeDirty || !bSlotDirty, "setting state of dirty message" );
-//  DBG_ASSERT( bCtrlDirty || ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ), ! Discussed with MBA
-//              "setting state of non dirty controller" );
+//	DBG_ASSERT( bCtrlDirty || ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ), ! Discussed with MBA
+//				"setting state of non dirty controller" );
     DBG_ASSERT( SfxControllerItem::GetItemState(pState) == eState, "invalid SfxItemState" );
     DBG_PROFSTART(SfxStateCacheSetState);
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 
 //========================================================================
-//  class SvxTextEncodingTable
+//	class SvxTextEncodingTable
 //========================================================================
 
 class SVX_DLLPUBLIC SvxTextEncodingTable : public ResStringArray
@@ -45,8 +45,8 @@ public:
     SvxTextEncodingTable();
     ~SvxTextEncodingTable();
 
-    const String&       GetTextString( const rtl_TextEncoding nEnc ) const;
-    rtl_TextEncoding    GetTextEncoding( const String& rStr ) const;
+    const String&		GetTextString( const rtl_TextEncoding nEnc ) const;
+    rtl_TextEncoding	GetTextEncoding( const String& rStr ) const;
 };
 
 

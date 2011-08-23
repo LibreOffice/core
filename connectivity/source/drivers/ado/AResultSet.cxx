@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ using namespace ::comphelper;
 
 #include <oledb.h>
 
-#define CHECK_RETURN(x)                                                 \
-    if(!SUCCEEDED(x))                                                               \
+#define CHECK_RETURN(x)													\
+    if(!SUCCEEDED(x))																\
         ADOS::ThrowException(*m_pStmt->m_pConnection->getConnection(),*this);
 
 using namespace connectivity::ado;
@@ -62,8 +62,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 //------------------------------------------------------------------------------
-//  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.AResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)  \
+//	IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.AResultSet","com.sun.star.sdbc.ResultSet");
+::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)	\
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ado.ResultSet");
 }
@@ -87,7 +87,7 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
     return pSupported != pEnd;
 }
 // -------------------------------------------------------------------------
-OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  OResultSet_BASE(m_aMutex)
+OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :	OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
                         ,m_xStatement(*pStmt)
                         ,m_pStmt(pStmt)
@@ -98,7 +98,7 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  ORes
 {
 }
 // -------------------------------------------------------------------------
-OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
+OResultSet::OResultSet(ADORecordset* _pRecordSet) :	OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
                         ,m_xStatement(NULL)
                         ,m_xMetaData(NULL)
@@ -149,7 +149,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
@@ -464,7 +464,7 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(!row)                 // absolute with zero not allowed
+    if(!row)				 // absolute with zero not allowed
         ::dbtools::throwFunctionSequenceException(*this);
 
     sal_Bool bCheck = sal_True;
@@ -548,7 +548,7 @@ sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeExceptio
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
-{   ::osl::MutexGuard aGuard( m_aMutex );
+{	::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
@@ -883,7 +883,7 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& first, const Any& se
     first >>= nPos1;
     sal_Int32 nPos2;
     second >>= nPos2;
-    if(nPos1 == nPos2)  // they should be equal
+    if(nPos1 == nPos2)	// they should be equal
         return sal_True;
 
     OSL_ENSURE((nPos1 >= 0 && nPos1 < (sal_Int32)m_aBookmarks.size()) || (nPos1 >= 0 && nPos2 < (sal_Int32)m_aBookmarks.size()),"Invalid Index for vector");
@@ -1063,12 +1063,12 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
 
-    //  DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
-    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-    DECL_PROP0(FETCHSIZE,               sal_Int32);
+    //	DECL_PROP1IMPL(CURSORNAME,			::rtl::OUString) PropertyAttribute::READONLY);
+    DECL_PROP0(FETCHDIRECTION,			sal_Int32);
+    DECL_PROP0(FETCHSIZE,				sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(RESULTSETTYPE,		sal_Int32) PropertyAttribute::READONLY);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }

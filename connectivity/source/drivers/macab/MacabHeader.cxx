@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
                 CFRetain(fields[i]->value);
         }
     }
-
+    
 }
 
 // -------------------------------------------------------------------------
@@ -124,7 +124,7 @@ void MacabHeader::operator+= (const MacabHeader *r)
                     numToAdd++;
                 }
             }
-
+            
             newFields = new macabfield *[size+numToAdd];
             for(i = 0; i < size; i++)
             {
@@ -249,7 +249,7 @@ macabfield **MacabHeader::sortRecord(const sal_Int32 _start, const sal_Int32 _le
     return sorted;
 }
 
-sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield *_field2)
+sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield *_field2) 
 {
     /* Comparing two fields in a MacabHeader is different than comparing two
      * fields in a MacabRecord. It starts in the same way (if one of the two

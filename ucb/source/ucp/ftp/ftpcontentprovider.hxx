@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,17 +52,17 @@
 
 
 namespace ftp {
-
+    
 
     class FTPLoaderThread;
-
-
+    
+    
     class FTPContentProvider:
         public ::ucbhelper::ContentProviderImplHelper,
         public FTPHandleProvider
     {
     public:
-
+        
         FTPContentProvider(
             const com::sun::star::uno::Reference<
             com::sun::star::lang::XMultiServiceFactory>& xMSF );
@@ -71,7 +71,7 @@ namespace ftp {
 
         // XInterface
         XINTERFACE_DECL()
-
+            
         // XTypeProvider
         XTYPEPROVIDER_DECL()
 
@@ -84,24 +84,24 @@ namespace ftp {
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier )
             throw( com::sun::star::ucb::IllegalIdentifierException,
                    com::sun::star::uno::RuntimeException );
-
+        
         // FTPHandleProvider.
-
+        
         virtual CURL* handle();
-
+        
         virtual bool forHost(const rtl::OUString& host,
                              const rtl::OUString& port,
                              const rtl::OUString& username,
                              rtl::OUString& password,
                              rtl::OUString& account);
-
+        
         virtual bool setHost(const rtl::OUString& host,
                              const rtl::OUString& port,
                              const rtl::OUString& username,
                              const rtl::OUString& password,
                              const rtl::OUString& account);
-
-
+        
+        
         struct ServerInfo {
             rtl::OUString host;
             rtl::OUString port;
@@ -111,20 +111,20 @@ namespace ftp {
         };
 
     private:
-
+        
         osl::Mutex m_aMutex;
         FTPLoaderThread *m_ftpLoaderThread;
         ucbhelper::InternetProxyDecider *m_pProxyDecider;
         std::vector<ServerInfo> m_ServerInfo;
-
+        
         void init();
-
+        
         com::sun::star::uno::Reference<com::sun::star::ucb::XContentProvider>
         getHttpProvider()
-            throw(com::sun::star::uno::RuntimeException);
-
+            throw(com::sun::star::uno::RuntimeException);		
+        
     };  // end class FTPContentProvider
-
+    
 }       // end namespace ftp
 
 #endif

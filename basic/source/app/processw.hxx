@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 class ProcessWrapper : public SbxObject
 {
 using SbxVariable::GetInfo;
-// Definition of a table entry. This is done here because
+// Definition of a table entry. This is done here because 
 // through this methods and property can declared as private.
 #if defined ( ICC ) || defined ( HPUX ) || defined ( C50 ) || defined ( C52 )
 public:
@@ -49,13 +49,13 @@ private:
 #endif
 
     struct Methods {
-        const char* pName;      // Name of the entry
-        SbxDataType eType;      // Data type
-        pMeth pFunc;            // Function Pointer
-        short nArgs;            // Arguments and flags
+        const char* pName;		// Name of the entry
+        SbxDataType eType;		// Data type
+        pMeth pFunc;			// Function Pointer
+        short nArgs;			// Arguments and flags
     };
-    static Methods aProcessMethods[];   // Method table
-    Methods *pMethods;  // Current method table
+    static Methods aProcessMethods[];	// Method table
+    Methods *pMethods;	// Current method table
 
     void PSetImage( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );
     void PStart( SbxVariable* pVar, SbxArray* pPar, BOOL bWrite );

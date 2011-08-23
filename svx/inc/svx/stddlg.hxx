@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ public:
     SvxStandardDialog( Window* pParent, const ResId& rResId );
     ~SvxStandardDialog();
 
-    short           Execute();
+    short			Execute();
 
 protected:
-    virtual void    Apply() = 0;    // pure virtual!!!
+    virtual void	Apply() = 0;	// pure virtual!!!
 };
 
 

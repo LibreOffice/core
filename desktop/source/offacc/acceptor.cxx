@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
     , m_aConnectString()
     , m_aProtocol()
     , m_bInit(sal_False)
-    , m_bDying(false)
+    , m_bDying(false)  
 {
     m_rSMgr = rFactory;
     m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
@@ -156,7 +156,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     throw( Exception )
 {
     // prevent multiple initialization
-    ClearableMutexGuard aGuard( m_aMutex );
+    ClearableMutexGuard	aGuard(	m_aMutex );
     RTL_LOGFILE_CONTEXT( aLog, "destop (lo119109) Acceptor::initialize()" );
 
     sal_Bool bOk = sal_False;
@@ -190,7 +190,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     // do we want to enable accepting?
     sal_Bool bEnable = sal_False;
     if (((nArgs == 1 && (aArguments[0] >>= bEnable)) ||
-         (nArgs == 2 && (aArguments[1] >>= bEnable))) &&
+         (nArgs == 2 && (aArguments[1] >>= bEnable))) && 
         bEnable )
     {
         m_cEnable.set();

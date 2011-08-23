@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ public:
 
     virtual void    Resize();
     virtual long    Notify( NotifyEvent& rNEvt );
-    virtual BOOL    Close();
+    virtual BOOL	Close();
 
     virtual void    showProgress( bool bStart );
     virtual void    updateProgress( const ::rtl::OUString &rText,
@@ -219,9 +219,9 @@ public:
                     UpdateRequiredDialog( Window * pParent, TheExtensionManager *pManager );
     virtual        ~UpdateRequiredDialog();
 
-    virtual short   Execute();
+    virtual short	Execute();
     virtual void    Resize();
-    virtual BOOL    Close();
+    virtual BOOL	Close();
 //    virtual long    Notify( NotifyEvent& rNEvt );
 
     virtual void    showProgress( bool bStart );

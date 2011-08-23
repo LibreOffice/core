@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,45 +50,45 @@ namespace drivermanager
     //======================================================================
     //= various
     //======================================================================
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                     SdbcDriver;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >						SdbcDriver;
     DECLARE_STL_USTRINGACCESS_MAP( SdbcDriver, DriverCollection );
 
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >       DriverFactory;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >		DriverFactory;
     struct DriverAccess
     {
-        ::rtl::OUString     sImplementationName;        /// the implementation name of the driver
-        DriverFactory       xComponentFactory;          /// the factory to create the driver component (if not already done so)
-        SdbcDriver          xDriver;                    /// the driver itself
+        ::rtl::OUString		sImplementationName;		/// the implementation name of the driver
+        DriverFactory		xComponentFactory;			/// the factory to create the driver component (if not already done so)
+        SdbcDriver			xDriver;					/// the driver itself
     };
 
     //==========================================================================
     //= OSDBCDriverManager - the one-instance service for managing SDBC drivers
     //==========================================================================
-    typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::sdbc::XDriverManager
-                                    ,   ::com::sun::star::sdbc::XDriverAccess
-                                    ,   ::com::sun::star::container::XEnumerationAccess
-                                    ,   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::uno::XNamingService
-                                    >   OSDBCDriverManager_Base;
+    typedef	::cppu::WeakImplHelper5	<	::com::sun::star::sdbc::XDriverManager
+                                    ,	::com::sun::star::sdbc::XDriverAccess
+                                    ,	::com::sun::star::container::XEnumerationAccess
+                                    ,	::com::sun::star::lang::XServiceInfo
+                                    ,	::com::sun::star::uno::XNamingService
+                                    >	OSDBCDriverManager_Base;
 
     class OSDBCDriverManager : public OSDBCDriverManager_Base
     {
         friend class ODriverEnumeration;
-
-        ::osl::Mutex                    m_aMutex;
+        
+        ::osl::Mutex			        m_aMutex;
         ::comphelper::ComponentContext  m_aContext;
         ::comphelper::EventLogger       m_aEventLogger;
 
         DECLARE_STL_VECTOR(DriverAccess, DriverAccessArray);
-        DriverAccessArray               m_aDriversBS;
+        DriverAccessArray		        m_aDriversBS;
 
         // for drivers registered at runtime (not bootstrapped) we don't require an XServiceInfo interface,
         // so we have to remember their impl-name in another way
         DECLARE_STL_USTRINGACCESS_MAP(SdbcDriver, DriverCollection);
-        DriverCollection                m_aDriversRT;
+        DriverCollection				m_aDriversRT;
 
-        ::connectivity::DriversConfig   m_aDriverConfig;
-        sal_Int32                       m_nLoginTimeout;
+        ::connectivity::DriversConfig   m_aDriverConfig;    
+        sal_Int32				        m_nLoginTimeout;
 
     private:
         OSDBCDriverManager(
@@ -140,7 +140,7 @@ namespace drivermanager
         void bootstrapDrivers();
     };
 
-}   // namespace drivermanager
+}	// namespace drivermanager
 
 #endif // _CONNECTIVITY_DRIVERMANAGER_HXX_
 

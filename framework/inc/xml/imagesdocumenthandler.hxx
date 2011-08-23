@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #define __FRAMEWORK_XML_IMAGEDOCUMENTHANDLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <xml/imagesconfiguration.hxx>
 #include <threadhelp/threadhelpbase.hxx>
@@ -47,7 +47,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -55,7 +55,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right initalization of lock member! Must be first of baseclasses.
+class OReadImagesDocumentHandler : private ThreadHelpBase,	// Struct for right initalization of lock member! Must be first of baseclasses.
                                    public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -83,54 +83,54 @@ class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right 
             IMG_NS_XLINK,
             TBL_XML_NAMESPACES_COUNT
         };
-
+        
         OReadImagesDocumentHandler( ImageListsDescriptor& aItems );
         virtual ~OReadImagesDocumentHandler();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-        throw ( ::com::sun::star::xml::sax::SAXException,
+        throw (	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endDocument(void)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
                                                     const rtl::OUString& aData)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL setDocumentLocator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
     private:
         ::rtl::OUString getErrorLineString();
 
-        class ImageHashMap : public ::std::hash_map< ::rtl::OUString        ,
-                                                     Image_XML_Entry        ,
-                                                     OUStringHashCode       ,
-                                                     ::std::equal_to< ::rtl::OUString > >
+        class ImageHashMap : public ::std::hash_map< ::rtl::OUString		,
+                                                     Image_XML_Entry		,
+                                                     OUStringHashCode		,
+                                                     ::std::equal_to< ::rtl::OUString >	>
         {
             public:
                 inline void free()
@@ -139,21 +139,21 @@ class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right 
                 }
         };
 
-        sal_Bool                                                                    m_bImageContainerStartFound;
-        sal_Bool                                                                    m_bImageContainerEndFound;
-        sal_Bool                                                                    m_bImagesStartFound;
-        sal_Bool                                                                    m_bImagesEndFound;
-        sal_Bool                                                                    m_bImageStartFound;
-        sal_Bool                                                                    m_bExternalImagesStartFound;
-        sal_Bool                                                                    m_bExternalImagesEndFound;
-        sal_Bool                                                                    m_bExternalImageStartFound;
-        sal_Int32                                                                   m_nHashMaskModeBitmap;
-        sal_Int32                                                                   m_nHashMaskModeColor;
-        ImageHashMap                                                                m_aImageMap;
-        ImageListsDescriptor&                                                       m_aImageList;
-        ImageListItemDescriptor*                                                    m_pImages;
-        ExternalImageItemListDescriptor*                                            m_pExternalImages;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
+        sal_Bool																	m_bImageContainerStartFound;
+        sal_Bool																	m_bImageContainerEndFound;
+        sal_Bool																	m_bImagesStartFound;
+        sal_Bool																	m_bImagesEndFound;
+        sal_Bool																	m_bImageStartFound;
+        sal_Bool																	m_bExternalImagesStartFound;
+        sal_Bool																	m_bExternalImagesEndFound;
+        sal_Bool																	m_bExternalImageStartFound;
+        sal_Int32																	m_nHashMaskModeBitmap;
+        sal_Int32																	m_nHashMaskModeColor;
+        ImageHashMap																m_aImageMap;
+        ImageListsDescriptor&														m_aImageList;
+        ImageListItemDescriptor*													m_pImages;
+        ExternalImageItemListDescriptor*											m_pExternalImages;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >	m_xLocator;
 };
 
 class OWriteImagesDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
@@ -167,7 +167,7 @@ class OWriteImagesDocumentHandler : private ThreadHelpBase // Struct for right i
         void WriteImagesDocument() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
-
+    
     protected:
         virtual void WriteImageList( const ImageListItemDescriptor* ) throw
             ( ::com::sun::star::xml::sax::SAXException,
@@ -185,14 +185,14 @@ class OWriteImagesDocumentHandler : private ThreadHelpBase // Struct for right i
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        const ImageListsDescriptor&                                                         m_aImageListsItems;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
-        ::rtl::OUString                                                                     m_aXMLXlinkNS;
-        ::rtl::OUString                                                                     m_aXMLImageNS;
-        ::rtl::OUString                                                                     m_aAttributeType;
-        ::rtl::OUString                                                                     m_aAttributeXlinkType;
-        ::rtl::OUString                                                                     m_aAttributeValueSimple;
+        const ImageListsDescriptor&															m_aImageListsItems;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >	m_xWriteDocumentHandler;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >		m_xEmptyList;
+        ::rtl::OUString																		m_aXMLXlinkNS;
+        ::rtl::OUString																		m_aXMLImageNS;
+        ::rtl::OUString																		m_aAttributeType;
+        ::rtl::OUString																		m_aAttributeXlinkType;
+        ::rtl::OUString																		m_aAttributeValueSimple;
 };
 
 } // namespace framework

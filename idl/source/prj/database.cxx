@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ SvIdlDataBase::~SvIdlDataBase()
 |*    Beschreibung
 *************************************************************************/
 #define ADD_TYPE( Name, OdlName, ParserChar, CName, BasName, BasPost )            \
-    aTypeList.Append( new SvMetaType( SvHash_##Name()->GetName(),   \
+    aTypeList.Append( new SvMetaType( SvHash_##Name()->GetName(),	\
                      BasName, OdlName, ParserChar, CName, BasName, BasPost ) );
 
 SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
@@ -483,10 +483,10 @@ SvMetaType * SvIdlDataBase::FindType( const ByteString & rName )
 *************************************************************************/
 SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 {
-    BOOL bIn    = FALSE;
-    BOOL bOut   = FALSE;
-    int nCall0  = CALL_VALUE;
-    int nCall1  = CALL_VALUE;
+    BOOL bIn	= FALSE;
+    BOOL bOut	= FALSE;
+    int nCall0	= CALL_VALUE;
+    int nCall1	= CALL_VALUE;
     BOOL bSet   = FALSE; //irgent ein Attribut gesetzt
 
     UINT32  nTokPos = rInStm.Tell();
@@ -599,7 +599,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
 (
     SvTokenStream & rInStm,
-    SvMetaType *    pType   /* Wenn der pType == NULL, dann muss der Typ
+    SvMetaType *	pType	/* Wenn der pType == NULL, dann muss der Typ
                                noch gelesen werden. */
 )
 {
@@ -737,13 +737,13 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 #ifndef W31
     String aFileName( rInStm.GetFileName() );
     ByteString aErrorText;
-    ULONG   nRow = 0, nColumn = 0;
+    ULONG	nRow = 0, nColumn = 0;
 
     rInStm.SeekEnd();
     SvToken *pTok = rInStm.GetToken();
 
     // Fehlerposition
-    nRow    = pTok->GetLine();
+    nRow 	= pTok->GetLine();
     nColumn = pTok->GetColumn();
 
     if( aError.IsError() )

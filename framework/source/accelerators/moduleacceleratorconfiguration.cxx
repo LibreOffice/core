@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@
 namespace framework
 {
 
-//-----------------------------------------------
+//-----------------------------------------------    
 // XInterface, XTypeProvider, XServiceInfo
 DEFINE_XINTERFACE_2(ModuleAcceleratorConfiguration              ,
                     XCUBasedAcceleratorConfiguration                    ,
@@ -75,7 +75,7 @@ DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(ModuleAcceleratorConfiguration,
                                       XCUBasedAcceleratorConfiguration      ,
                                       css::lang::XServiceInfo       ,
                                       css::lang::XInitialization    )
-
+                       
 DEFINE_XSERVICEINFO_MULTISERVICE(ModuleAcceleratorConfiguration                   ,
                                  ::cppu::OWeakObject                              ,
                                  SERVICENAME_MODULEACCELERATORCONFIGURATION       ,
@@ -90,21 +90,21 @@ DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
                         */
                     }
                    )
-
-//-----------------------------------------------
+                                    
+//-----------------------------------------------    
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
     : XCUBasedAcceleratorConfiguration(xSMGR)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration" );
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
 {
    // m_aPresetHandler.removeStorageListener(this);
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -112,23 +112,23 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::initialize" );
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-
+    
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
     m_sModule = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
     m_sLocale = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("Locale")          , ::rtl::OUString::createFromAscii("x-default"));
-
+    
     if (!m_sModule.getLength())
         throw css::uno::RuntimeException(
                 ::rtl::OUString::createFromAscii("The module dependend accelerator configuration service was initialized with an empty module identifier!"),
                 static_cast< ::cppu::OWeakObject* >(this));
-
+    
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
-
+    
     impl_ts_fillCache();
 }
-
-//-----------------------------------------------
+          
+//-----------------------------------------------    
 void ModuleAcceleratorConfiguration::impl_ts_fillCache()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::impl_ts_fillCache" );
@@ -143,7 +143,7 @@ void ModuleAcceleratorConfiguration::impl_ts_fillCache()
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
     ::comphelper::Locale aLocale = ::comphelper::Locale(m_sLocale);
-
+    
     // May be the current app module does not have any
     // accelerator config? Handle it gracefully :-)
     try

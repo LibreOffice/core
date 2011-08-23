@@ -53,7 +53,7 @@ class SbUnoObject: public SbxObject
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactNameInvocation;
     BOOL bNeedIntrospection;
     BOOL bIgnoreNativeCOMObjectMembers;
-    ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
+    ::com::sun::star::uno::Any maTmpUnoObj;	// Only to save obj for doIntrospection!
 
     // Hilfs-Methode zum Anlegen der dbg_-Properties
     void implCreateDbgProperties( void );
@@ -80,8 +80,8 @@ public:
 
     // Wert rausgeben
     ::com::sun::star::uno::Any getUnoAny( void );
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess( void )    { return mxUnoAccess; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation( void )         { return mxInvocation; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess( void )	{ return mxUnoAccess; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation( void )			{ return mxInvocation; }
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
 };
@@ -103,7 +103,7 @@ class SbUnoMethod : public SbxMethod
     SbUnoMethod* pPrev;
     SbUnoMethod* pNext;
 
-    bool mbInvocation;      // Method is based on invocation
+    bool mbInvocation;		// Method is based on invocation
 
 public:
     TYPEINFO();
@@ -128,7 +128,7 @@ class SbUnoProperty : public SbxProperty
     ::com::sun::star::beans::Property aUnoProp;
     INT32 nId;
 
-    bool mbInvocation;      // Property is based on invocation
+    bool mbInvocation;		// Property is based on invocation
 
     virtual ~SbUnoProperty();
 public:
@@ -151,7 +151,7 @@ public:
 // Wrapper fuer eine Uno-Klasse
 class SbUnoClass : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >   m_xClass;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >	m_xClass;
 
 public:
     TYPEINFO();
@@ -183,8 +183,8 @@ SbUnoClass* findUnoClass( const String& rName );
 // Wrapper for UNO Service
 class SbUnoService : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >    m_xServiceTypeDesc;
-    bool                                                                                                m_bNeedsInit;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >	m_xServiceTypeDesc;
+    bool																								m_bNeedsInit;
 
 public:
     TYPEINFO();
@@ -231,7 +231,7 @@ public:
 // Wrapper for UNO Singleton
 class SbUnoSingleton : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >	m_xSingletonTypeDesc;
 
 public:
     TYPEINFO();
@@ -268,7 +268,7 @@ public:
 
 class AutomationNamedArgsSbxArray : public SbxArray
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >      maNameSeq;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >		maNameSeq;
 public:
     TYPEINFO();
     AutomationNamedArgsSbxArray( sal_Int32 nSeqSize )

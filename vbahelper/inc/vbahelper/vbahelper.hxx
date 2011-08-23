@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,11 @@
 #include "vbaaccesshelper.hxx"
 
 namespace css = ::com::sun::star;
-namespace ooo
+namespace ooo 
 {
-    namespace vba
+    namespace vba 
     {
-        template < class T >
+        template < class T > 
         css::uno::Reference< T > getXSomethingFromArgs( css::uno::Sequence< css::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true ) throw (css::lang::IllegalArgumentException)
         {
             if ( args.getLength() < ( nPos + 1) )
@@ -88,8 +88,8 @@ namespace ooo
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC css::uno::Any OORGBToXLRGB( const css::uno::Any& );
         VBAHELPER_DLLPUBLIC css::uno::Any XLRGBToOORGB( const css::uno::Any& );
-        // provide a NULL object that can be passed as variant so that
-        // the object when passed to IsNull will return true. aNULL
+        // provide a NULL object that can be passed as variant so that 
+        // the object when passed to IsNull will return true. aNULL 
         // contains an empty object reference
         VBAHELPER_DLLPUBLIC const css::uno::Any& aNULL();
         VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell* pViewShell, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, sal_Bool bSelection  );
@@ -101,7 +101,7 @@ namespace ooo
         /** Extracts a boolean value from the passed Any, which may contain sal_Bool or an integer or floating-point value.
             Throws, if the Any is empty or contains an incompatible type. */
         VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny ) throw (css::uno::RuntimeException);
-
+        
         VBAHELPER_DLLPUBLIC rtl::OUString getAnyAsString( const css::uno::Any& pvargItem ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike = false); // needs to be in an uno service ( already this code is duplicated in basic )
         VBAHELPER_DLLPUBLIC double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical);
@@ -125,9 +125,9 @@ private:
 
 public:
     Millimeter();
-
+    
     Millimeter(double mm);
-
+    
     void set(double mm);
     void setInPoints(double points) ;
     void setInHundredthsOfOneMillimeter(double hmm);
@@ -162,21 +162,21 @@ protected:
     css::uno::Reference< css::drawing::XShape > xShape;
 public:
     ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException );
-
+    
     double getHeight();
 
         void setHeight(double _fheight) throw ( css::script::BasicErrorException );
-
+    
     double getWidth();
 
     void setWidth(double _fWidth) throw ( css::script::BasicErrorException );
-
+    
     double getLeft();
-
+    
     void setLeft(double _fLeft);
 
     double getTop();
-
+    
     void setTop(double _fTop);
 };
 
@@ -222,7 +222,7 @@ public:
 class VBAHELPER_DLLPUBLIC ContainerUtilities
 {
 
-public:
+public: 
     static rtl::OUString getUniqueName( const css::uno::Sequence< ::rtl::OUString >&  _slist, const rtl::OUString& _sElementName, const ::rtl::OUString& _sSuffixSeparator);
     static rtl::OUString getUniqueName( const css::uno::Sequence< rtl::OUString >& _slist, const rtl::OUString _sElementName, const rtl::OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix );
 

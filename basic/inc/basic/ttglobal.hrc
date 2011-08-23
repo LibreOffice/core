@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 ///////////////////////////////
 // Error message that go to the Resultfile.
 // *********************
-// ***  !!ATTENTION!!    ***
+// ***  !!ATTENTION!!	 ***
 // *********************
 // Theses numbers MUST NOT change ever!
 // Because they are stored in the Resultfiles and if you showed them again
@@ -40,9 +40,9 @@
 
 // Start of Ressources for the  Testtool (own file)
 // > 256 and > 9100 (Biggest res in TT itself)
-#define TT_START 20000              // Messages from /basic/source/testtool
-#define BAS_START 21000             // Messages from /basic/source/app
-#define SVT_START 22000             // Messages from /svtools/source/plugapp
+#define TT_START 20000				// Messages from /basic/source/testtool
+#define BAS_START 21000				// Messages from /basic/source/app
+#define SVT_START 22000				// Messages from /svtools/source/plugapp
 
 
 #endif

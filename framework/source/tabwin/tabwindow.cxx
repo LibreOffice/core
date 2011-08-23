@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,12 @@
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -45,7 +45,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
@@ -56,7 +56,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
 //
 
@@ -67,40 +67,40 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_11                    (   TabWindow                                                                          ,
+DEFINE_XINTERFACE_11                    (   TabWindow										                                   ,
                                             ::cppu::OWeakObject                                                                ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                                        ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                                         ),
-                                            DIRECT_INTERFACE( css::lang::XInitialization                                      ),
+                                            DIRECT_INTERFACE( css::lang::XTypeProvider								          ),
+                                            DIRECT_INTERFACE( css::lang::XServiceInfo								          ),
+                                            DIRECT_INTERFACE( css::lang::XInitialization							          ),
                                             DIRECT_INTERFACE( css::lang::XComponent                                           ),
-                                            DIRECT_INTERFACE( css::awt::XWindowListener                                       ),
+                                            DIRECT_INTERFACE( css::awt::XWindowListener								          ),
                                             DIRECT_INTERFACE( css::awt::XTopWindowListener                                    ),
                                             DIRECT_INTERFACE( css::awt::XSimpleTabController                                  ),
                                             DERIVED_INTERFACE( css::lang::XEventListener, css::awt::XWindowListener           ),
-                                            DIRECT_INTERFACE( css::beans::XMultiPropertySet                                   ),
-                                            DIRECT_INTERFACE( css::beans::XFastPropertySet                                    ),
-                                            DIRECT_INTERFACE( css::beans::XPropertySet                                        )
+                                            DIRECT_INTERFACE( css::beans::XMultiPropertySet							          ),
+                                            DIRECT_INTERFACE( css::beans::XFastPropertySet							          ),
+                                            DIRECT_INTERFACE( css::beans::XPropertySet								          )
                                         )
 
-DEFINE_XTYPEPROVIDER_11                 (   TabWindow                               ,
-                                            css::lang::XTypeProvider                ,
-                                            css::lang::XServiceInfo                 ,
-                                            css::lang::XInitialization              ,
+DEFINE_XTYPEPROVIDER_11                 (   TabWindow								,
+                                            css::lang::XTypeProvider			    ,
+                                            css::lang::XServiceInfo				    ,
+                                            css::lang::XInitialization				,
                                             css::lang::XComponent                   ,
-                                            css::awt::XWindowListener               ,
+                                            css::awt::XWindowListener				,
                                             css::awt::XTopWindowListener            ,
                                             css::awt::XSimpleTabController          ,
-                                            css::lang::XEventListener               ,
+                                            css::lang::XEventListener				,
                                             css::beans::XMultiPropertySet           ,
                                             css::beans::XFastPropertySet            ,
                                             css::beans::XPropertySet
                                         )
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   TabWindow                           ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   TabWindow							,
                                             ::cppu::OWeakObject                 ,
-                                            SERVICENAME_TABWINDOW               ,
+                                            SERVICENAME_TABWINDOW				,
                                             IMPLEMENTATIONNAME_TABWINDOW
                                         )
 
@@ -309,7 +309,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
 
     if ( !bInitalized )
     {
-        css::beans::PropertyValue                   aPropValue;
+        css::beans::PropertyValue				    aPropValue;
         css::uno::Reference< css::awt::XTopWindow > xTopWindow;
         css::uno::Reference< css::awt::XToolkit >   xToolkit;
         css::awt::WindowDescriptor                  aDescriptor;
@@ -399,12 +399,12 @@ throw (css::uno::Exception, css::uno::RuntimeException)
                 xContainerWindow = css::uno::Reference< css::awt::XWindow >( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
 
                 // create a tab control window properties
-                aDescriptor.Type                = css::awt::WindowClass_SIMPLE;
+                aDescriptor.Type				= css::awt::WindowClass_SIMPLE;
                 aDescriptor.WindowServiceName   = DECLARE_ASCII("tabcontrol");
-                aDescriptor.ParentIndex         = -1;
-                aDescriptor.Parent              = css::uno::Reference< css::awt::XWindowPeer >( xTopWindow, css::uno::UNO_QUERY );
-                aDescriptor.Bounds              = css::awt::Rectangle( 0,0,0,0 );
-                aDescriptor.WindowAttributes    = 0;
+                aDescriptor.ParentIndex			= -1;
+                aDescriptor.Parent				= css::uno::Reference< css::awt::XWindowPeer >( xTopWindow, css::uno::UNO_QUERY );
+                aDescriptor.Bounds				= css::awt::Rectangle( 0,0,0,0 );
+                aDescriptor.WindowAttributes	= 0;
 
                 xTabControl = css::uno::Reference< css::awt::XWindow >( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
 
@@ -446,7 +446,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  XComponent
+//	XComponent
 //---------------------------------------------------------------------------------------------------------
 void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException)
 {
@@ -612,7 +612,7 @@ throw (css::uno::RuntimeException)
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  XSimpleTabController
+//	XSimpleTabController
 //---------------------------------------------------------------------------------------------------------
 
 ::sal_Int32 SAL_CALL TabWindow::insertTab()
@@ -838,18 +838,18 @@ throw (css::uno::RuntimeException)
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  OPropertySetHelper
+//	OPropertySetHelper
 //---------------------------------------------------------------------------------------------------------
 
 // XPropertySet helper
 sal_Bool SAL_CALL TabWindow::convertFastPropertyValue( css::uno::Any&       aConvertedValue ,
                                                        css::uno::Any&       aOldValue       ,
-                                                       sal_Int32            nHandle         ,
+                                                       sal_Int32			nHandle         ,
                                                        const css::uno::Any& aValue             )
 throw( css::lang::IllegalArgumentException )
 {
-    //  Initialize state with FALSE !!!
-    //  (Handle can be invalid)
+    //	Initialize state with FALSE !!!
+    //	(Handle can be invalid)
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
@@ -965,7 +965,7 @@ const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticProper
                                          TABWINDOW_PROPHANDLE_TOPWINDOW,
                                          ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
                                          com::sun::star::beans::PropertyAttribute::READONLY  )
-    };  // Use it to initialize sequence!
+    }; 	// Use it to initialize sequence!
     static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, TABWINDOW_PROPCOUNT );
 
     // Return static "PropertyDescriptor"

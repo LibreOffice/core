@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,62 +36,62 @@
 
 class ImpEditEngine;
 
-#define MAX_NUMBERLEVEL         10
+#define MAX_NUMBERLEVEL			10
 
 struct AnchorInfo
 {
-    String  aHRef;
-    String  aText;
+    String	aHRef;
+    String	aText;
 };
 
 class EditHTMLParser : public HTMLParser
 {
     using HTMLParser::CallParser;
 private:
-    EditSelection           aCurSel;
+    EditSelection 			aCurSel;
     String                  aBaseURL;
-    ImpEditEngine*          pImpEditEngine;
-    AnchorInfo*             pCurAnchor;
+    ImpEditEngine* 			pImpEditEngine;
+    AnchorInfo*				pCurAnchor;
 
-    BOOL                    bInPara;
-    BOOL                    bWasInPara; // bInPara vor HeadingStart merken, weil sonst hinterher weg
-    BOOL                    bFieldsInserted;
-    BYTE                    nInTable;
-    BYTE                    nInCell;
+    BOOL					bInPara;
+    BOOL					bWasInPara;	// bInPara vor HeadingStart merken, weil sonst hinterher weg
+    BOOL					bFieldsInserted;
+    BYTE					nInTable;
+    BYTE					nInCell;
     BOOL                    bInTitle;
 
-    BYTE                    nDefListLevel;
-    BYTE                    nBulletLevel;
-    BYTE                    nNumberingLevel;
+    BYTE					nDefListLevel;
+    BYTE					nBulletLevel;
+    BYTE					nNumberingLevel;
 
-    BYTE                    nLastAction;
+    BYTE					nLastAction;
 
-    void                    StartPara( BOOL bReal );
-    void                    EndPara( BOOL bReal );
-    void                    AnchorStart();
-    void                    AnchorEnd();
-    void                    HeadingStart( int nToken );
-    void                    HeadingEnd( int nToken );
-    void                    SkipGroup( int nEndToken );
-    BOOL                    ThrowAwayBlank();
-    BOOL                    HasTextInCurrentPara();
-    void                    ProcessUnknownControl( BOOL bOn );
+    void					StartPara( BOOL bReal );
+    void					EndPara( BOOL bReal );
+    void					AnchorStart();
+    void					AnchorEnd();
+    void					HeadingStart( int nToken );
+    void					HeadingEnd( int nToken );
+    void					SkipGroup( int nEndToken );
+    BOOL					ThrowAwayBlank();
+    BOOL					HasTextInCurrentPara();
+    void					ProcessUnknownControl( BOOL bOn );
 
-    void                    ImpInsertParaBreak();
-    void                    ImpInsertText( const String& rText );
-    void                    ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel = 0 );
-    void                    ImpSetStyleSheet( USHORT nHeadingLevel );
+    void					ImpInsertParaBreak();
+    void 					ImpInsertText( const String& rText );
+    void 					ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel = 0 );
+    void					ImpSetStyleSheet( USHORT nHeadingLevel );
 
 protected:
-    virtual void            NextToken( int nToken );
+    virtual void 			NextToken( int nToken );
 
 public:
                             EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs );
                             ~EditHTMLParser();
 
-    virtual SvParserState   CallParser( ImpEditEngine* pImpEE, const EditPaM& rPaM );
+    virtual SvParserState 	CallParser( ImpEditEngine* pImpEE, const EditPaM& rPaM );
 
-    const EditSelection&    GetCurSelection() const { return aCurSel; }
+    const EditSelection&	GetCurSelection() const { return aCurSel; }
 };
 
 SV_DECL_REF( EditHTMLParser )

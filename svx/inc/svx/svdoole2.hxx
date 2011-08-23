@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,18 +65,18 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     svt::EmbeddedObjectRef      xObjRef;
-    Graphic*                    pGraphic;
-    String                      aProgName;
+    Graphic*					pGraphic;
+    String						aProgName;
 
     // wg. Kompatibilitaet erstmal am SdrTextObj
-    BOOL                        bFrame : 1;
-    BOOL                        bInDestruction : 1;
+    BOOL						bFrame : 1;
+    BOOL						bInDestruction : 1;
     mutable bool                m_bTypeAsked;
     mutable bool                m_bChart;
 
-    SdrOle2ObjImpl*             mpImpl;
+    SdrOle2ObjImpl*				mpImpl;
 
-    SvxUnoShapeModifyListener*  pModifyListener;
+    SvxUnoShapeModifyListener*	pModifyListener;
 
 protected:
 
@@ -106,7 +106,7 @@ public:
 
     // the original size of the object ( size of the icon for iconified object )
     // no conversion is done if no target mode is provided
-    Size        GetOrigObjSize( MapMode* pTargetMapMode = NULL ) const;
+    Size		GetOrigObjSize( MapMode* pTargetMapMode = NULL ) const;
 
 
     // OLE object has got a separate PersistName member now;
@@ -180,7 +180,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetParentXModel()  const;
     sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
     sal_Bool AddOwnLightClient();
-
+    
     // handy to get the empty replacement bitmap without accessing all the old stuff
     static Bitmap GetEmtyOLEReplacementBitmap();
 

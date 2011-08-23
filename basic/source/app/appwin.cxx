@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include "dialogs.hxx"
 #include "basrid.hxx"
 
-String *AppWin::pNoName = NULL; // contains the "Untitled"-String
+String *AppWin::pNoName = NULL;	// contains the "Untitled"-String
 short AppWin::nNumber = 0;      // consecutive number
 short AppWin::nCount = 0;       // number of edit windows
 
@@ -188,16 +188,16 @@ void AppWin::RequestHelp( const HelpEvent& )
 void AppWin::Help()
 {
   String s = pDataEdit->GetSelected();
-  if( s.Len() > 0 )
+  if( s.Len() > 0 ) 
   {
     // Trim leading whitespaces
-    while( s.GetChar(0) == ' ' )
+    while( s.GetChar(0) == ' ' ) 
       s.Erase( 0, 1 );
-//      aBasicApp.pHelp->Start( s );
-  }
-  else
+//		aBasicApp.pHelp->Start( s );
+  } 
+  else 
   {
-//      aBasicApp.pHelp->Start( OOO_HELP_INDEX );
+//		aBasicApp.pHelp->Start( OOO_HELP_INDEX );
   }
 }
 
@@ -216,7 +216,7 @@ void AppWin::GetFocus()
     if( pDataEdit ) // GetFocus is called by the destructor, so this check
     {
         pDataEdit->GrabFocus();
-//      InitMenu(GetpApp()->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));
+//		InitMenu(GetpApp()->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));
     }
 }
 
@@ -228,7 +228,7 @@ long AppWin::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         if ( pFrame->pList->Last() != this )
             Activate();
-    return FALSE;       // Der event soll weiter verarbeitet werden
+    return FALSE;		// Der event soll weiter verarbeitet werden
 }
 
 void AppWin::Activate()
@@ -249,12 +249,12 @@ long AppWin::InitMenu( Menu* pMenu )
     }
     else
         bMarked = FALSE;
-    pMenu->EnableItem( RID_EDITREPEAT,  (aFind.Len() != 0 ) );
-    pMenu->EnableItem( RID_EDITCUT,     bMarked );
-    pMenu->EnableItem( RID_EDITCOPY,    bMarked );
-    pMenu->EnableItem( RID_EDITPASTE,   ( ::svt::OStringTransfer::PasteString( aTemp, this ) ) );
-    pMenu->EnableItem( RID_EDITDEL,     bMarked );
-//  pMenu->EnableItem( RID_HELPTOPIC,   bMarked );
+    pMenu->EnableItem( RID_EDITREPEAT,	(aFind.Len() != 0 ) );
+    pMenu->EnableItem( RID_EDITCUT, 	bMarked );
+    pMenu->EnableItem( RID_EDITCOPY,	bMarked );
+    pMenu->EnableItem( RID_EDITPASTE,	( ::svt::OStringTransfer::PasteString( aTemp, this ) ) );
+    pMenu->EnableItem( RID_EDITDEL, 	bMarked );
+//	pMenu->EnableItem( RID_HELPTOPIC,	bMarked );
 
     BOOL bHasText;
     if( pDataEdit )
@@ -263,9 +263,9 @@ long AppWin::InitMenu( Menu* pMenu )
         bHasText = FALSE;
     BOOL bRunning = pFrame->Basic().IsRunning();
     BOOL bCanExecute = BOOL( (!bRunning && bHasText) || pFrame->bInBreak );
-    pMenu->EnableItem( RID_RUNSTART,    bCanExecute );
-    pMenu->EnableItem( RID_RUNBREAK,    bRunning && !pFrame->bInBreak);
-    pMenu->EnableItem( RID_RUNSTOP,     bRunning );
+    pMenu->EnableItem( RID_RUNSTART,	bCanExecute );
+    pMenu->EnableItem( RID_RUNBREAK, 	bRunning && !pFrame->bInBreak);
+    pMenu->EnableItem( RID_RUNSTOP, 	bRunning );
     pMenu->EnableItem( RID_RUNTOCURSOR, bCanExecute );
     pMenu->EnableItem( RID_RUNSTEPINTO, bCanExecute );
     pMenu->EnableItem( RID_RUNSTEPOVER, bCanExecute );
@@ -317,7 +317,7 @@ void AppWin::Command( const CommandEvent& rCEvt )
         case RID_EDITPASTE:
             {
                 ::rtl::OUString aTemp;
-                if( ::svt::OStringTransfer::PasteString( aTemp, this ) )
+                if( ::svt::OStringTransfer::PasteString( aTemp, this ) ) 
                     pDataEdit->Paste();
             }
             break;
@@ -376,7 +376,7 @@ BOOL AppWin::DiskFileChanged( USHORT nWhat )
                     return DiskFileChanged( SINCE_LAST_ASK_RELOAD );
             }
 // uncomment to avoid compiler warning
-//          break;
+//			break;
         case SINCE_LAST_ASK_RELOAD:
             {
                 String aFilename( GetText() );
@@ -388,7 +388,7 @@ BOOL AppWin::DiskFileChanged( USHORT nWhat )
                     || aLastAccess.IsYounger( aStat ) || aStat.IsYounger( aLastAccess );
             }
 // uncomment to avoid compiler warning
-//          break;
+//			break;
         default:
             DBG_ERROR("Not Implemented in AppWin::DiskFileChanged");
     }
@@ -432,7 +432,7 @@ void AppWin::CheckReload()
     if ( !aFile.Exists() )
         return;
 
-//  FileStat aStat( aFile );
+//	FileStat aStat( aFile );
 
     if ( DiskFileChanged( SINCE_LAST_ASK_RELOAD ) && ReloadAllowed() )
     {
@@ -466,8 +466,8 @@ BOOL AppWin::Load( const String& aName )
     SkipReload();
     BOOL bErr;
 
-//  if( !QuerySave() )
-//      return;
+//	if( !QuerySave() )
+//		return;
     bErr = !pDataEdit->Load( aName );
     if( bErr )
     {
@@ -609,15 +609,15 @@ BOOL AppWin::Close()
             return TRUE;
         }
 // uncomment to avoid compiler warning
-//  break;
+//	break;
     case SAVE_RES_ERROR:
         return FALSE;
 // uncomment to avoid compiler warning
-//      break;
+//		break;
     case SAVE_RES_CANCEL:
         return FALSE;
 // uncomment to avoid compiler warning
-//      break;
+//		break;
     default:
         DBG_ERROR("Not Implemented in AppWin::Close");
         return FALSE;

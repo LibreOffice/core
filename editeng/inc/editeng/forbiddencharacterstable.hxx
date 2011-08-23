@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ public:
             ~SvxForbiddenCharactersTable();
 
     const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( USHORT nLanuage, BOOL bGetDefault ) const;
-    void    SetForbiddenCharacters(  USHORT nLanuage , const com::sun::star::i18n::ForbiddenCharacters& );
-    void    ClearForbiddenCharacters( USHORT nLanuage );
+    void 	SetForbiddenCharacters(  USHORT nLanuage , const com::sun::star::i18n::ForbiddenCharacters& );
+    void 	ClearForbiddenCharacters( USHORT nLanuage );
 };
 
 #endif // _FORBIDDENCHARACTERSTABLE_HXX

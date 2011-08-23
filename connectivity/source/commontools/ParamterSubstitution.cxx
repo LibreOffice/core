@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ namespace connectivity
                 ::rtl::OUString sNewSql;
                 OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sText);
                 if(pNode)
-                {   // special handling for parameters
+                {	// special handling for parameters
                     OSQLParseNode::substituteParameterNames(pNode);
                     pNode->parseNodeToStr( sNewSql, xConnection );
                     delete pNode;

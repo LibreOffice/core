@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     Sequence< ::rtl::OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
-    sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
+    sTableTypes[2] = s_sAll;	// just to be sure to include anything else ....
 
     Any aCatalog;
     if ( sCatalog.getLength() )
@@ -83,26 +83,26 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if ( xResult->next() ) // there can be only one table with this name
         {
-//          Reference<XStatement> xStmt = m_xConnection->createStatement();
-//          if ( xStmt.is() )
-//          {
-//              Reference< XResultSet > xPrivRes = xStmt->executeQuery();
-//              Reference< XRow > xPrivRow(xPrivRes,UNO_QUERY);
-//              while ( xPrivRes.is() && xPrivRes->next() )
-//              {
-//                  if ( xPrivRow->getString(1) )
-//                  {
-//                  }
-//              }
-//          }
-            sal_Int32 nPrivileges = Privilege::DROP         |
-                                    Privilege::REFERENCE    |
-                                    Privilege::ALTER        |
-                                    Privilege::CREATE       |
-                                    Privilege::READ         |
-                                    Privilege::DELETE       |
-                                    Privilege::UPDATE       |
-                                    Privilege::INSERT       |
+//			Reference<XStatement> xStmt = m_xConnection->createStatement();
+//			if ( xStmt.is() )
+//			{
+//				Reference< XResultSet > xPrivRes = xStmt->executeQuery();
+//				Reference< XRow > xPrivRow(xPrivRes,UNO_QUERY);
+//				while ( xPrivRes.is() && xPrivRes->next() )
+//				{
+//					if ( xPrivRow->getString(1) )
+//					{
+//					}
+//				}
+//			}
+            sal_Int32 nPrivileges =	Privilege::DROP			|
+                                    Privilege::REFERENCE	|
+                                    Privilege::ALTER		|
+                                    Privilege::CREATE		|
+                                    Privilege::READ			|
+                                    Privilege::DELETE		|
+                                    Privilege::UPDATE		|
+                                    Privilege::INSERT		|
                                     Privilege::SELECT;
 
             OMySQLTable* pRet = new OMySQLTable( this
@@ -234,7 +234,7 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
 void OTables::addComment(const Reference< XPropertySet >& descriptor,::rtl::OUStringBuffer& _rOut)
 {
     ::rtl::OUString sDesc;
-    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))     >>= sDesc;
+    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))		>>= sDesc;
     if ( sDesc.getLength() )
     {
         _rOut.appendAscii(" COMMENT '");

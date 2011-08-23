@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace connectivity
         class OUsers : public sdbcx::OCollection
         {
             OAdabasConnection*    m_pConnection;
-            connectivity::sdbcx::IRefreshableUsers* m_pParent;
+            connectivity::sdbcx::IRefreshableUsers*	m_pParent;
         public:
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();

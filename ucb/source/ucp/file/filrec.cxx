@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ sal_Bool ReconnectingFile::reconnect()
             m_nFlags = (uFlags & ( ~OpenFlag_Create )) | OpenFlag_Write;
         else
             m_nFlags = uFlags;
-
+    
         m_bFlagsSet = sal_True;
     }
 

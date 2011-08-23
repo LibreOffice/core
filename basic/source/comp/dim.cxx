@@ -116,7 +116,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                 {
                     // STRING*n ?
                     if( Peek() == MUL )
-                    {       // fixed size!
+                    {		// fixed size!
                         Next();
                         SbiConstExpression aSize( this );
                         nSize = aSize.GetShortValue();
@@ -209,7 +209,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         Error( SbERR_NOT_IN_SUBR, eCurTok );
     if( eCurTok == PUBLIC || eCurTok == GLOBAL )
     {
-        bSwitchPool = TRUE;     // im richtigen Moment auf globalen Pool schalten
+        bSwitchPool = TRUE;		// im richtigen Moment auf globalen Pool schalten
         if( eCurTok == GLOBAL )
             bPersistantGlobal = TRUE;
     }
@@ -298,7 +298,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
     if( !bVBASupportOn && bStatic )
     {
         nEndOfStaticLbl = aGen.Gen( _JUMP, 0 );
-        aGen.Statement();   // bei static hier nachholen
+        aGen.Statement();	// bei static hier nachholen
     }
 
     BOOL bDefined = FALSE;
@@ -359,20 +359,20 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             SbiOpcode eOp2;
             switch ( pDef->GetScope() )
             {
-                case SbGLOBAL:  eOp2 = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
+                case SbGLOBAL:	eOp2 = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
                                 goto global;
-                case SbPUBLIC:  eOp2 = bPersistantGlobal ? _PUBLIC_P : _PUBLIC;
+                case SbPUBLIC:	eOp2 = bPersistantGlobal ? _PUBLIC_P : _PUBLIC;
                                 // AB 9.7.97, #40689, kein eigener Opcode mehr
                                 if( bVBASupportOn && bStatic )
                                 {
                                     eOp2 = _STATIC;
                                     break;
                                 }
-                global:         aGen.BackChain( nGblChain );
+                global:			aGen.BackChain( nGblChain );
                                 nGblChain = 0;
                                 bGblDefs = bNewGblDefs = TRUE;
                                 break;
-                default:        eOp2 = _LOCAL;
+                default:		eOp2 = _LOCAL;
             }
             UINT32 nOpnd2 = sal::static_int_cast< UINT16 >( pDef->GetType() );
             if( pDef->IsWithEvents() )
@@ -380,7 +380,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 
             short nFixedStringLength = pDef->GetFixedStringLength();
             if( nFixedStringLength >= 0 )
-                nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (UINT32(nFixedStringLength) << 17));     // len = all bits above 0x10000
+                nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (UINT32(nFixedStringLength) << 17));		// len = all bits above 0x10000
 
             aGen.Gen( eOp2, pDef->GetId(), nOpnd2 );
         }
@@ -447,7 +447,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                 }
                 SbiExpression aVar( this, *pDef );
                 if( !TestToken( EQ ) )
-                    goto MyBreak;   // AB 24.6.1996 (s.u.)
+                    goto MyBreak;	// AB 24.6.1996 (s.u.)
                 SbiConstExpression aExpr( this );
                 if( !bDefined && aExpr.IsValid() )
                 {
@@ -498,7 +498,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             }
         }
         if( !TestComma() )
-            goto MyBreak;   // AB 24.6.1996 (s.u.)
+            goto MyBreak;	// AB 24.6.1996 (s.u.)
 
         // #27963# AB, 24.6.1996
         // Einfuehrung bSwitchPool (s.o.): pPool darf beim VarDecl-Aufruf
@@ -507,7 +507,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         // d.h. pPool muss immer am Schleifen-Ende zurueckgesetzt werden.
         // auch bei break
         pPool = pOldPool;
-        continue;       // MyBreak überspingen
+        continue;		// MyBreak überspingen
     MyBreak:
         pPool = pOldPool;
         break;
@@ -595,7 +595,7 @@ void SbiParser::DefType( BOOL bPrivate )
                 pDim = NULL;
                 pElem = VarDecl(&pDim,FALSE,FALSE);
                 if( !pElem )
-                    bDone = TRUE;   // Error occured
+                    bDone = TRUE;	// Error occured
         }
         if( pElem )
         {
@@ -727,14 +727,14 @@ void SbiParser::DefEnum( BOOL bPrivate )
                 pElem = VarDecl( &pDim, FALSE, TRUE );
                 if( !pElem )
                 {
-                    bDone = TRUE;   // Error occured
+                    bDone = TRUE;	// Error occured
                     break;
                 }
                 else if( pDim )
                 {
                     delete pDim;
                     Error( SbERR_SYNTAX );
-                    bDone = TRUE;   // Error occured
+                    bDone = TRUE;	// Error occured
                     break;
                 }
 
@@ -764,7 +764,7 @@ void SbiParser::DefEnum( BOOL bPrivate )
                 if( pOld )
                 {
                     Error( SbERR_VAR_DEFINED, pElem->GetName() );
-                    bDone = TRUE;   // Error occured
+                    bDone = TRUE;	// Error occured
                     break;
                 }
 
@@ -877,9 +877,9 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
             BOOL bParamArray = FALSE;
             while( Peek() == BYVAL || Peek() == BYREF || Peek() == _OPTIONAL_ )
             {
-                if      ( Peek() == BYVAL )     Next(), bByVal = TRUE;
-                else if ( Peek() == BYREF )     Next(), bByVal = FALSE;
-                else if ( Peek() == _OPTIONAL_ )    Next(), bOptional = TRUE;
+                if		( Peek() == BYVAL )		Next(), bByVal = TRUE;
+                else if	( Peek() == BYREF )		Next(), bByVal = FALSE;
+                else if	( Peek() == _OPTIONAL_ )	Next(), bOptional = TRUE;
             }
             if( bCompatible && Peek() == PARAMARRAY )
             {
@@ -933,9 +933,9 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
     TypeDecl( *pDef );
     if( eType != SbxVARIANT && pDef->GetType() != eType )
         Error( SbERR_BAD_DECLARATION, aName );
-//  if( pDef->GetType() == SbxOBJECT )
-//      pDef->SetType( SbxVARIANT ),
-//      Error( SbERR_SYNTAX );
+//	if( pDef->GetType() == SbxOBJECT )
+//		pDef->SetType( SbxVARIANT ),
+//		Error( SbERR_SYNTAX );
     if( pDef->GetType() == SbxVARIANT && !( bFunc || bProp ) )
         pDef->SetType( SbxEMPTY );
     return pDef;

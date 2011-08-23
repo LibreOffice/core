@@ -4,7 +4,7 @@
         <locale lang="en">
             <displayname value="HelloWorld.Java"/>
             <description>
-                Prints "Helo World".
+                Prints "Helo World". 
             </description>
         </locale>
         <functionname value="HelloWorld.printHW"/>

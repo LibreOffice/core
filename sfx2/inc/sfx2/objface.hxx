@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ class SFX2_DLLPUBLIC SfxInterface
 friend class SfxIFConfig_Impl;
 friend class SfxSlotPool;
 
-    const char*             pName;          // Sfx-internal name of interface
+    const char* 			pName;			// Sfx-internal name of interface
     const SfxInterface*     pGenoType;      // base interface
     SfxSlot*                pSlots;         // SlotMap
     USHORT                  nCount;         // number of slots in SlotMap
-    SfxInterfaceId          nClassId;       // Id of interface
-    ResId                   aNameResId;     // ResId of external interface name
-    SfxInterface_Impl*      pImpData;
+    SfxInterfaceId			nClassId;		// Id of interface
+    ResId					aNameResId; 	// ResId of external interface name
+    SfxInterface_Impl*		pImpData;
 
     SfxSlot*                operator[]( USHORT nPos ) const;
 
@@ -74,37 +74,37 @@ public:
 
     const SfxSlot*          GetRealSlot( const SfxSlot * ) const;
     const SfxSlot*          GetRealSlot( USHORT nSlotId ) const;
-    virtual const SfxSlot*  GetSlot( USHORT nSlotId ) const;
-    const SfxSlot*          GetSlot( const String& rCommand ) const;
+    virtual const SfxSlot*	GetSlot( USHORT nSlotId ) const;
+    const SfxSlot*			GetSlot( const String& rCommand ) const;
 
     const char*             GetClassName() const { return pName; }
-    int                     HasName() const { return 0 != aNameResId.GetId(); }
+    int 					HasName() const { return 0 != aNameResId.GetId(); }
     String                  GetName() const
                             { return String(aNameResId); }
-    ResMgr*                 GetResMgr() const
+    ResMgr* 				GetResMgr() const
                             { return aNameResId.GetResMgr(); }
 
-    const SfxInterface*     GetGenoType() const { return pGenoType; }
-    const SfxInterface*     GetRealInterfaceForSlot( const SfxSlot* ) const;
+    const SfxInterface* 	GetGenoType() const { return pGenoType; }
+    const SfxInterface*		GetRealInterfaceForSlot( const SfxSlot* ) const;
 
-    void                    RegisterObjectBar( USHORT, const ResId&, const String* pST=0 );
-    void                    RegisterObjectBar( USHORT, const ResId&, sal_uInt32 nFeature, const String* pST=0 );
-    void                    RegisterChildWindow( USHORT, BOOL bContext, const String* pST=0 );
-    void                    RegisterChildWindow( USHORT, BOOL bContext, sal_uInt32 nFeature, const String* pST=0 );
-    void                    RegisterStatusBar( const ResId& );
-    const ResId&            GetObjectBarResId( USHORT nNo ) const;
+    void					RegisterObjectBar( USHORT, const ResId&, const String* pST=0 );
+    void					RegisterObjectBar( USHORT, const ResId&, sal_uInt32 nFeature, const String* pST=0 );
+    void					RegisterChildWindow( USHORT, BOOL bContext, const String* pST=0 );
+    void					RegisterChildWindow( USHORT, BOOL bContext, sal_uInt32 nFeature, const String* pST=0 );
+    void					RegisterStatusBar( const ResId& );
+    const ResId&			GetObjectBarResId( USHORT nNo ) const;
     USHORT                  GetObjectBarPos( USHORT nNo ) const;
     sal_uInt32              GetObjectBarFeature( USHORT nNo ) const;
-    USHORT                  GetObjectBarCount() const;
+    USHORT					GetObjectBarCount() const;
     void                    SetObjectBarPos( USHORT nPos, USHORT nId );
     const String*           GetObjectBarName( USHORT nNo ) const;
-    BOOL                    IsObjectBarVisible( USHORT nNo) const;
-    sal_uInt32              GetChildWindowFeature( USHORT nNo ) const;
-    sal_uInt32              GetChildWindowId( USHORT nNo ) const;
-    USHORT                  GetChildWindowCount() const;
-    void                    RegisterPopupMenu( const ResId& );
-    const ResId&            GetPopupMenuResId() const;
-    const ResId&            GetStatusBarResId() const;
+    BOOL					IsObjectBarVisible( USHORT nNo) const;
+    sal_uInt32				GetChildWindowFeature( USHORT nNo ) const;
+    sal_uInt32				GetChildWindowId( USHORT nNo ) const;
+    USHORT					GetChildWindowCount() const;
+    void					RegisterPopupMenu( const ResId& );
+    const ResId&			GetPopupMenuResId() const;
+    const ResId&			GetStatusBarResId() const;
 
     void                    Register( SfxModule* );
 
@@ -135,13 +135,13 @@ inline SfxSlot* SfxInterface::operator[]( USHORT nPos ) const
 class SfxIFConfig_Impl
 {
 friend class SfxInterface;
-    USHORT                  nCount;
-    SfxObjectUIArr_Impl*    pObjectBars;
+    USHORT					nCount;
+    SfxObjectUIArr_Impl*	pObjectBars;
 
 public:
                     SfxIFConfig_Impl();
                     ~SfxIFConfig_Impl();
-    BOOL            Store(SvStream&);
+    BOOL    		Store(SvStream&);
     void            RegisterObjectBar( USHORT, const ResId&, sal_uInt32 nFeature, const String* pST=0 );
     USHORT          GetType();
 };

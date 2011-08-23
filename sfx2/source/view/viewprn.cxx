@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,13 +77,13 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
     Reference< view::XRenderable >          mxRenderable;
     mutable Printer*                        mpLastPrinter;
     mutable Reference<awt::XDevice>         mxDevice;
-    SfxViewShell*                           mpViewShell;
-    SfxObjectShell*                         mpObjectShell;
-    sal_Bool        m_bOrigStatus;
-    sal_Bool        m_bNeedsChange;
-    sal_Bool        m_bApi;
-    util::DateTime  m_aLastPrinted;
-    ::rtl::OUString m_aLastPrintedBy;
+    SfxViewShell*							mpViewShell;
+    SfxObjectShell*							mpObjectShell;
+    sal_Bool		m_bOrigStatus;
+    sal_Bool		m_bNeedsChange;
+    sal_Bool		m_bApi;
+    util::DateTime	m_aLastPrinted;
+    ::rtl::OUString	m_aLastPrintedBy;
 
     Sequence< beans::PropertyValue > getMergedOptions() const;
     const Any& getSelectionObject() const;
@@ -96,10 +96,10 @@ public:
                           SfxViewShell* pView,
                           const uno::Sequence< beans::PropertyValue >& rProps
                         );
-
+    
     virtual ~SfxPrinterController();
     virtual void Notify( SfxBroadcaster&, const SfxHint& );
-
+    
     virtual int  getPageCount() const;
     virtual Sequence< beans::PropertyValue > getPageParameters( int i_nPage ) const;
     virtual void printPage( int i_nPage ) const;
@@ -131,7 +131,7 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
         mpObjectShell = mpViewShell->GetObjectShell();
         StartListening( *mpObjectShell );
     }
-
+    
     // initialize extra ui options
     if( mxRenderable.is() )
     {
@@ -174,7 +174,7 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
 }
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
-{
+{ 
     if ( rHint.IsA(TYPE(SfxSimpleHint)) )
     {
         if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -214,7 +214,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
         pXDevice->SetOutputDevice( mpLastPrinter );
         mxDevice = Reference< awt::XDevice >( pXDevice );
     }
-
+    
     Sequence< beans::PropertyValue > aRenderOptions( 1 );
     aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
     aRenderOptions[ 0 ].Value <<= mxDevice;
@@ -239,7 +239,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_
 {
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
     Sequence< beans::PropertyValue > aResult;
-
+    
     if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
@@ -345,7 +345,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 
         if ( m_bNeedsChange )
             mpObjectShell->EnableSetModified( m_bOrigStatus );
-
+            
         if ( mpViewShell )
         {
             mpViewShell->pImp->m_pPrinterController.reset();
@@ -397,7 +397,7 @@ private:
     PrinterSetupDialog*     _pSetupParent;
     SfxItemSet*             _pOptions;
     sal_Bool                _bModified;
-    sal_Bool                _bHelpDisabled;
+    sal_Bool				_bHelpDisabled;
 
     DECL_LINK( Execute, void * );
 
@@ -406,33 +406,33 @@ public:
             SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent );
             ~SfxDialogExecutor_Impl() { delete _pOptions; }
 
-    Link                GetLink() const { return LINK( this, SfxDialogExecutor_Impl, Execute); }
-    const SfxItemSet*   GetOptions() const { return _pOptions; }
-    void                DisableHelp() { _bHelpDisabled = sal_True; }
+    Link				GetLink() const { return LINK( this, SfxDialogExecutor_Impl, Execute); }
+    const SfxItemSet*	GetOptions() const { return _pOptions; }
+    void				DisableHelp() { _bHelpDisabled = sal_True; }
 };
 
 //--------------------------------------------------------------------
 
 SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrintDialog* pParent ) :
 
-    _pViewSh        ( pViewSh ),
-    _pPrintParent   ( pParent ),
-    _pSetupParent   ( NULL ),
-    _pOptions       ( NULL ),
-    _bModified      ( sal_False ),
-    _bHelpDisabled  ( sal_False )
+    _pViewSh		( pViewSh ),
+    _pPrintParent	( pParent ),
+    _pSetupParent	( NULL ),
+    _pOptions		( NULL ),
+    _bModified		( sal_False ),
+    _bHelpDisabled	( sal_False )
 
 {
 }
 
 SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent ) :
 
-    _pViewSh        ( pViewSh ),
-    _pPrintParent   ( NULL ),
-    _pSetupParent   ( pParent ),
-    _pOptions       ( NULL ),
-    _bModified      ( sal_False ),
-    _bHelpDisabled  ( sal_False )
+    _pViewSh		( pViewSh ),
+    _pPrintParent	( NULL ),
+    _pSetupParent	( pParent ),
+    _pOptions		( NULL ),
+    _bModified		( sal_False ),
+    _bHelpDisabled	( sal_False )
 
 {
 }
@@ -642,7 +642,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     // get the current selection; our controller should know it
     Reference< frame::XController > xController( GetController() );
     Reference< view::XSelectionSupplier > xSupplier( xController, UNO_QUERY );
-
+    
     Any aSelection;
     if( xSupplier.is() )
         aSelection = xSupplier->getSelection();
@@ -650,7 +650,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
         aSelection <<= GetObjectShell()->GetModel();
     Any aComplete( makeAny( GetObjectShell()->GetModel() ) );
     Any aViewProp( makeAny( xController ) );
-
+    
     boost::shared_ptr<vcl::PrinterController> pController( new SfxPrinterController( aComplete,
                                                                                aSelection,
                                                                                aViewProp,
@@ -736,15 +736,15 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( bIsAPI )
             {
                 // supported properties:
-                // String PrinterName
+                // String PrinterName 
                 // String FileName
-                // Int16 From
-                // Int16 To
+                // Int16 From 
+                // Int16 To 
                 // In16 Copies
                 // String RangeText
-                // bool Selection
+                // bool Selection 
                 // bool Asynchron
-                // bool Collate
+                // bool Collate 
                 // bool Silent
                 TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
                 for ( sal_Int32 nProp=0; nProp<aProps.getLength(); nProp++ )
@@ -773,7 +773,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             aProps.realloc( nLen + 1 );
             aProps[nLen].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) );
             aProps[nLen].Value = makeAny( bSelection );
-
+            
             ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );
 
             // FIXME: Recording
@@ -847,7 +847,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // PrinterDialog needs a temporary printer
                 SfxPrinter* pDlgPrinter = pPrinter->Clone();
                 nDialogRet = 0;
-
+                
                 // execute PrinterSetupDialog
                 PrinterSetupDialog* pPrintSetupDlg = new PrinterSetupDialog( GetWindow() );
 
@@ -920,8 +920,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
             }
         }
-
-        break;
+       
+        break;       
     }
 }
 

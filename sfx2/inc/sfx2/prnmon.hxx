@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@ class SfxPrintOptionsDialog : public ModalDialog
 private:
     OKButton                aOkBtn;
     CancelButton            aCancelBtn;
-    HelpButton              aHelpBtn;
-    SfxPrintOptDlg_Impl*    pDlgImpl;
+    HelpButton				aHelpBtn;
+    SfxPrintOptDlg_Impl*	pDlgImpl;
     SfxViewShell*           pViewSh;
     SfxItemSet*             pOptions;
     SfxTabPage*             pPage;
@@ -66,11 +66,11 @@ public:
 
     BOOL                    Construct();
     virtual short           Execute();
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual long			Notify( NotifyEvent& rNEvt );
 
     SfxTabPage*             GetTabPage() const { return pPage; }
     const SfxItemSet&       GetOptions() const { return *pOptions; }
-    void                    DisableHelp();
+    void					DisableHelp();
 };
 
 #endif

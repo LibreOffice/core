@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,47 +44,47 @@ com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
 
 class SotStorage;
 
-#define BASERR_ID_STDLIBOPEN            ERRCODE_BASMGR_STDLIBOPEN
+#define BASERR_ID_STDLIBOPEN			ERRCODE_BASMGR_STDLIBOPEN
 #define BASERR_ID_STDLIBSAVE            ERRCODE_BASMGR_STDLIBSAVE
-#define BASERR_ID_LIBLOAD               ERRCODE_BASMGR_LIBLOAD
-#define BASERR_ID_LIBCREATE             ERRCODE_BASMGR_LIBCREATE
+#define BASERR_ID_LIBLOAD				ERRCODE_BASMGR_LIBLOAD
+#define BASERR_ID_LIBCREATE				ERRCODE_BASMGR_LIBCREATE
 #define BASERR_ID_LIBSAVE               ERRCODE_BASMGR_LIBSAVE
-#define BASERR_ID_LIBDEL                ERRCODE_BASMGR_LIBDEL
+#define BASERR_ID_LIBDEL				ERRCODE_BASMGR_LIBDEL
 #define BASERR_ID_MGROPEN               ERRCODE_BASMGR_MGROPEN
-#define BASERR_ID_MGRSAVE               ERRCODE_BASMGR_MGRSAVE
-#define BASERR_ID_REMOVELIB             ERRCODE_BASMGR_REMOVELIB
-#define BASERR_ID_UNLOADLIB             ERRCODE_BASMGR_UNLOADLIB
+#define BASERR_ID_MGRSAVE				ERRCODE_BASMGR_MGRSAVE
+#define BASERR_ID_REMOVELIB				ERRCODE_BASMGR_REMOVELIB
+#define BASERR_ID_UNLOADLIB				ERRCODE_BASMGR_UNLOADLIB
 
 #define BASERR_REASON_OPENSTORAGE       0x0001
 #define BASERR_REASON_OPENLIBSTORAGE    0x0002
 #define BASERR_REASON_OPENMGRSTREAM     0x0004
 #define BASERR_REASON_OPENLIBSTREAM     0x0008
-#define BASERR_REASON_LIBNOTFOUND       0x0010
-#define BASERR_REASON_STORAGENOTFOUND   0x0020
-#define BASERR_REASON_BASICLOADERROR    0x0040
-#define BASERR_REASON_NOSTORAGENAME     0x0080
+#define BASERR_REASON_LIBNOTFOUND		0x0010
+#define BASERR_REASON_STORAGENOTFOUND	0x0020
+#define BASERR_REASON_BASICLOADERROR	0x0040
+#define BASERR_REASON_NOSTORAGENAME		0x0080
 
-#define BASERR_REASON_STDLIB            0x0100
+#define BASERR_REASON_STDLIB			0x0100
 
 class BasicError
 {
 private:
-    ULONG   nErrorId;
-    USHORT  nReason;
-    String  aErrStr;
+    ULONG	nErrorId;
+    USHORT	nReason;
+    String	aErrStr;
 
 public:
             BasicError();
             BasicError( const BasicError& rErr );
             BasicError( ULONG nId, USHORT nR, const String& rErrStr );
 
-    ULONG   GetErrorId() const                  { return nErrorId; }
-    USHORT  GetReason() const                   { return nReason; }
-    String  GetErrorStr()                       { return aErrStr; }
+    ULONG 	GetErrorId() const					{ return nErrorId; }
+    USHORT	GetReason() const					{ return nReason; }
+    String	GetErrorStr()						{ return aErrStr; }
 
-    void    SetErrorId( ULONG n )               { nErrorId = n; }
-    void    SetReason( USHORT n )               { nReason = n; }
-    void    SetErrorStr( const String& rStr)    { aErrStr = rStr; }
+    void	SetErrorId( ULONG n )				{ nErrorId = n; }
+    void	SetReason( USHORT n )				{ nReason = n; }
+    void	SetErrorStr( const String& rStr)	{ aErrStr = rStr; }
 };
 
 
@@ -132,7 +132,7 @@ struct LibraryContainerInfo
 struct BasicManagerImpl;
 
 
-#define LIB_NOTFOUND    0xFFFF
+#define LIB_NOTFOUND	0xFFFF
 
 class BasicManager : public SfxBroadcaster
 {
@@ -142,32 +142,32 @@ class BasicManager : public SfxBroadcaster
     friend class ::basic::BasicManagerCleaner;
 
 private:
-    BasicLibs*          pLibs;
-    BasicErrorManager*  pErrorMgr;
+    BasicLibs*			pLibs;
+    BasicErrorManager*	pErrorMgr;
 
-    String              aName;
-    String              maStorageName;
-    BOOL                bBasMgrModified;
-    BOOL                mbDocMgr;
+    String				aName;
+    String				maStorageName;
+    BOOL				bBasMgrModified;
+    BOOL				mbDocMgr;
 
-    BasicManagerImpl*   mpImpl;
+    BasicManagerImpl*	mpImpl;
 
-    void                Init();
+    void				Init();
 
 protected:
-    BOOL            ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
-    BOOL            ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, BOOL bInfosOnly = FALSE ) const;
-    void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
-    void            ImpMgrNotLoaded(  const String& rStorageName  );
-    BasicLibInfo*   CreateLibInfo();
+    BOOL			ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
+    BOOL			ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, BOOL bInfosOnly = FALSE ) const;
+    void			ImpCreateStdLib( StarBASIC* pParentFromStdLib );
+    void			ImpMgrNotLoaded(  const String& rStorageName  );
+    BasicLibInfo*	CreateLibInfo();
     void            LoadBasicManager( SotStorage& rStorage, const String& rBaseURL, BOOL bLoadBasics = TRUE );
-    void            LoadOldBasicManager( SotStorage& rStorage );
-    BOOL            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
-    BOOL            ImplEncryptStream( SvStream& rStream ) const;
-    BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
-    void            CheckModules( StarBASIC* pBasic, BOOL bReference ) const;
-    void            SetFlagToAllLibs( short nFlag, BOOL bSet ) const;
-                    BasicManager(); // This is used only to customize the paths for 'Save as'.
+    void			LoadOldBasicManager( SotStorage& rStorage );
+    BOOL 			ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
+    BOOL			ImplEncryptStream( SvStream& rStream ) const;
+    BasicLibInfo*	FindLibInfo( StarBASIC* pBasic ) const;
+    void			CheckModules( StarBASIC* pBasic, BOOL bReference ) const;
+    void			SetFlagToAllLibs( short nFlag, BOOL bSet ) const;
+                    BasicManager();	// This is used only to customize the paths for 'Save as'.
                     ~BasicManager();
 
 public:
@@ -184,40 +184,40 @@ public:
     */
     static void     LegacyDeleteBasicManager( BasicManager*& _rpManager );
 
-    void            SetStorageName( const String& rName )   { maStorageName = rName; }
-    String          GetStorageName() const                  { return maStorageName; }
-    void            SetName( const String& rName )          { aName = rName; }
-    String          GetName() const                         { return aName; }
+    void			SetStorageName( const String& rName )	{ maStorageName = rName; }
+    String			GetStorageName() const 					{ return maStorageName; }
+    void			SetName( const String& rName ) 			{ aName = rName; }
+    String			GetName() const							{ return aName; }
 
 
-    USHORT          GetLibCount() const;
-    StarBASIC*      GetLib( USHORT nLib ) const;
-    StarBASIC*      GetLib( const String& rName ) const;
-    USHORT          GetLibId( const String& rName ) const;
+    USHORT		    GetLibCount() const;
+    StarBASIC*	    GetLib( USHORT nLib ) const;
+    StarBASIC*	    GetLib( const String& rName ) const;
+    USHORT		    GetLibId( const String& rName ) const;
 
-    String          GetLibName( USHORT nLib );
+    String		    GetLibName( USHORT nLib );
 
     /** announces the library containers which belong to this BasicManager
 
         The method will automatically add two global constants, BasicLibraries and DialogLibraries,
         to the BasicManager.
     */
-    void            SetLibraryContainerInfo( const LibraryContainerInfo& rInfo );
+    void			SetLibraryContainerInfo( const LibraryContainerInfo& rInfo );
 
     const ::com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer >&
                     GetDialogLibraryContainer()  const;
     const ::com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer >&
                     GetScriptLibraryContainer()  const;
 
-    BOOL            LoadLib( USHORT nLib );
-    BOOL            RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage );
+    BOOL		    LoadLib( USHORT nLib );
+    BOOL		    RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage );
 
     // Modify-Flag will be reset only during save.
-    BOOL            IsModified() const;
-    BOOL            IsBasicModified() const;
+    BOOL		    IsModified() const;
+    BOOL		    IsBasicModified() const;
 
-    BOOL            HasErrors();
-    void            ClearErrors();
+    BOOL		    HasErrors();
+    void		    ClearErrors();
     BasicError*     GetFirstError();
     BasicError*     GetNextError();
 
@@ -239,16 +239,16 @@ public:
     bool            LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< rtl::OUString >& _out_rModuleNames );
     bool HasExeCode( const String& );
 private:
-    BOOL            IsReference( USHORT nLib );
+    BOOL		    IsReference( USHORT nLib );
 
-    BOOL            SetLibName( USHORT nLib, const String& rName );
+    BOOL		    SetLibName( USHORT nLib, const String& rName );
 
-    StarBASIC*      GetStdLib() const;
+    StarBASIC*  	GetStdLib() const;
     StarBASIC*      AddLib( SotStorage& rStorage, const String& rLibName, BOOL bReference );
-    BOOL            RemoveLib( USHORT nLib );
-    BOOL            HasLib( const String& rName ) const;
+    BOOL		    RemoveLib( USHORT nLib );
+    BOOL	    	HasLib( const String& rName ) const;
 
-    StarBASIC*      CreateLibForLibContainer( const String& rLibName,
+    StarBASIC*	    CreateLibForLibContainer( const String& rLibName,
                         const com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >&
                             xScriptCont );
     // For XML import/export:
@@ -259,6 +259,6 @@ private:
 
 void SetAppBasicManager( BasicManager* pBasMgr );
 
-#endif  //_BASMGR_HXX
+#endif	//_BASMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

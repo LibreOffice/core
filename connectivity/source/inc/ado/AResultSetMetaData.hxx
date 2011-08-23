@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,17 +48,17 @@ namespace connectivity
         //**************************************************************
                 typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
-        class OResultSetMetaData :  public  OResultSetMetaData_BASE
+        class OResultSetMetaData :	public 	OResultSetMetaData_BASE
         {
             friend class OResultSet;
 
-            ADORecordset*   m_pRecordSet;
-            sal_Int32       m_nColCount;
+            ADORecordset*	m_pRecordSet;
+            sal_Int32		m_nColCount;
 
             sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
         private:
-            OResultSetMetaData( const OResultSetMetaData& );            // never implemented
-            OResultSetMetaData& operator=( const OResultSetMetaData& ); // never implemented
+            OResultSetMetaData( const OResultSetMetaData& );			// never implemented
+            OResultSetMetaData& operator=( const OResultSetMetaData& );	// never implemented
 
         protected:
             virtual ~OResultSetMetaData();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,8 +161,8 @@ void SbxBase::AddFactory( SbxFactory* pFac )
     const SbxFactory* pTemp = pFac;
 
     // From 1996-03-06: take the HandleLast-Flag into account
-    USHORT nPos = p->aFacs.Count();     // Insert-Position
-    if( !pFac->IsHandleLast() )         // Only if not self HandleLast
+    USHORT nPos = p->aFacs.Count();		// Insert-Position
+    if( !pFac->IsHandleLast() )			// Only if not self HandleLast
     {
         // Rank new factory in front of factories with HandleLast
         while( nPos > 0 &&
@@ -197,16 +197,16 @@ SbxBase* SbxBase::Create( UINT16 nSbxId, UINT32 nCreator )
     if( nCreator == SBXCR_SBX )
       switch( nSbxId )
     {
-        case SBXID_VALUE:       return new SbxValue;
-        case SBXID_VARIABLE:    return new SbxVariable;
-        case SBXID_ARRAY:       return new SbxArray;
-        case SBXID_DIMARRAY:    return new SbxDimArray;
-        case SBXID_OBJECT:      return new SbxObject( aEmptyStr );
-        case SBXID_COLLECTION:  return new SbxCollection( aEmptyStr );
+        case SBXID_VALUE:		return new SbxValue;
+        case SBXID_VARIABLE:	return new SbxVariable;
+        case SBXID_ARRAY:  		return new SbxArray;
+        case SBXID_DIMARRAY:	return new SbxDimArray;
+        case SBXID_OBJECT:		return new SbxObject( aEmptyStr );
+        case SBXID_COLLECTION:	return new SbxCollection( aEmptyStr );
         case SBXID_FIXCOLLECTION:
                                 return new SbxStdCollection( aEmptyStr, aEmptyStr );
-        case SBXID_METHOD:      return new SbxMethod( aEmptyStr, SbxEMPTY );
-        case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
+        case SBXID_METHOD:		return new SbxMethod( aEmptyStr, SbxEMPTY );
+        case SBXID_PROPERTY:	return new SbxProperty( aEmptyStr, SbxEMPTY );
     }
     // Unknown type: go over the factories!
     SbxAppData* p = GetSbxData_Impl();

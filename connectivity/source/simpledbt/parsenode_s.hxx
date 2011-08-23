@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,15 @@ namespace connectivity
             ,public ORefBase
     {
     protected:
-        const OSQLParseNode*    m_pFullNode;
-        sal_Bool                m_bOwner;
+        const OSQLParseNode*	m_pFullNode;
+        sal_Bool				m_bOwner;
 
     public:
         OSimpleParseNode(const OSQLParseNode* _pNode, sal_Bool _bTakeOwnership = sal_True);
         ~OSimpleParseNode();
 
         // ISQLParseNode
-        virtual void parseNodeToStr(::rtl::OUString& _rString,
+        virtual void parseNodeToStr(::rtl::OUString& _rString, 
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const IParseContext* _pContext
         ) const;
@@ -74,7 +74,7 @@ namespace connectivity
     };
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_PARSENODE_SIMPLE_HXX

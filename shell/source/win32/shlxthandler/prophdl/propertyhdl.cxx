@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2010 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 //---------------------------
 long g_DllRefCnt = 0;
 HINSTANCE g_hModule = NULL;
-
+    
 //
 // Map of property keys to the locations of their value(s) in the .??? XML schema
 //
@@ -104,7 +104,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::QueryInterface(REFIID riid, void __RPC_F
 {
     *ppvObject = 0;
 
-    if (IID_IUnknown == riid || IID_IPropertyStore == riid)
+    if (IID_IUnknown == riid || IID_IPropertyStore == riid) 
     {
         OutputDebugStringFormat( "CPropertyHdl: QueryInterface (IID_IPropertyStore)\n" );
         IUnknown* pUnk = static_cast<IPropertyStore*>(this);
@@ -234,7 +234,7 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
         zlib_filefunc_def z_filefunc;
         pStream = PrepareIStream( pStream, z_filefunc );
 
-        CMetaInfoReader *pMetaInfoReader = NULL;
+        CMetaInfoReader *pMetaInfoReader = NULL; 
 
         try
         {
@@ -313,7 +313,7 @@ HRESULT CPropertyHdl::GetItemData( CMetaInfoReader *pMetaInfoReader, UINT nIndex
             pVarData->bstrVal = SysAllocString( pMetaInfoReader->getTagData( META_INFO_DESCRIPTION ).c_str() );
             OutputDebugStringFormat( "CPropertyHdl::GetItemData: Description=%S.\n", pMetaInfoReader->getTagData( META_INFO_DESCRIPTION ).c_str() );
             return S_OK;
-    }
+    }										
     case 5: {
             pVarData->vt = VT_BSTR;
             pVarData->bstrVal = SysAllocString( pMetaInfoReader->getTagAttribute( META_INFO_DOCUMENT_STATISTIC, META_INFO_PAGES ).c_str() );

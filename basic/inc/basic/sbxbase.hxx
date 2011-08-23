@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ DECLARE_LIST(SbxVarList_Impl, SbxVariable*)
 // AppData-Struktur for SBX:
 struct SbxAppData
 {
-    SbxError            eSbxError;  // Error code
-    SbxFacs             aFacs;      // Factories
-    SbxVarList_Impl     aVars;      // for Dump
-    SbxBasicFormater    *pBasicFormater;    // Pointer to Format()-Command helper class
+    SbxError			eSbxError;	// Error code
+    SbxFacs 			aFacs;		// Factories
+    SbxVarList_Impl		aVars;		// for Dump
+    SbxBasicFormater	*pBasicFormater;	// Pointer to Format()-Command helper class
 
     LanguageType        eBasicFormaterLangType;
         // It might be useful to store this class 'global' because some string reosurces are saved here

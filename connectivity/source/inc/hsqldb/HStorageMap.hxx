@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,17 +45,17 @@ namespace connectivity
     {
         class StreamHelper
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream>        m_xStream;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>      m_xSeek;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>  m_xOutputStream;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>   m_xInputStream;
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream>		m_xStream;
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>		m_xSeek;
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>	m_xOutputStream;
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>	m_xInputStream;
         public:
             StreamHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream>& _xStream);
             ~StreamHelper();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>   getInputStream();
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>  getOutputStream();
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>      getSeek();
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>	getInputStream();
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>	getOutputStream();
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>		getSeek();
         };
 
 
@@ -83,10 +83,10 @@ namespace connectivity
             static void throwJavaException(const ::com::sun::star::uno::Exception& _aException,JNIEnv * env);
         };
     //........................................................................
-    }   // namespace hsqldb
+    }	// namespace hsqldb
     //........................................................................
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 
 //........................................................................
 #endif // CONNECTIVI_HSQLDB_HSTORAGEMAP_HXX

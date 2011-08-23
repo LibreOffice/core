@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace accessibility {
 
 
 
-/** <p>This interface provides the means to transform between internal
+/**	<p>This interface provides the means to transform between internal
     coordinates in 100th of mm and screen coordinates without giving direct
     access to the underlying view.  Each view forwarder represents a
     specific real or virtual window.  A call to
@@ -74,7 +74,7 @@ public:
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.
 
-        @return
+        @return 
             The rectangle of the visible part of the document. The values
             are, contrary to the base class, in internal coordinates of
             100th of mm.
@@ -87,7 +87,7 @@ public:
         @param rPoint
             Point in internal coordinates (100th of mm).
 
-        @return
+        @return 
             The same point but in screen coordinates relative to the upper
             left corner of the (current) screen.
      */
@@ -99,7 +99,7 @@ public:
         @param rSize
             Size in internal coordinates (100th of mm).
 
-        @return
+        @return 
             The same size but in screen coordinates.
      */
     virtual Size LogicToPixel (const Size& rSize) const = 0;
@@ -111,7 +111,7 @@ public:
             Point in screen coordinates relative to the upper left corner of
             the (current) screen.
 
-        @return
+        @return 
             The same point but in internal coordinates (100th of mm).
      */
     virtual Point PixelToLogic (const Point& rPoint) const = 0;

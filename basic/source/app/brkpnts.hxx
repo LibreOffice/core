@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 #include <vcl/window.hxx>
 
-#define MARKER_NOMARKER 0xFFFF
+#define MARKER_NOMARKER	0xFFFF
 
 
 class SbModule;
@@ -44,46 +44,46 @@ using Window::Scroll;
 
 public:
     BreakpointWindow( Window *pParent );
-//  ~BreakpointWindow();
+//	~BreakpointWindow();
 
-    void        Reset();
+    void		Reset();
 
-    void        SetModule( SbModule *pMod );
-    void        SetBPsInModule();
+    void		SetModule( SbModule *pMod );
+    void		SetBPsInModule();
 
-    void        InsertBreakpoint( USHORT nLine );
-    void        ToggleBreakpoint( USHORT nLine );
-    void        AdjustBreakpoints( ULONG nLine, BOOL bInserted );
+    void		InsertBreakpoint( USHORT nLine );
+    void		ToggleBreakpoint( USHORT nLine );
+    void		AdjustBreakpoints( ULONG nLine, BOOL bInserted );
 
-    void        LoadBreakpoints( String aFilename );
-    void        SaveBreakpoints( String aFilename );
+    void		LoadBreakpoints( String aFilename );
+    void		SaveBreakpoints( String aFilename );
 
 protected:
-    Breakpoint* FindBreakpoint( ULONG nLine );
+    Breakpoint*	FindBreakpoint( ULONG nLine );
 
 private:
-    long            nCurYOffset;
-    USHORT          nMarkerPos;
-    SbModule*       pModule;
-    BOOL            bErrorMarker;
+    long			nCurYOffset;
+    USHORT			nMarkerPos;
+    SbModule*		pModule;
+    BOOL			bErrorMarker;
     static ImageList *pImages;
 
 protected:
-    virtual void    Paint( const Rectangle& );
-    Breakpoint*     FindBreakpoint( const Point& rMousePos );
-    void            ShowMarker( BOOL bShow );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	Paint( const Rectangle& );
+    Breakpoint* 	FindBreakpoint( const Point& rMousePos );
+    void			ShowMarker( BOOL bShow );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
 
 public:
 
-//  void            SetModulWindow( ModulWindow* pWin )
-//                      { pModulWindow = pWin; }
+//	void			SetModulWindow( ModulWindow* pWin )
+//						{ pModulWindow = pWin; }
 
-    void            SetMarkerPos( USHORT nLine, BOOL bErrorMarker = FALSE );
+    void			SetMarkerPos( USHORT nLine, BOOL bErrorMarker = FALSE );
 
     virtual void        Scroll( long nHorzScroll, long nVertScroll,
                                 USHORT nFlags = 0 );
-    long&           GetCurYOffset()         { return nCurYOffset; }
+    long&			GetCurYOffset() 		{ return nCurYOffset; }
 };
 
 

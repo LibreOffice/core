@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ private:
 bool Atom::operator==( const Atom& rAtom ) const
 {
     return ( maRecordHeader.nRecType == rAtom.maRecordHeader.nRecType ) &&
-            ( maRecordHeader.nRecVer == rAtom.maRecordHeader.nRecVer ) &&
+            ( maRecordHeader.nRecVer == rAtom.maRecordHeader.nRecVer ) &&	
            ( maRecordHeader.nRecInstance == rAtom.maRecordHeader.nRecInstance );
 }
 
@@ -580,7 +580,7 @@ public:
     virtual BOOL    Expand( SvLBoxEntry* pParent );
     virtual BOOL    Collapse( SvLBoxEntry* pParent );
 
-    SvLBoxEntry*    findAtom( Atom* pAtom );
+    SvLBoxEntry*	findAtom( Atom* pAtom );
 
     virtual void InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
     virtual void SetTabs();
@@ -588,7 +588,7 @@ public:
 private:
     void InsertAtom( const Atom* pAtom, SvLBoxEntry* pParent = 0 );
     const Atom* mpRootAtom;
-    ResMgr* mpResMgr;
+    ResMgr*	mpResMgr;
     Image maImgFolder;
     Image maImgAtom;
     Image maImgExpanded;
@@ -608,8 +608,8 @@ AtomContainerTreeListBox::AtomContainerTreeListBox( Window* pParent )
     maImgCollapsed = Image( ResId( RID_IMG_TREENODE_COLLAPSED, mpResMgr ) );
     maImgExpanded = Image( ResId( RID_IMG_TREENODE_EXPANDED, mpResMgr ) );
 
-//  SetDefaultExpandedEntryBmp( aExpanded );
-//  SetDefaultCollapsedEntryBmp(aCollapsed );
+//	SetDefaultExpandedEntryBmp( aExpanded );
+//	SetDefaultCollapsedEntryBmp(aCollapsed );
 
     maImgFolder = Image( ResId( IMG_SVT_FOLDER, mpResMgr ) );
     maImgAtom = Image( ResId( IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL, mpResMgr ) );
@@ -722,7 +722,7 @@ void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvLBoxEntry* pPare
         if( pAtom->isContainer() && pAtom->findFirstChildAtom() )
         {
             pEntry = InsertEntry( aText, maImgExpanded, maImgCollapsed, pParent );
-
+    
             /** returns the first child atom or NULL */
             const Atom* pChildAtom = pAtom->findFirstChildAtom();
 
@@ -836,11 +836,11 @@ public:
 private:
     void Sync( AtomContainerEntryPair* pPair, int nAction );
 
-    AtomContainerTreeListBox*   mpListBox[2];
-    MultiLineEdit*              mpEdit[2];
-    PPTDocumentPtr              mpDocument[2];
-    MenuBar*                    mpMenuBar;
-    PopupMenu*                  mpFileMenu;
+    AtomContainerTreeListBox*	mpListBox[2];
+    MultiLineEdit*				mpEdit[2];
+    PPTDocumentPtr				mpDocument[2];
+    MenuBar*					mpMenuBar;
+    PopupMenu*					mpFileMenu;
     bool mbSelectHdlGuard;
     DECL_LINK( implSelectHdl, AtomContainerTreeListBox* );
     DECL_LINK( implExpandingHdl, AtomContainerEntryPair* );
@@ -912,13 +912,13 @@ PPTDocumentPtr MSViewerWorkWindow::Load()
     ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.ppt" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
-//  INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-//  aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+//	INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+//	aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
     PPTDocumentPtr pDocument;
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        pDocument.reset( new PPTDocument( aDlg.GetPath() ) );
+        pDocument.reset( new PPTDocument( aDlg.GetPath() ) );	
     }
 
     return pDocument;
@@ -928,7 +928,7 @@ PPTDocumentPtr MSViewerWorkWindow::Load()
 
 MSViewerWorkWindow::MSViewerWorkWindow() :
     WorkWindow( 0, WB_APP | WB_STDWORK | WB_3DLOOK ),mbSelectHdlGuard(false)
-{
+{  
     Size aOutputSize( 400, 600 );
     SetOutputSizePixel( aOutputSize );
     SetText( String( RTL_CONSTASCII_USTRINGPARAM( "MSViewer" ) ) );
@@ -955,7 +955,7 @@ MSViewerWorkWindow::MSViewerWorkWindow() :
         mpListBox[nPane]->SetSelectHdl( LINK( this, MSViewerWorkWindow, implSelectHdl ) );
         mpListBox[nPane]->SetExpandingHdl( LINK( this, MSViewerWorkWindow, implExpandingHdl ) );
         mpListBox[nPane]->SetCollapsingHdl( LINK( this, MSViewerWorkWindow, implCollapsingHdl ) );
-
+        
         mpEdit[nPane] = new MultiLineEdit(this, WB_3DLOOK | WB_BORDER | WB_LEFT | WB_TOP | WB_READONLY | WB_HSCROLL | WB_VSCROLL );
         mpEdit[nPane]->SetReadOnly( TRUE );
         mpEdit[nPane]->SetReadOnly( TRUE );
@@ -1033,7 +1033,7 @@ void MSViewerWorkWindow::Sync( AtomContainerEntryPair* pPair, int nAction )
         if( pAtom && pAtom->getCompareAtom() )
         {
             SvLBoxEntry* pEntry = pDestinationListBox->findAtom( pAtom->getCompareAtom() );
-
+            
             if(pEntry )
             {
                 if( nAction == 0 )
@@ -1175,7 +1175,7 @@ void MSViewerWorkWindow::Resize()
         return -1;
     }
     comphelper::setProcessServiceFactory( xMSF );
-
+    
     InitVCL( xMSF );
 
     String aConfigURL;

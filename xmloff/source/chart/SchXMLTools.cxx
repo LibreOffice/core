@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
     OUString aRange;
     if( xSeq.is() && SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) )
     {
-        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation(
+        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( 
             lcl_ConvertRange( aRange, xDataProvider )) );
         SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
             Reference< beans::XPropertySet >( xRet, uno::UNO_QUERY ));
@@ -166,17 +166,17 @@ namespace SchXMLTools
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
 {
-    { XML_LINE,         XML_CHART_CLASS_LINE    },
-    { XML_AREA,         XML_CHART_CLASS_AREA    },
-    { XML_CIRCLE,       XML_CHART_CLASS_CIRCLE  },
-    { XML_RING,         XML_CHART_CLASS_RING    },
-    { XML_SCATTER,      XML_CHART_CLASS_SCATTER },
-    { XML_RADAR,        XML_CHART_CLASS_RADAR   },
-    { XML_FILLED_RADAR, XML_CHART_CLASS_FILLED_RADAR },
-    { XML_BAR,          XML_CHART_CLASS_BAR     },
-    { XML_STOCK,        XML_CHART_CLASS_STOCK   },
-    { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
-    { XML_SURFACE,      XML_CHART_CLASS_BAR     }, //@todo change this if a surface chart is available
+    { XML_LINE,	    	XML_CHART_CLASS_LINE	},
+    { XML_AREA,		    XML_CHART_CLASS_AREA	},
+    { XML_CIRCLE,		XML_CHART_CLASS_CIRCLE	},
+    { XML_RING,		    XML_CHART_CLASS_RING	},
+    { XML_SCATTER,		XML_CHART_CLASS_SCATTER	},
+    { XML_RADAR,		XML_CHART_CLASS_RADAR	},
+    { XML_FILLED_RADAR,	XML_CHART_CLASS_FILLED_RADAR },
+    { XML_BAR,			XML_CHART_CLASS_BAR		},
+    { XML_STOCK,		XML_CHART_CLASS_STOCK	},
+    { XML_BUBBLE,		XML_CHART_CLASS_BUBBLE	},
+    { XML_SURFACE,		XML_CHART_CLASS_BAR	    }, //@todo change this if a surface chart is available
     { XML_ADD_IN,       XML_CHART_CLASS_ADDIN   },
     { XML_TOKEN_INVALID, XML_CHART_CLASS_UNKNOWN }
 };
@@ -226,7 +226,7 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
 
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" ) )
-
+        
         ;
     return g_aChartTypeNameMap;
 }
@@ -409,7 +409,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         DBG_ERROR( "need a data provider" );
         return xRet;
     }
-
+    
     try
     {
         xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
@@ -614,7 +614,7 @@ void exportRangeToSomewhere( SvXMLExport& rExport, const ::rtl::OUString& rValue
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion == SvtSaveOptions::ODFVER_010 || nCurrentODFVersion == SvtSaveOptions::ODFVER_011 )
         return;//svg:desc is not allowed at draw:g in ODF1.0; but as the ranges for error bars are anyhow not allowed within ODF1.0 nor ODF1.1 we do not need the information
-
+    
     SvXMLElementExport aEmptyShapeGroup( rExport, XML_NAMESPACE_DRAW,
                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_G ),
                               sal_True, sal_False );
@@ -754,9 +754,9 @@ bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument
     uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartDoc, uno::UNO_QUERY );
     if( !xDataReceiver.is() )
         return false;
-
+    
     xDataReceiver->attachDataProvider( xDataProviderFromParent );
-
+    
     for( tSchXMLLSequencesPerIndex::const_iterator aLSeqIt( rLSequencesPerIndex.begin() );
          aLSeqIt != rLSequencesPerIndex.end(); ++aLSeqIt )
     {
@@ -844,7 +844,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
             aGenerator = lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) );
             if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
             {
-                //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already)
+                //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already) 
                 //only the report builder extension has created some files with OOo 3.1 that do not have a meta stream
                 if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/31") ) ) != -1 )
                     bResult = false;//#i100102# probably generated with OOo 3.1 by the report designer

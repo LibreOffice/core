@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( XMLControlOOoTransformerContext, XMLTransformerContext );
 
-XMLControlOOoTransformerContext::XMLControlOOoTransformerContext(
-        XMLTransformerBase& rImp,
+XMLControlOOoTransformerContext::XMLControlOOoTransformerContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
@@ -56,7 +56,7 @@ XMLControlOOoTransformerContext::~XMLControlOOoTransformerContext()
 {
 }
 
-void XMLControlOOoTransformerContext::StartElement(
+void XMLControlOOoTransformerContext::StartElement( 
     const Reference< XAttributeList >& rAttrList )
 {
     m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
@@ -72,21 +72,21 @@ XMLTransformerContext *XMLControlOOoTransformerContext::CreateChildContext(
 
     if( !m_aElemQName.getLength() )
     {
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+        pContext = new XMLIgnoreTransformerContext( GetTransformer(), 
                                                     rQName,
                                                     sal_False, sal_False );
         m_aElemQName = rQName;
         static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                 ->AppendAttributeList( rAttrList );
-        GetTransformer().ProcessAttrList( m_xAttrList,
+        GetTransformer().ProcessAttrList( m_xAttrList, 
                                           OOO_FORM_CONTROL_ACTIONS,
-                                          sal_False );
-        GetTransformer().GetDocHandler()->startElement( m_aElemQName,
+                                          sal_False	);
+        GetTransformer().GetDocHandler()->startElement( m_aElemQName, 
                                                         m_xAttrList );
     }
     else
     {
-        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+        pContext = new XMLIgnoreTransformerContext( GetTransformer(), 
                                                     rQName,
                                                     sal_True, sal_True );
     }

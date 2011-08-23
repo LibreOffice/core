@@ -13,23 +13,23 @@ import javax.swing.*;
  *  @author  Aidan Butler
  */
 public class XmlUpdater extends Thread {
-
+    
     private String classesPath = null;
     private String jarfilename;
     private String installPath;
     private boolean netInstall;
     private boolean bindingsInstall;
-
+    
     private JLabel statusLabel;
-
+        
     private Vector listeners;
     private Thread internalThread;
     private boolean threadSuspended;
     private JProgressBar progressBar;
-
+    
     private final String[] bakFiles =
     {
-        "writermenubar.xml",
+        "writermenubar.xml",		
         "writerkeybinding.xml",
         "calcmenubar.xml",
         "calckeybinding.xml",
@@ -41,7 +41,7 @@ public class XmlUpdater extends Thread {
         "META-INF" + File.separator + "manifest.xml"
     };
 
-    private final String[] dirs =
+    private final String[] dirs = 
     {
         "java" + File.separator + "Highlight",
         "java" + File.separator + "MemoryUsage",
@@ -54,7 +54,7 @@ public class XmlUpdater extends Thread {
         "javascript" + File.separator + "ExportSheetsToHTML"
     };
 
-    private final String[] names =
+    private final String[] names = 
     {
         "java/Highlight/HighlightUtil.java",
         "java/Highlight/HighlightText.java",
@@ -85,7 +85,7 @@ public class XmlUpdater extends Thread {
         "javascript/ExportSheetsToHTML/exportsheetstohtml.js"
     };
 
-
+    
     public XmlUpdater(String installPath, JLabel statusLabel,JProgressBar pBar, boolean netInstall, boolean bindingsInstall) {
         this.installPath = installPath;
         this.statusLabel = statusLabel;
@@ -111,7 +111,7 @@ public class XmlUpdater extends Thread {
         if (threadSuspended) {
             synchronized(this) {
                 while (threadSuspended) {
-                    try {
+                    try	{
                         wait();
                     } catch (InterruptedException eInt) {
                         //...
@@ -120,7 +120,7 @@ public class XmlUpdater extends Thread {
             }
         }
     }// checkSuspend
-
+    
 
     public void setSuspend()
     {
@@ -133,13 +133,13 @@ public class XmlUpdater extends Thread {
         threadSuspended = false;
         notify();
     }// setResume
-
+    
 
     public void setStop()
     {
         internalThread = null;
     }// setStop
-
+    
 
     public void run() {
 
@@ -151,7 +151,7 @@ public class XmlUpdater extends Thread {
         String                 fileName = null;
 
         internalThread = Thread.currentThread();
-
+        
         //System.out.println("\n\n\n\nFileName: "+installPath);
         classesPath= installPath.concat(File.separator+"program"+File.separator+"classes"+File.separator);
         String opSys =System.getProperty("os.name");
@@ -160,29 +160,29 @@ public class XmlUpdater extends Thread {
         String progpath=installPath;
         progpath= progpath.concat(File.separator+"program"+File.separator);
         //System.out.println("Office progpath" + progpath );
-        //System.out.println("\nModifying Installation "+installPath);
-
+        //System.out.println("\nModifying Installation "+installPath);	
+        
         String starBasicPath=installPath;
         starBasicPath= starBasicPath.concat(File.separator+"share"+File.separator+"basic"+File.separator+"ScriptBindingLibrary"+File.separator);
-        //System.out.println( "Office StarBasic path: " + starBasicPath );
-
+        //System.out.println( "Office StarBasic path: " + starBasicPath );  
+        
         String regSchemaOfficePath=installPath;
         regSchemaOfficePath= regSchemaOfficePath.concat(File.separator+"share"+File.separator+"registry"+File.separator+"schema"+File.separator+"org"+File.separator+"openoffice"+File.separator+"Office"+File.separator);
-        //System.out.println( "Office schema path: " + regSchemaOfficePath );
+        //System.out.println( "Office schema path: " + regSchemaOfficePath );  
 
         // Get the NetBeans installation
         //String netbeansPath=
-
+        
         progressBar.setString("Unzipping Required Files");
         ZipData zd = new ZipData("SFrameworkInstall.jar");
-
-
+        
+        
         if( (!netInstall) || bindingsInstall) {
             String configPath=installPath;
             configPath= configPath.concat(File.separator+"user"+File.separator+"config"+File.separator+"soffice.cfg"+File.separator);
             //System.out.println( "Office configuration path: " + configPath );
             String manifestPath=configPath + "META-INF" + File.separator;
-
+            
             //Adding <Office>/user/config/soffice.cfg/
             File configDir = new File( configPath );
             if( !configDir.isDirectory() ) {
@@ -192,7 +192,7 @@ public class XmlUpdater extends Thread {
                 else {
                     System.out.println( configDir + "directory created");
                 }
-            }
+            } 
             else
                 System.out.println( "soffice.cfg exists" );
 
@@ -204,11 +204,11 @@ public class XmlUpdater extends Thread {
                 else {
                     System.out.println( manifestPath + " directory created");
                 }
-            }
+            } 
             else
                 System.out.println( manifestPath + " exists" );
 
-            // Backup the confguration files in
+            // Backup the confguration files in 
             // <office>/user/config/soffice.cfg/
             // If they already exist.
 
@@ -236,12 +236,12 @@ public class XmlUpdater extends Thread {
             {
                 onInstallComplete();
                 return;
-            }
+            }    
             if (!zd.extractEntry("bindingdialog/calcmenubar.xml",configPath, statusLabel))
             {
                 onInstallComplete();
                 return;
-            }
+            }   
             if (!zd.extractEntry("bindingdialog/calckeybinding.xml",configPath, statusLabel))
             {
                 onInstallComplete();
@@ -251,7 +251,7 @@ public class XmlUpdater extends Thread {
             {
                 onInstallComplete();
                 return;
-            }
+            }   
             if (!zd.extractEntry("bindingdialog/impresskeybinding.xml",configPath, statusLabel))
             {
                 onInstallComplete();
@@ -261,7 +261,7 @@ public class XmlUpdater extends Thread {
             {
                 onInstallComplete();
                 return;
-            }
+            }   
             if (!zd.extractEntry("bindingdialog/drawkeybinding.xml",configPath, statusLabel))
             {
                 onInstallComplete();
@@ -300,26 +300,26 @@ public class XmlUpdater extends Thread {
                 onInstallComplete();
                 return;
             }
-
+        
             if (!zd.extractEntry("sframework/bshruntime.zip",progpath, statusLabel))
             {
                 onInstallComplete();
                 return;
             }
-
+        
             if (!zd.extractEntry("sframework/jsruntime.zip",progpath, statusLabel))
             {
                 onInstallComplete();
                 return;
             }
-
+        
             if (!zd.extractEntry("schema/Scripting.xcs",regSchemaOfficePath, statusLabel))
             {
                 onInstallComplete();
                 return;
             }
-
-    //--------------------------------
+        
+    //--------------------------------	
 
             progressBar.setString("Registering Scripting Framework");
             progressBar.setValue(3);
@@ -328,7 +328,7 @@ public class XmlUpdater extends Thread {
                return;
             }
             progressBar.setValue(5);
-
+        
             String path = installPath + File.separator +
                 "share" + File.separator + "Scripts" + File.separator;
 
@@ -355,13 +355,13 @@ public class XmlUpdater extends Thread {
                 }
             }
 
-
+        
             // Adding binding dialog
             if (!zd.extractEntry("bindingdialog/ScriptBinding.xba",starBasicPath, statusLabel))
             {
                 onInstallComplete();
                 return;
-            }
+            }         
             if (!zd.extractEntry("bindingdialog/MenuBinding.xdl",starBasicPath, statusLabel))
             {
                 onInstallComplete();
@@ -371,22 +371,22 @@ public class XmlUpdater extends Thread {
             {
                 onInstallComplete();
                 return;
-            }
+            }        
             if (!zd.extractEntry("bindingdialog/EventsBinding.xdl",starBasicPath, statusLabel))
             {
                 onInstallComplete();
                 return;
-            }
+            }        
             if (!zd.extractEntry("bindingdialog/HelpBinding.xdl",starBasicPath, statusLabel))
             {
                 onInstallComplete();
                 return;
-            }
+            } 
             if (!zd.extractEntry("bindingdialog/EditDebug.xdl",starBasicPath, statusLabel))
             {
                 onInstallComplete();
                 return;
-            }
+            } 
             if (!zd.extractEntry("bindingdialog/dialog.xlb",starBasicPath, statusLabel))
             {
                 onInstallComplete();
@@ -396,17 +396,17 @@ public class XmlUpdater extends Thread {
             {
                 onInstallComplete();
                 return;
-            }
-        }
-
-
+            }   
+        }	
+    
+    
         statusLabel.setText("Installation Complete");
         progressBar.setString("Installation Complete");
         progressBar.setValue(10);
         onInstallComplete();
 
     }// run
-
+    
 
     public void addInstallListener(InstallListener listener)
     {
@@ -423,5 +423,5 @@ public class XmlUpdater extends Thread {
             listener.installationComplete(null);
         }
     }// onInstallComplete
-
+ 
 }// XmlUpdater class

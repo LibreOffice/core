@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,6 @@ private:
     void MergeXMLVertPos( ::com::sun::star::style::GraphicLocation& ePos, ::com::sun::star::style::GraphicLocation eVert ) const;
 };
 
-#endif      // _XMLOFF_PROPERTYHANDLER_BRUSHTYPES_HXX
+#endif		// _XMLOFF_PROPERTYHANDLER_BRUSHTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

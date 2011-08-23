@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,19 +40,19 @@ class SvxXMLListStyle_Impl;
 
 class SvxXMLListStyleContext : public SvXMLStyleContext
 {
-    const ::rtl::OUString       sIsPhysical;
-    const ::rtl::OUString       sNumberingRules;
-    const ::rtl::OUString       sName;
-    const ::rtl::OUString       sIsContinuousNumbering;
+    const ::rtl::OUString		sIsPhysical;
+    const ::rtl::OUString		sNumberingRules;
+    const ::rtl::OUString		sName;
+    const ::rtl::OUString		sIsContinuousNumbering;
 
     ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace > xNumRules;
 
-    SvxXMLListStyle_Impl        *pLevelStyles;
+    SvxXMLListStyle_Impl		*pLevelStyles;
 
-    sal_Int32                   nLevels;
-    sal_Bool                    bConsecutive : 1;
-    sal_Bool                    bOutline : 1;
+    sal_Int32					nLevels;
+    sal_Bool					bConsecutive : 1;
+    sal_Bool					bOutline : 1;
 
 protected:
 
@@ -108,6 +108,6 @@ public:
     void CreateAndInsertAuto() const;
 };
 
-#endif  //  _XMLOFF_XMLNUMI_HXX
+#endif	//  _XMLOFF_XMLNUMI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

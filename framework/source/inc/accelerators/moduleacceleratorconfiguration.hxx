@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,33 +63,33 @@ class ModuleAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
 {
     //______________________________________
     // member
-
+    
     private:
 
         //----------------------------------
         /** identify the application module, where this accelerator
             configuration cache should work on. */
-        ::rtl::OUString m_sModule;
+        ::rtl::OUString m_sModule;     
         ::rtl::OUString m_sLocale;
-
+    
     //______________________________________
     // interface
 
     public:
-
+        
         //----------------------------------
         /** initialize this instance and fill the internal cache.
-
+        
             @param  xSMGR
                     reference to an uno service manager, which is used internaly.
          */
         ModuleAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR);
-
+        
         //----------------------------------
         /** TODO */
         virtual ~ModuleAcceleratorConfiguration();
-
-        // XInterface, XTypeProvider, XServiceInfo
+         
+        // XInterface, XTypeProvider, XServiceInfo         
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
@@ -98,12 +98,12 @@ class ModuleAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException);
-
+                  
     //______________________________________
     // helper
-
+    
     private:
-
+         
         //----------------------------------
         /** read all data into the cache. */
         void impl_ts_fillCache();

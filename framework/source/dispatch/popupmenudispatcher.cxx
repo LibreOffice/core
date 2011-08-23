@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <dispatch/popupmenudispatcher.hxx>
@@ -40,7 +40,7 @@
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
@@ -54,7 +54,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <ucbhelper/content.hxx>
@@ -63,43 +63,43 @@
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-using namespace ::com::sun::star                ;
-using namespace ::com::sun::star::awt           ;
-using namespace ::com::sun::star::beans         ;
-using namespace ::com::sun::star::container     ;
-using namespace ::com::sun::star::frame         ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::com::sun::star::util          ;
-using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::rtl                           ;
+using namespace ::com::sun::star				;
+using namespace ::com::sun::star::awt			;
+using namespace ::com::sun::star::beans			;
+using namespace ::com::sun::star::container		;
+using namespace ::com::sun::star::frame			;
+using namespace ::com::sun::star::lang			;
+using namespace ::com::sun::star::uno			;
+using namespace ::com::sun::star::util			;
+using namespace ::cppu							;
+using namespace ::osl							;
+using namespace ::rtl							;
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 const char*     PROTOCOL_VALUE      = "vnd.sun.star.popup:";
 const sal_Int32 PROTOCOL_LENGTH     = 19;
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
-PopupMenuDispatcher::PopupMenuDispatcher(
+PopupMenuDispatcher::PopupMenuDispatcher( 
     const uno::Reference< XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
+        //	Init baseclasses first
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
         ,   OWeakObject             (                                )
         // Init member
@@ -111,7 +111,7 @@ PopupMenuDispatcher::PopupMenuDispatcher(
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 PopupMenuDispatcher::~PopupMenuDispatcher()
 {
@@ -121,25 +121,25 @@ PopupMenuDispatcher::~PopupMenuDispatcher()
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_7     ( PopupMenuDispatcher                                     ,
-                          ::cppu::OWeakObject                                     ,
-                          DIRECT_INTERFACE( XTypeProvider                         ),
+                          ::cppu::OWeakObject					  		          ,
+                          DIRECT_INTERFACE( XTypeProvider	                      ),
                           DIRECT_INTERFACE( XServiceInfo                          ),
                           DIRECT_INTERFACE( XDispatchProvider                     ),
-                          DIRECT_INTERFACE( XDispatch                             ),
+                          DIRECT_INTERFACE( XDispatch		                      ),
                           DIRECT_INTERFACE( XEventListener                        ),
                           DIRECT_INTERFACE( XInitialization                       ),
                           DERIVED_INTERFACE( XFrameActionListener, XEventListener )
                         )
 
 DEFINE_XTYPEPROVIDER_7  (   PopupMenuDispatcher ,
-                            XTypeProvider       ,
+                            XTypeProvider		,
                             XServiceInfo        ,
                             XDispatchProvider   ,
-                            XDispatch           ,
-                            XEventListener      ,
+                            XDispatch			,
+                            XEventListener		,
                             XInitialization     ,
                             XFrameActionListener
                         )
@@ -160,14 +160,14 @@ DEFINE_INIT_SERVICE(PopupMenuDispatcher,
 )
 
 //*****************************************************************************************************************
-//  XInitialization
+//	XInitialization
 //*****************************************************************************************************************
-void SAL_CALL PopupMenuDispatcher::initialize(
-    const css::uno::Sequence< css::uno::Any >& lArguments )
+void SAL_CALL PopupMenuDispatcher::initialize( 
+    const css::uno::Sequence< css::uno::Any >& lArguments ) 
 throw( css::uno::Exception, css::uno::RuntimeException)
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
-
+    
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
@@ -179,7 +179,7 @@ throw( css::uno::Exception, css::uno::RuntimeException)
             m_xWeakFrame = xFrame;
 
             m_bActivateListener = sal_True;
-            uno::Reference< css::frame::XFrameActionListener > xFrameActionListener(
+            uno::Reference< css::frame::XFrameActionListener > xFrameActionListener( 
                 (OWeakObject *)this, css::uno::UNO_QUERY );
             xFrame->addFrameActionListener( xFrameActionListener );
         }
@@ -190,29 +190,29 @@ throw( css::uno::Exception, css::uno::RuntimeException)
 }
 
 //*****************************************************************************************************************
-//  XDispatchProvider
+//	XDispatchProvider
 //*****************************************************************************************************************
-css::uno::Reference< css::frame::XDispatch >
-SAL_CALL PopupMenuDispatcher::queryDispatch(
+css::uno::Reference< css::frame::XDispatch > 
+SAL_CALL PopupMenuDispatcher::queryDispatch( 
     const css::util::URL&  rURL    ,
     const ::rtl::OUString& sTarget ,
-    sal_Int32              nFlags  )
+    sal_Int32              nFlags  ) 
 throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
-
+    
     if ( rURL.Complete.compareToAscii( PROTOCOL_VALUE, PROTOCOL_LENGTH ) == 0 )
     {
         // --- SAFE ---
         ResetableGuard aGuard( m_aLock );
         impl_RetrievePopupControllerQuery();
         impl_CreateUriRefFactory();
-
+        
         css::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
         css::uno::Reference< css::uri::XUriReferenceFactory > xUriRefFactory( m_xUriRefFactory );
         aGuard.unlock();
         // --- SAFE ---
-
+        
         if ( xPopupCtrlQuery.is() )
         {
             try
@@ -222,9 +222,9 @@ throw( css::uno::RuntimeException )
                 sal_Int32     nSchemePart( 0 );
                 rtl::OUString aBaseURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:" ));
                 rtl::OUString aURL( rURL.Complete );
-
+                
                 nSchemePart = aURL.indexOf( ':' );
-                if (( nSchemePart > 0 ) &&
+                if (( nSchemePart > 0 ) && 
                     ( aURL.getLength() > ( nSchemePart+1 )))
                 {
                     nQueryPart  = aURL.indexOf( '?', nSchemePart );
@@ -233,13 +233,13 @@ throw( css::uno::RuntimeException )
                     else if ( nQueryPart == -1 )
                         aBaseURL += aURL.copy( nSchemePart+1 );
                 }
-
+                
                 css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider;
-
+                
                 // Find popup menu controller using the base URL
                 xPopupCtrlQuery->getByName( aBaseURL ) >>= xDispatchProvider;
                 aGuard.unlock();
-
+                
                 // Ask popup menu dispatch provider for dispatch object
                 if ( xDispatchProvider.is() )
                     xDispatch = xDispatchProvider->queryDispatch( rURL, sTarget, nFlags );
@@ -256,9 +256,9 @@ throw( css::uno::RuntimeException )
     return xDispatch;
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
-PopupMenuDispatcher::queryDispatches(
-    const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL 
+PopupMenuDispatcher::queryDispatches( 
+    const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) 
 throw( css::uno::RuntimeException )
 {
     sal_Int32 nCount = lDescriptor.getLength();
@@ -274,23 +274,23 @@ throw( css::uno::RuntimeException )
 }
 
 //*****************************************************************************************************************
-//  XDispatch
+//	XDispatch
 //*****************************************************************************************************************
-void
+void 
 SAL_CALL PopupMenuDispatcher::dispatch(
     const URL&                        /*aURL*/            ,
-    const Sequence< PropertyValue >&  /*seqProperties*/ )
+    const Sequence< PropertyValue >&  /*seqProperties*/	) 
 throw( RuntimeException )
 {
 }
 
 //*****************************************************************************************************************
-//  XDispatch
+//	XDispatch
 //*****************************************************************************************************************
-void
+void 
 SAL_CALL PopupMenuDispatcher::addStatusListener(
     const uno::Reference< XStatusListener >& xControl,
-    const URL&                          aURL    )
+    const URL&							aURL	)
 throw( RuntimeException )
 {
     // Ready for multithreading
@@ -301,12 +301,12 @@ throw( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//  XDispatch
+//	XDispatch
 //*****************************************************************************************************************
-void
+void 
 SAL_CALL PopupMenuDispatcher::removeStatusListener(
     const uno::Reference< XStatusListener >& xControl,
-    const URL&                          aURL    )
+    const URL&							aURL	) 
 throw( RuntimeException )
 {
     // Ready for multithreading
@@ -317,12 +317,12 @@ throw( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//   XFrameActionListener
+//	 XFrameActionListener
 //*****************************************************************************************************************
 
-void
-SAL_CALL PopupMenuDispatcher::frameAction(
-    const FrameActionEvent& aEvent )
+void 
+SAL_CALL PopupMenuDispatcher::frameAction( 
+    const FrameActionEvent& aEvent ) 
 throw ( RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -336,9 +336,9 @@ throw ( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//   XEventListener
+//	 XEventListener
 //*****************************************************************************************************************
-void
+void 
 SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -371,7 +371,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         css::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
-
+        
         if ( xFrame.is() )
         {
             css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
@@ -387,7 +387,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
                         rtl::OUString aMenuBar( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
                         xMenuBar = xLayoutManager->getElement( aMenuBar );
 
-                        m_xPopupCtrlQuery = css::uno::Reference< css::container::XNameAccess >(
+                        m_xPopupCtrlQuery = css::uno::Reference< css::container::XNameAccess >( 
                                                 xMenuBar, css::uno::UNO_QUERY );
                     }
                 }
@@ -407,16 +407,16 @@ void PopupMenuDispatcher::impl_CreateUriRefFactory()
 {
     if ( !m_xUriRefFactory.is() )
     {
-        rtl::OUString aUriRefFactoryService(
+        rtl::OUString aUriRefFactoryService( 
             RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uri.UriReferenceFactory" ));
-
+        
         m_xUriRefFactory = css::uno::Reference< css::uri::XUriReferenceFactory >(
                                 m_xFactory->createInstance( aUriRefFactoryService ),
                                 css::uno::UNO_QUERY);
-
+        
     }
 }
 
-}       //  namespace framework
+}		//	namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

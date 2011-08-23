@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ namespace svx{
             return false;
         }
 
-
-    }   // namespace DocRecovery
-}   // namespace svx
+        
+    }	// namespace DocRecovery
+}	// namespace svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

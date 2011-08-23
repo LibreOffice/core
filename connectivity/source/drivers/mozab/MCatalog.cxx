@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,12 @@ OCatalog::OCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
                 ,m_xMetaData(m_pConnection->getMetaData(  ))
 {
-//  osl_incrementInterlockedCount( &m_refCount );
-//  refreshTables();
-//  refreshViews();
-//  refreshGroups();
-//  refreshUsers();
-//  osl_decrementInterlockedCount( &m_refCount );
+//	osl_incrementInterlockedCount( &m_refCount );
+//	refreshTables();
+//	refreshViews();
+//	refreshGroups();
+//	refreshUsers();
+//	osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshTables()

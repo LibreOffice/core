@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace connectivity { namespace jdbc
     //====================================================================
     //= ContextClassLoaderScope
     //====================================================================
-    /**
+    /** 
     */
     class ContextClassLoaderScope
     {
@@ -65,7 +65,7 @@ namespace connectivity { namespace jdbc
             @param  _rxErrorContext
                 the context which should be passed to java_lang_object::ThrowLoggedSQLException in case
                 an error occurs
-
+            
         */
         ContextClassLoaderScope(
             JNIEnv& environment,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::logging;
 using namespace ::osl;
 
-#define SERVICE_SDBC_DRIVER     ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver")
+#define SERVICE_SDBC_DRIVER		::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver")
 
 void throwNoSuchElementException() throw(NoSuchElementException)
 {
@@ -74,8 +74,8 @@ class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
     friend class OSDBCDriverManager;
 
     DECLARE_STL_VECTOR( SdbcDriver, DriverArray );
-    DriverArray                 m_aDrivers;
-    ConstDriverArrayIterator    m_aPos;
+    DriverArray					m_aDrivers;
+    ConstDriverArrayIterator	m_aPos;
     // order matters!
 
 protected:
@@ -339,7 +339,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 // can it tell us something about the implementation name?
                 xSI = xSI.query( xFactory );
                 if ( xSI.is() )
-                {   // yes -> no need to load the driver immediately (load it later when needed)
+                {	// yes -> no need to load the driver immediately (load it later when needed)
                     aDriverDescriptor.sImplementationName = xSI->getImplementationName();
                     aDriverDescriptor.xComponentFactory = xFactory;
                     bValidDescriptor = sal_True;
@@ -414,8 +414,8 @@ void OSDBCDriverManager::initializeDriverPrecedence()
         ::std::sort( m_aDriversBS.begin(), m_aDriversBS.end(), CompareDriverAccessByName() );
 
         // loop through the names in the precedence order
-        const ::rtl::OUString* pDriverOrder     =                   aDriverOrder.getConstArray();
-        const ::rtl::OUString* pDriverOrderEnd  =   pDriverOrder +  aDriverOrder.getLength();
+        const ::rtl::OUString* pDriverOrder		=					aDriverOrder.getConstArray();
+        const ::rtl::OUString* pDriverOrderEnd	=	pDriverOrder +	aDriverOrder.getLength();
 
         // the first driver for which there is no preference
         DriverAccessArrayIterator aNoPrefDriversStart = m_aDriversBS.begin();
@@ -428,14 +428,14 @@ void OSDBCDriverManager::initializeDriverPrecedence()
                 ::std::equal_range( aNoPrefDriversStart, m_aDriversBS.end(), *pDriverOrder, CompareDriverAccessToName() );
 
             if ( aPos.first != aPos.second )
-            {   // we have a DriverAccess with this impl name
+            {	// we have a DriverAccess with this impl name
 
                 OSL_ENSURE( ::std::distance( aPos.first, aPos.second ) == 1,
                     "OSDBCDriverManager::initializeDriverPrecedence: more than one driver with this impl name? How this?" );
                 // move the DriverAccess pointed to by aPos.first to the position pointed to by aNoPrefDriversStart
 
                 if ( aPos.first != aNoPrefDriversStart )
-                {   // if this does not hold, the DriverAccess alread has the correct position
+                {	// if this does not hold, the DriverAccess alread has the correct position
 
                     // rotate the range [aNoPrefDriversStart, aPos.second) right 1 element
                     ::std::rotate( aNoPrefDriversStart, aPos.second - 1, aPos.second );
@@ -530,18 +530,18 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  ) thr
 
     // copy the bootstrapped drivers
     ::std::transform(
-        m_aDriversBS.begin(),               // "copy from" start
-        m_aDriversBS.end(),                 // "copy from" end
-        ::std::back_inserter( aDrivers ),   // insert into
-        ExtractDriverFromAccess()           // transformation to apply (extract a driver from a driver access)
+        m_aDriversBS.begin(),				// "copy from" start
+        m_aDriversBS.end(),					// "copy from" end
+        ::std::back_inserter( aDrivers ),	// insert into
+        ExtractDriverFromAccess()			// transformation to apply (extract a driver from a driver access)
     );
 
     // append the runtime drivers
     ::std::transform(
-        m_aDriversRT.begin(),                   // "copy from" start
-        m_aDriversRT.end(),                     // "copy from" end
-        ::std::back_inserter( aDrivers ),       // insert into
-        ExtractDriverFromCollectionElement()    // transformation to apply (extract a driver from a driver access)
+        m_aDriversRT.begin(),					// "copy from" start
+        m_aDriversRT.end(),						// "copy from" end
+        ::std::back_inserter( aDrivers ),		// insert into
+        ExtractDriverFromCollectionElement()	// transformation to apply (extract a driver from a driver access)
     );
 
     return new ODriverEnumeration( aDrivers );
@@ -705,8 +705,8 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
         {
             // search all bootstrapped drivers
             aFind = ::std::find_if(
-                m_aDriversBS.begin(),       // begin of search range
-                m_aDriversBS.end(),         // end of search range
+                m_aDriversBS.begin(),		// begin of search range
+                m_aDriversBS.end(),			// end of search range
                 std::unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad() )
                                             // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
             );
@@ -726,8 +726,8 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
     {
         // no -> search the runtime drivers
         DriverCollectionIterator aPos = ::std::find_if(
-            m_aDriversRT.begin(),       // begin of search range
-            m_aDriversRT.end(),         // end of search range
+            m_aDriversRT.begin(),		// begin of search range
+            m_aDriversRT.end(),			// end of search range
             std::unary_compose< AcceptsURL, ExtractDriverFromCollectionElement >( AcceptsURL( _rURL ), ExtractDriverFromCollectionElement() )
                                         // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
         );
@@ -739,6 +739,6 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
     return xReturn;
 }
 
-}   // namespace drivermanager
+}	// namespace drivermanager
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

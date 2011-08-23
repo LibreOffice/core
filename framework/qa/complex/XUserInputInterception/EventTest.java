@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,10 @@ import util.SOfficeFactory;
 
 //-----------------------------------------------
 /**
- * This <CODE>ComplexTest</CODE> checks the interface
+ * This <CODE>ComplexTest</CODE> checks the interface 
  * <CODE>XUserInputInterception</CODE>. Therefore it creates a document,
  * adds a mouse and a key listener onto the interface and fire the
- * correspond events. If all listener works as expected the test resluts in
+ * correspond events. If all listener works as expected the test resluts in 
  * <CODE>OK</CODE> status.
  * @short Check the interface XUserInputIntercaption
  * @descr checks is a simple way the interface XUserInputInteraction
@@ -67,35 +67,35 @@ import util.SOfficeFactory;
 public class EventTest extends ComplexTestCase {
     //-------------------------------------------
     // some const
-
+    
     //-------------------------------------------
     // member
-
+    
     /** points to the global uno service manager. */
     private XMultiServiceFactory m_xMSF = null;
-
+    
     /** indicates if the mousePressed event was called*/
     private boolean m_mousePressed = false;
     /** indicates if the mouseReleased event was called*/
     private boolean m_mouseReleased = false;
-
+    
     /** indicates if the mousePressed event was called*/
     private boolean m_keyPressed = false;
     /** indicates if the mouseReleased event was called*/
     private boolean m_keyReleased = false;
-
+    
     /** points to a global StarOffice factory */
     private SOfficeFactory m_SOF = null;
-
+    
     /**
      * define the miliseconds to wait until a <CODE>EventTrigger</CODE> thread should
      * be finished with its work
      */
     final int m_threadWait = 3000;
-
+    
     //-------------------------------------------
     // test environment
-
+    
     //-------------------------------------------
     /**
      * The test methods are:
@@ -122,7 +122,7 @@ public class EventTest extends ComplexTestCase {
           "checkMathDocument",
         };
     }
-
+    
     //-------------------------------------------
     /**
      * creates the mebmer <CODE>m_xMSF</CODE> and <CODE>m_SOF</CODE>
@@ -133,17 +133,17 @@ public class EventTest extends ComplexTestCase {
     public void before() {
         // get uno service manager from global test environment
         m_xMSF = (XMultiServiceFactory)param.getMSF();
-
+        
         // create frame instance
         try {
             // get a soffice factory object
             m_SOF = SOfficeFactory.getFactory((XMultiServiceFactory) param.getMSF());
-
+            
         } catch(java.lang.Throwable ex) {
             failed("Could not create the XUserInputInterception instance.");
         }
     }
-
+    
     //-------------------------------------------
     /**
      * closes the document
@@ -159,7 +159,7 @@ public class EventTest extends ComplexTestCase {
             log.println("document couldn't be closed successfully.");
         }
     }
-
+    
     /**
      * creates a text document and check the <CODE>XMouseClickHandler</CODE> and
      * <CODE>XKeyHandler</CODE>
@@ -167,20 +167,20 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XMouseClickHandler
      */
     public void checkTextDocument(){
-
+        
         XTextDocument xDoc = null;
-
+        
         try{
             xDoc = m_SOF.createTextDoc("WriterTest");
         } catch (com.sun.star.uno.Exception e){
             failed("Could not create a text document: " +e.toString());
         }
-
+        
         checkListener(xDoc);
-
+        
         closeDoc(xDoc);
     }
-
+    
     /**
      * creates an impress document and check the <CODE>XMouseClickHandler</CODE> and
      * <CODE>XKeyHandler</CODE>
@@ -188,20 +188,20 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XMouseClickHandler
      */
     public void checkImpressDocument(){
-
+        
         XComponent xDoc = null;
-
+        
         try{
             xDoc = m_SOF.createImpressDoc("ImpressTest");
         } catch (com.sun.star.uno.Exception e){
             failed("Could not create an impress document: " +e.toString());
         }
-
+        
         checkListener(xDoc);
-
+        
         closeDoc(xDoc);
     }
-
+    
     /**
      * creates a chart document and check the <CODE>XMouseClickHandler</CODE> and
      * <CODE>XKeyHandler</CODE>
@@ -209,20 +209,20 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XMouseClickHandler
      */
     public void checkChartDocument(){
-
+        
         XChartDocument xDoc = null;
-
+        
         try{
             xDoc = m_SOF.createChartDoc("ChartTest");
         } catch (com.sun.star.uno.Exception e){
             failed("Could not create a chart document: " +e.toString());
         }
-
+        
         checkListener(xDoc);
-
+        
         closeDoc(xDoc);
     }
-
+    
     /**
      * creates a math document and check the <CODE>XMouseClickHandler</CODE> and
      * <CODE>XKeyHandler</CODE>
@@ -230,20 +230,20 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XMouseClickHandler
      */
     public void checkMathDocument(){
-
+        
         XComponent xDoc = null;
-
+        
         try{
             xDoc = m_SOF.createMathDoc("MathTest");
         } catch (com.sun.star.uno.Exception e){
             failed("Could not create a math document: " +e.toString());
         }
-
+        
         checkListener(xDoc);
-
+        
         closeDoc(xDoc);
     }
-
+    
     /**
      * creates a draw document and check the <CODE>XMouseClickHandler</CODE> and
      * <CODE>XKeyHandler</CODE>
@@ -251,20 +251,20 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XMouseClickHandler
      */
     public void checkDrawDocument(){
-
+        
         XComponent xDoc = null;
-
+        
         try{
             xDoc = m_SOF.createDrawDoc("DrawTest");
         } catch (com.sun.star.uno.Exception e){
             failed("Could not create a draw document: " +e.toString());
         }
-
+        
         checkListener(xDoc);
-
+        
         closeDoc(xDoc);
     }
-
+    
     /**
      * creates a calc document and check the <CODE>XMouseClickHandler</CODE> and
      * <CODE>XKeyHandler</CODE>
@@ -272,19 +272,19 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XMouseClickHandler
      */
     public void checkCalcDocument(){
-
+        
         XSpreadsheetDocument xDoc = null;
-
+        
         try{
             xDoc = m_SOF.createCalcDoc("CalcTest");
         } catch (com.sun.star.uno.Exception e){
             failed("Could not create a calc document: " +e.toString());
         }
-
+        
         checkListener(xDoc);
         closeDoc(xDoc);
     }
-
+    
     /**
      * This is the central test method. It is called by ceck[DOCTYPE]Document. It
      * creates the <CODE>XUserInputInterception</CODE> from the document and call the
@@ -292,20 +292,20 @@ public class EventTest extends ComplexTestCase {
      * @param xDoc the document to test
      */
     private void checkListener(XInterface xDoc){
-
+        
         XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
-
+        
         XUserInputInterception xUII = getUII(xModel);
-
+        
         checkMouseListener(xUII, xModel);
         checkKeyListener(xUII, xModel);
     }
-
+    
     /**
-     * Creates a <CODE>MyKeyHandler</CODE> and adds it to the
-     * <CODE>XUserInputInterception</CODE>. Then an <CODE>EventTrigger</CODE> thread
+     * Creates a <CODE>MyKeyHandler</CODE> and adds it to the 
+     * <CODE>XUserInputInterception</CODE>. Then an <CODE>EventTrigger</CODE> thread  
      * was created and started.
-     * Has <CODE>OK</CODE> if the members <CODE>m_keyPressed</CODE> and
+     * Has <CODE>OK</CODE> if the members <CODE>m_keyPressed</CODE> and 
      * <CODE>m_keyReleased</CODE> are <CODE>TRUE</CODE>
      * @param xUII the XUserInputInterception
      * @param xModel the XModel of a document
@@ -315,64 +315,64 @@ public class EventTest extends ComplexTestCase {
     private void checkKeyListener(XUserInputInterception xUII, XModel xModel) {
         m_keyPressed = false;
         m_keyReleased = false;
-
+        
         MyKeyHandler keyListener = new MyKeyHandler();
-
+        
         xUII.addKeyHandler(keyListener);
-
+        
         log.println("starting thread to check the key listener...");
         EventTrigger et = new EventTrigger(xModel, EventTriggerType.KEY_TEXT_INTO_DOC);
 
         et.run();
-
+        
         util.utils.shortWait(m_threadWait);
         log.println("key listener thread should be finished.");
-
+        
         assure("key event does not work!", m_keyPressed && m_keyReleased);
         xUII.removeKeyHandler(keyListener);
-
+        
     }
-
+    
     /**
-     * Creates a <CODE>MyMouseClickHandler</CODE> and adds it to the
-     * <CODE>XUserInputInterception</CODE>. Then an <CODE>EventTrigger</CODE> thread
+     * Creates a <CODE>MyMouseClickHandler</CODE> and adds it to the 
+     * <CODE>XUserInputInterception</CODE>. Then an <CODE>EventTrigger</CODE> thread  
      * was created and started.
-     * Has <CODE>OK</CODE> if the members <CODE>m_mousePressed</CODE> and
+     * Has <CODE>OK</CODE> if the members <CODE>m_mousePressed</CODE> and 
      * <CODE>m_mouseReleased</CODE> are <CODE>TRUE</CODE>
      * @param xUII the XUserInputInterception
      * @param xModel the XModel of a document
      * @see EventTest.MyMouseClickHander
      * @see EventTest.EventTrigger
      */
-
+    
     private void checkMouseListener(XUserInputInterception xUII, XModel xModel) {
-
+        
         m_mousePressed = false;
         m_mouseReleased = false;
-
+        
         MyMouseClickHandler mouseListener = new MyMouseClickHandler();
-
+        
         xUII.addMouseClickHandler(mouseListener);
-
+               
         log.println("starting thread to check the mouse listener...");
         EventTrigger et = new EventTrigger(xModel, EventTriggerType.MOUSE_KLICK_INTO_DOC);
 
         et.run();
-
+        
         util.utils.shortWait(m_threadWait);
         log.println("mouse listener thread should be finished.");
-
+        
         assure("mouse event does not work!", m_mousePressed && m_mouseReleased);
         xUII.removeMouseClickHandler(mouseListener);
     }
-
+    
     /**
      * returns the <CODE>XUserInputInterception</CODE> from the <CODE>XMdoel</CODE>
      * @param xModel the XModel of a document
      * @return the <CODE>XUserInputInterception</CODE> of the document
      */
     private XUserInputInterception getUII(XModel xModel){
-
+        
         XController xController = xModel.getCurrentController();
 
         XUserInputInterception xUII = (XUserInputInterception) UnoRuntime.queryInterface(
@@ -382,7 +382,7 @@ public class EventTest extends ComplexTestCase {
         }
          return xUII;
     }
-
+    
     /**
      * Listener which added and its method must be called
      * on <code>keyPressed</code> and <code>keyReleased</code> call.
@@ -418,7 +418,7 @@ public class EventTest extends ComplexTestCase {
             log.println("XKeyHandler: disposing-Event");
         }
     }
-
+    
     /**
      * Listener which added and its method must be called
      * on <code>mousePressed</code> and <code>mouseReleased</code> call.
@@ -454,14 +454,14 @@ public class EventTest extends ComplexTestCase {
             log.println("XMouseClickHandler: disposing-Event");
         }
     };
-
+    
     /**
      * To check the events this class is a thread which click a mouse button and
      * press a key with the <CODE>Robot</CODE> class
      * @see java.awt.Robot
      */
     private class EventTrigger extends Thread{
-
+        
         /**
          * represents a <CODE>AccessibilityTools</CODE>
          */
@@ -475,7 +475,7 @@ public class EventTest extends ComplexTestCase {
          * represents a <CODE>XModel</CODE> of a document
          */
         private XModel xModel = null;
-
+        
         /**
          * Creates an instacne of this class. The parameter <CODE>eType</CODE> represents
          * the kind of event wich will be triggert at <CODE>run()</CODE>
@@ -487,26 +487,26 @@ public class EventTest extends ComplexTestCase {
             this.xModel = model;
             this.eventType = eType;
         }
-
+        
         /**
          * Triggers the event wich is represented by <CODE>eventType</CODE>
          * The scenarios are:
          * <ul>
          *    <li>EventTest.EventTriggerType.MOUSE_KLICK_INTO_DOC
-         *        which calls
+         *        which calls 
          *        <li><CODE>clickIntoDoc</CODE></LI>
          *        </LI>
          *    <li>EventTest.EventTriggerType.KEY_TEXT_INTO_DOC
-         *        which calls
+         *        which calls 
          *            <li><CODE>clickIntodoc</CODE></LI>
          *            <li><CODE>keyIntoDoc</CODE></LI>
          *    </LI>
          * </UL>
          */
         public void run(){
-
+            
             switch (this.eventType){
-
+                
                 case EventTriggerType.MOUSE_KLICK_INTO_DOC:
                     clickIntoDoc();
                     break;
@@ -514,7 +514,7 @@ public class EventTest extends ComplexTestCase {
                     clickIntoDoc();
                     keyIntoDoc();
                     break;
-
+                    
             }
         }
         /**
@@ -529,12 +529,12 @@ public class EventTest extends ComplexTestCase {
                 // get the position and the range of a scroll bar
 
                 XWindow xWindow = at.getCurrentWindow(
-                                          (XMultiServiceFactory) param.getMSF(),
+                                          (XMultiServiceFactory) param.getMSF(), 
                                           xModel);
 
                 XAccessible xRoot = at.getAccessibleObject(xWindow);
-
-
+                
+                
 
                 XAccessibleContext xPanel = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
                 XAccessibleComponent xPanelCont = (XAccessibleComponent) UnoRuntime.queryInterface(XAccessibleComponent.class, xPanel);
@@ -560,7 +560,7 @@ public class EventTest extends ComplexTestCase {
                 log.println("could not click into the scroll bar: " + e.toString());
             }
         }
-
+        
         /**
          * This method press the "A" key. Therefore it uses the <CODE>Robot</CODE>
          * class.
@@ -575,20 +575,20 @@ public class EventTest extends ComplexTestCase {
             } catch (java.awt.AWTException e) {
                 log.println("couldn't press key");
             }
-
+            
         }
     }
-
-    /** This interface represents all possible actions which could be used
+    
+    /** This interface represents all possible actions which could be used 
      * in the <CODE>EventTrigger</CODE> class.
      * @see EventTest.EventTrigger
-    */
+    */ 
     private interface EventTriggerType{
-
+        
         /** klick the mouse into the scroll bar*/
         final public static int MOUSE_KLICK_INTO_DOC = 1;
-
+        
         /** write some text into a spread sheet*/
         final public static int KEY_TEXT_INTO_DOC = 2;
-    }
+    }   
 }

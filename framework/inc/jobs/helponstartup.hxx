@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ class HelpOnStartup : private ThreadHelpBase
         //.......................................
         /** @short  reference to an uno service manager. */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
+    
         //.......................................
         /** @short  such module manager is used to classify new opened documents. */
         css::uno::Reference< css::frame::XModuleManager > m_xModuleManager;
@@ -88,13 +88,13 @@ class HelpOnStartup : private ThreadHelpBase
         css::uno::Reference< css::container::XNameAccess > m_xConfig;
 
         //.......................................
-        /** @short  knows the current locale of this office session,
+        /** @short  knows the current locale of this office session, 
                     which is needed to build complete help URLs.
          */
         ::rtl::OUString m_sLocale;
 
         //.......................................
-        /** @short  knows the current operating system of this office session,
+        /** @short  knows the current operating system of this office session, 
                     which is needed to build complete help URLs.
          */
         ::rtl::OUString m_sSystem;
@@ -128,7 +128,7 @@ class HelpOnStartup : private ThreadHelpBase
         //---------------------------------------
         // css.lang.XServiceInfo
         DECLARE_XSERVICEINFO
-
+    
         // css.task.XJob
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
             throw(css::lang::IllegalArgumentException,

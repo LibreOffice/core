@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,27 +100,27 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
 {
     if( rData.pXFillAttrSetItem )
     {
-        SfxWhichIter        aIter( rData.pXFillAttrSetItem->GetItemSet() );
-        USHORT              nWhich = aIter.FirstWhich();
-        const SfxPoolItem*  pItem;
-        sal_uInt32          nItemCount = 0;
-        sal_Size            nFirstPos = rOStm.Tell();
+        SfxWhichIter		aIter( rData.pXFillAttrSetItem->GetItemSet() );
+        USHORT				nWhich = aIter.FirstWhich();
+        const SfxPoolItem*	pItem;
+        sal_uInt32 			nItemCount = 0;
+        sal_Size 			nFirstPos = rOStm.Tell();
 
         rOStm << nItemCount;
-
+        
         while( nWhich )
         {
             if( SFX_ITEM_SET == rData.pXFillAttrSetItem->GetItemSet().GetItemState( nWhich, FALSE, &pItem ) )
             {
-                VersionCompat   aCompat( rOStm, STREAM_WRITE );
-                const USHORT    nItemVersion2 = pItem->GetVersion( (USHORT) rOStm.GetVersion() );
+                VersionCompat	aCompat( rOStm, STREAM_WRITE );
+                const USHORT	nItemVersion2 = pItem->GetVersion( (USHORT) rOStm.GetVersion() );
 
                 rOStm << nWhich << nItemVersion2;
                 pItem->Store( rOStm, nItemVersion2 );
-
+                
                 nItemCount++;
             }
-
+            
             nWhich = aIter.NextWhich();
         }
 
@@ -144,10 +144,10 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
 {
     DBG_ASSERT( rData.pPool, "XFillExchangeData has no pool" );
 
-    SfxItemSet*     pSet = new SfxItemSet ( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
-    SfxPoolItem*    pNewItem;
-    sal_uInt32      nItemCount = 0;
-    USHORT          nWhich, nItemVersion;
+    SfxItemSet*		pSet = new SfxItemSet ( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
+    SfxPoolItem*	pNewItem;
+    sal_uInt32 		nItemCount = 0;
+    USHORT			nWhich, nItemVersion;
 
     rIStm >> nItemCount;
 
@@ -159,7 +159,7 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
         VersionCompat aCompat( rIStm, STREAM_READ );
 
         rIStm >> nWhich >> nItemVersion;
-
+        
         if( nWhich )
         {
             pNewItem = rData.pPool->GetDefaultItem( nWhich ).Create( rIStm, nItemVersion );
@@ -171,8 +171,8 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
             }
         }
     }
-
-    delete rData.pXFillAttrSetItem;
+    
+    delete rData.pXFillAttrSetItem; 
     rData.pXFillAttrSetItem = new XFillAttrSetItem( pSet );
     rData.pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool();
 
@@ -181,7 +181,7 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
 
 /*************************************************************************
 |*
-|*    XBitmap& XBitmap::operator=( const XBitmap& rXBmp )
+|*	  XBitmap& XBitmap::operator=( const XBitmap& rXBmp )
 |*
 *************************************************************************/
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,11 +74,11 @@ namespace connectivity
     jobject convertTypeMapToJavaMap(JNIEnv *pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & _rMap);
 
     /** return if a exception occured
-        @param  pEnv
+        @param	pEnv
             The native java env
-        @param  _bClear
+        @param	_bClear
             <TRUE/> if the execption should be cleared
-        @return
+        @return 
             <TRUE/> if an exception is occured
     */
     sal_Bool isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear);

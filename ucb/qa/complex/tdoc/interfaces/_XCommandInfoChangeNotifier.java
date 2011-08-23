@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,28 +37,28 @@ public class _XCommandInfoChangeNotifier {
     public XCommandInfoChangeNotifier oObj = null;
     public LogWriter log = null;
     private CommandInfoChangeListener listener = new CommandInfoChangeListener();
-
+    
     public boolean _addCommandInfoChangeListener() {
         oObj.addCommandInfoChangeListener(listener);
         return true;
     }
-
+    
     public boolean _removeCommandInfoChangeListener() {
         oObj.removeCommandInfoChangeListener(listener);
         return true;
     }
-
+    
     private class CommandInfoChangeListener implements XCommandInfoChangeListener {
         boolean disposing = false;
         boolean infoChanged = false;
-
+        
         public void commandInfoChange(com.sun.star.ucb.CommandInfoChangeEvent commandInfoChangeEvent) {
             infoChanged = true;
         }
-
+        
         public void disposing(com.sun.star.lang.EventObject eventObject) {
             disposing = true;
         }
-
+        
     }
 }

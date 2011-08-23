@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,17 +53,17 @@ using namespace ::com::sun::star;
 namespace accessibility
 {
 
-    AccessibleHyperlink::AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, USHORT nP, USHORT nR, sal_Int32 nStt, sal_Int32 nEnd, const ::rtl::OUString& rD )
+    AccessibleHyperlink::AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, USHORT nP, USHORT nR, sal_Int32 nStt, sal_Int32 nEnd, const ::rtl::OUString& rD ) 
     : rTA( r )
-    {
-        pFld = p;
-        nPara = nP;
-        nRealIdx = nR;
-        nStartIdx = nStt;
-        nEndIdx = nEnd;
+    { 
+        pFld = p; 
+        nPara = nP; 
+        nRealIdx = nR; 
+        nStartIdx = nStt; 
+        nEndIdx = nEnd; 
         aDescription = rD;
     }
-
+    
     AccessibleHyperlink::~AccessibleHyperlink()
     {
         delete pFld;
@@ -74,7 +74,7 @@ namespace accessibility
     {
          return isValid() ? 1 : 0;
     }
-
+    
     sal_Bool SAL_CALL AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         sal_Bool bRet = sal_False;
@@ -85,26 +85,26 @@ namespace accessibility
         }
         return bRet;
     }
-
+    
     ::rtl::OUString  SAL_CALL AccessibleHyperlink::getAccessibleActionDescription( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::rtl::OUString aDesc;
 
         if ( isValid() && ( nIndex == 0 ) )
             aDesc = aDescription;
-
+    
         return aDesc;
     }
-
+    
     uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > xKeyBinding;
-
+    
         if( isValid() && ( nIndex == 0 ) )
         {
             ::comphelper::OAccessibleKeyBindingHelper* pKeyBindingHelper = new ::comphelper::OAccessibleKeyBindingHelper();
             xKeyBinding = pKeyBindingHelper;
-
+    
             awt::KeyStroke aKeyStroke;
             aKeyStroke.Modifiers = 0;
             aKeyStroke.KeyCode = KEY_RETURN;
@@ -112,7 +112,7 @@ namespace accessibility
             aKeyStroke.KeyFunc = 0;
             pKeyBindingHelper->AddKeyBinding( aKeyStroke );
         }
-
+    
         return xKeyBinding;
     }
 
@@ -121,22 +121,22 @@ namespace accessibility
     {
         return uno::Any();
     }
-
+    
     uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionObject( sal_Int32 /*nIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         return uno::Any();
     }
-
+    
     sal_Int32 SAL_CALL AccessibleHyperlink::getStartIndex() throw (uno::RuntimeException)
     {
         return nStartIdx;
     }
-
+    
     sal_Int32 SAL_CALL AccessibleHyperlink::getEndIndex() throw (uno::RuntimeException)
     {
         return nEndIdx;
     }
-
+    
     sal_Bool SAL_CALL AccessibleHyperlink::isValid(  ) throw (uno::RuntimeException)
     {
         return rTA.IsValid();

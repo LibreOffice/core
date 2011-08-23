@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,11 +65,11 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-sal_Unicode const pszExtHatch[]  = {'s','o','h'};
+sal_Unicode const pszExtHatch[]	 = {'s','o','h'};
 
-char const aChckHatch[]  = { 0x04, 0x00, 'S','O','H','L'};  // < 5.2
-char const aChckHatch0[] = { 0x04, 0x00, 'S','O','H','0'};  // = 5.2
-char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };     // = 6.0
+char const aChckHatch[]  = { 0x04, 0x00, 'S','O','H','L'};	// < 5.2
+char const aChckHatch0[] = { 0x04, 0x00, 'S','O','H','0'};	// = 5.2
+char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };		// = 6.0
 
 // ------------------
 // class XHatchTable
@@ -159,9 +159,9 @@ class impXHatchList
 {
 private:
     VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
-    SdrObject*              mpHatchObject;
+    SdrModel*				mpSdrModel;
+    SdrObject*			    mpBackgroundObject;
+    SdrObject*			    mpHatchObject;
 
 public:
     impXHatchList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pH)
@@ -199,7 +199,7 @@ void XHatchList::impCreate()
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
-
+    
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();

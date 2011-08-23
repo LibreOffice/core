@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,11 @@
 #include <editeng/editund2.hxx>
 #include <editeng/editdata.hxx>
 
-#define UNDO_NOACTION           0
-#define UNDO_NEWUNDO            1
-#define UNDO_UNDOSDELETED       2
-#define UNDO_EMPTYGROUPDELETED  3
-#define UNDO_INVALIDEND         4
+#define UNDO_NOACTION			0
+#define UNDO_NEWUNDO			1
+#define UNDO_UNDOSDELETED		2
+#define UNDO_EMPTYGROUPDELETED	3
+#define UNDO_INVALIDEND			4
 
 class ImpEditEngine;
 class EditView;
@@ -48,9 +48,9 @@ class EditView;
 class EditUndoDelContent : public EditUndo
 {
 private:
-    BOOL            bDelObject;
-    USHORT          nNode;
-    ContentNode*    pContentNode;   // Zeigt auf das gueltige,
+    BOOL 			bDelObject;
+    USHORT			nNode;
+    ContentNode* 	pContentNode;	// Zeigt auf das gueltige,
                                     // nicht zerstoerte Objekt!
 
 public:
@@ -58,8 +58,8 @@ public:
                     EditUndoDelContent( ImpEditEngine* pImpEE, ContentNode* pNode, USHORT nPortio );
                     ~EditUndoDelContent();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void 	Undo();
+    virtual void 	Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -68,18 +68,18 @@ public:
 class EditUndoConnectParas : public EditUndo
 {
 private:
-    USHORT          nNode;
-    USHORT          nSepPos;
-    SfxItemSet      aLeftParaAttribs;
-    SfxItemSet      aRightParaAttribs;
+    USHORT			nNode;
+    USHORT			nSepPos;
+    SfxItemSet		aLeftParaAttribs;
+    SfxItemSet		aRightParaAttribs;
 
     // 2 Pointer waeren schoener, aber dann muesste es ein SfxListener sein.
-    String          aLeftStyleName;
-    String          aRightStyleName;
-    SfxStyleFamily  eLeftStyleFamily;
-    SfxStyleFamily  eRightStyleFamily;
+    String			aLeftStyleName;
+    String			aRightStyleName;
+    SfxStyleFamily	eLeftStyleFamily;
+    SfxStyleFamily	eRightStyleFamily;
 
-    BOOL            bBackward;
+    BOOL			bBackward;
 
 public:
                     TYPEINFO();
@@ -88,8 +88,8 @@ public:
                                             const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, BOOL bBackward );
                     ~EditUndoConnectParas();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void 	Undo();
+    virtual void 	Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -98,16 +98,16 @@ public:
 class EditUndoSplitPara : public EditUndo
 {
 private:
-    USHORT          nNode;
-    USHORT          nSepPos;
+    USHORT			nNode;
+    USHORT			nSepPos;
 
 public:
                     TYPEINFO();
                     EditUndoSplitPara( ImpEditEngine* pImpEE, USHORT nNode, USHORT nSepPos );
                     ~EditUndoSplitPara();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void 	Undo();
+    virtual void 	Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -116,20 +116,20 @@ public:
 class EditUndoInsertChars : public EditUndo
 {
 private:
-    EPaM            aEPaM;
-    String          aText;
+    EPaM			aEPaM;
+    String			aText;
 
 public:
                     TYPEINFO();
                     EditUndoInsertChars( ImpEditEngine* pImpEE, const EPaM& rEPaM, const String& rStr );
 
-    const EPaM&     GetEPaM() { return aEPaM; }
-    String&         GetStr() { return aText; }
+    const EPaM&		GetEPaM() { return aEPaM; }
+    String&			GetStr() { return aText; }
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void 	Undo();
+    virtual void 	Redo();
 
-    virtual BOOL    Merge( SfxUndoAction *pNextAction );
+    virtual BOOL	Merge( SfxUndoAction *pNextAction );
 };
 
 // -----------------------------------------------------------------------
@@ -138,18 +138,18 @@ public:
 class EditUndoRemoveChars : public EditUndo
 {
 private:
-    EPaM            aEPaM;
-    String          aText;
+    EPaM			aEPaM;
+    String			aText;
 
 public:
                     TYPEINFO();
                     EditUndoRemoveChars( ImpEditEngine* pImpEE, const EPaM& rEPaM, const String& rStr );
 
-    const EPaM&     GetEPaM() { return aEPaM; }
-    String&         GetStr() { return aText; }
+    const EPaM&		GetEPaM() { return aEPaM; }
+    String&			GetStr() { return aText; }
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void 	Undo();
+    virtual void 	Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -158,8 +158,8 @@ public:
 class EditUndoInsertFeature : public EditUndo
 {
 private:
-    EPaM            aEPaM;
-    SfxPoolItem*    pFeature;
+    EPaM			aEPaM;
+    SfxPoolItem*	pFeature;
 
 public:
                     TYPEINFO();
@@ -167,8 +167,8 @@ public:
                                             const SfxPoolItem& rFeature);
                     ~EditUndoInsertFeature();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void 	Undo();
+    virtual void 	Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -177,16 +177,16 @@ public:
 class EditUndoMoveParagraphs: public EditUndo
 {
 private:
-    Range           nParagraphs;
-    USHORT          nDest;
+    Range			nParagraphs;
+    USHORT 			nDest;
 
 public:
                     TYPEINFO();
                     EditUndoMoveParagraphs( ImpEditEngine* pImpEE, const Range& rParas, USHORT nDest );
                     ~EditUndoMoveParagraphs();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void	Undo();
+    virtual void	Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -195,24 +195,24 @@ public:
 class EditUndoSetStyleSheet: public EditUndo
 {
 private:
-    USHORT          nPara;
-    XubString       aPrevName;
-    XubString       aNewName;
-    SfxStyleFamily  ePrevFamily;
-    SfxStyleFamily  eNewFamily;
-    SfxItemSet      aPrevParaAttribs;
+    USHORT			nPara;
+    XubString		aPrevName;
+    XubString		aNewName;
+    SfxStyleFamily	ePrevFamily;
+    SfxStyleFamily	eNewFamily;
+    SfxItemSet		aPrevParaAttribs;
 
 public:
                     TYPEINFO();
-
+                    
                     EditUndoSetStyleSheet( ImpEditEngine* pImpEE, USHORT nPara,
                         const XubString& rPrevName, SfxStyleFamily ePrevFamily,
                         const XubString& rNewName, SfxStyleFamily eNewFamily,
                         const SfxItemSet& rPrevParaAttribs );
                     ~EditUndoSetStyleSheet();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void	Undo();
+    virtual void	Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -221,17 +221,17 @@ public:
 class EditUndoSetParaAttribs: public EditUndo
 {
 private:
-    USHORT          nPara;
-    SfxItemSet      aPrevItems;
-    SfxItemSet      aNewItems;
+    USHORT			nPara;
+    SfxItemSet		aPrevItems;
+    SfxItemSet		aNewItems;
 
 public:
                     TYPEINFO();
                     EditUndoSetParaAttribs( ImpEditEngine* pImpEE, USHORT nPara, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems );
                     ~EditUndoSetParaAttribs();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void	Undo();
+    virtual void	Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -240,16 +240,16 @@ public:
 class EditUndoSetAttribs: public EditUndo
 {
 private:
-    ESelection          aESel;
-    SfxItemSet          aNewAttribs;
-    ContentInfoArray    aPrevAttribs;
+    ESelection			aESel;
+    SfxItemSet			aNewAttribs;
+    ContentInfoArray	aPrevAttribs;
 
-    BYTE                nSpecial;
-    BOOL                bSetIsRemove;
-    BOOL                bRemoveParaAttribs;
-    USHORT              nRemoveWhich;
+    BYTE				nSpecial;
+    BOOL				bSetIsRemove;
+    BOOL				bRemoveParaAttribs;
+    USHORT				nRemoveWhich;
 
-    void                ImpSetSelection( EditView* pView );
+    void				ImpSetSelection( EditView* pView );
 
 
 public:
@@ -257,16 +257,16 @@ public:
                         EditUndoSetAttribs( ImpEditEngine* pImpEE, const ESelection& rESel, const SfxItemSet& rNewItems );
                         ~EditUndoSetAttribs();
 
-    ContentInfoArray&   GetContentInfos()   { return aPrevAttribs; }
-    SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }
+    ContentInfoArray&	GetContentInfos()	{ return aPrevAttribs; }
+    SfxItemSet&			GetNewAttribs()		{ return aNewAttribs; }
 
-    void                SetSpecial( BYTE n )            { nSpecial = n; }
-    void                SetRemoveAttribs( BOOL b )      { bSetIsRemove = b; }
-    void                SetRemoveParaAttribs( BOOL b )  { bRemoveParaAttribs = b; }
-    void                SetRemoveWhich( USHORT n )      { nRemoveWhich = n; }
+    void				SetSpecial( BYTE n ) 			{ nSpecial = n; }
+    void				SetRemoveAttribs( BOOL b ) 		{ bSetIsRemove = b; }
+    void				SetRemoveParaAttribs( BOOL b )	{ bRemoveParaAttribs = b; }
+    void				SetRemoveWhich( USHORT n )		{ nRemoveWhich = n; }
 
-    virtual void        Undo();
-    virtual void        Redo();
+    virtual void		Undo();
+    virtual void		Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -275,24 +275,24 @@ public:
 class EditUndoTransliteration: public EditUndo
 {
 private:
-    ESelection          aOldESel;
-    ESelection          aNewESel;
+    ESelection			aOldESel;
+    ESelection			aNewESel;
 
-    sal_Int32           nMode;
-    EditTextObject*     pTxtObj;
-    String              aText;
+    sal_Int32			nMode;
+    EditTextObject*		pTxtObj;
+    String				aText;
 
 public:
                         TYPEINFO();
                         EditUndoTransliteration( ImpEditEngine* pImpEE, const ESelection& rESel, sal_Int32 nMode );
                         ~EditUndoTransliteration();
 
-    void                SetText( const String& rText ) { aText = rText; }
-    void                SetText( EditTextObject* pObj ) { pTxtObj = pObj; }
-    void                SetNewSelection( const ESelection& rSel ) { aNewESel = rSel; }
+    void				SetText( const String& rText ) { aText = rText; }
+    void				SetText( EditTextObject* pObj ) { pTxtObj = pObj; }
+    void				SetNewSelection( const ESelection& rSel ) { aNewESel = rSel; }
 
-    virtual void        Undo();
-    virtual void        Redo();
+    virtual void		Undo();
+    virtual void		Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -301,15 +301,15 @@ public:
 class EditUndoMarkSelection: public EditUndo
 {
 private:
-    ESelection      aSelection;
+    ESelection		aSelection;
 
 public:
                     TYPEINFO();
                     EditUndoMarkSelection( ImpEditEngine* pImpEE, const ESelection& rSel );
                     ~EditUndoMarkSelection();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void	Undo();
+    virtual void	Redo();
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,14 +59,14 @@ Color RGB_Color( ColorData nColorName )
 XPropertyTable::XPropertyTable( const String& rPath,
                                 XOutdevItemPool* pInPool,
                                 USHORT nInitSize, USHORT nReSize ) :
-            aName           ( pszStandard, 8 ),
-            aPath           ( rPath ),
-            pXPool          ( pInPool ),
-            aTable          ( nInitSize, nReSize ),
-            pBmpTable       ( NULL ),
-            bTableDirty     ( TRUE ),
-            bBitmapsDirty   ( TRUE ),
-            bOwnPool        ( FALSE )
+            aName			( pszStandard, 8 ),
+            aPath			( rPath ),
+            pXPool			( pInPool ),
+            aTable			( nInitSize, nReSize ),
+            pBmpTable		( NULL ),
+            bTableDirty		( TRUE ),
+            bBitmapsDirty	( TRUE ),
+            bOwnPool		( FALSE )
 {
     if( !pXPool )
     {
@@ -83,7 +83,7 @@ XPropertyTable::XPropertyTable( const String& rPath,
 *************************************************************************/
 
 XPropertyTable::XPropertyTable( SvStream& /*rIn*/) :
-            pBmpTable   ( NULL )
+            pBmpTable	( NULL )
 {
 }
 
@@ -291,14 +291,14 @@ void XPropertyTable::SetName( const String& rString )
 XPropertyList::XPropertyList( const String& rPath,
                                 XOutdevItemPool* pInPool,
                                 USHORT nInitSize, USHORT nReSize ) :
-            aName           ( pszStandard, 8 ),
-            aPath           ( rPath ),
-            pXPool          ( pInPool ),
-            aList           ( nInitSize, nReSize ),
-            pBmpList        ( NULL ),
-            bListDirty      ( TRUE ),
-            bBitmapsDirty   ( TRUE ),
-            bOwnPool        ( FALSE )
+            aName			( pszStandard, 8 ),
+            aPath			( rPath ),
+            pXPool			( pInPool ),
+            aList			( nInitSize, nReSize ),
+            pBmpList		( NULL ),
+            bListDirty		( TRUE ),
+            bBitmapsDirty	( TRUE ),
+            bOwnPool		( FALSE )
 {
     if( !pXPool )
     {
@@ -315,7 +315,7 @@ XPropertyList::XPropertyList( const String& rPath,
 *************************************************************************/
 
 XPropertyList::XPropertyList( SvStream& /*rIn*/) :
-            pBmpList    ( NULL )
+            pBmpList	( NULL )
 {
 }
 

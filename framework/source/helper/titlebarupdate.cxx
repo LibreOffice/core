@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <helper/titlebarupdate.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <pattern/window.hxx>
@@ -48,7 +48,7 @@
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -70,7 +70,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -90,18 +90,18 @@
 #include <vcl/wrkwin.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 
 static const ::sal_Int32 INVALID_ICON_ID = -1;
 static const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
 //_________________________________________________________________________________________________________________
-//  definitions
+//	definitions
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
@@ -146,21 +146,21 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
                 DECLARE_ASCII("Empty argument list!"),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-
+                
     lArguments[0] >>= xFrame;
     if (!xFrame.is())
         throw css::lang::IllegalArgumentException(
                 DECLARE_ASCII("No valid frame specified!"),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-
+                
     // SYNCHRONIZED ->
     WriteGuard aWriteLock(m_aLock);
     // hold the frame as weak reference(!) so it can die everytimes :-)
     m_xFrame = xFrame;
     aWriteLock.unlock();
     // <- SYNCHRONIZED
-
+    
     // start listening
     xFrame->addFrameActionListener(this);
 
@@ -294,23 +294,23 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SYNCHRONIZED
-
+    
     try
     {
         css::uno::Reference< css::frame::XModuleManager > xModuleManager(
             xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
             css::uno::UNO_QUERY_THROW);
-
+    
         css::uno::Reference< css::container::XNameAccess > xConfig(
             xModuleManager,
             css::uno::UNO_QUERY_THROW);
-
+    
                                         rInfo.sID = xModuleManager->identify(xFrame);
         ::comphelper::SequenceAsHashMap lProps    = xConfig->getByName (rInfo.sID);
-
+        
         rInfo.sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, ::rtl::OUString());
         rInfo.nIcon   = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_ICON  , INVALID_ICON_ID  );
-
+    
         // Note: If we could retrieve a module id ... everything is OK.
         // UIName and Icon ID are optional values !
         ::sal_Bool bSuccess = (rInfo.sID.getLength () > 0);
@@ -318,7 +318,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     }
     catch(const css::uno::Exception&)
         {}
-
+    
     return sal_False;
 }
 
@@ -335,7 +335,7 @@ void TitleBarUpdate::impl_forceUpdate()
     // frame already gone ? We hold it weak only ...
     if ( ! xFrame.is())
         return;
-
+    
     // no window -> no chance to set/update title and icon
     css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
     if ( ! xWindow.is())
@@ -359,7 +359,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
         ( ! xWindow.is()     )
        )
         return;
-
+    
     // a) set default value to an invalid one. So we can start further searches for right icon id, if
     //    first steps failed!
     sal_Int32 nIcon = INVALID_ICON_ID;
