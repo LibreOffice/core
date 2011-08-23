@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 /*
   XXX: This method doesn't throw exceptions at all.
   Should it declare that it throws ?? What if throw() is removed?
-  Does it change the API, the open-close principle?
+  Does it change the API, the open-close principle?  
 */
 /* {{{ OResultSetMetaData::getColumnCount() -I- */
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount()

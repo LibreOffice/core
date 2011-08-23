@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@
 namespace css = ::com::sun::star;
 
 namespace {
-    typedef cppu::WeakComponentImplHelper5<
+    typedef cppu::WeakComponentImplHelper5< 
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::awt::XMouseListener,
@@ -68,7 +68,7 @@ namespace {
         css::drawing::XDrawView
         > PresenterToolBarInterfaceBase;
 
-    typedef cppu::WeakComponentImplHelper3<
+    typedef cppu::WeakComponentImplHelper3< 
         css::awt::XPaintListener,
         css::drawing::framework::XView,
         css::drawing::XDrawView
@@ -92,7 +92,7 @@ public:
     typedef ::boost::function<void(void)> Action;
 
     enum Anchor { Left, Center, Right };
-
+    
     PresenterToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
@@ -117,16 +117,16 @@ public:
     ::rtl::Reference<PresenterController> GetPresenterController (void) const;
     css::uno::Reference<css::awt::XWindow> GetWindow (void) const;
     css::uno::Reference<css::uno::XComponentContext> GetComponentContext (void) const;
-
+    
     // lang::XEventListener
 
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
 
 
     // XWindowListener
-
+    
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -153,14 +153,14 @@ public:
 
     virtual void SAL_CALL mouseReleased (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
+    
     // XMouseMotionListener
 
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
@@ -262,16 +262,16 @@ public:
 
     ::rtl::Reference<PresenterToolBar> GetPresenterToolBar (void) const;
 
-
+    
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
+    
     // lang::XEventListener
 
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
 
@@ -284,7 +284,7 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
-
+    
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -62,9 +62,9 @@ namespace connectivity
         typedef my_XNameAccessRef my_XNameAccessRef;
 
         /*
-        **  OResultSet
+        **	OResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper12<  ::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper12<	::com::sun::star::sdbc::XResultSet,
                                                     ::com::sun::star::sdbc::XRow,
                                                     ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                     ::com::sun::star::util::XCancellable,
@@ -77,16 +77,16 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XColumnLocate,
                                                     ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
-        class OResultSet :  public  OBase_Mutex,
-                            public  OResultSet_BASE,
-                            public  ::cppu::OPropertySetHelper,
-                            public  OPropertyArrayUsageHelper<OResultSet>
+        class OResultSet :	public	OBase_Mutex,
+                            public	OResultSet_BASE,
+                            public	::cppu::OPropertySetHelper,
+                            public	OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
+            ::com::sun::star::uno::WeakReferenceHelper	m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData> m_xMetaData;
-            sql::ResultSet      *m_result;
-            unsigned int        fieldCount;
+            sql::ResultSet		*m_result;
+            unsigned int		fieldCount;
             rtl_TextEncoding    m_encoding;
             // OPropertyArrayUsageHelper
             ::cppu::IPropertyArrayHelper* createArrayHelper() const;
@@ -106,7 +106,7 @@ namespace connectivity
 
         public:
             DECLARE_SERVICE_INFO();
-
+            
             OResultSet( OCommonStatement* pStmt, sql::ResultSet *result, rtl_TextEncoding _encoding );
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
@@ -121,9 +121,9 @@ namespace connectivity
             Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType)
                                                                         throw(RuntimeException);
 
-            void SAL_CALL acquire()                                     throw();
+            void SAL_CALL acquire()										throw();
 
-            void SAL_CALL release()                                     throw();
+            void SAL_CALL release()										throw();
 
             //XTypeProvider
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
@@ -134,60 +134,60 @@ namespace connectivity
                                                                         throw(RuntimeException);
 
             // XResultSet
-            sal_Bool SAL_CALL next()                                    throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL next()									throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isBeforeFirst()                           throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isBeforeFirst()							throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isAfterLast()                             throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isAfterLast()								throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isFirst()                                 throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isFirst()									throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL isLast()                                  throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL isLast()									throw(SQLException, RuntimeException);
 
-            void SAL_CALL beforeFirst()                                 throw(SQLException, RuntimeException);
+            void SAL_CALL beforeFirst()									throw(SQLException, RuntimeException);
 
-            void SAL_CALL afterLast()                                   throw(SQLException, RuntimeException);
+            void SAL_CALL afterLast()									throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL first()                                   throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL first()									throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL last()                                    throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL last()									throw(SQLException, RuntimeException);
 
-            sal_Int32 SAL_CALL getRow()                                 throw(SQLException, RuntimeException);
+            sal_Int32 SAL_CALL getRow()									throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL absolute(sal_Int32 row)                   throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL absolute(sal_Int32 row)					throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL relative(sal_Int32 rows)                  throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL relative(sal_Int32 rows)					throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL previous()                                throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL previous()								throw(SQLException, RuntimeException);
 
-            void SAL_CALL refreshRow()                                  throw(SQLException, RuntimeException);
+            void SAL_CALL refreshRow()									throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL rowUpdated()                              throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL rowUpdated()								throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL rowInserted()                             throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL rowInserted()								throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL rowDeleted()                              throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL rowDeleted()								throw(SQLException, RuntimeException);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getStatement()
                                                                         throw(SQLException, RuntimeException);
             // XRow
             sal_Bool SAL_CALL wasNull() throw(SQLException, RuntimeException);
 
-            OUString SAL_CALL getString(sal_Int32 column)       throw(SQLException, RuntimeException);
+            OUString SAL_CALL getString(sal_Int32 column)		throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL getBoolean(sal_Int32 column)              throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL getBoolean(sal_Int32 column)				throw(SQLException, RuntimeException);
 
-            sal_Int8 SAL_CALL getByte(sal_Int32 column)                 throw(SQLException, RuntimeException);
+            sal_Int8 SAL_CALL getByte(sal_Int32 column)					throw(SQLException, RuntimeException);
 
-            sal_Int16 SAL_CALL getShort(sal_Int32 column)               throw(SQLException, RuntimeException);
+            sal_Int16 SAL_CALL getShort(sal_Int32 column)				throw(SQLException, RuntimeException);
 
-            sal_Int32 SAL_CALL getInt(sal_Int32 column)                 throw(SQLException, RuntimeException);
+            sal_Int32 SAL_CALL getInt(sal_Int32 column)					throw(SQLException, RuntimeException);
 
-            sal_Int64 SAL_CALL getLong(sal_Int32 column)                throw(SQLException, RuntimeException);
+            sal_Int64 SAL_CALL getLong(sal_Int32 column)				throw(SQLException, RuntimeException);
 
-            float SAL_CALL getFloat(sal_Int32 column)                   throw(SQLException, RuntimeException);
+            float SAL_CALL getFloat(sal_Int32 column)					throw(SQLException, RuntimeException);
 
-            double SAL_CALL getDouble(sal_Int32 column)                 throw(SQLException, RuntimeException);
+            double SAL_CALL getDouble(sal_Int32 column)					throw(SQLException, RuntimeException);
 
             ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getBytes(sal_Int32 column)
                                                                         throw(SQLException, RuntimeException);
@@ -227,45 +227,45 @@ namespace connectivity
                                                                         throw(SQLException, RuntimeException);
 
             // XCancellable
-            void SAL_CALL cancel()                                      throw(RuntimeException);
+            void SAL_CALL cancel()										throw(RuntimeException);
 
             // XCloseable
-            void SAL_CALL close()                                       throw(SQLException, RuntimeException);
+            void SAL_CALL close()										throw(SQLException, RuntimeException);
 
             // XWarningsSupplier
-            Any SAL_CALL getWarnings()                                  throw(SQLException, RuntimeException);
+            Any SAL_CALL getWarnings()									throw(SQLException, RuntimeException);
 
-            void SAL_CALL clearWarnings()                               throw(SQLException, RuntimeException);
+            void SAL_CALL clearWarnings()								throw(SQLException, RuntimeException);
 
             // XResultSetUpdate
-            void SAL_CALL insertRow()                                   throw(SQLException, RuntimeException);
+            void SAL_CALL insertRow()									throw(SQLException, RuntimeException);
 
-            void SAL_CALL updateRow()                                   throw(SQLException, RuntimeException);
+            void SAL_CALL updateRow()									throw(SQLException, RuntimeException);
 
-            void SAL_CALL deleteRow()                                   throw(SQLException, RuntimeException);
+            void SAL_CALL deleteRow()									throw(SQLException, RuntimeException);
 
-            void SAL_CALL cancelRowUpdates()                            throw(SQLException, RuntimeException);
+            void SAL_CALL cancelRowUpdates()							throw(SQLException, RuntimeException);
 
-            void SAL_CALL moveToInsertRow()                             throw(SQLException, RuntimeException);
+            void SAL_CALL moveToInsertRow()								throw(SQLException, RuntimeException);
 
-            void SAL_CALL moveToCurrentRow()                            throw(SQLException, RuntimeException);
+            void SAL_CALL moveToCurrentRow()							throw(SQLException, RuntimeException);
 
             // XRowUpdate
-            void SAL_CALL updateNull(sal_Int32 column)                  throw(SQLException, RuntimeException);
+            void SAL_CALL updateNull(sal_Int32 column)					throw(SQLException, RuntimeException);
 
-            void SAL_CALL updateBoolean(sal_Int32 column, sal_Bool x)   throw(SQLException, RuntimeException);
+            void SAL_CALL updateBoolean(sal_Int32 column, sal_Bool x)	throw(SQLException, RuntimeException);
 
-            void SAL_CALL updateByte(sal_Int32 column, sal_Int8 x)      throw(SQLException, RuntimeException);
+            void SAL_CALL updateByte(sal_Int32 column, sal_Int8 x)		throw(SQLException, RuntimeException);
 
-            void SAL_CALL updateShort(sal_Int32 column, sal_Int16 x)    throw(SQLException, RuntimeException);
+            void SAL_CALL updateShort(sal_Int32 column, sal_Int16 x)	throw(SQLException, RuntimeException);
 
-            void SAL_CALL updateInt(sal_Int32 column, sal_Int32 x)      throw(SQLException, RuntimeException);
+            void SAL_CALL updateInt(sal_Int32 column, sal_Int32 x)		throw(SQLException, RuntimeException);
 
-            void SAL_CALL updateLong(sal_Int32 column, sal_Int64 x)     throw(SQLException, RuntimeException);
+            void SAL_CALL updateLong(sal_Int32 column, sal_Int64 x)		throw(SQLException, RuntimeException);
 
-            void SAL_CALL updateFloat(sal_Int32 column, float x)        throw(SQLException, RuntimeException);
+            void SAL_CALL updateFloat(sal_Int32 column, float x)		throw(SQLException, RuntimeException);
 
-            void SAL_CALL updateDouble(sal_Int32 column, double x)      throw(SQLException, RuntimeException);
+            void SAL_CALL updateDouble(sal_Int32 column, double x)		throw(SQLException, RuntimeException);
 
             void SAL_CALL updateString(sal_Int32 column, const OUString& x)
                                                                         throw(SQLException, RuntimeException);
@@ -299,7 +299,7 @@ namespace connectivity
                                                                         throw(SQLException, RuntimeException);
 
             // XRowLocate
-            Any SAL_CALL getBookmark()                                  throw(SQLException, RuntimeException);
+            Any SAL_CALL getBookmark()									throw(SQLException, RuntimeException);
 
             sal_Bool SAL_CALL moveToBookmark(const Any& bookmark)
                                                                         throw(SQLException, RuntimeException);
@@ -310,7 +310,7 @@ namespace connectivity
             sal_Int32 SAL_CALL compareBookmarks(const Any& first, const Any& second)
                                                                         throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL hasOrderedBookmarks()                     throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL hasOrderedBookmarks()						throw(SQLException, RuntimeException);
 
             sal_Int32 SAL_CALL hashBookmark(const Any& bookmark)
                                                                         throw(SQLException, RuntimeException);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class PresenterUIPainter
 public:
     PresenterUIPainter (void);
     ~PresenterUIPainter (void);
-
+    
     static void PaintHorizontalBitmapComposite (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::awt::Rectangle& rRepaintBox,

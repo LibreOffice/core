@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@ import javax.swing.text.MutableAttributeSet;
 
 public class EditPageParser extends HTMLEditorKit.ParserCallback
 {
-
+    
     protected String m_sEditTime = "";
     protected String m_sEditToken = "";
     protected String m_sLoginToken = "";
@@ -48,12 +48,12 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
     protected int m_nHTMLArticleEnd = -1;
     protected int m_nNoArticleInd = -1;
     protected int m_nErrorInd = -1;
-
+    
     /** Creates a new instance of WikiHTMLParser */
     public EditPageParser()
     {
     }
-
+    
     public void handleComment( char[] data,int pos )
     {
         // insert code to handle comments
@@ -71,8 +71,8 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
             {
                 m_nHTMLArticleStart = pos+6;
                 m_bHTMLStartFound = false;
-            }
-        }
+            }                
+        }    
         else if ( t == HTML.Tag.HEAD )
         {
             m_bInHead = false;
@@ -149,7 +149,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
                 {
                     m_nWikiArticleHash = t.hashCode();
                     m_nWikiArticleStart = pos;
-                }
+                }                
             }
         }
         else if ( t == HTML.Tag.DIV )
@@ -161,7 +161,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
                 if ( sId.equalsIgnoreCase( "contentSub" ) )
                 {
                     m_bHTMLStartFound = true;
-                }
+                }                
             }
             if ( sClass != null )
             {
@@ -171,7 +171,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
                 }
                 else if ( sClass.equalsIgnoreCase( "noarticletext" ) )
                 {
-                    m_nNoArticleInd = pos;
+                    m_nNoArticleInd = pos;                    
                 }
                 else if ( sClass.equalsIgnoreCase( "errorbox" ) )
                 {
@@ -186,8 +186,8 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
             {
                 m_nErrorInd = pos;
             }
-        }
+        }   
     }
 
-
+    
 }

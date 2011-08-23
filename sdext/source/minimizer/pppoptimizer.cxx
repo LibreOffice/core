@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispat
     Reference < XDispatch > xRet;
     if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) == 0 )
     {
-//      if ( aURL.Path.compareToAscii( "Function1" ) == 0 )
+//		if ( aURL.Path.compareToAscii( "Function1" ) == 0 )
         xRet = this;
     }
     return xRet;

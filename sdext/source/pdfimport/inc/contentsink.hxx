@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <boost/shared_ptr.hpp>
 
 namespace rtl { class OUString; }
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
 namespace rendering
 {
     class  XPolyPolygon2D;
@@ -47,7 +47,7 @@ namespace geometry
     struct RealRectangle2D;
     struct RealPoint2D;
     struct RealSize2D;
-}
+} 
 namespace beans
 {
     struct PropertyValue;
@@ -86,7 +86,7 @@ namespace pdfi
         bool                isUnderline;
         bool                isOutline;
         double              size; // device pixel
-
+            
         bool operator==(const FontAttributes& rFont) const
         {
             return familyName == rFont.familyName &&
@@ -106,18 +106,18 @@ namespace pdfi
     struct ContentSink
     {
         virtual ~ContentSink() {}
-
+        
         /// Total number of pages for upcoming document
         virtual void setPageNum( sal_Int32 nNumPages ) = 0;
         virtual void startPage( const ::com::sun::star::geometry::RealSize2D& rSize ) = 0;
         virtual void endPage() = 0;
-
+        
         virtual void hyperLink( const ::com::sun::star::geometry::RealRectangle2D& rBounds,
                                 const ::rtl::OUString&                             rURI ) = 0;
-
+        
         virtual void pushState() = 0;
         virtual void popState() = 0;
-
+        
         virtual void setFlatness( double ) = 0;
         virtual void setTransformation( const ::com::sun::star::geometry::AffineMatrix2D& rMatrix ) = 0;
         virtual void setLineDash( const ::com::sun::star::uno::Sequence<double>& dashes,
@@ -131,27 +131,27 @@ namespace pdfi
         virtual void setBlendMode( sal_Int8 blendMode ) = 0;
         virtual void setFont( const FontAttributes& rFont ) = 0;
         virtual void setTextRenderMode( sal_Int32 ) = 0;
+        
 
-
-        virtual void strokePath( const ::com::sun::star::uno::Reference<
+        virtual void strokePath( const ::com::sun::star::uno::Reference< 
                                        ::com::sun::star::rendering::XPolyPolygon2D >& rPath ) = 0;
-        virtual void fillPath( const ::com::sun::star::uno::Reference<
+        virtual void fillPath( const ::com::sun::star::uno::Reference< 
                                      ::com::sun::star::rendering::XPolyPolygon2D >& rPath ) = 0;
-        virtual void eoFillPath( const ::com::sun::star::uno::Reference<
+        virtual void eoFillPath( const ::com::sun::star::uno::Reference< 
                                        ::com::sun::star::rendering::XPolyPolygon2D >& rPath ) = 0;
-
-        virtual void intersectClip(const ::com::sun::star::uno::Reference<
+        
+        virtual void intersectClip(const ::com::sun::star::uno::Reference< 
                                          ::com::sun::star::rendering::XPolyPolygon2D >& rPath) = 0;
-        virtual void intersectEoClip(const ::com::sun::star::uno::Reference<
+        virtual void intersectEoClip(const ::com::sun::star::uno::Reference< 
                                            ::com::sun::star::rendering::XPolyPolygon2D >& rPath) = 0;
-
+        
         virtual void drawGlyphs( const rtl::OUString&                               rGlyphs,
                                  const ::com::sun::star::geometry::RealRectangle2D& rRect,
                                  const ::com::sun::star::geometry::Matrix2D&        rFontMatrix ) = 0;
 
         /// issued when a sequence of associated glyphs is drawn
         virtual void endText() = 0;
-
+        
         /// draws given bitmap as a mask (using current fill color)
         virtual void drawMask(const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue>& xBitmap,
@@ -159,13 +159,13 @@ namespace pdfi
         /// Given image must already be color-mapped and normalized to sRGB.
         virtual void drawImage(const ::com::sun::star::uno::Sequence<
                                      ::com::sun::star::beans::PropertyValue>& xBitmap ) = 0;
-        /** Given image must already be color-mapped and normalized to sRGB.
+        /** Given image must already be color-mapped and normalized to sRGB. 
 
             maskColors must contain two sequences of color components
          */
         virtual void drawColorMaskedImage(const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue>& xBitmap,
-                                          const ::com::sun::star::uno::Sequence<
+                                          const ::com::sun::star::uno::Sequence< 
                                                 ::com::sun::star::uno::Any>&             xMaskColors ) = 0;
         virtual void drawMaskedImage(const ::com::sun::star::uno::Sequence<
                                            ::com::sun::star::beans::PropertyValue>& xBitmap,

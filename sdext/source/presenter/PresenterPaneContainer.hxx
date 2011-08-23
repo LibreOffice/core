@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ public:
     virtual ~PresenterPaneContainer (void);
 
     virtual void SAL_CALL disposing (void);
-
+    
     typedef ::boost::function1<void, const css::uno::Reference<css::drawing::framework::XView>&>
         ViewInitializationFunction;
 
@@ -140,7 +140,7 @@ public:
     SharedPaneDescriptor StoreBorderWindow(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
-
+    
     SharedPaneDescriptor StoreView (
         const css::uno::Reference<css::drawing::framework::XView>& rxView,
         const SharedBitmapDescriptor& rpViewBackground);
@@ -150,7 +150,7 @@ public:
 
     SharedPaneDescriptor RemoveView (
         const css::uno::Reference<css::drawing::framework::XView>& rxView);
-
+    
     void CreateBorderWindow (PaneDescriptor& rDescriptor);
 
     /** Find the pane whose border window is identical to the given border
@@ -179,7 +179,7 @@ public:
     ::rtl::OUString GetPaneURLForViewURL (const ::rtl::OUString& rsViewURL);
 
     void ToTop (const SharedPaneDescriptor& rpDescriptor);
-
+    
 
     // XEventListener
 
