@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,89 +34,89 @@
 
 //=========================================================================
 
-#define PRV_SV_DECL_REF_SIGNATURE( ClassName, Ref )                     \
-    inline               ClassName##Ref() { pObj = 0; }                 \
-    inline               ClassName##Ref( const ClassName##Ref & rObj ); \
-    inline               ClassName##Ref( ClassName * pObjP );           \
-    inline void          Clear();                                       \
-    inline               ~ClassName##Ref();                             \
-    inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
-    inline ClassName##Ref & operator = ( ClassName * pObj );            \
-    inline BOOL            Is() const { return pObj != NULL; }          \
-    inline ClassName *     operator &  () const { return pObj; }        \
-    inline ClassName *     operator -> () const { return pObj; }        \
-    inline ClassName &     operator *  () const { return *pObj; }       \
+#define PRV_SV_DECL_REF_SIGNATURE( ClassName, Ref )						\
+    inline               ClassName##Ref() { pObj = 0; }					\
+    inline               ClassName##Ref( const ClassName##Ref & rObj );	\
+    inline               ClassName##Ref( ClassName * pObjP );			\
+    inline void          Clear();										\
+    inline               ~ClassName##Ref();								\
+    inline ClassName##Ref & operator = ( const ClassName##Ref & rObj );	\
+    inline ClassName##Ref & operator = ( ClassName * pObj );			\
+    inline BOOL            Is() const { return pObj != NULL; }			\
+    inline ClassName *     operator &  () const { return pObj; }		\
+    inline ClassName *     operator -> () const { return pObj; }		\
+    inline ClassName &     operator *  () const { return *pObj; }		\
     inline operator ClassName * () const { return pObj; }
 
 #define PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef, AddNextRef, ReleaseRef, Init, pRefbase ) \
-inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )        \
-    { pObj = rObj.pObj; if( pObj ) { Init pRefbase->AddNextRef; } }         \
-inline ClassName##Ref::ClassName##Ref( ClassName * pObjP )                  \
-{ pObj = pObjP; if( pObj ) { Init pRefbase->AddRef; } }                     \
-inline void ClassName##Ref::Clear()                                         \
-{                                                                           \
-    if( pObj )                                                              \
-    {                                                                       \
-        ClassName* const pRefObj = pRefbase;                                \
-        pObj = 0;                                                           \
-        pRefObj->ReleaseRef;                                                \
-    }                                                                       \
-}                                                                           \
-inline ClassName##Ref::~ClassName##Ref()                                    \
-{ if( pObj ) { pRefbase->ReleaseRef; } }                                    \
-inline ClassName##Ref & ClassName##Ref::                                    \
-            operator = ( const ClassName##Ref & rObj )                      \
-{                                                                           \
-    if( rObj.pObj ) rObj.pRefbase->AddNextRef;                              \
-    ClassName* const pRefObj = pRefbase;                                    \
-    pObj = rObj.pObj;                                                       \
-    Init if( pRefObj ) { pRefObj->ReleaseRef; }                             \
-    return *this;                                                           \
-}                                                                           \
-inline ClassName##Ref & ClassName##Ref::operator = ( ClassName * pObjP )    \
+inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )		\
+    { pObj = rObj.pObj; if( pObj ) { Init pRefbase->AddNextRef; } }			\
+inline ClassName##Ref::ClassName##Ref( ClassName * pObjP )					\
+{ pObj = pObjP; if( pObj ) { Init pRefbase->AddRef; } }						\
+inline void ClassName##Ref::Clear()											\
+{																			\
+    if( pObj )																\
+    {																		\
+        ClassName* const pRefObj = pRefbase;								\
+        pObj = 0;															\
+        pRefObj->ReleaseRef;												\
+    }																		\
+}																			\
+inline ClassName##Ref::~ClassName##Ref()									\
+{ if( pObj ) { pRefbase->ReleaseRef; } }									\
+inline ClassName##Ref & ClassName##Ref::									\
+            operator = ( const ClassName##Ref & rObj )						\
+{																			\
+    if( rObj.pObj ) rObj.pRefbase->AddNextRef;								\
+    ClassName* const pRefObj = pRefbase;									\
+    pObj = rObj.pObj;														\
+    Init if( pRefObj ) { pRefObj->ReleaseRef; }								\
+    return *this;															\
+}																			\
+inline ClassName##Ref & ClassName##Ref::operator = ( ClassName * pObjP )	\
 { return *this = ClassName##Ref( pObjP ); }
 
-#define PRV_SV_DECL_REF_LOCK(ClassName, Ref)    \
-protected:                                      \
-    ClassName * pObj;                           \
-public:                                         \
+#define PRV_SV_DECL_REF_LOCK(ClassName, Ref)	\
+protected:										\
+    ClassName * pObj;							\
+public:											\
 PRV_SV_DECL_REF_SIGNATURE(ClassName, Ref)
 
-#define PRV_SV_DECL_REF( ClassName )            \
+#define PRV_SV_DECL_REF( ClassName )			\
 PRV_SV_DECL_REF_LOCK( ClassName, Ref )
 
-#define PRV_SV_DECL_LOCK( ClassName )           \
+#define PRV_SV_DECL_LOCK( ClassName )			\
 PRV_SV_DECL_REF_LOCK( ClassName, Lock )
 
-#define SV_DECL_REF( ClassName )                \
-class ClassName;                                \
-class ClassName##Ref                            \
-{                                               \
-    PRV_SV_DECL_REF( ClassName )                \
+#define SV_DECL_REF( ClassName )				\
+class ClassName;								\
+class ClassName##Ref							\
+{												\
+    PRV_SV_DECL_REF( ClassName )				\
 };
 
-#define SV_DECL_LOCK( ClassName )               \
-class ClassName;                                \
-class ClassName##Lock                           \
-{                                               \
-    PRV_SV_DECL_LOCK( ClassName )               \
+#define SV_DECL_LOCK( ClassName )				\
+class ClassName;								\
+class ClassName##Lock							\
+{												\
+    PRV_SV_DECL_LOCK( ClassName )				\
 };
 
-#define SV_IMPL_REF( ClassName )                                \
+#define SV_IMPL_REF( ClassName )								\
 PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef(), AddNextRef(),\
                           ReleaseReference(), EMPTYARG, pObj )
 
-#define SV_IMPL_LOCK( ClassName )                                   \
-PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( TRUE ),       \
-                          OwnerLock( TRUE ), OwnerLock( FALSE ),    \
+#define SV_IMPL_LOCK( ClassName )									\
+PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( TRUE ), 		\
+                          OwnerLock( TRUE ), OwnerLock( FALSE ), 	\
                           EMPTYARG, pObj )
 
-#define SV_DECL_IMPL_REF(ClassName)             \
-    SV_DECL_REF(ClassName)                      \
+#define SV_DECL_IMPL_REF(ClassName)				\
+    SV_DECL_REF(ClassName)						\
     SV_IMPL_REF(ClassName)
 
-#define SV_DECL_IMPL_LOCK( ClassName )          \
-    SV_DECL_LOCK(ClassName)                     \
+#define SV_DECL_IMPL_LOCK( ClassName )			\
+    SV_DECL_LOCK(ClassName)						\
     SV_IMPL_LOCK(ClassName)
 
 
@@ -301,9 +301,9 @@ inline EntryName ClassName##MemberList::Prev()\
             {return (EntryName)BaseList::Prev();}\
 inline void      ClassName##MemberList::Append( const ClassName##MemberList & rList )\
             {BaseList::Append(rList);}\
-inline ULONG     ClassName##MemberList::GetPos( const EntryName p) const\
+inline ULONG	 ClassName##MemberList::GetPos( const EntryName p) const\
             {return BaseList::GetPos( p );}\
-inline ULONG     ClassName##MemberList::GetPos\
+inline ULONG	 ClassName##MemberList::GetPos\
                     ( const EntryName p, ULONG nStart, BOOL bForward ) const\
             {return BaseList::GetPos( p, nStart, bForward );}
 
@@ -328,9 +328,9 @@ class TOOLS_DLLPUBLIC SvRefBase
     UINT32 nRefCount;
 #if defined (GCC) && (defined (C281) || defined (C290) || defined (C291))
 public:
-#else
+#else	
 protected:
-#endif
+#endif		
     virtual         ~SvRefBase();
     virtual void    QueryDelete();
 public:
@@ -352,7 +352,7 @@ public:
                             nRefCount -= SV_NO_DELETE_REFCOUNT;
                         return ++nRefCount;
                     }
-    void            ReleaseReference()
+    void			ReleaseReference()
                     {
                         if( !--nRefCount )
                             QueryDelete();
@@ -424,27 +424,27 @@ public:
     ~SvCompatWeakBase() { _xHdl->ResetWeakBase(); }
 };
 
-#define SV_DECL_WEAK_IMPL( ClassName, HdlName )                     \
-class ClassName##Weak                                               \
-{                                                                   \
-    HdlName _xHdl;                                                  \
-public:                                                             \
-    inline               ClassName##Weak( ) {}                      \
-    inline               ClassName##Weak( ClassName* pObj ) {       \
-        if( pObj ) _xHdl = pObj->GetHdl(); }                        \
-    inline void          Clear() { _xHdl.Clear(); }                 \
-    inline ClassName##Weak& operator = ( ClassName * pObj ) {       \
-        _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }          \
-    inline BOOL            Is() const {                             \
-        return _xHdl.Is() && _xHdl->GetObj(); }                     \
-    inline ClassName *     operator &  () const {                   \
-        return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \
-    inline ClassName *     operator -> () const {                   \
-        return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \
-    inline ClassName &     operator *  () const {                   \
-        return *(ClassName*) _xHdl->GetObj(); }                     \
-    inline operator ClassName * () const {                          \
-        return (ClassName*) (_xHdl.Is() ? _xHdl->GetObj() : 0 ); }  \
+#define SV_DECL_WEAK_IMPL( ClassName, HdlName )						\
+class ClassName##Weak												\
+{																	\
+    HdlName _xHdl;												    \
+public:																\
+    inline               ClassName##Weak( ) {}           			\
+    inline               ClassName##Weak( ClassName* pObj ) {		\
+        if( pObj ) _xHdl = pObj->GetHdl(); }						\
+    inline void          Clear() { _xHdl.Clear(); }					\
+    inline ClassName##Weak& operator = ( ClassName * pObj ) {		\
+        _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }			\
+    inline BOOL            Is() const {								\
+        return _xHdl.Is() && _xHdl->GetObj(); }						\
+    inline ClassName *     operator &  () const {					\
+        return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); }	\
+    inline ClassName *     operator -> () const {					\
+        return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); }	\
+    inline ClassName &     operator *  () const {					\
+        return *(ClassName*) _xHdl->GetObj(); }						\
+    inline operator ClassName * () const {							\
+        return (ClassName*) (_xHdl.Is() ? _xHdl->GetObj() : 0 ); }	\
 };
 
 #define SV_DECL_WEAK( ClassName ) SV_DECL_WEAK_IMPL( ClassName, SvWeakHdlRef )

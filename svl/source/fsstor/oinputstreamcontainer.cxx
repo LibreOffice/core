@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rTyp
         throw( uno::RuntimeException )
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     uno::Any aReturn;
     if ( m_bSeekable )
@@ -130,7 +130,7 @@ void SAL_CALL OFSInputStreamContainer::release()
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -148,7 +148,7 @@ sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OFSInputStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OFSInputStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -166,7 +166,7 @@ sal_Int32 SAL_CALL OFSInputStreamContainer::readSomeBytes( uno::Sequence< sal_In
 }
 
 //-----------------------------------------------
-void SAL_CALL OFSInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
+void SAL_CALL OFSInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -184,7 +184,7 @@ void SAL_CALL OFSInputStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 //-----------------------------------------------
-sal_Int32 SAL_CALL OFSInputStreamContainer::available(  )
+sal_Int32 SAL_CALL OFSInputStreamContainer::available(  ) 
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -201,7 +201,7 @@ sal_Int32 SAL_CALL OFSInputStreamContainer::available(  )
 }
 
 //-----------------------------------------------
-void SAL_CALL OFSInputStreamContainer::closeInput(  )
+void SAL_CALL OFSInputStreamContainer::closeInput(  ) 
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -263,7 +263,7 @@ void SAL_CALL OFSInputStreamContainer::seek( sal_Int64 location )
 
 //-----------------------------------------------
 sal_Int64 SAL_CALL OFSInputStreamContainer::getPosition()
-        throw ( io::IOException,
+        throw ( io::IOException, 
                 uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );

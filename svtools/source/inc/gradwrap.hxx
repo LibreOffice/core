@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,30 +32,30 @@
 
 /******************************************************************************
 |*
-|*  class GradientWrapper
+|* 	class GradientWrapper
 |*
-|*  Ersterstellung:     KA 24.11.95
-|*  letzte Aenderung:   KA 24.11.95
+|*	Ersterstellung:		KA 24.11.95
+|*	letzte Aenderung:	KA 24.11.95
 |*
-|*  Zeck:   dient beim MetaFile-Export dazu, die eigentliche Berechungs-
-|*          funktionalitaet zu kapseln. Das Schreiben der Records fuer
-|*          die unterschiedlichen File-Formate geschieht ueber LinkHandler.
+|*	Zeck:	dient beim MetaFile-Export dazu, die eigentliche Berechungs-
+|* 			funktionalitaet zu kapseln. Das Schreiben der Records fuer
+|*			die unterschiedlichen File-Formate geschieht ueber LinkHandler.
 |*
-|*          Klassen, die diesen Wrapper benutzen, muessen drei Linkhandler
-|*          zur Verfuegung stellen, die im Ctor uebergeben werden:
+|*			Klassen, die diesen Wrapper benutzen, muessen drei Linkhandler
+|* 			zur Verfuegung stellen, die im Ctor uebergeben werden:
 |*
-|*              1. Linkhandler zum Schreiben eines Records fuer Polygonausgabe
-|*              2. Linkhandler zum Schreiben eines Records fuer PolyPolygonausgabe
-|*              3. Linkhandler zum Schreiben eines Records fuer Setzen der Brush
+|*				1. Linkhandler zum Schreiben eines Records fuer Polygonausgabe
+|*				2. Linkhandler zum Schreiben eines Records fuer PolyPolygonausgabe
+|*				3. Linkhandler zum Schreiben eines Records fuer Setzen der Brush
 |*
 \******************************************************************************/
 
 
 class GradientWrapper
 {
-    Link        aDrawPolyRecordHdl;
-    Link        aDrawPolyPolyRecordHdl;
-    Link        aSetFillInBrushRecordHdl;
+    Link		aDrawPolyRecordHdl;
+    Link		aDrawPolyPolyRecordHdl;
+    Link		aSetFillInBrushRecordHdl;
 
                 GradientWrapper() {};
 
@@ -67,11 +67,11 @@ public:
                 ~GradientWrapper();
 
 
-    void        WriteLinearGradient(const Rectangle& rRect,
+    void 		WriteLinearGradient(const Rectangle& rRect,
                                     const Gradient& rGradient);
-    void        WriteRadialGradient(const Rectangle& rRect,
+    void		WriteRadialGradient(const Rectangle& rRect,
                                     const Gradient& rGradient);
-    void        WriteRectGradient(const Rectangle& rRect,
+    void		WriteRectGradient(const Rectangle& rRect,
                                   const Gradient& rGradient);
 };
 

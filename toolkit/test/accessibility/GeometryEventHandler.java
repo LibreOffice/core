@@ -48,7 +48,7 @@ class GeometryEventHandler
                         aShapeQueue.addLast (aTreeNode);
                 }
             }
-            aCanvas.repaint ();
+            aCanvas.repaint ();    
         }
     }
 }

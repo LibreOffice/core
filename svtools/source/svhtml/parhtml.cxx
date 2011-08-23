@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,45 +69,45 @@ const sal_Int32 MAX_ENTITY_LEN( 8L );
 // <INPUT TYPE=xxx>
 static HTMLOptionEnum __READONLY_DATA aInputTypeOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_IT_text,      HTML_IT_TEXT        },
-    { OOO_STRING_SVTOOLS_HTML_IT_password,  HTML_IT_PASSWORD    },
-    { OOO_STRING_SVTOOLS_HTML_IT_checkbox,  HTML_IT_CHECKBOX    },
-    { OOO_STRING_SVTOOLS_HTML_IT_radio,     HTML_IT_RADIO       },
-    { OOO_STRING_SVTOOLS_HTML_IT_range,     HTML_IT_RANGE       },
-    { OOO_STRING_SVTOOLS_HTML_IT_scribble,  HTML_IT_SCRIBBLE    },
-    { OOO_STRING_SVTOOLS_HTML_IT_file,      HTML_IT_FILE        },
-    { OOO_STRING_SVTOOLS_HTML_IT_hidden,    HTML_IT_HIDDEN      },
-    { OOO_STRING_SVTOOLS_HTML_IT_submit,    HTML_IT_SUBMIT      },
-    { OOO_STRING_SVTOOLS_HTML_IT_image,     HTML_IT_IMAGE       },
-    { OOO_STRING_SVTOOLS_HTML_IT_reset,     HTML_IT_RESET       },
-    { OOO_STRING_SVTOOLS_HTML_IT_button,    HTML_IT_BUTTON      },
-    { 0,                    0                   }
+    { OOO_STRING_SVTOOLS_HTML_IT_text,		HTML_IT_TEXT		},
+    { OOO_STRING_SVTOOLS_HTML_IT_password,	HTML_IT_PASSWORD	},
+    { OOO_STRING_SVTOOLS_HTML_IT_checkbox,	HTML_IT_CHECKBOX	},
+    { OOO_STRING_SVTOOLS_HTML_IT_radio,   	HTML_IT_RADIO		},
+    { OOO_STRING_SVTOOLS_HTML_IT_range,   	HTML_IT_RANGE		},
+    { OOO_STRING_SVTOOLS_HTML_IT_scribble,	HTML_IT_SCRIBBLE	},
+    { OOO_STRING_SVTOOLS_HTML_IT_file,    	HTML_IT_FILE		},
+    { OOO_STRING_SVTOOLS_HTML_IT_hidden,  	HTML_IT_HIDDEN		},
+    { OOO_STRING_SVTOOLS_HTML_IT_submit,  	HTML_IT_SUBMIT		},
+    { OOO_STRING_SVTOOLS_HTML_IT_image,   	HTML_IT_IMAGE		},
+    { OOO_STRING_SVTOOLS_HTML_IT_reset,   	HTML_IT_RESET		},
+    { OOO_STRING_SVTOOLS_HTML_IT_button,   	HTML_IT_BUTTON		},
+    { 0,					0					}
 };
 
 // <TABLE FRAME=xxx>
 static HTMLOptionEnum __READONLY_DATA aTableFrameOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_TF_void,  HTML_TF_VOID    },
-    { OOO_STRING_SVTOOLS_HTML_TF_above, HTML_TF_ABOVE   },
-    { OOO_STRING_SVTOOLS_HTML_TF_below, HTML_TF_BELOW   },
-    { OOO_STRING_SVTOOLS_HTML_TF_hsides,    HTML_TF_HSIDES  },
-    { OOO_STRING_SVTOOLS_HTML_TF_lhs,       HTML_TF_LHS     },
-    { OOO_STRING_SVTOOLS_HTML_TF_rhs,       HTML_TF_RHS     },
-    { OOO_STRING_SVTOOLS_HTML_TF_vsides,    HTML_TF_VSIDES  },
-    { OOO_STRING_SVTOOLS_HTML_TF_box,       HTML_TF_BOX     },
-    { OOO_STRING_SVTOOLS_HTML_TF_border,    HTML_TF_BOX     },
-    { 0,                0               }
+    { OOO_STRING_SVTOOLS_HTML_TF_void,	HTML_TF_VOID	},
+    { OOO_STRING_SVTOOLS_HTML_TF_above,	HTML_TF_ABOVE	},
+    { OOO_STRING_SVTOOLS_HTML_TF_below,	HTML_TF_BELOW	},
+    { OOO_STRING_SVTOOLS_HTML_TF_hsides,	HTML_TF_HSIDES	},
+    { OOO_STRING_SVTOOLS_HTML_TF_lhs,		HTML_TF_LHS		},
+    { OOO_STRING_SVTOOLS_HTML_TF_rhs,		HTML_TF_RHS		},
+    { OOO_STRING_SVTOOLS_HTML_TF_vsides,	HTML_TF_VSIDES	},
+    { OOO_STRING_SVTOOLS_HTML_TF_box,		HTML_TF_BOX		},
+    { OOO_STRING_SVTOOLS_HTML_TF_border,	HTML_TF_BOX		},
+    { 0,				0				}
 };
 
 // <TABLE RULES=xxx>
 static HTMLOptionEnum __READONLY_DATA aTableRulesOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_TR_none,  HTML_TR_NONE    },
-    { OOO_STRING_SVTOOLS_HTML_TR_groups,    HTML_TR_GROUPS  },
-    { OOO_STRING_SVTOOLS_HTML_TR_rows,  HTML_TR_ROWS    },
-    { OOO_STRING_SVTOOLS_HTML_TR_cols,  HTML_TR_COLS    },
-    { OOO_STRING_SVTOOLS_HTML_TR_all,       HTML_TR_ALL     },
-    { 0,                0               }
+    { OOO_STRING_SVTOOLS_HTML_TR_none,	HTML_TR_NONE	},
+    { OOO_STRING_SVTOOLS_HTML_TR_groups,	HTML_TR_GROUPS	},
+    { OOO_STRING_SVTOOLS_HTML_TR_rows,	HTML_TR_ROWS	},
+    { OOO_STRING_SVTOOLS_HTML_TR_cols,	HTML_TR_COLS	},
+    { OOO_STRING_SVTOOLS_HTML_TR_all,		HTML_TR_ALL		},
+    { 0,				0				}
 };
 
 
@@ -348,7 +348,7 @@ SvParserState __EXPORT HTMLParser::CallParser()
     AddRef();
     Continue( 0 );
     if( SVPAR_PENDING != eState )
-        ReleaseRef();       // dann brauchen wir den Parser nicht mehr!
+        ReleaseRef();		// dann brauchen wir den Parser nicht mehr!
 
     return eState;
 }
@@ -367,7 +367,7 @@ void HTMLParser::Continue( int nToken )
             NextToken( nToken );
 
         if( IsParserWorking() )
-            SaveState( 0 );         // bis hierhin abgearbeitet,
+            SaveState( 0 );			// bis hierhin abgearbeitet,
                                     // weiter mit neuem Token!
         nToken = GetNextToken();
     }
@@ -379,7 +379,7 @@ int HTMLParser::FilterToken( int nToken )
     {
     case sal_Unicode(EOF):
         nToken = 0;
-        break;          // nicht verschicken
+        break;			// nicht verschicken
 
     case HTML_HEAD_OFF:
         bIsInBody = TRUE;
@@ -400,7 +400,7 @@ int HTMLParser::FilterToken( int nToken )
     case HTML_HTML_OFF:
         nToken = 0;
         bReadPRE = bReadListing = bReadXMP = FALSE;
-        break;      // HTML_ON wurde auch nicht verschickt !
+        break;		// HTML_ON wurde auch nicht verschickt !
 
     case HTML_PREFORMTXT_ON:
         StartPRE();
@@ -564,15 +564,15 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             }
                         }
 
-                        if( !cChar )        // unbekanntes Zeichen?
+                        if( !cChar )		// unbekanntes Zeichen?
                         {
                             // dann im Stream zurueck, das '&' als Zeichen
                             // einfuegen und mit dem nachfolgenden Zeichen
                             // wieder aufsetzen
                             sTmpBuffer.append( (sal_Unicode)'&' );
 
-//                          rInput.SeekRel( -(long)(++nPos*GetCharSize()) );
-//                          nlLinePos -= nPos;
+//							rInput.SeekRel( -(long)(++nPos*GetCharSize()) );
+//							nlLinePos -= nPos;
                             DBG_ASSERT( rInput.Tell()-nStreamPos ==
                                         (ULONG)(nPos+1)*GetCharSize(),
                                         "Falsche Stream-Position" );
@@ -616,8 +616,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                     {
                                         // mit dem Zeichen wieder aufsetzen
                                         nNextCh = '&';
-//                                      rInput.SeekRel( -(long)(++nPos*GetCharSize()) );
-//                                      nlLinePos -= nPos;
+//										rInput.SeekRel( -(long)(++nPos*GetCharSize()) );
+//										nlLinePos -= nPos;
                                         DBG_ASSERT( rInput.Tell()-nStreamPos ==
                                                     (ULONG)(nPos+1)*GetCharSize(),
                                                     "Falsche Stream-Position" );
@@ -732,8 +732,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             {
 // MIB 20.11.98: Das macht hier keinen Sinn, oder doch: Zumindest wird
 // abc&auml;<EOF> nicht angezeigt, also lassen wir das in Zukunft.
-//              if( '>' != cBreak )
-//                  eState = SVPAR_ACCEPTED;
+//				if( '>' != cBreak )
+//					eState = SVPAR_ACCEPTED;
                 bWeiter = FALSE;
             }
             else
@@ -747,7 +747,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '>'==cBreak )
                 sTmpBuffer.append( nNextCh );
             else
-                bWeiter = FALSE;        // Abbrechen, String zusammen
+                bWeiter = FALSE;		// Abbrechen, String zusammen
             break;
 
         case '\f':
@@ -777,7 +777,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 break;
             }
             // Bug 18984: CR-LF -> Blank
-            //      Folge von CR/LF/BLANK/TAB nur in ein Blank wandeln
+            // 		Folge von CR/LF/BLANK/TAB nur in ein Blank wandeln
             // kein break!!
         case '\t':
             if( '\t'==nNextCh && bReadPRE && '>'!=cBreak )
@@ -1108,7 +1108,7 @@ int __EXPORT HTMLParser::_GetNextToken()
     if( pOptions->Count() )
         pOptions->DeleteAndDestroy( 0, pOptions->Count() );
 
-    if( !IsParserWorking() )        // wenn schon Fehler, dann nicht weiter!
+    if( !IsParserWorking() )		// wenn schon Fehler, dann nicht weiter!
         return 0;
 
     BOOL bReadNextCharSave = bReadNextChar;
@@ -1117,7 +1117,7 @@ int __EXPORT HTMLParser::_GetNextToken()
         DBG_ASSERT( !bEndTokenFound,
                     "</SCRIPT> gelesen und trotzdem noch ein Zeichen lesen?" );
         nNextCh = GetNextChar();
-        if( !IsParserWorking() )        // wenn schon Fehler, dann nicht weiter!
+        if( !IsParserWorking() )		// wenn schon Fehler, dann nicht weiter!
             return 0;
         bReadNextChar = FALSE;
     }
@@ -1452,7 +1452,7 @@ scan_text:
     } while( !nRet && SVPAR_WORKING == eState );
 
     if( SVPAR_PENDING == eState )
-        nRet = -1;      // irgendwas ungueltiges
+        nRet = -1;		// irgendwas ungueltiges
 
     return nRet;
 }
@@ -1501,8 +1501,8 @@ const HTMLOptions *HTMLParser::GetOptions( USHORT *pNoConvertToken ) const
             // Netscape achtet aber nur auf "=" und Leerzeichen (siehe
             // Mozilla: PA_FetchRequestedNameValues in
             // lipparse/pa_mdl.c
-//          while( nPos < aToken.Len() &&
-//                  ( '-'==(c=aToken[nPos]) || isalnum(c) || '.'==c || '_'==c) )
+//			while( nPos < aToken.Len() &&
+//					( '-'==(c=aToken[nPos]) || isalnum(c) || '.'==c || '_'==c) )
             while( nPos < aToken.Len() && '=' != (cChar=aToken.GetChar(nPos)) &&
                    HTML_ISPRINTABLE(cChar) && !HTML_ISSPACE(cChar) )
                 nPos++;
@@ -1510,7 +1510,7 @@ const HTMLOptions *HTMLParser::GetOptions( USHORT *pNoConvertToken ) const
             String sName( aToken.Copy( nStt, nPos-nStt ) );
 
 //JP 23.03.97: die PlugIns wollen die TokenName im "Original" haben
-//              also nur fuers Suchen in UpperCase wandeln
+//				also nur fuers Suchen in UpperCase wandeln
             String sNameUpperCase( sName );
             sNameUpperCase.ToUpperAscii();
 
@@ -1846,7 +1846,7 @@ int HTMLParser::FilterXMP( int nToken )
     case HTML_TEXTTOKEN:
     case HTML_NONBREAKSPACE:
     case HTML_SOFTHYPH:
-        break;              // bleiben erhalten
+        break;				// bleiben erhalten
 
     default:
         if( nToken )
@@ -1887,7 +1887,7 @@ int HTMLParser::FilterListing( int nToken )
     case HTML_TEXTTOKEN:
     case HTML_NONBREAKSPACE:
     case HTML_SOFTHYPH:
-        break;      // bleiben erhalten
+        break;		// bleiben erhalten
 
     default:
         if( nToken )

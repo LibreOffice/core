@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ class UCBHELPER_DLLPUBLIC PropertyValueSet :
                                      m_xSMgr;
     com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter >
                                      m_xTypeConverter;
-    osl::Mutex      m_aMutex;
+    osl::Mutex		m_aMutex;
     PropertyValues* m_pValues;
-    sal_Bool        m_bWasNull;
-    sal_Bool        m_bTriedToGetTypeConverter;
+    sal_Bool 		m_bWasNull;
+    sal_Bool    	m_bTriedToGetTypeConverter;
 
 private:
     UCBHELPER_DLLPRIVATE const com::sun::star::uno::Reference<
@@ -407,10 +407,10 @@ public:
     }
 
     /**
-      * This method tries to append all property values contained in a
+      *	This method tries to append all property values contained in a
       * property set to the value set.
       *
-       *    @param  rSet is a property set containing the property values.
+       *	@param  rSet is a property set containing the property values.
       */
     void appendPropertySet( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::beans::XPropertySet >& rSet );
@@ -418,10 +418,10 @@ public:
     /** This method tries to append a single property value contained in a
       * property set to the value set.
       *
-       *    @param  rSet is a property set containing the property values.
-       *    @param  rProperty is the property for that the value shall be obtained
-      *         from the given property set.
-       *    @return False, if the property value cannot be obtained from the
+       *	@param  rSet is a property set containing the property values.
+       *	@param  rProperty is the property for that the value shall be obtained
+      *	        from the given property set.
+       *	@return False, if the property value cannot be obtained	from the
       *         given property pet. True, otherwise.
        */
     sal_Bool appendPropertySetValue(

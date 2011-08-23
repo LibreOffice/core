@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -578,7 +578,7 @@ namespace comphelper
             @param _rLoggerName
                 the name of the logger to work with. If empty, the office-wide
                 default logger will be used.
-
+                
         */
         ResourceBasedEventLogger(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
@@ -595,7 +595,7 @@ namespace comphelper
             @param _pAsciiLoggerName
                 the ASCII name of the logger to work with. If NULL, the office-wide
                 default logger will be used.
-
+                
         */
         ResourceBasedEventLogger(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,

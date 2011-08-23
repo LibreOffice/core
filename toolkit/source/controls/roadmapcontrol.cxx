@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ namespace toolkit
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-//  ----------------------------------------------------
+//	----------------------------------------------------
 //  helper
-//  ----------------------------------------------------
+//	----------------------------------------------------
 
 static void lcl_throwIllegalArgumentException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{	// throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw IllegalArgumentException();
 }
 
 static void lcl_throwIndexOutOfBoundsException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
+{	// throwing is expensive (in terms of code size), thus we hope the compiler does not inline this ....
     throw IndexOutOfBoundsException();
 }
 
@@ -142,7 +142,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     // -------------------------------------------------------------------
-    ::com::sun::star::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Any	SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
         if ( !aRet.hasValue() )
@@ -157,7 +157,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
+            Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;
@@ -204,7 +204,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     void UnoControlRoadmapModel::SetRMItemDefaultProperties( const sal_Int32 , Reference< XInterface > xRoadmapItem)
     {
-        Any aAny;
+        Any	aAny;
         Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
         Reference< XPropertySet > xProps( xRoadmapItem, UNO_QUERY );
         if ( xProps.is() )
@@ -296,7 +296,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
-                                                throw    (IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+                                                throw	 (IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     {
         if (( Index > (sal_Int32)maRoadmapItems.size()) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );

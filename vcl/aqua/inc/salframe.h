@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,47 +61,47 @@ class AquaSalFrame : public SalFrame
 {
 public:
     NSWindow*                       mpWindow;               // Cocoa window
-    NSView*                         mpView;                 // Cocoa view (actually a custom view, see below
+    NSView*                         mpView;				    // Cocoa view (actually a custom view, see below
     NSMenuItem*                     mpDockMenuEntry;        // entry in the dynamic dock menu
     NSRect                          maScreenRect;           // for mirroring purposes
-    AquaSalGraphics*                mpGraphics;             // current frame graphics
-    AquaSalFrame*                   mpParent;               // pointer to parent frame
-     SystemEnvData                  maSysData;              // system data
+    AquaSalGraphics*		        mpGraphics; 			// current frame graphics
+    AquaSalFrame*			        mpParent;				// pointer to parent frame
+     SystemEnvData			        maSysData;				// system data
     int                             mnMinWidth;             // min. client width in pixels
     int                             mnMinHeight;            // min. client height in pixels
     int                             mnMaxWidth;             // max. client width in pixels
     int                             mnMaxHeight;            // max. client height in pixels
     NSRect                          maFullScreenRect;       // old window size when in FullScreen
-    bool                            mbGraphics:1;           // is Graphics used?
+    bool					        mbGraphics:1; 			// is Graphics used?
     bool                            mbFullScreen:1;         // is Window in FullScreen?
     bool                            mbShown:1;
     bool                            mbInitShow:1;
     bool                            mbPositioned:1;
     bool                            mbSized:1;
     bool                            mbPresentation:1;
-
+    
     ULONG                           mnStyle;
     unsigned int                    mnStyleMask;            // our style mask from NSWindow creation
-
+    
     ULONG                           mnLastEventTime;
     unsigned int                    mnLastModifierFlags;
     AquaSalMenu*                    mpMenu;
-
+    
     SalExtStyle                     mnExtStyle;             // currently document frames are marked this way
-
+    
     PointerStyle                    mePointerStyle;         // currently active pointer style
-
+    
     NSTrackingRectTag               mnTrackingRectTag;      // used to get enter/leave messages
 
     CGMutablePathRef                mrClippingPath;         // used for "shaping"
     std::vector< CGRect >           maClippingRects;
-
+    
     std::list<AquaBlinker*>         maBlinkers;
-
+    
     Rectangle                       maInvalidRect;
-
+    
     ULONG                           mnICOptions;
-
+    
     boost::shared_ptr< Timer >      mpActivityTimer; // Timer to prevent system sleep during presentation
 public:
     /** Constructor
@@ -114,49 +114,49 @@ public:
 
     virtual ~AquaSalFrame();
 
-    virtual SalGraphics*        GetGraphics();
-    virtual void                ReleaseGraphics( SalGraphics* pGraphics );
-    virtual BOOL                PostEvent( void* pData );
-    virtual void                SetTitle( const XubString& rTitle );
-    virtual void                SetIcon( USHORT nIcon );
+    virtual SalGraphics*		GetGraphics();
+    virtual void				ReleaseGraphics( SalGraphics* pGraphics );
+    virtual BOOL				PostEvent( void* pData );
+    virtual void				SetTitle( const XubString& rTitle );
+    virtual void				SetIcon( USHORT nIcon );
     virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                SetMenu( SalMenu* pSalMenu );
     virtual void                DrawMenuBar();
-    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
-    virtual void                Enable( BOOL bEnable );
+    virtual void				Show( BOOL bVisible, BOOL bNoActivate = FALSE );
+    virtual void				Enable( BOOL bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
-    virtual void                GetClientSize( long& rWidth, long& rHeight );
-    virtual void                GetWorkArea( Rectangle& rRect );
-    virtual SalFrame*           GetParent() const;
-    virtual void                SetWindowState( const SalFrameState* pState );
-    virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
-    virtual void                StartPresentation( BOOL bStart );
-    virtual void                SetAlwaysOnTop( BOOL bOnTop );
-    virtual void                ToTop( USHORT nFlags );
-    virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( BOOL bMouse );
-    virtual void                SetPointerPos( long nX, long nY );
-    virtual void                Flush( void );
-    virtual void                Flush( const Rectangle& );
-    virtual void                Sync();
-    virtual void                SetInputContext( SalInputContext* pContext );
-    virtual void                EndExtTextInput( USHORT nFlags );
-    virtual String              GetKeyName( USHORT nKeyCode );
-    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
+    virtual void				SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
+    virtual void				GetClientSize( long& rWidth, long& rHeight );
+    virtual void				GetWorkArea( Rectangle& rRect );
+    virtual SalFrame*			GetParent() const;
+    virtual void				SetWindowState( const SalFrameState* pState );
+    virtual BOOL				GetWindowState( SalFrameState* pState );
+    virtual void				ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
+    virtual void				StartPresentation( BOOL bStart );
+    virtual void				SetAlwaysOnTop( BOOL bOnTop );
+    virtual void				ToTop( USHORT nFlags );
+    virtual void				SetPointer( PointerStyle ePointerStyle );
+    virtual void				CaptureMouse( BOOL bMouse );
+    virtual void				SetPointerPos( long nX, long nY );
+    virtual void				Flush( void );
+    virtual void				Flush( const Rectangle& );
+    virtual void				Sync();
+    virtual void				SetInputContext( SalInputContext* pContext );
+    virtual void				EndExtTextInput( USHORT nFlags );
+    virtual String				GetKeyName( USHORT nKeyCode );
+    virtual String				GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
     virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
-    virtual LanguageType        GetInputLanguage();
-    virtual SalBitmap*          SnapShot();
-    virtual void                UpdateSettings( AllSettings& rSettings );
-    virtual void                Beep( SoundType eSoundType );
-    virtual const SystemEnvData*    GetSystemData() const;
-    virtual SalPointerState     GetPointerState();
+    virtual LanguageType		GetInputLanguage();
+    virtual SalBitmap*			SnapShot();
+    virtual void				UpdateSettings( AllSettings& rSettings );
+    virtual void				Beep( SoundType eSoundType );
+    virtual const SystemEnvData*	GetSystemData() const;
+    virtual SalPointerState		GetPointerState();
     virtual SalIndicatorState   GetIndicatorState();
     virtual void                SimulateKeyPress( USHORT nKeyCode );
-    virtual void                SetParent( SalFrame* pNewParent );
-    virtual bool                SetPluginParent( SystemParentData* pNewParent );
+    virtual void				SetParent( SalFrame* pNewParent );
+    virtual bool				SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetExtendedFrameStyle( SalExtStyle );
     virtual void                SetBackgroundBitmap( SalBitmap* );
     virtual void                SetScreenNumber(unsigned int);
@@ -175,21 +175,21 @@ public:
     virtual void SetClientSize( long nWidth, long nHeight );
 
     void UpdateFrameGeometry();
-
+    
     // trigger painting of the window
     void SendPaintEvent( const Rectangle* pRect = NULL );
 
     static bool isAlive( const AquaSalFrame* pFrame )
     { return GetSalData()->maFrameCheck.find( pFrame ) != GetSalData()->maFrameCheck.end(); }
-
+    
     static AquaSalFrame* GetCaptureFrame() { return s_pCaptureFrame; }
-
+    
     NSWindow* getWindow() const { return mpWindow; }
     NSView* getView() const { return mpView; }
     unsigned int getStyleMask() const { return mnStyleMask; }
-
+    
     void getResolution( long& o_rDPIX, long& o_rDPIY );
-
+    
     // actually the follwing methods do the same thing: flipping y coordinates
     // but having two of them makes clearer what the coordinate system
     // is supposed to be before and after
@@ -198,11 +198,11 @@ public:
 
     void VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen = true );
     void CocoaToVCL( NSPoint& io_Point, bool bRelativeToScreen = true );
-
+    
     NSCursor* getCurrentCursor() const;
-
+    
     CGMutablePathRef getClipPath() const { return mrClippingPath; }
-
+    
     // called by VCL_NSApplication to indicate screen settings have changed
     void screenParametersChanged();
 
@@ -210,12 +210,12 @@ public:
     /** do things on initial show (like centering on parent or on screen)
     */
     void initShow();
-
+    
     void initWindowAndView();
 
- private: // data
+ private: // data    
     static AquaSalFrame*                   s_pCaptureFrame;
-
+    
     // make AquaSalFrame non copyable
     AquaSalFrame( const AquaSalFrame& );
     AquaSalFrame& operator=(const AquaSalFrame&);

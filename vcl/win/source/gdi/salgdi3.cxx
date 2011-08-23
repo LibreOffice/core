@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@
 #include "vcl/fontsubset.hxx"
 #include "vcl/sallayout.hxx"
 
-#include "vcl/outdev.h"         // for ImplGlyphFallbackFontSubstitution
-#include "unotools/fontcfg.hxx" // for IMPL_FONT_ATTR_SYMBOL
+#include "vcl/outdev.h"			// for ImplGlyphFallbackFontSubstitution
+#include "unotools/fontcfg.hxx"	// for IMPL_FONT_ATTR_SYMBOL
 
 #include "rtl/logfile.hxx"
 #include "rtl/tencinfo.h"
@@ -126,13 +126,13 @@ typedef std::map< String, ImplDevFontAttributes > FontAttrMap;
 class ImplFontAttrCache
 {
 private:
-    FontAttrMap     aFontAttributes;
-    rtl::OUString   aCacheFileName;
-    String          aBaseURL;
-    BOOL            bModified;
+    FontAttrMap		aFontAttributes;
+    rtl::OUString	aCacheFileName;
+    String			aBaseURL;
+    BOOL			bModified;
 
 protected:
-    String  OptimizeURL( const String& rURL ) const;
+    String	OptimizeURL( const String& rURL ) const;
 
     enum{ MAGIC = 0x12349876 }; // change if fontattrcache format changes
 
@@ -147,7 +147,7 @@ public:
 ImplFontAttrCache::ImplFontAttrCache( const String& rFileNameURL, const String& rBaseURL ) : aBaseURL( rBaseURL )
 {
     bModified = FALSE;
-    aBaseURL.ToLowerAscii();    // Windows only, no problem...
+    aBaseURL.ToLowerAscii();	// Windows only, no problem...
 
     // open the cache file
     osl::FileBase::getSystemPathFromFileURL( rFileNameURL, aCacheFileName );
@@ -225,7 +225,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
 String ImplFontAttrCache::OptimizeURL( const String& rURL ) const
 {
     String aOptimizedFontFileURL( rURL );
-    aOptimizedFontFileURL.ToLowerAscii();   // Windows only, no problem...
+    aOptimizedFontFileURL.ToLowerAscii();	// Windows only, no problem...
     if ( aOptimizedFontFileURL.CompareTo( aBaseURL, aBaseURL.Len() ) == COMPARE_EQUAL )
         aOptimizedFontFileURL = aOptimizedFontFileURL.Copy( aBaseURL.Len() );
     return aOptimizedFontFileURL;
@@ -258,20 +258,20 @@ void ImplFontAttrCache::AddFontAttr( const String& rFontFileName, const ImplDevF
 class RawFontData
 {
 public:
-    explicit    RawFontData( HDC, DWORD nTableTag=0 );
+    explicit	RawFontData( HDC, DWORD nTableTag=0 );
                 ~RawFontData() { delete[] mpRawBytes; }
-    const unsigned char*    get() const { return mpRawBytes; }
-    const unsigned char*    steal() { unsigned char* p = mpRawBytes; mpRawBytes = NULL; return p; }
-    const int               size() const { return mnByteCount; }
+    const unsigned char*	get() const { return mpRawBytes; }
+    const unsigned char*	steal() { unsigned char* p = mpRawBytes; mpRawBytes = NULL; return p; }
+    const int				size() const { return mnByteCount; }
 
 private:
-    unsigned char*  mpRawBytes;
-    int             mnByteCount;
+    unsigned char*	mpRawBytes;
+    int				mnByteCount;
 };
 
 RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
-:   mpRawBytes( NULL )
-,   mnByteCount( 0 )
+:	mpRawBytes( NULL )
+,	mnByteCount( 0 )
 {
     // get required size in bytes
     mnByteCount = ::GetFontData( hDC, nTableTag, 0, NULL, 0 );
@@ -335,77 +335,77 @@ struct Unicode2LangType
 // map unicode ranges to languages supported by OOo
 // NOTE: due to the binary search used this list must be sorted by mnMinCode
 static Unicode2LangType aLangFromCodeChart[]= {
-    {0x0000, 0x007F, LANGUAGE_ENGLISH},             // Basic Latin
-    {0x0080, 0x024F, LANGUAGE_ENGLISH},             // Latin Extended-A and Latin Extended-B
-    {0x0250, 0x02AF, LANGUAGE_SYSTEM},              // IPA Extensions
-    {0x0370, 0x03FF, LANGUAGE_GREEK},               // Greek
-    {0x0590, 0x05FF, LANGUAGE_HEBREW},              // Hebrew
-    {0x0600, 0x06FF, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic
-    {0x0900, 0x097F, LANGUAGE_HINDI},               // Devanagari
-    {0x0980, 0x09FF, LANGUAGE_BENGALI},             // Bengali
-    {0x0A80, 0x0AFF, LANGUAGE_GUJARATI},            // Gujarati
-    {0x0B00, 0x0B7F, LANGUAGE_ORIYA},               // Oriya
-    {0x0B80, 0x0BFF, LANGUAGE_TAMIL},               // Tamil
-    {0x0C00, 0x0C7F, LANGUAGE_TELUGU},              // Telugu
-    {0x0C80, 0x0CFF, LANGUAGE_KANNADA},             // Kannada
-    {0x0D00, 0x0D7F, LANGUAGE_MALAYALAM},           // Malayalam
-    {0x0D80, 0x0D7F, LANGUAGE_SINHALESE_SRI_LANKA}, // Sinhala
-    {0x0E00, 0x0E7F, LANGUAGE_THAI},                // Thai
-    {0x0E80, 0x0EFF, LANGUAGE_LAO},                 // Lao
-    {0x0F00, 0x0FFF, LANGUAGE_TIBETAN},             // Tibetan
-    {0x1000, 0x109F, LANGUAGE_BURMESE},             // Burmese
-    {0x10A0, 0x10FF, LANGUAGE_GEORGIAN},            // Georgian
-    {0x1100, 0x11FF, LANGUAGE_KOREAN},              // Hangul Jamo, Korean-specific
-//  {0x1200, 0x139F, LANGUAGE_AMHARIC_ETHIOPIA},    // Ethiopic
-//  {0x1200, 0x139F, LANGUAGE_TIGRIGNA_ETHIOPIA},   // Ethiopic
+    {0x0000, 0x007F, LANGUAGE_ENGLISH},				// Basic Latin
+    {0x0080, 0x024F, LANGUAGE_ENGLISH},				// Latin Extended-A and Latin Extended-B
+    {0x0250, 0x02AF, LANGUAGE_SYSTEM},				// IPA Extensions
+    {0x0370, 0x03FF, LANGUAGE_GREEK},				// Greek
+    {0x0590, 0x05FF, LANGUAGE_HEBREW},				// Hebrew
+    {0x0600, 0x06FF, LANGUAGE_ARABIC_PRIMARY_ONLY},	// Arabic
+    {0x0900, 0x097F, LANGUAGE_HINDI},				// Devanagari
+    {0x0980, 0x09FF, LANGUAGE_BENGALI},				// Bengali
+    {0x0A80, 0x0AFF, LANGUAGE_GUJARATI},			// Gujarati
+    {0x0B00, 0x0B7F, LANGUAGE_ORIYA},				// Oriya
+    {0x0B80, 0x0BFF, LANGUAGE_TAMIL},				// Tamil
+    {0x0C00, 0x0C7F, LANGUAGE_TELUGU},				// Telugu
+    {0x0C80, 0x0CFF, LANGUAGE_KANNADA},				// Kannada
+    {0x0D00, 0x0D7F, LANGUAGE_MALAYALAM},			// Malayalam
+    {0x0D80, 0x0D7F, LANGUAGE_SINHALESE_SRI_LANKA},	// Sinhala
+    {0x0E00, 0x0E7F, LANGUAGE_THAI},				// Thai
+    {0x0E80, 0x0EFF, LANGUAGE_LAO},					// Lao
+    {0x0F00, 0x0FFF, LANGUAGE_TIBETAN},				// Tibetan
+    {0x1000, 0x109F, LANGUAGE_BURMESE},				// Burmese
+    {0x10A0, 0x10FF, LANGUAGE_GEORGIAN},			// Georgian
+    {0x1100, 0x11FF, LANGUAGE_KOREAN},				// Hangul Jamo, Korean-specific
+//	{0x1200, 0x139F, LANGUAGE_AMHARIC_ETHIOPIA},	// Ethiopic
+//	{0x1200, 0x139F, LANGUAGE_TIGRIGNA_ETHIOPIA},	// Ethiopic
     {0x13A0, 0x13FF, LANGUAGE_CHEROKEE_UNITED_STATES}, // Cherokee
-//  {0x1400, 0x167F, LANGUAGE_CANADIAN_ABORIGINAL}, // Canadian Aboriginial Syllabics
-//  {0x1680, 0x169F, LANGUAGE_OGHAM},               // Ogham
-//  {0x16A0, 0x16F0, LANGUAGE_RUNIC},               // Runic
-//  {0x1700, 0x171F, LANGUAGE_TAGALOG},             // Tagalog
-//  {0x1720, 0x173F, LANGUAGE_HANUNOO},             // Hanunoo
-//  {0x1740, 0x175F, LANGUAGE_BUHID},               // Buhid
-//  {0x1760, 0x177F, LANGUAGE_TAGBANWA},            // Tagbanwa
-    {0x1780, 0x17FF, LANGUAGE_KHMER},               // Khmer
-    {0x18A0, 0x18AF, LANGUAGE_MONGOLIAN},           // Mongolian
-//  {0x1900, 0x194F, LANGUAGE_LIMBU},               // Limbu
-//  {0x1950, 0x197F, LANGUAGE_TAILE},               // Tai Le
-//  {0x1980, 0x19DF, LANGUAGE_TAILUE},              // Tai Lue
-    {0x19E0, 0x19FF, LANGUAGE_KHMER},               // Khmer Symbols
-//  {0x1A00, 0x1A1F, LANGUAGE_BUGINESE},            // Buginese/Lontara
-//  {0x1B00, 0x1B7F, LANGUAGE_BALINESE},            // Balinese
-//  {0x1D00, 0x1DFF, LANGUAGE_NONE},                // Phonetic Symbols
-    {0x1E00, 0x1EFF, LANGUAGE_ENGLISH},             // Latin Extended Additional
-    {0x1F00, 0x1FFF, LANGUAGE_GREEK},               // Greek Extended
-    {0x2C60, 0x2C7F, LANGUAGE_ENGLISH},             // Latin Extended-C
-    {0x2E80, 0x2FFf, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Radicals Supplement + Kangxi Radical + Ideographic Description Characters
-    {0x3000, 0x303F, LANGUAGE_DEFAULT_CJK},         // CJK Symbols and punctuation
-    {0x3040, 0x30FF, LANGUAGE_JAPANESE},            // Japanese Hiragana + Katakana
-    {0x3100, 0x312F, LANGUAGE_CHINESE_TRADITIONAL}, // Bopomofo
-    {0x3130, 0x318F, LANGUAGE_KOREAN},              // Hangul Compatibility Jamo, Kocrean-specific
-    {0x3190, 0x319F, LANGUAGE_JAPANESE},            // Kanbun
-    {0x31A0, 0x31BF, LANGUAGE_CHINESE_TRADITIONAL}, // Bopomofo Extended
-    {0x31C0, 0x31EF, LANGUAGE_DEFAULT_CJK},         // CJK Ideographs
-    {0x31F0, 0x31FF, LANGUAGE_JAPANESE},            // Japanese Katakana Phonetic Extensions
-    {0x3200, 0x321F, LANGUAGE_KOREAN},              // Parenthesized Hangul
-    {0x3220, 0x325F, LANGUAGE_DEFAULT_CJK},         // Parenthesized Ideographs
-    {0x3260, 0x327F, LANGUAGE_KOREAN},              // Circled Hangul
-    {0x3280, 0x32CF, LANGUAGE_DEFAULT_CJK},         // Circled Ideographs
-    {0x32d0, 0x32FF, LANGUAGE_JAPANESE},            // Japanese Circled Katakana
-    {0x3400, 0x4DBF, LANGUAGE_DEFAULT_CJK},         // CJK Unified Ideographs Extension A
-    {0x4E00, 0x9FCF, LANGUAGE_DEFAULT_CJK},         // Unified CJK Ideographs
-    {0xA720, 0xA7FF, LANGUAGE_ENGLISH},             // Latin Extended-D
-    {0xAC00, 0xD7AF, LANGUAGE_KOREAN},              // Hangul Syllables, Korean-specific
-    {0xF900, 0xFAFF, LANGUAGE_DEFAULT_CJK},         // CJK Compatibility Ideographs
-    {0xFB00, 0xFB4F, LANGUAGE_HEBREW},              // Hebrew Presentation Forms
-    {0xFB50, 0xFDFF, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic Presentation Forms-A
-    {0xFE70, 0xFEFE, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic Presentation Forms-B
-    {0xFF65, 0xFF9F, LANGUAGE_JAPANESE},            // Japanese Halfwidth Katakana variant
-    {0xFFA0, 0xFFDC, LANGUAGE_KOREAN},              // Kocrean halfwidth hangual variant
-    {0x10140, 0x1018F, LANGUAGE_GREEK},             // Ancient Greak numbers
-    {0x1D200, 0x1D24F, LANGUAGE_GREEK},             // Ancient Greek Musical
-    {0x20000, 0x2A6DF, LANGUAGE_DEFAULT_CJK},       // CJK Unified Ideographs Extension B
-    {0x2F800, 0x2FA1F, LANGUAGE_DEFAULT_CJK}        // CJK Compatibility Ideographs Supplement
+//	{0x1400, 0x167F, LANGUAGE_CANADIAN_ABORIGINAL},	// Canadian Aboriginial Syllabics
+//	{0x1680, 0x169F, LANGUAGE_OGHAM},				// Ogham
+//	{0x16A0, 0x16F0, LANGUAGE_RUNIC},				// Runic
+//	{0x1700, 0x171F, LANGUAGE_TAGALOG},				// Tagalog
+//	{0x1720, 0x173F, LANGUAGE_HANUNOO},				// Hanunoo
+//	{0x1740, 0x175F, LANGUAGE_BUHID},				// Buhid
+//	{0x1760, 0x177F, LANGUAGE_TAGBANWA},			// Tagbanwa
+    {0x1780, 0x17FF, LANGUAGE_KHMER},				// Khmer
+    {0x18A0, 0x18AF, LANGUAGE_MONGOLIAN},			// Mongolian
+//	{0x1900, 0x194F, LANGUAGE_LIMBU},				// Limbu
+//	{0x1950, 0x197F, LANGUAGE_TAILE},				// Tai Le
+//	{0x1980, 0x19DF, LANGUAGE_TAILUE},				// Tai Lue
+    {0x19E0, 0x19FF, LANGUAGE_KHMER},				// Khmer Symbols
+//	{0x1A00, 0x1A1F, LANGUAGE_BUGINESE},			// Buginese/Lontara
+//	{0x1B00, 0x1B7F, LANGUAGE_BALINESE},			// Balinese
+//	{0x1D00, 0x1DFF, LANGUAGE_NONE},				// Phonetic Symbols
+    {0x1E00, 0x1EFF, LANGUAGE_ENGLISH},				// Latin Extended Additional
+    {0x1F00, 0x1FFF, LANGUAGE_GREEK},				// Greek Extended
+    {0x2C60, 0x2C7F, LANGUAGE_ENGLISH},				// Latin Extended-C
+    {0x2E80, 0x2FFf, LANGUAGE_CHINESE_SIMPLIFIED},	// CJK Radicals Supplement + Kangxi Radical + Ideographic Description Characters
+    {0x3000, 0x303F, LANGUAGE_DEFAULT_CJK},			// CJK Symbols and punctuation
+    {0x3040, 0x30FF, LANGUAGE_JAPANESE},			// Japanese Hiragana + Katakana
+    {0x3100, 0x312F, LANGUAGE_CHINESE_TRADITIONAL},	// Bopomofo
+    {0x3130, 0x318F, LANGUAGE_KOREAN},				// Hangul Compatibility Jamo, Kocrean-specific
+    {0x3190, 0x319F, LANGUAGE_JAPANESE},			// Kanbun
+    {0x31A0, 0x31BF, LANGUAGE_CHINESE_TRADITIONAL},	// Bopomofo Extended
+    {0x31C0, 0x31EF, LANGUAGE_DEFAULT_CJK},			// CJK Ideographs
+    {0x31F0, 0x31FF, LANGUAGE_JAPANESE},			// Japanese Katakana Phonetic Extensions
+    {0x3200, 0x321F, LANGUAGE_KOREAN},				// Parenthesized Hangul
+    {0x3220, 0x325F, LANGUAGE_DEFAULT_CJK},			// Parenthesized Ideographs
+    {0x3260, 0x327F, LANGUAGE_KOREAN},				// Circled Hangul
+    {0x3280, 0x32CF, LANGUAGE_DEFAULT_CJK},			// Circled Ideographs
+    {0x32d0, 0x32FF, LANGUAGE_JAPANESE},			// Japanese Circled Katakana
+    {0x3400, 0x4DBF, LANGUAGE_DEFAULT_CJK},			// CJK Unified Ideographs Extension A
+    {0x4E00, 0x9FCF, LANGUAGE_DEFAULT_CJK},			// Unified CJK Ideographs
+    {0xA720, 0xA7FF, LANGUAGE_ENGLISH},				// Latin Extended-D
+    {0xAC00, 0xD7AF, LANGUAGE_KOREAN},				// Hangul Syllables, Korean-specific
+    {0xF900, 0xFAFF, LANGUAGE_DEFAULT_CJK},			// CJK Compatibility Ideographs
+    {0xFB00, 0xFB4F, LANGUAGE_HEBREW},				// Hebrew Presentation Forms 
+    {0xFB50, 0xFDFF, LANGUAGE_ARABIC_PRIMARY_ONLY},	// Arabic Presentation Forms-A
+    {0xFE70, 0xFEFE, LANGUAGE_ARABIC_PRIMARY_ONLY},	// Arabic Presentation Forms-B
+    {0xFF65, 0xFF9F, LANGUAGE_JAPANESE},			// Japanese Halfwidth Katakana variant
+    {0xFFA0, 0xFFDC, LANGUAGE_KOREAN},				// Kocrean halfwidth hangual variant
+    {0x10140, 0x1018F, LANGUAGE_GREEK},				// Ancient Greak numbers
+    {0x1D200, 0x1D24F, LANGUAGE_GREEK},				// Ancient Greek Musical
+    {0x20000, 0x2A6DF, LANGUAGE_DEFAULT_CJK},		// CJK Unified Ideographs Extension B
+    {0x2F800, 0x2FA1F, LANGUAGE_DEFAULT_CJK}		// CJK Compatibility Ideographs Supplement
 };
 
 // get language matching to the missing char
@@ -433,7 +433,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
             nDefaultLang = (LanguageType)rtl_str_toInt32( aKeyValBuf, 16 );
 
         // TODO: use the default-CJK language selected in
-        //  Tools->Options->LangSettings->Languages when it becomes available here
+        //	Tools->Options->LangSettings->Languages when it becomes available here
         if( !nDefaultLang )
             nDefaultLang = Application::GetSettings().GetUILanguage();
 
@@ -470,7 +470,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
     while( nLow <= nHigh )
     {
         int nMiddle = (nHigh + nLow) / 2;
-        if( uChar < aLangFromCodeChart[ nMiddle].mnMinCode )
+        if( uChar < aLangFromCodeChart[ nMiddle].mnMinCode ) 
             nHigh = nMiddle - 1;
         else if( uChar > aLangFromCodeChart[ nMiddle].mnMaxCode )
             nLow = nMiddle + 1;
@@ -485,7 +485,7 @@ class WinGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
-    explicit    WinGlyphFallbackSubstititution( HDC );
+    explicit	WinGlyphFallbackSubstititution( HDC );
 
     bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingChars ) const;
 private:
@@ -494,7 +494,7 @@ private:
 };
 
 inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC )
-:   mhDC( hDC )
+:	mhDC( hDC )
 {}
 
 void ImplGetLogFontFromFontSelect( HDC, const ImplFontSelectData*,
@@ -517,7 +517,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
 
         // create HFONT from log font
         HFONT hNewFont = ::CreateFontIndirectW( &aLogFont );
-        // select the new font into device
+        // select the new font into device 
         HFONT hOldFont = ::SelectFont( mhDC, hNewFont );
 
         // read CMAP table to update their pCharMap
@@ -539,7 +539,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
     // static const int nMaxMatchCount = 1; // TODO: check more missing characters?
     const sal_Int32 nStrLen = rMissingChars.getLength();
     for( sal_Int32 nStrIdx = 0; nStrIdx < nStrLen; ++nStrIdx )
-    {
+    { 
         const sal_UCS4 uChar = rMissingChars.iterateCodePoints( &nStrIdx );
         nMatchCount += pCharMap->HasChar( uChar );
         break; // for now
@@ -573,7 +573,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
         aLocale = Application::GetSettings().GetUILocale();
 
     // first level fallback:
-    // try use the locale specific default fonts defined in VCL.xcu
+    // try use the locale specific default fonts defined in VCL.xcu 
     const ImplDevFontList* pDevFontList = ImplGetSVData()->maGDIData.mpScreenFontList;
     /*const*/ ImplDevFontListData* pDevFont = pDevFontList->ImplFindByLocale( aLocale );
     if( pDevFont )
@@ -586,7 +586,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
         }
     }
 
-    // are the missing characters symbols?
+    // are the missing characters symbols? 
     pDevFont = pDevFontList->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
                     rFontSelData.meWeight, rFontSelData.meWidthType,
                     rFontSelData.meFamily, rFontSelData.meItalic, rFontSelData.maSearchName );
@@ -607,7 +607,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
     int nTestFontCount = pTestFontList->Count();
     if( nTestFontCount > MAX_GFBFONT_COUNT )
         nTestFontCount = MAX_GFBFONT_COUNT;
-
+    
     for( int i = 0; i < nTestFontCount; ++i )
     {
         const ImplFontData* pFace = pTestFontList->Get( i );
@@ -2178,8 +2178,8 @@ static int WINAPI __AddFontResourceExW( LPCWSTR lpszfileName, DWORD fl, PVOID pd
 {
     typedef int (WINAPI *AddFontResourceExW_FUNC)(LPCWSTR, DWORD, PVOID );
 
-    static AddFontResourceExW_FUNC  pFunc = NULL;
-    static HMODULE                  hmGDI = NULL;
+    static AddFontResourceExW_FUNC	pFunc = NULL;
+    static HMODULE					hmGDI = NULL;
 
     if ( !pFunc && !hmGDI )
     {
@@ -2207,7 +2207,7 @@ bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
 #ifdef FR_PRIVATE
     nRet = __AddFontResourceExW( reinterpret_cast<LPCWSTR>(aUSytemPath.getStr()), FR_PRIVATE, NULL );
 #endif
-
+    
     if ( !nRet )
     {
         static int nCounter = 0;
@@ -2295,7 +2295,7 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
     // get FontAttributes from a *fot file
-    // TODO: use GetTTGlobalFontInfo() to access the font directly
+    // TODO: use GetTTGlobalFontInfo() to access the font directly 
     rDFA.mnQuality    = 1000;
     rDFA.mbDevice     = true;
     rDFA.meFamily     = FAMILY_DONTKNOW;
@@ -2905,7 +2905,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
             sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
             if( pGlyphIDs[i] & GF_ISCHAR ) // remaining pseudo-glyphs need to be translated
                 nGlyphIdx = pImplFontCharMap->GetGlyphIndex( nGlyphIdx );
-            if( (pGlyphIDs[i] & (GF_ROTMASK|GF_GSUB)) != 0) // TODO: vertical substitution
+            if( (pGlyphIDs[i] & (GF_ROTMASK|GF_GSUB)) != 0)	// TODO: vertical substitution
                 {/*####*/}
 
             nRealGlyphIds[i] = nGlyphIdx;
@@ -2939,11 +2939,11 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
     rInfo.m_nFontType   = FontSubsetInfo::SFNT_TTF;
     rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
-    rInfo.m_nAscent     = +aTTInfo.winAscent;
+    rInfo.m_nAscent	    = +aTTInfo.winAscent;
     rInfo.m_nDescent    = -aTTInfo.winDescent;
-    rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
+    rInfo.m_aFontBBox	= Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
-    rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
+    rInfo.m_nCapHeight	= aTTInfo.yMax; // Well ...
 
     // subset TTF-glyphs and get their properties
     // take care that subset fonts require the NotDef glyph in pos 0
@@ -3055,7 +3055,7 @@ const void* WinSalGraphics::GetEmbedFontData( const ImplFontData* pFont,
             *pDataLen = 0;
         pCharWidths[i] = nCharWidth;
     }
-
+    
     if( !*pDataLen )
         return NULL;
 
@@ -3110,11 +3110,11 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
-
+    
     float fScale = 0.0;
     HFONT hOldFont = 0;
     ImplDoSetFont( &aIFSD, fScale, hOldFont );
-
+    
     if( pFont->IsSubsettable() )
     {
         // get raw font file data
@@ -3126,12 +3126,12 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
         sal_uInt32 nFaceNum = 0;
         if( !*xRawFontData.get() )  // TTC candidate
             nFaceNum = ~0U;  // indicate "TTC font extracts only"
-
+    
         ScopedTrueTypeFont aSftTTF;
         int nRC = aSftTTF.open( (void*)xRawFontData.get(), xRawFontData.size(), nFaceNum );
         if( nRC != SF_OK )
             return;
-
+    
         int nGlyphs = GetTTGlyphCount( aSftTTF.get() );
         if( nGlyphs > 0 )
         {
@@ -3185,7 +3185,7 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 rWidths.push_back( nCharWidth );
             }
         }
-    }
+    }    
 }
 
 //--------------------------------------------------------------------------
@@ -3201,14 +3201,14 @@ SystemFontData WinSalGraphics::GetSysFontData( int nFallbacklevel ) const
 
     if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
     if (nFallbacklevel < 0 ) nFallbacklevel = 0;
-
+    
     aSysFontData.nSize = sizeof( SystemFontData );
-    aSysFontData.hFont = mhFonts[nFallbacklevel];
+    aSysFontData.hFont = mhFonts[nFallbacklevel]; 
     aSysFontData.bFakeBold = false;
     aSysFontData.bFakeItalic = false;
     aSysFontData.bAntialias = true;
     aSysFontData.bVerticalCharacterType = false;
-
+    
     OSL_TRACE("\r\n:WinSalGraphics::GetSysFontData(): FontID: %p, Fallback level: %d",
               aSysFontData.hFont,
               nFallbacklevel);

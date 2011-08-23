@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,27 +43,27 @@ typedef LHANDLE HSTR;
 #endif
 
 
-typedef ULONG       HCONVLIST;
-typedef ULONG       HCONV;
-typedef ATOM        HSZ;
-typedef DDESTRUCT*  HDDEDATA;
+typedef ULONG		HCONVLIST;
+typedef ULONG		HCONV;
+typedef ATOM		HSZ;
+typedef DDESTRUCT*	HDDEDATA;
 
 struct CONVINFO
 {
-    USHORT      nSize;                  // sizeof(CONVINFO)
-    ULONG       nUser;                  // Userhandle
-    HCONV       hConvPartner;           //
-    HSZ         hszPartner;             // Name der Partnerapp
-    HSZ         hszServiceReq;          // Name des angeforderten Services
-    HSZ         hszTopic;               // -- " -- Topics
-    HSZ         hszItem;                // -- " -- Items
-    USHORT      nFormat;                // Datenformat der akt. Transaktion
-    USHORT      nType;                  // Typ der akt. Transaktion (XTYP_*)
-    USHORT      nStatus;                // ST_* der Konversation
-    USHORT      nConvst;                // XST_* der akt. Transaktion
-    USHORT      nLastError;             // letzter Fehler der Transaktion
-    HCONVLIST   hConvList;              // ConvListId , wenn in ConvList
-    CONVCONTEXT aConvCtxt;              // conversation context
+    USHORT		nSize;					// sizeof(CONVINFO)
+    ULONG		nUser;					// Userhandle
+    HCONV		hConvPartner;			//
+    HSZ			hszPartner;				// Name der Partnerapp
+    HSZ			hszServiceReq;          // Name des angeforderten Services
+    HSZ			hszTopic;               // -- " -- Topics
+    HSZ			hszItem;                // -- " -- Items
+    USHORT		nFormat;				// Datenformat der akt. Transaktion
+    USHORT		nType;					// Typ der akt. Transaktion (XTYP_*)
+    USHORT		nStatus;                // ST_* der Konversation
+    USHORT		nConvst;                // XST_* der akt. Transaktion
+    USHORT		nLastError;				// letzter Fehler der Transaktion
+    HCONVLIST	hConvList;              // ConvListId , wenn in ConvList
+    CONVCONTEXT	aConvCtxt;				// conversation context
 };
 
 /* the following structure is for use with XTYP_WILDCONNECT processing. */
@@ -325,50 +325,50 @@ int     DdeCmpStringHandles(HSZ hsz1, HSZ hsz2);
 
 /* von OS/2 nicht unterstuetzte Win3.1 Clipboard-Formate */
 
-#define CF_NOTSUPPORTED_BASE    0xff00
+#define CF_NOTSUPPORTED_BASE	0xff00
 
 #ifndef CF_DIB
-#define CF_DIB                  CF_NOTSUPPORTED_BASE+1
+#define CF_DIB					CF_NOTSUPPORTED_BASE+1
 #endif
 
 #ifndef CF_DIF
-#define CF_DIF                  CF_NOTSUPPORTED_BASE+2
+#define CF_DIF					CF_NOTSUPPORTED_BASE+2
 #endif
 
 #ifndef CF_DSPMETAFILEPICT
-#define CF_DSPMETAFILEPICT      CF_NOTSUPPORTED_BASE+3
+#define CF_DSPMETAFILEPICT		CF_NOTSUPPORTED_BASE+3
 #endif
 
 #ifndef CF_METAFILEPICT
-#define CF_METAFILEPICT         CF_NOTSUPPORTED_BASE+4
+#define CF_METAFILEPICT			CF_NOTSUPPORTED_BASE+4
 #endif
 
 #ifndef CF_OEMTEXT
-#define CF_OEMTEXT              CF_NOTSUPPORTED_BASE+5
+#define CF_OEMTEXT				CF_NOTSUPPORTED_BASE+5
 #endif
 
 #ifndef CF_OWNERDISPLAY
-#define CF_OWNERDISPLAY         CF_NOTSUPPORTED_BASE+6
+#define CF_OWNERDISPLAY			CF_NOTSUPPORTED_BASE+6
 #endif
 
 #ifndef CF_PENDATA
-#define CF_PENDATA              CF_NOTSUPPORTED_BASE+7
+#define CF_PENDATA				CF_NOTSUPPORTED_BASE+7
 #endif
 
 #ifndef CF_RIFF
-#define CF_RIFF                 CF_NOTSUPPORTED_BASE+8
+#define CF_RIFF					CF_NOTSUPPORTED_BASE+8
 #endif
 
 #ifndef CF_SYLK
-#define CF_SYLK                 CF_NOTSUPPORTED_BASE+9
+#define CF_SYLK					CF_NOTSUPPORTED_BASE+9
 #endif
 
 #ifndef CF_TIFF
-#define CF_TIFF                 CF_NOTSUPPORTED_BASE+10
+#define CF_TIFF					CF_NOTSUPPORTED_BASE+10
 #endif
 
 #ifndef CF_WAVE
-#define CF_WAVE                 CF_NOTSUPPORTED_BASE+11
+#define CF_WAVE					CF_NOTSUPPORTED_BASE+11
 #endif
 
 

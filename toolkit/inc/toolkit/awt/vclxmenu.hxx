@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ class PopupMenu;
 
 DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >* )
 
-//  ----------------------------------------------------
-//  class VCLXMenu
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXMenu
+//	----------------------------------------------------
 
 class TOOLKIT_DLLPUBLIC VCLXMenu :  public ::com::sun::star::awt::XMenuBarExtended,
                                     public ::com::sun::star::awt::XPopupMenuExtended,
@@ -62,17 +62,17 @@ class TOOLKIT_DLLPUBLIC VCLXMenu :  public ::com::sun::star::awt::XMenuBarExtend
                                     public ::cppu::OWeakObject
 {
 private:
-    ::osl::Mutex            maMutex;
-    Menu*                   mpMenu;
-    MenuListenerMultiplexer maMenuListeners;
-    PopupMenuRefList        maPopupMenueRefs;
+    ::osl::Mutex			maMutex;
+    Menu*					mpMenu;
+    MenuListenerMultiplexer	maMenuListeners;
+    PopupMenuRefList		maPopupMenueRefs;
 
 protected:
-    ::osl::Mutex&           GetMutex() { return maMutex; }
+    ::osl::Mutex&			GetMutex() { return maMutex; }
 
-    DECL_LINK(      MenuEventListener, VclSimpleEvent* );
+    DECL_LINK( 	 	MenuEventListener, VclSimpleEvent* );
 
-    void            ImplCreateMenu( sal_Bool bPopup );
+    void			ImplCreateMenu( sal_Bool bPopup );
 
 public:
                     VCLXMenu();
@@ -80,22 +80,22 @@ public:
                     ~VCLXMenu();
 
 
-    Menu*           GetMenu() const { return mpMenu; }
-    BOOL            IsPopupMenu() const;
+    Menu*			GetMenu() const { return mpMenu; }
+    BOOL			IsPopupMenu() const;
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakObject::release(); }
+    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void						SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
+    void						SAL_CALL release() throw()	{ OWeakObject::release(); }
 
     // ::com::sun::star::lang::XUnoTunnel
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-    static VCLXMenu*                                            GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >&	GetUnoTunnelId() throw();
+    static VCLXMenu*											GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+    sal_Int64													SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XMenu
     void SAL_CALL addMenuListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -166,9 +166,9 @@ public:
 
 };
 
-//  ----------------------------------------------------
-//  class VCLXMenuBar
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXMenuBar
+//	----------------------------------------------------
 class TOOLKIT_DLLPUBLIC VCLXMenuBar : public VCLXMenu
 {
 public:
@@ -176,9 +176,9 @@ public:
         VCLXMenuBar( MenuBar* pMenuBar );
 };
 
-//  ----------------------------------------------------
-//  class VCLXPopupMenu
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXPopupMenu
+//	----------------------------------------------------
 class TOOLKIT_DLLPUBLIC VCLXPopupMenu : public VCLXMenu
 {
 public:

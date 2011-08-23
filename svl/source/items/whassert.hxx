@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 //------------------------------------------------------------------------
 
 #ifdef DBG_UTIL
-#define SFX_ASSERT( bCondition, nId, sMessage )                             \
-{                                                                           \
-    if ( DbgIsAssert() )                                                    \
-    {                                                                       \
-        if ( !(bCondition) )                                                \
-        {                                                                   \
-            ByteString aMsg( sMessage );                                    \
+#define SFX_ASSERT( bCondition, nId, sMessage ) 							\
+{																			\
+    if ( DbgIsAssert() )													\
+    {																		\
+        if ( !(bCondition) )												\
+        {																	\
+            ByteString aMsg( sMessage );									\
             aMsg.Append(RTL_CONSTASCII_STRINGPARAM("\nwith Id/Pos: "));     \
-            aMsg += ByteString::CreateFromInt32( nId );                     \
-            DbgOut( aMsg.GetBuffer(), DBG_OUT_ERROR, __FILE__, __LINE__);   \
-        }                                                                   \
-    }                                                                       \
+            aMsg += ByteString::CreateFromInt32( nId );						\
+            DbgOut( aMsg.GetBuffer(), DBG_OUT_ERROR, __FILE__, __LINE__);	\
+        }																	\
+    }																		\
 }
 #else
 #define SFX_ASSERT( bCondition, nId, sMessage )

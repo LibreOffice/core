@@ -1,6 +1,6 @@
 :
 eval 'exec perl -wS $0 ${1+"$@"}'
-    if 0;
+    if 0; 
 
 #
 # 2009 Copyright Novell, Inc. & Sun Microsystems, Inc.
@@ -10,8 +10,8 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # only, as published by the Free Software Foundation.
 #
 
-use IO::File;
-use Cwd;
+use	IO::File;
+use	Cwd;
 use File::Spec;
 use File::Spec::Functions;
 use File::Temp;
@@ -25,72 +25,72 @@ $TempDir = "";
 
 
 ###############################################################################
-#   Open a file with the given name.
-#   First it is checked if the temporary directory, in which all files for
-#   the document are gathered, is already present and create it if it is not.
-#   Then create the path to the file inside the temporary directory.
-#   Finally open the file and return a file handle to it.
+#	Open a file with the given name.
+#	First it is checked if the temporary directory, in which all files for
+#	the document are gathered, is already present and create it if it is not.
+#	Then create the path to the file inside the temporary directory.
+#	Finally open the file and return a file handle to it.
 #
-sub open_file
+sub	open_file
 {
-    my  $filename = pop @_;
-
-    #   Create base directory of temporary directory tree if not alreay
-    #   present.
+    my	$filename = pop @_;
+    
+    #	Create base directory of temporary directory tree if not alreay
+    #	present.
     if ($TempDir eq "")
     {
         $TempDir = File::Temp::tempdir (CLEANUP => 1);
     }
-
-    #   Create the path to the file.
+    
+    #	Create the path to the file.
     my $fullname = File::Spec->catfile ($TempDir, $filename);
     my ($volume,$directories,$file) = File::Spec->splitpath ($fullname);
     mkpath (File::Spec->catpath ($volume,$directories,""));
-
-    #   Open the file and return a file handle to it.
+    
+    #	Open the file and return a file handle to it.
     return new IO::File ($fullname, "w");
 }
 
 
 ###############################################################################
-#   Zip the files in the directory tree into the given file.
+#	Zip the files in the directory tree into the given file.
 #
-sub zip_dirtree
+sub	zip_dirtree
 {
-    my  $filename = pop @_;
-
-    my  $cwd = getcwd;
-    my  $zip_name = $filename;
-
-    #   We are about to change the directory.
-    #   Therefore create an absolute pathname for the zip archive.
-
-    #   First transfer the drive from $cwd to $zip_name.  This is a
-    #   workaround for a bug in file_name_is_absolute which thinks
-    #   the the path \bla is an absolute path under DOS.
+    my	$filename = pop @_;
+    
+    my	$cwd = getcwd;
+    my	$zip_name = $filename;
+    
+    #	We are about to change the directory.
+    #	Therefore create an absolute pathname for the zip archive.
+    
+    #	First transfer the drive from $cwd to $zip_name.  This is a
+    #	workaround for a bug in file_name_is_absolute which thinks
+    #	the the path \bla is an absolute path under DOS.
     my ($volume,$directories,$file) = File::Spec->splitpath ($zip_name);
     my ($volume_cwd,$directories_cwd,$file_cwd) = File::Spec->splitpath ($cwd);
     $volume = $volume_cwd if ($volume eq "");
     $zip_name = File::Spec->catpath ($volume,$directories,$file);
-
-    #   Add the current working directory to a relative path.
+    
+    #	Add the current working directory to a relative path.
     if ( ! file_name_is_absolute ($zip_name))
     {
         $zip_name = File::Spec->catfile ($cwd, $zip_name);
-
-        #   Try everything to clean up the name.
+        
+        #	Try everything to clean up the name.
         $zip_name = File::Spec->rel2abs ($filename);
         $zip_name = File::Spec->canonpath ($zip_name);
-
-        #   Remove .. directories from the middle of the path.
+        
+        #	Remove .. directories from the middle of the path.
         while ($zip_name =~ /\/[^\/][^\.\/][^\/]*\/\.\.\//)
         {
             $zip_name = $` . "/" . $';
         }
     }
 
-    #   Just in case the zip program gets confused by an existing file with the
-    #   same name as the one to be written that file is removed first.
+    #	Just in case the zip program gets confused by an existing file with the
+    #	same name as the one to be written that file is removed first.
     if ( -e $filename)
     {
         if (unlink ($filename) == 0)
@@ -100,9 +100,9 @@ sub zip_dirtree
             return;
         }
     }
-
-    #   Finally create the zip file.  First change into the temporary directory
-    #   so that the resulting zip file contains only paths relative to it.
+    
+    #	Finally create the zip file.  First change into the temporary directory
+    #	so that the resulting zip file contains only paths relative to it.
     print "zipping [$ZipCmd $ZipFlags $zip_name *]\n";
     chdir ($TempDir);
     system ("$ZipCmd $ZipFlags $zip_name *");
@@ -249,9 +249,9 @@ sub writeManifest
 
 
 ###############################################################################
-#   Print usage information.
+#	Print usage information.
 #
-sub usage   ()
+sub	usage	()
 {
     print <<END_OF_USAGE;
 usage: $0 <option>* [<SvgD-values>]
@@ -264,9 +264,9 @@ END_OF_USAGE
 }
 
 ###############################################################################
-#   Process the command line.
+#	Process the command line.
 #
-sub process_command_line
+sub	process_command_line
 {
     foreach (@ARGV)
     {
@@ -276,9 +276,9 @@ sub process_command_line
             exit 0;
         }
     }
-
+    
     $global_output_name = "polygons.odp";
-    my  $j = 0, $noMoreOptions = 0;
+    my	$j = 0, $noMoreOptions = 0;
     for (my $i=0; $i<$#ARGV; $i++)
     {
         if ( !$noMoreOptions and $ARGV[$i] eq "-o")
@@ -307,12 +307,12 @@ sub process_command_line
 }
 
 ###############################################################################
-#   Main
+#	Main
 ###############################################################################
 
 $ZipCmd = $ENV{LOG_FILE_ZIP_CMD};
 $ZipFlags = $ENV{LOG_FILE_ZIP_FLAGS};
-#   Provide default values for the zip command and it's flags.
+#	Provide default values for the zip command and it's flags.
 if ( ! defined $ZipCmd)
 {
     $ZipCmd = "zip" unless defined $ZipCmd;

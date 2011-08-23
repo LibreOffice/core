@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace cairocanvas
     typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XCustomSprite,
                                                ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
+                                                ::com::sun::star::lang::XServiceInfo >	CanvasCustomSpriteBase_Base;
     /** Mixin Sprite
 
         Have to mixin the Sprite interface before deriving from
@@ -83,10 +83,10 @@ namespace cairocanvas
     };
 
     typedef ::canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
-                                              SpriteHelper,
-                                              CanvasHelper,
+                                              SpriteHelper, 
+                                              CanvasHelper, 
                                               ::osl::MutexGuard,
-                                              ::cppu::OWeakObject >                     CanvasCustomSpriteBaseT;
+                                              ::cppu::OWeakObject > 					CanvasCustomSpriteBaseT;
 
     /* Definition of CanvasCustomSprite class */
 
@@ -108,7 +108,7 @@ namespace cairocanvas
             @param rDevice
             Target DX device
          */
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& 	rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice );
 
         virtual void SAL_CALL disposing();
@@ -134,7 +134,7 @@ namespace cairocanvas
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::ViewState&	  viewState,
                               const ::com::sun::star::rendering::RenderState& renderState );
 
         // SurfaceProvider
@@ -146,7 +146,7 @@ namespace cairocanvas
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
-            raw pointer (without refcounting)
+            raw pointer (without refcounting) 
         */
         SpriteCanvasRef           mpSpriteCanvas;
         ::cairo::SurfaceSharedPtr mpBufferSurface;

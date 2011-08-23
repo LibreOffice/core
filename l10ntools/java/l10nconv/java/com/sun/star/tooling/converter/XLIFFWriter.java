@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,11 +25,11 @@
  *
  ************************************************************************/
 /*
- *
+ * 
  /*
  * XLIFFWriter.java
  *
- *
+ * 
  */
 
 package com.sun.star.tooling.converter;
@@ -42,8 +42,8 @@ import com.sun.star.tooling.languageResolver.LanguageResolver;
 import com.sun.star.tooling.languageResolver.LanguageResolver.LanguageResolvingException;
 
 /**
- * Write the Data to a wellformed XLIFF File
- *
+ * Write the Data to a wellformed XLIFF File 
+ * 
  * @author Christian Schmidt
  */
 public class XLIFFWriter extends DataWriter {
@@ -71,32 +71,32 @@ public class XLIFFWriter extends DataWriter {
             "SourceQText", "SourceTitle", "TargetLanguageID", "TargetText",
             "TargetHText", "TargetQText", "TargetTitle", "TimeStamp" };
     /**
-     * An Map holding the source and target content
+     * An Map holding the source and target content 
      */
     private final Map data = new ExtMap(outLineNames, null);
 
 
     /**
-     * Indicates if this is the first Transunit to write
+     * Indicates if this is the first Transunit to write 
      */
     boolean isFirst = true;
-
+    
     LanguageResolver languageResolver;
 
-
+    
     /**
      * Create a new Instance of XLIFFWriter
-     *
+     * 
      * @param bos the Buffered Output Stream to write to
      * @param charset the charset to use
-     * @throws IOException
+     * @throws IOException 
      */
     public XLIFFWriter(BufferedOutputStream bos, String charset)
             throws IOException {
         super(bos, charset);
         this.languageResolver =new LanguageResolver();
-
-
+        
+        
     }
 
     /* (non-Javadoc)
@@ -107,8 +107,8 @@ public class XLIFFWriter extends DataWriter {
     }
 
     /**
-     * check if the item is an empty String
-     *
+     * check if the item is an empty String 
+     * 
      * @param item the string to check
      * @return true if it is not empty, false if it is empty
      */
@@ -120,7 +120,7 @@ public class XLIFFWriter extends DataWriter {
 
     /**
      * Replaces all characters that mustn't be in XLIFF PCdata
-     *
+     * 
      * @param string the string to check
      * @return the checked string with all characters replaced
      * @throws java.io.IOException
@@ -129,17 +129,17 @@ public class XLIFFWriter extends DataWriter {
         if (string == null)
             return string; // ""
         String str = string;
-//      str = str.replaceAll("&", "&amp;");
-//      str = str.replaceAll("<", "&lt;");
-//      str = str.replaceAll(">", "&gt;");
-//      str = str.replaceAll("\"", "&quot;");
-//      str = str.replaceAll("'", "&apos;");
+//		str = str.replaceAll("&", "&amp;");
+//		str = str.replaceAll("<", "&lt;");
+//		str = str.replaceAll(">", "&gt;");
+//		str = str.replaceAll("\"", "&quot;");
+//		str = str.replaceAll("'", "&apos;");
          for(int i=0;i<str.length();i++){
              if(str.charAt(i)=='&'){
                  str=str.substring(0, i)+"&amp;"+str.substring(i+1);
                  continue;
              }
-
+    
              if(str.charAt(i)=='<'){
                  str=str.substring(0, i)+"&lt;"+str.substring(i+1);
                  continue;
@@ -178,30 +178,30 @@ public class XLIFFWriter extends DataWriter {
      */
     public void writeData() throws IOException {
         if (isFirst) {
-
+            
             writeHeader();
             isFirst = false;
         }
         try{
             writeTransUnit();
         }catch(DirtyTagWrapper.TagWrapperException e){
-
+            
         }
     }
 
     /**
      * Write the XLIFFFiles header
-     *
+     * 
      * @throws IOException
      */
-    private void writeHeader() throws IOException {
+    private void writeHeader() throws IOException { 
 
         this.write(getHeader());
     }
 
     /**
      * Write the XLIFFFiles Trailer
-     *
+     * 
      * @throws IOException
      */
     private void writeTrailer() throws IOException {
@@ -210,20 +210,20 @@ public class XLIFFWriter extends DataWriter {
 
     /**
      * Write the next TransUnit
-     *
+     * 
      * @throws IOException
      */
     private void writeTransUnit() throws IOException, DirtyTagWrapper.TagWrapperException {
         try{
             StringBuffer writeBuffer = new StringBuffer(1000);
-
+    
             StringBuffer allLinesEnd = new StringBuffer(200);
             String sRessource = "";
             int parts = 0;
             if (data == null) {
                 OutputHandler.out("error");// TBD Exception
             }
-
+            
             if (!(this.data.get("SourceText").equals("") || this.data.get(
                     "SourceText").equals(" "))) {
                 parts++;
@@ -243,10 +243,10 @@ public class XLIFFWriter extends DataWriter {
             if (!(this.data.get("SourceText").equals("") || this.data.get(
                     "SourceText").equals(" "))) {
                 sRessource = "res"; // normal TEXT source
-
+                
                 allLinesEnd
                         .append("\t\t\t\t<context-group name=\"StarOffice Attributes\">\n");
-
+                
                 if (isUsed((String) this.data.get("ResType")))
                     allLinesEnd
                             .append("\t\t\t\t\t<context context-type=\"DBType\">"
@@ -299,7 +299,7 @@ public class XLIFFWriter extends DataWriter {
                             + "</context>\n");
                 allLinesEnd.append("\t\t\t\t</context-group>\n"
                         + "\t\t\t</trans-unit>\n");
-
+    
                 writeBuffer.append("\t\t\t<trans-unit id=\""
                         + this.data.get("BlockNr") + ":" + parts + "\" restype=\""
                         + sRessource + "\" translate=\"yes\">\n");
@@ -308,7 +308,7 @@ public class XLIFFWriter extends DataWriter {
                             + languageResolver.getRFCFromISO((String)this.data.get("SourceLanguageID")) + "\">"
                             + DirtyTagWrapper.wrapString((String) this.data.get("SourceText"))
                             + "</source>\n");
-
+    
                 if (isUsed((String) this.data.get("TargetText")))
                     writeBuffer
                             .append("\t\t\t\t<target state=\"to_translate\" xml:lang=\""
@@ -318,7 +318,7 @@ public class XLIFFWriter extends DataWriter {
                                             .get("TargetText")) + "</target>\n");
                 writeBuffer.append(allLinesEnd);
                 Converter.countLine();
-
+    
             }
             // if(!(this.data.get("SourceHText").equals("")||this.data.get("SourceHText").equals("
             // "))){
@@ -336,7 +336,7 @@ public class XLIFFWriter extends DataWriter {
             // writeBuffer.append(allLinesEnd);
             // Converter.countLine();
             // }
-
+    
             if (!(this.data.get("SourceQText").equals("") || this.data.get(
                     "SourceQText").equals(" "))) {
                 sRessource = "res-QuickHelp"; // Source is OuickHelp
@@ -359,11 +359,11 @@ public class XLIFFWriter extends DataWriter {
                 writeBuffer.append(allLinesEnd);
                 Converter.countLine();
             }
-
+    
             if (!(this.data.get("SourceTitle").equals("") || this.data.get(
                     "SourceTitle").equals(" "))) {
                 sRessource = "res-Title"; // Source is Title
-
+                
                 writeBuffer.append("\t\t\t<trans-unit id=\""
                         + this.data.get("BlockNr") + ":" + parts + "\" restype=\""
                         + sRessource + "\" translate=\"yes\">\n");// always translate
@@ -389,8 +389,8 @@ public class XLIFFWriter extends DataWriter {
     }
 
     /**
-     * Create the XLIFFFiles Header
-     *
+     * Create the XLIFFFiles Header 
+     * 
      * @return the header as string
      * @throws java.io.UnsupportedEncodingException
      */
@@ -399,18 +399,18 @@ public class XLIFFWriter extends DataWriter {
                 (getProcessingInstructionTag() + getDTDLine()
                         + openVersionLine() + openFileLine() + getHeaderTag() + openBodyTag())
                         .getBytes(), "UTF8");
-
+        
     }
 
     /**
      * Create the XLIFFFiles Trailer
-     *
+     * 
      * @return the trailer as string
      */
     private String getTrailer() {
         return closeBodyTag() + closeFileLine() + closeVersionLine();
     }
-
+    
     /**
      * Create the Processing Instruction Tag used by this XLIFFFile
      * @return the Processing Instruction Tag used by this XLIFFFile
@@ -439,7 +439,7 @@ public class XLIFFWriter extends DataWriter {
 
     /**
      * Create the beginning of the line holding the version of this XIFFFile
-     *
+     * 
      * @return a string  with the beginning of the line holding the version of this XIFFFile
      */
     private String openVersionLine() {
@@ -447,7 +447,7 @@ public class XLIFFWriter extends DataWriter {
     }
     /**
      * Create the ending of the line holding the version of this XIFFFile
-     *
+     * 
      * @return a string  with the ending of the line holding the version of this XIFFFile
      */
     private String closeVersionLine() {
@@ -455,11 +455,11 @@ public class XLIFFWriter extends DataWriter {
     }
     /**
      * Create the beginning of the line holding the file tag of this XIFFFile
-     *
+     * 
      * @return a string  with the beginning of the file tag of this XIFFFile
      */
     private String openFileLine() {
-
+        
             String FileTagStart = "\t<file";
             String FileDataType = " datatype=\"STAROFFICE\"";
             String FileDate = " date=\"" + this.data.get("TimeStamp") + "\"";
@@ -478,11 +478,11 @@ public class XLIFFWriter extends DataWriter {
             String FileTagEnd = ">";
             return FileTagStart + FileDataType + FileDate + FileOriginal
                 + FileSourceLanguage + FileTargetLanguage + FileTagEnd;
-
+        
     }
     /**
      * Create the ending of the line holding the file tag of this XIFFFile
-     *
+     * 
      * @return a string  with the ending of the file tag of this XIFFFile
      */
     private String closeFileLine() {
@@ -497,7 +497,7 @@ public class XLIFFWriter extends DataWriter {
     }
     /**
      * Create the begining of the line holding the body tag of this XIFFFile
-     *
+     * 
      * @return a string  with the begining of the body tag of this XIFFFile
      */
     private String openBodyTag() {
@@ -505,7 +505,7 @@ public class XLIFFWriter extends DataWriter {
     }
     /**
      * Create the ending of the line holding the body tag of this XIFFFile
-     *
+     * 
      * @return a string  with the ending of the body tag of this XIFFFile
      */
     private String closeBodyTag() {
@@ -514,7 +514,7 @@ public class XLIFFWriter extends DataWriter {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see com.sun.star.tooling.converter.DataWriter#writeData(java.util.Map[])
      */
     protected void writeData(Map[] data) throws IOException {
@@ -524,9 +524,9 @@ public class XLIFFWriter extends DataWriter {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see com.sun.star.tooling.converter.DataWriter#getDataFrom(com.sun.star.tooling.converter.DataHandler)
      */
-    protected void getDataFrom(DataHandler handler) {   }
+    protected void getDataFrom(DataHandler handler) {	}
 
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,9 +102,9 @@ public:
                              RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     void            WriteSyntax( FILE * fOutput, RscTypCont * pTC );
 
-    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    void			WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                 const char * );
-    void            WriteRcCtor( FILE * fOutput, RscTypCont * pTC );
+    void			WriteRcCtor( FILE * fOutput, RscTypCont * pTC );
 };
 
 class RscSysDepend : public RscClass

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@
 #include <vcl/salinst.hxx>
 
 // --------------
-// - ImpBitmap  -
+// - ImpBitmap	-
 // --------------
 
 ImpBitmap::ImpBitmap() :
-            mnRefCount  ( 1UL ),
-            mnChecksum  ( 0UL ),
+            mnRefCount	( 1UL ),
+            mnChecksum	( 0UL ),
             mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() ),
             maSourceSize( 0, 0 )
 {
@@ -63,7 +63,7 @@ void ImpBitmap::ImplSetSalBitmap( SalBitmap* pBitmap )
 }
 
 // -----------------------------------------------------------------------
-
+    
 BOOL ImpBitmap::ImplCreate( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
 {
     maSourceSize = rSize;

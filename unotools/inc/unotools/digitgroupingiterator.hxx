@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace utl {
     The iterator advances over the digit groupings, returning the number of
     digits per group. If the last group was encountered the iterator will
     always return the last grouping.
-
+    
     Grouping values are sanitized to be 0 <= value <= SAL_MAX_UINT16, even if
     originally Int32, to be able to easily cast it down to String's xub_StrLen.
     This shouldn't make any difference in practice.

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/scoped_array.hpp>
-
+#include <boost/scoped_ptr.hpp> 
+#include <boost/scoped_array.hpp> 
+ 
 #include <rtl/logfile.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -80,8 +80,8 @@ Image::Image( const ResId& rResId ) :
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        BitmapEx    aBmpEx;
-        ULONG       nObjMask = pResMgr->ReadLong();
+        BitmapEx	aBmpEx;
+        ULONG 		nObjMask = pResMgr->ReadLong();
 
         if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
         {
@@ -154,7 +154,7 @@ Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
     DBG_CTOR( Image, NULL );
 
     const BitmapEx aBmpEx( rBitmap, rMaskBitmap );
-
+    
     ImplInit( aBmpEx );
 }
 
@@ -166,7 +166,7 @@ Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
     DBG_CTOR( Image, NULL );
 
     const BitmapEx aBmpEx( rBitmap, rColor );
-
+    
     ImplInit( aBmpEx );
 }
 
@@ -176,7 +176,7 @@ Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
     mpImplData( NULL )
 {
     DBG_CTOR( Image, NULL );
-
+    
     const Graphic aGraphic( rxGraphic );
     ImplInit( aGraphic.GetBitmapEx() );
 }
@@ -218,7 +218,7 @@ void Image::ImplInit( const BitmapEx& rBmpEx )
 Size Image::GetSizePixel() const
 {
     DBG_CHKTHIS( Image, NULL );
-
+    
     Size aRet;
 
     if( mpImplData )
@@ -243,7 +243,7 @@ Size Image::GetSizePixel() const
 BitmapEx Image::GetBitmapEx() const
 {
     DBG_CHKTHIS( Image, NULL );
-
+    
     BitmapEx aRet;
 
     if( mpImplData )
@@ -268,7 +268,7 @@ BitmapEx Image::GetBitmapEx() const
 uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
 {
     const Graphic aGraphic( GetBitmapEx() );
-
+    
     return aGraphic.GetXGraphic();
 }
 
@@ -294,7 +294,7 @@ Image Image::GetColorTransformedImage( ImageColorTransform eColorTransform ) con
 
             if( nColorCount && pSrcColors && pDstColors )
             {
-                aBmpEx.Replace( pSrcColors, pDstColors, nColorCount );
+                aBmpEx.Replace( pSrcColors, pDstColors, nColorCount ); 
                 aRet = Image( aBmpEx );
             }
 
@@ -368,7 +368,7 @@ Image& Image::operator=( const Image& rImage )
 
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
         delete mpImplData;
-
+    
     mpImplData = rImage.mpImplData;
 
     return *this;
@@ -380,7 +380,7 @@ BOOL Image::operator==( const Image& rImage ) const
 {
     DBG_CHKTHIS( Image, NULL );
     DBG_CHKOBJ( &rImage, Image, NULL );
-
+    
     bool bRet = false;
 
     if( rImage.mpImplData == mpImplData )
@@ -400,7 +400,7 @@ BOOL Image::operator==( const Image& rImage ) const
             case IMAGETYPE_IMAGE:
                 bRet = static_cast< ImplImageData* >( rImage.mpImplData->mpData )->IsEqual( *static_cast< ImplImageData* >( mpImplData->mpData ) );
             break;
-
+            
             default:
                 bRet = false;
             break;
@@ -432,30 +432,30 @@ ImageList::ImageList( const ResId& rResId ) :
     RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::ImageList( const ResId& rResId )" );
 
     DBG_CTOR( ImageList, NULL );
-
+    
     rResId.SetRT( RSC_IMAGELIST );
-
+    
     ResMgr* pResMgr = rResId.GetResMgr();
 
     if( pResMgr && pResMgr->GetResource( rResId ) )
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        ULONG                               nObjMask = pResMgr->ReadLong();
-        const String                        aPrefix( pResMgr->ReadString() );
+        ULONG 								nObjMask = pResMgr->ReadLong();
+        const String						aPrefix( pResMgr->ReadString() );
         ::boost::scoped_ptr< Color >        spMaskColor;
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
             spMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) ) );
-
+        
         pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
-
+        
         if( nObjMask & RSC_IMAGELIST_IDLIST )
         {
             for( sal_Int32 i = 0, nCount = pResMgr->ReadLong(); i < nCount; ++i )
                 pResMgr->ReadLong();
         }
-
+        
         sal_Int32 nCount = pResMgr->ReadLong();
         ImplInit( static_cast< USHORT >( nCount ), Size() );
 
@@ -474,8 +474,8 @@ ImageList::ImageList( const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
-                      const ::rtl::OUString& rPrefix,
+ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, 
+                      const ::rtl::OUString& rPrefix, 
                       const Color* ) :
     mpImplData( NULL ),
     mnInitSize( 1 ),
@@ -490,8 +490,8 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
     mpImplData->maPrefix = rPrefix;
     for( sal_uInt32 i = 0; i < rNameVector.size(); ++i )
     {
-//      fprintf (stderr, "List %p [%d]: '%s'\n",
-//               this, i, rtl::OUStringToOString( rNameVector[i], RTL_TEXTENCODING_UTF8 ).getStr() );
+//		fprintf (stderr, "List %p [%d]: '%s'\n",
+//				 this, i, rtl::OUStringToOString( rNameVector[i], RTL_TEXTENCODING_UTF8 ).getStr() );
         mpImplData->AddImage( rNameVector[ i ], static_cast< USHORT >( i ) + 1, BitmapEx() );
     }
 }
@@ -537,8 +537,8 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
 
     BitmapEx aBmpEx;
 
-//  fprintf (stderr, "Attempt load of '%s'\n",
-//           rtl::OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr() );
+//	fprintf (stderr, "Attempt load of '%s'\n",
+//			 rtl::OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     rtl::OUString aFileName = rPrefix;
     aFileName += maName;
@@ -616,7 +616,7 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
 {
     USHORT nItems = sal::static_int_cast< USHORT >( rNameVector.size() );
 
-//  fprintf (stderr, "InsertFromHorizontalStrip (1) [%d items]\n", nItems);
+//	fprintf (stderr, "InsertFromHorizontalStrip (1) [%d items]\n", nItems);
 
     if (!nItems)
             return;
@@ -639,7 +639,7 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
 void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
                                             USHORT       nCount,
                                             const Color *pMaskColor,
-                                            const Color *pSearchColors,
+                                            const Color *pSearchColors, 
                                             const Color *pReplaceColors,
                                             ULONG        nColorCount)
 {
@@ -653,7 +653,7 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
     }
     if ( nColorCount && pSearchColors && pReplaceColors )
         aBmpEx.Replace( pSearchColors, pReplaceColors, nColorCount );
-
+    
     std::vector< rtl::OUString > aNames( nCount );
     InsertFromHorizontalStrip( aBmpEx, aNames );
 }
@@ -722,7 +722,7 @@ void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rI
     if( nId )
     {
         RemoveImage( nId );
-
+        
         if( !mpImplData )
             ImplInit( 0, rImage.GetSizePixel() );
         mpImplData->AddImage( rImageName, nId, rImage.GetBitmapEx());
@@ -789,7 +789,7 @@ Image ImageList::GetImage( USHORT nId ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
-//  fprintf (stderr, "GetImage %d\n", nId);
+//	fprintf (stderr, "GetImage %d\n", nId);
 
     Image aRet;
 
@@ -816,13 +816,13 @@ Image ImageList::GetImage( USHORT nId ) const
 
 Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
 {
-//  fprintf (stderr, "GetImage '%s'\n",
-//           rtl::OUStringToOString( rImageName, RTL_TEXTENCODING_UTF8 ).getStr() );
+//	fprintf (stderr, "GetImage '%s'\n",
+//			 rtl::OUStringToOString( rImageName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     if( mpImplData )
     {
         ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
-
+        
         if( pImg )
         {
             if( pImg->IsLoadable() )
@@ -830,7 +830,7 @@ Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
             return Image( pImg->maBitmapEx );
         }
     }
-//  fprintf (stderr, "no such image\n");
+//	fprintf (stderr, "no such image\n");
 
     return Image();
 }
@@ -852,7 +852,7 @@ void ImageList::Clear()
 USHORT ImageList::GetImageCount() const
 {
     DBG_CHKTHIS( ImageList, NULL );
-
+    
     return mpImplData ? static_cast< USHORT >( mpImplData->maImages.size() ) : 0;
 }
 
@@ -918,7 +918,7 @@ void ImageList::GetImageIds( ::std::vector< USHORT >& rIds ) const
     DBG_CHKTHIS( ImageList, NULL );
 
     rIds = ::std::vector< USHORT >();
-
+    
     if( mpImplData )
     {
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
@@ -928,7 +928,7 @@ void ImageList::GetImageIds( ::std::vector< USHORT >& rIds ) const
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString ImageList::GetImageName( USHORT nPos ) const
+::rtl::OUString	ImageList::GetImageName( USHORT nPos ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -947,7 +947,7 @@ void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
     DBG_CHKTHIS( ImageList, NULL );
 
     rNames = ::std::vector< ::rtl::OUString >();
-
+    
     if( mpImplData )
     {
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
@@ -964,7 +964,7 @@ void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
 Size ImageList::GetImageSize() const
 {
     DBG_CHKTHIS( ImageList, NULL );
-
+    
     Size aRet;
 
     if( mpImplData )
@@ -979,8 +979,8 @@ Size ImageList::GetImageSize() const
             aRet = mpImplData->maImageSize = aTmp.GetSizePixel();
         }
     }
-//  fprintf (stderr, "GetImageSize returns %d, %d\n",
-//           aRet.Width(), aRet.Height());
+//	fprintf (stderr, "GetImageSize returns %d, %d\n",
+//			 aRet.Width(), aRet.Height());
 
     return aRet;
 }
@@ -1009,7 +1009,7 @@ BOOL ImageList::operator==( const ImageList& rImageList ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
     DBG_CHKOBJ( &rImageList, ImageList, NULL );
-
+    
     bool bRet = false;
 
     if( rImageList.mpImplData == mpImplData )

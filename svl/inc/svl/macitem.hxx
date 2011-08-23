@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,15 +84,15 @@ public:
                 ScriptType eType); //  = STARBASIC entfernt
 
     SvxMacro( SjJSbxObjectBase* _pFunctionObject, const String &rSource );
-    ~SvxMacro();    // noetig fuer pFunctionObject
+    ~SvxMacro();	// noetig fuer pFunctionObject
 
-    const String &GetLibName() const        { return aLibName; }
-    const String &GetMacName() const        { return aMacName; }
+    const String &GetLibName() const 		{ return aLibName; }
+    const String &GetMacName() const 		{ return aMacName; }
     String GetLanguage()const;
 
-    ScriptType GetScriptType() const        { return eType; }
+    ScriptType GetScriptType() const 		{ return eType; }
 
-    BOOL HasMacro() const           { return aMacName.Len() ? TRUE : FALSE; }
+    BOOL HasMacro() const 			{ return aMacName.Len() ? TRUE : FALSE; }
 
 #ifdef SOLAR_JAVA
     // JavaScript-Function-Objekt holen
@@ -116,10 +116,10 @@ inline SvxMacro::SvxMacro( SjJSbxObjectBase* _pFunctionObject, const String &rSo
 
 DECLARE_TABLE( _SvxMacroTableDtor, SvxMacro* )
 
-#define SVX_MACROTBL_VERSION31  0
-#define SVX_MACROTBL_VERSION40  1
+#define SVX_MACROTBL_VERSION31	0
+#define SVX_MACROTBL_VERSION40	1
 
-#define SVX_MACROTBL_AKTVERSION SVX_MACROTBL_VERSION40
+#define SVX_MACROTBL_AKTVERSION	SVX_MACROTBL_VERSION40
 
 class SVL_DLLPUBLIC SvxMacroTableDtor : public _SvxMacroTableDtor
 {
@@ -132,10 +132,10 @@ public:
     // loescht alle Eintraege
     void DelDtor();
 
-    SvStream&   Read( SvStream &, USHORT nVersion = SVX_MACROTBL_AKTVERSION );
-    SvStream&   Write( SvStream & ) const;
+    SvStream&	Read( SvStream &, USHORT nVersion = SVX_MACROTBL_AKTVERSION );
+    SvStream&	Write( SvStream & ) const;
 
-    USHORT GetVersion() const       { return SVX_MACROTBL_AKTVERSION; }
+    USHORT GetVersion() const		{ return SVX_MACROTBL_AKTVERSION; }
 };
 
 inline SvxMacroTableDtor::SvxMacroTableDtor( const USHORT nInitSz,
@@ -164,8 +164,8 @@ public:
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT          GetVersion( USHORT nFileFormatVersion ) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT			GetVersion( USHORT nFileFormatVersion ) const;
 
     inline const SvxMacroTableDtor& GetMacroTable() const { return aMacroTable;}
     inline void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aMacroTable = rTbl; }

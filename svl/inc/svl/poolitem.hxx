@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,9 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
 #define SFX_ITEMS_OLD_MAXREF                0xffef
 #define SFX_ITEMS_MAXREF                    0xfffffffe
-#define SFX_ITEMS_SPECIAL                   0xffffffff
+#define SFX_ITEMS_SPECIAL					0xffffffff
 
-#define CONVERT_TWIPS                       0x80    //Uno-Konvertierung fuer Massangaben (fuer MemberId)
+#define CONVERT_TWIPS 						0x80	//Uno-Konvertierung fuer Massangaben (fuer MemberId)
 
 // -----------------------------------------------------------------------
 
@@ -145,19 +145,19 @@ enum SfxItemPresentation
 
 typedef USHORT SfxItemState;
 
-#define SFX_ITEM_UNKNOWN    0x0000
+#define	SFX_ITEM_UNKNOWN	0x0000
 
-#define SFX_ITEM_DISABLED   0x0001
-#define SFX_ITEM_READONLY   0x0002
+#define SFX_ITEM_DISABLED	0x0001
+#define SFX_ITEM_READONLY	0x0002
 
 #define SFX_ITEM_DONTCARE   0x0010
-#define SFX_ITEM_DEFAULT    0x0020
-#define SFX_ITEM_SET        0x0030
+#define SFX_ITEM_DEFAULT	0x0020
+#define SFX_ITEM_SET		0x0030
 
 // old stuff - dont use!!!
-#define SFX_ITEM_AVAILABLE  SFX_ITEM_DEFAULT
-#define SFX_ITEM_OFF        SFX_ITEM_DEFAULT
-#define SFX_ITEM_ON         SFX_ITEM_SET
+#define SFX_ITEM_AVAILABLE	SFX_ITEM_DEFAULT
+#define SFX_ITEM_OFF      	SFX_ITEM_DEFAULT
+#define SFX_ITEM_ON			SFX_ITEM_SET
 
 DBG_NAMEEX_VISIBILITY(SfxPoolItem, SVL_DLLPUBLIC)
 DBG_NAMEEX(SfxVoidItem)
@@ -185,11 +185,11 @@ friend class SfxVoidItem;
 
     ULONG                    nRefCount;                    // Referenzzaehler
     USHORT                   nWhich;
-    USHORT                   nKind;
+    USHORT					 nKind;
 
 private:
     inline void              SetRefCount( ULONG n );
-    inline void              SetKind( USHORT n );
+    inline void				 SetKind( USHORT n );
 public:
     inline ULONG             AddRef( ULONG n = 1 ) const;
 private:
@@ -213,7 +213,7 @@ public:
     virtual int              operator==( const SfxPoolItem& ) const = 0;
     int                      operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
-    virtual int              Compare( const SfxPoolItem &rWith ) const;
+    virtual int				 Compare( const SfxPoolItem &rWith ) const;
     virtual int              Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePresentation,
@@ -226,15 +226,15 @@ public:
     virtual bool             ScaleMetrics( long lMult, long lDiv );
     virtual bool             HasMetrics() const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxPoolItem*     Create( SvStream &, USHORT nItemVersion ) const;
     virtual SvStream&        Store( SvStream &, USHORT nItemVersion ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const = 0;
 
     ULONG                    GetRefCount() const { return nRefCount; }
-    inline USHORT            GetKind() const { return nKind; }
+    inline USHORT			 GetKind() const { return nKind; }
 
     /** Read in a Unicode string from a streamed byte string representation.
 

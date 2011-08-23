@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_dtrans.hxx"
 
 //-----------------------------------------------------------------
-//  includes of other projects
+//	includes of other projects
 //-----------------------------------------------------------------
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
@@ -45,36 +45,36 @@
 // the service names
 #define MIMECONTENTTYPEFACTORY_SERVICE_NAME  "com.sun.star.datatransfer.MimeContentTypeFactory"
 
-// the implementation names
+// the implementation names		
 #define MIMECONTENTTYPEFACTORY_IMPL_NAME  "com.sun.star.datatransfer.MimeCntTypeFactory"
 
 // the registry key names
 // a key under which this service will be registered, Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name           >
+//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name           > 
 #define MIMECONTENTTYPEFACTORY_REGKEY_NAME  "/com.sun.star.datatransfer.MimeCntTypeFactory/UNO/SERVICES/com.sun.star.datatransfer.MimeContentTypeFactory"
 
 //-----------------------------------------------------------------------------------------------------------
 // namespace directives
 //-----------------------------------------------------------------------------------------------------------
 
-using namespace ::rtl                       ;
-using namespace ::cppu                      ;
-using namespace ::com::sun::star::uno       ;
-using namespace ::com::sun::star::registry  ;
+using namespace ::rtl						;
+using namespace ::cppu					    ;
+using namespace ::com::sun::star::uno		;
+using namespace ::com::sun::star::registry	;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
 
 //-----------------------------------------------------------------
 // create a static object to initialize the shell9x library
 //-----------------------------------------------------------------
-
+ 
 namespace
 {
 
     //-----------------------------------------------------------------------------------------------------------
     // functions to create a new Clipboad instance; is needed by factory helper implementation
     // @param rServiceManager - service manager, useful if the component needs other uno services
-    // so we should give it to every UNO-Implementation component
+    // so we should give it to every UNO-Implementation component	
     //-----------------------------------------------------------------------------------------------------------
 
     Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
@@ -84,10 +84,10 @@ namespace
 }
 
 //-----------------------------------------------------------------------------------------------------------
-// the 3 important functions which will be exported
+// the 3 important functions which will be exported 
 //-----------------------------------------------------------------------------------------------------------
 
-extern "C"
+extern "C" 
 {
 
 //----------------------------------------------------------------------
@@ -115,13 +115,13 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
     {
         try
         {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
+            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );							
             pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_REGKEY_NAME ) ) );
             bRetVal = sal_True;
         }
         catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
+        {			
+            OSL_ENSURE(sal_False, "InvalidRegistryException caught");			
             bRetVal = sal_False;
         }
     }
@@ -130,7 +130,7 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
 }
 
 //----------------------------------------------------------------------
-// component_getFactory
+// component_getFactory 
 // returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
@@ -141,8 +141,8 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, MIMECONTENTTYPEFACTORY_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_SERVICE_NAME ) );
-
+        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_SERVICE_NAME ) );		
+        
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
@@ -152,7 +152,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
         {
             xFactory->acquire();
             pRet = xFactory.get();
-        }
+        }			
     }
 
     return pRet;

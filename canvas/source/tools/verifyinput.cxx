@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,10 @@ namespace canvas
 {
     namespace tools
     {
-        void verifyInput( const geometry::RealPoint2D&              rPoint,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const geometry::RealPoint2D&				rPoint,
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             (void)pStr; (void)xIf; (void)nArgPos;
 
@@ -103,10 +103,10 @@ namespace canvas
 #endif
         }
 
-        void verifyInput( const geometry::RealSize2D&               rSize,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const geometry::RealSize2D&				rSize,
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             (void)pStr; (void)xIf; (void)nArgPos;
 
@@ -137,10 +137,10 @@ namespace canvas
 #endif
         }
 
-        void verifyInput( const geometry::RealBezierSegment2D&      rSegment,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const geometry::RealBezierSegment2D&		rSegment,
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             (void)pStr; (void)xIf; (void)nArgPos;
 
@@ -211,10 +211,10 @@ namespace canvas
 #endif
         }
 
-        void verifyInput( const geometry::RealRectangle2D&          rRect,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const geometry::RealRectangle2D&			rRect,
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             (void)pStr; (void)xIf; (void)nArgPos;
 
@@ -265,15 +265,15 @@ namespace canvas
 #endif
         }
 
-        void verifyInput( const geometry::AffineMatrix2D&           matrix,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const geometry::AffineMatrix2D&			matrix, 
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             (void)pStr; (void)xIf; (void)nArgPos;
 
 #if OSL_DEBUG_LEVEL > 0
-            const sal_Int32 nBinaryState(
+            const sal_Int32 nBinaryState( 
                 100000 * !::rtl::math::isFinite( matrix.m00 ) +
                  10000 * !::rtl::math::isFinite( matrix.m01 ) +
                   1000 * !::rtl::math::isFinite( matrix.m02 ) +
@@ -302,16 +302,16 @@ namespace canvas
             }
 #endif
         }
-
-        void verifyInput( const geometry::Matrix2D&                 matrix,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        
+        void verifyInput( const geometry::Matrix2D&					matrix, 
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             (void)pStr; (void)xIf; (void)nArgPos;
 
 #if OSL_DEBUG_LEVEL > 0
-            const sal_Int32 nBinaryState(
+            const sal_Int32 nBinaryState( 
                 1000 * !::rtl::math::isFinite( matrix.m00 ) +
                  100 * !::rtl::math::isFinite( matrix.m01 ) +
                   10 * !::rtl::math::isFinite( matrix.m10 ) +
@@ -336,21 +336,21 @@ namespace canvas
             }
 #endif
         }
-
-        void verifyInput( const rendering::ViewState&               viewState,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        
+        void verifyInput( const rendering::ViewState&				viewState, 
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             verifyInput( viewState.AffineTransform,
                          pStr, xIf, nArgPos );
         }
 
-        void verifyInput( const rendering::RenderState&             renderState,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos,
-                          sal_Int32                                 nMinColorComponents )
+        void verifyInput( const rendering::RenderState&				renderState, 
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos,
+                          sal_Int32									nMinColorComponents )
         {
             verifyInput( renderState.AffineTransform,
                          pStr, xIf, nArgPos );
@@ -389,10 +389,10 @@ namespace canvas
             }
         }
 
-        void verifyInput( const rendering::Texture&                 texture,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const rendering::Texture&					texture,
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             verifyInput( texture.AffineTransform,
                          pStr, xIf, nArgPos );
@@ -464,9 +464,9 @@ namespace canvas
         {
             struct VerifyDashValue
             {
-                VerifyDashValue( const char*                                pStr,
-                                 const uno::Reference< uno::XInterface >&   xIf,
-                                 ::sal_Int16                                nArgPos ) :
+                VerifyDashValue( const char*								pStr,
+                                 const uno::Reference< uno::XInterface >&	xIf,
+                                 ::sal_Int16								nArgPos ) :
                     mpStr( pStr ),
                     mrIf( xIf ),
                     mnArgPos( nArgPos )
@@ -491,16 +491,16 @@ namespace canvas
                     }
                 }
 
-                const char*                                 mpStr;
-                const uno::Reference< uno::XInterface >&    mrIf;
-                sal_Int16                                   mnArgPos;
+                const char*									mpStr;
+                const uno::Reference< uno::XInterface >&	mrIf;
+                sal_Int16									mnArgPos;
             };
         }
 
-        void verifyInput( const rendering::StrokeAttributes&        strokeAttributes,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const rendering::StrokeAttributes&		strokeAttributes,
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             if( !::rtl::math::isFinite( strokeAttributes.StrokeWidth ) ||
                 strokeAttributes.StrokeWidth < 0.0 )
@@ -537,7 +537,7 @@ namespace canvas
             ::std::for_each( strokeAttributes.DashArray.getConstArray(),
                              strokeAttributes.DashArray.getConstArray() + strokeAttributes.DashArray.getLength(),
                              VerifyDashValue( pStr, xIf, nArgPos ) );
-
+                                
             ::std::for_each( strokeAttributes.LineArray.getConstArray(),
                              strokeAttributes.LineArray.getConstArray() + strokeAttributes.LineArray.getLength(),
                              VerifyDashValue( pStr, xIf, nArgPos ) );
@@ -591,10 +591,10 @@ namespace canvas
             }
         }
 
-        void verifyInput( const rendering::IntegerBitmapLayout&     bitmapLayout,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const rendering::IntegerBitmapLayout& 	bitmapLayout,
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             (void)pStr; (void)xIf; (void)nArgPos;
 
@@ -665,14 +665,14 @@ namespace canvas
 #else
                     throw lang::IllegalArgumentException();
 #endif
-                }
+                }                
             }
         }
 
-        void verifyInput( const rendering::FloatingPointBitmapLayout&   bitmapLayout,
-                          const char*                                   pStr,
-                          const uno::Reference< uno::XInterface >&      xIf,
-                          ::sal_Int16                                   nArgPos )
+        void verifyInput( const rendering::FloatingPointBitmapLayout&	bitmapLayout,
+                          const char*									pStr,
+                          const uno::Reference< uno::XInterface >&		xIf,
+                          ::sal_Int16									nArgPos )
         {
             (void)pStr; (void)xIf; (void)nArgPos;
 
@@ -742,7 +742,7 @@ namespace canvas
 #else
                 throw lang::IllegalArgumentException();
 #endif
-            }
+            }                
 
             if( bitmapLayout.Format < rendering::FloatingPointBitmapFormat::HALFFLOAT ||
                 bitmapLayout.Format > rendering::FloatingPointBitmapFormat::DOUBLE )
@@ -761,19 +761,19 @@ namespace canvas
             }
         }
 
-        void verifyInput( const rendering::FontInfo&                /*fontInfo*/,
-                          const char*                               /*pStr*/,
-                          const uno::Reference< uno::XInterface >&  /*xIf*/,
-                          ::sal_Int16                               /*nArgPos*/ )
+        void verifyInput( const rendering::FontInfo&				/*fontInfo*/,
+                          const char*								/*pStr*/,
+                          const uno::Reference< uno::XInterface >&	/*xIf*/,
+                          ::sal_Int16								/*nArgPos*/ )
         {
             // TODO(E3): Implement FontDescription checks, once the
             // Panose stuff is ready.
         }
 
-        void verifyInput( const rendering::FontRequest&             fontRequest,
-                          const char*                               pStr,
-                          const uno::Reference< uno::XInterface >&  xIf,
-                          ::sal_Int16                               nArgPos )
+        void verifyInput( const rendering::FontRequest&				fontRequest,
+                          const char*								pStr,
+                          const uno::Reference< uno::XInterface >&	xIf,
+                          ::sal_Int16								nArgPos )
         {
             verifyInput( fontRequest.FontDescription,
                          pStr, xIf, nArgPos );
@@ -819,10 +819,10 @@ namespace canvas
             }
         }
 
-        void verifyIndexRange( const geometry::IntegerRectangle2D&  rect,
-                               const geometry::IntegerSize2D&       size )
+        void verifyIndexRange( const geometry::IntegerRectangle2D& 	rect,
+                               const geometry::IntegerSize2D& 	 	size )
         {
-            const ::basegfx::B2IRange aRect(
+            const ::basegfx::B2IRange aRect( 
                 ::basegfx::unotools::b2IRectangleFromIntegerRectangle2D(
                     rect ) );
 
@@ -847,9 +847,9 @@ namespace canvas
             }
         }
 
-        void verifyBitmapSize( const geometry::IntegerSize2D&           size,
-                               const char*                              pStr,
-                               const uno::Reference< uno::XInterface >& xIf )
+        void verifyBitmapSize( const geometry::IntegerSize2D& 			size,
+                               const char*								pStr,
+                               const uno::Reference< uno::XInterface >&	xIf )
         {
             (void)pStr; (void)xIf;
 
@@ -884,9 +884,9 @@ namespace canvas
             }
         }
 
-        void verifySpriteSize( const geometry::RealSize2D&              size,
-                               const char*                              pStr,
-                               const uno::Reference< uno::XInterface >& xIf )
+        void verifySpriteSize( const geometry::RealSize2D& 				size,
+                               const char*								pStr,
+                               const uno::Reference< uno::XInterface >&	xIf )
         {
             (void)pStr; (void)xIf;
 

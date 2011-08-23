@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ SvtLanguageOptions::~SvtLanguageOptions()
 
     m_pCTLOptions->RemoveListener(this);
     m_pCJKOptions->RemoveListener(this);
-
+    
     delete m_pCJKOptions;
     delete m_pCTLOptions;
 }
@@ -232,7 +232,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
 /*-- 27.10.2005 08:18:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
+SvtSystemLanguageOptions::SvtSystemLanguageOptions() : 
     utl::ConfigItem( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("System/L10N") ))
 {
     uno::Sequence< rtl::OUString > aPropertyNames(1);

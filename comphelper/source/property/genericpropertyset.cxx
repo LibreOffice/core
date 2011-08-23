@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,14 +63,14 @@ namespace comphelper
         Mutex maMutex ;
     } ;
 
-    class GenericPropertySet :  public OWeakAggObject,
+    class GenericPropertySet :	public OWeakAggObject,
                                 public XServiceInfo,
                                 public XTypeProvider,
                                 public PropertySetHelper,
                                 private IMPL_GenericPropertySet_MutexContainer
     {
     private:
-        GenericAnyMapImpl   maAnyMap;
+        GenericAnyMapImpl	maAnyMap;
         ::cppu::OMultiTypeInterfaceContainerHelperVar< ::rtl::OUString,UStringHash,UStringEqual> m_aListener;
 
     protected:

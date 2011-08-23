@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ class PushButton;
 // - ButtonDialog-Types -
 // ----------------------
 
-#define BUTTONDIALOG_BUTTON_NOTFOUND            ((USHORT)0xFFFF)
+#define BUTTONDIALOG_BUTTON_NOTFOUND			((USHORT)0xFFFF)
 
-#define BUTTONDIALOG_DEFBUTTON                  ((USHORT)0x0001)
-#define BUTTONDIALOG_OKBUTTON                   ((USHORT)0x0002)
-#define BUTTONDIALOG_CANCELBUTTON               ((USHORT)0x0004)
-#define BUTTONDIALOG_HELPBUTTON                 ((USHORT)0x0008)
-#define BUTTONDIALOG_FOCUSBUTTON                ((USHORT)0x0010)
+#define BUTTONDIALOG_DEFBUTTON					((USHORT)0x0001)
+#define BUTTONDIALOG_OKBUTTON					((USHORT)0x0002)
+#define BUTTONDIALOG_CANCELBUTTON				((USHORT)0x0004)
+#define BUTTONDIALOG_HELPBUTTON 				((USHORT)0x0008)
+#define BUTTONDIALOG_FOCUSBUTTON				((USHORT)0x0010)
 
 // ----------------
 // - ButtonDialog -
@@ -57,19 +57,19 @@ class VCL_DLLPUBLIC ButtonDialog : public Dialog
 {
 private:
     ImplBtnDlgItemList* mpItemList;
-    Size                maPageSize;
-    Size                maCtrlSize;
-    long                mnButtonSize;
-    USHORT              mnCurButtonId;
-    USHORT              mnFocusButtonId;
-    BOOL                mbFormat;
-    Link                maClickHdl;
+    Size				maPageSize;
+    Size				maCtrlSize;
+    long				mnButtonSize;
+    USHORT				mnCurButtonId;
+    USHORT				mnFocusButtonId;
+    BOOL				mbFormat;
+    Link				maClickHdl;
 
-    SAL_DLLPRIVATE void             ImplInitButtonDialogData();
-    SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( USHORT nBtnFlags );
-    SAL_DLLPRIVATE ImplBtnDlgItem*  ImplGetItem( USHORT nId ) const;
+    SAL_DLLPRIVATE void				ImplInitButtonDialogData();
+    SAL_DLLPRIVATE PushButton* 		ImplCreatePushButton( USHORT nBtnFlags );
+    SAL_DLLPRIVATE ImplBtnDlgItem* 	ImplGetItem( USHORT nId ) const;
     DECL_DLLPRIVATE_LINK(           ImplClickHdl, PushButton* pBtn );
-    SAL_DLLPRIVATE void             ImplPosControls();
+    SAL_DLLPRIVATE void				ImplPosControls();
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE      ButtonDialog( const ButtonDialog & );
@@ -83,38 +83,38 @@ public:
                         ButtonDialog( Window* pParent, const ResId& rResId );
                         ~ButtonDialog();
 
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void		Resize();
+    virtual void		StateChanged( StateChangedType nStateChange );
 
-    virtual void        Click();
+    virtual void		Click();
 
-    void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
-    const Size&         GetPageSizePixel() const { return maPageSize; }
+    void				SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
+    const Size& 		GetPageSizePixel() const { return maPageSize; }
 
-    USHORT              GetCurButtonId() const { return mnCurButtonId; }
+    USHORT				GetCurButtonId() const { return mnCurButtonId; }
 
-    void                AddButton( const XubString& rText, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
-    void                AddButton( StandardButtonType eType, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
-    void                AddButton( PushButton* pBtn, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
-    void                RemoveButton( USHORT nId );
-    void                Clear();
-    USHORT              GetButtonCount() const;
-    USHORT              GetButtonId( USHORT nButton ) const;
-    PushButton*         GetPushButton( USHORT nId ) const;
-    void                SetButtonText( USHORT nId, const XubString& rText );
-    XubString           GetButtonText( USHORT nId ) const;
-    void                SetButtonHelpText( USHORT nId, const XubString& rText );
-    XubString           GetButtonHelpText( USHORT nId ) const;
-    void                SetButtonHelpId( USHORT nId, ULONG nHelpId );
-    ULONG               GetButtonHelpId( USHORT nId ) const;
+    void				AddButton( const XubString& rText, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
+    void				AddButton( StandardButtonType eType, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
+    void				AddButton( PushButton* pBtn, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
+    void				RemoveButton( USHORT nId );
+    void				Clear();
+    USHORT				GetButtonCount() const;
+    USHORT				GetButtonId( USHORT nButton ) const;
+    PushButton* 		GetPushButton( USHORT nId ) const;
+    void				SetButtonText( USHORT nId, const XubString& rText );
+    XubString			GetButtonText( USHORT nId ) const;
+    void				SetButtonHelpText( USHORT nId, const XubString& rText );
+    XubString			GetButtonHelpText( USHORT nId ) const;
+    void				SetButtonHelpId( USHORT nId, ULONG nHelpId );
+    ULONG				GetButtonHelpId( USHORT nId ) const;
 
-    void                SetFocusButton( USHORT nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
-    USHORT              GetFocusButton() const { return mnFocusButtonId; }
+    void				SetFocusButton( USHORT nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
+    USHORT				GetFocusButton() const { return mnFocusButtonId; }
 
-    void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
-    const Link&         GetClickHdl() const { return maClickHdl; }
+    void				SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
+    const Link& 		GetClickHdl() const { return maClickHdl; }
 };
 
-#endif  // _SV_BTNDLG_HXX
+#endif	// _SV_BTNDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

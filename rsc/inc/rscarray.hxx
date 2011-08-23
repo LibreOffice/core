@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@ class RscEnum;
 /******************* R s c A r r a y ************************************/
 class RscInstNode : public IdNode
 {
-    sal_uInt32  nTypeId;
+    sal_uInt32	nTypeId;
 protected:
     using NameNode::Search;
 public:
-    RSCINST aInst;
+    RSCINST	aInst;
     RscInstNode( sal_uInt32 nId );
     ~RscInstNode();
-    virtual sal_uInt32  GetId() const;
+    virtual sal_uInt32	GetId() const;
     RscInstNode *   Left() const { return (RscInstNode *)pLeft  ; };
     RscInstNode *   Right() const{ return (RscInstNode *)pRight ; };
-    RscInstNode *   Search( sal_uInt32 nId ) const
+    RscInstNode *	Search( sal_uInt32 nId ) const
                     {
                         return (RscInstNode *)IdNode::Search( nId );
                     }
@@ -55,7 +55,7 @@ public:
 
 struct RscArrayInst
 {
-    RscInstNode *   pNode;
+    RscInstNode *	pNode;
 };
 
 /* Der Baum wird ueber die Werte des Enums sortiert, nicht ueber
@@ -74,7 +74,7 @@ public:
                     RscArray( Atom nId, sal_uInt32 nTypId,
                                 RscTop * pSuper, RscEnum * pTypeClass );
                     ~RscArray();
-    virtual RSCCLASS_TYPE   GetClassType() const;
+    virtual RSCCLASS_TYPE	GetClassType() const;
 
     void            SetTypeClass( RscEnum * pClass )
                     {
@@ -94,7 +94,7 @@ public:
     sal_uInt32          Size(){ return( nSize ); };
 
     BOOL            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
-    virtual void    SetToDefault( const RSCINST & rInst );
+    virtual void	SetToDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst );
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
@@ -105,7 +105,7 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, BOOL bExtra );
-    virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    virtual void	WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
 
@@ -131,7 +131,7 @@ class RscLangArray : public RscArray
 public:
                     RscLangArray( Atom nId, sal_uInt32 nTypId,
                                 RscTop * pSuper, RscEnum * pTypeClass );
-    virtual RSCCLASS_TYPE   GetClassType() const;
+    virtual RSCCLASS_TYPE	GetClassType() const;
 };
 
 #endif //_RSCARRAY

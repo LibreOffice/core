@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,66 +63,66 @@ namespace svt { namespace table
     friend class TableFunctionSet;
     private:
         /// the control whose impl-instance we implemnt
-        TableControl&           m_rAntiImpl;
+        TableControl&       	m_rAntiImpl;
         /// the model of the table control
-        PTableModel             m_pModel;
+        PTableModel         	m_pModel;
         /// the input handler to use, usually the input handler as provided by ->m_pModel
-        PTableInputHandler      m_pInputHandler;
+        PTableInputHandler  	m_pInputHandler;
         /// the widths of the single columns, measured in pixel
-        ArrayOfLong             m_aColumnWidthsPixel;
+        ArrayOfLong         	m_aColumnWidthsPixel;
         /** the accumulated widths of the single columns, i.e. their exclusive right borders,
             <strong<not</strong> counting the space for a possible row header column
         */
-        ArrayOfLong             m_aAccColumnWidthsPixel;
+        ArrayOfLong         	m_aAccColumnWidthsPixel;
 
-    ArrayOfLong     m_aVisibleColumnWidthsPixel;
+    ArrayOfLong		m_aVisibleColumnWidthsPixel;
         /// the height of a single row in the table, measured in pixels
-        long                    m_nRowHeightPixel;
+        long                	m_nRowHeightPixel;
         /// the height of the column header row in the table, measured in pixels
-        long                    m_nColHeaderHeightPixel;
+        long                	m_nColHeaderHeightPixel;
         /// the width of the row header column in the table, measured in pixels
-        long                    m_nRowHeaderWidthPixel;
+        long                	m_nRowHeaderWidthPixel;
 
         /// the number of columns in the table control. Cached model value.
-        TableSize               m_nColumnCount;
+        TableSize           	m_nColumnCount;
         /// the number of rows in the table control. Cached model value.
-        TableSize               m_nRowCount;
+        TableSize           	m_nRowCount;
 
-        ColPos                  m_nCurColumn;
-        RowPos                  m_nCurRow;
-        ColPos                  m_nLeftColumn;
-        RowPos                  m_nTopRow;
+        ColPos              	m_nCurColumn;
+        RowPos              	m_nCurRow;
+        ColPos              	m_nLeftColumn;
+        RowPos              	m_nTopRow;
 
-        sal_Int32               m_nCursorHidden;
+        sal_Int32           	m_nCursorHidden;
 
         /** the window to contain all data content, including header bars
 
             The window's upper left corner is at position (0,0), relative to the
             table control, which is the direct parent of the data window.
         */
-        TableDataWindow*        m_pDataWindow;
+        TableDataWindow*    	m_pDataWindow;
         /// the vertical scrollbar, if any
-        ScrollBar*              m_pVScroll;
+        ScrollBar*          	m_pVScroll;
         /// the horizontal scrollbar, if any
-        ScrollBar*          m_pHScroll;
-        ScrollBarBox*           m_pScrollCorner;
+        ScrollBar*	    	m_pHScroll;
+        ScrollBarBox*       	m_pScrollCorner;
     //selection engine - for determining selection range, e.g. single, multiple
-    SelectionEngine*        m_pSelEngine;
+    SelectionEngine*    	m_pSelEngine;
     //vector which contains the selected rows
-    std::vector<RowPos>     m_nRowSelected;
+    std::vector<RowPos> 	m_nRowSelected;
     //part of selection engine
-    TableFunctionSet*       m_pTableFunctionSet;
+    TableFunctionSet*   	m_pTableFunctionSet;
     //part of selection engine
-    RowPos              m_nAnchor;
-    bool            m_bResizing;
-    ColPos          m_nResizingColumn;
-    bool            m_bResizingGrid;
-    rtl::OUString   m_aTooltipText;
+    RowPos		    	m_nAnchor;
+    bool			m_bResizing;
+    ColPos			m_nResizingColumn;
+    bool			m_bResizingGrid;
+    rtl::OUString	m_aTooltipText;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
         /** represents a bitmask of invariants to check
-
+            
             Actually, impl_checkInvariants checks more invariants than denoted in this
             bit mask, but only those present here can be disabled temporarily.
         */
@@ -139,10 +139,10 @@ namespace svt { namespace table
 
         inline  ColPos  getCurColumn() const    { return m_nCurColumn; }
         inline  RowPos  getCurRow() const       { return m_nCurRow; }
-        inline  void    setCurRow(RowPos curRow){ m_nCurRow = curRow; }
+        inline	void	setCurRow(RowPos curRow){ m_nCurRow = curRow; }
         inline  RowPos  getTopRow() const       { return m_nTopRow; }
-        inline  long    getRowCount() const     { return m_nRowCount; }
-        inline  long    getColumnCount() const  { return m_nColumnCount; }
+        inline  long	getRowCount() const		{ return m_nRowCount; }
+        inline  long	getColumnCount() const	{ return m_nColumnCount; }
 
         inline  long    getColHeaderHightPixel() const  { return m_nColHeaderHeightPixel; }
 
@@ -183,7 +183,7 @@ namespace svt { namespace table
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
     /** returns the row, which contains the input point*/
-    virtual RowPos  getCurrentRow (const Point& rPoint);
+    virtual RowPos	getCurrentRow (const Point& rPoint);
 
     void setCursorAtCurrentCell(const Point& rPoint);
     /** checks whether the vector with the selected rows contains the current row*/
@@ -191,7 +191,7 @@ namespace svt { namespace table
 
     bool    isRowSelected(RowPos current);
     /** returns the position of the current row in the selection vector */
-    int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
+    int	getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
     /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
     void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
     /** to be called when a new row is added to the control*/
@@ -199,7 +199,7 @@ namespace svt { namespace table
     /** returns the vector, which contains the selected rows*/
     std::vector<RowPos>& getSelectedRows();
     /** updates the vector, which contains the selected rows after removing the row nRowPos*/
-    void    removeSelectedRow(RowPos _nRowPos);
+    void	removeSelectedRow(RowPos _nRowPos);
     void    invalidateRows();
     void    clearSelection();
         // IAbstractTableControl
@@ -325,7 +325,7 @@ namespace svt { namespace table
         void impl_ni_getAccVisibleColWidths();
         void impl_updateLeftColumn();
 
-        DECL_LINK( OnScroll, ScrollBar* );
+        DECL_LINK( OnScroll, ScrollBar* );		
     };
     //see seleng.hxx, seleng.cxx, FunctionSet overridables, part of selection engine
     class TableFunctionSet : public FunctionSet
@@ -339,7 +339,7 @@ namespace svt { namespace table
         virtual ~TableFunctionSet();
 
        virtual void BeginDrag();
-       virtual void CreateAnchor();
+       virtual void CreateAnchor(); 
        virtual void DestroyAnchor();
        virtual BOOL SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor);
        virtual BOOL IsSelectionAtPoint( const Point& rPoint );

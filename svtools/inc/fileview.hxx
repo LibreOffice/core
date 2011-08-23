@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 #ifndef _SVT_FILEVIEW_HXX
-#define _SVT_FILEVIEW_HXX
+#define	_SVT_FILEVIEW_HXX
 
 #include "svtools/svtdllapi.h"
 #include <com/sun/star/uno/Sequence.h>
@@ -40,13 +40,13 @@
 
 // class SvtFileView -----------------------------------------------------
 
-#define FILEVIEW_ONLYFOLDER         0x0001
-#define FILEVIEW_MULTISELECTION     0x0002
+#define FILEVIEW_ONLYFOLDER			0x0001
+#define FILEVIEW_MULTISELECTION		0x0002
 
-#define FILEVIEW_SHOW_TITLE         0x0010
-#define FILEVIEW_SHOW_SIZE          0x0020
-#define FILEVIEW_SHOW_DATE          0x0040
-#define FILEVIEW_SHOW_ALL           0x0070
+#define FILEVIEW_SHOW_TITLE			0x0010
+#define FILEVIEW_SHOW_SIZE			0x0020
+#define FILEVIEW_SHOW_DATE			0x0040
+#define FILEVIEW_SHOW_ALL			0x0070
 
 class ViewTabListBox_Impl;
 class SvtFileView_Impl;
@@ -80,13 +80,13 @@ class SVT_DLLPUBLIC SvtFileView : public Control
 {
 private:
     SvtFileView_Impl*       mpImp;
-
+    
     ::com::sun::star::uno::Sequence< ::rtl::OUString > mpBlackList;
 
-    SVT_DLLPRIVATE void                 OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
+    SVT_DLLPRIVATE void					OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
 
-    DECL_DLLPRIVATE_LINK(               HeaderSelect_Impl, HeaderBar * );
-    DECL_DLLPRIVATE_LINK(               HeaderEndDrag_Impl, HeaderBar * );
+    DECL_DLLPRIVATE_LINK( 				HeaderSelect_Impl, HeaderBar * );
+    DECL_DLLPRIVATE_LINK( 				HeaderEndDrag_Impl, HeaderBar * );
 
 protected:
     virtual void GetFocus();
@@ -97,17 +97,17 @@ public:
     ~SvtFileView();
 
     const String&           GetViewURL() const;
-    String                  GetURL( SvLBoxEntry* pEntry ) const;
-    String                  GetCurrentURL() const;
+    String					GetURL( SvLBoxEntry* pEntry ) const;
+    String					GetCurrentURL() const;
 
-    sal_Bool                GetParentURL( String& _rParentURL ) const;
-    sal_Bool                CreateNewFolder( const String& rNewFolder );
+    sal_Bool				GetParentURL( String& _rParentURL ) const;
+    sal_Bool				CreateNewFolder( const String& rNewFolder );
 
-    void                    SetHelpId( sal_uInt32 nHelpId );
-    sal_uInt32              GetHelpId( ) const;
-    void                    SetSizePixel( const Size& rNewSize );
+    void					SetHelpId( sal_uInt32 nHelpId );
+    sal_uInt32				GetHelpId( ) const;
+    void					SetSizePixel( const Size& rNewSize );
     using Window::SetPosSizePixel;
-    virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
+    virtual void			SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
 
     /** initialize the view with the content of a folder given by URL, and aply an immediate filter
 
@@ -139,7 +139,7 @@ public:
 
     /** initializes the view with the content of a folder given by an UCB content
     */
-    sal_Bool                Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent,
+    sal_Bool				Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, 
                                         const String& rFilter );
 
     /** reads the current content of the current folder again, and applies the given filter to it
@@ -181,28 +181,28 @@ public:
                                 const FileViewAsyncAction* pAsyncDescriptor
                             );
 
-    void                    SetNoSelection();
-    void                    ResetCursor();
+    void					SetNoSelection();
+    void					ResetCursor();
 
-    void                    SetSelectHdl( const Link& rHdl );
-    void                    SetDoubleClickHdl( const Link& rHdl );
+    void					SetSelectHdl( const Link& rHdl );
+    void					SetDoubleClickHdl( const Link& rHdl );
     void                    SetOpenDoneHdl( const Link& rHdl );
 
-    ULONG                   GetSelectionCount() const;
-    SvLBoxEntry*            FirstSelected() const;
-    SvLBoxEntry*            NextSelected( SvLBoxEntry* pEntry ) const;
-    void                    EnableAutoResize();
-    void                    SetFocus();
+    ULONG           		GetSelectionCount() const;
+    SvLBoxEntry*			FirstSelected() const;
+    SvLBoxEntry*			NextSelected( SvLBoxEntry* pEntry ) const;
+    void					EnableAutoResize();
+    void					SetFocus();
 
     void                    EnableContextMenu( sal_Bool bEnable );
     void                    EnableDelete( sal_Bool bEnable );
-    void                    EnableNameReplacing( sal_Bool bEnable = sal_True );
+    void					EnableNameReplacing( sal_Bool bEnable = sal_True );
                                 // translate folder names or display doc-title instead of file name
                                 // EnableContextMenu( TRUE )/EnableDelete(TRUE) disable name replacing!
 
                             // save and load column size and sort order
     String                  GetConfigString() const;
-    void                    SetConfigString( const String& rCfgStr );
+    void					SetConfigString( const String& rCfgStr );
 
     void                    SetUrlFilter( const IUrlFilter* _pFilter );
     const IUrlFilter*       GetUrlFilter( ) const;
@@ -217,8 +217,8 @@ protected:
 
 struct SvtContentEntry
 {
-    sal_Bool    mbIsFolder;
-    UniString   maURL;
+    sal_Bool	mbIsFolder;
+    UniString	maURL;
 
     SvtContentEntry( const UniString& rURL, sal_Bool bIsFolder ) :
         mbIsFolder( bIsFolder ), maURL( rURL ) {}

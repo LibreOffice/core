@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace css = com::sun::star;
 
 // copy define from desktop\source\app\appinit.cxx
 
-#define DESKTOP_TEMPNAMEBASE_DIR    "/temp/soffice.tmp"
+#define DESKTOP_TEMPNAMEBASE_DIR	"/temp/soffice.tmp"
 
 OTempFileService::OTempFileService(::css::uno::Reference< ::css::uno::XComponentContext > const & context)
 : ::cppu::PropertySetMixin< ::css::io::XTempFile >(
@@ -88,7 +88,7 @@ throw ()
     OTempFileBase::release();
 }
 
-//  XTypeProvider
+//	XTypeProvider
 
 ::css::uno::Sequence< ::css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 throw ( ::css::uno::RuntimeException )
@@ -114,7 +114,7 @@ throw ( ::css::uno::RuntimeException )
     return OTempFileBase::getImplementationId();
 }
 
-//  XTempFile
+//	XTempFile
 
 sal_Bool SAL_CALL OTempFileService::getRemoveFile()
 throw ( ::css::uno::RuntimeException )
@@ -294,7 +294,7 @@ throw ( ::css::io::NotConnectedException, ::css::io::BufferSizeExceededException
     checkConnected();
     sal_uInt32 nWritten = mpStream->Write(aData.getConstArray(),aData.getLength());
     checkError();
-    if  ( nWritten != (sal_uInt32)aData.getLength())
+    if	( nWritten != (sal_uInt32)aData.getLength())
         throw ::css::io::BufferSizeExceededException( ::rtl::OUString(),static_cast < ::css::uno::XWeak * > ( this ) );
 }
 void SAL_CALL OTempFileService::flush(  )

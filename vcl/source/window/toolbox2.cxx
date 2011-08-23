@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ using namespace rtl;
 
 // =======================================================================
 
-#define TB_SEP_SIZE             8
+#define TB_SEP_SIZE 			8
 
 // -----------------------------------------------------------------------
 
@@ -95,22 +95,22 @@ ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
 // -----------------------------------------------------------------------
 ImplToolItem::ImplToolItem()
 {
-    mnId            = 0;
-    mpWindow        = NULL;
-    mpUserData      = NULL;
-    mnHelpId        = 0;
-    meType          = TOOLBOXITEM_BUTTON;
-    mnBits          = 0;
-    meState         = STATE_NOCHECK;
-    mbEnabled       = TRUE;
-    mbVisible       = TRUE;
-    mbEmptyBtn      = TRUE;
-    mbShowWindow    = FALSE;
-    mbBreak         = FALSE;
-    mnSepSize       = TB_SEP_SIZE;
+    mnId			= 0;
+    mpWindow		= NULL;
+    mpUserData		= NULL;
+    mnHelpId		= 0;
+    meType			= TOOLBOXITEM_BUTTON;
+    mnBits			= 0;
+    meState 		= STATE_NOCHECK;
+    mbEnabled		= TRUE;
+    mbVisible		= TRUE;
+    mbEmptyBtn		= TRUE;
+    mbShowWindow	= FALSE;
+    mbBreak 		= FALSE;
+    mnSepSize		= TB_SEP_SIZE;
     mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = 0;
-    mbMirrorMode    = FALSE;
+    mnImageAngle	= 0;
+    mbMirrorMode	= FALSE;
     mbVisibleText   = FALSE;
 }
 
@@ -120,22 +120,22 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const Image& rImage,
                             ToolBoxItemBits nItemBits ) :
     maImage( rImage )
 {
-    mnId            = nItemId;
-    mpWindow        = NULL;
-    mpUserData      = NULL;
-    mnHelpId        = 0;
-    meType          = TOOLBOXITEM_BUTTON;
-    mnBits          = nItemBits;
-    meState         = STATE_NOCHECK;
-    mbEnabled       = TRUE;
-    mbVisible       = TRUE;
-    mbEmptyBtn      = FALSE;
-    mbShowWindow    = FALSE;
-    mbBreak         = FALSE;
-    mnSepSize       = TB_SEP_SIZE;
+    mnId			= nItemId;
+    mpWindow		= NULL;
+    mpUserData		= NULL;
+    mnHelpId		= 0;
+    meType			= TOOLBOXITEM_BUTTON;
+    mnBits			= nItemBits;
+    meState 		= STATE_NOCHECK;
+    mbEnabled		= TRUE;
+    mbVisible		= TRUE;
+    mbEmptyBtn		= FALSE;
+    mbShowWindow	= FALSE;
+    mbBreak 		= FALSE;
+    mnSepSize		= TB_SEP_SIZE;
     mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = 0;
-    mbMirrorMode    = false;
+    mnImageAngle	= 0;
+    mbMirrorMode	= false;
     mbVisibleText   = false;
 }
 
@@ -145,22 +145,22 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const XubString& rText,
                             ToolBoxItemBits nItemBits ) :
     maText( rText )
 {
-    mnId            = nItemId;
-    mpWindow        = NULL;
-    mpUserData      = NULL;
-    mnHelpId        = 0;
-    meType          = TOOLBOXITEM_BUTTON;
-    mnBits          = nItemBits;
-    meState         = STATE_NOCHECK;
-    mbEnabled       = TRUE;
-    mbVisible       = TRUE;
-    mbEmptyBtn      = FALSE;
-    mbShowWindow    = FALSE;
-    mbBreak         = FALSE;
-    mnSepSize       = TB_SEP_SIZE;
+    mnId			= nItemId;
+    mpWindow		= NULL;
+    mpUserData		= NULL;
+    mnHelpId		= 0;
+    meType			= TOOLBOXITEM_BUTTON;
+    mnBits			= nItemBits;
+    meState 		= STATE_NOCHECK;
+    mbEnabled		= TRUE;
+    mbVisible		= TRUE;
+    mbEmptyBtn		= FALSE;
+    mbShowWindow	= FALSE;
+    mbBreak 		= FALSE;
+    mnSepSize		= TB_SEP_SIZE;
     mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = 0;
-    mbMirrorMode    = false;
+    mnImageAngle	= 0;
+    mbMirrorMode	= false;
     mbVisibleText   = false;
 }
 
@@ -171,54 +171,54 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const Image& rImage,
     maImage( rImage ),
     maText( rText )
 {
-    mnId            = nItemId;
-    mpWindow        = NULL;
-    mpUserData      = NULL;
-    mnHelpId        = 0;
-    meType          = TOOLBOXITEM_BUTTON;
-    mnBits          = nItemBits;
-    meState         = STATE_NOCHECK;
-    mbEnabled       = TRUE;
-    mbVisible       = TRUE;
-    mbEmptyBtn      = FALSE;
-    mbShowWindow    = FALSE;
-    mbBreak         = FALSE;
-    mnSepSize       = TB_SEP_SIZE;
+    mnId			= nItemId;
+    mpWindow		= NULL;
+    mpUserData		= NULL;
+    mnHelpId		= 0;
+    meType			= TOOLBOXITEM_BUTTON;
+    mnBits			= nItemBits;
+    meState 		= STATE_NOCHECK;
+    mbEnabled		= TRUE;
+    mbVisible		= TRUE;
+    mbEmptyBtn		= FALSE;
+    mbShowWindow	= FALSE;
+    mbBreak 		= FALSE;
+    mnSepSize		= TB_SEP_SIZE;
     mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = 0;
-    mbMirrorMode    = false;
+    mnImageAngle	= 0;
+    mbMirrorMode	= false;
     mbVisibleText   = false;
 }
 
 // -----------------------------------------------------------------------
 
 ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
-        mpWindow                ( rItem.mpWindow ),
-        mpUserData              ( rItem.mpUserData ),
-        maImage                 ( rItem.maImage ),
-        maHighImage             ( rItem.maHighImage ),
-        mnImageAngle            ( rItem.mnImageAngle ),
-        mbMirrorMode            ( rItem.mbMirrorMode ),
-        maText                  ( rItem.maText ),
-        maQuickHelpText         ( rItem.maQuickHelpText ),
-        maHelpText              ( rItem.maHelpText ),
-        maCommandStr            ( rItem.maCommandStr ),
-        mnHelpId                ( rItem.mnHelpId ),
-        maRect                  ( rItem.maRect ),
-        maCalcRect              ( rItem.maCalcRect ),
-        maItemSize              ( rItem.maItemSize ),
-        mnSepSize               ( rItem.mnSepSize ),
+        mpWindow				( rItem.mpWindow ),
+        mpUserData				( rItem.mpUserData ),
+        maImage					( rItem.maImage ),
+        maHighImage				( rItem.maHighImage ),
+        mnImageAngle			( rItem.mnImageAngle ),
+        mbMirrorMode			( rItem.mbMirrorMode ),
+        maText					( rItem.maText ),
+        maQuickHelpText			( rItem.maQuickHelpText ),
+        maHelpText				( rItem.maHelpText ),
+        maCommandStr			( rItem.maCommandStr ),
+        mnHelpId				( rItem.mnHelpId ),
+        maRect					( rItem.maRect ),
+        maCalcRect				( rItem.maCalcRect ),
+        maItemSize				( rItem.maItemSize ),
+        mnSepSize				( rItem.mnSepSize ),
         mnDropDownArrowWidth    ( rItem.mnDropDownArrowWidth ),
-        meType                  ( rItem.meType ),
-        mnBits                  ( rItem.mnBits ),
-        meState                 ( rItem.meState ),
-        mnId                    ( rItem.mnId ),
-        mbEnabled               ( rItem.mbEnabled ),
-        mbVisible               ( rItem.mbVisible ),
-        mbEmptyBtn              ( rItem.mbEmptyBtn ),
-        mbShowWindow            ( rItem.mbShowWindow ),
-        mbBreak                 ( rItem.mbBreak ),
-        mbVisibleText           ( rItem.mbVisibleText )
+        meType					( rItem.meType ),
+        mnBits					( rItem.mnBits ),
+        meState					( rItem.meState ),
+        mnId					( rItem.mnId ),
+        mbEnabled				( rItem.mbEnabled ),
+        mbVisible				( rItem.mbVisible ),
+        mbEmptyBtn				( rItem.mbEmptyBtn ),
+        mbShowWindow			( rItem.mbShowWindow ),
+        mbBreak					( rItem.mbBreak ),
+        mbVisibleText			( rItem.mbVisibleText )
 {
 }
 
@@ -232,32 +232,32 @@ ImplToolItem::~ImplToolItem()
 
 ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
 {
-    mpWindow                = rItem.mpWindow;
-    mpUserData              = rItem.mpUserData;
-    maImage                 = rItem.maImage;
-    maHighImage             = rItem.maHighImage;
-    mnImageAngle            = rItem.mnImageAngle;
-    mbMirrorMode            = rItem.mbMirrorMode;
-    maText                  = rItem.maText;
-    maQuickHelpText         = rItem.maQuickHelpText;
-    maHelpText              = rItem.maHelpText;
-    maCommandStr            = rItem.maCommandStr;
-    mnHelpId                = rItem.mnHelpId;
-    maRect                  = rItem.maRect;
-    maCalcRect              = rItem.maCalcRect;
-    mnSepSize               = rItem.mnSepSize;
+    mpWindow				= rItem.mpWindow;
+    mpUserData				= rItem.mpUserData;
+    maImage					= rItem.maImage;
+    maHighImage				= rItem.maHighImage;
+    mnImageAngle			= rItem.mnImageAngle;
+    mbMirrorMode			= rItem.mbMirrorMode;
+    maText					= rItem.maText;
+    maQuickHelpText			= rItem.maQuickHelpText;
+    maHelpText				= rItem.maHelpText;
+    maCommandStr			= rItem.maCommandStr;
+    mnHelpId				= rItem.mnHelpId;
+    maRect					= rItem.maRect;
+    maCalcRect				= rItem.maCalcRect;
+    mnSepSize				= rItem.mnSepSize;
     mnDropDownArrowWidth    = rItem.mnDropDownArrowWidth;
-    maItemSize              = rItem.maItemSize;
-    mbVisibleText           = rItem.mbVisibleText;
-    meType                  = rItem.meType;
-    mnBits                  = rItem.mnBits;
-    meState                 = rItem.meState;
-    mnId                    = rItem.mnId;
-    mbEnabled               = rItem.mbEnabled;
-    mbVisible               = rItem.mbVisible;
-    mbEmptyBtn              = rItem.mbEmptyBtn;
-    mbShowWindow            = rItem.mbShowWindow;
-    mbBreak                 = rItem.mbBreak;
+    maItemSize				= rItem.maItemSize;
+    mbVisibleText			= rItem.mbVisibleText;
+    meType					= rItem.meType;
+    mnBits					= rItem.mnBits;
+    meState					= rItem.meState;
+    mnId					= rItem.mnId;
+    mbEnabled				= rItem.mbEnabled;
+    mbVisible				= rItem.mbVisible;
+    mbEmptyBtn				= rItem.mbEmptyBtn;
+    mbShowWindow			= rItem.mbShowWindow;
+    mbBreak					= rItem.mbBreak;
     return *this;
 }
 
@@ -521,13 +521,6 @@ void ToolBox::Highlight()
 {
     ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
     maHighlightHdl.Call( this );
-
-    XubString aStr = GetHelpText( mnCurItemId );
-    if ( aStr.Len() || mbHideStatusText )
-    {
-        GetpApp()->ShowHelpStatusText( aStr );
-        mbHideStatusText = TRUE;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -573,14 +566,14 @@ void ToolBox::UserDraw( const UserDrawEvent& )
 
 void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
 {
-    ULONG                   nObjMask;
-    BOOL                    bImage = FALSE;     // Wurde Image gesetzt
+    ULONG					nObjMask;
+    BOOL					bImage = FALSE; 	// Wurde Image gesetzt
 
     // Item anlegen
     ImplToolItem aItem;
 
     GetRes( rResId.SetRT( RSC_TOOLBOXITEM ) );
-    nObjMask            = ReadLongRes();
+    nObjMask			= ReadLongRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_ID )
         aItem.mnId = sal::static_int_cast<USHORT>(ReadLongRes());
@@ -621,7 +614,7 @@ void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
         aItem.mbEnabled = !(BOOL)ReadShortRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_STATE )
-        aItem.meState   = (TriState)ReadLongRes();
+        aItem.meState	= (TriState)ReadLongRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_HIDE )
         aItem.mbVisible = !((BOOL)ReadShortRes());
@@ -734,10 +727,10 @@ void ToolBox::InsertWindow( USHORT nItemId, Window* pWindow,
 
     // Item anlegen und in die Liste einfuegen
     ImplToolItem aItem;
-    aItem.mnId       = nItemId;
-    aItem.meType     = TOOLBOXITEM_BUTTON;
-    aItem.mnBits     = nBits;
-    aItem.mpWindow   = pWindow;
+    aItem.mnId 		 = nItemId;
+    aItem.meType	 = TOOLBOXITEM_BUTTON;
+    aItem.mnBits	 = nBits;
+    aItem.mpWindow 	 = pWindow;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
 
@@ -757,8 +750,8 @@ void ToolBox::InsertSpace( USHORT nPos )
 {
     // Item anlegen und in die Liste einfuegen
     ImplToolItem aItem;
-    aItem.meType     = TOOLBOXITEM_SPACE;
-    aItem.mbEnabled  = FALSE;
+    aItem.meType	 = TOOLBOXITEM_SPACE;
+    aItem.mbEnabled	 = FALSE;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
 
@@ -775,8 +768,8 @@ void ToolBox::InsertSeparator( USHORT nPos, USHORT nPixSize )
 {
     // Item anlegen und in die Liste einfuegen
     ImplToolItem aItem;
-    aItem.meType     = TOOLBOXITEM_SEPARATOR;
-    aItem.mbEnabled  = FALSE;
+    aItem.meType	 = TOOLBOXITEM_SEPARATOR;
+    aItem.mbEnabled	 = FALSE;
     if ( nPixSize )
         aItem.mnSepSize = nPixSize;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
@@ -795,8 +788,8 @@ void ToolBox::InsertBreak( USHORT nPos )
 {
     // Item anlegen und in die Liste einfuegen
     ImplToolItem aItem;
-    aItem.meType     = TOOLBOXITEM_BREAK;
-    aItem.mbEnabled  = FALSE;
+    aItem.meType	 = TOOLBOXITEM_BREAK;
+    aItem.mbEnabled	 = FALSE;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
 
@@ -892,7 +885,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, USHORT nItemId,
         // ToolBox-Item in der Liste verschieben
         ImplToolItem aNewItem = rToolBox.mpData->m_aItems[nPos];
         // Bestimme Daten zuruecksetzen
-        aNewItem.mpWindow      = NULL;
+        aNewItem.mpWindow	   = NULL;
         aNewItem.mbShowWindow = FALSE;
 
         mpData->m_aItems.insert( (nNewPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nNewPos : mpData->m_aItems.end(), aNewItem );
@@ -919,8 +912,8 @@ void ToolBox::CopyItems( const ToolBox& rToolBox )
     for( std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
          it != mpData->m_aItems.end(); ++it )
     {
-        it->mpWindow        = NULL;
-        it->mbShowWindow    = FALSE;
+        it->mpWindow		= NULL;
+        it->mbShowWindow	= FALSE;
     }
 
     ImplInvalidate( TRUE, TRUE );
@@ -1383,8 +1376,8 @@ void ToolBox::SetImageList( const ImageList& rImageList )
 
 static Image ImplRotImage( const Image& rImage, long nAngle10 )
 {
-    Image       aRet;
-    BitmapEx    aRotBitmapEx( rImage.GetBitmapEx() );
+    Image 		aRet;
+    BitmapEx	aRotBitmapEx( rImage.GetBitmapEx() );
 
     aRotBitmapEx.Rotate( nAngle10, Color( COL_WHITE ) );
 
@@ -1426,8 +1419,8 @@ void ToolBox::SetItemImageAngle( USHORT nItemId, long nAngle10 )
 
 static Image ImplMirrorImage( const Image& rImage )
 {
-    Image       aRet;
-    BitmapEx    aMirrBitmapEx( rImage.GetBitmapEx() );
+    Image 		aRet;
+    BitmapEx	aMirrBitmapEx( rImage.GetBitmapEx() );
 
     aMirrBitmapEx.Mirror( BMP_MIRROR_HORZ );
 
@@ -1604,7 +1597,7 @@ void ToolBox::StartSelection()
     if ( !mbSelection )
     {
         mbSelection  = TRUE;
-        mnCurPos     = TOOLBOX_ITEM_NOTFOUND;
+        mnCurPos	 = TOOLBOX_ITEM_NOTFOUND;
         mnCurItemId  = 0;
         Activate();
     }
@@ -1628,10 +1621,10 @@ void ToolBox::EndSelection()
         Deactivate();
     }
 
-    mnCurPos        = TOOLBOX_ITEM_NOTFOUND;
-    mnCurItemId     = 0;
-    mnDownItemId    = 0;
-    mnMouseClicks   = 0;
+    mnCurPos		= TOOLBOX_ITEM_NOTFOUND;
+    mnCurItemId 	= 0;
+    mnDownItemId	= 0;
+    mnMouseClicks	= 0;
     mnMouseModifier = 0;
 }
 
@@ -1673,9 +1666,9 @@ void ToolBox::SetItemDown( USHORT nItemId, BOOL bDown, BOOL bRelease )
                 Deactivate();
             }
 
-            mnCurItemId     = 0;
-            mnDownItemId    = 0;
-            mnMouseClicks   = 0;
+            mnCurItemId 	= 0;
+            mnDownItemId	= 0;
+            mnMouseClicks	= 0;
             mnMouseModifier = 0;
         }
     }
@@ -1710,9 +1703,9 @@ void ToolBox::SetItemState( USHORT nItemId, TriState eState )
             if ( (eState == STATE_CHECK) && (pItem->mnBits & TIB_AUTOCHECK) &&
                  (pItem->mnBits & TIB_RADIOCHECK) )
             {
-                ImplToolItem*    pGroupItem;
-                USHORT          nGroupPos;
-                USHORT          nItemCount = GetItemCount();
+                ImplToolItem*	 pGroupItem;
+                USHORT			nGroupPos;
+                USHORT			nItemCount = GetItemCount();
 
                 nGroupPos = nPos;
                 while ( nGroupPos )
@@ -2422,7 +2415,7 @@ void ToolBox::ImplUpdateImageList()
                 vcl::IImageListProvider* pImageListProvider = mpData->mpImageListProvider;
                 SetImageList( pImageListProvider->getImageList(eType) );
                 mpData->meImageListType = eType;
-            }
+            }            
         }
         catch (com::sun::star::lang::IllegalArgumentException &) {}
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_MSN_PAL )
 {
     BYTE& rByte = pScanline[ nX >> 1 ];
 
-    ( nX & 1 ) ? ( rByte &= 0xf0, rByte |= ( rBitmapColor.GetIndex() & 0x0f ) ) :
+    ( nX & 1 ) ? ( rByte &= 0xf0, rByte |= ( rBitmapColor.GetIndex() & 0x0f ) ) : 
                  ( rByte &= 0x0f, rByte |= ( rBitmapColor.GetIndex() << 4 ) );
 }
 
@@ -97,7 +97,7 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_LSN_PAL )
 {
     BYTE& rByte = pScanline[ nX >> 1 ];
 
-    ( nX & 1 ) ? ( rByte &= 0x0f, rByte |= ( rBitmapColor.GetIndex() << 4 ) ) :
+    ( nX & 1 ) ? ( rByte &= 0x0f, rByte |= ( rBitmapColor.GetIndex() << 4 ) ) : 
                  ( rByte &= 0xf0, rByte |= ( rBitmapColor.GetIndex() & 0x0f ) );
 }
 
@@ -111,7 +111,7 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _8BIT_PAL )
 // ------------------------------------------------------------------
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _8BIT_PAL )
-{
+{	
     pScanline[ nX ] = rBitmapColor.GetIndex();
 }
 
@@ -285,7 +285,7 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_BGRA )
 // ------------------------------------------------------------------
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_BGRA )
-{
+{		   
     *( pScanline = pScanline + ( nX << 2 ) )++ = rBitmapColor.GetBlue();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline++ = rBitmapColor.GetRed();

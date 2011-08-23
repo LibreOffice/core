@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace tools
     typedef void ( *pfunc_CreateEventLogger)();
     typedef void ( *pfunc_DestroyEventLogger)();
 
-static oslModule    aTestToolModule = 0;
+static oslModule	aTestToolModule	= 0;
 // are we to be automated at all?
 static bool bAutomate = false;
 static bool bLoggerStarted = false;
@@ -104,7 +104,7 @@ void InitTestToolLib()
 
     if ( bAutomate )
     {
-        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
+        OUString	aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
 
         LoadLib();
         if ( aTestToolModule )
@@ -126,7 +126,7 @@ void InitTestToolLib()
 
     if ( ::comphelper::UiEventsLogger::isEnabled() )
     {
-        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateEventLogger" ));
+        OUString	aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateEventLogger" ));
 
         LoadLib();
         if ( aTestToolModule )
@@ -156,7 +156,7 @@ void DeInitTestToolLib()
     {
         if ( bAutomate )
         {
-            OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
+            OUString	aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
 
             oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
                 aTestToolModule, aFuncName.pData );
@@ -166,7 +166,7 @@ void DeInitTestToolLib()
 
         if ( bLoggerStarted /*::comphelper::UiEventsLogger::isEnabled()*/ )
         {
-            OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyEventLogger" ));
+            OUString	aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyEventLogger" ));
 
             oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
                 aTestToolModule, aFuncName.pData );

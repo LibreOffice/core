@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@ namespace utl
         friend class OEventListenerImpl;
 
     private:
-        UNOTOOLS_DLLPRIVATE OEventListenerAdapter( const OEventListenerAdapter& _rSource ); // never implemented
-        UNOTOOLS_DLLPRIVATE const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource );    // never implemented
+        UNOTOOLS_DLLPRIVATE OEventListenerAdapter( const OEventListenerAdapter& _rSource );	// never implemented
+        UNOTOOLS_DLLPRIVATE const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource );	// never implemented
 
     protected:
-        OEventListenerAdapterImpl*  m_pImpl;
+        OEventListenerAdapterImpl*	m_pImpl;
 
     protected:
                 OEventListenerAdapter();
@@ -65,7 +65,7 @@ namespace utl
     };
 
 //.........................................................................
-}   // namespace utl
+}	// namespace utl
 //.........................................................................
 
 #endif // _UNOTOOLS_EVENTLISTENERADAPTER_HXX_

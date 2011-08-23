@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ using namespace ::toolkit;
 
 #define IMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
     ::rtl::OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)	\
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
@@ -91,9 +91,9 @@ using namespace ::toolkit;
 
 
 
-//  ----------------------------------------------------
-//  class UnoControlEditModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlEditModel
+//	----------------------------------------------------
 UnoControlEditModel::UnoControlEditModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXEdit );
@@ -128,7 +128,7 @@ uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -142,9 +142,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInf
 }
 
 
-//  ----------------------------------------------------
-//  class UnoEditControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoEditControl
+//	----------------------------------------------------
 UnoEditControl::UnoEditControl()
     :maTextListeners( *this )
     ,mnMaxTextLen( 0 )
@@ -456,9 +456,9 @@ void UnoEditControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) t
 }
 
 
-//  ----------------------------------------------------
-//  class UnoControlFileControlModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlFileControlModel
+//	----------------------------------------------------
 UnoControlFileControlModel::UnoControlFileControlModel()
 {
     ImplRegisterProperty( BASEPROPERTY_ALIGN );
@@ -502,7 +502,7 @@ uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -515,9 +515,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFileControlModel::getPropert
     return xInfo;
 }
 
-//  ----------------------------------------------------
-//  class UnoFileControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoFileControl
+//	----------------------------------------------------
 UnoFileControl::UnoFileControl()
 {
 }
@@ -527,9 +527,9 @@ UnoFileControl::UnoFileControl()
     return ::rtl::OUString::createFromAscii( "filecontrol" );
 }
 
-//  ----------------------------------------------------
-//  class GraphicControlModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class GraphicControlModel
+//	----------------------------------------------------
 uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_GRAPHIC )
@@ -634,9 +634,9 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
     }
 }
 
-//  ----------------------------------------------------
-//  class UnoControlButtonModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlButtonModel
+//	----------------------------------------------------
 UnoControlButtonModel::UnoControlButtonModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXButton );
@@ -677,7 +677,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -690,9 +690,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
     return xInfo;
 }
 
-//  ----------------------------------------------------
-//  class UnoButtonControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoButtonControl
+//	----------------------------------------------------
 UnoButtonControl::UnoButtonControl()
     : maActionListeners( *this )
     , maItemListeners( *this )
@@ -829,9 +829,9 @@ awt::Size UnoButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(
     return Impl_calcAdjustedSize( rNewSize );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlImageControlModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlImageControlModel
+//	----------------------------------------------------
 UnoControlImageControlModel::UnoControlImageControlModel()
     :mbAdjustingImageScaleMode( false )
 {
@@ -859,7 +859,7 @@ uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -910,9 +910,9 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
     }
 }
 
-//  ----------------------------------------------------
-//  class UnoImageControlControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoImageControlControl
+//	----------------------------------------------------
 UnoImageControlControl::UnoImageControlControl()
     : maActionListeners( *this )
 {
@@ -954,9 +954,9 @@ awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize ) 
     return Impl_calcAdjustedSize( rNewSize );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlRadioButtonModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlRadioButtonModel
+//	----------------------------------------------------
 UnoControlRadioButtonModel::UnoControlRadioButtonModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXRadioButton );
@@ -986,7 +986,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -1001,9 +1001,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlRadioButtonModel::getPropert
 
 
 
-//  ----------------------------------------------------
-//  class UnoRadioButtonControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoRadioButtonControl
+//	----------------------------------------------------
 UnoRadioButtonControl::UnoRadioButtonControl()
     : maItemListeners( *this ), maActionListeners( *this )
 {
@@ -1161,9 +1161,9 @@ awt::Size UnoRadioButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) t
     return Impl_calcAdjustedSize( rNewSize );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlCheckBoxModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlCheckBoxModel
+//	----------------------------------------------------
 UnoControlCheckBoxModel::UnoControlCheckBoxModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCheckBox );
@@ -1193,7 +1193,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -1208,9 +1208,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCheckBoxModel::getPropertySe
 
 
 
-//  ----------------------------------------------------
-//  class UnoCheckBoxControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoCheckBoxControl
+//	----------------------------------------------------
 UnoCheckBoxControl::UnoCheckBoxControl()
     : maItemListeners( *this ), maActionListeners( *this )
 {
@@ -1344,9 +1344,9 @@ awt::Size UnoCheckBoxControl::calcAdjustedSize( const awt::Size& rNewSize ) thro
     return Impl_calcAdjustedSize( rNewSize );
 }
 
-//  ----------------------------------------------------
+//	----------------------------------------------------
 //  class UnoControlFixedHyperlinkModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
 UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedHyperlink );
@@ -1386,7 +1386,7 @@ uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId 
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -1399,9 +1399,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedHyperlinkModel::getProp
     return xInfo;
 }
 
-//  ----------------------------------------------------
+//	----------------------------------------------------
 //  class UnoFixedHyperlinkControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
 UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
     : maActionListeners( *this )
 {
@@ -1659,9 +1659,9 @@ awt::Size UnoFixedTextControl::calcAdjustedSize( const awt::Size& rNewSize ) thr
     return Impl_calcAdjustedSize( rNewSize );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlGroupBoxModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlGroupBoxModel
+//	----------------------------------------------------
 UnoControlGroupBoxModel::UnoControlGroupBoxModel()
 {
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
@@ -1697,7 +1697,7 @@ uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -1710,9 +1710,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlGroupBoxModel::getPropertySe
     return xInfo;
 }
 
-//  ----------------------------------------------------
-//  class UnoGroupBoxControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoGroupBoxControl
+//	----------------------------------------------------
 UnoGroupBoxControl::UnoGroupBoxControl()
 {
     maComponentInfos.nWidth = 100;
@@ -1766,7 +1766,7 @@ uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -1779,9 +1779,9 @@ uno::Reference< beans::XPropertySetInfo > UnoMultiPageModel::getPropertySetInfo(
     return xInfo;
 }
 
-//  ----------------------------------------------------
-//  class MultiPageControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class MultiPageControl
+//	----------------------------------------------------
 UnoMultiPageControl::UnoMultiPageControl()
 {
     maComponentInfos.nWidth = 100;
@@ -1948,7 +1948,7 @@ uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -2342,9 +2342,9 @@ void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_n
     m_aItemListListeners.notifyEach( NotificationMethod, aEvent );
 }
 
-//  ----------------------------------------------------
-//  class UnoListBoxControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoListBoxControl
+//	----------------------------------------------------
 UnoListBoxControl::UnoListBoxControl()
     :maActionListeners( *this )
     ,maItemListeners( *this )
@@ -2764,17 +2764,17 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
     if ( xPeerListener.is() )
         xPeerListener->itemListChanged( i_rEvent );
 }
-ActionListenerMultiplexer&  UnoListBoxControl::getActionListeners()
+ActionListenerMultiplexer& 	UnoListBoxControl::getActionListeners()
 {
     return maActionListeners;
 }
-ItemListenerMultiplexer&    UnoListBoxControl::getItemListeners()
+ItemListenerMultiplexer& 	UnoListBoxControl::getItemListeners()
 {
     return maItemListeners;
 }
-//  ----------------------------------------------------
-//  class UnoControlComboBoxModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlComboBoxModel
+//	----------------------------------------------------
 UnoControlComboBoxModel::UnoControlComboBoxModel() : UnoControlListBoxModel(true)
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXComboBox );
@@ -2793,7 +2793,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySe
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -2847,11 +2847,11 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-//  ----------------------------------------------------
-//  class UnoComboBoxControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoComboBoxControl
+//	----------------------------------------------------
 UnoComboBoxControl::UnoComboBoxControl()
-    :   maActionListeners( *this ),
+    : 	maActionListeners( *this ),
         maItemListeners( *this )
 {
     maComponentInfos.nWidth = 100;
@@ -2961,7 +2961,7 @@ void UnoComboBoxControl::removeItemListener(const uno::Reference < awt::XItemLis
 {
     if( getPeer().is() && maItemListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );  // MT: Mal alles so umstellen, schoener als Ref anlegen und query rufen
+        uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );	// MT: Mal alles so umstellen, schoener als Ref anlegen und query rufen
         xComboBox->removeItemListener( &maItemListeners );
     }
     maItemListeners.removeInterface( l );
@@ -3045,11 +3045,11 @@ void SAL_CALL UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rE
     if ( xPeerListener.is() )
         xPeerListener->itemListChanged( i_rEvent );
 }
-ActionListenerMultiplexer&  UnoComboBoxControl::getActionListeners()
+ActionListenerMultiplexer& 	UnoComboBoxControl::getActionListeners()
 {
     return maActionListeners;
 }
-ItemListenerMultiplexer&    UnoComboBoxControl::getItemListeners()
+ItemListenerMultiplexer& 	UnoComboBoxControl::getItemListeners()
 {
     return maItemListeners;
 }
@@ -3167,9 +3167,9 @@ sal_Int16 UnoComboBoxControl::getDropDownLineCount() throw(uno::RuntimeException
 }
 
 
-//  ----------------------------------------------------
-//  UnoSpinFieldControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	UnoSpinFieldControl
+//	----------------------------------------------------
 UnoSpinFieldControl::UnoSpinFieldControl() : maSpinListeners( *this )
 {
     mbRepeat = sal_False;
@@ -3257,9 +3257,9 @@ void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::sta
         xField->enableRepeat( bRepeat );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlDateFieldModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlDateFieldModel
+//	----------------------------------------------------
 UnoControlDateFieldModel::UnoControlDateFieldModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXDateField );
@@ -3287,7 +3287,7 @@ uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -3302,9 +3302,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertyS
 
 
 
-//  ----------------------------------------------------
-//  class UnoDateFieldControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoDateFieldControl
+//	----------------------------------------------------
 UnoDateFieldControl::UnoDateFieldControl()
 {
     mnFirst = Date( 1, 1, 1900 ).GetDate();
@@ -3497,9 +3497,9 @@ sal_Bool UnoDateFieldControl::isStrictFormat() throw(uno::RuntimeException)
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlTimeFieldModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlTimeFieldModel
+//	----------------------------------------------------
 UnoControlTimeFieldModel::UnoControlTimeFieldModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXTimeField );
@@ -3527,7 +3527,7 @@ uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -3542,9 +3542,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertyS
 
 
 
-//  ----------------------------------------------------
-//  class UnoTimeFieldControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoTimeFieldControl
+//	----------------------------------------------------
 UnoTimeFieldControl::UnoTimeFieldControl()
 {
     mnFirst = Time( 0, 0 ).GetTime();
@@ -3696,9 +3696,9 @@ sal_Bool UnoTimeFieldControl::isStrictFormat() throw(uno::RuntimeException)
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlNumericFieldModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlNumericFieldModel
+//	----------------------------------------------------
 UnoControlNumericFieldModel::UnoControlNumericFieldModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXNumericField );
@@ -3726,7 +3726,7 @@ uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -3741,9 +3741,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlNumericFieldModel::getProper
 
 
 
-//  ----------------------------------------------------
-//  class UnoNumericFieldControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoNumericFieldControl
+//	----------------------------------------------------
 UnoNumericFieldControl::UnoNumericFieldControl()
 {
     mnFirst = 0;
@@ -3892,9 +3892,9 @@ sal_Int16 UnoNumericFieldControl::getDecimalDigits() throw(uno::RuntimeException
     return ImplGetPropertyValue_INT16( BASEPROPERTY_DECIMALACCURACY );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlCurrencyFieldModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlCurrencyFieldModel
+//	----------------------------------------------------
 UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCurrencyField );
@@ -3928,7 +3928,7 @@ uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId )
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -3941,9 +3941,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCurrencyFieldModel::getPrope
     return xInfo;
 }
 
-//  ----------------------------------------------------
-//  class UnoCurrencyFieldControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoCurrencyFieldControl
+//	----------------------------------------------------
 UnoCurrencyFieldControl::UnoCurrencyFieldControl()
 {
     mnFirst = 0;
@@ -4091,9 +4091,9 @@ sal_Int16 UnoCurrencyFieldControl::getDecimalDigits() throw(uno::RuntimeExceptio
     return ImplGetPropertyValue_INT16( BASEPROPERTY_DECIMALACCURACY );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlPatternFieldModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlPatternFieldModel
+//	----------------------------------------------------
 UnoControlPatternFieldModel::UnoControlPatternFieldModel()
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXPatternField );
@@ -4120,7 +4120,7 @@ uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -4134,9 +4134,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlPatternFieldModel::getProper
 }
 
 
-//  ----------------------------------------------------
-//  class UnoPatternFieldControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoPatternFieldControl
+//	----------------------------------------------------
 UnoPatternFieldControl::UnoPatternFieldControl()
 {
 }
@@ -4223,9 +4223,9 @@ sal_Bool UnoPatternFieldControl::isStrictFormat() throw(uno::RuntimeException)
 }
 
 
-//  ----------------------------------------------------
-//  class UnoControlProgressBarModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlProgressBarModel
+//	----------------------------------------------------
 UnoControlProgressBarModel::UnoControlProgressBarModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -4265,7 +4265,7 @@ uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -4279,9 +4279,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlProgressBarModel::getPropert
 }
 
 
-//  ----------------------------------------------------
-//  class UnoProgressBarControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoProgressBarControl
+//	----------------------------------------------------
 UnoProgressBarControl::UnoProgressBarControl()
 {
 }
@@ -4355,9 +4355,9 @@ sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::Runtime
 }
 
 
-//  ----------------------------------------------------
-//  class UnoControlFixedLineModel
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoControlFixedLineModel
+//	----------------------------------------------------
 UnoControlFixedLineModel::UnoControlFixedLineModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -4393,7 +4393,7 @@ uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -4406,13 +4406,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedLineModel::getPropertyS
     return xInfo;
 }
 
-//  ----------------------------------------------------
-//  class UnoFixedLineControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoFixedLineControl
+//	----------------------------------------------------
 UnoFixedLineControl::UnoFixedLineControl()
 {
-    maComponentInfos.nWidth = 100;      // ??
-    maComponentInfos.nHeight = 100;     // ??
+    maComponentInfos.nWidth = 100;		// ??
+    maComponentInfos.nHeight = 100;		// ??
 }
 
 ::rtl::OUString UnoFixedLineControl::GetComponentServiceName()

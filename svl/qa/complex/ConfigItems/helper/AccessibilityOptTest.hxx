@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ private:
     void impl_checkSetHelpTipSeconds();
     void impl_checkSetSelectionInReadonly();
 
-private:
+private:	
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
     SvtAccessibilityOptions aAccessibilityOpt;
 };

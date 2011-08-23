@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ private:
 
                                 BitmapReadAccess() {}
                                 BitmapReadAccess( const BitmapReadAccess& ) {}
-    BitmapReadAccess&           operator=( const BitmapReadAccess& ) { return *this; }
+    BitmapReadAccess&    		operator=( const BitmapReadAccess& ) { return *this; }
 
 protected:
     Bitmap                      maBitmap;
@@ -168,8 +168,8 @@ public:
     inline BitmapColor          GetPixelFromData( const BYTE* pData, long nX ) const;
     inline void                 SetPixelOnData( BYTE* pData, long nX, const BitmapColor& rBitmapColor );
     inline BitmapColor          GetPixel( long nY, long nX ) const;
-    inline BitmapColor          GetColor( long nY, long nX ) const;
-    inline BYTE                 GetLuminance( long nY, long nX ) const;
+    inline BitmapColor			GetColor( long nY, long nX ) const;
+    inline BYTE					GetLuminance( long nY, long nX ) const;
 };
 
 // ---------------------
@@ -184,7 +184,7 @@ public:
     virtual                     ~BitmapWriteAccess();
 
     void                        CopyScanline( long nY, const BitmapReadAccess& rReadAcc );
-    void                        CopyScanline( long nY, ConstScanline aSrcScanline,
+    void                        CopyScanline( long nY, ConstScanline aSrcScanline, 
                                               ULONG nSrcScanlineFormat, ULONG nSrcScanlineSize );
 
     void                        CopyBuffer( const BitmapReadAccess& rReadAcc );
@@ -195,15 +195,15 @@ public:
 
     inline void                 SetPixel( long nY, long nX, const BitmapColor& rBitmapColor );
 
-    void                        SetLineColor();
-    void                        SetLineColor( const Color& rColor );
-    Color                       GetLineColor() const;
+    void                 		SetLineColor();
+    void                 		SetLineColor( const Color& rColor );
+    Color		   				GetLineColor() const;
 
-    void                        SetFillColor();
-    void                        SetFillColor( const Color& rColor );
-    Color                       GetFillColor() const;
+    void                 		SetFillColor();
+    void                 		SetFillColor( const Color& rColor );
+    Color				   		GetFillColor() const;
 
-    void                        Erase( const Color& rColor );
+    void						Erase( const Color& rColor );
 
     void                        DrawLine( const Point& rStart, const Point& rEnd );
 
@@ -219,18 +219,18 @@ public:
 private:
 
     BitmapColor*                mpLineColor;
-    BitmapColor*                mpFillColor;
+    BitmapColor*           		mpFillColor;
 
                                 BitmapWriteAccess() {}
                                 BitmapWriteAccess( const BitmapWriteAccess& ) : BitmapReadAccess() {}
-    BitmapWriteAccess&          operator=( const BitmapWriteAccess& ) { return *this; }
+    BitmapWriteAccess& 			operator=( const BitmapWriteAccess& ) { return *this; } 
 };
 
 // -------------------
 // - Accessor Helper -
 // -------------------
 
-/** This template handles BitmapAccess the RAII way.
+/** This template handles BitmapAccess the RAII way. 
 
     Please don't use directly, but the ready-made typedefs for
     BitmapReadAccess and BitmapWriteAccess below.
@@ -250,23 +250,23 @@ public:
         mrBitmap.ReleaseAccess( mpAccess );
     }
 
-    Access*         get() { return mpAccess; }
-    const Access*   get() const { return mpAccess; }
+    Access* 		get() { return mpAccess; }
+    const Access* 	get() const { return mpAccess; }
 
-    Access*         operator->() { return mpAccess; }
-    const Access*   operator->() const { return mpAccess; }
+    Access* 		operator->() { return mpAccess; }
+    const Access* 	operator->() const { return mpAccess; }
 
-    Access&         operator*() { return *mpAccess; }
-    const Access&   operator*() const { return *mpAccess; }
+    Access& 		operator*() { return *mpAccess; }
+    const Access& 	operator*() const { return *mpAccess; }
 
 private:
-    Access*     mpAccess;
-    Bitmap&     mrBitmap;
+    Access*		mpAccess;
+    Bitmap&		mrBitmap;
 };
 
 /** This wrapper handles BitmapReadAccess the RAII way.
 
-    Use as follows:
+    Use as follows: 
     Bitmap aBitmap
     ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(), aBitmap );
     pReadAccess->SetPixel()...
@@ -280,7 +280,7 @@ typedef ScopedBitmapAccess< BitmapReadAccess > ScopedBitmapReadAccess;
 
 /** This wrapper handles BitmapWriteAccess the RAII way.
 
-    Use as follows:
+    Use as follows: 
     Bitmap aBitmap
     ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(), aBitmap );
     pWriteAccess->SetPixel()...

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,8 +119,8 @@
 
 namespace css = ::com::sun::star;
 
-#define VCLWINDOW_FRAMEWINDOW               0x1000
-#define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
+#define VCLWINDOW_FRAMEWINDOW				0x1000
+#define VCLWINDOW_SYSTEMCHILDWINDOW			0x1001
 
 #if (defined WNT)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32
@@ -256,77 +256,77 @@ TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt
 
 struct ComponentInfo
 {
-    const char*     pName;
-    WindowType      nWinType;
+    const char*		pName;
+    WindowType		nWinType;
 };
 
 static ComponentInfo __FAR_DATA aComponentInfos [] =
 {
-    { "buttondialog",       WINDOW_BUTTONDIALOG },
-    { "cancelbutton",       WINDOW_CANCELBUTTON },
-    { "checkbox",           WINDOW_CHECKBOX },
-    { "combobox",           WINDOW_COMBOBOX },
-    { "control",            WINDOW_CONTROL },
-    { "currencybox",        WINDOW_CURRENCYBOX },
-    { "currencyfield",      WINDOW_CURRENCYFIELD },
-    { "datebox",            WINDOW_DATEBOX },
-    { "datefield",          WINDOW_DATEFIELD },
-    { "dialog",             WINDOW_DIALOG },
-    { "dockingarea",        WINDOW_DOCKINGAREA },
-    { "dockingwindow",      WINDOW_DOCKINGWINDOW },
-    { "edit",               WINDOW_EDIT },
-    { "errorbox",           WINDOW_ERRORBOX },
-    { "fixedbitmap",        WINDOW_FIXEDBITMAP },
-    { "fixedimage",         WINDOW_FIXEDIMAGE },
-    { "fixedline",          WINDOW_FIXEDLINE },
-    { "fixedtext",          WINDOW_FIXEDTEXT },
-    { "floatingwindow",     WINDOW_FLOATINGWINDOW },
-    { "framewindow",        VCLWINDOW_FRAMEWINDOW },
-    { "groupbox",           WINDOW_GROUPBOX },
-    { "helpbutton",         WINDOW_HELPBUTTON },
-    { "imagebutton",        WINDOW_IMAGEBUTTON },
-    { "imageradiobutton",   WINDOW_IMAGERADIOBUTTON },
-    { "infobox",            WINDOW_INFOBOX },
-    { "listbox",            WINDOW_LISTBOX },
-    { "longcurrencybox",    WINDOW_LONGCURRENCYBOX },
-    { "longcurrencyfield",  WINDOW_LONGCURRENCYFIELD },
-    { "menubutton",         WINDOW_MENUBUTTON },
-    { "messbox",            WINDOW_MESSBOX },
-    { "metricbox",          WINDOW_METRICBOX },
-    { "metricfield",        WINDOW_METRICFIELD },
-    { "modaldialog",        WINDOW_MODALDIALOG },
-    { "modelessdialog",     WINDOW_MODELESSDIALOG },
-    { "morebutton",         WINDOW_MOREBUTTON },
-    { "multilineedit",      WINDOW_MULTILINEEDIT },
-    { "multilistbox",       WINDOW_MULTILISTBOX },
-    { "numericbox",         WINDOW_NUMERICBOX },
-    { "numericfield",       WINDOW_NUMERICFIELD },
-    { "okbutton",           WINDOW_OKBUTTON },
-    { "patternbox",         WINDOW_PATTERNBOX },
-    { "patternfield",       WINDOW_PATTERNFIELD },
-    { "pushbutton",         WINDOW_PUSHBUTTON },
-    { "querybox",           WINDOW_QUERYBOX },
-    { "radiobutton",        WINDOW_RADIOBUTTON },
-    { "scrollbar",          WINDOW_SCROLLBAR },
-    { "scrollbarbox",       WINDOW_SCROLLBARBOX },
-    { "simpleanimation",    WINDOW_CONTROL },
-    { "spinbutton",         WINDOW_SPINBUTTON },
-    { "spinfield",          WINDOW_SPINFIELD },
-    { "throbber",           WINDOW_CONTROL },
-    { "splitter",           WINDOW_SPLITTER },
-    { "splitwindow",        WINDOW_SPLITWINDOW },
-    { "statusbar",          WINDOW_STATUSBAR },
-    { "systemchildwindow",  VCLWINDOW_SYSTEMCHILDWINDOW },
-    { "tabcontrol",         WINDOW_TABCONTROL },
-    { "tabdialog",          WINDOW_TABDIALOG },
-    { "tabpage",            WINDOW_TABPAGE },
-    { "timebox",            WINDOW_TIMEBOX },
-    { "timefield",          WINDOW_TIMEFIELD },
-    { "toolbox",            WINDOW_TOOLBOX },
-    { "tristatebox",        WINDOW_TRISTATEBOX },
-    { "warningbox",         WINDOW_WARNINGBOX },
-    { "window",             WINDOW_WINDOW },
-    { "workwindow",         WINDOW_WORKWINDOW }
+    { "buttondialog", 		WINDOW_BUTTONDIALOG },
+    { "cancelbutton",		WINDOW_CANCELBUTTON },
+    { "checkbox",			WINDOW_CHECKBOX },
+    { "combobox",			WINDOW_COMBOBOX },
+    { "control",			WINDOW_CONTROL },
+    { "currencybox",		WINDOW_CURRENCYBOX },
+    { "currencyfield",		WINDOW_CURRENCYFIELD },
+    { "datebox",			WINDOW_DATEBOX },
+    { "datefield",			WINDOW_DATEFIELD },
+    { "dialog",				WINDOW_DIALOG },
+    { "dockingarea",		WINDOW_DOCKINGAREA },
+    { "dockingwindow",		WINDOW_DOCKINGWINDOW },
+    { "edit",				WINDOW_EDIT },
+    { "errorbox",			WINDOW_ERRORBOX },
+    { "fixedbitmap",		WINDOW_FIXEDBITMAP },
+    { "fixedimage",			WINDOW_FIXEDIMAGE },
+    { "fixedline",			WINDOW_FIXEDLINE },
+    { "fixedtext",			WINDOW_FIXEDTEXT },
+    { "floatingwindow",		WINDOW_FLOATINGWINDOW },
+    { "framewindow",		VCLWINDOW_FRAMEWINDOW },
+    { "groupbox",			WINDOW_GROUPBOX },
+    { "helpbutton",			WINDOW_HELPBUTTON },
+    { "imagebutton",		WINDOW_IMAGEBUTTON },
+    { "imageradiobutton",	WINDOW_IMAGERADIOBUTTON },
+    { "infobox",			WINDOW_INFOBOX },
+    { "listbox",			WINDOW_LISTBOX },
+    { "longcurrencybox",	WINDOW_LONGCURRENCYBOX },
+    { "longcurrencyfield",	WINDOW_LONGCURRENCYFIELD },
+    { "menubutton",			WINDOW_MENUBUTTON },
+    { "messbox",			WINDOW_MESSBOX },
+    { "metricbox",			WINDOW_METRICBOX },
+    { "metricfield",		WINDOW_METRICFIELD },
+    { "modaldialog",		WINDOW_MODALDIALOG },
+    { "modelessdialog",		WINDOW_MODELESSDIALOG },
+    { "morebutton",			WINDOW_MOREBUTTON },
+    { "multilineedit",		WINDOW_MULTILINEEDIT },
+    { "multilistbox",		WINDOW_MULTILISTBOX },
+    { "numericbox",			WINDOW_NUMERICBOX },
+    { "numericfield",		WINDOW_NUMERICFIELD },
+    { "okbutton",			WINDOW_OKBUTTON },
+    { "patternbox",			WINDOW_PATTERNBOX },
+    { "patternfield",		WINDOW_PATTERNFIELD },
+    { "pushbutton",			WINDOW_PUSHBUTTON },
+    { "querybox",			WINDOW_QUERYBOX },
+    { "radiobutton",		WINDOW_RADIOBUTTON },
+    { "scrollbar",			WINDOW_SCROLLBAR },
+    { "scrollbarbox",		WINDOW_SCROLLBARBOX },
+    { "simpleanimation",	WINDOW_CONTROL },
+    { "spinbutton",			WINDOW_SPINBUTTON },
+    { "spinfield",			WINDOW_SPINFIELD },
+    { "throbber",        	WINDOW_CONTROL },
+    { "splitter",			WINDOW_SPLITTER },
+    { "splitwindow",		WINDOW_SPLITWINDOW },
+    { "statusbar",			WINDOW_STATUSBAR },
+    { "systemchildwindow",	VCLWINDOW_SYSTEMCHILDWINDOW },
+    { "tabcontrol",			WINDOW_TABCONTROL },
+    { "tabdialog",			WINDOW_TABDIALOG },
+    { "tabpage",			WINDOW_TABPAGE },
+    { "timebox",			WINDOW_TIMEBOX },
+    { "timefield",			WINDOW_TIMEFIELD },
+    { "toolbox",			WINDOW_TOOLBOX },
+    { "tristatebox",		WINDOW_TRISTATEBOX },
+    { "warningbox",			WINDOW_WARNINGBOX },
+    { "window",				WINDOW_WINDOW },
+    { "workwindow",			WINDOW_WORKWINDOW }
 };
 
 extern "C"
@@ -350,7 +350,7 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
     static sal_Bool bSorted = sal_False;
     if( !bSorted )
     {
-        qsort(  (void*) aComponentInfos,
+        qsort( 	(void*) aComponentInfos,
                 sizeof( aComponentInfos ) / sizeof( ComponentInfo ),
                 sizeof( ComponentInfo ),
                 ComponentInfoCompare );
@@ -376,13 +376,13 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXToolkit
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXToolkit
+//	----------------------------------------------------
 
-static sal_Int32                            nVCLToolkitInstanceCount = 0;
-static BOOL                                 bInitedByVCLToolkit = sal_False;
-//static cppu::OInterfaceContainerHelper *  pToolkits = 0;
+static sal_Int32							nVCLToolkitInstanceCount = 0;
+static BOOL									bInitedByVCLToolkit = sal_False;
+//static cppu::OInterfaceContainerHelper *	pToolkits = 0;
 
 static osl::Mutex & getInitMutex()
 {
@@ -455,7 +455,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
         if( pToolkits )
         {
             cppu::OInterfaceIteratorHelper aIt( *pToolkits );
-            ::com::sun::star::uno::XInterface * pI;
+            ::com::sun::star::uno::XInterface *	pI;
             while( pI = aIt.next() )
                 ((::com::sun::star::lang::XComponent *)pI)->dispose();
 
@@ -614,7 +614,7 @@ void SAL_CALL VCLXToolkit::disposing()
     return xRef;
 }
 
-Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
+Window*	VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const ::com::sun::star::awt::WindowDescriptor& rDescriptor,
     Window* pParent, WinBits nWinBits )
 {
@@ -941,9 +941,9 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                 if( bUseParentData )
                                 {
                                     SystemParentData aParentData;
-                                    aParentData.nSize   = sizeof( aParentData );
+                                    aParentData.nSize	= sizeof( aParentData );
                                     #if defined QUARTZ
-                                    aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
+                                    aParentData.pView	= reinterpret_cast<NSView*>(nWindowHandle);
                                     #elif defined UNX
                                     aParentData.aWindow = nWindowHandle;
                                     aParentData.bXEmbedSupport = bXEmbed;
@@ -1154,9 +1154,9 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         if( bUseParentData )
         {
             SystemParentData aParentData;
-            aParentData.nSize   = sizeof( aParentData );
+            aParentData.nSize	= sizeof( aParentData );
             #if defined QUARTZ
-            aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
+            aParentData.pView	= reinterpret_cast<NSView*>(nWindowHandle);
             #elif defined UNX
             aParentData.aWindow = nWindowHandle;
             aParentData.bXEmbedSupport = bXEmbed;
@@ -1200,12 +1200,12 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 }
 
 // ::com::sun::star::awt::XMessageBoxFactory
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessageBox(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent,
-    const ::com::sun::star::awt::Rectangle& aPosSize,
-    const ::rtl::OUString& aType,
-    ::sal_Int32 aButtons,
-    const ::rtl::OUString& aTitle,
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessageBox( 
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent, 
+    const ::com::sun::star::awt::Rectangle& aPosSize, 
+    const ::rtl::OUString& aType, 
+    ::sal_Int32 aButtons, 
+    const ::rtl::OUString& aTitle, 
     const ::rtl::OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::awt::WindowDescriptor aDescriptor;
@@ -1243,7 +1243,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         nAddWinBits |= WB_ABORT_RETRY_IGNORE;
     if ( sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_IGNORE )
         nAddWinBits |= WB_DEF_IGNORE;
-
+    
     aDescriptor.Type              = css::awt::WindowClass_MODALTOP;
     aDescriptor.WindowServiceName = aType;
     aDescriptor.ParentIndex       = -1;
@@ -1491,17 +1491,17 @@ void SAL_CALL VCLXToolkit::removeFocusListener(
 }
 
 // virtual
-void SAL_CALL VCLXToolkit::fireFocusGained(
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface > const &)
+void SAL_CALL VCLXToolkit::fireFocusGained( 
+    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::XInterface > const &) 
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
-
-// virtual
-void SAL_CALL VCLXToolkit::fireFocusLost(
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface > const &)
+        
+// virtual 
+void SAL_CALL VCLXToolkit::fireFocusLost( 
+    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::XInterface > const &) 
     throw (::com::sun::star::uno::RuntimeException)
 {
 }
@@ -1601,11 +1601,11 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
 {
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
           aHandlers(m_aKeyHandlers.getElements());
-
+    
     if (aHandlers.hasElements())
     {
         ::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
-
+        
         // See implementation in vclxwindow.cxx for mapping between VCL and UNO AWT event
         ::KeyEvent * pKeyEvent = static_cast< ::KeyEvent * >(
             static_cast< ::VclWindowEvent const * >(pEvent)->GetData());

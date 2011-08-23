@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace comphelper
     }
 
     // -----------------------------------------------------------------------------
-
+        
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper )
         : cppu::WeakImplHelper1<XAccessibleKeyBinding>( rHelper )
         , m_aKeyBindings( rHelper.m_aKeyBindings )
@@ -111,7 +111,7 @@ namespace comphelper
     // -----------------------------------------------------------------------------
 
 //..............................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //..............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

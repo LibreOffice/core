@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 #include "strings.hrc"
 #include <svtools/FilterConfigItem.hxx>
 
-#define KEY_QUALITY     "Quality"
-#define KEY_GRAYSCALES  "ColorMode"
+#define KEY_QUALITY		"Quality"
+#define KEY_GRAYSCALES	"ColorMode"
 
 /*************************************************************************
 |*
@@ -44,7 +44,7 @@
 
 DlgExportEJPG::DlgExportEJPG( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_JPG, *rPara.pResMgr ) ),
-                rFltCallPara        ( rPara ),
+                rFltCallPara		( rPara ),
                 aFiDescr            ( this, ResId( FI_DESCR, *rPara.pResMgr ) ),
                 aNumFldQuality      ( this, ResId( NUM_FLD_QUALITY, *rPara.pResMgr ) ),
                 aGrpQuality         ( this, ResId( GRP_QUALITY, *rPara.pResMgr ) ),
@@ -56,7 +56,7 @@ DlgExportEJPG::DlgExportEJPG( FltCallDialogParameter& rPara ) :
                 aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) )
 {
     FreeResource();
-    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
+    String	aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     // reading filter options

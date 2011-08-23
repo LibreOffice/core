@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& 	rSpriteSize,
                                             const SpriteCanvasRef&                          rRefDevice ) :
         mpSpriteCanvas( rRefDevice ),
         maSize( ::canvas::tools::roundUp( rSpriteSize.Width ),
@@ -65,8 +65,8 @@ namespace cairocanvas
 
         mpBufferSurface = mpSpriteCanvas->createSurface( maSize );
 
-        maCanvasHelper.init( maSize,
-                             *rRefDevice,
+        maCanvasHelper.init( maSize, 
+                             *rRefDevice, 
                              rRefDevice.get() );
         maCanvasHelper.setSurface( mpBufferSurface, true );
 
@@ -77,7 +77,7 @@ namespace cairocanvas
         // clear sprite to 100% transparent
         maCanvasHelper.clear();
     }
-
+    
     void SAL_CALL CanvasCustomSprite::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -104,16 +104,16 @@ namespace cairocanvas
         ::osl::MutexGuard aGuard( m_aMutex );
 
         maSpriteHelper.redraw( pCairo,
-                               rOrigOutputPos,
-                               mbSurfaceDirty,
+                               rOrigOutputPos, 
+                               mbSurfaceDirty, 
                                bBufferedUpdate );
 
         mbSurfaceDirty = false;
     }
 
     bool CanvasCustomSprite::repaint( const SurfaceSharedPtr&       pSurface,
-                                      const rendering::ViewState&   viewState,
-                                      const rendering::RenderState& renderState )
+                                      const rendering::ViewState&	viewState,
+                                      const rendering::RenderState&	renderState )
     {
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
@@ -170,7 +170,7 @@ namespace cairocanvas
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
+        
         return aRet;
     }
 }

@@ -72,7 +72,7 @@ public class InformationWriter
         {
             XPropertySet xPropertySet =  (XPropertySet) UnoRuntime.queryInterface(
                 XPropertySet.class, xObject);
-            MessageArea.println (prefix +
+            MessageArea.println (prefix + 
                 xPropertySet.getPropertyValue (name));
         }
         catch (Exception e)
@@ -82,7 +82,7 @@ public class InformationWriter
         }
     }
 
-
+    
 
     public void showShapes (XDrawPage xPage)
     {
@@ -90,24 +90,24 @@ public class InformationWriter
         {
             XIndexAccess xShapeList = (XIndexAccess) UnoRuntime.queryInterface(
                 XIndexAccess.class, xPage);
-
-            MessageArea.println ("There are " + xShapeList.getCount()
+                
+            MessageArea.println ("There are " + xShapeList.getCount() 
                 + " shapes");
             for (int i=0; i<xShapeList.getCount(); i++)
             {
                 XShape xShape = (XShape) UnoRuntime.queryInterface(
                     XShape.class, xShapeList.getByIndex (i));
-
-                XShapeDescriptor xShapeDescriptor =
+                    
+                XShapeDescriptor xShapeDescriptor = 
                     (XShapeDescriptor) UnoRuntime.queryInterface(
                         XShapeDescriptor.class, xShape);
                 String sName = xShapeDescriptor.getShapeType ();
                 MessageArea.println ("   shape " + i + " : " + sName);
-
-                XPropertySet xPropertySet =
+                
+                XPropertySet xPropertySet = 
                     (XPropertySet) UnoRuntime.queryInterface(
                         XPropertySet.class, xShape);
-                Integer nZOrder =
+                Integer nZOrder = 
                     (Integer) xPropertySet.getPropertyValue ("ZOrder");
                 MessageArea.println ("   zorder = " + nZOrder);
             }
@@ -117,11 +117,11 @@ public class InformationWriter
             MessageArea.println ("caught exception in showShapes: " + e);
         }
     }
+    
 
 
 
-
-    /** @descr Print all available services of the given object to the
+    /** @descr Print all available services of the given object to the 
                 standard output.
     */
     public void showServices (XInterface xObject)
@@ -138,7 +138,7 @@ public class InformationWriter
             else
             {
                 String[] sServiceNames = xMSF.getAvailableServiceNames ();
-                MessageArea.println ("    object can create "
+                MessageArea.println ("    object can create " 
                     + sServiceNames.length + " services");
                 for (int i=0; i<sServiceNames.length; i++)
                     MessageArea.println ("        service " + i + " : " + sServiceNames[i]);
@@ -149,7 +149,7 @@ public class InformationWriter
             MessageArea.println ("caught exception in showServices : " + e);
         }
     }
-
+    
     /** @descr Print the service and implementation name of the given
                 object.
     */
@@ -167,7 +167,7 @@ public class InformationWriter
             {
                 MessageArea.println ("    Service name        : " + xSN.getServiceName ());
             }
-
+            
             // Use interface XServiceInfo to retrieve information about
             // supported services.
             XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
@@ -176,8 +176,8 @@ public class InformationWriter
                 MessageArea.println ("    interface XServiceInfo not supported");
             else
             {
-                MessageArea.println ("    Implementation name : "
-                    + xSI.getImplementationName ());
+                MessageArea.println ("    Implementation name : " 
+                    + xSI.getImplementationName ());    
             }
         }
         catch (Exception e)
@@ -185,10 +185,10 @@ public class InformationWriter
             MessageArea.println ("caught exception in showInfo : " + e);
         }
     }
-
-
-
-
+    
+    
+    
+    
     /** @descr Print information about supported interfaces.
     */
     public void showInterfaces (XInterface xObject)
@@ -205,10 +205,10 @@ public class InformationWriter
             else
             {
                 Type[] aTypeList = xTP.getTypes ();
-                MessageArea.println ("    object supports " + aTypeList.length
+                MessageArea.println ("    object supports " + aTypeList.length 
                     + " interfaces");
                 for (int i=0; i<aTypeList.length; i++)
-                    MessageArea.println ("        " + i + " : "
+                    MessageArea.println ("        " + i + " : " 
                         + aTypeList[i].getTypeName());
             }
         }
@@ -217,8 +217,8 @@ public class InformationWriter
             MessageArea.println ("caught exception in showInterfaces : " + e);
         }
     }
-
-
+    
+    
     /** @descr Print information concerning the accessibility of the given
         object.
     */
@@ -233,46 +233,46 @@ public class InformationWriter
 
             //  Get XAccessibleContext object if given object does not
             //  already support this interface.
-            XAccessibleContext xContext
+            XAccessibleContext xContext 
                 = (XAccessibleContext) UnoRuntime.queryInterface (
                     XAccessibleContext.class, xObject);
             if (xContext == null)
             {
-                XAccessible xAccessible
+                XAccessible xAccessible 
                     = (XAccessible) UnoRuntime.queryInterface (
                         XAccessible.class, xObject);
                 if (xAccessible == null)
                 {
-                    MessageArea.println (sIndent + "given object " + xObject
+                    MessageArea.println (sIndent + "given object " + xObject 
                         + " is not accessible");
                     return false;
                 }
                 else
                     xContext = xAccessible.getAccessibleContext();
             }
-
+            
             //  Print information about the accessible context.
             if (xContext != null)
             {
-                MessageArea.println (sIndent + "Name         : "
+                MessageArea.println (sIndent + "Name         : " 
                     + xContext.getAccessibleName());
-                MessageArea.println (sIndent + "Description  : "
+                MessageArea.println (sIndent + "Description  : " 
                     + xContext.getAccessibleDescription());
-                MessageArea.println (sIndent + "Role         : "
+                MessageArea.println (sIndent + "Role         : " 
                     + xContext.getAccessibleRole());
                 String sHasParent;
                 if (xContext.getAccessibleParent() != null)
                 {
                     MessageArea.println (sIndent + "Has parent   : yes");
-                    MessageArea.println (sIndent + "Parent index : "
+                    MessageArea.println (sIndent + "Parent index : " 
                         + xContext.getAccessibleIndexInParent());
                 }
                 else
                     MessageArea.println (sIndent + "Has parent   : no");
-                MessageArea.println (sIndent + "Child count  : "
+                MessageArea.println (sIndent + "Child count  : " 
                     + xContext.getAccessibleChildCount());
                 MessageArea.print (sIndent + "Relation set : ");
-                XAccessibleRelationSet xRelationSet
+                XAccessibleRelationSet xRelationSet 
                     = xContext.getAccessibleRelationSet();
                 if (xRelationSet != null)
                 {
@@ -287,13 +287,13 @@ public class InformationWriter
                 }
                 else
                     MessageArea.println ("no relation set");
-
+                
                 MessageArea.print (sIndent + "State set    : ");
-                XAccessibleStateSet xStateSet =
+                XAccessibleStateSet xStateSet = 
                     xContext.getAccessibleStateSet();
                 if (xStateSet != null)
                 {
-                    XIndexAccess xStates =
+                    XIndexAccess xStates = 
                         (XIndexAccess) UnoRuntime.queryInterface (
                             XIndexAccess.class, xStateSet);
                     MessageArea.print (xStates.getCount() + " (");
@@ -312,7 +312,7 @@ public class InformationWriter
             }
             else
                 MessageArea.println ("object has no accessible context.");
-
+            
             //            showInfo (xContext);
             //            showServices (xContext);
             //            showInterfaces (xContext);
@@ -323,7 +323,7 @@ public class InformationWriter
         }
         return true;
     }
-
+    
 
 
 
@@ -333,20 +333,20 @@ public class InformationWriter
     {
         try
         {
-            XAccessibleComponent xComponent =
+            XAccessibleComponent xComponent = 
                 (XAccessibleComponent) UnoRuntime.queryInterface (
                     XAccessibleComponent.class, xObject);
-
+            
             //  Print information about the accessible context.
             if (xComponent != null)
             {
-                MessageArea.println (sIndent + "Position        : "
+                MessageArea.println (sIndent + "Position        : " 
                     + xComponent.getLocation().X+", "
                     + xComponent.getLocation().Y);
-                MessageArea.println (sIndent + "Screen position : "
+                MessageArea.println (sIndent + "Screen position : " 
                     + xComponent.getLocationOnScreen().X+", "
                     + xComponent.getLocationOnScreen().Y);
-                MessageArea.println (sIndent + "Size            : "
+                MessageArea.println (sIndent + "Size            : " 
                     + xComponent.getSize().Width+", "
                     + xComponent.getSize().Height);
             }
@@ -368,7 +368,7 @@ public class InformationWriter
         {
             if ( ! showAccessibility (xRoot, depth))
                 return false;
-
+            
             String sIndent = "";
             for (int i=0; i<depth; i++)
                 sIndent += "    ";

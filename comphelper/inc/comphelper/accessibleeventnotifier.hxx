@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,21 +51,21 @@ namespace comphelper
     {
     // typedefs
     public:
-        typedef sal_uInt32  TClientId;
+        typedef sal_uInt32	TClientId;
 
         typedef ::std::pair< TClientId, ::com::sun::star::accessibility::AccessibleEventObject >
                                                                                     ClientEvent;
 
-        typedef ::cppu::OInterfaceContainerHelper                                   EventListeners;
-        typedef ::std::map< TClientId, EventListeners*, ::std::less< TClientId > >  ClientMap;
+        typedef ::cppu::OInterfaceContainerHelper									EventListeners;
+        typedef ::std::map< TClientId, EventListeners*, ::std::less< TClientId > >	ClientMap;
 
     protected:
-        AccessibleEventNotifier( );     // never implemented
-        ~AccessibleEventNotifier( );    // never implemented
+        AccessibleEventNotifier( );		// never implemented
+        ~AccessibleEventNotifier( );	// never implemented
 
     private:
-        COMPHELPER_DLLPRIVATE AccessibleEventNotifier( const AccessibleEventNotifier& );                // never implemented!
-        COMPHELPER_DLLPRIVATE AccessibleEventNotifier& operator=( const AccessibleEventNotifier& ); // never implemented!
+        COMPHELPER_DLLPRIVATE AccessibleEventNotifier( const AccessibleEventNotifier& );				// never implemented!
+        COMPHELPER_DLLPRIVATE AccessibleEventNotifier& operator=( const AccessibleEventNotifier& );	// never implemented!
 
     public:
         /** registers a client of this class, means a broadcaster of AccessibleEvents
@@ -74,7 +74,7 @@ namespace comphelper
             dies, it <b>must</b> call <member>revokeClient</member> or <member>revokeClientNotifyDisposing</member>
             explicitly itself.</p>
         */
-        static  TClientId   registerClient( );
+        static	TClientId	registerClient( );
 
         /** revokes a broadcaster of AccessibleEvents
 
@@ -84,10 +84,10 @@ namespace comphelper
             When the client is disposed, you should prefer <member>revokeClientNotifyDisposing</member></p>
 
             <p>Any possibly pending events for this client are removed from the queue.</p>
-
+    
             @seealso revokeClientNotifyDisposing
         */
-        static  void        revokeClient( const TClientId _nClient );
+        static	void		revokeClient( const TClientId _nClient );
 
         /** revokes a client, with additionally notifying a disposing event to all listeners registered for
             this client
@@ -100,7 +100,7 @@ namespace comphelper
                 the source to be notified together with the <member scope="com.sun.star.lang">XComponent::disposing</member>
                 call.
         */
-        static  void        revokeClientNotifyDisposing(
+        static	void		revokeClientNotifyDisposing(
                         const TClientId _nClient,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxEventSource
                     ) SAL_THROW( ( ) );
@@ -139,14 +139,14 @@ namespace comphelper
             @param _nClient
                 the id of the client which needs to broadcast the event
         */
-        static void addEvent(
+        static void	addEvent(
                         const TClientId _nClient,
                         const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent
                     ) SAL_THROW( ( ) );
 
     private:
         /// generates a new client id
-        COMPHELPER_DLLPRIVATE static    TClientId   generateId();
+        COMPHELPER_DLLPRIVATE static	TClientId	generateId();
 
         /** looks up a client in our client map, asserts if it cannot find it or no event thread is present
 
@@ -162,11 +162,11 @@ namespace comphelper
                 <TRUE/> if and only if the client could be found and <arg>_rPos</arg> has been filled with
                 it's position
         */
-        COMPHELPER_DLLPRIVATE static    sal_Bool    implLookupClient( const TClientId _nClient, ClientMap::iterator& _rPos );
+        COMPHELPER_DLLPRIVATE static	sal_Bool	implLookupClient( const TClientId _nClient, ClientMap::iterator& _rPos );
     };
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER

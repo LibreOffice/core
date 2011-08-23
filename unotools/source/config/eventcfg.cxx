@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@
 
 #include <algorithm>
 
-using namespace ::std                   ;
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::std					;
+using namespace ::utl					;
+using namespace ::rtl					;
+using namespace ::osl					;
+using namespace ::com::sun::star::uno	;
 using namespace ::com::sun::star;
 
 #define ROOTNODE_EVENTS OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Events/ApplicationEvents" ))
@@ -134,7 +134,7 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
 {
@@ -154,7 +154,7 @@ GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
 {
@@ -175,7 +175,7 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
 }
 
 //*****************************************************************************************************************
-//  public method
+//	public method
 //*****************************************************************************************************************
 void GlobalEventConfig_Impl::Commit()
 {
@@ -219,7 +219,7 @@ void GlobalEventConfig_Impl::EstablishFrameCallback(const ::com::sun::star::uno:
 }
 
 //*****************************************************************************************************************
-//  private method
+//	private method
 //*****************************************************************************************************************
 void GlobalEventConfig_Impl::initBindingInfo()
 {

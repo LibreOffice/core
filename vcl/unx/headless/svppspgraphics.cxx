@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,19 +72,19 @@ class SalPrinterBmp : public psp::PrinterBmp
     public:
 
                             SalPrinterBmp (const BitmapDeviceSharedPtr& rDevice);
-        virtual             ~SalPrinterBmp ();
-        virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const;
-        virtual sal_uInt32  GetPaletteEntryCount () const;
-        virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const;
-        virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const;
-        virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const;
-        virtual sal_uInt32  GetWidth () const;
-        virtual sal_uInt32  GetHeight() const;
-        virtual sal_uInt32  GetDepth () const;
-
+        virtual				~SalPrinterBmp ();
+        virtual sal_uInt32	GetPaletteColor (sal_uInt32 nIdx) const;
+        virtual sal_uInt32	GetPaletteEntryCount () const;
+        virtual sal_uInt32	GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const;
+        virtual sal_uInt8	GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const;
+        virtual sal_uInt8	GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const;
+        virtual sal_uInt32	GetWidth () const;
+        virtual sal_uInt32	GetHeight() const;
+        virtual sal_uInt32	GetDepth ()	const;
+        
         static sal_uInt32 getRGBFromColor( const basebmp::Color& rCol )
         {
-            return    ((rCol.getBlue())          & 0x000000ff)
+            return 	  ((rCol.getBlue()) 		 & 0x000000ff)
                     | ((rCol.getGreen() <<  8) & 0x0000ff00)
                     | ((rCol.getRed()   << 16) & 0x00ff0000);
         }
@@ -317,7 +317,7 @@ void PspGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
     m_pPrinterGfx->DrawPolygon (nPoints, (Point*)pPtAry);
 }
 
-void PspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
+void PspGraphics::drawPolyPolygon( sal_uInt32			nPoly,
                                    const sal_uInt32   *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
@@ -432,11 +432,11 @@ SalColor PspGraphics::getPixel( long /*nX*/, long /*nY*/ )
 }
 
 void PspGraphics::invert(
-                         long       /*nX*/,
-                         long       /*nY*/,
-                         long       /*nDX*/,
-                         long       /*nDY*/,
-                         SalInvert  /*nFlags*/ )
+                         long		/*nX*/,
+                         long		/*nY*/,
+                         long		/*nDX*/,
+                         long		/*nDY*/,
+                         SalInvert	/*nFlags*/ )
 {
     DBG_ERROR ("Warning: PrinterGfx::Invert() not implemented");
 }
@@ -500,8 +500,8 @@ PspFontLayout::PspFontLayout( ::psp::PrinterGfx& rGfx )
     mnFontHeight = mrPrinterGfx.GetFontHeight();
     mnFontWidth  = mrPrinterGfx.GetFontWidth();
     mbVertical   = mrPrinterGfx.GetFontVertical();
-    mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
-    mbArtBold    = mrPrinterGfx.GetArtificialBold();
+    mbArtItalic	 = mrPrinterGfx.GetArtificialItalic();
+    mbArtBold	 = mrPrinterGfx.GetArtificialBold();
 }
 
 //--------------------------------------------------------------------------
@@ -589,19 +589,19 @@ public:
     PspServerFontLayout( psp::PrinterGfx&, ServerFont& rFont, const ImplLayoutArgs& rArgs );
 
     virtual void        InitFont() const;
-    const sal_Unicode*  getTextPtr() const { return maText.getStr() - mnMinCharPos; }
-    int                 getMinCharPos() const { return mnMinCharPos; }
-    int                 getMaxCharPos() const { return mnMinCharPos+maText.getLength()-1; }
+    const sal_Unicode*	getTextPtr() const { return maText.getStr() - mnMinCharPos; }
+    int					getMinCharPos() const { return mnMinCharPos; }
+    int					getMaxCharPos() const { return mnMinCharPos+maText.getLength()-1; }
 private:
     ::psp::PrinterGfx&  mrPrinterGfx;
     sal_IntPtr          mnFontID;
     int                 mnFontHeight;
     int                 mnFontWidth;
     bool                mbVertical;
-    bool                mbArtItalic;
-    bool                mbArtBold;
-    rtl::OUString       maText;
-    int                 mnMinCharPos;
+    bool				mbArtItalic;
+    bool				mbArtBold;
+    rtl::OUString		maText;
+    int					mnMinCharPos;
 };
 
 PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& rFont, const ImplLayoutArgs& rArgs )
@@ -612,9 +612,9 @@ PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& r
     mnFontHeight = mrPrinterGfx.GetFontHeight();
     mnFontWidth  = mrPrinterGfx.GetFontWidth();
     mbVertical   = mrPrinterGfx.GetFontVertical();
-    mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
-    mbArtBold    = mrPrinterGfx.GetArtificialBold();
-    maText       = OUString( rArgs.mpStr + rArgs.mnMinCharPos, rArgs.mnEndCharPos - rArgs.mnMinCharPos+1 );
+    mbArtItalic	 = mrPrinterGfx.GetArtificialItalic();
+    mbArtBold	 = mrPrinterGfx.GetArtificialBold();
+    maText		 = OUString( rArgs.mpStr + rArgs.mnMinCharPos, rArgs.mnEndCharPos - rArgs.mnMinCharPos+1 );
     mnMinCharPos = rArgs.mnMinCharPos;
 }
 
@@ -633,7 +633,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
     sal_Int32   aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Ucs     aUnicodes[ nMaxGlyphs ];
-    int         aCharPosAry [ nMaxGlyphs ];
+    int			aCharPosAry	[ nMaxGlyphs ];
 
     Point aPos;
     long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
@@ -805,19 +805,19 @@ void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
         pMetric->mbDevice       = aDFA.mbDevice;
         pMetric->mbScalableFont = true;
 
-        pMetric->mnOrientation  = m_pPrinterGfx->GetFontAngle();
-        pMetric->mnSlant        = 0;
+        pMetric->mnOrientation 	= m_pPrinterGfx->GetFontAngle();
+        pMetric->mnSlant		= 0;
 
-        sal_Int32 nTextHeight   = m_pPrinterGfx->GetFontHeight();
-        sal_Int32 nTextWidth    = m_pPrinterGfx->GetFontWidth();
+        sal_Int32 nTextHeight	= m_pPrinterGfx->GetFontHeight();
+        sal_Int32 nTextWidth	= m_pPrinterGfx->GetFontWidth();
         if( ! nTextWidth )
             nTextWidth = nTextHeight;
 
-        pMetric->mnWidth        = nTextWidth;
-        pMetric->mnAscent       = ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000;
-        pMetric->mnDescent      = ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000;
-        pMetric->mnIntLeading   = ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
-        pMetric->mnExtLeading   = 0;
+        pMetric->mnWidth		= nTextWidth;
+        pMetric->mnAscent		= ( aInfo.m_nAscend * nTextHeight + 500 ) / 1000;
+        pMetric->mnDescent		= ( aInfo.m_nDescend * nTextHeight + 500 ) / 1000;
+        pMetric->mnIntLeading	= ( aInfo.m_nLeading * nTextHeight + 500 ) / 1000;
+        pMetric->mnExtLeading	= 0;
     }
 }
 
@@ -834,9 +834,9 @@ ULONG PspGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
             nTextScale = m_pPrinterGfx->GetFontHeight();
         for( i = 0, it = rPairs.begin(); i < nPairs && i < nHavePairs; i++, ++it )
         {
-            pKernPairs[i].mnChar1   = it->first;
-            pKernPairs[i].mnChar2   = it->second;
-            pKernPairs[i].mnKern    = it->kern_x * nTextScale / 1000;
+            pKernPairs[i].mnChar1	= it->first;
+            pKernPairs[i].mnChar2	= it->second;
+            pKernPairs[i].mnKern	= it->kern_x * nTextScale / 1000;
         }
 
     }
@@ -987,9 +987,9 @@ const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnico
         return NULL;
 
     // fill in font info
-    rInfo.m_nAscent     = aFontInfo.m_nAscend;
-    rInfo.m_nDescent    = aFontInfo.m_nDescend;
-    rInfo.m_aPSName     = rMgr.getPSName( aFont );
+    rInfo.m_nAscent		= aFontInfo.m_nAscend;
+    rInfo.m_nDescent	= aFontInfo.m_nDescend;
+    rInfo.m_aPSName		= rMgr.getPSName( aFont );
 
     int xMin, yMin, xMax, yMax;
     rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
@@ -1019,8 +1019,8 @@ const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnico
 
     *pDataLen = aStat.st_size;
 
-    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
-    rInfo.m_nCapHeight  = yMax; // Well ...
+    rInfo.m_aFontBBox	= Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
+    rInfo.m_nCapHeight	= yMax; // Well ...
 
     for( int i = 0; i < 256; i++ )
         pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
@@ -1080,13 +1080,13 @@ FontWidth PspGraphics::ToFontWidth (psp::width::type eWidth)
     {
         case psp::width::UltraCondensed: return WIDTH_ULTRA_CONDENSED;
         case psp::width::ExtraCondensed: return WIDTH_EXTRA_CONDENSED;
-        case psp::width::Condensed:      return WIDTH_CONDENSED;
-        case psp::width::SemiCondensed:  return WIDTH_SEMI_CONDENSED;
-        case psp::width::Normal:         return WIDTH_NORMAL;
-        case psp::width::SemiExpanded:   return WIDTH_SEMI_EXPANDED;
-        case psp::width::Expanded:       return WIDTH_EXPANDED;
-        case psp::width::ExtraExpanded:  return WIDTH_EXTRA_EXPANDED;
-        case psp::width::UltraExpanded:  return WIDTH_ULTRA_EXPANDED;
+        case psp::width::Condensed:		 return WIDTH_CONDENSED;
+        case psp::width::SemiCondensed:	 return WIDTH_SEMI_CONDENSED;
+        case psp::width::Normal:		 return WIDTH_NORMAL;
+        case psp::width::SemiExpanded:	 return WIDTH_SEMI_EXPANDED;
+        case psp::width::Expanded:		 return WIDTH_EXPANDED;
+        case psp::width::ExtraExpanded:	 return WIDTH_EXTRA_EXPANDED;
+        case psp::width::UltraExpanded:	 return WIDTH_ULTRA_EXPANDED;
         default: break;
     }
     return WIDTH_DONTKNOW;
@@ -1096,16 +1096,16 @@ FontWeight PspGraphics::ToFontWeight (psp::weight::type eWeight)
 {
     switch (eWeight)
     {
-        case psp::weight::Thin:       return WEIGHT_THIN;
+        case psp::weight::Thin:		  return WEIGHT_THIN;
         case psp::weight::UltraLight: return WEIGHT_ULTRALIGHT;
-        case psp::weight::Light:      return WEIGHT_LIGHT;
+        case psp::weight::Light:	  return WEIGHT_LIGHT;
         case psp::weight::SemiLight:  return WEIGHT_SEMILIGHT;
-        case psp::weight::Normal:     return WEIGHT_NORMAL;
-        case psp::weight::Medium:     return WEIGHT_MEDIUM;
-        case psp::weight::SemiBold:   return WEIGHT_SEMIBOLD;
-        case psp::weight::Bold:       return WEIGHT_BOLD;
+        case psp::weight::Normal:	  return WEIGHT_NORMAL;
+        case psp::weight::Medium:	  return WEIGHT_MEDIUM;
+        case psp::weight::SemiBold:	  return WEIGHT_SEMIBOLD;
+        case psp::weight::Bold:		  return WEIGHT_BOLD;
         case psp::weight::UltraBold:  return WEIGHT_ULTRABOLD;
-        case psp::weight::Black:      return WEIGHT_BLACK;
+        case psp::weight::Black:	  return WEIGHT_BLACK;
         default: break;
     }
     return WEIGHT_DONTKNOW;
@@ -1115,8 +1115,8 @@ FontPitch PspGraphics::ToFontPitch (psp::pitch::type ePitch)
 {
     switch (ePitch)
     {
-        case psp::pitch::Fixed:     return PITCH_FIXED;
-        case psp::pitch::Variable:  return PITCH_VARIABLE;
+        case psp::pitch::Fixed:		return PITCH_FIXED;
+        case psp::pitch::Variable:	return PITCH_VARIABLE;
         default: break;
     }
     return PITCH_DONTKNOW;
@@ -1126,9 +1126,9 @@ FontItalic PspGraphics::ToFontItalic (psp::italic::type eItalic)
 {
     switch (eItalic)
     {
-        case psp::italic::Upright:  return ITALIC_NONE;
-        case psp::italic::Oblique:  return ITALIC_OBLIQUE;
-        case psp::italic::Italic:   return ITALIC_NORMAL;
+        case psp::italic::Upright:	return ITALIC_NONE;
+        case psp::italic::Oblique:	return ITALIC_OBLIQUE;
+        case psp::italic::Italic:	return ITALIC_NORMAL;
         default: break;
     }
     return ITALIC_DONTKNOW;
@@ -1139,11 +1139,11 @@ FontFamily PspGraphics::ToFontFamily (psp::family::type eFamily)
     switch (eFamily)
     {
         case psp::family::Decorative: return FAMILY_DECORATIVE;
-        case psp::family::Modern:     return FAMILY_MODERN;
-        case psp::family::Roman:      return FAMILY_ROMAN;
-        case psp::family::Script:     return FAMILY_SCRIPT;
-        case psp::family::Swiss:      return FAMILY_SWISS;
-        case psp::family::System:     return FAMILY_SYSTEM;
+        case psp::family::Modern:	  return FAMILY_MODERN;
+        case psp::family::Roman:	  return FAMILY_ROMAN;
+        case psp::family::Script:	  return FAMILY_SCRIPT;
+        case psp::family::Swiss:	  return FAMILY_SWISS;
+        case psp::family::System:	  return FAMILY_SYSTEM;
         default: break;
     }
     return FAMILY_DONTKNOW;
@@ -1363,7 +1363,7 @@ SystemGraphicsData PspGraphics::GetGraphicsData() const
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
         aRes.hDrawable = 0;
-        aRes.pRenderFormat = 0;
+        aRes.pXRenderFormat = 0;
     return aRes;
 }
 

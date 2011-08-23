@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ read_sdf_file_names();
 init();
 my $reference;
 my $path ;
-my $localize_file;
+my $localize_file; 
 while( hasLines() )
 {
     @current = ();
@@ -76,7 +76,7 @@ while( hasLines() )
     {
         push @current , $_;
     }
-
+    
     $reference = getNextIdentifier( );
 
     @current = ();
@@ -145,13 +145,13 @@ sub init
         print "Open file '$file'\n";
     }
 }
-
-# get the next module/file
+    
+# get the next module/file 
 sub getNextIdentifier
 {
     my @sorted = sort {
         return $a->module.$a->dir cmp $b->module.$b->dir;
-    } @current ;
+    } @current ; 
     return shift @sorted;
 }
 
@@ -276,7 +276,7 @@ sub write_lines
             $last_localize_file = $localize_file;
         }
     }
-}
+}    
 sub add_to_buffer
 {
     my $plainline;

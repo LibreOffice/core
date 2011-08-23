@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,30 +38,30 @@ class SfxPoolItem;
 class Bitmap;
 
 // Defines zur Steuerung der Ausführung von Slots
-#define EXECUTE_NO                  0
-#define EXECUTE_POSSIBLE            1
-#define EXECUTE_YES                 2
-#define EXECUTEMODE_ASYNCHRON       1
-#define EXECUTEMODE_DIALOGASYNCHRON 2
+#define EXECUTE_NO					0
+#define EXECUTE_POSSIBLE			1
+#define EXECUTE_YES					2
+#define EXECUTEMODE_ASYNCHRON		1
+#define EXECUTEMODE_DIALOGASYNCHRON	2
 
-#define SFX_USE_BINDINGS        0x8000
+#define SFX_USE_BINDINGS		0x8000
 
 // Property Requests(PR)
-#define TT_PR_ONCE      0x100
+#define TT_PR_ONCE		0x100
 
-#define TT_PR_SLOTS     ( 0x001 | TT_PR_ONCE )
+#define TT_PR_SLOTS		( 0x001 | TT_PR_ONCE )
 #define TT_PR_DISPATCHER (0x002 )
-#define TT_PR_IMG       ( 0x004 )
+#define TT_PR_IMG		( 0x004 )
 
-#define TT_PR_ERR_NODISPATCHER  01
-#define TT_PR_ERR_NOEXECUTE     02
+#define TT_PR_ERR_NODISPATCHER	01
+#define TT_PR_ERR_NOEXECUTE		02
 
-/// To detect inconsistencies
-#define TT_PROPERTIES_VERSION   1
+///	To detect inconsistencies
+#define TT_PROPERTIES_VERSION	1
 
 class SVT_DLLPUBLIC TTProperties : public ApplicationProperty
 {
-    USHORT nDonePRs;                    // Verwaltung für die Properties, die nur einmal gerufen werden mussen.
+    USHORT nDonePRs;					// Verwaltung für die Properties, die nur einmal gerufen werden mussen.
     SVT_DLLPRIVATE BOOL RequestProperty( USHORT nRequest );
 
     BOOL HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
@@ -100,7 +100,7 @@ public:
     ULONG nSidReferer;
 
     USHORT nActualPR;
-    USHORT nPropertyVersion;        // Wird bei jedem call gesetzt.
+    USHORT nPropertyVersion;		// Wird bei jedem call gesetzt.
 };
 
 #endif // _SVTOOLS_TTPROPS_HXX

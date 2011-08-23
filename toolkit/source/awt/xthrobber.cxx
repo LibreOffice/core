@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace toolkit
     {
         mpThrobber->start();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::stop() throw ( uno::RuntimeException )
     {
@@ -115,7 +115,7 @@ namespace toolkit
             VCLXWindow::setProperty( PropertyName, Value );
         }
     }
-
+    
     //--------------------------------------------------------------------
     uno::Any SAL_CALL XThrobber::getProperty( const ::rtl::OUString& PropertyName )
         throw( uno::RuntimeException )
@@ -150,7 +150,7 @@ namespace toolkit
 
         mpThrobber->setImageList( aImageList );
     }
-
+ 
 //........................................................................
 }   // namespace toolkit
 //........................................................................

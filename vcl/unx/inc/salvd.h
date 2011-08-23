@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,46 +40,46 @@ class X11SalGraphics;
 // -=-= SalVirDevData -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class X11SalVirtualDevice : public SalVirtualDevice
 {
-    SalDisplay      *pDisplay_;
-    X11SalGraphics  *pGraphics_;
-
-
-    Pixmap          hDrawable_;
+    SalDisplay		*pDisplay_;
+    X11SalGraphics	*pGraphics_;
+    
+    
+    Pixmap			hDrawable_;
     int             m_nScreen;
-
-    int             nDX_;
-    int             nDY_;
-    USHORT          nDepth_;
-    BOOL            bGraphics_;         // is Graphics used
+    
+    int				nDX_;
+    int				nDY_;
+    USHORT			nDepth_;
+    BOOL			bGraphics_;			// is Graphics used
     BOOL            bExternPixmap_;
-
+    
 public:
     X11SalVirtualDevice();
     virtual ~X11SalVirtualDevice();
 
-    BOOL            Init( SalDisplay *pDisplay,
+    BOOL			Init( SalDisplay *pDisplay,
                           long nDX, long nDY,
                           USHORT nBitCount,
                           int nScreen,
                           Pixmap hDrawable = None,
-                          void* pRenderFormat = NULL );
-    inline  void            InitGraphics( X11SalVirtualDevice *pVD );
+                          XRenderPictFormat* pXRenderFormat = NULL );
+    inline	void			InitGraphics( X11SalVirtualDevice *pVD );
 
-    inline  Display        *GetXDisplay() const;
-    inline  SalDisplay     *GetDisplay() const;
-    inline  BOOL            IsDisplay() const;
-    inline  Pixmap          GetDrawable() const { return hDrawable_; }
-    inline  USHORT          GetDepth() const { return nDepth_; }
-    int                     GetWidth() const { return nDX_; }
-    int                     GetHeight() const { return nDY_; }
+    inline	Display		   *GetXDisplay() const;
+    inline	SalDisplay	   *GetDisplay() const;
+    inline	BOOL			IsDisplay() const;
+    inline	Pixmap			GetDrawable() const { return hDrawable_; }
+    inline	USHORT			GetDepth() const { return nDepth_; }
+    int						GetWidth() const { return nDX_; }
+    int						GetHeight() const { return nDY_; }
     int                     GetScreenNumber() const { return m_nScreen; }
 
-    virtual SalGraphics*    GetGraphics();
-    virtual void            ReleaseGraphics( SalGraphics* pGraphics );
+    virtual SalGraphics*	GetGraphics();
+    virtual void			ReleaseGraphics( SalGraphics* pGraphics );
 
                             // Set new size, without saving the old contents
-    virtual BOOL            SetSize( long nNewDX, long nNewDY );
-    virtual void            GetSize( long& rWidth, long& rHeight );
+    virtual BOOL			SetSize( long nNewDX, long nNewDY );
+    virtual void			GetSize( long& rWidth, long& rHeight );
 };
 
 #ifdef _SV_SALDISP_HXX

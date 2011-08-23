@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace cppcanvas
     namespace internal
     {
 
-        ImplBitmap::ImplBitmap( const CanvasSharedPtr&                      rParentCanvas,
+        ImplBitmap::ImplBitmap( const CanvasSharedPtr& 						rParentCanvas,
                                 const uno::Reference< rendering::XBitmap >& rBitmap ) :
             CanvasGraphicHelper( rParentCanvas ),
             mxBitmap( rBitmap ),
@@ -55,7 +55,7 @@ namespace cppcanvas
             uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( rBitmap,
                                                                       uno::UNO_QUERY );
             if( xBitmapCanvas.is() )
-                mpBitmapCanvas.reset( new ImplBitmapCanvas(
+                mpBitmapCanvas.reset( new ImplBitmapCanvas( 
                                           uno::Reference< rendering::XBitmapCanvas >(rBitmap,
                                                                                      uno::UNO_QUERY) ) );
         }
@@ -79,8 +79,8 @@ namespace cppcanvas
             }
 
             // TODO(P1): implement caching
-            pCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                 pCanvas->getViewState(),
+            pCanvas->getUNOCanvas()->drawBitmap( mxBitmap, 
+                                                 pCanvas->getViewState(), 
                                                  getRenderState() );
 
             return true;
@@ -103,12 +103,12 @@ namespace cppcanvas
             rendering::RenderState aLocalState( getRenderState() );
             uno::Sequence<rendering::ARGBColor> aCol(1);
             aCol[0] = rendering::ARGBColor( nAlphaModulation, 1.0, 1.0, 1.0 );
-            aLocalState.DeviceColor =
+            aLocalState.DeviceColor = 
                 pCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace()->convertFromARGB(aCol);
 
             // TODO(P1): implement caching
-            pCanvas->getUNOCanvas()->drawBitmapModulated( mxBitmap,
-                                                          pCanvas->getViewState(),
+            pCanvas->getUNOCanvas()->drawBitmapModulated( mxBitmap, 
+                                                          pCanvas->getViewState(), 
                                                           aLocalState );
 
             return true;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,16 +76,16 @@ namespace dxcanvas
     {
     }
 
-    void TextLayoutDrawHelper::drawText(
+    void TextLayoutDrawHelper::drawText( 
         const GraphicsSharedPtr&                            rGraphics,
-        const ::com::sun::star::rendering::ViewState&       rViewState,
-        const ::com::sun::star::rendering::RenderState&     rRenderState,
-        const ::basegfx::B2ISize&                           rOutputOffset,
-        const ::com::sun::star::rendering::StringContext&   rText,
-        const ::com::sun::star::uno::Sequence< double >&    rLogicalAdvancements,
+        const ::com::sun::star::rendering::ViewState& 		rViewState,
+        const ::com::sun::star::rendering::RenderState& 	rRenderState,
+        const ::basegfx::B2ISize& 							rOutputOffset,
+        const ::com::sun::star::rendering::StringContext& 	rText,
+        const ::com::sun::star::uno::Sequence< double >& 	rLogicalAdvancements,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XCanvasFont >&     rCanvasFont,
-        const ::com::sun::star::geometry::Matrix2D&         rFontMatrix,
+            ::com::sun::star::rendering::XCanvasFont >& 	rCanvasFont,
+        const ::com::sun::star::geometry::Matrix2D& 		rFontMatrix,
         bool                                                bAlphaSurface )
     {
         HDC hdc = rGraphics->GetHDC();
@@ -242,10 +242,10 @@ namespace dxcanvas
         }
     }
 
-    geometry::RealRectangle2D TextLayoutDrawHelper::queryTextBounds( const rendering::StringContext&                    rText,
-                                                                     const uno::Sequence< double >&                     rLogicalAdvancements,
-                                                                     const uno::Reference< rendering::XCanvasFont >&    rCanvasFont,
-                                                                     const geometry::Matrix2D&                          rFontMatrix )
+    geometry::RealRectangle2D TextLayoutDrawHelper::queryTextBounds( const rendering::StringContext& 					rText,
+                                                                     const uno::Sequence< double >& 					rLogicalAdvancements,
+                                                                     const uno::Reference< rendering::XCanvasFont >&	rCanvasFont,
+                                                                     const geometry::Matrix2D& 							rFontMatrix )
     {
         if(!(rText.Length))
             return geometry::RealRectangle2D();

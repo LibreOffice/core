@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    ,
-                            const geometry::Matrix2D&                       rFontMatrix,
+    CanvasFont::CanvasFont( const rendering::FontRequest& 					rFontRequest,
+                            const uno::Sequence< beans::PropertyValue >&	, 
+                            const geometry::Matrix2D& 						rFontMatrix,
                             rendering::XGraphicDevice&                      rDevice,
                             const OutDevProviderSharedPtr&                  rOutDevProvider ) :
         CanvasFont_Base( m_aMutex ),
@@ -83,13 +83,13 @@ namespace vclcanvas
             const Size aSize = rOutDev.GetFontMetric( *maFont ).GetSize();
 
             const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
-            double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
-
+            double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);            
+            
             if( !::basegfx::fTools::equalZero( fDividend) )
                 fStretch /= fDividend;
-
+            
             const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
-
+            
             maFont->SetWidth( nNewWidth );
 
             rOutDev.EnableMapMode(bOldMapState);
@@ -111,10 +111,10 @@ namespace vclcanvas
         if( !mpRefDevice.is() )
             return uno::Reference< rendering::XTextLayout >(); // we're disposed
 
-        return new TextLayout( aText,
-                               nDirection,
-                               nRandomSeed,
-                               Reference( this ),
+        return new TextLayout( aText, 
+                               nDirection, 
+                               nRandomSeed, 
+                               Reference( this ), 
                                mpRefDevice,
                                mpOutDevProvider);
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ public:
     SvtListenerBase( SvtListener& rLst, SvtBroadcaster& rBroadcaster );
     ~SvtListenerBase();
 
-    SvtListenerBase* GetNext() const        { return pNext; }
-    void SetNext( SvtListenerBase* p )      { pNext = p; }
+    SvtListenerBase* GetNext() const  		{ return pNext; }
+    void SetNext( SvtListenerBase* p ) 		{ pNext = p; }
 
-    SvtBroadcaster* GetBroadcaster() const  { return pBroadcaster; }
-    SvtListener* GetListener() const        { return pListener; }
+    SvtBroadcaster* GetBroadcaster() const	{ return pBroadcaster; }
+    SvtListener* GetListener() const 		{ return pListener; }
 
-    SvtListenerBase* GetLeft() const        { return pLeft; }
-    SvtListenerBase* GetRight() const       { return pRight; }
+    SvtListenerBase* GetLeft() const  		{ return pLeft; }
+    SvtListenerBase* GetRight() const  		{ return pRight; }
 };
 
 

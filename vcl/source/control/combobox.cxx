@@ -116,16 +116,16 @@ ComboBox::~ComboBox()
 
 void ComboBox::ImplInitComboBoxData()
 {
-    mpSubEdit           = NULL;
-    mpBtn               = NULL;
-    mpImplLB            = NULL;
-    mpFloatWin          = NULL;
+    mpSubEdit			= NULL;
+    mpBtn				= NULL;
+    mpImplLB			= NULL;
+    mpFloatWin			= NULL;
 
-    mnDDHeight          = 0;
-    mbDDAutoSize        = TRUE;
-    mbSyntheticModify   = FALSE;
-    mbMatchCase         = FALSE;
-    mcMultiSep          = ';';
+    mnDDHeight			= 0;
+    mbDDAutoSize		= TRUE;
+    mbSyntheticModify	= FALSE;
+    mbMatchCase 		= FALSE;
+    mcMultiSep			= ';';
 }
 
 // -----------------------------------------------------------------------
@@ -330,8 +330,8 @@ IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, EMPTYARG )
 
 IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 {
-    Selection           aSel = pEdit->GetSelection();
-    AutocompleteAction  eAction = pEdit->GetAutocompleteAction();
+    Selection			aSel = pEdit->GetSelection();
+    AutocompleteAction	eAction = pEdit->GetAutocompleteAction();
 
     /* If there is no current selection do not auto complete on
        Tab/Shift-Tab since then we would not cycle to the next field.
@@ -339,9 +339,9 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
     if ( aSel.Len() ||
          ((eAction != AUTOCOMPLETE_TABFORWARD) && (eAction != AUTOCOMPLETE_TABBACKWARD)) )
     {
-        XubString   aFullText = pEdit->GetText();
-        XubString   aStartText = aFullText.Copy( 0, (xub_StrLen)aSel.Max() );
-        USHORT      nStart = mpImplLB->GetCurrentPos();
+        XubString	aFullText = pEdit->GetText();
+        XubString	aStartText = aFullText.Copy( 0, (xub_StrLen)aSel.Max() );
+        USHORT		nStart = mpImplLB->GetCurrentPos();
 
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
             nStart = 0;
@@ -400,11 +400,11 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
             xub_StrLen nIndex = 0;
             while ( nIndex != STRING_NOTFOUND )
             {
-                xub_StrLen  nPrevIndex = nIndex;
-                XubString   aToken = aText.GetToken( 0, mcMultiSep, nIndex );
-                xub_StrLen  nTokenLen = aToken.Len();
+                xub_StrLen	nPrevIndex = nIndex;
+                XubString	aToken = aText.GetToken( 0, mcMultiSep, nIndex );
+                xub_StrLen	nTokenLen = aToken.Len();
                 aToken.EraseLeadingAndTrailingChars( ' ' );
-                USHORT      nP = mpImplLB->GetEntryList()->FindEntry( aToken );
+                USHORT		nP = mpImplLB->GetEntryList()->FindEntry( aToken );
                 if ( (nP != LISTBOX_ENTRY_NOTFOUND) && (!mpImplLB->GetEntryList()->IsEntryPosSelected( nP )) )
                 {
                     aText.Erase( nPrevIndex, nTokenLen );
@@ -625,8 +625,8 @@ void ComboBox::Resize()
     if( IsDropDownBox() )
     {
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        long    nTop = 0;
-        long    nBottom = aOutSz.Height();
+        long	nTop = 0;
+        long	nBottom = aOutSz.Height();
 
         Window *pBorder = GetWindow( WINDOW_BORDER );
         ImplControlValue aControlValue;
@@ -813,7 +813,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
             && !IsReadOnly() )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
-        USHORT   nKeyCode = aKeyEvt.GetKeyCode().GetCode();
+        USHORT	 nKeyCode = aKeyEvt.GetKeyCode().GetCode();
         switch( nKeyCode )
         {
             case KEY_UP:
@@ -927,9 +927,9 @@ void ComboBox::ImplUpdateFloatSelection()
     mpImplLB->SetCallSelectionChangedHdl( FALSE );
     if ( !IsMultiSelectionEnabled() )
     {
-        XubString   aSearchStr( mpSubEdit->GetText() );
-        USHORT      nSelect = LISTBOX_ENTRY_NOTFOUND;
-        BOOL        bSelect = TRUE;
+        XubString	aSearchStr( mpSubEdit->GetText() );
+        USHORT		nSelect = LISTBOX_ENTRY_NOTFOUND;
+        BOOL		bSelect = TRUE;
 
         if ( mpImplLB->GetCurrentPos() != LISTBOX_ENTRY_NOTFOUND )
         {

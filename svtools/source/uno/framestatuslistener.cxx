@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,7 +195,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
     {
         SolarMutexGuard aSolarMutexGuard;
         URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
-
+        
         // Already in the list of status listener. Do nothing.
         if ( pIter != m_aListenerMap.end() )
             return;
@@ -214,13 +214,13 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( m_xServiceManager.is() && xDispatchProvider.is() )
             {
-                Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( 
+                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), 
                                                             UNO_QUERY );
                 aTargetURL.Complete = aCommandURL;
                 xURLTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
+            
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
                 URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
                 if ( aIter != m_aListenerMap.end() )
@@ -235,14 +235,14 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
                     }
                     catch ( Exception& )
                     {
-                    }
+                    }    
                 }
                 else
                     m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, xDispatch ));
             }
         }
     }
-
+    
     // Call without locked mutex as we are called back from dispatch implementation
     try
     {
@@ -257,7 +257,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
 void FrameStatusListener::removeStatusListener( const rtl::OUString& aCommandURL )
 {
     SolarMutexGuard aSolarMutexGuard;
-
+    
     URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
     if ( pIter != m_aListenerMap.end() )
     {
@@ -267,13 +267,13 @@ void FrameStatusListener::removeStatusListener( const rtl::OUString& aCommandURL
 
         try
         {
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( 
+                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), 
                                                         UNO_QUERY );
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = aCommandURL;
             xURLTransformer->parseStrict( aTargetURL );
-
+            
             if ( xDispatch.is() && xStatusListener.is() )
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
         }
@@ -290,10 +290,10 @@ void FrameStatusListener::bindListener()
 
     {
         SolarMutexGuard aSolarMutexGuard;
-
+        
         if ( !m_bInitialized )
             return;
-
+        
         // Collect all registered command URL's and store them temporary
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( m_xServiceManager.is() && xDispatchProvider.is() )
@@ -302,13 +302,13 @@ void FrameStatusListener::bindListener()
             URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
             while ( pIter != m_aListenerMap.end() )
             {
-                Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( 
+                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), 
                                                             UNO_QUERY );
                 com::sun::star::util::URL aTargetURL;
                 aTargetURL.Complete = pIter->first;
                 xURLTransformer->parseStrict( aTargetURL );
-
+                
                 Reference< XDispatch > xDispatch( pIter->second );
                 if ( xDispatch.is() )
                 {
@@ -322,7 +322,7 @@ void FrameStatusListener::bindListener()
                     {
                     }
                 }
-
+                
                 // Query for dispatch object. Old dispatch will be released with this, too.
                 try
                 {
@@ -332,14 +332,14 @@ void FrameStatusListener::bindListener()
                 {
                 }
                 pIter->second = xDispatch;
-
+                
                 Listener aListener( aTargetURL, xDispatch );
                 aDispatchVector.push_back( aListener );
                 ++pIter;
             }
         }
     }
-
+    
     // Call without locked mutex as we are called back from dispatch implementation
     if ( xStatusListener.is() )
     {
@@ -361,10 +361,10 @@ void FrameStatusListener::bindListener()
 void FrameStatusListener::unbindListener()
 {
     SolarMutexGuard aSolarMutexGuard;
-
+    
     if ( !m_bInitialized )
         return;
-
+    
     // Collect all registered command URL's and store them temporary
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     if ( m_xServiceManager.is() && xDispatchProvider.is() )
@@ -373,13 +373,13 @@ void FrameStatusListener::unbindListener()
         URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
         while ( pIter != m_aListenerMap.end() )
         {
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( 
+                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), 
                                                         UNO_QUERY );
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
             xURLTransformer->parseStrict( aTargetURL );
-
+            
             Reference< XDispatch > xDispatch( pIter->second );
             if ( xDispatch.is() )
             {
@@ -404,20 +404,20 @@ void FrameStatusListener::updateStatus( const rtl::OUString aCommandURL )
     Reference< XDispatch > xDispatch;
     Reference< XStatusListener > xStatusListener;
     com::sun::star::util::URL aTargetURL;
-
+    
     {
         SolarMutexGuard aSolarMutexGuard;
-
+        
         if ( !m_bInitialized )
             return;
-
+        
         // Try to find a dispatch object for the requested command URL
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
         if ( m_xServiceManager.is() && xDispatchProvider.is() )
         {
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( 
+                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), 
                                                         UNO_QUERY );
             aTargetURL.Complete = aCommandURL;
             xURLTransformer->parseStrict( aTargetURL );
@@ -427,9 +427,9 @@ void FrameStatusListener::updateStatus( const rtl::OUString aCommandURL )
 
     if ( xDispatch.is() && xStatusListener.is() )
     {
-        // Catch exception as we release our mutex, it is possible that someone else
+        // Catch exception as we release our mutex, it is possible that someone else 
         // has already disposed this instance!
-        // Add/remove status listener to get a update status information from the
+        // Add/remove status listener to get a update status information from the 
         // requested command.
         try
         {

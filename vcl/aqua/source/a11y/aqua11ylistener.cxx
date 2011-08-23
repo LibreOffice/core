@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #include "aqua11ylistener.hxx"
 #include "aqua11yfactory.h"
 #include "aqua11yfocustracker.hxx"
@@ -47,16 +47,16 @@ NSString * getTableNotification( const AccessibleEventObject& aEvent )
 {
     AccessibleTableModelChange aChange;
     NSString * notification = nil;
-
+    
     if( (aEvent.NewValue >>= aChange) &&
         ( AccessibleTableModelChangeType::INSERT == aChange.Type || AccessibleTableModelChangeType::DELETE == aChange.Type ) &&
         aChange.FirstRow != aChange.LastRow )
     {
         notification = NSAccessibilityRowCountChangedNotification;
     }
-
+    
     return notification;
-}
+}        
 
 //------------------------------------------------------------------------------
 
@@ -67,14 +67,14 @@ AquaA11yEventListener::AquaA11yEventListener(id wrapperObject, sal_Int16 role) :
 
 //------------------------------------------------------------------------------
 
-AquaA11yEventListener::~AquaA11yEventListener()
+AquaA11yEventListener::~AquaA11yEventListener() 
 {
     [ m_wrapperObject release ];
 }
 
 //------------------------------------------------------------------------------
 
-void SAL_CALL
+void SAL_CALL 
 AquaA11yEventListener::disposing( const EventObject& Source ) throw( RuntimeException )
 {
     [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) m_wrapperObject accessibleContext ] ];
@@ -82,13 +82,13 @@ AquaA11yEventListener::disposing( const EventObject& Source ) throw( RuntimeExce
 
 //------------------------------------------------------------------------------
 
-void SAL_CALL
+void SAL_CALL 
 AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw( RuntimeException )
 {
     NSString * notification = nil;
     id element = m_wrapperObject;
     Rectangle bounds;
-
+    
     // TODO: NSAccessibilityValueChanged, NSAccessibilitySelectedRowsChangedNotification
     switch( aEvent.EventId )
     {
@@ -99,11 +99,11 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
                     AquaA11yFocusTracker::get().setFocusedObject( xAccessible );
             }
             break;
-
+            
         case AccessibleEventId::NAME_CHANGED:
             notification = NSAccessibilityTitleChangedNotification;
             break;
-
+            
         case AccessibleEventId::CHILD:
             // only needed for tooltips (says Apple)
             if ( m_role == AccessibleRole::TOOL_TIP ) {
@@ -114,11 +114,11 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
                 }
             }
             break;
-
+            
         case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-            // TODO: depricate or remember all children
+            // TODO: depricate or remember all children 
             break;
-
+             
         case AccessibleEventId::BOUNDRECT_CHANGED:
             bounds = [ element accessibleComponent ] -> getBounds();
             if ( m_oldBounds.X != 0 && ( bounds.X != m_oldBounds.X || bounds.Y != m_oldBounds.Y ) ) {
@@ -129,23 +129,23 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
             }
             m_oldBounds = bounds;
             break;
-
+                
         case AccessibleEventId::SELECTION_CHANGED:
             notification = NSAccessibilitySelectedChildrenChangedNotification;
             break;
-
+            
         case AccessibleEventId::TEXT_SELECTION_CHANGED:
             notification = NSAccessibilitySelectedTextChangedNotification;
             break;
-
+ 
         case AccessibleEventId::TABLE_MODEL_CHANGED:
             notification = getTableNotification(aEvent);
             break;
-
+        
         case AccessibleEventId::CARET_CHANGED:
             notification = NSAccessibilitySelectedTextChangedNotification;
             break;
-
+        
         case AccessibleEventId::TEXT_CHANGED:
             notification = NSAccessibilityValueChangedNotification;
             break;
@@ -153,7 +153,7 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
         default:
             break;
     }
-
+    
     if( nil != notification )
         NSAccessibilityPostNotification(element, notification);
 }

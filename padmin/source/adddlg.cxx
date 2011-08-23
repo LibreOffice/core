@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ void APChooseDriverPage::updateDrivers( bool bRefresh, const rtl::OUString& rSel
 
     std::list< rtl::OUString > aDrivers;
     psp::PPDParser::getKnownPPDDrivers( aDrivers, bRefresh );
-
+    
     rtl::OUString aSelectDriver( psp::PPDParser::getPPDPrinterName( rSelectDriver ) );
 
     rtl::OUString aSelectedEntry;
@@ -270,7 +270,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 std::list< rtl::OUString > aDirs;
                 // get only psprint's directories, not eventual system dirs
                 psp::getPrinterPathList( aDirs, NULL );
-                std::list< rtl::OUString >::iterator dir;
+                std::list< rtl::OUString >::iterator dir;                
                 for( dir = aDirs.begin(); dir != aDirs.end(); ++dir )
                 {
                     ::std::list< String > aFiles;
@@ -388,9 +388,9 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
     }
     switch( m_eKind )
     {
-        case DeviceKind::Printer:   CommandStore::getPrintCommands( aCommands );break;
-        case DeviceKind::Fax:       CommandStore::getFaxCommands( aCommands );break;
-        case DeviceKind::Pdf:       CommandStore::getPdfCommands( aCommands );break;
+        case DeviceKind::Printer:	CommandStore::getPrintCommands( aCommands );break;
+        case DeviceKind::Fax:		CommandStore::getFaxCommands( aCommands );break;
+        case DeviceKind::Pdf:		CommandStore::getPdfCommands( aCommands );break;
     }
     // adjust height of command text and help button
     Rectangle aPosSize( m_aCommandTxt.GetPosPixel(), m_aCommandTxt.GetSizePixel() );
@@ -433,9 +433,9 @@ APCommandPage::~APCommandPage()
     aCommands.push_back( aLastCommand );
     switch( m_eKind )
     {
-        case DeviceKind::Printer:   CommandStore::setPrintCommands( aCommands );break;
-        case DeviceKind::Fax:       CommandStore::setFaxCommands( aCommands );break;
-        case DeviceKind::Pdf:       CommandStore::setPdfCommands( aCommands );break;
+        case DeviceKind::Printer:	CommandStore::setPrintCommands( aCommands );break;
+        case DeviceKind::Fax:		CommandStore::setFaxCommands( aCommands );break;
+        case DeviceKind::Pdf:		CommandStore::setPdfCommands( aCommands );break;
     }
 }
 
@@ -546,11 +546,11 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         String aUPrinter( AddPrinterDialog::uniquePrinterName( String( aPrinter, aEncoding ) ) );
 
         PrinterInfo aInfo;
-        aInfo.m_aDriverName     = String( aNewDriver, aEncoding );
-        aInfo.m_pParser         = pParser;
+        aInfo.m_aDriverName		= String( aNewDriver, aEncoding );
+        aInfo.m_pParser			= pParser;
         aInfo.m_aContext.setParser( pParser );
-        aInfo.m_aPrinterName    = aUPrinter;
-        aInfo.m_aCommand        = String( aCommand, aEncoding );
+        aInfo.m_aPrinterName	= aUPrinter;
+        aInfo.m_aCommand		= String( aCommand, aEncoding );
 
         // read the printer settings
         ByteString aGroup( aDriver );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ GenericClipboard::~GenericClipboard()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
+void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments ) 
     throw(Exception, RuntimeException)
 {
     if (!m_bInitialized)
@@ -73,7 +73,7 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
 
 // ------------------------------------------------------------------------
 
-OUString SAL_CALL GenericClipboard::getImplementationName(  )
+OUString SAL_CALL GenericClipboard::getImplementationName(  ) 
     throw(RuntimeException)
 {
     return OUString::createFromAscii(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME);
@@ -81,7 +81,7 @@ OUString SAL_CALL GenericClipboard::getImplementationName(  )
 
 // ------------------------------------------------------------------------
 
-sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName ) 
     throw(RuntimeException)
 {
     Sequence < OUString > SupportedServicesNames = GenericClipboard_getSupportedServiceNames();
@@ -95,7 +95,7 @@ sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName
 
 // ------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL GenericClipboard::getSupportedServiceNames(    )
+Sequence< OUString > SAL_CALL GenericClipboard::getSupportedServiceNames(	 ) 
     throw(RuntimeException)
 {
     return GenericClipboard_getSupportedServiceNames();
@@ -103,7 +103,7 @@ Sequence< OUString > SAL_CALL GenericClipboard::getSupportedServiceNames(    )
 
 // ------------------------------------------------------------------------
 
-Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
+Reference< XTransferable > SAL_CALL GenericClipboard::getContents() 
     throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -112,8 +112,8 @@ Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xTrans,
-                                      const Reference< XClipboardOwner >& xClipboardOwner )
+void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xTrans, 
+                                      const Reference< XClipboardOwner >& xClipboardOwner ) 
     throw(RuntimeException)
 {
     // remember old values for callbacks before setting the new ones.
@@ -132,7 +132,7 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
         oldOwner->lostOwnership(static_cast < XClipboard * > (this), oldContents);
 
     // notify all listeners on content changes
-    OInterfaceContainerHelper *pContainer =
+    OInterfaceContainerHelper *pContainer = 
         rBHelper.aLC.getContainer(getCppuType( (Reference < XClipboardListener > *) 0));
     if (pContainer)
     {
@@ -150,7 +150,7 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
 
 // ------------------------------------------------------------------------
 
-OUString SAL_CALL GenericClipboard::getName()
+OUString SAL_CALL GenericClipboard::getName() 
     throw(RuntimeException)
 {
     return m_aName;
@@ -167,7 +167,7 @@ sal_Int8 SAL_CALL GenericClipboard::getRenderingCapabilities()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
+void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboardListener >& listener ) 
     throw(RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
@@ -179,7 +179,7 @@ void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboar
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
+void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener ) 
     throw(RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
@@ -199,7 +199,7 @@ Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > SAL_CALL GenericClipboard_createInstance(
+Reference< XInterface > SAL_CALL GenericClipboard_createInstance( 
     const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/)
 {
     return Reference < XInterface >( ( OWeakObject * ) new GenericClipboard());

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ import java.io.OutputStreamWriter;
 
 /**
  * The abstract parent class of all converter writer classes
- *
+ * 
  * @author Christian Schmidt
  */
 abstract public class DataWriter extends OutputStreamWriter {
     protected final String seperator = new String("|");
-
+    
     /**
      * the char sequence used as line seperator
      */
@@ -54,7 +54,7 @@ abstract public class DataWriter extends OutputStreamWriter {
     /** Creates a new instance of DataWriter */
     /**
      * @param bos the buffered output stream holding the data
-     * @param encoding the encoding to use for read from bos
+     * @param encoding the encoding to use for read from bos 
      * @throws java.io.UnsupportedEncodingException
      */
     public DataWriter(BufferedOutputStream bos, String encoding)
@@ -66,16 +66,16 @@ abstract public class DataWriter extends OutputStreamWriter {
 
     /**
      * get the data that should be written from the DataHandler
-     *
+     *  
      * @param handler the DataHandler having the data
      * @throws java.io.IOException
      */
     abstract protected void getDataFrom(DataHandler handler)
             throws java.io.IOException;
-
+    
     /**
      * write the Data
-     *
+     * 
      * @throws java.io.IOException
      */
     abstract protected void writeData() throws java.io.IOException;

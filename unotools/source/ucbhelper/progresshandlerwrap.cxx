@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ sal_Bool getStatusFromAny_Impl( const Any& aAny, ::rtl::OUString& aText, sal_Int
     return bNumIsSet;
 }
 
-void SAL_CALL ProgressHandlerWrap::push( const Any& Status )
+void SAL_CALL ProgressHandlerWrap::push( const Any& Status ) 
     throw( RuntimeException )
 {
     if( !m_xStatusIndicator.is() )
@@ -88,7 +88,7 @@ void SAL_CALL ProgressHandlerWrap::update( const Any& Status )
     }
 }
 
-void SAL_CALL ProgressHandlerWrap::pop()
+void SAL_CALL ProgressHandlerWrap::pop() 
         throw( RuntimeException )
 {
     if( m_xStatusIndicator.is() )

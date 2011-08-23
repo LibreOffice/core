@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #if defined SCO || defined LINUX || defined HPUX || defined FREEBSD || \
-    defined NETBSD || defined OPENBSD
+	defined NETBSD || defined OPENBSD
 #include <sys/time.h>
 #elif defined AIX
 #include <time.h>
@@ -42,7 +42,7 @@
 #include <salstd.hxx>
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define capacityof(a)   (sizeof(a)/sizeof(*a))
+#define capacityof(a)	(sizeof(a)/sizeof(*a))
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline long Divide( long nDividend, long nDivisor )

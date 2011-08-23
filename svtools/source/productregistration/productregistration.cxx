@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace svt
 
     struct EqualsOUString : public ::std::unary_function< OUString, sal_Bool >
     {
-        const OUString& m_rCompare;
+        const OUString&	m_rCompare;
         EqualsOUString( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
 
         sal_Bool operator() ( const OUString& _rCompare )
@@ -298,7 +298,7 @@ namespace svt
 
         static sal_Bool bFirstEncounter( sal_True );
         if ( bFirstEncounter )
-        {   // during this session, this event was never triggered before ....
+        {	// during this session, this event was never triggered before ....
             bFirstEncounter = sal_False;
 
             sal_Bool bDeactivateJob = sal_True;
@@ -309,7 +309,7 @@ namespace svt
             utl::RegOptions::DialogPermission ePermission( aRegOptions.getDialogPermission() );
 
             if ( utl::RegOptions::dpDisabled != ePermission )
-            {   // the dialog is _not_ disabled
+            {	// the dialog is _not_ disabled
 
                 // for this session, I'm no interested in the dialog registration anymore
                 aRegOptions.markSessionDone( );
@@ -317,7 +317,7 @@ namespace svt
                 if  (   ( utl::RegOptions::dpNotThisSession == ePermission )     // first trigger session not reached
                     ||  ( utl::RegOptions::dpRemindLater == ePermission )        // or at a later reminder date
                     )
-                {   // the dialog should be executed during one of the next sessions
+                {	// the dialog should be executed during one of the next sessions
                     bDeactivateJob = sal_False;
                 }
                 else
@@ -449,7 +449,7 @@ namespace svt
     }
 
 //........................................................................
-}   // namespace svt
+}	// namespace svt
 //........................................................................
 
 extern "C"

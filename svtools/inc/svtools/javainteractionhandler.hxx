@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace svt
 //class.
 
 class SVT_DLLPUBLIC JavaInteractionHandler:
-        public com::sun::star::task::XInteractionHandler
+        public com::sun::star::task::XInteractionHandler 
 {
 public:
     JavaInteractionHandler(bool bReportErrorOnce = true);
@@ -65,7 +65,7 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 private:
-    oslInterlockedCount m_aRefCount;
+    oslInterlockedCount	m_aRefCount;
     SVT_DLLPRIVATE JavaInteractionHandler(JavaInteractionHandler const&); //not implemented
     SVT_DLLPRIVATE JavaInteractionHandler& operator = (JavaInteractionHandler const &); //not implemented
     SVT_DLLPRIVATE virtual ~JavaInteractionHandler();

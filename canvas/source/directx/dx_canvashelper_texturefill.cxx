@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace dxcanvas
 {
     namespace
     {
-        typedef ::boost::shared_ptr< Gdiplus::PathGradientBrush >   PathGradientBrushSharedPtr;
+        typedef ::boost::shared_ptr< Gdiplus::PathGradientBrush > 	PathGradientBrushSharedPtr;
 
         bool fillLinearGradient( GraphicsSharedPtr&                             rGraphics,
                                  const ::canvas::ParametricPolyPolygon::Values& /*rValues*/,
@@ -107,9 +107,9 @@ namespace dxcanvas
             ::basegfx::B2DPoint aRightTop( 1.0, 0.0 );
             ::basegfx::B2DPoint aRightBottom( 1.0, 1.0 );
 
-            aLeftTop    *= aTextureTransform;
+            aLeftTop	*= aTextureTransform;
             aLeftBottom *= aTextureTransform;
-            aRightTop   *= aTextureTransform;
+            aRightTop 	*= aTextureTransform;
             aRightBottom*= aTextureTransform;
 
             Gdiplus::RectF aBounds;
@@ -201,9 +201,9 @@ namespace dxcanvas
 
         int numColorSteps( const Gdiplus::Color& rColor1, const Gdiplus::Color& rColor2 )
         {
-            return ::std::max(
+            return ::std::max( 
                 labs( rColor1.GetRed() - rColor2.GetRed() ),
-                ::std::max(
+                ::std::max(                    
                     labs( rColor1.GetGreen() - rColor2.GetGreen() ),
                     labs( rColor1.GetBlue()  - rColor2.GetBlue() ) ) );
         }
@@ -213,8 +213,8 @@ namespace dxcanvas
                                     const std::vector< Gdiplus::REAL >&            rStops,
                                     GraphicsSharedPtr&                             rGraphics,
                                     const GraphicsPathSharedPtr&                   rPath,
-                                    const rendering::ViewState&                    viewState,
-                                    const rendering::RenderState&                  renderState,
+                                    const rendering::ViewState& 				   viewState,
+                                    const rendering::RenderState& 				   renderState,
                                     const rendering::Texture&                      texture )
         {
             // copy original fill path object, might have to change it
@@ -275,7 +275,7 @@ namespace dxcanvas
                                                            nColorSteps);
 
                 ::basegfx::B2DHomMatrix aTextureTransform;
-                ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
+                ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform, 
                                                                 texture.AffineTransform );
                 // determine overall transformation for inner polygon (might
                 // have to be prefixed by anisotrophic scaling)
@@ -285,8 +285,8 @@ namespace dxcanvas
                 // here, keep it all the way and only change the vertex values
                 // in the loop below (as ::Polygon is a pimpl class, creating
                 // one every loop turn would really stress the mem allocator)
-                ::basegfx::B2DPolygon   aOuterPoly( rGradientPoly );
-                ::basegfx::B2DPolygon   aInnerPoly;
+                ::basegfx::B2DPolygon 	aOuterPoly( rGradientPoly );
+                ::basegfx::B2DPolygon 	aInnerPoly;
 
                 // subdivide polygon _before_ rendering, would otherwise have
                 // to be performed on every loop turn.
@@ -315,7 +315,7 @@ namespace dxcanvas
                 else if( nAspectRatio < 1.0 )
                 {
                     // width < height case
-                    aInnerPolygonTransformMatrix.scale( 0.0,
+                    aInnerPolygonTransformMatrix.scale( 0.0, 
                                                         1.0 - nAspectRatio );
                 }
                 else
@@ -338,7 +338,7 @@ namespace dxcanvas
                 {
                     std::ptrdiff_t nIndex;
                     double fAlpha;
-                    const double fT( i/double(nStepCount) );
+                    const double fT( i/double(nStepCount) );            
                     boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
                     const Gdiplus::Color aFillColor(
@@ -441,8 +441,8 @@ namespace dxcanvas
                            const std::vector< Gdiplus::REAL >&            rStops,
                            GraphicsSharedPtr&                             rGraphics,
                            const GraphicsPathSharedPtr&                   rPath,
-                           const rendering::ViewState&                    viewState,
-                           const rendering::RenderState&                  renderState,
+                           const rendering::ViewState& 					  viewState,
+                           const rendering::RenderState& 				  renderState,
                            const rendering::Texture&                      texture )
         {
             switch( rValues.meType )
@@ -555,11 +555,11 @@ namespace dxcanvas
 
     // -------------------------------------------------------------
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas* 							/*pCanvas*/,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                         const rendering::ViewState&                        viewState,
-                                                                                         const rendering::RenderState&                      renderState,
-                                                                                         const uno::Sequence< rendering::Texture >&         textures )
+                                                                                         const rendering::ViewState& 						viewState,
+                                                                                         const rendering::RenderState& 						renderState,
+                                                                                         const uno::Sequence< rendering::Texture >& 		textures )
     {
         ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::fillTexturedPolyPolygon: polygon is NULL");
@@ -585,7 +585,7 @@ namespace dxcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    OSL_ASSERT(rValues.maColors.getLength() == rValues.maStops.getLength()
+                    OSL_ASSERT(rValues.maColors.getLength() == rValues.maStops.getLength() 
                                && rValues.maColors.getLength() > 1);
 
                     std::vector< Gdiplus::Color > aColors(rValues.maColors.getLength());

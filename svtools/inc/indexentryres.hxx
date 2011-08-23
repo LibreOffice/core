@@ -8,7 +8,7 @@
 
 class IndexEntryRessourceData;
 
-class SVT_DLLPUBLIC IndexEntryRessource
+class SVT_DLLPUBLIC IndexEntryRessource 
 {
     private:
         IndexEntryRessourceData  *mp_Data;

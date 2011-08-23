@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,7 +176,7 @@ public class ConfigHelper extends java.util.Properties
             throw new java.util.NoSuchElementException("The requested config value \""+sProp+"\" does not exists!");
         return new java.lang.Boolean(sValue).booleanValue();
     }
-
+    
     public synchronized boolean getBoolean(java.lang.String sProp   ,
                                            boolean          bDefault)
     {

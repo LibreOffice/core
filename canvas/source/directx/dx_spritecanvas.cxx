@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ namespace dxcanvas
            5: SystemGraphicsData as a streamed Any
          */
         ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
-                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE,
+                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE, 
                              "VCLSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Reference< awt::XWindow > xParentWindow;
@@ -104,7 +104,7 @@ namespace dxcanvas
             throw lang::NoSupportException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                      "Parent window not VCL window, or canvas out-of-process!")),
-                NULL);
+                NULL);            
 
         awt::Rectangle aRect;
         maArguments[2] >>= aRect;
@@ -178,9 +178,9 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        return maDeviceHelper.getRenderModule();
+        return maDeviceHelper.getRenderModule(); 
     }
-
+    
     const DXSurfaceBitmapSharedPtr& SpriteCanvas::getBackBuffer() const
     {
         ::osl::MutexGuard aGuard( m_aMutex );

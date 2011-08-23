@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -209,10 +209,10 @@ public:
 
     void                    SetUseThousandSep( BOOL b );
     BOOL                    IsUseThousandSep() const { return mbThousandSep; }
-
+    
     void                    SetShowTrailingZeros( BOOL bShowTrailingZeros );
     BOOL                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
-
+    
 
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
@@ -598,7 +598,7 @@ public:
                                                 FieldUnit eInUnit, MapUnit eOutUnit );
     static double           ConvertDoubleValue( double nValue, USHORT nDecDigits,
                                                 MapUnit eInUnit, FieldUnit eOutUnit );
-
+                                                
     // for backwards compatibility
     // caution: conversion to double loses precision
     static double           ConvertDoubleValue( sal_Int64 nValue, sal_Int64 nBaseValue, USHORT nDecDigits,

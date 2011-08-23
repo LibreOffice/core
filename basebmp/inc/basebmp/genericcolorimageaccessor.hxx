@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,17 +52,17 @@ namespace basebmp
             meDrawMode(DrawMode_PAINT)
         {}
 
-        GenericColorImageAccessor( BitmapDeviceSharedPtr const& rTarget,
+        GenericColorImageAccessor( BitmapDeviceSharedPtr const& rTarget, 
                                    DrawMode                     eDrawMode ) :
             mpDevice(rTarget),
             meDrawMode(eDrawMode)
         {}
 
-        template< typename Iterator >
+        template< typename Iterator > 
         Color operator()( Iterator const& i ) const
         { return mpDevice->getPixel( basegfx::B2IPoint( i->x,i->y ) ); }
 
-        template< typename Iterator, typename Difference >
+        template< typename Iterator, typename Difference > 
         Color operator()( Iterator const& i, Difference const& diff) const
         { return mpDevice->getPixel( basegfx::B2IPoint( i[diff]->x,
                                                         i[diff]->y ) ); }

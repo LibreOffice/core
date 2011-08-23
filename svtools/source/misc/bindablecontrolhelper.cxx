@@ -51,7 +51,7 @@ namespace svt
 //........................................................................
 
 #ifndef C2U
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
+#define C2U(cChar)	rtl::OUString::createFromAscii(cChar)
 #endif
 
     using namespace ::com::sun::star;

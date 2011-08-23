@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@
 
 namespace vclcanvas
 {
-    BitmapBackBuffer::BitmapBackBuffer( const BitmapEx&         rBitmap,
-                                        const OutputDevice&     rRefDevice ) :
+    BitmapBackBuffer::BitmapBackBuffer( const BitmapEx& 		rBitmap,
+                                        const OutputDevice& 	rRefDevice ) :
         maBitmap( rBitmap ),
         mpVDev( NULL ),
         mrRefDevice( rRefDevice ),
@@ -50,13 +50,13 @@ namespace vclcanvas
         mbVDevContentIsCurrent( false )
     {
     }
-
+        
     BitmapBackBuffer::~BitmapBackBuffer()
     {
         // make sure solar mutex is held on deletion (other methods
         // are supposed to be called with already locked solar mutex)
         SolarMutexGuard aGuard;
-
+        
         if( mpVDev )
             delete mpVDev;
     }
@@ -78,7 +78,7 @@ namespace vclcanvas
     void BitmapBackBuffer::clear()
     {
         // force current content to bitmap, make all transparent white
-        getBitmapReference().Erase(COL_TRANSPARENT);
+        getBitmapReference().Erase(COL_TRANSPARENT);        
     }
 
     BitmapEx& BitmapBackBuffer::getBitmapReference()
@@ -98,7 +98,7 @@ namespace vclcanvas
         // client queries bitmap, and will possibly alter content -
         // next time, VDev needs to be updated
         mbBitmapContentIsCurrent = true;
-        mbVDevContentIsCurrent   = false;
+        mbVDevContentIsCurrent 	 = false;
 
         return *maBitmap;
     }
@@ -122,11 +122,11 @@ namespace vclcanvas
         {
             // VDev not yet created, do it now. Create an alpha-VDev,
             // if bitmap has transparency.
-            mpVDev = maBitmap->IsTransparent() ?
+            mpVDev = maBitmap->IsTransparent() ? 
                 new VirtualDevice( mrRefDevice, 0, 0 ) :
                 new VirtualDevice( mrRefDevice );
 
-            OSL_ENSURE( mpVDev,
+            OSL_ENSURE( mpVDev, 
                         "BitmapBackBuffer::createVDev(): Unable to create VirtualDevice" );
 
             mpVDev->SetOutputSizePixel( maBitmap->GetSizePixel() );
@@ -137,7 +137,7 @@ namespace vclcanvas
             mpVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpVDev->GetAntialiasing() );
 #else
             // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-            // is not required to do AA. It would need to be adapted to use it correctly
+            // is not required to do AA. It would need to be adapted to use it correctly 
             // (especially gradient painting). This will need extra work.
             mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & !ANTIALIASING_ENABLE_B2DDRAW);
 #endif
@@ -160,7 +160,7 @@ namespace vclcanvas
         // canvas queried the VDev, and will possibly paint into
         // it. Next time, bitmap must be updated
         mbBitmapContentIsCurrent = false;
-        mbVDevContentIsCurrent   = true;
+        mbVDevContentIsCurrent 	 = true;
     }
 }
 

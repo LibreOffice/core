@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -800,7 +800,7 @@ const sal_Char * INetMIME::skipQuotedString(const sal_Char * pBegin,
                         || !isWhiteSpace(*p++))
                         return pBegin;
                     break;
-
+                    
                 case '"':
                     return p;
 
@@ -829,7 +829,7 @@ const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
                         || !isWhiteSpace(*p++))
                         return pBegin;
                     break;
-
+                    
                 case '"':
                     return p;
 
@@ -1088,7 +1088,7 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
                             }
                             else
                                 ++pBegin;
-                        }
+                        } 
                         break;
 
                     default:
@@ -3348,22 +3348,22 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '=';
 
-//          if (bEncodedWord && q != pEnd)
-//              switch (*q)
-//              {
-//                  case '\t':
-//                  case ' ':
-//                  case '"':
-//                  case ')':
-//                  case ',':
-//                  case '.':
-//                  case '=':
-//                      break;
+//			if (bEncodedWord && q != pEnd)
+//				switch (*q)
+//				{
+//					case '\t':
+//					case ' ':
+//					case '"':
+//					case ')':
+//					case ',':
+//					case '.':
+//					case '=':
+//						break;
 //
-//                  default:
-//                      bEncodedWord = false;
-//                      break;
-//              }
+//					default:
+//						bEncodedWord = false;
+//						break;
+//				}
 
             sal_Unicode * pUnicodeBuffer = 0;
             sal_Size nUnicodeSize = 0;
@@ -3465,13 +3465,13 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
         switch (*p++)
         {
-//          case '\t':
-//          case ' ':
-//          case ',':
-//          case '.':
-//          case '=':
-//              bStartEncodedWord = true;
-//              break;
+//			case '\t':
+//			case ' ':
+//			case ',':
+//			case '.':
+//			case '=':
+//				bStartEncodedWord = true;
+//				break;
 
             case '"':
                 if (eType != HEADER_FIELD_TEXT && nCommentLevel == 0)

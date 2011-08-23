@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,12 +51,12 @@ namespace utl
 {
 //.........................................................................
 
-/** @descr
+/**	@descr
         This base class provides an implementation of the
         <code>AccessibleStateSet</code> service.
 */
 class UNOTOOLS_DLLPUBLIC AccessibleStateSetHelper
-    :   public cppu::WeakImplHelper1<
+    :	public cppu::WeakImplHelper1<
         ::com::sun::star::accessibility::XAccessibleStateSet
         >
 {
@@ -77,7 +77,7 @@ public:
 
     AccessibleStateSetHelper ( const AccessibleStateSetHelper& rHelper );
 protected:
-    virtual ~AccessibleStateSetHelper   (void);
+    virtual ~AccessibleStateSetHelper	(void);
 public:
 
     //=====  XAccessibleStateSet  ==============================================
@@ -131,12 +131,12 @@ public:
 
     /** Adds a state to the set.
     */
-    void    AddState(sal_Int16 aState)
+    void	AddState(sal_Int16 aState)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Removes a state from the set if the set contains the state, otherwise nothing is done.
     */
-    void    RemoveState(sal_Int16 aState)
+    void	RemoveState(sal_Int16 aState)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Compares the set with the set given by rComparativeValue and puts the results
@@ -155,25 +155,25 @@ public:
 
     //=====  XTypeProvider  ===================================================
 
-    /** Returns a sequence of all supported interfaces.
+    /**	Returns a sequence of all supported interfaces.
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns a implementation id.
+    /**	Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId (void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    /// Mutex guarding this object.
+    ///	Mutex guarding this object.
     ::osl::Mutex maMutex;
 
 private:
-    /// The implementation of this helper interface.
-    AccessibleStateSetHelperImpl*   mpHelperImpl;
+    ///	The implementation of this helper interface.
+    AccessibleStateSetHelperImpl*	mpHelperImpl;
 };
 
 //.........................................................................

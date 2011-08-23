@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ public class Resolver implements EntityResolver {
 
     /**
      * Allow the application to resolve external entities.
-     *
+     * 
      * The Parser will call this method before opening any external entity
      * except the top-level document entity (including the external DTD subset,
      * external entities referenced within the DTD, and external entities
@@ -59,11 +59,11 @@ public class Resolver implements EntityResolver {
      * the parser resolve the entity itself, that it use an alternative URI, or
      * that it use an entirely different input source.
      */
-
+    
     /* (non-Javadoc)
      * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
      */
-
+    
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException, IOException {
 

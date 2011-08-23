@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ namespace cppcanvas
                 textEmphasisMarkStyle(EMPHASISMARK_NONE),
                 pushFlags(PUSH_ALL),
                 textDirection(::com::sun::star::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
-                textAlignment(0), // TODO(Q2): Synchronize with implrenderer
+                textAlignment(0), // TODO(Q2): Synchronize with implrenderer 
                                   // and possibly new rendering::TextAlignment
                 textReliefStyle(RELIEF_NONE),
                 textOverlineStyle(UNDERLINE_NONE),
@@ -89,44 +89,44 @@ namespace cppcanvas
             {
             }
 
-            ::basegfx::B2DPolyPolygon                                                           clip;
-            ::Rectangle                                                                         clipRect;
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >     xClipPoly;
+            ::basegfx::B2DPolyPolygon															clip;
+            ::Rectangle																			clipRect;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D > 	xClipPoly;
 
-            ::com::sun::star::uno::Sequence< double >                                           lineColor;
-            ::com::sun::star::uno::Sequence< double >                                           fillColor;
-            ::com::sun::star::uno::Sequence< double >                                           textColor;
-            ::com::sun::star::uno::Sequence< double >                                           textFillColor;
-            ::com::sun::star::uno::Sequence< double >                                           textLineColor;
+            ::com::sun::star::uno::Sequence< double >											lineColor;
+            ::com::sun::star::uno::Sequence< double >											fillColor;
+            ::com::sun::star::uno::Sequence< double >											textColor;
+            ::com::sun::star::uno::Sequence< double >											textFillColor;
+            ::com::sun::star::uno::Sequence< double >											textLineColor;
 
             /** Current font.
 
                 @attention Beware, this member can be NULL, and
                 nevertheless text output is generated.
              */
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >        xFont;
-            ::basegfx::B2DHomMatrix                                                             transform;
-            ::basegfx::B2DHomMatrix                                                             mapModeTransform;
-            double                                                                              fontRotation;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont > 		xFont;
+            ::basegfx::B2DHomMatrix																transform;
+            ::basegfx::B2DHomMatrix																mapModeTransform;
+            double																				fontRotation;
 
-            sal_uInt16                                                                          textEmphasisMarkStyle;
-            sal_uInt16                                                                          pushFlags;
-            sal_Int8                                                                            textDirection;
-            sal_Int8                                                                            textAlignment;
-            sal_Int8                                                                            textReliefStyle;
-            sal_Int8                                                                            textOverlineStyle;
-            sal_Int8                                                                            textUnderlineStyle;
-            sal_Int8                                                                            textStrikeoutStyle;
-            TextAlign                                                                           textReferencePoint;
+            sal_uInt16																			textEmphasisMarkStyle;
+            sal_uInt16																			pushFlags;
+            sal_Int8																			textDirection;
+            sal_Int8																			textAlignment;
+            sal_Int8																			textReliefStyle;
+            sal_Int8																			textOverlineStyle;
+            sal_Int8																			textUnderlineStyle;
+            sal_Int8																			textStrikeoutStyle;
+            TextAlign																			textReferencePoint;
 
-            bool                                                                                isTextOutlineModeSet;
-            bool                                                                                isTextEffectShadowSet;
-            bool                                                                                isTextWordUnderlineSet;
+            bool																				isTextOutlineModeSet;
+            bool																				isTextEffectShadowSet;
+            bool																				isTextWordUnderlineSet;
 
-            bool                                                                                isLineColorSet;
-            bool                                                                                isFillColorSet;
-            bool                                                                                isTextFillColorSet;
-            bool                                                                                isTextLineColorSet;
+            bool																				isLineColorSet;
+            bool																				isFillColorSet;
+            bool																				isTextFillColorSet;
+            bool																				isTextLineColorSet;
         };
     }
 }

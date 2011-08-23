@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,21 +37,21 @@
 #include <list>
 #include "toolkit/dllapi.h"
 
-//  ----------------------------------------------------
-//  class UnoPropertyArrayHelper
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class UnoPropertyArrayHelper
+//	----------------------------------------------------
 class TOOLKIT_DLLPUBLIC UnoPropertyArrayHelper : public ::cppu::IPropertyArrayHelper
 {
-private:
-    Table       maIDs;
+private:	
+    Table		maIDs;
 
 protected:
-    sal_Bool    ImplHasProperty( sal_uInt16 nPropId ) const;
+    sal_Bool 	ImplHasProperty( sal_uInt16 nPropId ) const;
 
 public:
                 UnoPropertyArrayHelper( const ::com::sun::star::uno::Sequence<sal_Int32>& rIDs );
                 UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs );
-
+    
     // ::cppu::IPropertyArrayHelper
     sal_Bool SAL_CALL fillPropertyMembersByHandle( ::rtl::OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nHandle );
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties();

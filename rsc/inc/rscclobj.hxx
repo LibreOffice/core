@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ protected:
 
 public:
     using NameNode::Insert;
-
+    
                 ObjNode( const RscId & rId, CLASS_DATA pData, ULONG lKey );
     ObjNode *   DelObjNode( RscTop * pClass, ULONG lFileKey );
     sal_uInt32      GetId() const;

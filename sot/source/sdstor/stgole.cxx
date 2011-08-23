@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "rtl/string.h"
 #include "rtl/string.h"
 #include "stgole.hxx"
-#include "storinfo.hxx"     // Read/WriteClipboardFormat()
+#include "storinfo.hxx"		// Read/WriteClipboardFormat()
 
 #include <tools/debug.hxx>
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
@@ -119,7 +119,7 @@ BOOL StgCompObjStream::Load()
     aUserName.Erase();
     if( GetError() != SVSTREAM_OK )
         return FALSE;
-    Seek( 8L );     // skip the first part
+    Seek( 8L );		// skip the first part
     INT32 nMarker = 0;
     *this >> nMarker;
     if( nMarker == -1L )
@@ -133,7 +133,7 @@ BOOL StgCompObjStream::Load()
         if( Read( p, nLen1 ) == (ULONG) nLen1 )
         {
             aUserName = nLen1 ? String( p, gsl_getSystemTextEncoding() ) : String();
-/*          // Now we can read the CB format
+/*			// Now we can read the CB format
             INT32 nLen2 = 0;
             *this >> nLen2;
             if( nLen2 > 0 )
@@ -168,15 +168,15 @@ BOOL StgCompObjStream::Store()
         return FALSE;
     Seek( 0L );
     ByteString aAsciiUserName( aUserName, RTL_TEXTENCODING_ASCII_US );
-    *this << (INT16) 1          // Version?
+    *this << (INT16) 1			// Version?
               << (INT16) -2                     // 0xFFFE = Byte Order Indicator
-              << (INT32) 0x0A03         // Windows 3.10
+              << (INT32) 0x0A03			// Windows 3.10
               << (INT32) -1L
-              << aClsId             // Class ID
+              << aClsId				// Class ID
               << (INT32) (aAsciiUserName.Len() + 1)
               << (const char *)aAsciiUserName.GetBuffer()
-              << (UINT8) 0;             // string terminator
-/*  // determine the clipboard format string
+              << (UINT8) 0;				// string terminator
+/*	// determine the clipboard format string
     String aCbFmt;
     if( nCbFormat > FORMAT_GDIMETAFILE )
     aCbFmt = Exchange::GetFormatName( nCbFormat );
@@ -185,13 +185,13 @@ BOOL StgCompObjStream::Store()
                << (const char*) aCbFmt
                << (UINT8) 0;
     else if( nCbFormat )
-         *this << (INT32) -1            // for Windows
+         *this << (INT32) -1	   		// for Windows
                 << (INT32) nCbFormat;
     else
-        *this << (INT32) 0;         // no clipboard format
+        *this << (INT32) 0;			// no clipboard format
 */
     WriteClipboardFormat( *this, nCbFormat );
-    *this << (INT32) 0;             // terminator
+    *this << (INT32) 0;				// terminator
     Commit();
     return BOOL( GetError() == SVSTREAM_OK );
 }
@@ -220,11 +220,11 @@ BOOL StgOleStream::Store()
     if( GetError() != SVSTREAM_OK )
         return FALSE;
     Seek( 0L );
-    *this << (INT32) 0x02000001         // OLE version, format
-          << (INT32) nFlags             // Object flags
-          << (INT32) 0                  // Update Options
-          << (INT32) 0                  // reserved
-          << (INT32) 0;                 // Moniker 1
+    *this << (INT32) 0x02000001			// OLE version, format
+          << (INT32) nFlags				// Object flags
+          << (INT32) 0					// Update Options
+          << (INT32) 0					// reserved
+          << (INT32) 0;			   		// Moniker 1
     Commit();
     return BOOL( GetError() == SVSTREAM_OK );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,19 +120,19 @@ namespace canvas
                 // This here is the whole purpose of the template:
                 // protecting object deletion with the solar mutex
                 SolarMutexGuard aGuard;
-
+                
                 if( mpWrappee )
                     delete mpWrappee;
             }
 
-            Wrappee*        operator->() { return mpWrappee; }
-            const Wrappee*  operator->() const { return mpWrappee; }
+            Wrappee* 		operator->() { return mpWrappee; }
+            const Wrappee* 	operator->() const { return mpWrappee; }
 
-            Wrappee&        operator*() { return *mpWrappee; }
-            const Wrappee&  operator*() const { return *mpWrappee; }
+            Wrappee& 		operator*() { return *mpWrappee; }
+            const Wrappee& 	operator*() const { return *mpWrappee; }
 
-            Wrappee&        get() { return *mpWrappee; }
-            const Wrappee&  get() const { return *mpWrappee; }
+            Wrappee& 		get() { return *mpWrappee; }
+            const Wrappee& 	get() const { return *mpWrappee; }
 
             void swap( VCLObject& rOther )
             {
@@ -140,8 +140,8 @@ namespace canvas
             }
 
         private:
-
-            Wrappee* mpWrappee;
+        
+            Wrappee* mpWrappee;            
         };
 
     }

@@ -7,7 +7,7 @@ import java.util.Vector;
 
 
 public class AccessibleTreeCellRenderer
-    extends DefaultTreeCellRenderer
+    extends DefaultTreeCellRenderer 
 {
     public Color
         maDefaultColor,
@@ -17,7 +17,7 @@ public class AccessibleTreeCellRenderer
 
 
 
-    public AccessibleTreeCellRenderer ()
+    public AccessibleTreeCellRenderer () 
     {
         maDefaultColor = Color.black;
         maChangedColor = Color.red;
@@ -31,7 +31,7 @@ public class AccessibleTreeCellRenderer
         boolean expanded,
         boolean leaf,
         int row,
-        boolean hasFocus)
+        boolean hasFocus) 
     {
         super.getTreeCellRendererComponent(
             tree, value, sel,
@@ -40,7 +40,7 @@ public class AccessibleTreeCellRenderer
 
         if (maChangedLines.size()<=row || maChangedLines.elementAt (row) == null)
             setTextNonSelectionColor (maDefaultColor);
-        else
+        else 
             setTextNonSelectionColor (maChangedColor);
 
         return this;

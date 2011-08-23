@@ -30,7 +30,7 @@
         </flow>
         <hfixedline/>
         <hbox cnt:expand="false">
-<!--            <align>
+<!--			<align>
                 <okbutton cnt:hfill="0.2" cnt:halign="0.2" />
             </align>
             <align>

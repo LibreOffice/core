@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,31 +45,31 @@ class SVL_DLLPUBLIC SfxBroadcaster
 {
 friend class SfxListener;
 
-    SfxListenerArr_Impl     aListeners;
+    SfxListenerArr_Impl 	aListeners;
 
 private:
-    BOOL         AddListener( SfxListener& rListener );
-    void                    RemoveListener( SfxListener& rListener );
-    const SfxBroadcaster&   operator=(const SfxBroadcaster &); // verboten
+    BOOL		 AddListener( SfxListener& rListener );
+    void					RemoveListener( SfxListener& rListener );
+    const SfxBroadcaster&	operator=(const SfxBroadcaster &); // verboten
 
 protected:
-    void                    Forward(SfxBroadcaster& rBC, const SfxHint& rHint);
-    virtual void            ListenersGone();
+    void					Forward(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void			ListenersGone();
 
 public:
                             TYPEINFO();
 
                             SfxBroadcaster();
                             SfxBroadcaster( const SfxBroadcaster &rBC );
-    virtual                 ~SfxBroadcaster();
+    virtual 				~SfxBroadcaster();
 
-    void                    Broadcast( const SfxHint &rHint );
-    void                    BroadcastDelayed( const SfxHint& rHint );
-    void                    BroadcastInIdle( const SfxHint& rHint );
+    void					Broadcast( const SfxHint &rHint );
+    void					BroadcastDelayed( const SfxHint& rHint );
+    void					BroadcastInIdle( const SfxHint& rHint );
 
-    BOOL                    HasListeners() const;
-    USHORT                  GetListenerCount() const { return aListeners.Count(); }
-    SfxListener*            GetListener( USHORT nNo ) const
+    BOOL					HasListeners() const;
+    USHORT					GetListenerCount() const { return aListeners.Count(); }
+    SfxListener*			GetListener( USHORT nNo ) const
                             { return (SfxListener*) aListeners[nNo]; }
 };
 

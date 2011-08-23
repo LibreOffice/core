@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,35 +34,35 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
-//  class IndexEntrySupplier_asian
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class IndexEntrySupplier_asian
+//	----------------------------------------------------
 
 class IndexEntrySupplier_asian : public IndexEntrySupplier_Common {
 public:
     IndexEntrySupplier_asian( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
     ~IndexEntrySupplier_asian();
 
-    rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,
-            const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rAlgorithm )
+    rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry, 
+            const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rAlgorithm ) 
             throw (com::sun::star::uno::RuntimeException);
-    rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& rIndexEntry,
-            const rtl::OUString& rPhoneticEntry, const com::sun::star::lang::Locale& rLocale)
+    rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& rIndexEntry, 
+            const rtl::OUString& rPhoneticEntry, const com::sun::star::lang::Locale& rLocale) 
             throw (com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL compareIndexEntry(
-            const rtl::OUString& rIndexEntry1, const rtl::OUString& rPhoneticEntry1,
+            const rtl::OUString& rIndexEntry1, const rtl::OUString& rPhoneticEntry1, 
             const com::sun::star::lang::Locale& rLocale1,
-            const rtl::OUString& rIndexEntry2, const rtl::OUString& rPhoneticEntry2,
+            const rtl::OUString& rIndexEntry2, const rtl::OUString& rPhoneticEntry2, 
             const com::sun::star::lang::Locale& rLocale2 )
             throw (com::sun::star::uno::RuntimeException);
     rtl::OUString SAL_CALL getPhoneticCandidate( const rtl::OUString& rIndexEntry,
-            const com::sun::star::lang::Locale& rLocale )
+            const com::sun::star::lang::Locale& rLocale ) 
             throw (com::sun::star::uno::RuntimeException);
 private:
     oslModule hModule;
 };
 
-} } } }
+} } } } 
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

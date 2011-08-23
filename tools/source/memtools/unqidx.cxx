@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ UniqueIndex::UniqueIndex( ULONG _nStartIndex,
                           ULONG _nInitSize, ULONG _nReSize ) :
                  Container( _nInitSize )
 {
-    nReSize         = _nReSize;
-    nStartIndex     = _nStartIndex;
-    nUniqIndex      = 0;
-    nCount          = 0;
+    nReSize     	= _nReSize;
+    nStartIndex 	= _nStartIndex;
+    nUniqIndex  	= 0;
+    nCount      	= 0;
 }
 
 /*************************************************************************

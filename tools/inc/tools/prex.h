@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,20 +29,20 @@
 #ifndef _PREX_H
 #define _PREX_H
 
-#define Window      XLIB_Window
-#define BYTE        XLIB_BYTE
-#define INT8        XLIB_INT8
+#define Window		XLIB_Window
+#define BYTE		XLIB_BYTE
+#define INT8		XLIB_INT8
 #define INT64       XLIB_INT64
-#define BOOL        XLIB_BOOL
-#define Font        XLIB_Font
-#define Cursor      XLIB_Cursor
-#define String      XLIB_String
-#define KeyCode     XLIB_KeyCode
-#define Region      XLIB_Region
-#define Icon        XLIB_Icon
-#define Time        XLIB_Time
-#define Region      XLIB_Region
-#define Boolean     XLIB_Boolean
+#define BOOL		XLIB_BOOL
+#define Font		XLIB_Font
+#define Cursor		XLIB_Cursor
+#define String		XLIB_String
+#define KeyCode		XLIB_KeyCode
+#define Region		XLIB_Region
+#define Icon		XLIB_Icon
+#define Time		XLIB_Time
+#define Region		XLIB_Region
+#define Boolean		XLIB_Boolean
 
 #if defined __cplusplus
 extern "C" {
@@ -65,13 +65,13 @@ extern "C" {
 typedef unsigned long Pixel;
 
 #undef  DestroyAll
-#define DestroyAll      XLIB_DestroyAll
-#define XLIB_DestroyAll 0
+#define DestroyAll		XLIB_DestroyAll
+#define XLIB_DestroyAll	0
 #undef  String
-#define String          XLIB_String
+#define String			XLIB_String
 
 #undef  KeyCode
-#define KeyCode         XLIB_KeyCode //undef in intrinsics
+#define KeyCode			XLIB_KeyCode //undef in intrinsics
 
 #define __Ol_OlXlibExt_h__
 

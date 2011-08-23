@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -228,7 +228,7 @@ namespace comphelper
         // So, everything of XSet except insert is implemented empty
         return sal_False;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBag::insert( const Any& _element ) throw (IllegalArgumentException, ElementExistException, RuntimeException)
     {
@@ -247,7 +247,7 @@ namespace comphelper
             )
             throw IllegalTypeException( ::rtl::OUString(), *this );
 
-        m_aDynamicProperties.addVoidProperty( aProperty.Name, aProperty.Type, findFreeHandle(), aProperty.Attributes );
+        m_aDynamicProperties.addVoidProperty( aProperty.Name, aProperty.Type, findFreeHandle(), aProperty.Attributes ); 
 
         // our property info is dirty
         m_pArrayHelper.reset();
@@ -255,7 +255,7 @@ namespace comphelper
         g.clear();
         setModified(sal_True);
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBag::remove( const Any& /*aElement*/ ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
     {
@@ -356,7 +356,7 @@ namespace comphelper
             )
             throw IllegalTypeException( ::rtl::OUString(), *this );
 
-        m_aDynamicProperties.addProperty( _rName, findFreeHandle(), _nAttributes, _rInitialValue );
+        m_aDynamicProperties.addProperty( _rName, findFreeHandle(), _nAttributes, _rInitialValue ); 
 
         // our property info is dirty
         m_pArrayHelper.reset();
@@ -485,8 +485,6 @@ namespace comphelper
 
         try
         {
-            ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
-
             // check for unknown properties
             // we cannot simply rely on the XMultiPropertySet::setPropertyValues
             // implementation of our base class, since it does not throw
@@ -503,6 +501,7 @@ namespace comphelper
                     ++pName, ++pHandle, ++pProperty
                 )
             {
+                ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
                 *pHandle = rPropInfo.getHandleByName( *pName );
                 if ( *pHandle != -1 )
                     continue;
@@ -513,9 +512,6 @@ namespace comphelper
                     // add the property
                     sal_Int16 nAttributes = PropertyAttribute::BOUND | PropertyAttribute::REMOVEABLE | PropertyAttribute::MAYBEDEFAULT;
                     addProperty( *pName, nAttributes, pProperty->Value );
-                    // rPropInfo is invalid, refetch
-                    rPropInfo = getInfoHelper();
-                    *pHandle = rPropInfo.getHandleByName( *pName );
                     continue;
                 }
 

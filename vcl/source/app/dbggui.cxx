@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -626,9 +626,9 @@ BOOL DbgWindow::Close()
     // remember window position
     ByteString aState( GetWindowState() );
     DbgData* pData = DbgGetData();
-    strncpy( pData->aDbgWinState,
-         aState.GetBuffer(),
-         std::min( sizeof( pData->aDbgWinState ),
+    strncpy( pData->aDbgWinState, 
+         aState.GetBuffer(), 
+         std::min( sizeof( pData->aDbgWinState ), 
                size_t(aState.Len() + 1U )) );
     pData->aDbgWinState[ sizeof( pData->aDbgWinState ) - 1 ] = 0;
     // and save for next session
@@ -998,7 +998,7 @@ DbgDialog::DbgDialog() :
     maOverwrite.SetPosSizePixel( LogicToPixel( Point( 205, 130 ), aAppMap ),
                                  aButtonSize );
     }
-
+    
     {
     maHookOSLBox.Show();
     maHookOSLBox.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Reroute osl debug ~messages" ) ) );
@@ -1526,7 +1526,7 @@ void DbgDialogTest( Window* pWindow )
                                  "%s should have a mnemonic char (~): %s",
                                  pClass,
                                  ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-
+                
                     // check text width
                     int aWidth=0;
                     switch( pChild->GetType() )
@@ -1575,7 +1575,7 @@ void DbgDialogTest( Window* pWindow )
                     int aWidth=0;
                     if( nAccelPos != STRING_NOTFOUND )
                     {
-                        aWidth = pChild->GetTextWidth( aText, 0, nAccelPos ) +
+                        aWidth = pChild->GetTextWidth( aText, 0, nAccelPos ) + 
                                  pChild->GetTextWidth( aText, nAccelPos+1, aText.Len() - nAccelPos - 1);
                     }
                     else
@@ -1799,7 +1799,7 @@ class DbgMessageBox : public ErrorBox
         SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output") ) );
         AddButton( String( RTL_CONSTASCII_USTRINGPARAM( "Copy" ) ), COPY_BUTTON_ID, 0 );
     }
-
+    
     virtual void Click()
     {
         if( GetCurButtonId() == COPY_BUTTON_ID )

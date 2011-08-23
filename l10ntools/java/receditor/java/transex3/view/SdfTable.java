@@ -9,9 +9,9 @@ class SdfTable extends JTable{
     }
     //@Override
     public boolean isCellEditable(int row, int col) {
-        if( row == 0 && col == 0 || row == 0 && col == 1 || row == 0 && col == 2 || row == 0 && col == 3 || row == 0 && col == 4 )
+        if( row == 0 && col == 0 || row == 0 && col == 1 || row == 0 && col == 2 || row == 0 && col == 3 || row == 0 && col == 4 ) 
             return false;
-        else
+        else 
             return true;
     }
     /*public String getTableId() {
@@ -20,5 +20,5 @@ class SdfTable extends JTable{
     public void setTableId(String tableId) {
         this.tableId = tableId;
     }*/
-
+    
 }

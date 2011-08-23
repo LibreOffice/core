@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ namespace basegfx
         // is created.
         B2DPolyPolygon adaptiveSubdivideByCount(const B2DPolyPolygon& rCandidate, sal_uInt32 nCount = 0L);
 
-        // isInside test for B2dPoint. On border is not inside as long as not true is given
+        // isInside test for B2dPoint. On border is not inside as long as not true is given 
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
         bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
 
@@ -102,19 +102,19 @@ namespace basegfx
             The outer range of the polygon
         */
         B2DRange getRange(const B2DPolyPolygon& rCandidate);
-
+            
         /** Apply given LineDashing to given polyPolygon
 
             For a description see applyLineDashing in b2dpolygontoos.hxx
         */
         void applyLineDashing(
-            const B2DPolyPolygon& rCandidate,
-            const ::std::vector<double>& rDotDashArray,
+            const B2DPolyPolygon& rCandidate, 
+            const ::std::vector<double>& rDotDashArray, 
             B2DPolyPolygon* pLineTarget,
             B2DPolyPolygon* pGapTarget = 0,
             double fFullDashDotLen = 0.0);
 
-        // test if point is inside epsilon-range around the given PolyPolygon. Can be used
+        // test if point is inside epsilon-range around the given PolyPolygon. Can be used 
         // for HitTesting. The epsilon-range is defined to be the tube around the PolyPolygon
         // with distance fDistance and rounded edges (start and end point).
         bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
@@ -180,7 +180,7 @@ namespace basegfx
         B2DPolyPolygon createB2DPolyPolygonFromB3DPolyPolygon(const B3DPolyPolygon& rCandidate, const B3DHomMatrix& rMat);
 
         // for each contained edge in each contained polygon calculate the smallest distance. Return the index to the smallest
-        // edge in rEdgeIndex and the index to the polygon in rPolygonIndex. The relative position on the edge is returned in rCut.
+        // edge in rEdgeIndex and the index to the polygon in rPolygonIndex. The relative position on the edge is returned in rCut. 
         // If nothing was found (e.g. empty input plygon), DBL_MAX is returned.
         double getSmallestDistancePointToPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPoint, sal_uInt32& rPolygonIndex, sal_uInt32& rEdgeIndex, double& rCut);
 
@@ -219,7 +219,7 @@ namespace basegfx
 
             @param rPolyPoly
             The poly-polygon to export
-
+            
             @param bUseRelativeCoordinates
             When true, all coordinate values are exported as relative
             to the current position. This tends to save some space,
@@ -235,14 +235,14 @@ namespace basegfx
             value alone, without any "<path ...>" or "d="...")
          */
         ::rtl::OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
-                                      bool                  bUseRelativeCoordinates=true,
-                                      bool                  bDetectQuadraticBeziers=true );
+                                      bool 					bUseRelativeCoordinates=true,
+                                      bool 					bDetectQuadraticBeziers=true );
 
         // #i76891# Try to remove existing curve segments if they are simply edges
         B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
 
         /** split each edge of a polyPolygon in exactly nSubEdges equidistant edges
-
+            
             @param rCandidate
             The source polyPolygon. If too small (no edges), nSubEdges too small (<2)
             or neither bHandleCurvedEdgesnor bHandleStraightEdges it will just be returned.
@@ -263,7 +263,7 @@ namespace basegfx
         /** snap some polygon coordinates to discrete coordinates
 
             This method allows to snap some polygon points to discrete (integer) values
-            which equals e.g. a snap to discrete coordinates. It will snap points of
+            which equals e.g. a snap to discrete coordinates. It will snap points of 
             horizontal and vertical edges
 
             @param rCandidate

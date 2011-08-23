@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ const sal_Char sEndCharacters[] = "EndCharacters";
 //-----------------------------------------------------------------------------
 struct SvxForbiddenStruct_Impl
 {
-    Locale      aLocale;
-    OUString    sStartChars;
-    OUString    sEndChars;
+    Locale 		aLocale;
+    OUString	sStartChars;
+    OUString	sEndChars;
 };
 //-----------------------------------------------------------------------------
 typedef SvxForbiddenStruct_Impl* SvxForbiddenStruct_ImplPtr;
@@ -64,10 +64,10 @@ SV_IMPL_PTRARR(SvxForbiddenStructArr, SvxForbiddenStruct_ImplPtr);
 //-----------------------------------------------------------------------------
 struct SvxAsianConfig_Impl
 {
-    sal_Bool    bKerningWesternTextOnly;
-    sal_Int16   nCharDistanceCompression;
+    sal_Bool 	bKerningWesternTextOnly;
+    sal_Int16	nCharDistanceCompression;
 
-    SvxForbiddenStructArr   aForbiddenArr;
+    SvxForbiddenStructArr	aForbiddenArr;
 
     SvxAsianConfig_Impl() :
         bKerningWesternTextOnly(sal_True),
@@ -126,8 +126,8 @@ void SvxAsianConfig::Load()
         OUString sStart(sPropPrefix);
         sStart += pNodes[nNode];
         sStart += C2U("/");
-        pNames[nName] = sStart;     pNames[nName++] += C2U("StartCharacters");
-        pNames[nName] = sStart;     pNames[nName++] += C2U("EndCharacters");
+        pNames[nName] = sStart; 	pNames[nName++] += C2U("StartCharacters");
+        pNames[nName] = sStart; 	pNames[nName++] += C2U("EndCharacters");
     }
     Sequence<Any> aNodeValues = GetProperties(aPropNames);
     const Any* pNodeValues = aNodeValues.getConstArray();
@@ -147,7 +147,7 @@ void SvxAsianConfig::Load()
 /* -----------------------------17.01.01 09:57--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SvxAsianConfig::Notify( const Sequence<OUString>& )
+void 	SvxAsianConfig::Notify( const Sequence<OUString>& )
 {
     Load();
 }
@@ -193,14 +193,14 @@ void SvxAsianConfig::Commit()
 /* -----------------------------16.01.01 15:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool    SvxAsianConfig::IsKerningWesternTextOnly() const
+sal_Bool 	SvxAsianConfig::IsKerningWesternTextOnly() const
 {
     return pImpl->bKerningWesternTextOnly;
 }
 /* -----------------------------16.01.01 15:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-void        SvxAsianConfig::SetKerningWesternTextOnly(sal_Bool bSet)
+void 		SvxAsianConfig::SetKerningWesternTextOnly(sal_Bool bSet)
 {
     pImpl->bKerningWesternTextOnly = bSet;
     SetModified();
@@ -208,14 +208,14 @@ void        SvxAsianConfig::SetKerningWesternTextOnly(sal_Bool bSet)
 /* -----------------------------16.01.01 15:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Int16   SvxAsianConfig::GetCharDistanceCompression() const
+sal_Int16	SvxAsianConfig::GetCharDistanceCompression() const
 {
     return pImpl->nCharDistanceCompression;
 }
 /* -----------------------------16.01.01 15:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-void        SvxAsianConfig::SetCharDistanceCompression(sal_Int16 nSet)
+void 		SvxAsianConfig::SetCharDistanceCompression(sal_Int16 nSet)
 {
     DBG_ASSERT(nSet >= 0 && nSet < 3, "compression value illegal");
     SetModified();
@@ -237,7 +237,7 @@ uno::Sequence<lang::Locale> SvxAsianConfig::GetStartEndCharLocales()
 /* -----------------------------16.01.01 15:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool    SvxAsianConfig::GetStartEndChars( const Locale& rLocale,
+sal_Bool	SvxAsianConfig::GetStartEndChars( const Locale& rLocale,
                                     OUString& rStartChars,
                                     OUString& rEndChars )
 {

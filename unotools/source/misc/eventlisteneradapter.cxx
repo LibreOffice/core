@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ namespace utl
     class OEventListenerImpl : public ::cppu::WeakImplHelper1< XEventListener >
     {
     protected:
-        OEventListenerAdapter*          m_pAdapter;
-        Reference< XEventListener >     m_xKeepMeAlive;
+        OEventListenerAdapter*			m_pAdapter;
+        Reference< XEventListener >		m_xKeepMeAlive;
             // imagine an implementation of XComponent which holds it's listeners with a weak reference ...
             // would be very bad if we don't hold ourself
-        Reference< XComponent >         m_xComponent;
+        Reference< XComponent >			m_xComponent;
 
     public:
         OEventListenerImpl( OEventListenerAdapter* _pAdapter, const Reference< XComponent >& _rxComp );
 
-        void                            dispose();
-        const Reference< XComponent >&  getComponent() const { return m_xComponent; }
+        void							dispose();
+        const Reference< XComponent >&	getComponent() const { return m_xComponent; }
 
     protected:
         virtual void SAL_CALL disposing( const EventObject& _rSource ) throw (RuntimeException);
@@ -107,7 +107,7 @@ namespace utl
     struct OEventListenerAdapterImpl
     {
     public:
-        ::std::vector< void* >  aListeners;
+        ::std::vector< void* >	aListeners;
     };
 
     //=====================================================================
@@ -152,7 +152,7 @@ namespace utl
     //---------------------------------------------------------------------
     void OEventListenerAdapter::stopAllComponentListening(  )
     {
-        for (   ::std::vector< void* >::const_iterator aDisposeLoop = m_pImpl->aListeners.begin();
+        for (	::std::vector< void* >::const_iterator aDisposeLoop = m_pImpl->aListeners.begin();
                 aDisposeLoop != m_pImpl->aListeners.end();
                 ++aDisposeLoop
             )
@@ -179,7 +179,7 @@ namespace utl
     }
 
 //.........................................................................
-}   // namespace utl
+}	// namespace utl
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,22 +45,22 @@ class SVT_DLLPUBLIC SvtDocumentTemplateDialog : public ModalDialog
 {
 private:
     svt::FixedHyperlink aMoreTemplatesLink;
-    FixedLine           aLine;
-    PushButton          aManageBtn;
-    PushButton          aEditBtn;
-    OKButton            aOKBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
+    FixedLine			aLine;
+    PushButton			aManageBtn;
+    PushButton			aEditBtn;
+    OKButton			aOKBtn;
+    CancelButton		aCancelBtn;
+    HelpButton			aHelpBtn;
 
-    SvtTmplDlg_Impl*    pImpl;
+    SvtTmplDlg_Impl*	pImpl;
 
-    DECL_DLLPRIVATE_LINK(           SelectHdl_Impl, SvtTemplateWindow* );
-    DECL_DLLPRIVATE_LINK(           DoubleClickHdl_Impl, SvtTemplateWindow* );
-    DECL_DLLPRIVATE_LINK(           NewFolderHdl_Impl, SvtTemplateWindow* );
-    DECL_DLLPRIVATE_LINK(           SendFocusHdl_Impl, SvtTemplateWindow* );
-    DECL_DLLPRIVATE_LINK(           OKHdl_Impl, PushButton* );
-    DECL_DLLPRIVATE_LINK(           OrganizerHdl_Impl, PushButton* );
-    DECL_DLLPRIVATE_LINK(           UpdateHdl_Impl, Timer* );
+    DECL_DLLPRIVATE_LINK(			SelectHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(			DoubleClickHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(			NewFolderHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(			SendFocusHdl_Impl, SvtTemplateWindow* );
+    DECL_DLLPRIVATE_LINK(			OKHdl_Impl, PushButton* );
+    DECL_DLLPRIVATE_LINK(			OrganizerHdl_Impl, PushButton* );
+    DECL_DLLPRIVATE_LINK(			UpdateHdl_Impl, Timer* );
     DECL_DLLPRIVATE_LINK(           OpenLinkHdl_Impl, svt::FixedHyperlink* );
 
 public:
@@ -79,8 +79,8 @@ public:
 
     ~SvtDocumentTemplateDialog();
 
-    sal_Bool    IsFileSelected( ) const;
-    String      GetSelectedFileURL( ) const;
+    sal_Bool	IsFileSelected( ) const;
+    String		GetSelectedFileURL( ) const;
 
     void        SelectTemplateFolder();
 

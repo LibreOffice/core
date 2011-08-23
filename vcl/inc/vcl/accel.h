@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ class Accelerator;
 class ImplAccelEntry
 {
 public:
-    USHORT          mnId;
-    KeyCode         maKeyCode;
-    Accelerator*    mpAccel;
-    Accelerator*    mpAutoAccel;
-    BOOL            mbEnabled;
+    USHORT			mnId;
+    KeyCode 		maKeyCode;
+    Accelerator*	mpAccel;
+    Accelerator*	mpAutoAccel;
+    BOOL			mbEnabled;
 };
 
 // -----------------
@@ -57,6 +57,6 @@ public:
 // in KEYCOD.CXX
 void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3, USHORT& rCode4 );
 
-#endif  // _SV_ACCEL_H
+#endif	// _SV_ACCEL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

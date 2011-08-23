@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ class VCL_DLLPUBLIC TabPage : public Window
 {
 private:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void ImplInitSettings();
+    SAL_DLLPRIVATE void	ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void	ImplInitSettings();
 
 public:
                     TabPage( Window* pParent, WinBits nStyle = 0 );
@@ -51,15 +51,15 @@ public:
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
 
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void	StateChanged( StateChangedType nStateChange );
+    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual void    ActivatePage();
-    virtual void    DeactivatePage();
+    virtual void	ActivatePage();
+    virtual void	DeactivatePage();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
-#endif  // _SV_TABPAGE_HXX
+#endif	// _SV_TABPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

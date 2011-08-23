@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ class COMPHELPER_DLLPUBLIC OTruncatedTransactedFileStream
                                         ::com::sun::star::beans::XPropertySetInfo,
                                         ::com::sun::star::beans::XPropertySet >
 {
-    ::osl::Mutex    m_aMutex;
+    ::osl::Mutex	m_aMutex;
     TTFileStreamData_Impl* m_pStreamData;
 
     void CommonInit_Impl(

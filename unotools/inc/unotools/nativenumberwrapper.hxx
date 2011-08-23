@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,14 +61,14 @@ public:
                         sal_Int16 nNativeNumberMode ) const;
 
     sal_Bool        isValidNatNum(
-                        const ::com::sun::star::lang::Locale& rLocale,
+                        const ::com::sun::star::lang::Locale& rLocale, 
                         sal_Int16 nNativeNumberMode ) const;
 
     ::com::sun::star::i18n::NativeNumberXmlAttributes convertToXmlAttributes(
                         const ::com::sun::star::lang::Locale& rLocale,
                         sal_Int16 nNativeNumberMode ) const;
 
-    sal_Int16       convertFromXmlAttributes(
+    sal_Int16       convertFromXmlAttributes( 
                         const ::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr ) const;
 
 };

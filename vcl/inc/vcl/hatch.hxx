@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,17 +42,17 @@ class SvStream;
 
 struct ImplHatch
 {
-    ULONG               mnRefCount;
-    Color               maColor;
-    HatchStyle          meStyle;
-    long                mnDistance;
-    USHORT              mnAngle;
+    ULONG				mnRefCount;
+    Color				maColor;
+    HatchStyle			meStyle;
+    long				mnDistance;
+    USHORT				mnAngle;
 
                         ImplHatch();
                         ImplHatch( const ImplHatch& rImplHatch );
 
-    friend SvStream&    operator>>( SvStream& rIStm, ImplHatch& rImplHatch );
-    friend SvStream&    operator<<( SvStream& rOStm, const ImplHatch& rImplHatch );
+    friend SvStream&	operator>>( SvStream& rIStm, ImplHatch& rImplHatch );
+    friend SvStream&	operator<<( SvStream& rOStm, const ImplHatch& rImplHatch );
 };
 
 // ---------
@@ -61,10 +61,10 @@ struct ImplHatch
 
 class VCL_DLLPUBLIC Hatch
 {
-private:
+private:	
 
-    ImplHatch*          mpImplHatch;
-    SAL_DLLPRIVATE void ImplMakeUnique();
+    ImplHatch*		    mpImplHatch;
+    SAL_DLLPRIVATE void	ImplMakeUnique();
 
 public:
 
@@ -73,19 +73,19 @@ public:
                     Hatch( HatchStyle eStyle, const Color& rHatchColor, long nDistance, USHORT nAngle10 = 0 );
                     ~Hatch();
 
-    Hatch&          operator=( const Hatch& rHatch );
+    Hatch&			operator=( const Hatch& rHatch );
     BOOL            operator==( const Hatch& rHatch ) const;
     BOOL            operator!=( const Hatch& rHatch ) const { return !(Hatch::operator==( rHatch ) ); }
     BOOL            IsSameInstance( const Hatch& rHatch ) const { return( mpImplHatch == rHatch.mpImplHatch ); }
 
     void            SetStyle( HatchStyle eStyle );
-    HatchStyle      GetStyle() const { return mpImplHatch->meStyle; }
+    HatchStyle		GetStyle() const { return mpImplHatch->meStyle; }
 
     void            SetColor( const Color& rColor  );
-    const Color&    GetColor() const { return mpImplHatch->maColor; }
+    const Color&	GetColor() const { return mpImplHatch->maColor; }
 
     void            SetDistance( long nDistance  );
-    long            GetDistance() const { return mpImplHatch->mnDistance; }
+    long			GetDistance() const { return mpImplHatch->mnDistance; }
 
     void            SetAngle( USHORT nAngle10 );
     USHORT          GetAngle() const { return mpImplHatch->mnAngle; }

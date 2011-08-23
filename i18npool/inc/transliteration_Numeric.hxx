@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ public:
 
         // Methods which are shared.
         virtual sal_Int16 SAL_CALL getType(  ) throw(::com::sun::star::uno::RuntimeException);
-
+    
         virtual ::rtl::OUString SAL_CALL
         folding( const ::rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, ::com::sun::star::uno::Sequence< sal_Int32 >& offset )
         throw(::com::sun::star::uno::RuntimeException);
@@ -54,7 +54,7 @@ public:
         equals( const ::rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1, const ::rtl::OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
         throw(::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL 
         transliterateRange( const ::rtl::OUString& str1, const ::rtl::OUString& str2 )
         throw(::com::sun::star::uno::RuntimeException);
 protected:
@@ -63,9 +63,9 @@ protected:
         sal_Unicode* table;
         sal_Bool recycleSymbol;
 private:
-        rtl::OUString SAL_CALL
+        rtl::OUString SAL_CALL 
         transliterateBullet( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        com::sun::star::uno::Sequence< sal_Int32 >& offset )
+        com::sun::star::uno::Sequence< sal_Int32 >& offset ) 
         throw(com::sun::star::uno::RuntimeException);
 };
 
