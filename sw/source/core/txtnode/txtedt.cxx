@@ -1908,7 +1908,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                     const String aScannerText( aExpandText );
                     SwScanner aScanner( *this, aScannerText, 0, pConversionMap,
                                         i18n::WordType::WORD_COUNT,
-                                        (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd );
+                                        (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd, true );
 
                     const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
 

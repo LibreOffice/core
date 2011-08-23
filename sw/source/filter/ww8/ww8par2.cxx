@@ -3775,21 +3775,7 @@ const BYTE* WW8RStyle::HasParaSprm( USHORT nId ) const
     if( !pParaSprms || !nSprmsLen )
         return 0;
 
-    const BYTE* pSprms = pParaSprms;
-    USHORT i, x;
-
-    for( i=0; i < nSprmsLen; )
-    {
-        USHORT nAktId = maSprmParser.GetSprmId(pSprms);
-        // Sprm found ?
-        if( nAktId == nId )
-            return pSprms + maSprmParser.DistanceToData(nId);
-
-        x = maSprmParser.GetSprmSize(nAktId, pSprms);
-        i = i + x;
-        pSprms += x;
-    }
-    return 0;                               // Sprm not found
+    return maSprmParser.findSprmData(nId, pParaSprms, nSprmsLen);
 }
 
 void WW8RStyle::ImportSprms(BYTE *pSprms, short nLen, bool bPap)
@@ -3803,11 +3789,11 @@ void WW8RStyle::ImportSprms(BYTE *pSprms, short nLen, bool bPap)
         nSprmsLen = nLen;
     }
 
-    while ( nLen > 0 )
+    WW8SprmIter aSprmIter(pSprms, nLen, maSprmParser);
+    while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
     {
-        USHORT nL1 = pIo->ImportSprm(pSprms);
-        nLen = nLen - nL1;
-        pSprms += nL1;
+        pIo->ImportSprm(pSprm);
+        aSprmIter++;
     }
 
     pParaSprms = 0;

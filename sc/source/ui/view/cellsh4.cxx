@@ -275,6 +275,7 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
             ;
     }
     pViewShell->ShowAllCursors();
+    rReq.Done();
 }
 
 void ScCellShell::ExecuteMove( SfxRequest& rReq )
